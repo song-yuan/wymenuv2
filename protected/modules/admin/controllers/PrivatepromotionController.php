@@ -66,6 +66,10 @@ class PrivatepromotionController extends BackendController
 		//var_dump($model);exit;
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('privatepromotion/index' , 'companyId' => $this->companyId)) ;
+			}
 			$db = Yii::app()->db;
 			//$transaction = $db->beginTransaction();
 		//try{
@@ -79,9 +83,6 @@ class PrivatepromotionController extends BackendController
 			$se=new Sequence("private_promotion");
 			$model->lid = $se->nextval();
 			if(!empty($groupID)){
-				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
-				//$command=$db->createCommand($sql);
-				//$command->execute();
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("private_branduser");
 					$id = $userid->nextval();
@@ -107,17 +108,6 @@ class PrivatepromotionController extends BackendController
 			$model->weekday = $weekdayID;
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
-			//$transaction->commit(); //提交事务会真正的执行数据库操作
-			//return true;
-			//}catch (Exception $e) {
-			//	$transaction->rollback(); //如果操作失败, 数据回滚
-				//Yii::app()->end(json_encode(array("status"=>"fail")));
-			//	return false;
-			//}
-			
-			//$py=new Pinyin();
-			//$model->simple_code = $py->py($model->product_name);
-			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('privatepromotion/index' , 'companyId' => $this->companyId ));
@@ -150,20 +140,13 @@ class PrivatepromotionController extends BackendController
 		$sql = 'select t1.brand_user_lid from nb_private_promotion t left join nb_private_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.private_promotion_id = t.lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
-		//var_dump($userlvs);exit;
-		//var_dump($sql);exit;
-// 		$criteria = new CDbCriteria;
-// 		$criteria->select = 't.brand_user_lid';
-// 		$criteria->with = 'PrivateBranduser';
-// 		$criteria->condition =  't.delete_flag=0 and t.lid='.$lid.' and t.dpid='.$this->companyId ;
-// 		$criteria->order = ' t.lid asc ';
-		
-// 		$model = PrivatePromotion::model()->find($criteria);
-// 		$model = (object)$model;
-		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-		//var_dump($model);exit;
+
 		
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('privatepromotion/index' , 'companyId' => $this->companyId)) ;
+			}
 			$model->attributes = Yii::app()->request->getPost('PrivatePromotion');
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$weekdayID = Yii::app()->request->getParam('weekday');
@@ -205,10 +188,6 @@ class PrivatepromotionController extends BackendController
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->weekday=$weekdayID;
 			$model->is_sync = $is_sync;
-			//$gropid = array();
-			//$gropid = (dexplode(',',$groupID));
-			//var_dump(dexplode(',',$groupID));exit;
-			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('privatepromotion/index' , 'companyId' => $this->companyId));
@@ -227,6 +206,10 @@ class PrivatepromotionController extends BackendController
 	 * 删除现金券
 	 */
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('privatepromotion/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
 		$is_sync = DataSync::getInitSync();
@@ -261,16 +244,6 @@ class PrivatepromotionController extends BackendController
 				echo "操作有误！请点击右上角的返回继续编辑";
 				exit;
 			}
-			//$sql = 'select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0) where t.delete_flag = 0 and t.dpid='.$this->companyId;
-// 			$command=$db->createCommand($sql);
-// 			$models= $command->queryAll();
-// 			//var_dump($sql);exit;
-			
-			
-// 			$criteria = new CDbCriteria;
-// 			$criteria->with = array('company','category','PrivatePromotionDetail');
-// 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
- 			//var_dump($$categoryId);exit;
 			if(!empty($categoryId)){
 				//var_dump($typeId);exit;
 				//$criteria->condition.=' and t.category_id = '.$categoryId;
@@ -296,20 +269,6 @@ class PrivatepromotionController extends BackendController
 			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 			$models = $pdata->queryAll();
 			$categories = $this->getCategories();
-			//var_dump($models);exit;
-//			$criteria = new CDbCriteria;
-// 			$pages = new CPagination(count($models));
-// 				    $pages->setPageSize(1);
-// 			$pages->applyLimit($criteria);
-// 			$categories = $this->getCategories();
-			
-			//$pages = new CPagination(Product::model()->count($criteria));
-			//	    $pages->setPageSize(1);
-			//$pages->applyLimit($criteria);
-			//$models = Product::model()->findAll($criteria);
-			
-			//$categories = $this->getCategories();
-			//var_dump($promotionID);exit;
 			$this->render('detailindex',array(
 					'models'=>$models,
 					'pages'=>$pages,
@@ -331,14 +290,6 @@ class PrivatepromotionController extends BackendController
 			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 			$models = $pdata->queryAll();
 
-
-// 			$criteria = new CDbCriteria;
-// 			$criteria->with = array('PrivatePromotionDetail');
-// 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-// 			$pages = new CPagination(ProductSet::model()->count($criteria));
-// 			$pages->applyLimit($criteria);
-// 			$models = ProductSet::model()->findAll($criteria);
- 			//var_dump($promotionID);exit;
 			$this->render('detailindex',array(
 					'models'=>$models,
 					'pages'=>$pages,
@@ -346,33 +297,7 @@ class PrivatepromotionController extends BackendController
 					'promotionID'=>$promotionID
 			));
 		}
-		 
-		//var_dump($sc);exit;
-		//$db = Yii::app()->db;
-		/*if(empty($sc))
-		 {
-		$sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId
-		. " union ".
-		"SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId
-		;
-		}else{
-		$sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
-		. " union ".
-		"SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
-		;
-		}
-		$command=$db->createCommand($sql);
-		//$command->bindValue(":table" , $this->table);
-		$models= $command->queryAll();
-		//var_dump($models);exit;
-		$criteria = new CDbCriteria;
-		$pages = new CPagination(count($models));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$this->render('index',array(
-		'models'=>$models,
-		'pages'=>$pages
-		));*/
+
 	}
 	
 	public function actionStatus(){
@@ -547,35 +472,7 @@ class PrivatepromotionController extends BackendController
 			return false;
 		}
 	}	
-		
-// 		if($command->execute())
-// 		{
-// 			Gateway::getOnlineStatus();
-// 			$store = Store::instance('wymenu');
-// 			$pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
-// 			//var_dump($pads);exit;
-// 			if(!empty($pads))
-// 			{
-// 				$sendjsondata=json_encode(array("company_id"=>  $this->companyId,
-// 						"do_id"=>"sell_off",
-// 						"do_data"=>array(array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-// 								//,array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-// 						)));
-// 				//var_dump($sendjsondata);exit;
-// 				foreach($pads as $pad)
-// 				{
-// 					$clientId=$store->get("padclient_".$this->companyId.$pad->lid);
-// 					//var_dump($clientId,$print_data);exit;
-// 					if(!empty($clientId))
-// 					{
-// 						Gateway::sendToClient($clientId,$sendjsondata);
-// 					}
-// 				}
-// 			}
-// 			Yii::app()->end(json_encode(array("status"=>"success")));
-// 		}else{
-// 			Yii::app()->end(json_encode(array("status"=>"fail")));
-// 		}
+
 
 	
 	public function actionResetall(){

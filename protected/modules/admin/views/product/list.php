@@ -302,7 +302,7 @@
 							<div class="ku-item-info">口味设置</div>
 						</div>
 					</a>
-					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
+					<?php if(Yii::app()->user->role < User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('copyproduct/index',array('companyId'=>$this->companyId));?>">
 						<div id="cpxf" class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cpxf"></div>
@@ -323,6 +323,7 @@
 							<div class="ku-item-info">口味下发</div>
 						</div>
 					</a>
+					<?php endif;?>
 					<a href="<?php echo $this->createUrl('muchupdateProd/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple plxg"></div>
@@ -335,7 +336,7 @@
 							<div class="ku-item-info">估清列表</div>
 						</div>
 					</a>
-					<?php endif;?>
+					
 					<a href="<?php echo $this->createUrl('productSim/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cpjx"></div>
@@ -387,7 +388,7 @@
 						</div>
 					</a>
 					<?php elseif($type==2):?>
-					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
+					<?php if(Yii::app()->user->role <= User::SHOPKEEPER_VICE):?>
 					<a href="<?php echo $this->createUrl('printer/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dyjsz"></div>
@@ -478,7 +479,7 @@
 							<div class="ku-item-info">单位系数</div>
 						</div>
 					</a>
-					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
+					<?php if(Yii::app()->user->role <= User::SHOPKEEPER_VICE):?>
 					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple bomxx"></div>

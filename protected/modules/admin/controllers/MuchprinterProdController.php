@@ -65,7 +65,7 @@ class MuchprinterProdController extends BackendController
 		
 		//var_dump($catep1,$catep2,$products);exit;
          //       Until::isUpdateValid($pids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-        if((!empty($pids))&&(!empty($printids))&&(Yii::app()->user->role < User::GROUPER)){
+        if((!empty($pids))&&(!empty($printids))&&(Yii::app()->user->role <= User::SHOPKEEPER)){
         	
 	        	foreach ($pids as $pid){
 	        		$product =  Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$pid,':companyId'=>$this->companyId));

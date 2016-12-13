@@ -105,7 +105,10 @@ class ProductBomController extends BackendController
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductBom');
-			
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid)) ;
+			}
 			$db = Yii::app()->db;
 			$sql = 'select t.* from nb_product t where t.delete_flag = 0 and t.lid = '.$pblid;
 			$command1 = $db->createCommand($sql);
@@ -161,6 +164,10 @@ class ProductBomController extends BackendController
 		$model = ProductBom::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid)) ;
+			}
 			$model->attributes = Yii::app()->request->getPost('ProductBom');
 			$model->update_at = date('Y-m-d H:i:s',time());
 			if($model->save()){
@@ -186,7 +193,10 @@ class ProductBomController extends BackendController
 	public function actionDetailDelete(){
         $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
         $pblid = Yii::app()->request->getParam('pblid');
-
+        if(Yii::app()->user->role > User::SHOPKEEPER) {
+        	Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+        	$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid)) ;
+        }
         $ids = Yii::app()->request->getPost('ids');//var_dump($ids);exit;
         Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if(!empty($ids)) {

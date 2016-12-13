@@ -61,27 +61,23 @@ class NormalpromotionController extends BackendController
 		$model = new NormalPromotion();
 		$model->dpid = $this->companyId ;
 		$brdulvs = $this->getBrdulv();
-		//$model->create_time = time();
-		//var_dump($model);exit;
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId)) ;
+			}
 			$db = Yii::app()->db;
-			//$transaction = $db->beginTransaction();
-			//try{
 			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$weekdayID = Yii::app()->request->getParam('weekday');
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			
-			//$db = Yii::app()->db;
 		
 			$se=new Sequence("normal_promotion");
 			$model->lid = $se->nextval();
 			if(!empty($groupID)){
-				//$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
-				//$command=$db->createCommand($sql);
-				//$command->execute();
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("normal_branduser");
 					$id = $userid->nextval();
@@ -106,31 +102,16 @@ class NormalpromotionController extends BackendController
 			$model->weekday = $weekdayID;
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
-				
-			//$transaction->commit(); //提交事务会真正的执行数据库操作
-			//return true;
-			//}catch (Exception $e) {
-			//	$transaction->rollback(); //如果操作失败, 数据回滚
-			//Yii::app()->end(json_encode(array("status"=>"fail")));
-			//	return false;
-			//}
-				
-			//$py=new Pinyin();
-			//$model->simple_code = $py->py($model->product_name);
-			//var_dump($model);exit;
+			
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('normalpromotion/detailindex','lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product' ));
 			}
 		}
 		
-		//$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-		//echo 'ss';exit;
 		$this->render('create' , array(
 				'model' => $model ,
 				'brdulvs'=>$brdulvs,
-				//'categories' => $categories
 		));
 	}	
 
@@ -153,6 +134,10 @@ class NormalpromotionController extends BackendController
 // 		try
 // 		{
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId)) ;
+			}
 			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$weekdayID = Yii::app()->request->getParam('weekday');
@@ -473,6 +458,10 @@ class NormalpromotionController extends BackendController
 		
 		
 		public function actionDetaildelete(){
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('normalpromotion/detailindex' , 'companyId' => $this->companyId)) ;
+			}
 			$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 			$ids = Yii::app()->request->getParam('id');
 			$is_sync = DataSync::getInitSync();
@@ -509,6 +498,7 @@ class NormalpromotionController extends BackendController
 				}
 				
 				if(!empty($categoryId)){
+					
 					if($typeId=='product'){
 						//$criteria->condition.=' and t.category_id = '.$categoryId;
 						$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.* 
@@ -614,6 +604,10 @@ class NormalpromotionController extends BackendController
 	 * 删除现金券
 	 */
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
 		$is_sync = DataSync::getInitSync();
@@ -642,17 +636,21 @@ class NormalpromotionController extends BackendController
 	
 	public function getProductSetPrice($productSetId,$dpid){
 		$proSetPrice = '';
-		$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id,t1.set_price from nb_product_set_detail t left join nb_product_set t1 on(t1.lid ='.$productSetId.' and t1.delete_flag =0 and t1.dpid ='.$dpid.') where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
-		$connect = Yii::app()->db->createCommand($sql);
-		//	$connect->bindValue(':site_id',$siteId);
-		//	$connect->bindValue(':dpid',$dpid);
-		$proSetPrice = $connect->queryRow();
-		//var_dump($proSetPrice);exit;
-		if(!empty($proSetPrice)){
-			return $proSetPrice['all_setprice']+$proSetPrice['set_price'] ;
-		}
-		else{
-			return flse;
+		if($productSetId && $dpid){
+			$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id,t1.set_price from nb_product_set_detail t left join nb_product_set t1 on(t1.lid ='.$productSetId.' and t1.delete_flag =0 and t1.dpid ='.$dpid.') where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
+			$connect = Yii::app()->db->createCommand($sql);
+			//	$connect->bindValue(':site_id',$siteId);
+			//	$connect->bindValue(':dpid',$dpid);
+			$proSetPrice = $connect->queryRow();
+			//var_dump($proSetPrice);exit;
+			if(!empty($proSetPrice)){
+				return $proSetPrice['all_setprice']+$proSetPrice['set_price'] ;
+			}
+			else{
+				return '0.00';
+			}
+		}else{
+			return '0.00';
 		}
 	}
 	

@@ -67,8 +67,7 @@
 						<div class="input-group">
 		                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
 		                    <span class="input-group-btn">
-		                    <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
-		                    <!-- <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>     -->                                                    
+		                    <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>                                                   
 		                    </span>
 	                    </div>
                     </div> 
@@ -134,16 +133,6 @@
 										</div>
 									</div>
 								</td>
-                                                                <!--
-                                                                <label class="radio-inline">
-												<input type="radio" name="optionsRadios" id="optionsRadios27" value="option3" disabled> Disabled
-												</label> 
-                                                                <td>
-									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','在售');?>" data-off-label="<?php echo yii::t('app','售罄');?>">
-										<input typeId="<?php echo $typeId;?>" pid="<?php echo $model['lid'];?>" <?php if(!$model['status']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
-									</div>
-								</td>
-                                                                -->
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -209,34 +198,10 @@
 		});
 	});
         
-        //cancelallclean
-        
-        $("#cancelallclean").on("click",function(){
-            var url="<?php echo $this->createUrl('normalpromotion/resetall',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>";
-            //alert(url);
-            $.ajax({
- 			url:url,
- 			async: false,
- 			//data:"companyId="+company_id+'&padId='+pad_id,
-                        dataType:'json',
- 			success:function(msg){
-                            //alert(msg.status);
-                            if(msg.status=="success")
-                            {
-                                alert("已经解除全部沽清！");
-                                location.reload();
-                            }else{
-                                alert("已经解除全部沽清"+"111")
-                                location.reload();
-                            }
- 			},
-                        error:function(){
- 				alert("请重试"+"2");                                
- 			},
- 		});
-        });
-        
         $(".clear_btn").on("click",function(){
+            <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
             var arr=document.getElementsByName("optionsRadios"+vid);
            // var chx=document.getElementById("optionsCheck"+vid);
@@ -269,21 +234,14 @@
                   	return false;
                       }
                 }
-			//if(chx.checked)
-			//	{
-			//	checkvalue= $("#checknum"+vid).val();
-			//	}
-			//alert(optid);
-			//alert(optvalue);
-           // alert(checkvalue);
-            //alert(promotionID);
+			
             $.ajax({
-                        type:'GET',
+            type:'GET',
  			url:"<?php echo $this->createUrl('normalpromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
+            cache:false,
+            dataType:'json',
  			success:function(msg){
                             //alert(msg.status);
                             if(msg.status=="success")
@@ -305,15 +263,18 @@
 
 
         $(".clear_red").on("click",function(){
+        	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
            
             $.ajax({
-                        type:'GET',
+            type:'GET',
  			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
+            cache:false,
+            dataType:'json',
  			success:function(msg){
                             //alert(msg.status);
                             if(msg.status=="success")

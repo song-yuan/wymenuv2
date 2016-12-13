@@ -184,35 +184,12 @@
 			location.href="<?php echo $this->createUrl('privatepromotion/promotiondetail' , array('companyId'=>$this->companyId));?>/cid/"+cid+"/promotionID/"+promotionID;
 		});
 	});
-        
-        //cancelallclean
-        
-        $("#cancelallclean").on("click",function(){
-            var url="<?php echo $this->createUrl('privatepromotion/resetall',array('companyId'=>$this->companyId));?>";
-            //alert(url);
-            $.ajax({
- 			url:url,
- 			async: false,
- 			//data:"companyId="+company_id+'&padId='+pad_id,
-                        dataType:'json',
- 			success:function(msg){
-                            //alert(msg.status);
-                            if(msg.status=="success")
-                            {
-                                alert("已经解除全部沽清！");
-                                location.reload();
-                            }else{
-                                alert("已经解除全部沽清"+"111")
-                                location.reload();
-                            }
- 			},
-                        error:function(){
- 				alert("请重试"+"2");                                
- 			},
- 		});
-        });
+      
         
         $(".clear_btn").on("click",function(){
+        	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
             var arr=document.getElementsByName("optionsRadios"+vid);
             var chx=document.getElementById("optionsCheck"+vid);
@@ -249,10 +226,6 @@
 				{
 				checkvalue= $("#checknum"+vid).val();
 				}
-			//alert(optid);
-			//alert(optvalue);
-           // alert(checkvalue);
-            //alert(promotionID);
             $.ajax({
                         type:'GET',
  			url:"<?php echo $this->createUrl('privatepromotion/store',array('companyId'=>$this->companyId,'typeId'=>"product"));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
@@ -281,6 +254,9 @@
 
 
         $(".clear_red").on("click",function(){
+        	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
            
             $.ajax({
@@ -311,7 +287,9 @@
 
 
         $("#yichu").on("click",function(){
-            //alert(111);
+        	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");return false;
+            <?php endif;?>
             var aa = document.getElementsByName("idchk");
             var str=new Array();
             for (var i = 0; i < aa.length; i++) {
@@ -326,10 +304,7 @@
                	 alert("<?php echo yii::t('app','请勾选相应的菜品再进行一键移除！！！');?>");
                	 return false;
                	 }
-            //str = str.substr(0,str.length-1);//除去最后一个“，”
-            //alert(str);
-            //var vid=$(this).attr("id").substr(12,10);
-            //alert(vid);
+            
 
             $.ajax({
                         type:'GET',

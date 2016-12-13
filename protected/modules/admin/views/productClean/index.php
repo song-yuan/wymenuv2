@@ -37,21 +37,19 @@
 				),
 		)); ?>
 	<div class="col-md-12">
-              
-                    <div class="tabbable tabbable-custom">
-                            <ul class="nav nav-tabs">
-                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'product' , 'companyId'=>$this->companyId));?>'"><?php echo yii::t('app','单品');?></a></li>
-                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'set' , 'companyId'=>$this->companyId));?>'"><?php echo yii::t('app','套餐');?></a></li>
-                            
-                            </ul>
-                            <div class="tab-content">
+    	<div class="tabbable tabbable-custom">
+            <ul class="nav nav-tabs">
+	              <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'product' , 'companyId'=>$this->companyId));?>'"><?php echo yii::t('app','单品');?></a></li>
+                  <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'set' , 'companyId'=>$this->companyId));?>'"><?php echo yii::t('app','套餐');?></a></li>
+            </ul>
+            <div class="tab-content">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-                                    <?php if($typeId=='product') :?>
+                    <?php if($typeId=='product') :?>
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品沽清列表');?></div>
 					<div class="actions">						
-                                            <div style="margin-top:-5px !important;" class="btn-group">
+                        <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
@@ -59,18 +57,18 @@
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','历史记录');?></button>
 						</div>-->
 					</div>
-                                        <?php else :?>
-                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐沽清列表');?></div>
-                                        <?php endif;?>
-                                            <div class="col-md-3 pull-right">
+                    <?php else :?>
+                    <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐沽清列表');?></div>
+                    <?php endif;?>
+                    <div class="col-md-3 pull-right">
 						<div class="input-group">
-                                                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
-                                                        <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>                                                        
-                                                    </span>
-                                                </div>
-                                            </div>
+                             <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
+                             <span class="input-group-btn">
+	                             <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
+	                             <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>                                                        
+                             </span>
+                        </div>
+                    </div>
                                         
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -186,6 +184,10 @@
         //cancelallclean
         
         $("#cancelallclean").on("click",function(){
+            <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            	alert("您没有权限！");
+            	return false;
+            <?php endif;?>
             var url="<?php echo $this->createUrl('productClean/resetall',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>";
             //alert(url);
             $.ajax({
@@ -211,6 +213,11 @@
         });
         
         $(".clear_btn").on("click",function(){
+            <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");
+            location.reload();
+            return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
             var arr=document.getElementsByName("optionsRadios"+vid);
             var optvalue;
@@ -227,12 +234,12 @@
             }
             //alert(optvalue);
             $.ajax({
-                        type:'GET',
+            type:'GET',
  			url:"<?php echo $this->createUrl('productClean/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/storeNumber/"+optvalue,
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
+            cache:false,
+            dataType:'json',
  			success:function(msg){
                             //alert(msg.status);
                             if(msg.status=="success")

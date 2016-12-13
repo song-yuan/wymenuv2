@@ -61,8 +61,9 @@
 												<td><?php if($model['date_info_type']==1){ echo date('Y-m-d',$model['begin_timestamp']).'至'.date('Y-m-d',$model['end_timestamp']);}else{ echo '领取后'; echo $model['fixed_begin_term'] >0 ?$model['fixed_begin_term']:'当天'; echo '生效'.$model['fixed_term'].'天有效';}?></td>
 												<td><?php if($model['status']==0){ echo '审核中';}elseif($model['status']==1){echo '审核通过';}elseif($model['status']==2){echo '审核失败';}?></td>
 												<td class="button-column">
+												<!-- 
 													<a href="<?php echo $this->createUrl('/admin/wxcard/detail',array('companyId'=>$this->companyId,'id'=>$model['lid']));?>" class="btn default btn-xs green-stripe">详情</a>
-													<a href="<?php echo $this->createUrl('/admin/wxcard/cardUser',array('companyId'=>$this->companyId,'id'=>$model['lid']));?>" class="btn default btn-xs blue-stripe">统计</a>
+												 -->	<a href="<?php echo $this->createUrl('/admin/wxcard/cardUser',array('companyId'=>$this->companyId,'id'=>$model['lid']));?>" class="btn default btn-xs blue-stripe">统计</a>
 													<a class="btn default btn-xs red btn_deleteGift" title="删除" cardid="<?php echo $model['lid'];?>" href="javascript:;"><i class="fa fa-times"></i> 删 除</a>
 												</td>
 											</tr>

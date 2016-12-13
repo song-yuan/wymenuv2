@@ -38,7 +38,7 @@
 			<!-- /.modal -->
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','礼品券查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','礼品券查询'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','礼品券兑换'),'breadcrumbs'=>array(array('word'=>yii::t('app','线上活动'),'url'=>$this->createUrl('discount/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','礼品券查询'),'url'=>$this->createUrl('gift/index' , array('companyId' => $this->companyId,'type'=>1))),array('word'=>yii::t('app','礼品券兑换'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('gift/index' , array('companyId' => $this->companyId,'type'=>1)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">

@@ -6,14 +6,13 @@
 			<?php $this->endContent();?>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'营销中心','subhead'=>'微信卡券列表','breadcrumbs'=>array(array('word'=>'营销中心','url'=>''),array('word'=>'营销品设置','url'=>''),array('word'=>'微信卡券','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>'微信卡券','breadcrumbs'=>array(array('word'=>yii::t('app','线上活动'),'url'=>$this->createUrl('discount/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>'营销品设置','url'=>''),array('word'=>'微信卡券','url'=>$this->createUrl('wxcard/index' , array('companyId' => $this->companyId,'type'=>1)))),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wxcard/index' , array('companyId' => $this->companyId,'type'=>1)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="nav nav-tabs">
 						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
-						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
 						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
 						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
 						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('gift/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','礼品券');?></a></li>

@@ -127,16 +127,7 @@
 										</div>
 									</div>
 								</td>
-                                                                <!--
-                                                                <label class="radio-inline">
-												<input type="radio" name="optionsRadios" id="optionsRadios27" value="option3" disabled> Disabled
-												</label> 
-                                                                <td>
-									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','在售');?>" data-off-label="<?php echo yii::t('app','售罄');?>">
-										<input typeId="<?php echo $typeId;?>" pid="<?php echo $model['lid'];?>" <?php if(!$model['status']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
-									</div>
-								</td>
-                                                                -->
+                                
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -208,6 +199,9 @@
        
         
         $(".clear_btn").on("click",function(){
+            <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
             var arr=document.getElementsByName("optionsRadios"+vid);
             var chx=document.getElementById("optionsCheck"+vid);
@@ -274,15 +268,18 @@
         });
 
         $(".clear_red").on("click",function(){
+        	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限！");return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
          
             $.ajax({
-                        type:'GET',
+            type:'GET',
  			url:"<?php echo $this->createUrl('privatepromotion/detaildelete',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
+            cache:false,
+            dataType:'json',
  			success:function(msg){
                             //alert(msg.status);
                             if(msg.status=="success")

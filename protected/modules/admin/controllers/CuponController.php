@@ -65,10 +65,11 @@ class CuponController extends BackendController
 		//var_dump($model);exit;
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
+			}
 			$db = Yii::app()->db;
-			//$transaction = $db->beginTranstaction();
-			//try{
-			//var_dump(Yii::app()->request->getPost('Cupon'));exit;
 			$model->attributes = Yii::app()->request->getPost('Cupon');
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$gropids = array();
@@ -78,9 +79,6 @@ class CuponController extends BackendController
 			$se=new Sequence("cupon");
 			$model->lid = $se->nextval();
 			if(!empty($groupID)){
-				//$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
-				//$command=$db->createCommand($sql);
-				//$command->execute();
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("cupon_branduser");
 					$id = $userid->nextval();
@@ -107,27 +105,12 @@ class CuponController extends BackendController
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
-			//var_dump($model);exit;
-			//$transaction->commit(); //提交事务会真正的执行数据库操作
-			//return true;
-			//}catch (Exception $e) {
-			//	$transaction->rollback(); //如果操作失败, 数据回滚
-			//Yii::app()->end(json_encode(array("status"=>"fail")));
-			//	return false;
-			//}
-		
-			//$py=new Pinyin();
-			//$model->simple_code = $py->py($model->product_name);
-			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId ));
 			}
 		}
 		
-		//$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-		//echo 'ss';exit;
 		$this->render('create' , array(
 				'model' => $model ,
 				'brdulvs'=>$brdulvs,
@@ -156,6 +139,10 @@ class CuponController extends BackendController
 		//var_dump($userlvs);exit;
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
+			}
 			$model->attributes = Yii::app()->request->getPost('Cupon');
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$gropids = array();
@@ -196,10 +183,6 @@ class CuponController extends BackendController
 			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->is_sync=$is_sync;
-			//$gropid = array();
-			//$gropid = (dexplode(',',$groupID));
-			//var_dump(dexplode(',',$groupID));exit;
-			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId));
@@ -225,6 +208,10 @@ class CuponController extends BackendController
 		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $cuponId,':dpid'=> $this->companyId));
 	    
 	    if(Yii::app()->request->isPostRequest){
+	    	if(Yii::app()->user->role > User::SHOPKEEPER) {
+	    		Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+	    		$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
+	    	}
 	    	$userIds = Yii::app()->request->getPost('userIds');
 	    	$userArr = explode(',',$userIds);
 	    	$pre = 10000 + $this->companyId;
@@ -263,9 +250,6 @@ class CuponController extends BackendController
 		if(!empty($brdules)){
 			return $brdules;
 		}
-		// 		else{
-		// 			return flse;
-		// 		}
 	}
 	
 	public function actionUpdate1($id)
@@ -346,6 +330,10 @@ class CuponController extends BackendController
 	 * 删除现金券
 	 */
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
 		$is_sync = DataSync::getInitSync();
@@ -373,34 +361,7 @@ class CuponController extends BackendController
 	 * @throws CHttpException
 	 */
 	
-	private function getCategories(){
-		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' tree,t.lid asc ';
-	
-		$models = ProductCategory::model()->findAll($criteria);
-	
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
-		$options = array();
-		$optionsReturn = array(yii::t('app','--请选择分类--'));
-		if($models) {
-			foreach ($models as $model) {
-				if($model->pid == '0') {
-					$options[$model->lid] = array();
-				} else {
-					$options[$model->pid][$model->lid] = $model->category_name;
-				}
-			}
-			//var_dump($options);exit;
-		}
-		foreach ($options as $k=>$v) {
-			//var_dump($k,$v);exit;
-			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
-			$optionsReturn[$model->category_name] = $v;
-		}
-		return $optionsReturn;
-	}
+
 	public function loadModel($id)
 	{
 		$model=Cashcard::model()->findByPk($id);

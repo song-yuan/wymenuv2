@@ -145,6 +145,10 @@ class CompanyController extends BackendController
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
 		$type = Yii::app()->request->getParam('type');
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
+		if(Yii::app()->user->role >= User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('company/index' , 'companyId' => $this->companyId)) ;
+		}
 		if(Yii::app()->request->isPostRequest) {
                         Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			$model->attributes = Yii::app()->request->getPost('Company');
