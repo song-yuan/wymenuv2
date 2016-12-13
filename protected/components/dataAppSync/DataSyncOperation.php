@@ -695,8 +695,8 @@ class DataSyncOperation {
 			return $msg;
 		}
 		
-		$transaction = Yii::app ()->db->beginTransaction ();
-		try {
+// 		$transaction = Yii::app ()->db->beginTransaction ();
+// 		try {
 				foreach ($pruductIds as $productId){
 					$productArr = split(',', $productId);
 					$psetId = $productArr[0];
@@ -857,19 +857,19 @@ class DataSyncOperation {
 					Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
 				}
 				
-				$transaction->commit ();
+// 				$transaction->commit ();
 				$msg = json_encode ( array (
 						'status' => true,
 						'syncLid' => $syncLid,
 						'content' => $content
 				) );
-		} catch ( Exception $e ) {
-			$transaction->rollback ();
-			$msg = json_encode ( array (
-					'status' => false,
-					'msg'=>$e->getMessage()
-			) );
-		}
+// 		} catch ( Exception $e ) {
+// 			$transaction->rollback ();
+// 			$msg = json_encode ( array (
+// 					'status' => false,
+// 					'msg'=>$e->getMessage()
+// 			) );
+// 		}
 		return $msg;
 	}
 	public static function batchSync($data) {
@@ -1220,7 +1220,7 @@ class DataSyncOperation {
 	public static function updateMaterialStock($dpid, $materialId, $stock) {
 		$temStock = $stock;
 		$time = time ();
-		$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and delete_flag=0 order by create_at asc';
+		$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock <> 0 and delete_flag=0 order by create_at asc';
 		$materialStocks = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		if(!empty($materialStocks)){
 			$count = count($materialStocks);
