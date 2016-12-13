@@ -60,6 +60,7 @@ class MemberCard extends CActiveRecord
 			array('create_at ,enable_date', 'safe'),
 			array('is_sync','length','max'=>50),
 			array('birthday','length','max'=>16),
+			array('level_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','必须选择会员等级')),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, level_id, name, mobile, birthday, email, haspassword, password_hash, sex, ages, all_money, all_points, card_status, enable_date,delete_flag', 'safe', 'on'=>'search'),

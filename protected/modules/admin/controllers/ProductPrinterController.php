@@ -28,11 +28,15 @@ class ProductPrinterController extends BackendController
 		));
 	}
 	public function actionUpdate(){
-                $printerway=array();
+        $printerway=array();
 		$lid = Yii::app()->request->getParam('lid');
 		$model = Product::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('productPrinter/index' , 'companyId' => $this->companyId)) ;
+			}
 			$postData = Yii::app()->request->getPost('ProductPrinterway');
 			//$model->printer_way_id = $postData;
 			if(ProductPrinterway::saveProductPrinterway($this->companyId, $lid, $postData)){

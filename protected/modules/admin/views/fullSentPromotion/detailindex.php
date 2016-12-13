@@ -206,6 +206,10 @@
        
         
         $(".clear_btn").on("click",function(){
+        	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限!");
+            return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
             var arr=document.getElementsByName("optionsRadios"+vid);
             var chx=document.getElementById("optionsCheck"+vid);
@@ -240,11 +244,7 @@
 			//if(chx.checked)
 			//	{
 				checkvalue= $("#checknum"+vid).val();
-			//	}
-			//alert(optid);
-			//alert(optvalue);
-            //alert(checkvalue);
-            //alert(promotionID);
+			
             $.ajax({
                         type:'GET',
  			url:"<?php echo $this->createUrl('fullSentPromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
@@ -272,6 +272,10 @@
         });
 
         $(".clear_red").on("click",function(){
+        	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+            alert("您没有权限!");
+            return false;
+            <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
          
             $.ajax({

@@ -84,6 +84,10 @@ class CashcardController extends BackendController
 		//$model->create_time = time();
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('cashcard/index' , 'companyId' => $this->companyId)) ;
+			}
 		$model->attributes = Yii::app()->request->getPost('TotalPromotion');
 		$se=new Sequence("total_promotion");
 		$model->lid = $se->nextval();
@@ -106,59 +110,7 @@ class CashcardController extends BackendController
 		    		'model' => $model ,
 		    		//'categories' => $categories
 		    		));
-// 		$brand = Yii::app()->admin->getBrand($this->companyId);
-// 		$request = Yii::app()->request;
-// 		$model = new Cashcard;
-// 		$model->brand_id = $brand->brand_id;
-// 		$model->group_id = Yii::app()->admin->admin_user_id;
-// 		$objects = Yii::app()->admin->getRegions($this->companyId);
-	
-// 		if($request->isPostRequest)
-// 		{	
-// 			$postData = $request->getPost('Cashcard');
-// 			$postData['create_time'] = time();
-// 			$shopIds = $request->getPost('shopId');
-			
-// 			$model->attributes = $postData;
-// 			$allShopids = Yii::app()->admin->getShopIds($this->companyId);
-			
-// 			$transaction = Yii::app()->db->beginTransaction();
-// 			if($model->valid($shopIds)){
-// 				$diffShopIds = array_diff($allShopids,$shopIds);
-// 				try{
-// 					if(empty($diffShopIds)){
-// 						$model->shop_flag = 0;
-// 						$model->save(false);
-// 					}else{
-// 						$model->shop_flag = 1;
-// 						$model->save(false);
-// 						//save gift shop
-// 						$cashcardManage = new CashcardManage($model);
-// 						$cashcardManage->saveCashcardShop($shopIds);
-						
-// 						$regionAdminIds = array();
-// 						$shopAdminIds = Yii::app()->admin->getShopOwnerIds($shopIds);
-// 						if(Yii::app()->admin->role_type < AdminWebUser::REGION_ADMIN){
-// 						$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
-// 					  }
-// 						$systemMessage = new SystemMessageManage();
-// 						$title = Yii::app()->admin->admin_user_name.' 添加了现金券['.$model->title.']';
-// 						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
-// 					}
-					
-// 					$transaction->commit();
-					
-// 					Yii::app()->admin->setFlash('success','创建成功！');
-// 					$this->redirect(array('index','cid'=>$this->companyId));
-// 				} catch(Exception $e){
-// 					$transaction->rollback();
-// 				}
-// 			}
-// 		}
-// 		$this->render('create',array(
-// 			'model'=>$model,
-// 			'objects'=>$objects,
-// 		));
+
 	}
 	/**
 	 * 编辑现金券
@@ -172,6 +124,10 @@ class CashcardController extends BackendController
 		   $model = TotalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		    //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		   if(Yii::app()->request->isPostRequest) {
+		   	if(Yii::app()->user->role > User::SHOPKEEPER) {
+		   		Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+		   		$this->redirect(array('cashcard/index' , 'companyId' => $this->companyId)) ;
+		   	}
 		   $model->attributes = Yii::app()->request->getPost('TotalPromotion');
 		   $model->update_at=date('Y-m-d H:i:s',time());
 		   $model->is_sync = $is_sync;
@@ -184,76 +140,7 @@ class CashcardController extends BackendController
 		    $this->render('index' , array(
 		    			'model'=>$model,
 		    ));
-// 		$request = Yii::app()->request;
-// 		$model=$this->loadModel($id);
-// 		$objects = Yii::app()->admin->getRegions($this->companyId);
-// 		$cashcardManage = new CashcardManage($model);
-// 		$selectedShopIds = $cashcardManage->getSelectedShopIds();
-		
-// 		if(isset($model->cash)){
-// 			$model->cash /= 100;
-// 		}
-// 		if(isset($model->order_consume)){
-// 			$model->order_consume /= 100;
-// 		}
-// 		if(!$model->isAdmin()){
-// 			Yii::app()->admin->setFlash('error','你没有权限修改');
-// 			$this->redirect(array('index','cid'=>$this->companyId));
-// 		}
-// 		if($request->isPostRequest)
-// 		{
-// 			$postData = $request->getPost('Cashcard');
-// 			if($postData['is_exclusive'] == 0) $postData['order_consume'] = 0;
-// 			if($postData['exchangeable'] == 0) $postData['consume_point'] = $postData['activity_point'] = 0;
-			
-			
-// 			$shopIds = $request->getPost('shopId');
-			
-// 			$model->attributes=$postData;
-			
-// 			$allShopids = Yii::app()->admin->getShopIds($this->companyId);//判断是否全部选择 如果全部选择 shop_flag = 0
-// 			$transaction = Yii::app()->db->beginTransaction();
-// 			if($model->valid($shopIds)){
-// 				$diffShopIds = array_diff($allShopids,$shopIds);
-// 				try{
-// 					if(empty($diffShopIds)){
-// 						$model->shop_flag = 0;
-// 						$model->save(false);
-// 						$cashcardManage->delete($id);
-// 					}else{
-// 						$model->shop_flag = 1;
-// 						$model->save(false);
-// 						//save gift shop
-// 						$cashcardManage->saveCashcardShop($shopIds);
-						
-// 						$regionAdminIds = array();
-// 						$shopAdminIds = Yii::app()->admin->getShopOwnerIds($shopIds);
-// 						if(Yii::app()->admin->role_type < AdminWebUser::REGION_ADMIN){
-// 							$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
-// 						}
-// 						$systemMessage = new SystemMessageManage();
-// 						$title = Yii::app()->admin->admin_user_name.' 修改了现金券['.$model->title.']';
-// 						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
-// 					}
-// 					$transaction->commit();
-// 					Yii::app()->admin->setFlash('success','编辑成功！');
-// 					$this->redirect(array('index','cid'=>$this->companyId));
-// 				} catch(Exception $e){
-// 					$transaction->rollback();
-// 				}
-// 			}else{
-// 				$model->start_time = strtotime($model->start_time);
-// 				$model->end_time = strtotime($model->end_time)+3600*24;
-// 			}
-// 		}
 
-// 		$model->start_time = $model->start_time ?date('Y-m-d',$model->start_time):'';
-// 		$model->end_time = $model->end_time ?date('Y-m-d',$model->end_time-3600*24):'';
-// 		$this->render('update',array(
-// 			'model'=>$model,
-// 			'objects'=>$objects,
-// 			'selectedShopIds'=>$selectedShopIds
-// 		));
 	}
 
 	/**
@@ -261,6 +148,10 @@ class CashcardController extends BackendController
 	 */
 	public function actionDelete($id)
 	{
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('cashcard/index' , 'companyId' => $this->companyId)) ;
+		}
 		$model = $this->loadModel($id);
 		if($model->isAdmin()){
 			$model->delete();

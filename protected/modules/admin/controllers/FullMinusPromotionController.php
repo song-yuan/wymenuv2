@@ -66,6 +66,10 @@ class FullMinusPromotionController extends BackendController
 		//var_dump($model);exit;
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('fullMinusPromotion/index' , 'companyId' => $this->companyId)) ;
+			}
 			$db = Yii::app()->db;
 			//$transaction = $db->beginTransaction();
 		//try{
@@ -77,59 +81,22 @@ class FullMinusPromotionController extends BackendController
 		
 			$se=new Sequence("full_sent");
 			$model->lid = $se->nextval();
-// 			if(!empty($groupID)){
-// 				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
-// 				//$command=$db->createCommand($sql);
-// 				//$command->execute();
-// 				foreach ($gropids as $gropid){
-// 					$userid = new Sequence("private_branduser");
-// 					$id = $userid->nextval();
-// 					$data = array(
-// 							'lid'=>$id,
-// 							'dpid'=>$this->companyId,
-// 							'create_at'=>date('Y-m-d H:i:s',time()),
-// 							'update_at'=>date('Y-m-d H:i:s',time()),
-// 							'private_promotion_id'=>$model->lid,
-// 							'to_group'=>"2",
-// 							'is_used'=>"1",
-// 							'brand_user_lid'=>$gropid,
-// 							'cupon_source'=>'0',
-// 							'delete_flag'=>'0',
-// 							'is_sync'=>$is_sync,
-// 					);
-// 					$command = $db->createCommand()->insert('nb_private_branduser',$data);
-// 					//var_dump($gropid);exit;
-// 				}
-// 			}
+
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
 			$model->full_type = '1';
-			//$transaction->commit(); //提交事务会真正的执行数据库操作
-			//return true;
-			//}catch (Exception $e) {
-			//	$transaction->rollback(); //如果操作失败, 数据回滚
-				//Yii::app()->end(json_encode(array("status"=>"fail")));
-			//	return false;
-			//}
-			
-			//$py=new Pinyin();
-			//$model->simple_code = $py->py($model->product_name);
-			//var_dump($model);exit;
+
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('fullMinusPromotion/index' , 'companyId' => $this->companyId ));
 			}
 		}
-		
-		//$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-		//echo 'ss';exit;
+
 		$this->render('create' , array(
 				'model' => $model ,
-				//'brdulvs'=>$brdulvs,
-				//'categories' => $categories
+
 		));
 	}
 	
@@ -138,25 +105,20 @@ class FullMinusPromotionController extends BackendController
 	 */
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
-		//echo 'ddd';
-		//$groupID = Yii::app()->request->getParam('str');
-		//var_dump($groupID);exit;
-		//$brdulvs = $this->getBrdulv();
+
 		$is_sync = DataSync::getInitSync();
 		$model = FullSent::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 
 		
 		if(Yii::app()->request->isPostRequest) {
+			if(Yii::app()->user->role > User::SHOPKEEPER) {
+				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+				$this->redirect(array('fullMinusPromotion/index' , 'companyId' => $this->companyId)) ;
+			}
 			$model->attributes = Yii::app()->request->getPost('FullSent');
 	
-			//print_r(explode(',',$groupID));
-			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->is_sync = $is_sync;
-			//$gropid = array();
-			//$gropid = (dexplode(',',$groupID));
-			//var_dump(dexplode(',',$groupID));exit;
-			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('FullMinusPromotion/index' , 'companyId' => $this->companyId));
@@ -164,8 +126,6 @@ class FullMinusPromotionController extends BackendController
 		}
 		$this->render('update' , array(
 				'model'=>$model,
-				//'brdulvs'=>$brdulvs,
-				//'userlvs'=>$userlvs,
 		));
 	}
 
@@ -175,6 +135,10 @@ class FullMinusPromotionController extends BackendController
 	 * 删除现金券
 	 */
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('fullMinusPromotion/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
 		$is_sync = DataSync::getInitSync();
