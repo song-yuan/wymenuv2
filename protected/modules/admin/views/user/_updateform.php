@@ -11,7 +11,7 @@
 									<div class="form-group <?php if($model->hasErrors('username')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'username',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'username',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('username')));?>
+											<?php echo $form->textField($model, 'username',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('username'),'disabled'=>'true'));?>
 											<?php echo $form->error($model, 'username' )?>
 										</div>
 									</div>
