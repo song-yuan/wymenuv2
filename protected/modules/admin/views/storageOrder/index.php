@@ -80,7 +80,7 @@
 								<th style="width:16%"><?php echo yii::t('app','厂商名称');?></th>
 								<th><?php echo yii::t('app','组织名称');?></th>
 								<th><?php echo yii::t('app','入库单号');?></th>
-								<th><?php echo yii::t('app','管理员');?></th>
+								<th><?php echo yii::t('app','入库负责人');?></th>
 								<th><?php echo yii::t('app','订货单号');?></th>
 								<th><?php echo yii::t('app','入库日期');?></th>
 								<th><?php echo yii::t('app','备注');?></th>

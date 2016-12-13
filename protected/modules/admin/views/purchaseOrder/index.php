@@ -83,7 +83,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','厂商名称');?></th>
-								<th><?php echo yii::t('app','管理员');?></th>
+								<th><?php echo yii::t('app','采购负责人');?></th>
 								<th><?php echo yii::t('app','订货单号');?></th>
 								<th><?php echo yii::t('app','采购商');?></th>
 								<th><?php echo yii::t('app','采购商地址');?></th>
