@@ -661,12 +661,12 @@ class DataSyncOperation {
 		if(isset($adminId) && $adminId != "" ){
 			$admin = WxAdminUser::get($dpid, $adminId);
 			if(!$admin){
-				$msg = array('status'=>false,'msg'=>'不存在该服务员');
+				$msg = array('status'=>false,'msg'=>'不存在该服务员1');
 				echo json_encode($msg);
 				exit;
 			}
 		}else{
-			$msg = array('status'=>false,'msg'=>'不存在该服务员');
+			$msg = array('status'=>false,'msg'=>'不存在该服务员1');
 			echo json_encode($msg);
 			exit;
 		}
@@ -690,7 +690,7 @@ class DataSyncOperation {
 		}else{
 			$msg = json_encode ( array (
 					'status' => false,
-					'msg'=>'订单不存在'
+					'msg'=>'订单不存在2'
 			) );
 			return $msg;
 		}
@@ -762,11 +762,11 @@ class DataSyncOperation {
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
 				    			if($psetId > 0){
 				    				if($orderRetreat['total'] >= $orderProduct['zhiamount']){
-				    					throw new Exception('超过退款数量');
+				    					throw new Exception('超过退款数量3');
 				    				}
 				    			}else{
 				    				if($orderRetreat['total'] >= $orderProduct['amount']){
-				    					throw new Exception('超过退款数量');
+				    					throw new Exception('超过退款数量3');
 				    				}
 				    			}
 				    		}
@@ -813,7 +813,7 @@ class DataSyncOperation {
 						$result = Curl::httpsRequest($url);
 						$resObj = json_decode($result);
 						if(!$resObj->status){
-							throw new Exception('微信退款失败');
+							throw new Exception('微信退款失败4');
 						}
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
@@ -821,7 +821,7 @@ class DataSyncOperation {
 						$result = Curl::httpsRequest($url);
 						$resObj = json_decode($result);
 						if(!$resObj->status){
-							throw new Exception('支付宝退款失败');
+							throw new Exception('支付宝退款失败5');
 						}	
 					}elseif($pay['paytype']==4){
 						// 会员卡支付
@@ -836,7 +836,7 @@ class DataSyncOperation {
 						$result = Curl::httpsRequest($url,$data);
 						$resObj = json_decode($result);
 						if(!$resObj->status){
-							throw new Exception('会员卡退款失败');
+							throw new Exception('会员卡退款失败6');
 						}
 					}
 					$se = new Sequence ( "order_pay" );
