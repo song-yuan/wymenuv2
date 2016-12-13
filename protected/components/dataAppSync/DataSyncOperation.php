@@ -897,6 +897,7 @@ class DataSyncOperation {
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
 					$result = Curl::httpsRequest($url,$pData);
 					$resObj = json_decode($result);
+					echo '<meta charset=utf8 />';
 					var_dump($resObj);exit;
 					if($resObj->status){
 						array_push($lidArr, $lid);
