@@ -752,7 +752,7 @@ class DataSyncOperation {
 				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
 				    	}
 				    }else{
-				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice;
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice.' and is_retreat=0';
 				    	$orderProduct =  Yii::app ()->db->createCommand ($sql)->queryRow();
 				    	if($orderProduct){
 				    		$orderProductDetailId = $orderProduct['lid'];
@@ -898,7 +898,6 @@ class DataSyncOperation {
 					$result = Curl::httpsRequest($url,$pData);
 					echo '<meta charset="utf8" />';
 					$resObj = json_decode($result);
-					 echo $resObj->msg;exit;
 					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
