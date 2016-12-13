@@ -97,26 +97,26 @@ class Until {
                 "default->readfeedback",
                 "",
             );
-            if(Yii::app()->params['cloud_local']=='c')//云端服务器
-            {
-                $sql = "select is2_cloud from nb_company where delete_flag = 0 and dpid=".$dpid;
-                //var_dump($sql);
-                $command=$db->createCommand($sql);
-                $nowval= $command->queryScalar();
-                //var_dump($sql,$nowval,$controller."->".$action);
-                if($nowval=="1")
-                {
-                    if(in_array($controller."->".$action,$validOperate))
-                    {
-                        $title=yii::t('app',"云端不能进行此项操作");
-                        $parent->redirect(array('default/error2',
-                                'companyId'=>$dpid,
-				'title' => $title                               
-                        ));
-                        return false;
-                    }
-                }
-            }
+//             if(Yii::app()->params['cloud_local']=='c')//云端服务器
+//             {
+//                 $sql = "select is2_cloud from nb_company where delete_flag = 0 and dpid=".$dpid;
+//                 //var_dump($sql);
+//                 $command=$db->createCommand($sql);
+//                 $nowval= $command->queryScalar();
+//                 //var_dump($sql,$nowval,$controller."->".$action);
+//                 if($nowval=="1")
+//                 {
+//                     if(in_array($controller."->".$action,$validOperate))
+//                     {
+//                         $title=yii::t('app',"云端不能进行此项操作");
+//                         $parent->redirect(array('default/error2',
+//                                 'companyId'=>$dpid,
+// 				'title' => $title                               
+//                         ));
+//                         return false;
+//                     }
+//                 }
+//             }
             return true;
         }
         

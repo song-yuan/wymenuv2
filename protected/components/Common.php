@@ -38,10 +38,10 @@ class Common{
     }
     static public function getuserName($userId){
         $username = "";
-        $sql="select t.username from nb_user t where  t.lid=".$userId;
+        $sql="select t.username,t.staff_no from nb_user t where  t.lid=".$userId;
         $connect = Yii::app()->db->createCommand($sql);
         $user = $connect->queryRow();
-        $username = $user['username'];
+        $username = $user['username'].'('.$user['staff_no'].')';
         return $username;
     }
     static public function getmaterialName($materialId){
