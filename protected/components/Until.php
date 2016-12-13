@@ -33,42 +33,42 @@ class Until {
  	 */
  	static public function isUpdateValid(array $lids,$dpid,$parent){
             $db = Yii::app()->db;
-            if(Yii::app()->params['cloud_local']=='c')//云端服务器
-            {
-                $sql = "select is2_cloud from nb_company where dpid=".$dpid;
-                $command=$db->createCommand($sql);
-                $nowval= $command->queryScalar();
-                if($nowval=="1")
-                {
-                   foreach ($lids as $lid)
-                    {
-                        if($lid%2==1)
-                        {
-                            // return yii::t('app',"云端不能更新本地数据");
-                             $title=yii::t('app',"云端不能更新本地数据");
-                             $parent->redirect(array('default/error2',
-                                     'companyId'=>$dpid,
-                                     'title' => $title                               
-                             ));
-                        }
-                    }
-                }else{
-                    return "1";
-                }                    
-            }else{//本地服务器
-                foreach ($lids as $lid)
-                {
-                    if($lid%2==0)
-                    {
-                        //return yii::t('app',"本地不能更新云端数据");
-                        $title=yii::t('app',"本地不能更新云端数据");
-                            $parent->redirect(array('default/error2',
-                                    'companyId'=>$dpid,
-                                    'title' => $title                               
-                            ));
-                    }
-                }
-            } 
+//             if(Yii::app()->params['cloud_local']=='c')//云端服务器
+//             {
+//                 $sql = "select is2_cloud from nb_company where dpid=".$dpid;
+//                 $command=$db->createCommand($sql);
+//                 $nowval= $command->queryScalar();
+//                 if($nowval=="1")
+//                 {
+//                    foreach ($lids as $lid)
+//                     {
+//                         if($lid%2==1)
+//                         {
+//                             // return yii::t('app',"云端不能更新本地数据");
+//                              $title=yii::t('app',"云端不能更新本地数据");
+//                              $parent->redirect(array('default/error2',
+//                                      'companyId'=>$dpid,
+//                                      'title' => $title                               
+//                              ));
+//                         }
+//                     }
+//                 }else{
+//                     return "1";
+//                 }                    
+//             }else{//本地服务器
+//                 foreach ($lids as $lid)
+//                 {
+//                     if($lid%2==0)
+//                     {
+//                         //return yii::t('app',"本地不能更新云端数据");
+//                         $title=yii::t('app',"本地不能更新云端数据");
+//                             $parent->redirect(array('default/error2',
+//                                     'companyId'=>$dpid,
+//                                     'title' => $title                               
+//                             ));
+//                     }
+//                 }
+//             } 
             return "1";
  	}
         
