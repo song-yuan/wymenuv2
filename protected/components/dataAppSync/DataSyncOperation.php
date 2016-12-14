@@ -670,7 +670,7 @@ class DataSyncOperation {
 			echo json_encode($msg);
 			exit;
 		}
-		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4)';
+		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4,8)';
 		$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
 		
 		if($order){	
@@ -712,25 +712,14 @@ class DataSyncOperation {
 				    		$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
 				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
-				    			if($psetId > 0){
-				    				if($orderRetreat['total'] >= $orderproduct['zhiamount']){
-				    					$msg = json_encode ( array (
-				    							'status' => true,
-				    							'syncLid' => $syncLid,
-				    							'content' => $content
-				    					) );
-				    					return $msg;
-				    				}
-				    			}else{
-				    				if($orderRetreat['total'] >= $orderproduct['amount']){
-				    					$msg = json_encode ( array (
-				    							'status' => true,
-				    							'syncLid' => $syncLid,
-				    							'content' => $content
-				    					) );
-				    					return $msg;
-				    				}
-				    			}
+			    				if($orderRetreat['total'] >= $orderproduct['zhiamount']){
+			    					$msg = json_encode ( array (
+			    							'status' => true,
+			    							'syncLid' => $syncLid,
+			    							'content' => $content
+			    					) );
+			    					return $msg;
+			    				}
 				    		}
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
 				    		Yii::app ()->db->createCommand ($sql)->execute();
@@ -760,15 +749,9 @@ class DataSyncOperation {
 				    		$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
 				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
-				    			if($psetId > 0){
-				    				if($orderRetreat['total'] >= $orderProduct['zhiamount']){
-				    					throw new Exception('超过退款数量');
-				    				}
-				    			}else{
-				    				if($orderRetreat['total'] >= $orderProduct['amount']){
-				    					throw new Exception('超过退款数量');
-				    				}
-				    			}
+			    				if($orderRetreat['total'] >= $orderProduct['amount']){
+			    					throw new Exception('超过退款数量');
+			    				}
 				    		}
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
 				    		Yii::app ()->db->createCommand ($sql)->execute();
