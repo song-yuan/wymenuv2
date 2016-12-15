@@ -358,14 +358,14 @@ input.weui_btn_plain_default {
 }
 .empty1{
     height: 20px;
-    border-top: 1px solid #A3A3A3;
-    border-bottom: 1px solid #A3A3A3;
+    border-top: 1px solid #CFCFCF;
+    border-bottom: 1px solid #CFCFCF;
     background-color: #EDEDED;
 }
 .empty2{
     height: 40px;
-    border-top: 1px solid #A3A3A3;
-    border-bottom: 1px solid #A3A3A3;
+    border-top: 1px solid #CFCFCF;
+    border-bottom: 1px solid #CFCFCF;
     color:#787878; 
     line-height: 40px;
     padding-left: 20px;
@@ -374,7 +374,7 @@ input.weui_btn_plain_default {
 }
 .empty3{
     height: 20px;
-    border-top: 1px solid #A3A3A3; 
+    border-top: 1px solid #CFCFCF; 
      background-color: #EDEDED;
 }
 .put_into{
@@ -387,11 +387,37 @@ input.weui_btn_plain_default {
    background-color: #EDEDED;
    padding-bottom: 50px;
 }
+.money1{
+    font-size: 17px;
+    margin:20px 0px 10px 20px;
+}
+.money2{
+    font-size: 50px;
+    text-align: center;
+}
+.point1{
+   font-size: 17px;
+    padding:20px 0px 0px 15px;    
+}
+.point2{
+     font-size: 50px;
+    /* float: right; */
+    text-align: right;
+    vertical-align: middle;
+    padding-right: 15px;
+    
+}
+.point_style{
+    margin-top: 0px;
+    background-color: #04BE02;
+    color:#FFFFFF;
+}
+
 .weui_cell:first-child:before {
   display: none;
 }
 .weui_cells {
-  margin-top: 1.17647059em;
+ /* margin-top: 1.17647059em;*/
   background-color: #FFFFFF;
   line-height: 1.41176471;
   font-size: 17px;
