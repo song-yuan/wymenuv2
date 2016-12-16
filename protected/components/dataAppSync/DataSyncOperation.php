@@ -873,7 +873,7 @@ class DataSyncOperation {
 				
 				//写入log文件。。。
 				if($obj->dpid != "0000000042"){
-					$txt=data('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content;
+					$txt=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content;
 					fwrite($k,$txt);
 				}
 				if($type==2){
