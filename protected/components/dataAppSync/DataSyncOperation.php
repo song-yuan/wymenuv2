@@ -856,7 +856,9 @@ class DataSyncOperation {
 		return $msg;
 	}
 	public static function batchSync($data) {
+		
 		if(isset($data) && !empty($data['data'])){
+			$k=fopen(Yii::app()->basePath."/data/log.txt","w");
 			$lidArr = array();
 			$adminId = $_POST['admin_id'];
 			$data = $_POST['data'];
@@ -868,6 +870,12 @@ class DataSyncOperation {
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
 				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
+				
+				//写入log文件。。。
+				if($obj->dpid != "0000000042"){
+					$txt=$obj;
+					fwrite($k,$txt);
+				}
 				if($type==2){
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
 					$result = Curl::httpsRequest($url,$pData);
@@ -893,6 +901,7 @@ class DataSyncOperation {
 					}
 				}
 			}
+			fclose($k);
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
