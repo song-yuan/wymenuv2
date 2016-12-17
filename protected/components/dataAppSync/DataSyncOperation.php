@@ -857,7 +857,7 @@ class DataSyncOperation {
 	}
 	public static function batchSync($data) {
 		$k=fopen(Yii::app()->basePath."/data/log.txt","a+");
-		$txt1 = date('Y年m月d日  H时i分s秒   ',time());
+		$txt1 = date('Y年m月d日  H时i分s秒   ',time()).'"\n"';
 		fwrite($k,$txt1);
 		if(isset($data) && !empty($data['data'])){
 			
@@ -878,7 +878,7 @@ class DataSyncOperation {
 				
 				//写入log文件。。。
 				if($obj->dpid !='42'){
-					$txt3=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content;
+					$txt3=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content.'"\n"';
 					fwrite($k,$txt3);
 				}
 				if($type==2){
