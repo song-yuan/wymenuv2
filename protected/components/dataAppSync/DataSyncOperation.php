@@ -856,17 +856,14 @@ class DataSyncOperation {
 		return $msg;
 	}
 	public static function batchSync($data) {
-		$k=fopen(Yii::app()->basePath."/data/log.txt","a+");
-		$txt1 = date('Y年m月d日  H时i分s秒   ',time()).'"\n"';
-		fwrite($k,$txt1);
+		
 		if(isset($data) && !empty($data['data'])){
 			
-			//$txt2 = $data;
-			//fwrite($k,$txt2);
-			
+			$k=fopen(Yii::app()->basePath."/data/log.txt","w");
 			$lidArr = array();
 			$adminId = $_POST['admin_id'];
 			$data = $_POST['data'];
+			$data = str_replace('"order_pay":]','"order_pay":[]',$data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
 				$lid = $obj->lid;
@@ -877,9 +874,9 @@ class DataSyncOperation {
 				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
 				
 				//写入log文件。。。
-				if($obj->dpid !='42'){
-					$txt3=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content.'"\n"';
-					fwrite($k,$txt3);
+				if($obj->dpid != "0000000042"){
+					$txt=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content;
+					fwrite($k,$txt);
 				}
 				if($type==2){
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
