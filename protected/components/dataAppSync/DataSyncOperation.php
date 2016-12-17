@@ -856,9 +856,7 @@ class DataSyncOperation {
 		return $msg;
 	}
 	public static function batchSync($data) {
-		
 		if(isset($data) && !empty($data['data'])){
-			
 			//$k=fopen(Yii::app()->basePath."/data/log.txt","w");
 			$lidArr = array();
 			$adminId = $_POST['admin_id'];
