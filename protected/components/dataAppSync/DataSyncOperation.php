@@ -861,8 +861,8 @@ class DataSyncOperation {
 		fwrite($k,$txt1);
 		if(isset($data) && !empty($data['data'])){
 			
-			$txt2 = $data;
-			fwrite($k,$txt2);
+			//$txt2 = $data;
+			//fwrite($k,$txt2);
 			
 			$lidArr = array();
 			$adminId = $_POST['admin_id'];
