@@ -863,7 +863,7 @@ class DataSyncOperation {
 			$lidArr = array();
 			$adminId = $_POST['admin_id'];
 			$data = $_POST['data'];
-			$data = str_replace('"order_pay":]','"order_pay":[]',$data);
+			$data = str_replace('\"order_pay\":]','\"order_pay\":[]',$data);
 			$txt1 = $data;
 			fwrite($k,$txt1);
 			$dataArr = json_decode($data);
