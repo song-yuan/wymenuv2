@@ -40,6 +40,7 @@ class Order extends CActiveRecord
         public $all_number;
         public $all_ordertype;
         public $all_num;
+        public $all_nums;
         //支付部分传递参数
         public $account_cash=0;
         public $account_otherdetail="";
@@ -90,6 +91,7 @@ class Order extends CActiveRecord
                 //'siteNo' => array(self::HAS_ONE , 'SiteNo' , '','on'=>' t.dpid=siteNo.dpid and t.site'),
                 'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
 				'channel' => array(self::BELONGS_TO , 'Channel' ,'' ,'on'=>'t.takeout_typeid = channel.lid and t.dpid = channel.dpid '),
+				'orderpay' => array(self::BELONGS_TO , 'OrderPay' ,'' ,'on'=>'t.dpid = orderpay.dpid and t.lid = orderpay.order_id '),
 		);
 	}
 
