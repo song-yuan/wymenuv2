@@ -3368,45 +3368,45 @@ public function actionPayallReport(){
 		$userid = Yii::app()->request->getParam('userid');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
-		
+	
 		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
-		$criteria->with = array('company','order4');
-		$criteria->condition = 't.paytype != "11" and t.dpid='.$this->companyId ;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(*) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
+		$criteria->with = array('company','orderpay');
+		$criteria->condition = 'orderpay.paytype != "11" and t.dpid='.$this->companyId.' and t.order_status in (3,4,8)' ;
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
 		if($userid != '0' && $userid != '-1'){
-			$criteria->addCondition ('order4.username ="'.$userid.'"');
+			$criteria->addCondition ('t.username ="'.$userid.'"');
 		}
-		$criteria->addCondition("order4.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("order4.create_at <='$end_time 23:59:59'");
+		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		if($text==1){
 			if($userid != '0'){
-				$criteria->group ='t.dpid,year(t.create_at),order4.username';
-				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+				$criteria->group ='t.dpid,year(t.create_at),t.username';
+				$criteria->order = 'year(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}else{
 				$criteria->group ='t.dpid,year(t.create_at)';
-				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+				$criteria->order = 'year(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}
 		}elseif($text==2){
 			if($userid != '0' ){
-				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),order4.username';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),t.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}else{
 				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at)';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}
 		}elseif($text==3){
 			if($userid != '0'){
-				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),order4.username';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}else{
 				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}
 		}
-	    $model = OrderPay::model()->findAll($criteria);
+		$model = Order::model()->findAll($criteria);
 	   	//var_dump($model);exit;
 	   	$payments = $this->getPayment($this->companyId);
 	   	$username = $this->getUsername($this->companyId);
@@ -3517,21 +3517,21 @@ public function actionPayallReport(){
 			}else{
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all);
 			}
-			if($userid !='0' && $userid != '-1'){
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j,$v->order4->username.'('.$this->getUserstaffno($this->companyId,$v->order4->username).')');
-			}elseif($userid =='0' || $userid == '-1'){
+			if($userid !='0'){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j,$v->username.'('.$this->getUserstaffno($this->companyId,$v->username).')');
+			}else{
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j);
 			}
 				$objPHPExcel->setActiveSheetIndex(0)
-				->setCellValue('B'.$j,$v->all_num)
-				->setCellValue('C'.$j,$reality_all = $this->getGrossProfit($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
+				->setCellValue('B'.$j,$v->all_nums)
+				->setCellValue('C'.$j,$reality_all = $this->getGrossProfit($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v->all_reality))
 				->setCellValue('E'.$j,$v->all_reality)
-				->setCellValue('G'.$j,$cash = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,0,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
-				->setCellValue('H'.$j,$wechat = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,1,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
-				->setCellValue('I'.$j,$alipay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,2,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
-				->setCellValue('J'.$j,$unionpay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,5,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
-				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username));
+				->setCellValue('G'.$j,$cash = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,0,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('H'.$j,$wechat = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,1,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('I'.$j,$alipay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,2,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('J'.$j,$unionpay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,5,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
 				$letters='';
 				if($payments){
 					$let = '0';
@@ -3553,7 +3553,7 @@ public function actionPayallReport(){
 							case 10: $letters = 'U';$letternexts = 'V3';break;
 							default:break;
 						}
-						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username));
+						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
 					}
 					$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 						
@@ -3644,7 +3644,7 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(12);
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$filename="支付方式（员工营业额）报表（".date('y-m-d H:i',time())."）.xls";
+		$filename="支付方式（员工营业额）报表（".date('y年m月d日  H时i分',time())."）.xls";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
@@ -4712,12 +4712,12 @@ public function actionPayallReport(){
 			->setCellValue('E'.$i,sprintf("%.2f",$v['all_realprice']+$retreatnum).'('.$retreatnum.')')
 			->setCellValue('F'.$i,sprintf("%.2f",$v['all_originalprice']-$v['all_realprice']));
 			if($v['all_number']){
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$i,sprintf("%.2f",$v['all_realprice']/$v['all_number']));
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$i,sprintf("%.2f",($v['all_realprice']+$retreatnum)/$v['all_number']));
 			}else { 
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$i,sprintf("%.2f",$model['all_realprice']));
 			}
 			if($v['all_account']){
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$i,sprintf("%.2f",$v['all_realprice']/$v['all_number']));
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$i,sprintf("%.2f",($v['all_realprice']+$retreatnum)/$v['all_number']));
 			}else {
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$i,sprintf("%.2f",$model['all_realprice']));
 			}
