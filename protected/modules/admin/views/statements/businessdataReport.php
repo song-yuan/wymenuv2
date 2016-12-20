@@ -103,8 +103,8 @@
 								?>
 								<td><?php echo sprintf("%.2f",$model['all_realprice']+$retreatnum).'('.$retreatnum.')';?></td>
 								<td><?php echo sprintf("%.2f",$model['all_originalprice']-$model['all_realprice']);?></td>
-								<td><?php if($model['all_number']){echo sprintf("%.2f",$model['all_realprice']/$model['all_number']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
-								<td><?php if($model['all_account']){echo sprintf("%.2f",$model['all_realprice']/$model['all_account']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
+								<td><?php if($model['all_number']){echo sprintf("%.2f",($model['all_realprice']+$retreatnum)/$model['all_number']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
+								<td><?php if($model['all_account']){echo sprintf("%.2f",($model['all_realprice']+$retreatnum)/$model['all_account']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
 								
 								<td><?php ?></td>
 								
