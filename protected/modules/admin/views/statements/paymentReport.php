@@ -123,7 +123,7 @@
 		                $orders_total = $orders_total+$model->all_nums;    //总单数
 		                echo $model->all_nums;?></td>
 		             <td><?php 
-		                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $grossprofit_total+=$reality_all;
 		                echo $reality_all;
 		                ?></td>
@@ -140,32 +140,32 @@
 		            ?></td>
 		            <?php if($userid != '0'): ?>
 		            <td><?php 
-		                echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';
+		                echo $model->username.'('.$this->getUserstaffno($this->companyId,$model->username).')';
 		             ?></td>
 		            <?php endif;?>
 		            <td><?php  
-		                $cash = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $cash = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $cash_total += $cash;
 		                echo $cash;
 		            ?></td>
 		            <td><?php 
-		                $wechat = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,1,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $wechat = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,1,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $wechat_total +=$wechat;
 		                echo $wechat;
 		            ?></td>
 		            <td><?php
-		                $alipay=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $alipay=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $alipay_total += $alipay;
 		                echo $alipay; 
 		            ?></td>
 		            <td><?php 
-		                $unionpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,5,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $unionpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,5,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $unionpay_total += $unionpay;
 		                echo $unionpay;
 		                ?>
 		            </td>
 		            <td id="alipay4"><?php 
-		                $vipcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,4,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $vipcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,4,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $vipcard_total += $vipcard;
 		                echo $vipcard; 
 		                ?>
@@ -174,7 +174,7 @@
 		                
 		                <?php $j = 0;foreach ($payments as $payment):?>
 		                    <td><?php 
-		                           $pay_item =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username); 
+		                           $pay_item =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username); 
 		                           $grouppay_arr[$j] +=$pay_item;
 		                          // $grouppay.$i +=$pay_item;
 		                            
@@ -198,7 +198,7 @@
 		            <td><?php  echo $gather_total;?></td>
 		            <?php if($userid != '0'): ?>
 		                <td><?php   
-		                       // echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';
+		                       // echo $model->username.'('.$this->getUserstaffno($this->companyId,$model->username).')';
 		                    ?>
 		                </td>
 		            <?php endif;?>
