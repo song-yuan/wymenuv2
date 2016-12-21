@@ -8,14 +8,7 @@ class DataSyncAppVersion
      * 查询最新的版本信息
      */
     public static function checkVersion($data){
-        //查询是否是最新版本的安装包
-    	$verinfo = $data['versioninfo'];
-    	$type = $data['type'];
-    	$appType = $data['appType'];
-    	
-    	$versions = array();
-    	$versions = explode(',',$version);
-    	
+       
     	$msg = json_encode ( array (
     			'status' => true,
     			'verinfo' => '00.00.0003',
