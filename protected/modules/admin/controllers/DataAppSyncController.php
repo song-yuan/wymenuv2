@@ -145,13 +145,6 @@ public function actionValidateNewData(){
  * app更新
  */
 public function actionAppUpdate(){
-	$msg = json_encode ( array (
-			'status' => true,
-			'verinfo' => '00.00.0003',
-			'type' => '1',
-			'appType' => '1'
-	) );
-	echo $msg;exit;
 	$result = DataSyncAppVersion::checkVersion($_POST);
 	echo $result;exit;
 }
