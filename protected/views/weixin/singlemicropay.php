@@ -14,7 +14,11 @@ if(isset($auth_code) && $auth_code != ""){
 	$microPay = new MicroPay();
 	$result = $microPay->pay($input);
 	if($result){
-		$msg = array('status'=>true, 'trade_no'=>$orderId);
+		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
+			$msg = array('status'=>true, 'result'=>true, 'trade_no'=>$orderId);
+		}else{
+			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);
+		}
 	}else{
 		$msg = array('status'=>false);
 	}

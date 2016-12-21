@@ -72,13 +72,13 @@ if(isset($_POST)){
 	
 	switch ($barPayResult->getTradeStatus()) {
 		case "SUCCESS":
-			echo json_encode(array('status'=>true, 'trade_no'=>$outTradeNo));
+			echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
 			break;
 		case "FAILED":
 			echo json_encode(array('status'=>false));
 			break;
 		case "UNKNOWN":
-			echo json_encode(array('status'=>false));
+			echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
 			break;
 		default:
 			echo json_encode(array('status'=>false));
