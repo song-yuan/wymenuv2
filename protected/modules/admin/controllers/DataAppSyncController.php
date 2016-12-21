@@ -141,6 +141,13 @@ public function actionValidateNewData(){
  	$result = DataSyncOperation::operateOrder($_POST);
  	echo $result;exit;
 }
+/*
+ * app更新
+ */
+public function actionAppUpdate(){
+	$result = DataSyncAppVersion::checkVersion($_POST);
+	echo $result;exit;
+}
 /**
  * 
  * 退单
