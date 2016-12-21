@@ -33,8 +33,8 @@ class MicroPay
 		{
 			return false;
 		}
-		//确认10次
-		$queryTimes = 10;
+		// 确认查询15次
+		$queryTimes = 15;
 		while($queryTimes > 0)
 		{
 			$queryTimes--;
@@ -53,7 +53,8 @@ class MicroPay
 		//10次确认失败，则撤销订单
 		if(!$this->cancel($out_trade_no))
 		{
-			throw new WxpayException("撤销单失败！");
+			// 撤销单失败 返回 撤销单失败！
+			return array('return_code'=>'SUCCESS','result_code'=>'CANCEL');
 		}
 		return false;
 	}
