@@ -1,3 +1,9 @@
+<?php
+	$baseUrl = Yii::app()->baseUrl;
+	$this->setPageTitle('会员中心');
+?>
+
+
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
@@ -6,6 +12,16 @@
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
 
 <style>
+    .hd {
+    padding:15px 0px 8px 0px;
+    text-align: center;
+}
+    .hd img{
+       
+        height:180px;
+       
+           
+    }
     .up_down1:after{
          transition:All 0.3s ease-in-out;
 
@@ -115,15 +131,16 @@
 
 
 <head>
+    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">   
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>一点吃会员卡</title>
 </head>
 <body>
     <div class="container js_container">
         <div class="page">
             <div class="hd">
-                <h1 class="page_title">会员卡</h1>
-                <p class="page_desc">会员卡设计</p>
+                <img  src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/hyk.png" class="icon_nav" alt=""/>
             </div>
             <div class="bd">
                 <div class="weui_cells weui_cells_access global_navs">
@@ -164,9 +181,11 @@
                     <!--BEGIN dialog2-->
                     <div id="dialog2" style="display: none; ">
                       
-                        <div class="weui_dialog" style="z-index: 999999;">
+                        <div class="weui_dialog" style="z-index:100;">
                             
-                            <div class="btn_ewm_out" >    <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a></div>
+                            <div class="btn_ewm_out">    
+                                <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
+                            </div>
                           
                             
                             <div  class="txw_out"><img class="txm" src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/txm.png"></div>
@@ -270,7 +289,8 @@
     </div>
     
 
- </body>        
+ </body>    
+
 <script type="text/javascript">
  
     $('.weui_cell ').on('click',function(){
