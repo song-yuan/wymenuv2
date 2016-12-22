@@ -1,10 +1,27 @@
-<?php //Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
-<?php //Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
+<?php
+	$baseUrl = Yii::app()->baseUrl;
+	$this->setPageTitle('会员中心');
+?>
+
+
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
+<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
 
 <style>
+    .hd {
+    padding:15px 0px 8px 0px;
+    text-align: center;
+}
+    .hd img{
+       
+        height:180px;
+       
+           
+    }
     .up_down1:after{
          transition:All 0.3s ease-in-out;
 
@@ -58,24 +75,72 @@
         display: none;
     }
     .pri_style,.sale1_style,.sale2_style{
-        height:150px;
+        height:120px;
         border-top: 1px solid #D9D9D9;
         border-bottom: 1px solid #D9D9D9;
         background-color: #EDEDED;
+        font-size: 15px;
+        
+    }
+    .introduce{
+       margin: 20px 0px 10px 55px; 
+       color:#787878;
+    }
+    ul{
+        margin: 0px 0px 10px 75px; 
+        color:#787878;
+    }
+    .txm{
+       width: 240px;
+       height:90px;
+       padding-bottom: 10px;
+       
+    }
+    .txw_out{
+     border-bottom: 1px dashed #CFCFCF;   
+    }
+    .ewm{
+         width: 130px;
+       height:130px;
+    }
+    .btn_ewm{
+     
+        font-size: 30px;
+        color:#636363;
+    }
+    .btn_ewm_out{
+       text-align: right;  
+       margin-bottom: 20px;
+    }
+    .txw_out,.ewm_out,.des{
+       text-align: center; 
+    }
+    .des{
+        border-top: 1px solid #CFCFCF;
+        color: #787878;
+        background-color: #EDEDED;
+        font-size: 15px;
+        height:40px;
+        line-height: 40px;
+    }
+    .ewm_out{
+        margin-top: 40px;
+        margin-bottom: 40px;
     }
 </style>
 
 
 <head>
+    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">   
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>一点吃会员卡</title>
 </head>
 <body>
     <div class="container js_container">
         <div class="page">
             <div class="hd">
-                <h1 class="page_title">会员卡</h1>
-                <p class="page_desc">会员卡设计</p>
+                <img  src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/hyk.png" class="icon_nav" alt=""/>
             </div>
             <div class="bd">
                 <div class="weui_cells weui_cells_access global_navs">
@@ -97,7 +162,7 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <a class="weui_cell js_cell" href="javascript:;" >
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('wechat/ticket');?>" >
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdq.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>我的券</p>
@@ -105,7 +170,7 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <a class="weui_cell js_cell" href="javascript:;" data-id="code">
+                    <a class="weui_cell js_cell" href="javascript:;"  id="showDialog2" >
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdewm.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>我的二维码</p>
@@ -113,6 +178,22 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
+                    <!--BEGIN dialog2-->
+                    <div id="dialog2" style="display: none; ">
+                      
+                        <div class="weui_dialog" style="z-index:100;">
+                            
+                            <div class="btn_ewm_out">    
+                                <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
+                            </div>
+                          
+                            
+                            <div  class="txw_out"><img class="txm" src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/txm.png"></div>
+                            <div class="ewm_out"><img class="ewm" src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/ewm.png"></div>
+                            <div class="des">到店出示给服务员即可使用</div>
+                        </div>
+                    </div>
+                    <!--END dialog2-->
                     <div class="empty1"></div>                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="privilege" data_target="#chanel_demo1">
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdzxtq.png" class="icon_nav" alt=""></span>
@@ -123,9 +204,13 @@
                     </a>
                     <div class="collapse pri_style" id="chanel_demo1">
                         <!--  add some code here -->
-                        <div style="height:200px">
-                            
-                        </div>  
+                        
+                        <div class="introduce">  详情说明</div>
+                            <ul>
+                                <li>到店即可享受9折优惠</li>
+                                <li>生日可享受8.5折优惠</li>
+                            </ul>
+                      
                     </div>
   
                     
@@ -143,7 +228,11 @@
                     </a>
                      <div class="collapse sale1_style" id="chanel_demo2">
                         <!--  add some code here -->
-                        <div></div>  
+                       <div class="introduce">  详情说明</div>
+                            <ul>
+                                <li>满30元减2元</li>
+                                <li>满50元减5元</li>
+                            </ul> 
                     </div>
                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="sale2" data_target="#chanel_demo3">
@@ -156,10 +245,14 @@
                     </a>
                     <div class="collapse sale2_style" id="chanel_demo3">
                         <!--  add some code here -->
-                        <div></div>  
+                        <div class="introduce">  详情说明</div>
+                            <ul>
+                                <li>满30元送甜筒一个</li>
+                                <li>满50元送薯条(小)一份</li>
+                            </ul>
                     </div>
                     <div class="empty1"></div>
-                    <a class="weui_cell js_cell" href="javascript:;" >
+                    <a class="weui_cell js_cell" href="javascript:;">
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-grxx.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>个人信息</p>
@@ -167,7 +260,7 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <a class="weui_cell js_cell" href="javascript:;" >
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('wechat/bill');?>" >
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>账单</p>
@@ -196,7 +289,8 @@
     </div>
     
 
- </body>        
+ </body>    
+
 <script type="text/javascript">
  
     $('.weui_cell ').on('click',function(){

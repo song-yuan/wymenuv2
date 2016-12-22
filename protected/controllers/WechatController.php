@@ -15,8 +15,13 @@
           $this->render('point');
         }
          public function actionTicket(){
-          $this->render('ticket');
+          $this->render('ticket'); 
         }
+       
+         public function actionBill(){
+          $this->render('bill'); 
+        }
+        
     }
 
 
