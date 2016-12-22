@@ -164,7 +164,7 @@
                     <!--BEGIN dialog2-->
                     <div id="dialog2" style="display: none; ">
                       
-                        <div class="weui_dialog" style="z-index: 100">
+                        <div class="weui_dialog" style="z-index: 999999;">
                             
                             <div class="btn_ewm_out" >    <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a></div>
                           
