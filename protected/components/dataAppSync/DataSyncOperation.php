@@ -986,10 +986,10 @@ class DataSyncOperation {
 			//$data = str_replace('\"order_pay\":]','\"order_pay\":[]',$data);
 			//$txt1 = $data;
 			//fwrite($k,$txt1);
-			fwrite($k,'begain..');
 			fwrite($k,$data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
+				fwrite($k,'begain..');
 				$lid = $obj->lid;
 				$dpid = $obj->dpid;
 				$type = $obj->sync_type;
@@ -1048,8 +1048,8 @@ class DataSyncOperation {
 // 						array_push($lidArr, $lid);
 // 					}
 				}
+				fwrite($k,'end...');
 			}
-			fwrite($k,'end...');
 			fclose($k);
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
