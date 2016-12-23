@@ -637,6 +637,129 @@ class DataSyncOperation {
 	}
 	/**
 	 * 
+	 * @param unknown $data
+	 * 
+	 * 微信支付退款
+	 * 
+	 */
+	public static function refundWxPay($data) {
+		$now = time();
+		$dpid = $data['dpid'];
+		$rand = rand(100,999);
+		$out_refund_no = $now.'-'.$dpid.'-'.$rand;
+		if(isset($data['admin_id']) && $data['admin_id'] != "" ){
+			$admin_id = $data['admin_id'];
+			$admin = WxAdminUser::get($dpid, $admin_id);
+			if(!$admin){
+				$msg = array('status'=>false);
+				return json_encode($msg);
+			}
+		}else{
+			$msg = array('status'=>false);
+			return json_encode($msg);
+		}
+		if(isset($data['out_trade_no']) && $data['out_trade_no'] != ""){
+			$out_trade_no = $data['out_trade_no'];
+			$total_fee = $data['total_fee'];
+			$refund_fee = $data['refund_fee'];
+			
+			$input = new WxPayRefund();
+			$input->SetOut_trade_no($out_trade_no);
+			$input->SetTotal_fee($total_fee*100);
+			$input->SetRefund_fee($refund_fee*100);
+			$input->SetOut_refund_no($out_refund_no);
+			 
+			$result = WxPayApi::refund($input);
+			if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
+				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
+			}else{
+				$msg = array('status'=>false);
+			}
+		}else{
+			$msg = array('status'=>false);
+		}
+		return  json_encode($msg);
+	}
+	/**
+	 *
+	 * @param unknown $data
+	 *
+	 * 支付宝支付退款
+	 *
+	 */
+	public static function refundZfbPay($data) {
+		$now = time();
+		$dpid = $data['dpid'];
+		$rand = rand(100,999);
+		$out_request_no = $now.'-'.$dpid.'-'.$rand;
+		if(isset($data['admin_id']) && $data['admin_id'] != "" ){
+			$admin_id = $data['admin_id'];
+			$admin = WxAdminUser::get($dpid, $admin_id);
+			if(!$admin){
+				$msg = array('status'=>false);
+				return json_encode($msg);
+			}
+		}else{
+			$msg = array('status'=>false);
+			return json_encode($msg);
+		}
+		$alipayAccount = AlipayAccount::get($dpid);
+		$f2fpayConfig = array(
+				//支付宝公钥
+				'alipay_public_key' => $alipayAccount['alipay_public_key'],
+				//商户私钥
+				'merchant_private_key' => $alipayAccount['merchant_private_key'],
+				//编码格式
+				'charset' => "UTF-8",
+				//支付宝网关
+				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
+				//应用ID
+				'app_id' => $alipayAccount['appid'],
+				//异步通知地址,只有扫码支付预下单可用
+				'notify_url' =>  "",
+				//最大查询重试次数
+				'MaxQueryRetry' => "10",
+				//查询间隔
+				'QueryDuration' => "3"
+		);
+		if(isset($data['out_trade_no']) && $data['out_trade_no'] != ""){
+			$out_trade_no = $data['out_trade_no'];
+			$refund_amount = $data['refund_fee'];
+			//第三方应用授权令牌,商户授权系统商开发模式下使用
+			$appAuthToken = "";//根据真实值填写
+		
+			//创建退款请求builder,设置参数
+			$refundRequestBuilder = new AlipayTradeRefundContentBuilder();
+			$refundRequestBuilder->setOutTradeNo($out_trade_no);
+			$refundRequestBuilder->setRefundAmount($refund_amount);
+			$refundRequestBuilder->setOutRequestNo($out_request_no);
+		
+			$refundRequestBuilder->setAppAuthToken($appAuthToken);
+		
+			//初始化类对象,调用refund获取退款应答
+			$refundResponse = new AlipayTradeService($f2fpayConfig);
+			$refundResult =	$refundResponse->refund($refundRequestBuilder);
+			//根据交易状态进行处理
+			switch ($refundResult->getTradeStatus()){
+				case "SUCCESS":
+					$msg = array('status'=>true, 'trade_no'=>$out_request_no);
+					break;
+				case "FAILED":
+					$msg = array('status'=>false,'msg'=>'支付宝退款失败!!!');
+					break;
+				case "UNKNOWN":
+					$msg = array('status'=>false,'msg'=>'系统异常，订单状态未知!!!');
+					break;
+				default:
+					$msg = array('status'=>false,'msg'=>'不支持的交易状态，交易返回异常!!!');
+					break;
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'缺少参数!!!');
+		}
+	}
+	/**
+	 * 
 	 * 退单
 	 * 
 	 */
@@ -662,13 +785,11 @@ class DataSyncOperation {
 			$admin = WxAdminUser::get($dpid, $adminId);
 			if(!$admin){
 				$msg = array('status'=>false,'msg'=>'不存在该服务员');
-				echo json_encode($msg);
-				exit;
+				return json_encode($msg);
 			}
 		}else{
 			$msg = array('status'=>false,'msg'=>'不存在该服务员');
-			echo json_encode($msg);
-			exit;
+			return json_encode($msg);
 		}
 		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4,8)';
 		$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
@@ -792,33 +913,31 @@ class DataSyncOperation {
 					}
 					if($pay['paytype']==1){
 						// 微信支付
-						$url = Yii::app()->request->hostInfo.'/wymenuv2/weixin/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&total_fee='.$pay['pay_amount'].'&refund_fee='.$refund_fee;
-						$result = Curl::httpsRequest($url);
+						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
+						$result = self::refundWxPay($rData);
 						$resObj = json_decode($result);
-						if(!$resObj->status){
+						if(!$resObj['status']){
 							throw new Exception('微信退款失败');
 						}
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
-						$url = Yii::app()->request->hostInfo.'/wymenuv2/alipay/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&refund_fee='.$refund_fee;
-						$result = Curl::httpsRequest($url);
-						$resObj = json_decode($result);
-						if(!$resObj->status){
+						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'refund_fee'=>$refund_fee);
+						$result = self::refundZfbPay($rData);
+						if(!$resObj['status']){
 							throw new Exception('支付宝退款失败');
-						}	
+						}
 					}elseif($pay['paytype']==4){
 						// 会员卡支付
-						$url = Yii::app()->request->hostInfo.'/wymenuv2/admin/dataAppSync/refundMemberCard';
-						$data = array(
+						$rData = array(
 								'dpid'=>$dpid,
 								'rfid'=>$pay['paytype_id'],
 								'admin_id'=>$adminId,
 								'password'=>'',
 								'refund_price'=>$refund_fee,
 								);
-						$result = Curl::httpsRequest($url,$data);
+						$result = self::refundMemberCard($rData);
 						$resObj = json_decode($result);
-						if(!$resObj->status){
+						if(!$resObj['status']){
 							throw new Exception('会员卡退款失败');
 						}
 					}
@@ -871,7 +990,7 @@ class DataSyncOperation {
 				$type = $obj->sync_type;
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
-				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
+// 				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
 				
 				//写入log文件。。。
 // 				if($obj->dpid != "0000000042"){
@@ -879,28 +998,49 @@ class DataSyncOperation {
 // 					fwrite($k,$txt);
 // 				}
 				if($type==2){
+					// 新增订单
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
-					$result = Curl::httpsRequest($url,$pData);
+					if(strpos($syncurl,'createOrder')){
+						$result = self::operateOrder($pData);
+					}else{
+						$result = self::addMemberCard($pData);
+					}
 					$resObj = json_decode($result);
-					if($resObj->status){
+					if($resObj['status']){
 						array_push($lidArr, $lid);
 					}
+// 					$result = Curl::httpsRequest($url,$pData);
+// 					$resObj = json_decode($result);
+// 					if($resObj->status){
+// 						array_push($lidArr, $lid);
+// 					}
 				}elseif($type==4){
+					// 退款
 					$contentArr = split('::', $content);
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
-					$result = Curl::httpsRequest($url,$pData);
+					$result = self::retreatOrder($pData);
 					$resObj = json_decode($result);
-					if($resObj->status){
+					if($resObj['status']){
 						array_push($lidArr, $lid);
 					}
-				}else{
-					$contentArr = split(':', $content);
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'rfid'=>$contentArr[1],'password'=>$contentArr[2],'pay_price'=>$contentArr[3],'data'=>$content);
-					$result = Curl::httpsRequest($url,$pData);
+// 					$result = Curl::httpsRequest($url,$pData);
+// 					$resObj = json_decode($result);
+// 					if($resObj->status){
+// 						array_push($lidArr, $lid);
+// 					}
+				}elseif($type==3){
+					// 增加会员卡
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
+					$result = self::addMemberCard($pData);
 					$resObj = json_decode($result);
-					if($resObj->status){
+					if($resObj['status']){
 						array_push($lidArr, $lid);
 					}
+// 					$result = Curl::httpsRequest($url,$pData);
+// 					$resObj = json_decode($result);
+// 					if($resObj->status){
+// 						array_push($lidArr, $lid);
+// 					}
 				}
 			}
 			//fclose($k);
@@ -940,7 +1080,9 @@ class DataSyncOperation {
 		$memberCard = Yii::app ()->db->createCommand ($sql)->queryRow();
 		if($memberCard){
 			$msg = json_encode ( array (
-					'status' => false,
+					'status' => true,
+					'syncLid' => $syncLid,
+					'content' => $orderData
 			) );
 			return $msg;
 		}
@@ -971,7 +1113,7 @@ class DataSyncOperation {
 				) );
 		} else {
 			$msg = json_encode ( array (
-					'status' => false,
+					'status' => false
 				) );
 		}
 		return $msg;
