@@ -14,7 +14,7 @@ if(isset($admin_id) && $admin_id != "" ){
 	echo json_encode($msg);
 	exit;
 }
-if(isset($out_trade_no) && $out_trade_no != ""){
+if(isset($out_trade_no) && $out_trade_no!="" && $out_trade_no!=0){
 	$input = new WxPayRefund();
 	$input->SetOut_trade_no($out_trade_no);
 	$input->SetTotal_fee($total_fee*100);
