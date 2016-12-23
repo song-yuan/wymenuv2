@@ -986,30 +986,16 @@ class DataSyncOperation {
 	}
 	public static function batchSync($data) {
 		if(isset($data) && !empty($data['data'])){
-			$k=fopen(Yii::app()->basePath."/data/log.txt","w");
 			$lidArr = array();
 			$adminId = $data['admin_id'];
 			$data = $data['data'];
-			//$data = str_replace('\"order_pay\":]','\"order_pay\":[]',$data);
-			//$txt1 = $data;
-			//fwrite($k,$txt1);
-			fwrite($k,$data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
-				fwrite($k,'begain..');
 				$lid = $obj->lid;
 				$dpid = $obj->dpid;
 				$type = $obj->sync_type;
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
-// 				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
-				$str = $lid.'..';
-				fwrite($k,$str);
-				//写入log文件。。。
-// 				if($obj->dpid != "0000000042"){
-// 					$txt=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content;
-// 					fwrite($k,$txt);
-// 				}
 				if($type==2){
 					// 新增订单
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
@@ -1022,11 +1008,6 @@ class DataSyncOperation {
 					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
-// 					$result = Curl::httpsRequest($url,$pData);
-// 					$resObj = json_decode($result);
-// 					if($resObj->status){
-// 						array_push($lidArr, $lid);
-// 					}
 				}elseif($type==4){
 					// 退款
 					$contentArr = split('::', $content);
@@ -1036,11 +1017,6 @@ class DataSyncOperation {
 					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
-// 					$result = Curl::httpsRequest($url,$pData);
-// 					$resObj = json_decode($result);
-// 					if($resObj->status){
-// 						array_push($lidArr, $lid);
-// 					}
 				}elseif($type==3){
 					// 增加会员卡
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
@@ -1049,15 +1025,8 @@ class DataSyncOperation {
 					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
-// 					$result = Curl::httpsRequest($url,$pData);
-// 					$resObj = json_decode($result);
-// 					if($resObj->status){
-// 						array_push($lidArr, $lid);
-// 					}
 				}
-				fwrite($k,'end...');
 			}
-			fclose($k);
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
