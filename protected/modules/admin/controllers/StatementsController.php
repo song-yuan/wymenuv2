@@ -315,6 +315,13 @@ class StatementsController extends BackendController
 		$comName = $this->getComName();
 		$db = Yii::app()->db;
 		
+		
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
 		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.lid,t.dpid,t.create_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.create_at asc';
 		//var_dump($sql);exit;
 		if ($text==1) {
@@ -325,7 +332,7 @@ class StatementsController extends BackendController
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 						
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,year(t.create_at) order by year(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}else{
 			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
@@ -333,7 +340,7 @@ class StatementsController extends BackendController
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 					
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,year(t.create_at) order by year(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}}elseif ($text==2){
 			if ($str){
@@ -342,7 +349,7 @@ class StatementsController extends BackendController
 							
 							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 							
-							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 									group by t1.category_id,t.dpid,month(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}else{
 			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
@@ -350,7 +357,7 @@ class StatementsController extends BackendController
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 						
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,month(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}}elseif ($text==3){
 			if ($str){
@@ -359,7 +366,7 @@ class StatementsController extends BackendController
 							
 							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 							
-							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 									group by t1.category_id,t.dpid,day(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}else{
 			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
@@ -367,7 +374,7 @@ class StatementsController extends BackendController
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 						
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,day(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}}
 		if($download){
@@ -525,10 +532,17 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 	
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000'; 
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
 		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(*) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(distinct t.account_no) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
 		$criteria->with = array('company','orderpay');
 		$criteria->condition = 'orderpay.paytype != "11" and t.dpid='.$this->companyId.' and t.order_status in (3,4,8)' ;
+		$criteria->addCondition('t.lid in('.$ords.')');
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
@@ -562,6 +576,7 @@ public function actionPayallReport(){
 				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}
 		}
+		$criteria->distinct = TRUE;
 		$model = Order::model()->findAll($criteria);
 		//var_dump($model);exit;
 		$payments = $this->getPayment($this->companyId);
@@ -818,7 +833,15 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where paytype !=11 and dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		
+		
+		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where  order_id in('.$ords.') and paytype !=11 and dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
 		//$sql = 'select k.pay_amount from(select DATEADD(hh,DATEDIFF(hh,0,create_at),0) [Hour],sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by DATEDIFF(hh,0,create_at)) k';
 
 
@@ -886,12 +909,20 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
+		
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		
 		if($text==1){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') group by year(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc) k';
 		}elseif($text==2){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') group by year(create_at) asc,month(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc) k';
 		}elseif($text==3){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
 		}
 			//统计实付价格，客流、单数
 		
@@ -1149,8 +1180,14 @@ public function actionPayallReport(){
 		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//$catId = Yii::app()->request->getParam('cid',0);
-		//var_dump($catId);exit;
+		
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		//echo ($ords);exit;
 		$criteria = new CDbCriteria;
 		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.dpid,t.product_id,t1.lid,t1.product_name,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total from nb_order_product t left join nb_product t1 on(t1.lid = t.product_id and t.dpid = t1.dpid ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=1 group by t.product_id,t.amount,is_retreat,month(t.create_at)';
 		//var_dump($sql);exit;
@@ -1176,8 +1213,10 @@ public function actionPayallReport(){
 		if($ordertype==5){
 			$criteria->addCondition("t.set_id !=0");
 		}
+		//$criteria->addCondition("t.order_id in('.$ords.')");
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+		$criteria->addCondition("t.order_id in(".$ords.")");
 	
 		if($text==1){
 			$criteria->group ='t.product_id,year(t.create_at)';
@@ -1202,7 +1241,6 @@ public function actionPayallReport(){
 		//var_dump($a);exit;
 		 //var_dump($comName);
 		 //exit;
-	
 	
 		$this->render('ceshiproductReport',array(
 				'models'=>$models,
@@ -1233,7 +1271,13 @@ public function actionPayallReport(){
 		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//$catId = Yii::app()->request->getParam('cid',0);
+		
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
 		//var_dump($catId);exit;
 		//$criteria = new CDbCriteria;
 		if($ordertype=='-1'){
@@ -1247,13 +1291,13 @@ public function actionPayallReport(){
 			$strs = $this->companyId;
 		}
 		if($text==1){
-			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.y_all,k.set_id order by k.y_all,all_setnum desc,all_setprice desc)c';
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') and t.order_id in('.$ords.') group by t.order_id,t.set_id) k where 1 group by k.y_all,k.set_id order by k.y_all,all_setnum desc,all_setprice desc)c';
 			
 		}elseif($text==2){
-			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.m_all,k.set_id order by k.y_all,k.m_all,all_setnum desc,all_setprice desc)c';
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') and t.order_id in('.$ords.') group by t.order_id,t.set_id) k where 1 group by k.m_all,k.set_id order by k.y_all,k.m_all,all_setnum desc,all_setprice desc)c';
 			
 		}else{
-			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc)c';
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') and t.order_id in('.$ords.') group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc)c';
 			
 		}
 		//$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.zhiamount) as all_num,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid = '.$this->companyId.' group by t.order_id,t.set_id) k where 1 group by k.set_id )c';
@@ -3134,6 +3178,14 @@ public function actionPayallReport(){
 		$comName = $this->getComName();
 		$db = Yii::app()->db;
 	
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		//$criteria->addCondition('t.lid in('.$ords.')');
+		
 		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.lid,t.dpid,t.create_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.create_at asc';
 		//var_dump($sql);exit;
 		if ($text==1) {
@@ -3144,7 +3196,7 @@ public function actionPayallReport(){
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 						
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,year(t.create_at) order by year(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}else{
 			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
@@ -3152,7 +3204,7 @@ public function actionPayallReport(){
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 					
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,year(t.create_at) order by year(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}}elseif ($text==2){
 			if ($str){
@@ -3161,7 +3213,7 @@ public function actionPayallReport(){
 							
 							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 							
-							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 									group by t1.category_id,t.dpid,month(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}else{
 			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
@@ -3169,7 +3221,7 @@ public function actionPayallReport(){
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 						
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,month(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}}elseif ($text==3){
 			if ($str){
@@ -3178,7 +3230,7 @@ public function actionPayallReport(){
 							
 							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 							
-							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+							where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 									group by t1.category_id,t.dpid,day(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}else{
 			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
@@ -3186,7 +3238,7 @@ public function actionPayallReport(){
 						
 						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 						
-						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.'
+						where t.delete_flag = 0 and t.is_retreat in(1,0) and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8) and t.set_id '.$setids.' and t4.lid in('.$ords.')
 								group by t1.category_id,t.dpid,day(t.create_at) order by year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.price) desc,t.dpid asc)k';
 			}}
 		$model = Yii::app()->db->createCommand($sql)->queryAll();
@@ -3369,10 +3421,19 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 	
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		
+		
 		$criteria = new CDbCriteria;
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(*) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
 		$criteria->with = array('company','orderpay');
 		$criteria->condition = 'orderpay.paytype != "11" and t.dpid='.$this->companyId.' and t.order_status in (3,4,8)' ;
+		$criteria->addCondition('t.lid in('.$ords.')');
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
@@ -4192,7 +4253,13 @@ public function actionPayallReport(){
 		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//$catId = Yii::app()->request->getParam('cid',0);
+		
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
 		//var_dump($catId);exit;
 		$criteria = new CDbCriteria;
 		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.dpid,t.product_id,t1.lid,t1.product_name,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total from nb_order_product t left join nb_product t1 on(t1.lid = t.product_id and t.dpid = t1.dpid ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=1 group by t.product_id,t.amount,is_retreat,month(t.create_at)';
@@ -4221,6 +4288,7 @@ public function actionPayallReport(){
 		}
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+		$criteria->addCondition("t.order_id in(".$ords.")");
 	
 		if($text==1){
 			$criteria->group ='t.product_id,year(t.create_at)';
@@ -4423,6 +4491,13 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		
 		if($ordertype=='-1'){
 			$ordertypes = '>=0';
 		}else{
@@ -4434,13 +4509,13 @@ public function actionPayallReport(){
 			$strs = $this->companyId;
 		}
 		if($text==1){   //年
-			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.y_all,k.set_id order by k.y_all,all_setnum desc,all_setprice desc)c';
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') and t.order_id in('.$ords.') group by t.order_id,t.set_id) k where 1 group by k.y_all,k.set_id order by k.y_all,all_setnum desc,all_setprice desc)c';
 				
 		}elseif($text==2){ //月
-			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.m_all,k.set_id order by k.y_all,k.m_all,all_setnum desc,all_setprice desc)c';
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') and t.order_id in('.$ords.') group by t.order_id,t.set_id) k where 1 group by k.m_all,k.set_id order by k.y_all,k.m_all,all_setnum desc,all_setprice desc)c';
 				
 		}else{
-			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc)c';
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') and t.order_id in('.$ords.') group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc)c';
 				
 		}
 		$models =  $db->createCommand($sql)->queryAll();
@@ -4615,13 +4690,21 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		//$criteria->addCondition('t.lid in('.$ords.')');
+		
 		$db = Yii::app()->db;
 		if($text==1){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') group by year(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc) k';
 		}elseif($text==2){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') group by year(create_at) asc,month(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc) k';
 		}elseif($text==3){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
 		}
 			//统计实付价格，客流、单数
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
@@ -6113,7 +6196,14 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where paytype != 11 and  dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all';
+		$sql = 'select k.lid from nb_order k where k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		
+		$sql = 'select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where order_id in('.$ords.') and paytype != 11 and  dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 	
 	
