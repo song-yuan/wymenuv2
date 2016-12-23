@@ -928,7 +928,7 @@ class DataSyncOperation {
 						$result = self::refundZfbPay($rData);
 						fwrite($f,$result);
 						$resObj = json_decode($result);
-						fwrite($f,$resObj['status']);
+						fwrite($f,$resObj->status);
 						fwrite($f,'end');
 						fclose($f);
 						if(!$resObj['status']){
