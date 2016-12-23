@@ -924,11 +924,12 @@ class DataSyncOperation {
 						// 支付宝支付
 						$f = fopen(Yii::app()->basePath."/data/log.txt","w");
 						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'refund_fee'=>$refund_fee);
-						fwrite($f,'begain \r\n');
+						fwrite($f,'begain');
 						$result = self::refundZfbPay($rData);
 						fwrite($f,$result);
 						$resObj = json_decode($result);
-						fwrite($f,'end \r\n');
+						fwrite($f,$resObj['status']);
+						fwrite($f,'end');
 						fclose($f);
 						if(!$resObj['status']){
 							throw new Exception('支付宝退款失败');
