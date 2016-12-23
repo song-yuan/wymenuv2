@@ -917,21 +917,16 @@ class DataSyncOperation {
 						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
 						$result = self::refundWxPay($rData);
 						$resObj = json_decode($result);
-						if(!$resObj['status']){
+						if(!$resObj->status){
 							throw new Exception('微信退款失败');
 						}
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
-						$f = fopen(Yii::app()->basePath."/data/log.txt","w");
+						
 						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'refund_fee'=>$refund_fee);
-						fwrite($f,'begain');
 						$result = self::refundZfbPay($rData);
-						fwrite($f,$result);
 						$resObj = json_decode($result);
-						fwrite($f,$resObj->msg);
-						fwrite($f,'end');
-						fclose($f);
-						if(!$resObj['status']){
+						if(!$resObj->status){
 							throw new Exception('支付宝退款失败');
 						}
 					}elseif($pay['paytype']==4){
@@ -945,7 +940,7 @@ class DataSyncOperation {
 								);
 						$result = self::refundMemberCard($rData);
 						$resObj = json_decode($result);
-						if(!$resObj['status']){
+						if(!$resObj->status){
 							throw new Exception('会员卡退款失败');
 						}
 					}
@@ -984,7 +979,7 @@ class DataSyncOperation {
 	}
 	public static function batchSync($data) {
 		if(isset($data) && !empty($data['data'])){
-			//$k=fopen(Yii::app()->basePath."/data/log.txt","w");
+			$k=fopen(Yii::app()->basePath."/data/log.txt","w");
 			$lidArr = array();
 			$adminId = $_POST['admin_id'];
 			$data = $_POST['data'];
@@ -999,7 +994,8 @@ class DataSyncOperation {
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
 // 				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
-				
+				$str = $lid.'..';
+				fwrite($k,$str);
 				//写入log文件。。。
 // 				if($obj->dpid != "0000000042"){
 // 					$txt=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content;
@@ -1014,7 +1010,7 @@ class DataSyncOperation {
 						$result = self::addMemberCard($pData);
 					}
 					$resObj = json_decode($result);
-					if($resObj['status']){
+					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
 // 					$result = Curl::httpsRequest($url,$pData);
@@ -1028,7 +1024,7 @@ class DataSyncOperation {
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
 					$result = self::retreatOrder($pData);
 					$resObj = json_decode($result);
-					if($resObj['status']){
+					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
 // 					$result = Curl::httpsRequest($url,$pData);
@@ -1041,7 +1037,7 @@ class DataSyncOperation {
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
 					$result = self::addMemberCard($pData);
 					$resObj = json_decode($result);
-					if($resObj['status']){
+					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
 // 					$result = Curl::httpsRequest($url,$pData);
@@ -1051,7 +1047,7 @@ class DataSyncOperation {
 // 					}
 				}
 			}
-			//fclose($k);
+			fclose($k);
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
