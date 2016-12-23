@@ -1049,6 +1049,7 @@ class DataSyncOperation {
 // 					}
 				}
 			}
+			fwrite($k,'end...');
 			fclose($k);
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
