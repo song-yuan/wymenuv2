@@ -396,20 +396,20 @@ class DataSyncOperation {
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
 		
+		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
+		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
+		if($orderModel){
+			$msg = json_encode ( array (
+					'status' => true,
+					'orderId' => $orderModel['lid'],
+					'syncLid' => $syncLid,
+					'content' => $orderData
+			) );
+			return $msg;
+		}
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
-			$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
-			$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
-			if($orderModel){
-				$msg = json_encode ( array (
-						'status' => true,
-						'orderId' => $orderModel['lid'],
-						'syncLid' => $syncLid,
-						'content' => $orderData
-				) );
-				return $msg;
-			}
-			
 			$insertOrderArr = array (
 					'lid' => $orderId,
 					'dpid' => $dpid,
@@ -835,6 +835,7 @@ class DataSyncOperation {
 				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
 			    				if($orderRetreat['total'] >= $orderproduct['zhiamount']){
+			    					$transaction->rollback ();
 			    					$msg = json_encode ( array (
 			    							'status' => true,
 			    							'syncLid' => $syncLid,
@@ -872,7 +873,13 @@ class DataSyncOperation {
 				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
 			    				if($orderRetreat['total'] >= $orderProduct['amount']){
-			    					throw new Exception('超过退款数量');
+			    					$transaction->rollback ();
+			    					$msg = json_encode ( array (
+			    							'status' => true,
+			    							'syncLid' => $syncLid,
+			    							'content' => $content
+			    					) );
+			    					return $msg;
 			    				}
 				    		}
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
