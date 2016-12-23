@@ -722,7 +722,7 @@ class DataSyncOperation {
 				//查询间隔
 				'QueryDuration' => "3"
 		);
-		if(isset($data['out_trade_no']) && $data['out_trade_no'] != "" && $data['out_trade_no'] != 0){
+		if(isset($data['out_trade_no']) && $data['out_trade_no']!="" && $data['out_trade_no']!=0){
 			$out_trade_no = $data['out_trade_no'];
 			$refund_amount = $data['refund_fee'];
 			//第三方应用授权令牌,商户授权系统商开发模式下使用
