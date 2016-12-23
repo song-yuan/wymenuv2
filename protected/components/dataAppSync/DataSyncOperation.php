@@ -757,6 +757,7 @@ class DataSyncOperation {
 		}else{
 			$msg = array('status'=>false,'msg'=>'缺少参数!!!');
 		}
+		return json_encode($msg);
 	}
 	/**
 	 * 
@@ -923,6 +924,7 @@ class DataSyncOperation {
 						// 支付宝支付
 						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'refund_fee'=>$refund_fee);
 						$result = self::refundZfbPay($rData);
+						$resObj = json_decode($result);
 						if(!$resObj['status']){
 							throw new Exception('支付宝退款失败');
 						}
