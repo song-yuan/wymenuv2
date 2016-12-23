@@ -986,6 +986,8 @@ class DataSyncOperation {
 			//$data = str_replace('\"order_pay\":]','\"order_pay\":[]',$data);
 			//$txt1 = $data;
 			//fwrite($k,$txt1);
+			fwrite($k,'begain..');
+			fwrite($k,$data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
 				$lid = $obj->lid;
