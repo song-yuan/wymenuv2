@@ -981,8 +981,8 @@ class DataSyncOperation {
 		if(isset($data) && !empty($data['data'])){
 			$k=fopen(Yii::app()->basePath."/data/log.txt","w");
 			$lidArr = array();
-			$adminId = $_POST['admin_id'];
-			$data = $_POST['data'];
+			$adminId = $data['admin_id'];
+			$data = $data['data'];
 			//$data = str_replace('\"order_pay\":]','\"order_pay\":[]',$data);
 			//$txt1 = $data;
 			//fwrite($k,$txt1);

@@ -191,7 +191,7 @@ public function actionGetMemberCardYue(){
  * 
  */
 public function actionBatchSync(){
-	$result = DataSyncOperation::batchSync($_POST);
+	$result = DataSyncOperation::batchSync($_GET);
 	echo $result;exit;
 }
 /**
