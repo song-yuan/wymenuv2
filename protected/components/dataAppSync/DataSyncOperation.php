@@ -1023,7 +1023,7 @@ class DataSyncOperation {
 					$logStr = 'lid:'.$lid.' dpid:'.$dpid.' type:'.$type.' syncurl:'.$syncurl.' content:'.$content;
 					Helper::writeLog($logStr);
 				}
-				Helper::writeLog('begin...'. "\r\n");
+				Helper::writeLog('end...'. "\r\n");
 			}
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
