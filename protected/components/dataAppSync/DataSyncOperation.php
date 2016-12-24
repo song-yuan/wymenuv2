@@ -991,6 +991,7 @@ class DataSyncOperation {
 			$data = $data['data'];
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
+				Helper::writeLog('begin...'. "\r\n");
 				$lid = $obj->lid;
 				$dpid = $obj->dpid;
 				$type = $obj->sync_type;
@@ -1022,6 +1023,7 @@ class DataSyncOperation {
 					$logStr = 'lid:'.$lid.' dpid:'.$dpid.' type:'.$type.' syncurl:'.$syncurl.' content:'.$content;
 					Helper::writeLog($logStr);
 				}
+				Helper::writeLog('begin...'. "\r\n");
 			}
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
