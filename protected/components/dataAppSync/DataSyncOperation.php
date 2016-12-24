@@ -986,12 +986,13 @@ class DataSyncOperation {
 	}
 	public static function batchSync($data) {
 		if(isset($data) && !empty($data['data'])){
+			Helper::writeLog('begin...');
 			$lidArr = array();
 			$adminId = $data['admin_id'];
 			$data = $data['data'];
+			Helper::writeLog($data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
-				Helper::writeLog('begin...'. "\r\n");
 				$lid = $obj->lid;
 				$dpid = $obj->dpid;
 				$type = $obj->sync_type;
@@ -1023,12 +1024,14 @@ class DataSyncOperation {
 					$logStr = 'lid:'.$lid.' dpid:'.$dpid.' type:'.$type.' syncurl:'.$syncurl.' content:'.$content;
 					Helper::writeLog($logStr);
 				}
-				Helper::writeLog('end...'. "\r\n");
 			}
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
+			Helper::writeLog('count:'.$count);
+			Helper::writeLog('end...');
 		}else{
+			Helper::writeLog('empty data!!!');
 			$msg = json_encode(array('status'=>false,'msg'=>''));
 		}
 		return $msg;
