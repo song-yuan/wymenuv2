@@ -1004,27 +1004,23 @@ class DataSyncOperation {
 					}else{
 						$result = self::addMemberCard($pData);
 					}
-					$resObj = json_decode($result);
-					if($resObj->status){
-						array_push($lidArr, $lid);
-					}
 				}elseif($type==4){
 					// 退款
 					$contentArr = split('::', $content);
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
 					$result = self::retreatOrder($pData);
-					$resObj = json_decode($result);
-					if($resObj->status){
-						array_push($lidArr, $lid);
-					}
 				}elseif($type==3){
 					// 增加会员卡
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
 					$result = self::addMemberCard($pData);
-					$resObj = json_decode($result);
-					if($resObj->status){
-						array_push($lidArr, $lid);
-					}
+				}
+				$resObj = json_decode($result);
+				if($resObj->status){
+					array_push($lidArr, $lid);
+				}else{
+					// 插入同步不成功数据
+					$logStr = 'lid:'.$lid.' dpid:'.$dpid.' type:'.$type.' syncurl:'.$syncurl.' content:'.$content;
+					Helper::writeLog($logStr);
 				}
 			}
 			$count = count($lidArr);
