@@ -396,20 +396,20 @@ class DataSyncOperation {
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
 		
+		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
+		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
+		if($orderModel){
+			$msg = json_encode ( array (
+					'status' => true,
+					'orderId' => $orderModel['lid'],
+					'syncLid' => $syncLid,
+					'content' => $orderData
+			) );
+			return $msg;
+		}
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
-			$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
-			$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
-			if($orderModel){
-				$msg = json_encode ( array (
-						'status' => true,
-						'orderId' => $orderModel['lid'],
-						'syncLid' => $syncLid,
-						'content' => $orderData
-				) );
-				return $msg;
-			}
-			
 			$insertOrderArr = array (
 					'lid' => $orderId,
 					'dpid' => $dpid,
@@ -658,7 +658,7 @@ class DataSyncOperation {
 			$msg = array('status'=>false);
 			return json_encode($msg);
 		}
-		if(isset($data['out_trade_no']) && $data['out_trade_no'] != ""){
+		if(isset($data['out_trade_no']) && $data['out_trade_no']!="" && $data['out_trade_no']!=0){
 			$out_trade_no = $data['out_trade_no'];
 			$total_fee = $data['total_fee'];
 			$refund_fee = $data['refund_fee'];
@@ -722,7 +722,7 @@ class DataSyncOperation {
 				//查询间隔
 				'QueryDuration' => "3"
 		);
-		if(isset($data['out_trade_no']) && $data['out_trade_no'] != ""){
+		if(isset($data['out_trade_no']) && $data['out_trade_no']!="" && $data['out_trade_no']!=0){
 			$out_trade_no = $data['out_trade_no'];
 			$refund_amount = $data['refund_fee'];
 			//第三方应用授权令牌,商户授权系统商开发模式下使用
@@ -757,6 +757,7 @@ class DataSyncOperation {
 		}else{
 			$msg = array('status'=>false,'msg'=>'缺少参数!!!');
 		}
+		return json_encode($msg);
 	}
 	/**
 	 * 
@@ -834,6 +835,7 @@ class DataSyncOperation {
 				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
 			    				if($orderRetreat['total'] >= $orderproduct['zhiamount']){
+			    					$transaction->rollback ();
 			    					$msg = json_encode ( array (
 			    							'status' => true,
 			    							'syncLid' => $syncLid,
@@ -871,7 +873,13 @@ class DataSyncOperation {
 				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
 			    				if($orderRetreat['total'] >= $orderProduct['amount']){
-			    					throw new Exception('超过退款数量');
+			    					$transaction->rollback ();
+			    					$msg = json_encode ( array (
+			    							'status' => true,
+			    							'syncLid' => $syncLid,
+			    							'content' => $content
+			    					) );
+			    					return $msg;
 			    				}
 				    		}
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
@@ -916,14 +924,16 @@ class DataSyncOperation {
 						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
 						$result = self::refundWxPay($rData);
 						$resObj = json_decode($result);
-						if(!$resObj['status']){
+						if(!$resObj->status){
 							throw new Exception('微信退款失败');
 						}
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
+						
 						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'refund_fee'=>$refund_fee);
 						$result = self::refundZfbPay($rData);
-						if(!$resObj['status']){
+						$resObj = json_decode($result);
+						if(!$resObj->status){
 							throw new Exception('支付宝退款失败');
 						}
 					}elseif($pay['paytype']==4){
@@ -937,7 +947,7 @@ class DataSyncOperation {
 								);
 						$result = self::refundMemberCard($rData);
 						$resObj = json_decode($result);
-						if(!$resObj['status']){
+						if(!$resObj->status){
 							throw new Exception('会员卡退款失败');
 						}
 					}
@@ -976,13 +986,11 @@ class DataSyncOperation {
 	}
 	public static function batchSync($data) {
 		if(isset($data) && !empty($data['data'])){
-			//$k=fopen(Yii::app()->basePath."/data/log.txt","w");
+			Helper::writeLog('begin...');
 			$lidArr = array();
-			$adminId = $_POST['admin_id'];
-			$data = $_POST['data'];
-			//$data = str_replace('\"order_pay\":]','\"order_pay\":[]',$data);
-			//$txt1 = $data;
-			//fwrite($k,$txt1);
+			$adminId = $data['admin_id'];
+			$data = $data['data'];
+			Helper::writeLog($data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
 				$lid = $obj->lid;
@@ -990,13 +998,6 @@ class DataSyncOperation {
 				$type = $obj->sync_type;
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
-// 				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
-				
-				//写入log文件。。。
-// 				if($obj->dpid != "0000000042"){
-// 					$txt=date('Y-m-d H:i:s',time())."Lid:".$obj->lid."  Dpid:".$obj->dpid."  Sync:".$obj->sync_type."  Url:".$obj->sync_url."  content:".$obj->content;
-// 					fwrite($k,$txt);
-// 				}
 				if($type==2){
 					// 新增订单
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
@@ -1005,49 +1006,32 @@ class DataSyncOperation {
 					}else{
 						$result = self::addMemberCard($pData);
 					}
-					$resObj = json_decode($result);
-					if($resObj['status']){
-						array_push($lidArr, $lid);
-					}
-// 					$result = Curl::httpsRequest($url,$pData);
-// 					$resObj = json_decode($result);
-// 					if($resObj->status){
-// 						array_push($lidArr, $lid);
-// 					}
 				}elseif($type==4){
 					// 退款
 					$contentArr = split('::', $content);
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
 					$result = self::retreatOrder($pData);
-					$resObj = json_decode($result);
-					if($resObj['status']){
-						array_push($lidArr, $lid);
-					}
-// 					$result = Curl::httpsRequest($url,$pData);
-// 					$resObj = json_decode($result);
-// 					if($resObj->status){
-// 						array_push($lidArr, $lid);
-// 					}
 				}elseif($type==3){
 					// 增加会员卡
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
 					$result = self::addMemberCard($pData);
-					$resObj = json_decode($result);
-					if($resObj['status']){
-						array_push($lidArr, $lid);
-					}
-// 					$result = Curl::httpsRequest($url,$pData);
-// 					$resObj = json_decode($result);
-// 					if($resObj->status){
-// 						array_push($lidArr, $lid);
-// 					}
+				}
+				$resObj = json_decode($result);
+				if($resObj->status){
+					array_push($lidArr, $lid);
+				}else{
+					// 插入同步不成功数据
+					$logStr = 'lid:'.$lid.' dpid:'.$dpid.' type:'.$type.' syncurl:'.$syncurl.' content:'.$content;
+					Helper::writeLog($logStr);
 				}
 			}
-			//fclose($k);
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
+			Helper::writeLog('count:'.$count);
+			Helper::writeLog('end...');
 		}else{
+			Helper::writeLog('empty data!!!');
 			$msg = json_encode(array('status'=>false,'msg'=>''));
 		}
 		return $msg;
