@@ -986,11 +986,10 @@ class DataSyncOperation {
 	}
 	public static function batchSync($data) {
 		if(isset($data) && !empty($data['data'])){
-			Helper::writeLog('begin...');
+			$dpid = 0;
 			$lidArr = array();
 			$adminId = $data['admin_id'];
 			$data = $data['data'];
-			Helper::writeLog($data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
 				$lid = $obj->lid;
@@ -1021,17 +1020,54 @@ class DataSyncOperation {
 					array_push($lidArr, $lid);
 				}else{
 					// 插入同步不成功数据
-					$logStr = 'lid:'.$lid.' dpid:'.$dpid.' type:'.$type.' syncurl:'.$syncurl.' content:'.$content;
-					Helper::writeLog($logStr);
+					$data = array('dpid'=>$dpid,'jobid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
+					$resFail = self::setSyncFailure($data);
+					$failObj = json_decode($resFail);
+					if($resObj->status){
+						array_push($lidArr, $lid);
+					}
+				}
+			}
+			// 获取云端失败数据
+			$syncData = self::getAllSyncFailure($dpid);
+			$syncArr = json_decode($syncData);
+			if(!empty($syncArr)){
+				foreach ($syncArr as $sync){
+					$lid = $sync->lid;
+					$dpid = $sync->dpid;
+					$syncLid = $sync->jobid;
+					$type = $sync->sync_type;
+					$syncurl = $sync->sync_url;
+					$content = $sync->content;
+					if($type==2){
+						// 新增订单
+						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
+						if(strpos($syncurl,'createOrder')){
+							$result = self::operateOrder($pData);
+						}else{
+							$result = self::addMemberCard($pData);
+						}
+					}elseif($type==4){
+						// 退款
+						$contentArr = split('::', $content);
+						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
+						$result = self::retreatOrder($pData);
+					}elseif($type==3){
+						// 增加会员卡
+						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
+						$result = self::addMemberCard($pData);
+					}
+					$resObj = json_decode($result);
+					if($resObj->status){
+						self::delSyncFailure($lid,$dpid);
+						array_push($lidArr, $syncLid);
+					}
 				}
 			}
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
-			Helper::writeLog('count:'.$count);
-			Helper::writeLog('end...');
 		}else{
-			Helper::writeLog('empty data!!!');
 			$msg = json_encode(array('status'=>false,'msg'=>''));
 		}
 		return $msg;
@@ -1390,6 +1426,63 @@ class DataSyncOperation {
 		$sql = 'select t.lid,t.dpid,t.url as main_picture,if(t.type=0,3,4) as is_set from nb_double_screen_detail t,nb_double_screen t1 where t.double_screen_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t1.is_able=1 and t.delete_flag=0 and t1.delete_flag=0';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return json_encode($results);
+	}
+	/**
+	 * 
+	 * 同步内容失败写入云端
+	 * 
+	 */
+	public static function setSyncFailure($data) {
+		$dpid = $data['dpid'];
+		$jobid = $data['jobid']; // 保存pos本地的lid
+		$syncType = $data['sync_type'];
+		$syncUrl = $data['sync_url'];
+		$content = $data['content'];
+		$sql = 'select * from nb_sync_failure where dpid='.$dpid.' and jobid='.$jobid.' and sync_type='.$syncType.' and sync_url='.$syncUrl.' and content='.$content.' and delete_flag=0';
+		$failreslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if($failreslut){
+			$msg = json_encode(array('status'=>true));
+			return $msg;
+		}
+		$se = new Sequence ( "sync_failure" );
+		$syncFailureId = $se->nextval ();
+		$syncFailure = array (
+				'lid' => $syncFailureId,
+				'dpid' => $dpid,
+				'create_at' => date ( 'Y-m-d H:i:s', $time ),
+				'update_at' => date ( 'Y-m-d H:i:s', $time ),
+				'jobid' => $jobid,
+				'sync_type' => $syncType,
+				'sync_url' => $syncUrl,
+				'content' => $content,
+				'is_sync' => DataSync::getInitSync ()
+		);
+		$reslut = Yii::app ()->db->createCommand ()->insert ( 'nb_sync_failure', $syncFailure );
+		if($reslut){
+			$msg = json_encode(array('status'=>true));
+		}else{
+			$msg = json_encode(array('status'=>false));
+		}
+		return $msg;
+	}
+	/**
+	 * 
+	 * 获取所有同步失败列表
+	 * 
+	 */
+	public static function getAllSyncFailure($dpid) {
+		$sql = 'select * from nb_sync_failure where dpid='.$dpid.' and delete_flag=0';
+		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+		return json_encode($results);
+	}
+	/**
+	 * 
+	 * 删除失败数据
+	 * 
+	 */
+	public static function delSyncFailure($lid,$dpid) {
+		$sql = 'update nb_sync_failure set delete_flag=1 where lid='.$lid.' and dpid='.$dpid;
+		Yii::app ()->db->createCommand ( $sql )->execute ();
 	}
 }
 
