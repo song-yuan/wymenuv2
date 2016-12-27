@@ -17,16 +17,20 @@ if(isset($auth_code) && $auth_code != ""){
 		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
 			$msg = array('status'=>true, 'result'=>true, 'trade_no'=>$orderId);
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
+			Helper::writeLog('1');
 			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);
 		}else{
-			$msg = array('status'=>false);
+			Helper::writeLog('2');
+			$msg = array('status'=>false, 'result'=>false,);
 		}
 	}else{
-		$msg = array('status'=>false);
+		Helper::writeLog('3');
+		$msg = array('status'=>false, 'result'=>false,);
 	}
 }else{
-	$msg = array('status'=>false);
+	$msg = array('status'=>false, 'result'=>false,);
 }
+Helper::writeLog(json_encode($msg));
 echo json_encode($msg);
 exit;
 ?>
