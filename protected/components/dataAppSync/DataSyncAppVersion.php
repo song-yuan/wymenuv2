@@ -12,9 +12,9 @@ class DataSyncAppVersion
     	$verinfo = $data['versioninfo'];
     	$type = $data['type'];
     	$appType = $data['appType'];
-    	$newver = '00.00.0003';
+    	$newver = '00.00.0410';
     	
-    	$url = 'http://menu.wymenu.com/wymenuv2/uploads/menucharge.apk';
+    	$url = 'http://menu.wymenu.com/wymenuv2/downloadApk/menucharge.apk';
     	//status = 0时，表示当前是最新版本;1时，表示云端有最新的版本可以进行更新;2时，表示终端app版本号比云端的版本号高;3时，表示未知状态.
     	//type = 0时,表示自选更新;1时,表示强制更新.
     	//appType = 1时,表示收银台APP,2时，表示后台APP。
