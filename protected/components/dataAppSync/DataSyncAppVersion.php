@@ -12,20 +12,52 @@ class DataSyncAppVersion
     	$verinfo = $data['versioninfo'];
     	$type = $data['type'];
     	$appType = $data['appType'];
-    	$newver = '00.00.0510';
+    	$newverinfo = '00.00.0000';
     	
-    	$url = 'http://menu.wymenu.com/wymenuv2/downloadApk/menucharge.apk';
-    	//status = 0时，表示当前是最新版本;1时，表示云端有最新的版本可以进行更新;2时，表示终端app版本号比云端的版本号高;3时，表示未知状态.
-    	//type = 0时,表示自选更新;1时,表示强制更新.
-    	//appType = 1时,表示收银台APP,2时，表示后台APP。
-    	$msg = json_encode ( array (
-    			'status' => '0',
-    			'verinfo' => $newver,
-    			'type' => '0',
-    			'appType' => '1',
+		$db = Yii::app()->db;
+        $sql = 'select t.* from nb_app_version t where t.delete_flag = 0 and t.lid =(select max(k.lid) from nb_app_version k where delete_flag = 0 and k.app_type = '.$appType.') and t.app_type ='.$appType;
+        $command = $db->createCommand($sql);
+        $appverifnos = $command->queryRow();
+        	
+        $newverinfo = $appverifnos['app_version'];
+        $newapptype = $appverifnos['app_type'];
+        $newtype = $appverifnos['type'];
+        $content = $appverifnos['content'];
+        $url = $appverifnos['apk_url'];
+        //var_dump($url);exit;
+        	
+    	if($verinfo > $newverinfo){
+    		$status = 0;
+    	}else{
+    		$status = 1;
+    	}
+    	$msg = json_encode(array(
+    			'status' => $status,
+    			'verinfo' => $newverinfo,
+    			'type' => $newtype,
+    			'appType' => $newapptype,
     			'url' => $url,
-    	) );
-        return $msg;
+    			'content' => $content,
+    	));
+    	return $msg;
+    	
+    	
+//     	$verinfo = $data['versioninfo'];
+//     	$type = $data['type'];
+//     	$appType = $data['appType'];
+//     	$newverinfo = '00.00.0510';
+//     	$url = 'http://menu.wymenu.com/wymenuv2/downloadApk/menucharge.apk';
+//     	//status = 0时，表示当前是最新版本;1时，表示云端有最新的版本可以进行更新;2时，表示终端app版本号比云端的版本号高;3时，表示未知状态.
+//     	//type = 0时,表示自选更新;1时,表示强制更新.
+//     	//appType = 1时,表示收银台APP,2时，表示后台APP。
+//     	$msg = json_encode(array(
+//     			'status' => 1,
+//     			'verinfo' => $newverinfo,
+//     			'type' => '0',
+//     			'appType' => '1',
+//     			'url' => $url,
+//     	));
+//         return $msg;
     }
     
     public static function  GrabImage($baseurl,$filename="") { 
