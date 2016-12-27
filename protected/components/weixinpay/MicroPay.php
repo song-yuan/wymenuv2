@@ -15,6 +15,8 @@ class MicroPay
 	public function pay($microPayInput)
 	{
 		$result = WxPayApi::micropay($microPayInput, 10);
+		Helper::writeLog('1');
+		Helper::writeLog(json_encode($result));
 		//如果返回成功
 		if(!array_key_exists("return_code", $result)
 			|| !array_key_exists("result_code", $result))
@@ -24,7 +26,7 @@ class MicroPay
 		
 		//签名验证
 		$out_trade_no = $microPayInput->GetOut_trade_no();
-		
+		Helper::writeLog($out_trade_no);
 		//接口调用成功，明确返回调用失败
 		if($result["return_code"] == "SUCCESS" &&
 		   $result["result_code"] == "FAIL" && 
@@ -37,6 +39,7 @@ class MicroPay
 		$queryTimes = 15;
 		while($queryTimes > 0)
 		{
+			Helper::writeLog('query times:'.$queryTimes);
 			$queryTimes--;
 			$succResult = 0;
 			$queryResult = $this->query($out_trade_no, $succResult);
@@ -50,9 +53,11 @@ class MicroPay
 				return false;
 			}
 		}
+		Helper::writeLog('cancel');
 		//10次确认失败，则撤销订单
 		if(!$this->cancel($out_trade_no))
 		{
+			Helper::writeLog('cancel fail');
 			// 撤销单失败 返回 撤销单失败！
 			return array('return_code'=>'SUCCESS','result_code'=>'CANCEL');
 		}
