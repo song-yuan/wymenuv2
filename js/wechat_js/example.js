@@ -75,13 +75,14 @@ $(function () {
     });
     $container.on('click', '#showDialog2', function () {
        
+        
+        str='<div class="sp-lightbox1"  style="position: fixed;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;"></div>';
+	$("#dialog2").prepend(str);
         $('#dialog2').show();
-        str='<div class="sp-lightbox1"  style="position: fixed;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);z-index: 99;cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;"></div>';
-	$("body").append(str);
-       
+        
         $('#dialog2').find('.btn_ewm').on('click', function () {
             $('#dialog2').hide();
-            $("body").find(".sp-lightbox1").remove();
+            $("#dialog2").find(".sp-lightbox1").remove();
         });
       
     });

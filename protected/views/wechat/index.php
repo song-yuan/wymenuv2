@@ -1,9 +1,3 @@
-<?php
-	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('会员中心');
-?>
-
-
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
@@ -179,12 +173,12 @@
                         </div>
                     </a>
                     <!--BEGIN dialog2-->
-                    <div id="dialog2" style="display: none; ">
+                    <div id="dialog2" style="z-index: 90;position: fixed;display: none;  ">
                       
-                        <div class="weui_dialog" style="z-index:100;">
+                        <div class="weui_dialog" >
                             
                             <div class="btn_ewm_out">    
-                                <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
+                                <a href="javassscript:;" class="fa fa-times-circle btn_ewm"></a>
                             </div>
                           
                             
