@@ -43,13 +43,17 @@ class MicroPay
 			$queryTimes--;
 			$succResult = 0;
 			$queryResult = $this->query($out_trade_no, $succResult);
+			Helper::writeLog('query result:'. json_encode($queryResult));
 			//如果需要等待1s后继续
 			if($succResult == 2){
+				Helper::writeLog('waite');
 				sleep(2);
 				continue;
 			} else if($succResult == 1){//查询成功
+				Helper::writeLog('success');
 				return $queryResult;
 			} else {//订单交易失败
+				Helper::writeLog('fail');
 				return false;
 			}
 		}
