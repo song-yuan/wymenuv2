@@ -43,7 +43,7 @@ class MicroPay
 			$queryTimes--;
 			$succResult = 0;
 			$queryResult = $this->query($out_trade_no, $succResult);
-			Helper::writeLog('query result:'. json_encode($queryResult));
+			Helper::writeLog('query result:'. $queryResult);
 			//如果需要等待1s后继续
 			if($succResult == 2){
 				Helper::writeLog('waite');
@@ -81,6 +81,7 @@ class MicroPay
 		$queryOrderInput->SetOut_trade_no($out_trade_no);
 		$result = WxPayApi::orderQuery($queryOrderInput);
 		
+		Helper::writeLog(json_encode($result));
 		if($result["return_code"] == "SUCCESS" 
 			&& $result["result_code"] == "SUCCESS")
 		{
