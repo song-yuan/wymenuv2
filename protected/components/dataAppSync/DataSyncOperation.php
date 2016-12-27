@@ -739,7 +739,9 @@ class DataSyncOperation {
 			//初始化类对象,调用refund获取退款应答
 			$refundResponse = new AlipayTradeService($f2fpayConfig);
 			$refundResult =	$refundResponse->refund($refundRequestBuilder);
+			Helper::writeLog('11');
 			Helper::writeLog(json_encode($refundResult));
+			Helper::writeLog('22');
 			//根据交易状态进行处理
 			switch ($refundResult->getTradeStatus()){
 				case "SUCCESS":
