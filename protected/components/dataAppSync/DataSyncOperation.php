@@ -735,7 +735,6 @@ class DataSyncOperation {
 			$refundRequestBuilder->setOutRequestNo($out_request_no);
 		
 			$refundRequestBuilder->setAppAuthToken($appAuthToken);
-			Helper::writeLog('11');
 			//初始化类对象,调用refund获取退款应答
 			$refundResponse = new AlipayTradeService($f2fpayConfig);
 			$refundResult =	$refundResponse->refund($refundRequestBuilder);
