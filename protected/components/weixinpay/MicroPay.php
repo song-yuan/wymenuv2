@@ -19,7 +19,7 @@ class MicroPay
 		if(!array_key_exists("return_code", $result)
 			|| !array_key_exists("result_code", $result))
 		{
-			throw new WxPayException("接口调用失败！");
+			return false;
 		}
 		
 		//签名验证
