@@ -1433,6 +1433,7 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function setSyncFailure($data) {
+		$time = time ();
 		$dpid = $data['dpid'];
 		$jobid = $data['jobid']; // 保存pos本地的lid
 		$syncType = $data['sync_type'];
