@@ -1017,8 +1017,8 @@ class DataSyncOperation {
 				}
 				$resObj = json_decode($result);
 				if($resObj->status){
-// 					array_push($lidArr, $lid);
-// 				}else{
+					array_push($lidArr, $lid);
+				}else{
 					// 插入同步不成功数据
 					$data = array('dpid'=>$dpid,'jobid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
 					$resFail = self::setSyncFailure($data);
