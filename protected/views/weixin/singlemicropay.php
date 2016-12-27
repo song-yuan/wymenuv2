@@ -13,6 +13,7 @@ if(isset($auth_code) && $auth_code != ""){
 	
 	$microPay = new MicroPay();
 	$result = $microPay->pay($input);
+	Helper::writeLog(json_encode($result));
 	if($result){
 		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
 			$msg = array('status'=>true, 'result'=>true, 'trade_no'=>$orderId);
