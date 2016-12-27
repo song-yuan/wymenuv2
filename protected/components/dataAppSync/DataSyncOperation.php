@@ -739,7 +739,7 @@ class DataSyncOperation {
 			$refundResponse = new AlipayTradeService($f2fpayConfig);
 			$refundResult =	$refundResponse->refund($refundRequestBuilder);
 // 			Helper::writeLog('11');
-// 			Helper::writeLog(json_encode($refundResult));
+			Helper::writeLog($refundResult->getTradeStatus());
 // 			Helper::writeLog('22');
 			//根据交易状态进行处理
 			switch ($refundResult->getTradeStatus()){

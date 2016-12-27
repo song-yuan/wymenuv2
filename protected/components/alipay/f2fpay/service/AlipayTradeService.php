@@ -167,13 +167,10 @@ class AlipayTradeService {
 		if(!empty($response)&&("10000"==$response->code)){
 			$result->setTradeStatus("SUCCESS");
 		} elseif ($this->tradeError($response)){
-			Helper::writeLog('11');
 			$result->setTradeStatus("UNKNOWN");
 		} else {
-			Helper::writeLog('12');
 			$result->setTradeStatus("FAILED");
 		}
-		Helper::writeLog(json_encode($result));
 		return $result;
 	}
 
