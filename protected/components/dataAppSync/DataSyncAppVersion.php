@@ -13,35 +13,44 @@ class DataSyncAppVersion
     	$type = $data['type'];
     	$appType = $data['appType'];
     	$newverinfo = '00.00.0000';
+    	$newapptype = 1;
+    	$newtype = 0;
+    	$content = '';
+    	$url = '';
     	
 		$db = Yii::app()->db;
         $sql = 'select t.* from nb_app_version t where t.delete_flag = 0 and t.lid =(select max(k.lid) from nb_app_version k where delete_flag = 0 and k.app_type = '.$appType.') and t.app_type ='.$appType;
         $command = $db->createCommand($sql);
         $appverifnos = $command->queryRow();
-        	
-        $newverinfo = $appverifnos['app_version'];
-        $newapptype = $appverifnos['app_type'];
-        $newtype = $appverifnos['type'];
-        $content = $appverifnos['content'];
-        $url = $appverifnos['apk_url'];
-        //var_dump($url);exit;
-        	
-    	if($verinfo > $newverinfo){
-    		$status = 0;
-    	}else{
-    		$status = 1;
-    	}
-    	$msg = json_encode(array(
-    			'status' => $status,
-    			'verinfo' => $newverinfo,
-    			'type' => $newtype,
-    			'appType' => $newapptype,
-    			'url' => $url,
-    			'content' => $content,
-    	));
-    	return $msg;
-    	
-    	
+        if($appverifnos){	
+	        $newverinfo = $appverifnos['app_version'];
+	        $newapptype = $appverifnos['app_type'];
+	        $newtype = $appverifnos['type'];
+	        $content = $appverifnos['content'];
+	        $url = $appverifnos['apk_url'];
+	        //var_dump($url);exit;
+	        if($newverinfo&&$newapptype&&$url){
+		    	if($verinfo > $newverinfo){
+		    		$status = 0;
+		    	}else{
+		    		$status = 1;
+		    	}
+	        }else{
+	        	$status = 0;
+	        }
+	    	
+        }else{
+        	$status = 0;
+        }
+        $msg = json_encode(array(
+        		'status' => $status,
+        		'verinfo' => $newverinfo,
+        		'type' => $newtype,
+        		'appType' => $newapptype,
+        		'url' => $url,
+        		'content' => $content,
+        ));
+        return $msg;
 //     	$verinfo = $data['versioninfo'];
 //     	$type = $data['type'];
 //     	$appType = $data['appType'];
