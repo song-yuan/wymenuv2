@@ -114,7 +114,8 @@ class CompanyController extends BackendController
 				$model->attributes = Yii::app()->request->getPost('Company');
 				$model->create_at=date('Y-m-d H:i:s',time());
 				$model->update_at=date('Y-m-d H:i:s',time());
-				$model->comp_dpid = $this->companyId;
+				$model->comp_dpid = $this->getCompanyId(Yii::app()->user->username);
+				//var_dump($model);exit;
 				//$model->type="0";
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
@@ -184,6 +185,10 @@ class CompanyController extends BackendController
 	private function getPrinterList(){
 		$printers = Printer::model()->findAll('dpid=:dpid',array(':dpid'=>$this->companyId)) ;
 		return CHtml::listData($printers, 'printer_id', 'name');
+	}
+	private function getCompanyId($username){
+		$companyId = User::model()->find('username=:username',array(':username'=>$username)) ;
+		return $companyId['dpid'];
 	}
 	
 }
