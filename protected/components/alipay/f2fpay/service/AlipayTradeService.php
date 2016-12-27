@@ -163,6 +163,7 @@ class AlipayTradeService {
 		$response = $response->alipay_trade_refund_response;
 
 		$result = new AlipayF2FRefundResult($response);
+		Helper::writeLog(json_encode($result));
 		if(!empty($response)&&("10000"==$response->code)){
 			$result->setTradeStatus("SUCCESS");
 		} elseif ($this->tradeError($response)){
