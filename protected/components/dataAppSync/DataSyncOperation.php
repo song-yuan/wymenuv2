@@ -1433,12 +1433,13 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function setSyncFailure($data) {
+		$time = time ();
 		$dpid = $data['dpid'];
 		$jobid = $data['jobid']; // 保存pos本地的lid
 		$syncType = $data['sync_type'];
 		$syncUrl = $data['sync_url'];
 		$content = $data['content'];
-		$sql = 'select * from nb_sync_failure where dpid='.$dpid.' and jobid='.$jobid.' and sync_type='.$syncType.' and sync_url='.$syncUrl.' and content='.$content.' and delete_flag=0';
+		$sql = "select * from nb_sync_failure where dpid=".$dpid." and jobid=".$jobid." and sync_type=".$syncType." and sync_url='".$syncUrl."' and content='".$content."' and delete_flag=0";
 		$failreslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if($failreslut){
 			$msg = json_encode(array('status'=>true));
