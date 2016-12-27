@@ -159,11 +159,11 @@ class AlipayTradeService {
 		$request = new AlipayTradeRefundRequest();
 		$request->setBizContent ( $bizContent );
 		$response = $this->aopclientRequestExecute ( $request , NULL ,$req->getAppAuthToken());
-		Helper::writeLog(json_encode($response));
+
 		$response = $response->alipay_trade_refund_response;
-		Helper::writeLog(json_encode($response));
+
 		$result = new AlipayF2FRefundResult($response);
-		Helper::writeLog(json_encode($result));
+		
 		if(!empty($response)&&("10000"==$response->code)){
 			$result->setTradeStatus("SUCCESS");
 		} elseif ($this->tradeError($response)){
@@ -171,7 +171,7 @@ class AlipayTradeService {
 		} else {
 			$result->setTradeStatus("FAILED");
 		}
-
+		Helper::writeLog(json_encode($result));
 		return $result;
 	}
 
