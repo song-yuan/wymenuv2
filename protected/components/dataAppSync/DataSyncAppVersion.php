@@ -24,7 +24,7 @@ class DataSyncAppVersion
         $newtype = $appverifnos['type'];
         $content = $appverifnos['content'];
         $url = $appverifnos['apk_url'];
-        var_dump($url);exit;
+        //var_dump($url);exit;
         	
     	if($verinfo > $newverinfo){
     		$status = 0;
