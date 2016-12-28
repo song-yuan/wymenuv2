@@ -1022,7 +1022,7 @@ class DataSyncOperation {
 					$data = array('dpid'=>$dpid,'jobid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
 					$resFail = self::setSyncFailure($data);
 					$failObj = json_decode($resFail);
-					if($resObj->status){
+					if($failObj->status){
 						array_push($lidArr, $lid);
 					}
 				}
