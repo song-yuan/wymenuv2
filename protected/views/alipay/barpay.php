@@ -9,7 +9,7 @@ $company = WxCompany::get($this->companyId);
 
 $data = array(
 		'dpid' => $this->companyId,
-		'pay_type' => 0,
+		'pay_type' => 1,
 		'out_trade_no' => $outTradeNo,
 		'total_fee' => $totalAmount
 );
