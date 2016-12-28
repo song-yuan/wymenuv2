@@ -80,8 +80,11 @@ if($authCode!=''&&$result['status']){
 	$response = $barPayResult->getResponse();
 	switch ($barPayResult->getTradeStatus()) {
 		case "SUCCESS":
+			Helper::writeLog('1');
 			$transactionId = $response->trade_no;
+			Helper::writeLog($transactionId);
 			MicroPayModel::update($this->companyId, $outTradeNo, $transactionId, json_encode($response));
+			Helper::writeLog('2');
 			echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
 			break;
 		case "FAILED":
