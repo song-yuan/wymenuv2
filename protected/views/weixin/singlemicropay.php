@@ -27,11 +27,8 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 	$result = $microPay->pay($input);
 	if($result){
 		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
-			Helper::writeLog('1');
 			$transactionId = $result["transaction_id"];
-			Helper::writeLog($transactionId);
 			MicroPayModel::update($dpid, $orderId, $transactionId, json_encode($result));
-			Helper::writeLog(2);
 			$msg = array('status'=>true, 'result'=>true, 'trade_no'=>$orderId);
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
 			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);

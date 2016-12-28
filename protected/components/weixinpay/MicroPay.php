@@ -71,7 +71,6 @@ class MicroPay
 		$queryOrderInput->SetOut_trade_no($out_trade_no);
 		$result = WxPayApi::orderQuery($queryOrderInput);
 		
-		Helper::writeLog(json_encode($result));
 		if($result["return_code"] == "SUCCESS" 
 			&& $result["result_code"] == "SUCCESS")
 		{
