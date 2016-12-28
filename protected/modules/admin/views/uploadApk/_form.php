@@ -30,6 +30,7 @@
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'app_version',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('app_version')));?>
 				<?php echo $form->error($model, 'app_version' )?>
+				<span style="color: red;">安装包版本号格式必须填写为（xx.xx.xxxx）。</span>
 			</div>
 		</div>
 		<div class="form-group">
@@ -37,6 +38,7 @@
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'apk_url',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('apk_url')));?>
 				<?php echo $form->error($model, 'apk_url' )?>
+				<span style="color: red;">安装包名称的后缀（.apk）必须加上;例如：xxxx.apk。</span>
 			</div>
 		</div>
 		
