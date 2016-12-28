@@ -39,6 +39,7 @@
 				<?php echo $form->error($model, 'apk_url' )?>
 			</div>
 		</div>
+		
 		<div class="form-group">
 			<?php echo $form->label($model, 'content',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">

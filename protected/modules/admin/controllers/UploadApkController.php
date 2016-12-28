@@ -48,7 +48,7 @@ class UploadApkController extends BackendController
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->apk_url = $path.$model->apk_url;
+			//$model->apk_url = $path.$model->apk_url;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('uploadApk/index','lid' => $model->lid , 'companyId'=>$this->companyId));
@@ -61,16 +61,14 @@ class UploadApkController extends BackendController
 		));
 	}
     public function actionUpdate(){
-    	$path = Yii::app()->basePath.'/../downloadApk';
+    	//$path = Yii::app()->basePath.'/../downloadApk';
     	//$path = Yii::app()->request->baseUrl;
     	//var_dump($path);exit;
 		$lid = Yii::app()->request->getParam('lid');
 		$model = AppVersion::model()->find('lid=:lid' , array(':lid'=>$lid));
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('AppVersion');
-			if($model->apk_url){
-				$model->apk_url = $path.$model->apk_url;
-			}
+			
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
