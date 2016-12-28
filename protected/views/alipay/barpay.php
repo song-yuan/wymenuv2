@@ -9,7 +9,7 @@ $company = WxCompany::get($this->companyId);
 
 $data = array(
 		'dpid' => $this->companyId,
-		'pay_type' => 0,
+		'pay_type' => 1,
 		'out_trade_no' => $outTradeNo,
 		'total_fee' => $totalAmount
 );
@@ -80,11 +80,8 @@ if($authCode!=''&&$result['status']){
 	$response = $barPayResult->getResponse();
 	switch ($barPayResult->getTradeStatus()) {
 		case "SUCCESS":
-			Helper::writeLog('1');
 			$transactionId = $response->trade_no;
-			Helper::writeLog($transactionId);
 			MicroPayModel::update($this->companyId, $outTradeNo, $transactionId, json_encode($response));
-			Helper::writeLog('2');
 			echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
 			break;
 		case "FAILED":
