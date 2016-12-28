@@ -89,6 +89,12 @@
     		background-repeat: no-repeat;
 			background-size: 80%;
 		}
+		.ku-item.app{
+			background-image:url(../../../../img/waiter/icon-android.png);
+			background-position: 15px 10px;
+    		background-repeat: no-repeat;
+			background-size: 70%;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -175,7 +181,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('uploadApk/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple bgx"></div>
+							<div class="ku-item ku-purple app"></div>
 							<div class="ku-item-info">app更新</div>
 						</div>
 					</a>
