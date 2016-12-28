@@ -11,9 +11,9 @@ $orderId = $now.'-'.$dpid.'-'.$rand;
 $company = WxCompany::get($dpid);
 $data = array(
 		'dpid' => $dpid,
-		'pay_type '=> 0,
-		'out_trade_no '=> $orderId,
-		'total_fee '=> $should_total
+		'pay_type' => 0,
+		'out_trade_no' => $orderId,
+		'total_fee' => $should_total
 );
 $result = MicroPayModel::insert($data);
 if(isset($auth_code) && $auth_code != ""&&$result['status']){
