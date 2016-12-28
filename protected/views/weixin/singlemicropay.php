@@ -1,10 +1,22 @@
 <?php
+/**
+ * 
+ * 微信刷卡支付
+ * 
+ */
 $now = time();
 $rand = rand(100,999);
 $orderId = $now.'-'.$dpid.'-'.$rand;
 
 $company = WxCompany::get($dpid);
-if(isset($auth_code) && $auth_code != ""){
+$data = array(
+		'dpid' => $dpid,
+		'pay_type '=> 0,
+		'out_trade_no '=> $orderId,
+		'total_fee '=> $should_total
+);
+$result = MicroPayModel::insert($data);
+if(isset($auth_code) && $auth_code != ""&&$result['status']){
 	$input = new WxPayMicroPay();
 	$input->SetAuth_code($auth_code);
 	$input->SetBody($company['company_name']);
@@ -15,6 +27,8 @@ if(isset($auth_code) && $auth_code != ""){
 	$result = $microPay->pay($input);
 	if($result){
 		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
+			$transactionId = $result["transaction_id"];
+			MicroPayModel::update($dpid, $out_trade_no, $transactionId, json_encode($result));
 			$msg = array('status'=>true, 'result'=>true, 'trade_no'=>$orderId);
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
 			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);

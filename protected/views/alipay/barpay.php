@@ -1,15 +1,22 @@
 <?php 
-if(isset($_POST)){
-	
-	$now = time();
-	$rand = rand(100,999);
-	$outTradeNo = $now.'-'.$this->companyId.'-'.$rand;
-	
-	$company = WxCompany::get($this->companyId);
-	
+$now = time();
+$rand = rand(100,999);
+$outTradeNo = $now.'-'.$this->companyId.'-'.$rand;
+
+$totalAmount = $_POST['pay_price'];
+$authCode = $_POST['auth_code'];
+$company = WxCompany::get($this->companyId);
+
+$data = array(
+		'dpid' => $this->companyId,
+		'pay_type '=> 0,
+		'out_trade_no '=> $outTradeNo,
+		'total_fee '=> $totalAmount
+);
+$result = MicroPayModel::insert($data);
+
+if($authCode!=''&&$result['status']){
 	$subject = $company['company_name']."-扫码";
-	$totalAmount = $_POST['pay_price'];
-	$authCode = $_POST['auth_code'];
 	
 	$undiscountableAmount = "0.01";
 	$sellerId = $this->alipay_config['seller_id'];
@@ -70,8 +77,11 @@ if(isset($_POST)){
 	$barPay = new AlipayTradeService($this->f2fpay_config);
 	$barPayResult = $barPay->barPay($barPayRequestBuilder);
 	
+	$response = $barPayResult->getResponse();
 	switch ($barPayResult->getTradeStatus()) {
 		case "SUCCESS":
+			$transactionId = $response->trade_no;
+			MicroPayModel::update($this->companyId, $outTradeNo, $transactionId, json_encode($response));
 			echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
 			break;
 		case "FAILED":
