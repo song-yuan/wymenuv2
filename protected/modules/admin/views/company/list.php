@@ -173,6 +173,12 @@
 							<div class="ku-item-info">表更新</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('uploadApk/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple bgx"></div>
+							<div class="ku-item-info">app更新</div>
+						</div>
+					</a>
 					<?php endif;?>
 					<!--
 					<a href="#">
