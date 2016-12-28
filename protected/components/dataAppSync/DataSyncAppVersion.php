@@ -17,6 +17,8 @@ class DataSyncAppVersion
     	$newtype = 0;
     	$content = '';
     	$url = '';
+
+    	$urlhead = Yii::app()->request->getHostInfo().'/wymenuv2/downloadApk/';
     	
 		$db = Yii::app()->db;
         $sql = 'select t.* from nb_app_version t where t.delete_flag = 0 and t.lid =(select max(k.lid) from nb_app_version k where delete_flag = 0 and k.app_type = '.$appType.') and t.app_type ='.$appType;
@@ -27,7 +29,9 @@ class DataSyncAppVersion
 	        $newapptype = $appverifnos['app_type'];
 	        $newtype = $appverifnos['type'];
 	        $content = $appverifnos['content'];
-	        $url = $appverifnos['apk_url'];
+	        $urlend = $appverifnos['apk_url'];
+	        
+	        $url = $urlhead.$urlend;
 	        //var_dump($url);exit;
 	        if($newverinfo&&$newapptype&&$url){
 		    	if($verinfo > $newverinfo){

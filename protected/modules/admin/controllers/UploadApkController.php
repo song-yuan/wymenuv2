@@ -11,8 +11,7 @@ class UploadApkController extends BackendController
 			return true;
 		}   
         public function actionIndex(){
-        	
-        	var_dump(Yii::app()->request->getHostInfo());exit;
+
 //         	$db = Yii::app()->db;
 //         	$sql = 'select t.* from nb_app_version t where t.delete_flag = 0 and t.lid =(select max(k.lid) from nb_app_version k where delete_flag = 0 and k.app_type = 1) and t.app_type = 1';
 //         	$command = $db->createCommand($sql);
