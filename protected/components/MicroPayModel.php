@@ -3,6 +3,7 @@ class MicroPayModel
 {
 	public static function insert($data){
 		$time = time();
+		$isSync = DataSync::getInitSync ();
 		$dpid = $data['dpid'];
 		$payType = $data['pay_type'];
 		$outTradeNo = $data['out_trade_no'];
