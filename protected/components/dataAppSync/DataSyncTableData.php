@@ -15,10 +15,11 @@ class DataSyncTableData
     	$this->end = isset($data['end'])?$data['end']:'';
     }
     public function getInitData(){
+    	$dataArr = array('page'=>0,'msg'=>array());
     	if($this->tableName=='nb_member_card'||$this->tableName=='nb_brand_user_level'){
     		$this->dpid = WxCompany::getDpids($this->dpid);
     	}
-    	$sql = 'select * from ' . $this->tableName . ' where dpid in ('.$this->dpid.')';
+    	$sql = 'select count(*) from ' . $this->tableName . ' where dpid in ('.$this->dpid.')';
     	if($this->begain!=''){
     		$begain = date('Y-m-d H:i:s',strtotime($this->begain));
     		$sql .= ' and create_at >= "'.$begain.'"';
@@ -34,9 +35,23 @@ class DataSyncTableData
     	if(!in_array($this->tableName,$this->tableArr)){
     		$sql .= ' and delete_flag = 0';
     	}
-    	$data = Yii::app()->db->createCommand($sql)
-    							->queryAll();
-    	return $data;
+    	$dataCount = Yii::app()->db->createCommand($sql)->queryRow();
+    	
+    	$sql = str_replace('count(*)', '*', $sql);
+    	
+    	$item = 500;
+    	$page = ceil($dataCount['count(*)']/$item);
+    	$dataArr['page'] = $page;
+    	
+    	$tempArr = array();
+    	for($i=0;$i<$page;$i++){
+    		$newSql = $sql.' limit '.$i*$item.','.$item;
+    		$data = Yii::app()->db->createCommand($newSql)->queryAll();
+    		$tempArr = array_merge($tempArr,$data);
+    	}
+    	$dataArr['msg'] = $tempArr;
+    	var_dump($dataArr);exit;
+    	return $dataArr;
     }
    
 }
