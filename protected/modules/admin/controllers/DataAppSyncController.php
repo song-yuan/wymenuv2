@@ -63,9 +63,8 @@ public function actionGetSyncPosInfo(){
  * 
  */ 
 public function actionGetSyncTableData(){
-   $dpid = Yii::app()->request->getParam('dpid',null);
-   $tableName = Yii::app()->request->getParam('tn',null);
-   $tableStruct = DataSyncOperation::getDataSyncData($dpid,$tableName);
+   $data = $_GET;
+   $tableStruct = DataSyncOperation::getDataSyncData($data);
    echo json_encode($tableStruct);exit;
 }
 /**
