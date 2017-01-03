@@ -21,12 +21,13 @@ class DataSyncTableData
     	$sql = 'select * from ' . $this->tableName . ' where dpid in ('.$this->dpid.')';
     	if($this->begain!=''){
     		$begain = date('Y-m-d H:i:s',strtotime($this->begain));
-    		$sql .= ' and creat_at >= '.$this->begain;
+    		$sql .= ' and creat_at >= "'.$this->begain.'"';
     	}
     	if($this->end!=''){
     		$begain = date('Y-m-d H:i:s',strtotime($this->end)+24*60*60);
-    		$sql .= ' and creat_at <= '.$this->end;
+    		$sql .= ' and creat_at <= "'.$this->end.'"';
     	}
+    	
     	if(!in_array($this->tableName,$this->tableArr)){
     		$sql .= ' and delete_flag = 0';
     	}
