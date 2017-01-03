@@ -75,8 +75,8 @@ class DataSyncOperation {
 	 * 
 	 * 
 	 */
-	public static function getDataSyncData($dpid, $tableName) {
-		$dataBase = new DataSyncTableData ( $dpid, $tableName );
+	public static function getDataSyncData($data) {
+		$dataBase = new DataSyncTableData ($data);
 		$tableData = $dataBase->getInitData ();
 		return array ('status' => true,'msg' => $tableData);
 	}
