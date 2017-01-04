@@ -665,7 +665,7 @@ class DataSyncOperation {
 			$refund_fee = $data['refund_fee'];
 			
 			$microPay = MicroPayModel::get($dpid, $out_trade_no, 0);
-			if(empty($microPay)){
+			if(empty($microPay)||empty($microPay['transaction_id'])){
 				// 不存在支付记录 则直接退款成功
 				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
 				return json_encode($msg);
@@ -717,7 +717,7 @@ class DataSyncOperation {
 			$refund_amount = $data['refund_fee'];
 			
 			$microPay = MicroPayModel::get($dpid, $out_trade_no, 1);
-			if(empty($microPay)){
+			if(empty($microPay)||empty($microPay['transaction_id'])){
 				// 不存在支付记录 则直接退款成功
 				$msg = array('status'=>true, 'trade_no'=>$out_request_no);
 				return json_encode($msg);
