@@ -34,7 +34,7 @@ class DataSyncAppVersion
 	        $url = $urlhead.$urlend;
 	        //var_dump($url);exit;
 	        if($newverinfo&&$newapptype&&$url){
-		    	if($verinfo > $newverinfo){
+		    	if($verinfo >= $newverinfo){
 		    		$status = 0;
 		    	}else{
 		    		$status = 1;
