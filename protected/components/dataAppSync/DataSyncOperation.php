@@ -1171,11 +1171,11 @@ class DataSyncOperation {
 		
 		$dpid = WxCompany::getDpids($dpid);
 		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
-		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-		if (! $reslut) {
+		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $result) {
 			return '0.00';
 		}else{
-			return $reslut['all_money'];
+			return $result['all_money'];
 		}
 	}
 	/**
@@ -1193,8 +1193,8 @@ class DataSyncOperation {
 		$payPrice = $data ['pay_price'];
 		
 		$sql = 'select * from nb_user where dpid=' . $dpid . ' and lid=' . $adminId . ' and delete_flag=0';
-		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-		if (! $reslut) {
+		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $result) {
 			return json_encode ( array (
 					'status' => false,
 					'msg' => '不存在该管理员'
@@ -1203,24 +1203,24 @@ class DataSyncOperation {
 		$dpid = WxCompany::getDpids($dpid);
 		
 		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
-		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-		if (! $reslut) {
+		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $result) {
 			return json_encode ( array (
 					'status' => false,
 					'msg' => '不存在该会员信息' 
 			) );
 		}
 		
-		if ($payPrice > $reslut ['all_money']) {
+		if ($payPrice > $result ['all_money']) {
 			return json_encode ( array (
 					'status' => false,
 					'msg' => '余额不足' 
 			) );
 		}
 		
-		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpid . ') and lid=' . $reslut ['lid'] . ' and rfid=' . $rfid;
-		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
-		if ($reslut) {
+		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
+		$result = Yii::app ()->db->createCommand ( $sql )->execute ();
+		if ($result) {
 			return json_encode ( array (
 					'status' => true,
 			) );
@@ -1244,8 +1244,8 @@ class DataSyncOperation {
 		$refundPrice = $data ['refund_price'];
 		
 		$sql = 'select * from nb_user where dpid=' . $dpid . ' and lid=' . $adminId . ' and delete_flag=0';
-		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-		if (! $reslut) {
+		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $result) {
 			return json_encode ( array (
 					'status' => false,
 					'msg' => '不存在该管理员'
@@ -1255,17 +1255,17 @@ class DataSyncOperation {
 		$dpid = WxCompany::getDpids($dpid);
 		
 		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
-		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-		if (! $reslut) {
+		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $result) {
 			return json_encode ( array (
 					'status' => false,
 					'msg' => '不存在该会员信息'
 			) );
 		}
 		
-		$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid in (' . $dpid . ') and lid=' . $reslut ['lid'] . ' and rfid=' . $rfid;
-		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
-		if ($reslut) {
+		$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
+		$result = Yii::app ()->db->createCommand ( $sql )->execute ();
+		if ($result) {
 			return json_encode ( array (
 					'status' => true,
 			) );
@@ -1462,8 +1462,8 @@ class DataSyncOperation {
 		$syncUrl = $data['sync_url'];
 		$content = $data['content'];
 		$sql = "select * from nb_sync_failure where dpid=".$dpid." and jobid=".$jobid." and sync_type=".$syncType." and sync_url='".$syncUrl."' and content='".$content."' and delete_flag=0";
-		$failreslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-		if($failreslut){
+		$failresult = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if($failresult){
 			$msg = json_encode(array('status'=>true));
 			return $msg;
 		}
@@ -1480,8 +1480,8 @@ class DataSyncOperation {
 				'content' => $content,
 				'is_sync' => DataSync::getInitSync ()
 		);
-		$reslut = Yii::app ()->db->createCommand ()->insert ( 'nb_sync_failure', $syncFailure );
-		if($reslut){
+		$result = Yii::app ()->db->createCommand ()->insert ( 'nb_sync_failure', $syncFailure );
+		if($result){
 			$msg = json_encode(array('status'=>true));
 		}else{
 			$msg = json_encode(array('status'=>false));
