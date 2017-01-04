@@ -777,6 +777,10 @@ class DataSyncOperation {
 		$username =  $data ['username'];
 		$pruductIds = split('==',$data ['pruductids']);
 		$memo = $data ['memo'];
+		$retreatTime = $data ['retreattime'];
+		if($retreatTime==''){
+			$retreatTime = date ( 'Y-m-d H:i:s', $time );
+		}
 		$content = '';
 		if(isset($data ['data'])){
 			$content = $data ['data'];
@@ -851,7 +855,7 @@ class DataSyncOperation {
 				    		$orderRetreatData = array (
 				    				'lid' => $orderRetreatId,
 				    				'dpid' => $dpid,
-				    				'create_at' => date ( 'Y-m-d H:i:s', $time ),
+				    				'create_at' => $retreatTime,
 				    				'update_at' => date ( 'Y-m-d H:i:s', $time ),
 				    				'retreat_id' => $retreatId,
 				    				'order_detail_id' => $orderProductDetailId,
@@ -889,7 +893,7 @@ class DataSyncOperation {
 				    		$orderRetreatData = array (
 				    				'lid' => $orderRetreatId,
 				    				'dpid' => $dpid,
-				    				'create_at' => date ( 'Y-m-d H:i:s', $time ),
+				    				'create_at' => $retreatTime,
 				    				'update_at' => date ( 'Y-m-d H:i:s', $time ),
 				    				'retreat_id' => $retreatId,
 				    				'order_detail_id' => $orderProductDetailId,
@@ -955,7 +959,7 @@ class DataSyncOperation {
 					$orderPayData = array (
 							'lid' => $orderPayId,
 							'dpid' => $dpid,
-							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'create_at' => $retreatTime,
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'order_id' => $orderId,
 							'account_no' => $accountNo,
@@ -1007,7 +1011,8 @@ class DataSyncOperation {
 				}elseif($type==4){
 					// 退款
 					$contentArr = split('::', $content);
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
+					$createAt = isset($contentArr[7])?$contentArr[7]:'';
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 					$result = self::retreatOrder($pData);
 				}elseif($type==3){
 					// 增加会员卡
@@ -1049,7 +1054,8 @@ class DataSyncOperation {
 					}elseif($type==4){
 						// 退款
 						$contentArr = split('::', $content);
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
+						$createAt = isset($contentArr[7])?$contentArr[7]:'';
+						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 						$result = self::retreatOrder($pData);
 					}elseif($type==3){
 						// 增加会员卡
