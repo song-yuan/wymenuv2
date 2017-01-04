@@ -29,10 +29,6 @@ class DataSyncTableData
     		$end = date('Y-m-d H:i:s',strtotime($this->end)+24*60*60);
     		$sql .= ' and create_at <= "'.$end.'"';
     	}
-    	if($this->end==''&&$this->begain==''){
-    		$time = date('Y-m-d H:i:s',time()-7*24*60*60);
-    		$sql .= ' and create_at >= "'.$time.'"';
-    	}
     	if(!in_array($this->tableName,$this->tableArr)){
     		$sql .= ' and delete_flag = 0';
     	}
