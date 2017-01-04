@@ -1,6 +1,11 @@
 <?php
 class MicroPayModel
 {
+	public static function get($dpid,$outTradeNo,$payType){
+		$sql = 'select * from nb_micro_pay where dpid='.$dpid.' and out_trade_no='.$outTradeNo.' and pay_type='.$payType;
+		$result = Yii::app ()->db->createCommand ($sql)->queryRow();
+		return $reslut;
+	}
 	public static function insert($data){
 		$time = time();
 		$isSync = DataSync::getInitSync ();

@@ -658,10 +658,18 @@ class DataSyncOperation {
 			$msg = array('status'=>false);
 			return json_encode($msg);
 		}
+		
 		if(isset($data['out_trade_no']) && $data['out_trade_no']!="" && $data['out_trade_no']!=0){
 			$out_trade_no = $data['out_trade_no'];
 			$total_fee = $data['total_fee'];
 			$refund_fee = $data['refund_fee'];
+			
+			$microPay = MicroPayModel::get($dpid, $out_trade_no, 0);
+			if(empty($microPay)){
+				// 不存在支付记录 则直接退款成功
+				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
+				return json_encode($msg);
+			}
 			
 			$input = new WxPayRefund();
 			$input->SetOut_trade_no($out_trade_no);
@@ -703,28 +711,37 @@ class DataSyncOperation {
 			$msg = array('status'=>false);
 			return json_encode($msg);
 		}
-		$alipayAccount = AlipayAccount::get($dpid);
-		$f2fpayConfig = array(
-				//支付宝公钥
-				'alipay_public_key' => $alipayAccount['alipay_public_key'],
-				//商户私钥
-				'merchant_private_key' => $alipayAccount['merchant_private_key'],
-				//编码格式
-				'charset' => "UTF-8",
-				//支付宝网关
-				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
-				//应用ID
-				'app_id' => $alipayAccount['appid'],
-				//异步通知地址,只有扫码支付预下单可用
-				'notify_url' =>  "",
-				//最大查询重试次数
-				'MaxQueryRetry' => "10",
-				//查询间隔
-				'QueryDuration' => "3"
-		);
+		
 		if(isset($data['out_trade_no']) && $data['out_trade_no']!="" && $data['out_trade_no']!=0){
 			$out_trade_no = $data['out_trade_no'];
 			$refund_amount = $data['refund_fee'];
+			
+			$microPay = MicroPayModel::get($dpid, $out_trade_no, 1);
+			if(empty($microPay)){
+				// 不存在支付记录 则直接退款成功
+				$msg = array('status'=>true, 'trade_no'=>$out_request_no);
+				return json_encode($msg);
+			}
+			
+			$alipayAccount = AlipayAccount::get($dpid);
+			$f2fpayConfig = array(
+					//支付宝公钥
+					'alipay_public_key' => $alipayAccount['alipay_public_key'],
+					//商户私钥
+					'merchant_private_key' => $alipayAccount['merchant_private_key'],
+					//编码格式
+					'charset' => "UTF-8",
+					//支付宝网关
+					'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
+					//应用ID
+					'app_id' => $alipayAccount['appid'],
+					//异步通知地址,只有扫码支付预下单可用
+					'notify_url' =>  "",
+					//最大查询重试次数
+					'MaxQueryRetry' => "10",
+					//查询间隔
+					'QueryDuration' => "3"
+			);
 			//第三方应用授权令牌,商户授权系统商开发模式下使用
 			$appAuthToken = "";//根据真实值填写
 		
