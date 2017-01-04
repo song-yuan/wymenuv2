@@ -50,7 +50,6 @@ class DataSyncTableData
     		$tempArr = array_merge($tempArr,$data);
     	}
     	$dataArr['msg'] = $tempArr;
-    	var_dump($dataArr);exit;
     	return $dataArr;
     }
    
