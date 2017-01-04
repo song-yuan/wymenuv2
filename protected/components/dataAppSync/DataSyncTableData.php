@@ -15,7 +15,8 @@ class DataSyncTableData
     	$this->end = isset($data['end'])?$data['end']:'';
     }
     public function getInitData(){
-    	$dataArr = array('page'=>0,'msg'=>array());
+    	$item = 500;
+    	$dataArr = array('page'=>0, 'item'=>$item, 'msg'=>array());
     	if($this->tableName=='nb_member_card'||$this->tableName=='nb_brand_user_level'){
     		$this->dpid = WxCompany::getDpids($this->dpid);
     	}
@@ -39,7 +40,6 @@ class DataSyncTableData
     	
     	$sql = str_replace('count(*)', '*', $sql);
     	
-    	$item = 500;
     	$page = ceil($dataCount['count(*)']/$item);
     	$dataArr['page'] = $page;
     	
