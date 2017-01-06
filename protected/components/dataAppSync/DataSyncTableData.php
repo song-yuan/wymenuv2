@@ -11,12 +11,13 @@ class DataSyncTableData
     public function __construct($data){
     	$this->dpid = $data['dpid'];
     	$this->tableName = $data['tn'];
+    	$this->cp = isset($data['cp'])?$data['cp']:0;
     	$this->begain = isset($data['begain'])?$data['begain']:'';
     	$this->end = isset($data['end'])?$data['end']:'';
     }
     public function getInitData(){
     	$item = 200;
-    	$dataArr = array('page'=>0, 'item'=>$item, 'msg'=>array());
+    	$dataArr = array('page'=>0,'currentpage'=>$this->cp+1, 'item'=>$item, 'msg'=>array());
     	if($this->tableName=='nb_member_card'||$this->tableName=='nb_brand_user_level'){
     		$this->dpid = WxCompany::getDpids($this->dpid);
     	}
@@ -39,13 +40,9 @@ class DataSyncTableData
     	$page = ceil($dataCount['count(*)']/$item);
     	$dataArr['page'] = $page;
     	
-    	$tempArr = array();
-    	for($i=0;$i<$page;$i++){
-    		$newSql = $sql.' limit '.$i*$item.','.$item;
-    		$data = Yii::app()->db->createCommand($newSql)->queryAll();
-    		$tempArr = array_merge($tempArr,$data);
-    	}
-    	$dataArr['msg'] = $tempArr;
+    	$newSql = $sql.' limit '.$this->cp*$item.','.$item;
+    	$data = Yii::app()->db->createCommand($newSql)->queryAll();
+    	$dataArr['msg'] = $data;
     	return $dataArr;
     }
    
