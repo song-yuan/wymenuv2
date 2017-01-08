@@ -54,7 +54,6 @@ class DataSyncTables
     	array("name"=>"本店会员积分","table"=>"nb_member_points"),
         array("name"=>"本店会员充值","table"=>"nb_member_recharge"),
         array("name"=>"折扣表","table"=>"nb_discount"),
-       // array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
         array("name"=>"日结","table"=>"nb_close_account"),
         array("name"=>"日结明细","table"=>"nb_close_account_detail"),
         array("name"=>"订单","table"=>"nb_order"),
@@ -115,11 +114,11 @@ class DataSyncTables
     public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
-        	"nb_pad_setting"=>" CREATE TABLE IF NOT EXISTS 'nb_pad_setting'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  'jobid' int(10) NOT NULL DEFAULT '0',".
+        	"nb_pad_setting"=>" CREATE TABLE IF NOT EXISTS 'nb_pad_setting'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `jobid` int(10) NOT NULL DEFAULT '0',".
 	        	"  `pad_code` varchar(50) NOT NULL,".
 				"  `pad_sales_type` varchar(2) NOT NULL,".
         		"  `item_count` varchar(2) NOT NULL DEFAULT '4',".
@@ -136,11 +135,11 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
 				"	PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_sync_failure"=>" CREATE TABLE IF NOT EXISTS 'nb_sync_failure'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  'jobid' int(10) NOT NULL DEFAULT '0',".
+        	"nb_sync_failure"=>" CREATE TABLE IF NOT EXISTS 'nb_sync_failure'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `jobid` int(10) NOT NULL DEFAULT '0',".
         		"  `sync_type` varchar(2) NOT NULL DEFAULT '0',".
                 "  `sync_url` varchar(255) NOT NULL DEFAULT '0',".
 				"  `content` text NOT NULL,".
@@ -148,9 +147,9 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"   PRIMARY KEY (`lid`,`dpid`)".
         		");",
-            "nb_local_company"=>" CREATE TABLE 'nb_local_company'('dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+            "nb_local_company"=>" CREATE TABLE 'nb_local_company'(`dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `token` varchar(50) NOT NULL,".
         		"  `type` varchar(2) NOT NULL DEFAULT '0',".
         		"  `comp_dpid` int(10) NOT NULL,".
@@ -182,10 +181,10 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`dpid`)".
         		");",
-            "nb_user"=>" CREATE TABLE 'nb_user'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+            "nb_user"=>" CREATE TABLE 'nb_user'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `mobile` varchar(20) NOT NULL,".
 				"  `username` varchar(50) NOT NULL,".
 				"  `password_hash` varchar(60) NOT NULL,".
@@ -199,20 +198,20 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_floor"=>" CREATE TABLE 'nb_floor'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_floor"=>" CREATE TABLE 'nb_floor'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(50) NOT NULL,".
 				"  `manager` varchar(20) NOT NULL,".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"   PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_pad"=>" CREATE TABLE 'nb_pad'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_pad"=>" CREATE TABLE 'nb_pad'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(100) NOT NULL ,".
 				"  `printer_id` int(10) NOT NULL DEFAULT '0',".
 				"  `server_address` varchar(70) NOT NULL DEFAULT '0',".
@@ -222,19 +221,19 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_payment_method"=>" CREATE TABLE 'nb_payment_method'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_payment_method"=>" CREATE TABLE 'nb_payment_method'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(50) NOT NULL,".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_printer"=>" CREATE TABLE 'nb_printer'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_printer"=>" CREATE TABLE 'nb_printer'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(64) NOT NULL,".
         		"  `address` varchar(64) NOT NULL ,".
         		"  `language` char(2) NOT NULL DEFAULT '1',".
@@ -245,10 +244,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_printer_way"=>" CREATE TABLE 'nb_printer_way'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_printer_way"=>" CREATE TABLE 'nb_printer_way'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(50) NOT NULL,".
 				"  `is_onepaper` char(1) NOT NULL DEFAULT '1',".
 				"  `list_no` tinyint NOT NULL DEFAULT '1',".
@@ -257,10 +256,10 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_printer_way_detail"=>" CREATE TABLE 'nb_printer_way_detail'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_printer_way_detail"=>" CREATE TABLE 'nb_printer_way_detail'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `print_way_id` int(10) NOT NULL DEFAULT '0',".
 				"  `floor_id` int(10) NOT NULL DEFAULT '0',".
 				"  `printer_id` int(10) NOT NULL DEFAULT '0',".
@@ -269,10 +268,10 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",	
-            "nb_product" => " CREATE TABLE 'nb_product'('lid' int(10) NOT NULL,".
-        			"  'dpid' int(10) NOT NULL,".
-        			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                    "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+            "nb_product" => " CREATE TABLE 'nb_product'(`lid` int(10) NOT NULL,".
+        			"  `dpid` int(10) NOT NULL,".
+        			"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                    "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                     "  `category_id` int(10) NOT NULL DEFAULT '0',".
                     "  `phs_code` varchar(12) NOT NULL,".
                     "  `chs_code` varchar(12) NOT NULL,".
@@ -301,23 +300,23 @@ class DataSyncTables
                     "  `is_show` char(1) NOT NULL DEFAULT '1',".
                     "  `delete_flag` char(1) NOT NULL DEFAULT '0',".
                     "  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-                    "  PRIMARY KEY ('lid','dpid')".
+                    "  PRIMARY KEY (`lid`,`dpid`)".
                     ");",
-             "nb_product_icache" => " CREATE TABLE 'nb_product_icache'('lid' int(10) NOT NULL,".
-        			"  'dpid' int(10) NOT NULL,".
-        			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                    "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+             "nb_product_icache" => " CREATE TABLE 'nb_product_icache'(`lid` int(10) NOT NULL,".
+        			"  `dpid` int(10) NOT NULL,".
+        			"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                    "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
 					"  `product_id` int(10) NOT NULL DEFAULT '0',".
                     "  `icache_picture` varchar(255) NOT NULL,".
                     "  `is_set` char(1) NOT NULL DEFAULT '0',".
                     "  `delete_flag` char(1) NOT NULL DEFAULT '0',".
                     "  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-                    "  PRIMARY KEY ('lid','dpid')".
+                    "  PRIMARY KEY (`lid`,`dpid`)".
                     ");",
-        	"nb_product_category"=>" CREATE TABLE 'nb_product_category'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_product_category"=>" CREATE TABLE 'nb_product_category'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `pid` int(10) NOT NULL DEFAULT '0',".
 				"  `tree` varchar(50) NOT NULL,".
 				"  `category_name` varchar(50) NOT NULL,".
@@ -330,10 +329,10 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_product_picture"=>" CREATE TABLE 'nb_product_picture'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_product_picture"=>" CREATE TABLE 'nb_product_picture'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `product_id` int(10) NOT NULL DEFAULT '0',".
 				"  `is_set` char(1) NOT NULL DEFAULT '0',".
 				"  `pic_path` varchar(255) NOT NULL,".
@@ -342,20 +341,20 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_product_printerway"=>" CREATE TABLE 'nb_product_printerway'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_product_printerway"=>" CREATE TABLE 'nb_product_printerway'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `printer_way_id` int(10) NOT NULL DEFAULT '0',".
         		"  `product_id` int(10) NOT NULL DEFAULT '0',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_product_set"=>" CREATE TABLE 'nb_product_set'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_product_set"=>" CREATE TABLE 'nb_product_set'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `pshs_code` varchar(25) NOT NULL DEFAULT '',".
         		"  `set_name` varchar(50) NOT NULL,".
         		"  `source` varchar(2) NOT NULL DEFAULT '0',".
@@ -378,10 +377,10 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_product_set_detail"=>" CREATE TABLE 'nb_product_set_detail'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_product_set_detail"=>" CREATE TABLE 'nb_product_set_detail'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `set_id` int(10) NOT NULL DEFAULT '0',".
 				"  `product_id` int(10) NOT NULL DEFAULT '0',".
 				"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
@@ -392,30 +391,30 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_product_taste"=>" CREATE TABLE 'nb_product_taste'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_product_taste"=>" CREATE TABLE 'nb_product_taste'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `taste_group_id` int(10) NOT NULL DEFAULT '0',".
 				"  `product_id` int(10) NOT NULL DEFAULT '0',".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_retreat"=>" CREATE TABLE 'nb_retreat'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_retreat"=>" CREATE TABLE 'nb_retreat'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(50) NOT NULL,".
 				"  `tip` varchar(50) NOT NULL ,".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_site"=>" CREATE TABLE 'nb_site'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_site"=>" CREATE TABLE 'nb_site'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `serial` varchar(50) NOT NULL,".
 				"  `type_id` int(10) NOT NULL DEFAULT '0',".
 				"  `splid` int(10) NOT NULL DEFAULT '0',".
@@ -436,40 +435,40 @@ class DataSyncTables
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_site_persons"=>" CREATE TABLE 'nb_site_persons'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_site_persons"=>" CREATE TABLE 'nb_site_persons'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `min_persons` tinyint(3) NOT NULL DEFAULT '1',".
         		"  `max_persons` tinyint(3) NOT NULL DEFAULT '4',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_site_type"=>" CREATE TABLE 'nb_site_type'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_site_type"=>" CREATE TABLE 'nb_site_type'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(45) NOT NULL,".
 				"  `simplecode` varchar(3) NOT NULL DEFAULT 'A',".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_channel"=>" CREATE TABLE 'nb_channel'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_channel"=>" CREATE TABLE 'nb_channel'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `channel_type` varchar(2) NOT NULL DEFAULT '0',".
         		"  `channel_name` varchar(50) NOT NULL,".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_takeaway_member"=>" CREATE TABLE 'nb_takeaway_member'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_takeaway_member"=>" CREATE TABLE 'nb_takeaway_member'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `type` varchar(2) NOT NULL DEFAULT '0',".
         		"  `member_name` varchar(255) NOT NULL,".
         		"  `phone_number` varchar(11) NOT NULL,".
@@ -478,11 +477,11 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_taste"=>" CREATE TABLE 'nb_taste'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  'taste_group_id' int(10) NOT NULL DEFAULT '0',".
+        	"nb_taste"=>" CREATE TABLE 'nb_taste'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `taste_group_id` int(10) NOT NULL DEFAULT '0',".
         		"  `name` varchar(50) NOT NULL,".
         		"  `allflae` char(1) NOT NULL DEFAULT '0',".
         		"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
@@ -490,10 +489,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_taste_group"=>" CREATE TABLE 'nb_taste_group'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_taste_group"=>" CREATE TABLE 'nb_taste_group'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(50) NOT NULL,".
         		"  `tghs_code` varchar(12) NOT NULL DEFAULT '',".
         		"  `source` varchar(2) NOT NULL DEFAULT '0',".
@@ -502,15 +501,15 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_brand_user_level"=>" CREATE TABLE 'nb_brand_user_level'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_brand_user_level"=>" CREATE TABLE 'nb_brand_user_level'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `level_name` varchar(50) NOT NULL,".
         		"  `level_type` varchar(1) NOT NULL DEFAULT '0',".
         		"  `level_discount` varchar(8) NOT NULL DEFAULT '1',".
         		"  `birthday_discount` varchar(8) NOT NULL DEFAULT '1',".
-        		"  'min_charge_money' int(10) NOT NULL DEFAULT '0',".
+        		"  `min_charge_money` int(10) NOT NULL DEFAULT '0',".
         		"  `min_total_points` int(10) NOT NULL DEFAULT '0',".
         		"  `max_total_points` int(10) NOT NULL DEFAULT '0',".
         		"  'card_cost' int(10) NOT NULL DEFAULT '0',".
@@ -519,10 +518,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",	
-        	"nb_member_card"=>" CREATE TABLE 'nb_member_card'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_member_card"=>" CREATE TABLE 'nb_member_card'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `selfcode` varchar(10) DEFAULT NULL ,".
 				"  `rfid` varchar(10) DEFAULT NULL UNIQUE,".
 				"  `level_id` int(10) NOT NULL DEFAULT '0',".
@@ -537,15 +536,15 @@ class DataSyncTables
 				"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `all_points` int(10) NOT NULL DEFAULT '0',".
 				"  `card_status` varchar(1) NOT NULL DEFAULT '0' ,".
-        		"  'enable_date' TIMESTAMP NOT NULL DEFAULT (datetime('now', 'localtime')),".
+        		"  `enable_date` TIMESTAMP NOT NULL DEFAULT (datetime('now', 'localtime')),".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111' ,".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_member_points"=>" CREATE TABLE 'nb_member_points'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_member_points"=>" CREATE TABLE 'nb_member_points'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `member_card_rfid` varchar(10) NOT NULL DEFAULT '0',".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `points` int(10) NOT NULL DEFAULT '0',".
@@ -553,11 +552,11 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_member_recharge"=>" CREATE TABLE 'nb_member_recharge'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  'admin_id' int(10)  DEFAULT 'NULL',".
+        	"nb_member_recharge"=>" CREATE TABLE 'nb_member_recharge'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `admin_id` int(10)  DEFAULT 'NULL',".
         		"  `member_card_id` int(10) NOT NULL DEFAULT '0',".
         		"  `reality_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `give_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
@@ -565,10 +564,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-            "nb_discount"=>" CREATE TABLE 'nb_discount'('lid' int(10) NOT NULL,".
-                "  'dpid' int(10) NOT NULL,".
-                "  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+            "nb_discount"=>" CREATE TABLE 'nb_discount'(`lid` int(10) NOT NULL,".
+                "  `dpid` int(10) NOT NULL,".
+                "  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                 "  `discount_name` varchar(50) NOT NULL,".
                 "  `discount_abstract` varchar(255) NOT NULL DEFAULT '',".
                 "  `discount_num` decimal(5,2) NOT NULL DEFAULT '0.00',".
@@ -578,15 +577,10 @@ class DataSyncTables
                 "  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
                 "  PRIMARY KEY (`lid`,`dpid`)".
                 ");",
-        	"nb_local_activity"=>" CREATE TABLE 'nb_local_activity'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		");",
-        	"nb_close_account"=>" CREATE TABLE 'nb_close_account'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_close_account"=>" CREATE TABLE 'nb_close_account'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `user_id` int(10) NOT NULL DEFAULT '0',".
         		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
@@ -595,10 +589,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_close_account_detail"=>" CREATE TABLE 'nb_close_account_detail'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_close_account_detail"=>" CREATE TABLE 'nb_close_account_detail'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `close_account_id` int(10) NOT NULL DEFAULT '',".
         		"  `paytype` varchar(1) NOT NULL DEFAULT '0',".
         		"  `payment_method_id` int(10) NOT NULL DEFAULT '0',".
@@ -606,10 +600,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order"=>" CREATE TABLE 'nb_order'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order"=>" CREATE TABLE 'nb_order'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `user_id` int(10) DEFAULT NULL DEFAULT '0',".
         		"  `account_no` varchar(20) NOT NULL DEFAULT '0',".
         		"  `classes` int(10) NOT NULL DEFAULT '0',".
@@ -636,10 +630,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_account_discount"=>" CREATE TABLE 'nb_order_account_discount'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_account_discount"=>" CREATE TABLE 'nb_order_account_discount'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `account_no` varchar(20) NOT NULL ,".
         		"  `discount_type` varchar(2) NOT NULL ,".
@@ -649,10 +643,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL ,".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_address"=>" CREATE TABLE 'nb_order_address'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_address"=>" CREATE TABLE 'nb_order_address'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `order_lid` int(11) NOT NULL ,".
         		"  `consignee` varchar(30) DEFAULT NULL ,".
         		"  `province` varchar(30) DEFAULT NULL,".
@@ -666,10 +660,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) DEFAULT '11111' ,".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_feedback"=>" CREATE TABLE 'nb_order_feedback'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_feedback"=>" CREATE TABLE 'nb_order_feedback'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `site_id` int(10) NOT NULL DEFAULT '0',".
         		"  `is_temp` char(1) NOT NULL DEFAULT '0',".
         		"  `is_deal` char(1) NOT NULL DEFAULT '0',".
@@ -681,10 +675,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_pay"=>" CREATE TABLE 'nb_order_pay'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_pay"=>" CREATE TABLE 'nb_order_pay'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `account_no` varchar(20) NOT NULL,".
         		"  `pay_amount` decimal(10,2) NOT NULL DEFAULT '0.00',".
@@ -695,10 +689,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_product"=>" CREATE TABLE 'nb_order_product'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_product"=>" CREATE TABLE 'nb_order_product'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `set_id` int(10) NOT NULL DEFAULT '0',".
         		"  `private_promotion_lid` int(10) NOT NULL DEFAULT '0',".
@@ -724,10 +718,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_retreat"=>" CREATE TABLE 'nb_order_retreat'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_retreat"=>" CREATE TABLE 'nb_order_retreat'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `retreat_id` int(10) NOT NULL DEFAULT '0',".
         		"  `order_detail_id` int(10) NOT NULL DEFAULT '0',".
         		"  `retreat_memo` varchar(50) NOT NULL ,".
@@ -737,10 +731,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_taste"=>" CREATE TABLE 'nb_order_taste'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_taste"=>" CREATE TABLE 'nb_order_taste'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `taste_id` int(10) NOT NULL DEFAULT '0',".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `is_order` char(1) NOT NULL DEFAULT '0',".
@@ -748,10 +742,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_order_product_promotion"=>" CREATE TABLE 'nb_order_product_promotion'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_order_product_promotion"=>" CREATE TABLE 'nb_order_product_promotion'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `order_product_id` int(10) NOT NULL DEFAULT '0',".
         		"  `account_no` varchar(20) NOT NULL,".
@@ -762,10 +756,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_queue_persons"=>" CREATE TABLE 'nb_queue_persons'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_queue_persons"=>" CREATE TABLE 'nb_queue_persons'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `stlid` int(10) NOT NULL DEFAULT '0',".
         		"  `splid` int(10) NOT NULL DEFAULT '0',".
         		"  `queue_no` varchar(20) NOT NULL DEFAULT 'A001',".
@@ -777,10 +771,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_shift_detail"=>" CREATE TABLE 'nb_shift_detail'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_shift_detail"=>" CREATE TABLE 'nb_shift_detail'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `userid` int(10) NOT NULL DEFAULT '0',".
         		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
@@ -797,10 +791,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-            "nb_site_no"=>" CREATE TABLE 'nb_site_no'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+            "nb_site_no"=>" CREATE TABLE 'nb_site_no'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `site_id` int(10) NOT NULL DEFAULT '0',".
         		"  `is_temp` char(1) NOT NULL DEFAULT '0',".
         		"  `status` char(1) NOT NULL DEFAULT '0',".
@@ -813,10 +807,10 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-          	"nb_normal_promotion" => " CREATE TABLE 'nb_normal_promotion'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+          	"nb_normal_promotion" => " CREATE TABLE 'nb_normal_promotion'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `promotion_title` varchar(50) NOT NULL,".
         		"  `main_picture` varchar(255) NOT NULL,".
         		"  `promotion_abstract` varchar(255) NOT NULL,".
@@ -834,12 +828,12 @@ class DataSyncTables
         		"  `is_available` varchar(2) NOT NULL DEFAULT '0',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY ('lid','dpid')".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_normal_promotion_detail" => " CREATE TABLE 'nb_normal_promotion_detail'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_normal_promotion_detail" => " CREATE TABLE 'nb_normal_promotion_detail'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `normal_promotion_id` int(10) NOT NULL DEFAULT '0',".
         		"  `product_id` int(10) NOT NULL DEFAULT '0',".
         		"  `is_set` varchar(2) NOT NULL,".
@@ -849,12 +843,12 @@ class DataSyncTables
         		"  `order_num` int(4) NOT NULL DEFAULT '0',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY ('lid','dpid')".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-          	"nb_full_sent" => " CREATE TABLE 'nb_full_sent'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+          	"nb_full_sent" => " CREATE TABLE 'nb_full_sent'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `title` varchar(64) NOT NULL,".
         		"  `infor` varchar(255) NOT NULL,".
         		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
@@ -865,12 +859,12 @@ class DataSyncTables
                 "  `sent_number` int(3) NOT NULL DEFAULT '1',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY ('lid','dpid')".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_full_sent_detail" => " CREATE TABLE 'nb_full_sent_detail'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        	"nb_full_sent_detail" => " CREATE TABLE 'nb_full_sent_detail'(`lid` int(10) NOT NULL,".
+        		"  `dpid` int(10) NOT NULL,".
+        		"  `create_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  `update_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `full_sent_id` int(10) NOT NULL DEFAULT '0',".
         		"  `product_id` int(10) NOT NULL DEFAULT '0',".
         		"  `is_discount` varchar(2) NOT NULL DEFAULT '0',".
@@ -879,7 +873,7 @@ class DataSyncTables
         		"  `number` int(3) NOT NULL DEFAULT '1',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY ('lid','dpid')".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
         );
         
