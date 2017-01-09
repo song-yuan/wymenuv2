@@ -77,7 +77,7 @@ class DataSyncAppVersion
     	
     	$contents = '';
     	$db = Yii::app()->db;
-    	$sql = 'select t.* from nb_connect_us t where t.delete_flag = 0 ';
+    	$sql = 'select t.* from nb_connect_us t where t.delete_flag = 0 order by t.type';
     	$command = $db->createCommand($sql);
     	$connectinfos = $command->queryAll();
     	if($connectinfos){
