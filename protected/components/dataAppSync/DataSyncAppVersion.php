@@ -75,9 +75,7 @@ class DataSyncAppVersion
     public static function getConnectUsInfo($data){
     	//查询是否是最新版本的安装包
     	
-    
-    	$urlhead = Yii::app()->request->getHostInfo().'/wymenuv2/downloadApk/';
-    	$contents = '';
+    	$contents = 'xxx';
     	$db = Yii::app()->db;
     	$sql = 'select t.* from nb_connect_us t where t.delete_flag = 0 ';
     	$command = $db->createCommand($sql);
