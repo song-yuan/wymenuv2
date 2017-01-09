@@ -72,42 +72,30 @@ class DataSyncAppVersion
 //     	));
 //         return $msg;
     }
+    public static function getConnectUsInfo($data){
+    	//查询是否是最新版本的安装包
+    	
     
-    public static function  GrabImage($baseurl,$filename="") { 
-        if($baseurl=="") return false; 
-        if(file_exists($filename))
-        {
-            return "";
-        }
-        $basedir="";
-        if($filename=="") { 
-            $ext=strrchr($url,"."); 
-            if($ext!=".gif" && $ext!=".jpg" && $ext!=".png") return false; 
-            $filename=date("YmdHis").$ext; 
-        } else{
-            $basedir=substr($filename, 0,strrpos($filename,"/"));
-        }
-
-        try{
-            if (!is_dir($basedir)){  		
-                //第三个参数是“true”表示能创建多级目录，iconv防止中文目录乱码
-                $res=mkdir(iconv("UTF-8", "GBK", $basedir),0777,true); 
-                if (!$res){
-                    return "";    
-                }
-            }
-            ob_start(); 
-            readfile($baseurl.$filename); 
-            $img = ob_get_contents(); 
-            ob_end_clean(); 
-            $size = strlen($img); 
-
-            $fp2=@fopen($filename, "a"); 
-            fwrite($fp2,$img); 
-            fclose($fp2); 
-        }catch (Exception $e) {
-            return "";
-        }
-        return $filename; 
+    	$urlhead = Yii::app()->request->getHostInfo().'/wymenuv2/downloadApk/';
+    	 
+    	$db = Yii::app()->db;
+    	$sql = 'select t.* from nb_connect_us t where t.delete_flag = 0 ';
+    	$command = $db->createCommand($sql);
+    	$connectinfo = $command->queryAll();
+    	if($connectinfo){
+    		$status = 1;
+    		 $connectinfos = $connectinfo;
+    		
+    
+    	}else{
+    		$status = 0;
+    	}
+    	$msg = json_encode(array(
+    			'status' => $status,
+    			'connectinfos' => $connectinfos,
+    	));
+    	return $msg;
     }
+    
+
 }
