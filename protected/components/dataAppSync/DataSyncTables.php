@@ -133,7 +133,7 @@ class DataSyncTables
 				"  sync_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
 				"  delete_flag varchar(1) NOT NULL DEFAULT '0',".
 				"  is_sync varchar(50) NOT NULL DEFAULT '11111',".
-				"	PRIMARY KEY (lid,dpid)".
+				"  PRIMARY KEY (lid,dpid)".
         		");",
         	"nb_sync_failure"=>" CREATE TABLE IF NOT EXISTS nb_sync_failure(lid int(10) NOT NULL,".
         		"  dpid int(10) NOT NULL,".
@@ -145,7 +145,7 @@ class DataSyncTables
 				"  content text NOT NULL,".
 				"  delete_flag varchar(1) NOT NULL DEFAULT '0',".
 				"  is_sync varchar(50) NOT NULL DEFAULT '11111',".
-        		"   PRIMARY KEY (lid,dpid)".
+        		"  PRIMARY KEY (lid,dpid)".
         		");",
             "nb_local_company"=>" CREATE TABLE nb_local_company(dpid int(10) NOT NULL,".
         		"  create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
@@ -206,7 +206,7 @@ class DataSyncTables
 				"  manager varchar(20) NOT NULL,".
 				"  delete_flag char(1) NOT NULL DEFAULT '0',".
 				"  is_sync varchar(50) NOT NULL DEFAULT '11111',".
-        		"   PRIMARY KEY (lid,dpid)".
+        		"  PRIMARY KEY (lid,dpid)".
         		");",
         	"nb_pad"=>" CREATE TABLE nb_pad(lid int(10) NOT NULL,".
         		"  dpid int(10) NOT NULL,".
