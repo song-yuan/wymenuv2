@@ -72,42 +72,43 @@ class DataSyncAppVersion
 //     	));
 //         return $msg;
     }
+    public static function getConnectUsInfo($data){
+    	//查询是否是最新版本的安装包
+    	
+    	$contents = 'xxx';
+    	$db = Yii::app()->db;
+    	$sql = 'select t.* from nb_connect_us t where t.delete_flag = 0 ';
+    	$command = $db->createCommand($sql);
+    	$connectinfos = $command->queryAll();
+    	if($connectinfos){
+    		$status = 1;
+    		foreach ($connectinfos as $connectinfo){
+    			$connect_type = $connectinfo['type'];
+    			if($connect_type == 0){
+    				$connect_name = 'QQ：';
+    			}elseif($connect_type == 1){
+    				$connect_name = '手机：';
+    			}
+    			$content = '<div style="width: 20%;float: left;text-align: right;">
+			    			<span id="updatever_title" >'.$connect_name.'</span>
+			    			</div>
+			    			<div style="width: 50%;float: left;margin-left: 2%;">
+			    			<span id="print_success_num" >'.$connectinfo['content'].'</span>
+			    			</div>';
+    		}
+    		 $contents = $contents.$content;
+    		
     
-    public static function  GrabImage($baseurl,$filename="") { 
-        if($baseurl=="") return false; 
-        if(file_exists($filename))
-        {
-            return "";
-        }
-        $basedir="";
-        if($filename=="") { 
-            $ext=strrchr($url,"."); 
-            if($ext!=".gif" && $ext!=".jpg" && $ext!=".png") return false; 
-            $filename=date("YmdHis").$ext; 
-        } else{
-            $basedir=substr($filename, 0,strrpos($filename,"/"));
-        }
-
-        try{
-            if (!is_dir($basedir)){  		
-                //第三个参数是“true”表示能创建多级目录，iconv防止中文目录乱码
-                $res=mkdir(iconv("UTF-8", "GBK", $basedir),0777,true); 
-                if (!$res){
-                    return "";    
-                }
-            }
-            ob_start(); 
-            readfile($baseurl.$filename); 
-            $img = ob_get_contents(); 
-            ob_end_clean(); 
-            $size = strlen($img); 
-
-            $fp2=@fopen($filename, "a"); 
-            fwrite($fp2,$img); 
-            fclose($fp2); 
-        }catch (Exception $e) {
-            return "";
-        }
-        return $filename; 
+    	}else{
+    		$status = 0;
+    	}
+    	$msg = json_encode(array(
+    			'status' => $status,
+    			'contents' => $contents,
+    			'ceshi' =>'sssss',
+    	));
+    	return $msg;
     }
+    
+
 }
