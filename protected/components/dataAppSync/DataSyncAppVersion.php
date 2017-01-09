@@ -82,12 +82,30 @@ class DataSyncAppVersion
     	$connectinfos = $command->queryAll();
     	if($connectinfos){
     		$status = 1;
+    		$type0 = 1;
+    		$type1 = 1;
+    		$type2 = 1;
+    		$type3 = 1;
+    		$type4 = 1;
     		foreach ($connectinfos as $connectinfo){
     			$connect_type = $connectinfo['type'];
     			if($connect_type == 0){
-    				$connect_name = 'QQ：';
+    				$connect_name = 'QQ'.$type0.'：';
+    				$type0++;
     			}elseif($connect_type == 1){
-    				$connect_name = '手机：';
+    				$connect_name = '手机'.$type1.'：';
+    				$type1++;
+    			}
+    			elseif($connect_type == 2){
+    				$connect_name = 'email'.$type1.'：';
+    				$type1++;
+    			}
+    			elseif($connect_type == 3){
+    				$connect_name = '固话'.$type1.'：';
+    				$type1++;
+    			}elseif($connect_type == 4){
+    				$connect_name = '微信'.$type1.'：';
+    				$type1++;
     			}
     			$content = '<div style="width: 94%;height: 26px;line-height: 26px;">
     						<div style="width: 20%;float: left;text-align: right;">
