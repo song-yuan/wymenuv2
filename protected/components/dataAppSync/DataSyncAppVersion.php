@@ -89,12 +89,13 @@ class DataSyncAppVersion
     			}elseif($connect_type == 1){
     				$connect_name = '手机：';
     			}
-    			$content = '<div style="width: 20%;float: left;text-align: right;">
+    			$content = '<div>
+    						<div style="width: 20%;float: left;text-align: right;">
 			    			<span id="updatever_title" >'.$connect_name.'</span>
 			    			</div>
 			    			<div style="width: 50%;float: left;margin-left: 2%;">
 			    			<span id="print_success_num" >'.$connectinfo['content'].'</span>
-			    			</div>';
+			    			</div></div>';
     		}
     		 $contents = $contents.$content;
     		
