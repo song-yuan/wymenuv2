@@ -75,7 +75,7 @@ class DataSyncAppVersion
     public static function getConnectUsInfo($data){
     	//查询是否是最新版本的安装包
     	
-    	$contents = 'xxx';
+    	$contents = '';
     	$db = Yii::app()->db;
     	$sql = 'select t.* from nb_connect_us t where t.delete_flag = 0 ';
     	$command = $db->createCommand($sql);
@@ -106,7 +106,6 @@ class DataSyncAppVersion
     	$msg = json_encode(array(
     			'status' => $status,
     			'contents' => $contents,
-    			'ceshi' =>'sssss',
     	));
     	return $msg;
     }
