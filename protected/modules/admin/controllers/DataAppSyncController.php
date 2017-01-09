@@ -147,6 +147,13 @@ public function actionAppUpdate(){
 	$result = DataSyncAppVersion::checkVersion($_POST);
 	echo $result;exit;
 }
+/*
+ * app更新
+*/
+public function actionGetConnectinfo(){
+	$result = DataSyncAppVersion::getConnectUsInfo($_POST);
+	echo $result;exit;
+}
 /**
  * 
  * 退单
