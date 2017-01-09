@@ -96,10 +96,9 @@ class DataSyncAppVersion
 			    			<div style="width: 50%;float: left;margin-left: 2%;">
 			    			<span id="print_success_num" >'.$connectinfo['content'].'</span>
 			    			</div></div>';
+    			$contents = $contents.$content;
     		}
-    		 $contents = $contents.$content;
     		
-    
     	}else{
     		$status = 0;
     	}
