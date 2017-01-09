@@ -105,6 +105,7 @@ class DataSyncAppVersion
     	$msg = json_encode(array(
     			'status' => $status,
     			'contents' => $contents,
+    			'ceshi' =>'sssss',
     	));
     	return $msg;
     }
