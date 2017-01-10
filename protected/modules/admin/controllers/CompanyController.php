@@ -103,7 +103,7 @@ class CompanyController extends BackendController
 	            //$model->comp_dpid=mysql_insert_id();
 	            $model->type="0";
 	                        
-	            // $model->comp_dpid = Yii::app()->db->getLastInsertID();
+	            var_dump($model);exit;
 				if($model->save()){
 					$comp_dpid = Yii::app()->db->getLastInsertID();
 					$sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
