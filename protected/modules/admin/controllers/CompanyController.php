@@ -81,6 +81,7 @@ class CompanyController extends BackendController
 	}
 	public function actionCreate(){
 		$type = '-1';
+		$type2 = 'create';
 		if(Yii::app()->user->role <= User::ADMIN_AREA) {
 		
 		$model = new Company();
@@ -89,12 +90,20 @@ class CompanyController extends BackendController
 		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE){
 			if(Yii::app()->request->isPostRequest) {
 				$model->attributes = Yii::app()->request->getPost('Company');
-	                        $model->create_at=date('Y-m-d H:i:s',time());
-	                        $model->update_at=date('Y-m-d H:i:s',time());
-	                        //$model->comp_dpid=mysql_insert_id();
-	                        $model->type="0";
+				$province = Yii::app()->request->getParam('province1');
+				$city = Yii::app()->request->getParam('city1');
+				$area = Yii::app()->request->getParam('area1');
+				
+				$model->country = 'china';
+				$model->province = $province;
+				$model->city = $city;
+				$model->county_area = $area;
+	            $model->create_at = date('Y-m-d H:i:s',time());
+	            $model->update_at = date('Y-m-d H:i:s',time());
+	            //$model->comp_dpid=mysql_insert_id();
+	            $model->type="0";
 	                        
-	                       // $model->comp_dpid = Yii::app()->db->getLastInsertID();
+	            // $model->comp_dpid = Yii::app()->db->getLastInsertID();
 				if($model->save()){
 					$comp_dpid = Yii::app()->db->getLastInsertID();
 					$sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
@@ -112,6 +121,14 @@ class CompanyController extends BackendController
 		elseif(Yii::app()->user->role > 3 && Yii::app()->user->role <= 9){
 			if(Yii::app()->request->isPostRequest) {
 				$model->attributes = Yii::app()->request->getPost('Company');
+				$province = Yii::app()->request->getParam('province1');
+				$city = Yii::app()->request->getParam('city1');
+				$area = Yii::app()->request->getParam('area1');
+				
+				$model->country = 'china';
+				$model->province = $province;
+				$model->city = $city;
+				$model->county_area = $area;
 				$model->create_at=date('Y-m-d H:i:s',time());
 				$model->update_at=date('Y-m-d H:i:s',time());
 				$model->comp_dpid = $this->getCompanyId(Yii::app()->user->username);
@@ -133,7 +150,8 @@ class CompanyController extends BackendController
 				'printers'=>$printers,
 				'role'=>$role,
                 'companyId'=>  $this->companyId,
-				'type'=> $type
+				'type'=> $type,
+				'type2'=> $type2,
 		));
 		
 		
@@ -145,17 +163,26 @@ class CompanyController extends BackendController
 		$role = Yii::app()->user->role;
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
 		$type = Yii::app()->request->getParam('type');
+		$type2 = 'update';
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
 		if(Yii::app()->user->role >= User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('company/index' , 'companyId' => $this->companyId)) ;
 		}
 		if(Yii::app()->request->isPostRequest) {
-                        Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+            //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			$model->attributes = Yii::app()->request->getPost('Company');
-                        $model->update_at=date('Y-m-d H:i:s',time());
+			$province = Yii::app()->request->getParam('province1');
+			$city = Yii::app()->request->getParam('city1');
+			$area = Yii::app()->request->getParam('area1');
 			
-			//var_dump($model->attributes);exit;
+			$model->country = 'china';
+			$model->province = $province;
+			$model->city = $city;
+			$model->county_area = $area;
+            $model->update_at=date('Y-m-d H:i:s',time());
+			
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
 				$this->redirect(array('company/index','companyId'=>$this->companyId));
@@ -170,6 +197,7 @@ class CompanyController extends BackendController
 				'role'=>$role,
                 'companyId'=>$this->companyId,
 				'type'=>$type,
+				'type2'=>$type2,
 		));
 	}
 	public function actionDelete(){
