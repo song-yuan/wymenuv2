@@ -1,4 +1,5 @@
 							<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hzj3D9srpRthGaFjOeBGvOG6"></script>
+							<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
 							<?php $form=$this->beginWidget('CActiveForm', array(
 									'id' => 'company-form',
 									'errorMessageCssClass' => 'help-block',
@@ -7,6 +8,15 @@
 										'enctype' => 'multipart/form-data'
 									),
 							)); ?>
+							<style>
+								.selectedclass{
+									font-size: 14px;
+									color: #333333;
+									height: 34px;
+									line-height: 34px;
+									padding: 6px 12px;
+								}
+							</style>
 								<div class="form-body">
 									<div class="form-group">
 										<?php echo $form->label($model, 'company_name',array('class' => 'col-md-3 control-label'));?>
@@ -105,6 +115,17 @@
 										</div>
 									</div>
 									<div class="form-group">
+										<label class="col-md-3 control-label">请选择省市县区</label>
+										<div class="col-md-6">
+											<select id="province" name="province" class="selectedclass"></select>
+											<select id="city" name="city" class="selectedclass"></select>
+											<select id="area" name="area" class="selectedclass"></select>
+										</div>
+									</div>
+									<input type="hidden" id="province1" name="province1" value="" />
+									<input type="hidden" id="city1" name="city1" value="" />
+									<input type="hidden" id="area1" name="area1" value="" />
+									<div class="form-group">
 										<?php echo $form->label($model, 'email',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'email',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('email')));?>
@@ -156,7 +177,7 @@
 											<?php echo $form->error($model, 'homepage' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
+                                    <div class="form-group">
 										<?php echo $form->label($model, 'domain',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'domain',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('domain')));?>
@@ -172,7 +193,7 @@
 									</div>
 									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
 									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
-                                                                        <!--
+                                    <!--
 									<div class="form-group">
 										<?php echo $form->label($model, 'printer_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -183,7 +204,7 @@
 									-->									
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<a href="<?php echo $this->createUrl('company/index', array('companyId' => $this->companyId));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
@@ -203,8 +224,8 @@
 							)); ?>
 							
 	<script>
-
-	 
+	
+	new PCAS("province","city","area","<?php echo $model->province;?>","<?php echo $model->city;?>","<?php echo $model->county_area;?>");
 	 $('#Company_type').change(function(){ 
 	 //alert($(this).children('option:selected').val()); 
 	 var p1=$(this).children('option:selected').val();//这就是selected的值 
@@ -258,7 +279,26 @@
 					}
 				}, "上海市");
 			});
-
+		     $("#su").on('click',function() {
+		         //alert(11);
+		         var province = $('#province').children('option:selected').val();
+		         var city = $('#city').children('option:selected').val();
+		         var area = $('#area').children('option:selected').val();
+		         
+		         var dayendzero = "00:00";
+		         //var ss = "";
+		       // if(aa.checked){
+		         if(province == null || province == 'undefind' || province == ''){
+		        	 alert("<?php echo yii::t('app','请填写店铺所处省市信息。。。');?>");
+		        	 return false;
+		         }
+		         //alert(province);return false;
+		         
+		         $("#province1").val(province);
+		         $("#city1").val(city);
+		         $("#area1").val(area);
+		         $("#company-form").submit();
+		     });
 
 		});
 	</script>							

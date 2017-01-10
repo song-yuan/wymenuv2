@@ -41,9 +41,9 @@ class Company extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('printer_id, distance, delete_flag', 'numerical', 'integerOnly'=>true),
+			array('printer_id, distance, delete_flag, province, ', 'numerical', 'integerOnly'=>true),
 			array('company_name, email, is_sync', 'length', 'max'=>50),
-			array('logo, domain, homepage', 'length', 'max'=>255),
+			array('logo, domain, homepage, country, city, county_area', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
 			array('lng, lat', 'length', 'max'=>10),
 			array('description','length'),
@@ -53,14 +53,14 @@ class Company extends CActiveRecord
 			array('membercard_code','length','max'=>16),
 			array('membercard_enable_date','length','max'=>3),
 			array('company_name, logo, contact_name, mobile' , 'required'),
-			array('email', 'length', 'min'=>6, 'max'=>40,'message'=>yii::t('app','请输入4到20的电子邮件')),
+			array('email', 'length', 'min'=>6, 'max'=>40,'message'=>yii::t('app','请输入6到20的电子邮件')),
 			//array('mobile','match','pattern'=>'/^[1][358]\d{9}$/','message'=>yii::t('app','请填写有效的手机号码')),
 			//array('telephone', 'match','pattern'=>'/(^[0-9]{3,4}[0-9]{7,8}$)|(^400\-[0-9]{3}\-[0-9]{4}$)|(^[0-9]{3,4}\-[0-9]{7,8}$)|(^0{0,1}13[0-9]{9}$)/' ,'message'=>yii::t('app','请填写有效的电话号码')),
 			
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo, token, contact_name,type, is_membercard_recharge, membercard_code, membercard_enable_date, membercard_points_type, is_sync, mobile, telephone, email, lng, lat, distance, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo, token, contact_name,type, is_membercard_recharge, membercard_code, membercard_enable_date, membercard_points_type, is_sync, mobile, telephone, email, lng, lat, distance, country, province, city, county_area, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -93,6 +93,10 @@ class Company extends CActiveRecord
 			'mobile' =>yii::t('app', '联系人手机'),
 			'telephone' => yii::t('app','电话'),
 			'email' => yii::t('app','电子邮箱'),
+				'country' => yii::t('app','国家'),
+				'province' => yii::t('app','省份'),
+				'city' => yii::t('app','城市'),
+				'county_area' => yii::t('app','县区'),
 			'address'=>yii::t('app','公司地址'),
 			'homepage' => yii::t('app','公司主页'),
             'domain'=>yii::t('app','系统服务地址'),
@@ -133,6 +137,10 @@ class Company extends CActiveRecord
 		$criteria->compare('mobile',$this->mobile,true);
 		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('email',$this->email,true);
+		$criteria->compare('country',$this->country,true);
+		$criteria->compare('province',$this->province,true);
+		$criteria->compare('city',$this->city,true);
+		$criteria->compare('county_area',$this->county_area,true);
 		$criteria->compare('homepage',$this->homepage,true);
         $criteria->compare('domain',$this->domain,true);
 		$criteria->compare('create_at',$this->create_at);
