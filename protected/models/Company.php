@@ -41,9 +41,9 @@ class Company extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('printer_id, distance, delete_flag, province, ', 'numerical', 'integerOnly'=>true),
+			array('printer_id, distance, delete_flag, ', 'numerical', 'integerOnly'=>true),
 			array('company_name, email, is_sync', 'length', 'max'=>50),
-			array('logo, domain, homepage, country, city, county_area', 'length', 'max'=>255),
+			array('logo, domain, homepage, country, province, city, county_area', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
 			array('lng, lat', 'length', 'max'=>10),
 			array('description','length'),
