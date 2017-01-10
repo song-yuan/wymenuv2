@@ -1,3 +1,14 @@
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
+<style>
+.selectedclass{
+	font-size: 14px;
+	color: #333333;
+	height: 34px;
+	line-height: 34px;
+	padding: 6px 12px;
+}
+</style>
+
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -41,7 +52,15 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?></div>
 					<div class="actions">
-                                            <?php if(Yii::app()->params->master_slave=='m') : ?>
+					<div class="btn-group">
+						<select id="province" name="province" class="selectedclass"></select>
+						<select id="city" name="city" class="selectedclass"></select>
+						<select id="area" name="area" class="selectedclass"></select>
+                    </div>
+                    <div class="btn-group">
+	                	<button type="button" id="cityselect" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
+	                </div>
+                        <?php if(Yii::app()->params->master_slave=='m') : ?>
 						<?php if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role <= User::ADMIN_AREA):?>
 							<a href="<?php echo $this->createUrl('company/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 							<div class="btn-group">
@@ -141,3 +160,19 @@
             <?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+<script>
+	new PCAS("province","city","area","<?php echo $province;?>","<?php echo $city;?>","<?php echo $area;?>");
+	$('#cityselect').on('click',function(){
+		 var province = $('#province').children('option:selected').val();
+         var city = $('#city').children('option:selected').val();
+         var area = $('#area').children('option:selected').val();
+		//alert(111);
+         location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+// 		if(province == null || province == 'undefind' || province == ''){
+//	       	alert("<?php echo yii::t('app','请填写店铺所处省市信息再进行查询。。。');?>");
+// 	       	return false;
+// 	    }else{
+//	    	location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+// 		}
+	});
+</script>
