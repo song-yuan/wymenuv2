@@ -17,6 +17,10 @@ class CompanyController extends BackendController
 		$this->render('list');
 	}
 	public function actionIndex(){
+		$province = Yii::app()->request->getParam('province',0);
+		$city = Yii::app()->request->getParam('city',0);
+		$area = Yii::app()->request->getParam('area',0);
+		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
 		$criteria = new CDbCriteria;
@@ -30,7 +34,15 @@ class CompanyController extends BackendController
 			$criteria->condition = ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
 		}
 		//var_dump($criteria);exit;
-	
+		if($province){
+			$criteria->condition.=' and t.province like "'.$province.'"';
+		}
+		if($city){
+			$criteria->condition.=' and t.city like "'.$city.'"';
+		}
+		if($area){
+			$criteria->condition.=' and t.county_area like "'.$area.'"';
+		}
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -39,6 +51,9 @@ class CompanyController extends BackendController
 		$this->render('index',array(
 				'models'=> $models,
 				'pages'=>$pages,
+				'province'=>$province,
+				'city'=>$city,
+				'area'=>$area,
 		));
 	}
 	public function actionIndex1(){
