@@ -27,8 +27,8 @@ class DataSyncOperation {
 			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
+				$padSettingId = $result['lid'];
 				$dpid = $result['dpid'];
-				$padSettingId = $result['pad_setting_id'];
 				$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
 				$resDetai = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 				if($resDetai){
