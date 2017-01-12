@@ -27,12 +27,36 @@ class DataSyncOperation {
 			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
-				$msg = array('status'=>true,'msg'=>$result);
+				$dpid = $result['dpid'];
+				$padSettingId = $result['pad_setting_id'];
+				$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
+				$resDetai = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+				if($resDetai){
+					$msg = array('status'=>false,'msg'=>'该序列号已被使用');
+				}else{
+					$isSync = DataSync::getInitSync ();
+					$se = new Sequence ( "pad_setting_detail" );
+					$lid = $se->nextval ();
+					$data = array (
+							'lid' => $lid,
+							'dpid' => $dpid,
+							'create_at' => date ( 'Y-m-d H:i:s', time () ),
+							'update_at' => date ( 'Y-m-d H:i:s', time () ),
+							'postable_sync_id' => $padSettingId,
+							'is_sync' => $isSync
+					);
+					$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_detail', $data );
+					if($res){
+						$msg = array('status'=>true,'msg'=>$result);
+					}else{
+						$msg = array('status'=>false,'msg'=>'请重新操作');
+					}
+				}
 			}else{
-				$msg = array('status'=>false,'msg'=>'');
+				$msg = array('status'=>false,'msg'=>'序列号不存在');
 			}
 		}else{
-			$msg = array('status'=>false,'msg'=>'');
+			$msg = array('status'=>false,'msg'=>'请输入序列号');
 		}
 		return $msg;
 	}
