@@ -168,6 +168,10 @@ class DataSyncTables
         		"lat varchar(10) NOT NULL,".
         		"distance int(10) NOT NULL DEFAULT '5',".
         		"homepage varchar(255) NOT NULL,".
+        		"country varchar(255) NOT NULL,".
+        		"province varchar(255) NOT NULL,".
+        		"city varchar(255) NOT NULL,".
+        		"county_area varchar(255) NOT NULL,".
         		"domain varchar(255) NOT NULL,".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"description text NOT NULL DEFAULT '',".
