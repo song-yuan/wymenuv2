@@ -30,8 +30,8 @@ class DataSyncOperation {
 				$padSettingId = $result['lid'];
 				$dpid = $result['dpid'];
 				$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
-				$resDetai = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-				if($resDetai){
+				$resDetail = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+				if($resDetail){
 					$msg = array('status'=>false,'msg'=>'该序列号已被使用');
 				}else{
 					$isSync = DataSync::getInitSync ();
@@ -42,7 +42,7 @@ class DataSyncOperation {
 							'dpid' => $dpid,
 							'create_at' => date ( 'Y-m-d H:i:s', time () ),
 							'update_at' => date ( 'Y-m-d H:i:s', time () ),
-							'postable_sync_id' => $padSettingId,
+							'pad_setting_id' => $padSettingId,
 							'is_sync' => $isSync
 					);
 					$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_detail', $data );
