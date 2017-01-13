@@ -3,8 +3,6 @@ $now = time();
 $rand = rand(100,999);
 $outTradeNo = $now.'-'.$this->companyId.'-'.$rand;
 
-$totalAmount = $_POST['pay_price'];
-$authCode = $_POST['auth_code'];
 $company = WxCompany::get($this->companyId);
 
 $data = array(
@@ -29,8 +27,8 @@ if($authCode!=''&&$result['status']){
 	$storeId = "wy_".$this->companyId;
 	
 	$goodsDetailList = array();
-	if(isset($_POST['goods'])&&$_POST['goods']!=''){
-		$goodsArr = json_decode($_POST['goods']);
+	if($goodStr!=''){
+		$goodsArr = json_decode($goodStr);
 		foreach ($goodsArr as $goods){
 			$goodsDetai = new GoodsDetail();
 			$goodsDetai->setGoodsId($goods[0]);
