@@ -97,7 +97,7 @@ class Company extends CActiveRecord
 				'province' => yii::t('app','省份'),
 				'city' => yii::t('app','城市'),
 				'county_area' => yii::t('app','县区'),
-			'address'=>yii::t('app','公司地址'),
+			'address'=>yii::t('app','具体街道号'),
 			'homepage' => yii::t('app','公司主页'),
             'domain'=>yii::t('app','系统服务地址'),
             'distance'=> yii::t('app','外卖范围'),
