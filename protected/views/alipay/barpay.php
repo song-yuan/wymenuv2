@@ -3,8 +3,6 @@ $now = time();
 $rand = rand(100,999);
 $outTradeNo = $now.'-'.$this->companyId.'-'.$rand;
 
-$totalAmount = $_POST['pay_price'];
-$authCode = $_POST['auth_code'];
 $company = WxCompany::get($this->companyId);
 
 $data = array(
@@ -29,8 +27,8 @@ if($authCode!=''&&$result['status']){
 	$storeId = "wy_".$this->companyId;
 	
 	$goodsDetailList = array();
-	if(isset($_POST['goods'])&&$_POST['goods']!=''){
-		$goodsArr = json_decode($_POST['goods']);
+	if($goodStr!=''){
+		$goodsArr = json_decode($goodStr);
 		foreach ($goodsArr as $goods){
 			$goodsDetai = new GoodsDetail();
 			$goodsDetai->setGoodsId($goods[0]);
@@ -45,7 +43,7 @@ if($authCode!=''&&$result['status']){
 	// 支付宝的店铺编号
 	$alipayStoreId = "";
 	// 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)
-	$providerId = "2088811584894868"; //系统商pid,作为系统商返佣数据提取的依据
+	$providerId = ""; //系统商pid,作为系统商返佣数据提取的依据 2088811584894868
 	$extendParams = new ExtendParams();
 	$extendParams->setSysServiceProviderId($providerId);
 	$extendParamsArr = $extendParams->getExtendParams();
@@ -54,7 +52,7 @@ if($authCode!=''&&$result['status']){
 	$timeExpress = "5m";
 	
 	//第三方应用授权令牌,商户授权系统商开发模式下使用
-	$appAuthToken = "201701BBda91f2d7e6964c37b616687e75858C86";
+	$appAuthToken = ""; //201701BBda91f2d7e6964c37b616687e75858C86
 	
 	// 创建请求builder，设置请求参数
 	$barPayRequestBuilder = new AlipayTradePayContentBuilder();

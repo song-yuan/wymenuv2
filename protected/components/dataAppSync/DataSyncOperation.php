@@ -27,12 +27,36 @@ class DataSyncOperation {
 			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
-				$msg = array('status'=>true,'msg'=>$result);
+				$padSettingId = $result['lid'];
+				$dpid = $result['dpid'];
+				$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
+				$resDetail = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+				if($resDetail){
+					$msg = array('status'=>false,'msg'=>'该序列号已被使用');
+				}else{
+					$isSync = DataSync::getInitSync ();
+					$se = new Sequence ( "pad_setting_detail" );
+					$lid = $se->nextval ();
+					$data = array (
+							'lid' => $lid,
+							'dpid' => $dpid,
+							'create_at' => date ( 'Y-m-d H:i:s', time () ),
+							'update_at' => date ( 'Y-m-d H:i:s', time () ),
+							'pad_setting_id' => $padSettingId,
+							'is_sync' => $isSync
+					);
+					$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_detail', $data );
+					if($res){
+						$msg = array('status'=>true,'msg'=>$result);
+					}else{
+						$msg = array('status'=>false,'msg'=>'请重新操作');
+					}
+				}
 			}else{
-				$msg = array('status'=>false,'msg'=>'');
+				$msg = array('status'=>false,'msg'=>'序列号不存在');
 			}
 		}else{
-			$msg = array('status'=>false,'msg'=>'');
+			$msg = array('status'=>false,'msg'=>'请输入序列号');
 		}
 		return $msg;
 	}
@@ -355,9 +379,10 @@ class DataSyncOperation {
 			$syncLid = $data ['sync_lid'];
 		}
 		$dpid = $data ['dpid'];
+		$padSetLid = $data ['posLid']; // pad序列号对于的lid
 		$orderData = $data ['data'];
 		$obj = json_decode ( $orderData );
-		if (isset ( $data ['is_pos'] ) && $data ['is_pos'] == 1) {
+		if (isset ( $data ['is_pos'] ) && $data ['is_pos'] > 0) {
 			$isSync = 0;
 		} else {
 			$isSync = DataSync::getInitSync ();
@@ -396,7 +421,7 @@ class DataSyncOperation {
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
 		
-		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
+		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and user_id='.$padSetLid.' and account_no="'.$accountNo.'"';
 		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
 		if($orderModel){
 			$msg = json_encode ( array (
@@ -418,7 +443,7 @@ class DataSyncOperation {
 					'account_no' => $accountNo,
 					'classes' => $orderInfo->classes,
 					'username' => $orderInfo->username,
-					'user_id' => '0',
+					'user_id' => $padSetLid,
 					'site_id' => $orderInfo->site_id,
 					'is_temp' => $orderInfo->is_temp,
 					'number' => $orderInfo->number,
@@ -1014,17 +1039,14 @@ class DataSyncOperation {
 			foreach ($dataArr as $obj){
 				$lid = $obj->lid;
 				$dpid = $obj->dpid;
+				$padLid = $obj->jobid;
 				$type = $obj->sync_type;
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
 				if($type==2){
 					// 新增订单
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
-					if(strpos($syncurl,'createOrder')){
-						$result = self::operateOrder($pData);
-					}else{
-						$result = self::addMemberCard($pData);
-					}
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
+					$result = self::operateOrder($pData);
 				}elseif($type==4){
 					// 退款
 					$contentArr = split('::', $content);
@@ -1033,7 +1055,7 @@ class DataSyncOperation {
 					$result = self::retreatOrder($pData);
 				}elseif($type==3){
 					// 增加会员卡
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 					$result = self::addMemberCard($pData);
 				}
 				$resObj = json_decode($result);
@@ -1041,7 +1063,7 @@ class DataSyncOperation {
 					array_push($lidArr, $lid);
 				}else{
 					// 插入同步不成功数据
-					$data = array('dpid'=>$dpid,'jobid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
+					$data = array('dpid'=>$dpid,'jobid'=>$padLid,'pos_sync_lid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
 					$resFail = self::setSyncFailure($data);
 					$failObj = json_decode($resFail);
 					if($failObj->status){
@@ -1056,18 +1078,15 @@ class DataSyncOperation {
 				foreach ($syncArr as $sync){
 					$lid = $sync->lid;
 					$dpid = $sync->dpid;
-					$syncLid = $sync->jobid;
+					$padLid = $sync->jobid;
+					$syncLid = $sync->pos_sync_lid;
 					$type = $sync->sync_type;
 					$syncurl = $sync->sync_url;
 					$content = $sync->content;
 					if($type==2){
 						// 新增订单
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
-						if(strpos($syncurl,'createOrder')){
-							$result = self::operateOrder($pData);
-						}else{
-							$result = self::addMemberCard($pData);
-						}
+						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
+						$result = self::operateOrder($pData);
 					}elseif($type==4){
 						// 退款
 						$contentArr = split('::', $content);
@@ -1076,7 +1095,7 @@ class DataSyncOperation {
 						$result = self::retreatOrder($pData);
 					}elseif($type==3){
 						// 增加会员卡
-						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
+						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 						$result = self::addMemberCard($pData);
 					}
 					$resObj = json_decode($result);
@@ -1457,11 +1476,12 @@ class DataSyncOperation {
 	public static function setSyncFailure($data) {
 		$time = time ();
 		$dpid = $data['dpid'];
-		$jobid = $data['jobid']; // 保存pos本地的lid
+		$jobid = $data['jobid']; 
+		$posSyncLid = $data['pos_sync_lid'];// 保存pos本地的lid
 		$syncType = $data['sync_type'];
 		$syncUrl = $data['sync_url'];
 		$content = $data['content'];
-		$sql = "select * from nb_sync_failure where dpid=".$dpid." and jobid=".$jobid." and sync_type=".$syncType." and sync_url='".$syncUrl."' and content='".$content."' and delete_flag=0";
+		$sql = "select * from nb_sync_failure where dpid=".$dpid." and jobid=".$jobid." and pos_sync_lid=".$posSyncLid." and sync_type=".$syncType." and sync_url='".$syncUrl."' and content='".$content."' and delete_flag=0";
 		$failresult = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if($failresult){
 			$msg = json_encode(array('status'=>true));
@@ -1475,6 +1495,7 @@ class DataSyncOperation {
 				'create_at' => date ( 'Y-m-d H:i:s', $time ),
 				'update_at' => date ( 'Y-m-d H:i:s', $time ),
 				'jobid' => $jobid,
+				'pos_sync_lid' => $posSyncLid,
 				'sync_type' => $syncType,
 				'sync_url' => $syncUrl,
 				'content' => $content,
