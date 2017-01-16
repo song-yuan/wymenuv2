@@ -175,4 +175,21 @@
 //	    	location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 // 		}
 	});
+	$('#province').change(function(){
+		changeselect();
+		});
+	$('#city').change(function(){
+		changeselect();
+		});
+	$('#area').change(function(){
+		changeselect();
+		});
+	 function changeselect(){
+		 var province = $('#province').children('option:selected').val();
+			var city = $('#city').children('option:selected').val();
+	        var area = $('#area').children('option:selected').val();
+	        
+			location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+			 
+		 }
 </script>
