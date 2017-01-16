@@ -50,7 +50,7 @@ class PoscodeController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+                //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
