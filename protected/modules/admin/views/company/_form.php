@@ -269,6 +269,12 @@
 		        var city = $('#city').children('option:selected').val();
 		        var area = $('#area').children('option:selected').val();
 				var address = $('#Company_address').val();
+				if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
+					city = '';
+					}
+				if(area == '市辖区'){
+					area = '';
+					}
 				var real_address = province+city+area+address;
 				// 创建地址解析器实例
 				var myGeo = new BMap.Geocoder();
