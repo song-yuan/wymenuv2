@@ -967,7 +967,37 @@ public function actionPayallReport(){
 		}elseif($text==3){
 			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
 		}
-		
+		//var_dump($sql2);exit;
+		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
+		return $retreat['retreat_allprice'];
+	}
+	/*
+	 * 支付方式报表的退款查询
+	*/
+	public function getPaymentRetreat($dpid,$begin_time,$end_time,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		$begin_time = $begin_time.' 00:00:00';
+		$end_time = $end_time.' 23:59:59';		
+		$db = Yii::app()->db;
+		if($text==1){
+			if($usertype != '0'){
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and t2.username = "'.$userid.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}else{
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}
+		}elseif($text==2){
+			if($usertype != '0'){
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and t2.username = "'.$userid.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}else{
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
+			}
+		}elseif($text==3){
+			if($usertype){
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" and t2.username = "'.$userid.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}else{
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
+			}
+		}
+		//var_dump($sql2);exit;
 		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		return $retreat['retreat_allprice'];
 	}
@@ -3582,7 +3612,7 @@ public function actionPayallReport(){
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
 			}
 		}
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternext.'3',yii::t('app','备注'));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternext.'3',yii::t('app','退款'));
 		$j=4;
 		foreach($model as $v){
 			//print_r($v);
@@ -3599,10 +3629,11 @@ public function actionPayallReport(){
 			}else{
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j);
 			}
+			$retreats = $this->getPaymentRetreat($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username);
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('B'.$j,$v->all_nums)
 				->setCellValue('C'.$j,$reality_all = $this->getGrossProfit($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
-				->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v->all_reality))
+				->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v->all_reality+$retreats))
 				->setCellValue('E'.$j,$v->all_reality)
 				->setCellValue('G'.$j,$cash = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,0,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('H'.$j,$wechat = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,1,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
@@ -3610,24 +3641,25 @@ public function actionPayallReport(){
 				->setCellValue('J'.$j,$unionpay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,5,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
 				$letters='';
+				$letternexts= 'L';
 				if($payments){
 					$let = '0';
 					
-					$letternexts= 'L3';
+					
 					foreach ($payments as $payment){
 						$paymentname = $payment['name'];
 						$let++;
 						switch ($let){
-							case 1: $letters = 'L';$letternexts = 'M3';break;
-							case 2: $letters = 'M';$letternexts = 'N3';break;
-							case 3: $letters = 'N';$letternexts = 'O3';break;
-							case 4: $letters = 'O';$letternexts = 'P3';break;
-							case 5: $letters = 'P';$letternexts = 'Q3';break;
-							case 6: $letters = 'Q';$letternexts = 'R3';break;
-							case 7: $letters = 'R';$letternexts = 'S3';break;
-							case 8: $letters = 'S';$letternexts = 'T3';break;
-							case 9: $letters = 'T';$letternexts = 'U3';break;
-							case 10: $letters = 'U';$letternexts = 'V3';break;
+							case 1: $letters = 'L';$letternexts = 'M';break;
+							case 2: $letters = 'M';$letternexts = 'N';break;
+							case 3: $letters = 'N';$letternexts = 'O';break;
+							case 4: $letters = 'O';$letternexts = 'P';break;
+							case 5: $letters = 'P';$letternexts = 'Q';break;
+							case 6: $letters = 'Q';$letternexts = 'R';break;
+							case 7: $letters = 'R';$letternexts = 'S';break;
+							case 8: $letters = 'S';$letternexts = 'T';break;
+							case 9: $letters = 'T';$letternexts = 'U';break;
+							case 10: $letters = 'U';$letternexts = 'V';break;
 							default:break;
 						}
 						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
@@ -3635,7 +3667,7 @@ public function actionPayallReport(){
 					$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 						
 				}
-		
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternexts.$j,$retreats);
 					//细边框引用
 					$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->applyFromArray($linestyle);
 					$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->applyFromArray($linestyle);
