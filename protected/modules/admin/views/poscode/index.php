@@ -66,6 +66,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','POS序列');?></th>
                                 <th><?php echo yii::t('app','POS秘钥');?></th>
+                                <th><?php echo yii::t('app','是否使用');?></th>
                                 <th><?php echo yii::t('app','类型');?></th>
 								<th></th>
 							</tr>
@@ -74,10 +75,11 @@
 						
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->lid;?></td>
-                                <td ><?php echo $model->pad_code;?></td>
-								<td ><?php if($model->pad_sales_type==0)echo '中餐模式';else echo '西餐模式';?></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td ><?php echo $model['lid'];?></td>
+                                <td ><?php echo $model['pad_code'];?></td>
+                                <td ><?php if($model['isused']) echo '已使用';else echo '未使用';?></td>
+								<td ><?php if($model['pad_sales_type']==0)echo '中餐模式';else echo '西餐模式';?></td>
 								<td class="center">
 								</td>
 							</tr>
