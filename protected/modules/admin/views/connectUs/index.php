@@ -22,13 +22,13 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','APP更新列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','APP更新列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','联系方式列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','联系方式列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
 	<!-- END PAGE HEADER-->	
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('uploadApk/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('connectUs/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -39,9 +39,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
                                 <div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','APP更新列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','联系方式列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('uploadApk/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('connectUs/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
@@ -58,29 +58,20 @@
                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
                                 </th>
                                 <th><?php echo yii::t('app','序号');?></th>
-								<th><?php echo yii::t('app','时间');?></th>
-								<th><?php echo yii::t('app','更新类型');?></th>
-								<th><?php echo yii::t('app','app类型');?></th>
-								<th><?php echo yii::t('app','版本号');?></th>
-								<th><?php echo yii::t('app','安装包名称');?></th>
-								<th><?php echo yii::t('app','更新内容');?></th>
+								<th><?php echo yii::t('app','类型');?></th>
+								<th><?php echo yii::t('app','号码');?></th>
 								<th><?php echo yii::t('app','');?></th>
 							</tr>
 						</thead>
 						<tbody>
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
-							<tr class="odd gradeX">                                           
+							<tr class="odd gradeX">                                    
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td><?php echo $model->lid%1000;?></td>
-								<td><?php echo $model->create_at;?></td>
-								<td><?php switch($model->type){case 0: echo '自选更新';break;case 1: echo '强制更新';break;default: echo '';}?></td>
-								<td><?php switch($model->app_type){case 1: echo '收银app';break;case 2: echo '后台app';default: echo '';}?></td>
-								<td><?php echo $model->app_version;?></td>
-								<td><?php echo $model->apk_url;?></td>
-								<td><?php echo $model->content;?></td>
+								<td><?php switch($model->type){case 0: echo 'QQ';break;case 1: echo '手机';break;case 2: echo 'Email';break;case 3: echo '固话';break;case 4: echo '微信';break;default: echo '';}?></td>								<td><?php echo $model->content;?></td>
 								<td class="center">
-									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('uploadApk/update' , array('lid' => $model->lid , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
+									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('connectUs/update' , array('lid' => $model->lid , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

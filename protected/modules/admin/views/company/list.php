@@ -95,6 +95,12 @@
     		background-repeat: no-repeat;
 			background-size: 70%;
 		}
+		.ku-item.connect{
+			background-image:url(../../../../img/waiter/phone3.png);
+			background-position: 8px 3px;
+    		background-repeat: no-repeat;
+			background-size: 90%;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -189,6 +195,12 @@
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple tbsj"></div>
 							<div class="ku-item-info">同步失败</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('connectUs/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple connect"></div>
+							<div class="ku-item-info">联系我们</div>
 						</div>
 					</a>
 					<?php endif;?>
