@@ -357,6 +357,8 @@ class DataSyncOperation {
 			}
 			if($table=='nb_member_card'||$table=='nb_brand_user_level'){
 				$dpid = WxCompany::getDpids($dpid);
+			}else{
+				$dpid = $data['dpid'];
 			}
 			$sql = 'select * from '.$tableName.' where dpid in ('.$dpid.') and (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and is_sync<>0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
