@@ -10,17 +10,15 @@ class PoscodeController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
-		$criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$this->companyId .' and t.delete_flag=0';
-		$pages = new CPagination(PadSetting::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
 		
-		$models = PadSetting::model()->findAll($criteria);
+		$sql='select t1.lid as isused,t.* from nb_pad_setting t left join nb_pad_setting_detail t1 on (t.dpid = t1.dpid and t.lid = t1.pad_setting_id and t1.delete_flag = 0) where t.dpid ='.$this->companyId.' and t.delete_flag = 0';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		$pages = new CPagination(count($models));
+		$pages->setPageSize(10);
 		//var_dump($models);exit;
 		$this->render('index',array(
 			'models'=>$models,
-			'pages'=>$pages
+			'pages'=>$pages,
 		));
 	}
 	public function actionCreate(){
@@ -50,7 +48,7 @@ class PoscodeController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+                //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			foreach ($ids as $id) {

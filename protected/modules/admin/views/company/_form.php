@@ -114,6 +114,14 @@
 											<?php echo $form->error($model, 'telephone' )?>
 										</div>
 									</div>
+									
+									<div class="form-group">
+										<?php echo $form->label($model, 'email',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'email',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('email')));?>
+											<?php echo $form->error($model, 'email' )?>
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="col-md-3 control-label">请选择省市县区</label>
 										<div class="col-md-6">
@@ -125,13 +133,6 @@
 									<input type="hidden" id="province1" name="province1" value="" />
 									<input type="hidden" id="city1" name="city1" value="" />
 									<input type="hidden" id="area1" name="area1" value="" />
-									<div class="form-group">
-										<?php echo $form->label($model, 'email',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'email',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('email')));?>
-											<?php echo $form->error($model, 'email' )?>
-										</div>
-									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'address',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -264,11 +265,21 @@
 			map.enableScrollWheelZoom(true);
 			
 			$('.getLocation').click(function(){
+				var province = $('#province').children('option:selected').val();
+		        var city = $('#city').children('option:selected').val();
+		        var area = $('#area').children('option:selected').val();
 				var address = $('#Company_address').val();
+				if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
+					city = '';
+					}
+				if(area == '市辖区'){
+					area = '';
+					}
+				var real_address = province+city+area+address;
 				// 创建地址解析器实例
 				var myGeo = new BMap.Geocoder();
 				// 将地址解析结果显示在地图上,并调整地图视野
-				myGeo.getPoint(address, function(point){
+				myGeo.getPoint(real_address, function(point){
 					if (point) {
 						$('#Company_lng').val(point.lng);
 						$('#Company_lat').val(point.lat);

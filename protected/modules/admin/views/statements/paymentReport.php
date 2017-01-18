@@ -92,7 +92,7 @@
 		                         ?></th>
 		                    <?php endforeach;?>
 		               <?php endif;?>                                                              
-		               <th><?php echo yii::t('app','备注');?></th>
+		               <th><?php echo yii::t('app','退款');?></th>
 		
 		            </tr>
 		        </thead>
@@ -115,6 +115,7 @@
 		           $grouppay_arr[$i] =0; 
 		           // $grouppay.$i =0;
 		        }
+		        $retreats = 0;
 		        foreach ($models as $model): ?>
 		
 		        <tr class="odd gradeX">
@@ -129,7 +130,11 @@
 		                ?></td>
 		            
 		            <td><?php 
-		                $discount=sprintf("%.2f",$reality_all-$model->all_reality);
+						//退款...
+			            $retreat = $this->getPaymentRetreat($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+			            $retreats+=$retreat;
+		            	//优惠...
+		                $discount=sprintf("%.2f",$reality_all-$model->all_reality+$retreat);
 		                $discount_total += $discount;
 		                echo $discount;
 		            ?></td>
@@ -184,7 +189,7 @@
 		                    </td>
 		                <?php endforeach;?>
 		            <?php endif;?> 
-		            <td><?php ?></td>
+		            <td><?php echo $retreat;?></td>
 										
 		        </tr>
 		       

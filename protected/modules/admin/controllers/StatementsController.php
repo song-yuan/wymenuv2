@@ -126,28 +126,9 @@ class StatementsController extends BackendController
 				$money = Yii::app()->db->createCommand($sql)->queryAll();
 			}
 		}
-		//$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
-		//$money = Yii::app()->db->createCommand($sql)->queryRow();
-		//var_dump($money);exit;
+
 		$criteria = new CDbCriteria;
-//		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_reality,t.paytype,t.payment_method_id,t.order_status';
-//		$criteria->with = array('company','paymentMethod');
-//		$criteria->condition = 't.order_status in(3,4,8) and t.dpid='.$this->companyId ;
-//		if($str){
-//			$criteria->condition = ' t.order_status in(3,4,8) and t.dpid in('.$str.')';
-//		}
-//		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-//		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
-//		if($text==1){
-//			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,year(t.update_at)';
-//			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
-//		}elseif($text==2){
-//			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,month(t.update_at)';
-//			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
-//		}else{
-//			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,day(t.update_at)';
-//			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
-//		}
+
 		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id';
 		$criteria->with = array('company','order8','paymentMethod');
 		$criteria->condition = 't.paytype != 4 and t.dpid='.$this->companyId ;
@@ -166,9 +147,7 @@ class StatementsController extends BackendController
 			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 		}
-		//$criteria->order = 't.update_at asc,t.dpid asc';
-		//$criteria->group = 't.paytype,t.payment_method_id';
-		
+
 		$pages = new CPagination(OrderPay::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -184,8 +163,6 @@ class StatementsController extends BackendController
 				'str'=>$str,
 				'comName'=>$comName,
 				'money'=>$money,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	
@@ -254,35 +231,6 @@ class StatementsController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		//$models = Yii::app()->db->createCommand($sql)->queryAll();
-		//var_dump($models);exit;
-		//$comName = $this->getComName();
-		/*$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price';
-		$criteria->with = array('product','productcg');
-		$criteria->condition = 't.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.dpid='.$this->companyId;
-		if($str){
-			$criteria->condition = ' t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.dpid in('.$str.')';
-		}
-		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
-		if($text==1){
-			$criteria->group ='t.dpid,year(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
-		}elseif($text==2){
-			$criteria->group ='t.dpid,month(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
-		}else{
-			$criteria->group ='t.dpid,day(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
-		}
-		*/
-		/*$pages = new CPagination(OrderProduct::model()->count($criteria));
-		$pages->applyLimit($criteria);
-		//var_dump($criteria);exit;
-		$model = OrderProduct::model()->findAll($criteria);
-		//$comName = $this->getComName();
-		$Catname = $this->getCatName($CategoryId);*/
 		$this->render('cgReport',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -316,7 +264,7 @@ class StatementsController extends BackendController
 		$db = Yii::app()->db;
 		
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -455,9 +403,6 @@ public function actionPayallReport(){
 				'text'=>$text,
 				'str'=>$str,
 				'comName'=>$comName,
-				//'money'=>$money,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 
@@ -532,7 +477,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 	
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no,k.create_at';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000'; 
 		foreach ($orders as $order){
@@ -633,7 +578,7 @@ public function actionPayallReport(){
 	}
 	
 	public function getPaymentPrice($dpid,$begin_time,$end_time,$type,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no,k.create_at';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -841,7 +786,7 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -918,7 +863,7 @@ public function actionPayallReport(){
 	
 		$db = Yii::app()->db;
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -967,7 +912,37 @@ public function actionPayallReport(){
 		}elseif($text==3){
 			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
 		}
-		
+		//var_dump($sql2);exit;
+		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
+		return $retreat['retreat_allprice'];
+	}
+	/*
+	 * 支付方式报表的退款查询
+	*/
+	public function getPaymentRetreat($dpid,$begin_time,$end_time,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		$begin_time = $begin_time.' 00:00:00';
+		$end_time = $end_time.' 23:59:59';		
+		$db = Yii::app()->db;
+		if($text==1){
+			if($usertype != '0'){
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and t2.username = "'.$userid.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}else{
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}
+		}elseif($text==2){
+			if($usertype != '0'){
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and t2.username = "'.$userid.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}else{
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
+			}
+		}elseif($text==3){
+			if($usertype){
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" and t2.username = "'.$userid.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			}else{
+				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
+			}
+		}
+		//var_dump($sql2);exit;
 		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		return $retreat['retreat_allprice'];
 	}
@@ -1189,7 +1164,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -1280,7 +1255,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -1630,7 +1605,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -3194,7 +3169,7 @@ public function actionPayallReport(){
 		$comName = $this->getComName();
 		$db = Yii::app()->db;
 	
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -3437,7 +3412,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 	
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -3582,7 +3557,7 @@ public function actionPayallReport(){
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
 			}
 		}
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternext.'3',yii::t('app','备注'));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternext.'3',yii::t('app','退款'));
 		$j=4;
 		foreach($model as $v){
 			//print_r($v);
@@ -3599,10 +3574,11 @@ public function actionPayallReport(){
 			}else{
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j);
 			}
+			$retreats = $this->getPaymentRetreat($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username);
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('B'.$j,$v->all_nums)
 				->setCellValue('C'.$j,$reality_all = $this->getGrossProfit($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
-				->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v->all_reality))
+				->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v->all_reality+$retreats))
 				->setCellValue('E'.$j,$v->all_reality)
 				->setCellValue('G'.$j,$cash = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,0,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('H'.$j,$wechat = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,1,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
@@ -3610,24 +3586,25 @@ public function actionPayallReport(){
 				->setCellValue('J'.$j,$unionpay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,5,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
 				$letters='';
+				$letternexts= 'L';
 				if($payments){
 					$let = '0';
 					
-					$letternexts= 'L3';
+					
 					foreach ($payments as $payment){
 						$paymentname = $payment['name'];
 						$let++;
 						switch ($let){
-							case 1: $letters = 'L';$letternexts = 'M3';break;
-							case 2: $letters = 'M';$letternexts = 'N3';break;
-							case 3: $letters = 'N';$letternexts = 'O3';break;
-							case 4: $letters = 'O';$letternexts = 'P3';break;
-							case 5: $letters = 'P';$letternexts = 'Q3';break;
-							case 6: $letters = 'Q';$letternexts = 'R3';break;
-							case 7: $letters = 'R';$letternexts = 'S3';break;
-							case 8: $letters = 'S';$letternexts = 'T3';break;
-							case 9: $letters = 'T';$letternexts = 'U3';break;
-							case 10: $letters = 'U';$letternexts = 'V3';break;
+							case 1: $letters = 'L';$letternexts = 'M';break;
+							case 2: $letters = 'M';$letternexts = 'N';break;
+							case 3: $letters = 'N';$letternexts = 'O';break;
+							case 4: $letters = 'O';$letternexts = 'P';break;
+							case 5: $letters = 'P';$letternexts = 'Q';break;
+							case 6: $letters = 'Q';$letternexts = 'R';break;
+							case 7: $letters = 'R';$letternexts = 'S';break;
+							case 8: $letters = 'S';$letternexts = 'T';break;
+							case 9: $letters = 'T';$letternexts = 'U';break;
+							case 10: $letters = 'U';$letternexts = 'V';break;
 							default:break;
 						}
 						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
@@ -3635,7 +3612,7 @@ public function actionPayallReport(){
 					$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 						
 				}
-		
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternexts.$j,$retreats);
 					//细边框引用
 					$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->applyFromArray($linestyle);
 					$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->applyFromArray($linestyle);
@@ -4270,7 +4247,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -4507,7 +4484,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -4706,7 +4683,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
@@ -6212,7 +6189,7 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.account_no';
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){

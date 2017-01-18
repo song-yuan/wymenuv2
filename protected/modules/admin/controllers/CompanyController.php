@@ -17,9 +17,9 @@ class CompanyController extends BackendController
 		$this->render('list');
 	}
 	public function actionIndex(){
-		$province = Yii::app()->request->getParam('province',0);
-		$city = Yii::app()->request->getParam('city',0);
-		$area = Yii::app()->request->getParam('area',0);
+		$provinces = Yii::app()->request->getParam('province',0);
+		$citys = Yii::app()->request->getParam('city',0);
+		$areas = Yii::app()->request->getParam('area',0);
 		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
@@ -33,7 +33,16 @@ class CompanyController extends BackendController
 		}else{
 			$criteria->condition = ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
 		}
+		$province = $provinces;
+		$city = $citys;
+		$area = $areas;
 		//var_dump($criteria);exit;
+		if($citys == '市辖区'|| $citys == '省直辖县级行政区划' || $citys == '市辖县'){
+			$city = '0';
+		}
+		if($areas == '市辖区'){
+			$area = '0';
+		}
 		if($province){
 			$criteria->condition.=' and t.province like "'.$province.'"';
 		}
@@ -51,9 +60,9 @@ class CompanyController extends BackendController
 		$this->render('index',array(
 				'models'=> $models,
 				'pages'=>$pages,
-				'province'=>$province,
-				'city'=>$city,
-				'area'=>$area,
+				'province'=>$provinces,
+				'city'=>$citys,
+				'area'=>$areas,
 		));
 	}
 	public function actionIndex1(){
