@@ -34,7 +34,7 @@ class MaterialUnit extends CActiveRecord
 		return array(
 			array('unit_name,', 'required'),
 			array('unit_type, delete_flag', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid', 'length', 'max'=>10),
+			array('lid, dpid, sort_code', 'length', 'max'=>10),
 			array('unit_name, unit_specifications', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at, update_at', 'safe'),
