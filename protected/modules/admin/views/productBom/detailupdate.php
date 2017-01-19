@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改配方明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','原料信息'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>4,))),array('word'=>yii::t('app','配方列表'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','配方明细管理'),'url'=>$this->createUrl('productBom/detailindex' , array('companyId'=>$this->companyId,'pblid'=>$pblid))),array('word'=>yii::t('app','修改配方明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productBom/detailindex' , array('companyId' => $this->companyId,'pblid'=>$pblid)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改配方明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','原料信息'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>4,))),array('word'=>yii::t('app','配方列表'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','配方明细管理'),'url'=>$this->createUrl('productBom/detailindex' , array('companyId'=>$this->companyId,'pblid'=>$pblid))),array('word'=>yii::t('app','修改配方明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productBom/detailindex' , array('companyId' => $this->companyId,'pblid'=>$pblid,'papage'=>$papage)))));?>
 	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform',  array('model'=>$model,'pblid'=>$pblid, 'categories' => $categories,'categoryId'=>$categoryId,'materials'=>$materials,)); ?>
+							<?php echo $this->renderPartial('_detailform',  array('model'=>$model,'pblid'=>$pblid, 'categories' => $categories,'categoryId'=>$categoryId,'materials'=>$materials,'papage'=>$papage)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

@@ -53,6 +53,16 @@ class Common{
        // var_dump($sql);exit;
         return $materialname;
     }
+    static public function getStockSortCode($stockId){
+        //var_dump($stockId);
+        $unitname = "";
+        $sql="select t.unit_name,t.sort_code from nb_material_unit t where  t.lid=".$stockId ;
+        $connect = Yii::app()->db->createCommand($sql);
+        $stock = $connect->queryRow();
+        //var_dump($stock);exit;
+        $unitname = $stock['sort_code'];
+        return $unitname;
+    }
     /**
      * 
      * 获取入库单入库单

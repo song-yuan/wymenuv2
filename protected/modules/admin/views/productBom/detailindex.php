@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','配方明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','原料信息'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>4,))),array('word'=>yii::t('app','配方列表'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','配方明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productBom/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','配方明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','原料信息'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>4,))),array('word'=>yii::t('app','配方列表'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','配方明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productBom/index' , array('companyId' => $this->companyId,'page' => $papage)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('productBom/detaildelete' , array('companyId' => $this->companyId,'pblid'=>$pblid)),
+				'action' => $this->createUrl('productBom/detaildelete' , array('companyId' => $this->companyId,'pblid'=>$pblid,'papage'=>$papage)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,20 +42,11 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $prodname;?><?php echo yii::t('app','  原料明细列表（*带括号的则为产品口味或规格的原料）');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('productBom/detailcreate' , array('companyId' => $this->companyId,'lid'=>$pblid,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<!-- <div class="btn-group">
-							<a class="btn green" href="#" data-toggle="dropdown">
-							<i class="fa fa-cogs"></i> Tools
-							<i class="fa fa-angle-down"></i>
-							</a>
-							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
-							</ul>
-						</div> -->
+						<a href="<?php echo $this->createUrl('productBom/detailcreate' , array('companyId' => $this->companyId,'lid'=>$pblid,'papage'=>$papage));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                         <div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
-						<a href="<?php echo $this->createUrl('productBom/index' , array('companyId' => $this->companyId,'lid'=>$pblid,));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+						
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -81,7 +72,7 @@
                                 <td><?php echo Common::getSalesName($model['sales_unit_id']);?></td>
                                 
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model['lid'] ,'pblid'=>$model['product_id'], 'companyId' => $model['dpid'],'prodname'=>$model['material_name'],'tastename'=>$model['name']));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model['lid'] ,'pblid'=>$model['product_id'], 'companyId' => $model['dpid'],'prodname'=>$model['material_name'],'tastename'=>$model['name'],'papage'=>$papage));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>

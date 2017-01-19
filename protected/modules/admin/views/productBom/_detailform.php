@@ -30,15 +30,24 @@
 	<div class="form-group" <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>>
 		<?php echo $form->label($model, 'sales_unit_id',array('class' => 'col-md-3 control-label'));?>
 		<div class="col-md-4">
-			<?php echo $form->dropDownList($model, 'sales_unit_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::genSalesUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id')));?>
+			<?php echo $form->dropDownList($model, 'sales_unit_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::genSalesUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id'),'disabled'=>true));?>
 			<?php echo $form->error($model, 'sales_unit_id' )?>
 		</div>
+		<div class="col-md-4" style="display: none;">
+			<select class="form-control" placeholder="" name="ProductBom[hidden_sale_unit]" id="hidden_sale_unit">
+			<?php $saleunits = Helper::genSalesUnit();?>
+			<?php var_dump($saleunits);?>
+			<?php foreach ($saleunits as $key=>$saleunit){
+				echo '<option value="'.$key.'">'.$saleunit.'</option>';
+			}?>
+			</select>
+		</div>
 	</div>
-	
+	<input type="hidden" id="hidden1" name="hidden1" value=''/>
 	<div class="form-actions fluid">
 		<div class="col-md-offset-3 col-md-9">
 			<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-			<a href="<?php echo $this->createUrl('productBom/detailindex' , array('companyId' => $model->dpid,'pblid'=>$pblid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
+			<a href="<?php echo $this->createUrl('productBom/detailindex' , array('companyId' => $model->dpid,'pblid'=>$pblid,'papage'=> $papage));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
 		</div>
 	</div>
 	<?php $this->endWidget(); ?>
@@ -62,6 +71,21 @@
 				});
 			});
 			$('#ProductBom_material_id').change(function(){
+				var salesUnitId = $(this).find('option:selected').attr('unit-id');
+				$('#ProductBom_sales_unit_id').find('option').each(function(){
+					var val = $(this).val();
+					if(val == salesUnitId){
+						//$("#ProductBom_sales_unit_id").val(val);
+						$("#ProductBom_sales_unit_id").find("option[value="+val+"]").attr("selected",true);
+						$('#hidden1').val(val);
+						//$(this).remove();
+					}else{
+						//$("#ProductBom_sales_unit_id").find("option[value="+val+"]").attr("selected",false);
+						}
+				});
+				
+			});
+			$('ProductBom_material_id').change(function(){
 				var salesUnitId = $(this).find('option:selected').attr('unit-id');
 				$('#ProductBom_sales_unit_id').find('option').each(function(){
 					var val = $(this).val();
