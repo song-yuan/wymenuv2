@@ -32,15 +32,15 @@ class MaterialUnit extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, unit_name,', 'required'),
+			array('unit_name,', 'required'),
 			array('unit_type, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('unit_name, unit_specifications', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at, update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, unit_type, unit_name, unit_specifications, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, unit_type, unit_name, unit_specifications, sort_code, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,6 +70,7 @@ class MaterialUnit extends CActiveRecord
 			'unit_type' => '单位类型',
 			'unit_name' => '单位名称',
 			'unit_specifications' => '单位规格',
+			'sort_code' => '序号',
 			'delete_flag' => '删除 0未删除 1删除',
 			'is_sync' => 'Is Sync',
 		);
@@ -100,6 +101,7 @@ class MaterialUnit extends CActiveRecord
 		$criteria->compare('unit_type',$this->unit_type);
 		$criteria->compare('unit_name',$this->unit_name,true);
 		$criteria->compare('unit_specifications',$this->unit_specifications,true);
+		$criteria->compare('sort_code',$this->sort_code,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

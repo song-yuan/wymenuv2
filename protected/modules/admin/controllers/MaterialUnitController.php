@@ -25,11 +25,12 @@ class MaterialUnitController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.unit_type='.$type.' and t.delete_flag=0 and t.dpid='.$this->companyId;
-		$criteria->order = ' t.lid desc ';	
+		$criteria->order = ' t.sort_code,t.lid desc ';	
 		$pages = new CPagination(MaterialUnit::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = MaterialUnit::model()->findAll($criteria);
+		//var_dump($models);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -37,9 +38,6 @@ class MaterialUnitController extends BackendController
 				'type'=>$type
 		
 		));
-	}
-	public function actionSetMealList() {
-		
 	}
 	public function actionCreate(){
 		
@@ -57,7 +55,7 @@ class MaterialUnitController extends BackendController
 			//$unitName = $model->unit_name ;
 			$unitName = MaterialUnit::model()->find('dpid=:dpid and unit_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->unit_name));
 			if($unitName){
-				Yii::app()->user->setFlash('error' ,yii::t('app', '该入库单位已添加'));
+				Yii::app()->user->setFlash('error' ,yii::t('app', '该单位已添加'));
 			}else{
 				$se=new Sequence("material_unit");
 				$lid = $se->nextval();
@@ -68,6 +66,7 @@ class MaterialUnitController extends BackendController
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->update_at = date('Y-m-d H:i:s',time());
 				$model->delete_flag = '0';
+				//var_dump($model);exit;
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 					$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId ,'type'=>$type,));
