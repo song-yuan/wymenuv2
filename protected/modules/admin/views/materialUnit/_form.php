@@ -30,6 +30,13 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<?php echo $form->label($model, 'sort_code',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'sort_code', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sort_code')));?>
+				<?php echo $form->error($model, 'sort_code' )?>
+			</div>
+		</div>
+		<div class="form-group">
 			<?php echo $form->label($model, 'unit_specifications',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'unit_specifications', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('unit_specifications')));?>

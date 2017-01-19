@@ -61,6 +61,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:16%"><?php echo yii::t('app','名称');?></th>
 								<th><?php echo yii::t('app','类型');?></th>
+								<th><?php echo yii::t('app','序号');?></th>
 								<th><?php echo yii::t('app','规格');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -72,6 +73,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo $model->unit_name;?></td>
 								<td ><?php if($model->unit_type==0) echo "入库单位"; elseif($model->unit_type==1) echo "零售单位";?></td>
+								<td ><?php echo $model->sort_code;?></td>
 								<td ><?php echo $model->unit_specifications;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('materialUnit/update',array('id' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
