@@ -72,11 +72,12 @@ class ProductBomController extends BackendController
 	public function actionDetailIndex(){
 		$pblid = Yii::app()->request->getParam('pblid');
 		$prodname = Yii::app()->request->getParam('prodname');
+		$papage = Yii::app()->request->getParam('papage',1);
 		//$criteria = new CDbCriteria;
 		//$criteria->with = array('material','taste');
 		//$criteria->condition =  't.dpid='.$this->companyId .' and t.product_id='.$pblid.' and t.delete_flag=0';
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select t2.material_name,t1.name,t.* from nb_product_bom t left join nb_taste t1 on(t.taste_id = t1.lid and t.dpid = t1.dpid) left join nb_product_material t2 on(t.material_id=t2.lid and t.dpid=t2.dpid and t2.delete_flag=0) where t.delete_flag = 0 and t.product_id='.$pblid.' and t.dpid ='.$this->companyId.' order by t.taste_id asc,t.lid asc) k ';
+		$sql = 'select k.* from(select t2.material_name,t1.name,t.* from nb_product_bom t left join nb_taste t1 on(t.taste_id = t1.lid and t.dpid = t1.dpid) right join nb_product_material t2 on(t.material_id=t2.lid and t.dpid=t2.dpid and t2.delete_flag=0) where t.delete_flag = 0 and t.product_id='.$pblid.' and t.dpid ='.$this->companyId.' order by t.taste_id asc,t.lid asc) k ';
 		$recharge = Yii::app()->db->createCommand($sql)->queryRow();
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -94,21 +95,25 @@ class ProductBomController extends BackendController
 				'models'=>$models,
 				'pages'=>$pages,
 				'pblid'=>$pblid,
-				'prodname'=>$prodname
+				'prodname'=>$prodname,
+				'papage'=>$papage
 		));
 	}
 	public function actionDetailCreate(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$pblid = Yii::app()->request->getParam('lid');
+		$papage = Yii::app()->request->getParam('papage');
 		//var_dump($pblid);exit;
 		$model = new ProductBom();
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductBom');
+			$model->sales_unit_id = Yii::app()->request->getPost('hidden1');
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 				$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid)) ;
 			}
+			//var_dump($model);exit;
 			$db = Yii::app()->db;
 			$sql = 'select t.* from nb_product t where t.delete_flag = 0 and t.lid = '.$pblid;
 			$command1 = $db->createCommand($sql);
@@ -153,7 +158,8 @@ class ProductBomController extends BackendController
 				'pblid'=>$pblid,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId,
-				'materials'=>$materialslist
+				'materials'=>$materialslist,
+				'papage' => $papage,
 		));
 	}
 	public function actionDetailUpdate(){
@@ -161,18 +167,26 @@ class ProductBomController extends BackendController
         $prodname = Yii::app()->request->getParam('prodname');
         $tastename = Yii::app()->request->getParam('tastename');
         $lid = Yii::app()->request->getParam('lid');
+        $papage = Yii::app()->request->getParam('papage');
+        
 		$model = ProductBom::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-				$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid)) ;
+				$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid,'papage'=>$papage)) ;
 			}
 			$model->attributes = Yii::app()->request->getPost('ProductBom');
+			
+			$saleunit = Yii::app()->request->getPost('hidden1',0);
+			if($saleunit){
+				$model->sales_unit_id = $saleunit;
+			}
+			
 			$model->update_at = date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('ProductBom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid));
+				$this->redirect(array('ProductBom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid,'papage'=>$papage));
 			}
 		}
         $categories = $this->getCategories();
@@ -181,30 +195,32 @@ class ProductBomController extends BackendController
         $materialslist=CHtml::listData($materials, 'lid', 'material_name');
 		$this->render('detailupdate' , array(
             'model' => $model,
-            'pblid'=>$pblid,
-            'categories'=>$categories,
-            'categoryId'=>$categoryId,
-            'materials'=>$materialslist,
-			'prodname'=>$prodname,
-			'tastename'=>$tastename
+            'pblid' => $pblid,
+            'categories' => $categories,
+            'categoryId' => $categoryId,
+            'materials' => $materialslist,
+			'prodname' => $prodname,
+			'tastename' => $tastename,
+			'papage' => $papage,
 		));
 	}
 
 	public function actionDetailDelete(){
         $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
         $pblid = Yii::app()->request->getParam('pblid');
+        $papage = Yii::app()->request->getParam('papage');
         if(Yii::app()->user->role > User::SHOPKEEPER) {
         	Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-        	$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid)) ;
+        	$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid,'papage'=>$papage)) ;
         }
         $ids = Yii::app()->request->getPost('ids');//var_dump($ids);exit;
         Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if(!empty($ids)) {
             Yii::app()->db->createCommand('update nb_product_bom set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')->execute(array( ':companyId' => $this->companyId));
-            $this->redirect(array('productBom/detailindex' , 'companyId' => $companyId,'pblid'=>$pblid)) ;
+            $this->redirect(array('productBom/detailindex' , 'companyId' => $companyId,'pblid'=>$pblid,'papage'=>$papage)) ;
         } else {
             Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-            $this->redirect(array('productBom/detailindex' , 'companyId' => $companyId,'pblid'=>$pblid)) ;
+            $this->redirect(array('productBom/detailindex' , 'companyId' => $companyId,'pblid'=>$pblid,'papage'=>$papage)) ;
         }
 	}
 	public function actionGetChildren2(){
@@ -271,7 +287,7 @@ class ProductBomController extends BackendController
 			}
 		}
 		foreach ($options as $k=>$v) {
-			$model = MaterialCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$model = MaterialCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>$this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
 		return $optionsReturn;

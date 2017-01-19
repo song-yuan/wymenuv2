@@ -22,9 +22,9 @@ class MaterialUnitRatioController extends BackendController
 	public function actionIndex(){
 		//$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
-		$criteria->with =array('company') ;
+		$criteria->with =array('company','stockunit') ;
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
-		$criteria->order = ' t.lid desc ';
+		$criteria->order = ' stockunit.sort_code,t.lid desc ';
         $pages = new CPagination(MaterialUnitRatio::model()->count($criteria));
         //$pages->setPageSize(1);
         $pages->applyLimit($criteria);

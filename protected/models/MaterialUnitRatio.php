@@ -55,6 +55,7 @@ class MaterialUnitRatio extends CActiveRecord
 		return array(
 			'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 			'unit' => array(self::BELONGS_TO,'MaterialUnit','','on'=>'t.stock_unit_id=unit.lid or t.sales_unit_id=unit.lid and unit.dpid=t.dpid and unit.delete_flag=0'),
+			'stockunit' => array(self::BELONGS_TO,'MaterialUnit','','on'=>'t.stock_unit_id=stockunit.lid and stockunit.dpid=t.dpid and stockunit.delete_flag=0'),
 		);
 	}
 

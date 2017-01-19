@@ -54,7 +54,9 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','库存单位名称');?></th>
+								<th><?php echo yii::t('app','库存单位序号');?></th>
+								<th><?php echo yii::t('app','库存单位名称');?></th>
+								<th><?php echo yii::t('app','零售单位序号');?></th>
 								<th><?php echo yii::t('app','零售单位名称');?></th>
 								<th><?php echo yii::t('app','对应系数');?></th>
 								<th>&nbsp;</th>
@@ -65,9 +67,11 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getStockName($model->stock_unit_id);?></td>
-								<td ><?php echo Common::getSalesName($model->sales_unit_id);?></td>
-								<td ><?php echo $model->unit_ratio;?></td>
+								<td><?php echo Common::getStockSortCode($model->stock_unit_id);?></td>
+								<td><?php echo Common::getStockName($model->stock_unit_id);?></td>
+								<td><?php echo Common::getStockSortCode($model->sales_unit_id);?></td>
+								<td><?php echo Common::getSalesName($model->sales_unit_id);?></td>
+								<td><?php echo $model->unit_ratio;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('materialUnitRatio/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
