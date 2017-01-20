@@ -110,6 +110,7 @@ class ProductController extends BackendController
 		}
 		$id = Yii::app()->request->getParam('id');
 		$istempp = Yii::app()->request->getParam('istempp');
+		$papage = Yii::app()->request->getParam('papage');
 		//var_dump($istempp);exit;
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
@@ -120,12 +121,12 @@ class ProductController extends BackendController
 				$categoryId = ProductCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
 				$model->chs_code = $categoryId['chs_code'];
 			}
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->product_name);
+                $py=new Pinyin();
+                $model->simple_code = $py->py($model->product_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('product/index' , 'companyId' => $this->companyId ,'page' => $papage));
 			}
 		}
 		$categories = $this->getCategoryList();
@@ -134,6 +135,7 @@ class ProductController extends BackendController
 				'model' => $model ,
 				'categories' => $categories,
 				'istempp' => $istempp,
+				'papage' => $papage,
 		));
 	}
 	public function actionDelete(){

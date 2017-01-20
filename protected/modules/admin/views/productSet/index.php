@@ -29,7 +29,7 @@
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('productSet/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('productSet/delete' , array('companyId' => $this->companyId,'papage' => $pages->getCurrentPage()+1)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('productSet/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('productSet/create' , array('companyId' => $this->companyId,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -52,7 +52,7 @@
 								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
 							</ul>
 						</div> -->
-                                                <div class="btn-group">
+                        <div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 					</div>
@@ -71,7 +71,7 @@
 								<th><?php echo yii::t('app','点赞数');?></th> -->
 								<th><?php echo yii::t('app','来源');?></th>
 								<th>&nbsp;</th>
-                                                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -87,10 +87,10 @@
 								<td><?php echo $model->favourite_number;?></td> -->
 								<td><?php switch ($model->source){case 0: echo yii::t('app','自建');break;case 1: echo yii::t('app','总部下发');break;default: echo '';break;}?></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source, 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
                                 <td class="center">
-									<a href="<?php echo $this->createUrl('productSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source));?>"><?php echo yii::t('app','编辑明细');?></a>
+									<a href="<?php echo $this->createUrl('productSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source , 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

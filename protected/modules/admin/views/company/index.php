@@ -87,12 +87,12 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th>ID</th>
 								<th><?php echo yii::t('app','店铺名称');?></th>
-								<th >logo</th>
+								<th>logo</th>
 								<th><?php echo yii::t('app','联系人');?></th>
-								<th ><?php echo yii::t('app','手机');?></th>
+								<th><?php echo yii::t('app','手机');?></th>
 								<th><?php echo yii::t('app','电话');?></th>
-								<th >email</th>
-								<th ><?php echo yii::t('app','创建时间');?></th>
+								<th>email</th>
+								<th><?php echo yii::t('app','创建时间');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
