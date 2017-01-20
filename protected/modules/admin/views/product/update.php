@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改产品'),'breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','菜品列表'),'url'=>$this->createUrl('product/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改产品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/index' , array('companyId' => $this->companyId,'type'=>0,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改产品'),'breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','菜品列表'),'url'=>$this->createUrl('product/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改产品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/index' , array('companyId' => $this->companyId,'type'=>0,'page'=>$papage)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'istempp'=>$istempp)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'istempp'=>$istempp, 'papage'=>$papage)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

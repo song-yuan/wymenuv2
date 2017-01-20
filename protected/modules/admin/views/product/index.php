@@ -103,7 +103,7 @@
                                 <td ><?php switch($model->is_temp_price) {case 0 :echo '自建';break;case 1:echo '总部下发';break;default: echo '';break;}?></td>
                                                                 
 								<td class="center">
-								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid ,'istempp' => $model->is_temp_price , ));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid ,'istempp' => $model->is_temp_price ,'papage' => $pages->getCurrentPage()+1 ));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

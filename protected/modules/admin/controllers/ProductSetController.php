@@ -74,10 +74,11 @@ class ProductSetController extends BackendController
 	public function actionUpdate(){
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
+			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId));
 		}
 		$lid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
+		$papage = Yii::app()->request->getParam('papage');
                 //echo 'ddd';
 		$model = ProductSet::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -90,12 +91,13 @@ class ProductSetController extends BackendController
                         //var_dump($model->attributes);var_dump(Yii::app()->request->getPost('ProductSet'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('productSet/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('productSet/index' , 'companyId' => $this->companyId ,'page' => $papage));
 			}
 		}
 		$this->render('update' , array(
 				'model'=>$model,
 				'status'=>$status,
+				'papage'=>$papage,
 		));
 	}
         
@@ -105,6 +107,9 @@ class ProductSetController extends BackendController
 			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		
+		$papage = Yii::app()->request->getParam('papage');
+		//var_dump($papage);exit;
 		$ids = Yii::app()->request->getPost('ids');
         //Until::isUpdateValid(array($ids),$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
@@ -113,17 +118,18 @@ class ProductSetController extends BackendController
 			
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('productSet/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('productSet/index' , 'companyId' => $companyId, 'page' => $papage));
 		} else {
 			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
-			$this->redirect(array('productSet/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('productSet/index' , 'companyId' => $companyId, 'page' => $papage));
 		}
 	}
         
         public function actionDetailIndex(){
 		$pwlid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');// var_dump($pwlid);exit;
-        
+		$papage = Yii::app()->request->getParam('papage');
+		
 		$criteria = new CDbCriteria;
         $criteria->with = array('product');
         $criteria->order =  't.group_no';
@@ -146,6 +152,7 @@ class ProductSetController extends BackendController
             'psmodel'=>$psmodel,
 			'pages'=>$pages,
 			'status'=>$status,
+			'papage'=>$papage,
 		));
 	}
 
@@ -154,12 +161,13 @@ class ProductSetController extends BackendController
 		$model = new ProductSetDetail();
 		$model->dpid = $this->companyId ;
 		$pslid = Yii::app()->request->getParam('psid');
-		$type = Yii::app()->request->getParam('type'); //var_dump($pslid);exit;
+		$type = Yii::app()->request->getParam('type');
+		$papage = Yii::app()->request->getParam('papage'); //var_dump($pslid);exit;
 		$status = '';
         $model->set_id=$pslid;
         if(Yii::app()->user->role > User::SHOPKEEPER) {
         	Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-        	$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid)) ;
+        	$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid , 'papage'=>$papage)) ;
         }
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
@@ -185,7 +193,7 @@ class ProductSetController extends BackendController
 			if($model->save()) {
                             
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id));
+				$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id,'papage'=>$papage));
 			}
 		}
                 $maxgroupno=$this->getMaxGroupNo($pslid);
@@ -206,6 +214,7 @@ class ProductSetController extends BackendController
 				'groups' =>$groupslist,
 				'type'=>$type,
 				'status'=>$status,
+				'papage'=>$papage,
 		));
 	}
 	public function actionDetailUpdate(){
@@ -213,6 +222,7 @@ class ProductSetController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$type = Yii::app()->request->getParam('type');
 		$status = Yii::app()->request->getParam('status');
+		$papage = Yii::app()->request->getParam('papage');
 		
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 	if(Yii::app()->user->role > User::SHOPKEEPER) {
@@ -257,26 +267,28 @@ class ProductSetController extends BackendController
 				'groups'=>$groupslist,
 				'type'=>$type,
 				'status'=>$status,
+				'papage'=>$papage,
 		));
 	}
         
 	public function actionDetailDelete(){
 		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-                $printset = Yii::app()->request->getParam('psid');                
+        $printset = Yii::app()->request->getParam('psid');  
+        $papage = Yii::app()->request->getParam('papage');
 		$ids = Yii::app()->request->getPost('ids');
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-			$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid'=>$printset)) ;
+			$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		}
                 //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset)) ;
+			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
-			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset)) ;
+			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		}
 	}	
         
