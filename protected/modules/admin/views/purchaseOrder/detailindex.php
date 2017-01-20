@@ -49,8 +49,8 @@
 						<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 					</div>
 					<?php endif;?>	
-						<a href="<?php echo $this->createUrl('purchaseOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
-					
+					<!-- 	<a href="<?php echo $this->createUrl('purchaseOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+					 -->
 					</div>
 					
 				</div>

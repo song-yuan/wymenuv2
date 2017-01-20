@@ -47,14 +47,14 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','入库单详情列表');?></div>
 					<div class="actions">
-                                            <?php if($storage->status!=3):?>
-                                            <a href="javascript:void(0);" class="btn blue add_btn " pid="<?php echo $slid;?>" compid="<?php echo $dpid;?>"><i class="fa fa-pencil"></i> <?php echo yii::t('app','批量添加');?></a>
-                                           <a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-                                           <div class="btn-group">
-                                                   <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-                                           </div>
-											<?php endif;?>
-                                           <a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+	                    <?php if($storage->status!=3):?>
+	                    <a href="javascript:void(0);" class="btn blue add_btn " pid="<?php echo $slid;?>" compid="<?php echo $dpid;?>"><i class="fa fa-pencil"></i> <?php echo yii::t('app','批量添加');?></a>
+	                    <a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+	                    <div class="btn-group">
+	                    	<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+	                    </div>
+						<?php endif;?>
+	                    <!-- <a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a> -->
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -92,7 +92,7 @@
 						<div style="display: none;" id="storagedetail" val="0"></div>
 						<?php endif;?>
 							<tr>
-								<td colspan="6" style="text-align: right;">
+								<td colspan="7" style="text-align: right;">
 								<?php if($storage->status==1):?><?php if(Yii::app()->user->role<15):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待确认入库</span><?php endif;?>
 								<?php elseif($storage->status==3):?><span style="color:red">已入库</span>
 								<?php elseif($storage->status==2):?><?php if(Yii::app()->user->role<15):?><input id="status-2" type="button" class="btn blue" value="重新送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待重新送审</span><?php endif;?>
