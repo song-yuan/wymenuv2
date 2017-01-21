@@ -47,7 +47,7 @@ class SitePersonsController extends BackendController
 	public function actionUpdate() {
 		$lid = Yii::app()->request->getParam('lid');
                 $dpid = Yii::app()->request->getParam('companyId');
-                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = SitePersons::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
 		//var_dump($model);
 		if(Yii::app()->request->isPostRequest) {
@@ -65,7 +65,7 @@ class SitePersonsController extends BackendController
 	public function actionDelete() {
 		//$ids = $_POST['type_id'] ;
                 $ids = Yii::app()->request->getPost('type_id');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+                //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		//var_dump(implode(',' , $ids),$this->companyId);exit;
                 //$sql='update nb_site_type set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId';
                 //$command=Yii::app()->db->createCommand($sql);

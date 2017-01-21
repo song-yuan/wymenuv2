@@ -74,7 +74,7 @@ class CopyproductbomController extends BackendController
 		$command = $db->createCommand($sql);
 		$products = $command->queryAll();
 		//var_dump($catep1,$catep2,$products);exit;
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
         	foreach ($dpids as $dpid){
 

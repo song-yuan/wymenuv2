@@ -26,7 +26,15 @@
 	<!-- END PAGE HEADER-->	
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
-
+	<?php $form=$this->beginWidget('CActiveForm', array(
+				'id' => 'product-form',
+				'action' => $this->createUrl('postable/delete' , array('companyId' => $this->companyId)),
+				'errorMessageCssClass' => 'help-block',
+				'htmlOptions' => array(
+					'class' => 'form-horizontal',
+					'enctype' => 'multipart/form-data'
+				),
+		)); ?>
 	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
@@ -104,7 +112,7 @@
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
-		
+		<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">

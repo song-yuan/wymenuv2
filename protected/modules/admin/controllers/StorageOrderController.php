@@ -123,7 +123,7 @@ class StorageOrderController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$model = StorageOrder::model()->find('lid=:storageId and dpid=:dpid' , array(':storageId' => $lid,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('StorageOrder');
 			$model->update_at=date('Y-m-d H:i:s',time());
@@ -140,7 +140,7 @@ class StorageOrderController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_storage_order set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -307,7 +307,7 @@ class StorageOrderController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$model = StorageOrderDetail::model()->find('lid=:storagedetailId and dpid=:dpid' , array(':storagedetailId' => $lid,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('StorageOrderDetail');
 			$model->update_at=date('Y-m-d H:i:s',time());

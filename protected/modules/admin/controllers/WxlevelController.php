@@ -80,7 +80,7 @@ class WxlevelController extends BackendController
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('lid');
-		Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+		//Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
                 if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = BrandUserLevel::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;

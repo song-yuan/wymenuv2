@@ -115,7 +115,7 @@ class PurchaseOrderController extends BackendController
 		$id = Yii::app()->request->getParam('lid');
 		$model = PurchaseOrder::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PurchaseOrder');
 			$model->update_at=date('Y-m-d H:i:s',time());
@@ -132,7 +132,7 @@ class PurchaseOrderController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_purchase_order set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -206,7 +206,7 @@ class PurchaseOrderController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$model = PurchaseOrderDetail::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $lid,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PurchaseOrderDetail');
 			$model->update_at=date('Y-m-d H:i:s',time());
@@ -231,7 +231,7 @@ class PurchaseOrderController extends BackendController
 		$status = Yii::app()->request->getParam('status');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_purchase_order_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));

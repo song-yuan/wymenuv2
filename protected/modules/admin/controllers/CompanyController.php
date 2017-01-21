@@ -226,7 +226,7 @@ class CompanyController extends BackendController
 	}
 	public function actionDelete(){
 		$ids = Yii::app()->request->getPost('companyIds');
-                Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_company set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where dpid in ('.implode(',' , $ids).')')
 			->execute();

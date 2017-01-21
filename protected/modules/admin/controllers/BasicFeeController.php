@@ -86,7 +86,7 @@ class BasicFeeController extends BackendController {
 		$is_sync = DataSync::getInitSync();
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = CompanyBasicFee::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId));
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
             if(Yii::app()->request->isPostRequest) {
 					$model->attributes = Yii::app()->request->getPost('CompanyBasicFee');
                     $model->update_at=date('Y-m-d H:i:s',time());

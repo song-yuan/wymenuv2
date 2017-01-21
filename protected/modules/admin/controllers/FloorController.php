@@ -49,7 +49,7 @@ class FloorController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
                 $dpid = Yii::app()->request->getParam('companyId');
 		$model = Floor::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
                 if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Floor');
                         $model->update_at=date('Y-m-d H:i:s',time());
@@ -71,7 +71,7 @@ class FloorController extends BackendController
                 //$command->bindValue(":ids" , implode(',' , $ids));
                 //$command->bindValue(":dpid" , $this->companyId);
                 //var_dump($command);exit;
-		Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+		//Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
                 if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_floor set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));

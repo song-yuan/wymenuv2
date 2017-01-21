@@ -127,7 +127,7 @@ class NormalpromotionController extends BackendController
 		//var_dump($groupID);exit;
 		$brdulvs = $this->getBrdulv();
 		$model = NormalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$is_sync = DataSync::getInitSync();
 		//$db = Yii::app()->db;
 // 		$transaction = $db->beginTransaction();

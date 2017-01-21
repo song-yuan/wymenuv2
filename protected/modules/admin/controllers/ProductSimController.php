@@ -42,7 +42,7 @@ public function actionUpdate(){
 		$papage = Yii::app()->request->getParam('papage');
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
                         //var_dump($model);exit;
@@ -73,7 +73,7 @@ public function actionUpdate(){
 	}
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
-                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		
 		if($product){

@@ -130,7 +130,7 @@ class CuponController extends BackendController
 		//var_dump($groupID);exit;
 		$brdulvs = $this->getBrdulv();
 		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		
 		$db = Yii::app()->db;
 		$sql = 'select t1.brand_user_lid from nb_cupon t left join nb_cupon_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.cupon_id = t.lid and t1.delete_flag = 0)where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId;

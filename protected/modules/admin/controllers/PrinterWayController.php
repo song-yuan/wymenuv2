@@ -52,7 +52,7 @@ class PrinterWayController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
                 //echo 'ddd';
 		$model = PrinterWay::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -78,7 +78,7 @@ class PrinterWayController extends BackendController
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_printer_way set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')

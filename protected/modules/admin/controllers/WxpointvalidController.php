@@ -55,7 +55,7 @@ class WxpointvalidController extends BackendController
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
 		$model = PointsValid::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
                         
 		if(Yii::app()->request->isPostRequest && Yii::app()->user->role <= User::SHOPKEEPER) {
 			$model->attributes = Yii::app()->request->getPost('PointsValid');
@@ -82,7 +82,7 @@ class WxpointvalidController extends BackendController
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('lid');
-		Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+		//Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
                 if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = PointsValid::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
