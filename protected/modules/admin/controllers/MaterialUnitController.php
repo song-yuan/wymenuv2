@@ -86,11 +86,12 @@ class MaterialUnitController extends BackendController
 		
 		$type=Yii::app()->request->getParam('type',0);
 		$id = Yii::app()->request->getParam('id');
+		$papage = Yii::app()->request->getParam('papage');
 		$model = MaterialUnit::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-			$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId,'type'=>$type)) ;
+			$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId,'type'=>$type, 'page'=>$papage)) ;
 		}
 		
 		if(Yii::app()->request->isPostRequest) {
@@ -98,16 +99,19 @@ class MaterialUnitController extends BackendController
             $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId,'type'=>$type ));
+				$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId,'type'=>$type, 'page'=>$papage));
 			}
 		}
 
 		$this->render('update' , array(
 				'model' => $model ,
-				'type' => $type
+				'type' => $type,
+				'papage' => $papage,
 		));
 	}
 	public function actionDelete(){
+		$type=Yii::app()->request->getParam('type',0);
+		$papage = Yii::app()->request->getParam('papage');
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId)) ;
@@ -118,10 +122,10 @@ class MaterialUnitController extends BackendController
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_material_unit set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('materialUnit/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('materialUnit/index' , 'companyId' => $companyId,'type'=>$type, 'page'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('materialUnit/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('materialUnit/index' , 'companyId' => $companyId,'type'=>$type, 'page'=>$papage)) ;
 		}
 	}
 

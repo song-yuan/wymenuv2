@@ -51,7 +51,7 @@
 									<img src="<?php echo $model->main_picture;?>" />
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productImg/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('productImg/update',array('lid' => $model->lid , 'companyId' => $model->dpid, 'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

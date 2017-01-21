@@ -39,6 +39,7 @@ class ProductSimController extends BackendController
 
 public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
+		$papage = Yii::app()->request->getParam('papage');
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -50,14 +51,15 @@ public function actionUpdate(){
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('productSim/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('productSim/index' , 'companyId' => $this->companyId, 'page'=>$papage));
 			}
 		}
 		$categories = $this->getCategoryList();
 		//$departments = $this->getDepartments();
 		$this->render('update' , array(
 				'model' => $model ,
-				'categories' => $categories
+				'categories' => $categories,
+				'papage' => $papage,
 		));
 	}
 	public function actionStatus(){

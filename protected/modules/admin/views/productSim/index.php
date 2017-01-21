@@ -43,11 +43,8 @@
 						<thead>
 							<tr>
 								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
-								<!-- <th ><?php echo yii::t('app','图片');?></th> -->
 								<th><?php echo yii::t('app','类别');?></th>
-								<!-- <th><?php echo yii::t('app','原价');?></th> -->
                                 <th><?php echo yii::t('app','简称');?></th>
-                                <!-- <th><?php echo yii::t('app','是否时价');?></th> -->
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -56,12 +53,10 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td style="width:20%"><?php echo $model->product_name;?></td>
-								<!-- <td ><img width="100" src="<?php echo $model->main_picture;?>" /></td> -->
 								<td><?php echo $model->category->category_name;?></td>
-								<!-- <td ><?php echo $model->original_price;?></td> -->
                                 <td ><?php echo $model->simple_code;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productSim/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>/page/<?php echo $pages->getCurrentPage()+1;?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productSim/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>/papage/<?php echo $pages->getCurrentPage()+1;?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

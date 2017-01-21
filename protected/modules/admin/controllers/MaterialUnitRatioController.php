@@ -35,9 +35,6 @@ class MaterialUnitRatioController extends BackendController
 				'pages'=>$pages,
 		));
 	}
-	public function actionSetMealList() {
-
-	}
 	public function actionCreate(){
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -86,20 +83,22 @@ class MaterialUnitRatioController extends BackendController
 			$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId)) ;
 		}
 		$id = Yii::app()->request->getParam('id');
+		$papage = Yii::app()->request->getParam('papage');
 		$model = MaterialUnitRatio::model()->find('lid=:unitId and dpid=:dpid' , array(':unitId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MaterialUnitRatio');
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId, 'page'=>$papage));
 			}
 		}
 
 		$this->render('update' , array(
 				'model' => $model ,
+				'papage' => $papage,
 		));
 	}
 	public function actionDelete(){
@@ -109,14 +108,15 @@ class MaterialUnitRatioController extends BackendController
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		$papage = Yii::app()->request->getPost('papage');
+		//Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_material_unit_ratio set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 					->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('materialUnitRatio/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('materialUnitRatio/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('m  aterialUnitRatio/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('m  aterialUnitRatio/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		}
 	}
 }

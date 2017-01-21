@@ -34,7 +34,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('materialUnit/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('materialUnit/delete' , array('companyId' => $this->companyId, 'type'=>$type, 'papage'=>$pages->getCurrentPage()+1)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -76,7 +76,7 @@
 								<td ><?php echo $model->sort_code;?></td>
 								<td ><?php echo $model->unit_specifications;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('materialUnit/update',array('id' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('materialUnit/update',array('id' => $model->lid , 'companyId' => $model->dpid,'type'=>$type, 'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

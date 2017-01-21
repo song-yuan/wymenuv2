@@ -143,6 +143,7 @@ class ProductMaterialController extends BackendController
 			$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId)) ;
 		}
 		$id = Yii::app()->request->getParam('id');
+		$papage = Yii::app()->request->getParam('papage');
 		$model = ProductMaterial::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -168,7 +169,7 @@ class ProductMaterialController extends BackendController
 				$model->update_at=date('Y-m-d H:i:s',time());
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-					$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+					$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId, 'page'=>$papage));
 				}
 			}else{
 				Yii::app()->user->setFlash('error',yii::t('app','库存单位和零售单位不对应！！'));
@@ -178,7 +179,8 @@ class ProductMaterialController extends BackendController
 		$categories = $this->getCategoryList();//var_dump($categories);exit;
 		$this->render('update' , array(
 				'model' => $model ,
-				'categories' => $categories
+				'categories' => $categories,
+				'papage' => $papage,
 		));
 	}
 	public function actionDelete(){
@@ -186,16 +188,17 @@ class ProductMaterialController extends BackendController
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId)) ;
 		}
+		$papage = Yii::app()->request->getParam('papage');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_material set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		}
 	}
 	

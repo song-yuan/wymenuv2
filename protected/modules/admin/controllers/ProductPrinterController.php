@@ -30,30 +30,32 @@ class ProductPrinterController extends BackendController
 	public function actionUpdate(){
         $printerway=array();
 		$lid = Yii::app()->request->getParam('lid');
+		$papage = Yii::app()->request->getParam('papage');
 		$model = Product::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-				$this->redirect(array('productPrinter/index' , 'companyId' => $this->companyId)) ;
+				$this->redirect(array('productPrinter/index' , 'companyId' => $this->companyId, 'page'=>$papage)) ;
 			}
 			$postData = Yii::app()->request->getPost('ProductPrinterway');
 			//$model->printer_way_id = $postData;
 			if(ProductPrinterway::saveProductPrinterway($this->companyId, $lid, $postData)){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('productPrinter/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('productPrinter/index' , 'companyId' => $this->companyId, 'page'=>$papage));
 			}
 		}
 		$printerWays = PrinterWay::getPrinterWay($this->companyId);
                 
-                $productPrinterway=  ProductPrinterway::getProductPrinterWay($lid,$this->companyId);
+        $productPrinterway=  ProductPrinterway::getProductPrinterWay($lid,$this->companyId);
 		foreach($productPrinterway as $ppw){
 			array_push($printerway,$ppw['printer_way_id']);
 		}
 		$this->render('updateProductPrinter' , array(
 			'model'=>$model,
 			'printerWays'=>$printerWays,
-                        'printerway'=>$printerway,
+            'printerway'=>$printerway,
+			'papage'=>$papage,
 		));
 	}
 }
