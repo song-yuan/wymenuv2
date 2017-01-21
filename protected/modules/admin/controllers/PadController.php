@@ -48,7 +48,7 @@ class PadController extends BackendController
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
                 $model = Pad::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Pad');
                         $model->update_at=date('Y-m-d H:i:s',time());
@@ -65,7 +65,7 @@ class PadController extends BackendController
 	}
         public function actionBind(){
 		$padId = Yii::app()->request->getParam('padId',0);
-                Until::isUpdateValid(array($padId),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($padId),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
                 $model = Pad::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $padId,':dpid'=> $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Pad');
@@ -85,7 +85,7 @@ class PadController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			foreach ($ids as $id) {

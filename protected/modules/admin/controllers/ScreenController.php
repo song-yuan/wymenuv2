@@ -95,7 +95,7 @@ class ScreenController extends BackendController
 		$model = Screen::model()->find('lid=:screenId and dpid=:dpid' , array(':screenId' => $id,':dpid'=>$this->companyId));
 		
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Screen');
 			$model->update_at=date('Y-m-d H:i:s',time());
@@ -112,7 +112,7 @@ class ScreenController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-            Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_screen set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -150,7 +150,7 @@ class ScreenController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		if(Yii::app()->request->isPostRequest){
 			$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+            //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 			if(!empty($ids)) {
 				Yii::app()->db->createCommand('update nb_screen set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 					->execute(array( ':companyId' => $this->companyId));

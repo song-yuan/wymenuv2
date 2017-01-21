@@ -89,7 +89,7 @@ class GiftController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		
 		$model = Gift::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		
 		if(Yii::app()->request->isPostRequest) {
 			$is_sync = DataSync::getInitSync();

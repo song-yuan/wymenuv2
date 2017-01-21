@@ -87,7 +87,7 @@ class ProductSalesController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $printset = Yii::app()->request->getParam('psid');
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_discount set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
@@ -102,7 +102,7 @@ class ProductSalesController extends BackendController
 	//delete方法新加
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('id');
-                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = ProductDiscount::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		$product = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$model->product_id,':dpid'=>  $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
@@ -121,7 +121,7 @@ class ProductSalesController extends BackendController
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if($product){
                         $product->saveAttributes(array('is_discount'=>$product->is_discount==0?1:0,'update_at'=>date('Y-m-d H:i:s',time())));
                         //$product->update_at = date('Y-m-d H:i:s',time());			

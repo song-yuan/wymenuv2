@@ -62,7 +62,7 @@ class TasteController extends BackendController
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
 		$type = Yii::app()->request->getParam('type');
-                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = TasteGroup::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
@@ -83,7 +83,7 @@ class TasteController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('lid');
 		$type = Yii::app()->request->getParam('type',0);
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = TasteGroup::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
@@ -166,7 +166,7 @@ class TasteController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$type = Yii::app()->request->getParam('type');
                 $groupname = Yii::app()->request->getParam('groupname',0);
-                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = Taste::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
@@ -193,7 +193,7 @@ class TasteController extends BackendController
                 $groupname = Yii::app()->request->getParam('groupname',0);
 		$ids = Yii::app()->request->getPost('lid');
 		$type = Yii::app()->request->getParam('type',0);
-                Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = Taste::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $this->companyId)) ;
@@ -237,7 +237,7 @@ class TasteController extends BackendController
 	public function actionUpdateProductTaste(){
 		$tasteArr = array();
 		$lid = Yii::app()->request->getParam('lid');
-                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = Product::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		
 		if(Yii::app()->request->isPostRequest) {

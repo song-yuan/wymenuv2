@@ -50,7 +50,7 @@ class SiteTypeController extends BackendController
 	public function actionUpdate() {
 		$lid = Yii::app()->request->getParam('lid');
                 $dpid = Yii::app()->request->getParam('companyId');
-                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = SiteType::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
 		//var_dump($model);
 		if(Yii::app()->request->isPostRequest) {

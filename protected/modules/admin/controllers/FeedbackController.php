@@ -57,7 +57,7 @@ class FeedbackController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$allflag = Yii::app()->request->getParam('allflag');
 		$model = Feedback::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
                         
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Feedback');
@@ -76,7 +76,7 @@ class FeedbackController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('lid');
 		$allflag = Yii::app()->request->getParam('allflag',0);
-		Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+		//Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
                 if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = Feedback::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;

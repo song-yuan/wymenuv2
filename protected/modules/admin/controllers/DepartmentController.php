@@ -47,7 +47,7 @@ class DepartmentController extends BackendController
 		$model = Department::model()->findByPk($id);
 		
 		if(Yii::app()->request->isPostRequest) {
-                        Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+                        //Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			
 			$model->attributes = Yii::app()->request->getPost('Department');
                         $model->update_at=date('Y-m-d H:i:s',time());

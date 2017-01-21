@@ -49,7 +49,7 @@ class CompanyWifiController extends BackendController
 	}
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
-                Until::isUpdateValid(array($id),$this->companyId,$this);
+        //Until::isUpdateValid(array($id),$this->companyId,$this);
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = CompanyWifi::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId));
 		if(Yii::app()->request->isPostRequest) {
@@ -65,7 +65,7 @@ class CompanyWifiController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$this->companyId,$this);
+        //Until::isUpdateValid($ids,$this->companyId,$this);
 		if(!empty($ids)) {
                         foreach ($ids as $id) {
                                 $model = CompanyWifi::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;

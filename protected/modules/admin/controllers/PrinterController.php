@@ -50,7 +50,7 @@ class PrinterController extends BackendController
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
         $model = Printer::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
         if(Yii::app()->request->isPostRequest) {
         	if(Yii::app()->user->role > User::SHOPKEEPER) {
         		Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -68,7 +68,7 @@ class PrinterController extends BackendController
 		));
 	}
         public function actionList(){
-                Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = Company::model()->findByPk($this->companyId);
 		$printer = $this->getPrinters();
                 
@@ -92,7 +92,7 @@ class PrinterController extends BackendController
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = Printer::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;

@@ -148,7 +148,7 @@ class UserController extends BackendController
 	public function actionUpdate() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));		
 		$id = Yii::app()->request->getParam('id');
-                Until::isUpdateValid(array($id),$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($id),$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->user->role > User::SHOPKEEPER && Yii::app()->user->userId != $id) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限修改'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
@@ -178,7 +178,7 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId));
 		}
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = User::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id,':companyId'=>$companyId)) ;
@@ -244,7 +244,7 @@ class UserController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $ids = Yii::app()->request->getPost('ids');
                 $userid=Yii::app()->request->getParam('userid',0);
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_user_company set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));

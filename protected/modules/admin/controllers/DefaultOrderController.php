@@ -1691,7 +1691,7 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $typeId = Yii::app()->request->getParam('typeId',0);
-                Until::isUpdateValid(array($lid), $companyId, $this);
+                //Until::isUpdateValid(array($lid), $companyId, $this);
                 $sql='update nb_order_product set is_waiting=2 where dpid='.$companyId.' and lid='.$lid;
                 //var_dump($sql);exit;
                 Yii::app()->db->createCommand($sql)->execute();

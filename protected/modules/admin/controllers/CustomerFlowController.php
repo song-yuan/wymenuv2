@@ -45,7 +45,7 @@ class CustomerFlowController extends BackendController
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
 		if(Yii::app()->request->isPostRequest) {
-                        Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			$model->attributes = Yii::app()->request->getPost('Company');
                         $model->update_at=date('Y-m-d H:i:s',time());
 			
@@ -66,7 +66,7 @@ class CustomerFlowController extends BackendController
 	}
 	public function actionDelete(){
 		$ids = Yii::app()->request->getPost('companyIds');
-                Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_company set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where dpid in ('.implode(',' , $ids).')')
 			->execute();

@@ -72,7 +72,7 @@ class MaterialCategoryController extends BackendController
 		$this->layout = '/layouts/main_picture';
 		$id = Yii::app()->request->getParam('id');
 		$model = MaterialCategory::model()->find('lid=:id and dpid=:dpid', array(':id' => $id,':dpid'=>  $this->companyId));
-                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MaterialCategory');
                         $model->update_at=date('Y-m-d H:i:s',time());
@@ -91,7 +91,7 @@ class MaterialCategoryController extends BackendController
 	}
 	public function actionDelete(){
 		$id = Yii::app()->request->getParam('id');
-                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = MaterialCategory::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		//var_dump($id,  $this->companyId,$model);exit;
 		if($model) {

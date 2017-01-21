@@ -214,7 +214,7 @@ class ProductBomController extends BackendController
         	$this->redirect(array('productbom/detailindex' , 'companyId' => $this->companyId,'pblid'=>$pblid,'papage'=>$papage)) ;
         }
         $ids = Yii::app()->request->getPost('ids');//var_dump($ids);exit;
-        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if(!empty($ids)) {
             Yii::app()->db->createCommand('update nb_product_bom set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')->execute(array( ':companyId' => $this->companyId));
             $this->redirect(array('productBom/detailindex' , 'companyId' => $companyId,'pblid'=>$pblid,'papage'=>$papage)) ;
