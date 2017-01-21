@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('productMaterial/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('productMaterial/delete' , array('companyId' => $this->companyId,'papage'=>$pages->getCurrentPage()+1)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -84,10 +84,10 @@
 								<!-- <td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td> -->
 								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid, 'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 								<!-- <td class="center">
-								<a href="<?php echo $this->createUrl('productMaterial/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid,));?>"><?php echo yii::t('app','查看库存详情');?></a>
+								<a href="<?php echo $this->createUrl('productMaterial/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid, 'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','查看库存详情');?></a>
 								</td> -->
 							</tr>
 						<?php endforeach;?>

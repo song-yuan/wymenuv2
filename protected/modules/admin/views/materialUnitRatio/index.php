@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('materialUnitRatio/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('materialUnitRatio/delete' , array('companyId' => $this->companyId, 'papage'=>$pages->getCurrentPage()+1)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -73,7 +73,7 @@
 								<td><?php echo Common::getSalesName($model->sales_unit_id);?></td>
 								<td><?php echo $model->unit_ratio;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('materialUnitRatio/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('materialUnitRatio/update',array('id' => $model->lid , 'companyId' => $model->dpid, 'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

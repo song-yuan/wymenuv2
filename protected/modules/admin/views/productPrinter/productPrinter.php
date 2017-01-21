@@ -53,7 +53,7 @@
 									}?>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productPrinter/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('productPrinter/update',array('lid' => $model->lid , 'companyId' => $model->dpid, 'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

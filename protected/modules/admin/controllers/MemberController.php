@@ -80,8 +80,9 @@ class MemberController extends BackendController
 	}
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
+		$papage = Yii::app()->request->getParam('papage');
 		$model = MemberCard::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberCard');
                         $model->update_at=date('Y-m-d H:i:s',time());
@@ -92,26 +93,28 @@ class MemberController extends BackendController
 			}
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('member/index' , 'companyId' => $this->companyId, 'page'=>$papage));
 			}
 		}
 		$this->render('update' , array(
 			'model'=>$model,
+			'papage'=>$papage,
 		));
 	}
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$id = Yii::app()->request->getParam('id');
-                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		$papage = Yii::app()->request->getParam('papage');
+        //Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($id)) {
 				$model = MemberCard::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
 					$model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
-			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('member/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('member/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		}
 	}
 	public function actionChargeRecord() {
