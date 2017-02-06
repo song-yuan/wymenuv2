@@ -18,17 +18,18 @@
  */
 class OrderPay extends CActiveRecord
 {
-        public $should_all;
-        public $all_reality;
+    public $should_all;
+    public $all_reality;
 	public $y_all;
 	public $m_all;
 	public $d_all;
 	public $all_status;
-        public $reality_all;
-        public $all_total;
-        public $all_huiyuan;
-        public $all_num;
-        public $all_nums;
+    public $reality_all;
+    public $all_total;
+    public $all_huiyuan;
+    public $all_num;
+    public $all_nums;
+    public $transactionId;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -71,6 +72,7 @@ class OrderPay extends CActiveRecord
                 'order' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order.dpid and t.order_id=order.lid and order.order_status in (4)') , //not 4,8
 				'order4' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order4.dpid and t.order_id=order4.lid and order4.order_status in (3,4,8)') , //not 4,8
                 'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
+				'micropay' => array(self::BELONGS_TO , 'MicroPayMode' ,'' ,'on'=>'t.remark = micropay.out_trade_no and t.dpid = micropay.dpid '),
 		);
 	}
 
@@ -87,10 +89,10 @@ class OrderPay extends CActiveRecord
 			'order_id' =>yii::t('app', '订单编号'),
 			'account_no' =>yii::t('app', '账单号'),
 			'pay_amount' => yii::t('app','金额'),
-                        'paytype' => yii::t('app','支付方式'),
+            'paytype' => yii::t('app','支付方式'),
 			'payment_method_id' =>yii::t('app', '方式'),
 			'remark' => yii::t('app','备注'),
-				'is_sync' => yii::t('app','是否同步'),
+			'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -119,7 +121,7 @@ class OrderPay extends CActiveRecord
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('account_no',$this->account_no,true);
 		$criteria->compare('pay_amount',$this->pay_amount,true);
-                $criteria->compare('paytype',$this->paytype,true);
+        $criteria->compare('paytype',$this->paytype,true);
 		$criteria->compare('payment_method_id',$this->payment_method_id,true);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('is_sync',$this->is_sync,true);

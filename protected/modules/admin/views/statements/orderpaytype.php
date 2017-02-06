@@ -158,6 +158,9 @@
 							<tr>
 								
 								<th><?php echo yii::t('app','账单号');?></th>
+								<?php if($paymentid=='1' && ($paytype == '1' || $paytype == '2')):?>
+								<th><?php echo yii::t('app','第三方账单号');?></th>
+								<?php endif;?>
 								<th><?php echo yii::t('app','下单时间');?></th>
                                 <th><?php echo yii::t('app','支付方式');?></th>
                                 <th><?php echo yii::t('app','金额');?></th>
@@ -171,6 +174,9 @@
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
 								<td class="accountno" accountno="<?php echo $model->account_no;?>" orderid="<?php echo $model->lid?>" payamount="<?php echo sprintf("%.2f",$model->pay_amount);?>" ><?php echo $model->account_no; ?></td>
+								<?php if($paymentid=='1' && ($paytype == '1' || $paytype == '2')):?>
+								<th><?php echo $model->transactionId;?></th>
+								<?php endif;?>
 								<td><?php echo $model->create_at;?></td>
 								<td><?php if($model->paytype==3){
 										echo $model->paymentMethod->name;

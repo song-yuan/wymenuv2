@@ -16,7 +16,7 @@
  * @property string $delete_flag
  * @property string $is_sync
  */
-class MicroPay extends CActiveRecord
+class MicroPayMode extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
@@ -34,14 +34,14 @@ class MicroPay extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, out_trade_no', 'required'),
+			array('out_trade_no', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('pay_type', 'length', 'max'=>2),
 			array('out_trade_no, total_fee', 'length', 'max'=>32),
 			array('transaction_id', 'length', 'max'=>64),
 			array('delete_flag', 'length', 'max'=>1),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at, pay_result', 'safe'),
+			array('create_at, pay_result, update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, pay_type, out_trade_no, transaction_id, total_fee, pay_result, delete_flag, is_sync', 'safe', 'on'=>'search'),
