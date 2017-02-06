@@ -270,6 +270,7 @@ class CopymaterialController extends BackendController
 	        							'unit_name'=>$materialunits['unit_name'],
 	        							'unit_type'=>$materialunits['unit_type'],
 	        							//'type'=>$category['type'],
+	        							'sort_code'=> $materialunits['sort_code'],
 	        							'muhs_code'=> $materialunits['muhs_code'],
 	        							'unit_specifications'=>$materialunits['unit_specifications'],
 	        							'delete_flag'=>'0',

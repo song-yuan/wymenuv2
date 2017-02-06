@@ -1612,8 +1612,9 @@ public function actionPayallReport(){
 			$ords = $ords .','.$order['lid'];
 		}
 		
-		$criteria->select = 't.*';
+		$criteria->select = 't.*,nb_micro_pay.transaction_id as transactionId';
 		$criteria->with = array("paymentMethod","order4");
+		$criteria->join='LEFT JOIN nb_micro_pay ON t.remark = nb_micro_pay.out_trade_no and t.dpid = nb_micro_pay.dpid';
 		$criteria->addCondition("t.dpid= ".$this->companyId." and t.order_id in (".$ords.")");
 		
 		if($paymentid==1){
