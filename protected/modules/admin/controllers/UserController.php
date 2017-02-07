@@ -162,7 +162,7 @@ class UserController extends BackendController
 			if($pw){
 				$model->password = $pw;
 			}
-                        //$model->update_at=date('Y-m-d H:i:s',time());
+              	$model->update_at=date('Y-m-d H:i:s',time());
                         //var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
