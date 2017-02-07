@@ -25,6 +25,11 @@ class ProductController extends BackendController
 		$this->render('list',array('type'=>$type));
 	}
 	public function actionIndex(){
+		
+		$company = Company::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$this->companyId));
+		$comtype = $company->type;
+		
+		//var_dump($comtype);exit;
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = array('company','category');
@@ -44,7 +49,8 @@ class ProductController extends BackendController
 				'models'=>$models,
 				'pages'=>$pages,
 				'categories'=>$categories,
-				'categoryId'=>$categoryId
+				'categoryId'=>$categoryId,
+				'comtype'=>$comtype,
 		));
 	}
 
@@ -228,4 +234,48 @@ class ProductController extends BackendController
 		$departments = Department::model()->findAll('company_id=:companyId',array(':companyId'=>$this->companyId)) ;
 		return CHtml::listData($departments, 'department_id', 'name');
 	}
+	
+	
+
+	public function actionStore(){
+		$pid = Yii::app()->request->getParam('pid');//菜品lid编号
+		$showtype = Yii::app()->request->getParam('showtype');//下架类型，0表示自上下架，1表示统一上下架。
+		$shownum = Yii::app()->request->getParam('shownum');//表示下架后菜品is_show字段的数值，0表示单品不显示，1表示都显示，6表示公司统一下架，7表示自下架。
+		$pcode = Yii::app()->request->getParam('pcode');//菜品在公司内的唯一编码.
+		$dpid = $this->companyId;
+		$db = Yii::app()->db;
+		$transaction = $db->beginTransaction();
+		$msg = $pid.'@@'.$shownum.'##'.$showtype.'$$'.$pcode.'%%'.$dpid;
+		try
+		{
+			$is_sync = DataSync::getInitSync();
+			//盘点日志
+			//盘点日志
+			if($showtype==0){
+				Yii::app()->db->createCommand('update nb_product set is_show = '.$shownum.' where lid in ('.$pid.') and dpid = :companyId')
+				->execute(array( ':companyId' => $this->companyId));
+				//Yii::app()->user->setFlash('success' , yii::t('app','删除成功'));
+				//$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
+				$transaction->commit();
+				Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+			}else{
+				$dpids = '000';
+				$companys = Company::model()->findAll('dpid=:companyId or comp_dpid=:companyId and delete_flag=0' , array(':companyId'=>$this->companyId));
+				foreach ($companys as $company){
+					$dpids = $dpids .','.$company->dpid;
+				}
+				Yii::app()->db->createCommand('update nb_product set is_show = '.$shownum.' where phs_code in ('.$pcode.') and dpid in ('.$dpids.')')
+				->execute();
+				$transaction->commit();
+				Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+			}
+			return true;
+		}catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			Yii::app()->end(json_encode(array("status"=>"fail")));
+			return false;
+		}
+	}
+	
+	
 }

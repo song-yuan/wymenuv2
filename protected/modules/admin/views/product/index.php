@@ -62,15 +62,15 @@
 								<th><?php echo yii::t('app','现价');?></th>
 								<th><?php echo yii::t('app','会员价');?></th>
 								<th><?php echo yii::t('app','打包费');?></th>
-                                <th><?php echo yii::t('app','单位');?></th>
+                                <!-- <th><?php echo yii::t('app','单位');?></th> -->
                                 <th><?php echo yii::t('app','排序号');?></th>
-                                <th><?php echo yii::t('app','星级');?></th>
-                                <!-- 
+                                <!-- <th><?php echo yii::t('app','星级');?></th>
+                                
                                 <th><?php echo yii::t('app','称重');?></th>
                                 <th><?php echo yii::t('app','重量单位');?></th>
                                 <th><?php echo yii::t('app','点单数');?></th>
                                 <th><?php echo yii::t('app','点赞数');?></th>   --> 
-                                <th><?php echo yii::t('app','参与会员折扣');?></th>
+                                <th><?php echo yii::t('app','会员折扣');?></th>
 								<th><?php echo yii::t('app','可折');?></th>
                                 <th><?php echo yii::t('app','可售');?></th>
                                 <th><?php echo yii::t('app','来源');?></th>
@@ -88,10 +88,10 @@
 								<td ><?php echo $model->original_price;?></td>
 								<td ><?php echo $model->member_price;?></td>
 								<td ><?php echo $model->dabao_fee;?></td>
-                                <td ><?php echo $model->product_unit;?></td>
+                                <!-- <td ><?php echo $model->product_unit;?></td> -->
                                 <td ><?php echo $model->sort;?></td>
-                                <td ><?php echo $model->rank;?></td>
-                                <!-- 
+                                <!--<td ><?php echo $model->rank;?></td>
+                                 
                                 <td ><?php echo $model->is_weight_confirm=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                 <td ><?php echo $model->weight_unit;?></td>
                                 
@@ -104,6 +104,27 @@
                                                                 
 								<td class="center">
 								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid ,'istempp' => $model->is_temp_price ,'papage' => $pages->getCurrentPage()+1 ));?>"><?php echo yii::t('app','编辑');?></a>
+								
+								<?php if(yii::app()->user->role >=9):?>
+									<?php if($model->is_show <=5):?>
+									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" style="background-color: #e02222;color: #fff;font-weight:600;">自下架</button>
+									<?php elseif($model->is_show ==6):?>
+									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" disabled style="background-color: #cdd4d2;color: #fff;font-weight:600;">无法上架</button>
+									<?php elseif($model->is_show ==7):?>
+									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" style="background-color: #00ffad;color: #fff;font-weight:600;">自上架</button>
+									<?php endif;?>
+								<?php else:?>
+									<?php if($model->is_show <=5):?>
+									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" style="background-color: #e02222;color: #fff;font-weight:600;">自下架</button>
+									<?php else:?>
+									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" style="background-color: #00ffad;color: #fff;font-weight:600;">自上架</button>
+									<?php endif;?>
+									<?php if($comtype == 0):?>
+									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "1" style="background-color: #00ffad;color: #fff;font-weight:600;">统一上架</button>
+									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "6" style="background-color: #e02222;color: #fff;font-weight:600;">统一下架</button>
+									<?php endif;?>
+								<?php endif;?>
+								
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -158,17 +179,49 @@
 			}
 			return true;
 		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('product/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('product/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
+		
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('product/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
+		$('.on_off_sell').on('click',function(){
+			var pid = $(this).attr('pid');
+			var showtype = $(this).attr('showtype');
+			var shownum = $(this).attr('shownum');
+			var pcode = $(this).attr('pcode');
+			if(pid!=''&&showtype!=''&&shownum!=''&&pcode!=''){
+				var istrue = 1;
+			}else{
+				var istrue = 0;
+			}
+			//alert(pid+'@@'+showtype+'##'+shownum+'$$'+pcode);
+			if(window.confirm("确认进行此项操作?")&&istrue){
+				$.ajax({
+		            type:'GET',
+					url:"<?php echo $this->createUrl('product/store',array('companyId'=>$this->companyId,));?>/pid/"+pid+"/showtype/"+showtype+"/shownum/"+shownum+"/pcode/"+pcode,
+					async: false,
+					//data:"companyId="+company_id+'&padId='+pad_id,
+		            cache:false,
+		            dataType:'json',
+					success:function(msg){
+			            //alert(msg.status);
+			            if(msg.status=="success")
+			            {            
+				            //alert("<?php echo yii::t('app','成功'); ?>"); 
+				            layer.msg(msg.msg);              
+				            location.reload();
+			            }else{
+				            alert("<?php echo yii::t('app','失败'); ?>"+"1");
+				            location.reload();
+			            }
+					},
+		            error:function(){
+						alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+					},
+				});
+			}else{
+				alert('该菜品信息有误！无法进行上下架操作！');
+			}
+		})
 	});
 	</script>	
