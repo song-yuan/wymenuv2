@@ -172,8 +172,9 @@ $(document).ready(function(){
 });
 	$('input[name="cz"]').change(function(){
 		var type = '<?php echo $type;?>';
+		var groupnum = '<?php echo $maxgroupno;?>';
 		//alert(type);
-		if(type==0){
+		if(type==0 && groupnum !=''){
 		    if($(this).val()==1){
 		       $("#xinzu").show();
 		       $("#tihuanzu").hide();
@@ -181,7 +182,10 @@ $(document).ready(function(){
 		       $("#tihuanzu").show();
 		      $("#xinzu").hide();
 		    }
-		}
+		}else{
+			layer.msg('添加第一个套餐产品，无法替换！！！',{icon: 0});
+			$('input[name="cz"]').val('1').click();
+			}
 	 });                                                        
 	$('.minus').click(function(){
 		var input = $(this).siblings('input');
