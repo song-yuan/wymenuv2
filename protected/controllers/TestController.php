@@ -7,7 +7,6 @@ class TestController extends Controller
 	{
 		$code = '60605790';
 		$deviceId = '1234567890';
-		echo $code;$deviceId;exit;
 		$res = SqbPay::activate($code,$deviceId);
 		var_dump($res);exit;
 	}
