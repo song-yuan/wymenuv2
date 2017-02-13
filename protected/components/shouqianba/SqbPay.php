@@ -15,9 +15,7 @@
  */
 class SqbPay{
     public static function activate($code,$device_id){
-    	var_dump(SqbConfig::SQB_DOMAIN);
     	$url = SqbConfig::SQB_DOMAIN.'/terminal/activate';
-    	var_dump($url);exit;
     	$data = array(
 	    			'app_id'=>SqbConfig::APPID,
 	    			'code'=>$code,
@@ -27,7 +25,6 @@ class SqbPay{
     	$vendorSn = SqbConfig::VENDER_SN;
     	$venderKey = SqbConfig::VENDER_KEY;
     	$sign = md5($body.$venderKey);
-    	var_dump($sign);exit;
     	$result = SqbCurl::httpPost($url, $body, $vendorSn, $sign);
     	return $result;
     }
