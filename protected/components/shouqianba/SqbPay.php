@@ -14,11 +14,9 @@
  *
  */
 class SqbPay{
-	public $api_domain = 'https://api.shouqianba.com';
-	
     public static function activate($code,$device_id){
-    	var_dump($this->api_domain);exit;
-    	$url = $this->api_domain.'/terminal/activate';
+    	var_dump(SqbConfig::SQB_DOMAIN);
+    	$url = SqbConfig::SQB_DOMAIN.'/terminal/activate';
     	var_dump($url);exit;
     	$data = array(
 	    			'app_id'=>SqbConfig::APPID,
