@@ -21,7 +21,7 @@ class SqbPay{
     	$data = array(
     			'app_id'=>SqbConfig::APPID,
     			'code'=>$code,
-    			'device_id'=>$device_id,
+    			'device_id'=>$device_id
     	);
     	$body = json_encode($data);
     	$vendorSn = SqbConfig::VENDER_SN;
