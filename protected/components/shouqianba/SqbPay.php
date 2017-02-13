@@ -18,11 +18,12 @@ class SqbPay{
 	
     public static function activate($code,$device_id){
     	$url = $this->api_domain.'/terminal/activate';
+    	var_dump($url);exit;
     	$data = array(
-    			'app_id'=>SqbConfig::APPID,
-    			'code'=>$code,
-    			'device_id'=>$device_id
-    	);
+	    			'app_id'=>SqbConfig::APPID,
+	    			'code'=>$code,
+	    			'device_id'=>$device_id
+    			);
     	$body = json_encode($data);
     	$vendorSn = SqbConfig::VENDER_SN;
     	$venderKey = SqbConfig::VENDER_KEY;
