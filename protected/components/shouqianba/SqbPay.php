@@ -17,7 +17,7 @@ class SqbPay{
 	public $api_domain = 'https://api.shouqianba.com';
 	
     public static function activate($code,$device_id){
-    	$url = $this->api_domain+'/terminal/activate';
+    	$url = $this->api_domain.'/terminal/activate';
     	$data = array(
     			'app_id'=>SqbConfig::APPID,
     			'code'=>$code,
@@ -26,7 +26,7 @@ class SqbPay{
     	$body = json_encode($data);
     	$vendorSn = SqbConfig::VENDER_SN;
     	$venderKey = SqbConfig::VENDER_KEY;
-    	$sign = md5($body+$venderKey);
+    	$sign = md5($body.$venderKey);
     	$result = SqbCurl::httpPost($url, $body, $vendorSn, $sign);
     	return $result;
     }
