@@ -27,6 +27,7 @@ class SqbPay{
     	$vendorSn = SqbConfig::VENDER_SN;
     	$venderKey = SqbConfig::VENDER_KEY;
     	$sign = md5($body.$venderKey);
+    	var_dump($sign);exit;
     	$result = SqbCurl::httpPost($url, $body, $vendorSn, $sign);
     	return $result;
     }
