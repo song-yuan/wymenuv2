@@ -20,6 +20,8 @@
 										<?php
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
+											'thumbWidth'=>1080,
+											'thumbHeight'=>935,
 											'fileTypes'=> '*.jpg',
 											'buttonText'=> yii::t('app','上传图片'),
 											'companyId' => $model->dpid,
