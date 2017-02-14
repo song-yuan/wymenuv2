@@ -34,6 +34,14 @@ class DataSyncOperation {
 				if($resDetail && $resDetail['content']!=$mac){
 					$msg = array('status'=>false,'msg'=>'该序列号已被使用');
 				}else{
+					if(!$resDetail){
+						$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and content="'.$mac.'" and delete_flag=0';
+						$resDetail = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+						if($resDetail){
+							$msg = array('status'=>false,'msg'=>'该收银机已绑定其他序列号');
+							return $msg;
+						}
+					}
 					$isSync = DataSync::getInitSync ();
 					$se = new Sequence ( "pad_setting_detail" );
 					$lid = $se->nextval ();
