@@ -68,7 +68,7 @@
                                 <th><?php echo yii::t('app','POS秘钥');?></th>
                                 <th><?php echo yii::t('app','是否使用');?></th>
                                 <th><?php echo yii::t('app','类型');?></th>
-								<th></th>
+								<th><?php echo yii::t('app','收银机mac地址');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -78,10 +78,9 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
 								<td ><?php echo $model['lid'];?></td>
                                 <td ><?php echo $model['pad_code'];?></td>
-                                <td ><?php if($model['isused']) echo '已使用';else echo '未使用';?></td>
+                                <td ><?php if($model->detail) echo '已使用';else echo '未使用';?></td>
 								<td ><?php if($model['pad_sales_type']==0)echo '中餐模式';else echo '西餐模式';?></td>
-								<td class="center">
-								</td>
+								<td><?php if($model->detail) echo $model->detail[0]->content;?></td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>
