@@ -36,7 +36,8 @@ public function actionGetServerTime(){
  */
 public function actionGetSyncPosInfo(){
 	$code = Yii::app()->request->getParam('code',0);
-	$posinfo = DataSyncOperation::getDataSyncPosInfor($code);
+	$mac = Yii::app()->request->getParam('mac','');
+	$posinfo = DataSyncOperation::getDataSyncPosInfor($code,$mac);
 	echo json_encode($posinfo);exit;
 }
 /**

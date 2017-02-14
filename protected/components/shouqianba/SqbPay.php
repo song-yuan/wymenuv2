@@ -24,14 +24,13 @@ class SqbPay{
     	$body = json_encode($data);
     	$vendorSn = SqbConfig::VENDER_SN;
     	$venderKey = SqbConfig::VENDER_KEY;
-    	$sign = md5($body.$venderKey);
-    	$result = SqbCurl::httpPost($url, $body, $vendorSn, $sign);
+    	$result = SqbCurl::httpPost($url, $body, $vendorSn, $venderKey);
     	return $result;
     }
     public static function checkin(){
     	 
     }
-    public static function pay(){
+    public static function pay($dpid,$data){
     
     }
     public static function precreate(){
