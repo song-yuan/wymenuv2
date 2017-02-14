@@ -7,10 +7,11 @@
  *
  */
 class SqbCurl{
-	public static function httpPost($url,$data,$vendor_sn,$sign){
+	public static function httpPost($url,$data,$vendor_sn,$vendor_key){
 		$contentType = 'Content-type: application/json';
 		$length = mb_strlen($data,'UTF8');
 		$contentLength = 'Content-length: '.$length;
+		$sign = md5($data.$vendor_key);
 		$authorization = 'Authorization: '.$vendor_sn.' '.$sign;
 		$header = array($authorization,$contentType, $contentLength);
 		$ch = curl_init();									// 创建一个新cURL资源

@@ -22,7 +22,7 @@ class DataSyncOperation {
 	 * 获取pos设备信息
 	 *
 	 */
-	public static function getDataSyncPosInfor($code) {
+	public static function getDataSyncPosInfor($code,$mac) {
 		if($code){
 			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
@@ -31,7 +31,7 @@ class DataSyncOperation {
 				$dpid = $result['dpid'];
 				$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
 				$resDetail = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-				if($resDetail){
+				if($resDetail && $resDetail['content']!=$mac){
 					$msg = array('status'=>false,'msg'=>'该序列号已被使用');
 				}else{
 					$isSync = DataSync::getInitSync ();
@@ -43,6 +43,7 @@ class DataSyncOperation {
 							'create_at' => date ( 'Y-m-d H:i:s', time () ),
 							'update_at' => date ( 'Y-m-d H:i:s', time () ),
 							'pad_setting_id' => $padSettingId,
+							'content' => $mac,
 							'is_sync' => $isSync
 					);
 					$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_detail', $data );
