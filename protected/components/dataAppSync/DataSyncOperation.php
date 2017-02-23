@@ -432,8 +432,7 @@ class DataSyncOperation {
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
 		
-// 		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and user_id='.$padSetLid.' and account_no="'.$accountNo.'"';
-		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
+		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and user_id='.$padSetLid.' and account_no="'.$accountNo.'"';
 		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
 		if($orderModel){
 			$msg = json_encode ( array (

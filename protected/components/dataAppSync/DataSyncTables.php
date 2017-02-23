@@ -128,7 +128,7 @@ class DataSyncTables
 				"pad_fip varchar(20) NOT NULL DEFAULT '0',".
         		"print_type varchar(2) NOT NULL DEFAULT '0',".
 				"bt_mac varchar(20) NOT NULL,".
-        		"order_period int(3) NOT NULL DEFAULT '1',".
+        		"order_period int(3) NOT NULL DEFAULT '3',".
         		"serial_number TINYINT(2) NOT NULL DEFAULT '0',".
 				"is_product_free varchar(1) NOT NULL  DEFAULT '0',".
         		"order_number TINYINT(2) NOT NULL  DEFAULT '1',".
