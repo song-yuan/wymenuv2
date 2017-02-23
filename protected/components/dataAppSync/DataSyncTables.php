@@ -546,6 +546,7 @@ class DataSyncTables
         		"max_total_points int(10) NOT NULL DEFAULT '0',".
         		"'card_cost' int(10) NOT NULL DEFAULT '0',".
         		"'enable_date' TIMESTAMP NOT NULL DEFAULT (datetime('now', 'localtime')),".
+        		"'style_id' int(10) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
