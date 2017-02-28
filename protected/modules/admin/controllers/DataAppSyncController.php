@@ -193,6 +193,15 @@ public function actionGetMemberCardYue(){
  	echo $result;exit;
 }
 /**
+ *
+ *获取微信会员信息
+ *
+ */
+public function actionGetUserInfo(){
+	$result = DataSyncOperation::getUserInfo($_POST);
+	echo $result;exit;
+}
+/**
  * 
  * 批量同步
  * 

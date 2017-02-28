@@ -47,7 +47,7 @@ class WxBrandUser {
 		return $brandUser;
 	}
 	/**
-	 * 通过openid查找用户
+	 * 通过card_id查找用户
 	 * 
 	 */
 	public static function getFromCardId($cardId) {
