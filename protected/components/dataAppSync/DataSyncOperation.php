@@ -1538,5 +1538,21 @@ class DataSyncOperation {
 		$sql = 'update nb_sync_failure set delete_flag=1 where lid='.$lid.' and dpid='.$dpid;
 		Yii::app ()->db->createCommand ( $sql )->execute ();
 	}
+	/**
+	 * 
+	 * 获取 微信会员信息
+	 * 
+	 */
+	public static function getUserInfo($data) {
+		$cardId = $data['card_id'];
+		$user = WxBrandUser::getFromCardId($cardId);
+		if($user){
+			$cupon = WxCupon::getUserNotUseCupon($user['lid'],$user['dpid']);
+			$msg = array('status'=>true,'user'=>$user,'cupon'=>$cupon);
+		}else{
+			$msg = array('status'=>false);
+		}
+		return json_encode($msg);
+	}
 }
 
