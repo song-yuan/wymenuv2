@@ -21,7 +21,7 @@ class DataSyncAppVersion
     	$urlhead = Yii::app()->request->getHostInfo().'/wymenuv2/downloadApk/';
     	
 		$db = Yii::app()->db;
-        $sql = 'select t.* from nb_app_version t where t.delete_flag = 0 and t.lid =(select max(k.lid) from nb_app_version k where delete_flag = 0 and k.app_type = '.$appType.') and t.app_type ='.$appType;
+        $sql = 'select * from nb_app_version where app_type ='.$appType.' and delete_flag = 0 order by lid desc limit 1';
         $command = $db->createCommand($sql);
         $appverifnos = $command->queryRow();
         if($appverifnos){	
