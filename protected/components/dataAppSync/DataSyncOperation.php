@@ -1610,11 +1610,11 @@ class DataSyncOperation {
 					}
 				}
 				$transaction->commit();
-				$msg = json_encode(array('status'=>true));
+				$msg = array('status'=>true);
 			}catch (Exception $e) {
 				$message = $e->getMessage();
 				$transaction->rollback();
-				$msg = json_encode(array('status'=>false,'msg'=>$message));
+				$msg = array('status'=>false,'msg'=>$message);
 			}
 		}else{
 			$msg = array('status'=>false,'msg'=>'不存在该会员信息');
