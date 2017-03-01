@@ -95,23 +95,25 @@ class WxRecharge
 				}else{
 					$endTime = date('Y-m-d H:i:s',strtotime('+1 year'));
 				}
-				$se = new Sequence("point_record");
+				$se = new Sequence("member_points");
 			    $lid = $se->nextval();
 				$pointRecordData = array(
 									'lid'=>$lid,
 						        	'dpid'=>$this->dpid,
 						        	'create_at'=>date('Y-m-d H:i:s',$time),
 						        	'update_at'=>date('Y-m-d H:i:s',$time),
-						        	'point_type'=>1,
-						        	'type_lid'=>$this->rechargeId,
-						        	'point_num'=>$this->recharge['recharge_pointback'],
-						        	'brand_user_lid'=>$this->userId,
+						        	'card_type'=>1,
+									'card_id'=>$this->userId,
+									'point_resource'=>1,
+						        	'resource_id'=>$this->rechargeId,
+						        	'points'=>$this->recharge['recharge_pointback'],
+						        	'remain_points'=>$this->recharge['recharge_pointback'],
 						        	'end_time'=>$endTime,
 						        	'is_sync'=>DataSync::getInitSync(),
 									);
-				$result = Yii::app()->db->createCommand()->insert('nb_point_record', $pointRecordData);
+				$result = Yii::app()->db->createCommand()->insert('nb_member_points', $pointRecordData);
 				if(!$result){
-	       		throw new Exception('插入积分失败!');
+	       			throw new Exception('插入积分失败!');
 	       	   }
 	   	   }
 	   	   

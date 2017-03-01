@@ -1555,5 +1555,52 @@ class DataSyncOperation {
 		}
 		return json_encode($msg);
 	}
+	/**
+	 *
+	 * 获取 微信会员信息
+	 *
+	 */
+	public static function dealWxHykPay($data) {
+		$cardId = $data['card_id'];
+		$cupons = $data['cupon'];
+		$yue = $data['yue'];
+		$points = $data['points'];
+		$user = WxBrandUser::getFromCardId($cardId);
+		if($user){
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				if(!empty($cupon)){
+					foreach ($cupons as $cupon){
+						$res = WxCupon::dealCupon($user['dpid'], $cupon['lid'], 2);
+						if(!$res){
+							throw new Exception('代金券核销失败');
+						}
+					}
+				}
+				if($yue!=0){
+					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], -$yue);
+					if(!$res){
+						throw new Exception('储值支付失败');
+					}
+				}
+				if($points!='0-0'){
+					$pointArr = split('-', $points);
+					$res = WxPoints::dealPoints($user['lid'], $user['dpid'],$pointArr[1]);
+					if(!$res){
+						throw new Exception('积分支付失败');
+					}
+				}
+				$transaction->commit();
+				$msg = json_encode(array('status'=>true));
+			}catch (Exception $e) {
+				$message = $e->getMessage();
+				$transaction->rollback();
+				$msg = json_encode(array('status'=>false,'msg'=>$message));
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'不存在该会员信息');
+		}
+		return json_encode($msg);
+	}
 }
 
