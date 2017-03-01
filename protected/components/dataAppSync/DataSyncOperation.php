@@ -1561,6 +1561,7 @@ class DataSyncOperation {
 	 *
 	 */
 	public static function dealWxHykPay($data) {
+		var_dump($data);exit;
 		$cardId = $data['card_id'];
 		$cupons = $data['cupon'];
 		$yue = $data['yue'];
