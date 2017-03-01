@@ -642,9 +642,12 @@ class DataSyncOperation {
 						'dpid' => $dpid,
 						'create_at' => $createAt,
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
-						'member_card_rfid' => $memberPoints->member_card_rfid,
-						'order_id' => $orderId,
+						'card_type' => 0,
+						'card_id' => $memberPoints->member_card_rfid,
+						'point_resource' => 0,
+						'resource_id' => $orderId,
 						'points' => $memberPoints->receive_points,
+						'remain_points' => $memberPoints->receive_points,
 						'is_sync' => $isSync
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
