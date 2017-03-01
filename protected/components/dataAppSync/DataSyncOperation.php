@@ -1588,9 +1588,9 @@ class DataSyncOperation {
 		if($user){
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
-				if(!empty($cupon)){
+				if(!empty($cupons)){
 					foreach ($cupons as $cupon){
-						$res = WxCupon::dealCupon($user['dpid'], $cupon['lid'], 2);
+						$res = WxCupon::dealCupon($cupon['dpid'], $cupon['lid'], 2);
 						if(!$res){
 							throw new Exception('代金券核销失败');
 						}
