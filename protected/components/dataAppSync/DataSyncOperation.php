@@ -1548,7 +1548,8 @@ class DataSyncOperation {
 		$user = WxBrandUser::getFromCardId($cardId);
 		if($user){
 			$cupon = WxCupon::getUserNotUseCupon($user['lid'],$user['dpid']);
-			$msg = array('status'=>true,'user'=>$user,'cupon'=>$cupon);
+			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
+			$msg = array('status'=>true,'user'=>$user,'cupon'=>$cupon,'points'=>$point);
 		}else{
 			$msg = array('status'=>false);
 		}
