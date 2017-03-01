@@ -1196,7 +1196,7 @@ class DataSyncOperation {
 		$type = $data ['type'];
 		
 		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select t.*,t.level_name,t.level_discount,t.birthday_discount from nb_member_card t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t.level_type=0 and t.delete_flag=0 where t.dpid in (' . $dpid . ') and t.rfid=' . $rfid . ' and t.delete_flag=0';
+		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_member_card t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t.level_type=0 and t.delete_flag=0 where t.dpid in (' . $dpid . ') and t.rfid="' . $rfid . '" and t.delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (!$result) {
 			$msg = array('status'=>false,'type'=>$type);
@@ -1215,7 +1215,7 @@ class DataSyncOperation {
 		$rfid = $data ['rfid'];
 		
 		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
+		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $result) {
 			return '0.00';
