@@ -175,6 +175,15 @@ public function actionAddMemberCard(){
  	echo $result;exit;
 }
 /**
+ *
+ * 获取会员卡 信息
+ *
+ */
+public function actionGetMemberCard(){
+	$result = DataSyncOperation::getMemberCard($_POST);
+	echo $result;exit;
+}
+/**
  * 
  * 获取会员卡余额
  * 
