@@ -193,15 +193,6 @@ public function actionGetMemberCardYue(){
  	echo $result;exit;
 }
 /**
- *
- *获取微信会员信息
- *
- */
-public function actionGetUserInfo(){
-	$result = DataSyncOperation::getUserInfo($_POST);
-	echo $result;exit;
-}
-/**
  * 
  * 批量同步
  * 
@@ -239,5 +230,22 @@ public function actionDoubleScreen(){
  	$result = DataSyncOperation::getDoubleScreen($dpid);
  	echo $result;exit;
 }
-
+/**
+ *
+ *获取微信会员信息
+ *
+ */
+public function actionGetUserInfo(){
+	$result = DataSyncOperation::getUserInfo($_POST);
+	echo $result;exit;
+}
+/**
+ * 
+ * 微信会员卡提交
+ * 
+ */
+public function actionDealWxHykPay(){
+	$result = DataSyncOperation::dealWxHykPay($_POST);
+	echo $result;exit;
+}
 }

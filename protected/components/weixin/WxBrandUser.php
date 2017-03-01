@@ -97,7 +97,7 @@ class WxBrandUser {
 	 * 
 	 */
 	public static function getHistoryPoints($userId,$dpid) {
-		$sql = 'select sum(point_num) as total from nb_point_record where brand_user_lid = '.$userId.' and dpid='.$dpid;
+		$sql = 'select sum(point_num) as total from nb_member_points where card_type=1 and card_id = '.$userId.' and dpid='.$dpid;
 		$points = Yii::app()->db->createCommand($sql)->queryRow();
 		return $points['total']?$points['total']:0;
 	}
@@ -108,7 +108,7 @@ class WxBrandUser {
 	 */
 	public static function getAvaliablePoints($userId,$dpid) {
 		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select sum(point_num) as total from nb_point_record where brand_user_lid = '.$userId.' and dpid='.$dpid.' and end_time > "'.$now.'"';
+		$sql = 'select sum(point_num) as total from nb_member_points where card_type=1 and card_id = '.$userId.' and dpid='.$dpid.' and end_time > "'.$now.'"';
 		$points = Yii::app()->db->createCommand($sql)->queryRow();
 		return $points['total']?$points['total']:0;
 	}
@@ -126,6 +126,11 @@ class WxBrandUser {
 				        	'is_sync'=>DataSync::getInitSync(),
 							);
 		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));
+		return $result;
+	}
+	public static function dealYue($userId,$dpid,$money){
+		$sql = 'update nb_brand_user set remain_money = remain_money+'.$money.' where lid='.$userId.' and dpid='.$dpid;
+		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
 }

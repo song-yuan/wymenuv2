@@ -118,21 +118,23 @@ class WxCashBack
 			}else{
 				$endTime = date('Y-m-d H:i:s',strtotime('+1 year'));
 			}
-			$se = new Sequence("point_record");
+			$se = new Sequence("member_points");
 		    $lid = $se->nextval();
 			$pointRecordData = array(
 								'lid'=>$lid,
 					        	'dpid'=>$this->dpid,
 					        	'create_at'=>date('Y-m-d H:i:s',$time),
 					        	'update_at'=>date('Y-m-d H:i:s',$time),
-					        	'point_type'=>0,
-					        	'type_lid'=>$orderId,
-					        	'point_num'=>$this->consumerPointsBack,
-					        	'brand_user_lid'=>$this->userId,
+								'card_type'=>1,
+								'card_id'=>$this->userId,
+					        	'point_resource'=>0,
+					        	'resource_id'=>$orderId,
+					        	'points'=>$this->consumerPointsBack,
+								'remain_points'=>$this->consumerPointsBack,
 					        	'end_time'=>$endTime,
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
-			$result = Yii::app()->db->createCommand()->insert('nb_point_record', $pointRecordData);
+			$result = Yii::app()->db->createCommand()->insert('nb_member_points', $pointRecordData);
 			if(!$result){
 				throw new Exception('现金支付记录失败');
 			}

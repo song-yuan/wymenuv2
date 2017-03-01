@@ -608,8 +608,7 @@ class WxOrder
 		     );
 			$orderPay = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 			
-			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$cuponBranduserLid.' and dpid='.$order['dpid'].' and to_group=3';
-			$cuponBranduser = Yii::app()->db->createCommand($sql)->execute();
+			WxCupon::dealCupon($order['dpid'], $cuponBranduserLid, 2);
 			if($money == 0){
 				//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);

@@ -143,6 +143,16 @@ class WxCupon
 	}
 	/**
 	 * 
+	 * 使用核销代金券
+	 * 
+	 */
+	public static function dealCupon($dpid,$cuponId,$status){
+		$sql = 'update nb_cupon_branduser set is_used='.$status.' where lid='.$cuponId.' and dpid='.$dpid;
+		$result = Yii::app()->db->createCommand($sql)->execute();
+		return $result;
+	}
+	/**
+	 * 
 	 * 发放代金券
 	 */
 	public static function sentCupon($dpid,$userId,$cuponId){
