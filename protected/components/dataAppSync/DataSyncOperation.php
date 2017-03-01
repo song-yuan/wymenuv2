@@ -364,11 +364,7 @@ class DataSyncOperation {
 			if($table=='nb_local_company'){
 				$tableName = 'nb_company';
 			}
-			if($table=='nb_member_card'||$table=='nb_brand_user_level'){
-				$dpid = WxCompany::getDpids($dpid);
-			}else{
-				$dpid = $data['dpid'];
-			}
+			$dpid = $data['dpid'];
 			$sql = 'select * from '.$tableName.' where dpid in ('.$dpid.') and (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and is_sync<>0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
@@ -1188,6 +1184,26 @@ class DataSyncOperation {
 				) );
 		}
 		return $msg;
+	}
+	/**
+	 *
+	 * 会员卡 信息
+	 *
+	 */
+	public static function getMemberCard($data) {
+		$dpid = $data ['dpid'];
+		$rfid = $data ['rfid'];
+		$type = $data ['type'];
+		
+		$dpid = WxCompany::getDpids($dpid);
+		$sql = 'select t.*,t.level_name,t.level_discount,t.birthday_discount from nb_member_card t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t.level_type=0 and t.delete_flag=0 where t.dpid in (' . $dpid . ') and t.rfid=' . $rfid . ' and t.delete_flag=0';
+		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (!$result) {
+			$msg = array('status'=>false,'type'=>$type);
+		}else{
+			$msg = array('status'=>true,'data'=>$result,'type'=>$type);
+		}
+		return json_encode($msg);
 	}
 	/**
 	 * 

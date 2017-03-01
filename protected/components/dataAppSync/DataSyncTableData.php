@@ -18,9 +18,6 @@ class DataSyncTableData
     public function getInitData(){
     	$item = 100;
     	$dataArr = array('page'=>0,'currentpage'=>$this->cp+1, 'item'=>$item, 'msg'=>array());
-    	if($this->tableName=='nb_member_card'||$this->tableName=='nb_brand_user_level'){
-    		$this->dpid = WxCompany::getDpids($this->dpid);
-    	}
     	$sql = 'select count(*) from ' . $this->tableName . ' where dpid in ('.$this->dpid.')';
     	if($this->begain!=''){
     		$begain = date('Y-m-d H:i:s',strtotime($this->begain));
