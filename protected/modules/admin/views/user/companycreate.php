@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','添加管理店铺'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','服务员列表'),'url'=>$this->createUrl('user/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','管理店铺列表'),'url'=>$this->createUrl('user/companyindex' , array('companyId'=>$this->companyId,'lid'=>$model->user_id))),array('word'=>\yii::t('app','添加操作员管理店铺'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('user/companyindex' , array('companyId'=>$this->companyId,'lid'=>$model->user_id)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','服务员列表'),'url'=>$this->createUrl('user/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','管理店铺列表'),'url'=>$this->createUrl('user/companyindex' , array('companyId'=>$this->companyId,'lid'=>$model->user_id))),array('word'=>\yii::t('app','添加操作员管理店铺'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('user/companyindex' , array('companyId'=>$this->companyId,'lid'=>$model->user_id)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

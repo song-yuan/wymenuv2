@@ -7,7 +7,7 @@
 			padding-right:10px;
 			display:inline-block;
 		}
-		span.tab-active{
+        span.tab-active{
 			color:white;
 		}
 		.ku-item{
@@ -17,8 +17,8 @@
 			margin-top:20px;
 			margin-left:20px;
 			border-radius:5px !important;
-			border:2px solid black;
-			box-shadow: 5px 5px 5px #888888;
+		/*	border:2px solid black;
+			box-shadow: 5px 5px 5px #888888;*/
 			vertical-align:middle;
 		}
 		.ku-item-info{
@@ -28,10 +28,10 @@
 			text-align:center;
 		}
 		.ku-purple{
-			background-color:#852b99;
+			
 		}
 		.ku-grey{
-			background-color:rgb(68,111,120);
+			/*background-color:#DB7093;*/
 		}
 		.ku-item.dpgl{
 			background-image:url(../../../../../../img/waiter/icon-dpjcsz.png);
@@ -176,16 +176,17 @@
 	
 	<!-- BEGIN PAGE CONTENT-->
 	<?php if($type==0):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>''))));?>
 	<?php elseif($type==1):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','库存数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存数据'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','库存数据'),'url'=>''))));?>
 	<?php endif;?>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="portlet purple box">
-				<div class="portlet-title">
+			      	<div class="portlet-title">
 					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','营业数据');?></span></a></div>
-					<!-- <em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-truck">&nbsp</em><a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存数据');?></span></a> -->
+					<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
+					<!--<em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-truck">&nbsp</em><a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存数据');?></span></a> -->
 					<div class="actions">
 						<!-- <a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>  -->
 					</div>
@@ -270,7 +271,7 @@
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey tcmx"></div>
 							<div class="ku-item-info">退菜明细</div>
-						</div>
+					</div>
 					</a>
 					<a href="<?php echo $this->createUrl('statements/retreatreasonReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">

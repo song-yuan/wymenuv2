@@ -65,20 +65,12 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘点库存'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点库存'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' =>'2',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点库存'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' =>'2',)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
-	<?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'material-form',
-				'action' => $this->createUrl('productMaterial/delete' , array('companyId' => $this->companyId)),
-				'errorMessageCssClass' => 'help-block',
-				'htmlOptions' => array(
-					'class' => 'form-horizontal',
-					'enctype' => 'multipart/form-data'
-				),
-		)); ?>
+	
 	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
@@ -88,8 +80,9 @@
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						
-						<!-- <a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a> -->
+						<div class="btn-group">
+							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+					</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -153,58 +146,16 @@
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
-		<?php $this->endWidget(); ?>
+
 	</div>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
-         
 	$(document).ready(function(){
-       
-		function IsPC()  
-        {  
-            var userAgentInfo = navigator.userAgent;  
-            var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");  
-            var flag = true;  
-            for (var v = 0; v < Agents.length; v++) {  
-                if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }  
-            }  
-            return flag;  
-        }
-           if(!IsPC()){
-            $("input[type='text']").each(function(event){
-                $(this).focus(function(event){
-                	$(".kucundiv").css("background-color",'');
-                	$(this).css("background-color","rgba(241,8,8,0.6)");
-                	document.activeElement.blur();
-                   	new KeyBoard(this);  
-                });
-            });
-           }  
-            
-            
-
-		$('#material-form').submit(function(){
-			if(!$('.checkboxes:checked').length){
-				alert("<?php echo yii::t('app','请选择要删除的项');?>");
-				return false;
-			}
-			return true;
-		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('productMaterial/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('productMaterial/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('stockTaking/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
-		});
-	});
-          
-                    
+		});   
+	})             
 	$("#stocktaking").on("click",function(){
 		//alert("123");
 		//var vid=$(this).attr("id").substr(12,10);
@@ -249,8 +200,14 @@
 	            //alert(msg.status);
 	            if(msg.status=="success")
 	            {            
-		            alert("<?php echo yii::t('app','成功'); ?>");               
-		            location.reload();
+		            //alert("<?php echo yii::t('app','成功'); ?>");
+		            if(msg.msg !=''){
+		            	alert("下列产品尚未入库，无非进行盘点【"+msg.msg+"】；其他产品盘点正常。点击确认跳转至盘点日志查看");
+		            }else{
+			            layer.msg("盘点成功！");
+			        }  
+		            location.href="<?php echo $this->createUrl('stocktakinglog/detailindex' , array('companyId'=>$this->companyId,));?>/id/"+msg.logid
+		            //location.reload();
 	            }else{
 		            alert("<?php echo yii::t('app','失败'); ?>"+"1");
 		            location.reload();
@@ -297,7 +254,17 @@
 			},
 		});
     });
-    
+	$('#excel').click(function excel(){
+		var cid = '<?php echo $categoryId;?>';
+       if(confirm('确认导出并且下载Excel文件吗？')){
+	       //layer.msg('暂未开放！');
+    	   location.href="<?php echo $this->createUrl('stockTaking/stockExport' , array('companyId'=>$this->companyId ));?>/cid/"+cid;
+       }
+       else{
+    	   location.href="<?php echo $this->createUrl('stockTaking/index' , array('companyId'=>$this->companyId ));?>/cid/"+cid;
+       }
+	      
+	});  
  
     
 	</script>	

@@ -14,7 +14,7 @@ class RetreatController extends BackendController
 	}
 	public function actionIndex() {
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->addCondition('type=1 and dpid=:dpid and delete_flag=0');
 		$criteria->order = ' lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		

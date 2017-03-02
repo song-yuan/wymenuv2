@@ -30,13 +30,12 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','代金券查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','活动中心'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','添加代金券'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('cupon/index' , array('companyId' => $this->companyId,)))));?>
-		
+			 <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'breadcrumbs'=>array(array('word'=>yii::t('app','微信赠券'),'url'=>$this->createUrl('wechatMarket/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','添加系统券'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('cupon/index' , array('companyId' => $this->companyId,'type'=>1)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
-				<div class="col-md-12">
-				<div class="tabbable tabbable-custom">
+				
+				
 <!-- 					<ul class="nav nav-tabs"> --
 					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">整体设置</a></li>
 					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">普通优惠</a></li>
@@ -48,11 +47,11 @@
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加代金券');?></div>
+								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加系统券');?></div>
 								<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
-							</div>
-						</div>
+                                                                </div>
+                                                        </div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
 							<?php echo $this->renderPartial('_form', array('model'=>$model,'brdulvs'=>$brdulvs)); ?>
@@ -62,8 +61,8 @@
 				</div>
 			</div>
 			<!-- END PAGE CONTENT-->    
-		</div>
-		</div>
+		
+		
 		</div>
 		<!-- END PAGE -->  
 	<script type="text/javascript">

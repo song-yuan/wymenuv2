@@ -11,7 +11,7 @@ class PoscodeController extends BackendController
 	}
 	public function actionIndex(){
 		
-		$sql='select t1.lid as isused,t.* from nb_pad_setting t left join nb_pad_setting_detail t1 on (t.dpid = t1.dpid and t.lid = t1.pad_setting_id and t1.delete_flag = 0) where t.dpid ='.$this->companyId.' and t.delete_flag = 0';
+		$sql='select t1.lid as isused,t1.create_at as usedtime,t.* from nb_pad_setting t left join nb_pad_setting_detail t1 on (t.dpid = t1.dpid and t.lid = t1.pad_setting_id and t1.delete_flag = 0) where t.dpid ='.$this->companyId.' and t.delete_flag = 0';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		$pages = new CPagination(count($models));
 		$pages->setPageSize(10);

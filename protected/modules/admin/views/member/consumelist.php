@@ -8,19 +8,21 @@
                                                             <?php if($models):?>
                                                                     <thead>
                                                                             <tr>
-                                                                                    <th><?php echo yii::t('app','时间');?></th>
-                                                                                    <th><?php echo yii::t('app','性质');?></th>
-                                                                                    <th><?php echo yii::t('app','状态');?></th>
-                                                                                    <th><?php echo yii::t('app','金额');?></th>                                                                                    
+                                                                            	<th><?php echo yii::t('app','账单号');?></th>
+                                                                                <th><?php echo yii::t('app','时间');?></th>
+                                                                                <th><?php echo yii::t('app','性质');?></th>
+                                                                                <th><?php echo yii::t('app','状态');?></th>
+                                                                                <th><?php echo yii::t('app','金额');?></th>                                                                                    
                                                                             </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                     <?php foreach ($models as $model):?>
                                                                             <tr class="odd gradeX">
-                                                                                    <td ><?php echo $model->update_at;?></td>
-                                                                                    <td><?php switch($model->order_type){ case "1":echo "堂食";break;case "2":echo "外送";break;case "8":echo "自提";break;} ;?></td>
-                                                                                    <td><?php switch($model->order_status){ case "3":echo "支付";break;case "4":echo "结单";break;case "8":echo "结算";break;} ;?></td>
-                                                                                    <td ><?php echo $model->reality_total;?></td>                                                                                    
+                                                                            	<td ><?php echo $model->account_no;?></td>
+	                                                                            <td ><?php echo $model->create_at;?></td>
+	                                                                            <td><?php switch($model->order_type){ case "1":echo "堂食";break;case "2":echo "外送";break;case "8":echo "自提";break;} ;?></td>
+	                                                                            <td><?php switch($model->order_status){ case "3":echo "支付";break;case "4":echo "结单";break;case "8":echo "结算";break;} ;?></td>
+	                                                                            <td ><?php echo $model->reality_total;?></td>                                                                                    
                                                                             </tr>
                                                                     <?php endforeach;?>
                                                                     </tbody>                                                                    

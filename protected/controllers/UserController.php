@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo'))){
+		if(in_array($actin->id,array('index','ticket','oldindex','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -35,21 +35,69 @@ class UserController extends Controller
 				$userId = 2;
 				Yii::app()->session['userId'] = $userId;
 			}
-		}
+		} 
 		return true;
 	}
+        /**
+         *
+         * 
+         * 新的微信端
+         * 
+         */ 
+    public function actionIndex(){
+        //$userId就是brand_user表里的lid
+        $userId = Yii::app()->session['userId'];
+        //$user就是brand_user表里的一行
+        $user = WxBrandUser::get($userId,$this->companyId);
+        
+        $userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
+
+        $remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
+        $this->render('index',array(
+                                'userid'=>$userId,
+                                'companyId'=>$this->companyId,
+                                'user'=>$user,
+                                'userLevel'=>$userLevel,
+                                'remainMoney'=>$remainMoney
+                )
+                );
+	
+    }  
+    public function actionMoney(){
+        $this->render('money');
+    } 
+     public function actionPoint(){
+      $this->render('point');
+    }
+    public function actionTicket(){
+        //$userId就是brand_user表里的lid
+            $userId = Yii::app()->session['userId'];
+            $not_useds = WxCupon::getUserNotUseCupon($userId,$this->companyId);
+            $expires = WxCupon::getUserExpireCupon($userId,$this->companyId);
+            $useds = WxCupon::getUserUseCupon($userId,$this->companyId);
+            $this->render('ticket',array('companyId'=>$this->companyId,
+                                        'not_useds'=>$not_useds,
+                                        'expires'=>$expires,
+                                        'useds'=>$useds
+                    ));       
+    }
+     public function actionBill(){
+      $this->render('bill'); 
+    }
+        
 	/**
 	 * 
 	 * 个人中心
 	 * 
 	 */
-	public function actionIndex()
+      //以前的index
+	public function actionoldIndex()
 	{
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId,$this->companyId);
 		$userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
 		$remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
-		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel,'remainMoney'=>$remainMoney));
+		$this->render('oldindex',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel,'remainMoney'=>$remainMoney));
 	}
 	/**
 	 * 

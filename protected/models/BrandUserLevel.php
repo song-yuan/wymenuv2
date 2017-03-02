@@ -21,6 +21,7 @@
  */
 class BrandUserLevel extends CActiveRecord
 {
+	public $bgimg;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -43,13 +44,13 @@ class BrandUserLevel extends CActiveRecord
 			array('level_name, is_sync', 'length', 'max'=>50),
 			array('level_type,delete_flag', 'length', 'max'=>2),
 			array('level_discount,birthday_discount', 'length', 'max'=>8),
-			array('create_at,update_at,enable_date', 'safe'),
+			array('create_at,update_at,enable_date,style_id', 'safe'),
 			array('level_discount','compare','compareValue'=>'1','operator'=>'<=','message'=>yii::t('app','折扣数值大于等于0小于等于1')),
 			array('level_discount','compare','compareValue'=>'0','operator'=>'>=','message'=>yii::t('app','折扣数值大于等于0小于等于1')),
            // array('min_total_points','compare','compareAttribute'=>'max_total_points','operator'=>'<','message'=>yii::t('app','最低积分大于最高积分')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, level_name, level_type, level_discount, birthday_discount, min_charge_money, card_cost, min_total_points, is_sync, max_total_points,enable_date, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, level_name, level_type, level_discount, birthday_discount, min_charge_money, card_cost, min_total_points, is_sync, max_total_points,enable_date, style_id, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,6 +62,7 @@ class BrandUserLevel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'MemberWxCardStyle' => array(self::BELONGS_TO , 'MemberWxcardStyle' ,'' ,'on'=>'t.dpid = MemberWxCardStyle.dpid and t.style_id = MemberWxCardStyle.lid '),
 		);
 	}
 
@@ -83,6 +85,7 @@ class BrandUserLevel extends CActiveRecord
 			'min_total_points' => '当前等级的最低积分',
 			'max_total_points' => '当前等级的最高积分',
 			'enable_date' => '有效期',
+			'style_id' => '背景样式',
 			'delete_flag' => '0表示存在，1表示删除',
 			'is_sync' => yii::t('app','是否同步'),
 		);
@@ -116,6 +119,8 @@ class BrandUserLevel extends CActiveRecord
         $criteria->compare('birthday_discount',$this->birthday_discount,true);
 		$criteria->compare('min_total_points',$this->min_total_points);
 		$criteria->compare('max_total_points',$this->max_total_points);
+		$criteria->compare('enable_date',$this->enable_date,true);
+		$criteria->compare('style_id',$this->style_id,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

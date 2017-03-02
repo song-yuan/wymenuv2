@@ -30,12 +30,12 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','添加普通优惠'),'breadcrumbs'=>array(array('word'=>yii::t('app','活动中心'),'url'=>$this->createUrl('discount/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','普通优惠'),'url'=>$this->createUrl('normalpromotion/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','添加普通优惠活动'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('normalpromotion/index' , array('companyId' => $this->companyId,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','营销活动'),'url'=>$this->createUrl('entityMarket/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','普通优惠'),'url'=>$this->createUrl('normalpromotion/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','添加普通优惠'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('normalpromotion/index' , array('companyId' => $this->companyId,)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
-				<div class="tabbable tabbable-custom">
+				
 <!-- 					<ul class="nav nav-tabs"> 
 					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">整体设置</a></li>
 					<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">普通优惠</a></li>
@@ -44,7 +44,7 @@
  				</ul> -->
 				<div class="tab-content">
 			
-					<div class="col-md-12">
+					
 						<div class="portlet box blue">
 							<div class="portlet-title">
 								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加普通优惠活动');?></div>
@@ -58,10 +58,10 @@
 							<!-- END FORM--> 
 						</div>
 					</div>
-				</div>
+				
 			</div>
 			<!-- END PAGE CONTENT-->    
-		</div>
+		
 		</div>
 		</div>
 		<!-- END PAGE -->  

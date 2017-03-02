@@ -6,7 +6,7 @@
 			<?php $this->endContent();?>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>'微信卡券','breadcrumbs'=>array(array('word'=>yii::t('app','线上活动'),'url'=>$this->createUrl('discount/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>'营销品设置','url'=>''),array('word'=>'微信卡券','url'=>$this->createUrl('wxcard/index' , array('companyId' => $this->companyId,'type'=>1)))),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wxcard/index' , array('companyId' => $this->companyId,'type'=>1)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'breadcrumbs'=>array(array('word'=>yii::t('app','线上活动'),'url'=>$this->createUrl('discount/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>'营销品设置','url'=>''),array('word'=>'微信卡券','url'=>$this->createUrl('wxcard/index' , array('companyId' => $this->companyId,'type'=>1)))),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wxcard/index' , array('companyId' => $this->companyId,'type'=>1)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">

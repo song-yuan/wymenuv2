@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺设置'),'subhead'=>yii::t('app','POS列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','收银机设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','POS列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','收银机设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','POS列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -67,6 +67,7 @@
 								<th><?php echo yii::t('app','POS序列');?></th>
                                 <th><?php echo yii::t('app','POS秘钥');?></th>
                                 <th><?php echo yii::t('app','是否使用');?></th>
+                                <th><?php echo yii::t('app','使用时间');?></th>
                                 <th><?php echo yii::t('app','类型');?></th>
 								<th></th>
 							</tr>
@@ -79,6 +80,7 @@
 								<td ><?php echo $model['lid'];?></td>
                                 <td ><?php echo $model['pad_code'];?></td>
                                 <td ><?php if($model['isused']) echo '已使用';else echo '未使用';?></td>
+								<td ><?php echo $model['usedtime']?$model['usedtime']:'';?></td>
 								<td ><?php if($model['pad_sales_type']==0)echo '中餐模式';else echo '西餐模式';?></td>
 								<td class="center">
 								</td>

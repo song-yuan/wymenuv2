@@ -32,6 +32,11 @@
  */
 class BrandUser extends CActiveRecord
 {
+	
+	public $y_all;
+	public $m_all;
+	public $d_all;
+	public $all_num;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -73,6 +78,9 @@ class BrandUser extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    
+                    'point_record' => array(self::HAS_MANY , 'PointRecord' ,'','on'=> 't.lid=point_record.brand_user_lid and point_record.dpid=t.dpid'),
+                    'cupon_branduser'=>array(self::HAS_MANY , 'CuponBranduser' ,'','on'=>'t.lid=cupon_branduser.brand_user_lid and cupon_branduser.dpid=t.dpid and cupon_branduser.delete_flag < 1'),
                     'level' => array(self::BELONGS_TO , 'BrandUserLevel' ,'','on'=> 't.user_level_lid=level.lid and level.dpid=t.dpid'),
 		);
 	}
