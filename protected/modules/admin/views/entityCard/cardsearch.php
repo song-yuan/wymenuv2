@@ -168,7 +168,7 @@ li{
             <form action="" method="post" >     
                     <div class="row find">
                             <div class="col-xs-12 col-sm-5 form-group find_item1">                                    
-                                <input type="text" name="num" class="form-control"  placeholder="卡号" >
+                                <input type="text" name="num" class="form-control"  placeholder="" >
                             </div>     
                             <div class="col-xs-12 col-sm-2 find_item2">
                                 <input type="submit"   class=' btn  btn-primary  ' value="查 询"/>           
@@ -294,6 +294,7 @@ li{
                         <table class="info_item table table-striped table-bordered table-hover" id="point_table">
                             <thead>
                                 <tr>
+                                    <th>来源</th> 
                                     <th>积分</th>
                                     <th>时间</th>
                                                                    
@@ -306,6 +307,10 @@ li{
                              ?>                           
                             <tbody>
                                  <tr>
+                                    <td> 
+                                        <?php if(($v->point_resource)=="0")  echo "消费";?>
+                                         <?php if(($v->point_resource)=="1")  echo "充值";?>
+                                    </td> 
                                      <td><?php echo $v->points;?></td> 
                                     <td><?php echo $v->create_at;?></td>
                                                                   

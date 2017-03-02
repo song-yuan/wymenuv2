@@ -36,12 +36,13 @@ class WechatMemberController extends BackendController {
 	        if($num !=''){
 	          $card_id=(10000 + $this->companyId)*1000000000 + $num;
 	        //查找主要信息。
-	          $brand_user_model = BrandUser::model()->with(array('point_record','level','cupon_branduser'))->find("t.dpid='".$this->companyId ."'and card_id='".$card_id."'");          
+	          $brand_user_model = BrandUser::model()->with(array('point','level','cupon_branduser'))->find("t.dpid='".$this->companyId ."'and (t.card_id='".$card_id."' or t.mobile_num='".$num."')");          
 	          
 	          if($brand_user_model){
 	              $userLid = $brand_user_model->lid;
 	          }
 	        $now = date('Y-m-d H:i:s',time());
+               
 	        $db = Yii::app()->db; 
 	        $sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$userLid.' and dpid='.$this->companyId.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
 	        $back = Yii::app()->db->createCommand($sql)->queryRow();
@@ -201,6 +202,38 @@ class WechatMemberController extends BackendController {
       public function actionShop(){
        $this->render('shop');
      }
+public function actionAccountDetail(){
+
+        $type = Yii::app()->request->getParam('type',"0");
+
+        $orderid = Yii::app()->request->getParam('orderid',"0");
+        $db = Yii::app()->db;
+        if($type == 0){
+                $sql = 'select sum(t.zhiamount*t.amount) as all_amount,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) where t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.lid';
+        }else{
+                $sql = 'select sum(t.zhiamount*t.amount) as all_amount,count(t.zhiamount) as all_zhiamount,sum(t2.retreat_amount) as retreat_num,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t.lid = t2.order_detail_id) where t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.lid';
+        }//var_dump($sql);exit;
+        $allmoney = Yii::app()->db->createCommand($sql)->queryAll();
+        $sql1 = 'select t.pay_amount from nb_order_pay t where t.paytype =11 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
+        $model = Yii::app()->db->createCommand($sql1)->queryRow();
+        $change = $model['pay_amount']?$model['pay_amount']:0;
+        //var_dump($models);exit; 
+        $sql2 = 'select sum(t.pay_amount) as all_money from nb_order_pay t where t.paytype in(0,11) and t.pay_amount >0 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
+        $models = Yii::app()->db->createCommand($sql2)->queryRow();
+        $money = $models['all_money']?$models['all_money']:0;
+
+        $sql4 = 'select sum(t.pay_amount) as all_money from nb_order_pay t where t.pay_amount <0 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
+        $models = Yii::app()->db->createCommand($sql4)->queryRow();
+        $retreat = $models['all_money']?$models['all_money']:0;
+
+        $sql3 = 'select t1.name,t.* from nb_order_pay t left join nb_payment_method t1 on(t.dpid = t1.dpid and t.payment_method_id = t1.lid) where t.paytype not in (0,11) and t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.payment_method_id,t.paytype';
+        $allpayment = Yii::app()->db->createCommand($sql3)->queryAll();
+        if(empty($allpayment)){
+                $allpayment = false;
+        }
+        Yii::app()->end(json_encode(array('status'=>true,'msg'=>$allmoney,'change'=>$change,'money'=>$money,'allpayment'=>$allpayment,'retreat'=>$retreat)));
+
+}
 }
 
 

@@ -319,31 +319,24 @@ li{
                                 <tr>
                                     <th>来源</th>    
                                     <th>积分</th>
-                                    <th>过期时间</th>
-                                    <th>状态</th>                          
+                                    <th>时间</th>
+                                                      
                                 </tr>
                             </thead>
                             <?php 
-                             if(!empty($brand_user_model->point_record)):
-                                 foreach (($brand_user_model->point_record) as $v): 
+                             if(!empty($brand_user_model->point)):
+                                 foreach (($brand_user_model->point) as $v): 
 
                              ?>                           
                             <tbody>
                                  <tr>
                                       <td> 
-                                          <?php if(($v->point_type)=="0")  echo "消费";?>
-                                           <?php if(($v->point_type)=="1")  echo "充值";?>
+                                          <?php if(($v->point_resource)=="0")  echo "消费";?>
+                                           <?php if(($v->point_resource)=="1")  echo "充值";?>
                                       </td> 
-                                     <td><?php echo $v->point_num;?></td> 
-                                    <td><?php echo $v->end_time;?></td> 
-                                    <td>
-                                        <?php 
-                                             $now = date('Y-m-d H:i:s',time());
-                                             $time=$v->end_time;
-                                             if($now<=$time){
-                                             echo "未过期" ;}else{ echo "已过期";}          
-                                        ?>
-                                    </td>
+                                     <td><?php echo $v->points;?></td> 
+                                    <td><?php echo $v->create_at;?></td> 
+                                    
                                 </tr>
                             </tbody>
                             <?php 
@@ -380,10 +373,10 @@ li{
                                     <td><?php 
                                        
                                         if($cupon_array->is_used=="1"){
-                                            if(($now>=$v->begin_time)&&($now<=$v->end_time)){
+                                            if(((date('Y-m-d H:i:s',time()))>=$v->begin_time)&&((date('Y-m-d H:i:s',time()))<=$v->end_time)){
                                                 echo "未使用";
                                             }
-                                            if($now>=$v->end_time){
+                                            if((date('Y-m-d H:i:s',time()))>=$v->end_time){
                                                 echo "已过期";
                                             }
                                         }

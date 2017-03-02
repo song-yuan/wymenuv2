@@ -50,7 +50,7 @@
 .edit_del .edit{
     margin-right:10px;
 }
- .active{
+ .show{
         display:block!important;
     }
 
@@ -84,132 +84,69 @@
                                 'enctype' => 'multipart/form-data'
                         ),
         )); ?>
-        <div class="col-md-12">
-        <div class="tabbable tabbable-custom">
-                <ul class="nav nav-tabs">
-                        <!--<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
-                        <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
-                        <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
-                        <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('fullSentPromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','满送优惠');?></a></li>
-                        <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('fullMinusPromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','满减优惠');?></a></li> 
-                        <li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
-                        <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('gift/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','礼品券');?></a></li>
-                        <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信卡券');?></a></li>-->
-                </ul>
-		
-                <div class="col-md-12">
+<div class="col-md-12">
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
-                <div class="portlet box purple">
-                        <div class="portlet-title">
-                                <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','系统券设置');?></div>
-                                <div class="actions">
-                                <!-- <p><input type="text" name="datetime" class="ui_timepicker" value=""></p> -->
-                                        <a href="<?php echo $this->createUrl('cupon/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加代金券');?></a>
-                                <!--	<div class="btn-group">
-                                                <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除代金券');?></button>
-                                        </div>-->
-                                </div>
-					
-					
-                        </div>
-                        <div class="portlet-body" id="table-manage">
-                        <!--	<table class="table table-striped table-bordered table-hover" id="sample_1">
-                                        <thead>
-                                                <tr>
-                                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-                                                        <th><?php echo yii::t('app','代金券名称');?></th>
-                                                        <th><?php echo yii::t('app','摘要');?></th>
-                                                        <th><?php echo yii::t('app','代金券金额');?></th>
-                                                        <th><?php echo yii::t('app','最低消费');?></th>
-                                                        <th><?php echo yii::t('app','兑换积分');?></th>
-                                                        <th><?php echo yii::t('app','生效开始日期');?></th>
-                                                        <th><?php echo yii::t('app','生效结束日期');?></th>
-                                                        <th><?php echo yii::t('app','是否有效');?></th>
-                                                        <th><?php echo yii::t('app','编辑');?></th>                                                                
-                                                        <th><?php echo yii::t('app','发放');?></th> 
-                                                        <th><?php echo yii::t('app','备注');?></th>
+    <div class="portlet box purple">
+            <div class="portlet-title">
+                    <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','系统券设置');?></div>
+                    <div class="actions">
+                            <a href="<?php echo $this->createUrl('cupon/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加代金券');?></a>   
+                    </div>		
+            </div>
+        <div class="portlet-body" id="table-manage">
+        
+        <div>
+              <?php if($models) :?>
+                 <?php foreach ($models as $model):?>
+                 <div class="cupon_list" >                                           
+                     <div class="cupon_item">
+                         <div class="money_type" >
+                             <span  class="money" >
+                             <?php echo floor($model->cupon_money);?>
+                             </span>
+                             <span class="type" >元代金券</span>
+                         </div>
+                         <div class="min_date">
+                             <div  class="min">满
+                                 <span>
+                                 <?php echo floor($model->min_consumer);?>
+                                 </span>
+                                 元可用
+                             </div>
+                             <div class="date">
+                                 限
+                                 <span>
+                                     <?php echo date('Y-m-d',strtotime($model->begin_time));?>
+                                 </span> 
+                                 至
+                                 <span>
+                                     <?php echo date('Y-m-d',strtotime($model->end_time));?>
+                                 </span>  
+                                 使用
+                             </div> 
+                         </div>
 
-                                                </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php if($models) :?>
+                     </div>
+                     <div class="edit_del" style="">
+                         <div class="btn-group edit" style="" >
+                             <a type="submit"  class="btn blue"  
+                                href="<?php echo $this->createUrl('cupon/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">
+                             <?php echo yii::t('app','编辑');?>
+                             </a>
+                         </div>
 
-
-                                        <?php foreach ($models as $model):?>
-                                                        <tr class="odd gradeX">
-                                                        <td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-                                                        <td><?php echo $model->cupon_title; ?></td>
-                                                        <td><?php echo $model->cupon_abstract;?></td>
-                                                        <td><?php echo $model->cupon_money;?></td>
-                                                        <td><?php echo $model->min_consumer;?></td>
-                                                        <td><?php echo $model->change_point;?></td>
-                                                        <td><?php echo $model->begin_time;?></td>
-                                                        <td><?php echo $model->end_time;?></td>
-                                                        <td><?php switch ($model->is_available){case 0:echo yii::t('app','有效');break;case 1:echo yii::t('app','无效');break;default:echo '';break;} ?></td>
-                                                        <td class="center">
-                                                        <a href="<?php echo $this->createUrl('cupon/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
-                                                        <td class="center">
-                                                        <a href="javascript:;" class="sent" data-id="<?php echo $model->lid ;?>"><?php echo yii::t('app','发放');?></a> </td> 
-                                                         <td><?php echo '';?></td>
-                                                        </tr>
-
-                                        <?php endforeach;?>	
-                                        <?php endif;?>
-                                        </tbody>
-
-                                </table>-->
-  <div>
-        <?php if($models) :?>
-           <?php foreach ($models as $model):?>
-           <div class="cupon_list" >                                           
-               <div class="cupon_item">
-                   <div class="money_type" >
-                       <span  class="money" >
-                       <?php echo floor($model->cupon_money);?>
-                       </span>
-                       <span class="type" >元代金券</span>
-                   </div>
-                   <div class="min_date">
-                       <div  class="min">满
-                           <span>
-                           <?php echo floor($model->min_consumer);?>
-                           </span>
-                           元可用
-                       </div>
-                       <div class="date">
-                           限
-                           <span>
-                               <?php echo date('Y-m-d',strtotime($model->begin_time));?>
-                           </span> 
-                           至
-                           <span>
-                               <?php echo date('Y-m-d',strtotime($model->end_time));?>
-                           </span>  
-                           使用
-                       </div> 
-                   </div>
-
-               </div>
-               <div class="edit_del" style="">
-                   <div class="btn-group edit" style="" >
-                       <a type="submit"  class="btn blue"  
-                          href="<?php echo $this->createUrl('cupon/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">
-                       <?php echo yii::t('app','编辑');?>
-                       </a>
-                   </div>
-                     
-                   <div class="btn-group" >
-                       <a type="submit"  class="btn red"
-                          href="<?php echo $this->createUrl('cupon/delete',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">
-                       <?php echo yii::t('app','删除');?>
-                       </a>
-                   </div>                                           
-               </div>
-           </div>                                   
-           <?php endforeach;?>	
-           <?php endif;?>
-      <div style="clear:both"></div>
-    </div>
+                         <div class="btn-group" >
+                             <a type="submit"  class="btn red"
+                                href="<?php echo $this->createUrl('cupon/delete',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">
+                             <?php echo yii::t('app','删除');?>
+                             </a>
+                         </div>                                           
+                     </div>
+                 </div>                                   
+                 <?php endforeach;?>	
+                 <?php endif;?>
+            <div style="clear:both"></div>
+          </div>
                                        
  
 
@@ -246,26 +183,18 @@
 <?php endif;?>	
                                     
                       
-                           </div>
-                   </div>
+</div>
+</div>
                    <!-- END EXAMPLE TABLE PORTLET-->
-           </div>
+        
 
-        </div>
+   
 		<?php $this->endWidget(); ?>
 		</div>
 		
 </div>					<!-- END EXAMPLE TABLE PORTLET-->
 </div>
-<div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div id="ajax-modal" class="modal fade" tabindex="-1"  style="width:600px;">
-    </div>
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-        </div>
-    </div>
-</div>			
+		
  <script type="text/javascript">
 $(document).ready(function(){
         $('#normalpromotion-form').submit(function(){
@@ -293,12 +222,12 @@ $(document).ready(function(){
             });
         });
 	$(".cupon_list").click( function () {
-            $(this).siblings().find(".edit_del").removeClass("active");
-            if($(this).find(".edit_del").hasClass("active"))
+            $(this).siblings().find(".edit_del").removeClass("show");
+            if($(this).find(".edit_del").hasClass("show"))
             {
-               $(this).find(".edit_del").removeClass("active"); 
+               $(this).find(".edit_del").removeClass("show"); 
             }else{
-              $(this).find(".edit_del").addClass("active");
+              $(this).find(".edit_del").addClass("show");
           }
         });    
             
