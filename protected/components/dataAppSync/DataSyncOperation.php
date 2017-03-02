@@ -22,7 +22,7 @@ class DataSyncOperation {
 	 * 获取pos设备信息
 	 *
 	 */
-	public static function getDataSyncPosInfor($code) {
+	public static function getDataSyncPosInfor($code,$mac) {
 		if($code){
 			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
@@ -31,9 +31,17 @@ class DataSyncOperation {
 				$dpid = $result['dpid'];
 				$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
 				$resDetail = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-				if($resDetail){
+				if($resDetail && $resDetail['content']!=$mac){
 					$msg = array('status'=>false,'msg'=>'该序列号已被使用');
 				}else{
+					if(!$resDetail){
+						$sql = 'select * from nb_pad_setting_detail where dpid='.$dpid.' and content="'.$mac.'" and delete_flag=0';
+						$resDetail = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+						if($resDetail){
+							$msg = array('status'=>false,'msg'=>'该收银机已绑定其他序列号');
+							return $msg;
+						}
+					}
 					$isSync = DataSync::getInitSync ();
 					$se = new Sequence ( "pad_setting_detail" );
 					$lid = $se->nextval ();
@@ -43,6 +51,7 @@ class DataSyncOperation {
 							'create_at' => date ( 'Y-m-d H:i:s', time () ),
 							'update_at' => date ( 'Y-m-d H:i:s', time () ),
 							'pad_setting_id' => $padSettingId,
+							'content' => $mac,
 							'is_sync' => $isSync
 					);
 					$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_detail', $data );
@@ -355,11 +364,7 @@ class DataSyncOperation {
 			if($table=='nb_local_company'){
 				$tableName = 'nb_company';
 			}
-			if($table=='nb_member_card'||$table=='nb_brand_user_level'){
-				$dpid = WxCompany::getDpids($dpid);
-			}else{
-				$dpid = $data['dpid'];
-			}
+			$dpid = $data['dpid'];
 			$sql = 'select * from '.$tableName.' where dpid in ('.$dpid.') and (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and is_sync<>0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
@@ -637,9 +642,12 @@ class DataSyncOperation {
 						'dpid' => $dpid,
 						'create_at' => $createAt,
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
-						'member_card_rfid' => $memberPoints->member_card_rfid,
-						'order_id' => $orderId,
+						'card_type' => 0,
+						'card_id' => $memberPoints->member_card_rfid,
+						'point_resource' => 0,
+						'resource_id' => $orderId,
 						'points' => $memberPoints->receive_points,
+						'remain_points' => $memberPoints->receive_points,
 						'is_sync' => $isSync
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
@@ -1103,7 +1111,6 @@ class DataSyncOperation {
 					$resObj = json_decode($result);
 					if($resObj->status){
 						self::delSyncFailure($lid,$dpid);
-						array_push($lidArr, $syncLid);
 					}
 				}
 			}
@@ -1182,6 +1189,26 @@ class DataSyncOperation {
 		return $msg;
 	}
 	/**
+	 *
+	 * 会员卡 信息
+	 *
+	 */
+	public static function getMemberCard($data) {
+		$dpid = $data ['dpid'];
+		$rfid = $data ['rfid'];
+		$type = $data ['type'];
+		
+		$dpid = WxCompany::getDpids($dpid);
+		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_member_card t left join nb_brand_user_level t1 on t.level_id=t1.lid and t.dpid=t1.dpid and t1.level_type=0 and t1.delete_flag=0 where t.dpid in (' . $dpid . ') and t.rfid="' . $rfid . '" and t.delete_flag=0';
+		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (!$result) {
+			$msg = array('status'=>false,'type'=>$type);
+		}else{
+			$msg = array('status'=>true,'data'=>$result,'type'=>$type);
+		}
+		return json_encode($msg);
+	}
+	/**
 	 * 
 	 * 会员卡余额
 	 * 
@@ -1191,7 +1218,7 @@ class DataSyncOperation {
 		$rfid = $data ['rfid'];
 		
 		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
+		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $result) {
 			return '0.00';
@@ -1529,6 +1556,70 @@ class DataSyncOperation {
 	public static function delSyncFailure($lid,$dpid) {
 		$sql = 'update nb_sync_failure set delete_flag=1 where lid='.$lid.' and dpid='.$dpid;
 		Yii::app ()->db->createCommand ( $sql )->execute ();
+	}
+	/**
+	 * 
+	 * 获取 微信会员信息
+	 * 
+	 */
+	public static function getUserInfo($data) {
+		$cardId = $data['card_id'];
+		$user = WxBrandUser::getFromCardId($cardId);
+		if($user){
+			$cupon = WxCupon::getUserNotUseCupon($user['lid'],$user['dpid']);
+			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
+			$msg = array('status'=>true,'user'=>$user,'cupon'=>$cupon,'points'=>$point);
+		}else{
+			$msg = array('status'=>false);
+		}
+		return json_encode($msg);
+	}
+	/**
+	 *
+	 * 获取 微信会员信息
+	 *
+	 */
+	public static function dealWxHykPay($data) {
+		$cardId = $data['card_id'];
+		$cupons = isset($data['cupon'])?$data['cupon']:array();
+		$yue = $data['yue'];
+		$points = $data['points'];
+		$user = WxBrandUser::getFromCardId($cardId);
+		if($user){
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				if(!empty($cupons)){
+					foreach ($cupons as $cupon){
+						$res = WxCupon::dealCupon($cupon['dpid'], $cupon['cupon_id'], 2);
+						if(!$res){
+							throw new Exception('代金券核销失败');
+						}
+					}
+				}
+				if($yue!=0){
+					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], -$yue);
+					if(!$res){
+						throw new Exception('储值支付失败');
+					}
+				}
+				if($points!='0-0'){
+					$pointArr = split('-', $points);
+					$res = WxPoints::dealPoints($user['lid'], $user['dpid'],$pointArr[1]);
+					if(!$res){
+						throw new Exception('积分支付失败');
+					}
+				}
+				$transaction->commit();
+				$msg = array('status'=>true);
+			}catch (Exception $e) {
+				$message = $e->getMessage();
+				$transaction->rollback();
+				$msg = array('status'=>false,'msg'=>$message);
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'不存在该会员信息');
+		}
+		return json_encode($msg);
 	}
 }
 

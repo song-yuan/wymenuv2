@@ -36,7 +36,8 @@ public function actionGetServerTime(){
  */
 public function actionGetSyncPosInfo(){
 	$code = Yii::app()->request->getParam('code',0);
-	$posinfo = DataSyncOperation::getDataSyncPosInfor($code);
+	$mac = Yii::app()->request->getParam('mac','');
+	$posinfo = DataSyncOperation::getDataSyncPosInfor($code,$mac);
 	echo json_encode($posinfo);exit;
 }
 /**
@@ -174,6 +175,15 @@ public function actionAddMemberCard(){
  	echo $result;exit;
 }
 /**
+ *
+ * 获取会员卡 信息
+ *
+ */
+public function actionGetMemberCard(){
+	$result = DataSyncOperation::getMemberCard($_POST);
+	echo $result;exit;
+}
+/**
  * 
  * 获取会员卡余额
  * 
@@ -229,5 +239,22 @@ public function actionDoubleScreen(){
  	$result = DataSyncOperation::getDoubleScreen($dpid);
  	echo $result;exit;
 }
-
+/**
+ *
+ *获取微信会员信息
+ *
+ */
+public function actionGetUserInfo(){
+	$result = DataSyncOperation::getUserInfo($_POST);
+	echo $result;exit;
+}
+/**
+ * 
+ * 微信会员卡提交
+ * 
+ */
+public function actionDealWxHykPay(){
+	$result = DataSyncOperation::dealWxHykPay($_POST);
+	echo $result;exit;
+}
 }

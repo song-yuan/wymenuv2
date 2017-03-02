@@ -47,11 +47,11 @@ class WxBrandUser {
 		return $brandUser;
 	}
 	/**
-	 * 通过openid查找用户
+	 * 通过card_id查找用户
 	 * 
 	 */
 	public static function getFromCardId($cardId) {
-		$sql = 'select * from nb_brand_user where card_id = "'.$cardId.'"';
+		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_brand_user t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t1.level_type=1 and t1.delete_flag=0 where t.card_id = "'.$cardId.'"';
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUser;
 	}
@@ -97,7 +97,7 @@ class WxBrandUser {
 	 * 
 	 */
 	public static function getHistoryPoints($userId,$dpid) {
-		$sql = 'select sum(point_num) as total from nb_point_record where brand_user_lid = '.$userId.' and dpid='.$dpid;
+		$sql = 'select sum(point_num) as total from nb_member_points where card_type=1 and card_id = '.$userId.' and dpid='.$dpid;
 		$points = Yii::app()->db->createCommand($sql)->queryRow();
 		return $points['total']?$points['total']:0;
 	}
@@ -108,7 +108,7 @@ class WxBrandUser {
 	 */
 	public static function getAvaliablePoints($userId,$dpid) {
 		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select sum(point_num) as total from nb_point_record where brand_user_lid = '.$userId.' and dpid='.$dpid.' and end_time > "'.$now.'"';
+		$sql = 'select sum(point_num) as total from nb_member_points where card_type=1 and card_id = '.$userId.' and dpid='.$dpid.' and end_time > "'.$now.'"';
 		$points = Yii::app()->db->createCommand($sql)->queryRow();
 		return $points['total']?$points['total']:0;
 	}
@@ -126,6 +126,11 @@ class WxBrandUser {
 				        	'is_sync'=>DataSync::getInitSync(),
 							);
 		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));
+		return $result;
+	}
+	public static function dealYue($userId,$dpid,$money){
+		$sql = 'update nb_brand_user set remain_money = remain_money+'.$money.' where lid='.$userId.' and dpid='.$dpid;
+		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
 }
