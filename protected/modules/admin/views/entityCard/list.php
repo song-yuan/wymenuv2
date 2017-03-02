@@ -1,30 +1,19 @@
 <style>
-     .page-content .page-breadcrumb.breadcrumb {
-        margin-top: 0px;
-        margin-bottom: 20px;
-    }
-    .portlet.box.purple {
-    border: 1px solid #CFCFCF;
-   
-    
-}
-
-.panel_body{
-    margin-top: 30px;
-    
+ .portlet-body {
+margin-top: 30px;
 }
 
 .col-xs-6,col-sm-3{
  text-align: center;
-    margin-bottom: 55px;
-  
+ margin-bottom: 50px;
 }
+
 .col-xs-6 a,col-sm-3 a,
 .col-xs-6 a:hover,col-sm-3 a:hover,
 .col-xs-6 a:visited,col-sm-3 a:visited
 {
     text-decoration: none;
- 
+   
     display:block;
     
 }
@@ -34,12 +23,13 @@
     color:#3385ff;
     
 }
-.col-xs-6 .list_text,col-sm-3 .list_text {
+.col-xs-6 .list_text,col-sm-3 .list_text{
     color:black; 
     font-size: 25px;
     margin-top: 10px;
 }
 
+  
   
 </style>
 
@@ -65,22 +55,6 @@
                                             <div class="list_text">卡查询</div>
                                 </a> 
                              </div>
-                          </div>
-                            <div class="row">
-                             <div class="col-xs-6 col-sm-3">
-                                  <a href="#">
-                                            <div class="fa fa-heart-o   list_picture"></div>
-                                            <div class="list_text">生日关怀</div>
-                                        </a> 
-                             </div>
-                             <div class="col-xs-6 col-sm-3">
-                                  <a href="#">
-                                            <div class="fa fa-th-large list_picture"></div>
-                                            <div class="list_text">卡魔方</div>
-                                        </a> 
-                             </div>
-                          </div>
-                            <div class="row">
                              <div class="col-xs-6 col-sm-3">
                                 <a href="<?php echo $this->createUrl('entityCard/recharge',array('companyId'=>$this->companyId));?>">
                                             <div class="fa fa-rmb list_picture"></div>
@@ -93,6 +67,20 @@
                                             <div class="list_text">清零</div>
                                         </a> 
                              </div>
+                             <div class="col-xs-6 col-sm-3">
+                                  <a href="#">
+                                            <div class="fa fa-heart-o   list_picture"></div>
+                                            <div class="list_text">生日关怀</div>
+                                        </a> 
+                             </div>
+                             <div class="col-xs-6 col-sm-3">
+                                  <a href="<?php echo $this->createUrl('member/index',array('companyId'=>$this->companyId));?>">
+                                            <div class="fa fa-th-large list_picture"></div>
+                                            <div class="list_text">卡魔方</div>
+                                        </a> 
+                             </div>
+                        
+                            
                           </div>
                               
                          </div>        

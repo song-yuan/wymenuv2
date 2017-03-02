@@ -23,51 +23,20 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员中心'),'subhead'=>yii::t('app','传统卡会员列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','传统卡会员'),'url'=>$this->createUrl('member/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','传统卡会员'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('member/list' , array('companyId' => $this->companyId,'type'=>1)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','实体卡'),'url'=>$this->createUrl('entityCard/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','卡魔方'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('entityCard/list' , array('companyId' => $this->companyId)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
-	<div class="row">
-		<div class="col-md-12">
-		<?php $form=$this->beginWidget('CActiveForm', array(
-					'id'=>'MemberCard',
-					'clientOptions'=>array(
-						'validateOnSubmit'=>true,
-					),
-					'htmlOptions'=>array(
-						'class'=>'form-inline pull-right'
-					),
-				)); ?>
-			<table id="search-form" class="table">
-				<tr>
-					<td width="15%"><label class="control-label">按卡号查找</label></td>
-					<td width="35%">
-					<div class="input-group">
-					<span class="input-group-addon">会员卡号</span><input type="text" name="id" class="form-control input-medium" value="<?php echo isset($id) && $id ?$id:'';?>"/>
-					</div>
-					</td>
-					<td width="15%">
-					</td>
-					<td width="35%">
-					   <button type="submit" class="btn green">
-							查找 &nbsp; 
-							<i class="m-icon-swapright m-icon-white"></i>
-						</button>
-					</td>
-				</tr>
-			</table>
-		<?php $this->endWidget(); ?>
-		</div>
-	</div>
+
 	<div class="row">
 		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','传统卡会员列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员列表');?></div>
 					<div class="actions">
 					<?php if(Yii::app()->user->role<9):?>
-						<a href="javascript:;" class="btn green add_btn"><i class="fa fa-plus"></i> <?php echo yii::t('app','充 值');?></a>
+						
 						<a href="<?php echo $this->createUrl('member/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添 加');?></a>
 					<?php endif;?>
 					</div>
