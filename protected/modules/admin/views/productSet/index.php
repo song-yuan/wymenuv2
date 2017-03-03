@@ -69,6 +69,7 @@
                                 <th><?php echo yii::t('app','套餐会员价');?></th>
                                 <!-- <th><?php echo yii::t('app','下单数');?></th>
 								<th><?php echo yii::t('app','点赞数');?></th> -->
+								<th><?php echo yii::t('app','售卖限制');?></th>
 								<th><?php echo yii::t('app','来源');?></th>
 								<th>&nbsp;</th>
                                 <th>&nbsp;</th>
@@ -85,6 +86,7 @@
                                 <td><?php echo $model->member_price;?></td>
 								<!-- <td ><?php echo $model->order_number ;?></td>
 								<td><?php echo $model->favourite_number;?></td> -->
+								<td><?php if($model->is_show)echo '都可售';else echo '活动可售';?></td>
 								<td><?php switch ($model->source){case 0: echo yii::t('app','自建');break;case 1: echo yii::t('app','总部下发');break;default: echo '';break;}?></td>
 								<td class="center">
 									<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source, 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
