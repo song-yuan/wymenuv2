@@ -129,7 +129,7 @@ class ProductPrinterway extends CActiveRecord
         public static function saveProductPrinterway($dpid,$productId,$printerwayIds=array()){
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-			$sql = 'delete from nb_product_printerway where dpid=:dpid and product_id=:productId';
+			$sql = 'update nb_product_printerway set delete_flag="1",update_at ="'.date("Y-m-d H:i:s",time()).'" where dpid=:dpid and product_id=:productId';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':dpid',$dpid);
 			$conn->bindValue(':productId',$productId);

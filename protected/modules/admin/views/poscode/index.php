@@ -44,17 +44,9 @@
 					<div class="actions">
 						<!--<a href="#" class="btn green" id="bindPadId"><i class="fa fa-android"></i> <?php echo yii::t('app','绑定设备识别');?></a>-->
 						<a href="<?php echo $this->createUrl('poscode/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<!-- <div class="btn-group">
-							<a class="btn green" href="#" data-toggle="dropdown">
-							<i class="fa fa-cogs"></i> Tools
-							<i class="fa fa-angle-down"></i>
-							</a>
-							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
-							</ul>
-						</div> -->
-                                                <div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+						
+                        <div class="btn-group">
+							<!-- <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button> -->
 						</div>
 					</div>
 				</div>
