@@ -47,12 +47,12 @@ class ProductSet extends CActiveRecord
 			array('set_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
-			array('type', 'length', 'max'=>2),
+			array('type, is_show', 'length', 'max'=>2),
 			array('is_member_discount, is_special, is_discount, status, delete_flag', 'length', 'max'=>1),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, set_name, type, simple_code, main_picture, set_price, member_price, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, set_name, type, simple_code, main_picture, set_price, member_price, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
 
 		);
 	}
@@ -95,6 +95,7 @@ class ProductSet extends CActiveRecord
             'store_number' =>yii::t('app', '库存数量'),
 			'order_number' => yii::t('app','总下单次数'),
 			'favourite_number' => yii::t('app','总点赞次数'),
+			'is_show' => yii::t('app','是否只在活动中售卖'),
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => yii::t('app','是否同步'),
 		);
@@ -137,6 +138,7 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('order_number',$this->order_number);
         $criteria->compare('store_number',$this->store_number);
 		$criteria->compare('favourite_number',$this->favourite_number);
+		$criteria->compare('is_show',$this->is_show);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
