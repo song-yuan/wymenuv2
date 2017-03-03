@@ -34,7 +34,7 @@ return array(
                         //'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
                         // uncomment the following lines to use a MySQL database
                         //'connectionString' => 'mysql:host=52.68.233.6;dbname=nb_wymenu',
-                        //'connectionString' => 'mysql:host=120.27.29.4;dbname=nb_wymenu',
+                        //'connectionString' => 'mysql:host=120.27.29.4;dbname=nb_wymenu_customer',
                         'connectionString' => 'mysql:host=121.42.12.97;dbname=nb_wymenu',
                         //'connectionString' => 'mysql:host=192.168.1.37;dbname=nb_wymenu',
                         'emulatePrepare' => true,
@@ -77,7 +77,8 @@ return array(
                 ),
                 //memcache的定义
                 'memcache'=>array(
-                    'server'=>'121.42.12.97',
+                    //'server'=>'120.27.29.4',
+                	'server'=>'121.42.12.97',
                     'port'=>11211,
                 ),
 );

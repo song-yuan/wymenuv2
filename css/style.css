@@ -488,7 +488,8 @@ Page container
 }
 
 .page-header-fixed .page-container {
-  margin-top: 42px;  
+  margin-top: 42px; 
+  background-color: #fff;
 }
 
 /***
@@ -536,8 +537,8 @@ Page sidebar
   border: 0px;
   padding: 10px 15px;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .page-sidebar-fixed .page-sidebar-menu > li > a {
@@ -552,7 +553,9 @@ Page sidebar
   margin-right: 5px;
   text-shadow:none; 
 }
-
+.page-sidebar-menu > li > a span {
+    font-size: 15px; 
+}
 .page-sidebar-menu > li.break {
   margin-bottom: 20px;
 }
@@ -936,7 +939,7 @@ Page content
 }
 
 .ie8 .page-content { 
-    padding: 20px;
+    padding: 28px 20px 20px 20px;
     margin-left: 225px; 
     margin-top: 0px;
     min-height: 760px;
@@ -991,10 +994,11 @@ Page breadcrumb
   box-shadow: none;
   padding-right: 30px;
   padding-left: 8px;
-  margin-top: 15px;
-  margin-bottom: 25px;
+  margin-top: 0px;
+  margin-bottom: 20px;
   border:0px !important;  
   background-color: #eee;
+  font-size:15px;
 }
 
 .page-content .page-breadcrumb.breadcrumb > li > a, 
@@ -1424,7 +1428,7 @@ Portlets
 }
 
 .portlet > .portlet-body.purple, .portlet.purple {
-  background-color: #852b99 !important;
+  /*background-color: #852b99 !important;*/
 }
 
 .portlet > .portlet-body.light-grey, .portlet.light-grey {
@@ -1564,6 +1568,8 @@ Box portlet
 .portlet.box > .portlet-body {
   background-color: #fff;
   padding: 10px;
+  min-height: 550px;
+  
 }
 
 .portlet.box > .portlet-title {  
@@ -1607,12 +1613,11 @@ Box portlet
 }
 
 .portlet.box.purple > .portlet-title {
-  background-color: #852b99;
+  background-color: #7D9EC0;
 } 
 
 .portlet.box.purple {  
-   border: 1px solid #af5cc1;
-   border-top: 0;
+   border: 1px solid #CFCFCF;
 }
 
 .portlet.box.grey > .portlet-title {

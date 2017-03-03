@@ -184,7 +184,7 @@ Up To Medium Devices
  	}
 
  	.page-sidebar.navbar-collapse {
-  		max-height: 340px;
+  		max-height: 420px;
   	}
 
  	.page-sidebar.navbar-collapse.collapse {
@@ -391,7 +391,7 @@ Extra Small Devices Only
 	***/
 	.page-content {
 		padding: 20px 10px 10px 10px !important;
-		overflow: hidden;
+		/*overflow: hidden;*/
 	}
 
 	/***

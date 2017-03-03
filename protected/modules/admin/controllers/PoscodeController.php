@@ -13,10 +13,11 @@ class PoscodeController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->with = 'detail';
 		$criteria->condition = 't.dpid='.$this->companyId.' and t.delete_flag=0';
-		
+		$criteria->group = 't.lid';
 		$pages = new CPagination(PadSetting::model()->count($criteria));
 		$pages->applyLimit($criteria);
 		$models = PadSetting::model()->findAll($criteria);
+
 		$this->render('index',array(
 			'models'=>$models,
 			'pages'=>$pages,

@@ -1,4 +1,3 @@
-
 <style>
 		span.tab{
 			color: black;
@@ -17,8 +16,7 @@
 			margin-top:20px;
 			margin-left:20px;
 			border-radius:5px !important;
-			border:2px solid black;
-			box-shadow: 5px 5px 5px #888888;
+		
 			vertical-align:middle;
 		}
 		.ku-item-info{
@@ -28,7 +26,11 @@
 			text-align:center;
 		}
 		.ku-purple{
-			background-color:#852b99;
+			
+                /*   background-color:#EE9572;
+                   background-color:#DB7093;
+                 background-color:#8FBC8F;
+                 background-color:#7D9EC0;*/
 		}
 		.ku-grey{
 			background-color:rgb(68,111,120);
@@ -255,15 +257,15 @@
 	
 	<!-- BEGIN PAGE CONTENT-->
 	<?php if($type==0):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','菜品设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>''))));?>
 	<?php elseif($type==1):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','餐桌设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>''))));?>
 	<?php elseif($type==2):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','打印设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>''))));?>
 	<?php elseif($type==3):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','收银设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','收银设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','收银设置'),'url'=>''))));?>
 	<?php elseif($type==4):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','配方设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','配方设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','配方设置'),'url'=>''))));?>
 	<?php endif;?>
 	<div class="row">
 		<div class="col-md-12">

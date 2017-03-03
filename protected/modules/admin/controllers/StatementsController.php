@@ -64,17 +64,12 @@ class StatementsController extends BackendController
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 		}
 		
-		//$criteria->order = 't.update_at asc,t.dpid asc';
-
 		$pages = new CPagination(OrderProduct::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = OrderProduct::model()->findAll($criteria);
 		//var_dump($models);exit();
 		$comName = $this->getComName();
-		//$a=array_keys($comName);
-		//var_dump($a);exit;
-        // var_dump($comName);exit;       
 
 
 		$this->render('productsalesReport',array(
@@ -179,8 +174,6 @@ class StatementsController extends BackendController
 		$comName = $this->getComName();
 		$db = Yii::app()->db;
 		
-		//$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.update_at asc';
-		//var_dump($sql);exit;
 			if ($text==1) {
 				if($str){
 				//var_dump($text);exit;
@@ -238,10 +231,7 @@ class StatementsController extends BackendController
 				'end_time'=>$end_time,
 				'text'=>$text,
 				'str'=>$str,
-				//'catname'=>$Catname,
 				'comName'=>$comName,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	
@@ -339,9 +329,6 @@ class StatementsController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		//$models = Yii::app()->db->createCommand($sql)->queryAll();
-		//var_dump($models);exit;
-		//$comName = $this->getComName();
 	
 		$this->render('incomeReport',array(
 		'models'=>$models,
@@ -353,8 +340,6 @@ class StatementsController extends BackendController
 		'setid'=>$setid,
 		//'catname'=>$Catname,
 		'comName'=>$comName,
-		//'categories'=>$categories,
-		//'categoryId'=>$categoryId
 		));
 	}
 	
@@ -561,11 +546,6 @@ public function actionPayallReport(){
 			$criteria->addCondition("month(t.create_at) ='$m_all'");
 			$criteria->addCondition("day(t.create_at) ='$d_all'");
 		}
-// 		if($type==3){
-// 			$criteria->addCondition("t.paytype =3 and t.payment_method_id ='$num'");
-// 		}else{
-// 			$criteria->addCondition("t.paytype ='$num'");
-// 		}
 		$model = Order::model()->findAll($criteria);
 		$price = '';
 		//var_dump($model);exit;
@@ -670,11 +650,6 @@ public function actionPayallReport(){
 			$sql = 'select k.* from(select t1.selfcode,t1.name,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
 			//var_dump($sql);exit;
 		}
-		//传统卡充值
-		//$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
-		//$money = Yii::app()->db->createCommand($sql)->queryRow();
-		//var_dump($models);exit;
-		//var_dump($money);exit;
 		if($text==2){
 			$sql = 'select k.* from(select t1.card_id,t1.user_name,t.recharge_money,t.cashback_num from nb_recharge_record t left join nb_brand_user t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid ) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
 			//var_dump($sql);exit;
@@ -689,9 +664,6 @@ public function actionPayallReport(){
 			$recharge = Yii::app()->db->createCommand($sql)->queryRow();
 		
 		}
-		//微信会员卡充值
-		//$sql = 'select sum(t.recharge_money) as all_recharge,sum(t.cashback_num) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
-		//$recharge = Yii::app()->db->createCommand($sql)->queryRow();
 	
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -711,8 +683,6 @@ public function actionPayallReport(){
 				'moneys'=>$money,
 				'recharge'=>$recharge,
 				'text'=>$text,
-							//'categories'=>$categories,
-							//'categoryId'=>$categoryId
 		));
 	}
 	/*
@@ -729,11 +699,6 @@ public function actionPayallReport(){
 			$sql = 'select k.* from nb_member_card k where k.delete_flag = 0 and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" and k.dpid in('.$this->companyId.')';
 			//var_dump($sql);exit;
 		}
-		//传统卡充值
-		//$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
-		//$money = Yii::app()->db->createCommand($sql)->queryRow();
-		//var_dump($models);exit;
-		//var_dump($money);exit;
 		if($text==2){
 			$sql = 'select k.* from nb_brand_user k where k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" and k.dpid in('.$this->companyId.') ';
 			//var_dump($sql);exit;
@@ -748,9 +713,6 @@ public function actionPayallReport(){
 			$branduser = Yii::app()->db->createCommand($sql)->queryRow();
 	
 		}
-		//微信会员卡充值
-		//$sql = 'select sum(t.recharge_money) as all_recharge,sum(t.cashback_num) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
-		//$recharge = Yii::app()->db->createCommand($sql)->queryRow();
 	
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -759,9 +721,6 @@ public function actionPayallReport(){
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-	
-	
-		//var_dump($model);exit;
 		$this->render('membercard',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -770,8 +729,6 @@ public function actionPayallReport(){
 				'membercard'=>$membercard,
 				'branduser'=>$branduser,
 				'text'=>$text,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	//var sql = '';
@@ -795,22 +752,11 @@ public function actionPayallReport(){
 		
 		
 		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where  order_id in('.$ords.') and paytype !=11 and dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
-		//$sql = 'select k.pay_amount from(select DATEADD(hh,DATEDIFF(hh,0,create_at),0) [Hour],sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by DATEDIFF(hh,0,create_at)) k';
-
-
-		//$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-		//echo($sql);exit;
-		//$pages = new CPagination($count);
-		//$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-		//$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-		//$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $db->createCommand($sql)->queryAll();
 		
 		$timeprice = array();
 		$timesum = array();
 		$hour = array();
-		//DATEADD(hh,DATEDIFF(hh,0,Date),0) [Hour];
-		//$sql1 = 'select k.pay_amount from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all) k';
 		for ($i =0;$i<24;$i++){
 			$timeprice[$i]='0';
 			$timesum[$i]='0';
@@ -845,10 +791,6 @@ public function actionPayallReport(){
 				'timesum'=>$timesum,
 				'hour'=>$hour,
 				'maxp'=>$maxp,
-				'maxs'=>$maxs,
-				//'money'=>$money,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}                       
 	/*
@@ -991,11 +933,6 @@ public function actionPayallReport(){
 	
 		$db = Yii::app()->db;
 		$sql = 'select k.* from(select t1.create_at as ordertime,t1.should_total,t1.reality_total,t1.username,sum(t.pay_amount) as pay_all,t.* from nb_order_pay t left join nb_order t1 on(t.dpid = t1.dpid and t1.lid = t.order_id) where t.paytype != 11 and t.pay_amount <0 and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'" and t.dpid in('.$str.') group by t.order_id)k';
-		//$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.account_no,t2.username,t2.retreat_amount,t3.name,t2.retreat_memo,t.create_at,t.amount,t.price,t.update_at,t.is_retreat,t.order_id,t.set_id,t.product_name from nb_order_product t left join nb_order t1 on(t.dpid = t1.dpid and t1.lid = t.order_id ) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t2.order_detail_id = t.lid and t2.delete_flag = 0) left join nb_retreat t3 on(t.dpid = t3.dpid and t3.lid = t2.retreat_id and t3.delete_flag = 0) left join nb_product t4 on(t.dpid = t4.dpid and t.product_id = t4.lid and t4.delete_flag = 0) where t.delete_flag = 0 and t.set_id = 0 and t.is_retreat = 1 and t.product_order_status in(1,2) and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'" and t.dpid in('.$this->companyId.')
-		//		union select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.account_no,t2.username,t2.retreat_amount,t3.name,t2.retreat_memo,t.create_at,t.amount,sum(t.price*t.amount*t2.retreat_amount/t.zhiamount) as price,t.update_at,t.is_retreat,t.order_id,t.set_id,t4.set_name as product_name from nb_order_product t left join nb_order t1 on(t.dpid = t1.dpid and t1.lid = t.order_id ) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t2.order_detail_id = t.lid and t2.delete_flag = 0) left join nb_retreat t3 on(t.dpid = t3.dpid and t3.lid = t2.retreat_id and t3.delete_flag = 0) left join nb_product_set t4 on(t.dpid = t4.dpid and t.set_id = t4.lid and t4.delete_flag = 0) where t.delete_flag = 0 and t.set_id > 0 and t.is_retreat = 1 and t.product_order_status in(1,2) and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'" and t.dpid in('.$this->companyId.') group by t.order_id,t.set_id
-		//		) k where 1 order by k.create_at';
-		//$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.account_no,t2.username,t2.retreat_amount,t3.name,t2.retreat_memo,t4.product_name as product_name_p,t.* from nb_order_product t left join nb_order t1 on(t.dpid= t1.dpid and t1.lid = t.order_id ) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t2.order_detail_id = t.lid and t2.delete_flag = 0) left join nb_retreat t3 on(t.dpid = t3.dpid and t3.lid = t2.retreat_id and t3.delete_flag = 0) left join nb_product t4 on(t.dpid = t4.dpid and t.product_id = t4.lid and t4.delete_flag = 0)  where t.delete_flag = 0 and t.is_retreat = 1 and t.product_order_status in(1,2) and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'" and t.dpid in('.$this->companyId.')) k';
-		//echo $sql;exit;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
@@ -1015,9 +952,6 @@ public function actionPayallReport(){
 				'text'=>$text,
 				'str'=>$str,
 				'comName'=>$comName,
-				//'money'=>$money,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	public function actionRetreatdetailReport2(){
@@ -1052,9 +986,6 @@ public function actionPayallReport(){
 				'text'=>$text,
 				'str'=>$str,
 				'comName'=>$comName,
-				//'money'=>$money,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	/*
@@ -1092,9 +1023,6 @@ public function actionPayallReport(){
 				'str'=>$str,
 				'comName'=>$comName,
 				'allmoney'=>$allmoney,
-				//'money'=>$money,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	/*
@@ -1220,10 +1148,6 @@ public function actionPayallReport(){
 		$models = OrderProduct::model()->findAll($criteria);
 		//var_dump($models);exit();
 		$comName = $this->getComName();
-		//$a=array_keys($comName);
-		//var_dump($a);exit;
-		 //var_dump($comName);
-		 //exit;
 	
 		$this->render('ceshiproductReport',array(
 				'models'=>$models,
@@ -1425,10 +1349,6 @@ public function actionPayallReport(){
 		$receive = Yii::app()->db->createCommand($sql)->queryRow();
 		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" and is_used=2';
 		$used = Yii::app()->db->createCommand($sql)->queryRow();
-		//echo $read;
-		//echo $receive;
-		//echo $used;exit;
-		//var_dump($receive);exit;
 		
 		//$model = Yii::app()->db->createCommand($sql)->queryRow();
 		$comName = $this->getComName();
@@ -1573,11 +1493,6 @@ public function actionPayallReport(){
 		$criteria->group = 't.account_no,t.order_status' ;
 		$criteria->order = 't.lid ASC' ;
 		$criteria->distinct = TRUE;
-	
-		//$categoryId = Yii::app()->request->getParam('cid',0);
-	
-	
-	
 		$pages = new CPagination(Order::model()->count($criteria));
 		//$pages->PageSize = 10;
 		$pages->applyLimit($criteria);
@@ -1755,11 +1670,6 @@ public function actionPayallReport(){
 			$sitetype = $site['serial'];
 			$retsite=$sitelevel.":".$sitename.":".$sitetype;
 		}
-		//if($siteId && $dpid){
-		//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
-		//$conn = Yii::app()->db->createCommand($sql);
-	
-		//}
 		return $retsite;
 	}
 
@@ -1874,13 +1784,6 @@ public function actionPayallReport(){
  		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
 	}
 	
-
-/*	private function getCategoryList(){
-		$categories = user::model()->findAll('delete_flag=0 ' , array(':companyId' => $this->companyId)) ;
-		//var_dump($categories);exit;
-		return CHtml::listData($categories, 'lid', 'username');
-	}
-*/
 	public function getPaymentName($paymentMethodId){
 		$name='';
 		$sql = 'select t.name from nb_payment_method t where t.delete_flag = 0 and t.lid='.$paymentMethodId;
@@ -1943,47 +1846,18 @@ public function actionPayallReport(){
 		$sql = 'select t.lid,t.dpid,t.name from nb_payment_method t where t.delete_flag = 0 and t.dpid ='.$dpid;
 		$connect = Yii::app()->db->createCommand($sql);
 		$models = $connect->queryAll();
-// 		$optionsReturn = array();
-// 		if($models) {
-// 			foreach ($models as $model) {
-// 				$optionsReturn[$model['lid']] = $model['name'];
-// 			}
-// 		}
 		return $models;
 	}
  		public function getCatName($CategoryId){
 		$Catname = "";
 		$sql = 'select t.lid,t.category_name from nb_product_category t where t.lid='.$CategoryId;
-		//$sql = 'select t.site_id, t.dpid, t1.site_level, t1.type_id, t1.serial, t2.name from nb_order t, nb_site t1, nb_site_type t2 where t.site_id = t1.lid and t.dpid = t1.dpid and t1.type_id = t2.lid and t.dpid = t2.dpid and t.lid ='. $orderId;
-		//$conn = Yii::app()->db->createCommand($sql);
-		//$result = $conn->queryRow();
-		//$siteId = $result['lid'];
  		$connect = Yii::app()->db->createCommand($sql);
- 	//	$connect->bindValue(':site_id',$siteId);
- 	//	$connect->bindValue(':dpid',$dpid);
  		$model = $connect->queryRow();
  		if($model['category_name']){
  			$Catname = $model['category_name'];
  		}
-        
- 		/*if($site['site_id'] && $site['dpid'] ){
-		//	echo 'ABC';
-                    $sitelevel = $site['site_level'];
-                    $sitename = $site['name'];
-                    $sitetype = $site['serial'];
-                    $retsite=$sitelevel.":".$sitename.":".$sitetype;
-		}*/
-		//if($siteId && $dpid){
-			//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
-			//$conn = Yii::app()->db->createCommand($sql);
-
-	      //}
 		return $Catname;
 	}
-// 	private function getDepartments(){
-// 		$departments = Department::model()->findAll('company_id=:companyId',array(':companyId'=>$this->companyId)) ;
-// 		return CHtml::listData($departments, 'department_id', 'name');
-// 	}
 	
 
 	public function getOrderDetails($orderId){
@@ -2011,11 +1885,7 @@ public function actionPayallReport(){
 		$text = Yii::app()->request->getParam('text');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//$catId = Yii::app()->request->getParam('cid',0);
-		//var_dump($catId);exit;
 		$criteria = new CDbCriteria;
-		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.dpid,t.product_id,t1.lid,t1.product_name,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total from nb_order_product t left join nb_product t1 on(t1.lid = t.product_id and t.dpid = t1.dpid ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=1 group by t.product_id,t.amount,is_retreat,month(t.create_at)';
-		//var_dump($sql);exit;
 		$criteria->select ='year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.update_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount) as all_price';
 		$criteria->with = array('company','product');
 
@@ -2130,10 +2000,8 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
 		//单元格加粗，居中：
-		
 		// 将A1单元格设置为加粗，居中
 		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-		
 		//加粗字体
 		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
 		//设置字体垂直居中
@@ -2153,9 +2021,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-		
-		
-		
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="产品销售报表.xls";
@@ -2614,13 +2479,7 @@ public function actionPayallReport(){
 				$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.update_at)';
 				$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 			}
-			//$criteria->order = 't.update_at asc';
-			//var_dump($criteria);exit;
 			$model = OrderPay::model()->findAll($criteria);
-			//print_r($model);exit;
-			
-			
-			
 			//设置第1行的行高
 			$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 			//设置第2行的行高
@@ -2835,21 +2694,6 @@ public function actionPayallReport(){
 						->setCellValue('E'.$j);
 				}
 				}
-				//单元格高度自适应
-				//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
-				//单元格换行
-				//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
-				//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-				//长度不够显示的时候换行
-				//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
-				//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-				//使用数组定义L列的样式
-				//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
-				//设置字体垂直居中
-				//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-				//设置字体水平居中
-				//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				//$objPHPExcel->getActiveSheet()->getStyle('J'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 				//设置填充颜色
 				$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 				$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
@@ -3024,25 +2868,6 @@ public function actionPayallReport(){
 						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
 				),
 		);
-		// 			//大边框样式 边框加粗
-		// 			$lineBORDER = array(
-		// 					'borders' => array(
-		// 							'outline' => array(
-		// 									'style' => PHPExcel_Style_Border::BORDER_THICK,
-		// 									'color' => array('argb' => '000000'),
-		// 							),
-		// 					),
-		// 			);
-		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
-		//细边框样式
-		// 			$linestyle = array(
-		// 					'borders' => array(
-		// 							'outline' => array(
-		// 									'style' => PHPExcel_Style_Border::BORDER_THIN,
-		// 									'color' => array('argb' => 'FF000000'),
-		// 							),
-		// 					),
-		// 			);
 			
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1',yii::t('app','产品分类营业额报表'))
@@ -3078,21 +2903,6 @@ public function actionPayallReport(){
 							->setCellValue('D'.$j,$v['all_price'])
 							->setCellValue('E'.$j);
 					}
-					//单元格高度自适应
-					//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
-					//单元格换行
-					//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
-					//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-					//长度不够显示的时候换行
-					//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
-					//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-					//使用数组定义L列的样式
-					//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
-					//设置字体垂直居中
-					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-					//设置字体水平居中
-					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-					//$objPHPExcel->getActiveSheet()->getStyle('A3'.$j.':E3'.$j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 					//设置填充颜色
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
@@ -3106,17 +2916,11 @@ public function actionPayallReport(){
 		}
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		//大边框样式引用
-		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
 		//合并单元格
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
-		//单元格加粗，居中：
-	
 		// 将A1单元格设置为加粗，居中
 		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-	
-	
 		//加粗字体
 		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFont()->setBold(true);
 		//设置字体垂直居中
@@ -3134,10 +2938,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(22);
-		//$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-	
-	
-	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="产品分类营业额报表.xls";
@@ -3176,10 +2976,6 @@ public function actionPayallReport(){
 		foreach ($orders as $order){
 			$ords = $ords .','.$order['lid'];
 		}
-		//$criteria->addCondition('t.lid in('.$ords.')');
-		
-		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.lid,t.dpid,t.create_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.create_at asc';
-		//var_dump($sql);exit;
 		if ($text==1) {
 			if($str){
 				//var_dump($text);exit;
@@ -3326,21 +3122,6 @@ public function actionPayallReport(){
 				->setCellValue('E'.$j,$v['all_price']-$this->getRetreatPrice($begin_time,$end_time,$str,$text,$v['y_all'],$v['m_all'],$v['d_all'],$setid,$v['category_id']))
 				->setCellValue('F'.$j,$this->getRetreatPrice($begin_time,$end_time,$str,$text,$v['y_all'],$v['m_all'],$v['d_all'],$setid,$v['category_id']));
 			}
-			//单元格高度自适应
-			//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
-			//单元格换行
-			//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
-			//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-			//长度不够显示的时候换行
-			//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
-			//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-			//使用数组定义L列的样式
-			//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
-			//设置字体垂直居中
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			//设置字体水平居中
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			//$objPHPExcel->getActiveSheet()->getStyle('A3'.$j.':E3'.$j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			//设置填充颜色
 			$objPHPExcel->getActiveSheet()->getStyle('A2:F'.$j)->applyFromArray($linestyle);//细边框样式引用
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
@@ -3363,11 +3144,8 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
 		//单元格加粗，居中：
-	
 		// 将A1单元格设置为加粗，居中
 		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-	
-	
 		//加粗字体
 		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
 		//设置字体垂直居中
@@ -3384,16 +3162,12 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->getStartColor()->setARGB('FFB848');
 		//设置每列宽度
-		//设置每列宽度
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-	
-	
-	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="营业收入报表（产品分类）（".date('m-d H:i',time())."）.xls";
@@ -3419,8 +3193,6 @@ public function actionPayallReport(){
 		foreach ($orders as $order){
 			$ords = $ords .','.$order['lid'];
 		}
-		
-		
 		$criteria = new CDbCriteria;
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(*) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
 		$criteria->with = array('company','orderpay');
@@ -3464,9 +3236,6 @@ public function actionPayallReport(){
 	   	$payments = $this->getPayment($this->companyId);
 	   	$username = $this->getUsername($this->companyId);
 	    $comName = $this->getComName();
-			
-			
-			
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 		//设置第2行的行高
@@ -3618,32 +3387,11 @@ public function actionPayallReport(){
 					$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->applyFromArray($linestyle);
 					$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->applyFromArray($linestyle);
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':'.$letternext.$j)->applyFromArray($linestyle);
-					//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
-					//单元格高度自适应
-					//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
-					//单元格换行
-					//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
-					//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-					//长度不够显示的时候换行
-					//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
-					//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-					//使用数组定义L列的样式
-					//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
-					//设置字体垂直居中
-					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-					//设置字体水平居中
-					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-					//$objPHPExcel->getActiveSheet()->getStyle('J'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 					//设置填充颜色
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
 					//设置字体靠左、靠右
 					$objPHPExcel->getActiveSheet()->getStyle('B'.$j.':'.$letternext.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-						
-					//$objPHPExcel->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,PHPExcel_Cell_DataType::TYPE_NUMERIC);
-					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-					//$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-					//$objPHPExcel->getActiveSheet()->setCellValueExplicit("D".$j,PHPExcel_Cell_DataType::TYPE_NUMERIC);
 					//细边框样式引用
 					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
 					$j++;
@@ -3739,9 +3487,6 @@ public function actionPayallReport(){
 			//var_dump($criteria);exit;
 			$model = OrderPay::model()->findAll($criteria);
 			//print_r($model);exit;
-			
-			
-			
 			//设置第1行的行高
 			$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 			//设置第2行的行高
@@ -4210,8 +3955,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
 		
-		
-		
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="收款统计（支付方式）报表（".date('m-d',time())."）.xls";
@@ -4456,8 +4199,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
 	
-	
-	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="产品销售报表（".date('m-d',time())."）.xls";
@@ -4465,7 +4206,6 @@ public function actionPayallReport(){
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
 		$objWriter->save('php://output');
-	
 	
 	}
 	
@@ -4655,8 +4395,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
 	
-	
-	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="产品销售报表（".date('m月d日 H时i分',time())."）.xls";
@@ -4664,11 +4402,7 @@ public function actionPayallReport(){
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
 		$objWriter->save('php://output');
-	
-	
 	}
-	
-	
 	/*
 	 * 
 	 * 营业数据报表
@@ -4702,7 +4436,6 @@ public function actionPayallReport(){
 		}
 			//统计实付价格，客流、单数
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-		
 		
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -4850,9 +4583,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
-	
-	
-	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="营业数据报表（".date('m-d H:i',time())."）.xls";
@@ -4985,9 +4715,6 @@ public function actionPayallReport(){
 			//设置字体靠左
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$objPHPExcel->getActiveSheet()->getStyle('D'.$i.':I'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		//冻结窗格
@@ -5027,8 +4754,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
 	
-	
-	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="账单详情报表（".date('m月d日 H时i分',time())."）.xls";
@@ -5036,7 +4761,6 @@ public function actionPayallReport(){
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
 		$objWriter->save('php://output');
-	
 	
 	}
 
@@ -5200,9 +4924,6 @@ public function actionPayallReport(){
 			//设置字体靠左
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$objPHPExcel->getActiveSheet()->getStyle('D'.$i.':F'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		//冻结窗格
@@ -5237,8 +4958,6 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(12);
-	
-	
 	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -5368,11 +5087,7 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
 			//设置字体靠左
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i.':F'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-
-
-
 			$i++;
 		}
 		//冻结窗格
@@ -5541,9 +5256,6 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$objPHPExcel->getActiveSheet()->getStyle('F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i.':F'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		//冻结窗格
@@ -5622,13 +5334,6 @@ public function actionPayallReport(){
 		}
 		
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-		//$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-		//var_dump($count);exit;
-		//$pages = new CPagination($count);
-		//$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-		//$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-		//$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-		//$models = $count->queryAll();
 	
 	
 		//设置第1行的行高
@@ -5731,22 +5436,10 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			//$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 			$objPHPExcel->getActiveSheet()->getStyle('E'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		//$objPHPExcel->getActiveSheet()->freezePane('B4');
-		//$objPHPExcel->getActiveSheet()->freezePane('C4');
-		//$objPHPExcel->getActiveSheet()->freezePane('D4');
-		//$objPHPExcel->getActiveSheet()->freezePane('E4');
-		//$objPHPExcel->getActiveSheet()->freezePane('F4');
-		//$objPHPExcel->getActiveSheet()->freezePane('G4');
-		//$objPHPExcel->getActiveSheet()->freezePane('A1');
-		//$objPHPExcel->getActiveSheet()->freezePane('A2:G2');
-		//$objPHPExcel->getActiveSheet()->freezePane('A3:G3');
 		//合并单元格
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
@@ -5793,7 +5486,6 @@ public function actionPayallReport(){
 	
 	}
 	
-	
 	/*
 	 *
 	* 充值记录报表
@@ -5815,7 +5507,6 @@ public function actionPayallReport(){
 		//$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 		//$money = Yii::app()->db->createCommand($sql)->queryRow();
 		//var_dump($models);exit;
-		//var_dump($money);exit;
 		if($text==2){
 			$sql = 'select k.* from(select t1.card_id,t1.user_name,t.recharge_money,t.cashback_num from nb_recharge_record t left join nb_brand_user t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid ) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
 			//var_dump($sql);exit;
@@ -5832,14 +5523,6 @@ public function actionPayallReport(){
 		}
 	
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-		//$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-		//var_dump($count);exit;
-		//$pages = new CPagination($count);
-		//$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-		//$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-		//$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-		//$models = $count->queryAll();
-	
 	
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -5927,10 +5610,6 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$objPHPExcel->getActiveSheet()->getStyle('F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i.':D'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('E'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		}elseif($text==2){
@@ -5962,10 +5641,6 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$objPHPExcel->getActiveSheet()->getStyle('F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i.':D'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('E'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		}elseif($text==3){
@@ -5992,10 +5667,6 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('A5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 			$objPHPExcel->getActiveSheet()->getStyle('A4')->getFill()->getStartColor()->setARGB('fae9e5');
 			$objPHPExcel->getActiveSheet()->getStyle('A5')->getFill()->getStartColor()->setARGB('fae9e5');
-			//$objPHPExcel->getActiveSheet()->getStyle('A4')->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->getStyle('A5')->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			//$objPHPExcel->getActiveSheet()->getStyle('F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			$objPHPExcel->getActiveSheet()->getStyle('B4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 			$objPHPExcel->getActiveSheet()->getStyle('B5')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 			$objPHPExcel->getActiveSheet()->getStyle('C4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
@@ -6006,15 +5677,6 @@ public function actionPayallReport(){
 		
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		//$objPHPExcel->getActiveSheet()->freezePane('B4');
-		//$objPHPExcel->getActiveSheet()->freezePane('C4');
-		//$objPHPExcel->getActiveSheet()->freezePane('D4');
-		//$objPHPExcel->getActiveSheet()->freezePane('E4');
-		//$objPHPExcel->getActiveSheet()->freezePane('F4');
-		//$objPHPExcel->getActiveSheet()->freezePane('G4');
-		//$objPHPExcel->getActiveSheet()->freezePane('A1');
-		//$objPHPExcel->getActiveSheet()->freezePane('A2:G2');
-		//$objPHPExcel->getActiveSheet()->freezePane('A3:G3');
 		//合并单元格
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
@@ -6079,14 +5741,6 @@ public function actionPayallReport(){
 		$sql = 'select username,sum(reality_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by username order by lid desc';
 		
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-		//$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-		//var_dump($count);exit;
-		//$pages = new CPagination($count);
-		//$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-		//$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-		//$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-		//$models = $count->queryAll();
-	
 	
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -6166,22 +5820,10 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		//$objPHPExcel->getActiveSheet()->freezePane('B4');
-		//$objPHPExcel->getActiveSheet()->freezePane('C4');
-		//$objPHPExcel->getActiveSheet()->freezePane('D4');
-		//$objPHPExcel->getActiveSheet()->freezePane('E4');
-		//$objPHPExcel->getActiveSheet()->freezePane('F4');
-		//$objPHPExcel->getActiveSheet()->freezePane('G4');
-		//$objPHPExcel->getActiveSheet()->freezePane('A1');
-		//$objPHPExcel->getActiveSheet()->freezePane('A2:G2');
-		//$objPHPExcel->getActiveSheet()->freezePane('A3:G3');
 		//合并单元格
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:C2');
@@ -6324,23 +5966,10 @@ public function actionPayallReport(){
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 			$objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-			//$objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		//$objPHPExcel->getActiveSheet()->freezePane('B4');
-		//$objPHPExcel->getActiveSheet()->freezePane('C4');
-		//$objPHPExcel->getActiveSheet()->freezePane('D4');
-		//$objPHPExcel->getActiveSheet()->freezePane('E4');
-		//$objPHPExcel->getActiveSheet()->freezePane('F4');
-		//$objPHPExcel->getActiveSheet()->freezePane('G4');
-		//$objPHPExcel->getActiveSheet()->freezePane('A1');
-		//$objPHPExcel->getActiveSheet()->freezePane('A2:G2');
-		//$objPHPExcel->getActiveSheet()->freezePane('A3:G3');
 		//合并单元格
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
@@ -6492,22 +6121,10 @@ public function actionPayallReport(){
 			//$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 			$objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			$objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
-			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
 			$i++;
 		}
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		//$objPHPExcel->getActiveSheet()->freezePane('B4');
-		//$objPHPExcel->getActiveSheet()->freezePane('C4');
-		//$objPHPExcel->getActiveSheet()->freezePane('D4');
-		//$objPHPExcel->getActiveSheet()->freezePane('E4');
-		//$objPHPExcel->getActiveSheet()->freezePane('F4');
-		//$objPHPExcel->getActiveSheet()->freezePane('G4');
-		//$objPHPExcel->getActiveSheet()->freezePane('A1');
-		//$objPHPExcel->getActiveSheet()->freezePane('A2:G2');
-		//$objPHPExcel->getActiveSheet()->freezePane('A3:G3');
 		//合并单元格
 		$objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
 		$objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
@@ -7249,37 +6866,5 @@ public function actionPayallReport(){
 	
 	
 	}
-	
-	//
-// 		public function actionSalesReport(){
-// 			$str = Yii::app()->request->getParam('str');
-// 			$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
-// 			$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-// 			$criteria = new CDbCriteria;
-// 			$criteria->select = 't.*';
-// 			$criteria->with = array('company','paymentMethod');
-// 			$criteria->condition = ' t.dpid='.$this->companyId ;
-// 			if($str){
-// 				$criteria->condition = ' t.dpid in('.$str.')';
-// 			}
-// 			$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-// 			$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-// 			$criteria->order = 't.create_at asc';
-		
-// 			$pages = new CPagination(CloseAccountDetail::model()->count($criteria));
-// 			//	    $pages->setPageSize(1);
-// 			$pages->applyLimit($criteria);
-// 			//var_dump($criteria);exit;
-// 			$model = CloseAccountDetail::model()->findAll($criteria);
-// 			$comName = $this->getComName();
-// 			$this->render('salesReport',array(
-// 					'models'=>$model,
-// 					'pages'=>$pages,
-// 					'begin_time'=>$begin_time,
-// 					'end_time'=>$end_time,
-// 					'comName'=>$comName,
-// 					//'categories'=>$categories,
-// 					//'categoryId'=>$categoryId
-// 			));
-// 		}
+
 }

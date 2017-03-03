@@ -44,13 +44,13 @@ class CompanyController extends BackendController
 			$area = '0';
 		}
 		if($province){
-			$criteria->condition.=' and t.province like "'.$province.'"';
+			$criteria->addCondition('province like "'.$province.'"');
 		}
 		if($city){
-			$criteria->condition.=' and t.city like "'.$city.'"';
+			$criteria->addCondition('city like "'.$city.'"');
 		}
 		if($area){
-			$criteria->condition.=' and t.county_area like "'.$area.'"';
+			$criteria->addCondition('county_area like "'.$area.'"');
 		}
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);

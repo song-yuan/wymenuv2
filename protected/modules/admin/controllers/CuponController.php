@@ -43,6 +43,7 @@ class CuponController extends BackendController
     
     
     
+    
 	public function saveFile($event){
 		$fullName = $event->sender['name'];
 		$extensionName = $event->sender['uploadedFile']->getExtensionName();
@@ -77,8 +78,15 @@ class CuponController extends BackendController
 			//$db = Yii::app()->db;
 		
 			$se=new Sequence("cupon");
-			$model->lid = $se->nextval();
-			if(!empty($groupID)){
+                        $lid= $se->nextval();
+			$model->lid =$lid;
+                       
+                        $code=new Sequence("cupon_code");
+                        $sole_code = $code->nextval();
+                        $model->sole_code = ProductCategory::getChscode($this->companyId, $lid, $sole_code);
+			$model->source='0';
+                        
+                        if(!empty($groupID)){
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("cupon_branduser");
 					$id = $userid->nextval();
@@ -335,18 +343,14 @@ class CuponController extends BackendController
 			$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$ids = Yii::app()->request->getPost('ids');
+		
 		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(!empty($ids)) {
-			
-			Yii::app()->db->createCommand('update nb_cupon set delete_flag=1, is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
-			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('cupon/index' , 'companyId' => $companyId)) ;
-		} else {
-			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('cupon/index' , 'companyId' => $companyId)) ;
-		}
+		$lid = Yii::app()->request->getParam('lid');
+                if($lid){
+                   Yii::app()->db->createCommand('update nb_cupon set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where lid = "'.$lid.'"')->execute();
+                }
+                $this->redirect(array('cupon/index','companyId'=>$this->companyId)); 
 	}
 
 	/**

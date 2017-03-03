@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','添加双屏内容'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','双屏设置'),'url'=>$this->createUrl('doubleScreen/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','双屏内容列表'),'url'=>$this->createUrl('doubleScreen/detailIndex' , array('companyId' => $model->dpid,'groupid'=>$groupid,'groupname'=>$groupname,'type'=>$type))),array('word'=>yii::t('app','添加双屏内容'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','双屏设置'),'url'=>$this->createUrl('doubleScreen/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','双屏内容列表'),'url'=>$this->createUrl('doubleScreen/detailIndex' , array('companyId' => $model->dpid,'groupid'=>$groupid,'groupname'=>$groupname,'type'=>$type))),array('word'=>yii::t('app','添加双屏内容'),'url'=>''))));?>
 	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
