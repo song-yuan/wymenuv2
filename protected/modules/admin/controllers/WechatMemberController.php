@@ -40,7 +40,9 @@ class WechatMemberController extends BackendController {
 	          
 	          if($brand_user_model){
 	              $userLid = $brand_user_model->lid;
-	          }
+	          }else{
+			Yii::app()->user->setFlash('error' ,yii::t('app', '没有该会员'));                
+		  }
 	        $now = date('Y-m-d H:i:s',time());
                
 	        $db = Yii::app()->db; 

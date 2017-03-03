@@ -54,7 +54,7 @@
 								<th><?php echo yii::t('app','积分');?></th>
 								<th><?php echo yii::t('app','状态');?></th>
 								<th><?php echo yii::t('app','折扣（生日折扣）');?></th>
-								<!-- <th><?php echo yii::t('app','时间');?></th> -->
+								
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -71,20 +71,20 @@
 								<td ><?php echo $model->all_points;?></td>
 								<td ><?php switch($model->card_status){case 0:echo '正常';break;case 1: echo "挂失";break;case 2: echo '注销';break;default:echo '';break;}?></td>
 								<td ><?php echo sprintf("%.2f",$model->brandUserLevel->level_discount).'('.sprintf("%.2f",$model->brandUserLevel->birthday_discount).')';?></td>
-								<!-- <td><?php echo $model->create_at;?></td> -->
+								
 								<td class="center">
-									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
+<!--									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/consumersRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
-									<a href="<?php echo $this->createUrl('member/pointsRecord',array('rfid' => $model->rfid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','积分记录');?></a>&nbsp;
+									<a href="<?php echo $this->createUrl('member/pointsRecord',array('rfid' => $model->rfid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','积分记录');?></a>&nbsp;-->
 									<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
-									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid, 'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
+									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
                                     <?php endif;?>
                                     <!-- <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a> -->
 								</td>
 							</tr>
 						<?php endforeach;?>
 						<?php else:?>
-						<td colspan="8">没有找到数据</td>
+						<td colspan="10">没有找到数据</td>
 						<?php endif;?>
 						</tbody>
 					</table>

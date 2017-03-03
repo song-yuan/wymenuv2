@@ -15,25 +15,27 @@ class EntityCardController extends BackendController {
        
 		$this->render('list');
     }
-     public function actionCardSearch() {
-        $num = Yii::app()->request->getPost('num');   
+     public function actionCardSearch() {         
         $card_model=''; 
         $orderPay='';
-        if($num !=''){
-             $card_model = MemberCard::model()->with(array('brandUserLevel','point','recharge'))->find(" t.dpid='".$this->companyId ."'and ( t.selfcode='".$num."' or t.rfid='".$num."' or t.mobile='".$num."')");           
-             $rfid = 0;
-           if($card_model){
-              $rfid = $card_model->rfid;
-          }
-             
-             $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype=4 and t.paytype_id='".$rfid."' and t.dpid='".$this->companyId."'");
-             
-        }  
         
-       
-               
-        
-      //  var_dump($card_model);exit;
+        $num = Yii::app()->request->getPost('num');
+        if(Yii::app()->request->isPostRequest){
+            if($num !=''){
+                 $card_model = MemberCard::model()->with(array('brandUserLevel','point','recharge'))->find(" t.dpid='".$this->companyId ."'and ( t.selfcode='".$num."' or t.rfid='".$num."' or t.mobile='".$num."')");           
+                 $rfid = 0;
+                if($card_model){
+                  $rfid = $card_model->rfid;
+                }
+
+                $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype=4 and t.paytype_id='".$rfid."' and t.dpid='".$this->companyId."'");
+
+
+                if(!$card_model){
+                 Yii::app()->user->setFlash('error' ,yii::t('app', '没有该会员'));
+                }
+            }
+        }    
        	$this->render('cardsearch',array( "card_model"=> $card_model,
                                             "num"=>$num,
                                              'orderPay'=>$orderPay
