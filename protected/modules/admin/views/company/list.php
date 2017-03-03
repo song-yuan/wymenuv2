@@ -119,9 +119,6 @@
 						<img alt="" src="">
 					</div>
 					<div class="modal-footer">
-						<!--  
-						<button type="button" class="btn blue">Save changes</button>
-						-->
 						<button type="button" class="btn default" data-dismiss="modal">确定</button>
 					</div>
 				</div>
