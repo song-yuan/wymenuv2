@@ -2,6 +2,7 @@
 class UserForm extends CFormModel
 {
 	public $lid ;
+	public $update_at ;
 	public $username ;
 	public $password_old ;
 	public $password ;
@@ -23,7 +24,7 @@ class UserForm extends CFormModel
 				array('username' , 'length' , 'min' => 5 , 'max' => 20),
 				array('password' , 'length' , 'min' => 6 , 'max' => 16),
 				array('dpid' , 'numerical'),
-				array('lid , staff_no , email , password_old' , 'safe'),
+				array('lid , staff_no , email , password_old , update_at' , 'safe'),
 		);
 	}
 	/**
@@ -65,6 +66,7 @@ class UserForm extends CFormModel
                         
 			//$model->lid = $this->getPkValue();
 		}
+		$model->update_at = date('Y-m-d H:i:s',time());
 		$model->username = $this->username;
 		$model->mobile = $this->mobile ;
 		$model->staff_no = $this->staff_no;
