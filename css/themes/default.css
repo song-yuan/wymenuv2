@@ -14,17 +14,17 @@ Page header
 .header {
   filter: none !important;
   background-image: none !important;
-  background-color: #000 !important;
+  background-color: #777 !important;
 }
 .header .btn-navbar {
   background-color: #212121 !important;
 }
 .header .navbar-nav .dropdown-toggle:hover,
 .header .navbar-nav .dropdown.open .dropdown-toggle {
-  background-color: #383838 !important;
+  background-color: #666 !important;
 }
 .header .navbar-nav li.dropdown .dropdown-toggle i {
-  color: #8a8a8a !important;
+  color: #bbb!important;
 }
 /***
 Page sidebar
