@@ -21,7 +21,8 @@ Page header
 }
 .header .navbar-nav .dropdown-toggle:hover,
 .header .navbar-nav .dropdown.open .dropdown-toggle {
-  background-color: #666 !important;
+  background-color: #ecab7c !important;
+  border-radius: 5px;
 }
 .header .navbar-nav li.dropdown .dropdown-toggle i {
   color: #bbb!important;
