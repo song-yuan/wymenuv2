@@ -134,11 +134,10 @@ class StockTakingController extends BackendController
 					$model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			}
-			$this->redirect(array('retreat/index' , 'companyId' => $companyId)) ;
-		} else {
+		}else {
 			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
-			$this->redirect(array('stockTaking/damagereason' , 'companyId' => $companyId)) ;
 		}
+		$this->redirect(array('stockTaking/damagereason' , 'companyId' => $companyId)) ;
 	}
 	
 	
