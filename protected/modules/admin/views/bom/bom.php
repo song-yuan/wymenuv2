@@ -333,16 +333,16 @@
 							<div class="ku-item-info">盘损原因</div>
 						</div>
 					</a>
-					 <a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple pc"></div>
-							<div class="ku-item-info">盘点</div>
-						</div>
-					</a>
 					<a href="<?php echo $this->createUrl('stockTaking/damageindex',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损</div>
+						</div>
+					</a>
+					 <a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pc"></div>
+							<div class="ku-item-info">盘点</div>
 						</div>
 					</a>
 					<!-- <a href="<?php echo $this->createUrl('stockInventory/index',array('companyId'=>$this->companyId));?>">
