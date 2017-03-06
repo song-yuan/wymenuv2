@@ -195,14 +195,18 @@
             if(nownum != ''){
             	var reaname = $("#selreadam"+vid).find("option:selected").text();
                 var reatip = $("#selreadam"+vid).find("option:selected").attr('tip');
-                var reason = reaname +'['+ reatip +']';
+                if(reaname&&reatip){
+                	var reason = reaname +'['+ reatip +']';
+                }else{
+                	var reason = '盘损原因 '+'[尚未填写原因]';
+                	}
                 optval = vid +','+ difference +','+ nownum +','+ originalnum +','+ reason +';'+ optval;
                 //layer.msg(reatip);
                 } 
         }
         if(optval.length >0){
         	optval = optval.substr(0,optval.length-1);//除去最后一个“，”
-        	alert(optval);
+        	//alert(optval);
         }else{
             alert('请至少盘点一项');
             return false;
