@@ -14,9 +14,7 @@ class UserController extends BackendController
 	public function init(){
 		$this->roles = array(
 			'1' => yii::t('app','超级管理员'),
-			'2' => yii::t('app','超级管理员2'),
 			'3' => yii::t('app','超级副管理员'),
-			'4' => yii::t('app','超级副管理员4'),
 			'5' => yii::t('app','总部管理员'),
 			'7' => yii::t('app','总部副管理员'),
 			'9' => yii::t('app','区域管理员'),
