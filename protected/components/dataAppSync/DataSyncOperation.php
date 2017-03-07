@@ -425,8 +425,6 @@ class DataSyncOperation {
 		$createAt = $orderInfo->creat_at;
 		
 		$time = time ();
-		$se = new Sequence ( "order" );
-		$orderId = $se->nextval ();
 		
 		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and user_id='.$padSetLid.' and account_no="'.$accountNo.'"';
 		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
@@ -442,6 +440,9 @@ class DataSyncOperation {
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
+			$se = new Sequence ( "order" );
+			$orderId = $se->nextval ();
+			
 			$insertOrderArr = array (
 					'lid' => $orderId,
 					'dpid' => $dpid,
