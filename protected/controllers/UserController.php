@@ -25,7 +25,7 @@ class UserController extends Controller
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
 				if(!$this->brandUser){
-					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['appid']);
+					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
 				$userId = $this->brandUser['lid'];
