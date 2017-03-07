@@ -180,12 +180,10 @@
                         </div>
                         <div class="weui_cell_ft">
                         </div>
-                    </a>
+                    </a>       
                     <!--BEGIN dialog2-->
-                    <div id="dialog2" style="display: none; ">
-                      
-                        <div class="weui_dialog" style="z-index:100;">
-                            
+                    <div id="dialog2" style="z-index:90;position: fixed; display: none;">                     
+                        <div class="weui_dialog" >                           
                             <div class="btn_ewm_out">    
                                 <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
                             </div>
@@ -193,7 +191,8 @@
                             </div>
                             <div class="des">到店出示给服务员即可使用</div>
                         </div>
-                    </div>
+                    </div>  
+                    <!--BEGIN dialog2--> 
                     <!--END dialog2-->
                     <div class="empty1"></div>                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="privilege" data_target="#chanel_demo1">
