@@ -65,7 +65,7 @@ class NewBrandUser {
     }
     public function brandUserLevelId() {
     	$sql = 'SELECT lid FROM nb_brand_user_level WHERE dpid = ' . $this->brandId .' and level_type=1 and delete_flag=0 order by level_discount desc limit 1';
-    	echo $sql;
+    	echo $sql;exit;
     	$result = Yii::app()->db->createCommand($sql)->queryRow();
     	if($result){
     		return $result['lid'];
