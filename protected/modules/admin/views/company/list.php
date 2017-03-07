@@ -41,8 +41,8 @@
     		background-repeat: no-repeat;
 		}
 		.ku-item.czygl{
-			background-image:url(../../../../img/waiter/icon-dpjcsz.png);
-			background-position: -135px 15px;
+			background-image:url(../../../../img/waiter/icon-dpczy.png);
+			background-position: 25px 27px;
     		background-repeat: no-repeat;
 		}
 		.ku-item.qxsz{
@@ -148,12 +148,12 @@
 						</div>
 					</a>
 					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
-					<a href="<?php echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
+<!--					<a href="<?php// echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple wxdp"></div>
 							<div class="ku-item-info">微信设置</div>
 						</div>
-					</a>
+					</a>-->
 					<a href="<?php echo $this->createUrl('alipay/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple zfbsz"></div>

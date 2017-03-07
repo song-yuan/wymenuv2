@@ -252,7 +252,7 @@ class CuponController extends BackendController
 	private function getBrdulv(){
 		$criteria = new CDbCriteria;
 		$criteria->with = '';
-		$criteria->condition = ' t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->condition = ' t.delete_flag=0 and t.level_type=1 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.min_total_points asc ' ;
 		$brdules = BrandUserLevel::model()->findAll($criteria);
 		if(!empty($brdules)){

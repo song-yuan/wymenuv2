@@ -51,7 +51,7 @@ margin-top: 30px;
                              </div>
                              <div class="col-xs-6  col-sm-3">
                                  <a href="<?php echo $this->createUrl('entityCard/cardsearch',array('companyId'=>$this->companyId));?>">
-                                            <div class="fa fa-folder-open list_picture"></div>
+                                            <div class="fa  fa-user  list_picture"></div>
                                             <div class="list_text">卡查询</div>
                                 </a> 
                              </div>
@@ -68,14 +68,20 @@ margin-top: 30px;
                                         </a> 
                              </div>
                              <div class="col-xs-6 col-sm-3">
+                                  <a href="<?php echo $this->createUrl('member/index',array('companyId'=>$this->companyId));?>">
+                                            <div class="fa fa-folder-open  list_picture"></div>
+                                            <div class="list_text">添加会员</div>
+                                        </a> 
+                             </div>
+                            <div class="col-xs-6 col-sm-3">
                                   <a href="#">
                                             <div class="fa fa-heart-o   list_picture"></div>
                                             <div class="list_text">生日关怀</div>
                                         </a> 
                              </div>
                              <div class="col-xs-6 col-sm-3">
-                                  <a href="<?php echo $this->createUrl('member/index',array('companyId'=>$this->companyId));?>">
-                                            <div class="fa fa-th-large list_picture"></div>
+                                  <a href="javascript:void(0)">
+                                            <div class="fa  fa-th-large list_picture"></div>
                                             <div class="list_text">卡魔方</div>
                                         </a> 
                              </div>

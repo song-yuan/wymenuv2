@@ -55,8 +55,10 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>ID</th>
-								<th><?php echo yii::t('app','基础费用名称');?></th>
+								<?php if(Yii::app()->user->role <User::ADMIN):?>
+                                                                <th>ID</th>
+								<?php endif;?>
+                                                                <th><?php echo yii::t('app','基础费用名称');?></th>
 								<th><?php echo yii::t('app','价格');?></th>
 								<th><?php echo yii::t('app','描述');?></th>
 								<th><?php echo yii::t('app','创建时间');?></th>
@@ -67,8 +69,9 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo $model->lid;?></td>
-								
+								<?php if(Yii::app()->user->role <User::ADMIN):?>
+                                                                <td><?php echo $model->lid;?></td>
+								<?php endif;?>
 								<td><?php switch($model->fee_type) {case 1: echo yii::t('app','餐位费'); break; case 2: echo yii::t('app','打包费') ; break; case 3: echo yii::t('app','送餐费'); break; case 4: echo yii::t('app','外卖起步价'); break; default :echo '';}?></td>
 								<td><?php echo $model->fee_price;?></td>
 								<td><?php echo $model->fee_abstract;?></td>

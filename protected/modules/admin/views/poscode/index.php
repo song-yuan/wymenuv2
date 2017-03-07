@@ -45,9 +45,11 @@
 						<!--<a href="#" class="btn green" id="bindPadId"><i class="fa fa-android"></i> <?php echo yii::t('app','绑定设备识别');?></a>-->
 						<a href="<?php echo $this->createUrl('poscode/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						
-                        <div class="btn-group">
-							<!-- <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button> -->
+                                                <?php if(Yii::app()->user->role <User::ADMIN):?>
+                                                <div class="btn-group">
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
+                                                <?php endif;?>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">

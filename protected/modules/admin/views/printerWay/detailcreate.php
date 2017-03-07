@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','添加厨打方案明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','厨打设置'),'url'=>$this->createUrl('printerWay/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','厨打方案明细列表'),'url'=>$this->createUrl('printerWay/detailindex' , array('companyId'=>$this->companyId,'lid' => $model->print_way_id))),array('word'=>yii::t('app','添加厨打方案明细'),'url'=>''),),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('printerWay/detailindex' , array('companyId' => $this->companyId,'lid' => $model->print_way_id)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','厨打设置'),'url'=>$this->createUrl('printerWay/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','厨打方案明细列表'),'url'=>$this->createUrl('printerWay/detailindex' , array('companyId'=>$this->companyId,'lid' => $model->print_way_id))),array('word'=>yii::t('app','添加厨打方案明细'),'url'=>''),),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('printerWay/detailindex' , array('companyId' => $this->companyId,'lid' => $model->print_way_id)))));?>
 	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

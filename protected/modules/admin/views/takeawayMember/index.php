@@ -63,7 +63,9 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','唯一ID');?></th>
+								<?php if(Yii::app()->user->role <User::ADMIN):?>
+                                                                    <th><?php echo yii::t('app','唯一ID');?></th>
+                                                                <?php endif;?>
 								<th><?php echo yii::t('app','编号');?></th>
 								<th><?php echo yii::t('app','送餐员名称');?></th>
 								<th><?php echo yii::t('app','手机号码');?></th>
@@ -75,8 +77,10 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo $model->lid;?></td>
-								<td><?php echo $model->cardId;?></td>
+								<?php if(Yii::app()->user->role <User::ADMIN):?>
+                                                                    <td><?php echo $model->lid;?></td>
+                                                                <?php endif;?>
+                                                                <td><?php echo $model->cardId;?></td>
 								<td><?php echo $model->member_name;?></td>
 								<td><?php echo $model->phone_number;?></td>
 								<td><?php echo $model->create_at;?></td>
