@@ -6,20 +6,41 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/mobiscroll.min.css">
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/wechat_js/mobiscroll.min.js"></script>
+<style>
+.weui_select {
+    padding-left: 0px!important;
+    height: 1.41176471em!important;
+  
+}
+</style>
+
 <body class="add_address bg_lgrey2">
 <form action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId));?>" method="post" onsubmit="return validate()">
 
 <div class="page cell">
 	<div class="weui_cells_title">完善个人资料</div>
     <div class="weui_cells weui_cells_form">
-   		<div class="weui_cell">
+        <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="name" name="user[user_name]" type="text" placeholder="请输入姓名" value="<?php echo $user['user_name'];?>"/>
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">性别</label></div>
+            <div id='sex-val-box' class="weui_cell_bd weui_cell_primary ">
+            
+            <select class="weui_select" id="sex" name="user[sex]">
+                <option value="0">保密</option>
+                <option value="1">男</option>
+                <option value="2">女</option>
+            </select>
             </div>
         </div>
        <div class="weui_cell">
@@ -38,7 +59,7 @@
         <div class="weui_cell">
             <div class="weui_cell_hd"><label for="" class="weui_label">生日</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="birthday" name="user[user_birthday]" type="date" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>"/>
+                <input class="weui_input" id="birthday" name="user[user_birthday]" type="text" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>"/>
             </div>
         </div>
     </div>
@@ -140,5 +161,12 @@
     	$('.backUrl').click(function(){
     		history.go(-1);
     	});
+        $('#birthday').mobiscroll().date({
+            theme: 'android-holo-light',
+            lang: 'zh',
+            display: 'center',
+	});
+      
+       
     });
 </script>

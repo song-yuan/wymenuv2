@@ -19,8 +19,8 @@
 			margin-top:20px;
 			margin-left:20px;
 			border-radius:5px !important;
-			border:2px solid black;
-			box-shadow: 5px 5px 5px #888888;
+			/*border:2px solid black;*/
+			/*box-shadow: 5px 5px 5px #888888;*/
 			vertical-align:middle;
 		}
 		.ku-item-info{
@@ -30,7 +30,7 @@
 			text-align:center;
 		}
 		.ku-purple{
-			background-color:#852b99;
+			/*background-color:#852b99;*/
 		}
 		.ku-grey{
 			background-color:rgb(68,111,120);
@@ -41,8 +41,8 @@
     		background-repeat: no-repeat;
 		}
 		.ku-item.czygl{
-			background-image:url(../../../../img/waiter/icon-dpjcsz.png);
-			background-position: -135px 15px;
+			background-image:url(../../../../img/waiter/icon-dpczy.png);
+			background-position: 25px 27px;
     		background-repeat: no-repeat;
 		}
 		.ku-item.qxsz{
@@ -119,9 +119,6 @@
 						<img alt="" src="">
 					</div>
 					<div class="modal-footer">
-						<!--  
-						<button type="button" class="btn blue">Save changes</button>
-						-->
 						<button type="button" class="btn default" data-dismiss="modal">确定</button>
 					</div>
 				</div>
@@ -130,7 +127,7 @@
 			<!-- /.modal-dialog -->
 		</div>
 	<!-- BEGIN PAGE CONTENT-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','店铺管理'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>''))));?>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="portlet purple box">
@@ -151,12 +148,12 @@
 						</div>
 					</a>
 					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
-					<a href="<?php echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
+<!--					<a href="<?php// echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple wxdp"></div>
 							<div class="ku-item-info">微信设置</div>
 						</div>
-					</a>
+					</a>-->
 					<a href="<?php echo $this->createUrl('alipay/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple zfbsz"></div>

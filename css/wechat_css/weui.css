@@ -858,6 +858,7 @@ input.weui_btn_plain_default {
 }
 .weui_dialog {
   position: fixed;
+  z-index: 13;
   width: 75%;
   top: 50%;
   left: 50%;

@@ -59,11 +59,11 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php if($type==0):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味设置'),'subhead'=>yii::t('app','单品口味设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','单品口味设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','单品口味设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 	<?php elseif($type==1):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味设置'),'subhead'=>yii::t('app','整单口味设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','整单口味设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','整单口味设置'),'url'=>''))));?>
 	<?php else:?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味设置'),'subhead'=>yii::t('app','单品口味对应'),'breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','单品口味对应'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','单品口味对应'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 	<?php endif;?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->

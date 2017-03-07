@@ -73,9 +73,9 @@ $(function () {
             $('#dialog1').hide();
         });
     });
+
     $container.on('click', '#showDialog2', function () {
        
-        
         str='<div class="sp-lightbox1"  style="position: fixed;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;"></div>';
 	$("#dialog2").prepend(str);
         $('#dialog2').show();

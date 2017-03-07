@@ -451,7 +451,7 @@ class MemberController extends BackendController
 		$lid = Yii::app()->request->getParam('lid',"0000000000");
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.dpid='.$companyId.' and t.user_id='.$lid.' and order_status in ("3","4","8") and order_type in ("1","2")';
-		$criteria->order = ' t.update_at desc ';
+		$criteria->order = ' t.create_at desc ';
 		$pages = new CPagination(Order::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);

@@ -44,13 +44,13 @@ class CompanyController extends BackendController
 			$area = '0';
 		}
 		if($province){
-			$criteria->condition.=' and t.province like "'.$province.'"';
+			$criteria->addCondition('province like "'.$province.'"');
 		}
 		if($city){
-			$criteria->condition.=' and t.city like "'.$city.'"';
+			$criteria->addCondition('city like "'.$city.'"');
 		}
 		if($area){
-			$criteria->condition.=' and t.county_area like "'.$area.'"';
+			$criteria->addCondition('county_area like "'.$area.'"');
 		}
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -126,8 +126,6 @@ class CompanyController extends BackendController
 	            $model->update_at = date('Y-m-d H:i:s',time());
 	            //$model->comp_dpid=mysql_insert_id();
 	            $model->type="0";
-	                        
-	            var_dump($model);exit;
 				if($model->save()){
 					$comp_dpid = Yii::app()->db->getLastInsertID();
 					$sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
@@ -166,19 +164,17 @@ class CompanyController extends BackendController
 				}
 			}
 		}
-		$role = Yii::app()->user->role;
-		$printers = $this->getPrinterList();
-		//var_dump($printers);exit;
-		return $this->render('create',array(
-				'model' => $model,
-				'printers'=>$printers,
-				'role'=>$role,
-                'companyId'=>  $this->companyId,
-				'type'=> $type,
-				'type2'=> $type2,
-		));
-		
-		
+			$role = Yii::app()->user->role;
+			$printers = $this->getPrinterList();
+			//var_dump($printers);exit;
+			return $this->render('create',array(
+					'model' => $model,
+					'printers'=>$printers,
+					'role'=>$role,
+	                'companyId'=>  $this->companyId,
+					'type'=> $type,
+					'type2'=> $type2,
+			));
 		}else{
 			$this->redirect(array('company/index','companyId'=>  $this->companyId));
 		}

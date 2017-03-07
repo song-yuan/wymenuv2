@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','送餐员列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','送餐员设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '1',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','送餐员设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '1',)))));?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -63,7 +63,9 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','唯一ID');?></th>
+								<?php if(Yii::app()->user->role <User::ADMIN):?>
+                                                                    <th><?php echo yii::t('app','唯一ID');?></th>
+                                                                <?php endif;?>
 								<th><?php echo yii::t('app','编号');?></th>
 								<th><?php echo yii::t('app','送餐员名称');?></th>
 								<th><?php echo yii::t('app','手机号码');?></th>
@@ -75,8 +77,10 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo $model->lid;?></td>
-								<td><?php echo $model->cardId;?></td>
+								<?php if(Yii::app()->user->role <User::ADMIN):?>
+                                                                    <td><?php echo $model->lid;?></td>
+                                                                <?php endif;?>
+                                                                <td><?php echo $model->cardId;?></td>
 								<td><?php echo $model->member_name;?></td>
 								<td><?php echo $model->phone_number;?></td>
 								<td><?php echo $model->create_at;?></td>

@@ -19,23 +19,7 @@
 											<?php echo $form->error($model, 'cupon_title' )?>
 										</div>
 									</div><!-- 活动标题 -->
-									<div class="form-group">
-										<?php if($model->hasErrors('main_picture')) echo 'has-error';?>
-										<?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
-										<div class="col-md-9">
-										<?php
-										$this->widget('application.extensions.swfupload.SWFUpload',array(
-											'callbackJS'=>'swfupload_callback',
-											'fileTypes'=> '*.jpg',
-											'buttonText'=> yii::t('app','上传产品图片'),
-											'companyId' => $model->dpid,
-											'imgUrlList' => array($model->main_picture),
-										));
-										?>
-										<?php echo $form->hiddenField($model,'main_picture'); ?>
-										<?php echo $form->error($model,'main_picture'); ?>
-										</div>
-									</div><!-- 主图片 -->
+								
 						
 									<div class="form-group" >
 									<?php if($model->hasErrors('cupon_abstract')) echo 'has-error';?>

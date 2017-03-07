@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','厨打方案明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','厨打设置'),'url'=>$this->createUrl('printerWay/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','厨打方案明细列表'),'url'=>''),),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('printerWay/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','厨打设置'),'url'=>$this->createUrl('printerWay/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','厨打方案明细列表'),'url'=>''),),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('printerWay/index' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -88,12 +88,7 @@
 						<?php endif;?>
 					</table>
 		
-					<div class="form-actions fluid">
-						<div class="col-md-offset-3 col-md-9">
-									<!--<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>-->
-									<a href="<?php echo $this->createUrl('printerWay/index' , array('companyId' => $pwmodel->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
-						</div>
-					</div>
+					
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">

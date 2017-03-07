@@ -245,7 +245,7 @@ class ProductController extends BackendController
 		$dpid = $this->companyId;
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
-		$msg = $pid.'@@'.$shownum.'##'.$showtype.'$$'.$pcode.'%%'.$dpid;
+		//$msg = $pid.'@@'.$shownum.'##'.$showtype.'$$'.$pcode.'%%'.$dpid;
 		try
 		{
 			$is_sync = DataSync::getInitSync();

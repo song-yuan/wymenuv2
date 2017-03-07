@@ -30,14 +30,14 @@
 			</div>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','代金券'),'breadcrumbs'=>array(array('word'=>yii::t('app','活动中心'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','修改代金券'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('cupon/index' , array('companyId' => $this->companyId,)))));?>
-		<!-- END PAGE HEADER-->
+			 <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'breadcrumbs'=>array(array('word'=>yii::t('app','微信赠券'),'url'=>$this->createUrl('wechatMarket/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','修改系统券'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('cupon/index' , array('companyId' => $this->companyId,'type'=>1)))));?>
+                        <!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改代金券');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改系统券');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

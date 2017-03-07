@@ -6,7 +6,7 @@ Default theme
 Reset and overrides  
 ***/
 body {
-  background-color: #3d3d3d !important;
+  background-color: #fff !important;
 }
 /***
 Page header
@@ -14,46 +14,49 @@ Page header
 .header {
   filter: none !important;
   background-image: none !important;
-  background-color: #212121 !important;
+  background-color: #56a8fd !important;
 }
 .header .btn-navbar {
   background-color: #212121 !important;
 }
 .header .navbar-nav .dropdown-toggle:hover,
 .header .navbar-nav .dropdown.open .dropdown-toggle {
-  background-color: #383838 !important;
+  background-color: #ecab7c !important;
+  border-radius: 5px;
 }
 .header .navbar-nav li.dropdown .dropdown-toggle i {
-  color: #8a8a8a !important;
+  color: #bbb!important;
 }
 /***
 Page sidebar
 ***/
 .page-sidebar {
-  background-color: #3d3d3d;
+  background-color: #fff;
+ 
 }
 ul.page-sidebar-menu > li > a {
-  border-top: 1px solid #5c5c5c !important;
-  color: #ffffff !important;
+ /* border-top: 1px solid  #D4D4D4 !important;*/
+  color: #000000;
 }
 ul.page-sidebar-menu > li:last-child > a {
   border-bottom: 1px solid transparent !important;
 }
 ul.page-sidebar-menu > li a i {
-  color: #969696;
+   color: #3385ff;
 }
 ul.page-sidebar-menu > li.open > a,
 ul.page-sidebar-menu > li > a:hover,
 ul.page-sidebar-menu > li:hover > a {
-  background: #303030;
+   background: #D4D4D4;
 }
 ul.page-sidebar-menu > li.active > a {
-  background: #e02222 !important;
-  border-top-color: transparent !important;
-  color: #ffffff;
+  /*background:#D4D4D4 !important;
+  color:black ;*/
+  background:#D9D9D9!important;
+ color:#2d78f4;
 }
 ul.page-sidebar-menu > li.active > a i {
-  color: #ffffff;
+ color: #3385ff;
 }
 ul.page-sidebar-menu > li > ul.sub-menu > li:first-child > a {
   border-top: 0px !important;
@@ -176,7 +179,7 @@ Horizontal Menu(new in v1.2)
 Footer 
 ***/
 .footer .footer-inner {
-  color: #999999;
+   color:#000000;
 }
 .footer .footer-tools .go-top {
   background-color: #4f4f4f;
@@ -269,10 +272,10 @@ Landscape phone to portrait tablet
     page sidebar
     ***/
   .page-sidebar {
-    background-color: #292929 !important;
+    background-color: #f2f2f2 !important;
   }
   ul.page-sidebar-menu > li > a {
-    border-top: 1px solid #4a4a4a !important;
+    border-top: 1px solid rgba(0,0,0,.2) !important;
   }
   ul.page-sidebar-menu > li:last-child > a {
     border-bottom: 0 !important;
@@ -283,6 +286,6 @@ Landscape phone to portrait tablet
   ul.page-sidebar-menu > li.open > a,
   ul.page-sidebar-menu > li > a:hover,
   ul.page-sidebar-menu > li:hover > a {
-    background: #1e1e1e;
+   background: #fff;
   }
 }

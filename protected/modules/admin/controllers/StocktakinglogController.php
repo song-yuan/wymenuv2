@@ -11,6 +11,7 @@ class StocktakinglogController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
+		$status = Yii::app()->request->getParam('status','0');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d 00:00:00',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d 23:59:59',time()));
 		//var_dump($begin_time);exit;
@@ -19,6 +20,9 @@ class StocktakinglogController extends BackendController
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
 		$criteria->addCondition("t.create_at >='$begin_time '");
 		$criteria->addCondition("t.create_at <='$end_time '");
+		
+		$criteria->addCondition("t.status ='$status'");
+		
 		$criteria->order = ' t.lid desc ';	
 		$pages = new CPagination(StockTaking::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -30,11 +34,12 @@ class StocktakinglogController extends BackendController
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
+				'status'=>$status,
 				//'categoryId'=>$categoryId
-		
 		));
 	}
 	public function actionDetailindex(){
+		$status = Yii::app()->request->getParam('status','0');
 		$stockTakingId = Yii::app()->request->getParam('id',0);
 		$begin_time = Yii::app()->request->getParam('begin_time');
 		$end_time = Yii::app()->request->getParam('end_time');
@@ -49,6 +54,7 @@ class StocktakinglogController extends BackendController
 				'models'=>$models,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
+				'status'=>$status,
 				//'pages'=>$pages,
 	
 		));

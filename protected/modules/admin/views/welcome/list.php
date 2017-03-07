@@ -3,7 +3,7 @@
 
 		.bg-welcome{
 			min-height: 500px;
-			background-image:url(../../../../img/waiter/bg-welcome3.jpg);
+			/*background-image:url(../../../../img/waiter/bg-welcome3.jpg);*/
 			background-size: 100%;
     		background-repeat: no-repeat;
 		}
@@ -22,7 +22,7 @@
 			margin-bottom: 0px !important; 	
 		}
 		.purple2{
-			background-color: #9D48BE;
+			/*background-color: #9D48BE;*/
 		}
 		.padding-right{
 			padding-right: 0px !important;

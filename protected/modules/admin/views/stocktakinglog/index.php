@@ -28,8 +28,11 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘点日志'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点日志'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
-	
+	<?php if($status==0):?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点日志'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
+	<?php elseif($status==1):?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘损日志'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
+	<?php endif;?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -38,7 +41,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘点日志');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php if($status)echo yii::t('app','盘损日志');else echo yii::t('app','盘点日志');?></div>
 					<div class="actions">
 						<div class="btn-group">
 				
@@ -59,8 +62,8 @@
 						<thead>
 							<tr>
 								<!--<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>-->
-								<th style="width:16%"><?php echo yii::t('app','盘点日期');?></th>
-								<th><?php echo yii::t('app','盘点人');?></th>
+								<th style="width:16%"><?php if($status)echo yii::t('app','盘损日期');else echo yii::t('app','盘点日期');?></th>
+								<th><?php if($status)echo yii::t('app','盘损人');else echo  yii::t('app','盘点人');?></th>
 								<th><?php echo yii::t('app','记录');?></th>
 								<th><?php echo yii::t('app','备注');?></th>
 							</tr>
@@ -73,7 +76,7 @@
 								<td><?php echo $model->username;?></td>
 								<td><?php echo $model->title;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('stocktakinglog/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid , 'begin_time'=>$begin_time , 'end_time'=>$end_time));?>"><?php echo yii::t('app','查看详情');?></a>
+								<a href="<?php echo $this->createUrl('stocktakinglog/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid , 'begin_time'=>$begin_time , 'end_time'=>$end_time , 'status'=>$status));?>"><?php echo yii::t('app','查看详情');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -140,7 +143,7 @@
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time   
+			   location.href="<?php echo $this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId ,'status'=>$status));?>/begin_time/"+begin_time+"/end_time/"+end_time   
 			  
 	        });
 	});

@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '0',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '0',)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -56,14 +56,15 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','名称');?></th>
+                                                                <th><?php echo yii::t('app','排序号');?></th>
+                                                                <th style="width:16%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','类别');?></th>
 								<th><?php echo yii::t('app','现价');?></th>
 								<th><?php echo yii::t('app','会员价');?></th>
 								<th><?php echo yii::t('app','打包费');?></th>
                                 <!-- <th><?php echo yii::t('app','单位');?></th> -->
-                                <th><?php echo yii::t('app','排序号');?></th>
+                               
                                 <!-- <th><?php echo yii::t('app','星级');?></th>
                                 
                                 <th><?php echo yii::t('app','称重');?></th>
@@ -82,14 +83,15 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php if($model->is_temp_price && Yii::app()->user->role >=13):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /><?php endif;?></td>
-								<td style="width:16%"><?php echo $model->product_name;?></td>
+								 <td ><?php echo $model->sort;?></td>
+                                                                <td style="width:16%"><?php echo $model->product_name;?></td>
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
 								<td ><?php echo $model->member_price;?></td>
 								<td ><?php echo $model->dabao_fee;?></td>
                                 <!-- <td ><?php echo $model->product_unit;?></td> -->
-                                <td ><?php echo $model->sort;?></td>
+                               
                                 <!--<td ><?php echo $model->rank;?></td>
                                  
                                 <td ><?php echo $model->is_weight_confirm=='0'?yii::t('app','否'):yii::t('app','是');?></td>

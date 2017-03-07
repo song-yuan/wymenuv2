@@ -167,6 +167,12 @@
 			</div>
 	<script type="text/javascript">
 	function check(){
+                var memberLevel  =$("#MemberCard_level_id").val();
+                if(memberLevel==false){
+                    alert("请选择会员等级。");
+                    return false;
+                
+                }
 		var password1 = $('input[name="MemberCard[password_hash]"]').val();
 		var password2 = $('input[name="MemberCard[password_hash1]"]').val();
 		if(password1 != password2){
