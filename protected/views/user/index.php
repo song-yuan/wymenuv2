@@ -303,12 +303,10 @@
     });  
     $('#qrcode-btn').click(function(){
         var userId = $(this).attr('user_id');
-        alert(userId);
         $.ajax({
             url:'<?php echo $this->createUrl('/user/ajaxGetUserCard',array('companyId'=>$this->companyId));?>',
             data:{userId:userId},
             success:function(msg){
-                alert(JSON.stringify(msg));
                 if(msg.status){
                     var content = '<img src="<?php echo $baseUrl;?>/'+msg.url+'" style="width:100%;height:100%;"/>';
                     $("#qrcode-box").empty().append(content);
