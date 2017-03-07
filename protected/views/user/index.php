@@ -1,7 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('会员中心');
-	var_dump($user);
+	echo $user['lid'];exit;
 ?>
 
 
@@ -176,7 +176,7 @@
                         <span class="weui_cell_hd">
                             <img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdewm.png" class="icon_nav" alt="">
                         </span>
-                        <div  id='qrcode-btn'class="weui_cell_bd weui_cell_primary">
+                        <div  id='qrcode-btn' class="weui_cell_bd weui_cell_primary" user_id="<?php echo $user['lid'];?>">
                             <p>我的二维码</p>
                         </div>
                         <div class="weui_cell_ft">
@@ -303,11 +303,11 @@
         
     });  
     $('#qrcode-btn').click(function(){
-        var userId = <?php echo $user['lid'];?>;
+        var userId = $(this).attr('user_id');
         alert(userId);
         $.ajax({
             url:'<?php echo $this->createUrl('/user/ajaxGetUserCard',array('companyId'=>$this->companyId));?>',
-            data:{userId:<?php echo $user['lid'];?>},
+            data:{userId:userId},
             success:function(msg){
                 alert(JSON.stringify(msg));
                 if(msg.status){
