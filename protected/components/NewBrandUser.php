@@ -49,6 +49,7 @@ class NewBrandUser {
         	'lid'=>$lid,
         	'dpid'=>$this->brandId,
         	'openid'=>$this->openId,
+        	'user_level_lid'=>$this->brandUserLevelId(),
         	'card_id'=>$this->newBrandUserCardId(),
         	'create_at'=>date('Y-m-d H:i:s',$time),
         	'update_at'=>date('Y-m-d H:i:s',$time), 
@@ -61,7 +62,15 @@ class NewBrandUser {
         $this->brandUser = WxBrandUser::get($lid,$this->brandId);
        
     }
-	
+    public function brandUserLevelId() {
+    	$sql = 'SELECT 	lid FROM nb_brand_user WHERE dpid = ' . $this->brandId .' and level_type=1 and delete_flag=0 order by level_discount desc limit 1';
+    	$result = Yii::app()->db->createCommand($sql)->queryRow();
+    	if($result){
+    		return $result['lid'];
+    	}else{
+    		return 0;
+    	}
+    }
 	/**
      * 计算会员卡号，如果该品牌之前已经有会员卡号，则查询出最大的会员卡号，再加一，为下一个会员卡号
      * 如果该品牌之前没有会员卡号（没有会员），则用会员卡号的规则，写入第一个会员卡号。规则：(10000 + $brandId)*1000000000 + 801;
