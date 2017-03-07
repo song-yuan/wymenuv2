@@ -49,7 +49,6 @@ class UserController extends Controller
         $userId = Yii::app()->session['userId'];
         //$user就是brand_user表里的一行
         $user = WxBrandUser::get($userId,$this->companyId);
-        var_dump($user);exit;
         $userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
 
         $remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
@@ -59,8 +58,7 @@ class UserController extends Controller
                                 'user'=>$user,
                                 'userLevel'=>$userLevel,
                                 'remainMoney'=>$remainMoney
-                )
-                );
+                ));
 	
     }  
     public function actionMoney(){
