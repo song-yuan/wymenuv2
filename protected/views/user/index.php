@@ -1,7 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('会员中心');
-	echo $user['lid'];exit;
 ?>
 
 
