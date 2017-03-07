@@ -28,6 +28,7 @@ class UserController extends Controller
 					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['appid']);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
+				var_dump($this->brandUser);exit;
 				$userId = $this->brandUser['lid'];
 				Yii::app()->session['userId'] = $userId;
 			}else{
