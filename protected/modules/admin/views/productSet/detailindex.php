@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','套餐明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','套餐设置'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','套餐明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productSet/index' , array('companyId' => $this->companyId,'page'=>$papage)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','套餐设置'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','套餐明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productSet/index' , array('companyId' => $this->companyId,'page'=>$papage)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->

@@ -69,7 +69,8 @@ class DiscountController extends BackendController
 		$is_sync = DataSync::getInitSync();
 		//$model->create_time = time();
 		//var_dump($model);exit;
-		if(Yii::app()->request->isPostRequest && Yii::app()->user->role <= User::SHOPKEEPER) {
+		if(Yii::app()->request->isPostRequest) {
+                    if( Yii::app()->user->role <= User::SHOPKEEPER){
 			$model->attributes = Yii::app()->request->getPost('Discount');
 			$se=new Sequence("discount");
 			$model->lid = $se->nextval();
@@ -84,7 +85,12 @@ class DiscountController extends BackendController
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('discount/index' , 'companyId' => $this->companyId ));
 			}
-		}else{Yii::app()->user->setFlash('error' , yii::t('app','无权限'));}
+                }else{
+                    Yii::app()->user->setFlash('error' , yii::t('app','无权限'));
+                    
+                }
+                
+                }
 		
 		$this->render('create' , array(
 				'model' => $model ,
@@ -101,7 +107,8 @@ class DiscountController extends BackendController
 		//echo 'ddd';
 		$model = Discount::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(Yii::app()->request->isPostRequest && Yii::app()->user->role <= User::SHOPKEEPER) {
+		if(Yii::app()->request->isPostRequest) {
+                    if(Yii::app()->user->role <= User::SHOPKEEPER){
 			$model->attributes = Yii::app()->request->getPost('Discount');
 			//$model->update_at=date('Y-m-d H:i:s',time());
 			//$model->is_sync=$is_sync;
@@ -111,7 +118,10 @@ class DiscountController extends BackendController
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('discount/index' , 'companyId' => $this->companyId));
 			}
-		}else{Yii::app()->user->setFlash('error' , yii::t('app','无权限'));}
+		}else{
+                    Yii::app()->user->setFlash('error' , yii::t('app','无权限'));       
+                }
+        }
 		$this->render('update' , array(
 				'model'=>$model,
 		));

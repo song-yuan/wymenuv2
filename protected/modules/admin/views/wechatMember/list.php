@@ -71,7 +71,7 @@
                                         </a> 
                                      </div>
                                     <div class="col-sm-3 col-xs-6">
-                                        <a href="<?php ?>">
+                                        <a href="javascript:void(0)">
                                             <span class="fa fa-truck list_picture"></span>
                                             <div class="list_text">会员渠道</div>
                                         </a> 
@@ -84,25 +84,25 @@
                                         </a> 
                                     </div>
                                     <div class="col-sm-3 col-xs-6">
-                                        <a href="<?php echo $this->createUrl('wechatMember/store',array('companyId' => $this->companyId))?>">
+                                        <a href="javascript:void(0)">
                                             <span class="fa fa-yen  list_picture"></span>
                                             <div class="list_text">储值</div>
                                         </a> 
                                     </div>
                                     <div class="col-sm-3 col-xs-6">
-                                        <a href="<?php ?>">
+                                        <a href="javascript:void(0)">
                                             <span class="fa  fa-star list_picture"></span>
                                             <div class="list_text">积分</div>
                                         </a> 
                                     </div>
                                     <div class="col-sm-3 col-xs-6">
-                                        <a href="<?php ?>">
+                                        <a href="javascript:void(0)">
                                             <span class="fa fa-shopping-cart list_picture"></span>
                                             <div class="list_text">会员商城</div>
                                         </a> 
                                       </div>
                                     <div class="col-sm-3 col-xs-6">
-                                        <a href="#">
+                                        <a href="javascript:void(0)">
                                             <span class="fa fa-chain  list_picture"></span>
                                             <div class="list_text">实体卡绑定</div>
                                         </a> 

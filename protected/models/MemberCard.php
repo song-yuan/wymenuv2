@@ -79,7 +79,7 @@ class MemberCard extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                'brandUserLevel' => array(self::BELONGS_TO , 'BrandUserLevel' ,'','on'=> 't.level_id=brandUserLevel.lid and brandUserLevel.dpid=t.dpid and brandUserLevel.delete_flag<1'),
+                'brandUserLevel' => array(self::BELONGS_TO , 'BrandUserLevel' ,'','on'=> 't.level_id=brandUserLevel.lid and brandUserLevel.dpid=t.dpid and brandUserLevel.delete_flag<1 and brandUserLevel.level_type=0'),
                 'point' => array(self::HAS_MANY , 'MemberPoints' ,'','on'=> 't.rfid=point.card_id and point.dpid=t.dpid and point.delete_flag<1 and point.card_type=0'),   
 		'recharge' => array(self::HAS_MANY , 'MemberRecharge' ,'','on'=> 't.rfid=recharge.member_card_id and recharge.dpid=t.dpid and recharge.delete_flag<1'),   
 				

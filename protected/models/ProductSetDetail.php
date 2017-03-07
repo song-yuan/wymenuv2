@@ -73,7 +73,7 @@ class ProductSetDetail extends CActiveRecord
 			'update_at' => '更新时间',
 			'set_id' => yii::t('app','套餐名称'),
 			'product_id' => yii::t('app','产品名称'),
-			'price' =>yii::t('app', '套餐价格'),
+			'price' =>yii::t('app', '菜品差额'),
 			'group_no' =>yii::t('app', '分组号'),
 			'number' =>yii::t('app', '数量'),
 			'is_select' =>yii::t('app', '组中默认项'),
