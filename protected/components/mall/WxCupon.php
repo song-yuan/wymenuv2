@@ -166,7 +166,7 @@ class WxCupon
 							->bindValue(':type',$type)
 							->queryAll();
 		foreach ($sentPromotion as $promotion){
-			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],0,$promotion['sentwxcard_pro_id']);
+			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id']);
 		}
 	}
 	/**
