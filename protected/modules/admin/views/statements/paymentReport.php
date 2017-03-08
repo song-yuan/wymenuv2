@@ -91,7 +91,8 @@
 		                            $grouppay_item ++;
 		                         ?></th>
 		                    <?php endforeach;?>
-		               <?php endif;?>                                                              
+		               <?php endif;?>   
+		               <th><?php echo yii::t('app','系统券');?></th>                                                           
 		               <th><?php echo yii::t('app','退款');?></th>
 		
 		            </tr>
@@ -115,6 +116,7 @@
 		           $grouppay_arr[$i] =0; 
 		           // $grouppay.$i =0;
 		        }
+		        $all_wxcards = 0;
 		        $retreats = 0;
 		        foreach ($models as $model): ?>
 		
@@ -189,6 +191,12 @@
 		                    </td>
 		                <?php endforeach;?>
 		            <?php endif;?> 
+		            <td><?php 
+		                $wxcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,9,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $all_wxcards = $all_wxcards + $wxcard;
+		                echo $wxcard; 
+		                ?>
+		            </td>
 		            <td><?php echo $retreat;?></td>
 										
 		        </tr>
@@ -221,7 +229,8 @@
 		                    
 		                <?php endforeach;?>
 		            <?php endif;?> 
-		            <td><?php ?></td>
+		            <td><?php echo $all_wxcards;?></td>
+		            <td><?php echo $retreats;?></td>
 										
 		        </tr>
 		      <?php endif;?> 
