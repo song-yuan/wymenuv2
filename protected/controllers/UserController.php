@@ -50,14 +50,17 @@ class UserController extends Controller
         //$user就是brand_user表里的一行
         $user = WxBrandUser::get($userId,$this->companyId);
         $userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
-
+        $style_id=$userLevel['style_id'];
+        $img=WxBrandUser::getCardImg($style_id,$this->companyId);
+        
         $remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
         $this->render('index',array(
                                 'userid'=>$userId,
                                 'companyId'=>$this->companyId,
                                 'user'=>$user,
                                 'userLevel'=>$userLevel,
-                                'remainMoney'=>$remainMoney
+                                'remainMoney'=>$remainMoney,
+                                'img'=>$img
                 ));
 	
     }  

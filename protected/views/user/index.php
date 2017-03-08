@@ -14,13 +14,24 @@
 <style>
     .hd {
     padding:15px 0px 8px 0px;
-    text-align: center;
+   
 }
-    .hd img{
-       
-        height:180px;
-       
-           
+    .img-box{
+            background-repeat: no-repeat;
+            height: 180px;
+            width: 300px;
+            margin: 0 auto;  
+            position: relative;
+            border-radius: 7px;
+            
+    }
+    .img-box p{
+        position: absolute;
+        bottom:0px;
+        right:0;
+        margin:0px 10px 0px 10px;
+        color:#fff;
+
     }
     .up_down1:after{
          transition:All 0.3s ease-in-out;
@@ -140,8 +151,10 @@
   
     <div class="container js_container">
         <div class="page">
-            <div class="hd">
-                <img  src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/hyk.png" class="icon_nav" alt=""/>
+           <div class="hd" style="position: relative;">
+               <div class="img-box" style="background-image:url(<?php echo isset($img['bg_img'])?$img['bg_img']:Yii::app()->request->baseUrl.'/img/wechat_img/hyk22.jpg'?>)">
+                   <p>会员卡号：<?php echo substr($user['card_id'],5);?></p>
+               </div>
             </div>
             <div class="bd">
                 <div class="weui_cells weui_cells_access global_navs">

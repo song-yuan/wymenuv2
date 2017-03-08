@@ -1,3 +1,7 @@
+<?php
+	$baseUrl = Yii::app()->baseUrl;
+	$this->setPageTitle('我的积分');
+?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
 <head>
