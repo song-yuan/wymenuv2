@@ -128,7 +128,7 @@
                         </div>   
                 </div>
                 <div class="range " >
-                    <div class="describe">限制条件：</div>
+                    <div class="describe">限制条件：<?php echo $v['cupon_money'];?></div>
                     <div class="date">
                            <span>
                              <?php echo date('Y.m.d',strtotime($v['begin_time']));?>   
