@@ -154,9 +154,26 @@ class WxCupon
 	}
 	/**
 	 * 
+	 * 获取发放的代金券 活动
+	 * 
+	 */
+	public static function getWxSentCupon($dpid,$type,$userId){
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select t1.* from nb_sentwxcard_promotion_detail t,nb_sentwxcard_promotion t1 where t.sentwxcard_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and type=:type and t,begin_time <=:now and :now <= t.end_time and t.delete_flag=0 and t1.delete_flag=0';
+		$sentPromotion = Yii::app()->db->createCommand($sql)
+							->bindValue(':dpid',$dpid)
+							->bindValue(':now',$now)
+							->bindValue(':type',$type)
+							->queryAll();
+		foreach ($sentPromotion as $promotion){
+			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],0,$promotion['sentwxcard_pro_id']);
+		}
+	}
+	/**
+	 * 
 	 * 发放代金券
 	 */
-	public static function sentCupon($dpid,$userId,$cuponId){
+	public static function sentCupon($dpid,$userId,$cuponId,$source = 2,$source_id = 0){
 		$now = date('Y-m-d H:i:s',time());
 		$se = new Sequence("cupon_branduser");
 		$lid = $se->nextval();
@@ -168,8 +185,8 @@ class WxCupon
 	        	'cupon_id'=>$cuponId,
 	        	'to_group'=>3,
 	        	'brand_user_lid'=>$userId,
-	        	'cupon_source'=>2,
-	        	'source_id'=>0,
+	        	'cupon_source'=>$source,
+	        	'source_id'=>$source_id,
 	        	'is_used'=>1,
 	        	'is_sync'=>DataSync::getInitSync(),
 				);

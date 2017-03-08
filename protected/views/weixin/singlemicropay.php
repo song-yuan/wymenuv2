@@ -32,6 +32,8 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 			$msg = array('status'=>true, 'result'=>true, 'trade_no'=>$orderId);
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
 			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);
+		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL_SUCCESS"){
+			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);
 		}else{
 			$msg = array('status'=>false, 'result'=>false,);
 		}
