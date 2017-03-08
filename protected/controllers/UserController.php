@@ -25,7 +25,7 @@ class UserController extends Controller
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
 				if(!$this->brandUser){
-					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['appid']);
+					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
 				$userId = $this->brandUser['lid'];
@@ -49,18 +49,23 @@ class UserController extends Controller
         $userId = Yii::app()->session['userId'];
         //$user就是brand_user表里的一行
         $user = WxBrandUser::get($userId,$this->companyId);
-        
         $userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
-
+        $img = array();
+        if($userLevel){
+            $style_id=$userLevel['style_id'];
+            $img = WxBrandUser::getCardImg($style_id,$this->companyId);
+        }
+        
+        
         $remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
         $this->render('index',array(
                                 'userid'=>$userId,
                                 'companyId'=>$this->companyId,
                                 'user'=>$user,
                                 'userLevel'=>$userLevel,
-                                'remainMoney'=>$remainMoney
-                )
-                );
+                                'remainMoney'=>$remainMoney,
+                                'img'=>$img
+                ));
 	
     }  
     public function actionMoney(){
@@ -185,6 +190,7 @@ class UserController extends Controller
 			$userInfo['dpid'] = $this->companyId;
 			$result = WxBrandUser::update($userInfo);
 			if($result){
+				WxCupon::getWxSentCupon($this->companyId, 1, $userInfo['lid']);
 				$this->redirect(array('/user/index','companyId'=>$this->companyId));
 			}else{
 				$this->redirect(array('/user/setUserInfo','companyId'=>$this->companyId));
