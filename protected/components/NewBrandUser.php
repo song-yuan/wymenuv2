@@ -26,6 +26,7 @@ class NewBrandUser {
 			$this->brandId = $brandId;
 			$this->newBrandUser();
 			$this->pullUserInfo();
+			$this->sentCupon();
 			$this->success = true;
 			$transaction->commit();
 		} catch(Exception $e) {
