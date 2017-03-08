@@ -186,6 +186,7 @@ class UserController extends Controller
 			$userInfo['dpid'] = $this->companyId;
 			$result = WxBrandUser::update($userInfo);
 			if($result){
+				WxCupon::getWxSentCupon($this->companyId, 1, $userInfo['lid']);
 				$this->redirect(array('/user/index','companyId'=>$this->companyId));
 			}else{
 				$this->redirect(array('/user/setUserInfo','companyId'=>$this->companyId));
