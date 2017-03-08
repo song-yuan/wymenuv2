@@ -54,6 +54,9 @@ class MicroPay
 		{
 			// 撤销单失败 返回 撤销单失败！
 			return array('return_code'=>'SUCCESS','result_code'=>'CANCEL');
+		}else{
+			// 撤销单成功 如已支付则已退款
+			return array('return_code'=>'SUCCESS','result_code'=>'CANCEL_SUCCESS');
 		}
 		return false;
 	}
