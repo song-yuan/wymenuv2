@@ -333,6 +333,7 @@
 					<input type="hidden" id="newselcups" name="newselcups"></input>
 					<input type="hidden" id="falid" name="falid"></input>
 					<input type="hidden" id="facode" name="facode"></input>
+					<input type="hidden" id="sub" name="sub"></input>
 					<div class="form-actions fluid">
 						<div class="col-md-offset-3 col-md-9">
 							<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
@@ -428,11 +429,24 @@
 	         //alert(plids);
 	         var begintime = $('#SentwxcardPromotion_begin_time').val();
 	         var endtime = $('#SentwxcardPromotion_end_time').val();
+	         
+	         var title = $('#SentwxcardPromotion_promotion_title').val();
+	         var picture = $('#SentwxcardPromotion_main_picture').val();
+	         var abstracts = $('#SentwxcardPromotion_promotion_abstract').val();
+	         var messages = $('#SentwxcardPromotion_promotion_message').val();
+	         
+	         if(title&&picture&&abstracts&&messages){
+					
+				}else{
+					alert("请填写带星号的项！！");
+					return false;
+				}
+	         
 	         if(endtime<=begintime){
 	        	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
 	        	 return false;
 	         }
-
+			
 	         $("#falid").val(falid);
 	         $("#facode").val(facode);
 	         $("#newselcups").val(plids);
