@@ -35,6 +35,35 @@ class WxBrandUser {
 		$card_img = Yii::app()->db->createCommand($sql)->queryRow();
 		return $card_img;
 	}
+        /**
+         * 返回满送
+         */
+        public static function getFullGive($dpid) {
+                $now = date('Y-m-d H:i:s',time());
+		$sql = 'SELECT * FROM nb_full_sent WHERE full_type = 0 and begin_time <=:now and end_time>=:now and dpid = '.$dpid.' and delete_flag=0';
+		$full_give =  Yii::app()->db->createCommand($sql)->bindValue(':now',$now)->queryAll();
+		return $full_give;
+	}
+         /**
+         * 返回满减
+         */
+        public static function getFullMinus($dpid) {
+                $now = date('Y-m-d H:i:s',time());
+		$sql = 'SELECT * FROM nb_full_sent WHERE full_type = 1 and begin_time <=:now and end_time>=:now and dpid = '.$dpid.' and delete_flag=0 ';
+		$full_minus = Yii::app()->db->createCommand($sql)->bindValue(':now',$now)->queryAll();
+		return $full_minus;
+	}
+        
+         /**
+         * 返回账单
+         */
+        public static function getOrderPay($card_id,$dpid) {
+               
+		$sql = 'SELECT * FROM nb_order_pay WHERE  dpid = '.$dpid.' and remark = '.$card_id.' and paytype in (8,9,10)';
+		$order_pay = Yii::app()->db->createCommand($sql)->queryAll();
+		return $order_pay;
+	}
+        
 	/**
 	 * 返回对应的openId 
 	 */
@@ -59,8 +88,9 @@ class WxBrandUser {
 	 * 通过card_id查找用户
 	 * 
 	 */
-	public static function getFromCardId($cardId) {
-		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_brand_user t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t1.level_type=1 and t1.delete_flag=0 where t.card_id = "'.$cardId.'"';
+	public static function getFromCardId($dpid,$cardId) {
+		$dpids = WxCompany::getDpids($dpid);
+		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_brand_user t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t1.level_type=1 and t1.delete_flag=0 where t.dpid in ('.$dpids.') and t.card_id = "'.$cardId.'"';
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUser;
 	}
