@@ -289,8 +289,7 @@ li{
                             </thead>
                             <?php 
                              if(!empty($orderPay)):
-                                 foreach ($orderPay as $v): 
-                                     
+                                 foreach ($orderPay as $v):                                     
                              ?>                           
                             <tbody>
                                  <tr>

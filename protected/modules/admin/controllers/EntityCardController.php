@@ -22,7 +22,7 @@ class EntityCardController extends BackendController {
         $num = Yii::app()->request->getPost('num');
         if(Yii::app()->request->isPostRequest){
             if($num !=''){
-                 $card_model = MemberCard::model()->with(array('brandUserLevel','point','recharge'))->find(" t.dpid='".$this->companyId ."'and ( t.selfcode='".$num."' or t.rfid='".$num."' or t.mobile='".$num."')");           
+                 $card_model = MemberCard::model()->with(array('brandUserLevel','point','recharge'))->find(" t.dpid='".$this->companyId ."'and ( t.selfcode like '%".$num."%' or t.rfid='".$num."' or t.mobile='".$num."')");           
                  $rfid = 0;
                 if($card_model){
                   $rfid = $card_model->rfid;
@@ -32,7 +32,7 @@ class EntityCardController extends BackendController {
 
 
                 if(!$card_model){
-                 Yii::app()->user->setFlash('error' ,yii::t('app', '没有该会员'));
+                 Yii::app()->user->setFlash('error' ,yii::t('app', '没有查询到该会员'));
                 }
             }
         }    

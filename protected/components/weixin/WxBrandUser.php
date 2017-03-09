@@ -35,6 +35,35 @@ class WxBrandUser {
 		$card_img = Yii::app()->db->createCommand($sql)->queryRow();
 		return $card_img;
 	}
+        /**
+         * 返回满送
+         */
+        public static function getFullGive($dpid) {
+                $now = date('Y-m-d H:i:s',time());
+		$sql = 'SELECT * FROM nb_full_sent WHERE full_type = 0 and begin_time <=:now and end_time>=:now and dpid = '.$dpid.' and delete_flag=0';
+		$full_give =  Yii::app()->db->createCommand($sql)->bindValue(':now',$now)->queryAll();
+		return $full_give;
+	}
+         /**
+         * 返回满减
+         */
+        public static function getFullMinus($dpid) {
+                $now = date('Y-m-d H:i:s',time());
+		$sql = 'SELECT * FROM nb_full_sent WHERE full_type = 1 and begin_time <=:now and end_time>=:now and dpid = '.$dpid.' and delete_flag=0 ';
+		$full_minus = Yii::app()->db->createCommand($sql)->bindValue(':now',$now)->queryAll();
+		return $full_minus;
+	}
+        
+         /**
+         * 返回账单
+         */
+        public static function getOrderPay($card_id,$dpid) {
+               
+		$sql = 'SELECT * FROM nb_order_pay WHERE  dpid = '.$dpid.' and remark = '.$card_id.' and paytype in (8,9,10)';
+		$order_pay = Yii::app()->db->createCommand($sql)->queryAll();
+		return $order_pay;
+	}
+        
 	/**
 	 * 返回对应的openId 
 	 */

@@ -86,7 +86,7 @@
         display: none;
     }
     .pri_style,.sale1_style,.sale2_style{
-        height:120px;
+        min-height:120px;
         border-top: 1px solid #D9D9D9;
         border-bottom: 1px solid #D9D9D9;
         background-color: #EDEDED;
@@ -239,13 +239,27 @@
                         <div class="up_down1">
                         </div>
                     </a>
-                     <div class="collapse sale1_style" id="chanel_demo2">
+                    <div class="collapse sale1_style" id="chanel_demo2">
                         <!--  add some code here -->
-                       <div class="introduce">  详情说明</div>
+                       <div class="introduce">详情说明</div>
+                      <?php 
+                            if($minus):
+                            foreach ($minus as $v):
+                        ?>                        
                             <ul>
-                                <li>满30元减2元</li>
-                                <li>满50元减5元</li>
+                                <li><?php echo $v['title'];?>
+                                   （使用时间：<?php echo date('Y.m.d',strtotime($v['begin_time']));?> -
+                                    <?php echo date('Y.m.d',strtotime($v['end_time']));?>）
+                                </li>
                             </ul> 
+                        <?php 
+                            endforeach; 
+                            else :
+                        ?>
+                           <ul>
+                               <li>暂无满减优惠活动</li> 
+                           </ul> 
+                        <?php endif; ?>
                     </div>
                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="sale2" data_target="#chanel_demo3">
@@ -259,10 +273,25 @@
                     <div class="collapse sale2_style" id="chanel_demo3">
                         <!--  add some code here -->
                         <div class="introduce">  详情说明</div>
+                            <?php 
+                            if($give):
+                            foreach ($give as $v):
+                        ?>                        
                             <ul>
-                                <li>满30元送甜筒一个</li>
-                                <li>满50元送薯条(小)一份</li>
-                            </ul>
+                                <li><?php echo $v['title'];?>
+                             
+                                   （使用时间：<?php echo date('Y.m.d',strtotime($v['begin_time']));?> -
+                                   <?php echo date('Y.m.d',strtotime($v['end_time']));?>）
+                                </li>
+                            </ul> 
+                        <?php 
+                            endforeach; 
+                            else :
+                        ?>
+                           <ul>
+                               <li>暂无满送优惠活动</li> 
+                           </ul> 
+                        <?php endif; ?>
                     </div>
                     <div class="empty1"></div>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/setUserInfo',array('companyId'=>$this->companyId));?>">
