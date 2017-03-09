@@ -26,6 +26,15 @@ class WxBrandUser {
 		$brandUserLevel = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUserLevel;
 	}
+        /**
+         * 返回会员卡图片
+         */
+        public static function getCardImg($style_id,$dpid) {
+
+		$sql = 'SELECT * FROM nb_member_wxcard_style WHERE lid = ' .$style_id .' and dpid = '.$dpid.' and delete_flag=0';
+		$card_img = Yii::app()->db->createCommand($sql)->queryRow();
+		return $card_img;
+	}
 	/**
 	 * 返回对应的openId 
 	 */

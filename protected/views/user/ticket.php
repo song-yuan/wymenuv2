@@ -1,3 +1,7 @@
+<?php
+	$baseUrl = Yii::app()->baseUrl;
+	$this->setPageTitle('我的券');
+?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
@@ -124,7 +128,7 @@
                         </div>   
                 </div>
                 <div class="range " >
-                    <div class="describe">限制条件：</div>
+                    <div class="describe">限制条件：<?php echo $v['cupon_money'];?></div>
                     <div class="date">
                            <span>
                              <?php echo date('Y.m.d',strtotime($v['begin_time']));?>   

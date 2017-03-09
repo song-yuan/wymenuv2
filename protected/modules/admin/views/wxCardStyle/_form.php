@@ -31,8 +31,13 @@
                 ?>
                <?php echo $form->hiddenField($model,'bg_img'); ?>
                <?php echo $form->error($model,'bg_img'); ?>
+                   <div> 图片大小建议：宽300像素，高180像素</div>  
                 </div>
+               
         </div>
+        
+                    
+               
         <div class="form-group">
                 <?php echo $form->labelEx($model, 'style_cardnum_style',array('class' => 'col-md-3 control-label'));?>
                 <div class="col-md-4">
