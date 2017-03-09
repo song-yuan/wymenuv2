@@ -23,6 +23,22 @@ class WxPoints
 				  ->queryRow();
 	    return $point['total']?$point['total']:0;
 	}
+        /**
+	 * 
+	 * 获取所有积分记录
+	 * 
+	 */
+	public static function getPoints($userId,$dpid){
+		$date = date('Y-m-d H:i:s',time());
+		$sql = 'select create_at,points,remain_points,end_time from nb_member_points where card_type=1 and card_id=:userId and dpid=:dpid   and delete_flag=0';
+		$point = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':userId',$userId)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryAll();
+                 return $point;
+	}
+        
+        
 	/**
 	 * 
 	 * 处理积分

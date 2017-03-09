@@ -56,15 +56,19 @@ class UserController extends Controller
             $img = WxBrandUser::getCardImg($style_id,$this->companyId);
         }
         
+        $give = WxBrandUser::getFullGive($this->companyId);
+        $minus = WxBrandUser::getFullMinus($this->companyId);
         
         $remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
         $this->render('index',array(
-                                'userid'=>$userId,
+                                'userId'=>$userId,
                                 'companyId'=>$this->companyId,
                                 'user'=>$user,
                                 'userLevel'=>$userLevel,
                                 'remainMoney'=>$remainMoney,
-                                'img'=>$img
+                                'img'=>$img,
+                                'give'=>$give,
+                                'minus'=>$minus
                 ));
 	
     }  
@@ -72,7 +76,19 @@ class UserController extends Controller
         $this->render('money');
     } 
      public function actionPoint(){
-      $this->render('point');
+        $userId = Yii::app()->session['userId'];
+        $remain_points = WxPoints::getAvaliablePoints($userId,$this->companyId);  
+        $this->render('point',array( 
+                     'remain_points' => $remain_points,
+                     
+                ));
+    }
+    public function actionPointRecord(){
+         $userId = Yii::app()->session['userId'];       
+         $points = WxPoints::getPoints($userId,$this->companyId);
+        $this->render('pointRecord',array(      
+                     'points'=>$points
+                ));
     }
     public function actionTicket(){
         //$userId就是brand_user表里的lid
@@ -87,7 +103,15 @@ class UserController extends Controller
                     ));       
     }
      public function actionBill(){
-      $this->render('bill'); 
+         $userId = Yii::app()->session['userId'];
+        //$user就是brand_user表里的一行
+        $user = WxBrandUser::get($userId,$this->companyId);
+        $card_id = $user['card_id'];
+        $order_pay = WxBrandUser::getOrderPay($card_id,$this->companyId);
+        $this->render('bill',array(   
+                                    'order_pay'=>$order_pay,
+	                    )
+                ); 
     }
         
 	/**

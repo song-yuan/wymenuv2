@@ -5,12 +5,22 @@
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
 <style>
+    .item1{
+         
+    margin-top: 0px;
+    background-color: #04BE02;
+    color:#FFFFFF;
+
+    }
+
 .money1{
     font-size: 17px;
-    margin:20px 0px 10px 20px;
+    padding:20px 0px 0px 15px;    
 }
 .money2{
     font-size: 50px;
+   
+    padding-right: 15px;
     text-align: center;
 }
 </style>
@@ -22,13 +32,15 @@
 <body>
      
        <div class="page">
-           <div class="money1">
-               我的储值余额(元)
+           <div class="item1">
+                <div class="money1">
+                    我的储值余额(元)
+                </div>
+                <div class="money2">
+                    0.00
+                </div>
            </div>
-           <div class="money2">
-               0.00
-           </div>
-           <div class="empty2">储值有优惠</div>
+<!--           <div class="empty2">储值有优惠</div>
            <div class="bd"> 
                <div class="weui_cells weui_cells_access global_navs">
                     <a class="weui_cell js_cell" href="javascript:;" >
@@ -66,7 +78,7 @@
                     </a>
                    
                  </div>
-           </div> 
+           </div> -->
         </div>   
   
    </body>

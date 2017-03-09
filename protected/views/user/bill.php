@@ -2,28 +2,19 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('账单');
 ?>
+
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap/js/bootstrap.min.js');?>
+<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/bootstrap/css/bootstrap.min.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
-<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
+
 <style>
-.aaa{
-   
-    height: 300px;
-    background-color: #EDEDED;
-}
-.bbb{
-   font-size: 65px;
-   color:#D9D9D9;
-   width: 100%;
-   text-align: center;
-   margin-bottom: 20px;
-   margin-top: 80px;
-}
-.ccc{
-    color:#787878;
-    text-align: center;
-    font-size: 25px;
-}
+   .page{
+        padding:10px 15px 10px 15px;
+    }
+    
+
+    
 </style>
 
 <head>
@@ -33,10 +24,27 @@
 </head>
 <body>
      <div class="page">
-         <div class="aaa">
-                <div class="fa  fa-align-justify bbb "></div>
-                <div class="ccc">您还没有在本店消费哦!</div>
-         </div>
+        <table class="table table-striped">
+            <tr>
+                <th>账单号</th>
+                <th>金额</th>
+                <th>时间</th>
+            </tr>
+             <?php  
+                    if($order_pay): 
+                    foreach($order_pay as $v):                 
+                ?>
+            <tr>
+                <td><?php echo $v['account_no'];?></td>
+                <td><?php echo $v['pay_amount'];?></td>
+                <td><?php echo  date('Y.m.d',strtotime($v['create_at']));?>
+              
+            </tr>
+              <?php                                    
+                    endforeach;
+                    endif;
+                ?>
+        </table>
        
      </div>   
   </body>  

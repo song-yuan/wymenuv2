@@ -40,8 +40,9 @@ class WechatMemberController extends BackendController {
 	          
 	          if($brand_user_model){
 	              $userLid = $brand_user_model->lid;
+                      $card_id = $brand_user_model->card_id;
 	          }else{
-			Yii::app()->user->setFlash('error' ,yii::t('app', '没有该会员'));                
+			Yii::app()->user->setFlash('error' ,yii::t('app', '没有查询到该会员'));                
 		  }
 	        $now = date('Y-m-d H:i:s',time());
                
@@ -49,7 +50,7 @@ class WechatMemberController extends BackendController {
 	        $sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$userLid.' and dpid='.$this->companyId.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
 	        $back = Yii::app()->db->createCommand($sql)->queryRow();
 	        $cashback= $back['total'];
-	          $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype=6 and t.paytype_id='".$userLid."'and t.dpid='".$this->companyId."'");
+	          $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid='".$this->companyId."'");
 	         }   
 	        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid=".$this->companyId);            
 	          }
