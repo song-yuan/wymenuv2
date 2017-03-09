@@ -10,7 +10,13 @@
 								#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 								</style>
 								<div class="form-body">
-														
+									<div class="form-group">
+										<?php echo $form->label($model, yii::t('app','代金券面值'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'cupon_money',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cupon_money')));?>
+											<?php echo $form->error($model, 'cupon_money' )?>
+										</div>
+									</div><!-- 活动类型 -->					
 									<div class="form-group ">
 									<?php if($model->hasErrors('cupon_title')) echo 'has-error';?>
 										<?php echo $form->label($model, yii::t('app','代金券名称'),array('class' => 'col-md-3 control-label'));?>
@@ -29,13 +35,7 @@
 											<?php echo $form->error($model, 'cupon_abstract' )?>
 										</div>
 									</div><!-- 活动摘要 -->
-									<div class="form-group">
-										<?php echo $form->label($model, yii::t('app','代金券面值'),array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'cupon_money',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cupon_money')));?>
-											<?php echo $form->error($model, 'cupon_money' )?>
-										</div>
-									</div><!-- 活动类型 -->
+									
 									 <div class="form-group">
 										<?php echo $form->label($model, yii::t('app','使用该代金券的最低消费'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -135,7 +135,7 @@
 											</div>
 										</div>
 									<div class="form-group">
-										<?php echo $form->label($model, yii::t('app','图文说明'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','图文说明（限43个字）'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
 											<?php echo $form->textArea($model, 'cupon_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cupon_memo')));?>
 											<?php echo $form->error($model, 'cupon_memo' )?>
@@ -179,6 +179,12 @@
 		 
 
 	     $("#su").on('click',function() {
+                var cuponmoney   =$("#Cupon_cupon_money").val();
+                if(cuponmoney==false){
+                    alert("请填写代金券面值");
+                    return false;
+                }
+                 
 	        // alert(11);
 	         var p1 = $('#Cupon_to_group').children('option:selected').val();
 	         var aa = document.getElementsByName("chk");
@@ -188,6 +194,7 @@
 	        // alert(p1);
 	         //var ss = "";
 	       // if(aa.checked){
+            
 	         if(endtime<=begintime){
 	           	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
 	           	 return false;
