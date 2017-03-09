@@ -1582,11 +1582,12 @@ class DataSyncOperation {
 	 *
 	 */
 	public static function dealWxHykPay($data) {
+		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
 		$cupons = isset($data['cupon'])?$data['cupon']:array();
 		$yue = $data['yue'];
 		$points = $data['points'];
-		$user = WxBrandUser::getFromCardId($cardId);
+		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
