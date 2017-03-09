@@ -1564,8 +1564,9 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getUserInfo($data) {
+		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
-		$user = WxBrandUser::getFromCardId($cardId);
+		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
 			$cupon = WxCupon::getUserNotUseCupon($user['lid'],$user['dpid']);
 			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
