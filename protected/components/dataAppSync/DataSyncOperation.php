@@ -636,24 +636,56 @@ class DataSyncOperation {
 			
 			//会员卡积分
 			if(!empty($memberPoints)){
-				$se = new Sequence ( "member_points" );
-				$memberPointId = $se->nextval ();
-				$memberPointData = array (
-						'lid' => $memberPointId,
-						'dpid' => $dpid,
-						'create_at' => $createAt,
-						'update_at' => date ( 'Y-m-d H:i:s', $time ),
-						'card_type' => 0,
-						'card_id' => $memberPoints->member_card_rfid,
-						'point_resource' => 0,
-						'resource_id' => $orderId,
-						'points' => $memberPoints->receive_points,
-						'remain_points' => $memberPoints->receive_points,
-						'is_sync' => $isSync
-				);
-				Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
-				$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid='.$memberPoints->member_card_rfid.' and dpid='.$dpid;
-				Yii::app ()->db->createCommand ($sql)->execute();
+				$cardType = $memberPoints->card_type;
+				$cardId = $memberPoints->member_card_rfid;
+				$receivePoint = $memberPoints->receive_points;
+				$endDate = date('Y',$time)+1 . '-' . date('m-d 23:59:59',$time);
+				if($cardType == 0){
+					// 实体会员卡
+					$se = new Sequence ( "member_points" );
+					$memberPointId = $se->nextval ();
+					$memberPointData = array (
+							'lid' => $memberPointId,
+							'dpid' => $dpid,
+							'create_at' => $createAt,
+							'update_at' => date ( 'Y-m-d H:i:s', $time ),
+							'card_type' => $cardType,
+							'card_id' => $cardId,
+							'point_resource' => 0,
+							'resource_id' => $orderId,
+							'points' => $receivePoint,
+							'remain_points' => $receivePoint,
+							'end_time' => $endDate,
+							'is_sync' => $isSync
+					);
+					Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
+					$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid='.$memberPoints->member_card_rfid.' and dpid='.$dpid;
+					Yii::app ()->db->createCommand ($sql)->execute();
+				}else{
+					// 微信会员卡
+					$user = WxBrandUser::getFromCardId($dpid, $cardId);
+					if($user){
+						$se = new Sequence ( "member_points" );
+						$memberPointId = $se->nextval ();
+						$memberPointData = array (
+								'lid' => $memberPointId,
+								'dpid' => $dpid,
+								'create_at' => $createAt,
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'card_type' => $cardType,
+								'card_id' => $user['lid'],
+								'point_resource' => 0,
+								'resource_id' => $orderId,
+								'points' => $receivePoint,
+								'remain_points' => $receivePoint,
+								'end_time' => $endDate,
+								'is_sync' => $isSync
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
+						$sql = 'update nb_brand_user set consume_point_history = consume_point_history+'.$receivePoint.',consume_total_money =consume_total_money+'.$orderInfo->should_total.' where lid='.$user['lid'].' and dpid='.$user['dpid'];
+						Yii::app ()->db->createCommand ($sql)->execute();
+					}
+				}
 			}
 			$transaction->commit ();
 			$msg = json_encode ( array (
@@ -1564,8 +1596,9 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getUserInfo($data) {
+		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
-		$user = WxBrandUser::getFromCardId($cardId);
+		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
 			$cupon = WxCupon::getUserNotUseCupon($user['lid'],$user['dpid']);
 			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
@@ -1581,11 +1614,12 @@ class DataSyncOperation {
 	 *
 	 */
 	public static function dealWxHykPay($data) {
+		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
 		$cupons = isset($data['cupon'])?$data['cupon']:array();
 		$yue = $data['yue'];
 		$points = $data['points'];
-		$user = WxBrandUser::getFromCardId($cardId);
+		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
