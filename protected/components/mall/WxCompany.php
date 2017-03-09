@@ -37,7 +37,11 @@ class WxCompany
 		$coompany = self::get($dpid);
 		$memCode = $coompany['membercard_code'];
 		if($memCode!=''){
-			$sql = 'select dpid from nb_company where membercard_code="'.$memCode.'" and delete_flag=0';
+			$comDpid = $coompany['comp_dpid'];
+			if($comDpid==0){
+				$comDpid = $dpid;
+			}
+			$sql = 'select dpid from nb_company where (comp_dpid='.$comDpid.' or (dpid='.$dpid.' and comp_dpid=0)) and membercard_code="'.$memCode.'" and delete_flag=0';
 			$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
 			$dpidJoin = join(',',$dpids);
 		}else{
