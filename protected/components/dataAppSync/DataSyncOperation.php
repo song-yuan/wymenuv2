@@ -639,6 +639,7 @@ class DataSyncOperation {
 				$cardType = $memberPoints->card_type;
 				$cardId = $memberPoints->member_card_rfid;
 				$receivePoint = $memberPoints->receive_points;
+				$endDate = date('Y',$time)+1 . '-' . date('m-d 23:59:59',$time);
 				if($cardType == 0){
 					// 实体会员卡
 					$se = new Sequence ( "member_points" );
@@ -654,6 +655,7 @@ class DataSyncOperation {
 							'resource_id' => $orderId,
 							'points' => $receivePoint,
 							'remain_points' => $receivePoint,
+							'end_time' => $endDate,
 							'is_sync' => $isSync
 					);
 					Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
@@ -676,6 +678,7 @@ class DataSyncOperation {
 								'resource_id' => $orderId,
 								'points' => $receivePoint,
 								'remain_points' => $receivePoint,
+								'end_time' => $endDate,
 								'is_sync' => $isSync
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
