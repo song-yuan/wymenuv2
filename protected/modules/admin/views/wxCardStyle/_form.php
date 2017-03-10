@@ -38,13 +38,13 @@
         
                     
                
-        <div class="form-group">
-                <?php echo $form->labelEx($model, 'style_cardnum_style',array('class' => 'col-md-3 control-label'));?>
+<!--        <div class="form-group">
+                <?php //echo $form->labelEx($model, 'style_cardnum_style',array('class' => 'col-md-3 control-label'));?>
                 <div class="col-md-4">
-                        <?php echo $form->radioButtonList($model, 'style_cardnum_style',$style_cardnum_style,array('separator'=>'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;','class' => 'form-control'));?>
-                        <?php echo $form->error($model, 'style_cardnum_style' )?>
+                        <?php //echo $form->radioButtonList($model, 'style_cardnum_style',$style_cardnum_style,array('separator'=>'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;','class' => 'form-control'));?>
+                        <?php //echo $form->error($model, 'style_cardnum_style' )?>
                 </div>
-        </div>
+        </div>-->
         <div class="form-actions fluid">
                 <div class="col-md-offset-3 col-md-9">
                         <button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>

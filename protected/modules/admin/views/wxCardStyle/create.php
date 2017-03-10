@@ -26,7 +26,10 @@
 
             <div class="portlet purple box">
                 <div class="portlet-body form" >
-                    <?php echo $this->renderPartial('_form', array('model'=>$model, 'style_cardnum_style'=>$style_cardnum_style)); ?>
+                    <?php echo $this->renderPartial('_form', 
+                                        array('model'=>$model, 
+                                            //'style_cardnum_style'=>$style_cardnum_style
+                                            )); ?>
                 </div>
             </div>
     </div>

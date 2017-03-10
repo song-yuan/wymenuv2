@@ -74,7 +74,7 @@ class PadSetting extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'pad_code' => '店铺同步码',
-			'pad_sales_type' => '销售模式 ',
+			'pad_sales_type' => '屏幕模式 ',
 			'pad_type' => 'pos类型 0 主pos 1从pos',
 			'pad_ip' => 'Pad Ip',
 			'pad_fip' => 'Pad Fip',

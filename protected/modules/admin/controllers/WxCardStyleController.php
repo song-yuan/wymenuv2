@@ -31,8 +31,8 @@ class WxCardStyleController extends BackendController
 		));
     }
     public function actionCreate() {
-        $style_cardnum_style[1] = "卡号在左边";
-        $style_cardnum_style[2] = "卡号在右边";
+    //    $style_cardnum_style[1] = "卡号在左边";
+    //    $style_cardnum_style[2] = "卡号在右边";
         $model = new MemberWxcardStyle();
         $model->dpid = $this->companyId ;
         if(Yii::app()->request->isPostRequest) {
@@ -42,7 +42,7 @@ class WxCardStyleController extends BackendController
                 $model->lid = $lid;
              
                $model->bg_img = $cardImg['bg_img'];
-                $model->style_cardnum_style = $cardImg['style_cardnum_style'];
+           //     $model->style_cardnum_style = $cardImg['style_cardnum_style'];
                
              
                 $model->create_at = date('Y-m-d H:i:s',time());
@@ -56,14 +56,14 @@ class WxCardStyleController extends BackendController
         
         return $this->render('create',array(
 				'model' => $model,
-                                'style_cardnum_style'=>$style_cardnum_style
+                         //       'style_cardnum_style'=>$style_cardnum_style
                                
                                  
                             ));
     }
     public function actionUpdate() {
-        $style_cardnum_style[1] = "卡号在左边";
-        $style_cardnum_style[2] = "卡号在右边";
+       // $style_cardnum_style[1] = "卡号在左边";
+       // $style_cardnum_style[2] = "卡号在右边";
         //通过get方法接收要展示的信息的主键。
         $lid = Yii::app()->request->getParam('lid');
         //在数据库查找该主键对应的条目。
@@ -72,7 +72,7 @@ class WxCardStyleController extends BackendController
            
                 $cardImg = Yii::app()->request->getPost('MemberWxcardStyle');
                 $model->bg_img = $cardImg['bg_img'];
-                $model->style_cardnum_style = $cardImg['style_cardnum_style'];
+              //  $model->style_cardnum_style = $cardImg['style_cardnum_style'];
                 $model->update_at=date('Y-m-d H:i:s',time());
 
             //var_dump($model->attributes);exit;
@@ -85,7 +85,7 @@ class WxCardStyleController extends BackendController
         }
         $this->render('update',array(
 				'model'=> $model,
-				 'style_cardnum_style'=>$style_cardnum_style
+				// 'style_cardnum_style'=>$style_cardnum_style
 		));
     }
     public function actionDelete() {
