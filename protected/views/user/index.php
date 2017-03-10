@@ -23,9 +23,10 @@
             margin: 0 auto;  
             position: relative;
             border-radius: 7px;
+        
             
     }
-    .img-box p{
+    .img-box .level_num{
         position: absolute;
         bottom:0px;
         right:0;
@@ -153,7 +154,9 @@
         <div class="page">
            <div class="hd" style="position: relative;">
                <div class="img-box" style="background-image:url(<?php echo isset($img['bg_img'])?$img['bg_img']:Yii::app()->request->baseUrl.'/img/wechat_img/hyk22.jpg'?>)">
-                   <p>会员卡号：<?php echo substr($user['card_id'],5);?></p>
+                   <div class="level_num">
+                       <span class="num">会员卡号：<?php echo substr($user['card_id'],5);?></span>
+                   </div>
                </div>
             </div>
             <div class="bd">
@@ -215,15 +218,16 @@
                         </div>
                         <div class="up_down1" ></div>
                     </a>
-                    <div class="collapse pri_style" id="chanel_demo1">
-                        <!--  add some code here -->
-                        
-                        <div class="introduce">详情说明</div>
-                            <ul>
-                                <li>到店即可享受&nbsp;<?php  echo $userLevel['level_discount']*10;?>&nbsp;折优惠</li>
-                                <li>生日可享受&nbsp;<?php echo $userLevel['birthday_discount']*10;?>&nbsp;折优惠</li>
-                            </ul>
-                      
+                    <div class="collapse pri_style" id="chanel_demo1">            
+                        <?php   if($userLevel): ?>
+                        <div class="introduce"><?php  echo $userLevel['level_name']; ?>：</div>
+                        <ul>
+                            <li>到店即可享受&nbsp;<?php  echo $userLevel['level_discount']*10;?>&nbsp;折优惠</li>
+                            <li>生日可享受&nbsp;<?php echo $userLevel['birthday_discount']*10;?>&nbsp;折优惠</li>
+                        </ul>
+                        <?php  else: ?>
+                        <div class="introduce">暂无等级特权</div>
+                        <?php endif; ?>
                     </div>
   
                     
