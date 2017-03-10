@@ -140,16 +140,6 @@
         margin-bottom: 30px;
     }
 </style>
-
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <meta name = "format-detection" content = "telephone=no">
-    <title>一点吃会员卡</title>
-</head>
-<body>
-  
     <div class="container js_container">
         <div class="page">
            <div class="hd" style="position: relative;">
@@ -334,9 +324,6 @@
         </div>
     </div>
     
-
- </body>    
-
 <script type="text/javascript">
  
     $('.weui_cell ').on('click',function(){

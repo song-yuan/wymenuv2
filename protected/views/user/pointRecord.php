@@ -11,12 +11,7 @@
         padding:10px 15px 10px 15px;
     }
 </style>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
- 
-</head>
-<body>
+
     <div class="page">
         <table class="table table-striped">
             <tr>
@@ -41,4 +36,3 @@
                 ?>
         </table>
     </div>
- </body>  

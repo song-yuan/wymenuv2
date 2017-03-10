@@ -9,10 +9,15 @@
     .page{
        background-color: #EDEDED; 
     }
+    
 .nav-tabs {
     border-bottom: 1px solid #CFCFCF;
     padding-top: 9px;
     background-color: white!important;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
 }
 .nav-tabs>li {
     float: left;
@@ -42,22 +47,22 @@
     .cupon_items{
        
        
-       padding-top: 20px;
-       padding-left: 20px;
+       padding-top: 55px;
+       padding-left: 16px;
       
     }
    .cupon_item{
        margin-bottom: 20px;   
     }
     .type{
-        width: 28%;
+        min-width: 32%;
        background-color: #74d2d4;
        float: left;
        border-top-left-radius: 6px;
        border-bottom-left-radius: 6px;
        text-align: center;
         padding-top: 30px;
-       padding-bottom: 30px;
+        min-height: 78px;
        color:#fff;
   
     }
@@ -74,16 +79,15 @@
     }
    .type .price .money{
     line-height: 30px;
-    font-size: 30px;
+    font-size: 26px;
     
     }
    .type .limit{
-     line-height: 1; 
      font-size: 14px;
     }
     .range{
-        width: 60%;
-        height: 88px;
+        width: 57%;
+        min-height: 88px;
         background-color: #fff;
         float: left;
         border-top-right-radius: 6px;
@@ -93,17 +97,12 @@
         color:#787878;
     }
     .range .describe{
-        height: 68px;
+        min-height: 68px;
     }
     
 </style>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
- 
-</head>
-<body>
+
     <div class="page">
         
         <ul class="nav nav-tabs" id="attr_info">
@@ -121,7 +120,16 @@
                 <div class="type ">
                         <div class="price">
                             <span class="yen">&yen;</span>
-                            <span class="money"><?php echo $v['cupon_money'];?></span>
+                            <span class="money">
+                                
+                                <?php 
+                                if($v['cupon_money'] == floor($v['cupon_money'])){
+                                echo floor($v['cupon_money']);
+                                }else{
+                                    echo $v['cupon_money'];
+                                }
+                                ?>
+                            </span>
                         </div>
                         <div class="limit">
                             满<?php echo floor($v['min_consumer']);?>元可用  
@@ -161,7 +169,7 @@
                    
                 </div>
                 <div class="range ">
-                    <div class="describe">限制条件：</div>
+                    <div class="describe">限制条件：<?php echo $v['cupon_memo'];?></div>
                     <div class="date">
                            <span>
                               <?php echo date('Y.m.d',strtotime($v['begin_time']));?>  
@@ -193,7 +201,7 @@
                    
                 </div>
                 <div class="range ">
-                    <div class="describe">限制条件：</div>
+                    <div class="describe">限制条件：<?php echo $v['cupon_memo'];?></div>
                     <div class="date">
                            <span>
                              <?php echo date('Y.m.d',strtotime($v['begin_time']));?> 
@@ -211,7 +219,7 @@
         </div>
          
      </div>   
-  </body>   
+
   <script>
     $(function(){
 
