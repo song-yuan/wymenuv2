@@ -72,7 +72,7 @@ margin-top: 30px;
                                         </a> 
                                     </div>
                                     <div class="col-xs-6  col-sm-3">
-                                        <a href="<?php echo $this->createUrl('buysentPromotion/index',array('companyId' => $this->companyId))?>">
+                                        <a href="<?php echo $this->createUrl('buysentpromotion/index',array('companyId' => $this->companyId))?>">
                                             <span class="fa fa-leaf list_picture"></span>
                                             <div class="list_text">买送</div>
                                         </a> 
