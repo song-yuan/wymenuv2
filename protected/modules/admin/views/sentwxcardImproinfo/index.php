@@ -428,6 +428,18 @@
 	         //alert(plids);
 	         var begintime = $('#SentwxcardPromotion_begin_time').val();
 	         var endtime = $('#SentwxcardPromotion_end_time').val();
+
+	         var title = $('#SentwxcardPromotion_promotion_title').val();
+	         var picture = $('#SentwxcardPromotion_main_picture').val();
+	         var abstracts = $('#SentwxcardPromotion_promotion_abstract').val();
+	         var messages = $('#SentwxcardPromotion_promotion_message').val();
+	         
+	         if(title&&picture&&abstracts&&messages){
+					
+				}else{
+					alert("请填写带星号的项！！");
+					return false;
+				}
 	         if(endtime<=begintime){
 	        	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
 	        	 return false;

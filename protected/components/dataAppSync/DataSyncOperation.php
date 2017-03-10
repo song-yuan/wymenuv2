@@ -1600,6 +1600,7 @@ class DataSyncOperation {
 		$cardId = $data['card_id'];
 		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
+			$user['user_birthday'] = date('m.d',strtotime($user['user_birthday']));
 			$cupon = WxCupon::getUserNotUseCupon($user['lid'],$user['dpid']);
 			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
 			$msg = array('status'=>true,'user'=>$user,'cupon'=>$cupon,'points'=>$point);
