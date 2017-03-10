@@ -14,6 +14,9 @@
     border-bottom: 1px solid #CFCFCF;
     padding-top: 9px;
     background-color: white!important;
+    position: fixed;
+    left: 0;
+    right: 0;
 }
 .nav-tabs>li {
     float: left;
@@ -43,7 +46,7 @@
     .cupon_items{
        
        
-       padding-top: 20px;
+       padding-top: 55px;
        padding-left: 16px;
       
     }
