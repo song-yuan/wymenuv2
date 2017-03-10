@@ -16,13 +16,6 @@
 
     
 </style>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
- 
-</head>
-<body>
      <div class="page">
         <table class="table table-striped">
             <tr>
@@ -36,7 +29,7 @@
                 ?>
             <tr>
                 <td><?php echo $v['account_no'];?></td>
-                <td><?php echo $v['pay_amount'];?></td>
+                <td><?php echo $v['amount'];?></td>
                 <td><?php echo  date('Y.m.d',strtotime($v['create_at']));?>
               
             </tr>
@@ -47,4 +40,3 @@
         </table>
        
      </div>   
-  </body>  

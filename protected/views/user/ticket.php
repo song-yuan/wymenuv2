@@ -17,6 +17,7 @@
     position: fixed;
     left: 0;
     right: 0;
+    top: 0;
 }
 .nav-tabs>li {
     float: left;
@@ -101,12 +102,7 @@
     
 </style>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
- 
-</head>
-<body>
+
     <div class="page">
         
         <ul class="nav nav-tabs" id="attr_info">
@@ -223,7 +219,7 @@
         </div>
          
      </div>   
-  </body>   
+
   <script>
     $(function(){
 

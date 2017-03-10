@@ -59,7 +59,7 @@ class WxBrandUser {
          */
         public static function getOrderPay($card_id,$dpid) {
                
-		$sql = 'SELECT * FROM nb_order_pay WHERE  dpid = '.$dpid.' and remark = '.$card_id.' and paytype in (8,9,10)';
+		$sql = 'SELECT * , sum(pay_amount) as amount FROM nb_order_pay WHERE  dpid = '.$dpid.' and remark = '.$card_id.' and paytype in (8,9,10) GROUP BY account_no ';
 		$order_pay = Yii::app()->db->createCommand($sql)->queryAll();
 		return $order_pay;
 	}
