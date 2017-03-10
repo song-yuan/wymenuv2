@@ -32,7 +32,7 @@ class UserController extends Controller
 				Yii::app()->session['userId'] = $userId;
 			}else{
 				//pc 浏览
-				$userId = 1978;
+				$userId = 2082;
 				Yii::app()->session['userId'] = $userId;
 			}
 		} 
