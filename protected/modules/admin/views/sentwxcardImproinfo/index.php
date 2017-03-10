@@ -220,54 +220,6 @@
 						</div>
 					</div><!-- 活动类型 -->
 					
-					<!-- <div class="form-group">
-						<?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
-						<div class="col-md-4">
-							<?php echo $form->dropDownList($model, 'to_group', array( '1' => yii::t('app','关注微信人群'), '2' => yii::t('app','会员等级') , '3' => yii::t('app','会员个人')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
-							<?php echo $form->error($model, 'to_group' )?>
-											</div>
-										</div>
-	                                     -->
-					<?php if($model->to_group=="2"):{?>
-					<div id="yincang" style="display: ;" class="form-group ">
-						<label class="col-md-3 control-label"><?php echo yii::t('app','会员等级');?></label>
-						<div class="col-md-4" style="border:1px solid red;">
-						<?php if($brdulvs) :{?>
-						<?php $i=1;?>
-						<?php foreach ($brdulvs as $brdulv):?>
-						
-							<tr class="odd gradeX">
-								<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes " <?php if(!empty($userlvs)){foreach ($userlvs as $userlv){if($userlv['brand_user_lid'] == $brdulv->lid) echo 'checked' ;}}else echo "123";?>   value="<?php echo $brdulv->lid;?>" name="chk" /></td>
-								<td><?php echo $i,$brdulv->level_name; ?></td>
-								
-							</tr>
-						<?php $i=$i+1;?>
-						<?php endforeach;?>
-						<?php }endif;?>
-						</div>
-						<input type="hidden" id="hidden1" name="hidden1" value="" />
-					</div>
-				<?php }elseif($model->to_group!="2"):{?>
-						<div id="yincang" style="display:none ;" class="form-group ">
-						<label class="col-md-3 control-label"><?php echo yii::t('app','会员等级');?></label>
-						<div class="col-md-4" style="border:1px solid red;">
-						<?php if($brdulvs) :{?>
-						<?php $i=1;?>
-						<?php foreach ($brdulvs as $brdulv):?>
-						
-							<tr class="odd gradeX">
-								<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" check="" value="<?php echo $brdulv->lid;?>" name="chk" /></td>
-								<td><?php echo $i,$brdulv->level_name; ?></td>
-								
-							</tr>
-						<?php $i=$i+1;?>
-						<?php endforeach;?>
-						<?php }endif;?>
-						</div>
-						<input type="hidden" id="hidden1" name="hidden1" value="" />
-					</div>
-				<?php }endif;?>
-					
 	                <div class="form-group">
 	                		<i style="color: red;" class="fa  fa-star"></i>
 							<label class="control-label col-md-3"><?php echo yii::t('app','活动有效期限');?></label>

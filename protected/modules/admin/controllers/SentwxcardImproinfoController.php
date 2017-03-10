@@ -168,6 +168,8 @@ class SentwxcardImproinfoController extends BackendController
     				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
     				$transaction->commit(); //提交事务会真正的执行数据库操作
     				$this->redirect(array('sentwxcardImproinfo/index' , 'companyId' => $this->companyId));
+    			}else{
+    				$transaction->rollback();
     			}
     				
     		} catch (Exception $e) {
