@@ -47,6 +47,7 @@
             <div class="weui_cell_hd"><label class="weui_label">手机</label></div>
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="mobile" name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
+                <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
             <div class="weui_cell_ft sentMessage" style="font-size:100%;padding-left:5px;border-left:1px solid #888;"><span id="countSpan">获取验证码</span><span id="countdown"></span></div>
         </div>
@@ -139,7 +140,18 @@
     		if($(this).hasClass('disable')){
     			return;
     		}
+                
     		var mobile = $('#mobile').val();
+                
+                var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+                if(!myreg.test(mobile)){ 
+                    alert('请输入有效的手机号码！'); 
+                    return false; 
+                }
+                if(mobile ==$("#old_phone").val()){
+                    alert('该手机号码已存在！'); 
+                    return false; 
+                }
     		$('.sentMessage').addClass('disable');
     		$.ajax({
     			url:'<?php echo $this->createUrl('/user/ajaxSentMessage',array('companyId'=>$this->companyId));?>',
