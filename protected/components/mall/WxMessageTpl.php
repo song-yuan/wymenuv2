@@ -35,37 +35,35 @@ class WxMessageTpl
 		$msgTplId = $this->msgTpl['message_tpl_id'];
 		
 		$this->megTplData = array(
-			array(
 				'touser'=>$this->data['touser'],
 	            'template_id'=>$msgTplId,
 	            'url'=>$this->data['url'],
 	            'data' => array(
 	                'first'=>array(
-	                    'value'=>$this->data['first'],
+	                    'value'=>'',
 	                    'color'=>'#0A0A0A',
 	                ),
 	                'keyword1'=>array(
-	                    'value'=>$this->data['keyword1'],
+	                    'value'=>'',
 	                    'color'=>'#0A0A0A',
 	                ),
 	                'keyword2'=>array(
-	                    'value'=>$this->data['keyword2'],
+	                    'value'=>'',
 	                    'color'=>'#FF0000',
 	                ),
 	                'keyword3'=>array(
-	                    'value'=>$this->data['keyword3'],
+	                    'value'=>'',
 	                    'color'=>'#0A0A0A',
 	                ),
 	                'keyword4'=>array(
-	                    'value'=>$this->data['keyword4'],
+	                    'value'=>'',
 	                    'color'=>'#0A0A0A',
 	                ),
 	                'remark'=>array(
-	                    'value'=>$this->data['remark'],
+	                    'value'=>'',
 	                    'color'=>'#173177',
 	                )
-	            )
-			),
+			)
 		);
 		if($this->data['keyword1']){
 			$this->megTplData['data']['keyword1']['value'] = $this->data['keyword1'];
@@ -93,7 +91,7 @@ class WxMessageTpl
 	}
 	public function sent(){
 		$tplUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$this->access_token;
-		Curl::httpsRequest($tplUrl, json_encode($this->megTplData[$this->type]));
+		Curl::httpsRequest($tplUrl, json_encode($this->megTplData));
 	}
 	
 	
