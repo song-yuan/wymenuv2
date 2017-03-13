@@ -166,7 +166,6 @@ class WxCupon
 							->bindValue(':now',$now)
 							->bindValue(':type',$type)
 							->queryAll();
-		var_dump($sentPromotion);exit;
 		foreach ($sentPromotion as $promotion){
 			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId);
 		}
@@ -224,6 +223,7 @@ class WxCupon
 					'keyword4'=>$cupon['cupon_abstract'],
 					'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['	telephone'].'咨询'
 			);
+			var_dump($data);exit;
 			new WxMessageTpl($dpid,$userId,1,$data);
 		}
 	    return $result;
