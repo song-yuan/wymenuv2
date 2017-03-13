@@ -221,9 +221,8 @@ class WxCupon
 					'keyword2'=>$sourceStr,
 					'keyword3'=>$cupon['end_time'],
 					'keyword4'=>$cupon['cupon_abstract'],
-					'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['	telephone'].'咨询'
+					'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['telephone'].'咨询'
 			);
-			var_dump($data);exit;
 			new WxMessageTpl($dpid,$userId,1,$data);
 		}
 	    return $result;
