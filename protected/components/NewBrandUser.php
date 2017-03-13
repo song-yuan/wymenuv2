@@ -93,7 +93,7 @@ class NewBrandUser {
 		new PullUserInfo($this->brandId, $this->userId);
 	}
 	public function sentCupon() {
-		WxCupon::getWxSentCupon($this->brandId, 0, $this->userId);
+		WxCupon::getWxSentCupon($this->brandId, 0, $this->userId,$this->openId);
 	}
 }
  
