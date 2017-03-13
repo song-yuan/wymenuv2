@@ -205,7 +205,6 @@ class WxCupon
 				);
 		$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
 		$cupon = self::getCupon($dpid, $cuponId);
-		var_dump($cupon);exit;
 		if($cupon){
 			if($source==0){
 				$sourceStr = '活动领取';
@@ -224,6 +223,7 @@ class WxCupon
 					'keyword4'=>$cupon['cupon_abstract'],
 					'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['	telephone'].'咨询'
 			);
+			var_dump($data);exit;
 			new WxMessageTpl($dpid,$userId,1,$data);
 		}
 	    return $result;
