@@ -158,7 +158,7 @@ class WxCupon
 	 * 获取发放的代金券 活动
 	 * 
 	 */
-	public static function getWxSentCupon($dpid,$type,$userId){
+	public static function getWxSentCupon($dpid,$type,$userId,$openId){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select t.* from nb_sentwxcard_promotion_detail t,nb_sentwxcard_promotion t1 where t.sentwxcard_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.type=:type and t1.begin_time <=:now and :now <= t1.end_time and t.delete_flag=0 and t1.delete_flag=0';
 		$sentPromotion = Yii::app()->db->createCommand($sql)
@@ -167,14 +167,26 @@ class WxCupon
 							->bindValue(':type',$type)
 							->queryAll();
 		foreach ($sentPromotion as $promotion){
-			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id']);
+			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId);
+		}
+	}
+	public static function getOneMonthByBirthday(){
+		$todayBegain = date('Y-m-d 00:00:00',strtotime('+1 month'));
+		$todayEnd = date('Y-m-d 23:59:59',strtotime('+1 month'));
+		
+		$sql = 'select * from nb_brand_user where user_birthday >="'.$todayBegain.'" and user_birthday <="'.$todayEnd.'" and unsubscribe = 0';
+		$users = Yii::app()->db->createCommand($sql)->queryAll();
+		if(!empty($users)){
+			foreach ($users as $user){
+				self::getWxSentCupon($user['dpid'],2,$user['lid'],$user['openid']);
+			}
 		}
 	}
 	/**
 	 * 
 	 * 发放代金券
 	 */
-	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id){
+	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId){
 		$now = date('Y-m-d H:i:s',time());
 		$se = new Sequence("cupon_branduser");
 		$lid = $se->nextval();
@@ -193,6 +205,17 @@ class WxCupon
 				);
 		$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
 		
+		$data = array(
+				'touser'=>$openId,
+				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$this->data['lid'])),
+				'first'=>'您好，您已支付成功订单',
+				'keyword1'=>$order['lid'],
+				'keyword2'=>$order['should_total'].'元',
+				'keyword3'=>$company['company_name'],
+				'keyword4'=>date('Y-m-m H:i:s',time()),
+				'remark'=>'已收到订单~请耐心等候~'
+		);
+		new WxMessageTpl($order['dpid'],$order['user_id'],0,$data);
 	    return $result;
 	}
 }
