@@ -30,7 +30,7 @@ class WxMessageTpl
 	}
 	public function getData(){
 		if(!$this->msgTpl){
-			return ;
+			exit;
 		}
 		$msgTplId = $this->msgTpl['message_tpl_id'];
 		
@@ -40,7 +40,7 @@ class WxMessageTpl
 	            'url'=>$this->data['url'],
 	            'data' => array(
 	                'first'=>array(
-	                    'value'=>'',
+	                    'value'=>$this->data['first'],
 	                    'color'=>'#0A0A0A',
 	                ),
 	                'keyword1'=>array(
@@ -49,7 +49,7 @@ class WxMessageTpl
 	                ),
 	                'keyword2'=>array(
 	                    'value'=>'',
-	                    'color'=>'#FF0000',
+	                    'color'=>'#0A0A0A',
 	                ),
 	                'keyword3'=>array(
 	                    'value'=>'',
@@ -60,7 +60,7 @@ class WxMessageTpl
 	                    'color'=>'#0A0A0A',
 	                ),
 	                'remark'=>array(
-	                    'value'=>'',
+	                    'value'=>$this->data['remark'],
 	                    'color'=>'#173177',
 	                )
 			)
