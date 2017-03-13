@@ -175,6 +175,7 @@ class WxCupon
 		
 		$sql = 'select * from nb_brand_user where user_birthday like "%-'.$monthBegain.'" and unsubscribe = 0';
 		$users = Yii::app()->db->createCommand($sql)->queryAll();
+		var_dump($users);exit;
 		if(!empty($users)){
 			foreach ($users as $user){
 				self::getWxSentCupon($user['dpid'],2,$user['lid'],$user['openid']);
