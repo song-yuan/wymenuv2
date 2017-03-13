@@ -187,6 +187,7 @@ class WxCupon
 	 * 发放代金券
 	 */
 	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId){
+		$company = WxCompany::get($dpid);
 		$now = date('Y-m-d H:i:s',time());
 		$se = new Sequence("cupon_branduser");
 		$lid = $se->nextval();
@@ -204,18 +205,27 @@ class WxCupon
 	        	'is_sync'=>DataSync::getInitSync(),
 				);
 		$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
-		
-		$data = array(
-				'touser'=>$openId,
-				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$this->data['lid'])),
-				'first'=>'您好，您已支付成功订单',
-				'keyword1'=>$order['lid'],
-				'keyword2'=>$order['should_total'].'元',
-				'keyword3'=>$company['company_name'],
-				'keyword4'=>date('Y-m-m H:i:s',time()),
-				'remark'=>'已收到订单~请耐心等候~'
-		);
-		new WxMessageTpl($order['dpid'],$order['user_id'],0,$data);
+		$cupon = self::getCupon($dpid, $cuponId);
+		if($cupon){
+			if($source==0){
+				$sourceStr = '活动领取';
+			}elseif($source==1){
+				$sourceStr = '红包领取';
+			}else{
+				$sourceStr = '商家赠送';
+			}
+			$data = array(
+					'touser'=>$openId,
+					'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
+					'first'=>'现金券已经领取成功',
+					'keyword1'=>$cupon['cupon_money'].'元现金券一张',
+					'keyword2'=>$sourceStr,
+					'keyword3'=>$cupon['end_time'],
+					'keyword4'=>$cupon['cupon_abstract'],
+					'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['	telephone'].'咨询'
+			);
+			new WxMessageTpl($dpid,$userId,1,$data);
+		}
 	    return $result;
 	}
 }
