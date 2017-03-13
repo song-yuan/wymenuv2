@@ -171,10 +171,10 @@ class WxCupon
 		}
 	}
 	public static function getOneMonthByBirthday(){
-		$todayBegain = date('Y-m-d 00:00:00',strtotime('+1 month'));
-		$todayEnd = date('Y-m-d 23:59:59',strtotime('+1 month'));
+		$todayBegain = date('m-d 00:00:00',strtotime('+1 month'));
+		$todayEnd = date('m-d 23:59:59',strtotime('+1 month'));
 		
-		$sql = 'select * from nb_brand_user where user_birthday >="'.$todayBegain.'" and user_birthday <="'.$todayEnd.'" and unsubscribe = 0';
+		$sql = 'select * from nb_brand_user where user_birthday like "%'.$todayBegain.'" and user_birthday like "%'.$todayEnd.'" and unsubscribe = 0';
 		$users = Yii::app()->db->createCommand($sql)->queryAll();
 		if(!empty($users)){
 			foreach ($users as $user){
