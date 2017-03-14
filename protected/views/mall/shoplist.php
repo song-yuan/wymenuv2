@@ -117,7 +117,7 @@
 						}else{
 							var distance = getFlatternDistance(latitude,longitude,lat,lng);
 						}
-						
+						alert(distance);
 						if(5000 >= distance >= 1000){
 							distance = (distance/1000).toFixed(2)+'千米';
 						}else if(distance < 1000){
