@@ -94,19 +94,19 @@ class Notify extends WxPayNotify
 		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
 		foreach($orderProducts as $product){
 			$productTasteArr = array();
-			$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
+			$productBoms = DataSyncOperation::getBom($orderIdArr[1], $product['product_id'], $productTasteArr);
 			if(!empty($productBoms)){
 				foreach ($productBoms as $bom){
 					$stock = $bom['number']*$product['amount'];
-					DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
+					DataSyncOperation::updateMaterialStock($orderIdArr[1],$bom['material_id'],$stock);
 				}
 			}
 		}
 		//发送模板消息通知
-		$company = WxCompany::get($dpid);
+		$company = WxCompany::get($orderIdArr[1]);
 		$data = array(
 				'touser'=>$openId,
-				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$dpid,'orderId'=>$order['lid'])),
+				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'])),
 				'first'=>'您好，您已支付成功订单',
 				'keyword1'=>$order['lid'],
 				'keyword2'=>$order['should_total'].'元',
