@@ -87,7 +87,7 @@
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
-		$("#name-search").keyup(function(){
+		$("#name-search").change(function(){
 			var search = $(this).val();
 			$('li').hide();
 		 	$('#allshop').find('li').each(function(){
