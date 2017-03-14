@@ -724,11 +724,11 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 	}
 	 	
-		if($paytype != 10){
-			//返现或者积分
-			$back = new WxCashBack($order['dpid'],$order['user_id'],$order['should_total']);
-			$back->inRecord($order['lid']);
-		}
+// 		if($paytype != 10){
+// 			//返现或者积分
+// 			$back = new WxCashBack($order['dpid'],$order['user_id'],$order['should_total']);
+// 			$back->inRecord($order['lid']);
+// 		}
 	 }
 	/**
 	 * 
