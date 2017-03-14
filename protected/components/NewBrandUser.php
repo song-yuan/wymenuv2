@@ -45,8 +45,8 @@ class NewBrandUser {
     public function newBrandUser() {
   		$time = time();
   		$se = new Sequence("brand_user");
-        $lid = $se->nextval();
-        $insertBrandUserArr = array(
+                $lid = $se->nextval();
+                $insertBrandUserArr = array(
         	'lid'=>$lid,
         	'dpid'=>$this->brandId,
         	'openid'=>$this->openId,

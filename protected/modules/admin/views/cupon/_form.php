@@ -67,7 +67,7 @@
 									</div><!-- 活动实施对象 --
 									 -->
 									<?php if($model->to_group=="2"):{?>
-									<div id="yincang" style="display: ;" class="form-group ">
+									<div id="yincang" style="" class="form-group ">
 										<label class="col-md-3 control-label"><?php echo yii::t('app','会员等级');?></label>
 										<div class="col-md-4" style="border:1px solid red;">
 										<?php if($brdulvs) :{?>
@@ -135,7 +135,7 @@
 											</div>
 										</div>
 									<div class="form-group">
-										<?php echo $form->label($model, yii::t('app','图文说明（限43个字）'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','使用说明'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
 											<?php echo $form->textArea($model, 'cupon_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cupon_memo')));?>
 											<?php echo $form->error($model, 'cupon_memo' )?>
