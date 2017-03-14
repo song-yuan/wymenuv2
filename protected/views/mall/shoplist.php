@@ -98,9 +98,9 @@
 			 	}
 		 	});	 
 		 	if($('#allshop').find('li:visible').length == 0){
-				$("tips").show();
+				$("#tips").show();
 			}else{
-				$("tips").hide();
+				$("#tips").hide();
 			}
 		});
 	    wx.ready(function () {
