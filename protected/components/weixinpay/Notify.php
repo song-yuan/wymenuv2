@@ -93,10 +93,11 @@ class Notify extends WxPayNotify
 		//减少库存
 		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
 		foreach($orderProducts as $product){
-			$productBoms = DataSyncOperation::getBom($dpid, $product['product_id']);
+			$productTasteArr = array();
+			$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
 			if(!empty($productBoms)){
 				foreach ($productBoms as $bom){
-					$stock = $bom['number']/$bom['unit_ratio'];
+					$stock = $bom['number']*$product['amount'];
 					DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
 				}
 			}
@@ -105,7 +106,7 @@ class Notify extends WxPayNotify
 		$company = WxCompany::get($this->dpid);
 		$data = array(
 				'touser'=>$openId,
-				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$this->data['lid'])),
+				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$order['lid'])),
 				'first'=>'您好，您已支付成功订单',
 				'keyword1'=>$order['lid'],
 				'keyword2'=>$order['should_total'].'元',
