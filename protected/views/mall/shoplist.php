@@ -94,6 +94,7 @@
 			        $('#allshop').find('li').each(function(){
 						var lat = parseFloat($(this).attr('lat'));
 						var lng = parseFloat($(this).attr('lng'));
+						alert(lat);alert(lng);
 						if(isNaN(lat)==''||isNaN(lng)=''){
 							var distance = 10000;
 						}else{
