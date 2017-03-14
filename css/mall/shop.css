@@ -182,7 +182,7 @@
 
 
 
-.shops ul li:last-child {
+.shops ul li:visible:last-child {
 	border-bottom: 0px;
 }
 
