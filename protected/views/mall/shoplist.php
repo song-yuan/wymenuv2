@@ -38,7 +38,7 @@
 				<?php endforeach;?>
 			</ul>
 			<!-- 全部门店 -->
-			<div id="tips" class="info" style="display:none;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
+			<div id="tips" class="info" style="display:none;text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
 	    </div>
 	</div>
 	<script type="text/javascript">
@@ -89,10 +89,13 @@
 		});
 		$("#name-search").change(function(){
 			var search = $(this).val();
+			alert(search);
 			$('li').hide();
 		 	$('#allshop').find('li').each(function(){
 			 	var name = $(this).find('h1').html();
+			 	alert(name);
 	 	 	 	var patt = new RegExp(search);
+	 	 	 	alert(patt.test(name));
 		 	  	if(patt.test(name)){
 					$(this).show();
 			 	}
