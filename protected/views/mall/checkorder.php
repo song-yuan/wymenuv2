@@ -256,7 +256,7 @@
 <script>
 function emptyCart(){
 	var timestamp=new Date().getTime()
-    var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+    var random = timestamp +''+ (Math.random()*899+100);
 	$.ajax({
 		url:'<?php echo $this->createUrl('/mall/emptyCart',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>',
 		type:'GET',
