@@ -57,7 +57,7 @@ class UserController extends Controller
         
         $sql = 'SELECT * FROM nb_brand_user_level WHERE dpid = ' .$this->companyId .' and level_type=1 and delete_flag=0  order by level_discount desc ';
         $result = Yii::app()->db->createCommand($sql)->queryAll();
-
+        $lid = 0;
         if($result){
             $count=count($result);
            
@@ -69,13 +69,12 @@ class UserController extends Controller
                            $upLev = true;
                             $sql = 'UPDATE nb_brand_user set user_level_lid = '.$lid .' WHERE dpid = ' .$this->companyId .' and lid = ' .$userId .'' ;
                             $result = Yii::app()->db->createCommand($sql)->execute(); 
-                        } 
-                        
+                        }    
                     }
                 }
             }
         }else{
-                $lid = 0;
+                
                 $sql = 'UPDATE nb_brand_user set user_level_lid = '.$lid .' WHERE dpid = ' .$this->companyId .' and lid = ' .$userId .'' ;
                 $result = Yii::app()->db->createCommand($sql)->execute();
             }    
