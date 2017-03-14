@@ -83,6 +83,24 @@
 	        
 	        return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
 	    }
+	    $('li').click(function(){
+		    var href = $(this).attr('href');
+		    location.href = href;
+		});
+		$("#name-search").change(function(){
+			var search = $(this).val();
+			$('li').hide();
+		 	$('#allshop').find('li').each(function(){
+			 	var name = $(this).find('h1').html();
+	 	 	 	var patt = new RegExp(search);
+		 	  	if(patt.test(name)){
+					$(this).show();
+			 	}
+		 	});	 
+		 	if($('#allshop').find('li:visible').length == 0){
+				$("tips").show();
+			}
+		});
 	    wx.ready(function () {
 	    	wx.getLocation({
 			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -94,8 +112,7 @@
 			        $('#allshop').find('li').each(function(){
 						var lat = parseFloat($(this).attr('lat'));
 						var lng = parseFloat($(this).attr('lng'));
-						alert(lat);alert(lng);
-						if(isNaN(lat)==''||isNaN(lng)=''){
+						if(isNaN(lat)==''||isNaN(lng)==''){
 							var distance = 10000;
 						}else{
 							var distance = getFlatternDistance(latitude,longitude,lat,lng);
@@ -118,23 +135,5 @@
 			    }
 			});
 	    });
-	    $('li').click(function(){
-		    var href = $(this).attr('href');
-		    location.href = href;
-		});
-		$("#name-search").change(function(){
-			var search = $(this).val();
-			$('li').hide();
-		 	$('#allshop').find('li').each(function(){
-			 	var name = $(this).find('h1').html();
-	 	 	 	var patt = new RegExp(search);
-		 	  	if(patt.test(name)){
-					$(this).show();
-			 	}
-		 	});	 
-		 	if($('#allshop').find('li:visible').length == 0){
-				$("tips").show();
-			}
-		});
 	</script>
 </body>
