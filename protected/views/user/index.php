@@ -324,24 +324,25 @@
                      <div class="put_into_bg">
                     <div class="weui_btn weui_btn_primary put_into">放入微信卡包</div> 
                     </div>
-                    <div id="uplevel" style="z-index:90;position: fixed; display: <?php echo $upLev ? 'block':'none';?>;">                     
-                        <div class="weui_dialog" >                           
-                            <div class="btn_ewm_out">    
-                                <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
-                            </div>
-                            <div  class="uplevel_box">
-                                恭喜你升级为<?php  echo $userLevel['level_name']; ?>
-                            </div> 
-                        </div>
-                    </div>  
+                  
                     
                 </div>
                
             </div>
-           
+              <div id="uplevel" style="z-index:90;position: absolute; display: <?php echo $upLev ? 'block':'none';?>;">                     
+                    <div class="weui_dialog" >                           
+                        <div class="btn_ewm_out">    
+                            <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
+                        </div>
+                        <div  class="uplevel_box">
+                            恭喜你升级为<?php  echo $userLevel['level_name']; ?>
+                        </div> 
+                    </div>
+                </div>  
+           <div class="sp-lightbox1"  style="z-index:50;position: absolute;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;display: <?php echo $upLev?'block':'none';?>"></div>
         </div>
     </div>
-    <div class="sp-lightbox1"  style="z-index:50;position: fixed;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;display: <?php echo $upLev?'block':'none';?>"></div>
+    
 <script type="text/javascript">
     $('.weui_cell ').on('click',function(){
       
