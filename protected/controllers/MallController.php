@@ -4,7 +4,8 @@ class MallController extends Controller
 {
 	/**
 	 * 
-	 * type点单类型0 临时座 1 堂吃 2 外卖 3 预约
+	 * type点单类型0 临时座 
+	 * 1 堂吃 2 外卖 3 预约
 	 * 
 	 */
 	public $companyId;

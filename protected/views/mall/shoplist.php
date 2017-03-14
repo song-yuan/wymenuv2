@@ -22,15 +22,12 @@
 	</div>
 	-->
 	<div class="shops">
-		<!--  
-		<div class="search"><input type="text" value=""></div>
-		-->
+		<div class="search" style="display:none;"><input id="name-search" type="text" value="" placeholder="请输入搜索关键字"></div>
 		<div class="shopcontainer">
 			<!-- 全部门店 -->
 			<ul id="allshop" class="shown">
 				<?php foreach ($children as $child):?>
-				<a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>">	
-				<li lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
+				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
@@ -38,10 +35,10 @@
 						<div class="misinfo small font_l"><span class="left">电话: <?php echo $child['telephone'];?></span><span class="right"></span></div>
 					</div>
 				</li>
-				</a>
 				<?php endforeach;?>
 			</ul>
 			<!-- 全部门店 -->
+			<div id="tips" class="info" style="display:none;text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
 	    </div>
 	</div>
 	<script type="text/javascript">
@@ -86,6 +83,26 @@
 	        
 	        return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
 	    }
+	    $('li').click(function(){
+		    var href = $(this).attr('href');
+		    location.href = href;
+		});
+		$("#name-search").change(function(){
+			var search = $(this).val();
+			$('li').hide();
+		 	$('#allshop').find('li').each(function(){
+			 	var name = $(this).find('h1').html();
+	 	 	 	var patt = new RegExp(search);
+		 	  	if(patt.test(name)){
+					$(this).show();
+			 	}
+		 	});	 
+		 	if($('#allshop').find('li:visible').length == 0){
+				$("#tips").show();
+			}else{
+				$("#tips").hide();
+			}
+		});
 	    wx.ready(function () {
 	    	wx.getLocation({
 			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -97,14 +114,25 @@
 			        $('#allshop').find('li').each(function(){
 						var lat = parseFloat($(this).attr('lat'));
 						var lng = parseFloat($(this).attr('lng'));
-						var distance = getFlatternDistance(latitude,longitude,lat,lng);
-						if(distance > 1000){
-							distance = (distance/1000).toFixed(2)+'千米';
+						if(isNaN(lat)==''||isNaN(lng)==''){
+							var distance = 10000;
 						}else{
+							var distance = getFlatternDistance(latitude,longitude,lat,lng);
+						}
+						if(5000 >= distance >= 1000){
+							distance = (distance/1000).toFixed(2)+'千米';
+						}else if(distance < 1000){
 							distance = distance.toFixed(2)+'米';
+						}else{
+							$(this).hide();
+							return true;
 						}
 						$(this).find('span.right').html(distance);
 				    });
+				    if($('#allshop').find('li:visible').length == 0){
+					    $(".search").show();
+						$("#tips").show();
+					}
 			    }
 			});
 	    });
