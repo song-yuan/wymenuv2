@@ -94,7 +94,12 @@
 			        $('#allshop').find('li').each(function(){
 						var lat = parseFloat($(this).attr('lat'));
 						var lng = parseFloat($(this).attr('lng'));
-						var distance = getFlatternDistance(latitude,longitude,lat,lng);
+						if(lat==''||lng=''){
+							var distance = 10000;
+						}else{
+							var distance = getFlatternDistance(latitude,longitude,lat,lng);
+						}
+						
 						if(5000 >= distance >= 1000){
 							distance = (distance/1000).toFixed(2)+'千米';
 						}else if(distance < 1000){
