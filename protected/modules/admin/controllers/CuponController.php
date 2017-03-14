@@ -72,6 +72,7 @@ class CuponController extends BackendController
 			}
 			$db = Yii::app()->db;
 			$model->attributes = Yii::app()->request->getPost('Cupon');
+                        
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$gropids = array();
 			$gropids = explode(',',$groupID);

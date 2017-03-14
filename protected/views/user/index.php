@@ -139,6 +139,13 @@
         margin-top: 30px;
         margin-bottom: 30px;
     }
+  
+    .uplevel_box{
+        text-align: center;
+        margin-top: 25px;
+        margin-bottom: 40px;
+        font-size: 22px;
+    }
 </style>
     <div class="container js_container">
         <div class="page">
@@ -317,15 +324,25 @@
                      <div class="put_into_bg">
                     <div class="weui_btn weui_btn_primary put_into">放入微信卡包</div> 
                     </div>
+                    <div id="uplevel" style="z-index:90;position: fixed; display: <?php echo $upLev ? 'block':'none';?>;">                     
+                        <div class="weui_dialog" >                           
+                            <div class="btn_ewm_out">    
+                                <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
+                            </div>
+                            <div  class="uplevel_box">
+                                恭喜你升级为<?php  echo $userLevel['level_name']; ?>
+                            </div> 
+                        </div>
+                    </div>  
+                    
                 </div>
                
             </div>
            
         </div>
     </div>
-    
+    <div class="sp-lightbox1"  style="position: fixed;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;display: <?php echo $upLev?'block':'none';?>"></div>
 <script type="text/javascript">
- 
     $('.weui_cell ').on('click',function(){
       
         var up_down=(!$(this).find(".up_down1").hasClass('up_down2'))?true:false;
@@ -351,6 +368,10 @@
             });
     });
 
+            $('#uplevel').find('.btn_ewm').on('click', function () {
+                $('#uplevel').hide();
+                $(".sp-lightbox1").hide();
+            });
 </script>
 
 

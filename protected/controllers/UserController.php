@@ -24,15 +24,17 @@ class UserController extends Controller
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
-				if(!$this->brandUser){
-					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
-		    		$this->brandUser = $newBrandUser->brandUser;
-				}
+				if(!$this->brandUser)
+                                {
+                                    $newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
+                                    $this->brandUser = $newBrandUser->brandUser;
+				}  
+              
 				$userId = $this->brandUser['lid'];
 				Yii::app()->session['userId'] = $userId;
 			}else{
 				//pc 浏览
-				$userId = 2082;
+				$userId = 1978;
 				Yii::app()->session['userId'] = $userId;
 			}
 		} 
@@ -45,11 +47,41 @@ class UserController extends Controller
          * 
          */ 
     public function actionIndex(){
+        $upLev = false;
+        
         //$userId就是brand_user表里的lid
         $userId = Yii::app()->session['userId'];
         //$user就是brand_user表里的一行
+
         $user = WxBrandUser::get($userId,$this->companyId);
-        $userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
+        
+        $sql = 'SELECT * FROM nb_brand_user_level WHERE dpid = ' .$this->companyId .' and level_type=1 and delete_flag=0  order by level_discount desc ';
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+
+        if($result){
+            $count=count($result);
+           
+            if($user['consume_point_history'] >= $result[0]['min_total_points']){
+                for($i=0;$i<$count;$i++){
+                    if( ($user['consume_point_history'] >= $result[$i]['min_total_points']) && ($user['consume_point_history'] <= $result[$i]['max_total_points'])){
+                       $lid = $result[$i]['lid'];                       
+                       if($user['user_level_lid']!=$lid){
+                           $upLev = true;
+                            $sql = 'UPDATE nb_brand_user set user_level_lid = '.$lid .' WHERE dpid = ' .$this->companyId .' and lid = ' .$userId .'' ;
+                            $result = Yii::app()->db->createCommand($sql)->execute(); 
+                        } 
+                        
+                    }
+                }
+            }else{
+                $lid = 0;
+                $sql = 'UPDATE nb_brand_user set user_level_lid = '.$lid .' WHERE dpid = ' .$this->companyId .' and lid = ' .$userId .'' ;
+                $result = Yii::app()->db->createCommand($sql)->execute();
+            }    
+        }
+               
+        $userLevel =  WxBrandUser::getUserLevel($lid,$this->companyId); 
+   
         $img = array();
         if($userLevel){
             $style_id=$userLevel['style_id'];
@@ -58,17 +90,20 @@ class UserController extends Controller
         
         $give = WxBrandUser::getFullGive($this->companyId);
         $minus = WxBrandUser::getFullMinus($this->companyId);
-        
+
         $remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
         $this->render('index',array(
                                 'userId'=>$userId,
                                 'companyId'=>$this->companyId,
                                 'user'=>$user,
                                 'userLevel'=>$userLevel,
-                                'remainMoney'=>$remainMoney,
+                                'remainMoney'=>$remainMoney, 
                                 'img'=>$img,
                                 'give'=>$give,
-                                'minus'=>$minus
+                                'minus'=>$minus,
+                                'upLev'=>$upLev,
+                             
+                                
                 ));
 	
     }  

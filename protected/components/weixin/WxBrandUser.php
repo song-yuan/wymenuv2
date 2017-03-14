@@ -19,13 +19,29 @@ class WxBrandUser {
 		return $brandUser;
 	}
 	/**
-	 * 返回brandUser数组
+	 * 返回会员等级
 	 */
 	public static function getUserLevel($userLevelId,$dpid) {
 		$sql = 'SELECT * FROM nb_brand_user_level WHERE lid = ' .$userLevelId .' and dpid = '.$dpid.' and delete_flag=0';
 		$brandUserLevel = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUserLevel;
 	}
+        
+        /**
+	 * 返回店铺所有等级
+	 */
+        public static function getAllLevel($dpid) {
+            $sql = 'SELECT lid FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
+            $result = Yii::app()->db->createCommand($sql)->queryAll();
+            
+//            if($result){
+//                    return $result['lid'];
+//            }else{
+//                    return 0;
+//            }
+        }
+        
+        
         /**
          * 返回会员卡图片
          */
