@@ -103,10 +103,10 @@ class Notify extends WxPayNotify
 			}
 		}
 		//发送模板消息通知
-		$company = WxCompany::get($this->dpid);
+		$company = WxCompany::get($dpid);
 		$data = array(
 				'touser'=>$openId,
-				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$order['lid'])),
+				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$dpid,'orderId'=>$order['lid'])),
 				'first'=>'您好，您已支付成功订单',
 				'keyword1'=>$order['lid'],
 				'keyword2'=>$order['should_total'].'元',
