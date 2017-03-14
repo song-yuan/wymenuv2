@@ -87,21 +87,20 @@
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
-		$("#name-search").change(function(){
+		$("#name-search").keyup(function(){
 			var search = $(this).val();
-			alert(search);
 			$('li').hide();
 		 	$('#allshop').find('li').each(function(){
 			 	var name = $(this).find('h1').html();
-			 	alert(name);
 	 	 	 	var patt = new RegExp(search);
-	 	 	 	alert(patt.test(name));
 		 	  	if(patt.test(name)){
 					$(this).show();
 			 	}
 		 	});	 
 		 	if($('#allshop').find('li:visible').length == 0){
 				$("tips").show();
+			}else{
+				$("tips").hide();
 			}
 		});
 	    wx.ready(function () {
