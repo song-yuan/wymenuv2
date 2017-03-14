@@ -73,12 +73,12 @@ class UserController extends Controller
                         
                     }
                 }
-            }else{
+            }
+        }else{
                 $lid = 0;
                 $sql = 'UPDATE nb_brand_user set user_level_lid = '.$lid .' WHERE dpid = ' .$this->companyId .' and lid = ' .$userId .'' ;
                 $result = Yii::app()->db->createCommand($sql)->execute();
             }    
-        }
                
         $userLevel =  WxBrandUser::getUserLevel($lid,$this->companyId); 
    
