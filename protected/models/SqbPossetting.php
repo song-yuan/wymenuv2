@@ -41,11 +41,10 @@ class CompanySetting extends CActiveRecord
 			array('pay_channel, delete_flag', 'length', 'max'=>2),
 			array('appId, device_id, terminal_sn, terminal_key, is_sync', 'length', 'max'=>50),
 			array('key_validtime', 'length', 'max'=>25),
-			array('com_qrcode', 'length', 'max'=>255),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, pay_channel, appId, device_id, terminal_sn, terminal_key, key_validtime, com_qrcode, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, pay_channel, appId, device_id, terminal_sn, terminal_key, key_validtime, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,7 +75,6 @@ class CompanySetting extends CActiveRecord
 			'terminal_sn' => '店铺在支付平台终端号',
 			'terminal_key' => '店铺在支付平台终端秘钥',
 			'key_validtime' => '有效时间',
-			'com_qrcode' => '店铺唯一二维码',
 			'delete_flag' => '1表示删除',
 			'is_sync' => '同步标志',
 		);
@@ -110,7 +108,6 @@ class CompanySetting extends CActiveRecord
 		$criteria->compare('terminal_sn',$this->terminal_sn,true);
 		$criteria->compare('terminal_key',$this->terminal_key,true);
 		$criteria->compare('key_validtime',$this->key_validtime,true);
-		$criteria->compare('com_qrcode',$this->com_qrcode,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
