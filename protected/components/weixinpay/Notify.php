@@ -93,15 +93,27 @@ class Notify extends WxPayNotify
 		//减少库存
 		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
 		foreach($orderProducts as $product){
-			$productBoms = DataSyncOperation::getBom($dpid, $product['product_id']);
+			$productTasteArr = array();
+			$productBoms = DataSyncOperation::getBom($orderIdArr[1], $product['product_id'], $productTasteArr);
 			if(!empty($productBoms)){
 				foreach ($productBoms as $bom){
-					$stock = $bom['number']/$bom['unit_ratio'];
-					DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
+					$stock = $bom['number']*$product['amount'];
+					DataSyncOperation::updateMaterialStock($orderIdArr[1],$bom['material_id'],$stock);
 				}
 			}
 		}
 		//发送模板消息通知
-		new WxMessageTpl($order['dpid'],$order['user_id'],0,$order);
+		$company = WxCompany::get($orderIdArr[1]);
+		$data = array(
+				'touser'=>$openId,
+				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'])),
+				'first'=>'您好，您已成功支付订单',
+				'keyword1'=>$order['lid'],
+				'keyword2'=>$order['should_total'].'元',
+				'keyword3'=>$company['company_name'],
+				'keyword4'=>date('Y-m-m H:i:s',time()),
+				'remark'=>'已收到订单~请耐心等候~'
+		);
+		new WxMessageTpl($order['dpid'],$order['user_id'],0,$data);
 	}
 }

@@ -45,8 +45,8 @@ class NewBrandUser {
     public function newBrandUser() {
   		$time = time();
   		$se = new Sequence("brand_user");
-        $lid = $se->nextval();
-        $insertBrandUserArr = array(
+                $lid = $se->nextval();
+                $insertBrandUserArr = array(
         	'lid'=>$lid,
         	'dpid'=>$this->brandId,
         	'openid'=>$this->openId,
@@ -93,7 +93,7 @@ class NewBrandUser {
 		new PullUserInfo($this->brandId, $this->userId);
 	}
 	public function sentCupon() {
-		WxCupon::getWxSentCupon($this->brandId, 0, $this->userId);
+		WxCupon::getWxSentCupon($this->brandId, 0, $this->userId,$this->openId);
 	}
 }
  

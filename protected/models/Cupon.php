@@ -77,7 +77,7 @@ class Cupon extends CActiveRecord
 			'main_picture' => '主图片',
 			'cupon_abstract' => '摘要',
 				'to_group'=>'0表示所有人，1表示关注微信，2表示会员等级，3表示会员个人',
-			'cupon_memo' => '图文说明，包括使用规则描述',
+			'cupon_memo' => '规则说明',
 			'cupon_money' => '金额',
 			'min_consumer' => '最低消费',
 			'change_point' => '0表示不需要积分，直接领取；>0表示需要兑换的积分',

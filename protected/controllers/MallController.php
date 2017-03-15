@@ -4,7 +4,9 @@ class MallController extends Controller
 {
 	/**
 	 * 
-	 * type点单类型0 临时座 1 堂吃 2 外卖 3 预约
+	 * type点单类型 无餐桌 6 微信临时座 
+	 * 带餐桌 1微信 堂吃 （需要扫餐桌二维码） 3 预约
+	 * 2 微信外卖
 	 * 
 	 */
 	public $companyId;
@@ -17,7 +19,7 @@ class MallController extends Controller
 	public function init() 
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
-		$type = Yii::app()->request->getParam('type',0);
+		$type = Yii::app()->request->getParam('type',6);
 		$this->companyId = $companyId;
 		$this->type = $type;
 		$company = WxCompany::get($this->companyId);

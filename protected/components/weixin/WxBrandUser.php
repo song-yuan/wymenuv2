@@ -19,13 +19,29 @@ class WxBrandUser {
 		return $brandUser;
 	}
 	/**
-	 * 返回brandUser数组
+	 * 返回会员等级
 	 */
 	public static function getUserLevel($userLevelId,$dpid) {
 		$sql = 'SELECT * FROM nb_brand_user_level WHERE lid = ' .$userLevelId .' and dpid = '.$dpid.' and delete_flag=0';
 		$brandUserLevel = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUserLevel;
 	}
+        
+        /**
+	 * 返回店铺所有等级
+	 */
+        public static function getAllLevel($dpid) {
+            $sql = 'SELECT lid FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
+            $result = Yii::app()->db->createCommand($sql)->queryAll();
+            
+//            if($result){
+//                    return $result['lid'];
+//            }else{
+//                    return 0;
+//            }
+        }
+        
+        
         /**
          * 返回会员卡图片
          */
@@ -58,8 +74,8 @@ class WxBrandUser {
          * 返回账单
          */
         public static function getOrderPay($card_id,$dpid) {
-               
-		$sql = 'SELECT * , sum(pay_amount) as amount FROM nb_order_pay WHERE  dpid = '.$dpid.' and remark = '.$card_id.' and paytype in (8,9,10) GROUP BY account_no ';
+        $dpid = WxCompany::getDpids($dpid);       
+		$sql = 'SELECT * , sum(pay_amount) as amount FROM nb_order_pay WHERE  dpid in ( '.$dpid.') and remark = '.$card_id.' and paytype in (8,9,10) GROUP BY account_no ';
 		$order_pay = Yii::app()->db->createCommand($sql)->queryAll();
 		return $order_pay;
 	}

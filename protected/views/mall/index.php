@@ -79,8 +79,7 @@ function setTotal(){
     var n=0;
     <!--计算总额--> 
     $(".lt-rt").each(function(){ 
-    s+=parseInt($(this).find('input[class*=result]').val())*parseFloat($(this).siblings().find('span[class*=price]').text()); 
-
+    	s+=parseInt($(this).find('input[class*=result]').val())*parseFloat($(this).siblings().find('span[class*=price]').text()); 
     });
 
     <!--计算菜种-->
