@@ -25,7 +25,7 @@ class SqbPossetting extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'nb_sqb_setting';
+		return 'nb_sqb_possetting';
 	}
 
 	/**
