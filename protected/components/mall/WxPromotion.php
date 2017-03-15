@@ -17,13 +17,13 @@ class WxPromotion
 	}
 	public function getPromotionDetail(){
 		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select t.*,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and t.delete_flag=0 and t1.delete_flag=0';
+		$sql = 'select t.*,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and t.delete_flag=0 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':now',$now)->queryAll();
 		
 		foreach($results as $k=>$result){
 			if($result['is_set']){
 				//套餐	
-				$sql = 'select t.* from nb_product_set t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=1 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1';
+				$sql = 'select t.*,t1.num from nb_product_set t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=1 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1';
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->bindValue(':promotionId',$result['normal_promotion_id'])->queryRow();
 				if($product){
 					if($result['is_discount']==0){
@@ -37,7 +37,7 @@ class WxPromotion
 				}
 			}else{
 				//单品
-				$sql = 'select t.* from nb_product t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=0 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1';
+				$sql = 'select t.*,t1.num from nb_product t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=0 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1';
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->bindValue(':promotionId',$result['normal_promotion_id'])->queryRow();
 				if($product){
 					if($result['is_discount']==0){
@@ -58,7 +58,7 @@ class WxPromotion
 	 * 
 	 */
 	 public static function getPromotion($dpid,$promotionId){
-	 	$sql = 'select * from  nb_private_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
+	 	$sql = 'select * from  nb_normal_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$promotionId)->queryRow();
 	 	return $result;
 	 }
