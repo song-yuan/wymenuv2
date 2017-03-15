@@ -18,7 +18,7 @@
  * @property string $delete_flag
  * @property string $is_sync
  */
-class CompanySetting extends CActiveRecord
+class SqbPossetting extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
