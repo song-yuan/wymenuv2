@@ -56,7 +56,7 @@ class WxOrder
 	}
 	//获取购物车信息
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
+		$sql = 'select t.dpid,t.product_id,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
@@ -68,8 +68,8 @@ class WxOrder
 				throw new Exception($store['msg']);
 			}
 			$results[$k]['store_number'] = $store['msg'];
-			if($result['privation_promotion_id'] > 0){
-				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['privation_promotion_id'],$result['to_group']);
+			if($result['promotion_id'] > 0){
+				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['promotion_id'],$result['to_group']);
 				$results[$k]['price'] = $productPrice['price'];
 				$results[$k]['promotion'] = $productPrice;
 			}else{
@@ -153,18 +153,7 @@ class WxOrder
 		$result = SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
 		if($this->isTemp==1){
 			$this->siteId = $result['siteid'];
-//			$this->getSiteNo($result['siteid']);
 		}
-	}
-	public function getSiteNo($siteId){
-		$sql = 'select * from nb_site_no where site_id=:siteId and dpid=:dpid and is_temp=1 and status=1';
-		$siteNo = Yii::app()->db->createCommand($sql)
-				  ->bindValue(':siteId',$siteId)
-				  ->bindValue(':dpid',$this->dpid)
-				  ->queryRow();
-	    if($siteNo){
-	    	$this->siteId = $siteNo['lid'];
-	    }
 	}
 	//生成订单
 	public function createOrder(){

@@ -10,10 +10,6 @@
 		}
 	}
 	
-	//子订单号
-//	$se = new Sequence("order_subno");
-//	$orderSubNo = $se->nextval();
-	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
@@ -39,8 +35,7 @@
 			$input->SetOpenid($openId);
 		}
 		$orderInfo = WxPayApi::unifiedOrder($input);
-//		echo '<meta charset=utf8 />';
-//		var_dump($orderInfo);exit;
+
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
 	}catch(Exception $e){
