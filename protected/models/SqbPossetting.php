@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "nb_company_setting".
+ * This is the model class for table "nb_sqb_possetting".
  *
- * The followings are the available columns in table 'nb_company_setting':
+ * The followings are the available columns in table 'nb_sqb_possetting':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
@@ -25,7 +25,7 @@ class SqbPossetting extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'nb_company_setting';
+		return 'nb_sqb_setting';
 	}
 
 	/**
