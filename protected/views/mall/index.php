@@ -136,6 +136,7 @@ function getProduct(){
 			
 			if(promotions.length > 0){
 				navLi += '<li class="current"><a href="#st-1">特价菜</a><b></b></li>';
+				promotionStr +='<div class="section" id="st-1"><div class="prt-title">活动专区</div>';
 				for(var i=0; i<promotions.length; i++){
 					var promotion = promotions[i];
 					var promotionProduct = promotion['product'];
@@ -166,6 +167,7 @@ function getProduct(){
              			}
              		}
 				}
+				promotionStr +='</div>';
 			}
 			
 			for(var k in categorys){
