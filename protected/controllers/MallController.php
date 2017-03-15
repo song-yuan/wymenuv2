@@ -602,7 +602,7 @@ class MallController extends Controller
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
 		
-		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId,'to_group'=>$toGroup);
+		$productArr = array('product_id'=>$productId,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		
 		//检查活动商品数量
