@@ -127,7 +127,6 @@ class MallController extends Controller
 				$siteOpen = true;
 			}
 		}
-		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
 		if(empty($carts)){
