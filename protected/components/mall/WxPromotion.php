@@ -2,42 +2,54 @@
 /**
  * 
  * 
- * 微信端个人优惠类
+ * 微信端 普通优惠活动
  * 
  */
 class WxPromotion
 {
 	public $dpid;
 	public $userId;
-	public $siteId;
-	
+	public $promotionProductList;
 	public function __construct($dpid,$userId){
 		$this->dpid = $dpid;
 		$this->userId = $userId;
-		$this->getUser();
-		$this->getUserPromotion();
+		$this->getPromotionDetail();
 	}
-	public function getUser(){
-		$sql = 'select * from nb_brand_user where lid=:lid and dpid=:dpid';
-		$this->user = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':lid',$this->userId)->queryRow();
-	}
-	public function getUserPromotion(){
+	public function getPromotionDetail(){
 		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select t.private_promotion_id,t.to_group,t1.promotion_title,t1.promotion_type,t1.order_num from nb_private_branduser t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.brand_user_lid=:userId and t.dpid=:dpid and t1.begin_time <= :now and :now <= t1.end_time and t.is_used=1 and t.to_group=3 and t.delete_flag=0 and t1.is_available=0 and t1.delete_flag=0' .
-			   ' union select t.private_promotion_id,t.to_group,t1.promotion_title,t1.promotion_type,t1.order_num from nb_private_branduser t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.brand_user_lid=:userLevelId and t.dpid=:dpid and t1.begin_time <= :now and :now <= t1.end_time and t.is_used=1 and t.to_group=2 and t.delete_flag=0 and t1.is_available=0 and t1.delete_flag=0';
-		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->user['lid'])->bindValue(':userLevelId',$this->user['user_level_lid'])->bindValue(':now',$now)->queryAll();
+		$sql = 'select t.*,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and t.delete_flag=0 and t1.delete_flag=0';
+		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':now',$now)->queryAll();
+		
 		foreach($results as $k=>$result){
-			$sql = 'select m.*,n.num from (select t.product_id,t.is_set,t.is_discount,t.promotion_money,t.promotion_discount,t.order_num,t1.product_name,t1.main_picture,t1.original_price,t1.store_number from nb_private_promotion_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.private_promotion_id=:promotionId and t.delete_flag=0 and t1.status=0 and t1.is_show=1)m left join nb_cart n on m.product_id=n.product_id and n.user_id=:userId and privation_promotion_id=:promotionId';
-			$products = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->user['lid'])->bindValue(':promotionId',$result['private_promotion_id'])->queryAll();
-			foreach($products as $j=>$product){
-//				$products[$j]['price'] = self::getPromotionPrice($this->dpid,$this->userId,$product['product_id'],$result['private_promotion_id'],$result['to_group']);
-				if($product['is_discount']==0){
-					$products[$j]['price'] = ($product['original_price'] - $product['promotion_money']) > 0 ? number_format($product['original_price'] - $product['promotion_money'],2) : number_format(0,2);
+			if($result['is_set']){
+				//套餐	
+				$sql = 'select t.* from nb_product_set t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=1 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1';
+				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->bindValue(':promotionId',$result['normal_promotion_id'])->queryRow();
+				if($product){
+					if($result['is_discount']==0){
+						$product['price'] = ($product['set_price'] - $result['promotion_money']) > 0 ? number_format($product['set_price'] - $result['promotion_money'],2) : number_format(0,2);
+					}else{
+						$product['price'] = ($product['set_price']*$result['promotion_discount']) > 0 ? number_format($product['set_price']*$result['promotion_discount'],2) : number_format(0,2);
+					}
+					$results[$k]['product'] = $product;
 				}else{
-					$products[$j]['price'] = ($product['original_price']*$product['promotion_discount']) > 0 ? number_format($product['original_price']*$product['promotion_discount'],2) : number_format(0,2);
+					unset($results[$k]);
+				}
+			}else{
+				//单品
+				$sql = 'select t.* from nb_product t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=0 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1';
+				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->bindValue(':promotionId',$result['normal_promotion_id'])->queryRow();
+				if($product){
+					if($result['is_discount']==0){
+						$product['price'] = ($product['original_price'] - $result['promotion_money']) > 0 ? number_format($product['original_price'] - $result['promotion_money'],2) : number_format(0,2);
+					}else{
+						$product['price'] = ($product['original_price']*$result['promotion_discount']) > 0 ? number_format($product['original_price']*$result['promotion_discount'],2) : number_format(0,2);
+					}
+					$results[$k]['product'] = $product;
+				}else{
+					unset($results[$k]);
 				}
 			}
-			$results[$k]['productList'] = $products;
 		}
 		$this->promotionProductList = $results;
 	}
