@@ -382,6 +382,9 @@ class WxOrder
 				  ->bindValue(':lid',$orderId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
+		if($order){
+			$order['taste'] = self::getOrderTaste($orderId, $dpid, 1);
+		}
 	    return $order;
 	}
 	/**
@@ -411,12 +414,24 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select price,amount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0';
+		$sql = 'select lid,price,amount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0';
 		$orderProduct = Yii::app()->db->createCommand($sql)
-				  ->bindValue(':orderId',$orderId)
-				  ->bindValue(':dpid',$dpid)
-				  ->queryAll();
+					    ->bindValue(':orderId',$orderId)
+					    ->bindValue(':dpid',$dpid)
+					    ->queryAll();
+		foreach ($orderProduct as $k=>$product){
+			$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
+			$orderProduct[$k]['taste'] = $productTaste;
+		}
 	    return $orderProduct;
+	}
+	public static function getOrderTaste($orderId,$dpid,$isOrder){
+		$sql = 'select t.*,t1.name,t1.price from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.is_order=:isOrder and t.order_id=:orderId';
+		$orderProduct = Yii::app()->db->createCommand($sql)
+						->bindValue(':orderId',$orderId)
+						->bindValue(':dpid',$dpid)
+						->bindValue(':isOrder',$isOrder)
+						->queryAll();
 	}
 	public static function getOrderProductByType($orderId,$dpid,$type){
 		$sql = 'select t.price,t.amount,t.is_retreat from nb_order_product t where t.order_id = :orderId and t.dpid = :dpid and t.product_type=:type and t.delete_flag=0';
@@ -489,17 +504,6 @@ class WxOrder
 	 public static function updatePayType($orderId,$dpid,$paytype = 1){
 	 	$isSync = DataSync::getInitSync();
 		$sql = 'update nb_order set paytype='.$paytype.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
-		Yii::app()->db->createCommand($sql)->execute();
-	}
-	/**
-	 * 
-	 * 更改订单备注
-	 * 
-	 * 
-	 */
-	 public static function updateRemark($orderId,$dpid,$remark){
-	 	$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set remark="'.$remark.'",is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**

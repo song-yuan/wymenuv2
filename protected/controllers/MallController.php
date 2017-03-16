@@ -253,12 +253,7 @@ class MallController extends Controller
 			}
 		}else{
 			WxOrder::updatePayType($orderId,$this->companyId);
-			$order = WxOrder::getOrder($orderId,$this->companyId);
-			if($order['order_status'] > 2){
-				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-			}else{
-				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
-			}
+			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 	}
 	 /**
