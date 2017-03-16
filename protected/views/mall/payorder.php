@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
+	$orderTatsePrice = 0.00;
 	$payYue = 0.00;
 	$payCupon = 0.00;
 	if(!empty($orderPays)){
@@ -81,7 +82,7 @@
 			<div class="clear"></div>
 		</div>
 		<?php if(!empty($product['taste'])):?>
-		<div class="taste">
+		<div class="taste">口味:
 		<?php foreach ($product['taste'] as $taste):?>
 		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
 		<?php endforeach;?>
@@ -90,8 +91,8 @@
 	<?php endforeach;?>
 	<div class="ht1"></div>
 	<?php if(!empty($order['taste'])):?>
-		<div class="taste">
-		<?php foreach ($order['taste'] as $otaste):?>
+		<div class="taste">整单口味:
+		<?php foreach ($order['taste'] as $otaste): $orderTatsePrice +=$otaste['price'];?>
 		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
 		<?php endforeach;?>
 		</div>
@@ -111,25 +112,31 @@
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
+	<?php if($orderTatsePrice>0):?>
+		<div class="item">
+			<div class="lt">口味加价:</div><div class="rt">￥<?php echo number_format($orderTatsePrice,2);?></div>
+			<div class="clear"></div>
+		</div>
+	<?php endif;?>
 	<div class="item">
 		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php if($order['reality_total'] > $order['should_total']):?>
 	<div class="item">
-		<div class="lt">优惠</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="lt">优惠</div><div class="rt">-￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
 	<?php if($payCupon>0):?>
 	<div class="item">
-		<div class="lt">现金券支付</div><div class="rt">￥<?php echo $payCupon;?></div>
+		<div class="lt">现金券支付</div><div class="rt">-￥<?php echo $payCupon;?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
 	<?php if($payYue > 0):?>
 	<div class="item" >
-		<div class="lt">余额支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
+		<div class="lt">余额支付:</div><div class="rt">-￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
