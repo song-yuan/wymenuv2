@@ -191,8 +191,8 @@ class MallController extends Controller
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		
-		$transaction=Yii::app()->db->beginTransaction();
-		try{
+// 		$transaction=Yii::app()->db->beginTransaction();
+// 		try{
 			//生成订单
 			$orderId = $orderObj->createOrder();
 			
@@ -235,13 +235,12 @@ class MallController extends Controller
 					WxOrder::insertOrderPay($order,10);
 				}
 			}
-		   $transaction->commit();
-		}catch (Exception $e) {
-			$transaction->rollback();
-			$msg = $e->getMessage();
-			var_dump($msg);exit;
-			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
-		}
+// 		   $transaction->commit();
+// 		}catch (Exception $e) {
+// 			$transaction->rollback();
+// 			$msg = $e->getMessage();
+// 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+// 		}
 		if($paytype == 1){
 			//支付宝支付
 			WxOrder::updatePayType($orderId,$this->companyId,2);
