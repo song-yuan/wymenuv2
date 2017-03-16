@@ -104,7 +104,7 @@ class WxOrder
 			foreach($this->tastes as $taste){
 				$tasteArr = explode('-',$taste);
 				if(count($tasteArr)>1){
-					$this->productTastes[$tasteArr[0]] = $tasteArr;
+					$this->productTastes[$tasteArr[0]][] = $tasteArr;
 				}
 			}
 		}
