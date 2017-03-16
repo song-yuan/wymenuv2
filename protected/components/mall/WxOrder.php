@@ -654,12 +654,6 @@ class WxOrder
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 	}
-	 	
-// 		if($paytype != 10){
-// 			//返现或者积分
-// 			$back = new WxCashBack($order['dpid'],$order['user_id'],$order['should_total']);
-// 			$back->inRecord($order['lid']);
-// 		}
 	 }
 	/**
 	 * 
@@ -708,9 +702,6 @@ class WxOrder
 						WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 					}
 					
-					//返现或者积分
-					$back = new WxCashBack($order['dpid'],$order['user_id'],$total - $cashback);
-					$back->inRecord($order['lid']);
 					$payMoney = $total;
 	 			}else{
 	 				$sql = 'update nb_brand_user set remain_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
@@ -735,9 +726,6 @@ class WxOrder
 					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 				}
 				
-				//返现或者积分
-				$back = new WxCashBack($order['dpid'],$order['user_id'],$total - $cashback);
-				$back->inRecord($order['lid']);
 				$payMoney = $total;
  			}else{
  				$sql = 'update nb_brand_user set remain_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
