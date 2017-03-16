@@ -239,6 +239,7 @@ class MallController extends Controller
 		}catch (Exception $e) {
 			$transaction->rollback();
 			$msg = $e->getMessage();
+			var_dump($msg);exit;
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		if($paytype == 1){
