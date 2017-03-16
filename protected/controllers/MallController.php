@@ -301,7 +301,6 @@ class MallController extends Controller
 		}
 
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
-		var_dump($order);var_dump($orderProducts);exit;
 		$user = WxBrandUser::get($userId,$this->companyId);
 	    $this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
