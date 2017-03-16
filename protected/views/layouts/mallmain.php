@@ -19,6 +19,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
     <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	<script>
 	  wx.config({
