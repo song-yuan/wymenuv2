@@ -238,7 +238,7 @@ $(document).ready(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
-            if(top < ptHeight){
+            if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) <= 0){
             	$(this).find('.prt-title').addClass('top');
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
