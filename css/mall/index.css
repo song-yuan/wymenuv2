@@ -15,8 +15,9 @@ body{ background-color:#efefef;}
 .sticky .nav-above {position: absolute;	top:0;left:1em;	right:1em;height:15px;}
 .section{ background-color:#fff;position:relative;}
 .section .top{ position:fixed;top:0;width: 100%;z-index:10;}
-.prt-title{height: 40px; line-height: 40px; padding-left:20px; font-size: 18px;background: #f7f7f7;}
-.prt-lt{ position:relative; width:97%; height:0.8rem; margin-left:3%; border-bottom:1px solid #e5e5e5;}
+.section .prt-title{height: 40px; line-height: 40px; padding-left:20px; font-size: 18px;background: #f7f7f7;}
+.section .prt-lt{ position:relative; width:97%; height:0.8rem; margin-left:3%; border-bottom:1px solid #e5e5e5;}
+.section .prt-lt:last-child{border-bottom:0px;}
 .prt-lt .lt-lt{ position:relative; float:left; width:0.8rem; height:0.6rem; margin:0.1rem;}
 .prt-lt .lt-lt img{ float:left; width:0.8rem; height:0.6rem;}
 .prt-lt .lt-lt i.commend{ position:absolute; top:0; left:0.05rem; display:block; width:0.18rem; height:0.24rem; background:url(../images/index/commend.png) no-repeat; background-size:0.18rem 0.24rem;}
