@@ -27,7 +27,6 @@
 </style>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <div class="nav-lf">
 <ul id="nav">
   
@@ -233,12 +232,14 @@ $(document).ready(function(){
         _this.addClass('current');
     });
     $('#container').scroll(function(){
+        var ptHeight = $('.prt-title').outerHeight();
     	$('.prt-title').removeClass('top');
         $('.section').each(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
-            if(top < 0 && (parseInt(top) + parseInt(height)) > 5){
+            layer.msg(top+'-'+ptHeight+'-'+height);
+            if(top < ptHeight && (parseInt(top) + parseInt(height) + parseInt(ptHeight)) >= 0){
             	$(this).find('.prt-title').addClass('top');
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
