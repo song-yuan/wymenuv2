@@ -49,7 +49,6 @@
     border-radius:100%;
 }
 </style>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 		
 <div class="weui_cells">
     <div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>订单号:</p></div><div class="weui_cell_ft"><?php echo $order['lid'].'-'.$order['dpid'];?></div></div>
