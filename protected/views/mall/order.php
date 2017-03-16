@@ -9,7 +9,6 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_002.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_004.js" type="text/javascript"></script>
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_002.css" rel="stylesheet" type="text/css">
@@ -66,8 +65,22 @@
 		<div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 		<div class="clear"></div>
 	</div>
+		<?php if(!empty($product['taste'])):?>
+		<div class="taste">口味:
+		<?php foreach ($product['taste'] as $taste):?>
+		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
 	<?php endforeach;?>
 	<div class="ht1"></div>
+	<?php if(!empty($order['taste'])):?>
+		<div class="taste">整单口味:
+		<?php foreach ($order['taste'] as $otaste): $orderTatsePrice +=$otaste['price'];?>
+		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+	<?php endif;?>
 	<!-- 其他费用 -->
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
