@@ -239,7 +239,7 @@ class MallController extends Controller
 		}catch (Exception $e) {
 			$transaction->rollback();
 			$msg = $e->getMessage();
-			$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		if($paytype == 1){
 			//支付宝支付
