@@ -444,16 +444,21 @@ class WxOrder
 	    return $orderProduct;
 	}
 	public static function getUserOrderList($userId,$dpid,$type){
+		$user = WxBrandUser::get($userId, $dpid);
 		if($type==1){
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (1,2) order by lid desc limit 0,20';
+			$sql = 'select m.* from (select * from nb_order where dpid=:dpid and user_id=:userId and order_type in (1,2,3,6) and order_status in (1,2)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid=:dpid and t.order_type=0 and t.order_status in (1,2) and t1.remark=:cardId)m where 1 order by lid desc limit 20';
 		}elseif($type==2){
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (3,4)  order by lid desc limit 0,20';
+			$sql = 'select m.* from (select * from nb_order where dpid=:dpid and user_id=:userId and order_type in (1,2,3,6) and order_status in (3,4)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid=:dpid and t.order_type=0 and t.order_status in (1,2) and t1.remark=:cardId)m where 1 order by lid desc limit 20';
 		}else{
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (1,2,3,4) order by lid desc limit 0,20';
+			$sql = 'select m.* from (select * from nb_order where dpid=:dpid and user_id=:userId and order_type in (1,2,3,6) and order_status in (1,2,3,4)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid=:dpid and t.order_type=0 and t.order_status in (1,2) and t1.remark=:cardId)m where 1 order by lid desc limit 20';
 		}
 		$orderList = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
 				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':cardId',$user['card_id'])
 				  ->queryAll();
 	    return $orderList;
 	}
