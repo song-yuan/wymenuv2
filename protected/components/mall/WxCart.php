@@ -28,11 +28,12 @@ class WxCart
 	}
 	//加入购物车 判断
 	public function isCart(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and promotion_id=:privationPromotionId';
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and is_set=:isSet and promotion_id=:privationPromotionId';
 		$this->cart = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':userId',$this->userId)
 					  ->bindValue(':productId',$this->productArr['product_id'])
+					  ->bindValue(':isSet',$this->productArr['is_set'])
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
 	}
@@ -150,6 +151,7 @@ class WxCart
 	        	'update_at'=>date('Y-m-d H:i:s',$time), 
 	        	'user_id'=>$this->userId,
 	        	'product_id'=>$this->productArr['product_id'],
+        		'is_set'=>$this->productArr['is_set'],
 	        	'num'=>$this->productArr['num'],
 	        	'site_id'=>$this->siteId,
 	        	'promotion_id'=>$this->productArr['promotion_id'],

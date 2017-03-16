@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('点单');
+	$this->setPageTitle('自助点单');
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
@@ -128,9 +128,11 @@ function getProduct(){
 			var categorys = data.categorys;
 			var promotions = data.promotions;
 			var products = data.products;
+			var productSets = data.productSets;
 			var navLi = '';
 			var promotionStr = '';
 			var productStr = '';
+			var productSetStr = '';
 			
 			if(promotions.length > 0){
 				navLi += '<li class="current"><a href="#st-1">优惠</a><b></b></li>';
@@ -191,29 +193,56 @@ function getProduct(){
 					}else if(pProduct.spicy==3){
 						productStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span></p>';
 					}
-					productStr +='<p class="pr">¥<span class="price">'+pProduct.price+'</span>';
-					if(pProduct.price != pProduct.original_price){
-						productStr +='<span class="oprice"><strike>¥'+pProduct.original_price+'</strike></span>';
-					}
+					productStr +='<p class="pr">¥<span class="price">'+pProduct.original_price+'</span>';
          			productStr +='</p></div>';
          			if(parseInt(pProduct.num)){
-         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
+         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
         				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
          			}else{
          				if(parseInt(pProduct.store_number) != 0){
-	         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
+	         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
 	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
          				}else{
-         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
+         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
 	        				productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
          				}
          			}
-         		
 				}
 				productStr +='</div>';
 			}
+			if(productSets.length > 0){
+				navLi += '<li class=""><a href="#st-set">套餐</a><b></b></li>';
+				productSetStr +='<div class="section" id="st-set"><div class="prt-title">套餐</div>';
+				for(var q in productSets){
+					var pProductSet = productSets[q];
+					productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
+					productSetStr +='<div class="lt-ct"><p><span>'+ pProductSet.set_name +'</span> <span>';
+					if(pProductSet.spicy==1){
+						productSetStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/>';
+					}else if(pProductSet.spicy==2){
+						productSetStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/>';
+					}else if(pProductSet.spicy==3){
+						productSetStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span></p>';
+					}
+					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.set_price+'</span>';
+					productSetStr +='</p></div>';
+         			if(parseInt(pProductSet.num)){
+         				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
+         				productSetStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+         			}else{
+         				if(parseInt(pProductSet.store_number) != 0){
+         					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
+         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
+         				}else{
+         					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
+         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
+         				}
+         			}
+				}
+				productSetStr +='</div>';
+			}
 			$('#nav').append(navLi);
-			$('#container').append(promotionStr + productStr);
+			$('#container').append(promotionStr + productStr + productSetStr);
 			setTotal();
 			layer.closeAll('loading');
 		},
@@ -257,12 +286,13 @@ $(document).ready(function(){
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
+        var isSet = t.attr('is-set');
         
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId));?>',
-        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup,random:random},
+        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -304,13 +334,14 @@ $(document).ready(function(){
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
+        var isSet = t.attr('is-set');
         var storeNum = t.attr('store-number');
         
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId));?>',
-        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup,random:random},
+        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){

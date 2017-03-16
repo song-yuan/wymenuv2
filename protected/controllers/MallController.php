@@ -575,7 +575,8 @@ class MallController extends Controller
 		$product = new WxProduct($this->companyId,$userId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
-		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));
+		$productSets = $product->productSetLists;
+		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products,'productSets'=>$productSets));
 		exit;
 	}
 	/**
@@ -601,8 +602,9 @@ class MallController extends Controller
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
+		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		
 		//检查活动商品数量
@@ -655,8 +657,9 @@ class MallController extends Controller
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
+		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		if($cart->deleteCart()){
