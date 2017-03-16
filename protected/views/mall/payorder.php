@@ -80,7 +80,7 @@
 			<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 			<div class="clear"></div>
 		</div>
-		<?php if($product['taste']):?>
+		<?php if(!empty($product['taste'])):?>
 		<div class="taste">
 		<?php foreach ($product['taste'] as $taste):?>
 		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
@@ -89,7 +89,7 @@
 		<?php endif;?>
 	<?php endforeach;?>
 	<div class="ht1"></div>
-	<?php if($order['taste']):?>
+	<?php if(!empty($order['taste'])):?>
 		<div class="taste">
 		<?php foreach ($order['taste'] as $otaste):?>
 		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
