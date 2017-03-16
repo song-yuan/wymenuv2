@@ -2,13 +2,18 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
 	$payYue = 0.00;
+	$payCupon = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
 			if($orderPay['paytype']==10){
 				$payYue = $orderPay['pay_amount']; 
+			}elseif($orderPay['paytype']==9){
+				$payCupon = $orderPay['pay_amount']; 
 			}
 		}
 	}
+	
+	$payPrice = $order['should_total'] - $payYue - $payCupon; // 最终支付价格
 	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
@@ -23,7 +28,7 @@
 		$input->SetBody("点餐订单");
 		$input->SetAttach("0");
 		$input->SetOut_trade_no($orderId);
-		$input->SetTotal_fee($order['should_total']*100);
+		$input->SetTotal_fee($payPrice*100);
 		$input->SetTime_start(date("YmdHis"));
 		$input->SetTime_expire(date("YmdHis", time() + 600));
 		$input->SetGoods_tag("点餐订单");

@@ -482,7 +482,7 @@ $(document).ready(function(){
 	  	  	}
   	  	}
 	  	$(this).addClass('on');
-	  	$(this).siblings('input').val(productId+'-'+tasteId);
+	  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice);
 	  	tasteDesc.find('span[id^='+group+'-]').remove();
 	  	var str = '<span id="'+group+'-'+tasteId+'">'+tastName+'</span>';
 	  	tasteDesc.append(str);
