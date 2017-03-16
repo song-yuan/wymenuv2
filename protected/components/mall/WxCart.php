@@ -39,7 +39,11 @@ class WxCart
 	}
 	//判断产品库存
 	public function checkStoreNumber(){
-		$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+		if($this->productArr['is_set']){
+			$sql = 'select * from nb_product_set where lid=:productId and dpid=:dpid and delete_flag=0';
+		}else{
+			$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+		}
 		$product = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':productId',$this->productArr['product_id'])
