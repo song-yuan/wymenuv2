@@ -87,6 +87,22 @@ class AlipayController extends Controller
 	 * 
 	 */
     public function actionMobileWeb(){
+    	$company = WxCompany::get($this->companyId);
+    	$payYue = 0.00;
+    	$payCupon = 0.00;
+    	if(!empty($orderPays)){
+    		foreach($orderPays as $orderPay){
+    			if($orderPay['paytype']==10){
+    				$payYue = $orderPay['pay_amount'];
+    			}elseif($orderPay['paytype']==9){
+    				$payCupon = $orderPay['pay_amount'];
+    			}
+    		}
+    	}
+    	
+    	$payPrice = $order['should_total'] - $payYue - $payCupon; // 最终支付价格
+    	
+    	$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$order['lid'];
 		//支付类型
         $payment_type = "1";
         //服务器异步通知页面路径
@@ -96,15 +112,15 @@ class AlipayController extends Controller
         $return_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/return?companyId=".$this->companyId;
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
         //商户订单号
-        $out_trade_no = $_GET['out_trade_no'];
+        $out_trade_no = $order['lid'].'-'.$order['dpid'];
         //商户网站订单系统中唯一订单号，必填
         //订单名称
-        $subject = $_GET['subject'];
+        $subject = $company['company_name'];
         //付款金额
-        $total_fee = $_GET['total_fee'];
+        $total_fee = $payPrice;
         //必填
         //商品展示地址
-        $show_url = $_GET['show_url'];
+        $show_url = $showUrl;
         //必填，需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html
         //订单描述 
         $body = isset($_GET['body'])?$_GET['body']:'';
