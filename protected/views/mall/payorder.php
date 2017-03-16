@@ -173,7 +173,7 @@
 				 	location.href = '<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 				 }else{
 				 	//支付失败或取消支付
-				 	
+					 layer.msg('支付失败!');
 				 }     
 			}
 		);

@@ -291,9 +291,7 @@ function reset_total(price){
 window.onload = emptyCart;
 $(document).ready(function(){
 	<?php if($msg):?>
-	layer.ready(function(){
 	    layer.msg(<?php echo $msg;?>);
-	}); 
 	<?php endif;?>
 	<?php if($this->type==3):?>
 	var today = new Date();
