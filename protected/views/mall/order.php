@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
+	$orderTatsePrice = 0.00;
 	$isCupon = false;
 	if(!empty($cupons)){
 		$isCupon = true;
@@ -100,9 +101,24 @@
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
+	<?php if($orderTatsePrice>0):?>
 	<div class="item">
-		<div class="lt">合计:</div>
-		<div class="rt">￥<?php echo $order['should_total'];?></div>
+		<div class="lt">口味加价:</div><div class="rt">￥<?php echo number_format($orderTatsePrice,2);?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
+	<div class="item">
+		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
+		<div class="clear"></div>
+	</div>
+	<?php if($order['reality_total'] > $order['should_total']):?>
+	<div class="item">
+		<div class="lt">优惠</div><div class="rt">-￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
+	<div class="item">
+		<div class="lt">实付:</div><div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
 </div>
@@ -278,6 +294,7 @@ $(document).ready(function(){
 	});
 	$('#payorder').click(function(){
 		<?php if($order['order_type']==1):?>
+		layer.load(2);
 		$('form').submit();
 		<?php elseif($order['order_type']==2):?>
 		var address = $('input[name="address"]').val();
@@ -285,6 +302,7 @@ $(document).ready(function(){
 			layer.msg('请添加收货地址!');
 			return;
 		}
+		layer.load(2);
 		$('form').submit();
 		<?php elseif($order['order_type']==3):?>
 		var address = $('input[name="address"]').val();
@@ -297,6 +315,7 @@ $(document).ready(function(){
 			layer.msg('请选择预约时间!');
 			return;
 		}
+		layer.load(2);
 		$('form').submit();
 		<?php endif;?>
 	});

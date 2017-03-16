@@ -141,7 +141,7 @@
 	<?php endif;?>
 	
 	<div class="item">
-		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($payPrice,2);?></span></div>
+		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($payPrice,2);?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>

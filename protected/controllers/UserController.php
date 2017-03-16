@@ -34,7 +34,7 @@ class UserController extends Controller
 				Yii::app()->session['userId'] = $userId;
 			}else{
 				//pc 浏览
-				$userId = 1978;
+				$userId = 2082;
 				Yii::app()->session['userId'] = $userId;
 			}
 		} 
@@ -218,11 +218,11 @@ class UserController extends Controller
 			}
 		}
 		
-//		$orderPays = WxOrderPay::get($this->companyId,$orderId);
+		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		//查找分享红包
 		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
 		
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'orderPays'=>$orderPays,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	}
 	/**
 	 * 

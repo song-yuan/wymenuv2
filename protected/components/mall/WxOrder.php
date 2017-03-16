@@ -180,7 +180,7 @@ class WxOrder
 	        	'site_id'=>$this->siteId,
 	        	'is_temp'=>$this->isTemp,
 	        	'number'=>$this->number,
-	        	'order_status'=>1,
+	        	'order_status'=>2,
 	        	'order_type'=>$this->type,
 	        	'is_sync'=>DataSync::getInitSync(),
 	        );
