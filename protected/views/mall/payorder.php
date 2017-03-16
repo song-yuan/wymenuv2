@@ -76,12 +76,26 @@
 <?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
-	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
-		<div class="clear"></div>
-	</div>
+		<div class="item">
+			<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+			<div class="clear"></div>
+		</div>
+		<?php if($product['taste']):?>
+		<div class="taste">
+		<?php foreach ($product['taste'] as $taste):?>
+		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
 	<?php endforeach;?>
 	<div class="ht1"></div>
+	<?php if($order['taste']):?>
+		<div class="taste">
+		<?php foreach ($order['taste'] as $otaste):?>
+		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+	<?php endif;?>
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
 		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
