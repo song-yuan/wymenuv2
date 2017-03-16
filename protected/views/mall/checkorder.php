@@ -631,8 +631,10 @@ $(document).ready(function(){
 				layer.msg('预约时间必须大于当前时间!');
 				return;
 			}
+			layer.load(2);
 			$('form').submit();
 		<?php else:?>
+			layer.load(2);
 			$('form').submit();
 		<?php endif;?>
 	});
