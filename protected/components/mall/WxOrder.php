@@ -427,11 +427,12 @@ class WxOrder
 	}
 	public static function getOrderTaste($orderId,$dpid,$isOrder){
 		$sql = 'select t.*,t1.name,t1.price from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.is_order=:isOrder and t.order_id=:orderId';
-		$orderProduct = Yii::app()->db->createCommand($sql)
+		$orderTaste = Yii::app()->db->createCommand($sql)
 						->bindValue(':orderId',$orderId)
 						->bindValue(':dpid',$dpid)
 						->bindValue(':isOrder',$isOrder)
 						->queryAll();
+		return $orderTaste;
 	}
 	public static function getOrderProductByType($orderId,$dpid,$type){
 		$sql = 'select t.price,t.amount,t.is_retreat from nb_order_product t where t.order_id = :orderId and t.dpid = :dpid and t.product_type=:type and t.delete_flag=0';
