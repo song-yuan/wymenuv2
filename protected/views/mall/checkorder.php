@@ -97,8 +97,8 @@
 	    <div class="taste">整单口味</div><div class="taste-desc"></div>
 	    <div class="taste-items" product-id="0">
 	    	<?php foreach($orderTastes as $k=>$groups):?>
+	    	<div class="item-group"><?php echo $groups['name'];?></div>
 	    	<div class="item-group">
-	    		<div class="item group"><?php echo $groups['name'];?></div>
 	    		<?php foreach($groups['tastes'] as $taste):?>
 	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
@@ -125,10 +125,10 @@
 	    <div class="taste">可选口味</div><div class="taste-desc"></div>
 	    <div class="taste-items" product-id="<?php echo $model['product_id'];?>">
 	    	<?php foreach($model['taste_groups'] as $k=>$groups):?>
+	    	<div class="item-group"><?php echo $groups['name'];?></div>
 	    	<div class="item-group">
-	    		<div class="item group"><?php echo $groups['name'];?></div>
 	    		<?php foreach($groups['tastes'] as $taste):?>
-	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
+	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="0" />
 	    		<div class="clear"></div>
@@ -138,7 +138,28 @@
 	    <?php endif;?>
 	    <!-- 可选择套餐 -->
 	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
-	     <div class="set-detail">可选口味</div><div class="set-detail-desc"></div>
+	     <div class="detail">可选套餐</div>
+	     <div class="detail-desc">
+	     <?php foreach ($model['detail'] as $k=>$detail):?>
+	     	<?php foreach($detail as $item):?>
+	     		<?php if($item['is_select'] > 0):?>
+    			<span id="<?php echo $k.'-'.$item['product_id'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></span>
+    			<?php endif;?>
+    		<?php endforeach;?>
+	     <?php endforeach;?>
+	     </div>
+	     <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
+		     <?php foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
+		     <div class="item-group">选择一个</div>
+		     <div class="item-group">
+	    		<?php foreach($detail as $item): $on = ''; if($item['is_select'] > 0){$on='on';$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['price'];}?>
+	    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+	    		<?php endforeach;?>
+	    		<input type="hidden" name="set-detail[]" value="<?php echo $selectItem;?>" />
+	    		<div class="clear"></div>
+	    	</div>
+	     	<?php endforeach;?>
+	     </div>
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
@@ -460,28 +481,31 @@ $(document).ready(function(){
     	}
 	});
   });
-  $('.t-item').click(function(){
+  $('.taste-items .t-item').click(function(){
+	var sectionObj = $(this).parents('.section');
   	var tasteItems = $(this).parents('.taste-items');
-  	var tasteDesc = $(this).parents('.section').find('.taste-desc');
+  	var tasteDesc = sectionObj.find('.taste-desc');
   	var productId = tasteItems.attr('product-id');
   	var tasteId = $(this).attr('taste-id');
   	var group =  $(this).attr('group');
   	var tastePrice = $(this).attr('taste-pirce');
   	var tastName = $(this).html();
+  	var num = sectionObj.find('.num').html();
   	if($(this).hasClass('on')){
   		$(this).removeClass('on');
   		$(this).siblings('input').val(0);
   		tasteDesc.find('#'+group+'-'+tasteId).remove();
   		if(parseFloat(tastePrice) > 0){
-  			reset_total(-tastePrice);
+  			reset_total(-tastePrice*num);
   	  	}
   	}else{
-  	  	var onObj = $(this).siblings().find('on');
+  	  	var onObj = $(this).siblings('.on');
   	  	if(onObj.length > 0){
 	  	  	var onPrice = onObj.attr('taste-pirce');
 	  	  	if(parseFloat(onPrice) > 0){
-	  	  		reset_total(-onPrice);
+	  	  		reset_total(-onPrice*num);
 	  	  	}
+	  	  	onObj.removeClass('on');
   	  	}
 	  	$(this).addClass('on');
 	  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice);
@@ -489,11 +513,55 @@ $(document).ready(function(){
 	  	var str = '<span id="'+group+'-'+tasteId+'">'+tastName+'</span>';
 	  	tasteDesc.append(str);
 	  	if(parseFloat(tastePrice) > 0){
-  			reset_total(tastePrice);
+  			reset_total(tastePrice*num);
   	  	}
   	}
   });
-  
+
+  $('.detail').click(function(){
+	 	var _this = $(this);
+	 	layer.open({
+		    type: 1,
+		    title: false,
+		    shadeClose: true,
+		    closeBtn: 0,
+		    area: ['80%'],
+		    content:_this.siblings('.detail-items'),
+		    btn: '确定',
+		    yes: function(index, layero){ 
+	        layer.close(index);
+	   	}
+		});
+ 	});
+  $('.detail-items .t-item').click(function(){
+	  if(!$(this).hasClass('on')){
+			var sectionObj = $(this).parents('.section');
+		  	var tasteItems = $(this).parents('.detail-items');
+		  	var detailDesc = sectionObj.find('.detail-desc');
+		  	var setId = tasteItems.attr('set-id');
+		  	var productId = $(this).attr('product-id');
+		  	var group =  $(this).attr('group');
+		  	var detailPrice = $(this).attr('detail-pirce');
+		  	var detailName = $(this).html();
+		  	var num = sectionObj.find('.num').html();
+	  	  	var onObj = $(this).siblings('.on');
+	  	  	if(onObj.length > 0){
+		  	  	var onPrice = onObj.attr('detail-pirce');
+		  	  	if(parseFloat(onPrice) > 0){
+		  	  		reset_total(-onPrice*num);
+		  	  	}
+		  	  	onObj.removeClass('on');
+	  	  	}
+		  	$(this).addClass('on');
+		  	$(this).siblings('input').val(setId+'-'+productId+'-'+detailPrice);
+		  	detailDesc.find('span[id^='+group+'-]').remove();
+		  	var str = '<span id="'+group+'-'+productId+'">'+detailName+'</span>';
+		  	detailDesc.append(str);
+		  	if(parseFloat(detailPrice) > 0){
+	  			reset_total(detailPrice*num);
+	  	  	}
+	  	}
+    });
 	$('.user-cupon .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');

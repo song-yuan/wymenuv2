@@ -115,6 +115,17 @@ class WxCart
 				  ->bindValue(':userId',$this->userId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
+			if($result['is_set']){
+				$detail = WxProduct::getProductSetDetail($result['product_id'], $result['dpid']);
+				if(!empty($detail)){
+					$results[$k]['detail'] = $detail;
+				}else{
+					unset($results[$k]);
+					continue;
+				}
+			}else{
+				$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
+			}
 			if($result['promotion_id'] > 0){
 				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$result['promotion_id'],$result['to_group']);
 				$results[$k]['price'] = $productPrice['price'];
@@ -124,9 +135,8 @@ class WxCart
 				$results[$k]['price'] = $productPrice->price;
 				$results[$k]['promotion'] = $productPrice->promotion;
 			}
-			$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 		}
-		return $results;
+		return array_merge($results);
 	}
 	public function getCartPromotion(){
 		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and promotion_id > 0 and promotion_id!=:privationPromotionId';
