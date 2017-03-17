@@ -215,6 +215,8 @@ function getProduct(){
 				productSetStr +='<div class="section" id="st-set"><div class="prt-title">套餐</div>';
 				for(var q in productSets){
 					var pProductSet = productSets[q];
+					alert(JSON.stringify(pProductSet));
+					var pDetail = pProductSet['detail'];
 					productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
 					productSetStr +='<div class="lt-ct"><p><span>'+ pProductSet.set_name +'</span> <span>';
 					if(pProductSet.spicy==1){
@@ -228,16 +230,29 @@ function getProduct(){
 					productSetStr +='</p></div>';
          			if(parseInt(pProductSet.num)){
          				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
-         				productSetStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div></div>';
+         				productSetStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div>';
          			}else{
          				if(parseInt(pProductSet.store_number) != 0){
          					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
-         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div></div>';
+         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
          				}else{
          					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
-         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div></div>';
+         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
          				}
          			}
+         			// 套餐详情
+         			productSetStr +='<div class="tips">';
+         			for(var ps=0; ps<pDetail.length; ps++){
+             			var detail = pDetail[ps]
+             			for(var ps1=0;ps1<detail.length;ps1++){
+							var detailItem = detail[ps1];
+							if(detailItem['is_select']=='1'){
+								productSetStr +=detailItem['product_name']+'x'+detailItem['number']+' ';
+							}
+                 		}
+             		}
+         			productSetStr +='</div>';
+         			productSetStr +='</div>';
 				}
 				productSetStr +='</div>';
 			}

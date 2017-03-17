@@ -40,10 +40,15 @@ class WxProduct
 	}
 	public function productSetList(){
 		$sql = 'select m.*,n.num from (select * from nb_product_set where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid)m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and is_set=1 and promotion_id=-1 order by m.lid desc';
-		$this->productSetLists = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->queryAll();
-		foreach ($this->productSetLists as $k=>$set){
+		$setProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->queryAll();
+		foreach ($setProducts as $k=>$set){
 			$setDetail = self::getProductSetDetail($set['lid'], $set['dpid']);
-			$this->productSetLists[$k]['detail'] = $setDetail;
+			if(!empty($setDetail)){
+				$setProducts[$k]['detail'] = $setDetail;
+				array_push($this->productSetLists,$setProducts[$k]);
+			}else{
+				unset($setProducts[$k]);
+			}
 		}
 	}
 	/**
@@ -68,6 +73,6 @@ class WxProduct
 	 	foreach ($setDetail as $detail){
 	 		$setDetails[$detail['group_no']][] = $detail;
 	 	}
- 		return $setDetails;
+ 		return array_merge($setDetails);
 	 }
 }
