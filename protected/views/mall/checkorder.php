@@ -622,7 +622,18 @@ $(document).ready(function(){
 			layer.msg('无可用代金券');
 			return;
 		}
-		$('#cuponList').css('display','block');
+	 	layer.open({
+		    type: 1,
+		    title: false,
+		    shadeClose: false,
+		    closeBtn: 0,
+		    area: ['100%'],
+		    content:$('#cuponList'),
+		    btn: '确定',
+		    yes: function(index, layero){ 
+	        layer.close(index);
+	   	}
+		});
 	});
 	$('input[name="yue"]').change(function(){
 		var total = $('#total').attr('total');

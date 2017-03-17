@@ -63,7 +63,7 @@ class MallController extends Controller
 //				Yii::app()->session['userId'] = $userId;
 //				Yii::app()->session['qrcode-'.$userId] = -1;
 //				pc 测试
-				$userId = 2;
+				$userId = 2082;
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = 40;
 			}
