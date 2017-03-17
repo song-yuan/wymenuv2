@@ -523,7 +523,7 @@ $(document).ready(function(){
 	 	layer.open({
 		    type: 1,
 		    title: false,
-		    shadeClose: true,
+		    shadeClose: false,
 		    closeBtn: 0,
 		    area: ['80%'],
 		    content:_this.siblings('.detail-items'),
