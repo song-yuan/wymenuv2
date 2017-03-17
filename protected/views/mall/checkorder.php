@@ -29,7 +29,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_002.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_004.js" type="text/javascript"></script>
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_002.css" rel="stylesheet" type="text/css">
@@ -101,7 +100,7 @@
 	    	<div class="item-group">
 	    		<div class="item group"><?php echo $groups['name'];?></div>
 	    		<?php foreach($groups['tastes'] as $taste):?>
-	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>"><?php echo $taste['name'];?></div>
+	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="0" />
 	    		<div class="clear"></div>
@@ -128,7 +127,7 @@
 	    	<div class="item-group">
 	    		<div class="item group"><?php echo $groups['name'];?></div>
 	    		<?php foreach($groups['tastes'] as $taste):?>
-	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>"><?php echo $taste['name'];?></div>
+	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="0" />
 	    		<div class="clear"></div>
@@ -268,12 +267,30 @@ function emptyCart(){
 		}
 	});
 }
+function reset_total(price){
+	var setTotal = $('#total').attr('total');
+	var yue = $('#yue').attr('yue');
+	var total = $('#total').html();
+	var totalFee = parseFloat(total) + parseFloat(price);
+	$('#total').attr('total',parseFloat(setTotal) + parseFloat(price));
+	
+	if($('input[name="yue"]').is(':checked')){
+		if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
+			totalFee = 0;
+		}
+	}
+	if(totalFee > 0){
+		totalFee =  totalFee.toFixed(2);
+	}else{
+		totalFee = '0.00';
+	}
+	
+	$('#total').html(totalFee);
+}
 window.onload = emptyCart;
 $(document).ready(function(){
 	<?php if($msg):?>
-	layer.ready(function(){
 	    layer.msg(<?php echo $msg;?>);
-	}); 
 	<?php endif;?>
 	<?php if($this->type==3):?>
 	var today = new Date();
@@ -372,24 +389,15 @@ $(document).ready(function(){
 		<?php elseif($this->type==3):?>
 		var seatFee = $('.packingFee').attr('price');
 		<?php endif;?>
-		var setTotal = $('#total').attr('total');
-		var total = $('#total').html();
+		
 		if(parseInt(number) > 1 ){
 			$('.number').val(parseInt(number)-1);
 			<?php if($this->type==1):?>
 			$('.seatingFee').find('.num').html(parseInt(number)-1);
 			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
 			<?php endif;?>
-		
-			$('#total').attr('total',parseFloat(setTotal) - parseFloat(seatFee));
-			
-			if(parseFloat(total) > 0){
-				var totalFee = parseFloat(total) - parseFloat(seatFee);
-				if(parseFloat(totalFee)==0){
-					totalFee = 0; 
-				}
-				totalFee =  totalFee.toFixed(2);
-				$('#total').html(totalFee);
+			if(parseFloat(seatFee)>0){
+				reset_total(-seatFee);
 			}
 		}else if(parseInt(number) == 1){
 			<?php if($siteOpen):?>
@@ -399,15 +407,8 @@ $(document).ready(function(){
 				$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
 				<?php endif;?>
 			
-				$('#total').attr('total',parseFloat(setTotal) - parseFloat(seatFee));
-				
-				if(parseFloat(total) > 0){
-					var totalFee = parseFloat(total) - parseFloat(seatFee);
-					if(parseFloat(totalFee)==0){
-						totalFee = 0; 
-					}
-					totalFee =  totalFee.toFixed(2);
-					$('#total').html(totalFee);
+				if(parseFloat(seatFee)>0){
+					reset_total(-seatFee);
 				}
 			<?php endif;?>
 		}
@@ -421,24 +422,15 @@ $(document).ready(function(){
 		<?php elseif($this->type==3):?>
 		var seatFee = $('.packingFee').attr('price');
 		<?php endif;?>
-		var setTotal = $('#total').attr('total');
-		var yue = $('#yue').attr('yue');
-		var total = $('#total').html();
 		$('.number').val(parseInt(number)+1);
 		<?php if($this->type==1):?>
 		$('.seatingFee').find('.num').html(parseInt(number)+1);
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
 		<?php endif;?>
-		var totalFee = parseFloat(total) + parseFloat(seatFee);
-		$('#total').attr('total',parseFloat(setTotal) + parseFloat(seatFee));
 		
-		if($('input[name="yue"]').is(':checked')){
-			if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
-				totalFee = 0;
-			}
+		if(parseFloat(seatFee)>0){
+			reset_total(seatFee);
 		}
-		totalFee =  totalFee.toFixed(2);
-		$('#total').html(totalFee);
 	});
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
@@ -469,19 +461,31 @@ $(document).ready(function(){
   	var productId = tasteItems.attr('product-id');
   	var tasteId = $(this).attr('taste-id');
   	var group =  $(this).attr('group');
+  	var tastePrice = $(this).attr('taste-pirce');
   	var tastName = $(this).html();
-  	
   	if($(this).hasClass('on')){
   		$(this).removeClass('on');
   		$(this).siblings('input').val(0);
   		tasteDesc.find('#'+group+'-'+tasteId).remove();
+  		if(parseFloat(tastePrice) > 0){
+  			reset_total(-tastePrice);
+  	  	}
   	}else{
-  		$(this).siblings().removeClass('on');
+  	  	var onObj = $(this).siblings().find('on');
+  	  	if(onObj.length > 0){
+	  	  	var onPrice = onObj.attr('taste-pirce');
+	  	  	if(parseFloat(onPrice) > 0){
+	  	  		reset_total(-onPrice);
+	  	  	}
+  	  	}
 	  	$(this).addClass('on');
-	  	$(this).siblings('input').val(productId+'-'+tasteId);
+	  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice);
 	  	tasteDesc.find('span[id^='+group+'-]').remove();
 	  	var str = '<span id="'+group+'-'+tasteId+'">'+tastName+'</span>';
 	  	tasteDesc.append(str);
+	  	if(parseFloat(tastePrice) > 0){
+  			reset_total(tastePrice);
+  	  	}
   	}
   });
   
@@ -626,8 +630,10 @@ $(document).ready(function(){
 				layer.msg('预约时间必须大于当前时间!');
 				return;
 			}
+			layer.load(2);
 			$('form').submit();
 		<?php else:?>
+			layer.load(2);
 			$('form').submit();
 		<?php endif;?>
 	});

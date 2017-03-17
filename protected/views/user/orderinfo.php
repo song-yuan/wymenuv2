@@ -1,16 +1,22 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('订单详情');
+	$this->setPageTitle('我的订单');
+	
+	$orderTatsePrice = 0.00;
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/user.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 
 
-<div class="order-title">我的订单</div>
-<div class="order-site"><div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div><div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '已支付';else echo '已完成';?></div><div class="clear"></div></div>
+<div class="order-title">订单详情</div>
+<div class="order-site"><div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div><div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '已支付';elseif ($order['order_status']==7) echo '已取消';else echo '已完成';?></div><div class="clear"></div></div>
+<div class="order-site">
+	<span>订单号: <?php echo $order['lid'];?></span>
+	<span>下单时间: <?php echo $order['create_at'];?></span>
+</div>
 <?php if($address):?>
 	<?php if($order['order_type']==2):?>
 	<div class="address">
@@ -34,8 +40,22 @@
 		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 		<div class="clear"></div>
 	</div>
+		<?php if(!empty($product['taste'])):?>
+		<div class="taste">口味:
+		<?php foreach ($product['taste'] as $taste):?>
+		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
 	<?php endforeach;?>
 	<div class="ht1"></div>
+		<?php if(!empty($order['taste'])):?>
+		<div class="taste">整单口味:
+		<?php foreach ($order['taste'] as $otaste): $orderTatsePrice +=$otaste['price'];?>
+		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+	<?php endif;?>
 		<!-- 其他费用 -->
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
@@ -55,48 +75,56 @@
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
-	
+	<?php if($orderTatsePrice>0):?>
+		<div class="item">
+			<div class="lt">口味加价:</div><div class="rt">￥<?php echo number_format($orderTatsePrice,2);?></div>
+			<div class="clear"></div>
+		</div>
+	<?php endif;?>
 	<div class="item">
 		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
-	<?php if($order['reality_total'] - $order['should_total'] - $order['yue_total']):?>
-	
-	<?php if($order['cupon_branduser_lid'] > 0):?>
+	<?php if($order['reality_total'] > $order['should_total']):?>
 	<div class="item">
-		<div class="lt">会员减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $order['yue_total'] - $order['cupon_money'],2);?></div>
-		<div class="clear"></div>
-	</div>
-	<div class="item">
-		<div class="lt">现金券减免</div><div class="rt">￥<?php echo number_format($order['cupon_money'],2);?></div>
-		<div class="clear"></div>
-	</div>
-	<?php else:?>
-	<div class="item">
-		<div class="lt">会员减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $order['yue_total'],2);?></div>
-		<div class="clear"></div>
-	</div>
-	<?php endif;?>
-	
-	<?php endif;?>
-	<div class="ht1"></div>
-	<?php if($order['yue_total'] > 0):?>
-	<div class="item" >
-		<div class="lt">余额支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['yue_total'],2);?></span></div>
-		<div class="clear"></div>
-	</div>
-	<?php endif;?>
-	
-	<?php if($order['should_total'] > 0):?>
-	<div class="item">
-		<div class="lt"><?php if($order['paytype']==1):?>微信支付:<?php elseif($order['paytype']==2):?>微信支付:<?php else:?>现金支付<?php endif;?></div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'],2);?></span></div>
+		<div class="lt">优惠:</div><div class="rt">-￥<?php echo $order['reality_total'] - $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
 	<div class="item">
-		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'] + $order['yue_total'],2);?></span></div>
+		<div class="lt">实付:</div><div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
+	<?php if(!empty($orderPays)):?>
+	<?php foreach ($orderPays as $pay):?>
+		<?php if($pay['paytype']==0):?>
+		<div class="item">
+			<div class="lt">现金支付:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
+			<div class="clear"></div>
+		</div>
+		<?php elseif($pay['paytype']==1):?>
+		<div class="item">
+			<div class="lt">微信支付:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
+			<div class="clear"></div>
+		</div>
+		<?php elseif($pay['paytype']==2):?>
+		<div class="item">
+			<div class="lt">支付宝支付:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
+			<div class="clear"></div>
+		</div>
+		<?php elseif($pay['paytype']==9):?>
+		<div class="item">
+			<div class="lt">现金券:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
+			<div class="clear"></div>
+		</div>
+		<?php elseif($pay['paytype']==10):?>
+		<div class="item">
+			<div class="lt">余额支付:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
+			<div class="clear"></div>
+		</div>
+		<?php endif;?>
+	<?php endforeach;?>
+	<?php endif;?>
 </div>
 
 <?php if($order['order_status']< 3):?>
@@ -141,7 +169,7 @@
 <?php else:?>
 <?php 
 	$title = '物易我要点单';
-    $desc = '物点单优惠，尽在物易我要点单';
+    $desc = '点单优惠，尽在物易我要点单';
     $url = $this->createAbsoluteUrl('/mall/index',array('companyId'=>$this->companyId));
     $imgUrl = Yii::app()->request->hostInfo.$baseUrl.'/img/mall/144208iygyy9.png';
 ?>

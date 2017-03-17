@@ -12,12 +12,14 @@ class WxProduct
 	public $siteId;
 	public $categorys = array();
 	public $categoryProductLists = array();
+	public $productSetLists = array();
 	
 	public function __construct($companyId,$userId){
 		$this->companyId = $companyId;
 		$this->userId = $userId;
 		$this->getCategory();
 		$this->productList();
+		$this->productSetList();
 	}
 	public function getCategory(){
 		$this->categorys = WxCategory::get($this->companyId);
@@ -31,15 +33,14 @@ class WxProduct
 			}else{
 				$categoryIds = $category['lid'];
 			}
-			$sql = 'select m.*,n.num from (select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.'))m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and privation_promotion_id=-1 order by m.lid desc';
+			$sql = 'select m.*,n.num from (select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.'))m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and is_set=0 and promotion_id=-1 order by m.sort asc,m.lid desc';
 		    $categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->companyId)->bindValue(':userId',$this->userId)->queryAll();
-		    foreach($categoryProducts as $j=>$product){
-		    	$productPrice = new WxProductPrice($product['lid'],$product['dpid']);
-				$categoryProducts[$j]['price'] = $productPrice->price;
-				$categoryProducts[$j]['promotion'] = $productPrice->promotion;
-		    }
 		    $this->categoryProductLists[$k]['product_list'] = $categoryProducts;
 		}
+	}
+	public function productSetList(){
+		$sql = 'select m.*,n.num from (select * from nb_product_set where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid)m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and is_set=1 and promotion_id=-1 order by m.lid desc';
+		$this->productSetLists = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->companyId)->bindValue(':userId',$this->userId)->queryAll();
 	}
 	/**
 	 * 

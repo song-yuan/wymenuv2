@@ -4,7 +4,7 @@
  * 
  * 微信端购物车类
  * //堂吃必须有siteId
- * productArr = array('product_id'=>1,'num'=>1,'privation_promotion_id'=>-1)
+ * productArr = array('product_id'=>1,'num'=>1,'promotion_id'=>-1)
  * 
  */
 class WxCart
@@ -28,17 +28,22 @@ class WxCart
 	}
 	//加入购物车 判断
 	public function isCart(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and privation_promotion_id=:privationPromotionId';
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and is_set=:isSet and promotion_id=:privationPromotionId';
 		$this->cart = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':userId',$this->userId)
 					  ->bindValue(':productId',$this->productArr['product_id'])
-					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
+					  ->bindValue(':isSet',$this->productArr['is_set'])
+					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
 	}
 	//判断产品库存
 	public function checkStoreNumber(){
-		$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+		if($this->productArr['is_set']){
+			$sql = 'select * from nb_product_set where lid=:productId and dpid=:dpid and delete_flag=0';
+		}else{
+			$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+		}
 		$product = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':productId',$this->productArr['product_id'])
@@ -55,25 +60,25 @@ class WxCart
 	}
 	// 如果产品有特价活动
 	public function checkPromotion(){
-		if($this->productArr['privation_promotion_id'] > 0){
-			$sqla = 'select count(*) as count from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id=:privationPromotionId';
+		if($this->productArr['promotion_id'] > 0){
+			$sqla = 'select count(*) as count from nb_cart where dpid=:dpid and user_id=:userId and promotion_id=:privationPromotionId';
 			$resulta = Yii::app()->db->createCommand($sqla)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':userId',$this->userId)
-					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
+					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
 					  
-			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type from nb_private_promotion_detail t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.private_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
+			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
 			$result = Yii::app()->db->createCommand($sql)
 						  ->bindValue(':dpid',$this->dpid)
 						  ->bindValue(':productId',$this->productArr['product_id'])
-						  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
+						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 						  ->queryRow();
 			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
 				if(!empty($cartPromotions)){
 					foreach($cartPromotions as $promotion){
-						$privatePromotion = WxPromotion::getPromotion($this->dpid,$promotion['privation_promotion_id']);
+						$privatePromotion = WxPromotion::getPromotion($this->dpid,$promotion['promotion_id']);
 						if($privatePromotion['promotion_type']==0){
 							return array('status'=>false,'msg'=>'本活动不与其他活动同时使用!');
 						}
@@ -103,14 +108,14 @@ class WxCart
 		}
 	}
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId';
+		$sql = 'select t.dpid,t.product_id,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
-			if($result['privation_promotion_id'] > 0){
-				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['privation_promotion_id'],$result['to_group']);
+			if($result['promotion_id'] > 0){
+				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['promotion_id'],$result['to_group']);
 				$results[$k]['price'] = $productPrice['price'];
 				$results[$k]['promotion'] = $productPrice;
 			}else{
@@ -123,11 +128,11 @@ class WxCart
 		return $results;
 	}
 	public function getCartPromotion(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id > 0 and privation_promotion_id!=:privationPromotionId';
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and promotion_id > 0 and promotion_id!=:privationPromotionId';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
-				  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
+				  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 				  ->queryAll();
 		return $results;
 	}
@@ -150,9 +155,10 @@ class WxCart
 	        	'update_at'=>date('Y-m-d H:i:s',$time), 
 	        	'user_id'=>$this->userId,
 	        	'product_id'=>$this->productArr['product_id'],
+        		'is_set'=>$this->productArr['is_set'],
 	        	'num'=>$this->productArr['num'],
 	        	'site_id'=>$this->siteId,
-	        	'privation_promotion_id'=>$this->productArr['privation_promotion_id'],
+	        	'promotion_id'=>$this->productArr['promotion_id'],
 	        	'to_group'=>$this->productArr['to_group'],
 	        	'is_sync'=>DataSync::getInitSync(),	
 	        );
