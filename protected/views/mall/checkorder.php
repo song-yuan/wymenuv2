@@ -317,6 +317,7 @@ function reset_total(price){
 }
 window.onload = emptyCart;
 $(document).ready(function(){
+	var cupon_layer = 0;
 	<?php if($msg):?>
 	    layer.msg(<?php echo $msg;?>);
 	<?php endif;?>
@@ -574,7 +575,6 @@ $(document).ready(function(){
 		
 		$('.user-cupon .item').removeClass('on');
 		$(this).addClass('on');
-		$('#cuponList').css('display','none');
 		$('input[name="cupon"]').val(userCuponId);
 		$('.noCupon').attr('min-money',minMoney);
 		$('.noCupon').attr('cupon-money',cuponMoney);
@@ -590,6 +590,7 @@ $(document).ready(function(){
 		$('#total').html(money);
 		$('#total').attr('total',money);
 		$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
+		layer.close(cupon_layer);
 	});
 	$('.user-cupon .item.noCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
@@ -600,7 +601,6 @@ $(document).ready(function(){
 		
 		$('.user-cupon .item').removeClass('on');
 		$(this).addClass('on');
-		$('#cuponList').css('display','none');
 		$('input[name="cupon"]').val(userCuponId);
 		
 		$(this).attr('min-money',0);
@@ -616,13 +616,14 @@ $(document).ready(function(){
 		$('#total').html(money);
 		$('#total').attr('total',money);
 		$('.cupon').find('.copun-rt').html('请选择代金券');
+		layer.close(cupon_layer);
 	});
 	$('.cupon').click(function(){
 		if($(this).hasClass('disabled')){
 			layer.msg('无可用代金券');
 			return;
 		}
-	 	layer.open({
+		cupon_layer = layer.open({
 		    type: 1,
 		    title: false,
 		    shadeClose: true,
