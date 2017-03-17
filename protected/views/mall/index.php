@@ -197,14 +197,14 @@ function getProduct(){
          			productStr +='</p></div>';
          			if(parseInt(pProduct.num)){
          				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
-        				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+        				productStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div></div>';
          			}else{
          				if(parseInt(pProduct.store_number) != 0){
 	         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
-	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
+	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div></div>';
          				}else{
          					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
-	        				productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
+	        				productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div></div>';
          				}
          			}
 				}
@@ -228,14 +228,14 @@ function getProduct(){
 					productSetStr +='</p></div>';
          			if(parseInt(pProductSet.num)){
          				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
-         				productSetStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+         				productSetStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div></div>';
          			}else{
          				if(parseInt(pProductSet.store_number) != 0){
          					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
-         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
+         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div></div>';
          				}else{
          					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
-         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
+         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div></div>';
          				}
          			}
 				}
@@ -268,7 +268,9 @@ $(document).ready(function(){
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
             if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) >= 0){
-            	$(this).find('.prt-title').addClass('top');
+                if(top!=0){
+                	$(this).find('.prt-title').addClass('top');
+                }
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
 	        	return false;
