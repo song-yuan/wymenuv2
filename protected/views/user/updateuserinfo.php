@@ -167,8 +167,6 @@
             $('#dialog2').show();
             return false;
         }
-    
-
         
         if(verify_flag){
             var success = true;
@@ -183,13 +181,16 @@
                                     $('#dialog2').find('.weui_dialog_bd').html('验证码错误');
                             $('#dialog2').show();
                             success = false;
-                            return false;
+                             
                             }
                     }
             });
+           if(success == false){
+              return false; 
+           }
             
         }
-        
+     
         if($("#birthday").attr("data")=='true'){
            return true;
         }else{
