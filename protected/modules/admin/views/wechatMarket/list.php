@@ -95,7 +95,7 @@
                                     <div class="list col-sm-3 col-xs-12">
                                        <a href="<?php echo $this->createUrl('sentwxcardpromotion/index',array('companyId' => $this->companyId))?>">
                                            <div class="list_big">开卡关怀</div>
-                                            <div class="list_small">配置开卡消息及建立开卡赠礼活动，贴心的开卡消息及开卡礼品往往可以将新用户带进店来</div>
+                                            <div class="list_small">建立首次开卡赠礼活动，配置开卡消息，贴心的开卡消息及开卡礼品往往可以将新用户带进店来</div>
                                        </a> 
                                       
                                     </div>
