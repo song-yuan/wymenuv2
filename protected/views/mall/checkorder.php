@@ -625,14 +625,10 @@ $(document).ready(function(){
 	 	layer.open({
 		    type: 1,
 		    title: false,
-		    shadeClose: false,
+		    shadeClose: true,
 		    closeBtn: 0,
-		    area: ['100%'],
+		    area: ['100%','100%'],
 		    content:$('#cuponList'),
-		    btn: '确定',
-		    yes: function(index, layero){ 
-	        layer.close(index);
-	   	}
 		});
 	});
 	$('input[name="yue"]').change(function(){
