@@ -254,12 +254,14 @@
 </footer>
 
 <div class="user-cupon" id="cuponList">
+	<div class="cupon-container">
 	<?php if($isCupon):?>
 	<?php foreach($cupons as $coupon):?>
 		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
 	<?php endforeach;?>
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
+	</div>
 </div>
 	<input type="hidden" name="cupon" value="0" />
 </form>
