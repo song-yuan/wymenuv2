@@ -215,7 +215,6 @@ function getProduct(){
 				productSetStr +='<div class="section" id="st-set"><div class="prt-title">套餐</div>';
 				for(var q in productSets){
 					var pProductSet = productSets[q];
-					alert(JSON.stringify(pProductSet));
 					var pDetail = pProductSet['detail'];
 					productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
 					productSetStr +='<div class="lt-ct"><p><span>'+ pProductSet.set_name +'</span> <span>';
