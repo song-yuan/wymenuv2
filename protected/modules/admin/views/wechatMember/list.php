@@ -106,7 +106,13 @@
                                             <span class="fa fa-chain  list_picture"></span>
                                             <div class="list_text">实体卡绑定</div>
                                         </a> 
-                                    </div>                                    
+                                    </div>
+                                    <div class="col-sm-3 col-xs-6">
+                                        <a href="<?php echo $this->createUrl('wxMessage/index',array('companyId' => $this->companyId))?>">
+                                            <span class="fa fa-envelope-o  list_picture"></span>
+                                            <div class="list_text">模板消息</div>
+                                        </a> 
+                                    </div>
                             </div> 
                         </div>
                     </div>

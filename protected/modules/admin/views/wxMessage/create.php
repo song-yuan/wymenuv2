@@ -19,7 +19,7 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('wechatMember/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员卡样式'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wxCardStyle/index' , array('companyId' => $this->companyId)))));?>
+<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('wechatMember/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','模板消息'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wxMessage/index' , array('companyId' => $this->companyId,'type'=>0)))));?>
 <div class="row">
    
     <div class="col-md-12">
@@ -28,7 +28,7 @@
                 <div class="portlet-body form" >
                     <?php echo $this->renderPartial('_form', 
                                         array('model'=>$model, 
-                                         
+                                               'message_type'=>$message_type
                                             )); ?>
                 </div>
             </div>
