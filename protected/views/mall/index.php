@@ -281,7 +281,7 @@ $(document).ready(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
-            if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) >= 0){
+            if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) > 0){
                 if(top!=0){
                 	$(this).find('.prt-title').addClass('top');
                 }

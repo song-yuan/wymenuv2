@@ -120,7 +120,8 @@
 	        <div class="prt-rt">￥<span class="price"><?php echo $model['price']?></span></div>
 	        <div class="clear"></div>
 	    </div>
-	    <?php if(!empty($model['taste_groups'])):?>
+	    <!-- 可选择口味 -->
+	    <?php if(isset($model['taste_groups'])&&!empty($model['taste_groups'])):?>
 	    <div class="taste">可选口味</div><div class="taste-desc"></div>
 	    <div class="taste-items" product-id="<?php echo $model['product_id'];?>">
 	    	<?php foreach($model['taste_groups'] as $k=>$groups):?>
@@ -134,6 +135,10 @@
 	    	</div>
 	    	<?php endforeach;?>
 	    </div>
+	    <?php endif;?>
+	    <!-- 可选择套餐 -->
+	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
+	     <div class="set-detail">可选口味</div><div class="set-detail-desc"></div>
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
