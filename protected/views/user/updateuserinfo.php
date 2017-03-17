@@ -183,6 +183,7 @@
                                     $('#dialog2').find('.weui_dialog_bd').html('验证码错误');
                             $('#dialog2').show();
                             success = false;
+                            return false;
                             }
                     }
             });
