@@ -7,60 +7,66 @@ class AlipayController extends Controller
 	public $gateway_config = array();
 	public $alipay_config = array();
 	public $f2fpay_config = array();
+	public $compaychannel = '1';
     public function init(){
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
-		$alipayAccount = AlipayAccount::get($this->companyId);
-		//支付宝网关
-		$this->gateway_config = array(
-				//商户的私钥（后缀是.pen）文件相对路径
-				'alipay_public_key_file' => Yii::app()->basePath.'/'.$alipayAccount['alipay_public_key_file'],
-				'merchant_private_key_file' => Yii::app()->basePath.'/'.$alipayAccount['merchant_private_key_file'],
-				'merchant_public_key_file' => Yii::app()->basePath.'/'.$alipayAccount['merchant_public_key_file'],		
-				'charset' => "GBK",
-				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
-				'app_id' => $alipayAccount['appid'] 
-		);
-		//支付宝支付 网页支付 及时到账接口
-		$this->alipay_config = array(
-				//合作身份者id，以2088开头的16位纯数字
-				'partner'=>'2088811584894868',
-				//收款支付宝账号，一般情况下收款账号就是签约账号
-				'seller_id'=>'2088811584894868',
-				//商户的私钥（后缀是.pen）文件相对路径
-				'private_key_path'=>Yii::app()->basePath.'/cert/ali/rsa_private_key.pem',
-				//支付宝公钥（后缀是.pen）文件相对路径
-				'ali_public_key_path'=>Yii::app()->basePath.'/cert/ali/ali_public_key.pem',
-				//签名方式 不需修改
-				'sign_type'=>strtoupper('RSA'),
-				//字符编码格式 目前支持 gbk 或 utf-8
-				'input_charset'=>strtolower('utf-8'),
-				//ca证书路径地址，用于curl中ssl校验
-				//请保证cacert.pem文件在当前文件夹目录中
-				'cacert'=>Yii::app()->basePath.'/cert/ali/cacert.pem',
-				//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-				'transport'=>'http',
-		);
+		$compaychannel = WxCompany::getpaychannel($this->companyId);
+		$this->compaychannel = $compaychannel['pay_channel'];
+		if($this->compaychannel=='1'){
+			$alipayAccount = AlipayAccount::get($this->companyId);
+			//支付宝网关
+			$this->gateway_config = array(
+					//商户的私钥（后缀是.pen）文件相对路径
+					'alipay_public_key_file' => Yii::app()->basePath.'/'.$alipayAccount['alipay_public_key_file'],
+					'merchant_private_key_file' => Yii::app()->basePath.'/'.$alipayAccount['merchant_private_key_file'],
+					'merchant_public_key_file' => Yii::app()->basePath.'/'.$alipayAccount['merchant_public_key_file'],
+					'charset' => "GBK",
+					'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
+					'app_id' => $alipayAccount['appid']
+			);
+			//支付宝支付 网页支付 及时到账接口
+			$this->alipay_config = array(
+					//合作身份者id，以2088开头的16位纯数字
+					'partner'=>'2088811584894868',
+					//收款支付宝账号，一般情况下收款账号就是签约账号
+					'seller_id'=>'2088811584894868',
+					//商户的私钥（后缀是.pen）文件相对路径
+					'private_key_path'=>Yii::app()->basePath.'/cert/ali/rsa_private_key.pem',
+					//支付宝公钥（后缀是.pen）文件相对路径
+					'ali_public_key_path'=>Yii::app()->basePath.'/cert/ali/ali_public_key.pem',
+					//签名方式 不需修改
+					'sign_type'=>strtoupper('RSA'),
+					//字符编码格式 目前支持 gbk 或 utf-8
+					'input_charset'=>strtolower('utf-8'),
+					//ca证书路径地址，用于curl中ssl校验
+					//请保证cacert.pem文件在当前文件夹目录中
+					'cacert'=>Yii::app()->basePath.'/cert/ali/cacert.pem',
+					//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
+					'transport'=>'http',
+			);
+			
+			// 支付宝扫条码 面对面支付
+			$this->f2fpay_config = array(
+					//支付宝公钥
+					'alipay_public_key' => $alipayAccount['alipay_public_key'],
+					//商户私钥
+					'merchant_private_key' => $alipayAccount['merchant_private_key'],
+					//编码格式
+					'charset' => "UTF-8",
+					//支付宝网关
+					'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
+					//应用ID
+					'app_id' => $alipayAccount['appid'],
+					//异步通知地址,只有扫码支付预下单可用
+					'notify_url' =>  "",
+					//最大查询重试次数
+					'MaxQueryRetry' => "10",
+					//查询间隔
+					'QueryDuration' => "3"
+			);
+		}
 		
-		// 支付宝扫条码 面对面支付
-		$this->f2fpay_config = array(
-				//支付宝公钥
-				'alipay_public_key' => $alipayAccount['alipay_public_key'],
-				//商户私钥
-				'merchant_private_key' => $alipayAccount['merchant_private_key'],
-				//编码格式
-				'charset' => "UTF-8",
-				//支付宝网关
-				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
-				//应用ID 
-				'app_id' => $alipayAccount['appid'],
-				//异步通知地址,只有扫码支付预下单可用
-				'notify_url' =>  "",
-				//最大查询重试次数
-				'MaxQueryRetry' => "10",
-				//查询间隔
-				'QueryDuration' => "3"
-		);
     }
     /**
      * 
@@ -219,20 +225,25 @@ class AlipayController extends Controller
     // 当面付 条码支付 
     public function actionBarPay()
     {
+    	$poscode = Yii::app()->request->getParam('poscode');
+    	$username = Yii::app()->request->getParam('username');
+    	$companyId = Yii::app()->request->getParam('companyId');
+    	//新加参数
     	$totalAmount = Yii::app()->request->getParam('pay_price');
     	$authCode = Yii::app()->request->getParam('auth_code');
     	$goodStr = Yii::app()->request->getParam('goods');
-    	$this->render('barpay',array('totalAmount'=>$totalAmount,'authCode'=>$authCode,'goodStr'=>$goodStr));
+    	$this->render('barpay',array('dpid'=>$companyId,'totalAmount'=>$totalAmount,'authCode'=>$authCode,'goodStr'=>$goodStr,'poscode'=>$poscode,'username'=>$username,));
     }
     // 退款
     public function actionRefund()
     {
+    	$poscode = Yii::app()->request->getParam('poscode');
     	$companyId = Yii::app()->request->getParam('companyId');
 		$adminId = Yii::app()->request->getParam('admin_id');
 		$outTradeNo = Yii::app()->request->getParam('out_trade_no');
 		$refundAmount = Yii::app()->request->getParam('refund_fee');
 	
-		$this->render('refund',array('dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'refund_amount'=>$refundAmount));
+		$this->render('refund',array('dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'refund_amount'=>$refundAmount,'poscode'=>$poscode));
     }
    // 手机订单支付
     public function actionReturn()
