@@ -136,6 +136,7 @@ class WxOrder
 				}
 			}
 		}
+		var_dump($this->productSetDetail);exit;
 	}
 	//获取座位状态
 	public function getSite(){
@@ -246,9 +247,25 @@ class WxOrder
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			if($cart['is_set'] > 0){
-				// 套餐 插入套餐明细
-				foreach ($this->productSetDetail[$cart['product_id']] as $detail){
-					$ortherPrice = $detail[2];
+				$hasPrice = 0;
+				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(set_id,product_id,num,price); price 套餐内加价
+				foreach ($this->productSetDetail[$cart['product_id']] as $k=>$detail){
+					$ortherPrice = $detail[3];
+					$setProduct = WxProduct::getProduct($detail[1], $this->dpid);
+					$eachPrice = ($setProduct['original_price']+$ortherPrice)/$cart['original_price']*$detail[2]*$cart['price'];
+					$hasPrice += $eachPrice*$detail[2];
+					if($k+1 == count($detail)){
+						$leavePrice = $hasPrice - $cart['price'];
+						if($leavePrice > 0){
+							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+						}else{
+							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+						}
+					}else{
+						$itemPrice = $eachPrice + $ortherPrice;
+					}
+					$itemPrice = number_format($itemPrice,4);
+					
 					$se = new Sequence("order_product");
 					$orderProductId = $se->nextval();
 					
@@ -262,9 +279,10 @@ class WxOrder
 							'product_id'=>$detail[1],
 							'product_name'=>$cart['product_name'],
 							'product_pic'=>$cart['main_picture'],
-							'price'=>$cart['price']+$ortherPrice,
-							'original_price'=>$cart['original_price']+$ortherPrice,
-							'amount'=>$cart['num'],
+							'price'=>$itemPrice,
+							'original_price'=>$setProduct['original_price']+$ortherPrice,
+							'amount'=>$cart['num']*$detail[2],
+							'zhiamount'=>$cart['num'],
 							'product_order_status'=>9,
 							'is_sync'=>DataSync::getInitSync(),
 					);
