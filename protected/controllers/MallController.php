@@ -63,7 +63,7 @@ class MallController extends Controller
 //				Yii::app()->session['userId'] = $userId;
 //				Yii::app()->session['qrcode-'.$userId] = -1;
 //				pc 测试
-				$userId = 2;
+				$userId = 2082;
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = 40;
 			}
@@ -127,12 +127,12 @@ class MallController extends Controller
 				$siteOpen = true;
 			}
 		}
-		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
+		
 		$price = WxCart::getCartPrice($carts);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
@@ -240,20 +240,22 @@ class MallController extends Controller
 		}catch (Exception $e) {
 			$transaction->rollback();
 			$msg = $e->getMessage();
-			$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		if($paytype == 1){
-			$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
 			//支付宝支付
 			WxOrder::updatePayType($orderId,$this->companyId,2);
 			$order = WxOrder::getOrder($orderId,$this->companyId);
+			$orderPays = WxOrderPay::get($this->companyId,$orderId);
 			if($order['order_status'] > 2){
 				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}else{
+				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'order'=>$order,'orderPays'=>$orderPays));
 			}
-			$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+		}else{
+			WxOrder::updatePayType($orderId,$this->companyId);
+			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
-		WxOrder::updatePayType($orderId,$this->companyId);
-		$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	}
 	 /**
 	 * 
@@ -300,7 +302,6 @@ class MallController extends Controller
 		}
 
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
-		
 		$user = WxBrandUser::get($userId,$this->companyId);
 	    $this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
@@ -568,14 +569,15 @@ class MallController extends Controller
 	public function actionGetProduct()
 	{
 		$userId = Yii::app()->request->getParam('userId');
-		//特价菜
+		//普通优惠
 		$promotion = new WxPromotion($this->companyId,$userId);
 		$promotions = $promotion->promotionProductList;
-		//普通优惠
+		
 		$product = new WxProduct($this->companyId,$userId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
-		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));
+		$productSets = $product->productSetLists;
+		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products,'productSets'=>$productSets));
 		exit;
 	}
 	/**
@@ -589,20 +591,21 @@ class MallController extends Controller
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
 		if($userId < 0){
-			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
+			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众进行点餐')));
 		}
 		
-//		if($this->type==1){
-//			if($siteId < 0){
-//				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
-//			}
-//		}
+		if($this->type==1){
+			if($siteId < 0){
+				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
+			}
+		}
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
+		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId,'to_group'=>$toGroup);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		
 		//检查活动商品数量
@@ -637,11 +640,6 @@ class MallController extends Controller
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
 		}
 		
-//		if($this->type==1){
-//			if($siteId < 0){
-//				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
-//			}
-//		}
 		$all = Yii::app()->request->getParam('all',0);
 		if($all){
 			$result = WxCart::clearCart($userId,$this->companyId);
@@ -655,8 +653,9 @@ class MallController extends Controller
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
+		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId,'to_group'=>$toGroup);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		if($cart->deleteCart()){

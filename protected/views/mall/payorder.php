@@ -1,18 +1,20 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
+	$orderTatsePrice = 0.00;
 	$payYue = 0.00;
+	$payCupon = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
 			if($orderPay['paytype']==10){
 				$payYue = $orderPay['pay_amount']; 
+			}elseif($orderPay['paytype']==9){
+				$payCupon = $orderPay['pay_amount']; 
 			}
 		}
 	}
 	
-	//子订单号
-//	$se = new Sequence("order_subno");
-//	$orderSubNo = $se->nextval();
+	$payPrice = $order['should_total'] - $payYue - $payCupon; // 最终支付价格
 	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
@@ -27,7 +29,7 @@
 		$input->SetBody("点餐订单");
 		$input->SetAttach("0");
 		$input->SetOut_trade_no($orderId);
-		$input->SetTotal_fee($order['should_total']*100);
+		$input->SetTotal_fee($payPrice*100);
 		$input->SetTime_start(date("YmdHis"));
 		$input->SetTime_expire(date("YmdHis", time() + 600));
 		$input->SetGoods_tag("点餐订单");
@@ -39,8 +41,7 @@
 			$input->SetOpenid($openId);
 		}
 		$orderInfo = WxPayApi::unifiedOrder($input);
-//		echo '<meta charset=utf8 />';
-//		var_dump($orderInfo);exit;
+
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
 	}catch(Exception $e){
@@ -53,7 +54,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 <div class="order-title">支付订单</div>
@@ -76,12 +76,26 @@
 <?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
-	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
-		<div class="clear"></div>
-	</div>
+		<div class="item">
+			<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+			<div class="clear"></div>
+		</div>
+		<?php if(!empty($product['taste'])):?>
+		<div class="taste">口味:
+		<?php foreach ($product['taste'] as $taste):?>
+		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
 	<?php endforeach;?>
 	<div class="ht1"></div>
+	<?php if(!empty($order['taste'])):?>
+		<div class="taste">整单口味:
+		<?php foreach ($order['taste'] as $otaste): $orderTatsePrice +=$otaste['price'];?>
+		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
+		<?php endforeach;?>
+		</div>
+	<?php endif;?>
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
 		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
@@ -97,39 +111,37 @@
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
+	<?php if($orderTatsePrice>0):?>
+		<div class="item">
+			<div class="lt">口味加价:</div><div class="rt">￥<?php echo number_format($orderTatsePrice,2);?></div>
+			<div class="clear"></div>
+		</div>
+	<?php endif;?>
 	<div class="item">
 		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
-	
-	<?php if($order['reality_total'] - $order['should_total'] - $payYue):?>
-	<?php if($order['cupon_branduser_lid'] > 0):?>
-	<?php if(($order['reality_total'] - $order['should_total'] - $payYue - $order['cupon_money'])>0):?>
+	<?php if($order['reality_total'] > $order['should_total']):?>
 	<div class="item">
-		<div class="lt">会员减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $payYue - $order['cupon_money'],2);?></div>
+		<div class="lt">优惠</div><div class="rt">-￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
+	<?php if($payCupon>0):?>
 	<div class="item">
-		<div class="lt">现金券减免</div><div class="rt">￥<?php echo $order['cupon_money'];?></div>
-		<div class="clear"></div>
-	</div>
-	<?php else:?>
-	<div class="item">
-		<div class="lt">会员减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $payYue,2);?></div>
+		<div class="lt">现金券支付</div><div class="rt">-￥<?php echo $payCupon;?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
-	<?php endif;?>
-	
 	<?php if($payYue > 0):?>
 	<div class="item" >
-		<div class="lt">余额支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
+		<div class="lt">余额支付:</div><div class="rt">-￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
+	
 	<div class="item">
-		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'],2);?></span></div>
+		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($payPrice,2);?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
@@ -137,7 +149,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total" should-total="<?php echo $order['should_total'];?>"><?php echo number_format($order['should_total'],2);?></span></p>
+        <p>￥<span id="total" class="total" should-total="<?php echo $payPrice;?>"><?php echo number_format($payPrice,2);?></span></p>
     </div>
     <div class="ft-rt">
         <p><a href="javascript:;" id="payOrder">付款</a></p>
@@ -160,7 +172,7 @@
 				 	location.href = '<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 				 }else{
 				 	//支付失败或取消支付
-				 	
+					 layer.msg('支付失败!');
 				 }     
 			}
 		);

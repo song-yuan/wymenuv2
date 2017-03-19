@@ -2,12 +2,16 @@ body{ background-color:#E5E5E5;}
 
 .total{ color:#FF5151;}
 .order-title{padding:10px;height:30px;line-height:30px;margin-bottom:1px;font-size:20px;text-align:center;background:rgb(255,255,255);}
-.order-site{padding:10px;height:30px;line-height:30px;margin-bottom:1px;font-size:18px;background:rgb(255,255,255);}
+.order-site{padding:10px;min-height:30px;line-height:30px;margin-bottom:1px;font-size:18px;background:rgb(255,255,255);}
+.order-site .lt{float:left;width:50%;}
+.order-site .rt{float:left;width:50%;text-align:center;color:#ff9933;}
+.order-site span{font-size: 15px;display: block;color: gray;}
 .order-info{padding:20px 10px;font-size:16px;background:rgb(255,255,255);}
 .order-info .item{width:100%;height:30px;line-height:30px;}
 .order-info .item .lt{width:70%;height:100%;float:left;}
 .order-info .item .rt{width:30%;height:100%;float:right;font-size:15px;}
 .order-info .ht1{width:100%;height:1px;background-color:#E5E5E5;}
+.order-info .taste{padding:5px;font-size:15px;color:gray;}
 
 .order-num{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
 .order-num .num-lt{float:left;width:35%;}
@@ -38,10 +42,11 @@ body{ background-color:#E5E5E5;}
 .order-remark{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
 .order-remark textarea{border:none;width:100%;height:30px;color:#999999}
 .order-paytype{font-size:16px;}
-.user-cupon{display:none;position:fixed;top:0;left:0;width:90%;height:100%;z-index:100;background:white;padding:20px;font-size:14px;}
+.user-cupon {width:100%;height:100%;font-size: 14px;}
+.user-cupon .cupon-container{padding:20px;overflow:auto;}
 .order-paytype .select-type{padding:10px 10px 0;margin-top:5px;color:#FF5151}
 .order-paytype .paytype{padding:10px;background:rgb(255,255,255);}
-.order-paytype .item,.user-cupon .item{padding:5px;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 20px 20px;}
+.order-paytype .item,.user-cupon .item{padding:10px;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 20px 20px;}
 .order-paytype .item img{width:20px;height:20px;vertical-align:middle;}
 .order-paytype .on,.user-cupon .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 20px 20px;}
 .paytype .item:last-child,.user-cupon .item:last-child{border:none;}

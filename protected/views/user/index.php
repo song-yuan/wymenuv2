@@ -29,10 +29,9 @@
     .img-box .level_num{
         position: absolute;
         bottom:0px;
-        right:0;
+        left:0;
         margin:0px 10px 0px 10px;
         color:#fff;
-
     }
     .up_down1:after{
          transition:All 0.3s ease-in-out;
@@ -152,7 +151,7 @@
            <div class="hd" style="position: relative;">
                <div class="img-box" style="background-image:url(<?php echo isset($img['bg_img'])?$img['bg_img']:Yii::app()->request->baseUrl.'/img/wechat_img/hyk22.jpg'?>)">
                    <div class="level_num">
-                       <span class="num">会员卡号：<?php echo substr($user['card_id'],5);?></span>
+                       <span class="num">卡号：<?php echo substr($user['card_id'],5);?></span>
                    </div>
                </div>
             </div>
@@ -303,7 +302,7 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/bill',array('companyId'=>$this->companyId));?>" >
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>" >
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>账单</p>
