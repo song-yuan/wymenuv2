@@ -68,7 +68,6 @@ class SqbPay{
     		//var_dump('111');exit;
     		return $result;
     	}
-    	
 //     	/*该接口用于支付，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
 //     	$terminal_sn = $data['terminal_sn'];
 //     	$terminal_key = $data['terminal_key'];
@@ -101,13 +100,14 @@ class SqbPay{
     	
     	
     	$obj = json_decode($result,true);
-    	//var_dump($obj);
+    	//var_dump($obj);exit;
     	$return_code = $obj['result_code'];
     	
     	Helper::writeLog($result);
     	//判断支付返回状态...
     	if($return_code == '200'){
     		$result_codes = $obj['biz_response']['result_code'];
+    		
     		if($result_codes == 'PAY_SUCCESS'){
     			$result = array(
     					"return_code"=>"SUCCESS",
@@ -122,6 +122,7 @@ class SqbPay{
     					"result_code"=>"ERROR",
     					"msg"=>"支付失败！",
     					"data"=>$obj['biz_response']['data']);
+    			
     		}elseif($result_codes == 'PAY_IN_PROGRESS'){
     			/*发起轮询*/
     			do {
@@ -260,7 +261,8 @@ class SqbPay{
     		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
     		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
     	}
-    	Helper::writeLog($result);
+    	//var_dump($result);
+    	//exit;
     	return $result;
     }
     public static function precreate($data){

@@ -13,14 +13,13 @@ $data = array(
 		'dpid' => $dpid,
 		'pay_type' => 0,
 		'out_trade_no' => $orderId,
-		'total_fee' => $should_total
+		'total_fee' => ''.$should_total
 );
 $result = MicroPayModel::insert($data);
 
 
 if(isset($auth_code) && $auth_code != ""&&$result['status']){
 	$compaychannel = WxCompany::getpaychannel($dpid);
- 	//var_dump($compaychannel['pay_channel']);
 	if($compaychannel['pay_channel']=='2'){
 		$result = SqbPay::pay(array(
 				'type'=>'3',
@@ -32,6 +31,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 				'subject'=>$company['company_name'],
 				'operator'=>$username,
 		));
+		
 	}else{
 
 		$input = new WxPayMicroPay();
@@ -63,7 +63,6 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 }else{
 	$msg = array('status'=>false, 'result'=>false,);
 }
-Helper::writeLog($msg);
 echo json_encode($msg);
 exit;
 ?>
