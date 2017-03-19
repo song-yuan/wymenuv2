@@ -59,13 +59,9 @@ class MallController extends Controller
 				}
 			}else{
 //				pc 浏览
-				$userId = -1;
-//				Yii::app()->session['userId'] = $userId;
-//				Yii::app()->session['qrcode-'.$userId] = -1;
-//				pc 测试
 				$userId = 2082;
 				Yii::app()->session['userId'] = $userId;
-				Yii::app()->session['qrcode-'.$userId] = 40;
+				Yii::app()->session['qrcode-'.$userId] = -1;
 			}
 		}
 		return true;
@@ -129,6 +125,7 @@ class MallController extends Controller
 		}
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
+		
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
@@ -185,29 +182,24 @@ class MallController extends Controller
 		}elseif($this->type==3){
 			$number = Yii::app()->request->getPost('number');
 		}
+		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
 		
-		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$tastes);
-		if(!$orderObj->cart){
-			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
-		}
-		
-		$transaction=Yii::app()->db->beginTransaction();
+		$transaction = Yii::app()->db->beginTransaction();
 		try{
+			$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$setDetails,$tastes);
 			//生成订单
 			$orderId = $orderObj->createOrder();
-			
 			//订单地址
 			if(in_array($this->type,array(2,3))){
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$this->companyId);
 					$result = WxOrderAddress::addOrderAddress($orderId,$address);
-					if(!$result){
-						$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type));
+					if($result){
+						throw new Exception('请添加订单地址信息！');
 					}
 				}else{
-					$msg = '请添加订单地址信息';
-					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+					throw new Exception('请添加订单地址信息！');
 				}
 			}
 		
