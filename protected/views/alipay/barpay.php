@@ -14,13 +14,11 @@ $data = array(
 $result = MicroPayModel::insert($data);
 
 if($authCode!=''&&$result['status']){
-	
-	$compaychannel = WxCompany::getpaychannel($dpid);
-	if($compaychannel['pay_channel']=='2'){
+	if($this->compaychannel=='2'){
 		$result = SqbPay::pay(array(
 				'type'=>'1',
 				'device_id'=>$poscode,
-				'dynamicId'=>$auth_code,
+				'dynamicId'=>$authCode,
 				'totalAmount'=>''.$totalAmount*100,
 				'clientSn'=>$outTradeNo,
 				'dpid'=>$dpid,
@@ -30,7 +28,7 @@ if($authCode!=''&&$result['status']){
 		if($result){
 			if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
 				$transactionId = $result["transaction_id"];
-				MicroPayModel::update($dpid, $orderId, $transactionId, json_encode($result));
+				MicroPayModel::update($dpid, $outTradeNo, $transactionId, json_encode($result));
 				echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
 				exit;
 			}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
