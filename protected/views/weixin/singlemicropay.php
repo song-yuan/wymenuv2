@@ -63,6 +63,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 }else{
 	$msg = array('status'=>false, 'result'=>false,);
 }
+Helper::writeLog($msg);
 echo json_encode($msg);
 exit;
 ?>
