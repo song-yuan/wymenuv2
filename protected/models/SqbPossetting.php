@@ -38,13 +38,13 @@ class SqbPossetting extends CActiveRecord
 		return array(
 			array('lid, dpid, update_at', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('pay_channel, delete_flag', 'length', 'max'=>2),
+			array('delete_flag', 'length', 'max'=>2),
 			array('appId, device_id, terminal_sn, terminal_key, is_sync', 'length', 'max'=>50),
 			array('key_validtime', 'length', 'max'=>25),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, pay_channel, appId, device_id, terminal_sn, terminal_key, key_validtime, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, appId, device_id, terminal_sn, terminal_key, key_validtime, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,7 +69,6 @@ class SqbPossetting extends CActiveRecord
 			'dpid' => 'Dpid',
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
-			'pay_channel' => '1表示收钱吧通道，2表示翼码通道',
 			'appId' => '店铺在支付平台对应的id',
 			'device_id' => '设备唯一身份ID，对应系统内的POS秘钥',
 			'terminal_sn' => '店铺在支付平台终端号',
@@ -102,7 +101,6 @@ class SqbPossetting extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('pay_channel',$this->pay_channel,true);
 		$criteria->compare('appId',$this->appId,true);
 		$criteria->compare('device_id',$this->device_id,true);
 		$criteria->compare('terminal_sn',$this->terminal_sn,true);

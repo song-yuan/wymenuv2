@@ -62,7 +62,11 @@
                                 <th><?php echo yii::t('app','POS秘钥');?></th>
                                 <th><?php echo yii::t('app','是否使用');?></th>
                                 <th><?php echo yii::t('app','模式');?></th>
+                                <th><?php echo yii::t('app','线上支付');?></th>
 								<th><?php echo yii::t('app','收银机mac地址');?></th>
+								<?php if(Yii::app()->user->role <=5):?>
+								<th><?php echo yii::t('app','激活');?></th>
+								<?php endif;?>
 							</tr>
 						</thead>
 						<tbody>
@@ -74,7 +78,25 @@
                                 <td ><?php echo $model['pad_code'];?></td>
                                 <td ><?php if($model->detail) echo '已使用';else echo '未使用';?></td>
 								<td ><?php if($model['pad_sales_type']==0)echo '单屏模式';else echo '双屏模式';?></td>
+								<td >
+								<?php switch($model['pay_activate']){
+											case 0: echo '未开通线上支付';break;
+											case 1: echo '未激活线上支付';break;
+											case 2: echo '已激活线上支付';break;
+											default: echo '位置状态';break;
+								}?></td>
 								<td><?php if($model->detail) echo $model->detail[0]->content;?></td>
+								<td class="center">
+									<div class="actions">
+									<?php if($model['pay_activate']==0):?>
+										<button type="button" class="btn green stocktaking" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">开通</button> 
+                                    <?php elseif($model['pay_activate']==1):?>
+                                    	<button type="button" class="btn green stocktaking" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">激活</button> 
+                                    <?php elseif($model['pay_activate']==2):?>
+                                    	<button type="button" class="btn " id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">已激活</button> 
+                                    <?php endif;?>
+                                    </div>
+								</td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>
@@ -122,7 +144,7 @@
 	</div>
 	<!-- END PAGE CONTENT-->
     <script language="JavaScript" type="text/JavaScript">
-        $('#bindPadId').click(function(){ 
+        $('#bindPadId').click(function(){
             var companyId=<?php echo $this->companyId;?>;            
             var padInfo=Androidwymenuprinter.getPadInfo();
             alert(padInfo);
@@ -134,4 +156,34 @@
                 $('#portlet-pad-bind').modal();
             }
         });
+    	$(".stocktaking").on('click',function(){
+        	
+            var device_id = $(this).attr('device_id');
+           	//return false;
+            $.ajax({
+                type:'POST',
+    			url:"<?php echo $this->createUrl('cfceshi/sqbactivate',array('companyId'=>$this->companyId,));?>",
+    			async: false,
+                data: {
+                	device_id: device_id,
+                },
+                cache:false,
+                dataType:'json',
+    			success:function(msg){
+    	            //alert(msg.status);
+    	            if(msg.status=="success")
+    	            {            
+    			        layer.msg("激活成功！");
+    		            location.reload();
+    	            }else{
+    		            layer.msg("不能重复激活！！！");
+    		            location.reload();
+    	            }
+    			},
+                error:function(){
+    				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+    			},
+    		});
+            
+    		});
     </script>

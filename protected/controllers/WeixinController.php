@@ -46,12 +46,14 @@ class WeixinController extends Controller
 	 */
 	 public function actionMicroPaySingle()
 	{
+		$poscode = Yii::app()->request->getParam('poscode');
+		$username = Yii::app()->request->getParam('username');
 		$companyId = Yii::app()->request->getParam('companyId');
 		$should_total = Yii::app()->request->getParam('pay_price');
 		$auth_code = Yii::app()->request->getParam('auth_code');
 		$goodStr = Yii::app()->request->getParam('goods');
 		
-		$this->render('singlemicropay',array('dpid'=>$companyId,'auth_code'=>$auth_code,'should_total'=>$should_total));
+		$this->render('singlemicropay',array('dpid'=>$companyId,'auth_code'=>$auth_code,'should_total'=>$should_total,'poscode'=>$poscode,'username'=>$username));
 	}
 	/**
 	 * 
@@ -60,12 +62,13 @@ class WeixinController extends Controller
 	 */
 	 public function actionRefund()
 	 {
+	 	$poscode = Yii::app()->request->getParam('poscode');
 		$companyId = Yii::app()->request->getParam('companyId');
 		$adminId = Yii::app()->request->getParam('admin_id');
 		$outTradeNo = Yii::app()->request->getParam('out_trade_no');
 		$totalFee = Yii::app()->request->getParam('total_fee');
 		$refundFee = Yii::app()->request->getParam('refund_fee');
 	
-		$this->render('refund',array('dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'total_fee'=>$totalFee,'refund_fee'=>$refundFee));
+		$this->render('refund',array('poscode'=>$poscode,'dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'total_fee'=>$totalFee,'refund_fee'=>$refundFee));
 	 }
 }

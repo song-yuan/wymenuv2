@@ -19,6 +19,16 @@ class WxCompany
 		}
 	    return $company;
 	}
+	public static function getpaychannel($dpid){
+		$sql = 'select * from nb_company_property where dpid=:dpid';
+		$company = Yii::app()->db->createCommand($sql)
+		->bindValue(':dpid',$dpid)
+		->queryRow();
+		if(!$company){
+			throw new Exception('不存在该公司信息');
+		}
+		return $company;
+	}
 	// 获取总部的字店铺
 	public static function getCompanyChildren($dpid){
 		$sql = 'select * from nb_company where comp_dpid=:dpid and type=1';
