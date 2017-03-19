@@ -23,7 +23,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
  	//var_dump($compaychannel['pay_channel']);
 	if($compaychannel['pay_channel']=='2'){
 		$result = SqbPay::pay(array(
-				'type'=>'1',
+				'type'=>'3',
 				'device_id'=>$poscode,
 				'dynamicId'=>$auth_code,
 				'totalAmount'=>''.$should_total*100,

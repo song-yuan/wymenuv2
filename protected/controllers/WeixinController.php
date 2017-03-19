@@ -48,6 +48,7 @@ class WeixinController extends Controller
 	{
 		$poscode = Yii::app()->request->getParam('poscode');
 		$username = Yii::app()->request->getParam('username');
+		//新加参数
 		$companyId = Yii::app()->request->getParam('companyId');
 		$should_total = Yii::app()->request->getParam('pay_price');
 		$auth_code = Yii::app()->request->getParam('auth_code');

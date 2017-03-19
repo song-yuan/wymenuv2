@@ -219,10 +219,14 @@ class AlipayController extends Controller
     // 当面付 条码支付 
     public function actionBarPay()
     {
+    	$poscode = Yii::app()->request->getParam('poscode');
+    	$username = Yii::app()->request->getParam('username');
+    	$companyId = Yii::app()->request->getParam('companyId');
+    	//新加参数
     	$totalAmount = Yii::app()->request->getParam('pay_price');
     	$authCode = Yii::app()->request->getParam('auth_code');
     	$goodStr = Yii::app()->request->getParam('goods');
-    	$this->render('barpay',array('totalAmount'=>$totalAmount,'authCode'=>$authCode,'goodStr'=>$goodStr));
+    	$this->render('barpay',array('dpid'=>$companyId,'totalAmount'=>$totalAmount,'authCode'=>$authCode,'goodStr'=>$goodStr,'poscode'=>$poscode,'username'=>$username,));
     }
     // 退款
     public function actionRefund()
