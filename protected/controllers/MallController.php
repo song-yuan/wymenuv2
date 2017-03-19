@@ -184,10 +184,18 @@ class MallController extends Controller
 		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
+		try{
+			$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
+			if(empty($orderObj->cart)){
+				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
+			}
+		}catch (Exception $e) {
+			$msg = $e->getMessage();
+			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+		}
 		
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
-			$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$setDetails,$tastes);
 			//生成订单
 			$orderId = $orderObj->createOrder();
 			//订单地址
