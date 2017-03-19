@@ -40,13 +40,22 @@
 		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 		<div class="clear"></div>
 	</div>
-		<?php if(!empty($product['taste'])):?>
+		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
 		<div class="taste">口味:
 		<?php foreach ($product['taste'] as $taste):?>
 		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
 		<?php endforeach;?>
 		</div>
 		<?php endif;?>
+		
+		<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
+		<div class="taste">
+		<?php foreach ($product['detail'] as $detail):?>
+		<span> <?php echo $detail['product_name'];?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
+		
 	<?php endforeach;?>
 	<div class="ht1"></div>
 		<?php if(!empty($order['taste'])):?>
