@@ -105,7 +105,6 @@ class SqbPay{
     	$return_code = $obj['result_code'];
     	
     	Helper::writeLog($result);
-    	var_dump($obj);
     	//判断支付返回状态...
     	if($return_code == '200'){
     		$result_codes = $obj['biz_response']['result_code'];
@@ -116,14 +115,13 @@ class SqbPay{
     					"msg"=>"支付成功！",
     					"transaction_id"=>$obj['biz_response']['data']['trade_no'],
     					"data"=>$obj['biz_response']['data']);
-    			echo '1cf';
+    			
     		}elseif($result_codes == 'PAY_FAIL'){
     			$result = array(
     					"return_code"=>"SUCCESS",
     					"result_code"=>"ERROR",
     					"msg"=>"支付失败！",
     					"data"=>$obj['biz_response']['data']);
-    			echo '2cf';
     		}elseif($result_codes == 'PAY_IN_PROGRESS'){
     			/*发起轮询*/
     			do {
@@ -182,7 +180,6 @@ class SqbPay{
 		    			"result_code"=>"ERROR",
 		    			"msg"=>"操作失败！",
 		    			"data"=>$obj['biz_response']['data']);
-    			echo '4cf';
     		}elseif($result_codes == 'SUCCESS'){
     			$order_status = $obj['biz_response']['data']['order_status'];
     			if($order_status == 'CREATED'){
@@ -238,7 +235,6 @@ class SqbPay{
     							"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
     							"data"=>$rsts['biz_response']['data']);
     				}
-    				echo '5cf';
     			}elseif($order_status == 'PAID'){
     				$result = array(
     						"return_code"=>"SUCCESS",
@@ -246,27 +242,23 @@ class SqbPay{
     						"msg"=>"支付成功！",
     						"transaction_id"=>$obj['biz_response']['data']['trade_no'],
     						"data"=>$obj['biz_response']['data']);
-    				echo '6cf';
     			}else{
     				$result = array(
     						"return_code"=>"SUCCESS",
     						"result_code"=>"ERROR",
     						"msg"=>"支付失败！",
     						"data"=>$obj['biz_response']['data']);
-    				echo '7cf';
     			}
     		}else{
     			$result = array(
     					"return_code"=>"SUCCESS",
     					"result_code"=>"CANCEL",
     					'msg'=>'未知状态！');
-    			echo '8cf';
     		}
 
     	}else{
     		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
     		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
-    		echo '12cf';
     	}
 
     	return $result;
