@@ -318,9 +318,10 @@ function reset_total(price){
 window.onload = emptyCart;
 $(document).ready(function(){
 	var cupon_layer = 0;
-	<?php if($msg):?>
-	    layer.msg(<?php echo $msg;?>);
-	<?php endif;?>
+	var msg = "<?php echo $msg;?>";
+	if(msg){
+		layer.msg(msg);
+	}
 	<?php if($this->type==3):?>
 	var today = new Date();
 	var currYear = today.getFullYear();
@@ -476,7 +477,7 @@ $(document).ready(function(){
 	    title: false,
 	    shadeClose: true,
 	    closeBtn: 0,
-	    area: ['80%'],
+	    area: ['100%','60%'],
 	    content:_this.siblings('.taste-items'),
 	    btn: '确定',
 	    yes: function(index, layero){ 
@@ -528,7 +529,7 @@ $(document).ready(function(){
 		    title: false,
 		    shadeClose: false,
 		    closeBtn: 0,
-		    area: ['80%'],
+		    area: ['100%','60%'],
 		    content:_this.siblings('.detail-items'),
 		    btn: '确定',
 		    yes: function(index, layero){ 
