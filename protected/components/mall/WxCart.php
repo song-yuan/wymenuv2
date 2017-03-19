@@ -48,7 +48,6 @@ class WxCart
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':productId',$this->productArr['product_id'])
 					  ->queryRow();
-		var_dump($product);
 		if($product['store_number']==0){
 			return array('status'=>false,'msg'=>'该产品已售罄!');
 		}
