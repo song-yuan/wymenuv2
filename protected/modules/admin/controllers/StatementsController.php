@@ -541,7 +541,7 @@ public function actionPayallReport(){
 		//$criteria->with = array('company','order4');
 		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
 		$criteria->addCondition ('t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59"');
-		$criteria->addCondition('t.order_id in('.$ords.')');
+		$criteria->addCondition('t.lid in('.$ords.')');
 		if($usertype != '0'){
 			$criteria->addCondition ('t.username ="'.$userid.'"');
 		}
