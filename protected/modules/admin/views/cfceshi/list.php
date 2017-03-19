@@ -68,11 +68,13 @@
 				</div>
 				<div class="form-actions fluid">
 						<div class="col-md-offset-9 col-md-3">
-							<button type="button" class="btn green" id="stocktaking">激活</button> 
-							<button type="button" class="btn green" id="stockCheck">签到</button> 
+							<button style="display: none;" type="button" class="btn green" id="stocktaking">激活</button> 
+							<button style="display: none;" type="button" class="btn green" id="stockCheck">签到</button> 
 							<button type="button" class="btn green" id="stockOrder">下单</button>   
-							<button type="button" class="btn green" id="stockPay">支付</button>  
-							<button type="button" class="btn green" id="stockRefund">退款</button>   
+							<button type="button" class="btn green" id="stockPayWei">微信支付</button> 
+							<button type="button" class="btn green" id="stockPayAli">支付宝支付</button> 
+							<button type="button" class="btn green" id="stockRefundWei">微信退款</button>
+							<button type="button" class="btn green" id="stockRefundAli">支付宝退款</button>   
 							<button type="button" class="btn green" id="stockFind">查询</button>                        
 						</div>
 					</div>
@@ -116,7 +118,7 @@
 		});
         
 		});
-	$("#stockPay").on("click",function(){
+	$("#stockPayAli").on("click",function(){
 
 		var device_id = $("#device_id").val();
         var price = $("#price").val();
@@ -125,6 +127,27 @@
         $.ajax({
             type:'GET',
 			url:"<?php echo $this->createUrl('../alipay/barpay',array('companyId'=>$this->companyId,));?>/pay_price/"+price+"/auth_code/"+dynamicId+"/poscode/"+device_id+"/username/"+username,
+			async: false,
+            cache:false,
+            dataType:'json',
+			success:function(msg){
+	            layer.msg(msg.status);
+			},
+            error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+        
+	});
+	$("#stockPayWei").on("click",function(){
+
+		var device_id = $("#device_id").val();
+        var price = $("#price").val();
+        var dynamicId = $("#dynamicId").val();
+        var username = '<?php echo Yii::app()->user->username?>';
+        $.ajax({
+            type:'GET',
+			url:"<?php echo $this->createUrl('../weixin/microPaySingle',array('companyId'=>$this->companyId,));?>/pay_price/"+price+"/auth_code/"+dynamicId+"/poscode/"+device_id+"/username/"+username,
 			async: false,
             cache:false,
             dataType:'json',
@@ -186,7 +209,40 @@
 	});
     
 	});
-	$("#stockRefund").on("click",function(){
+	$("#stockRefundAli").on("click",function(){
+
+		var device_id = $("#device_id").val();
+        var refund_fee = total_fee = $("#price").val();
+	    var out_trade_no = $("#clientSn").val();
+	    var admin_id = '0000000178';
+	    //layer.msg(admin_id);return false;
+	    $.ajax({
+	        type:'GET',
+			url:"<?php echo $this->createUrl('../alipay/refund',array('companyId'=>$this->companyId,));?>/poscode/"+device_id+"/admin_id/"+admin_id+"/out_trade_no/"+out_trade_no+"/total_fee/"+total_fee+"/refund_fee/"+refund_fee,
+			async: false,
+			
+	        cache:false,
+	        dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg.status)
+	            {            
+		            
+			        layer.msg("退款成功！");
+			          
+		            //location.reload();
+	            }else{
+		            layer.msg("退款失败！");
+		            //location.reload();
+	            }
+			},
+	        error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+	    
+	});
+	$("#stockRefundWei").on("click",function(){
 
 		var device_id = $("#device_id").val();
         var refund_fee = total_fee = $("#price").val();
