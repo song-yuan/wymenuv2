@@ -136,7 +136,6 @@ class WxOrder
 				}
 			}
 		}
-		var_dump($this->productSetDetail);exit;
 	}
 	//获取座位状态
 	public function getSite(){
@@ -277,8 +276,8 @@ class WxOrder
 							'order_id'=>$orderId,
 							'set_id'=>$cart['product_id'],
 							'product_id'=>$detail[1],
-							'product_name'=>$cart['product_name'],
-							'product_pic'=>$cart['main_picture'],
+							'product_name'=>$setProduct['product_name'],
+							'product_pic'=>$setProduct['main_picture'],
 							'price'=>$itemPrice,
 							'original_price'=>$setProduct['original_price']+$ortherPrice,
 							'amount'=>$cart['num']*$detail[2],
@@ -493,16 +492,32 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select lid,price,amount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0';
+		$sql = 'select lid,order_id,main_id,set_id,price,amount,zhiamount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0 and set_id=0';
+		$sql .=' union select t.lid,t.order_id,t.main_id,t.set_id,sum(t.price) as price,t.amount,t.zhiamount,t.is_retreat,t.product_id,t1.set_name as product_name,t.product_pic,t.original_price from nb_order_product t,nb_product_set t1  where t.set_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=0 and t.delete_flag=0 and t.set_id>0 group by t.set_id,t.main_id';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 					    ->bindValue(':orderId',$orderId)
 					    ->bindValue(':dpid',$dpid)
 					    ->queryAll();
 		foreach ($orderProduct as $k=>$product){
-			$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
-			$orderProduct[$k]['taste'] = $productTaste;
+			if($product['set_id']>0){
+				$productSet = self::getOrderProductSetDetail($product['order_id'],$dpid,$product['set_id'],$product['main_id']);
+				$orderProduct[$k]['detail'] = $productSet;
+			}else{
+				$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
+				$orderProduct[$k]['taste'] = $productTaste;
+			}
 		}
 	    return $orderProduct;
+	}
+	public static function getOrderProductSetDetail($orderId,$dpid,$setId,$mainId){
+		$sql = 'select * from nb_order_product where order_id=:orderId and set_id=:setId and dpid=:dpid and main_id=:mainId and product_type=0 and delete_flag=0';
+		$orderProductSet = Yii::app()->db->createCommand($sql)
+					->bindValue(':orderId',$orderId)
+					->bindValue(':dpid',$dpid)
+					->bindValue(':setId',$setId)
+					->bindValue(':mainId',$mainId)
+					->queryAll();
+		return $orderProductSet;
 	}
 	public static function getOrderTaste($orderId,$dpid,$isOrder){
 		$sql = 'select t.*,t1.name,t1.price from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.is_order=:isOrder and t.order_id=:orderId';
