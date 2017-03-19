@@ -152,8 +152,8 @@
 		     <?php foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
 		     <div class="item-group">选择一个</div>
 		     <div class="item-group">
-	    		<?php foreach($detail as $item): $on = ''; if($item['is_select'] > 0){$on='on';$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['price'];}?>
-	    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+	    		<?php foreach($detail as $item): $on = ''; if($item['is_select'] > 0){$on='on';$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];}?>
+	    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="set-detail[]" value="<?php echo $selectItem;?>" />
 	    		<div class="clear"></div>
@@ -545,6 +545,7 @@ $(document).ready(function(){
 		  	var setId = tasteItems.attr('set-id');
 		  	var productId = $(this).attr('product-id');
 		  	var group =  $(this).attr('group');
+			var detailNum = $(this).attr('detail-num');
 		  	var detailPrice = $(this).attr('detail-pirce');
 		  	var detailName = $(this).html();
 		  	var num = sectionObj.find('.num').html();
@@ -557,7 +558,7 @@ $(document).ready(function(){
 		  	  	onObj.removeClass('on');
 	  	  	}
 		  	$(this).addClass('on');
-		  	$(this).siblings('input').val(setId+'-'+productId+'-'+detailPrice);
+		  	$(this).siblings('input').val(setId+'-'+productId+'-'+detailNum+'-'+detailPrice);
 		  	detailDesc.find('span[id^='+group+'-]').remove();
 		  	var str = '<span id="'+group+'-'+productId+'">'+detailName+'</span>';
 		  	detailDesc.append(str);
