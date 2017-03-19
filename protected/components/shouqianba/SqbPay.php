@@ -260,7 +260,7 @@ class SqbPay{
     		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
     		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
     	}
-
+    	Helper::writeLog($result);
     	return $result;
     }
     public static function precreate($data){
