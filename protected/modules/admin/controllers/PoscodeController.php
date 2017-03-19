@@ -34,7 +34,7 @@ class PoscodeController extends BackendController
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->update_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
-                        $model->pad_code = PadSetting::getNo($model->lid,4).PadSetting::getRandomString(8,1);
+                        $model->pad_code = PadSetting::getNo($model->lid,4).PadSetting::getNo($model->dpid,4).PadSetting::getRandomString(6,1);
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));

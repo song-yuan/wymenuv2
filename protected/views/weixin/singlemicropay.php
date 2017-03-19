@@ -16,15 +16,35 @@ $data = array(
 		'total_fee' => $should_total
 );
 $result = MicroPayModel::insert($data);
+
+
 if(isset($auth_code) && $auth_code != ""&&$result['status']){
-	$input = new WxPayMicroPay();
-	$input->SetAuth_code($auth_code);
-	$input->SetBody($company['company_name']);
-	$input->SetTotal_fee($should_total*100);
-	$input->SetOut_trade_no($orderId);
-	
-	$microPay = new MicroPay();
-	$result = $microPay->pay($input);
+	$compaychannel = WxCompany::getpaychannel($dpid);
+ 	//var_dump($compaychannel['pay_channel']);
+	if($compaychannel['pay_channel']=='2'){
+		$result = SqbPay::pay(array(
+				'type'=>'1',
+				'device_id'=>$poscode,
+				'dynamicId'=>$auth_code,
+				'totalAmount'=>''.$should_total*100,
+				'clientSn'=>$orderId,
+				'dpid'=>$dpid,
+				'subject'=>$company['company_name'],
+				'operator'=>$username,
+		));
+	}else{
+
+		$input = new WxPayMicroPay();
+		$input->SetAuth_code($auth_code);
+		$input->SetBody($company['company_name']);
+		$input->SetTotal_fee($should_total*100);
+		$input->SetOut_trade_no($orderId);
+		
+		$microPay = new MicroPay();
+		$result = $microPay->pay($input);
+		
+	}
+	//echo $result;
 	if($result){
 		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
 			$transactionId = $result["transaction_id"];
