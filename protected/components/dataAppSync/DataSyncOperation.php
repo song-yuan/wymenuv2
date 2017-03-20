@@ -231,7 +231,7 @@ class DataSyncOperation {
 						$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 						if(!empty($productSet)){
 							$orderProduct [$k] ['set_name'] = $productSet[0]['set_name'];
-							$orderProduct [$k] ['set_price'] = $product['set_price'] + $productSet[0]['set_price'];
+							$orderProduct [$k] ['set_price'] = $product['set_price'];
 							$orderProduct [$k] ['set_detail'] = $productSet;
 						}
 					}
