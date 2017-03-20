@@ -26,7 +26,7 @@
 			<!-- 全部门店 -->
 			<ul id="allshop" class="shown">
 				<?php foreach ($children as $child):?>
-				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
+				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>" style="display:none;">
 					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
@@ -86,9 +86,12 @@
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
-		$("#name-search").change(function(){
+		$("#name-search").keyup(function(){
 			var search = $(this).val();
 			$('li').hide();
+			if(search==''){
+				return;
+			}
 		 	$('#allshop').find('li').each(function(){
 			 	var name = $(this).find('h1').html();
 	 	 	 	var patt = new RegExp(search);
