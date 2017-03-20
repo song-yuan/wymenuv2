@@ -771,8 +771,24 @@ class WxOrder
 	 public static function reduceYue($user,$order){
 	 	$payMoney = 0;
 	 	$userId = $user['lid'];
+	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
-	 	$total = $order['should_total'];
+	 	
+	 	$orderTotal = $order['should_total'];
+	 	$payCupon = 0.00;
+	 	$payPoints = 0.00;
+	 	$orderPays = WxOrderPay::get($dpid,$orderId);
+		if(!empty($orderPays)){
+			foreach($orderPays as $orderPay){
+				if($orderPay['paytype']==9){
+					$payCupon = $orderPay['pay_amount']; 
+				}elseif($orderPay['paytype']==8){
+					$payPoints = $orderPay['pay_amount'];
+				}
+			}
+		}
+		$total = $orderTotal - $payCupon - $payPoints;
+		
 	 	$isSync = DataSync::getInitSync();
 	 	
 	 	$yue = WxBrandUser::getYue($userId,$dpid);//余额

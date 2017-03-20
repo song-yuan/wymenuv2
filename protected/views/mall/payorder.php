@@ -4,17 +4,20 @@
 	$orderTatsePrice = 0.00;
 	$payYue = 0.00;
 	$payCupon = 0.00;
+	$payPoints = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
 			if($orderPay['paytype']==10){
 				$payYue = $orderPay['pay_amount']; 
 			}elseif($orderPay['paytype']==9){
 				$payCupon = $orderPay['pay_amount']; 
+			}elseif($orderPay['paytype']==8){
+				$payPoints = $orderPay['pay_amount']; 
 			}
 		}
 	}
 	
-	$payPrice = $order['should_total'] - $payYue - $payCupon; // 最终支付价格
+	$payPrice = $order['should_total'] - $payYue - $payCupon - $payPoints; // 最终支付价格
 	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
