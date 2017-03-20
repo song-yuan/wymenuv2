@@ -203,7 +203,7 @@ class MallController extends Controller
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$this->companyId);
 					$result = WxOrderAddress::addOrderAddress($orderId,$address);
-					if($result){
+					if(!$result){
 						throw new Exception('请添加订单地址信息！');
 					}
 				}else{
