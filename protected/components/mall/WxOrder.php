@@ -131,9 +131,21 @@ class WxOrder
 		if(!empty($this->setDetail)){
 			foreach($this->setDetail as $detail){
 				$detailArr = explode('-',$detail);
-				if(count($detailArr)>1){
+				if(count($detailArr) > 1){
 					$this->productSetDetail[$detailArr[0]][] = $detailArr;
 				}
+			}
+			// 套餐内单品
+			foreach ($this->productSetDetail as $k=>$setdetail){
+				$totalOriginPrice = 0;
+				foreach ($setdetail as $key=>$val){
+					$setProduct = WxProduct::getProduct($val[1], $this->dpid);
+					$totalOriginPrice += $setProduct['original_price']*$val[2];
+					$this->productSetDetail[$k][$key]['product_name'] = $setProduct['product_name'];
+					$this->productSetDetail[$k][$key]['main_picture'] = $setProduct['main_picture'];
+					$this->productSetDetail[$k][$key]['original_price'] = $setProduct['original_price'];
+				}
+				$this->productSetDetail[$k]['total_original_price'] = $totalOriginPrice;
 			}
 		}
 	}
@@ -248,12 +260,15 @@ class WxOrder
 			if($cart['is_set'] > 0){
 				$hasPrice = 0;
 				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(set_id,product_id,num,price); price 套餐内加价
-				foreach ($this->productSetDetail[$cart['product_id']] as $k=>$detail){
+				$totalProductPrice = $this->productSetDetail[$cart['product_id']]['total_original_price'];
+				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
+					if($i==='total_original_price'){
+						continue;
+					}
 					$ortherPrice = $detail[3];
-					$setProduct = WxProduct::getProduct($detail[1], $this->dpid);
-					$eachPrice = ($setProduct['original_price']+$ortherPrice)/$cart['original_price']*$detail[2]*$cart['price'];
-					$hasPrice += $eachPrice*$detail[2];
-					if($k+1 == count($detail)){
+					$eachPrice = $detail['original_price']*$detail[2]/$totalProductPrice*$cart['price'];
+					$hasPrice += $eachPrice;
+					if($i+2 == count($detail)){
 						$leavePrice = $hasPrice - $cart['price'];
 						if($leavePrice > 0){
 							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
@@ -267,7 +282,6 @@ class WxOrder
 					
 					$se = new Sequence("order_product");
 					$orderProductId = $se->nextval();
-					
 					$orderProductData = array(
 							'lid'=>$orderProductId,
 							'dpid'=>$this->dpid,
@@ -276,10 +290,10 @@ class WxOrder
 							'order_id'=>$orderId,
 							'set_id'=>$cart['product_id'],
 							'product_id'=>$detail[1],
-							'product_name'=>$setProduct['product_name'],
-							'product_pic'=>$setProduct['main_picture'],
+							'product_name'=>$detail['product_name'],
+							'product_pic'=>$detail['main_picture'],
 							'price'=>$itemPrice,
-							'original_price'=>$setProduct['original_price']+$ortherPrice,
+							'original_price'=>$detail['original_price']+$ortherPrice,
 							'amount'=>$cart['num']*$detail[2],
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>9,
