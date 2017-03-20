@@ -86,24 +86,36 @@
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
-		$("#name-search").keyup(function(){
-			var search = $(this).val();
-			$('li').hide();
-			if(search==''){
-				return;
-			}
-		 	$('#allshop').find('li').each(function(){
-			 	var name = $(this).find('h1').html();
-	 	 	 	var patt = new RegExp(search);
-		 	  	if(patt.test(name)){
-					$(this).show();
-			 	}
-		 	});	 
-		 	if($('#allshop').find('li:visible').length == 0){
-				$("#tips").show();
-			}else{
-				$("#tips").hide();
-			}
+		
+		$("#name-search").on('click',function(){
+			var oevent=this.id;
+			$("#name-search").off().on({
+				oevent:function(e){
+					
+				},
+				compositionstart:function(){
+					
+				},
+				compositionend:function(){
+					var search = $(this).val();
+					$('li').hide();
+					if(search==''){
+						return;
+					}
+				 	$('#allshop').find('li').each(function(){
+					 	var name = $(this).find('h1').html();
+			 	 	 	var patt = new RegExp(search);
+				 	  	if(patt.test(name)){
+							$(this).show();
+					 	}
+				 	});	 
+				 	if($('#allshop').find('li:visible').length == 0){
+						$("#tips").show();
+					}else{
+						$("#tips").hide();
+					}
+				}
+			});
 		});
 	    wx.ready(function () {
 	    	wx.getLocation({
