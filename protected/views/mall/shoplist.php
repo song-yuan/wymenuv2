@@ -21,7 +21,7 @@
 	</div>
 	-->
 	<div class="shops">
-		<div class="search" style="display:none;"><input id="name-search" type="text" value="" placeholder="请输入搜索关键字"></div>
+		<div class="search"><input id="name-search" type="text" value="" placeholder="请输入搜索关键字"></div>
 		<div class="shopcontainer">
 			<!-- 全部门店 -->
 			<ul id="allshop" class="shown">
@@ -144,7 +144,6 @@
 						$(this).find('span.right').html(distance);
 				    });
 				    if($('#allshop').find('li:visible').length == 0){
-					    $(".search").show();
 						$("#tips").show();
 					}
 			    }
