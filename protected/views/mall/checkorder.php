@@ -226,7 +226,7 @@
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
-		<div class="item wx on" paytype="2"><img src="<?php echo $baseUrl;?>/img/mall/wxpay.png"/> 微信支付</div>
+		<div class="item wx on" paytype="2" style="border:none;"><img src="<?php echo $baseUrl;?>/img/mall/wxpay.png"/> 微信支付</div>
 		<!-- 
 		<div class="item zfb" paytype="1" style="border:none;"><img src="<?php echo $baseUrl;?>/img/mall/zfbpay.png"/> 支付宝支付</div>
 		-->
