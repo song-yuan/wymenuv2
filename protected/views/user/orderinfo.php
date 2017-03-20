@@ -31,7 +31,7 @@
 	<?php endif;?>
 <?php endif;?>
 <div class="order-site">
-	<span>订单号: <?php echo $order['lid'];?></span>
+	<span>交易序号: <?php echo $order['account_no'];?></span>
 	<span>下单时间: <?php echo $order['create_at'];?></span>
 </div>
 <div class="order-info">
