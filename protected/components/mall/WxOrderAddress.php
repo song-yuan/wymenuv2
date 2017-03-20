@@ -39,8 +39,7 @@ class WxOrderAddress
 			return $result;
       }
       public static function checkOrderAddress($orderId,$dpid){
-      	   $isSync = DataSync::getInitSync();
-           $sql = 'update nb_order_address set delete_flag=1,is_sync='.$isSync.' where order_lid='.$orderId.' and dpid='.$dpid;
+           $sql = 'delete from nb_order_address where order_lid='.$orderId.' and dpid='.$dpid;
            Yii::app()->db->createCommand($sql)->execute();
       }
 }
