@@ -761,6 +761,7 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 		
 	 	}else{
+	 		// 微信支付
 	 		$payYue = 0.00;
 	 		$payCupon = 0.00;
 	 		$payPoints = 0.00;
