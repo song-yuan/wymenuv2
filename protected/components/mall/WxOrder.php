@@ -761,6 +761,23 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 		
 	 	}else{
+	 		// 微信支付
+	 		$payYue = 0.00;
+	 		$payCupon = 0.00;
+	 		$payPoints = 0.00;
+	 		$orderPays = $orderPays = WxOrderPay::get($order['dpid'],$order['lid']);
+	 		if(!empty($orderPays)){
+	 			foreach($orderPays as $orderPay){
+	 				if($orderPay['paytype']==10){
+	 					$payYue = $orderPay['pay_amount'];
+	 				}elseif($orderPay['paytype']==9){
+	 					$payCupon = $orderPay['pay_amount'];
+	 				}elseif($orderPay['paytype']==8){
+	 					$payPoints = $orderPay['pay_amount'];
+	 				}
+	 			}
+	 		}
+	 		$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2);
 	 		$se = new Sequence("order_pay");
 		    $orderPayId = $se->nextval();
 		    $insertOrderPayArr = array(
@@ -770,7 +787,7 @@ class WxOrder
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		        	'order_id'=>$order['lid'],
 		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$order['should_total'],
+		        	'pay_amount'=>$payPrice,
 		        	'paytype'=>$paytype,
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
