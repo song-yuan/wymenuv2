@@ -259,7 +259,13 @@ class WxOrder
 		}
 		$levelDiscount = 1;
 		if($this->user['level']){
-			$levelDiscount = $this->user['level']['level_discount'];
+			$birthday = date('m-d',strtotime($user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscunt =  $this->user['level']['birthday_discount'];
+			}else{
+				$levelDiscunt =  $this->user['level']['level_discount'];
+			}
 		}
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;

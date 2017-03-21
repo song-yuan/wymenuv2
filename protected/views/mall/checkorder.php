@@ -504,7 +504,11 @@ $(document).ready(function(){
   	var group =  $(this).attr('group');
   	var tastePrice = $(this).attr('taste-pirce');
   	var tastName = $(this).html();
-  	var num = sectionObj.find('.num').html();
+  	var num = 1;
+  	if(sectionObj.find('.num').length > 0){
+  		num = sectionObj.find('.num').html();
+  	}
+  	
   	if($(this).hasClass('on')){
   		$(this).removeClass('on');
   		$(this).siblings('input').val(0);

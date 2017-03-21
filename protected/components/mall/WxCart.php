@@ -239,7 +239,13 @@ class WxCart
 		$price = 0;
 		$levelDiscunt = 1;
 		if($user['level']){
-			$levelDiscunt = $user['level']['level_discount'];
+			$birthday = date('m-d',strtotime($user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscunt = $user['level']['birthday_discount'];
+			}else{
+				$levelDiscunt = $user['level']['level_discount'];
+			}
 		}
 		foreach($cartArrs as $cart){
 			if($cart['promotion_id'] > 0){
