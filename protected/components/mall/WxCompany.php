@@ -70,7 +70,6 @@ class WxCompany
 		}else{
 			$sql = 'select * from nb_sqb_possetting where dpid='.$dpid.' and delete_flag=0 order by lid desc';
 		}
-		echo $sql;
 		$sqbinfor = Yii::app()->db->createCommand($sql)
 			->queryRow();
 		return $sqbinfor;
