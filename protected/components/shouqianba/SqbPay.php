@@ -19,10 +19,11 @@ class SqbPay{
     	
     	$code = $data['code'];
     	$device_id = $data['device_id'];
+    	$appId = $data['appId'];
     	
     	$url = SqbConfig::SQB_DOMAIN.'/terminal/activate';
     	$data = array(
-	    			'app_id'=>SqbConfig::APPID,
+	    			'app_id'=>$appId,
 	    			'code'=>$code,
 	    			'device_id'=>$device_id
     			);
@@ -266,36 +267,49 @@ class SqbPay{
     	return $result;
     }
     public static function precreate($data){
-    	/*该接口用于预下单，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
-    	$terminal_sn = $data['terminal_sn'];
-    	$terminal_key = $data['terminal_key'];
-    	/*终端号及终端秘钥*/
-    	$clientSn = $data['clientSn'];
+    	
+    	$dpid = $data['dpid'];
+    	$device_id = $data['pad_code'];
+    	$clientSn = $data['account_no'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
-    	$total_amount = $data['totalAmount'];
+    	$total_amount = ''.$data['should_total']*100;
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
-    	$paytype = $data['payType'];
-    	/*非必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
-    	$openId = $data['openId'];
+    	$payway = $data['payType'];
+    	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
+    	$payer_uid = $data['open_id'];
     	/*消费者在支付通道的唯一id,微信WAP支付必须传open_id*/
     	$subject = $data['abstract'];
     	/*本次交易的简要介绍*/
     	$operator = $data['userName'];
     	/*发起本次交易的操作员*/
+    	$notify_url = $data['notify_url'];
+    	
+    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	if(!empty($devicemodel)){
+    		$terminal_sn = $devicemodel['terminal_sn'];
+    		$terminal_key = $devicemodel['terminal_key'];
+    	}else{
+    		$result = array('status'=>false, 'result'=>false,);
+    		//var_dump('111');exit;
+    		return $result;
+    	}
     	
     	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/precreate';
     	$data = array(
     				'terminal_sn'=>$terminal_sn,
     				'client_sn'=>$clientSn,
     				'total_amount'=>$total_amount,
-    				'payway'=>$paytype,
+    				'payway'=>$payway,
     				'sub_payway'=>'3',
-    				'payer_uid'=>$openId,
+    				'payer_uid'=>$payer_uid,
     				'subject'=>$subject,
     				'operator'=>$operator,
+    				'notify_url'=>$notify_url,
     	);
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+    	$obj = json_decode($result,true);
+    	//var_dump($obj);exit;
     	return $result;
     
     }
@@ -345,7 +359,7 @@ class SqbPay{
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	
     	$obj = json_decode($result,true);
-    	//var_dump($obj);
+    	var_dump($obj);exit;
     	$return_code = $obj['result_code'];
     	if($return_code == '200'){
     		$result_codes = $obj['biz_response']['result_code'];

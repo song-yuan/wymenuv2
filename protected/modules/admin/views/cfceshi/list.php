@@ -27,7 +27,7 @@
 				<div style="min-height: 30px;display:none" class="form-group">
 	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">设备号:</lable>
 					<div style="margin-top: 5px;" class="col-md-4">
-						<input id="device_id" class="form-control" value="015658444456">
+						<input id="device_id" class="form-control" value="01760027562502">
 					</div>
 				</div>
 				<div style="min-height: 30px;display:none" class="form-group">
@@ -70,7 +70,7 @@
 						<div class="col-md-offset-9 col-md-3">
 							<button style="display: none;" type="button" class="btn green" id="stocktaking">激活</button> 
 							<button style="display: none;" type="button" class="btn green" id="stockCheck">签到</button> 
-							<button type="button" class="btn green" id="stockOrder">下单</button>   
+							<button type="button" class="btn green" id="stockOrder">预下单</button>   
 							<button type="button" class="btn green" id="stockPayWei">微信支付</button> 
 							<button type="button" class="btn green" id="stockPayAli">支付宝支付</button> 
 							<button type="button" class="btn green" id="stockRefundWei">微信退款</button>
@@ -87,6 +87,7 @@
 		
         var code = $("#code").val();
         var device_id = $("#device_id").val();
+        var appId = $("#appId").val();
        
         $.ajax({
             type:'POST',
@@ -96,6 +97,7 @@
             data: {
             	code: code,
             	device_id: device_id,
+            	appId: appId,
             },
             cache:false,
             dataType:'json',
@@ -280,7 +282,7 @@
 	    var device_id = $("#device_id").val();
 	    $.ajax({
 	        type:'POST',
-			url:"<?php echo $this->createUrl('cfceshi/sqbprecreate',array('companyId'=>$this->companyId,));?>",
+			url:"<?php echo $this->createUrl('cfceshi/sqbprecreate',array('companyId'=>$this->companyId,));?>/pad_code/"+device_id,
 			async: false,
 			data: {device_id: device_id},
 	        cache:false,
