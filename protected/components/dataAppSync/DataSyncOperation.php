@@ -712,6 +712,7 @@ class DataSyncOperation {
 	 */
 	public static function refundWxPay($data) {
 		$now = time();
+		$poscode = $data['poscode'];
 		$dpid = $data['dpid'];
 		$rand = rand(100,999);
 		$out_refund_no = $now.'-'.$dpid.'-'.$rand;
@@ -738,14 +739,24 @@ class DataSyncOperation {
 				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
 				return json_encode($msg);
 			}
-			
-			$input = new WxPayRefund();
-			$input->SetOut_trade_no($out_trade_no);
-			$input->SetTotal_fee($total_fee*100);
-			$input->SetRefund_fee($refund_fee*100);
-			$input->SetOut_refund_no($out_refund_no);
-			 
-			$result = WxPayApi::refund($input);
+			$compaychannel = WxCompany::getpaychannel($dpid);
+			if($compaychannel['pay_channel']=='2'){
+				$result = SqbPay::refund(array(
+						'device_id'=>$poscode,
+						'refund_amount'=>''.$refund_fee*100,
+						'clientSn'=>$out_trade_no,
+						'dpid'=>$dpid,
+						'operator'=>$admin_id,
+				));
+			}else{
+				$input = new WxPayRefund();
+				$input->SetOut_trade_no($out_trade_no);
+				$input->SetTotal_fee($total_fee*100);
+				$input->SetRefund_fee($refund_fee*100);
+				$input->SetOut_refund_no($out_refund_no);
+				 
+				$result = WxPayApi::refund($input);
+			}
 			if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
 				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
 			}else{
@@ -766,6 +777,7 @@ class DataSyncOperation {
 	public static function refundZfbPay($data) {
 		$now = time();
 		$dpid = $data['dpid'];
+		$poscode = $data['poscode'];
 		$rand = rand(100,999);
 		$out_request_no = $now.'-'.$dpid.'-'.$rand;
 		if(isset($data['admin_id']) && $data['admin_id'] != "" ){
@@ -790,53 +802,68 @@ class DataSyncOperation {
 				$msg = array('status'=>true, 'trade_no'=>$out_request_no);
 				return json_encode($msg);
 			}
-			
-			$alipayAccount = AlipayAccount::get($dpid);
-			$f2fpayConfig = array(
-					//支付宝公钥
-					'alipay_public_key' => $alipayAccount['alipay_public_key'],
-					//商户私钥
-					'merchant_private_key' => $alipayAccount['merchant_private_key'],
-					//编码格式
-					'charset' => "UTF-8",
-					//支付宝网关
-					'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
-					//应用ID
-					'app_id' => $alipayAccount['appid'],
-					//异步通知地址,只有扫码支付预下单可用
-					'notify_url' =>  "",
-					//最大查询重试次数
-					'MaxQueryRetry' => "10",
-					//查询间隔
-					'QueryDuration' => "3"
-			);
-			//第三方应用授权令牌,商户授权系统商开发模式下使用
-			$appAuthToken = "";//根据真实值填写
-		
-			//创建退款请求builder,设置参数
-			$refundRequestBuilder = new AlipayTradeRefundContentBuilder();
-			$refundRequestBuilder->setOutTradeNo($out_trade_no);
-			$refundRequestBuilder->setRefundAmount($refund_amount);
-			$refundRequestBuilder->setOutRequestNo($out_request_no);
-		
-			$refundRequestBuilder->setAppAuthToken($appAuthToken);
-			//初始化类对象,调用refund获取退款应答
-			$refundResponse = new AlipayTradeService($f2fpayConfig);
-			$refundResult =	$refundResponse->refund($refundRequestBuilder);
-			//根据交易状态进行处理
-			switch ($refundResult->getTradeStatus()){
-				case "SUCCESS":
-					$msg = array('status'=>true, 'trade_no'=>$out_request_no);
-					break;
-				case "FAILED":
+			$compaychannel = WxCompany::getpaychannel($dpid);
+			if($compaychannel['pay_channel']=='2'){
+				$result = SqbPay::refund(array(
+						'device_id'=>$poscode,
+						'refund_amount'=>''.$refund_amount*100,
+						'clientSn'=>$out_trade_no,
+						'dpid'=>$dpid,
+						'operator'=>$admin_id,
+				));
+				if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
+					$msg = array('status'=>true, 'trade_no'=>$out_trade_no);
+				}else{
 					$msg = array('status'=>false,'msg'=>'支付宝退款失败!!!');
-					break;
-				case "UNKNOWN":
-					$msg = array('status'=>false,'msg'=>'系统异常，订单状态未知!!!');
-					break;
-				default:
-					$msg = array('status'=>false,'msg'=>'不支持的交易状态，交易返回异常!!!');
-					break;
+				}
+			}else{
+				$alipayAccount = AlipayAccount::get($dpid);
+				$f2fpayConfig = array(
+						//支付宝公钥
+						'alipay_public_key' => $alipayAccount['alipay_public_key'],
+						//商户私钥
+						'merchant_private_key' => $alipayAccount['merchant_private_key'],
+						//编码格式
+						'charset' => "UTF-8",
+						//支付宝网关
+						'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
+						//应用ID
+						'app_id' => $alipayAccount['appid'],
+						//异步通知地址,只有扫码支付预下单可用
+						'notify_url' =>  "",
+						//最大查询重试次数
+						'MaxQueryRetry' => "10",
+						//查询间隔
+						'QueryDuration' => "3"
+				);
+				//第三方应用授权令牌,商户授权系统商开发模式下使用
+				$appAuthToken = "";//根据真实值填写
+			
+				//创建退款请求builder,设置参数
+				$refundRequestBuilder = new AlipayTradeRefundContentBuilder();
+				$refundRequestBuilder->setOutTradeNo($out_trade_no);
+				$refundRequestBuilder->setRefundAmount($refund_amount);
+				$refundRequestBuilder->setOutRequestNo($out_request_no);
+			
+				$refundRequestBuilder->setAppAuthToken($appAuthToken);
+				//初始化类对象,调用refund获取退款应答
+				$refundResponse = new AlipayTradeService($f2fpayConfig);
+				$refundResult =	$refundResponse->refund($refundRequestBuilder);
+				//根据交易状态进行处理
+				switch ($refundResult->getTradeStatus()){
+					case "SUCCESS":
+						$msg = array('status'=>true, 'trade_no'=>$out_request_no);
+						break;
+					case "FAILED":
+						$msg = array('status'=>false,'msg'=>'支付宝退款失败!!!');
+						break;
+					case "UNKNOWN":
+						$msg = array('status'=>false,'msg'=>'系统异常，订单状态未知!!!');
+						break;
+					default:
+						$msg = array('status'=>false,'msg'=>'不支持的交易状态，交易返回异常!!!');
+						break;
+				}
 			}
 		}else{
 			$msg = array('status'=>false,'msg'=>'缺少参数!!!');
@@ -855,6 +882,7 @@ class DataSyncOperation {
 			$syncLid = $data ['sync_lid'];
 		}
 		$dpid = $data ['dpid'];
+		$poscode = $data['poscode'];
 		$accountNo = $data ['account'];
 		$retreatId = $data ['retreatid'];
 		$retreatprice = $data ['retreatprice'];
@@ -1009,7 +1037,7 @@ class DataSyncOperation {
 					}
 					if($pay['paytype']==1){
 						// 微信支付
-						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
+						$rData = array('dpid'=>$dpid,'poscode'=>$poscode,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
 						$result = self::refundWxPay($rData);
 						$resObj = json_decode($result);
 						if(!$resObj->status){
@@ -1018,7 +1046,7 @@ class DataSyncOperation {
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
 						
-						$rData = array('dpid'=>$dpid,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'refund_fee'=>$refund_fee);
+						$rData = array('dpid'=>$dpid,'poscode'=>$poscode,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'refund_fee'=>$refund_fee);
 						$result = self::refundZfbPay($rData);
 						$resObj = json_decode($result);
 						if(!$resObj->status){
@@ -1077,6 +1105,7 @@ class DataSyncOperation {
 			$dpid = 0;
 			$lidArr = array();
 			$adminId = $data['admin_id'];
+			$poscode = $data['poscode'];
 			$data = $data['data'];
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
@@ -1094,7 +1123,7 @@ class DataSyncOperation {
 					// 退款
 					$contentArr = split('::', $content);
 					$createAt = isset($contentArr[7])?$contentArr[7]:'';
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 					$result = self::retreatOrder($pData);
 				}elseif($type==3){
 					// 增加会员卡
