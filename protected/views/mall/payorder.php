@@ -51,7 +51,7 @@
 			
 			$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		}elseif($payChannel==2){
-			$jsApiParameters = '{dpid:'.$this->companyId.',account_no:'.$orderId.',should_total:'.$payPrice.',payType:3,open_id:'.$user['openid'].',abstract:'.$company['company_name']."-微信点餐订单".',userName:'.$user['nickname'].',notify_url:'.$notifyUrl.'}';
+			$jsApiParameters = '{dpid:"'.$this->companyId.'",account_no:"'.$orderId.'",should_total:"'.$payPrice.'",payType:3,open_id:"'.$user['openid'].'",abstract:"'.$company['company_name']."-微信点餐订单".'",userName:"'.$user['nickname'].'",notify_url:"'.$notifyUrl.'"}';
 		}else{
 			$jsApiParameters = '';
 		}
