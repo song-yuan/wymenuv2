@@ -257,6 +257,10 @@ class WxOrder
 		 		$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
 		}
+		$levelDiscount = 1;
+		if($this->user['level']){
+			$levelDiscount = $this->user['level']['level_discount'];
+		}
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			if($cart['is_set'] > 0){
@@ -359,7 +363,7 @@ class WxOrder
 			
 			 
 			 //插入订单优惠
-			 if(!empty($cart['promotion'])){
+			 if($cart['promotion_id'] > 0){
 			 	foreach($cart['promotion']['promotion_info'] as $promotion){
 			 		$se = new Sequence("order_product_promotion");
 	    			$orderproductpromotionId = $se->nextval();
@@ -379,8 +383,10 @@ class WxOrder
 		 										);
 		 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
 			 	}
+			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+			 }else{
+			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
 			 }
-			 $orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			 $realityPrice += ($cart['original_price']+$ortherPrice)*$cart['num'];
 		}
 		 if(($this->type==1||$this->type==3) && $this->seatingFee > 0){
@@ -461,9 +467,6 @@ class WxOrder
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status=3,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}else{
-			if($this->user['level']){
-				$orderPrice = number_format($orderPrice*$this->user['level']['level_discount'],2);
-			}
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
