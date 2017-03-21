@@ -61,6 +61,7 @@ class SqbPay{
     	
     	/*查询设备对应的支付秘钥和支付平台对应的终端号*/
     	$devicemodel = WxCompany::getSqbPayinfo($dpid,$device_id);
+    	var_dump($devicemodel);exit;
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
