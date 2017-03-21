@@ -89,7 +89,7 @@
 								<td class="center">
 									<div class="actions">
 									<?php if($model['pay_activate']==0):?>
-										<button type="button" class="btn green stocktaking" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">开通</button> 
+										<button type="button" class="btn payonline" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">未开通</button> 
                                     <?php elseif($model['pay_activate']==1):?>
                                     	<button type="button" class="btn green stocktaking" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">激活</button> 
                                     <?php elseif($model['pay_activate']==2):?>
