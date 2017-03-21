@@ -17,8 +17,7 @@
 		}
 	}
 	
-	$payPrice = $order['should_total'] - $payYue - $payCupon - $payPoints; // 最终支付价格
-	echo $payPrice*100;exit;
+	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
@@ -153,7 +152,7 @@
 	<?php endif;?>
 	
 	<div class="item">
-		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($payPrice,2);?></span></div>
+		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payPrice;?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
@@ -161,7 +160,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total"><?php echo number_format($payPrice,2);?></span></p>
+        <p>￥<span id="total" class="total"><?php echo $payPrice;?></span></p>
     </div>
     <div class="ft-rt">
         <p><a href="javascript:;" id="payOrder">付款</a></p>
