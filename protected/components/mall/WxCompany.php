@@ -25,7 +25,7 @@ class WxCompany
 		->bindValue(':dpid',$dpid)
 		->queryRow();
 		if(!$company){
-			throw new Exception('不存在该公司信息');
+			$company = array('pay_channel'=>'0');
 		}
 		return $company;
 	}
