@@ -23,7 +23,7 @@
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
 	$canpWxpay = true;
-	try{
+// 	try{
 		$tools = new JsApiPay();
 		$openId = WxBrandUser::openId($userId,$this->companyId);
 		$account = WxAccount::get($this->companyId);
@@ -47,10 +47,10 @@
 
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
-	}catch(Exception $e){
-		$canpWxpay = false;
-		$jsApiParameters = $e->getMessage();
-	}
+// 	}catch(Exception $e){
+// 		$canpWxpay = false;
+// 		$jsApiParameters = $e->getMessage();
+// 	}
 	
 ?>
 
@@ -161,7 +161,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total" should-total="<?php echo $payPrice;?>"><?php echo number_format($payPrice,2);?></span></p>
+        <p>￥<span id="total" class="total"><?php echo number_format($payPrice,2);?></span></p>
     </div>
     <div class="ft-rt">
         <p><a href="javascript:;" id="payOrder">付款</a></p>
