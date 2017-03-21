@@ -139,7 +139,7 @@ class MallController extends Controller
 		$isFreightFee = WxCompanyFee::get(3,$this->companyId);
 		
 		$address = WxAddress::getDefault($userId,$this->companyId);
-		$user = WxBrandUser::get($userId,$this->companyId); 
+		$user = WxBrandUser::get($userId,$this->companyId);
 		
 		$this->render('checkorder',array('company'=>$company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
 	}
@@ -182,8 +182,9 @@ class MallController extends Controller
 		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
+		$user = WxBrandUser::get($userId,$this->companyId);
 		try{
-			$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
+			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
 			if(empty($orderObj->cart)){
 				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}
