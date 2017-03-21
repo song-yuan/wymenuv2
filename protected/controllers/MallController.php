@@ -271,6 +271,7 @@ class MallController extends Controller
 		$packingFee = 0;
 		$freightFee = 0;
 		
+		$company = WxCompany::get($this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] > 2){
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
@@ -302,7 +303,7 @@ class MallController extends Controller
 
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		$user = WxBrandUser::get($userId,$this->companyId);
-	    $this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	/**
 	 * 
@@ -714,6 +715,18 @@ class MallController extends Controller
 		}else{
 			echo 0;
 		}
+		exit;
+	}
+	/**
+	 *
+	 * 判断购物车是否为空
+	 *
+	 */
+	public function actionPayPreOrder()
+	{
+		$data = Yii::app()->request->getPost;
+		$result = SqbPay::precreate($data);
+		echo $result;
 		exit;
 	}
 	private function weixinServiceAccount() {	
