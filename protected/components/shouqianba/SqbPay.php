@@ -60,7 +60,7 @@ class SqbPay{
     	$operator = $data['operator'];
     	
     	/*查询设备对应的支付秘钥和支付平台对应的终端号*/
-    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid,$device_id);
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];

@@ -64,10 +64,13 @@ class WxCompany
 	 * 获取店铺的收钱吧支付内容
 	 * 
 	 */
-	public static function getSqbPayinfo($dpid){
-		$sql = 'select * from nb_sqb_possetting where dpid=:dpid and delete_flag=0 order by lid desc';
+	public static function getSqbPayinfo($dpid,$poscode = null){
+		if($poscode){
+			$sql = 'select * from nb_sqb_possetting where dpid='.$dpid.' and device_id="'.$poscode.'" and delete_flag=0 ';
+		}else{
+			$sql = 'select * from nb_sqb_possetting where dpid='.$dpid.' and delete_flag=0 order by lid desc';
+		}
 		$sqbinfor = Yii::app()->db->createCommand($sql)
-			->bindValue(':dpid',$dpid)
 			->queryRow();
 		return $sqbinfor;
 	}
