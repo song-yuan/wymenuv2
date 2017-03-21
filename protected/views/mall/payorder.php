@@ -25,7 +25,7 @@
 	//①、获取用户openid
 	$canpWxpay = true;
 	try{
-		$compaychannel = WxCompany::getpaychannel($dpid);
+		$compaychannel = WxCompany::getpaychannel($this->companyId);
 		$payChannel = $compaychannel['pay_channel'];
 		if($payChannel==1){
 			$tools = new JsApiPay();
@@ -51,7 +51,7 @@
 			
 			$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		}elseif($payChannel==2){
-			$jsApiParameters = '{dpid:'.$dpid.',account_no:'.$orderId.',should_total:'.$payPrice.',payType:3,open_id:'.$user['openid'].',abstract:'.$company['company_name']."-微信点餐订单".',userName:'.$user['nickname'].',notify_url:'.$notifyUrl.'}';
+			$jsApiParameters = '{dpid:'.$this->companyId.',account_no:'.$orderId.',should_total:'.$payPrice.',payType:3,open_id:'.$user['openid'].',abstract:'.$company['company_name']."-微信点餐订单".',userName:'.$user['nickname'].',notify_url:'.$notifyUrl.'}';
 		}else{
 			$jsApiParameters = '';
 		}
