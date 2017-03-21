@@ -18,7 +18,6 @@ class WxProductPrice
 	 */
 	public $productId;
 	public $dpid;
-	public $userId;
 	public $isSet;
 	public $price;
 	public $promotion = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());

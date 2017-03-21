@@ -198,7 +198,14 @@
 		<!-- end餐位费 -->
 	<?php endif;?>
 </div>
-
+<?php if($user['level']):?>
+<div class="discount">
+	<ul>
+		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品享受<?php echo $user['level']['level_discount'];?>折优惠</li>
+		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount'];?>折优惠</li>
+	</ul>
+</div>
+<?php endif;?>
 <?php if($this->type==3):?>
 	<div class="order-time arrowright">
 		<div class="time-lt">预约时间</div>
@@ -221,13 +228,6 @@
 	</div>
 <?php endif;?>
 
-<?php if($user['level']):?>
-<div class="order-copun arrowright">
-	<div class="copun-lt">会员折扣</div>
-	<div class="copun-rt"><?php echo $user['level']['level_discount'];?></div>
-	<div class="clear"></div>
-</div>
-<?php endif;?>
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="备注"></textarea>
 </div>
@@ -255,11 +255,7 @@
 
 <footer>
     <div class="ft-lt">
-    	<?php if($user['level']):?>
-        <p>￥<span id="total" class="total" total="<?php echo number_format($price*$user['level']['level_discount'],2);?>"><?php echo number_format($price*$user['level']['level_discount'],2).'(原价:￥'.$price.')';?></span></p>
-        <?php else:?>
         <p>￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
-        <?php endif;?>
     </div>
     <div class="ft-rt">
         <p><a id="payorder" href="javascript:;">确认下单</a></p>
