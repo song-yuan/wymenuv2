@@ -152,8 +152,8 @@
 		     <?php foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
 		     <div class="item-group">选择一个</div>
 		     <div class="item-group">
-	    		<?php foreach($detail as $item): $on = ''; if($item['is_select'] > 0){$on='on';$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['price'];}?>
-	    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+	    		<?php foreach($detail as $item): $on = ''; if($item['is_select'] > 0){$on='on';$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];}?>
+	    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="set-detail[]" value="<?php echo $selectItem;?>" />
 	    		<div class="clear"></div>
@@ -198,7 +198,14 @@
 		<!-- end餐位费 -->
 	<?php endif;?>
 </div>
-
+<?php if($user['level']):?>
+<div class="discount">
+	<ul>
+		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品享受<?php echo $user['level']['level_discount']*10;?>折优惠</li>
+		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount']*10;?>折优惠</li>
+	</ul>
+</div>
+<?php endif;?>
 <?php if($this->type==3):?>
 	<div class="order-time arrowright">
 		<div class="time-lt">预约时间</div>
@@ -220,14 +227,17 @@
 		<div class="clear"></div>
 	</div>
 <?php endif;?>
+
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="备注"></textarea>
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
-		<div class="item wx on" paytype="2"><img src="<?php echo $baseUrl;?>/img/mall/wxpay.png"/> 微信支付</div>
+		<div class="item wx on" paytype="2" style="border:none;"><img src="<?php echo $baseUrl;?>/img/mall/wxpay.png"/> 微信支付</div>
+		<!-- 
 		<div class="item zfb" paytype="1" style="border:none;"><img src="<?php echo $baseUrl;?>/img/mall/zfbpay.png"/> 支付宝支付</div>
+		-->
 		<input type="hidden" name="paytype" value="2" />
 	</div>
 </div>
@@ -494,7 +504,11 @@ $(document).ready(function(){
   	var group =  $(this).attr('group');
   	var tastePrice = $(this).attr('taste-pirce');
   	var tastName = $(this).html();
-  	var num = sectionObj.find('.num').html();
+  	var num = 1;
+  	if(sectionObj.find('.num').length > 0){
+  		num = sectionObj.find('.num').html();
+  	}
+  	
   	if($(this).hasClass('on')){
   		$(this).removeClass('on');
   		$(this).siblings('input').val(0);
@@ -545,6 +559,7 @@ $(document).ready(function(){
 		  	var setId = tasteItems.attr('set-id');
 		  	var productId = $(this).attr('product-id');
 		  	var group =  $(this).attr('group');
+			var detailNum = $(this).attr('detail-num');
 		  	var detailPrice = $(this).attr('detail-pirce');
 		  	var detailName = $(this).html();
 		  	var num = sectionObj.find('.num').html();
@@ -557,7 +572,7 @@ $(document).ready(function(){
 		  	  	onObj.removeClass('on');
 	  	  	}
 		  	$(this).addClass('on');
-		  	$(this).siblings('input').val(setId+'-'+productId+'-'+detailPrice);
+		  	$(this).siblings('input').val(setId+'-'+productId+'-'+detailNum+'-'+detailPrice);
 		  	detailDesc.find('span[id^='+group+'-]').remove();
 		  	var str = '<span id="'+group+'-'+productId+'">'+detailName+'</span>';
 		  	detailDesc.append(str);

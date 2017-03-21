@@ -93,7 +93,6 @@ class MallController extends Controller
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
-//		var_dump($carts);exit;
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
@@ -125,12 +124,12 @@ class MallController extends Controller
 		}
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
-		
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		
-		$price = WxCart::getCartPrice($carts);
+		$user = WxBrandUser::get($userId,$this->companyId);
+		$price = WxCart::getCartPrice($carts,$user);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		
@@ -141,7 +140,6 @@ class MallController extends Controller
 		$isFreightFee = WxCompanyFee::get(3,$this->companyId);
 		
 		$address = WxAddress::getDefault($userId,$this->companyId);
-		$user = WxBrandUser::get($userId,$this->companyId); 
 		
 		$this->render('checkorder',array('company'=>$company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
 	}
@@ -184,8 +182,9 @@ class MallController extends Controller
 		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
+		$user = WxBrandUser::get($userId,$this->companyId);
 		try{
-			$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
+			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
 			if(empty($orderObj->cart)){
 				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}
@@ -203,7 +202,7 @@ class MallController extends Controller
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$this->companyId);
 					$result = WxOrderAddress::addOrderAddress($orderId,$address);
-					if($result){
+					if(!$result){
 						throw new Exception('请添加订单地址信息！');
 					}
 				}else{

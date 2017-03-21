@@ -16,6 +16,10 @@ class WxBrandUser {
 			$companyId = WxCompany::getCompanyDpid($dpid);
 			$brandUser = self:: get($userId,$companyId);
 		}
+		if($brandUser){
+			$brandUserLevel = self::getUserLevel($brandUser['user_level_lid'],$brandUser['dpid']);
+			$brandUser['level'] = $brandUserLevel;
+		}
 		return $brandUser;
 	}
 	/**

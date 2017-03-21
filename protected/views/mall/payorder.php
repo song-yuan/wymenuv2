@@ -4,18 +4,20 @@
 	$orderTatsePrice = 0.00;
 	$payYue = 0.00;
 	$payCupon = 0.00;
+	$payPoints = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
 			if($orderPay['paytype']==10){
 				$payYue = $orderPay['pay_amount']; 
 			}elseif($orderPay['paytype']==9){
 				$payCupon = $orderPay['pay_amount']; 
+			}elseif($orderPay['paytype']==8){
+				$payPoints = $orderPay['pay_amount']; 
 			}
 		}
 	}
 	
-	$payPrice = $order['should_total'] - $payYue - $payCupon; // 最终支付价格
-	
+	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
@@ -80,13 +82,22 @@
 			<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 			<div class="clear"></div>
 		</div>
-		<?php if(!empty($product['taste'])):?>
+		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
 		<div class="taste">口味:
 		<?php foreach ($product['taste'] as $taste):?>
 		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
 		<?php endforeach;?>
 		</div>
 		<?php endif;?>
+		
+		<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
+		<div class="taste">
+		<?php foreach ($product['detail'] as $detail):?>
+		<span> <?php echo $detail['product_name'];?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
+		
 	<?php endforeach;?>
 	<div class="ht1"></div>
 	<?php if(!empty($order['taste'])):?>
@@ -98,16 +109,16 @@
 	<?php endif;?>
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
-		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
+		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php elseif($order['order_type']==2):?>
 	<div class="item">
-		<div class="lt">包装费:</div><div class="rt">￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>
+		<div class="lt">包装费:</div><div class="rt">￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
-		<div class="lt">配送费:</div><div class="rt">￥<?php echo $freightFee?number_format($freightFee):'免费';?></div>
+		<div class="lt">配送费:</div><div class="rt">￥<?php echo $freightFee?number_format($freightFee):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
@@ -141,7 +152,7 @@
 	<?php endif;?>
 	
 	<div class="item">
-		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($payPrice,2);?></span></div>
+		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payPrice;?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
@@ -149,7 +160,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total" should-total="<?php echo $payPrice;?>"><?php echo number_format($payPrice,2);?></span></p>
+        <p>￥<span id="total" class="total"><?php echo $payPrice;?></span></p>
     </div>
     <div class="ft-rt">
         <p><a href="javascript:;" id="payOrder">付款</a></p>
@@ -172,7 +183,7 @@
 				 	location.href = '<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 				 }else{
 				 	//支付失败或取消支付
-					 layer.msg('支付失败!');
+					 layer.msg('支付失败,请重新支付!');
 				 }     
 			}
 		);

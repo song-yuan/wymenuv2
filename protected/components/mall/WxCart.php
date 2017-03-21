@@ -58,8 +58,9 @@ class WxCart
 		}
 		return array('status'=>true,'msg'=>'');
 	}
-	// 如果产品有特价活动
+	// 如果产品有优惠活动
 	public function checkPromotion(){
+		$now = date('Y-m-d H:i:s');
 		if($this->productArr['promotion_id'] > 0){
 			$sqla = 'select count(*) as count from nb_cart where dpid=:dpid and user_id=:userId and promotion_id=:privationPromotionId';
 			$resulta = Yii::app()->db->createCommand($sqla)
@@ -68,12 +69,27 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
 					  
-			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
+			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
 			$result = Yii::app()->db->createCommand($sql)
 						  ->bindValue(':dpid',$this->dpid)
 						  ->bindValue(':productId',$this->productArr['product_id'])
 						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 						  ->queryRow();
+			if($now > $result['end_time']){
+				return array('status'=>false,'msg'=>'活动已结束!');
+			}
+			if($now < $result['begin_time']){
+				return array('status'=>false,'msg'=>'活动未开始!');
+			}
+			$week = date('w');
+			$weekday = split(',',$result['weekday']);
+			if(!in_array($week, $weekday)){
+				return array('status'=>false,'msg'=>'今天无活动!');
+			}
+			$time = date('H:i');
+			if($time > $result['day_end']||$time < $result['day_begin']){
+				return array('status'=>false,'msg'=>'今天活动未开始!');
+			}
 			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
 				if(!empty($cartPromotions)){
@@ -219,10 +235,24 @@ class WxCart
 		}
 		return $success;
 	}
-	public static function getCartPrice($cartArrs){
+	public static function getCartPrice($cartArrs,$user){
 		$price = 0;
+		$levelDiscunt = 1;
+		if($user['level']){
+			$birthday = date('m-d',strtotime($user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscunt = $user['level']['birthday_discount'];
+			}else{
+				$levelDiscunt = $user['level']['level_discount'];
+			}
+		}
 		foreach($cartArrs as $cart){
-			$price += $cart['price']*$cart['num'];
+			if($cart['promotion_id'] > 0){
+				$price += $cart['price']*$cart['num'];
+			}else{
+				$price += $cart['price']*$levelDiscunt*$cart['num'];
+			}
 		}
 		return number_format($price,2);
 	}

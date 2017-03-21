@@ -13,6 +13,7 @@ class WxOrder
 {
 	public $dpid;
 	public $userId;
+	public $user;
 	public $siteId;
 	public $type;
 	public $number;
@@ -29,9 +30,10 @@ class WxOrder
 	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,price))
 	public $order = false;
 	
-	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array()){
+	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array()){
 		$this->dpid = $dpid;
-		$this->userId = $userId;
+		$this->userId = $user['lid'];
+		$this->user = $user;
 		$this->siteId = $siteId;
 		$this->type = $type;
 		$this->number = $number;
@@ -131,9 +133,21 @@ class WxOrder
 		if(!empty($this->setDetail)){
 			foreach($this->setDetail as $detail){
 				$detailArr = explode('-',$detail);
-				if(count($detailArr)>1){
+				if(count($detailArr) > 1){
 					$this->productSetDetail[$detailArr[0]][] = $detailArr;
 				}
+			}
+			// 套餐内单品
+			foreach ($this->productSetDetail as $k=>$setdetail){
+				$totalOriginPrice = 0;
+				foreach ($setdetail as $key=>$val){
+					$setProduct = WxProduct::getProduct($val[1], $this->dpid);
+					$totalOriginPrice += $setProduct['original_price']*$val[2];
+					$this->productSetDetail[$k][$key]['product_name'] = $setProduct['product_name'];
+					$this->productSetDetail[$k][$key]['main_picture'] = $setProduct['main_picture'];
+					$this->productSetDetail[$k][$key]['original_price'] = $setProduct['original_price'];
+				}
+				$this->productSetDetail[$k]['total_original_price'] = $totalOriginPrice;
 			}
 		}
 	}
@@ -243,15 +257,43 @@ class WxOrder
 		 		$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
 		}
+		$levelDiscount = 1;
+		if($this->user['level']){
+			$birthday = date('m-d',strtotime( $this->user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscunt =  $this->user['level']['birthday_discount'];
+			}else{
+				$levelDiscunt =  $this->user['level']['level_discount'];
+			}
+		}
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			if($cart['is_set'] > 0){
-				// 套餐 插入套餐明细
-				foreach ($this->productSetDetail[$cart['product_id']] as $detail){
-					$ortherPrice = $detail[2];
+				$hasPrice = 0;
+				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(set_id,product_id,num,price); price 套餐内加价
+				$totalProductPrice = $this->productSetDetail[$cart['product_id']]['total_original_price'];
+				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
+					if($i==='total_original_price'){
+						continue;
+					}
+					$ortherPrice = $detail[3];
+					$eachPrice = $detail['original_price']*$detail[2]/$totalProductPrice*$cart['price'];
+					$hasPrice += $eachPrice;
+					if($i+2 == count($detail)){
+						$leavePrice = $hasPrice - $cart['price'];
+						if($leavePrice > 0){
+							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+						}else{
+							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+						}
+					}else{
+						$itemPrice = $eachPrice + $ortherPrice;
+					}
+					$itemPrice = number_format($itemPrice,4);
+					
 					$se = new Sequence("order_product");
 					$orderProductId = $se->nextval();
-					
 					$orderProductData = array(
 							'lid'=>$orderProductId,
 							'dpid'=>$this->dpid,
@@ -260,11 +302,12 @@ class WxOrder
 							'order_id'=>$orderId,
 							'set_id'=>$cart['product_id'],
 							'product_id'=>$detail[1],
-							'product_name'=>$cart['product_name'],
-							'product_pic'=>$cart['main_picture'],
-							'price'=>$cart['price']+$ortherPrice,
-							'original_price'=>$cart['original_price']+$ortherPrice,
-							'amount'=>$cart['num'],
+							'product_name'=>$detail['product_name'],
+							'product_pic'=>$detail['main_picture'],
+							'price'=>$itemPrice,
+							'original_price'=>$detail['original_price']+$ortherPrice,
+							'amount'=>$cart['num']*$detail[2],
+							'zhiamount'=>$cart['num'],
 							'product_order_status'=>9,
 							'is_sync'=>DataSync::getInitSync(),
 					);
@@ -326,7 +369,7 @@ class WxOrder
 			
 			 
 			 //插入订单优惠
-			 if(!empty($cart['promotion'])){
+			 if($cart['promotion_id'] > 0){
 			 	foreach($cart['promotion']['promotion_info'] as $promotion){
 			 		$se = new Sequence("order_product_promotion");
 	    			$orderproductpromotionId = $se->nextval();
@@ -346,8 +389,10 @@ class WxOrder
 		 										);
 		 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
 			 	}
+			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+			 }else{
+			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
 			 }
-			 $orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			 $realityPrice += ($cart['original_price']+$ortherPrice)*$cart['num'];
 		}
 		 if(($this->type==1||$this->type==3) && $this->seatingFee > 0){
@@ -475,16 +520,32 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select lid,price,amount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0';
+		$sql = 'select lid,order_id,main_id,set_id,price,amount,zhiamount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0 and set_id=0';
+		$sql .=' union select t.lid,t.order_id,t.main_id,t.set_id,sum(t.price) as price,t.amount,t.zhiamount,t.is_retreat,t.product_id,t1.set_name as product_name,t.product_pic,t.original_price from nb_order_product t,nb_product_set t1  where t.set_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=0 and t.delete_flag=0 and t.set_id>0 group by t.set_id,t.main_id';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 					    ->bindValue(':orderId',$orderId)
 					    ->bindValue(':dpid',$dpid)
 					    ->queryAll();
 		foreach ($orderProduct as $k=>$product){
-			$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
-			$orderProduct[$k]['taste'] = $productTaste;
+			if($product['set_id']>0){
+				$productSet = self::getOrderProductSetDetail($product['order_id'],$dpid,$product['set_id'],$product['main_id']);
+				$orderProduct[$k]['detail'] = $productSet;
+			}else{
+				$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
+				$orderProduct[$k]['taste'] = $productTaste;
+			}
 		}
 	    return $orderProduct;
+	}
+	public static function getOrderProductSetDetail($orderId,$dpid,$setId,$mainId){
+		$sql = 'select * from nb_order_product where order_id=:orderId and set_id=:setId and dpid=:dpid and main_id=:mainId and product_type=0 and delete_flag=0';
+		$orderProductSet = Yii::app()->db->createCommand($sql)
+					->bindValue(':orderId',$orderId)
+					->bindValue(':dpid',$dpid)
+					->bindValue(':setId',$setId)
+					->bindValue(':mainId',$mainId)
+					->queryAll();
+		return $orderProductSet;
 	}
 	public static function getOrderTaste($orderId,$dpid,$isOrder){
 		$sql = 'select t.*,t1.name,t1.price from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.is_order=:isOrder and t.order_id=:orderId';
@@ -700,6 +761,23 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 		
 	 	}else{
+	 		// 微信支付
+	 		$payYue = 0.00;
+	 		$payCupon = 0.00;
+	 		$payPoints = 0.00;
+	 		$orderPays = $orderPays = WxOrderPay::get($order['dpid'],$order['lid']);
+	 		if(!empty($orderPays)){
+	 			foreach($orderPays as $orderPay){
+	 				if($orderPay['paytype']==10){
+	 					$payYue = $orderPay['pay_amount'];
+	 				}elseif($orderPay['paytype']==9){
+	 					$payCupon = $orderPay['pay_amount'];
+	 				}elseif($orderPay['paytype']==8){
+	 					$payPoints = $orderPay['pay_amount'];
+	 				}
+	 			}
+	 		}
+	 		$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2);
 	 		$se = new Sequence("order_pay");
 		    $orderPayId = $se->nextval();
 		    $insertOrderPayArr = array(
@@ -709,7 +787,7 @@ class WxOrder
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		        	'order_id'=>$order['lid'],
 		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$order['should_total'],
+		        	'pay_amount'=>$payPrice,
 		        	'paytype'=>$paytype,
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
@@ -724,8 +802,24 @@ class WxOrder
 	 public static function reduceYue($user,$order){
 	 	$payMoney = 0;
 	 	$userId = $user['lid'];
+	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
-	 	$total = $order['should_total'];
+	 	
+	 	$orderTotal = $order['should_total'];
+	 	$payCupon = 0.00;
+	 	$payPoints = 0.00;
+	 	$orderPays = WxOrderPay::get($dpid,$orderId);
+		if(!empty($orderPays)){
+			foreach($orderPays as $orderPay){
+				if($orderPay['paytype']==9){
+					$payCupon = $orderPay['pay_amount']; 
+				}elseif($orderPay['paytype']==8){
+					$payPoints = $orderPay['pay_amount'];
+				}
+			}
+		}
+		$total = $orderTotal - $payCupon - $payPoints;
+		
 	 	$isSync = DataSync::getInitSync();
 	 	
 	 	$yue = WxBrandUser::getYue($userId,$dpid);//余额

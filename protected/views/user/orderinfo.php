@@ -13,10 +13,6 @@
 
 <div class="order-title">订单详情</div>
 <div class="order-site"><div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div><div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '已支付';elseif ($order['order_status']==7) echo '已取消';else echo '已完成';?></div><div class="clear"></div></div>
-<div class="order-site">
-	<span>订单号: <?php echo $order['lid'];?></span>
-	<span>下单时间: <?php echo $order['create_at'];?></span>
-</div>
 <?php if($address):?>
 	<?php if($order['order_type']==2):?>
 	<div class="address">
@@ -34,19 +30,32 @@
 	</div>
 	<?php endif;?>
 <?php endif;?>
+<div class="order-site">
+	<span>交易序号: <?php echo $order['account_no'];?></span>
+	<span>下单时间: <?php echo $order['create_at'];?></span>
+</div>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
 		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 		<div class="clear"></div>
 	</div>
-		<?php if(!empty($product['taste'])):?>
+		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
 		<div class="taste">口味:
 		<?php foreach ($product['taste'] as $taste):?>
 		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
 		<?php endforeach;?>
 		</div>
 		<?php endif;?>
+		
+		<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
+		<div class="taste">
+		<?php foreach ($product['detail'] as $detail):?>
+		<span> <?php echo $detail['product_name'];?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
+		
 	<?php endforeach;?>
 	<div class="ht1"></div>
 		<?php if(!empty($order['taste'])):?>
@@ -60,18 +69,18 @@
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
 		<div class="lt">餐位费:</div>
-		<div class="rt">X1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
+		<div class="rt">X1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php elseif($order['order_type']==2):?>
 	<div class="item">
 		<div class="lt">包装费:</div>
-		<div class="rt">X1 ￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>
+		<div class="rt">X1 ￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
 		<div class="lt">配送费:</div>
-		<div class="rt">X1 ￥<?php echo $freightFee?number_format($freightFee,2):'免费';?></div>
+		<div class="rt">X1 ￥<?php echo $freightFee?number_format($freightFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>

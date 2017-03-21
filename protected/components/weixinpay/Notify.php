@@ -108,7 +108,7 @@ class Notify extends WxPayNotify
 				'touser'=>$openId,
 				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'])),
 				'first'=>'您好，您已成功支付订单',
-				'keyword1'=>$order['lid'],
+				'keyword1'=>$order['account_no'],
 				'keyword2'=>$order['should_total'].'元',
 				'keyword3'=>$company['company_name'],
 				'keyword4'=>date('Y-m-m H:i:s',time()),

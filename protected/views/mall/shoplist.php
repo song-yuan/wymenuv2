@@ -21,12 +21,12 @@
 	</div>
 	-->
 	<div class="shops">
-		<div class="search" style="display:none;"><input id="name-search" type="text" value="" placeholder="请输入搜索关键字"></div>
+		<div class="search"><input id="name-search" type="text" value="" placeholder="请输入搜索关键字"></div>
 		<div class="shopcontainer">
 			<!-- 全部门店 -->
 			<ul id="allshop" class="shown">
 				<?php foreach ($children as $child):?>
-				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
+				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>" style="display:none;">
 					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
@@ -86,21 +86,36 @@
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
-		$("#name-search").change(function(){
-			var search = $(this).val();
-			$('li').hide();
-		 	$('#allshop').find('li').each(function(){
-			 	var name = $(this).find('h1').html();
-	 	 	 	var patt = new RegExp(search);
-		 	  	if(patt.test(name)){
-					$(this).show();
-			 	}
-		 	});	 
-		 	if($('#allshop').find('li:visible').length == 0){
-				$("#tips").show();
-			}else{
-				$("#tips").hide();
-			}
+		
+		$("#name-search").on('click',function(){
+			var oevent=this.id;
+			$("#name-search").off().on({
+				oevent:function(e){
+					
+				},
+				compositionstart:function(){
+					
+				},
+				compositionend:function(){
+					var search = $(this).val();
+					$('li').hide();
+					if(search==''){
+						return;
+					}
+				 	$('#allshop').find('li').each(function(){
+					 	var name = $(this).find('h1').html();
+			 	 	 	var patt = new RegExp(search);
+				 	  	if(patt.test(name)){
+							$(this).show();
+					 	}
+				 	});	 
+				 	if($('#allshop').find('li:visible').length == 0){
+						$("#tips").show();
+					}else{
+						$("#tips").hide();
+					}
+				}
+			});
 		});
 	    wx.ready(function () {
 	    	wx.getLocation({
@@ -129,7 +144,6 @@
 						$(this).find('span.right').html(distance);
 				    });
 				    if($('#allshop').find('li:visible').length == 0){
-					    $(".search").show();
 						$("#tips").show();
 					}
 			    }
