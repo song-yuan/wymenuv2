@@ -120,7 +120,7 @@
                                         <?php endif; ?>
                                             <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
                                         <?php if(Yii::app()->user->role <= User::POWER_ADMIN):?>
-                                            <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','开发');?></a>
+                                            <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','online-pay');?></a>
                                     	<?php endif;?>
                                     </div>	
 								</td>

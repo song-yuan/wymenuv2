@@ -111,9 +111,13 @@ class CompanyController extends BackendController
 		$model = new Company();
 		$model->create_at = date('Y-m-d H:i:s');
 		//var_dump($model);exit;
+		$db = Yii::app()->db;
 		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE){
 			if(Yii::app()->request->isPostRequest) {
 				$model->attributes = Yii::app()->request->getPost('Company');
+				
+				$pay_online = Yii::app()->request->getParam('pay_online');
+				
 				$province = Yii::app()->request->getParam('province1');
 				$city = Yii::app()->request->getParam('city1');
 				$area = Yii::app()->request->getParam('area1');
@@ -128,6 +132,19 @@ class CompanyController extends BackendController
 	            $model->type="0";
 				if($model->save()){
 					$comp_dpid = Yii::app()->db->getLastInsertID();
+					$userid = new Sequence("company_property");
+					$id = $userid->nextval();
+					$data = array(
+							'lid'=>$id,
+							'dpid'=>$comp_dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'pay_type'=>$pay_online,
+							'pay_channel'=>'',
+							'delete_flag'=>'0',
+					);
+					$command = $db->createCommand()->insert('nb_company_property',$data);
+						
 					$sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
 					$command=Yii::app()->db->createCommand($sql);
 					$command->execute();
@@ -143,6 +160,9 @@ class CompanyController extends BackendController
 		elseif(Yii::app()->user->role > 3 && Yii::app()->user->role <= 9){
 			if(Yii::app()->request->isPostRequest) {
 				$model->attributes = Yii::app()->request->getPost('Company');
+				
+				$pay_online = Yii::app()->request->getParam('pay_online');
+				
 				$province = Yii::app()->request->getParam('province1');
 				$city = Yii::app()->request->getParam('city1');
 				$area = Yii::app()->request->getParam('area1');
@@ -157,6 +177,20 @@ class CompanyController extends BackendController
 				//var_dump($model);exit;
 				//$model->type="0";
 				if($model->save()){
+					$comp_dpid = Yii::app()->db->getLastInsertID();
+					$userid = new Sequence("company_property");
+					$id = $userid->nextval();
+					$data = array(
+							'lid'=>$id,
+							'dpid'=>$comp_dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'pay_type'=>$pay_online,
+							'pay_channel'=>'',
+							'delete_flag'=>'0',
+					);
+					$command = $db->createCommand()->insert('nb_company_property',$data);
+					
 					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
 					$this->redirect(array('company/index','companyId'=> $this->companyId));
 				} else {
@@ -237,6 +271,38 @@ class CompanyController extends BackendController
 	private function getCompanyId($username){
 		$companyId = User::model()->find('username=:username',array(':username'=>$username)) ;
 		return $companyId['dpid'];
+	}
+	public function actionStore(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		$appid = Yii::app()->request->getParam('appid');
+		$code = Yii::app()->request->getParam('code');
+		//var_dump($dpid,$appid);exit;
+	
+		//****查询公司的产品分类。。。****
+		$db = Yii::app()->db;
+		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
+		if(!empty($compros)){
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",appId ="'.$appid.'",code ="'.$code.'" where dpid ='.$dpid;
+			$command = $db->createCommand($sql);
+			$command->execute();
+		}else{
+			$se = new Sequence("company_property");
+			$id = $se->nextval();
+			$data = array(
+					'lid'=>$id,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'pay_type'=>'1',
+					'pay_channel'=>'2',
+					'appId'=>$appid,
+					'code'=>$code,
+					'delete_flag'=>'0',
+			);
+			//var_dump($dataprod);exit;
+			$command = $db->createCommand()->insert('nb_company_property',$data);
+		}
+		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 	}
 	
 }
