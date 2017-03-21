@@ -13,6 +13,7 @@ class WxOrder
 {
 	public $dpid;
 	public $userId;
+	public $user;
 	public $siteId;
 	public $type;
 	public $number;
@@ -29,9 +30,10 @@ class WxOrder
 	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,price))
 	public $order = false;
 	
-	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array()){
+	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array()){
 		$this->dpid = $dpid;
-		$this->userId = $userId;
+		$this->userId = $user['lid'];
+		$this->user = $user;
 		$this->siteId = $siteId;
 		$this->type = $type;
 		$this->number = $number;
@@ -459,6 +461,9 @@ class WxOrder
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status=3,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}else{
+			if($this->user['level']){
+				$orderPrice = number_format($orderPrice*$this->user['level']['level_discount'],2);
+			}
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
