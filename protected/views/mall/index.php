@@ -341,6 +341,9 @@ $(document).ready(function(){
         			layer.msg(msg.msg);
         		}
         	},
+        	error:function(){
+        		layer.msg('添加失败,请检查网络');
+            },
         	dataType:'json'
         });
     });
@@ -377,6 +380,9 @@ $(document).ready(function(){
         			layer.msg(msg.msg);
         		}
         	},
+        	error:function(){
+        		layer.msg('移除失败,请检查网络');
+            },
         	dataType:'json'
         });
    });
