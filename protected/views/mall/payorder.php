@@ -18,12 +18,12 @@
 	}
 	
 	$payPrice = $order['should_total'] - $payYue - $payCupon - $payPoints; // 最终支付价格
-	
+	echo $payPrice*100;exit;
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
 	$canpWxpay = true;
-// 	try{
+	try{
 		$tools = new JsApiPay();
 		$openId = WxBrandUser::openId($userId,$this->companyId);
 		$account = WxAccount::get($this->companyId);
@@ -47,10 +47,10 @@
 
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
-// 	}catch(Exception $e){
-// 		$canpWxpay = false;
-// 		$jsApiParameters = $e->getMessage();
-// 	}
+	}catch(Exception $e){
+		$canpWxpay = false;
+		$jsApiParameters = $e->getMessage();
+	}
 	
 ?>
 
