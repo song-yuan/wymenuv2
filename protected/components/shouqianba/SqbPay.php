@@ -65,7 +65,7 @@ class SqbPay{
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
-    		$result = array('status'=>false, 'result'=>false,);
+    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
     		//var_dump('111');exit;
     		return $result;
     	}
@@ -262,8 +262,6 @@ class SqbPay{
     		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
     		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
     	}
-    	//var_dump($result);
-    	//exit;
     	return $result;
     }
     public static function precreate($data){
@@ -284,13 +282,13 @@ class SqbPay{
     	/*发起本次交易的操作员*/
     	$notify_url = $data['notify_url'];
     	
-    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid and delete_flag = 0',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	var_dump($devicemodel);exit;
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
     		$result = array('status'=>false, 'result'=>false,);
-    		//var_dump('111');exit;
     		return $result;
     	}
     	
@@ -308,13 +306,10 @@ class SqbPay{
     	);
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
-    	$obj = json_decode($result,true);
-    	//var_dump($obj);exit;
     	return $result;
     
     }
     public static function refund($data){
-    	//var_dump($data);exit;
     	$device_id = $data['device_id'];
     	$refund_amount = $data['refund_amount'];
     	$clientSn = $data['clientSn'];
@@ -328,7 +323,6 @@ class SqbPay{
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
     		$result = array('status'=>false, 'result'=>false,);
-    		//var_dump($result);exit;
     		return $result;
     	}
     	
@@ -359,7 +353,7 @@ class SqbPay{
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	
     	$obj = json_decode($result,true);
-    	var_dump($obj);exit;
+    	//var_dump($obj);exit;
     	$return_code = $obj['result_code'];
     	if($return_code == '200'){
     		$result_codes = $obj['biz_response']['result_code'];
