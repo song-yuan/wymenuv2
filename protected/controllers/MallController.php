@@ -128,7 +128,8 @@ class MallController extends Controller
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		
-		$price = WxCart::getCartPrice($carts);
+		$user = WxBrandUser::get($userId,$this->companyId);
+		$price = WxCart::getCartPrice($carts,$user);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		
@@ -139,7 +140,6 @@ class MallController extends Controller
 		$isFreightFee = WxCompanyFee::get(3,$this->companyId);
 		
 		$address = WxAddress::getDefault($userId,$this->companyId);
-		$user = WxBrandUser::get($userId,$this->companyId);
 		
 		$this->render('checkorder',array('company'=>$company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
 	}

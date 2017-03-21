@@ -235,10 +235,18 @@ class WxCart
 		}
 		return $success;
 	}
-	public static function getCartPrice($cartArrs){
+	public static function getCartPrice($cartArrs,$user){
 		$price = 0;
+		$levelDiscunt = 1;
+		if($user['level']){
+			$levelDiscunt = $user['level']['level_discount'];
+		}
 		foreach($cartArrs as $cart){
-			$price += $cart['price']*$cart['num'];
+			if($cart['promotion_id'] > 0){
+				$price += $cart['price']*$cart['num'];
+			}else{
+				$price += $cart['price']*$levelDiscunt*$cart['num'];
+			}
 		}
 		return number_format($price,2);
 	}
