@@ -269,7 +269,6 @@ class SqbPay{
     public static function precreate($data){
     	
     	$dpid = $data['dpid'];
-    	$device_id = $data['pad_code'];
     	$clientSn = $data['account_no'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
     	$total_amount = ''.$data['should_total']*100;
@@ -284,13 +283,12 @@ class SqbPay{
     	/*发起本次交易的操作员*/
     	$notify_url = $data['notify_url'];
     	
-    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid);
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
     		$result = array('status'=>false, 'result'=>false,);
-    		//var_dump('111');exit;
     		return $result;
     	}
     	
@@ -308,8 +306,6 @@ class SqbPay{
     	);
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
-    	$obj = json_decode($result,true);
-    	//var_dump($obj);exit;
     	return $result;
     
     }
