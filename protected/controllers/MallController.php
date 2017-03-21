@@ -724,7 +724,7 @@ class MallController extends Controller
 	 */
 	public function actionPayPreOrder()
 	{
-		$data = Yii::app()->request->getPost;
+		$data = $_POST;
 		$result = SqbPay::precreate($data);
 		echo $result;
 		exit;
