@@ -251,7 +251,7 @@ function getProduct(){
 							}
                  		}
              		}
-         			productSetStr +='</div>';
+         			productSetStr +='</div></div>';
 				}
 				productSetStr +='</div>';
 			}
