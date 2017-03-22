@@ -87,7 +87,7 @@
 		    location.href = href;
 		});
 		
-		$("#name-search").on('click',function(){
+		$("#name-search").on('focus',function(){
 			var oevent=this.id;
 			$("#name-search").off().on({
 				oevent:function(e){
@@ -135,10 +135,13 @@
 						}
 						if(5000 >= distance >= 1000){
 							distance = (distance/1000).toFixed(2)+'千米';
+							$("#tips").hide();
+							$(this).show();
 						}else if(distance < 1000){
 							distance = distance.toFixed(2)+'米';
+							$("#tips").hide();
+							$(this).show();
 						}else{
-							$(this).hide();
 							return true;
 						}
 						$(this).find('span.right').html(distance);
