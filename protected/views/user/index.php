@@ -311,6 +311,8 @@
                         </div>
                     </a>
                     <div class="empty1"></div>
+                     <div class="put_into_bg"></div>
+                    <!-- 
                      <a class="weui_cell js_cell" href="javascript:;" data-id="tel">
                         <span class="weui_cell_hd"></span>
                         <div class="weui_cell_bd weui_cell_primary">
@@ -323,7 +325,7 @@
                      <div class="put_into_bg">
                     <div class="weui_btn weui_btn_primary put_into">放入微信卡包</div> 
                     </div>
-                  
+                   -->
                     
                 </div>
                

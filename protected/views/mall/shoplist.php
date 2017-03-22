@@ -129,21 +129,22 @@
 						var lat = parseFloat($(this).attr('lat'));
 						var lng = parseFloat($(this).attr('lng'));
 						if(isNaN(lat)||isNaN(lng)){
-							var distance = 10000;
+							$(this).find('span.right').html('暂无距离');
+							return true;
 						}else{
 							var distance = getFlatternDistance(latitude,longitude,lat,lng);
 						}
-						if(5000 >= distance >= 1000){
+						if(distance >= 1000 && distance <= 5000){
 							distance = (distance/1000).toFixed(2)+'千米';
 							$(this).find('span.right').html(distance);
-							$("#tips").hide();
 							$(this).show();
 						}else if(distance < 1000){
 							distance = distance.toFixed(2)+'米';
 							$(this).find('span.right').html(distance);
-							$("#tips").hide();
 							$(this).show();
 						}else{
+							distance = (distance/1000).toFixed(2)+'千米';
+							$(this).find('span.right').html(distance);
 							return true;
 						}
 				    });
