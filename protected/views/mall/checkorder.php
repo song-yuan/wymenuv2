@@ -92,9 +92,9 @@
 
 <!-- 购物车商品 -->
 <div class="cart-info">
-	<div class="section" style="padding-top:10px;">
-	    <?php if(!empty($orderTastes)):?>
-	    <div class="taste">整单口味</div><div class="taste-desc"></div>
+	<?php if(!empty($orderTastes)):?>
+	<div class="section">
+	    <div class="taste">整单口味</div><div class="taste-desc"></div><div class="clear"></div>
 	    <div class="taste-items" product-id="0">
 	    	<?php foreach($orderTastes as $k=>$groups):?>
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
@@ -107,8 +107,8 @@
 	    	</div>
 	    	<?php endforeach;?>
 	    </div>
-	    <?php endif;?>
 	</div>
+	<?php endif;?>
 	<?php foreach($models as $model):?>
 	<div class="section cartProduct">
 		<!--
@@ -122,7 +122,7 @@
 	    </div>
 	    <!-- 可选择口味 -->
 	    <?php if(isset($model['taste_groups'])&&!empty($model['taste_groups'])):?>
-	    <div class="taste">可选口味</div><div class="taste-desc"></div>
+	    <div class="taste">可选口味</div><div class="taste-desc"></div><div class="clear"></div>
 	    <div class="taste-items" product-id="<?php echo $model['product_id'];?>">
 	    	<?php foreach($model['taste_groups'] as $k=>$groups):?>
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
@@ -147,7 +147,7 @@
     			<?php endif;?>
     		<?php endforeach;?>
 	     <?php endforeach;?>
-	     </div>
+	     </div><div class="clear"></div>
 	     <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
 		     <?php foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
 		     <div class="item-group">选择一个</div>
