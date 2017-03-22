@@ -21,7 +21,7 @@ body{ background-color:#efefef;}
 .prt-lt .lt-lt{ position:relative; float:left; width:0.8rem; height:0.6rem; margin:0.1rem;}
 .prt-lt .lt-lt img{ float:left; width:0.8rem; height:0.6rem;}
 .prt-lt .lt-lt i.commend{ position:absolute; top:0; left:0.05rem; display:block; width:0.18rem; height:0.24rem; background:url(../images/index/commend.png) no-repeat; background-size:0.18rem 0.24rem;}
-.prt-lt .lt-ct{ float:left; width:1.9rem; height:0.6rem; margin-top:0.1rem;}
+.prt-lt .lt-ct{ position: relative;float:left; width:1.9rem; height:0.6rem; margin-top:0.1rem;}
 .prt-lt .lt-ct p{ font-size:0.18rem; white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
 .prt-lt .lt-ct p.pr{ margin-top:0.1rem; color:#FF5151;}
 span.oprice{font-size:0.12rem;color:#BFBEBE;}
