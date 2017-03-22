@@ -11,13 +11,19 @@
  *refund 退款接口
  *cancel 撤单接口
  *query 查询接口
- *code 98093516
+ *code 14599168
  */
 class SqbPay{
-    public static function activate($code,$device_id){
+    public static function activate($data){
+    	/*该接口用于激活店铺的终端，用到的SN及KEY为我们总账户的sn和key*/
+    	
+    	$code = $data['code'];
+    	$device_id = $data['device_id'];
+    	$appId = $data['appId'];
+    	
     	$url = SqbConfig::SQB_DOMAIN.'/terminal/activate';
     	$data = array(
-	    			'app_id'=>SqbConfig::APPID,
+	    			'app_id'=>$appId,
 	    			'code'=>$code,
 	    			'device_id'=>$device_id
     			);
@@ -27,36 +33,62 @@ class SqbPay{
     	$result = SqbCurl::httpPost($url, $body, $vendorSn, $venderKey);
     	return $result;
     }
-    public static function checkin(){
+    public static function checkin($data){
+    	/*该接口用于每日例行签到，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
+    	$terminal_sn = $data['terminal_sn'];
+    	$terminal_key = $data['terminal_key'];
+    	/*终端号及终端秘钥*/
+    	$device_id = $data['device_id'];
     	$url = SqbConfig::SQB_DOMAIN.'/terminal/checkin';
     	$data = array(
-    				'terminal_sn'=>SqbConfig::VENDER_SN,
+    				'terminal_sn'=>$terminal_sn,
     				'device_id'=>$device_id,
     	);
     	$body = json_encode($data);
-    	$vendorSn = SqbConfig::VENDER_SN;
-    	$venderKey = SqbConfig::VENDER_KEY;
-    	$result = SqbCurl::httpPost($url , $body, $vendorSn , $venderKey);
+    	$result = SqbCurl::httpPost($url , $body, $terminal_sn , $terminal_key);
     	return $result;
     }
-    public static function pay($dpid,$data){
+    public static function pay($data){
     	
-    	$clientSn = $data['clientSn'];
-    	/*必须在商户系统内唯一；且长度不超过32字节*/
-    	$total_amount = $data['totalAmount'];
-    	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
-    	$paytype = $data['payType'];
-    	/*非必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
+    	$paytype = $data['type'];
+    	$device_id = $data['device_id'];
     	$dynamicId = $data['dynamicId'];
-    	/*条码内容*/
-    	$subject = $data['abstract'];
-    	/*本次交易的简要介绍*/
-    	$operator = $data['userName'];
-    	/*发起本次交易的操作员*/
+    	$total_amount = $data['totalAmount'];
+    	$clientSn = $data['clientSn'];
+    	$dpid = $data['dpid'];
+    	$subject = $data['subject'];
+    	$operator = $data['operator'];
     	
+    	/*查询设备对应的支付秘钥和支付平台对应的终端号*/
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid,$device_id);
+    	if(!empty($devicemodel)){
+    		$terminal_sn = $devicemodel['terminal_sn'];
+    		$terminal_key = $devicemodel['terminal_key'];
+    	}else{
+    		$result = array('status'=>false, 'result'=>false,);
+    		//var_dump('111');exit;
+    		return $result;
+    	}
+//     	/*该接口用于支付，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
+//     	$terminal_sn = $data['terminal_sn'];
+//     	$terminal_key = $data['terminal_key'];
+//     	/*终端号及终端秘钥*/
+//     	$clientSn = $data['clientSn'];
+//     	/*必须在商户系统内唯一；且长度不超过32字节*/
+//     	$total_amount = $data['totalAmount'];
+//     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
+//     	$paytype = $data['payType'];
+//     	/*非必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
+//     	$dynamicId = $data['dynamicId'];
+//     	/*条码内容*/
+//     	$subject = $data['abstract'];
+//     	/*本次交易的简要介绍*/
+//     	$operator = $data['userName'];
+    	/*发起本次交易的操作员*/
+    	//var_dump($dynamicId);exit;
     	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/pay';
-    	$data = array(
-    				'terminal_sn'=>SqbConfig::VENDER_SN,
+    	$datas = array(
+    				'terminal_sn'=>$terminal_sn,
     				'client_sn'=>$clientSn,
     				'total_amount'=>$total_amount,
     				'payway'=>$paytype,
@@ -64,75 +96,365 @@ class SqbPay{
     				'subject'=>$subject,
     				'operator'=>$operator,
     	);
-    	$body = json_encode($data);
-    	$vendorSn = SqbConfig::VENDER_SN;
-    	$venderKey = SqbConfig::VENDER_KEY;
-    	$result = SqbCurl::httpPost($url, $body, $vendorSn, $venderKey);
+    	$body = json_encode($datas);
+    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+    	
+    	
+    	$obj = json_decode($result,true);
+    	//var_dump($obj);exit;
+    	$return_code = $obj['result_code'];
+    	
+    	Helper::writeLog($result);
+    	//判断支付返回状态...
+    	if($return_code == '200'){
+    		$result_codes = $obj['biz_response']['result_code'];
+    		
+    		if($result_codes == 'PAY_SUCCESS'){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"SUCCESS",
+    					"msg"=>"支付成功！",
+    					"transaction_id"=>$obj['biz_response']['data']['trade_no'],
+    					"data"=>$obj['biz_response']['data']);
+    			
+    		}elseif($result_codes == 'PAY_FAIL'){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"ERROR",
+    					"msg"=>"支付失败！",
+    					"data"=>$obj['biz_response']['data']);
+    			
+    		}elseif($result_codes == 'PAY_IN_PROGRESS'){
+    			/*发起轮询*/
+    			do {
+    				$i=1;
+    				++$i;
+    				$status = true;
+    				$resultstatus = SqbPay::query(array(
+    						'terminal_sn'=>$terminal_sn,
+    						'terminal_key'=>$terminal_key,
+    						'sn'=>$obj['biz_response']['data']['sn'],
+    						'client_sn'=>$clientSn,
+    				));
+    				$rsts = json_decode($resultstatus,true);
+    				$q_code = $rsts['result_code'];
+    				if($q_code == '200'){
+    					$q_re_code = $rsts['biz_response']['data']['order_status'];
+    					if($q_re_code == 'CREATED'){
+    						'支付中...';
+    						$status = true;
+    					}elseif($q_re_code == 'PAID'){
+    						'支付成功';
+    						$status = false;
+    					}elseif($q_re_code == 'REFUNDED'){
+    						'成功退款';
+    						$status = false;
+    					}elseif($q_re_code == 'PARTIAL_REFUNDED'){
+    						'成功部分退款';
+    						$status = false;
+    					}else{
+    						'其他';
+    						$status = true;
+    					}
+    				}else{
+    					$status = true;
+    				}
+    				
+    			}while ($i<=6&&$status);
+    			
+    			if($status){
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"ERROR",
+    						"msg"=>"失败！",
+    						"data"=>'');
+    			}else{
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"SUCCESS",
+    						"msg"=>"支付成功！",
+    						"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
+    						"data"=>$rsts['biz_response']['data']);
+    			}
+    		}elseif($result_codes == 'FAIL'){
+    			$result = array(
+		    			"return_code"=>"SUCCESS",
+		    			"result_code"=>"ERROR",
+		    			"msg"=>"操作失败！",
+		    			"data"=>$obj['biz_response']['data']);
+    		}elseif($result_codes == 'SUCCESS'){
+    			$order_status = $obj['biz_response']['data']['order_status'];
+    			if($order_status == 'CREATED'){
+    				
+    				/*发起轮询*/
+    				do {
+    					$i=1;
+    					++$i;
+    					$status = true;
+    					$resultstatus = SqbPay::query(array(
+    							'terminal_sn'=>$terminal_sn,
+    							'terminal_key'=>$terminal_key,
+    							'sn'=>$obj['biz_response']['data']['sn'],
+    							'client_sn'=>$clientSn,
+    					));
+    					$rsts = json_decode($resultstatus,true);
+    					$q_code = $rsts['result_code'];
+    					if($q_code == '200'){
+    						$q_re_code = $rsts['biz_response']['data']['order_status'];
+    						if($q_re_code == 'CREATED'){
+    							'支付中...';
+    							$status = true;
+    						}elseif($q_re_code == 'PAID'){
+    							'支付成功';
+    							$status = false;
+    						}elseif($q_re_code == 'REFUNDED'){
+    							'成功退款';
+    							$status = false;
+    						}elseif($q_re_code == 'PARTIAL_REFUNDED'){
+    							'成功部分退款';
+    							$status = false;
+    						}else{
+    							'其他';
+    							$status = true;
+    						}
+    					}else{
+    						$status = true;
+    					}
+    				
+    				}while ($i<=6&&$status);
+    				 
+    				if($status){
+    					$result = array(
+    							"return_code"=>"SUCCESS",
+    							"result_code"=>"ERROR",
+    							"msg"=>"失败！",
+    							"data"=>'');
+    				}else{
+    					$result = array(
+    							"return_code"=>"SUCCESS",
+    							"result_code"=>"SUCCESS",
+    							"msg"=>"支付成功！",
+    							"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
+    							"data"=>$rsts['biz_response']['data']);
+    				}
+    			}elseif($order_status == 'PAID'){
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"SUCCESS",
+    						"msg"=>"支付成功！",
+    						"transaction_id"=>$obj['biz_response']['data']['trade_no'],
+    						"data"=>$obj['biz_response']['data']);
+    			}else{
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"ERROR",
+    						"msg"=>"支付失败！",
+    						"data"=>$obj['biz_response']['data']);
+    			}
+    		}else{
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"CANCEL",
+    					'msg'=>'未知状态！');
+    		}
+
+    	}else{
+    		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
+    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
+    	}
+    	//var_dump($result);
+    	//exit;
     	return $result;
     }
     public static function precreate($data){
     	
-    	$clientSn = $data['clientSn'];
+    	$dpid = $data['dpid'];
+    	$clientSn = $data['account_no'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
-    	$total_amount = $data['totalAmount'];
+    	$total_amount = ''.$data['should_total']*100;
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
-    	$paytype = $data['payType'];
-    	/*非必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
-    	$openId = $data['openId'];
+    	$payway = $data['payType'];
+    	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
+    	$payer_uid = $data['open_id'];
     	/*消费者在支付通道的唯一id,微信WAP支付必须传open_id*/
     	$subject = $data['abstract'];
     	/*本次交易的简要介绍*/
     	$operator = $data['userName'];
     	/*发起本次交易的操作员*/
+    	$notify_url = $data['notify_url'];
+    	
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid);
+    	if(!empty($devicemodel)){
+    		$terminal_sn = $devicemodel['terminal_sn'];
+    		$terminal_key = $devicemodel['terminal_key'];
+    	}else{
+    		$result = array('status'=>false, 'result'=>false,);
+    		return $result;
+    	}
     	
     	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/precreate';
     	$data = array(
-    				'terminal_sn'=>SqbConfig::VENDER_SN,
+    				'terminal_sn'=>$terminal_sn,
     				'client_sn'=>$clientSn,
     				'total_amount'=>$total_amount,
-    				'payway'=>$paytype,
-    				'payer_uid'=>$openId,
+    				'payway'=>$payway,
+    				'sub_payway'=>'3',
+    				'payer_uid'=>$payer_uid,
     				'subject'=>$subject,
     				'operator'=>$operator,
+    				'notify_url'=>$notify_url,
     	);
     	$body = json_encode($data);
-    	$vendorSn = SqbConfig::VENDER_SN;
-    	$venderKey = SqbConfig::VENDER_KEY;
-    	$result = SqbCurl::httpPost($url, $body, $vendorSn, $venderKey);
+    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	return $result;
     
     }
     public static function refund($data){
-
-    	$sn = $data['sn'];
-    	/*收钱吧系统内部唯一订单号*/
-    	$clientSn = $data['clientSn'];
-    	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
-    	$refund_request_no = $data['refund_request_no'];
-    	/*商户退款所需序列号，用于唯一标识某次退款请求，以防止意外的重复退款。正常情况下，对同一笔订单进行多次退款请求时该字段不能重复；而当通信质量不佳，终端不确认退款请求是否成功，自动或手动发起的退款请求重试，则务必要保持序列号不变*/
-    	$operator = $data['userName'];
-    	/*发起本次退款的操作员*/
+    	//var_dump($data);exit;
+    	$device_id = $data['device_id'];
     	$refund_amount = $data['refund_amount'];
-    	/*退款金额*/
+    	$clientSn = $data['clientSn'];
+    	$dpid = $data['dpid'];
+    	$operator = $data['operator'];
+    	
+    	/*查询设备对应的支付秘钥和支付平台对应的终端号*/
+    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	if(!empty($devicemodel)){
+    		$terminal_sn = $devicemodel['terminal_sn'];
+    		$terminal_key = $devicemodel['terminal_key'];
+    	}else{
+    		$result = array('status'=>false, 'result'=>false,);
+    		//var_dump($result);exit;
+    		return $result;
+    	}
+    	
+//     	/*该接口用于退款，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
+//     	$terminal_sn = $data['terminal_sn'];
+//     	$terminal_key = $data['terminal_key'];
+//     	/*终端号及终端秘钥*/
+//     	$sn = $data['sn'];
+//     	/*收钱吧系统内部唯一订单号*/
+//     	$clientSn = $data['clientSn'];
+//     	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
+//     	$refund_request_no = $data['refund_request_no'];
+//     	/*商户退款所需序列号，用于唯一标识某次退款请求，以防止意外的重复退款。正常情况下，对同一笔订单进行多次退款请求时该字段不能重复；而当通信质量不佳，终端不确认退款请求是否成功，自动或手动发起的退款请求重试，则务必要保持序列号不变*/
+//     	$operator = $data['userName'];
+//     	/*发起本次退款的操作员*/
+//     	$refund_amount = $data['refund_amount'];
+//     	/*退款金额*/
     	
     	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/refund';
     	$data = array(
-    			'terminal_sn'=>SqbConfig::VENDER_SN,
-    			'sn'=>$sn,
+    			'terminal_sn'=>$terminal_sn,
     			'client_sn'=>$clientSn,
-    			'refund_request_no'=>$refund_request_no,
+    			'refund_request_no'=>$clientSn,
     			'operator'=>$operator,
     			'refund_amount'=>$refund_amount,
     	);
     	$body = json_encode($data);
-    	$vendorSn = SqbConfig::VENDER_SN;
-    	$venderKey = SqbConfig::VENDER_KEY;
-    	$result = SqbCurl::httpPost($url, $body, $vendorSn, $venderKey);
+    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+    	
+    	$obj = json_decode($result,true);
+    	var_dump($obj);exit;
+    	$return_code = $obj['result_code'];
+    	if($return_code == '200'){
+    		$result_codes = $obj['biz_response']['result_code'];
+    		if($result_codes == 'REFUND_SUCCESS'){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"SUCCESS",
+    					"msg"=>"退款成功！");
+    		}elseif($result_codes == 'REFUND_ERROR'){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"ERROR",
+    					"msg"=>"退款失败！");
+    		}elseif($result_codes == 'REFUND_IN_PROGRESS'){
+    			/*发起轮询*/
+    			do {
+    				$i=1;
+    				++$i;
+    				$status = true;
+    				$resultstatus = SqbPay::query(array(
+    						'terminal_sn'=>$terminal_sn,
+    						'terminal_key'=>$terminal_key,
+    						'client_sn'=>$clientSn,
+    				));
+    				$rsts = json_decode($resultstatus,true);
+    				$q_code = $rsts['result_code'];
+    				if($q_code == '200'){
+    					$q_re_code = $rsts['biz_response']['data']['order_status'];
+    					if($q_re_code == 'REFUNDED'){
+    						'成功退款';
+    						$status = false;
+    					}elseif($q_re_code == 'PARTIAL_REFUNDED'){
+    						'成功部分退款';
+    						$status = false;
+    					}else{
+    						'其他';
+    						$status = true;
+    					}
+    				}else{
+    					$status = true;
+    				}
+    		
+    			}while ($i<=6&&$status);
+    			 
+    			if($status){
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"ERROR",
+    						"msg"=>"失败！",
+    						"data"=>'');
+    			}else{
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"SUCCESS",
+    						"msg"=>"成功！");
+    			}
+    		}elseif($result_codes == 'FAIL'){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"ERROR",
+    					"msg"=>"操作失败！");
+    		}elseif($result_codes == 'SUCCESS'){
+    			$order_status = $obj['biz_response']['data']['order_status'];
+    			if($order_status == 'REFUNDED' || $order_status == 'PARTIAL_REFUNDED'){
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"SUCCESS",
+    						"msg"=>"退款成功！");
+    				
+    			}elseif($order_status == 'REFUND_ERROR'){
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"ERROR",
+    						"msg"=>"操作失败！");
+    			}else{
+    				$result = array(
+    						"return_code"=>"SUCCESS",
+    						"result_code"=>"ERROR",
+    						"msg"=>"退款失败！");
+    			}
+    		}else{
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
+    		}
+    		
+    	}else{
+    		$result = array('status'=>false);
+    	}
+    	//var_dump($result);exit;
     	return $result;
     
     }
     public static function cancel($type,$data){
-
+    	/*该接口用于撤单，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
+    	$terminal_sn = $data['terminal_sn'];
+    	$terminal_key = $data['terminal_key'];
+    	/*终端号及终端秘钥*/
     	$sn = $data['sn'];
     	/*收钱吧系统内部唯一订单号*/
     	$clientSn = $data['clientSn'];
@@ -146,34 +468,33 @@ class SqbPay{
     	}
     	
     	$data = array(
-    			'terminal_sn'=>SqbConfig::VENDER_SN,
+    			'terminal_sn'=>$terminal_sn,
     			'sn'=>$sn,
     			'client_sn'=>$clientSn,
     	);
     	$body = json_encode($data);
-    	$vendorSn = SqbConfig::VENDER_SN;
-    	$venderKey = SqbConfig::VENDER_KEY;
-    	$result = SqbCurl::httpPost($url, $body, $vendorSn, $venderKey);
+    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	return $result;
     
     }
     public static function query($data){
-
+    	/*该接口用于查询，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
+    	$terminal_sn = $data['terminal_sn'];
+    	$terminal_key = $data['terminal_key'];
+    	/*终端号及终端秘钥*/
     	$sn = $data['sn'];
     	/*收钱吧系统内部唯一订单号*/
-    	$clientSn = $data['clientSn'];
+    	$clientSn = $data['client_sn'];
     	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
     	
     	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/query';
     	$data = array(
-    			'terminal_sn'=>SqbConfig::VENDER_SN,
+    			'terminal_sn'=>$terminal_sn,
     			'sn'=>$sn,
     			'client_sn'=>$clientSn,
     	);
     	$body = json_encode($data);
-    	$vendorSn = SqbConfig::VENDER_SN;
-    	$venderKey = SqbConfig::VENDER_KEY;
-    	$result = SqbCurl::httpPost($url, $body, $vendorSn, $venderKey);
+    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	return $result;
     
     }

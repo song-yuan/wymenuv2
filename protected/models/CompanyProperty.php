@@ -1,31 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "nb_sqb_possetting".
+ * This is the model class for table "nb_company_property".
  *
- * The followings are the available columns in table 'nb_sqb_possetting':
+ * The followings are the available columns in table 'nb_company_property':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
+ * @property string $pay_type
  * @property string $pay_channel
  * @property string $appId
- * @property string $device_id
- * @property string $terminal_sn
- * @property string $terminal_key
- * @property string $key_validtime
- * @property string $com_qrcode
+ * @property string $qr_code
  * @property string $delete_flag
  * @property string $is_sync
  */
-class SqbPossetting extends CActiveRecord
+class CompanyProperty extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_sqb_possetting';
+		return 'nb_company_property';
 	}
 
 	/**
@@ -38,13 +35,13 @@ class SqbPossetting extends CActiveRecord
 		return array(
 			array('lid, dpid, update_at', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('delete_flag', 'length', 'max'=>2),
-			array('appId, device_id, terminal_sn, terminal_key, is_sync', 'length', 'max'=>50),
-			array('key_validtime', 'length', 'max'=>25),
+			array('pay_type, pay_channel, delete_flag', 'length', 'max'=>2),
+			array('appId, is_sync', 'length', 'max'=>50),
+			array('qr_code', 'length', 'max'=>250),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, appId, device_id, terminal_sn, terminal_key, key_validtime, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, pay_type, pay_channel, appId, qr_code, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,11 +66,14 @@ class SqbPossetting extends CActiveRecord
 			'dpid' => 'Dpid',
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
+			'pay_type' => '0表示未开通线上支付，1表示总部统一管理支付，2表示店铺自管
+
+理支付',
+			'pay_channel' => '1表示官方支付渠道，2表示收钱吧支付渠道，3表示翼码支付渠
+
+道',
 			'appId' => '店铺在支付平台对应的id',
-			'device_id' => '设备唯一身份ID，对应系统内的POS秘钥',
-			'terminal_sn' => '店铺在支付平台终端号',
-			'terminal_key' => '店铺在支付平台终端秘钥',
-			'key_validtime' => '有效时间',
+			'qr_code' => '店铺二维码',
 			'delete_flag' => '1表示删除',
 			'is_sync' => '同步标志',
 		);
@@ -101,11 +101,10 @@ class SqbPossetting extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('pay_type',$this->pay_type,true);
+		$criteria->compare('pay_channel',$this->pay_channel,true);
 		$criteria->compare('appId',$this->appId,true);
-		$criteria->compare('device_id',$this->device_id,true);
-		$criteria->compare('terminal_sn',$this->terminal_sn,true);
-		$criteria->compare('terminal_key',$this->terminal_key,true);
-		$criteria->compare('key_validtime',$this->key_validtime,true);
+		$criteria->compare('qr_code',$this->qr_code,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
@@ -118,7 +117,7 @@ class SqbPossetting extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return CompanySetting the static model class
+	 * @return CompanyProperty the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

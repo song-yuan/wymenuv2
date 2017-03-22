@@ -13,6 +13,7 @@ class WxOrder
 {
 	public $dpid;
 	public $userId;
+	public $user;
 	public $siteId;
 	public $type;
 	public $number;
@@ -25,17 +26,22 @@ class WxOrder
 	public $normalPromotionIds = array();
 	public $tastes = array();//原始产品口味
 	public $productTastes = array();//处理后的产品口味
+	public $setDetail = array();  // 套餐详情 set_id - product_id - price
+	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,price))
 	public $order = false;
 	
-	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1,$tastes = array()){
+	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array()){
 		$this->dpid = $dpid;
-		$this->userId = $userId;
+		$this->userId = $user['lid'];
+		$this->user = $user;
 		$this->siteId = $siteId;
 		$this->type = $type;
 		$this->number = $number;
 		$this->tastes = $tastes;
+		$this->setDetail = $productSet;
 		$this->getCart();
 		$this->dealTastes();
+		$this->dealProductSet();
 		if($this->type==1){
 			$this->isTemp = 0;
 			$this->getSite();
@@ -56,24 +62,25 @@ class WxOrder
 	}
 	//获取购物车信息
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
+		$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0';
+		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=1';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
 				  ->bindValue(':siteId',$this->siteId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
-			$store = $this->checkStoreNumber($this->dpid,$result['product_id'],$result['num']);
+			$store = $this->checkStoreNumber($this->dpid,$result['product_id'],$result['is_set'],$result['num']);
 			if(!$store['status']){
 				throw new Exception($store['msg']);
 			}
 			$results[$k]['store_number'] = $store['msg'];
 			if($result['promotion_id'] > 0){
-				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['promotion_id'],$result['to_group']);
+				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$result['promotion_id'],$result['to_group']);
 				$results[$k]['price'] = $productPrice['price'];
 				$results[$k]['promotion'] = $productPrice;
 			}else{
-				$productPrice = new WxProductPrice($result['product_id'],$result['dpid']);
+				$productPrice = new WxProductPrice($result['product_id'],$result['dpid'],$result['is_set']);
 				$results[$k]['price'] = $productPrice->price;
 				$results[$k]['promotion'] = $productPrice->promotion;
 			}
@@ -82,15 +89,27 @@ class WxOrder
 		$this->cart = $results;
 	}
 	//判断产品库存
-	public function checkStoreNumber($dpid,$productId,$num){
-		$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
-		$product = Yii::app()->db->createCommand($sql)
-					  ->bindValue(':dpid',$dpid)
-					  ->bindValue(':productId',$productId)
-					  ->queryRow();
-		if($product['store_number']==0){
-			return array('status'=>false,'msg'=>'该产品已售罄!');
+	public function checkStoreNumber($dpid,$productId,$isSet,$num){
+		if($isSet){
+			$sql = 'select * from nb_product_set where lid=:productId and dpid=:dpid and delete_flag=0';
+			$product = Yii::app()->db->createCommand($sql)
+					->bindValue(':dpid',$dpid)
+					->bindValue(':productId',$productId)
+					->queryRow();
+			if($product['store_number']==0){
+				return array('status'=>false,'msg'=>$product['set_name'].'该产品已售罄!');
+			}
+		}else{
+			$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+			$product = Yii::app()->db->createCommand($sql)
+						->bindValue(':dpid',$dpid)
+						->bindValue(':productId',$productId)
+						->queryRow();
+			if($product['store_number']==0){
+				return array('status'=>false,'msg'=>$product['product_name'].'该产品已售罄!');
+			}
 		}
+		
 		if($product['store_number'] > 0){
 			if($num > $product['store_number']){
 				return array('status'=>false,'msg'=>'超出库存,库存剩余'.$product['store_number'].'!');
@@ -106,6 +125,29 @@ class WxOrder
 				if(count($tasteArr)>1){
 					$this->productTastes[$tasteArr[0]][] = $tasteArr;
 				}
+			}
+		}
+	}
+	//处理订单口味
+	public function dealProductSet(){
+		if(!empty($this->setDetail)){
+			foreach($this->setDetail as $detail){
+				$detailArr = explode('-',$detail);
+				if(count($detailArr) > 1){
+					$this->productSetDetail[$detailArr[0]][] = $detailArr;
+				}
+			}
+			// 套餐内单品
+			foreach ($this->productSetDetail as $k=>$setdetail){
+				$totalOriginPrice = 0;
+				foreach ($setdetail as $key=>$val){
+					$setProduct = WxProduct::getProduct($val[1], $this->dpid);
+					$totalOriginPrice += $setProduct['original_price']*$val[2];
+					$this->productSetDetail[$k][$key]['product_name'] = $setProduct['product_name'];
+					$this->productSetDetail[$k][$key]['main_picture'] = $setProduct['main_picture'];
+					$this->productSetDetail[$k][$key]['original_price'] = $setProduct['original_price'];
+				}
+				$this->productSetDetail[$k]['total_original_price'] = $totalOriginPrice;
 			}
 		}
 	}
@@ -215,57 +257,119 @@ class WxOrder
 		 		$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
 		}
-		foreach($this->cart as $cart){
-			$se = new Sequence("order_product");
-			$orderProductId = $se->nextval();
-			//插入产品口味
-			$pTastePrice = 0; //口味价格
-			if(isset($this->productTastes[$cart['product_id']]) && !empty($this->productTastes[$cart['product_id']])){
-				foreach($this->productTastes[$cart['product_id']] as $taste){
-					if($taste[2] > 0){
-						$pTastePrice +=$taste[2];
-					}
-					$se = new Sequence("order_taste");
-					$orderTasteId = $se->nextval();
-					$orderTasteData = array(
-							'lid'=>$orderTasteId,
-							'dpid'=>$this->dpid,
-							'create_at'=>date('Y-m-d H:i:s',$time),
-							'update_at'=>date('Y-m-d H:i:s',$time),
-							'taste_id'=>$taste[1],
-							'order_id'=>$orderProductId,
-							'is_order'=>0,
-							'is_sync'=>DataSync::getInitSync(),
-					);
-					Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
-				}
+		$levelDiscount = 1;
+		if($this->user['level']){
+			$birthday = date('m-d',strtotime( $this->user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscunt =  $this->user['level']['birthday_discount'];
+			}else{
+				$levelDiscunt =  $this->user['level']['level_discount'];
 			}
-			
-         	$orderProductData = array(
+		}
+		foreach($this->cart as $cart){
+			$ortherPrice = 0;
+			if($cart['is_set'] > 0){
+				$hasPrice = 0;
+				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(set_id,product_id,num,price); price 套餐内加价
+				$totalProductPrice = $this->productSetDetail[$cart['product_id']]['total_original_price'];
+				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
+					if($i==='total_original_price'){
+						continue;
+					}
+					$ortherPrice = $detail[3];
+					$eachPrice = $detail['original_price']*$detail[2]/$totalProductPrice*$cart['price'];
+					$hasPrice += $eachPrice;
+					if($i+2 == count($detail)){
+						$leavePrice = $hasPrice - $cart['price'];
+						if($leavePrice > 0){
+							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+						}else{
+							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+						}
+					}else{
+						$itemPrice = $eachPrice + $ortherPrice;
+					}
+					$itemPrice = number_format($itemPrice,4);
+					
+					$se = new Sequence("order_product");
+					$orderProductId = $se->nextval();
+					$orderProductData = array(
 							'lid'=>$orderProductId,
 							'dpid'=>$this->dpid,
 							'create_at'=>date('Y-m-d H:i:s',$time),
-        					'update_at'=>date('Y-m-d H:i:s',$time), 
+							'update_at'=>date('Y-m-d H:i:s',$time),
 							'order_id'=>$orderId,
-							'set_id'=>0,
-							'product_id'=>$cart['product_id'],
-							'product_name'=>$cart['product_name'],
-							'product_pic'=>$cart['main_picture'],
-							'price'=>$cart['price']+$pTastePrice,
-							'original_price'=>$cart['original_price']+$pTastePrice,
-							'amount'=>$cart['num'],
+							'set_id'=>$cart['product_id'],
+							'product_id'=>$detail[1],
+							'product_name'=>$detail['product_name'],
+							'product_pic'=>$detail['main_picture'],
+							'price'=>$itemPrice,
+							'original_price'=>$detail['original_price']+$ortherPrice,
+							'amount'=>$cart['num']*$detail[2],
+							'zhiamount'=>$cart['num'],
 							'product_order_status'=>9,
 							'is_sync'=>DataSync::getInitSync(),
-							);
-			 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+					);
+					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				}
+				$isSync = DataSync::getInitSync();
+				if($cart['store_number'] > 0){
+					$sql = 'update nb_product_set set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
+					Yii::app()->db->createCommand($sql)->execute();
+				}
+			}else{
+				$se = new Sequence("order_product");
+				$orderProductId = $se->nextval();
+				//单品 插入产品口味
+				if(isset($this->productTastes[$cart['product_id']]) && !empty($this->productTastes[$cart['product_id']])){
+					foreach($this->productTastes[$cart['product_id']] as $taste){
+						if($taste[2] > 0){
+							$ortherPrice +=$taste[2];
+						}
+						$se = new Sequence("order_taste");
+						$orderTasteId = $se->nextval();
+						$orderTasteData = array(
+								'lid'=>$orderTasteId,
+								'dpid'=>$this->dpid,
+								'create_at'=>date('Y-m-d H:i:s',$time),
+								'update_at'=>date('Y-m-d H:i:s',$time),
+								'taste_id'=>$taste[1],
+								'order_id'=>$orderProductId,
+								'is_order'=>0,
+								'is_sync'=>DataSync::getInitSync(),
+						);
+						Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
+					}
+				}
+				$orderProductData = array(
+						'lid'=>$orderProductId,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'order_id'=>$orderId,
+						'set_id'=>0,
+						'product_id'=>$cart['product_id'],
+						'product_name'=>$cart['product_name'],
+						'product_pic'=>$cart['main_picture'],
+						'price'=>$cart['price']+$ortherPrice,
+						'original_price'=>$cart['original_price']+$ortherPrice,
+						'amount'=>$cart['num'],
+						'product_order_status'=>9,
+						'is_sync'=>DataSync::getInitSync(),
+				);
+				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				
+				$isSync = DataSync::getInitSync();
+				if($cart['store_number'] > 0){
+					$sql = 'update nb_product set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
+					Yii::app()->db->createCommand($sql)->execute();
+				}
+			}
+			
 			 
-			 $isSync = DataSync::getInitSync();
-			 if($cart['store_number'] > 0){
-			 	$sql = 'update nb_product set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
-			 	Yii::app()->db->createCommand($sql)->execute();
-			 }
 			 //插入订单优惠
-			 if(!empty($cart['promotion'])){
+			 if($cart['promotion_id'] > 0){
 			 	foreach($cart['promotion']['promotion_info'] as $promotion){
 			 		$se = new Sequence("order_product_promotion");
 	    			$orderproductpromotionId = $se->nextval();
@@ -285,9 +389,11 @@ class WxOrder
 		 										);
 		 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
 			 	}
+			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+			 }else{
+			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
 			 }
-			 $orderPrice +=  ($cart['price']+$pTastePrice)*$cart['num'];
-			 $realityPrice += ($cart['original_price']+$pTastePrice)*$cart['num'];
+			 $realityPrice += ($cart['original_price']+$ortherPrice)*$cart['num'];
 		}
 		 if(($this->type==1||$this->type==3) && $this->seatingFee > 0){
 			 	$se = new Sequence("order_product");
@@ -414,16 +520,32 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select lid,price,amount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0';
+		$sql = 'select lid,order_id,main_id,set_id,price,amount,zhiamount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0 and set_id=0';
+		$sql .=' union select t.lid,t.order_id,t.main_id,t.set_id,sum(t.price) as price,t.amount,t.zhiamount,t.is_retreat,t.product_id,t1.set_name as product_name,t.product_pic,t.original_price from nb_order_product t,nb_product_set t1  where t.set_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=0 and t.delete_flag=0 and t.set_id>0 group by t.set_id,t.main_id';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 					    ->bindValue(':orderId',$orderId)
 					    ->bindValue(':dpid',$dpid)
 					    ->queryAll();
 		foreach ($orderProduct as $k=>$product){
-			$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
-			$orderProduct[$k]['taste'] = $productTaste;
+			if($product['set_id']>0){
+				$productSet = self::getOrderProductSetDetail($product['order_id'],$dpid,$product['set_id'],$product['main_id']);
+				$orderProduct[$k]['detail'] = $productSet;
+			}else{
+				$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
+				$orderProduct[$k]['taste'] = $productTaste;
+			}
 		}
 	    return $orderProduct;
+	}
+	public static function getOrderProductSetDetail($orderId,$dpid,$setId,$mainId){
+		$sql = 'select * from nb_order_product where order_id=:orderId and set_id=:setId and dpid=:dpid and main_id=:mainId and product_type=0 and delete_flag=0';
+		$orderProductSet = Yii::app()->db->createCommand($sql)
+					->bindValue(':orderId',$orderId)
+					->bindValue(':dpid',$dpid)
+					->bindValue(':setId',$setId)
+					->bindValue(':mainId',$mainId)
+					->queryAll();
+		return $orderProductSet;
 	}
 	public static function getOrderTaste($orderId,$dpid,$isOrder){
 		$sql = 'select t.*,t1.name,t1.price from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.is_order=:isOrder and t.order_id=:orderId';
@@ -639,6 +761,23 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 		
 	 	}else{
+	 		// 微信支付
+	 		$payYue = 0.00;
+	 		$payCupon = 0.00;
+	 		$payPoints = 0.00;
+	 		$orderPays = $orderPays = WxOrderPay::get($order['dpid'],$order['lid']);
+	 		if(!empty($orderPays)){
+	 			foreach($orderPays as $orderPay){
+	 				if($orderPay['paytype']==10){
+	 					$payYue = $orderPay['pay_amount'];
+	 				}elseif($orderPay['paytype']==9){
+	 					$payCupon = $orderPay['pay_amount'];
+	 				}elseif($orderPay['paytype']==8){
+	 					$payPoints = $orderPay['pay_amount'];
+	 				}
+	 			}
+	 		}
+	 		$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2);
 	 		$se = new Sequence("order_pay");
 		    $orderPayId = $se->nextval();
 		    $insertOrderPayArr = array(
@@ -648,7 +787,7 @@ class WxOrder
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		        	'order_id'=>$order['lid'],
 		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$order['should_total'],
+		        	'pay_amount'=>$payPrice,
 		        	'paytype'=>$paytype,
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
@@ -663,8 +802,24 @@ class WxOrder
 	 public static function reduceYue($user,$order){
 	 	$payMoney = 0;
 	 	$userId = $user['lid'];
+	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
-	 	$total = $order['should_total'];
+	 	
+	 	$orderTotal = $order['should_total'];
+	 	$payCupon = 0.00;
+	 	$payPoints = 0.00;
+	 	$orderPays = WxOrderPay::get($dpid,$orderId);
+		if(!empty($orderPays)){
+			foreach($orderPays as $orderPay){
+				if($orderPay['paytype']==9){
+					$payCupon = $orderPay['pay_amount']; 
+				}elseif($orderPay['paytype']==8){
+					$payPoints = $orderPay['pay_amount'];
+				}
+			}
+		}
+		$total = $orderTotal - $payCupon - $payPoints;
+		
 	 	$isSync = DataSync::getInitSync();
 	 	
 	 	$yue = WxBrandUser::getYue($userId,$dpid);//余额
@@ -751,7 +906,7 @@ class WxOrder
 	    
 		$accountNo = self::getAccountNo($dpid,0,1,$orderId);
 		
-		$transaction=Yii::app()->db->beginTransaction();
+		$transaction = Yii::app()->db->beginTransaction();
 			try{
         	    $insertOrderArr = array(
         	        	'lid'=>$orderId,

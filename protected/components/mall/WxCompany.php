@@ -19,9 +19,19 @@ class WxCompany
 		}
 	    return $company;
 	}
+	public static function getpaychannel($dpid){
+		$sql = 'select * from nb_company_property where dpid=:dpid';
+		$company = Yii::app()->db->createCommand($sql)
+		->bindValue(':dpid',$dpid)
+		->queryRow();
+		if(!$company){
+			$company = array('pay_channel'=>'0');
+		}
+		return $company;
+	}
 	// 获取总部的字店铺
 	public static function getCompanyChildren($dpid){
-		$sql = 'select * from nb_company where comp_dpid=:dpid and type=1';
+		$sql = 'select * from nb_company where comp_dpid=:dpid and type=1 and delete_flag=0';
 		$companys = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
@@ -48,5 +58,20 @@ class WxCompany
 			$dpidJoin = $dpid;
 		}
 		return $dpidJoin;
+	}
+	/**
+	 * 
+	 * 获取店铺的收钱吧支付内容
+	 * 
+	 */
+	public static function getSqbPayinfo($dpid,$poscode = null){
+		if($poscode){
+			$sql = 'select * from nb_sqb_possetting where dpid='.$dpid.' and device_id="'.$poscode.'" and delete_flag=0 ';
+		}else{
+			$sql = 'select * from nb_sqb_possetting where dpid='.$dpid.' and delete_flag=0 order by lid desc';
+		}
+		$sqbinfor = Yii::app()->db->createCommand($sql)
+			->queryRow();
+		return $sqbinfor;
 	}
 }

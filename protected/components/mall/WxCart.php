@@ -58,8 +58,9 @@ class WxCart
 		}
 		return array('status'=>true,'msg'=>'');
 	}
-	// 如果产品有特价活动
+	// 如果产品有优惠活动
 	public function checkPromotion(){
+		$now = date('Y-m-d H:i:s');
 		if($this->productArr['promotion_id'] > 0){
 			$sqla = 'select count(*) as count from nb_cart where dpid=:dpid and user_id=:userId and promotion_id=:privationPromotionId';
 			$resulta = Yii::app()->db->createCommand($sqla)
@@ -68,12 +69,27 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
 					  
-			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
+			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
 			$result = Yii::app()->db->createCommand($sql)
 						  ->bindValue(':dpid',$this->dpid)
 						  ->bindValue(':productId',$this->productArr['product_id'])
 						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 						  ->queryRow();
+			if($now > $result['end_time']){
+				return array('status'=>false,'msg'=>'活动已结束!');
+			}
+			if($now < $result['begin_time']){
+				return array('status'=>false,'msg'=>'活动未开始!');
+			}
+			$week = date('w');
+			$weekday = split(',',$result['weekday']);
+			if(!in_array($week, $weekday)){
+				return array('status'=>false,'msg'=>'今天无活动!');
+			}
+			$time = date('H:i');
+			if($time > $result['day_end']||$time < $result['day_begin']){
+				return array('status'=>false,'msg'=>'今天活动未开始!');
+			}
 			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
 				if(!empty($cartPromotions)){
@@ -108,13 +124,25 @@ class WxCart
 		}
 	}
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0';
-		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=1';
+		$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=0';
+		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=1';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
+				  ->bindValue(':siteId',$this->siteId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
+			if($result['is_set']){
+				$detail = WxProduct::getProductSetDetail($result['product_id'], $result['dpid']);
+				if(!empty($detail)){
+					$results[$k]['detail'] = $detail;
+				}else{
+					unset($results[$k]);
+					continue;
+				}
+			}else{
+				$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
+			}
 			if($result['promotion_id'] > 0){
 				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$result['promotion_id'],$result['to_group']);
 				$results[$k]['price'] = $productPrice['price'];
@@ -124,9 +152,8 @@ class WxCart
 				$results[$k]['price'] = $productPrice->price;
 				$results[$k]['promotion'] = $productPrice->promotion;
 			}
-			$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 		}
-		return $results;
+		return array_merge($results);
 	}
 	public function getCartPromotion(){
 		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and promotion_id > 0 and promotion_id!=:privationPromotionId';
@@ -208,10 +235,24 @@ class WxCart
 		}
 		return $success;
 	}
-	public static function getCartPrice($cartArrs){
+	public static function getCartPrice($cartArrs,$user){
 		$price = 0;
+		$levelDiscunt = 1;
+		if($user['level']){
+			$birthday = date('m-d',strtotime($user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscunt = $user['level']['birthday_discount'];
+			}else{
+				$levelDiscunt = $user['level']['level_discount'];
+			}
+		}
 		foreach($cartArrs as $cart){
-			$price += $cart['price']*$cart['num'];
+			if($cart['promotion_id'] > 0){
+				$price += $cart['price']*$cart['num'];
+			}else{
+				$price += $cart['price']*$levelDiscunt*$cart['num'];
+			}
 		}
 		return number_format($price,2);
 	}

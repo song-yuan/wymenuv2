@@ -56,6 +56,17 @@
 											<?php echo $form->error($model, 'type' )?>
 										</div> 
 									</div>
+									
+									<div class="form-group">
+									<LABEL class="col-md-3 control-label ">是否开通线上支付</LABEL>
+										<div class="col-md-4">
+											<SELECT class="form-control pay_online">
+												<OPTION value="0">不开通</OPTION>
+												<OPTION value="2">开通线上支付（个人）</OPTION>
+												<OPTION value="1">开通线上支付（总部）</OPTION>
+											</SELECT>
+										</div>
+									</div>
 									<?php elseif($type != '-1'):?>
 									<div class="form-group"> 
 										<?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>
@@ -64,6 +75,7 @@
 											<?php echo $form->error($model, 'type' )?>
 										</div> 
 									</div>
+									
 									<?php endif;?>
 									<?php if($type !='2'):?>
 									<div id="yincang" style="display:black;">
@@ -98,8 +110,19 @@
 									</div>
 									</div>
 									<?php endif;?>
-									<?php }?>
+									<?php }else{?>
 									
+									<div class="form-group">
+									<LABEL class="col-md-3 control-label ">是否开通线上支付</LABEL>
+										<div class="col-md-4">
+											<SELECT class="form-control pay_online">
+												<OPTION value="1">开通</OPTION>
+												<OPTION value="0">不开通</OPTION>
+											</SELECT>
+										</div>
+									</div>
+									<?php }?>
+									<input type="hidden" id="pay_online" name="pay_online" value="" />
 									<div class="form-group">
 										<?php echo $form->label($model, 'mobile',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -291,7 +314,11 @@
 				}, "上海市");
 			});
 		     $("#su").on('click',function() {
-		         //alert(11);
+
+		    	 var pay_online = $('.pay_online').children('option:selected').val();
+		         //alert(pay_online);
+		         //layer.msg('网络开小差了！建议重新查询...',{icon:5});
+		         //return false;
 		         var province = $('#province').children('option:selected').val();
 		         var city = $('#city').children('option:selected').val();
 		         var area = $('#area').children('option:selected').val();
@@ -304,7 +331,7 @@
 		        	 return false;
 		         }
 		         //alert(province);return false;
-		         
+		         $("#pay_online").val(pay_online);
 		         $("#province1").val(province);
 		         $("#city1").val(city);
 		         $("#area1").val(area);

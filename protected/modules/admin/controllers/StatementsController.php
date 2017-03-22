@@ -528,11 +528,20 @@ public function actionPayallReport(){
 	
 	//gross profit 毛利润计算
 	public function getGrossProfit($dpid,$begin_time,$end_time,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		
 		$criteria = new CDbCriteria;
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.should_total) as should_all,sum(t.reality_total) as reality_all,count(*) as all_num';//array_count_values()
 		//$criteria->with = array('company','order4');
 		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
 		$criteria->addCondition ('t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59"');
+		$criteria->addCondition('t.lid in('.$ords.')');
 		if($usertype != '0'){
 			$criteria->addCondition ('t.username ="'.$userid.'"');
 		}

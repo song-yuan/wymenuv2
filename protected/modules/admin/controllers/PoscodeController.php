@@ -28,13 +28,24 @@ class PoscodeController extends BackendController
 		$model->dpid = $this->companyId ;
 		
 		if(Yii::app()->request->isPostRequest) {
+			$is_onlinepay = CompanyProperty::model()->find('dpid=:dpid',array(':dpid'=>$this->companyId));
+			if(!empty($is_onlinepay)){
+				if($is_onlinepay['pay_type']){
+					$pay_act = '1';
+				}else{
+					$pay_act = '0';
+				}
+			}else{
+				$pay_act = '0';
+			}
 			$model->attributes = Yii::app()->request->getPost('PadSetting');
                         $se=new Sequence("pad_setting");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->update_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
-                        $model->pad_code = PadSetting::getNo($model->lid,4).PadSetting::getRandomString(8,1);
+                        $model->pay_activate = $pay_act;
+                        $model->pad_code = PadSetting::getNo($model->lid,4).PadSetting::getNo($model->dpid,4).PadSetting::getRandomString(6,1);
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));

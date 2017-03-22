@@ -4,46 +4,57 @@
 	$orderTatsePrice = 0.00;
 	$payYue = 0.00;
 	$payCupon = 0.00;
+	$payPoints = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
 			if($orderPay['paytype']==10){
 				$payYue = $orderPay['pay_amount']; 
 			}elseif($orderPay['paytype']==9){
 				$payCupon = $orderPay['pay_amount']; 
+			}elseif($orderPay['paytype']==8){
+				$payPoints = $orderPay['pay_amount']; 
 			}
 		}
 	}
 	
-	$payPrice = $order['should_total'] - $payYue - $payCupon; // 最终支付价格
-	
+	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
+	
+	$payChannel = 0;
 	//①、获取用户openid
 	$canpWxpay = true;
 	try{
-		$tools = new JsApiPay();
-		$openId = WxBrandUser::openId($userId,$this->companyId);
-		$account = WxAccount::get($this->companyId);
-		//②、统一下单
-		$input = new WxPayUnifiedOrder();
-		$input->SetBody("点餐订单");
-		$input->SetAttach("0");
-		$input->SetOut_trade_no($orderId);
-		$input->SetTotal_fee($payPrice*100);
-		$input->SetTime_start(date("YmdHis"));
-		$input->SetTime_expire(date("YmdHis", time() + 600));
-		$input->SetGoods_tag("点餐订单");
-		$input->SetNotify_url($notifyUrl);
-		$input->SetTrade_type("JSAPI");
-		if($account['multi_customer_service_status'] == 1){
-			$input->SetSubOpenid($openId);
+		$compaychannel = WxCompany::getpaychannel($this->companyId);
+		$payChannel = $compaychannel['pay_channel'];
+		if($payChannel==1){
+			$tools = new JsApiPay();
+			$openId = WxBrandUser::openId($userId,$this->companyId);
+			$account = WxAccount::get($this->companyId);
+			//②、统一下单
+			$input = new WxPayUnifiedOrder();
+			$input->SetBody($company['company_name']."-微信点餐订单");
+			$input->SetAttach("0");
+			$input->SetOut_trade_no($orderId);
+			$input->SetTotal_fee($payPrice*100);
+			$input->SetTime_start(date("YmdHis"));
+			$input->SetTime_expire(date("YmdHis", time() + 600));
+			$input->SetGoods_tag($company['company_name']."-微信点餐订单");
+			$input->SetNotify_url($notifyUrl);
+			$input->SetTrade_type("JSAPI");
+			if($account['multi_customer_service_status'] == 1){
+				$input->SetSubOpenid($openId);
+			}else{
+				$input->SetOpenid($openId);
+			}
+			$orderInfo = WxPayApi::unifiedOrder($input);
+			
+			$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+		}elseif($payChannel==2){
+			$jsApiParameters = '{dpid:"'.$this->companyId.'",account_no:"'.$orderId.'",should_total:"'.$payPrice.'",payType:3,abstract:"'.$company['company_name']."-微信点餐订单".'",userName:"'.$user['nickname'].'",notify_url:"'.$notifyUrl.'"}';
 		}else{
-			$input->SetOpenid($openId);
+			$jsApiParameters = '';
 		}
-		$orderInfo = WxPayApi::unifiedOrder($input);
-
-		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
-		
 	}catch(Exception $e){
 		$canpWxpay = false;
 		$jsApiParameters = $e->getMessage();
@@ -80,13 +91,22 @@
 			<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 			<div class="clear"></div>
 		</div>
-		<?php if(!empty($product['taste'])):?>
+		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
 		<div class="taste">口味:
 		<?php foreach ($product['taste'] as $taste):?>
 		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
 		<?php endforeach;?>
 		</div>
 		<?php endif;?>
+		
+		<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
+		<div class="taste">
+		<?php foreach ($product['detail'] as $detail):?>
+		<span> <?php echo $detail['product_name'];?> </span>
+		<?php endforeach;?>
+		</div>
+		<?php endif;?>
+		
 	<?php endforeach;?>
 	<div class="ht1"></div>
 	<?php if(!empty($order['taste'])):?>
@@ -98,16 +118,16 @@
 	<?php endif;?>
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
-		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
+		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php elseif($order['order_type']==2):?>
 	<div class="item">
-		<div class="lt">包装费:</div><div class="rt">￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>
+		<div class="lt">包装费:</div><div class="rt">￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
-		<div class="lt">配送费:</div><div class="rt">￥<?php echo $freightFee?number_format($freightFee):'免费';?></div>
+		<div class="lt">配送费:</div><div class="rt">￥<?php echo $freightFee?number_format($freightFee):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
@@ -141,7 +161,7 @@
 	<?php endif;?>
 	
 	<div class="item">
-		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($payPrice,2);?></span></div>
+		<div class="lt">实付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payPrice;?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
@@ -149,7 +169,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total" should-total="<?php echo $payPrice;?>"><?php echo number_format($payPrice,2);?></span></p>
+        <p>￥<span id="total" class="total"><?php echo $payPrice;?></span></p>
     </div>
     <div class="ft-rt">
         <p><a href="javascript:;" id="payOrder">付款</a></p>
@@ -162,6 +182,7 @@
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
+		<?php if ($payChannel==1):?>
 		WeixinJSBridge.invoke(
 			'getBrandWCPayRequest',
 			<?php echo $jsApiParameters; ?>,
@@ -172,10 +193,27 @@
 				 	location.href = '<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 				 }else{
 				 	//支付失败或取消支付
-					 layer.msg('支付失败!');
+					 layer.msg('支付失败,请重新支付!');
 				 }     
 			}
 		);
+		<?php elseif($payChannel==2):?>
+		$.ajax({
+				url:'<?php echo $this->createUrl('/mall/payPreOrder',array('companyId'=>$this->companyId));?>',
+				data:<?php echo $jsApiParameters;?>,
+				type:'POST',
+				dataType:'json',
+				success:function(msg){
+					alert(msg);
+					alert(JSON.stringify(msg));
+				},
+				error:function(){
+					layer.msg('支付失败,请重新支付!');
+				}
+			});
+		<?php else:?>
+		layer.msg('无支付信息,请联系客服!');
+		<?php endif;?>
 	}
 	<?php endif;?>
 	function callpay()

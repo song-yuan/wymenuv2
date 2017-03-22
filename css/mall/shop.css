@@ -197,7 +197,7 @@
 
 .shops .left img {
 	width: 100%;
-	height: auto;
+	height: 100px;
 }
 
 
@@ -230,7 +230,7 @@
 }
 
 .misinfo span.right {
-	width: 25%;
+	width: 30%;
 	text-align: right;
 }
 

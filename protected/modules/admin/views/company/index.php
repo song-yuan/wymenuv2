@@ -30,6 +30,10 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
+	<div id="main2" name="main2" style="min-width: 500px;min-height:300px;display:none;" onMouseOver="this.style.backgroundColor='rgba(255,222,212,1)'" onmouseout="this.style.backgroundColor=''">
+		<div id="content"></div>
+	</div>
+	
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
@@ -113,8 +117,11 @@
 									<div class="actions">
                                         <?php if(Yii::app()->user->role < User::SHOPKEEPER) : ?><!-- Yii::app()->params->master_slave=='m' -->
                                             <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type));?>"><?php echo yii::t('app','编辑');?></a>
-                                         <?php endif; ?>
+                                        <?php endif; ?>
                                             <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
+                                        <?php if(Yii::app()->user->role <= User::POWER_ADMIN):?>
+                                            <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','online-pay');?></a>
+                                    	<?php endif;?>
                                     </div>	
 								</td>
 							</tr>
@@ -177,13 +184,13 @@
 	});
 	$('#province').change(function(){
 		changeselect();
-		});
+	});
 	$('#city').change(function(){
 		changeselect();
-		});
+	});
 	$('#area').change(function(){
 		changeselect();
-		});
+	});
 	 function changeselect(){
 		 var province = $('#province').children('option:selected').val();
 			var city = $('#city').children('option:selected').val();
@@ -192,4 +199,62 @@
 			location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 			 
 		 }
+	$('.setAppid').on('click',function(){
+		
+		$('#content').html('');
+		var dpid = $(this).attr('dpid');
+		var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid"/></div>'
+					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="code" placeholder="code"/></div>'
+					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><button id="appid_store" class="btn green">确认</button></div>'
+					;
+		$('#content').html(content);
+		//alert(dpid);
+		layer_zhexiantu=layer.open({
+		     type: 1,
+		     //shift:5,
+		     shade: [0.5,'#fff'],
+		     //move:'#main2',
+		     moveOut:true,
+		     offset:['10px','350px'],
+		     shade: false,
+		     title: false, //不显示标题
+		     area: ['auto', 'auto'],
+		     content: $('#main2'),//$('#productInfo'), //捕获的元素
+		     cancel: function(index){
+		         layer.close(index);
+		         layer_zhexiantu=0;
+		     }
+		 });
+
+		   layer.style(layer_zhexiantu, {
+			   backgroundColor: 'rgba(255,255,255,0.2)',
+			 });
+		$('#appid_store').on('click',function(){
+			var appid = $('#appid').val();
+			var code = $('#code').val();
+			//alert(appid);
+			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code;
+	        $.ajax({
+	            url:url,
+	            type:'GET',
+	            //data:orderid,//CF
+	            async:false,
+	            dataType: "json",
+	            success:function(msg){
+	                var data=msg;
+	                if(data.status){
+	                	layer.msg('成功！！！');
+	                	layer.close(layer_zhexiantu);
+	   		        	layer_zhexiantu=0;
+	                }else{
+	                	layer.msg('失败！！！');
+	                }
+	            },
+	            error: function(msg){
+	                layer.msg('网络错误！！！');
+	            }
+	        });
+		});
+	});
+	
 </script>
