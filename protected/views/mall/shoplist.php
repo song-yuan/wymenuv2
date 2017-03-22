@@ -129,6 +129,7 @@
 						var lat = parseFloat($(this).attr('lat'));
 						var lng = parseFloat($(this).attr('lng'));
 						if(isNaN(lat)==''||isNaN(lng)==''){
+							alert(lat);alert(lng);
 							var distance = 10000;
 						}else{
 							var distance = getFlatternDistance(latitude,longitude,lat,lng);
