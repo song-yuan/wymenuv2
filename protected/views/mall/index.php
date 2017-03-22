@@ -229,14 +229,14 @@ function getProduct(){
 					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.set_price+'</span></p>';
          			if(parseInt(pProductSet.num)){
          				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
-         				productSetStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div>';
+         				productSetStr +='<div class="add">+</div><div class="clear"></div></div>';
          			}else{
          				if(parseInt(pProductSet.store_number) != 0){
          					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
-         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
+         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
          				}else{
          					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
-         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
+         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
          				}
          			}
          			productSetStr +='</div><div class="clear"></div>';
