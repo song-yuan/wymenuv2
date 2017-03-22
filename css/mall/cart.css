@@ -58,7 +58,7 @@ input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-
 
 .cart-info {padding:10px;font-size: 16px;background: rgb(255,255,255);}
 .section .taste{background: white;width:100px;height:20px;line-height:20px;text-align:center;border-radius:10px;color:#FF5151;font-size:1.0em;border:1px solid #A09C9C;}
-.section .taste-desc{height:20px;line-height:20px;padding:0 5px;font-size:12px;}
+.section .taste-desc{height:20px;line-height:20px;padding:5px 0;font-size:12px;}
 .section .taste-desc span{height:100%;margin-left:5px;}
 .section .taste-items{display:none;}
 .section .taste-items .item-group{margin:10px;}
@@ -67,7 +67,7 @@ input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-
 .item-group .item.on{border:1px solid #FF5151;}
 
 .section .detail{background: white;width:100px;height:20px;line-height:20px;text-align:center;border-radius:10px;color:#FF5151;font-size:1.0em;border:1px solid #A09C9C;}
-.section .detail-desc{height:20px;line-height:20px;padding:0 5px;font-size:12px;}
+.section .detail-desc{height:20px;line-height:20px;padding:5px 0;font-size:12px;}
 .section .detail-desc span{height:100%;margin-left:5px;}
 .section .detail-items{display:none;}
 .section .detail-items .item-group{margin:10px;}
