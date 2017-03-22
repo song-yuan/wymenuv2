@@ -30,7 +30,7 @@
 					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
-						<div class="info small font_l">地址: <?php echo $child['address'];?></div>
+						<div class="info small font_l">地址: <?php echo $child['province'].$child['city'].$child['county_area'].$child['address'];?></div>
 						<div class="misinfo small font_l"><span class="left">电话: <?php echo $child['telephone'];?></span><span class="right"></span></div>
 					</div>
 				</li>

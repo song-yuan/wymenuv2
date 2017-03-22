@@ -311,7 +311,6 @@
                         </div>
                     </a>
                     <div class="empty1"></div>
-                     <div class="put_into_bg"></div>
                     <!-- 
                      <a class="weui_cell js_cell" href="javascript:;" data-id="tel">
                         <span class="weui_cell_hd"></span>
