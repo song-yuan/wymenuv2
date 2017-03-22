@@ -146,6 +146,7 @@
 						}else{
 							return true;
 						}
+						alert(distance);
 				    });
 				    if($('#allshop').find('li:visible').length == 0){
 						$("#tips").show();
