@@ -135,16 +135,17 @@
 						}
 						if(5000 >= distance >= 1000){
 							distance = (distance/1000).toFixed(2)+'千米';
+							$(this).find('span.right').html(distance);
 							$("#tips").hide();
 							$(this).show();
 						}else if(distance < 1000){
 							distance = distance.toFixed(2)+'米';
+							$(this).find('span.right').html(distance);
 							$("#tips").hide();
 							$(this).show();
 						}else{
 							return true;
 						}
-						$(this).find('span.right').html(distance);
 				    });
 				    if($('#allshop').find('li:visible').length == 0){
 						$("#tips").show();
