@@ -31,7 +31,7 @@ class WxCompany
 	}
 	// 获取总部的字店铺
 	public static function getCompanyChildren($dpid){
-		$sql = 'select * from nb_company where comp_dpid=:dpid and type=1';
+		$sql = 'select * from nb_company where comp_dpid=:dpid and type=1 and delete_flag=0';
 		$companys = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
