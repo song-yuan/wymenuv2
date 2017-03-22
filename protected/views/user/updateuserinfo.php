@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('完善个人资料');
+        $a=$user['user_name']? "个人信息": "会员注册";
+	$this->setPageTitle($a);  
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
@@ -48,7 +49,9 @@
 <form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId));?>" method="post" >
 
 <div class="page cell">
-	<div class="weui_cells_title">完善个人资料</div>
+	<div class="weui_cells_title">
+            <?php  echo $user['user_name']? "个人信息": "会员注册";?>
+        </div>
     <div class="weui_cells weui_cells_form">
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
@@ -73,8 +76,8 @@
                 <input class="weui_input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
-            <div class="weui_cell_ft sentMessage" style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;">
-                <span id="countSpan">获取验证码</span>
+            <div class="weui_cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;">
+                <span id="countSpan" >获取验证码</span>
                 <span id="countdown"></span>
             </div>
             <div class="weui_cell_ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
@@ -82,9 +85,9 @@
             </div>
         </div>
         <div class="weui_cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
-            <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+            <div class="weui_cell_hd" ><label class="weui_label">验证码</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
+                <input class="weui_input" code_type = "<?php echo $user['mobile_num']?'1':'0'?>" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
         </div>
         <div class="weui_cell">
@@ -100,7 +103,8 @@
 	<button class="bttn_black2 bttn_large backUrl" type="button">取消</button>
 	<button class="bttn_black2 bttn_large" type="submit" onclick="return validate()">保存</button>
 </div>
-<input type="hidden" name="user[lid]" value="<?php echo $user['lid'];?>"/>
+<input type="hidden" id="user_id" name="user[lid]" value="<?php echo $user['lid'];?>"/>
+<input type="hidden" id="user_id" name="user[dpid]" value="<?php echo $user['dpid'];?>"/>
 </form>
 <div class="weui_dialog_alert" id="dialog2" style="display: none;">
 	<div class="weui_mask"></div>
@@ -171,10 +175,12 @@
         if(verify_flag){
             var success = true;
             var verifyCode = $('#verifyCode').val();
-            var mobile = $('#mobile').val()
+            var mobile = $('#mobile').val();
+            
+        
             $.ajax({
                     url:'<?php echo $this->createUrl('/user/ajaxVerifyCode',array('companyId'=>$this->companyId));?>',
-                    data:{mobile:mobile,code:verifyCode},
+                    data:{mobile:mobile, code:verifyCode},
                     async: false,
                     success:function(msg){
                             if(!parseInt(msg)){
@@ -234,9 +240,12 @@ $('document').ready(function(){
             return false; 
         }
         $('.sentMessage').addClass('disable');
+        var type = $('#verifyCode').attr('code_type');
+        var user_id = $('#user_id').val();
+        
         $.ajax({
                 url:'<?php echo $this->createUrl('/user/ajaxSentMessage',array('companyId'=>$this->companyId));?>',
-                data:{mobile:mobile},
+                data:{mobile:mobile,type:type,user_id:user_id},
                 success:function(msg){
                         if(!parseInt(msg)){
                                 $('#dialog2').find('.weui_dialog_bd').html('发送失败!'+msg);

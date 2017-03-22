@@ -21,6 +21,7 @@
 									case 3: $roles = $this->roles3;break;
 									case 5: $roles = $this->roles5;break;
 									case 7: $roles = $this->roles7;break;
+                                                                        case 8: $roles = $this->roles8;break;
 									case 9: $roles = $this->roles9;break;
 									case 11: $roles = $this->roles11;break;
 									case 13: $roles = $this->roles13;break;

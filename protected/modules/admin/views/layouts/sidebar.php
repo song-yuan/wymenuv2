@@ -15,7 +15,8 @@
                     </a>
             </li>
             -->
-   <?php if(Yii::app()->user->role <= '15') : ?>
+   <?php if(Yii::app()->user->role <= '15'): ?>
+        <?php if(Yii::app()->user->role != '8'): ?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWifi', 'user' ,'synchronous','poscode','postable','connectUs','uploadApk' ))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('company/list',array('companyId' => $this->companyId));?>">
                         <i class="fa fa-home"></i> 
@@ -28,7 +29,7 @@
                     <span class="title"><?php echo yii::t('app','基础设置');?></span>					
                 </a>
             </li>
-            
+        <?php endif; ?>    
 
             <!-- <li class="<?php if(in_array(Yii::app()->controller->id , array('taste'))) echo 'active';?>">
                     <a href="">
@@ -88,6 +89,7 @@
                         <span class="title"><?php echo yii::t('app','微信赠券');?></span>					
                     </a>
             </li>
+        <?php if(Yii::app()->user->role != '8'): ?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('entityCard','memberWxlevel'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('entityCard/list',array('companyId' => $this->companyId));?>">
                         <i class="fa fa-credit-card"></i> 
@@ -112,6 +114,8 @@
                     <span class="title"><?php echo yii::t('app','报表中心');?></span>					
                     </a>
             </li>
+        <?php endif; ?>
+
             <?php if(Yii::app()->user->role ==1):?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('cfceshi',))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('cfceshi/list',array('companyId' => $this->companyId,'type'=>0));?>">

@@ -113,6 +113,12 @@
                                             <div class="list_text">模板消息</div>
                                         </a> 
                                     </div>
+                                    <div class="col-sm-3 col-xs-6">
+                                        <a href="<?php echo $this->createUrl('mobileMessage/index',array('companyId' => $this->companyId))?>">
+                                            <span class="fa fa-envelope  list_picture"></span>
+                                            <div class="list_text">短信</div>
+                                        </a> 
+                                    </div>
                             </div> 
                         </div>
                     </div>
