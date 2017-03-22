@@ -6,6 +6,7 @@ class UserController extends BackendController
 	public $roles3;
 	public $roles5;
 	public $roles7;
+        public $roles8;
 	public $roles9;
 	public $roles11;
 	public $roles13;
@@ -17,6 +18,7 @@ class UserController extends BackendController
 			'3' => yii::t('app','超级副管理员'),
 			'5' => yii::t('app','总部管理员'),
 			'7' => yii::t('app','总部副管理员'),
+                        '8' => yii::t('app','营销员'),
 			'9' => yii::t('app','区域管理员'),
 			'11' => yii::t('app','店长'),
 			'13' => yii::t('app','副店长'),
@@ -48,6 +50,8 @@ class UserController extends BackendController
 			'19' => yii::t('app','服务员'),
 		) ;
 		//总部副管理员的权限
+                
+               
 		$this->roles9 = array(
 				'11' => yii::t('app','店长'),
 				'13' => yii::t('app','副店长'),

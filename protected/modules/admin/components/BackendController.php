@@ -8,7 +8,7 @@ class BackendController extends CController
 		parent::beforeAction($action);
 		$controllerId = Yii::app()->controller->getId();
 		$action = Yii::app()->controller->getAction()->getId();   
-		//var_dump(Yii::app()->user->companyId);             
+	//var_dump(Yii::app()->user->companyId);             
         //$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
         //var_dump(Yii::app()->user->role);exit;
 		if(Yii::app()->user->isGuest) {
