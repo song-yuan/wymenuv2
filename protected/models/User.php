@@ -28,14 +28,15 @@ class User extends CActiveRecord
 	
 	const POWER_ADMIN = 1;				//超级管理员
 	const POWER_ADMIN_VICE = 3;			//超级副管理员
-	const ADMIN = 5;					//总部管理员
+	const ADMIN = 5;				//总部管理员
 	const ADMIN_VICE = 7;				//总部副管理员
+        const SALESMAN = 8;                             //营销员
 	const ADMIN_AREA = 9;				//区域管理员
 	const SHOPKEEPER = 11;				//店长
 	const SHOPKEEPER_VICE = 13;			//副店长
-	const GROUPER = 15;					//组长
-	const CASHIER = 17;					//收银员
-	const WAITER = 19;					//服务员
+	const GROUPER = 15;				//组长
+	const CASHIER = 17;				//收银员
+	const WAITER = 19;				//服务员
 	/**
 	 * @return string the associated database table name
 	 */

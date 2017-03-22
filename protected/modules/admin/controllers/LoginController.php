@@ -49,7 +49,8 @@ class LoginController extends BackendController
 				$this->redirect(array('welcome/list/companyId/'.Yii::app()->user->companyId));
 				
 			}
-		}//var_dump(Yii::app()->user->companyId);exit;
+		}//
+                //var_dump(Yii::app()->user->companyId);exit;
 		$this->render('index',array('model' => $model));
 	}
 	public function actionLogout()
