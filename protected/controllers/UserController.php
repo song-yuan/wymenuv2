@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','ticket','oldindex','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo'))){
+		if(in_array($actin->id,array('index','ticket','oldindex','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -319,6 +319,17 @@ class UserController extends Controller
 				$this->redirect(array('/user/address','companyId'=>$this->companyId));
 			}
 		};
+	}
+	/**
+	 * 
+	 * 实体卡绑定
+	 * 
+	 */
+	public function actionBindMemberCard()
+	{
+		$userId = Yii::app()->session['userId'];
+		$user = WxBrandUser::get($userId, $this->companyId);
+		$this->render('setaddress',array('company'=>$company,'user'=>$user));
 	}
 	// 未使用现金券
 	public function actionCupon()

@@ -24,9 +24,9 @@
 		<div class="search"><input id="name-search" type="text" value="" placeholder="请输入搜索关键字"></div>
 		<div class="shopcontainer">
 			<!-- 全部门店 -->
-			<ul id="allshop" class="shown">
+			<ul id="allshop">
 				<?php foreach ($children as $child):?>
-				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>" style="display:none;">
+				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" shop-id="<?php echo $child['dpid'];?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
@@ -37,7 +37,10 @@
 				<?php endforeach;?>
 			</ul>
 			<!-- 全部门店 -->
-			<div id="tips" class="info" style="display:none;text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
+			<ul id="activeshop" class="shown">
+			
+			</ul>
+			<div id="tips" class="info" style="text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
 	    </div>
 	</div>
 	<script type="text/javascript">
@@ -82,13 +85,9 @@
 	        
 	        return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
 	    }
-	    $('li').click(function(){
-		    var href = $(this).attr('href');
-		    location.href = href;
-		});
-		
-		$("#name-search").change(function(){
-			var search = $(this).val();
+	    function searchShop(){
+		    var shopStr = '';
+	    	var search = $(this).val();
 			$('li').hide();
 			if(search==''){
 				return;
@@ -97,14 +96,23 @@
 			 	var name = $(this).find('h1').html();
 	 	 	 	var patt = new RegExp(search);
 		 	  	if(patt.test(name)){
-					$(this).show();
+		 	  		shopStr +=$(this).prop("outerHTML");
 			 	}
 		 	});	 
-		 	if($('#allshop').find('li:visible').length == 0){
+		 	if(shopStr==''){
 				$("#tips").show();
 			}else{
 				$("#tips").hide();
+				$("#activeshop").html(shopStr);
 			}
+	    }
+	    $('li').click(function(){
+		    var href = $(this).attr('href');
+		    location.href = href;
+		});
+		
+		$("#name-search").change(function(){
+			searchShop();
 		});
 	    wx.ready(function () {
 	    	wx.getLocation({
@@ -139,6 +147,8 @@
 				    });
 				    if($('#allshop').find('li:visible').length == 0){
 						$("#tips").show();
+					}else{
+						searchShop();
 					}
 			    }
 			});
