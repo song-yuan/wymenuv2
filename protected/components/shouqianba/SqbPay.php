@@ -510,9 +510,9 @@ class SqbPay{
     		$paramsStr = rtrim($paramsStrs,"&");
     		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
     		$paramsStr = $paramsStr."&sign=".$sign;
-    		 
-    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
     		var_dump($paramsStr);exit;
+    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
+    		exit;
     	}else{
     		$result = array(
     				"return_code"=>"ERROR",
