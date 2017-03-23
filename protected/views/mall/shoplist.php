@@ -31,7 +31,7 @@
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
 						<div class="info small font_l">地址: <?php echo $child['province'].$child['city'].$child['county_area'].$child['address'];?></div>
-						<div class="misinfo small font_l"><span class="left">电话: <?php echo $child['telephone'];?></span><span class="right"></span></div>
+						<div class="misinfo small"><span class="left font_l">电话: <?php echo $child['telephone'];?></span><span class="right"></span></div>
 					</div>
 				</li>
 				<?php endforeach;?>
@@ -116,7 +116,7 @@
 	    function sortShop(oriarr,arr){
 		    var str = '';
 	    	var originArr = oriarr;
-	    	arr.sort();
+	    	arr.sort(sortNumber);
 		    for(var k in arr){
 			    if(arr[k]!=""){
 			    	var index = originArr.indexOf(arr[k]);
