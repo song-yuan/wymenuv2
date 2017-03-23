@@ -116,7 +116,7 @@
 	    function sortShop(oriarr,arr){
 		    var str = '';
 	    	var originArr = oriarr;
-	    	arr.sort();
+	    	arr.sort(sortNumber);
 		    for(var k in arr){
 			    if(arr[k]!=""){
 			    	var index = originArr.indexOf(arr[k]);
