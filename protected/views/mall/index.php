@@ -1,6 +1,12 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('自助点单');
+	if($this->type==2){
+		$this->setPageTitle('外卖点单');
+	}elseif($this->type==6){
+		$this->setPageTitle('店堂点单');
+	}else{
+		$this->setPageTitle('自助点单');
+	}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
@@ -267,7 +273,7 @@ $(document).ready(function(){
 	var j = 0;
 	window.load = getProduct(); 
 	
-    $('#nav').on('click','li',function(){
+    $('#nav').on('touchstart','li',function(){
     	var _this = $(this);
     	var href = _this.find('a').attr('href');
         $('#nav').find('li').removeClass('current');
