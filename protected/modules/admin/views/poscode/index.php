@@ -162,7 +162,7 @@
            	//return false;
             $.ajax({
                 type:'POST',
-    			url:"<?php echo $this->createUrl('cfceshi/sqbactivate',array('companyId'=>$this->companyId,));?>",
+    			url:"<?php echo $this->createUrl('poscode/sqbactivate',array('companyId'=>$this->companyId,));?>",
     			async: false,
                 data: {
                 	device_id: device_id,
