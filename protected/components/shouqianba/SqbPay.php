@@ -570,5 +570,26 @@ class SqbPay{
     	return $result;
     
     }
+    public static function prequery($data){
+    	/*该接口用于查询，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
+    	$terminal_sn = $data['terminal_sn'];
+    	$terminal_key = $data['terminal_key'];
+    	/*终端号及终端秘钥*/
+    	$sn = $data['sn'];
+    	/*收钱吧系统内部唯一订单号*/
+    	$clientSn = $data['client_sn'];
+    	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
+    	 
+    	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/query';
+    	$data = array(
+    			'terminal_sn'=>$terminal_sn,
+    			'sn'=>$sn,
+    			'client_sn'=>$clientSn,
+    	);
+    	$body = json_encode($data);
+    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+    	return $result;
+    
+    }
 }
 ?>
