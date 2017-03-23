@@ -187,11 +187,11 @@
 }
 
 .shops div.left {
-	width: 30%;
+	width: 10%;
 }
 
 .shops div.right {
-	width: 67%;
+	width: 90%;
 	overflow: hidden;
 }
 
@@ -218,10 +218,8 @@
 }
 
 .shops .misinfo {
-	position: absolute;
-	bottom: 14px;
 	overflow: hidden;
-	width: 65%;
+	width: 90%;
 
 }
 

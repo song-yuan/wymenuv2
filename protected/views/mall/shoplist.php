@@ -27,7 +27,7 @@
 			<ul id="allshop">
 				<?php foreach ($children as $k=>$child):?>
 				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
-					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
+					<div class="left"><img src="<?php echo $baseUrl.'/img/mall/icon_location.png';?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
 						<div class="info small font_l">地址: <?php echo $child['province'].$child['city'].$child['county_area'].$child['address'];?></div>
@@ -128,7 +128,7 @@
 		    $("#activeshop").html(str);
 	    }
 
-	    $('body').on('click','li',function(){
+	    $('#activeshop').on('click','li',function(){
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
