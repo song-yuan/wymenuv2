@@ -512,6 +512,7 @@ class SqbPay{
     		$paramsStr = $paramsStr."&sign=".$sign;
     		 
     		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
+    		var_dump($paramsStr);exit;
     	}else{
     		$result = array(
     				"return_code"=>"ERROR",

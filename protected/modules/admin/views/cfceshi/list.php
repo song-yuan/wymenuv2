@@ -70,7 +70,8 @@
 						<div class="col-md-offset-9 col-md-3">
 							<button style="display: none;" type="button" class="btn green" id="stocktaking">激活</button> 
 							<button style="display: none;" type="button" class="btn green" id="stockCheck">签到</button> 
-							<button type="button" class="btn green" id="stockOrder">预下单</button>   
+							<button type="button" class="btn green" id="stockOrder">预下单</button>  
+							<button type="button" class="btn green" id="stockWappay">公众号支付</button>  
 							<button type="button" class="btn green" id="stockPayWei">微信支付</button> 
 							<button type="button" class="btn green" id="stockPayAli">支付宝支付</button> 
 							<button type="button" class="btn green" id="stockRefundWei">微信退款</button>
@@ -278,7 +279,7 @@
 	    
 	});
 	$("#stockOrder").on("click",function(){
-	
+		return false;
 	    var device_id = $("#device_id").val();
 	    $.ajax({
 	        type:'POST',
@@ -307,4 +308,33 @@
 	    
 	});
 
+	$("#stockWappay").on("click",function(){
+		
+	    var device_id = $("#device_id").val();
+	    $.ajax({
+	        type:'POST',
+			url:"<?php echo $this->createUrl('cfceshi/sqbprecreate',array('companyId'=>$this->companyId,));?>/pad_code/"+device_id,
+			async: false,
+			data: {device_id: device_id},
+	        //cache:false,
+	        dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg.status=="success")
+	            {            
+		            
+			        layer.msg("成功！");
+			          
+		            //location.reload();
+	            }else{
+		            layer.mag("11");
+		            //location.reload();
+	            }
+			},
+	        error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+	    
+	});
 	</script>
