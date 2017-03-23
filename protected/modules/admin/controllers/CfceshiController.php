@@ -42,7 +42,7 @@ class CfceshiController extends BackendController
 		$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$this->companyId,':deviceid'=>$device_id));
 		//var_dump($obj);exit;
 		if($obj['result_code']=='400'){
-			Yii::app()->end(json_encode(array("status"=>"error",'msg'=>'不能重复激活！！！')));
+			Yii::app()->end(json_encode(array("status"=>"error",'msg'=>'不能激活！！！')));
 		}else{
 			if(!empty($devicemodel)){
 				Yii::app()->db->createCommand('update nb_sqb_posseting set terminal_key='.$obj['biz_response']['terminal_key'].' where device_id ='.$device_id.' and dpid ='.$this->companyId)
