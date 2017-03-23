@@ -453,7 +453,7 @@ class SqbPay{
     
     }
     
-    public static function PreOrder($data){
+    public static function preOrder($data){
     	 
     	$dpid = $data['dpid'];
     	$client_sn = $data['client_sn'];

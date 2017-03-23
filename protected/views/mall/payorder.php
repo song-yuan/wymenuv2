@@ -52,6 +52,10 @@
 			$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		}elseif($payChannel==2){
 			$jsApiParameters = '{dpid:"'.$this->companyId.'",account_no:"'.$orderId.'",should_total:"'.$payPrice.'",payType:3,abstract:"'.$company['company_name']."-微信点餐订单".'",userName:"'.$user['nickname'].'",notify_url:"'.$notifyUrl.'"}';
+			$data = array(
+					
+			);
+			SqbPay::preOrder($data);
 		}else{
 			$jsApiParameters = '';
 		}
@@ -197,20 +201,6 @@
 				 }     
 			}
 		);
-		<?php elseif($payChannel==2):?>
-		$.ajax({
-				url:'<?php echo $this->createUrl('/mall/payPreOrder',array('companyId'=>$this->companyId));?>',
-				data:<?php echo $jsApiParameters;?>,
-				type:'POST',
-				dataType:'json',
-				success:function(msg){
-					alert(msg);
-					alert(JSON.stringify(msg));
-				},
-				error:function(){
-					layer.msg('支付失败,请重新支付!');
-				}
-			});
 		<?php else:?>
 		layer.msg('无支付信息,请联系客服!');
 		<?php endif;?>
