@@ -26,22 +26,33 @@ class WxSentMessage
 	 * 记录短信
 	 * 
 	 */
-	public static function insert($dpid,$mobile,$code){
+	public static function insert($dpid,$mobile,$code,$type,$user_id){      
 		$time = time();
 		$se = new Sequence("mobile_message");
-	    $lid = $se->nextval();
+                $lid = $se->nextval();
 		$insertArr = array(
 			        	'lid'=>$lid,
 			        	'dpid'=>$dpid,
 			        	'create_at'=>date('Y-m-d H:i:s',$time),
-			        	'update_at'=>date('Y-m-d H:i:s',$time), 
+			        	'update_at'=>date('Y-m-d H:i:s',$time),
+                                        'user_id' => $user_id,
+                                        'type'=>$type,
 			        	'mobile'=>$mobile,
 			        	'code'=>$code,
 			        	'is_sync'=>DataSync::getInitSync(),
 			        );
 		$result = Yii::app()->db->createCommand()->insert('nb_mobile_message', $insertArr);
-		return $result;
+		return array('status'=>$result,'lid'=>$lid);
 	}
+	/**
+	 * 
+	 * 查找短信
+	 * 
+	 */
+        public static function update($lid,$status){  
+            $sql = 'UPDATE nb_mobile_message set status = '.$status .' WHERE  lid = ' .$lid  ;
+            $result = Yii::app()->db->createCommand($sql)->execute(); 
+        }      
 	/**
 	 * 
 	 * 查找短信
@@ -52,6 +63,7 @@ class WxSentMessage
 		$result = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':mobile',$mobile)
 				  ->bindValue(':dpid',$dpid)
+                                 
 				  ->queryRow();
 	    return $result;
 	}

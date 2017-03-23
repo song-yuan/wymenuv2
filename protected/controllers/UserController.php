@@ -34,7 +34,7 @@ class UserController extends Controller
 				Yii::app()->session['userId'] = $userId;
 			}else{
 				//pc 浏览
-				$userId = 2082;
+				$userId = 1978;
 				Yii::app()->session['userId'] = $userId;
 			}
 		} 
@@ -245,7 +245,7 @@ class UserController extends Controller
 	{
 		if(Yii::app()->request->isPostRequest){
 			$userInfo = Yii::app()->request->getPost('user');
-			$userInfo['dpid'] = $this->companyId;
+                       
 			$result = WxBrandUser::update($userInfo);
 			if($result){
 				WxCupon::getWxSentCupon($this->companyId, 1, $userInfo['lid'],$this->brandUser['openid']);
@@ -549,8 +549,10 @@ class UserController extends Controller
 	{
 		$mobile = Yii::app()->request->getParam('mobile');
 		$code = Yii::app()->request->getParam('code');
+               
 		$mobile = trim($mobile);
 		$code = trim($code);
+               
 		$result = WxSentMessage::getCode($this->companyId,$mobile);
 		if($result && $result['code'] == $code){
 			echo 1;
@@ -564,15 +566,21 @@ class UserController extends Controller
 	 * 发送短信
 	 * 
 	 */
-	 public function actionAjaxSentMessage()
-	{
+	 public function actionAjaxSentMessage()                 
+	{       
+                $user_id = Yii::app()->request->getParam('user_id');
 		$mobile = Yii::app()->request->getParam('mobile');
+                $type = Yii::app()->request->getParam('type');
 		$code = rand(1000,9999);
-		if(WxSentMessage::insert($this->companyId,$mobile,$code)){
+                $message =  WxSentMessage::insert($this->companyId,$mobile,$code,$type,$user_id);
+                
+		if($message['status']){
+                        $lid= $message['lid'];
 			$content = '【物易科技】您的验证码是：'.$code;
 			$result = WxSentMessage::sentMessage($mobile,$content);
 			$resArr = json_decode($result);
 			if($resArr->returnstatus=='Success'){
+                            WxSentMessage::update($lid ,1);
 				echo 1;
 			}else{
 				echo 0;
@@ -580,6 +588,8 @@ class UserController extends Controller
 		}else{
 			echo 0;
 		}
+              
+                
 		exit;
 	}
 	private function weixinServiceAccount() {	

@@ -13,6 +13,7 @@ class MallController extends Controller
 	public $type = 0;
 	public $weixinServiceAccount;
 	public $brandUser;
+	public $company;
 	public $layout = '/layouts/mallmain';
 	
 	
@@ -22,10 +23,10 @@ class MallController extends Controller
 		$type = Yii::app()->request->getParam('type',6);
 		$this->companyId = $companyId;
 		$this->type = $type;
-		$company = WxCompany::get($this->companyId);
+		$this->company = WxCompany::get($this->companyId);
 		if($company['type']=='0'){
 			$children = WxCompany::getCompanyChildren($this->companyId);
-			$this->render('shoplist',array('companyId'=>$this->companyId,'children'=>$children));
+			$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type,'children'=>$children));
 			exit;
 		}
 	}
@@ -113,7 +114,6 @@ class MallController extends Controller
 		$siteNum = false;
 		$siteOpen = false;
 		
-		$company = WxCompany::get($this->companyId);
 		$site = WxSite::get($siteId,$this->companyId);
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
@@ -141,7 +141,7 @@ class MallController extends Controller
 		
 		$address = WxAddress::getDefault($userId,$this->companyId);
 		
-		$this->render('checkorder',array('company'=>$company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -271,7 +271,6 @@ class MallController extends Controller
 		$packingFee = 0;
 		$freightFee = 0;
 		
-		$company = WxCompany::get($this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] > 2){
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
@@ -303,7 +302,7 @@ class MallController extends Controller
 
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		$user = WxBrandUser::get($userId,$this->companyId);
-	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	/**
 	 * 
