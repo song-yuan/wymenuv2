@@ -24,7 +24,7 @@ class ProductCategoryController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' tree,lid asc ';
+		$criteria->order = ' tree,order_num,lid asc ';
 		
 		$models = ProductCategory::model()->findAll($criteria);
 		

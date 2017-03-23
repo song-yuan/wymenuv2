@@ -64,7 +64,7 @@
 								<?php echo yii::t('app','*:必须设置二级分类');?><br>
 								<?php echo yii::t('app','*:分类之间名称不能重复');?><br></span>
                                 <?php echo yii::t('app','说明');?>：<br>
-                                <?php echo yii::t('app','1:（）内数字是各个分类的产品在前台的显示顺序，数值越大的排在最前面。');?><br>
+                                <?php echo yii::t('app','1:（）内数字是各个分类的产品在前台的显示顺序，数值越小的排在最前面。');?><br>
                                 <?php echo yii::t('app','2:所有数字小于9999');?><br>
                                 <?php echo yii::t('app','3:一级分类排好顺序后，不同一级分类内的二级分类排序数值不要交叉。');?>
                                 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo yii::t('app','如：三个一级分类显示顺序是1、2、3，');?>
