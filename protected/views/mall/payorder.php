@@ -19,6 +19,7 @@
 	
 	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
+	$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	
 	$payChannel = 0;
@@ -51,9 +52,15 @@
 			
 			$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		}elseif($payChannel==2){
-			$jsApiParameters = '{dpid:"'.$this->companyId.'",account_no:"'.$orderId.'",should_total:"'.$payPrice.'",payType:3,abstract:"'.$company['company_name']."-微信点餐订单".'",userName:"'.$user['nickname'].'",notify_url:"'.$notifyUrl.'"}';
 			$data = array(
-					
+					'dpid'=>$this->companyId,
+					'client_sn'=>$orderId,
+					'total_amount'=>$payPrice,
+					'subject'=>$company['company_name']."-微信点餐订单",
+					'payway'=>3,
+					'operator'=>$user['nickname'],
+					'notify_url'=>$notifyUrl,
+					'notify_url'=>$notifyUrl,
 			);
 			SqbPay::preOrder($data);
 		}else{
@@ -194,7 +201,7 @@
 				 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 				 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
 				 	layer.msg('支付成功!');
-				 	location.href = '<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
+				 	location.href = '<?php echo $returnUrl;?>';
 				 }else{
 				 	//支付失败或取消支付
 					 layer.msg('支付失败,请重新支付!');
