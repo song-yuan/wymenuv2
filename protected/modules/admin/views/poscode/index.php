@@ -58,8 +58,8 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','POS序列');?></th>
-                                <th><?php echo yii::t('app','POS秘钥');?></th>
+								<th><?php echo yii::t('app','序号');?></th>
+                                <th><?php echo yii::t('app','POS序列号');?></th>
                                 <th><?php echo yii::t('app','是否使用');?></th>
                                 <th><?php echo yii::t('app','模式');?></th>
                                 <th><?php echo yii::t('app','线上支付');?></th>
@@ -83,7 +83,7 @@
 											case 0: echo '未开通线上支付';break;
 											case 1: echo '未激活线上支付';break;
 											case 2: echo '已激活线上支付';break;
-											default: echo '位置状态';break;
+											default: echo '未知状态';break;
 								}?></td>
 								<td><?php if($model->detail) echo $model->detail[0]->content;?></td>
 								<td class="center">
