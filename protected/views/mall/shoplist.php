@@ -27,8 +27,10 @@
 			<ul id="allshop">
 				<?php foreach ($children as $k=>$child):?>
 				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
+					<!--  
 					<div class="left"><img src="<?php echo $baseUrl.'/img/mall/icon_location.png';?>"></div>
-					<div class="right">
+					-->
+					<div class="right" style="width:100%;">
 						<h1><?php echo $child['company_name'];?></h1>
 						<div class="info small font_l" style="margin-top:5px;">地址: <?php echo $child['province'].$child['city'].$child['county_area'].$child['address'];?></div>
 						<div class="misinfo small" style="margin-top:5px;"><span class="left font_l">电话: <?php echo $child['telephone'];?></span><span class="right font_org"></span></div>
