@@ -76,5 +76,49 @@ class PoscodeController extends BackendController
 			$this->redirect(array('poscode/index' , 'companyId' => $companyId)) ;
 		}
 	}
+	
+	public function actionSqbactivate(){
+		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$this->companyId));
+		if(!empty($compros)){
+			$appId = $compros['appId'];
+			$code = $compros['code'];
+		}else{
+			Yii::app()->end(json_encode(array("status"=>"ERROR",'msg'=>'尚未开通')));
+			exit;
+		}
+		//var_dump($_POST);exit;
+		//$result = SqbPay::activate($_POST);
+		$device_id = $_POST['device_id'];
+		$result = SqbPay::activate(array('device_id'=>$device_id,'appId'=>$appId,'code'=>$code));
+		$obj = json_decode($result,true);
+		$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$this->companyId,':deviceid'=>$device_id));
+		//var_dump($obj);exit;
+		if($obj['result_code']=='400'){
+			Yii::app()->end(json_encode(array("status"=>"error",'msg'=>'激活失败！！！')));
+		}else{
+			if(!empty($devicemodel)){
+				Yii::app()->db->createCommand('update nb_sqb_posseting set terminal_key='.$obj['biz_response']['terminal_key'].' where device_id ='.$device_id.' and dpid ='.$this->companyId)
+				->execute();
+			}else{
+	
+				//$obj = json_decode($result,true);
+				$comset=new SqbPossetting();
+				$se=new Sequence("sqb_possetting");
+				$comset->lid = $se->nextval();
+				$comset->dpid=$this->companyId;
+				$comset->create_at = date('Y-m-d H:i:s',time());
+				$comset->update_at = date('Y-m-d H:i:s',time());
+				$comset->device_id = $device_id;
+				$comset->terminal_sn = $obj['biz_response']['terminal_sn'];
+				$comset->terminal_key = $obj['biz_response']['terminal_key'];
+				$comset->key_validtime = date('Ymd',time());
+				$comset->save();
+	
+				Yii::app()->db->createCommand('update nb_pad_setting set pay_activate=2 where pad_code ='.$device_id.' and dpid ='.$this->companyId)
+				->execute();
+			}
+			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+		}
+	}
 
 }
