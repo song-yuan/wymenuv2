@@ -60,7 +60,7 @@ class SqbPay{
     	$operator = $data['operator'];
     	
     	/*查询设备对应的支付秘钥和支付平台对应的终端号*/
-    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid,$device_id);
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
@@ -267,7 +267,6 @@ class SqbPay{
     public static function precreate($data){
     	
     	$dpid = $data['dpid'];
-    	$device_id = $data['pad_code'];
     	$clientSn = $data['account_no'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
     	$total_amount = ''.$data['should_total']*100;
@@ -282,8 +281,7 @@ class SqbPay{
     	/*发起本次交易的操作员*/
     	$notify_url = $data['notify_url'];
     	
-    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid and delete_flag = 0',array(':dpid'=>$dpid,':deviceid'=>$device_id));
-    	var_dump($devicemodel);exit;
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid);
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
@@ -317,12 +315,15 @@ class SqbPay{
     	$operator = $data['operator'];
     	
     	/*查询设备对应的支付秘钥和支付平台对应的终端号*/
-    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid,$device_id);
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
-    		$result = array('status'=>false, 'result'=>false,);
+    		$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
     		return $result;
     	}
     	
@@ -442,12 +443,85 @@ class SqbPay{
     		}
     		
     	}else{
-    		$result = array('status'=>false);
+    		$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
     	}
     	//var_dump($result);exit;
     	return $result;
     
     }
+    
+    public static function PreOrder($data){
+    	 
+    	$dpid = $data['dpid'];
+    	$client_sn = $data['client_sn'];
+    	/*必须在商户系统内唯一；且长度不超过32字节*/
+    	$total_amount = ''.$data['total_amount']*100;
+    	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
+    	$subject = $data['subject'];
+    	/*本次交易的简要介绍*/
+    	$payway = $data['payway'];
+    	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
+    	$operator = $data['operator'];
+    	/*发起本次交易的操作员*/
+    	$notify_url = $data['notify_url'];
+    	/*发起本次交易的回调地址*/
+    	$return_url = $data['return_url'];
+    	/*发起本次交易的返回地址*/
+    	
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid);
+    	if(!empty($devicemodel)){
+    		$terminal_sn = $devicemodel['terminal_sn'];
+    		$terminal_key = $devicemodel['terminal_key'];
+    	}else{
+    		$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	$data = array(
+    			'terminal_sn'=>$terminal_sn,
+    			'client_sn'=>$client_sn,
+    			'total_amount'=>$total_amount,
+    			'subject'=>$subject,
+    			'payway'=>$payway,
+    			'operator'=>$operator,
+    			'notify_url'=>$notify_url,
+    			'return_url'=>$return_url
+    	);
+    	ksort($data);
+    	$paramsStrs = '';
+    	if(is_array($data)){
+    	foreach($data as $k => $v)
+	    	{
+	    		$paramsStrs .= $k.'='.$v.'&';
+	    	}
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	if(!empty($paramsStrs)){
+    		$paramsStr = rtrim($paramsStrs,"&");
+    		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
+    		$paramsStr = $paramsStr."&sign=".$sign;
+    		 
+    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	
+    } 
+    
     public static function cancel($type,$data){
     	/*该接口用于撤单，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
     	$terminal_sn = $data['terminal_sn'];
