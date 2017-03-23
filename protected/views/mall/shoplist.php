@@ -26,7 +26,7 @@
 			<!-- 全部门店 -->
 			<ul id="allshop">
 				<?php foreach ($children as $k=>$child):?>
-				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="0" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
+				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
@@ -85,6 +85,9 @@
 	        
 	        return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
 	    }
+	    function sortNumber(a,b){ 
+			return a - b 
+		} 
 	    function searchShop(){
 		    var shopStr = '';
 	    	var search = $('#name-search').val();
@@ -115,13 +118,17 @@
 	    	var originArr = oriarr;
 	    	arr.sort();
 		    for(var k in arr){
-		    	var index = originArr.indexOf(arr[k]);
-		    	str +=$('li[searil="'+index+'"][distance="'+arr[k]+'"]').prop("outerHTML");
+			    if(arr[k]!=""){
+			    	var index = originArr.indexOf(arr[k]);
+			    	str +=$('li[searil="'+index+'"][distance="'+arr[k]+'"]').prop("outerHTML");
+				}else{
+					str +=$('li[searil="'+k+'"]').prop("outerHTML");
+				}
 		    }
 		    $("#activeshop").html(str);
 	    }
 
-	    $('li').click(function(){
+	    $('body').on('click','li',function(){
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
