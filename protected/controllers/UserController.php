@@ -329,7 +329,7 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId, $this->companyId);
-		$this->render('setaddress',array('company'=>$company,'user'=>$user));
+		$this->render('bindmemcard',array('company'=>$company,'user'=>$user));
 	}
 	// 未使用现金券
 	public function actionCupon()

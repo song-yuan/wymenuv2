@@ -174,7 +174,7 @@
 }
 
 .shops ul li {
-	padding: 10px 0px;
+	padding: 10px;
 	border-bottom: 1px #CCCCCC solid;
 	overflow: hidden;
 	position: relative;
@@ -191,7 +191,7 @@
 }
 
 .shops div.right {
-	width: 90%;
+	width: 100%;
 	overflow: hidden;
 }
 
