@@ -24,7 +24,7 @@ class MallController extends Controller
 		$this->companyId = $companyId;
 		$this->type = $type;
 		$this->company = WxCompany::get($this->companyId);
-		if($company['type']=='0'){
+		if($this->company['type']=='0'){
 			$children = WxCompany::getCompanyChildren($this->companyId);
 			$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type,'children'=>$children));
 			exit;
@@ -714,18 +714,6 @@ class MallController extends Controller
 		}else{
 			echo 0;
 		}
-		exit;
-	}
-	/**
-	 *
-	 * 判断购物车是否为空
-	 *
-	 */
-	public function actionPayPreOrder()
-	{
-		$data = $_POST;
-		$result = SqbPay::precreate($data);
-		echo $result;
 		exit;
 	}
 	private function weixinServiceAccount() {	
