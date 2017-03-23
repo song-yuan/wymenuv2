@@ -30,7 +30,7 @@ class PoscodeController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$is_onlinepay = CompanyProperty::model()->find('dpid=:dpid',array(':dpid'=>$this->companyId));
 			if(!empty($is_onlinepay)){
-				if($is_onlinepay['pay_type']){
+				if($is_onlinepay['pay_type']&&$is_onlinepay['pay_channel']=='2'){
 					$pay_act = '1';
 				}else{
 					$pay_act = '0';
