@@ -60,7 +60,7 @@
 					'payway'=>3,
 					'operator'=>$user['nickname'],
 					'notify_url'=>$notifyUrl,
-					'notify_url'=>$notifyUrl,
+					'return_url'=>$notifyUrl,
 			);
 			SqbPay::preOrder($data);
 		}else{
