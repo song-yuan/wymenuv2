@@ -37,7 +37,7 @@ class CfceshiController extends BackendController
 		//var_dump($_POST);exit;
 		//$result = SqbPay::activate($_POST);
 		$device_id = $_POST['device_id'];
-		$result = SqbPay::activate(array('code'=>'14599168','device_id'=>$device_id,'appId'=>$appId,'code'=>$code));
+		$result = SqbPay::activate(array('device_id'=>$device_id,'appId'=>$appId,'code'=>$code));
 		$obj = json_decode($result,true);
 		$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$this->companyId,':deviceid'=>$device_id));
 		//var_dump($obj);exit;
@@ -157,15 +157,15 @@ class CfceshiController extends BackendController
 		$is_temp = 1;
 		$orderid = '0000026834';
 		
-		$result = SqbPay::precreate(array(
+		$result = SqbPay::preOrder(array(
 				'dpid'=>$dpid,
-				'pad_code'=>$pad_code,
-				'account_no'=>Order::getAccountNo($dpid,$site_id,$is_temp,$orderid),
-				'should_total'=>'0.01',
-				'payType'=>'3',
-				'open_id'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
-				'abstract'=>'wymenu',
-				'userName'=>'admin',
+				'client_sn'=>Order::getAccountNo($dpid,$site_id,$is_temp,$orderid),
+				'total_amount'=>'0.01',
+				'payway'=>'3',
+				'subject'=>'wymenu',
+				'operator'=>'admin',
+				'notify_url'=>'xxx',
+				'return_url'=>'xxx',
 		));
 	}
 	
