@@ -63,6 +63,7 @@ class BrandUserLevel extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 				'MemberWxCardStyle' => array(self::BELONGS_TO , 'MemberWxcardStyle' ,'' ,'on'=>'t.dpid = MemberWxCardStyle.dpid and t.style_id = MemberWxCardStyle.lid '),
+				'memberbind' => array(self::HAS_ONE , 'MemberCardBind' ,'' ,'on'=>'t.dpid = memberbind.dpid and t.lid = memberbind.membercard_level_id '),
 		);
 	}
 
