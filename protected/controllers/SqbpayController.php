@@ -6,7 +6,7 @@ class SqbpayController extends Controller
 		$dpid = '0000000027';
 		$site_id = '0000';
 		$is_temp = 1;
-		$orderid = '0000026834';
+		$orderid = '0000016830';
 		
 		$result = SqbPay::preOrder(array(
 				'dpid'=>$dpid,
