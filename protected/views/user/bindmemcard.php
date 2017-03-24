@@ -36,8 +36,8 @@
                 <input class="weui_input" code_type = "2" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
         </div>
-        <input type="hidden" id="user_id" value="<?php echo $user['lid'];?>">
-        <input type="hidden" id="user_dpid" value="<?php echo $user['dpid'];?>">
+        <input type="hidden" id="user_id" name="user[lid]" value="<?php echo $user['lid'];?>">
+        <input type="hidden" id="user_dpid" name="user[dpid]" value="<?php echo $user['dpid'];?>">
     </div>
     <div class="weui_cells_tips member_content">
     </div>

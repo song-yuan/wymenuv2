@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','ticket','oldindex','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard','saveBindMemberCard'))){
+		if(in_array($actin->id,array('index','ticket','oldindex','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -320,17 +320,16 @@ class UserController extends Controller
 	 */
 	public function actionSaveBindMemberCard()
 	{
-		$userId = Yii::app()->session['userId'];
-		$user = $this->brandUser;
 		if(Yii::app()->request->isPostRequest){
 			$userInfo = Yii::app()->request->getPost('user');
-			var_dump($userInfo);exit;
-            $mobile =   $userInfo['mobile_num'] ;       
+			$userId = $userInfo['lid'];
+			$dpid = $userInfo['dpid'];
+            $mobile =   $userInfo['mobile_num'];       
 			$member = WxBrandUser::getMemberCardByMobile($mobile);
 			if($member){
 				$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
 				if($memberCardBind){
-					$user = $this->brandUser;
+					$user = WxBrandUser::get($userId, $dpid);
 					if($user['member_card_rfid']){
 						$msg = '该会员卡已绑定微信';
 					}else{
@@ -353,9 +352,9 @@ class UserController extends Controller
 			}else{
 				$msg = '不存在该手机号的会员';
 			}
-			$this->render('bindmemcard',array('companyId'=>$this->companyId,'user'=>$user,'msg'=>$msg));
+			$this->redirect(array('/user/bindMemberCard','companyId'=>$this->companyId,'msg'=>$msg));
 		}else{
-			$this->render('bindmemcard',array('companyId'=>$this->companyId,'user'=>$user));
+			$this->redirect(array('/user/bindMemberCard','companyId'=>$this->companyId));
 		}
 	}
 	// 未使用现金券
