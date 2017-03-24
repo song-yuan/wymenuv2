@@ -37,7 +37,8 @@
 				
 			</li>
 		</ul>
-		<input type="hidden" name="address[user_id]" value="<?php echo $userId;?>"/>
+		<input type="hidden" name="address[user_id]" value="<?php echo $user['lid'];?>"/>
+		<input type="hidden" name="address[dpid]" value="<?php echo $user['dpid'];?>"/>
 		<input type="hidden" name="address[lid]" value="<?php echo $address?$address['lid']:'-1';?>"/>
 		<input type="hidden" name="address[lng]" value="<?php echo $address?$address['lng']:'0';?>"/>
 		<input type="hidden" name="address[lat]" value="<?php echo $address?$address['lat']:'0';?>"/>

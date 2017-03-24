@@ -36,7 +36,8 @@
                 <input class="weui_input" code_type = "2" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
         </div>
-        <input type="hidden" id="user_id" value="<?php echo $userId;?>">
+        <input type="hidden" id="user_id" value="<?php echo $user['lid'];?>">
+        <input type="hidden" id="user_dpid" value="<?php echo $user['dpid'];?>">
     </div>
     <div class="weui_cells_tips member_content">
     </div>
@@ -124,6 +125,7 @@ $('document').ready(function(){
 	$('#mobile').change(function(){
 		var mobile = $('#mobile').val();
 		var user_id = $('#user_id').val();
+		var user_dpid = $('#user_dpid').val();
 
 		var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
         if(!myreg.test(mobile)){ 
@@ -132,7 +134,7 @@ $('document').ready(function(){
         }
 		$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxGetMemberCard',array('companyId'=>$this->companyId));?>',
-            data:{mobile:mobile,user_id:user_id},
+            data:{mobile:mobile,user_id:user_id,user_dpid:user_dpid},
             success:function(msg){
                 if(msg.status){
                 	 $('.sentMessage').removeClass('disable');
