@@ -321,6 +321,7 @@ class UserController extends Controller
 	public function actionSaveBindMemberCard()
 	{
 		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
 		if(Yii::app()->request->isPostRequest){
 			$userInfo = Yii::app()->request->getPost('user');
             $mobile =   $userInfo['mobile_num'] ;       
@@ -337,7 +338,7 @@ class UserController extends Controller
 						if($memLevel&&$userLevel){
 							$result = WxBrandUser::brandUserBind($user['lid'], $user['dpid'], $member['rfid'],$userLevel['lid'],$userLevel['min_total_points']);
 							if($result){
-								
+								$this->redirect(array('/user/index','companyId'=>$this->companyId));
 							}else{
 								$msg = '绑定失败请重新绑定';
 							}
@@ -351,9 +352,9 @@ class UserController extends Controller
 			}else{
 				$msg = '不存在该手机号的会员';
 			}
-			$this->render('bindmemcard',array('companyId'=>$this->companyId,'msg'=>$msg));
+			$this->render('bindmemcard',array('companyId'=>$this->companyId,'user'=>$user,'msg'=>$msg));
 		}else{
-			$this->render('bindmemcard',array('companyId'=>$this->companyId));
+			$this->render('bindmemcard',array('companyId'=>$this->companyId,'user'=>$user));
 		}
 	}
 	// 未使用现金券
