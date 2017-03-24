@@ -160,11 +160,11 @@ class CfceshiController extends BackendController
 				'dpid'=>$dpid,
 				'client_sn'=>Order::getAccountNo($dpid,$site_id,$is_temp,$orderid),
 				'total_amount'=>'0.01',
-				'payway'=>'1',
+				'payway'=>'3',
 				'subject'=>'wymenu',
 				'operator'=>'admin',
-				'notify_url'=>'menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
-				'return_url'=>'menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
+				'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
+				'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
 		));
 		var_dump($result);exit;
 	}
