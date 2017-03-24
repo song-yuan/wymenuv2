@@ -31,6 +31,8 @@ class WxPromotion
 					}else{
 						$product['price'] = ($product['set_price']*$result['promotion_discount']) > 0 ? number_format($product['set_price']*$result['promotion_discount'],2) : number_format(0,2);
 					}
+					$product['original_price'] = $product['set_price'];
+					$product['product_name'] = $product['set_name'];
 					$results[$k]['product'] = $product;
 				}else{
 					unset($results[$k]);

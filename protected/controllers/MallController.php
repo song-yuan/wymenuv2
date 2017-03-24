@@ -13,6 +13,7 @@ class MallController extends Controller
 	public $type = 0;
 	public $weixinServiceAccount;
 	public $brandUser;
+	public $company;
 	public $layout = '/layouts/mallmain';
 	
 	
@@ -22,10 +23,10 @@ class MallController extends Controller
 		$type = Yii::app()->request->getParam('type',6);
 		$this->companyId = $companyId;
 		$this->type = $type;
-		$company = WxCompany::get($this->companyId);
-		if($company['type']=='0'){
+		$this->company = WxCompany::get($this->companyId);
+		if($this->company['type']=='0'){
 			$children = WxCompany::getCompanyChildren($this->companyId);
-			$this->render('shoplist',array('companyId'=>$this->companyId,'children'=>$children));
+			$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type,'children'=>$children));
 			exit;
 		}
 	}
@@ -113,7 +114,6 @@ class MallController extends Controller
 		$siteNum = false;
 		$siteOpen = false;
 		
-		$company = WxCompany::get($this->companyId);
 		$site = WxSite::get($siteId,$this->companyId);
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
@@ -128,20 +128,20 @@ class MallController extends Controller
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		
-		$user = WxBrandUser::get($userId,$this->companyId);
+		$user =$this->brandUser;
 		$price = WxCart::getCartPrice($carts,$user);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		
-		$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
+		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
 		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
 		$isPackingFee = WxCompanyFee::get(2,$this->companyId);
 		$isFreightFee = WxCompanyFee::get(3,$this->companyId);
 		
-		$address = WxAddress::getDefault($userId,$this->companyId);
+		$address = WxAddress::getDefault($userId,$user['dpid']);
 		
-		$this->render('checkorder',array('company'=>$company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -182,7 +182,7 @@ class MallController extends Controller
 		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
-		$user = WxBrandUser::get($userId,$this->companyId);
+		$user = $this->brandUser;
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
 			if(empty($orderObj->cart)){
@@ -200,7 +200,7 @@ class MallController extends Controller
 			//订单地址
 			if(in_array($this->type,array(2,3))){
 				if($addressId > 0){
-					$address = WxAddress::getAddress($addressId,$this->companyId);
+					$address = WxAddress::getAddress($addressId,$user['dpid']);
 					$result = WxOrderAddress::addOrderAddress($orderId,$address);
 					if(!$result){
 						throw new Exception('请添加订单地址信息！');
@@ -230,7 +230,7 @@ class MallController extends Controller
 			//使用余额
 			if($yue){
 				$order = WxOrder::getOrder($orderId,$this->companyId);
-				$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
+				$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 				if($remainMoney > 0){
 					WxOrder::insertOrderPay($order,10);
 				}
@@ -271,7 +271,6 @@ class MallController extends Controller
 		$packingFee = 0;
 		$freightFee = 0;
 		
-		$company = WxCompany::get($this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] > 2){
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
@@ -302,8 +301,8 @@ class MallController extends Controller
 		}
 
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
-		$user = WxBrandUser::get($userId,$this->companyId);
-	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+		$user = $this->brandUser;
+	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	/**
 	 * 
@@ -349,7 +348,7 @@ class MallController extends Controller
 		
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$user = WxBrandUser::get($userId,$this->companyId);
+		$user = $this->brandUser;
 		
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
@@ -715,18 +714,6 @@ class MallController extends Controller
 		}else{
 			echo 0;
 		}
-		exit;
-	}
-	/**
-	 *
-	 * 判断购物车是否为空
-	 *
-	 */
-	public function actionPayPreOrder()
-	{
-		$data = $_POST;
-		$result = SqbPay::precreate($data);
-		echo $result;
 		exit;
 	}
 	private function weixinServiceAccount() {	

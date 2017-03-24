@@ -60,7 +60,7 @@ class WxCart
 	}
 	// 如果产品有优惠活动
 	public function checkPromotion(){
-		$now = date('Y-m-d H:i:s');
+		$now = date('Y-m-d H:i:s',time());
 		if($this->productArr['promotion_id'] > 0){
 			$sqla = 'select count(*) as count from nb_cart where dpid=:dpid and user_id=:userId and promotion_id=:privationPromotionId';
 			$resulta = Yii::app()->db->createCommand($sqla)
@@ -69,10 +69,11 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
 					  
-			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
+			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=:isSet and t.delete_flag=0';
 			$result = Yii::app()->db->createCommand($sql)
 						  ->bindValue(':dpid',$this->dpid)
 						  ->bindValue(':productId',$this->productArr['product_id'])
+						  ->bindValue(':isSet',$this->productArr['is_set'])
 						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 						  ->queryRow();
 			if($now > $result['end_time']){

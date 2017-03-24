@@ -187,7 +187,7 @@
                         <span class="weui_cell_hd">
                             <img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdewm.png" class="icon_nav" alt="">
                         </span>
-                        <div  id='qrcode-btn' class="weui_cell_bd weui_cell_primary" user_id="<?php echo $user['lid'];?>">
+                        <div  id='qrcode-btn' class="weui_cell_bd weui_cell_primary" user_id="<?php echo $user['lid'];?>" user_dpid="<?php echo $user['dpid'];?>">
                             <p>我的二维码</p>
                         </div>
                         <div class="weui_cell_ft">
@@ -354,9 +354,10 @@
     });  
     $('#qrcode-btn').click(function(){
         var userId = $(this).attr('user_id');
+        var userDpid = $(this).attr('user_dpid');
         $.ajax({
             url:'<?php echo $this->createUrl('/user/ajaxGetUserCard',array('companyId'=>$this->companyId));?>',
-            data:{userId:userId},
+            data:{user_id:userId,user_dpid:userDpid},
             success:function(msg){
                 if(msg.status){
                     var content = '<img src="<?php echo $baseUrl;?>/'+msg.url+'" style="width:100%;height:100%;"/>';

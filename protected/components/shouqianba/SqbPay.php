@@ -65,7 +65,7 @@ class SqbPay{
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
-    		$result = array('status'=>false, 'result'=>false,);
+    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
     		//var_dump('111');exit;
     		return $result;
     	}
@@ -262,8 +262,6 @@ class SqbPay{
     		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
     		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
     	}
-    	//var_dump($result);
-    	//exit;
     	return $result;
     }
     public static function precreate($data){
@@ -310,7 +308,6 @@ class SqbPay{
     
     }
     public static function refund($data){
-    	//var_dump($data);exit;
     	$device_id = $data['device_id'];
     	$refund_amount = $data['refund_amount'];
     	$clientSn = $data['clientSn'];
@@ -318,13 +315,15 @@ class SqbPay{
     	$operator = $data['operator'];
     	
     	/*查询设备对应的支付秘钥和支付平台对应的终端号*/
-    	$devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$dpid,':deviceid'=>$device_id));
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid,$device_id);
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
-    		$result = array('status'=>false, 'result'=>false,);
-    		//var_dump($result);exit;
+    		$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
     		return $result;
     	}
     	
@@ -355,7 +354,7 @@ class SqbPay{
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	
     	$obj = json_decode($result,true);
-    	var_dump($obj);exit;
+    	//var_dump($obj);exit;
     	$return_code = $obj['result_code'];
     	if($return_code == '200'){
     		$result_codes = $obj['biz_response']['result_code'];
@@ -444,12 +443,86 @@ class SqbPay{
     		}
     		
     	}else{
-    		$result = array('status'=>false);
+    		$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
     	}
     	//var_dump($result);exit;
     	return $result;
     
     }
+    
+    public static function preOrder($data){
+    	 
+    	$dpid = $data['dpid'];
+    	$client_sn = $data['client_sn'];
+    	/*必须在商户系统内唯一；且长度不超过32字节*/
+    	$total_amount = ''.$data['total_amount']*100;
+    	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
+    	$subject = $data['subject'];
+    	/*本次交易的简要介绍*/
+    	$payway = $data['payway'];
+    	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
+    	$operator = $data['operator'];
+    	/*发起本次交易的操作员*/
+    	$notify_url = $data['notify_url'];
+    	/*发起本次交易的回调地址*/
+    	$return_url = $data['return_url'];
+    	/*发起本次交易的返回地址*/
+    	
+    	$devicemodel = WxCompany::getSqbPayinfo($dpid);
+    	if(!empty($devicemodel)){
+    		$terminal_sn = $devicemodel['terminal_sn'];
+    		$terminal_key = $devicemodel['terminal_key'];
+    	}else{
+    		$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	$data = array(
+    			'terminal_sn'=>$terminal_sn,
+    			'client_sn'=>$client_sn,
+    			'total_amount'=>$total_amount,
+    			'subject'=>$subject,
+    			'payway'=>$payway,
+    			'operator'=>$operator,
+    			'notify_url'=>$notify_url,
+    			'return_url'=>$return_url
+    	);
+    	ksort($data);
+    	$paramsStrs = '';
+    	if(is_array($data)){
+    	foreach($data as $k => $v)
+	    	{
+	    		$paramsStrs .= $k.'='.$v.'&';
+	    	}
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	if(!empty($paramsStrs)){
+    		$paramsStr = rtrim($paramsStrs,"&");
+    		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
+    		$paramsStr = $paramsStr."&sign=".$sign;
+    		//var_dump($paramsStr);
+    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
+    		//exit;
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	
+    } 
+    
     public static function cancel($type,$data){
     	/*该接口用于撤单，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
     	$terminal_sn = $data['terminal_sn'];
@@ -487,6 +560,27 @@ class SqbPay{
     	$clientSn = $data['client_sn'];
     	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
     	
+    	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/query';
+    	$data = array(
+    			'terminal_sn'=>$terminal_sn,
+    			'sn'=>$sn,
+    			'client_sn'=>$clientSn,
+    	);
+    	$body = json_encode($data);
+    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+    	return $result;
+    
+    }
+    public static function prequery($data){
+    	/*该接口用于查询，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
+    	$terminal_sn = $data['terminal_sn'];
+    	$terminal_key = $data['terminal_key'];
+    	/*终端号及终端秘钥*/
+    	$sn = $data['sn'];
+    	/*收钱吧系统内部唯一订单号*/
+    	$clientSn = $data['client_sn'];
+    	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
+    	 
     	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/query';
     	$data = array(
     			'terminal_sn'=>$terminal_sn,
