@@ -237,6 +237,46 @@ public function actionAccountDetail(){
         Yii::app()->end(json_encode(array('status'=>true,'msg'=>$allmoney,'change'=>$change,'money'=>$money,'allpayment'=>$allpayment,'retreat'=>$retreat)));
 
 }
+ public function actionChain(){
+     
+        $dpid = $this->companyId;
+        $entity = BrandUserLevel::model()->findALL('dpid='.$this->companyId.' and level_type=0 and delete_flag=0  order by level_discount desc');
+        $company = Company::model()->find('dpid='.$this->companyId);
+        if($company['type'] > 0){
+            $dpid = $company['comp_dpid'];
+        }
+        $weixin = BrandUserLevel::model()->findALL('dpid = '.$dpid .' and level_type=1 and delete_flag=0  order by level_discount desc ');
+        $binds = MemberCardBind::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId));
+       
+        if(Yii::app()->request->isPostRequest) {
+           $test = Yii::app()->request->getParam('bind');
+         
+            
+            foreach($test as $key => $val){
+                $bind = MemberCardBind::model()->find('lid=:lid and dpid=:dpid',array());
+                if(!$bind){
+                    $bind = new MemberCardBind();
+                    $se=new Sequence("member_card_bind");
+                    $lid = $se->nextval();
+                    $bind->lid = $lid;
+                }  
+                $bind->membercard_level_id = $key;
+                $bind->branduser_level_id =$val;
+                $bind->dpid = $this->companyId;
+                $bind->create_at = date('Y-m-d H:i:s',time());
+                $bind->update_at = date('Y-m-d H:i:s',time());
+                $bind->save();
+            }
+              Yii::app()->user->setFlash('success',yii::t('app','绑定成功！'));
+            $this->redirect(array('WechatMember/list' , 'companyId' => $this->companyId ));
+        }
+       // var_dump($bind->attributes);exit;
+        $this->render('chain',array(
+                    "entity" => $entity,
+                    "weixin" => $weixin
+                    )  
+                );
+     }
 }
 
 

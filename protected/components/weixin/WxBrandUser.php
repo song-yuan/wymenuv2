@@ -219,8 +219,8 @@ class WxBrandUser {
 	 * 绑定 会员升级直接
 	 * 
 	 */
-	public static function brandUserBind($userId,$dpid,$userLevelId,$points) {
-		$sql = 'update nb_brand_user set user_level_lid='.$userLevelId.',consume_point_history='.$points.' where lid='.$userId.' and dpid='.$dpid;
+	public static function brandUserBind($userId,$dpid,$rfid,$userLevelId,$points) {
+		$sql = 'update nb_brand_user set user_level_lid='.$userLevelId.',consume_point_history='.$points.',member_card_rfid='.$rfid.' where lid='.$userId.' and dpid='.$dpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}

@@ -329,13 +329,13 @@ class UserController extends Controller
 				$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
 				if($memberCardBind){
 					$user = $this->brandUser;
-					if($user['user_level_lid']==$memberCardBind['branduser_level_id']){
+					if($user['member_card_rfid']){
 						$msg = '该会员卡已绑定微信';
 					}else{
 						$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
 						$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
 						if($memLevel&&$userLevel){
-							$result = WxBrandUser::brandUserBind($user['lid'], $user['dpid'], $userLevel['lid'],$userLevel['min_total_points']);
+							$result = WxBrandUser::brandUserBind($user['lid'], $user['dpid'], $member['rfid'],$userLevel['lid'],$userLevel['min_total_points']);
 							if($result){
 								
 							}else{
