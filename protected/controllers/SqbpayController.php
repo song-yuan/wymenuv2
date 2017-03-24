@@ -2,7 +2,7 @@
 
 class SqbpayController extends Controller
 {
-	public function actionWappayresult(){
+	public function actionWappayresultceshi(){
 		$dpid = '0000000027';
 		$site_id = '0000';
 		$is_temp = 1;
@@ -19,6 +19,9 @@ class SqbpayController extends Controller
 				'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
 		));
 		
+	}
+	public function actionWappayresult(){
 		echo '收钱吧WAP支付';
+		echo $_POST;
 	}
 }
