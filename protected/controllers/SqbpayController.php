@@ -21,7 +21,8 @@ class SqbpayController extends Controller
 		
 	}
 	public function actionWappayresult(){
-		echo '收钱吧WAP支付';
-		var_dump($_POST);
+		$is_success = Yii::app()->request->getParam('is_success');
+		echo 'wappay';
+		var_dump($is_success);
 	}
 }
