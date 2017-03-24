@@ -24,10 +24,9 @@ class UserController extends Controller
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
-				if(!$this->brandUser)
-                                {
-                                    $newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
-                                    $this->brandUser = $newBrandUser->brandUser;
+				if(!$this->brandUser){
+                      $newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
+                      $this->brandUser = $newBrandUser->brandUser;
 				}  
               
 				$userId = $this->brandUser['lid'];
@@ -328,8 +327,50 @@ class UserController extends Controller
 	public function actionBindMemberCard()
 	{
 		$userId = Yii::app()->session['userId'];
-		$user = WxBrandUser::get($userId, $this->companyId);
-		$this->render('bindmemcard',array('company'=>$company,'user'=>$user));
+		$this->render('bindmemcard',array('companyId'=>$this->companyId));
+	}
+	/**
+	 *
+	 * 保存实体卡绑定
+	 *
+	 */
+	public function actionSaveBindMemberCard()
+	{
+		$userId = Yii::app()->session['userId'];
+		if(Yii::app()->request->isPostRequest){
+			$userInfo = Yii::app()->request->getPost('user');
+            $mobile =   $userInfo['mobile_num'] ;       
+			$member = WxBrandUser::getMemberCardByMobile($mobile);
+			if($member){
+				$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
+				if($memberCardBind){
+					$user = WxBrandUser::get($userId, $this->companyId);
+					if($user['user_level_lid']==$memberCardBind['branduser_level_id']){
+						$msg = '该会员卡已绑定微信';
+					}else{
+						$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
+						$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
+						if($memLevel&&$userLevel){
+							$result = WxBrandUser::brandUserBind($user['lid'], $user['dpid'], $userLevel['lid']);
+							if($result){
+								
+							}else{
+								$msg = '绑定失败请重新绑定';
+							}
+						}else{
+							$msg = '该会员卡不能绑定微信,绑定等级不存在';
+						}
+					}
+				}else{
+					$msg = '该会员卡不能绑定微信';
+				}
+			}else{
+				$msg = '不存在该手机号的会员';
+			}
+			$this->render('bindmemcard',array('companyId'=>$this->companyId,'msg'=>$msg));
+		}else{
+			$this->render('bindmemcard',array('companyId'=>$this->companyId));
+		}
 	}
 	// 未使用现金券
 	public function actionCupon()
@@ -437,6 +478,40 @@ class UserController extends Controller
 			$gift['qrcode'] = $imgurl;
 		}
 		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
+	}
+	/**
+	 *
+	 * 获取实体会员卡信息
+	 *
+	 */
+	public function actionAjaxGetMemberCard()
+	{
+		$mobile = Yii::app()->request->getParam('mobile');
+		$userId =  Yii::app()->request->getParam('user_id');
+		$member = WxBrandUser::getMemberCardByMobile($mobile);
+		if($member){
+			$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
+			if($memberCardBind){
+				$user = WxBrandUser::get($userId, $this->companyId);
+				if($user['user_level_lid']==$memberCardBind['branduser_level_id']){
+					$msg = array('status'=>false,'msg'=>'该会员卡已绑定微信');
+				}else{
+					$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
+					$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
+					if($memLevel&&$userLevel){
+						$msg = array('status'=>true,'member'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']),'branduser'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']));
+					}else{
+						$msg = array('status'=>false,'msg'=>'该会员卡不能绑定微信,绑定等级不存在');
+					}
+				}
+			}else{
+				$msg = array('status'=>false,'msg'=>'该会员卡不能绑定微信');
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'不存在该手机号的会员');
+		}
+		echo json_encode($msg);
+		exit;
 	}
 	/**
 	 * 
