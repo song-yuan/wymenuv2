@@ -22,7 +22,19 @@ class SqbpayController extends Controller
 	}
 	public function actionWappayresult(){
 		$is_success = Yii::app()->request->getParam('is_success');
-		echo 'wappay';
-		var_dump($is_success);
+		if($is_success == 'F'){
+			$error_code = Yii::app()->request->getParam('error_code');
+			$error_message = Yii::app()->request->getParam('error_message');
+			
+			
+			var_dump($is_success);
+			echo '---';
+			var_dump($error_code);
+			echo '---';
+			var_dump($error_message);
+		}
+		
+		echo '---';
+		
 	}
 }
