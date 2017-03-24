@@ -205,8 +205,8 @@ class WxBrandUser {
 	 * 
 	 */
 	public static function getMemberCardBind($mem_level_id,$dpid) {
-		$sql = 'select * from nb_member_card_bind where membercard_level_id=:levelId and delete_flag=0';
-		$memberCardBind = Yii::app()->db->createCommand($sql)->bindValue(':levelId',$mem_level_id)->queryRow();
+		$sql = 'select * from nb_member_card_bind where membercard_level_id=:levelId and dpid=:dpid and delete_flag=0';
+		$memberCardBind = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':levelId',$mem_level_id)->queryRow();
 		return $memberCardBind;
 	}
 	public static function updateUserLevel($userId,$dpid,$userLevelId) {
