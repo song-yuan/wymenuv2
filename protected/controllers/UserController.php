@@ -327,7 +327,7 @@ class UserController extends Controller
 	public function actionBindMemberCard()
 	{
 		$userId = Yii::app()->session['userId'];
-		$this->render('bindmemcard',array('companyId'=>$this->companyId));
+		$this->render('bindmemcard',array('companyId'=>$this->companyId,'userId'=>$userId));
 	}
 	/**
 	 *

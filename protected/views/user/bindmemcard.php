@@ -36,7 +36,7 @@
                 <input class="weui_input" code_type = "2" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
         </div>
-        
+        <input type="hidden" id="user_id" value="<?php echo $userId;?>">
     </div>
     <div class="weui_cells_tips member_content">
     </div>
