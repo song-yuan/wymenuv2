@@ -484,7 +484,7 @@ class UserController extends Controller
 					$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
 					$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
 					if($memLevel&&$userLevel){
-						$msg = array('status'=>true,'member'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']),'branduser'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']));
+						$msg = array('status'=>true,'member'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']),'branduser'=>array('name'=>$userLevel['level_name'],'level_discount'=>$userLevel['level_discount'],'birthday_discount'=>$userLevel['birthday_discount']));
 					}else{
 						$msg = array('status'=>false,'msg'=>'该会员卡不能绑定微信,绑定等级不存在');
 					}
