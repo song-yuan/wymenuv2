@@ -152,7 +152,6 @@ class CfceshiController extends BackendController
 	}
 	public function actionSqbprecreate(){
 		$dpid = $this->companyId;
-		$pad_code = Yii::app()->request->getParam('pad_code');
 		$site_id = '0000';
 		$is_temp = 1;
 		$orderid = '0000026834';
@@ -164,9 +163,10 @@ class CfceshiController extends BackendController
 				'payway'=>'3',
 				'subject'=>'wymenu',
 				'operator'=>'admin',
-				'notify_url'=>'xxx',
-				'return_url'=>'xxx',
+				'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
+				'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
 		));
+		var_dump($result);exit;
 	}
 	
 }
