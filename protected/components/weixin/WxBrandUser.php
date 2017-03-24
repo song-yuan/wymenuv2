@@ -35,7 +35,7 @@ class WxBrandUser {
 	 * 返回店铺所有等级
 	 */
         public static function getAllLevel($dpid) {
-            $sql = 'SELECT lid FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
+            $sql = 'SELECT * FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
             $result = Yii::app()->db->createCommand($sql)->queryAll();
 			return $result;
         }
