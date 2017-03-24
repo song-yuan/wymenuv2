@@ -324,6 +324,7 @@ class UserController extends Controller
 		$user = $this->brandUser;
 		if(Yii::app()->request->isPostRequest){
 			$userInfo = Yii::app()->request->getPost('user');
+			var_dump($userInfo);exit;
             $mobile =   $userInfo['mobile_num'] ;       
 			$member = WxBrandUser::getMemberCardByMobile($mobile);
 			if($member){
