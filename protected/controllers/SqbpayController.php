@@ -22,6 +22,6 @@ class SqbpayController extends Controller
 	}
 	public function actionWappayresult(){
 		echo '收钱吧WAP支付';
-		echo $_POST;
+		var_dump($_POST);
 	}
 }
