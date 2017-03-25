@@ -184,6 +184,7 @@ class MallController extends Controller
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
 		$user = $this->brandUser;
+		var_dump($user);exit;
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
 			if(empty($orderObj->cart)){
@@ -253,7 +254,7 @@ class MallController extends Controller
 				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'order'=>$order,'orderPays'=>$orderPays));
 			}
 		}else{
-			WxOrder::updatePayType($orderId,$this->companyId);
+			WxOrder::updatePayType($orderId,$this->companyId,1);
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 	}
