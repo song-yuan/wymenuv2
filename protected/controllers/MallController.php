@@ -32,7 +32,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
+		if(in_array($actin->id,array('index','cart','checkOrder','generalOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
