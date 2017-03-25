@@ -97,6 +97,10 @@ class WxBrandUser {
 	public static function getFromOpenId($openId) {
 		$sql = 'select * from nb_brand_user where openid = "'.$openId.'"';
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		if($brandUser){
+			$brandUserLevel = self::getUserLevel($brandUser['user_level_lid'],$brandUser['dpid']);
+			$brandUser['level'] = $brandUserLevel;
+		}
 		return $brandUser;
 	}
 	/**
