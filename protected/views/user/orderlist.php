@@ -18,7 +18,7 @@
 	<div class="orderlist with_topbar">
 		<!-- 全部 -->
 		<ul id="all">
-			<?php foreach($models as $model):?>
+			<?php foreach($models as $model): $orderCompany = WxCompany::get($model['dpid'])?>
 			<li class="bg_white">
 				<a href="<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$model['lid'],'orderDpid'=>$model['dpid']));?>">
 				<div class="headinfo colclear bottom_dash pad_10">
@@ -29,9 +29,10 @@
 					<div class="shortinfo2 noborder bottom_dash">
 						<div class="maininfo">
 						<div class="left">
-							<img src="<?php echo $baseUrl;?>/img/house.jpg" class="normal">
+							<img src="<?php echo $baseUrl.$orderCompany['logo'];?>" class="normal">
 						</div>
 						<div class="right">
+						<h2>店铺: <?php echo $orderCompany['company_name'];?></h2>
 						<h2>类型 : <?php if($model['order_type']==1) echo '堂吃';elseif($model['order_type']==2) echo '外卖';elseif($model['order_type']==3) echo '预约';elseif($model['order_type']==6) echo '手机自助点单';else echo '收银台点单';?></h2>
 						<div class="nooverflow">
 							<span class="pts left">合计 ：￥<?php echo $model['should_total'];?></span>
