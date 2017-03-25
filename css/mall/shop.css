@@ -231,6 +231,7 @@
 .misinfo span.right {
 	width: 30%;
 	font-size:1.5em;
+	line-height:100%;
 	font-weight:700;
 	text-align: right;
 }
