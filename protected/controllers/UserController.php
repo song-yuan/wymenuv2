@@ -173,37 +173,38 @@ class UserController extends Controller
 		$freightFee = 0;
 		
 		$orderId = Yii::app()->request->getParam('orderId');
-		$order = WxOrder::getOrder($orderId,$this->companyId);
-		$site = $site = WxSite::get($order['site_id'],$this->companyId);
+		$orderDpid = Yii::app()->request->getParam('orderDpid');
+		$order = WxOrder::getOrder($orderId,$orderDpid);
+		$site = $site = WxSite::get($order['site_id'],$orderDpid);
 		if($site){
-			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+			$siteType = WxSite::getSiteType($site['type_id'],$orderDpid);
 		}
 		
-		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$orderProducts = WxOrder::getOrderProduct($orderId,$orderDpid);
 		
 		if(in_array($order['order_type'],array(2,3))){
-			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
+			$address =  WxOrder::getOrderAddress($orderId,$orderDpid);
 		}
 		
 		if(in_array($order['order_type'],array(1,3))){
-			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			$seatingProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,1);
 			foreach($seatingProducts as $seatingProduct){
 				$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
 			}
 		}else{
-			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+			$packingProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,2);
 			foreach($packingProducts as $packingProduct){
 				$packingFee += $packingProduct['price']*$packingProduct['amount'];
 			}
-			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,3);
+			$freightProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,3);
 			foreach($freightProducts as $freightProduct){
 				$freightFee += $freightProduct['price']*$freightProduct['amount'];
 			}
 		}
 		
-		$orderPays = WxOrderPay::get($this->companyId,$orderId);
+		$orderPays = WxOrderPay::get($orderDpid,$orderId);
 		//查找分享红包
-		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
+		$redPack = WxRedPacket::getOrderShareRedPacket($orderDpid,$order['should_total']);
 		
 		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'orderPays'=>$orderPays,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	}
