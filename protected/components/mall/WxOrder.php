@@ -267,7 +267,6 @@ class WxOrder
 				$levelDiscunt =  $this->user['level']['level_discount'];
 			}
 		}
-		echo $levelDiscunt;exit;
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			if($cart['is_set'] > 0){
@@ -475,6 +474,7 @@ class WxOrder
 			Yii::app()->db->createCommand($sql)->execute();
 		}else{
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
+			echo $sql;exit;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 		
