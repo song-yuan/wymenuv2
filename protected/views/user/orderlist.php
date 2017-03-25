@@ -29,7 +29,7 @@
 					<div class="shortinfo2 noborder bottom_dash">
 						<div class="maininfo">
 						<div class="left">
-							<img src="<?php echo $baseUrl.'../'.$orderCompany['logo'];?>" class="normal">
+							<img src="<?php echo $orderCompany['logo'];?>" class="normal">
 						</div>
 						<div class="right">
 						<h2>店铺: <?php echo $orderCompany['company_name'];?></h2>
