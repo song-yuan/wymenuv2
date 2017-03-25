@@ -32,7 +32,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
+		if(in_array($actin->id,array('index','cart','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -129,11 +129,11 @@ class MallController extends Controller
 		}
 		
 		$user = $this->brandUser;
+		
 		$price = WxCart::getCartPrice($carts,$user);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		
-		var_dump($user);exit;
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
 		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
