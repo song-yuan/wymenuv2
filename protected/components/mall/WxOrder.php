@@ -262,9 +262,9 @@ class WxOrder
 			$birthday = date('m-d',strtotime( $this->user['user_birthday']));
 			$today = date('m-d',time());
 			if($birthday==$today){
-				$levelDiscunt =  $this->user['level']['birthday_discount'];
+				$levelDiscount =  $this->user['level']['birthday_discount'];
 			}else{
-				$levelDiscunt =  $this->user['level']['level_discount'];
+				$levelDiscount =  $this->user['level']['level_discount'];
 			}
 		}
 		foreach($this->cart as $cart){
@@ -474,7 +474,6 @@ class WxOrder
 			Yii::app()->db->createCommand($sql)->execute();
 		}else{
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
-			echo $sql;exit;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 		
