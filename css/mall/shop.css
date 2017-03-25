@@ -204,6 +204,7 @@
 .shops h1 {
 	font-size: 1.2em;
 	font-weight:800;
+	line-height:100%;
 	margin-bottom: 5px;
 }
 
@@ -231,7 +232,6 @@
 .misinfo span.right {
 	width: 30%;
 	font-size:1.5em;
-	line-height:100%;
 	font-weight:700;
 	text-align: right;
 }
