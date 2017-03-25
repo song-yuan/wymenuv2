@@ -389,7 +389,7 @@ class WxOrder
 		 										);
 		 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
 			 	}
-			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+			 	$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			 }else{
 			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
 			 }
