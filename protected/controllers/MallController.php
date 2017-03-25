@@ -128,11 +128,12 @@ class MallController extends Controller
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		
-		$user =$this->brandUser;
+		$user = $this->brandUser;
 		$price = WxCart::getCartPrice($carts,$user);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		
+		var_dump($user);exit;
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
 		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
