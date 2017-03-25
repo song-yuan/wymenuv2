@@ -248,7 +248,7 @@ class MallController extends Controller
 			$order = WxOrder::getOrder($orderId,$this->companyId);
 			$orderPays = WxOrderPay::get($this->companyId,$orderId);
 			if($order['order_status'] > 2){
-				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 			}else{
 				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'order'=>$order,'orderPays'=>$orderPays));
 			}
@@ -274,7 +274,7 @@ class MallController extends Controller
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] > 2){
-			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 		}
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		if(in_array($order['order_type'],array(2,3))){
