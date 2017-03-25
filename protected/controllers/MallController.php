@@ -32,7 +32,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','checkOrder','generalOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
+		if(in_array($actin->id,array('index','cart','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -183,7 +183,7 @@ class MallController extends Controller
 		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
-		$user = $this->brandUser;
+		$user = WxBrandUser::get($userId, $this->companyId);
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
 			if(empty($orderObj->cart)){
