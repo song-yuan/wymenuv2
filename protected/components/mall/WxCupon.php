@@ -34,8 +34,9 @@ class WxCupon
 	public static function getUserNotUseCupon($userId,$dpid){
 		$now = date('Y-m-d H:i:s',time());
 		$user = WxBrandUser::get($userId,$dpid);
-		$sql = 'select m.lid,m.dpid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from (select * from nb_cupon_branduser where dpid=:dpid and to_group=3 and brand_user_lid=:userId and is_used = 1 and delete_flag=0' .
-				' union select * from nb_cupon_branduser where dpid=:dpid and to_group=2 and brand_user_lid=:userLevelId and is_used = 1 and delete_flag=0)m ,nb_cupon n' .
+		$dpid = WxCompany::getDpids($dpid);
+		$sql = 'select m.lid,m.dpid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from (select * from nb_cupon_branduser where dpid in (:dpid) and to_group=3 and brand_user_lid=:userId and is_used = 1 and delete_flag=0' .
+				' union select * from nb_cupon_branduser where dpid in (:dpid) and to_group=2 and brand_user_lid=:userLevelId and is_used = 1 and delete_flag=0)m ,nb_cupon n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and n.begin_time <=:now and :now <= n.end_time and n.delete_flag=0';
 		
                 $cupon = Yii::app()->db->createCommand($sql)
@@ -53,8 +54,9 @@ class WxCupon
 	 */
 	public static function getUserUseCupon($userId,$dpid){
 		$user = WxBrandUser::get($userId,$dpid);
-		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where dpid=:dpid and to_group=3 and brand_user_lid=:userId and is_used =2 and delete_flag=0' .
-				' union select * from nb_cupon_branduser where dpid=:dpid and to_group=2 and brand_user_lid=:userLevelId and is_used = 2 and delete_flag=0)m ,nb_cupon n' .
+		$dpid = WxCompany::getDpids($dpid);
+		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where dpid in (:dpid) and to_group=3 and brand_user_lid=:userId and is_used =2 and delete_flag=0' .
+				' union select * from nb_cupon_branduser where dpid in (:dpid) and to_group=2 and brand_user_lid=:userLevelId and is_used = 2 and delete_flag=0)m ,nb_cupon n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and n.delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
@@ -71,8 +73,9 @@ class WxCupon
 	 public static function getUserExpireCupon($userId,$dpid){
 	 	$now = date('Y-m-d H:i:s',time());
 		$user = WxBrandUser::get($userId,$dpid);
-		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where dpid=:dpid and to_group=3 and brand_user_lid=:userId and is_used > 0 and delete_flag=0' .
-				' union select * from nb_cupon_branduser where dpid=:dpid and to_group=2 and brand_user_lid=:userLevelId and is_used > 0 and delete_flag=0)m ,nb_cupon n' .
+		$dpid = WxCompany::getDpids($dpid);
+		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where dpid in (:dpid) and to_group=3 and brand_user_lid=:userId and is_used > 0 and delete_flag=0' .
+				' union select * from nb_cupon_branduser where dpid in (:dpid) and to_group=2 and brand_user_lid=:userLevelId and is_used > 0 and delete_flag=0)m ,nb_cupon n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and :now > n.end_time and n.delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
