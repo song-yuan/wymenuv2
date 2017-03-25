@@ -29,13 +29,13 @@
 					<div class="shortinfo2 noborder bottom_dash">
 						<div class="maininfo">
 						<div class="left">
-							<img src="<?php echo $baseUrl.$orderCompany['logo'];?>" class="normal">
+							<img src="<?php echo $baseUrl.'../'.$orderCompany['logo'];?>" class="normal">
 						</div>
 						<div class="right">
-						<h2> 店铺: <?php echo $orderCompany['company_name'];?></h2>
-						<h2> 类型 : <?php if($model['order_type']==1) echo '堂吃';elseif($model['order_type']==2) echo '外卖';elseif($model['order_type']==3) echo '预约';elseif($model['order_type']==6) echo '手机自助点单';else echo '收银台点单';?></h2>
+						<h2>店铺: <?php echo $orderCompany['company_name'];?></h2>
+						<h2>类型 : <?php if($model['order_type']==1) echo '堂吃';elseif($model['order_type']==2) echo '外卖';elseif($model['order_type']==3) echo '预约';elseif($model['order_type']==6) echo '手机自助点单';else echo '收银台点单';?></h2>
 						<div class="nooverflow">
-							<span class="pts left"> 合计 ：￥<?php echo $model['should_total'];?></span>
+							<span class="pts left">合计 ：￥<?php echo $model['should_total'];?></span>
 							<span class="num small right"></span>
 						</div>
 						</div>
