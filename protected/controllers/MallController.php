@@ -184,7 +184,6 @@ class MallController extends Controller
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
 		$user = $this->brandUser;
-		var_dump($user);exit;
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
 			if(empty($orderObj->cart)){

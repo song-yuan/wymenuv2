@@ -267,6 +267,7 @@ class WxOrder
 				$levelDiscunt =  $this->user['level']['level_discount'];
 			}
 		}
+		echo $levelDiscunt;exit;
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			if($cart['is_set'] > 0){
