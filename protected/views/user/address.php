@@ -9,10 +9,8 @@
 <script type="text/javascript">
 var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId));?>";
 </script>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <body class="my_address bg_lgrey2">
 	<?php if($addresss):?>
 	<ul class="addlist" id="list">
