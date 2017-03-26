@@ -23,9 +23,7 @@
 <script type="text/javascript">
 var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId,'url'=>urldecode($url)));?>";
 </script>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hzj3D9srpRthGaFjOeBGvOG6"></script>
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
 <body class="my_address bg_lgrey2">

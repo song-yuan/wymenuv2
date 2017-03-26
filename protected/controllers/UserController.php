@@ -260,9 +260,10 @@ class UserController extends Controller
 	public function actionSetAddress()
 	{
 		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
 		$url = Yii::app()->request->getParam('url');
 		$type = Yii::app()->request->getParam('type',1);
-		$addresss = WxAddress::get($userId,$this->companyId);
+		$addresss = WxAddress::get($userId,$user['dpid']);
 		$company = WxCompany::get($this->companyId);
 		$this->render('setaddress',array('company'=>$company,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url,'type'=>$type));
 	}
