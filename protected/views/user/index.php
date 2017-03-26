@@ -310,15 +310,15 @@
                         </div>
                     </a>
                     <div class="empty1"></div>
-                    <!-- 
-                     <a class="weui_cell js_cell" href="javascript:;" data-id="tel">
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/address',array('companyId'=>$this->companyId));?>">
                         <span class="weui_cell_hd"></span>
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>门店及电话</p>
+                            <p>我的收货地址</p>
                         </div>
                         <div class="weui_cell_ft">
                         </div>
                     </a>
+                    <!-- 
                     <div class="empty3"></div>
                      <div class="put_into_bg">
                     <div class="weui_btn weui_btn_primary put_into">放入微信卡包</div> 
