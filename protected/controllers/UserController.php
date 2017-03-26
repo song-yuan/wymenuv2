@@ -584,8 +584,8 @@ class UserController extends Controller
 	public function actionAjaxSetAddress()
 	{
 		$lid = Yii::app()->request->getPost('lid');
+		$dpid = Yii::app()->request->getPost('dpid');
 		$userId = Yii::app()->request->getPost('userId');
-		$dpid = $this->companyId;
 		
 		$addresss = WxAddress::setDefault($userId,$lid,$dpid);
 		
