@@ -32,7 +32,7 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 		<?php foreach($addresss as $k=>$address):?>
 		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
 		<li id='<?php echo $address['lid'];?>' <?php if($type==2&&$company['distance']*1000 < $distance):?>class="over-distance"<?php endif;?>>
-			<label for="add<?php echo $k+1;?>" address-id="<?php echo $address['lid'];?>">
+			<label for="add<?php echo $k+1;?>" address-id="<?php echo $address['lid'];?>" address-dpid="<?php echo $address['dpid'];?>">
 			<span class="user">收货人：<?php echo $address['name'];?></span>
 			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
 			<div class="weui_cell_ft small"><i class="weui_icon_warn"></i><br>超出范围</div>
@@ -71,12 +71,13 @@ $(document).ready(function(){
 			return;
 		}
 		var addressId = $(this).find('label').attr('address-id');
+		var addressDpid = $(this).find('label').attr('address-dpid');
 		var userId = '<?php echo $userId;?>';
 		var back = $('input[name="back"]').val();
 		
 		$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxSetAddress',array('companyId'=>$this->companyId));?>',
-			data:{lid:addressId,userId:userId},
+			data:{lid:addressId,dpid:addressDpid,userId:userId},
 			type:'post',
 			success:function(msg){
 				layer.msg('正在跳转....');
