@@ -258,13 +258,13 @@ class WxOrder
 			}
 		}
 		$levelDiscount = 1;
-		if($this->user['level']){
+		if($this->type!=2&&$this->user['level']){
 			$birthday = date('m-d',strtotime( $this->user['user_birthday']));
 			$today = date('m-d',time());
 			if($birthday==$today){
-				$levelDiscunt =  $this->user['level']['birthday_discount'];
+				$levelDiscount =  $this->user['level']['birthday_discount'];
 			}else{
-				$levelDiscunt =  $this->user['level']['level_discount'];
+				$levelDiscount =  $this->user['level']['level_discount'];
 			}
 		}
 		foreach($this->cart as $cart){
@@ -389,7 +389,7 @@ class WxOrder
 		 										);
 		 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
 			 	}
-			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+			 	$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			 }else{
 			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
 			 }
@@ -567,21 +567,18 @@ class WxOrder
 	}
 	public static function getUserOrderList($userId,$dpid,$type){
 		$user = WxBrandUser::get($userId, $dpid);
+		$dpid = WxCompany::getDpids($dpid);
 		if($type==1){
-			$sql = 'select m.* from (select * from nb_order where dpid=:dpid and user_id=:userId and order_type in (1,2,3,6) and order_status in (1,2)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid=:dpid and t.order_type=0 and t.order_status in (1,2) and t1.remark=:cardId)m where 1 order by lid desc limit 20';
+			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}elseif($type==2){
-			$sql = 'select m.* from (select * from nb_order where dpid=:dpid and user_id=:userId and order_type in (1,2,3,6) and order_status in (3,4)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid=:dpid and t.order_type=0 and t.order_status in (3,4) and t1.remark=:cardId)m where 1 order by lid desc limit 20';
+			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (3,4) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}else{
-			$sql = 'select m.* from (select * from nb_order where dpid=:dpid and user_id=:userId and order_type in (1,2,3,6) and order_status in (1,2,3,4)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid=:dpid and t.order_type=0 and t.order_status in (1,2,3,4) and t1.remark=:cardId)m where 1 order by lid desc limit 20';
+			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2,3,4) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}
-		$orderList = Yii::app()->db->createCommand($sql)
-				  ->bindValue(':userId',$userId)
-				  ->bindValue(':dpid',$dpid)
-				  ->bindValue(':cardId',$user['card_id'])
-				  ->queryAll();
+		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 	    return $orderList;
 	}
 	public static function getOrderAddress($orderId,$dpid){

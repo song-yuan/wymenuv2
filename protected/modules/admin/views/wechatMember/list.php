@@ -102,7 +102,7 @@
                                         </a> 
                                       </div>
                                     <div class="col-sm-3 col-xs-6">
-                                        <a href="javascript:void(0)">
+                                        <a href="<?php echo $this->createUrl('wechatMember/chain',array('companyId' => $this->companyId))?>">
                                             <span class="fa fa-chain  list_picture"></span>
                                             <div class="list_text">实体卡绑定</div>
                                         </a> 

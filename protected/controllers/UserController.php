@@ -24,10 +24,9 @@ class UserController extends Controller
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
-				if(!$this->brandUser)
-                                {
-                                    $newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
-                                    $this->brandUser = $newBrandUser->brandUser;
+				if(!$this->brandUser){
+                      $newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
+                      $this->brandUser = $newBrandUser->brandUser;
 				}  
               
 				$userId = $this->brandUser['lid'];
@@ -35,6 +34,7 @@ class UserController extends Controller
 			}else{
 				//pc 浏览
 				$userId = 1978;
+				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 				Yii::app()->session['userId'] = $userId;
 			}
 		} 
@@ -53,44 +53,39 @@ class UserController extends Controller
         $userId = Yii::app()->session['userId'];
         //$user就是brand_user表里的一行
 
-        $user = WxBrandUser::get($userId,$this->companyId);
+        $user = $this->brandUser;
         
-        $sql = 'SELECT * FROM nb_brand_user_level WHERE dpid = ' .$this->companyId .' and level_type=1 and delete_flag=0  order by level_discount desc ';
-        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        $result = WxBrandUser::getAllLevel($user['dpid']);
         $lid = 0;
         if($result){
             $count=count($result);
-           
             if($user['consume_point_history'] >= $result[0]['min_total_points']){
                 for($i=0;$i<$count;$i++){
                     if( ($user['consume_point_history'] >= $result[$i]['min_total_points']) && ($user['consume_point_history'] <= $result[$i]['max_total_points'])){
                        $lid = $result[$i]['lid'];                       
                        if($user['user_level_lid']!=$lid){
                            $upLev = true;
-                            $sql = 'UPDATE nb_brand_user set user_level_lid = '.$lid .' WHERE dpid = ' .$this->companyId .' and lid = ' .$userId .'' ;
-                            $result = Yii::app()->db->createCommand($sql)->execute(); 
+                           WxBrandUser::updateUserLevel($userId, $user['dpid'], $lid);
                         }    
                     }
                 }
             }
         }else{
-                
-                $sql = 'UPDATE nb_brand_user set user_level_lid = '.$lid .' WHERE dpid = ' .$this->companyId .' and lid = ' .$userId .'' ;
-                $result = Yii::app()->db->createCommand($sql)->execute();
-            }    
+        	WxBrandUser::updateUserLevel($userId, $user['dpid'], $lid);
+        }    
                
-        $userLevel =  WxBrandUser::getUserLevel($lid,$this->companyId); 
+        $userLevel =  WxBrandUser::getUserLevel($lid,$user['dpid']); 
    
         $img = array();
         if($userLevel){
             $style_id=$userLevel['style_id'];
-            $img = WxBrandUser::getCardImg($style_id,$this->companyId);
+            $img = WxBrandUser::getCardImg($style_id,$user['dpid']);
         }
         
         $give = WxBrandUser::getFullGive($this->companyId);
         $minus = WxBrandUser::getFullMinus($this->companyId);
 
-        $remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
+        $remainMoney =  WxBrandUser::getYue($userId,$user['dpid']);
         $this->render('index',array(
                                 'userId'=>$userId,
                                 'companyId'=>$this->companyId,
@@ -111,15 +106,17 @@ class UserController extends Controller
     } 
      public function actionPoint(){
         $userId = Yii::app()->session['userId'];
-        $remain_points = WxPoints::getAvaliablePoints($userId,$this->companyId);  
+        $user = $this->brandUser;
+        $remain_points = WxPoints::getAvaliablePoints($userId,$user['dpid']);  
         $this->render('point',array( 
                      'remain_points' => $remain_points,
                      
                 ));
     }
     public function actionPointRecord(){
-         $userId = Yii::app()->session['userId'];       
-         $points = WxPoints::getPoints($userId,$this->companyId);
+         $userId = Yii::app()->session['userId'];    
+         $user = $this->brandUser;
+         $points = WxPoints::getPoints($userId,$user['dpid']);
         $this->render('pointRecord',array(      
                      'points'=>$points
                 ));
@@ -127,9 +124,10 @@ class UserController extends Controller
     public function actionTicket(){
         //$userId就是brand_user表里的lid
             $userId = Yii::app()->session['userId'];
-            $not_useds = WxCupon::getUserNotUseCupon($userId,$this->companyId);
-            $expires = WxCupon::getUserExpireCupon($userId,$this->companyId);
-            $useds = WxCupon::getUserUseCupon($userId,$this->companyId);
+            $user = $this->brandUser;
+            $not_useds = WxCupon::getUserNotUseCupon($userId,$user['dpid']);
+            $expires = WxCupon::getUserExpireCupon($userId,$user['dpid']);
+            $useds = WxCupon::getUserUseCupon($userId,$user['dpid']);
             $this->render('ticket',array('companyId'=>$this->companyId,
                                         'not_useds'=>$not_useds,
                                         'expires'=>$expires,
@@ -139,29 +137,15 @@ class UserController extends Controller
      public function actionBill(){
          $userId = Yii::app()->session['userId'];
         //$user就是brand_user表里的一行
-        $user = WxBrandUser::get($userId,$this->companyId);
+        $user = $this->brandUser;
         $card_id = $user['card_id'];
-        $order_pay = WxBrandUser::getOrderPay($card_id,$this->companyId);
+        $order_pay = WxBrandUser::getOrderPay($card_id,$user['dpid']);
         $this->render('bill',array(   
                                     'order_pay'=>$order_pay,
 	                    )
                 ); 
     }
         
-	/**
-	 * 
-	 * 个人中心
-	 * 
-	 */
-      //以前的index
-	public function actionoldIndex()
-	{
-		$userId = Yii::app()->session['userId'];
-		$user = WxBrandUser::get($userId,$this->companyId);
-		$userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
-		$remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
-		$this->render('oldindex',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel,'remainMoney'=>$remainMoney));
-	}
 	/**
 	 * 
 	 * 订单列表
@@ -190,37 +174,38 @@ class UserController extends Controller
 		$freightFee = 0;
 		
 		$orderId = Yii::app()->request->getParam('orderId');
-		$order = WxOrder::getOrder($orderId,$this->companyId);
-		$site = $site = WxSite::get($order['site_id'],$this->companyId);
+		$orderDpid = Yii::app()->request->getParam('orderDpid');
+		$order = WxOrder::getOrder($orderId,$orderDpid);
+		$site = $site = WxSite::get($order['site_id'],$orderDpid);
 		if($site){
-			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+			$siteType = WxSite::getSiteType($site['type_id'],$orderDpid);
 		}
 		
-		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$orderProducts = WxOrder::getOrderProduct($orderId,$orderDpid);
 		
 		if(in_array($order['order_type'],array(2,3))){
-			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
+			$address =  WxOrder::getOrderAddress($orderId,$orderDpid);
 		}
 		
 		if(in_array($order['order_type'],array(1,3))){
-			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			$seatingProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,1);
 			foreach($seatingProducts as $seatingProduct){
 				$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
 			}
 		}else{
-			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+			$packingProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,2);
 			foreach($packingProducts as $packingProduct){
 				$packingFee += $packingProduct['price']*$packingProduct['amount'];
 			}
-			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,3);
+			$freightProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,3);
 			foreach($freightProducts as $freightProduct){
 				$freightFee += $freightProduct['price']*$freightProduct['amount'];
 			}
 		}
 		
-		$orderPays = WxOrderPay::get($this->companyId,$orderId);
+		$orderPays = WxOrderPay::get($orderDpid,$orderId);
 		//查找分享红包
-		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
+		$redPack = WxRedPacket::getOrderShareRedPacket($orderDpid,$order['should_total']);
 		
 		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'orderPays'=>$orderPays,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	}
@@ -232,7 +217,7 @@ class UserController extends Controller
 	public function actionSetUserInfo()
 	{
 		$userId = Yii::app()->session['userId'];
-		$user = WxBrandUser::get($userId,$this->companyId);
+		$user = $this->brandUser;
 		
 		$this->render('updateuserinfo',array('companyId'=>$this->companyId,'user'=>$user));
 	}
@@ -263,7 +248,8 @@ class UserController extends Controller
 	public function actionAddress()
 	{
 		$userId = Yii::app()->session['userId'];
-		$addresss = WxAddress::get($userId,$this->companyId);
+		$user = $this->brandUser;
+		$addresss = WxAddress::get($userId,$user['dpid']);
 		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId));
 	}
 	/**
@@ -274,9 +260,10 @@ class UserController extends Controller
 	public function actionSetAddress()
 	{
 		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
 		$url = Yii::app()->request->getParam('url');
 		$type = Yii::app()->request->getParam('type',1);
-		$addresss = WxAddress::get($userId,$this->companyId);
+		$addresss = WxAddress::get($userId,$user['dpid']);
 		$company = WxCompany::get($this->companyId);
 		$this->render('setaddress',array('company'=>$company,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url,'type'=>$type));
 	}
@@ -291,11 +278,11 @@ class UserController extends Controller
 		$lid = Yii::app()->request->getParam('lid',0);
 		$url = Yii::app()->request->getParam('url',0);
 		$address = false;
-		
+		$user = $this->brandUser;
 		if($lid){
-			$address = WxAddress::getAddress($lid,$this->companyId);
+			$address = WxAddress::getAddress($lid,$user['dpid']);
 		}
-		$this->render('addaddress',array('companyId'=>$this->companyId,'userId'=>$userId,'address'=>$address,'url'=>$url));
+		$this->render('addaddress',array('companyId'=>$this->companyId,'user'=>$user,'address'=>$address,'url'=>$url));
 	}
 	/**
 	 * 
@@ -306,7 +293,6 @@ class UserController extends Controller
 		$goBack = Yii::app()->request->getParam('url');
 		if(Yii::app()->request->isPostRequest) {
 			$post = Yii::app()->request->getPost('address');
-			$post['dpid'] = $this->companyId;
 
 			if($post['lid'] > 0){
 				 $generateAddress = WxAddress::update($post);
@@ -327,9 +313,52 @@ class UserController extends Controller
 	 */
 	public function actionBindMemberCard()
 	{
-		$userId = Yii::app()->session['userId'];
-		$user = WxBrandUser::get($userId, $this->companyId);
-		$this->render('bindmemcard',array('company'=>$company,'user'=>$user));
+		$user = $this->brandUser;
+		$this->render('bindmemcard',array('companyId'=>$this->companyId,'user'=>$user));
+	}
+	/**
+	 *
+	 * 保存实体卡绑定
+	 *
+	 */
+	public function actionSaveBindMemberCard()
+	{
+		if(Yii::app()->request->isPostRequest){
+			$userInfo = Yii::app()->request->getPost('user');
+			$userId = $userInfo['lid'];
+			$dpid = $userInfo['dpid'];
+            $mobile =   $userInfo['mobile_num'];       
+			$member = WxBrandUser::getMemberCardByMobile($mobile);
+			if($member){
+				$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
+				if($memberCardBind){
+					$user = WxBrandUser::get($userId, $dpid);
+					if($user['member_card_rfid']){
+						$msg = '该会员卡已绑定微信';
+					}else{
+						$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
+						$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
+						if($memLevel&&$userLevel){
+							$result = WxBrandUser::brandUserBind($user['lid'], $user['dpid'], $member['rfid'],$userLevel['lid'],$userLevel['min_total_points']);
+							if($result){
+								$this->redirect(array('/user/index','companyId'=>$this->companyId));
+							}else{
+								$msg = '绑定失败请重新绑定';
+							}
+						}else{
+							$msg = '该会员卡不能绑定微信,绑定等级不存在';
+						}
+					}
+				}else{
+					$msg = '该会员卡不能绑定微信';
+				}
+			}else{
+				$msg = '不存在该手机号的会员';
+			}
+			$this->redirect(array('/user/bindMemberCard','companyId'=>$this->companyId,'msg'=>$msg));
+		}else{
+			$this->redirect(array('/user/bindMemberCard','companyId'=>$this->companyId));
+		}
 	}
 	// 未使用现金券
 	public function actionCupon()
@@ -439,6 +468,41 @@ class UserController extends Controller
 		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
 	}
 	/**
+	 *
+	 * 获取实体会员卡信息
+	 *
+	 */
+	public function actionAjaxGetMemberCard()
+	{
+		$mobile = Yii::app()->request->getParam('mobile');
+		$userId =  Yii::app()->request->getParam('user_id');
+		$userdpid =  Yii::app()->request->getParam('user_dpid');
+		$member = WxBrandUser::getMemberCardByMobile($mobile);
+		if($member){
+			$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
+			if($memberCardBind){
+				$user = WxBrandUser::get($userId, $userdpid);
+				if($user['member_card_rfid']){
+					$msg = array('status'=>false,'msg'=>'该会员卡已绑定微信');
+				}else{
+					$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
+					$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
+					if($memLevel&&$userLevel){
+						$msg = array('status'=>true,'member'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']),'branduser'=>array('name'=>$userLevel['level_name'],'level_discount'=>$userLevel['level_discount'],'birthday_discount'=>$userLevel['birthday_discount']));
+					}else{
+						$msg = array('status'=>false,'msg'=>'该会员卡不能绑定微信,绑定等级不存在');
+					}
+				}
+			}else{
+				$msg = array('status'=>false,'msg'=>'该会员卡不能绑定微信');
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'不存在该手机号的会员');
+		}
+		echo json_encode($msg);
+		exit;
+	}
+	/**
 	 * 
 	 * 取消订单
 	 * 
@@ -466,12 +530,13 @@ class UserController extends Controller
 	 */
 	public function actionAjaxGetUserCard()
 	{
-		$userId = Yii::app()->request->getParam('userId');
+		$userId = Yii::app()->request->getParam('user_id');
+		$userDpid = Yii::app()->request->getParam('user_dpid');
 		
-		$user = WxBrandUser::get($userId,$this->companyId);
+		$user = WxBrandUser::get($userId,$userDpid);
 		if($user){
 			$imgurl = './uploads';
-			$imgurl .= '/company_'.$this->companyId;
+			$imgurl .= '/company_'.$userDpid;
 			if(!is_dir($imgurl)){
 				mkdir($imgurl, 0777,true);
 			}
@@ -479,7 +544,7 @@ class UserController extends Controller
 			if(!is_dir($imgurl)){
 				mkdir($imgurl, 0777,true);
 			}
-			$imgurl .= '/usercard-'.$this->companyId.'-'.$userId.'.png';
+			$imgurl .= '/usercard-'.$userDpid.'-'.$userId.'.png';
 			
 			if(!file_exists($imgurl)){
 				$code=new QRCode($user['card_id']);
@@ -519,8 +584,8 @@ class UserController extends Controller
 	public function actionAjaxSetAddress()
 	{
 		$lid = Yii::app()->request->getPost('lid');
+		$dpid = Yii::app()->request->getPost('dpid');
 		$userId = Yii::app()->request->getPost('userId');
-		$dpid = $this->companyId;
 		
 		$addresss = WxAddress::setDefault($userId,$lid,$dpid);
 		
@@ -540,7 +605,7 @@ class UserController extends Controller
 	public function actionAjaxDeleteAddress()
 	{
 		$lid = Yii::app()->request->getParam('lid');
-		$dpid = $this->companyId;
+		$dpid = Yii::app()->request->getParam('dpid');;
 		
 		$addresss = WxAddress::deleteAddress($lid,$dpid);
 		

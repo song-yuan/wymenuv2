@@ -6,7 +6,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link href='<?php echo $baseUrl;?>/css/mall/common.css' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <body class="gift_exchange bg_lgrey2">
 	<div id="topnav">
 		<ul>
@@ -18,9 +17,9 @@
 	<div class="orderlist with_topbar">
 		<!-- 全部 -->
 		<ul id="all">
-			<?php foreach($models as $model):?>
+			<?php foreach($models as $model): $orderCompany = WxCompany::get($model['dpid'])?>
 			<li class="bg_white">
-				<a href="<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$model['lid']));?>">
+				<a href="<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$model['lid'],'orderDpid'=>$model['dpid']));?>">
 				<div class="headinfo colclear bottom_dash pad_10">
 					<div class="left small font_l"><?php echo $model['create_at'];?></div>
 					<?php if($model['order_status']< 3):?><div class="right small font_red">待付款</div><?php else:?> <?php if($model['takeout_status']==0):?><div class="right small font_org">已支付</div><?php elseif($model['takeout_status']==1):?><div class="right small font_org">商家已接单</div><?php elseif($model['takeout_status']==2):?><div class="right small font_org">商家已取消订单</div><?php elseif($model['takeout_status']==3):?><div class="right small font_org">商品配送中</div><?php elseif($model['takeout_status']==4):?><div class="right small font_org">订单已完成</div><?php endif;?><?php endif;?>
@@ -29,11 +28,12 @@
 					<div class="shortinfo2 noborder bottom_dash">
 						<div class="maininfo">
 						<div class="left">
-							<img src="<?php echo $baseUrl;?>/img/house.jpg" class="normal">
+							<img src="<?php echo $orderCompany['logo'];?>" class="normal">
 						</div>
 						<div class="right">
-						<h2>类型 : <?php if($model['order_type']==1) echo '堂吃';elseif($model['order_type']==2) echo '外卖';elseif($model['order_type']==3) echo '预约';elseif($model['order_type']==6) echo '手机自助点单';else echo '收银台点单';?></h2>
-						<div class="nooverflow">
+						<h2 style="margin-left:2%;font-size:1.2em !important;"><?php echo $orderCompany['company_name'];?></h2>
+						<h2 style="margin-left:2%;">类型 : <?php if($model['order_type']==1) echo '堂吃';elseif($model['order_type']==2) echo '外卖';elseif($model['order_type']==3) echo '预约';elseif($model['order_type']==6) echo '手机自助点单';else echo '收银台点单';?></h2>
+						<div class="nooverflow" style="margin-left:2%;">
 							<span class="pts left">合计 ：￥<?php echo $model['should_total'];?></span>
 							<span class="num small right"></span>
 						</div>

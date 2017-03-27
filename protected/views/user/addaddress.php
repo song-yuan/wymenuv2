@@ -6,7 +6,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/address.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
@@ -37,7 +36,8 @@
 				
 			</li>
 		</ul>
-		<input type="hidden" name="address[user_id]" value="<?php echo $userId;?>"/>
+		<input type="hidden" name="address[user_id]" value="<?php echo $user['lid'];?>"/>
+		<input type="hidden" name="address[dpid]" value="<?php echo $user['dpid'];?>"/>
 		<input type="hidden" name="address[lid]" value="<?php echo $address?$address['lid']:'-1';?>"/>
 		<input type="hidden" name="address[lng]" value="<?php echo $address?$address['lng']:'0';?>"/>
 		<input type="hidden" name="address[lat]" value="<?php echo $address?$address['lat']:'0';?>"/>

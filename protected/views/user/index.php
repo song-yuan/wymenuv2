@@ -6,7 +6,6 @@
 
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
@@ -187,7 +186,7 @@
                         <span class="weui_cell_hd">
                             <img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdewm.png" class="icon_nav" alt="">
                         </span>
-                        <div  id='qrcode-btn' class="weui_cell_bd weui_cell_primary" user_id="<?php echo $user['lid'];?>">
+                        <div  id='qrcode-btn' class="weui_cell_bd weui_cell_primary" user_id="<?php echo $user['lid'];?>" user_dpid="<?php echo $user['dpid'];?>">
                             <p>我的二维码</p>
                         </div>
                         <div class="weui_cell_ft">
@@ -311,15 +310,16 @@
                         </div>
                     </a>
                     <div class="empty1"></div>
-                    <!-- 
-                     <a class="weui_cell js_cell" href="javascript:;" data-id="tel">
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/address',array('companyId'=>$this->companyId));?>">
                         <span class="weui_cell_hd"></span>
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>门店及电话</p>
+                            <p>我的收货地址</p>
                         </div>
                         <div class="weui_cell_ft">
                         </div>
                     </a>
+                    <div class="empty1"></div>
+                    <!-- 
                     <div class="empty3"></div>
                      <div class="put_into_bg">
                     <div class="weui_btn weui_btn_primary put_into">放入微信卡包</div> 
@@ -354,9 +354,10 @@
     });  
     $('#qrcode-btn').click(function(){
         var userId = $(this).attr('user_id');
+        var userDpid = $(this).attr('user_dpid');
         $.ajax({
             url:'<?php echo $this->createUrl('/user/ajaxGetUserCard',array('companyId'=>$this->companyId));?>',
-            data:{userId:userId},
+            data:{user_id:userId,user_dpid:userDpid},
             success:function(msg){
                 if(msg.status){
                     var content = '<img src="<?php echo $baseUrl;?>/'+msg.url+'" style="width:100%;height:100%;"/>';

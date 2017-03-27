@@ -35,14 +35,9 @@ class WxBrandUser {
 	 * 返回店铺所有等级
 	 */
         public static function getAllLevel($dpid) {
-            $sql = 'SELECT lid FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
+            $sql = 'SELECT * FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
             $result = Yii::app()->db->createCommand($sql)->queryAll();
-            
-//            if($result){
-//                    return $result['lid'];
-//            }else{
-//                    return 0;
-//            }
+			return $result;
         }
         
         
@@ -102,6 +97,10 @@ class WxBrandUser {
 	public static function getFromOpenId($openId) {
 		$sql = 'select * from nb_brand_user where openid = "'.$openId.'"';
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		if($brandUser){
+			$brandUserLevel = self::getUserLevel($brandUser['user_level_lid'],$brandUser['dpid']);
+			$brandUser['level'] = $brandUserLevel;
+		}
 		return $brandUser;
 	}
 	/**
@@ -189,6 +188,43 @@ class WxBrandUser {
 	}
 	public static function dealYue($userId,$dpid,$money){
 		$sql = 'update nb_brand_user set remain_money = remain_money+'.$money.' where lid='.$userId.' and dpid='.$dpid;
+		$result = Yii::app()->db->createCommand($sql)->execute();
+		return $result;
+	}
+	/**
+	 * 
+	 * @param unknown $userId
+	 * @param unknown $dpid
+	 * @return Ambigous <number, unknown>
+	 * 
+	 */
+	public static function getMemberCardByMobile($mobile) {
+		$sql = 'select * from nb_member_card where mobile=:mobile and delete_flag=0';
+		$memberCard = Yii::app()->db->createCommand($sql)->bindValue(':mobile',$mobile)->queryRow();
+		return $memberCard;
+	}
+	/**
+	 * 
+	 * 获取实体卡 绑定的微信卡
+	 * 
+	 */
+	public static function getMemberCardBind($mem_level_id,$dpid) {
+		$sql = 'select * from nb_member_card_bind where membercard_level_id=:levelId and dpid=:dpid and delete_flag=0';
+		$memberCardBind = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':levelId',$mem_level_id)->queryRow();
+		return $memberCardBind;
+	}
+	public static function updateUserLevel($userId,$dpid,$userLevelId) {
+		$sql = 'update nb_brand_user set user_level_lid='.$userLevelId.' where lid='.$userId.' and dpid='.$dpid;
+		$result = Yii::app()->db->createCommand($sql)->execute();
+		return $result;
+	}
+	/**
+	 * 
+	 * 绑定 会员升级直接
+	 * 
+	 */
+	public static function brandUserBind($userId,$dpid,$rfid,$userLevelId,$points) {
+		$sql = 'update nb_brand_user set user_level_lid='.$userLevelId.',consume_point_history='.$points.',member_card_rfid='.$rfid.' where lid='.$userId.' and dpid='.$dpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
