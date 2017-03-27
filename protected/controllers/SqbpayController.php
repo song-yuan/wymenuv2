@@ -53,7 +53,6 @@ class SqbpayController extends Controller
 			
 		}
 		$this->render('list',array(
-				'type'=>$type,
 				'is_success'=>$is_success,
 				'status'=>$status,
 				'sign'=>$sign,

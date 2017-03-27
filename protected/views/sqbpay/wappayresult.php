@@ -1,7 +1,6 @@
 
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('支付中心');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
