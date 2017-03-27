@@ -130,7 +130,7 @@ class MallController extends Controller
 		
 		$user = WxBrandUser::get($userId, $this->companyId);
 		
-		$price = WxCart::getCartPrice($carts,$user);
+		$price = WxCart::getCartPrice($carts,$user,$this->type);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		

@@ -258,7 +258,7 @@ class WxOrder
 			}
 		}
 		$levelDiscount = 1;
-		if($this->user['level']){
+		if($this->type!=2&&$this->user['level']){
 			$birthday = date('m-d',strtotime( $this->user['user_birthday']));
 			$today = date('m-d',time());
 			if($birthday==$today){

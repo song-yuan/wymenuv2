@@ -236,10 +236,10 @@ class WxCart
 		}
 		return $success;
 	}
-	public static function getCartPrice($cartArrs,$user){
+	public static function getCartPrice($cartArrs,$user,$type){
 		$price = 0;
 		$levelDiscunt = 1;
-		if($user['level']){
+		if($type!=2&&$user['level']){
 			$birthday = date('m-d',strtotime($user['user_birthday']));
 			$today = date('m-d',time());
 			if($birthday==$today){
