@@ -202,7 +202,7 @@ class MallController extends Controller
 			if(in_array($this->type,array(2,3))){
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$user['dpid']);
-					if(!$result){
+					if(!$address){
 						throw new Exception('订单地址信息,有误请重新添加！');
 					}
 				}else{
