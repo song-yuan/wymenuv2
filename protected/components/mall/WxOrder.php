@@ -229,7 +229,7 @@ class WxOrder
 		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 		
 		//外卖订单地址
-		if($this->type==2){
+		if(in_array($this->type,array(2,3))){
 			$address = WxAddress::getDefault($this->userId,$this->user['dpid']);
 			if($address){
 				WxOrderAddress::addOrderAddress($orderId,$this->dpid,$address);
