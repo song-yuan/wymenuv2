@@ -295,6 +295,9 @@ class UserController extends Controller
 			$post = Yii::app()->request->getPost('address');
 
 			if($post['lid'] > 0){
+				 if($goBack){
+				 	$post['default_address'] = 1;
+				 }
 				 $generateAddress = WxAddress::update($post);
 			}else{
 				 $generateAddress = WxAddress::insert($post);
