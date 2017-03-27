@@ -26,7 +26,7 @@ class SqbpayController extends Controller
 					'payway'=>'3',
 					'subject'=>'wymenu',
 					'operator'=>'admin',
-					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn',
+					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
 					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
 			));
 		}else{
@@ -35,16 +35,13 @@ class SqbpayController extends Controller
 	}
 	public function actionWappayresult(){
 		$is_success = Yii::app()->request->getParam('is_success');
+		$status = Yii::app()->request->getParam('status');
+		$sign = Yii::app()->request->getParam('sign');
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
 			
 			
-			var_dump($is_success);
-			echo '^^^';
-			var_dump($error_code);
-			echo '###';
-			var_dump($error_message);
 		}else{
 			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
 			$sn = Yii::app()->request->getParam('sn');
@@ -53,10 +50,14 @@ class SqbpayController extends Controller
 			$status = Yii::app()->request->getParam('status');
 			$reflect = Yii::app()->request->getParam('reflect');
 			$sign = Yii::app()->request->getParam('sign');
-			echo $trade_no;
+			
 		}
-		
-		echo '&&&';
+		$this->render('list',array(
+				'type'=>$type,
+				'is_success'=>$is_success,
+				'status'=>$status,
+				'sign'=>$sign,
+		));
 		
 	}
 	public function actionWappayreturn(){
