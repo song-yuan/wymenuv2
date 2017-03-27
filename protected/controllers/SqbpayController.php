@@ -51,6 +51,9 @@ class SqbpayController extends Controller
 			
 			$result_code = Yii::app()->request->getParam('result_code');
 			$result_message = Yii::app()->request->getParam('result_message');
+			
+			$data = '{"is_success":"'.$is_success.'";"sn":"'.$sn.'";"status":"'.$status.'";"result_code":"'.$result_code.'";"result_message":"'.$result_message.'"}';
+			Helper::writeLog($data);
 		}
 		$this->render('wappayresult',array(
 				'is_success'=>$is_success,
