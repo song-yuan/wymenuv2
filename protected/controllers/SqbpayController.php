@@ -26,7 +26,7 @@ class SqbpayController extends Controller
 					'payway'=>'3',
 					'subject'=>'wymenu',
 					'operator'=>'admin',
-					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
+					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn',
 					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
 			));
 		}else{
