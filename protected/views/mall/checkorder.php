@@ -200,7 +200,7 @@
 		<!-- end餐位费 -->
 	<?php endif;?>
 </div>
-<?php if($user['level']):?>
+<?php if($this->type!=2&&$user['level']):?>
 <div class="discount">
 	<ul>
 		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品享受<?php echo $user['level']['level_discount']*10;?>折优惠</li>
