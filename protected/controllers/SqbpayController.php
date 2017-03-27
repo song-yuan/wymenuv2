@@ -40,8 +40,6 @@ class SqbpayController extends Controller
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
-			
-			
 		}else{
 			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
 			$sn = Yii::app()->request->getParam('sn');
@@ -51,11 +49,15 @@ class SqbpayController extends Controller
 			$reflect = Yii::app()->request->getParam('reflect');
 			$sign = Yii::app()->request->getParam('sign');
 			
+			$result_code = Yii::app()->request->getParam('result_code');
+			$result_message = Yii::app()->request->getParam('result_message');
 		}
 		$this->render('wappayresult',array(
 				'is_success'=>$is_success,
 				'status'=>$status,
 				'sign'=>$sign,
+				'result_code'=>$result_code,
+				'result_message'=>$result_message,
 		));
 		
 	}
