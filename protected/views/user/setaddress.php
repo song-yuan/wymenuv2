@@ -32,6 +32,7 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 		<?php foreach($addresss as $k=>$address):?>
 		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
 		<li id='<?php echo $address['lid'];?>' <?php if($type==2&&$company['distance']*1000 < $distance):?>class="over-distance"<?php endif;?>>
+			<input type="radio" id="add<?php echo $k+1;?>" name="addresslist" <?php if($address['default_address']){ echo 'checked';}?> value="" >
 			<label for="add<?php echo $k+1;?>" address-id="<?php echo $address['lid'];?>" address-dpid="<?php echo $address['dpid'];?>">
 			<span class="user">收货人：<?php echo $address['name'];?></span>
 			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
