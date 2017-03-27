@@ -5,13 +5,12 @@ class TestController extends Controller
 	public $layout = '/layouts/productmain';
 	public function actionIndex()
 	{
-		$code = '60605790';
-		$deviceId = '1234567890';
-		$res = SqbPay::activate($code,$deviceId);
-		var_dump($res);exit;
+		$this->render('index');
 	}
 	public function actionQrcode(){
-		$this->render('index');
+		$url = 'http://www.baidu.com';
+		$code=new QRCode($url);
+		$code->create();exit;
 	}
 	public function actionMicroPay(){
 		$companyId = Yii::app()->request->getParam('companyId');
