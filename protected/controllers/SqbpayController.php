@@ -18,21 +18,20 @@ class SqbpayController extends Controller
 		);
 		$result = MicroPayModel::insert($data);
 		
-		var_dump($result);exit;
-		$site_id = '0000';
-		$is_temp = 1;
-		$orderid = '0000016830';
-		$result = SqbPay::preOrder(array(
-				'dpid'=>$dpid,
-				'client_sn'=>$orderId,
-				'total_amount'=>'0.01',
-				'payway'=>'3',
-				'subject'=>'wymenu',
-				'operator'=>'admin',
-				'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
-				'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
-		));
-		
+		if($result['status']){
+			$result = SqbPay::preOrder(array(
+					'dpid'=>$dpid,
+					'client_sn'=>$orderId,
+					'total_amount'=>'0.01',
+					'payway'=>'3',
+					'subject'=>'wymenu',
+					'operator'=>'admin',
+					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
+					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult',
+			));
+		}else{
+			echo 'error';
+		}
 	}
 	public function actionWappayresult(){
 		$is_success = Yii::app()->request->getParam('is_success');
