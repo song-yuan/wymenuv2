@@ -52,7 +52,7 @@ class SqbpayController extends Controller
 			$sign = Yii::app()->request->getParam('sign');
 			
 		}
-		$this->render('list',array(
+		$this->render('wappayresult',array(
 				'is_success'=>$is_success,
 				'status'=>$status,
 				'sign'=>$sign,
