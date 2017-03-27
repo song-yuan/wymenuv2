@@ -7,10 +7,9 @@ class SqbpayController extends Controller
 		$site_id = '0000';
 		$is_temp = 1;
 		$orderid = '0000016830';
-		var_dump(Order::getAccountNo($dpid,$site_id,$is_temp,$orderid));exit;
 		$result = SqbPay::preOrder(array(
 				'dpid'=>$dpid,
-				'client_sn'=>Order::getAccountNo($dpid,$site_id,$is_temp,$orderid),
+				'client_sn'=>'170320026772',
 				'total_amount'=>'0.01',
 				'payway'=>'3',
 				'subject'=>'wymenu',
@@ -28,13 +27,13 @@ class SqbpayController extends Controller
 			
 			
 			var_dump($is_success);
-			echo '---';
+			echo '^^^';
 			var_dump($error_code);
-			echo '---';
+			echo '###';
 			var_dump($error_message);
 		}
 		
-		echo '---';
+		echo '&&&';
 		
 	}
 }
