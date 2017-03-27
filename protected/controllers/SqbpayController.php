@@ -71,6 +71,7 @@ class SqbpayController extends Controller
 			$error_message = Yii::app()->request->getParam('error_message');
 			$status = Yii::app()->request->getParam('status');
 			$client_sn = Yii::app()->request->getParam('client_sn');
+			$trade_no = Yii::app()->request->getParam('trade_no');
 			
 			
 			$data = '{"from":"returnfalse";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"error_message":"'.$error_message.'";}';
