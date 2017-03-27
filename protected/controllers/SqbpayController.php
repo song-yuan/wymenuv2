@@ -66,13 +66,6 @@ class SqbpayController extends Controller
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
-				
-				
-			var_dump($is_success);
-			echo '^^^';
-			var_dump($error_code);
-			echo '###';
-			var_dump($error_message);
 		}else{
 			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
 			$sn = Yii::app()->request->getParam('sn');
@@ -81,10 +74,12 @@ class SqbpayController extends Controller
 			$status = Yii::app()->request->getParam('status');
 			$reflect = Yii::app()->request->getParam('reflect');
 			$sign = Yii::app()->request->getParam('sign');
-			echo $trade_no;
+			
+			$result_code = Yii::app()->request->getParam('result_code');
+			$result_message = Yii::app()->request->getParam('result_message');
+			
+			$data = '{"is_success":"'.$is_success.'";"sn":"'.$sn.'";"status":"'.$status.'";"result_code":"'.$result_code.'";"result_message":"'.$result_message.'"}';
+			Helper::writeLog($data);
 		}
-	
-		echo '%%%';
-	
 	}
 }
