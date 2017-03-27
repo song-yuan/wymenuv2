@@ -230,9 +230,9 @@ class WxOrder
 		
 		//外卖订单地址
 		if($this->type==2){
-			$address = WxAddress::getDefault($this->userId,$this->dpid);
+			$address = WxAddress::getDefault($this->userId,$this->user['dpid']);
 			if($address){
-				WxOrderAddress::addOrderAddress($orderId,$address);
+				WxOrderAddress::addOrderAddress($orderId,$this->dpid,$address);
 			}
 		}
 		//整单口味

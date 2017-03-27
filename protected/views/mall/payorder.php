@@ -19,7 +19,7 @@
 	
 	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
-	$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));
+	$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	
 	$payChannel = 0;
