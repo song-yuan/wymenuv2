@@ -35,16 +35,11 @@ class SqbpayController extends Controller
 	}
 	public function actionWappayresult(){
 		$is_success = Yii::app()->request->getParam('is_success');
+		$status = Yii::app()->request->getParam('status');
+		$sign = Yii::app()->request->getParam('sign');
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
-			
-			
-			var_dump($is_success);
-			echo '^^^';
-			var_dump($error_code);
-			echo '###';
-			var_dump($error_message);
 		}else{
 			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
 			$sn = Yii::app()->request->getParam('sn');
@@ -53,10 +48,20 @@ class SqbpayController extends Controller
 			$status = Yii::app()->request->getParam('status');
 			$reflect = Yii::app()->request->getParam('reflect');
 			$sign = Yii::app()->request->getParam('sign');
-			echo $trade_no;
+			
+			$result_code = Yii::app()->request->getParam('result_code');
+			$result_message = Yii::app()->request->getParam('result_message');
+			
+			$data = '{"from":"result";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
+			Helper::writeLog($data);
 		}
-		
-		echo '&&&';
+		$this->render('wappayresult',array(
+				'is_success'=>$is_success,
+				'status'=>$status,
+				'sign'=>$sign,
+				'result_code'=>$result_code,
+				'result_message'=>$result_message,
+		));
 		
 	}
 	public function actionWappayreturn(){
@@ -64,13 +69,13 @@ class SqbpayController extends Controller
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
-				
-				
-			var_dump($is_success);
-			echo '^^^';
-			var_dump($error_code);
-			echo '###';
-			var_dump($error_message);
+			$status = Yii::app()->request->getParam('status');
+			$client_sn = Yii::app()->request->getParam('client_sn');
+			$trade_no = Yii::app()->request->getParam('trade_no');
+			
+			
+			$data = '{"from":"returnfalse";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"error_message":"'.$error_message.'";}';
+			Helper::writeLog($data);
 		}else{
 			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
 			$sn = Yii::app()->request->getParam('sn');
@@ -79,10 +84,12 @@ class SqbpayController extends Controller
 			$status = Yii::app()->request->getParam('status');
 			$reflect = Yii::app()->request->getParam('reflect');
 			$sign = Yii::app()->request->getParam('sign');
-			echo $trade_no;
+			
+			$result_code = Yii::app()->request->getParam('result_code');
+			$result_message = Yii::app()->request->getParam('result_message');
+			
+			$data = '{"from":"returntrue";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
+			Helper::writeLog($data);
 		}
-	
-		echo '%%%';
-	
 	}
 }

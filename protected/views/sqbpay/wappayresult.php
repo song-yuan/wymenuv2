@@ -1,14 +1,30 @@
-
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('支付中心');
+	$this->setPageTitle('支付');
 ?>
 
-
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
-<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
-
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cupon.css">
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
+<style>
+body{background: #EC5D5D;}
+</style>
+<div class=" " id="wrap">
+     <ul>
+		<div class="index">
+            <div class="index_box">
+                <div class="index_icon">
+                     <div class="titl">
+                         <h1><?php echo $is_success;?></h1>
+						 <div class="titl_h">
+						 <h2><?php echo $status;?></h2>
+						 <h3><?php echo $result_code;?></h3>
+						 <h3><?php echo $result_message;?></h3>
+						 </div>                                 
+                     </div>	
+                </div>
+            </div>
+        </div>
+   </ul>
+</div>
