@@ -19,6 +19,9 @@
 .over-distance .weui_cell_ft{
 	display:block;
 }
+.over-distance label{
+	background:none !important;
+}
 </style>
 <script type="text/javascript">
 var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId,'url'=>urldecode($url)));?>";
