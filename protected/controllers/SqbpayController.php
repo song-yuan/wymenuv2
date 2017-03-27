@@ -28,13 +28,13 @@ class SqbpayController extends Controller
 			
 			
 			var_dump($is_success);
-			echo '---';
+			echo '^^^';
 			var_dump($error_code);
-			echo '---';
+			echo '###';
 			var_dump($error_message);
 		}
 		
-		echo '---';
+		echo '&&&';
 		
 	}
 }
