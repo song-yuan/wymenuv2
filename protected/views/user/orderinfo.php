@@ -137,7 +137,7 @@
 </div>
 
 <?php if($order['order_status']< 3):?>
-<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.2em;">取消订单</div>
+<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="font-size:1.2em;">取消订单</div>
 <?php endif;?>
  <!--BEGIN dialog1-->
 <div class="weui_dialog_confirm" id="dialog1" style="display: none;">
@@ -193,6 +193,8 @@
 
 <script>
 $(document).ready(function(){
+	var orderId = 0;
+	var orderDpid = 0;
 	$('.payOrder').click(function(){
 		var status = $(this).attr('status');
 		if(parseInt(status) < 2){
@@ -201,15 +203,15 @@ $(document).ready(function(){
 			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'paytype'=>2));?>';
 		}
 	});
-	var orderId = 0;
 	$('.close_window').click(function(){
 		orderId = $(this).attr('order-id');
+		orderDpid = $(this).attr('order-dpid');
 		$('#dialog1').show();
 	});
 	$('#dialog1 .primary').click(function(){
 		$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
-			data:{orderId:orderId},
+			data:{orderId:orderId,orderDpid:orderDpid},
 			success:function(data){
 				if(parseInt(data)){
 					history.go(0);

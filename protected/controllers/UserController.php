@@ -513,7 +513,7 @@ class UserController extends Controller
 	 public function actionAjaxCancelOrder()
 	{
 		$orderId = Yii::app()->request->getParam('orderId');
-		$dpid = $this->companyId;
+		$dpid = Yii::app()->request->getParam('orderDpid');
 		
 		$transaction=Yii::app()->db->beginTransaction();
 		try{

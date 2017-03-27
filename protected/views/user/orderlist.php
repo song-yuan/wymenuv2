@@ -44,7 +44,7 @@
 					</a>
 					<?php if($model['order_status']< 3):?>
 					<div class="order_bttnbar pad_10">
-						<button class="bttn_large bttn_orange cancel" order-id="<?php echo $model['lid'];?>">取消订单</button>
+						<button class="bttn_large bttn_orange cancel" order-id="<?php echo $model['lid'];?>" order-dpid="<?php echo $model['dpid'];?>">取消订单</button>
 					</div>
 					<?php endif;?>
 			</li>
@@ -81,14 +81,16 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var orderId = 0;
+		var orderDpid = 0;
 		$('.cancel').click(function(){
 			orderId = $(this).attr('order-id');
+			orderDpid = $(this).attr('order-dpid');
 			$('#dialog1').show();
 		});
 		$('#dialog1 .primary').click(function(){
 			$.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
-				data:{orderId:orderId},
+				data:{orderId:orderId,orderDpid:orderDpid},
 				success:function(data){
 					if(parseInt(data)){
 						history.go(0);
