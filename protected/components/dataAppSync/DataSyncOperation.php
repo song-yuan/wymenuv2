@@ -640,7 +640,7 @@ class DataSyncOperation {
 				$cardId = $memberPoints->member_card_rfid;
 				$receivePoint = $memberPoints->receive_points;
 				$endDate = date('Y',$time)+1 . '-' . date('m-d 23:59:59',$time);
-				if($cardType == 0){
+				if($cardType == 0&&$cardId!=0){
 					// 实体会员卡
 					$se = new Sequence ( "member_points" );
 					$memberPointId = $se->nextval ();
@@ -659,7 +659,7 @@ class DataSyncOperation {
 							'is_sync' => $isSync
 					);
 					Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
-					$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid='.$memberPoints->member_card_rfid.' and dpid='.$dpid;
+					$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid='.$memberPoints->member_card_rfid;
 					Yii::app ()->db->createCommand ($sql)->execute();
 				}else{
 					// 微信会员卡
@@ -696,6 +696,7 @@ class DataSyncOperation {
 			) );
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
+			Helper::writeLog($dpid.'---'.$e->getMessage());
 			$msg = json_encode ( array (
 					'status' => false,
 					'orderId' => '' 
@@ -1178,6 +1179,7 @@ class DataSyncOperation {
 			}
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
+			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
 		}else{
 			$msg = json_encode(array('status'=>false,'msg'=>''));
