@@ -52,7 +52,7 @@ class SqbpayController extends Controller
 			$result_code = Yii::app()->request->getParam('result_code');
 			$result_message = Yii::app()->request->getParam('result_message');
 			
-			$data = '{"from":"result";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";"result_message":"'.$result_message.'"}';
+			$data = '{"from":"result";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
 			Helper::writeLog($data);
 		}
 		$this->render('wappayresult',array(
@@ -81,7 +81,7 @@ class SqbpayController extends Controller
 			$result_code = Yii::app()->request->getParam('result_code');
 			$result_message = Yii::app()->request->getParam('result_message');
 			
-			$data = '{"from":"return";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";"result_message":"'.$result_message.'"}';
+			$data = '{"from":"return";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
 			Helper::writeLog($data);
 		}
 	}
