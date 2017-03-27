@@ -11,7 +11,6 @@
 body{background: #EC5D5D;}
 </style>
 <div class=" " id="wrap">
-    <div class="topbox"><img src="../img/mall/cupon.png" /></div>
      <ul>
 		<div class="index">
             <div class="index_box">
@@ -19,14 +18,13 @@ body{background: #EC5D5D;}
                      <div class="titl">
                          <h1><?php echo $is_success;?></h1>
 						 <div class="titl_h">
-						 <span><?php echo $status;?></span>
-						 <span><?php echo $result_code;?></span>
-						 <span><?php echo $result_message;?></span>
+						 <h2><?php echo $status;?></h2>
+						 <h3><?php echo $result_code;?></h3>
+						 <h3><?php echo $result_message;?></h3>
 						 </div>                                 
                      </div>	
                 </div>
             </div>
         </div>
-		</a></li>
    </ul>
 </div>
