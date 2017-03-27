@@ -14,14 +14,14 @@ class WxOrderAddress
 	  * 添加订单地址
 	  * 
 	  */
-	  public static function addOrderAddress($orderId,$address){
+	  public static function addOrderAddress($orderId,$orderDpid,$address){
 	  		self::checkOrderAddress($orderId,$address['dpid']);
             $time = time();
 			$se = new Sequence("order_address");
 		    $lid = $se->nextval();
 			$insertData = array(
 								'lid'=>$lid,
-					        	'dpid'=>$address['dpid'],
+					        	'dpid'=>$orderDpid,
 					        	'create_at'=>date('Y-m-d H:i:s',$time),
 					        	'update_at'=>date('Y-m-d H:i:s',$time), 
 					        	'order_lid'=>$orderId,
