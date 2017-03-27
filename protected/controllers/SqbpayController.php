@@ -65,8 +65,7 @@ class SqbpayController extends Controller
 		
 	}
 	public function actionWappayreturn(){
-		$data = $_POST;
-		Helper::writeLog($_POST);
+		$is_post_success = Yii::app()->request->getPost('is_success');
 		
 		$is_success = Yii::app()->request->getParam('is_success');
 		if($is_success == 'F'){
@@ -94,5 +93,6 @@ class SqbpayController extends Controller
 			$data = '{"from":"returntrue";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
 			Helper::writeLog($data);
 		}
+		Helper::writeLog('{"return":"POST";"is_success":"'.$is_post_success.'"}');
 	}
 }
