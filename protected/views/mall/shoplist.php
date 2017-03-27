@@ -126,89 +126,60 @@
 		    }
 		    $("#activeshop").html(str);
 	    }
-        function getLocation(){
-            var options={
-                enableHighAccuracy:true,
-                maximumAge:1000
-            }
-            if(navigator.geolocation){
-                //浏览器支持geolocation
-                navigator.geolocation.getCurrentPosition(onSuccess,onError,options);
-            }else{
-                //浏览器不支持geolocation
-                alert('您的浏览器不支持地理位置定位');
-            }
-        }
-        //成功时
-        function onSuccess(position){
-            //返回用户位置
-            //经度
-            var longitude =position.coords.longitude;
-            //纬度
-            var latitude = position.coords.latitude;
-            alert('经度'+longitude+'，纬度'+latitude);
-
-            var originDistanceArr = new Array();
-			var shopDistanceArr = new Array();
-	        $('#allshop').find('li').each(function(){
-				var lat = parseFloat($(this).attr('lat'));
-				var lng = parseFloat($(this).attr('lng'));
-				if(isNaN(lat)||isNaN(lng)){
-					var distance = getFlatternDistance(latitude,longitude,0,0);
-				}else{
-					var distance = getFlatternDistance(latitude,longitude,lat,lng);
-				}
-				$(this).attr('distance',distance);
-				var searil = $(this).attr('searil');
-				if(distance >= 1000 && distance <= 5000){
-					originDistanceArr[searil] = distance;
-		 	  		shopDistanceArr[searil] = distance;
-					distance = (distance/1000).toFixed(2)+'千米';
-					$(this).find('span.right').html(distance);
-				}else if(distance < 1000){
-					originDistanceArr[searil] = distance;
-		 	  		shopDistanceArr[searil] = distance;
-					distance = distance.toFixed(2)+'米';
-					$(this).find('span.right').html(distance);
-				}else{
-					distance = (distance/1000).toFixed(2)+'千米';
-					$(this).find('span.right').html(distance);
-					return true;
-				}
-		    });
-	        if(shopDistanceArr.length==0){
-				$("#tips").show();
-			}else{
-				$("#tips").hide();
-				sortShop(originDistanceArr,shopDistanceArr);
-			}
-        }
-        //失败时
-        function onError(error){
-            switch(error.code){
-                case 1:
-                    alert("位置服务被拒绝");
-                    break;
-                case 2:
-                    alert("暂时获取不到位置信息");
-                    break;
-                case 3:
-                    alert("获取信息超时");
-                    break;
-                case 4:
-                    alert("未知错误");
-                    break;
-            }
-        }
-        window.onload = getLocation;
-
 
 	    $('#activeshop').on('click','li',function(){
 		    var href = $(this).attr('href');
 		    location.href = href;
 		});
+		
 		$("#name-search").change(function(){
 			searchShop();
 		});
+	    wx.ready(function () {
+	    	wx.getLocation({
+			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+			    success: function (res) {
+			        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			        var speed = res.speed; // 速度，以米/每秒计
+			        var accuracy = res.accuracy; // 位置精度
+
+			        var originDistanceArr = new Array();
+					var shopDistanceArr = new Array();
+			        $('#allshop').find('li').each(function(){
+						var lat = parseFloat($(this).attr('lat'));
+						var lng = parseFloat($(this).attr('lng'));
+						if(isNaN(lat)||isNaN(lng)){
+							var distance = getFlatternDistance(latitude,longitude,0,0);
+						}else{
+							var distance = getFlatternDistance(latitude,longitude,lat,lng);
+						}
+						$(this).attr('distance',distance);
+						var searil = $(this).attr('searil');
+						if(distance >= 1000 && distance <= 5000){
+							originDistanceArr[searil] = distance;
+				 	  		shopDistanceArr[searil] = distance;
+							distance = (distance/1000).toFixed(2)+'千米';
+							$(this).find('span.right').html(distance);
+						}else if(distance < 1000){
+							originDistanceArr[searil] = distance;
+				 	  		shopDistanceArr[searil] = distance;
+							distance = distance.toFixed(2)+'米';
+							$(this).find('span.right').html(distance);
+						}else{
+							distance = (distance/1000).toFixed(2)+'千米';
+							$(this).find('span.right').html(distance);
+							return true;
+						}
+				    });
+			        if(shopDistanceArr.length==0){
+						$("#tips").show();
+					}else{
+						$("#tips").hide();
+						sortShop(originDistanceArr,shopDistanceArr);
+					}
+			    }
+			});
+	    });
 	</script>
 </body>
