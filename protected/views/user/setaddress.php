@@ -45,7 +45,8 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 		<?php endforeach;?>
 	</ul>
 	<?php endif;?>
-	<input id="address_dpid" type="hidden" value="<?php echo $user['dpid'];?>">
+	<input id="user_lid" type="hidden" value="<?php echo $user['lid'];?>">
+	<input id="user_dpid" type="hidden" value="<?php echo $user['dpid'];?>">
 	<div class="tools">
 		<ul>
 			<li class="addicon"><a href="<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId,'url'=>$url));?>">添加收货地址</a></li>
@@ -59,7 +60,7 @@ var list = document.getElementById("list");
 new SwipeOut(list);
 list.addEventListener("delete", function(evt) {
 	var listId = evt.target.id;
-	var dpid = $('#address_dpid').value();
+	var dpid = $('#user_dpid').value();
 	$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxDeleteAddress',array('companyId'=>$this->companyId));?>',
 			data:{lid:listId,dpid:dpid},
@@ -81,7 +82,7 @@ $(document).ready(function(){
 		}
 		var addressId = $(this).find('label').attr('address-id');
 		var addressDpid = $(this).find('label').attr('address-dpid');
-		var userId = '<?php echo $userId;?>';
+		var userId = $('#user_lid').val();
 		var back = $('input[name="back"]').val();
 		
 		$.ajax({
