@@ -122,7 +122,7 @@
 	    	alert(arr);
 		    for(var k in arr){
 			    if(arr[k]!=""){
-			    	str +=$('li[searil="'+index+'"][distance="'+arr[k]+'"]').prop("outerHTML");
+			    	str +=$('li[searil="'+k+'"][distance="'+arr[k]+'"]').prop("outerHTML");
 				}else{
 					str +=$('li[searil="'+k+'"]').prop("outerHTML");
 				}
