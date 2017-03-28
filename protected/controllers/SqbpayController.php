@@ -66,7 +66,7 @@ class SqbpayController extends Controller
 	}
 	public function actionWappayreturn(){
 		$companyId = Yii::app()->request->getParam('companyId','000000');
-		
+		Helper::writeLog('进入方法;店铺:'.$companyId);
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		/*$mxl如下：
@@ -91,31 +91,13 @@ class SqbpayController extends Controller
 		 * */
 		
 		$obj = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+		$sns = $obj['sn'];
+
+		Helper::writeLog('进入方法'.$sns.';店铺:'.$companyId);
 		$sn = $obj->sn;
-		$client_sn = $obj->client_sn;
-		$client_tsn = $obj->client_tsn;
-		$ctime = $obj->ctime;
-		$status = $obj->status;
-		$payway = $obj->payway;
-		$sub_payway = $obj->sub_payway;
-		$order_status = $obj->order_status;
-		$total_amount = $obj->total_amount;
-		$net_amount = $obj->net_amount;
-		$finish_time = $obj->finish_time;
-		$subject = $obj->subject;
-		$store_id = $obj->store_id;
-		$terminal_id = $obj->terminal_id;
-		$operator = $obj->operator;
-		
-		Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
 		
 		
-		if($order_status == 'PAID'){
-			//订单成功支付...
-		}elseif($order_status == 'PAY_CANCELED'){
-			//订单支付失败...
-		}
 		
 		
 	}
