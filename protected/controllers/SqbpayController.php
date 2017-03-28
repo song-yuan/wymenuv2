@@ -80,6 +80,8 @@ class SqbpayController extends Controller
 		 * "payway":"3",*
 		 * "sub_payway":"3",*
 		 * "order_status":"PAY_CANCELED",*
+		 * "payer_uid":"",
+		 * "trade_no":"6521100249201703286121293325",
 		 * "total_amount":"1",*
 		 * "net_amount":"0",*
 		 * "finish_time":"1490611957891",*
@@ -92,7 +94,7 @@ class SqbpayController extends Controller
 		 * */
 		
 		$obj = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA, true)));
-		$sns = $obj['sn'];
+		$sns = $obj->sn;
 
 		Helper::writeLog('进入方法'.$sns.';店铺:'.$companyId);
 		
