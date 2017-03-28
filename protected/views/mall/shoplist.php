@@ -103,8 +103,6 @@
 		 	  	if(patt.test(name)){
 		 	  		originDistanceArr[searil] = shopDistance;
 		 	  		shopDistanceArr[searil] = shopDistance;
-			 	}else{
-				 	
 			 	}
 		 	});	 
 		 	if(shopDistanceArr.length==0){
@@ -119,13 +117,9 @@
 	    	var originArr = oriarr;
 	    	arr.sort(sortNumber);
 		    for(var k in arr){
-			    if(arr[k]!=""){
-			    	var index = originArr.indexOf(arr[k]);
-			    	originArr[index] = -1;
-			    	str +=$('li[searil="'+index+'"][distance="'+arr[k]+'"]').prop("outerHTML");
-				}else{
-					str +=$('li[searil="'+k+'"]').prop("outerHTML");
-				}
+		    	var index = originArr.indexOf(arr[k]);
+		    	originArr[index] = -1;
+		    	str +=$('li[searil="'+index+'"][distance="'+arr[k]+'"]').prop("outerHTML");
 		    }
 		    $("#activeshop").html(str);
 	    }
