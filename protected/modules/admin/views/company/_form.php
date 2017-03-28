@@ -1,3 +1,4 @@
+							<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 							<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hzj3D9srpRthGaFjOeBGvOG6"></script>
 							<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
 							<?php $form=$this->beginWidget('CActiveForm', array(
@@ -174,6 +175,8 @@
 											<div id="allmap" style="width:400px;height:200px;"></div>
 										</div>
 									</div>
+									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
+									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
 									
 									<div class="form-group">
 										<?php echo $form->label($model, 'distance',array('class' => 'col-md-3 control-label'));?>
@@ -215,8 +218,7 @@
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
-									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
-									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
+									
                                     <!--
 									<div class="form-group">
 										<?php echo $form->label($model, 'printer_id',array('class' => 'col-md-3 control-label'));?>
@@ -270,23 +272,29 @@
 			var cityName = result.name;
 			map.centerAndZoom(cityName,11);
 		}
-		var map = new BMap.Map("allmap");
+		
 		$(document).ready(function(){
-			// 百度地图API功能
+			//腾讯地图API
 			var lng = $('#Company_lng').val();
 			var lat = $('#Company_lat').val();
-			
-			if(parseInt(lng) && parseInt(lat)){
-				var point = new BMap.Point(lng,lat);
-				map.centerAndZoom(point,16);
-				map.addOverlay(new BMap.Marker(point));
-			}else{
-				var myCity = new BMap.LocalCity();
-				myCity.get(theLocation);
-			}
-			
-			map.enableScrollWheelZoom(true);
-			
+			alert(lng+'@@'+lat);
+			var geocoder,map,marker = null;
+		    var center = new qq.maps.LatLng(31.209145,121.325489);
+		    map = new qq.maps.Map(document.getElementById('allmap'),{
+		        center: center,
+		        zoom: 15
+		    });
+		    //调用地址解析类
+		    geocoder = new qq.maps.Geocoder({
+		        complete : function(result){
+		            map.setCenter(result.detail.location);
+		            var marker = new qq.maps.Marker({
+		                map:map,
+		                position: result.detail.location
+		            });
+		        }
+		    });
+
 			$('.getLocation').click(function(){
 				var province = $('#province').children('option:selected').val();
 		        var city = $('#city').children('option:selected').val();
@@ -300,18 +308,8 @@
 					}
 				var real_address = province+city+area+address;
 				// 创建地址解析器实例
-				var myGeo = new BMap.Geocoder();
-				// 将地址解析结果显示在地图上,并调整地图视野
-				myGeo.getPoint(real_address, function(point){
-					if (point) {
-						$('#Company_lng').val(point.lng);
-						$('#Company_lat').val(point.lat);
-						map.centerAndZoom(point, 16);
-						map.addOverlay(new BMap.Marker(point));
-					}else{
-						
-					}
-				}, "上海市");
+				geocoder.getLocation(real_address);
+				
 			});
 		     $("#su").on('click',function() {
 
