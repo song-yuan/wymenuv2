@@ -109,9 +109,6 @@ class SqbpayController extends Controller
 		
 		Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
-		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn="'.$sn.'"';
-		$notify = Yii::app()->db->createCommand($sql)
-		->queryRow();
 		
 		
 		if($order_status == 'PAID'){
