@@ -250,7 +250,7 @@ class UserController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$user = $this->brandUser;
 		$addresss = WxAddress::get($userId,$user['dpid']);
-		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId));
+		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'user'=>$user));
 	}
 	/**
 	 * 
@@ -265,7 +265,7 @@ class UserController extends Controller
 		$type = Yii::app()->request->getParam('type',1);
 		$addresss = WxAddress::get($userId,$user['dpid']);
 		$company = WxCompany::get($this->companyId);
-		$this->render('setaddress',array('company'=>$company,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url,'type'=>$type));
+		$this->render('setaddress',array('company'=>$company,'addresss'=>$addresss,'user'=>$user,'url'=>$url,'type'=>$type));
 	}
 	/**
 	 * 
