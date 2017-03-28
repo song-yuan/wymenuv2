@@ -26,7 +26,7 @@
 			<!-- 全部门店 -->
 			<ul id="allshop">
 				<?php foreach ($children as $k=>$child):?>
-				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
+				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k.'-s';?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
 						<div class="info small font_l" style="margin-top:5px;">地址: <?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></div>
@@ -117,9 +117,10 @@
 	    function sortShop(oriarr,arr){
 		    var str = '';
 	    	var originArr = oriarr;
+	    	alert(originArr);
 	    	arr.sort(sortNumber);
+	    	alert(arr);
 		    for(var k in arr){
-			    alert(k);alert(arr[k]);
 		    	str +=$('li[searil="'+k+'"][distance="'+arr[k]+'"]').prop("outerHTML");
 		    }
 		    $("#activeshop").html(str);
