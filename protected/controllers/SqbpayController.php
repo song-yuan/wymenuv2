@@ -130,8 +130,8 @@ class SqbpayController extends Controller
 				$notifyWxwapData = array (
 						'lid' => $notifyWxwapId,
 						'dpid' => $companyId,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
-						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'create_at' => date ( 'Y-m-d H:i:s', time()),
+						'update_at' => date ( 'Y-m-d H:i:s', time()),
 						'sn' => $sn,
 						'client_sn' => $client_sn,
 						'client_tsn' => $client_tsn,
@@ -160,8 +160,8 @@ class SqbpayController extends Controller
 			$notifyWxwapData = array (
 					'lid' => $notifyWxwapId,
 					'dpid' => $companyId,
-					'create_at' => date ( 'Y-m-d H:i:s', $time ),
-					'update_at' => date ( 'Y-m-d H:i:s', $time ),
+					'create_at' => date ( 'Y-m-d H:i:s', time()),
+					'update_at' => date ( 'Y-m-d H:i:s', time()),
 					'sn' => $sn,
 					'client_sn' => $client_sn,
 					'client_tsn' => $client_tsn,
