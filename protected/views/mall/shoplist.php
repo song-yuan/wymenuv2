@@ -117,7 +117,9 @@
 	    function sortShop(oriarr,arr){
 		    var str = '';
 	    	var originArr = oriarr;
+	    	alert(originArr);
 	    	arr.sort(sortNumber);
+	    	alert(arr);
 		    for(var k in arr){
 			    if(arr[k]!=""){
 			    	str +=$('li[searil="'+index+'"][distance="'+arr[k]+'"]').prop("outerHTML");
