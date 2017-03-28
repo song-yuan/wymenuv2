@@ -94,7 +94,7 @@ class SqbpayController extends Controller
 		 * */
 		//$obj = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
 		$obj = json_decode($xml,true);
-		$sns = $obj['sn'];
+		$sn = $obj['sn'];
 		$client_sn = $obj['client_sn'];
 		$client_tsn = $obj['client_tsn'];
 		$ctime = $obj['ctime'];
