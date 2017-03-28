@@ -179,7 +179,7 @@ class SqbpayController extends Controller
 					'operator' => $operator,
 			);
 			$data = json_encode($notifyWxwapData);
-			Helper::writeLog('第一次2:['.$sn.'],插入数据：'.$data);
+			Helper::writeLog('第一次2:['.$sn.'],插入数据：');
 			$result = Yii::app ()->db->createCommand ()->insert('nb_notify_wxwap',$notifyWxwapData);
 			Helper::writeLog('第一次2:['.$sn.']');
 		}
