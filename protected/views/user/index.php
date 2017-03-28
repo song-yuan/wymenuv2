@@ -309,7 +309,6 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <div class="empty1"></div>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/address',array('companyId'=>$this->companyId));?>">
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon_location.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
