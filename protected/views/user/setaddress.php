@@ -45,6 +45,7 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 		<?php endforeach;?>
 	</ul>
 	<?php endif;?>
+	<input id="address_dpid" type="hidden" value="<?php echo $user['dpid'];?>">
 	<div class="tools">
 		<ul>
 			<li class="addicon"><a href="<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId,'url'=>$url));?>">添加收货地址</a></li>
@@ -57,13 +58,17 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 var list = document.getElementById("list");
 new SwipeOut(list);
 list.addEventListener("delete", function(evt) {
-	var addressId = evt.target.id;
+	var listId = evt.target.id;
+	var dpid = $('#address_dpid').value();
 	$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxDeleteAddress',array('companyId'=>$this->companyId));?>',
-			data:{lid:addressId},
-			type:'post',
+			data:{lid:listId,dpid:dpid},
 			success:function(msg){
-				history.go(0);
+				if(parseInt(data)){
+					history.go(0);
+				}else{
+					layer.msg('删除失败');
+				}
 			}
 		});
 });
