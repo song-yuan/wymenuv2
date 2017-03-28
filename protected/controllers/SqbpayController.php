@@ -115,13 +115,15 @@ class SqbpayController extends Controller
 		Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
 		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn="'.$sn.'"';
+		
+		Helper::writeLog('进入方法'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)
 		->queryRow();
 		if(!empty($notify)){
 			if($order_status == $notify['order_status']){
 				Helper::writeLog('相同的'.$sn);
 			}else{
-		
+				Helper::writeLog('不同的1'.$sn);
 				//像微信公众号支付记录表插入记录...
 				$se = new Sequence ( "notify_wxwap" );
 				$notifyWxwapId = $se->nextval ();
@@ -147,10 +149,10 @@ class SqbpayController extends Controller
 						'operator' => $operator,
 				);
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-				Helper::writeLog('不同的'.$sn);
+				Helper::writeLog('不同的2'.$sn);
 			}
 		}else{
-		
+			Helper::writeLog('第一次1'.$sn);
 			//像微信公众号支付记录表插入记录...
 			$se = new Sequence ( "notify_wxwap" );
 			$notifyWxwapId = $se->nextval ();
@@ -176,7 +178,7 @@ class SqbpayController extends Controller
 					'operator' => $operator,
 			);
 			$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-			Helper::writeLog('第一次'.$sn);
+			Helper::writeLog('第一次2'.$sn);
 		}
 		
 		if($order_status == 'PAID'){
@@ -184,7 +186,6 @@ class SqbpayController extends Controller
 		}elseif($order_status == 'PAY_CANCELED'){
 			//订单支付失败...
 		}
-		Helper::writeLog('进入方法'.$sns.';店铺:'.$companyId);
 		
 	}
 }
