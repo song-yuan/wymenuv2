@@ -66,9 +66,10 @@ class SqbpayController extends Controller
 	}
 	public function actionWappayreturn(){
 		$companyId = Yii::app()->request->getParam('companyId','000000');
-		Helper::writeLog('进入方法;店铺:'.$companyId);
+		
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+		Helper::writeLog('进入方法;数据:'.$xml);
 		/*$mxl如下：
 		 * {
 		 * "sn":"7895259485469125",*
@@ -90,15 +91,10 @@ class SqbpayController extends Controller
 		 * 
 		 * */
 		
-		$obj = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+		$obj = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA, true)));
 		$sns = $obj['sn'];
 
 		Helper::writeLog('进入方法'.$sns.';店铺:'.$companyId);
-		$sn = $obj->sn;
-		
-		
-		
-		
 		
 	}
 }
