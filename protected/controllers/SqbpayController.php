@@ -123,7 +123,7 @@ class SqbpayController extends Controller
 			if($order_status == $notify['order_status']){
 				Helper::writeLog('相同的'.$sn);
 			}else{
-				Helper::writeLog('不同的1'.$sn);
+				Helper::writeLog('不同的1:['.$sn.']');
 				//像微信公众号支付记录表插入记录...
 				$se = new Sequence ( "notify_wxwap" );
 				$notifyWxwapId = $se->nextval ();
@@ -149,13 +149,14 @@ class SqbpayController extends Controller
 						'operator' => $operator,
 				);
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-				Helper::writeLog('不同的2'.$sn);
+				Helper::writeLog('不同的2:['.$sn.']');
 			}
 		}else{
-			Helper::writeLog('第一次1'.$sn);
+			Helper::writeLog('第一次1:['.$sn.']');
 			//像微信公众号支付记录表插入记录...
-			$se = new Sequence ( "notify_wxwap" );
-			$notifyWxwapId = $se->nextval ();
+			$se = new Sequence("notify_wxwap");
+			$notifyWxwapId = $se->nextval();
+			Helper::writeLog('第一次1:['.$sn.'],插入ID：'.$notifyWxwapId);
 			$notifyWxwapData = array (
 					'lid' => $notifyWxwapId,
 					'dpid' => $dpid,
@@ -177,8 +178,10 @@ class SqbpayController extends Controller
 					'terminal_id' => $terminal_id,
 					'operator' => $operator,
 			);
-			$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-			Helper::writeLog('第一次2'.$sn);
+			$data = json_encode($notifyWxwapData);
+			Helper::writeLog('第一次2:['.$sn.'],插入数据：'.$data);
+			$result = Yii::app ()->db->createCommand ()->insert('nb_notify_wxwap',$notifyWxwapData);
+			Helper::writeLog('第一次2:['.$sn.']');
 		}
 		
 		if($order_status == 'PAID'){
