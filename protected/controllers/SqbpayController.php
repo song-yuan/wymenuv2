@@ -129,7 +129,7 @@ class SqbpayController extends Controller
 				$notifyWxwapId = $se->nextval ();
 				$notifyWxwapData = array (
 						'lid' => $notifyWxwapId,
-						'dpid' => $dpid,
+						'dpid' => $companyId,
 						'create_at' => date ( 'Y-m-d H:i:s', $time ),
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
 						'sn' => $sn,
@@ -159,7 +159,7 @@ class SqbpayController extends Controller
 			Helper::writeLog('第一次1:['.$sn.'],插入ID：'.$notifyWxwapId);
 			$notifyWxwapData = array (
 					'lid' => $notifyWxwapId,
-					'dpid' => $dpid,
+					'dpid' => $companyId,
 					'create_at' => date ( 'Y-m-d H:i:s', $time ),
 					'update_at' => date ( 'Y-m-d H:i:s', $time ),
 					'sn' => $sn,
