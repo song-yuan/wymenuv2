@@ -112,24 +112,26 @@ class SqbpayController extends Controller
 		$terminal_id = $obj['terminal_id'];
 		$operator = $obj['operator'];
 		
-		Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
+		//Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
 		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn="'.$sn.'"';
+		
+		//Helper::writeLog('进入方法'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)
 		->queryRow();
 		if(!empty($notify)){
 			if($order_status == $notify['order_status']){
-				Helper::writeLog('相同的'.$sn);
+				//Helper::writeLog('相同的'.$sn);
 			}else{
-		
+				//Helper::writeLog('不同的1:['.$sn.']');
 				//像微信公众号支付记录表插入记录...
 				$se = new Sequence ( "notify_wxwap" );
 				$notifyWxwapId = $se->nextval ();
 				$notifyWxwapData = array (
 						'lid' => $notifyWxwapId,
-						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
-						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'dpid' => $companyId,
+						'create_at' => date ( 'Y-m-d H:i:s', time()),
+						'update_at' => date ( 'Y-m-d H:i:s', time()),
 						'sn' => $sn,
 						'client_sn' => $client_sn,
 						'client_tsn' => $client_tsn,
@@ -138,6 +140,8 @@ class SqbpayController extends Controller
 						'payway' => $payway,
 						'sub_payway' => $sub_payway,
 						'order_status' => $order_status,
+						'payer_uid' => $payer_uid,
+						'trade_no' => $trade_no,
 						'total_amount' => $total_amount,
 						'net_amount' => $net_amount,
 						'finish_time' => $finish_time,
@@ -147,18 +151,19 @@ class SqbpayController extends Controller
 						'operator' => $operator,
 				);
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-				Helper::writeLog('不同的'.$sn);
+				//Helper::writeLog('不同的2:['.$sn.']');
 			}
 		}else{
-		
+			//Helper::writeLog('第一次1:['.$sn.']');
 			//像微信公众号支付记录表插入记录...
-			$se = new Sequence ( "notify_wxwap" );
-			$notifyWxwapId = $se->nextval ();
+			$se = new Sequence("notify_wxwap");
+			$notifyWxwapId = $se->nextval();
+			//Helper::writeLog('第一次1:['.$sn.'],插入ID：'.$notifyWxwapId);
 			$notifyWxwapData = array (
 					'lid' => $notifyWxwapId,
-					'dpid' => $dpid,
-					'create_at' => date ( 'Y-m-d H:i:s', $time ),
-					'update_at' => date ( 'Y-m-d H:i:s', $time ),
+					'dpid' => $companyId,
+					'create_at' => date ( 'Y-m-d H:i:s', time()),
+					'update_at' => date ( 'Y-m-d H:i:s', time()),
 					'sn' => $sn,
 					'client_sn' => $client_sn,
 					'client_tsn' => $client_tsn,
@@ -167,6 +172,8 @@ class SqbpayController extends Controller
 					'payway' => $payway,
 					'sub_payway' => $sub_payway,
 					'order_status' => $order_status,
+					'payer_uid' => $payer_uid,
+					'trade_no' => $trade_no,
 					'total_amount' => $total_amount,
 					'net_amount' => $net_amount,
 					'finish_time' => $finish_time,
@@ -175,8 +182,10 @@ class SqbpayController extends Controller
 					'terminal_id' => $terminal_id,
 					'operator' => $operator,
 			);
-			$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-			Helper::writeLog('第一次'.$sn);
+			$data = json_encode($notifyWxwapData);
+			//Helper::writeLog('第一次2:['.$sn.'],插入数据：');
+			$result = Yii::app ()->db->createCommand ()->insert('nb_notify_wxwap',$notifyWxwapData);
+			Helper::writeLog('第一次2:['.$result.']');
 		}
 		
 		if($order_status == 'PAID'){
@@ -184,7 +193,6 @@ class SqbpayController extends Controller
 		}elseif($order_status == 'PAY_CANCELED'){
 			//订单支付失败...
 		}
-		Helper::writeLog('进入方法'.$sns.';店铺:'.$companyId);
 		
 	}
 }
