@@ -117,8 +117,11 @@
 	    function sortShop(oriarr,arr){
 		    var str = '';
 	    	var originArr = oriarr;
+	    	alert(originArr);
 	    	arr.sort(sortNumber);
+	    	alert(arr);
 		    for(var k in arr){
+			    alert(k);
 		    	str +=$('li[searil="'+k+'"][distance="'+arr[k]+'"]').prop("outerHTML");
 		    }
 		    $("#activeshop").html(str);
