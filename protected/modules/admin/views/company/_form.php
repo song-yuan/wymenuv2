@@ -1,5 +1,4 @@
 							<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
-							<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hzj3D9srpRthGaFjOeBGvOG6"></script>
 							<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
 							<?php $form=$this->beginWidget('CActiveForm', array(
 									'id' => 'company-form',
@@ -272,44 +271,67 @@
 			var cityName = result.name;
 			map.centerAndZoom(cityName,11);
 		}
-		
+		// 腾讯地图API功能
+		var geocoder,map,marker = null;
+		var init = function() {
+			    var center = new qq.maps.LatLng(31.21323,121.31706);
+			    map = new qq.maps.Map($('#allmap')[0],{
+			        center: center,
+			        zoom: 13
+			    });
+			    var marker = new qq.maps.Marker({
+			        position: center,
+			        map: map
+			    });
+			    //调用地址解析类
+			    geocoder = new qq.maps.Geocoder({
+			        complete : function(result){
+			            map.setCenter(result.detail.location);
+			            var lat = result.detail.location.lat;
+			            var lng = result.detail.location.lng;
+			            $('#Company_lng').val(lng);
+			            $('#Company_lat').val(lat);
+			            marker.setVisible(false);
+			            marker = new qq.maps.Marker({
+			                map:map,
+			                position: result.detail.location
+			            });
+			        }
+			    });
+			}
+		function codeAddress(address) {
+		    //通过getLocation();方法获取位置信息值
+		    geocoder.getLocation(address);
+		}
 		$(document).ready(function(){
-			//腾讯地图API
-			var lng = $('#Company_lng').val();
-			var lat = $('#Company_lat').val();
-			alert(lng+'@@'+lat);
-			var geocoder,map,marker = null;
-		    var center = new qq.maps.LatLng(31.209145,121.325489);
-		    map = new qq.maps.Map(document.getElementById('allmap'),{
-		        center: center,
-		        zoom: 15
-		    });
-		    //调用地址解析类
-		    geocoder = new qq.maps.Geocoder({
-		        complete : function(result){
-		            map.setCenter(result.detail.location);
-		            var marker = new qq.maps.Marker({
-		                map:map,
-		                position: result.detail.location
-		            });
-		        }
-		    });
-
+			init();
+			var province = $('#province').children('option:selected').val();
+	        var city = $('#city').children('option:selected').val();
+	        var area = $('#area').children('option:selected').val();
+			var address = $('#Company_address').val();
+			if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
+				city = '';
+				}
+			if(area == '市辖区'){
+				area = '';
+				}
+			var real_address = province+city+area+address;	
+			codeAddress(real_address);
+			
 			$('.getLocation').click(function(){
-				var province = $('#province').children('option:selected').val();
-		        var city = $('#city').children('option:selected').val();
-		        var area = $('#area').children('option:selected').val();
-				var address = $('#Company_address').val();
+				province = $('#province').children('option:selected').val();
+		        city = $('#city').children('option:selected').val();
+		        area = $('#area').children('option:selected').val();
+				address = $('#Company_address').val();
 				if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
 					city = '';
 					}
 				if(area == '市辖区'){
 					area = '';
 					}
-				var real_address = province+city+area+address;
+				real_address = province+city+area+address;
 				// 创建地址解析器实例
-				geocoder.getLocation(real_address);
-				
+				codeAddress(real_address);
 			});
 		     $("#su").on('click',function() {
 

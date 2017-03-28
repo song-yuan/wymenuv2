@@ -226,12 +226,12 @@
 }
 
 .misinfo span.left {
-	width: 70%;
+	width: 50%;
 }
 
 .misinfo span.right {
-	width: 30%;
-	font-size:1.5em;
+	width: 50%;
+	font-size:1.3em;
 	font-weight:700;
 	line-height:100%;
 	text-align: right;
