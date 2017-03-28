@@ -9,7 +9,7 @@ class SqbpayController extends Controller
 		$rand = rand(100,999);
 		//$orderId = $now.'-'.$dpid.'-'.$rand;
 		
-		$orderId = '0000026914-0000000027';
+		$orderId = '0000026908-0000000027';
 		
 		$company = WxCompany::get($dpid);
 		$data = array(
@@ -28,8 +28,8 @@ class SqbpayController extends Controller
 					'payway'=>'3',
 					'subject'=>'wymenu',
 					'operator'=>'admin',
-					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn/companyId/0000000027',
-					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult/companyId/0000000027',
+					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult/companyId/0000000027',
+					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn/companyId/0000000027',
 			));
 		}else{
 			echo 'error';
