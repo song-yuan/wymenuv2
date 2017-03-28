@@ -9,7 +9,7 @@ class SqbpayController extends Controller
 		$rand = rand(100,999);
 		//$orderId = $now.'-'.$dpid.'-'.$rand;
 		
-		$orderId = '0000026908-0000000027';
+		$orderId = '0000026906-0000000027';
 		
 		$company = WxCompany::get($dpid);
 		$data = array(
@@ -75,7 +75,7 @@ class SqbpayController extends Controller
 					$orderstatus = false;
 					Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
 				}else{
-					$orderstatus = false;
+					$orderstatus = true;
 					Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
 				}
 			}
@@ -223,7 +223,7 @@ class SqbpayController extends Controller
 					$orders = Yii::app()->db->createCommand($sql)
 					->queryRow();
 					if(!empty($orders)){
-						sleep(10);
+						sleep(20);
 						$resultorder = Yii::app()->db->createCommand('update nb_order set order_status = 4 where dpid='.$orderdpid.' and lid ='.$orderid)
 						->execute();
 					}
