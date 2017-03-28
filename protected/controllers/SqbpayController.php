@@ -69,7 +69,7 @@ class SqbpayController extends Controller
 		
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-		Helper::writeLog('进入方法;数据:'.$xml);
+		//Helper::writeLog('进入方法;数据:'.$xml);
 		/*$mxl如下：
 		 * {
 		 * "sn":"7895259485469125",*
@@ -92,10 +92,98 @@ class SqbpayController extends Controller
 		 * }
 		 * 
 		 * */
-		
+		//$obj = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
 		$obj = json_decode($xml,true);
 		$sns = $obj['sn'];
-
+		$client_sn = $obj['client_sn'];
+		$client_tsn = $obj['client_tsn'];
+		$ctime = $obj['ctime'];
+		$status = $obj['status'];
+		$payway = $obj['payway'];
+		$sub_payway = $obj['sub_payway'];
+		$order_status = $obj['order_status'];
+		$payer_uid = $obj['payer_uid'];
+		$trade_no = $obj['trade_no'];
+		$total_amount = $obj['total_amount'];
+		$net_amount = $obj['net_amount'];
+		$finish_time = $obj['finish_time'];
+		$subject = $obj['subject'];
+		$store_id = $obj['store_id'];
+		$terminal_id = $obj['terminal_id'];
+		$operator = $obj['operator'];
+		
+		Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
+		
+		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn="'.$sn.'"';
+		$notify = Yii::app()->db->createCommand($sql)
+		->queryRow();
+		if(!empty($notify)){
+			if($order_status == $notify['order_status']){
+				Helper::writeLog('相同的'.$sn);
+			}else{
+		
+				//像微信公众号支付记录表插入记录...
+				$se = new Sequence ( "notify_wxwap" );
+				$notifyWxwapId = $se->nextval ();
+				$notifyWxwapData = array (
+						'lid' => $notifyWxwapId,
+						'dpid' => $dpid,
+						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'sn' => $sn,
+						'client_sn' => $client_sn,
+						'client_tsn' => $client_tsn,
+						'ctime' => $ctime,
+						'status' => $status,
+						'payway' => $payway,
+						'sub_payway' => $sub_payway,
+						'order_status' => $order_status,
+						'total_amount' => $total_amount,
+						'net_amount' => $net_amount,
+						'finish_time' => $finish_time,
+						'subject' => $subject,
+						'store_id' => $store_id,
+						'terminal_id' => $terminal_id,
+						'operator' => $operator,
+				);
+				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
+				Helper::writeLog('不同的'.$sn);
+			}
+		}else{
+		
+			//像微信公众号支付记录表插入记录...
+			$se = new Sequence ( "notify_wxwap" );
+			$notifyWxwapId = $se->nextval ();
+			$notifyWxwapData = array (
+					'lid' => $notifyWxwapId,
+					'dpid' => $dpid,
+					'create_at' => date ( 'Y-m-d H:i:s', $time ),
+					'update_at' => date ( 'Y-m-d H:i:s', $time ),
+					'sn' => $sn,
+					'client_sn' => $client_sn,
+					'client_tsn' => $client_tsn,
+					'ctime' => $ctime,
+					'status' => $status,
+					'payway' => $payway,
+					'sub_payway' => $sub_payway,
+					'order_status' => $order_status,
+					'total_amount' => $total_amount,
+					'net_amount' => $net_amount,
+					'finish_time' => $finish_time,
+					'subject' => $subject,
+					'store_id' => $store_id,
+					'terminal_id' => $terminal_id,
+					'operator' => $operator,
+			);
+			$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
+			Helper::writeLog('第一次'.$sn);
+		}
+		
+		if($order_status == 'PAID'){
+			//订单成功支付...
+		}elseif($order_status == 'PAY_CANCELED'){
+			//订单支付失败...
+		}
 		Helper::writeLog('进入方法'.$sns.';店铺:'.$companyId);
 		
 	}
