@@ -301,19 +301,18 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>" >
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/address',array('companyId'=>$this->companyId));?>">
+                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon_location.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>账单</p>
+                            <p>收货地址</p>
                         </div>
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <div class="empty1"></div>
-                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/address',array('companyId'=>$this->companyId));?>">
-                        <span class="weui_cell_hd"></span>
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>" >
+                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>我的收货地址</p>
+                            <p>账单</p>
                         </div>
                         <div class="weui_cell_ft">
                         </div>
