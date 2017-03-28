@@ -26,7 +26,7 @@
 			<!-- 全部门店 -->
 			<ul id="allshop">
 				<?php foreach ($children as $k=>$child):?>
-				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
+				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k.'-s';?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
 						<div class="info small font_l" style="margin-top:5px;">地址: <?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></div>
@@ -88,6 +88,7 @@
 			return a - b 
 		} 
 	    function searchShop(){
+		    var hasShop = false;
 		    var shopStr = '';
 	    	var search = $('#name-search').val();
 			if(search==''){
@@ -101,15 +102,16 @@
 			 	var name = $(this).find('h1').html();
 	 	 	 	var patt = new RegExp(search);
 		 	  	if(patt.test(name)){
+		 	  		hasShop = true;
 		 	  		originDistanceArr[searil] = shopDistance;
 		 	  		shopDistanceArr[searil] = shopDistance;
 			 	}
 		 	});	 
-		 	if(shopDistanceArr.length==0){
-				$("#tips").show();
-			}else{
+		 	if(hasShop){
 				$("#tips").hide();
 				sortShop(originDistanceArr,shopDistanceArr);
+			}else{
+				$("#tips").show();
 			}
 	    }
 	    function sortShop(oriarr,arr){
@@ -139,6 +141,7 @@
 	    	wx.getLocation({
 			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 			    success: function (res) {
+			    	 var hasShop = false;
 			        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
 			        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 			        var speed = res.speed; // 速度，以米/每秒计
@@ -157,11 +160,13 @@
 						$(this).attr('distance',distance);
 						var searil = $(this).attr('searil');
 						if(distance >= 1000 && distance <= 5000){
+							hasShop = true;
 							originDistanceArr[searil] = distance;
 				 	  		shopDistanceArr[searil] = distance;
 							distance = (distance/1000).toFixed(2)+'千米';
 							$(this).find('span.right').html(distance);
 						}else if(distance < 1000){
+							hasShop = true;
 							originDistanceArr[searil] = distance;
 				 	  		shopDistanceArr[searil] = distance;
 							distance = distance.toFixed(2)+'米';
@@ -172,11 +177,11 @@
 							return true;
 						}
 				    });
-			        if(shopDistanceArr.length==0){
-						$("#tips").show();
-					}else{
+			        if(hasShop){
 						$("#tips").hide();
 						sortShop(originDistanceArr,shopDistanceArr);
+					}else{
+						$("#tips").show();
 					}
 			    }
 			});
