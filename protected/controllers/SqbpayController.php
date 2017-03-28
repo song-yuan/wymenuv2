@@ -7,7 +7,9 @@ class SqbpayController extends Controller
 		
 		$now = time();
 		$rand = rand(100,999);
-		$orderId = $now.'-'.$dpid.'-'.$rand;
+		//$orderId = $now.'-'.$dpid.'-'.$rand;
+		
+		$orderId = '0000026920-0000000027';
 		
 		$company = WxCompany::get($dpid);
 		$data = array(
@@ -33,7 +35,7 @@ class SqbpayController extends Controller
 			echo 'error';
 		}
 	}
-	public function actionWappayresult(){
+	public function actionWappayreturn(){
 		$is_success = Yii::app()->request->getParam('is_success');
 		$status = Yii::app()->request->getParam('status');
 		$sign = Yii::app()->request->getParam('sign');
@@ -52,8 +54,32 @@ class SqbpayController extends Controller
 			$result_code = Yii::app()->request->getParam('result_code');
 			$result_message = Yii::app()->request->getParam('result_message');
 			
-			$data = '{"from":"result";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
+			$data = '{"收钱吧同步返回参数":"result";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
 			Helper::writeLog($data);
+			
+			//接口调用成功,查询订单状态...
+			$account_nos = explode('-',$client_sn);
+			$orderid = $account_nos[0];
+			$orderdpid = $account_nos[1];
+			//Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
+			
+			$i = 0;
+			$orderstatus = true;
+			do{
+				sleep(2);
+				$i++;
+				$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
+				$orders = Yii::app()->db->createCommand($sql)
+				->queryRow();
+				if($orders['order_status'] == '4' || $orders['order_status'] == '8' ){
+					$orderstatus = false;
+					Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
+				}else{
+					$orderstatus = false;
+					Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
+				}
+			}
+			while ($i<=50&&$orderstatus);
 		}
 		$this->render('wappayresult',array(
 				'is_success'=>$is_success,
@@ -64,9 +90,8 @@ class SqbpayController extends Controller
 		));
 		
 	}
-	public function actionWappayreturn(){
+	public function actionWappayresult(){
 		$companyId = Yii::app()->request->getParam('companyId','000000');
-		
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		//Helper::writeLog('进入方法;数据:'.$xml);
@@ -115,10 +140,10 @@ class SqbpayController extends Controller
 		//Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
 		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn="'.$sn.'"';
-		
 		//Helper::writeLog('进入方法'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)
 		->queryRow();
+		
 		if(!empty($notify)){
 			if($order_status == $notify['order_status']){
 				//Helper::writeLog('相同的'.$sn);
@@ -192,25 +217,19 @@ class SqbpayController extends Controller
 					$account_nos = explode('-',$client_sn);
 					$orderid = $account_nos[0];
 					$orderdpid = $account_nos[1];
-					Helper::writeLog('支付成功:['.$orderid.'],插入数据：'.$orderdpid);
-					exit;
+					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
+					//exit;
 					$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
 					$orders = Yii::app()->db->createCommand($sql)
 					->queryRow();
 					if(!empty($orders)){
+						sleep(10);
 						$resultorder = Yii::app()->db->createCommand('update nb_order set order_status = 4 where dpid='.$orderdpid.' and lid ='.$orderid)
 						->execute();
-						if($resultorder){
-							$resultorder = Yii::app()->db->createCommand('update nb_order set order_status = 4 where dpid='.$orderdpid.' and lid ='.$orderid)
-							->execute();
-						}
 					}
 				}
-				
 			}
 			//Helper::writeLog('第一次2:['.$result.']');
 		}
-		
-		
 	}
 }
