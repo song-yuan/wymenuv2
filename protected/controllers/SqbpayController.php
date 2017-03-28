@@ -65,7 +65,7 @@ class SqbpayController extends Controller
 		
 	}
 	public function actionWappayreturn(){
-		$companyId = Yii::app()->request->getParam('companyId');
+		$companyId = Yii::app()->request->getParam('companyId','000000');
 		
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
@@ -109,70 +109,10 @@ class SqbpayController extends Controller
 		
 		Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
-		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn='.$sn;
+		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn="'.$sn.'"';
 		$notify = Yii::app()->db->createCommand($sql)
 		->queryRow();
-		if(!empty($notify)){
-			if($order_status == $notify['order_status']){
-				Helper::writeLog('相同的'.$sn);
-			}else{
-
-				//像微信公众号支付记录表插入记录...
-				$se = new Sequence ( "notify_wxwap" );
-				$notifyWxwapId = $se->nextval ();
-				$notifyWxwapData = array (
-						'lid' => $notifyWxwapId,
-						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
-						'update_at' => date ( 'Y-m-d H:i:s', $time ),
-						'sn' => $sn,
-						'client_sn' => $client_sn,
-						'client_tsn' => $client_tsn,
-						'ctime' => $ctime,
-						'status' => $status,
-						'payway' => $payway,
-						'sub_payway' => $sub_payway,
-						'order_status' => $order_status,
-						'total_amount' => $total_amount,
-						'net_amount' => $net_amount,
-						'finish_time' => $finish_time,
-						'subject' => $subject,
-						'store_id' => $store_id,
-						'terminal_id' => $terminal_id,
-						'operator' => $operator,
-				);
-				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-				Helper::writeLog('不同的'.$sn);
-			}
-		}else{
-
-			//像微信公众号支付记录表插入记录...
-			$se = new Sequence ( "notify_wxwap" );
-			$notifyWxwapId = $se->nextval ();
-			$notifyWxwapData = array (
-					'lid' => $notifyWxwapId,
-					'dpid' => $dpid,
-					'create_at' => date ( 'Y-m-d H:i:s', $time ),
-					'update_at' => date ( 'Y-m-d H:i:s', $time ),
-					'sn' => $sn,
-					'client_sn' => $client_sn,
-					'client_tsn' => $client_tsn,
-					'ctime' => $ctime,
-					'status' => $status,
-					'payway' => $payway,
-					'sub_payway' => $sub_payway,
-					'order_status' => $order_status,
-					'total_amount' => $total_amount,
-					'net_amount' => $net_amount,
-					'finish_time' => $finish_time,
-					'subject' => $subject,
-					'store_id' => $store_id,
-					'terminal_id' => $terminal_id,
-					'operator' => $operator,
-			);
-			$result = Yii::app ()->db->createCommand ()->insert ( 'nb_notify_wxwap', $notifyWxwapData );
-			Helper::writeLog('第一次'.$sn);
-		}
+		
 		
 		if($order_status == 'PAID'){
 			//订单成功支付...
