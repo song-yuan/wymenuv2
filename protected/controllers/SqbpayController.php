@@ -185,14 +185,32 @@ class SqbpayController extends Controller
 			$data = json_encode($notifyWxwapData);
 			//Helper::writeLog('第一次2:['.$sn.'],插入数据：');
 			$result = Yii::app ()->db->createCommand ()->insert('nb_notify_wxwap',$notifyWxwapData);
-			Helper::writeLog('第一次2:['.$result.']');
+			if($result){
+
+				if($order_status == 'PAID'){
+					//订单成功支付...
+					$account_nos = explode('-',$client_sn);
+					$orderid = $account_nos[0];
+					$orderdpid = $account_nos[1];
+					Helper::writeLog('支付成功:['.$orderid.'],插入数据：'.$orderdpid);
+					exit;
+					$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
+					$orders = Yii::app()->db->createCommand($sql)
+					->queryRow();
+					if(!empty($orders)){
+						$resultorder = Yii::app()->db->createCommand('update nb_order set order_status = 4 where dpid='.$orderdpid.' and lid ='.$orderid)
+						->execute();
+						if($resultorder){
+							$resultorder = Yii::app()->db->createCommand('update nb_order set order_status = 4 where dpid='.$orderdpid.' and lid ='.$orderid)
+							->execute();
+						}
+					}
+				}
+				
+			}
+			//Helper::writeLog('第一次2:['.$result.']');
 		}
 		
-		if($order_status == 'PAID'){
-			//订单成功支付...
-		}elseif($order_status == 'PAY_CANCELED'){
-			//订单支付失败...
-		}
 		
 	}
 }
