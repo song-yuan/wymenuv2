@@ -19,8 +19,7 @@ body{background: #EC5D5D;}
                          <h1><?php echo $is_success;?></h1>
 						 <div class="titl_h">
 						 <h2><?php echo $status;?></h2>
-						 <h3><?php echo $result_code;?></h3>
-						 <h3><?php echo $result_message;?></h3>
+						 <h2><?php echo '正在处理订单，请稍后。。。';?></h2>
 						 </div>                                 
                      </div>	
                 </div>
