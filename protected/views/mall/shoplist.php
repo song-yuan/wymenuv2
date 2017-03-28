@@ -155,7 +155,6 @@
 						}else{
 							var distance = getFlatternDistance(latitude,longitude,lat,lng);
 						}
-						distance = distance.toFixed(2);
 						$(this).attr('distance',distance);
 						var searil = $(this).attr('searil');
 						if(distance >= 1000 && distance <= 5000){
