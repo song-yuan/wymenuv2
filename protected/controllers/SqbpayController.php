@@ -9,7 +9,7 @@ class SqbpayController extends Controller
 		$rand = rand(100,999);
 		//$orderId = $now.'-'.$dpid.'-'.$rand;
 		
-		$orderId = '0000026906-0000000027';
+		$orderId = '0000026904-0000000027';
 		
 		$company = WxCompany::get($dpid);
 		$data = array(
