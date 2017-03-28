@@ -286,6 +286,10 @@
 			    geocoder = new qq.maps.Geocoder({
 			        complete : function(result){
 			            map.setCenter(result.detail.location);
+			            var lat = result.detail.location.lat;
+			            var lng = result.detail.location.lng;
+			            $('#Company_lng').val(lng);
+			            $('#Company_lat').val(lat);
 			            marker.setVisible(false);
 			            marker = new qq.maps.Marker({
 			                map:map,
