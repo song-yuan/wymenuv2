@@ -9,7 +9,7 @@ class SqbpayController extends Controller
 		$rand = rand(100,999);
 		//$orderId = $now.'-'.$dpid.'-'.$rand;
 		
-		$orderId = '0000026920-0000000027';
+		$orderId = '0000026914-0000000027';
 		
 		$company = WxCompany::get($dpid);
 		$data = array(
@@ -81,7 +81,7 @@ class SqbpayController extends Controller
 			}
 			while ($i<=50&&$orderstatus);
 		}
-		$this->render('wappayresult',array(
+		$this->render('wappayreturn',array(
 				'is_success'=>$is_success,
 				'status'=>$status,
 				'sign'=>$sign,
