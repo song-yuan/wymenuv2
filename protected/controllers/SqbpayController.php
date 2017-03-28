@@ -93,8 +93,8 @@ class SqbpayController extends Controller
 		 * 
 		 * */
 		
-		$obj = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA, true)));
-		$sns = $obj->sn;
+		$obj = json_decode($xml);
+		$sns = $obj['sn'];
 
 		Helper::writeLog('进入方法'.$sns.';店铺:'.$companyId);
 		
