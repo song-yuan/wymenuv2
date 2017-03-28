@@ -74,21 +74,22 @@ class SqbpayController extends Controller
 				if($orders['order_status'] == '4' || $orders['order_status'] == '8' ){
 					$orderstatus = false;
 					Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
+					//跳转到该页面。
+					$this->redirect('http://www.baidu.com');
 				}else{
 					$orderstatus = true;
 					Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
+					//echo '';
+					if($i == 1){
+						$this->render('wappayreturn',array(
+								'is_success'=>$is_success,
+								'status'=>$status,
+						));
+					}
 				}
 			}
 			while ($i<=50&&$orderstatus);
 		}
-		$this->render('wappayreturn',array(
-				'is_success'=>$is_success,
-				'status'=>$status,
-				'sign'=>$sign,
-				'result_code'=>$result_code,
-				'result_message'=>$result_message,
-		));
-		
 	}
 	public function actionWappayresult(){
 		$companyId = Yii::app()->request->getParam('companyId','000000');
