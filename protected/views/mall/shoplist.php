@@ -120,7 +120,6 @@
 	    	arr.sort(sortNumber);
 		    for(var k in arr){
 			    if(arr[k]!=""){
-			    	var index = originArr.indexOf(arr[k]);
 			    	str +=$('li[searil="'+index+'"][distance="'+arr[k]+'"]').prop("outerHTML");
 				}else{
 					str +=$('li[searil="'+k+'"]').prop("outerHTML");
