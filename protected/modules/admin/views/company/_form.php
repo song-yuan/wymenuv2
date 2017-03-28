@@ -174,6 +174,8 @@
 											<div id="allmap" style="width:400px;height:200px;"></div>
 										</div>
 									</div>
+									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
+									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
 									
 									<div class="form-group">
 										<?php echo $form->label($model, 'distance',array('class' => 'col-md-3 control-label'));?>
@@ -215,8 +217,7 @@
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
-									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
-									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
+									
                                     <!--
 									<div class="form-group">
 										<?php echo $form->label($model, 'printer_id',array('class' => 'col-md-3 control-label'));?>
