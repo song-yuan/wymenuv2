@@ -76,7 +76,7 @@ class WechatMarketController extends BackendController {
 				. " group by dpid,user_id) tct on t.dpid=tct.dpid and t.lid=tct.user_id "
                 . " LEFT JOIN nb_brand_user_level tl on tl.dpid=t.dpid and tl.lid=t.user_level_lid and tl.delete_flag=0 and tl.level_type=1 "
                 //. " LEFT JOIN nb_order t2 on t2.dpid=t.dpid and t2.lid not in(".$users.") "
-                . " where t.lid not in(".$users.") and t.dpid=".$companyId;
+                . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")";
 	        //echo $sql;exit;    
 	     if($finduserlevel!="0000000000")
          {
