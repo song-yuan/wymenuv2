@@ -148,7 +148,7 @@
 <script type="text/javascript">
   function validate() {
         if($('#name').val() == ''){
-        	$('#dialog2').find('.weui_dialog_bd').html('请填写姓名！');
+            $('#dialog2').find('.weui_dialog_bd').html('请填写姓名！');
             $('#dialog2').show();
             return false;}
         if($('#mobile').val() == ''){
