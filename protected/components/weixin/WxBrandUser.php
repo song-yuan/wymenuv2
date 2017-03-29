@@ -186,6 +186,21 @@ class WxBrandUser {
 		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));
 		return $result;
 	}
+	/**
+	 * 
+	 * 根据openid更新会员来源
+	 * 
+	 */
+	public static function updateByOpenid($param){
+		$openid = $param['openid'];
+		$insertData = array(
+				'scene_type'=>1,
+				'weixin_group'=>$param['group'],
+				'is_sync'=>DataSync::getInitSync(),
+		);
+		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'openid=:openid',array(':openid'=>$openid));
+		return $result;
+	}
 	public static function dealYue($userId,$dpid,$money){
 		$sql = 'update nb_brand_user set remain_money = remain_money+'.$money.' where lid='.$userId.' and dpid='.$dpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();

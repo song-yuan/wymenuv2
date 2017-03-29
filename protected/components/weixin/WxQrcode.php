@@ -6,8 +6,9 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 class WxQrcode {
-	const SITE_QRCODE = 1;
-	const SCREEN_QRCODE = 2;
+	const SITE_QRCODE = 1; // 座位
+	const SCREEN_QRCODE = 2; //大屏幕
+	const COMPANY_QRCODE = 3; // 店铺
 
 	
 	public $db;
@@ -19,36 +20,33 @@ class WxQrcode {
 		$this->getWxAccount($this->brandId );
 	}
 	public function getWxAccount($brandId){
-		$this->account = WeixinServiceAccount::model()->find('dpid=:brandId',array(':brandId'=>$this->brandId));
+		$this->account = WxAccount::get($this->brandId);
 	}
 	/**
 	 * 获取场景ID
 	 */
 	public function getSceneId($type,$id,$expireTime = null){
-		$scene = Scene::model()->find('dpid=:brandId and type=:type and id=:id',array(':brandId'=>$this->brandId,':type'=>$type,':id'=>$id));
-		$sceneId = $scene?$scene->scene_id:false;
+		$scene = WxScene::get($this->brandId,$type,$id);
+		$sceneId = $scene?$scene['scene_id']:false;
 		if($sceneId){
-			$isSync = DataSync::getAfterSync();
-			$scene->expire_time = $expireTime;
-			$scene->is_sync = $isSync;
-		    $scene->update();
+			WxScene::update($scene['lid'],$scene['dpid'],$expireTime);
 			return $sceneId;
 		}else{
-			    $sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
-				$maxSceneArr = $this->db->createCommand($sql)->queryRow();
+		    $sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
+			$maxSceneArr = $this->db->createCommand($sql)->queryRow();
 				
-				$maxSceneId = $maxSceneArr['maxId'];
-				$newSceneId = $maxSceneId+1;
+			$maxSceneId = $maxSceneArr['maxId'];
+			$sceneId = $maxSceneId+1;
 				
-				$scene = new Scene;
-				$time = time();
-				$isSync = DataSync::getAfterSync();
-				$se=new Sequence("scene");
-            	$lid = $se->nextval();
-				$scene->attributes = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$newSceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'is_sync'=>$isSync);
-				$scene->save();				
+			$time = time();
+			$isSync = DataSync::getInitSync();
+			$se=new Sequence("scene");
+            $lid = $se->nextval();
+            
+			$sceneData = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$sceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'is_sync'=>$isSync);
+			WxScene::insert($sceneData);				
 		}
-		return $scene->scene_id;
+		return $sceneId;
 	}
 	/**
 	 * 生成限制二维码
