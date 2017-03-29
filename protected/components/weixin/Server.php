@@ -161,7 +161,7 @@ class Server {
 		$this->sceneScanLog();
 	   	if(time() < $this->scene['expire_time']) {	//场景未过期
 	   		// 推送消息：非门店场景推送场景消息
-   			if($this->scene['type']){
+   			if($this->scene['type']==1){
    				echo $this->sceneResponse();
    			}
 	   	}else	// 场景已过期
@@ -194,24 +194,35 @@ class Server {
 		$subPushs = array();
 		
 		$tableArr = array(
-			1=>array('serial', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
+			1=>array('serial', 'type_id','欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
+			3=>array('company_name', 'comp_dpid', '恭喜你成为新会员,完善资料有惊喜哦', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_company', 'dpid'),
 		);
 		
 		$sceneType = $this->scene['type'];
 		
-		$sql = 'SELECT type_id,'.$tableArr[$sceneType][0].' as title, "'.$tableArr[$sceneType][1].'" as description, "'.$tableArr[$sceneType][2].'" as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
+		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['id'];
 		$query = Yii::app()->db->createCommand($sql)->queryRow();
 		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 
 		if($query) { 
-			$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$this->brandId;
-			$siteType = Yii::app()->db->createCommand($sql)->queryRow();
 			$urlArr = array(
-				1=>array('mall/index','companyId'),
+					1=>array('mall/index','companyId'),
+					3=>array('user/index','companyId'),
 			);
 			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
-			$typeName = isset($siteType['name'])?$siteType['name']:'';
-			$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
+			if($this->scene['type']==1){
+				$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$this->brandId;
+				$siteType = Yii::app()->db->createCommand($sql)->queryRow();
+				
+				$typeName = isset($siteType['name'])?$siteType['name']:'';
+				$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
+			}elseif ($this->scene['type']==3){
+				if($this->brandUser['weixin_group']==0){
+					$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['id']);
+					WxBrandUser::updateByOpenid($data);
+				}
+				$siteArr = array($query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
+			}
 			
 			array_push($subPushs,$siteArr);
 	    	
@@ -231,8 +242,9 @@ class Server {
 		    	}
 	    	 }
 			return $this->news($subPushs);
-		}else
+		}else{
 			return $this->generalResponse();
+		}
 	}
 	
     /**

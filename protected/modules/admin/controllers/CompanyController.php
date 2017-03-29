@@ -24,14 +24,15 @@ class CompanyController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
 		$criteria = new CDbCriteria;
+		$criteria->with = 'property';
 		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE)
 		{
-			$criteria->condition =' delete_flag=0 ';
+			$criteria->condition =' t.delete_flag=0 ';
 		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
-			$criteria->condition =' delete_flag=0 and dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or dpid='.Yii::app()->user->companyId;
+			$criteria->condition =' t.delete_flag=0 and dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or dpid='.Yii::app()->user->companyId;
 		}else{
-			$criteria->condition = ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
+			$criteria->condition = ' t.delete_flag=0 and dpid='.Yii::app()->user->companyId ;
 		}
 		$province = $provinces;
 		$city = $citys;
@@ -56,7 +57,6 @@ class CompanyController extends BackendController
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Company::model()->findAll($criteria);
-	
 		$this->render('index',array(
 				'models'=> $models,
 				'pages'=>$pages,
@@ -263,6 +263,32 @@ class CompanyController extends BackendController
 			
 		}
 		$this->redirect(array('company/index','companyId'=>$this->companyId));
+	}
+	/**
+	 * 生成店铺二维码
+	 */
+	public function actionGenWxQrcode(){
+		$dpid = Yii::app()->request->getParam('dpid',0);
+		$account = WeixinServiceAccount::model()->find('dpid=:dpid',array(':dpid'=>$dpid));
+		if($account&&$account['appid']&&$account['appsecret']){
+			$companyDpid = $dpid;
+		}else{
+			$company = Company::model()->find('dpid=:dpid',array(':dpid'=>$dpid));
+			$companyDpid = $company['comp_dpid'];
+		}
+		$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid));
+		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
+	
+		$wxQrcode = new WxQrcode($companyDpid);
+		$qrcode = $wxQrcode->getQrcode(WxQrcode::COMPANY_QRCODE,$model->dpid,strtotime('2050-01-01 00:00:00'));
+	
+		if($qrcode){
+			$model->saveAttributes(array('qr_code'=>$qrcode));
+			$data['msg'] = '生成二维码成功！';
+			$data['status'] = true;
+			$data['qrcode'] = $qrcode;
+		}
+		Yii::app()->end(json_encode($data));
 	}
 	private function getPrinterList(){
 		$printers = Printer::model()->findAll('dpid=:dpid',array(':dpid'=>$this->companyId)) ;
