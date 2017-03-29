@@ -304,6 +304,18 @@ class MallController extends Controller
 		$user = $this->brandUser;
 	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
+	 /**
+	  * 
+	  * 收钱吧支付
+	  * 
+	  */
+	 public function actionSqbPayOrder()
+	 {
+	 	$data = $_GET;
+	 	unset($data['companyId']);
+	 	SqbPay::preOrder($data);
+	 	exit;
+	 }
 	/**
 	 * 
 	 * 

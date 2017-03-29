@@ -16,61 +16,61 @@
 			}
 		}
 	}
-	
 	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
-	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
-	$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	
-	$payChannel = 0;
-	//①、获取用户openid
 	$canpWxpay = true;
-	try{
-		$compaychannel = WxCompany::getpaychannel($this->companyId);
-		$payChannel = $compaychannel['pay_channel'];
-		if($payChannel==1){
-			$tools = new JsApiPay();
-			$openId = WxBrandUser::openId($userId,$this->companyId);
-			$account = WxAccount::get($this->companyId);
-			//②、统一下单
-			$input = new WxPayUnifiedOrder();
-			$input->SetBody($company['company_name']."-微信点餐订单");
-			$input->SetAttach("0");
-			$input->SetOut_trade_no($orderId);
-			$input->SetTotal_fee($payPrice*100);
-			$input->SetTime_start(date("YmdHis"));
-			$input->SetTime_expire(date("YmdHis", time() + 600));
-			$input->SetGoods_tag($company['company_name']."-微信点餐订单");
-			$input->SetNotify_url($notifyUrl);
-			$input->SetTrade_type("JSAPI");
-			if($account['multi_customer_service_status'] == 1){
-				$input->SetSubOpenid($openId);
-			}else{
-				$input->SetOpenid($openId);
-			}
-			$orderInfo = WxPayApi::unifiedOrder($input);
-			
-			$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
-		}elseif($payChannel==2){
-			$data = array(
-					'dpid'=>$this->companyId,
-					'client_sn'=>$orderId,
-					'total_amount'=>$payPrice,
-					'subject'=>$company['company_name']."-微信点餐订单",
-					'payway'=>3,
-					'operator'=>$user['nickname'],
-					'notify_url'=>$notifyUrl,
-					'return_url'=>$returnUrl,
-			);
-			SqbPay::preOrder($data);
-		}else{
-			$jsApiParameters = '';
+	$compaychannel = WxCompany::getpaychannel($this->companyId);
+	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
+	if($payChannel==1){
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
+		//①、获取用户openid
+		try{
+				$tools = new JsApiPay();
+				$openId = WxBrandUser::openId($userId,$this->companyId);
+				$account = WxAccount::get($this->companyId);
+				//②、统一下单
+				$input = new WxPayUnifiedOrder();
+				$input->SetBody($company['company_name']."-微信点餐订单");
+				$input->SetAttach("0");
+				$input->SetOut_trade_no($orderId);
+				$input->SetTotal_fee($payPrice*100);
+				$input->SetTime_start(date("YmdHis"));
+				$input->SetTime_expire(date("YmdHis", time() + 600));
+				$input->SetGoods_tag($company['company_name']."-微信点餐订单");
+				$input->SetNotify_url($notifyUrl);
+				$input->SetTrade_type("JSAPI");
+				if($account['multi_customer_service_status'] == 1){
+					$input->SetSubOpenid($openId);
+				}else{
+					$input->SetOpenid($openId);
+				}
+				$orderInfo = WxPayApi::unifiedOrder($input);
+				
+				$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+		}catch(Exception $e){
+			$canpWxpay = false;
+			$jsApiParameters = $e->getMessage();
 		}
-	}catch(Exception $e){
-		$canpWxpay = false;
-		$jsApiParameters = $e->getMessage();
+	}elseif($payChannel==2){
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult',array('companyId'=>$order['dpid']));
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn',array('companyId'=>$order['dpid']));
+		$data = array(
+				'companyId'=>$this->companyId,
+				'dpid'=>$order['dpid'],
+				'client_sn'=>$orderId,
+				'total_amount'=>$payPrice,
+				'subject'=>$company['company_name']."-微信点餐订单",
+				'payway'=>3,
+				'operator'=>$user['nickname'],
+				'notify_url'=>$notifyUrl,
+				'return_url'=>$returnUrl,
+		);
+		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
+	}else{
+		$jsApiParameters = '';
 	}
-	
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
@@ -189,11 +189,11 @@
 </footer>
 
 <script type="text/javascript">
-	<?php if($canpWxpay):?>
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
 		<?php if ($payChannel==1):?>
+		<?php if($canpWxpay):?>
 		WeixinJSBridge.invoke(
 			'getBrandWCPayRequest',
 			<?php echo $jsApiParameters; ?>,
@@ -208,11 +208,13 @@
 				 }     
 			}
 		);
+		<?php endif;?>
+		<?php elseif($payChannel==2):?>
+		location.href = '<?php echo $sqbpayUrl;?>';
 		<?php else:?>
 		layer.msg('无支付信息,请联系客服!');
 		<?php endif;?>
 	}
-	<?php endif;?>
 	function callpay()
 	{
 		<?php if(!$canpWxpay):?>
