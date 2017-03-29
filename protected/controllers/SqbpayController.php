@@ -118,8 +118,11 @@ class SqbpayController extends Controller
 		}
 	}
 	public function actionWappayresult(){
-		$companyId = Yii::app()->request->getParam('companyId');
-		$dpid = Yii::app()->request->getParam('dpid');
+		$reflect = Yii::app()->request->getParam('reflect');
+		$reflect = json_decode($reflect);
+		//var_dump($reflect);exit;
+		$companyId = $reflect->companyId;
+		$dpid = $reflect->dpid;
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		//Helper::writeLog('进入方法;数据:'.$xml);
