@@ -313,7 +313,6 @@ class MallController extends Controller
 	 {
 	 	$data = $_GET;
 	 	unset($data['companyId']);
-	 	var_dump($data);exit;
 	 	SqbPay::preOrder($data);
 	 	exit;
 	 }
