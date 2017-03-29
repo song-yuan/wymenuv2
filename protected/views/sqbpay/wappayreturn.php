@@ -19,6 +19,7 @@ body{background: #EC5D5D;}
 						 <div class="titl_h">
 						 <h2><?php echo $status;?></h2>
 						 <h2><?php echo '正在处理订单，请稍后。。。';?></h2>
+						 <h2><?php echo $baseUrl;?></h2>
 						 </div>                                 
                      </div>	
                 </div>
@@ -27,6 +28,7 @@ body{background: #EC5D5D;}
 </div>
 <script>
 	$(document).ready(function(){
+		alert(1);
 		layer.load(2);
 		)};
 </script>
