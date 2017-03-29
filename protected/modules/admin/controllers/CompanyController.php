@@ -285,7 +285,8 @@ class CompanyController extends BackendController
 					'lid'=>$lid,
 					'dpid'=>$dpid,
 					'create_at'=>date('Y-m-d H:i:s',time()),
-					'update_at'=>date('Y-m-d H:i:s',time())
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'pay_channel'=>''
 			);
 			$model->attributes = $data;
 		}
