@@ -287,6 +287,7 @@ class CompanyController extends BackendController
 					'create_at'=>date('Y-m-d H:i:s',time()),
 					'update_at'=>date('Y-m-d H:i:s',time())
 			);
+			$model->attributes = $data;
 		}
 		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
 	
@@ -294,8 +295,8 @@ class CompanyController extends BackendController
 		$qrcode = $wxQrcode->getQrcode(WxQrcode::COMPANY_QRCODE,$model->dpid,strtotime('2050-01-01 00:00:00'));
 	
 		if($qrcode){
-			$data['qr_code'] = $qrcode;
-			$model->save($data);
+			$model->qr_code = $qrcode;
+			$model->save();
 			$data['msg'] = '生成二维码成功！';
 			$data['status'] = true;
 			$data['qrcode'] = $qrcode;
