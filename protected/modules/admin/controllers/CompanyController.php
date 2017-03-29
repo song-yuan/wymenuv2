@@ -295,7 +295,7 @@ class CompanyController extends BackendController
 	
 		if($qrcode){
 			$data['qr_code'] = $qrcode;
-			$model->saveAttributes($data);
+			$model->save($data);
 			$data['msg'] = '生成二维码成功！';
 			$data['status'] = true;
 			$data['qrcode'] = $qrcode;
