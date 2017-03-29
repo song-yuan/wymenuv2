@@ -56,6 +56,7 @@
 	}elseif($payChannel==2){
 		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
+		$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
 		$data = array(
 				'companyId'=>$this->companyId,
 				'dpid'=>$order['dpid'],
@@ -64,7 +65,7 @@
 				'subject'=>$company['company_name']."-微信点餐订单",
 				'payway'=>3,
 				'operator'=>$user['nickname'],
-				'reflect'=>'{companyId:'.$this->companyId.',dpid:'.$order['dpid'].'}',
+				'reflect'=>$reflect,
 				'notify_url'=>$notifyUrl,
 				'return_url'=>$returnUrl,
 		);
