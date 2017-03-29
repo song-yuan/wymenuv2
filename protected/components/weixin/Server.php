@@ -161,7 +161,7 @@ class Server {
 		$this->sceneScanLog();
 	   	if(time() < $this->scene['expire_time']) {	//场景未过期
 	   		// 推送消息：非门店场景推送场景消息
-   			if($this->scene['type']==1){
+   			if($this->scene['type']){
    				echo $this->sceneResponse();
    			}
 	   	}else	// 场景已过期
@@ -256,10 +256,12 @@ class Server {
 	 * 如果用户已经关注公众号，则微信会将带场景值扫描事件推送给开发者。
      */
 	public function sceneId() {
-   		if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false))
-    		$this->sceneId = substr($this->postArr['EventKey'], 8);
-   		else if($this->event == 'scan') 
+   		if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)){
+   			$this->sceneId = substr($this->postArr['EventKey'], 8);
+   		}
+   		else if($this->event == 'scan') {
    			$this->sceneId = $this->postArr['EventKey'];
+   		}
 	}
 		
 	/**
