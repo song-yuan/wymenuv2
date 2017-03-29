@@ -20,6 +20,7 @@ class SqbpayController extends Controller
 				'total_fee' => '0.01',
 		);
 		$result = MicroPayModel::insert($data);
+		$reflect = '000000026-0000027';
 		
 		if($result['status']){
 			$result = SqbPay::preOrder(array(
@@ -29,6 +30,7 @@ class SqbpayController extends Controller
 					'payway'=>'3',
 					'subject'=>'wymenu',
 					'operator'=>'admin',
+					'reflect'=>$reflect,
 					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult/companyId/0000000026/dpid/000000027',
 					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn/companyId/0000000026/dpid/000000027',
 			));
@@ -37,11 +39,14 @@ class SqbpayController extends Controller
 		}
 	}
 	public function actionWappayreturn(){
-		$companyId = Yii::app()->request->getParam('companyId');
-		$dpid = Yii::app()->request->getParam('dpid');
 		$is_success = Yii::app()->request->getParam('is_success');
 		$status = Yii::app()->request->getParam('status');
 		$sign = Yii::app()->request->getParam('sign');
+		$reflect = Yii::app()->request->getParam('reflect');
+		
+		$reflect = json_decode($reflect);
+		$companyId = $reflect['companyId'];
+		$dpid = $reflect['dpid'];
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
@@ -50,10 +55,6 @@ class SqbpayController extends Controller
 			$sn = Yii::app()->request->getParam('sn');
 			$trade_no = Yii::app()->request->getParam('trade_no');
 			$client_sn = Yii::app()->request->getParam('client_sn');
-			$status = Yii::app()->request->getParam('status');
-			$reflect = Yii::app()->request->getParam('reflect');
-			$sign = Yii::app()->request->getParam('sign');
-			
 			$result_code = Yii::app()->request->getParam('result_code');
 			$result_message = Yii::app()->request->getParam('result_message');
 			
