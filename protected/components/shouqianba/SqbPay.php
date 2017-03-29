@@ -466,9 +466,9 @@ class SqbPay{
     	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
     	$operator = $data['operator'];
     	/*发起本次交易的操作员*/
-    	$notify_url = $data['notify_url'];
+    	$notify_url = urlencode($data['notify_url']);
     	/*发起本次交易的回调地址*/
-    	$return_url = $data['return_url'];
+    	$return_url = urlencode($data['return_url']);
     	/*发起本次交易的返回地址*/
     	
     	Helper::writeLog('调用接口：'.$client_sn.';店铺ID：'.$dpid);
