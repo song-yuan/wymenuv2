@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','ticket','oldindex','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard'))){
+		if(in_array($actin->id,array('index','ticket','oldindex','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -166,7 +166,6 @@ class UserController extends Controller
 	 */
 	public function actionOrderInfo()
 	{
-		$userId = Yii::app()->session['userId'];
 		$siteType = false;
 		$address = false;
 		$seatingFee = 0;
