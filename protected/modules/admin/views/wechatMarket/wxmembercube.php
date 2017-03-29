@@ -41,7 +41,7 @@
 							'validateOnSubmit'=>true,
 						),
 						'htmlOptions'=>array(
-							'class'=>'form-inline pull-right'
+							'class'=>'form-inline'
 						),
 					)); ?>
 					<div class="col-md-12">
