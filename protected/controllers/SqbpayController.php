@@ -44,13 +44,13 @@ class SqbpayController extends Controller
 		$sign = Yii::app()->request->getParam('sign');
 		$reflect = Yii::app()->request->getParam('reflect');
 		$client_sn = Yii::app()->request->getParam('client_sn');
-		Helper::writeLog('获取参数：'.$is_success.';'.$reflect);
+		//Helper::writeLog('获取参数：'.$is_success.';'.$reflect);
 		
 		$reflect = json_decode($reflect);
-		var_dump($reflect);exit;
-		$companyId = $reflect['companyId'];
-		$dpid = $reflect['dpid'];
-		Helper::writeLog('获取参数：'.$companyId.';'.$dpid);
+		//var_dump($reflect);exit;
+		$companyId = $reflect->companyId;
+		$dpid = $reflect->dpid;
+		//Helper::writeLog('获取参数：'.$companyId.';'.$dpid);
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
@@ -61,7 +61,7 @@ class SqbpayController extends Controller
 					'companyId'=>$companyId,
 			));
 		}else{
-			Helper::writeLog('IS_success:T');
+			//Helper::writeLog('IS_success:T');
 			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
 			$sn = Yii::app()->request->getParam('sn');
 			$trade_no = Yii::app()->request->getParam('trade_no');
