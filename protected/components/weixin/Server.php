@@ -161,7 +161,7 @@ class Server {
 		$this->sceneScanLog();
 	   	if(time() < $this->scene['expire_time']) {	//场景未过期
 	   		// 推送消息：非门店场景推送场景消息
-   			if($this->scene['type']==1){
+   			if($this->scene['type']){
    				echo $this->sceneResponse();
    			}
 	   	}else	// 场景已过期
@@ -195,12 +195,15 @@ class Server {
 		
 		$tableArr = array(
 			1=>array('serial', 'type_id','欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
-			3=>array('company_name', 'comp_dpid', '恭喜你成为新会员,完善资料有惊喜哦', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_company', 'dpid'),
+			3=>array('company_name', 'comp_dpid', '恭喜你成为新会员,完善资料有惊喜哦', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_company'),
 		);
 		
 		$sceneType = $this->scene['type'];
 		
-		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['id'];
+		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->brandId;
+		if(isset($tableArr[$sceneType][5])){
+			$sql.= ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['id'];
+		}
 		$query = Yii::app()->db->createCommand($sql)->queryRow();
 		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 
@@ -253,10 +256,12 @@ class Server {
 	 * 如果用户已经关注公众号，则微信会将带场景值扫描事件推送给开发者。
      */
 	public function sceneId() {
-   		if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false))
-    		$this->sceneId = substr($this->postArr['EventKey'], 8);
-   		else if($this->event == 'scan') 
+   		if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)){
+   			$this->sceneId = substr($this->postArr['EventKey'], 8);
+   		}
+   		else if($this->event == 'scan') {
    			$this->sceneId = $this->postArr['EventKey'];
+   		}
 	}
 		
 	/**
