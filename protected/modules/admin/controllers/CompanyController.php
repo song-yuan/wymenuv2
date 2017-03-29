@@ -30,9 +30,9 @@ class CompanyController extends BackendController
 			$criteria->condition =' t.delete_flag=0 ';
 		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
-			$criteria->condition =' t.delete_flag=0 and dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or dpid='.Yii::app()->user->companyId;
+			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
 		}else{
-			$criteria->condition = ' t.delete_flag=0 and dpid='.Yii::app()->user->companyId ;
+			$criteria->condition = ' t.delete_flag=0 and t.dpid='.Yii::app()->user->companyId ;
 		}
 		$province = $provinces;
 		$city = $citys;
@@ -45,13 +45,13 @@ class CompanyController extends BackendController
 			$area = '0';
 		}
 		if($province){
-			$criteria->addCondition('province like "'.$province.'"');
+			$criteria->addCondition('t.province like "'.$province.'"');
 		}
 		if($city){
-			$criteria->addCondition('city like "'.$city.'"');
+			$criteria->addCondition('t.city like "'.$city.'"');
 		}
 		if($area){
-			$criteria->addCondition('county_area like "'.$area.'"');
+			$criteria->addCondition('t.county_area like "'.$area.'"');
 		}
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -277,13 +277,26 @@ class CompanyController extends BackendController
 			$companyDpid = $company['comp_dpid'];
 		}
 		$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid));
+		if(!$model){
+			$model = new CompanyProperty;
+			$se = new Sequence("company_property");
+			$lid = $se->nextval();
+			$data = array(
+					'lid'=>$lid,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time())
+			);
+			$model->attributes = $data;
+		}
 		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
 	
 		$wxQrcode = new WxQrcode($companyDpid);
 		$qrcode = $wxQrcode->getQrcode(WxQrcode::COMPANY_QRCODE,$model->dpid,strtotime('2050-01-01 00:00:00'));
 	
 		if($qrcode){
-			$model->saveAttributes(array('qr_code'=>$qrcode));
+			$model->qr_code = $qrcode;
+			$model->save();
 			$data['msg'] = '生成二维码成功！';
 			$data['status'] = true;
 			$data['qrcode'] = $qrcode;
