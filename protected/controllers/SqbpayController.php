@@ -54,8 +54,8 @@ class SqbpayController extends Controller
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
-			Helper::writeLog('获取参数：'.$error_code.';'.$error_message);
-			exit;
+			//Helper::writeLog('获取参数：'.$error_code.';'.$error_message);
+			//exit;
 			$this->redirect(array('/user/orderinfo',
 					'orderId'=>$client_sn,
 					'orderDpid'=>$dpid,
