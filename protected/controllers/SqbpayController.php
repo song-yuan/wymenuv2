@@ -118,12 +118,6 @@ class SqbpayController extends Controller
 		}
 	}
 	public function actionWappayresult(){
-		$reflect = Yii::app()->request->getParam('reflect');
-		Helper::writeLog('异步通知返回的原样传递的参数：'.$reflect);
-		$reflect = json_decode($reflect);
-		//var_dump($reflect);exit;
-		$companyId = $reflect->companyId;
-		$dpid = $reflect->dpid;
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		Helper::writeLog('异步通知的参数:'.$xml);
@@ -169,6 +163,10 @@ class SqbpayController extends Controller
 		$terminal_id = $obj['terminal_id'];
 		$operator = $obj['operator'];
 		
+		//订单号解析orderID和dpid
+		$account_nos = explode('-',$client_sn);
+		$orderid = $account_nos[0];
+		$orderdpid = $account_nos[1];
 		//Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
 		$sql = 'select * from nb_notify_wxwap where dpid ='.$dpid.' and sn="'.$sn.'"';
@@ -186,7 +184,7 @@ class SqbpayController extends Controller
 				$notifyWxwapId = $se->nextval ();
 				$notifyWxwapData = array (
 						'lid' => $notifyWxwapId,
-						'dpid' => $dpid,
+						'dpid' => $orderdpid,
 						'create_at' => date ( 'Y-m-d H:i:s', time()),
 						'update_at' => date ( 'Y-m-d H:i:s', time()),
 						'sn' => $sn,
@@ -218,7 +216,7 @@ class SqbpayController extends Controller
 			//Helper::writeLog('第一次1:['.$sn.'],插入ID：'.$notifyWxwapId);
 			$notifyWxwapData = array (
 					'lid' => $notifyWxwapId,
-					'dpid' => $dpid,
+					'dpid' => $orderdpid,
 					'create_at' => date ( 'Y-m-d H:i:s', time()),
 					'update_at' => date ( 'Y-m-d H:i:s', time()),
 					'sn' => $sn,
@@ -246,9 +244,6 @@ class SqbpayController extends Controller
 
 				if($order_status == 'PAID'){
 					//订单成功支付...
-					$account_nos = explode('-',$client_sn);
-					$orderid = $account_nos[0];
-					$orderdpid = $account_nos[1];
 					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
 					//exit;
 					$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
