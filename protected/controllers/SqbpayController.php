@@ -119,13 +119,14 @@ class SqbpayController extends Controller
 	}
 	public function actionWappayresult(){
 		$reflect = Yii::app()->request->getParam('reflect');
+		Helper::writeLog('异步通知返回的原样传递的参数：'.$reflect);
 		$reflect = json_decode($reflect);
 		//var_dump($reflect);exit;
 		$companyId = $reflect->companyId;
 		$dpid = $reflect->dpid;
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-		//Helper::writeLog('进入方法;数据:'.$xml);
+		Helper::writeLog('异步通知的参数:'.$xml);
 		/*$mxl如下：
 		 * {
 		 * "sn":"7895259485469125",*
