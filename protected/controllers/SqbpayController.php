@@ -76,16 +76,20 @@ class SqbpayController extends Controller
 					$orderstatus = false;
 					Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
 					//跳转到该页面。
-					$this->redirect('http://www.baidu.com');
+					$this->render('wappayreturn',array(
+							'is_success'=>$is_success,
+							'status'=>$status,
+					));
+					//$this->redirect('http://www.baidu.com');
 				}else{
 					$orderstatus = true;
 					//Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
 					//echo '';
 					if($i == 1 || $i == 2){
-						$this->render('wappayreturn',array(
-								'is_success'=>$is_success,
-								'status'=>$status,
-						));
+// 						$this->render('wappayreturn',array(
+// 								'is_success'=>$is_success,
+// 								'status'=>$status,
+// 						));
 					}
 				}
 			}
@@ -225,7 +229,7 @@ class SqbpayController extends Controller
 					$orders = Yii::app()->db->createCommand($sql)
 					->queryRow();
 					if(!empty($orders)){
-						sleep(20);
+						sleep(15);
 						$resultorder = Yii::app()->db->createCommand('update nb_order set order_status = 4 where dpid='.$orderdpid.' and lid ='.$orderid)
 						->execute();
 					}
