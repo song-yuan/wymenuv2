@@ -54,8 +54,8 @@
 			$jsApiParameters = $e->getMessage();
 		}
 	}elseif($payChannel==2){
-		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult',array('companyId'=>$order['dpid']));
-		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn',array('companyId'=>$order['dpid']));
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult',array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn',array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
 		$data = array(
 				'companyId'=>$this->companyId,
 				'dpid'=>$order['dpid'],

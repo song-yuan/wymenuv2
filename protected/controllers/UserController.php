@@ -12,7 +12,7 @@ class UserController extends Controller
 	public function init() 
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
-		$this->companyId = $companyId;
+		$this->companyId = $companyId; // 需为总部CompanyId（或者填公众号店铺）
 	}
 	
 	public function beforeAction($actin){
