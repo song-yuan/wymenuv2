@@ -4,12 +4,13 @@ class SqbpayController extends Controller
 {
 	public function actionWappayresultceshi(){
 		$dpid = '0000000027';
+		$orderid = Yii::app()->request->getParam('orderid');
 		
 		$now = time();
 		$rand = rand(100,999);
 		//$orderId = $now.'-'.$dpid.'-'.$rand;
 		
-		$orderId = '0000026904-0000000027';
+		$orderId = $orderid.'-0000000027';
 		
 		$company = WxCompany::get($dpid);
 		$data = array(
@@ -78,9 +79,9 @@ class SqbpayController extends Controller
 					$this->redirect('http://www.baidu.com');
 				}else{
 					$orderstatus = true;
-					Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
+					//Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
 					//echo '';
-					if($i == 1){
+					if($i == 1 || $i == 2){
 						$this->render('wappayreturn',array(
 								'is_success'=>$is_success,
 								'status'=>$status,
