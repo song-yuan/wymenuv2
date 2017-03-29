@@ -45,8 +45,9 @@ class SqbpayController extends Controller
 		$reflect = Yii::app()->request->getParam('reflect');
 		$client_sn = Yii::app()->request->getParam('client_sn');
 		Helper::writeLog('获取参数：'.$is_success.';'.$reflect);
-		$reflect = json_decode($reflect);
 		
+		$reflect = json_decode($reflect);
+		var_dump($reflect);exit;
 		$companyId = $reflect['companyId'];
 		$dpid = $reflect['dpid'];
 		Helper::writeLog('获取参数：'.$companyId.';'.$dpid);
