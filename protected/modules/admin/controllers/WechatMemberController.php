@@ -36,7 +36,7 @@ class WechatMemberController extends BackendController {
 	        if($num !=''){
 	          $card_id = $num;
 	        //查找主要信息。
-	          $brand_user_model = BrandUser::model()->with(array('point','level','cupon_branduser'))->find("t.dpid='".$this->companyId ."'and (t.card_id like '%".$card_id."%' or t.mobile_num='".$num."')");          
+	          $brand_user_model = BrandUser::model()->with(array('point','level','cupon_branduser'))->find("(t.dpid=".$this->companyId ." or t.weixin_group = ".$this->companyId.")and (t.card_id like '%".$card_id."%' or t.mobile_num='".$num."')");          
 	          
 	          if($brand_user_model){
 	              $userLid = $brand_user_model->lid;
