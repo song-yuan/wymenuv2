@@ -29,15 +29,16 @@ class SqbpayController extends Controller
 					'payway'=>'3',
 					'subject'=>'wymenu',
 					'operator'=>'admin',
-					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult/companyId/0000000027',
-					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn/companyId/0000000027',
+					'notify_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult/companyId/0000000026/dpid/000000027',
+					'return_url'=>'http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn/companyId/0000000026/dpid/000000027',
 			));
 		}else{
 			echo 'error';
 		}
 	}
 	public function actionWappayreturn(){
-		$companyId = Yii::app()->request->getParam('companyId','000000');
+		$companyId = Yii::app()->request->getParam('companyId');
+		$dpid = Yii::app()->request->getParam('dpid');
 		$is_success = Yii::app()->request->getParam('is_success');
 		$status = Yii::app()->request->getParam('status');
 		$sign = Yii::app()->request->getParam('sign');
@@ -79,7 +80,7 @@ class SqbpayController extends Controller
 					//跳转到该页面。
 					$this->redirect(array('/user/orderinfo',
 							'orderId'=>$client_sn,
-							'orderDpid'=>$companyId,
+							'orderDpid'=>$dpid,
 					));
 					
 				}else{
@@ -90,7 +91,7 @@ class SqbpayController extends Controller
 						Helper::writeLog('轮询次数：'.$i.'结果：错误！');
 						$this->redirect(array('/user/orderinfo',
 								'orderId'=>$client_sn,
-								'orderDpid'=>$companyId,
+								'orderDpid'=>$dpid,
 						));
 //						echo '错误';
 // 						$this->render('wappayreturn',array(
@@ -104,7 +105,8 @@ class SqbpayController extends Controller
 		}
 	}
 	public function actionWappayresult(){
-		$companyId = Yii::app()->request->getParam('companyId','000000');
+		$companyId = Yii::app()->request->getParam('companyId');
+		$dpid = Yii::app()->request->getParam('dpid');
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		//Helper::writeLog('进入方法;数据:'.$xml);
@@ -152,7 +154,7 @@ class SqbpayController extends Controller
 		
 		//Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
-		$sql = 'select * from nb_notify_wxwap where dpid ='.$companyId.' and sn="'.$sn.'"';
+		$sql = 'select * from nb_notify_wxwap where dpid ='.$dpid.' and sn="'.$sn.'"';
 		//Helper::writeLog('进入方法'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)
 		->queryRow();
@@ -167,7 +169,7 @@ class SqbpayController extends Controller
 				$notifyWxwapId = $se->nextval ();
 				$notifyWxwapData = array (
 						'lid' => $notifyWxwapId,
-						'dpid' => $companyId,
+						'dpid' => $dpid,
 						'create_at' => date ( 'Y-m-d H:i:s', time()),
 						'update_at' => date ( 'Y-m-d H:i:s', time()),
 						'sn' => $sn,
@@ -199,7 +201,7 @@ class SqbpayController extends Controller
 			//Helper::writeLog('第一次1:['.$sn.'],插入ID：'.$notifyWxwapId);
 			$notifyWxwapData = array (
 					'lid' => $notifyWxwapId,
-					'dpid' => $companyId,
+					'dpid' => $dpid,
 					'create_at' => date ( 'Y-m-d H:i:s', time()),
 					'update_at' => date ( 'Y-m-d H:i:s', time()),
 					'sn' => $sn,
