@@ -54,8 +54,8 @@
 			$jsApiParameters = $e->getMessage();
 		}
 	}elseif($payChannel==2){
-		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult',array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
-		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn',array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
 		$data = array(
 				'companyId'=>$this->companyId,
 				'dpid'=>$order['dpid'],
@@ -64,6 +64,7 @@
 				'subject'=>$company['company_name']."-微信点餐订单",
 				'payway'=>3,
 				'operator'=>$user['nickname'],
+				'reflect'=>'{companyId:'.$this->companyId.',dpid:'.$order['dpid'].'}',
 				'notify_url'=>$notifyUrl,
 				'return_url'=>$returnUrl,
 		);

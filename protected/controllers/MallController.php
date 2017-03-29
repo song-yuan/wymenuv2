@@ -7,7 +7,7 @@ class MallController extends Controller
 	 * type点单类型 无餐桌 6 微信临时座 
 	 * 带餐桌 1微信 堂吃 （需要扫餐桌二维码） 3 预约
 	 * 2 微信外卖
-	 * 
+	 * $companyId 子店铺的id
 	 */
 	public $companyId;
 	public $type = 0;
