@@ -37,6 +37,7 @@ class SqbpayController extends Controller
 		}
 	}
 	public function actionWappayreturn(){
+		$companyId = Yii::app()->request->getParam('companyId','000000');
 		$is_success = Yii::app()->request->getParam('is_success');
 		$status = Yii::app()->request->getParam('status');
 		$sign = Yii::app()->request->getParam('sign');
@@ -76,17 +77,22 @@ class SqbpayController extends Controller
 					$orderstatus = false;
 					Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
 					//跳转到该页面。
-					$this->render('wappayreturn',array(
-							'is_success'=>$is_success,
-							'status'=>$status,
+					$this->redirect(array('/user/orderinfo',
+							'orderId'=>$client_sn,
+							'orderDpid'=>$companyId,
 					));
+					
 				}else{
 					$orderstatus = true;
 					//Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
 					//echo '';
 					if($i==50){
 						Helper::writeLog('轮询次数：'.$i.'结果：错误！');
-						echo '错误';
+						$this->redirect(array('/user/orderinfo',
+								'orderId'=>$client_sn,
+								'orderDpid'=>$companyId,
+						));
+//						echo '错误';
 // 						$this->render('wappayreturn',array(
 // 								'is_success'=>$is_success,
 // 								'status'=>$status,
