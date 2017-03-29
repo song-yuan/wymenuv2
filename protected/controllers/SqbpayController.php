@@ -43,18 +43,26 @@ class SqbpayController extends Controller
 		$status = Yii::app()->request->getParam('status');
 		$sign = Yii::app()->request->getParam('sign');
 		$reflect = Yii::app()->request->getParam('reflect');
+		$client_sn = Yii::app()->request->getParam('client_sn');
 		
 		$reflect = json_decode($reflect);
 		$companyId = $reflect['companyId'];
 		$dpid = $reflect['dpid'];
+		Helper::writeLog('获取参数：'.$companyId.';'.$dpid);
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
+			
+			$this->redirect(array('/user/orderinfo',
+					'orderId'=>$client_sn,
+					'orderDpid'=>$dpid,
+					'companyId'=>$companyId,
+			));
 		}else{
+			Helper::writeLog('IS_success:T');
 			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
 			$sn = Yii::app()->request->getParam('sn');
 			$trade_no = Yii::app()->request->getParam('trade_no');
-			$client_sn = Yii::app()->request->getParam('client_sn');
 			$result_code = Yii::app()->request->getParam('result_code');
 			$result_message = Yii::app()->request->getParam('result_message');
 			
