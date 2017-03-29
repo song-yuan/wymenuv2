@@ -81,6 +81,7 @@ class SqbpayController extends Controller
 					$this->redirect(array('/user/orderinfo',
 							'orderId'=>$client_sn,
 							'orderDpid'=>$dpid,
+							'companyId'=>$companyId,
 					));
 					
 				}else{
@@ -92,6 +93,7 @@ class SqbpayController extends Controller
 						$this->redirect(array('/user/orderinfo',
 								'orderId'=>$client_sn,
 								'orderDpid'=>$dpid,
+								'companyId'=>$companyId,
 						));
 //						echo '错误';
 // 						$this->render('wappayreturn',array(
