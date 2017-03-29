@@ -63,6 +63,10 @@ class SqbpayController extends Controller
 			$orderid = $account_nos[0];
 			$orderdpid = $account_nos[1];
 			//Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
+			$this->render('wappayreturn',array(
+					'is_success'=>$is_success,
+					'status'=>$status,
+			));
 			
 			$i = 0;
 			$orderstatus = true;
@@ -76,16 +80,14 @@ class SqbpayController extends Controller
 					$orderstatus = false;
 					Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
 					//跳转到该页面。
-					$this->render('wappayreturn',array(
-							'is_success'=>$is_success,
-							'status'=>$status,
-					));
-					//$this->redirect('http://www.baidu.com');
+					$this->redirect('http://www.baidu.com');
 				}else{
 					$orderstatus = true;
 					//Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
 					//echo '';
-					if($i == 1 || $i == 2){
+					if($i==50){
+						Helper::writeLog('轮询次数：'.$i.'结果：错误！');
+						echo '错误';
 // 						$this->render('wappayreturn',array(
 // 								'is_success'=>$is_success,
 // 								'status'=>$status,
