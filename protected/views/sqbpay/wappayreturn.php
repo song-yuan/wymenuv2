@@ -11,7 +11,6 @@
 body{background: #EC5D5D;}
 </style>
 <div class=" " id="wrap">
-     <ul>
 		<div class="index">
             <div class="index_box">
                 <div class="index_icon">
@@ -25,5 +24,9 @@ body{background: #EC5D5D;}
                 </div>
             </div>
         </div>
-   </ul>
 </div>
+<script>
+	$(document).ready(function(){
+		layer.load(2);
+		)};
+</script>
