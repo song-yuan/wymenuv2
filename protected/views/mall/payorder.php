@@ -19,13 +19,13 @@
 	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	
+	$canpWxpay = true;
 	$compaychannel = WxCompany::getpaychannel($this->companyId);
 	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 	if($payChannel==1){
 		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
 		//①、获取用户openid
-		$canpWxpay = true;
 		try{
 				$tools = new JsApiPay();
 				$openId = WxBrandUser::openId($userId,$this->companyId);
@@ -189,11 +189,11 @@
 </footer>
 
 <script type="text/javascript">
-	<?php if($canpWxpay):?>
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
 		<?php if ($payChannel==1):?>
+		<?php if($canpWxpay):?>
 		WeixinJSBridge.invoke(
 			'getBrandWCPayRequest',
 			<?php echo $jsApiParameters; ?>,
@@ -208,13 +208,13 @@
 				 }     
 			}
 		);
+		<?php endif;?>
 		<?php elseif($payChannel==2):?>
 		location.href = '<?php echo $sqbpayUrl;?>';
 		<?php else:?>
 		layer.msg('无支付信息,请联系客服!');
 		<?php endif;?>
 	}
-	<?php endif;?>
 	function callpay()
 	{
 		<?php if(!$canpWxpay):?>
