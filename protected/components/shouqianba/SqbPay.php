@@ -471,7 +471,9 @@ class SqbPay{
     	$return_url = $data['return_url'];
     	/*发起本次交易的返回地址*/
     	
+    	Helper::writeLog('调用接口：'.$client_sn.';店铺ID：'.$dpid);
     	$devicemodel = WxCompany::getSqbPayinfo($dpid);
+    	Helper::writeLog('调用接口：'.$client_sn.';店铺ID：'.$dpid.'查询该店铺设备信息。');
     	if(!empty($devicemodel)){
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
@@ -480,6 +482,8 @@ class SqbPay{
     					"return_code"=>"ERROR",
     					"result_code"=>"ERROR",
     					'msg'=>'未知状态！');
+    		
+    		Helper::writeLog('调用接口：'.$client_sn.';店铺ID：'.$dpid.'查询该店铺设备信息。'.'设备信息为空');
     		return $result;
     	}
     	$data = array(
@@ -504,6 +508,7 @@ class SqbPay{
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
     				'msg'=>'未知状态！');
+    		Helper::writeLog('调用接口：'.$client_sn.';店铺ID：'.$dpid.'；拼接字符串：'.'拼接出错');
     		return $result;
     	}
     	if(!empty($paramsStrs)){
@@ -511,6 +516,7 @@ class SqbPay{
     		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
     		$paramsStr = $paramsStr."&sign=".$sign;
     		//var_dump($paramsStr);
+    		Helper::writeLog('调用接口：'.$client_sn.';店铺ID：'.$dpid.'；调用收钱吧接口');
     		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
     		//exit;
     	}else{
@@ -518,6 +524,8 @@ class SqbPay{
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
     				'msg'=>'未知状态！');
+    		
+    		Helper::writeLog('调用接口：'.$client_sn.';店铺ID：'.$dpid.'；拼接字符串：'.'字符串为空');
     		return $result;
     	}
     	
