@@ -120,7 +120,7 @@ class SqbpayController extends Controller
 	public function actionWappayresult(){
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-		Helper::writeLog('异步通知的参数:'.$xml);
+		//Helper::writeLog('异步通知的参数:'.$xml);
 		/*$mxl如下：
 		 * {
 		 * "sn":"7895259485469125",*
@@ -169,7 +169,7 @@ class SqbpayController extends Controller
 		$orderdpid = $account_nos[1];
 		//Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
 		
-		$sql = 'select * from nb_notify_wxwap where dpid ='.$dpid.' and sn="'.$sn.'"';
+		$sql = 'select * from nb_notify_wxwap where dpid ='.$orderdpid.' and sn="'.$sn.'"';
 		//Helper::writeLog('进入方法'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)
 		->queryRow();
