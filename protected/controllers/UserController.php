@@ -12,11 +12,11 @@ class UserController extends Controller
 	public function init() 
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
-		$this->companyId = $companyId;
+		$this->companyId = $companyId; // 需为总部CompanyId（或者填公众号店铺）
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','ticket','oldindex','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard','saveBindMemberCard'))){
+		if(in_array($actin->id,array('index','ticket','oldindex','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -33,7 +33,8 @@ class UserController extends Controller
 				Yii::app()->session['userId'] = $userId;
 			}else{
 				//pc 浏览
-				$userId = 1978;
+				$userId = 2082;
+				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 				Yii::app()->session['userId'] = $userId;
 			}
 		} 
@@ -165,7 +166,6 @@ class UserController extends Controller
 	 */
 	public function actionOrderInfo()
 	{
-		$userId = Yii::app()->session['userId'];
 		$siteType = false;
 		$address = false;
 		$seatingFee = 0;
@@ -173,37 +173,38 @@ class UserController extends Controller
 		$freightFee = 0;
 		
 		$orderId = Yii::app()->request->getParam('orderId');
-		$order = WxOrder::getOrder($orderId,$this->companyId);
-		$site = $site = WxSite::get($order['site_id'],$this->companyId);
+		$orderDpid = Yii::app()->request->getParam('orderDpid');
+		$order = WxOrder::getOrder($orderId,$orderDpid);
+		$site = $site = WxSite::get($order['site_id'],$orderDpid);
 		if($site){
-			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+			$siteType = WxSite::getSiteType($site['type_id'],$orderDpid);
 		}
 		
-		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$orderProducts = WxOrder::getOrderProduct($orderId,$orderDpid);
 		
 		if(in_array($order['order_type'],array(2,3))){
-			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
+			$address =  WxOrder::getOrderAddress($orderId,$orderDpid);
 		}
 		
 		if(in_array($order['order_type'],array(1,3))){
-			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			$seatingProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,1);
 			foreach($seatingProducts as $seatingProduct){
 				$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
 			}
 		}else{
-			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+			$packingProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,2);
 			foreach($packingProducts as $packingProduct){
 				$packingFee += $packingProduct['price']*$packingProduct['amount'];
 			}
-			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,3);
+			$freightProducts = WxOrder::getOrderProductByType($orderId,$orderDpid,3);
 			foreach($freightProducts as $freightProduct){
 				$freightFee += $freightProduct['price']*$freightProduct['amount'];
 			}
 		}
 		
-		$orderPays = WxOrderPay::get($this->companyId,$orderId);
+		$orderPays = WxOrderPay::get($orderDpid,$orderId);
 		//查找分享红包
-		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
+		$redPack = WxRedPacket::getOrderShareRedPacket($orderDpid,$order['should_total']);
 		
 		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'orderPays'=>$orderPays,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	}
@@ -248,7 +249,7 @@ class UserController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$user = $this->brandUser;
 		$addresss = WxAddress::get($userId,$user['dpid']);
-		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId));
+		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'user'=>$user));
 	}
 	/**
 	 * 
@@ -258,11 +259,12 @@ class UserController extends Controller
 	public function actionSetAddress()
 	{
 		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
 		$url = Yii::app()->request->getParam('url');
 		$type = Yii::app()->request->getParam('type',1);
-		$addresss = WxAddress::get($userId,$this->companyId);
+		$addresss = WxAddress::get($userId,$user['dpid']);
 		$company = WxCompany::get($this->companyId);
-		$this->render('setaddress',array('company'=>$company,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url,'type'=>$type));
+		$this->render('setaddress',array('company'=>$company,'addresss'=>$addresss,'user'=>$user,'url'=>$url,'type'=>$type));
 	}
 	/**
 	 * 
@@ -290,7 +292,9 @@ class UserController extends Controller
 		$goBack = Yii::app()->request->getParam('url');
 		if(Yii::app()->request->isPostRequest) {
 			$post = Yii::app()->request->getPost('address');
-
+			if($goBack){
+				$post['default_address'] = 1;
+			}
 			if($post['lid'] > 0){
 				 $generateAddress = WxAddress::update($post);
 			}else{
@@ -320,24 +324,25 @@ class UserController extends Controller
 	 */
 	public function actionSaveBindMemberCard()
 	{
-		$userId = Yii::app()->session['userId'];
 		if(Yii::app()->request->isPostRequest){
 			$userInfo = Yii::app()->request->getPost('user');
-            $mobile =   $userInfo['mobile_num'] ;       
+			$userId = $userInfo['lid'];
+			$dpid = $userInfo['dpid'];
+            $mobile =   $userInfo['mobile_num'];       
 			$member = WxBrandUser::getMemberCardByMobile($mobile);
 			if($member){
 				$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
 				if($memberCardBind){
-					$user = $this->brandUser;
-					if($user['user_level_lid']==$memberCardBind['branduser_level_id']){
+					$user = WxBrandUser::get($userId, $dpid);
+					if($user['member_card_rfid']){
 						$msg = '该会员卡已绑定微信';
 					}else{
 						$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
 						$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
 						if($memLevel&&$userLevel){
-							$result = WxBrandUser::brandUserBind($user['lid'], $user['dpid'], $userLevel['lid'],$userLevel['min_total_points']);
+							$result = WxBrandUser::brandUserBind($user['lid'], $user['dpid'], $member['rfid'],$userLevel['lid'],$userLevel['min_total_points']);
 							if($result){
-								
+								$this->redirect(array('/user/index','companyId'=>$this->companyId));
 							}else{
 								$msg = '绑定失败请重新绑定';
 							}
@@ -351,9 +356,9 @@ class UserController extends Controller
 			}else{
 				$msg = '不存在该手机号的会员';
 			}
-			$this->render('bindmemcard',array('companyId'=>$this->companyId,'msg'=>$msg));
+			$this->redirect(array('/user/bindMemberCard','companyId'=>$this->companyId,'msg'=>$msg));
 		}else{
-			$this->render('bindmemcard',array('companyId'=>$this->companyId));
+			$this->redirect(array('/user/bindMemberCard','companyId'=>$this->companyId));
 		}
 	}
 	// 未使用现金券
@@ -478,13 +483,13 @@ class UserController extends Controller
 			$memberCardBind = WxBrandUser::getMemberCardBind($member['level_id'],$member['dpid']);
 			if($memberCardBind){
 				$user = WxBrandUser::get($userId, $userdpid);
-				if($user['user_level_lid']==$memberCardBind['branduser_level_id']){
+				if($user['member_card_rfid']){
 					$msg = array('status'=>false,'msg'=>'该会员卡已绑定微信');
 				}else{
 					$memLevel = WxBrandUser::getUserLevel($member['level_id'],$member['dpid']);
 					$userLevel = WxBrandUser::getUserLevel($memberCardBind['branduser_level_id'],$user['dpid']);
 					if($memLevel&&$userLevel){
-						$msg = array('status'=>true,'member'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']),'branduser'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']));
+						$msg = array('status'=>true,'member'=>array('name'=>$memLevel['level_name'],'level_discount'=>$memLevel['level_discount'],'birthday_discount'=>$memLevel['birthday_discount']),'branduser'=>array('name'=>$userLevel['level_name'],'level_discount'=>$userLevel['level_discount'],'birthday_discount'=>$userLevel['birthday_discount']));
 					}else{
 						$msg = array('status'=>false,'msg'=>'该会员卡不能绑定微信,绑定等级不存在');
 					}
@@ -506,7 +511,7 @@ class UserController extends Controller
 	 public function actionAjaxCancelOrder()
 	{
 		$orderId = Yii::app()->request->getParam('orderId');
-		$dpid = $this->companyId;
+		$dpid = Yii::app()->request->getParam('orderDpid');
 		
 		$transaction=Yii::app()->db->beginTransaction();
 		try{
@@ -580,8 +585,8 @@ class UserController extends Controller
 	public function actionAjaxSetAddress()
 	{
 		$lid = Yii::app()->request->getPost('lid');
+		$dpid = Yii::app()->request->getPost('dpid');
 		$userId = Yii::app()->request->getPost('userId');
-		$dpid = $this->companyId;
 		
 		$addresss = WxAddress::setDefault($userId,$lid,$dpid);
 		

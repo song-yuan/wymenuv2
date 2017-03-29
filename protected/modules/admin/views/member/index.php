@@ -70,7 +70,7 @@
 								<td ><?php echo $model->all_money;?></td>
 								<td ><?php echo $model->all_points;?></td>
 								<td ><?php switch($model->card_status){case 0:echo '正常';break;case 1: echo "挂失";break;case 2: echo '注销';break;default:echo '';break;}?></td>
-								<td ><?php echo sprintf("%.2f",$model->brandUserLevel->level_discount).'('.sprintf("%.2f",$model->brandUserLevel->birthday_discount).')';?></td>
+								<td ><?php echo sprintf("%.2f",$model->brandUserLevel?$model->brandUserLevel->level_discount:'1').'('.sprintf("%.2f",$model->brandUserLevel?$model->brandUserLevel->birthday_discount:'1').')';?></td>
 								
 								<td class="center">
 <!--									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;

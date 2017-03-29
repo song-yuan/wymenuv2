@@ -6,7 +6,6 @@
 
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
@@ -302,6 +301,14 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/address',array('companyId'=>$this->companyId));?>">
+                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon_location.png" class="icon_nav" alt=""></span>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>收货地址</p>
+                        </div>
+                        <div class="weui_cell_ft">
+                        </div>
+                    </a>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>" >
                         <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
@@ -312,14 +319,6 @@
                     </a>
                     <div class="empty1"></div>
                     <!-- 
-                     <a class="weui_cell js_cell" href="javascript:;" data-id="tel">
-                        <span class="weui_cell_hd"></span>
-                        <div class="weui_cell_bd weui_cell_primary">
-                            <p>门店及电话</p>
-                        </div>
-                        <div class="weui_cell_ft">
-                        </div>
-                    </a>
                     <div class="empty3"></div>
                      <div class="put_into_bg">
                     <div class="weui_btn weui_btn_primary put_into">放入微信卡包</div> 

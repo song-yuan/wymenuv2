@@ -6,11 +6,10 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/address.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hzj3D9srpRthGaFjOeBGvOG6"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 
 <section class="add_address bg_lgrey2">
 	<form action="<?php echo Yii::app()->createUrl('/user/generateAddress',array('companyId'=>$this->companyId,'url'=>$url));?>" method="post" onsubmit="return validate()">
@@ -56,6 +55,23 @@
     <?php }else{?>
     addressInit('province', 'city', 'area', '', '', '');
     <?php }?>
+ // 腾讯地图API功能
+	var geocoder,map,marker = null;
+	var init = function() {
+	    //调用地址解析类
+	    geocoder = new qq.maps.Geocoder({
+	        complete : function(result){
+	            var lat = result.detail.location.lat;
+	            var lng = result.detail.location.lng;
+	            $('input[name="address[lng]"]').val(lng);
+	            $('input[name="address[lat]"]').val(lat);
+	        }
+	    });
+	}
+	function codeAddress(address) {
+	    //通过getLocation();方法获取位置信息值
+	    geocoder.getLocation(address);
+	}
   function validate() {
         if($('#name').val() == ''){
             alert('请填写收货人名字！');
@@ -71,19 +87,20 @@
         return false;}
     }
     $(document).ready(function(){
-    	$('#street').blur(function(){
-    		var city = $('#city').val();
-    		var area = $('#area').val();
-    		var street = $('#street').val();
-    		var myGeo = new BMap.Geocoder();
-    		myGeo.getPoint(city + area + street, function(point){
-				if (point) {
-					$('input[name="address[lng]"]').val(point.lng);
-					$('input[name="address[lat]"]').val(point.lat);
-				}else{
-					alert("您选择地址没有解析到结果!");
-				}
-			}, city);
+        init();
+        var province = $('#province').val();
+        var city = $('#city').val();
+		var area = $('#area').val();
+		var street = $('#street').val();
+		var fullAddress = province+city+area+street;
+		codeAddress(fullAddress);
+    	$('#street').change(function(){
+    		province = $('#province').val();
+    		city = $('#city').val();
+    		area = $('#area').val();
+    		street = $('#street').val();
+    		fullAddress = province+city+area+street;
+    		codeAddress(fullAddress);
     	});
     	$('.cancel').click(function(){
     		history.go(-1);

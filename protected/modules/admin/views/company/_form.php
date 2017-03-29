@@ -1,4 +1,4 @@
-							<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hzj3D9srpRthGaFjOeBGvOG6"></script>
+							<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 							<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
 							<?php $form=$this->beginWidget('CActiveForm', array(
 									'id' => 'company-form',
@@ -174,6 +174,8 @@
 											<div id="allmap" style="width:400px;height:200px;"></div>
 										</div>
 									</div>
+									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
+									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
 									
 									<div class="form-group">
 										<?php echo $form->label($model, 'distance',array('class' => 'col-md-3 control-label'));?>
@@ -215,8 +217,7 @@
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
-									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
-									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
+									
                                     <!--
 									<div class="form-group">
 										<?php echo $form->label($model, 'printer_id',array('class' => 'col-md-3 control-label'));?>
@@ -270,48 +271,67 @@
 			var cityName = result.name;
 			map.centerAndZoom(cityName,11);
 		}
-		var map = new BMap.Map("allmap");
-		$(document).ready(function(){
-			// 百度地图API功能
-			var lng = $('#Company_lng').val();
-			var lat = $('#Company_lat').val();
-			
-			if(parseInt(lng) && parseInt(lat)){
-				var point = new BMap.Point(lng,lat);
-				map.centerAndZoom(point,16);
-				map.addOverlay(new BMap.Marker(point));
-			}else{
-				var myCity = new BMap.LocalCity();
-				myCity.get(theLocation);
+		// 腾讯地图API功能
+		var geocoder,map,marker = null;
+		var init = function() {
+			    var center = new qq.maps.LatLng(31.21323,121.31706);
+			    map = new qq.maps.Map($('#allmap')[0],{
+			        center: center,
+			        zoom: 13
+			    });
+			    var marker = new qq.maps.Marker({
+			        position: center,
+			        map: map
+			    });
+			    //调用地址解析类
+			    geocoder = new qq.maps.Geocoder({
+			        complete : function(result){
+			            map.setCenter(result.detail.location);
+			            var lat = result.detail.location.lat;
+			            var lng = result.detail.location.lng;
+			            $('#Company_lng').val(lng);
+			            $('#Company_lat').val(lat);
+			            marker.setVisible(false);
+			            marker = new qq.maps.Marker({
+			                map:map,
+			                position: result.detail.location
+			            });
+			        }
+			    });
 			}
-			
-			map.enableScrollWheelZoom(true);
+		function codeAddress(address) {
+		    //通过getLocation();方法获取位置信息值
+		    geocoder.getLocation(address);
+		}
+		$(document).ready(function(){
+			init();
+			var province = $('#province').children('option:selected').val();
+	        var city = $('#city').children('option:selected').val();
+	        var area = $('#area').children('option:selected').val();
+			var address = $('#Company_address').val();
+			if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
+				city = '';
+				}
+			if(area == '市辖区'){
+				area = '';
+				}
+			var real_address = province+city+area+address;	
+			codeAddress(real_address);
 			
 			$('.getLocation').click(function(){
-				var province = $('#province').children('option:selected').val();
-		        var city = $('#city').children('option:selected').val();
-		        var area = $('#area').children('option:selected').val();
-				var address = $('#Company_address').val();
+				province = $('#province').children('option:selected').val();
+		        city = $('#city').children('option:selected').val();
+		        area = $('#area').children('option:selected').val();
+				address = $('#Company_address').val();
 				if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
 					city = '';
 					}
 				if(area == '市辖区'){
 					area = '';
 					}
-				var real_address = province+city+area+address;
+				real_address = province+city+area+address;
 				// 创建地址解析器实例
-				var myGeo = new BMap.Geocoder();
-				// 将地址解析结果显示在地图上,并调整地图视野
-				myGeo.getPoint(real_address, function(point){
-					if (point) {
-						$('#Company_lng').val(point.lng);
-						$('#Company_lat').val(point.lat);
-						map.centerAndZoom(point, 16);
-						map.addOverlay(new BMap.Marker(point));
-					}else{
-						
-					}
-				}, "上海市");
+				codeAddress(real_address);
 			});
 		     $("#su").on('click',function() {
 

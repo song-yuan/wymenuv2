@@ -33,44 +33,36 @@
     <div class="col-md-12">
         <div class="portlet purple box">
             <div class="portlet-body" id="table-manage">
-                 <form id="info" action="<?php echo $this->createUrl('wechatMember/chain',array('companyId' => $this->companyId))?>" method="post" >
-
+              <form id="info" action="<?php echo $this->createUrl('wechatMember/chain',array('companyId' => $this->companyId))?>" method="post" >
                 <div class=" col-sm-12 col-md-9 col-md-offset-1" >
                     <div class="table-responsive" style="font-size:20px;">
-                       
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-
                                     <th style="color:blue">实体卡等级</th>
                                     <th style="color:blue">微信会员等级</th>
-
-
                                 </tr>
                             </thead>
                             <tbody>
-                            
                                 <?php if($entity):?>
-                                <?php foreach ($entity as $v):?>
+                                <?php foreach ($entity as $k=>$v):?>
                                     <tr class="odd gradeX">
                                         <td>
-                                            <?php echo $v['level_name']."&nbsp;&nbsp;&nbsp;&nbsp;".$v['level_discount']."折"; ?>
-                                            <input type="hidden" class="binds" name="bind[][membercard_level_id]"   value="<?php echo $v['lid'];?>"/>
+                                            <?php echo $v['level_name']."(".$v['level_discount']."折)"; ?>
                                         </td>
                                         <td>
-                                           <select class="form-control category_selecter" tabindex="-1" name="category_id_selecter">
-                                                <option value="">微信会员等级</option>
+                                           <select class="form-control category_selecter" tabindex="-1" name="brand_user_level">
+                                                <option value="">请选择</option>
                                                 <?php if($weixin):?>
                                                     <?php foreach ($weixin as $wx):?>  
-                                                        <option  value="<?php echo $wx['lid']?>">
-                                                                <?php echo $wx['level_name']."&nbsp;&nbsp;&nbsp;&nbsp;".$wx['level_discount']."折"; ?>
-                                                            
+                                                        <option  value="<?php echo $wx['lid']?>" <?php if(isset($v->memberbind->branduser_level_id)&&$wx['lid']==$v->memberbind->branduser_level_id) echo 'selected';?>>
+                                                                <?php echo $wx['level_name']."(".$wx['level_discount']."折)"; ?>
                                                         </option>
-                                                        
                                                     <?php endforeach;?>
                                                 <?php endif;?> 
                                             </select> 
-                                            <input type="hidden" class="binds" name="bind[][branduser_level_id]"   value=""/>
+                                            <input type="hidden" class="membercard_level" name="bind[<?php echo $k;?>][membercard_level_id]"   value="<?php echo $v['lid'];?>"/>
+                                            <input type="hidden" class="branduser_level" name="bind[<?php echo $k;?>][branduser_level_id]"   value="<?php if($v->memberbind){ echo $v->memberbind->branduser_level_id;}?>"/>
                                         </td>
                                      </tr>
                                 <?php endforeach;?>
@@ -82,8 +74,8 @@
                     </div>
                 </div>
                 <div class="col-md-offset-2 col-md-7">
-                    <button type="submit" class="btn green" onclick = "return bind();"><?php echo yii::t('app','绑定');?></button>
                     <a href="<?php echo $this->createUrl('wechatMember/list' , array('companyId' => $this->companyId));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
+                    <button type="submit" class="btn green" onclick = "return bind();"><?php echo yii::t('app','绑定');?></button>
                 </div>
                </form>
             </div>
@@ -93,9 +85,9 @@
 </div>
 <script>
     $(function(){
-        $("select[name='category_id_selecter']").change(function(){
+        $("select[name='brand_user_level']").change(function(){
             var value = $(this).val();
-             $(this).parent().parent().find("input[name^='bind']").val(value);
+             $(this).parents('td').find("input.branduser_level").val(value);
         });
     });
    function bind() {

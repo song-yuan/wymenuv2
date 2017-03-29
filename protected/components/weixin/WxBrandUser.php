@@ -97,6 +97,10 @@ class WxBrandUser {
 	public static function getFromOpenId($openId) {
 		$sql = 'select * from nb_brand_user where openid = "'.$openId.'"';
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		if($brandUser){
+			$brandUserLevel = self::getUserLevel($brandUser['user_level_lid'],$brandUser['dpid']);
+			$brandUser['level'] = $brandUserLevel;
+		}
 		return $brandUser;
 	}
 	/**
@@ -182,6 +186,21 @@ class WxBrandUser {
 		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));
 		return $result;
 	}
+	/**
+	 * 
+	 * 根据openid更新会员来源
+	 * 
+	 */
+	public static function updateByOpenid($param){
+		$openid = $param['openid'];
+		$insertData = array(
+				'scene_type'=>1,
+				'weixin_group'=>$param['group'],
+				'is_sync'=>DataSync::getInitSync(),
+		);
+		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'openid=:openid',array(':openid'=>$openid));
+		return $result;
+	}
 	public static function dealYue($userId,$dpid,$money){
 		$sql = 'update nb_brand_user set remain_money = remain_money+'.$money.' where lid='.$userId.' and dpid='.$dpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
@@ -205,8 +224,8 @@ class WxBrandUser {
 	 * 
 	 */
 	public static function getMemberCardBind($mem_level_id,$dpid) {
-		$sql = 'select * from nb_member_card_bind where membercard_level_id=:levelId and delete_flag=0';
-		$memberCardBind = Yii::app()->db->createCommand($sql)->bindValue(':levelId',$mem_level_id)->queryRow();
+		$sql = 'select * from nb_member_card_bind where membercard_level_id=:levelId and dpid=:dpid and delete_flag=0';
+		$memberCardBind = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':levelId',$mem_level_id)->queryRow();
 		return $memberCardBind;
 	}
 	public static function updateUserLevel($userId,$dpid,$userLevelId) {
@@ -219,8 +238,8 @@ class WxBrandUser {
 	 * 绑定 会员升级直接
 	 * 
 	 */
-	public static function brandUserBind($userId,$dpid,$userLevelId,$points) {
-		$sql = 'update nb_brand_user set user_level_lid='.$userLevelId.',consume_point_history='.$points.' where lid='.$userId.' and dpid='.$dpid;
+	public static function brandUserBind($userId,$dpid,$rfid,$userLevelId,$points) {
+		$sql = 'update nb_brand_user set user_level_lid='.$userLevelId.',consume_point_history='.$points.',member_card_rfid='.$rfid.' where lid='.$userId.' and dpid='.$dpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}

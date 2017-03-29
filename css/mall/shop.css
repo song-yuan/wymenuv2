@@ -202,7 +202,9 @@
 
 
 .shops h1 {
-	font-size: 1em;
+	font-size: 1.2em;
+	font-weight:800;
+	line-height:100%;
 	margin-bottom: 5px;
 }
 
@@ -219,16 +221,19 @@
 
 .shops .misinfo {
 	overflow: hidden;
-	width: 90%;
+	width: 100%;
 
 }
 
 .misinfo span.left {
-	width: 70%;
+	width: 60%;
 }
 
 .misinfo span.right {
-	width: 30%;
+	width: 40%;
+	font-size:1.3em;
+	font-weight:700;
+	line-height:100%;
 	text-align: right;
 }
 

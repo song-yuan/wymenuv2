@@ -466,6 +466,8 @@ class SqbPay{
     	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
     	$operator = $data['operator'];
     	/*发起本次交易的操作员*/
+    	$reflect = $data['reflect'];
+    	/*原样返回的参数*/
     	$notify_url = $data['notify_url'];
     	/*发起本次交易的回调地址*/
     	$return_url = $data['return_url'];
@@ -489,8 +491,9 @@ class SqbPay{
     			'subject'=>$subject,
     			'payway'=>$payway,
     			'operator'=>$operator,
+    			'reflect'=>$reflect,
     			'notify_url'=>$notify_url,
-    			'return_url'=>$return_url
+    			'return_url'=>$return_url,
     	);
     	ksort($data);
     	$paramsStrs = '';
@@ -518,6 +521,7 @@ class SqbPay{
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
     				'msg'=>'未知状态！');
+    		
     		return $result;
     	}
     	

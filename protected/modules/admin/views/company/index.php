@@ -89,9 +89,9 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>ID</th>
 								<th><?php echo yii::t('app','店铺名称');?></th>
 								<th>logo</th>
+								<th>店铺二维码</th>
 								<th><?php echo yii::t('app','联系人');?></th>
 								<th><?php echo yii::t('app','手机');?></th>
 								<th><?php echo yii::t('app','电话');?></th>
@@ -105,9 +105,9 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
-								<td ><?php echo $model->dpid;?></td>
 								<td><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
+								<td ><?php if($model->property&&$model->property->qr_code):?><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->property->qr_code;?>" /><?php endif;?><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->dpid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 								<td ><?php echo $model->contact_name;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->telephone;?></td>
@@ -169,6 +169,17 @@
 	<!-- END PAGE CONTENT-->
 <script>
 	new PCAS("province","city","area","<?php echo $province;?>","<?php echo $city;?>","<?php echo $area;?>");
+	function genQrcode(that){
+		var id = $(that).attr('lid');
+		var $parent = $(that).parent();
+		$.get('<?php echo $this->createUrl('/admin/company/genWxQrcode');?>/dpid/'+id,function(data){
+			if(data.status){
+				$parent.find('img').remove();
+				$parent.prepend('<img style="width:100px;" src="/wymenuv2/./'+data.qrcode+'">');
+			}
+			alert(data.msg);
+		},'json');
+	}
 	$('#cityselect').on('click',function(){
 		 var province = $('#province').children('option:selected').val();
          var city = $('#city').children('option:selected').val();

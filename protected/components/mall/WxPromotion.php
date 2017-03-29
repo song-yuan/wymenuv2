@@ -71,7 +71,6 @@ class WxPromotion
 	 */
 	 public static function getPromotionPrice($dpid,$userId,$productId,$isSet,$promotionId,$toGroup){
 	 	$now = date('Y-m-d H:i:s',time());
-	 	$user = WxBrandUser::get($userId,$dpid);
 	 	if($isSet){
 	 		$product = WxProduct::getProductSet($productId,$dpid);
 	 		$sql = 'select t.*,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.normal_promotion_id=:promotionId and t.product_id=:productId and t1.begin_time <= :now and t1.end_time >= :now and t.is_set=1 and t.delete_flag=0 and t1.delete_flag=0';

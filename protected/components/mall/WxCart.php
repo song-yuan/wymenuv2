@@ -125,8 +125,8 @@ class WxCart
 		}
 	}
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=0';
-		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=1';
+		$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
+		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=1 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
@@ -236,10 +236,10 @@ class WxCart
 		}
 		return $success;
 	}
-	public static function getCartPrice($cartArrs,$user){
+	public static function getCartPrice($cartArrs,$user,$type){
 		$price = 0;
 		$levelDiscunt = 1;
-		if($user['level']){
+		if($type!=2&&$user['level']){
 			$birthday = date('m-d',strtotime($user['user_birthday']));
 			$today = date('m-d',time());
 			if($birthday==$today){

@@ -47,15 +47,16 @@ class NewBrandUser {
   		$se = new Sequence("brand_user");
                 $lid = $se->nextval();
                 $insertBrandUserArr = array(
-        	'lid'=>$lid,
-        	'dpid'=>$this->brandId,
-        	'openid'=>$this->openId,
-        	'user_level_lid'=>$this->brandUserLevelId(),
-        	'card_id'=>$this->newBrandUserCardId(),
-        	'create_at'=>date('Y-m-d H:i:s',$time),
-        	'update_at'=>date('Y-m-d H:i:s',$time), 
-        	'is_sync'=>DataSync::getInitSync(),	
-        );
+			        	'lid'=>$lid,
+			        	'dpid'=>$this->brandId,
+			        	'openid'=>$this->openId,
+			        	'user_level_lid'=>$this->brandUserLevelId(),
+			        	'card_id'=>$this->newBrandUserCardId(),
+			        	'create_at'=>date('Y-m-d H:i:s',$time),
+			        	'update_at'=>date('Y-m-d H:i:s',$time), 
+                		'scene_type'=>0,
+        				'is_sync'=>DataSync::getInitSync(),	
+        				);
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
        
         $this->userId = $lid;
