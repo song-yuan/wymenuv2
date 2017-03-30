@@ -62,7 +62,7 @@
 										<div class="col-md-9">
 												<div class="fileupload fileupload-new" data-provides="fileupload">
 													<div class="fileupload-new thumbnail">
-														<img src="<?php echo $model->main_picture;?>" alt="" />
+														<img src="<?php echo $model->main_picture?$model->main_picture:'';?>" alt="" />
 													</div>
 													<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
 													<div>
