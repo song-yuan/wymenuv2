@@ -53,6 +53,7 @@
 										?>
 										<?php echo $form->hiddenField($model,'main_picture'); ?>
 										<?php echo $form->error($model,'main_picture'); ?>
+										<span style="color: red;">图片只能上传JPG格式的。</span>
 										</div>
 									</div>
 						  			-->
