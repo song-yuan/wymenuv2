@@ -122,6 +122,7 @@ class ProductController extends BackendController
 		$model->dpid = $this->companyId;
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
+			var_dump($_FILES);
 			var_dump($_POST);exit;
 			$model->attributes = Yii::app()->request->getPost('Product');
 			if($model->category_id){
