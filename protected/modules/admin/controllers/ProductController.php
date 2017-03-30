@@ -64,6 +64,7 @@ class ProductController extends BackendController
 			$this->redirect(array('product/index' , 'companyId' => $this->companyId)) ;
 		}
 		if(Yii::app()->request->isPostRequest) {
+			var_dump($_POST);exit;
 			$model->attributes = Yii::app()->request->getPost('Product');
 			
 			$cateID = $model->category_id;
