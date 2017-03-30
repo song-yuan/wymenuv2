@@ -38,6 +38,7 @@
 											<?php if($istempp):?><span style="color: red;">来自总部下发菜品，无法修改以上选项</span><?php endif;?>
 										</div>
 									</div>
+									<!--
 									<div class="form-group <?php if($model->hasErrors('main_picture')) echo 'has-error';?>">
 										<?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
 										<div class="col-md-9">
@@ -54,6 +55,7 @@
 										<?php echo $form->error($model,'main_picture'); ?>
 										</div>
 									</div>
+						  			-->
 						  			<div class="form-group <?php if($model->hasErrors('main_picture')) echo 'has-error';?>">
 										<?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
 										<div class="col-md-9">
