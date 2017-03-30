@@ -146,7 +146,11 @@
 							)); ?>
            <script>
 	   
-	
+       	$('input[name="file"]').change(function(){
+   		  	$('form').ajaxSubmit(function(msg){
+   				$('#ProductSet_main_picture').val(msg);
+   			});
+   	   	});
 		function swfupload_callback(name,path,oldname)  {
 			$("#ProductSet_main_picture").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
