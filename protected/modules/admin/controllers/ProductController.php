@@ -64,7 +64,6 @@ class ProductController extends BackendController
 			$this->redirect(array('product/index' , 'companyId' => $this->companyId)) ;
 		}
 		if(Yii::app()->request->isPostRequest) {
-			var_dump($_POST);exit;
 			$model->attributes = Yii::app()->request->getPost('Product');
 			
 			$cateID = $model->category_id;
@@ -123,6 +122,7 @@ class ProductController extends BackendController
 		$model->dpid = $this->companyId;
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
+			var_dump($_POST);exit;
 			$model->attributes = Yii::app()->request->getPost('Product');
 			if($model->category_id){
 				$categoryId = ProductCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
