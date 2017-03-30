@@ -59,22 +59,22 @@
 						  			<div class="form-group <?php if($model->hasErrors('main_picture')) echo 'has-error';?>">
 										<?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
 										<div class="col-md-9">
-											<div class="fileupload fileupload-new" data-provides="fileupload">
-												<div class="fileupload-new thumbnail">
-													<img src="<?php echo $model->main_picture;?>" alt="" />
+												<div class="fileupload fileupload-new" data-provides="fileupload">
+													<div class="fileupload-new thumbnail">
+														<img src="<?php echo $model->main_picture;?>" alt="" />
+													</div>
+													<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
+													<div>
+														<span class="btn default btn-file">
+														<span class="fileupload-new"><i class="fa fa-paper-clip"></i> 上传产品图片 </span>
+														<span class="fileupload-exists"><i class="fa fa-undo"></i> 更改 </span>
+														<input type="file" accept="image/png,image/jpg,image/jpeg" name="file" class="default" />
+														</span>
+														<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除 </a>
+													</div>
 												</div>
-												<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 150px; max-height: 150px; line-height: 20px;"></div>
-												<div>
-													<span class="btn default btn-file">
-													<span class="fileupload-new"><i class="fa fa-paper-clip"></i> 上传产品图片</span>
-													<span class="fileupload-exists"><i class="fa fa-undo"></i> 更新</span>
-													<input type="file" class="default" />
-													</span>
-													<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除</a>
-												</div>
-											</div>
-											<span class="label label-danger">注意:</span>
-											<span>大小为300px*300px</span>
+												<span class="label label-danger">注意:</span>
+												<span>大小：建议300px*300px 格式:jpg 、png</span>
 										</div>
 									</div>
 									<div class="form-group" <?php if($model->hasErrors('original_price')) echo 'has-error';?>>
