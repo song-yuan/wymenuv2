@@ -55,6 +55,22 @@ class ProductController extends BackendController
 	}
 
 	public function actionCreate(){
+		$msg = '';
+		if(Yii::app()->request->isAjaxRequest){
+			$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+			$up = new CFileUpload();
+			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+			$up -> set("path", $path);
+			$up -> set("maxsize", 2*1024*1024);
+			$up -> set("allowtype", array("png", "jpg","jpeg"));
+		
+			if($up -> upload("file")) {
+				$msg = '/wymenuv2/uploads/company_'.$this->companyId.'/'.$up->getFileName();
+			}else{
+				$msg = $up->getErrorMsg();
+			}
+			echo $msg;exit;
+		}
 		$model = new Product();
 		$istempp = Yii::app()->request->getParam('istempp',0);
 		$model->dpid = $this->companyId ;
@@ -110,6 +126,22 @@ class ProductController extends BackendController
 	}
 	
 	public function actionUpdate(){
+		$msg = '';
+		if(Yii::app()->request->isAjaxRequest){
+			$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+			$up = new CFileUpload();
+			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+			$up -> set("path", $path);
+			$up -> set("maxsize", 2*1024*1024);
+			$up -> set("allowtype", array("png", "jpg","jpeg"));
+				
+			if($up -> upload("file")) {
+				$msg = '/wymenuv2/uploads/company_'.$this->companyId.'/'.$up->getFileName();
+			}else{
+				$msg = $up->getErrorMsg();
+			}
+			echo $msg;exit;
+		}
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('product/index' , 'companyId' => $this->companyId)) ;
@@ -122,8 +154,6 @@ class ProductController extends BackendController
 		$model->dpid = $this->companyId;
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
-			var_dump($_FILES);
-			var_dump($_POST);exit;
 			$model->attributes = Yii::app()->request->getPost('Product');
 			if($model->category_id){
 				$categoryId = ProductCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
@@ -133,7 +163,7 @@ class ProductController extends BackendController
                 $model->simple_code = $py->py($model->product_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
+				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'.$msg));
 				$this->redirect(array('product/index' , 'companyId' => $this->companyId ,'page' => $papage));
 			}
 		}
