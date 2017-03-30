@@ -53,6 +53,7 @@ class CompanyController extends BackendController
 		if($area){
 			$criteria->addCondition('t.county_area like "'.$area.'"');
 		}
+		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);

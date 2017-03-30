@@ -95,7 +95,7 @@
 								<th><?php echo yii::t('app','联系人');?></th>
 								<th><?php echo yii::t('app','手机');?></th>
 								<th><?php echo yii::t('app','电话');?></th>
-								<th>email</th>
+								<th><?php echo yii::t('app','地址');?></th>
 								<th><?php echo yii::t('app','创建时间');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -111,7 +111,8 @@
 								<td ><?php echo $model->contact_name;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->telephone;?></td>
-								<td ><?php echo $model->email;?></td>
+								<?php $address = $model->province.$model->city.$model->county_area;?>
+								<td ><?php echo $address;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="actions">
