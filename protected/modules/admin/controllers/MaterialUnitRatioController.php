@@ -40,6 +40,7 @@ class MaterialUnitRatioController extends BackendController
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId)) ;
 		}
+		$papage = Yii::app()->request->getParam('papage');
 		$model = new MaterialUnitRatio();
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
@@ -74,6 +75,7 @@ class MaterialUnitRatioController extends BackendController
 		}
 		$this->render('create' , array(
 				'model' => $model ,
+				'papage' => $papage,
 		));
 	}
 
