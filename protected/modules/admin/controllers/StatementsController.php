@@ -754,7 +754,7 @@ public function actionPayallReport(){
 		$db = Yii::app()->db;
 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
+		$ords ='0000000000'; 
 		foreach ($orders as $order){
 			$ords = $ords .','.$order['lid'];
 		}
@@ -781,8 +781,10 @@ public function actionPayallReport(){
 		}
 		$maxp = array_search(max($timeprice), $timeprice);
 		$maxp = $timeprice[$maxp];
+                
 		$maxs = array_search(max($timesum), $timesum);
 		$maxs = $timesum[$maxs];
+                
 		$timeprice = json_encode($timeprice);
 		$hour = json_encode($hour);
 		$timesum = json_encode($timesum);
@@ -800,6 +802,7 @@ public function actionPayallReport(){
 				'timesum'=>$timesum,
 				'hour'=>$hour,
 				'maxp'=>$maxp,
+                                'maxs'=>$maxs
 		));
 	}                       
 	/*
