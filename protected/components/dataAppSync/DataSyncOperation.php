@@ -1694,7 +1694,7 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getMaterial($dpid,$startTime,$endTime) {
-		$sql = 'select t.material_id,t.stock_num,t1.material_name,t2.unit_name from nb_material_stock_log t left join nb_product_material t1 on t.material_id=t1.lid and t.dpid=t1.dpid left join nb_material_unit t2 on t1.sales_unit_id=t2.lid and t1.dpid=t2.dpid where t.dpid='.$dpid.' and t.create_at >= "'.$startTime.'" and "'.$endTime.'" >= t.create_at';
+		$sql = 'select t.material_id,sum(t.stock_num),t1.material_name,t2.unit_name from nb_material_stock_log t left join nb_product_material t1 on t.material_id=t1.lid and t.dpid=t1.dpid left join nb_material_unit t2 on t1.sales_unit_id=t2.lid and t1.dpid=t2.dpid where t.dpid='.$dpid.' and t.create_at >= "'.$startTime.'" and "'.$endTime.'" >= t.create_at group by t.material_id';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return $result;
 	}
