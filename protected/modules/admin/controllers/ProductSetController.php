@@ -40,6 +40,22 @@ class ProductSetController extends BackendController
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
 		}
+		$msg = '';
+		if(Yii::app()->request->isAjaxRequest){
+			$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+			$up = new CFileUpload();
+			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+			$up -> set("path", $path);
+			$up -> set("maxsize", 2*1024*1024);
+			$up -> set("allowtype", array("png", "jpg","jpeg"));
+		
+			if($up -> upload("file")) {
+				$msg = '/wymenuv2/uploads/company_'.$this->companyId.'/'.$up->getFileName();
+			}else{
+				$msg = $up->getErrorMsg();
+			}
+			echo $msg;exit;
+		}
 		$model = new ProductSet();
 		$model->dpid = $this->companyId ;
 		$status = '';
@@ -75,6 +91,22 @@ class ProductSetController extends BackendController
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId));
+		}
+		$msg = '';
+		if(Yii::app()->request->isAjaxRequest){
+			$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+			$up = new CFileUpload();
+			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+			$up -> set("path", $path);
+			$up -> set("maxsize", 2*1024*1024);
+			$up -> set("allowtype", array("png", "jpg","jpeg"));
+		
+			if($up -> upload("file")) {
+				$msg = '/wymenuv2/uploads/company_'.$this->companyId.'/'.$up->getFileName();
+			}else{
+				$msg = $up->getErrorMsg();
+			}
+			echo $msg;exit;
 		}
 		$lid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');

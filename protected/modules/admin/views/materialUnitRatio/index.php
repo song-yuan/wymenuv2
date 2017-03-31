@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','单位系数列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('materialUnitRatio/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('materialUnitRatio/create' , array('companyId' => $this->companyId,'papage'=>$pages->getCurrentPage()+1));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
