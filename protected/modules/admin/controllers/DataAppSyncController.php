@@ -257,4 +257,16 @@ public function actionDealWxHykPay(){
 	$result = DataSyncOperation::dealWxHykPay($_POST);
 	echo $result;exit;
 }
+/**
+ *
+ * 原材料 消耗
+ *
+ */
+public function actionGetMaterial(){
+	$dpid = Yii::app()->request->getParam('dpid');
+	$startTime = Yii::app()->request->getParam('start_time');
+	$endTime = Yii::app()->request->getParam('end_time');
+	$result = DataSyncOperation::getMaterial($dpid,$startTime,$endTime);
+	echo json_encode($result);exit;
+}
 }
