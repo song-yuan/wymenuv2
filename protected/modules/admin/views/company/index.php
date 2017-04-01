@@ -90,12 +90,13 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<?php if(Yii::app()->user->role < '5'): ?><th>ID</th><?php endif; ?>
-                                                                <th><?php echo yii::t('app','店铺名称');?></th>
+                                <th><?php echo yii::t('app','店铺名称');?></th>
 								<th>logo</th>
 								<th>店铺二维码</th>
 								<th><?php echo yii::t('app','联系人');?></th>
 								<th><?php echo yii::t('app','手机');?></th>
 								<th><?php echo yii::t('app','电话');?></th>
+								<th><?php echo yii::t('app','支付');?></th>
 								<th><?php echo yii::t('app','地址');?></th>
 								<th><?php echo yii::t('app','创建时间');?></th>
 								<th>&nbsp;</th>
@@ -113,13 +114,25 @@
 								<td ><?php echo $model->contact_name;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->telephone;?></td>
+								<td >
+								<?php if($model->property){
+										switch ($model->property->pay_type){
+										case 0: echo '未开通';break;
+										case 1: echo '开通（个人）';break;
+										case 2: echo '开通（总部）';break;
+										default: echo '未知';break;
+								} $paytype = $model->property->pay_type;
+								}else{
+									$paytype = $model->property->pay_type;
+								};?>
+								</td>
 								<?php $address = $model->province.$model->city.$model->county_area;?>
 								<td ><?php echo $address;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="actions">
                                         <?php if(Yii::app()->user->role < User::SHOPKEEPER) : ?><!-- Yii::app()->params->master_slave=='m' -->
-                                            <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type));?>"><?php echo yii::t('app','编辑');?></a>
+                                            <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type,'pay_online'=>$paytype));?>"><?php echo yii::t('app','编辑');?></a>
                                         <?php endif; ?>
                                             <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
                                         <?php if(Yii::app()->user->role <= User::POWER_ADMIN):?>
