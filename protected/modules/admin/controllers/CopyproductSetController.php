@@ -58,61 +58,61 @@ class CopyproductSetController extends BackendController
         	$transaction = $db->beginTransaction();
         	try{
 	        	foreach ($dpids as $dpid){
-	
+                           
 	        			foreach ($pshscodes as $prodsethscode){
 	        				$prodsets = ProductSet::model()->find('pshs_code=:pscode and dpid=:companyId and delete_flag=0' , array(':pscode'=>$prodsethscode,':companyId'=>$this->companyId));
 	        				$prodsetso = ProductSet::model()->find('pshs_code=:pscode and dpid=:companyId and delete_flag=0' , array(':pscode'=>$prodsethscode,':companyId'=>$dpid));
 	        				if(!empty($prodsetso)){
 	        					$prodsetso->delete_flag = 1;
 	        					$prodsetso->update();
-	        					Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id =:setid and dpid = :companyId')
-	        					->execute(array(':setid'=> $prodsetso->lid, ':companyId' => $dpid));
-	        					//Yii::app()->db->createCommand()->update('nb_product_set_detail',array('set_id=:setid' ,'dpid=:dpid'), array(':setid' =>$prodsetso->lid , ':dpid'=>$dpid));
-	        				}
-	        				//var_dump($prodsetso);exit;
-	        				if(!empty($prodsets)){
-	        					$se = new Sequence("porduct_set");
-	        					$pslid = $se->nextval();
-	        					$dataprodset = array(
-	        							'lid'=>$pslid,
-	        							'dpid'=>$dpid,
-	        							'create_at'=>date('Y-m-d H:i:s',time()),
-	        							'update_at'=>date('Y-m-d H:i:s',time()),
-	        							'pshs_code'=>$prodsethscode,
-	        							'set_name'=>$prodsets->set_name,
-	        							'source'=>1,
-	        							'type'=>$prodsets->type,
-	        							'simple_code'=>$prodsets->simple_code,
-	        							'main_picture'=>$prodsets->main_picture,
-	        							'set_price'=>$prodsets->set_price,
-	        							'member_price'=>$prodsets->member_price,
-	        							'description'=>$prodsets->description,
-	        							'rank'=>$prodsets->rank,
-	        							'is_member_discount'=>$prodsets->is_member_discount,
-	        							'is_special'=>$prodsets->is_special,
-	        							'is_discount'=>$prodsets->is_discount,
-	        							'status'=>$prodsets->status,
-	        							'delete_flag'=>'0',
-	        							'is_sync'=>$is_sync,
-	        					);
-	        					//var_dump($dataprodset);exit;
-	        					$command = $db->createCommand()->insert('nb_product_set',$dataprodset);
-	        					
-	        					$prodsetdetails = ProductSetDetail::model()->findAll('set_id=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsets->lid,':companyId'=>$this->companyId));
-	        					foreach ($prodsetdetails as $prodsetdetail){
-	        						$producto = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsetdetail->product_id,':companyId'=>$this->companyId));
-	        						if(!empty($producto)){
-		        						$product = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$producto->phs_code,'companyId'=>$dpid));
-		        						//var_dump($product);exit;
-		        						if(!empty($product)){
-			        						$se = new Sequence("porduct_set_detail");
-			        						$psdlid = $se->nextval();
-			        						$dataprodsetdetail = array(
-			        								'lid'=>$psdlid,
-			        								'dpid'=>$dpid,
-			        								'create_at'=>date('Y-m-d H:i:s',time()),
-			        								'update_at'=>date('Y-m-d H:i:s',time()),
-			        								'set_id'=>$pslid,
+                                                                    Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id =:setid and dpid = :companyId')
+                                                                    ->execute(array(':setid'=> $prodsetso->lid, ':companyId' => $dpid));
+                                                                    //Yii::app()->db->createCommand()->update('nb_product_set_detail',array('set_id=:setid' ,'dpid=:dpid'), array(':setid' =>$prodsetso->lid , ':dpid'=>$dpid));
+                                                            }
+                                                            //var_dump($prodsetso);exit;
+                                                            if(!empty($prodsets)){
+                                                                    $se = new Sequence("porduct_set");
+                                                                    $pslid = $se->nextval();
+                                                                    $dataprodset = array(
+                                                                                    'lid'=>$pslid,
+                                                                                    'dpid'=>$dpid,
+                                                                                    'create_at'=>date('Y-m-d H:i:s',time()),
+                                                                                    'update_at'=>date('Y-m-d H:i:s',time()),
+                                                                                    'pshs_code'=>$prodsethscode,
+                                                                                    'set_name'=>$prodsets->set_name,
+                                                                                    'source'=>1,
+                                                                                    'type'=>$prodsets->type,
+                                                                                    'simple_code'=>$prodsets->simple_code,
+                                                                                    'main_picture'=>$prodsets->main_picture,
+                                                                                    'set_price'=>$prodsets->set_price,
+                                                                                    'member_price'=>$prodsets->member_price,
+                                                                                    'description'=>$prodsets->description,
+                                                                                    'rank'=>$prodsets->rank,
+                                                                                    'is_member_discount'=>$prodsets->is_member_discount,
+                                                                                    'is_special'=>$prodsets->is_special,
+                                                                                    'is_discount'=>$prodsets->is_discount,
+                                                                                    'status'=>$prodsets->status,
+                                                                                    'delete_flag'=>'0',
+                                                                                    'is_sync'=>$is_sync,
+                                                                    );
+                                                                    //var_dump($dataprodset);exit;
+                                                                    $command = $db->createCommand()->insert('nb_product_set',$dataprodset);
+
+                                                                    $prodsetdetails = ProductSetDetail::model()->findAll('set_id=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsets->lid,':companyId'=>$this->companyId));
+                                                                    foreach ($prodsetdetails as $prodsetdetail){
+                                                                            $producto = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsetdetail->product_id,':companyId'=>$this->companyId));
+                                                                            if(!empty($producto)){
+                                                                                    $product = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$producto->phs_code,'companyId'=>$dpid));
+                                                                                    //var_dump($product);exit;
+                                                                                    if(!empty($product)){
+                                                                                            $se = new Sequence("porduct_set_detail");
+                                                                                            $psdlid = $se->nextval();
+                                                                                            $dataprodsetdetail = array(
+                                                                                                            'lid'=>$psdlid,
+                                                                                                            'dpid'=>$dpid,
+                                                                                                            'create_at'=>date('Y-m-d H:i:s',time()),
+                                                                                                        'update_at'=>date('Y-m-d H:i:s',time()),
+                                                                                                    'set_id'=>$pslid,
 			        								'product_id'=>$product->lid,
 			        								'price'=>$prodsetdetail->price,
 			        								'group_no'=>$prodsetdetail->group_no,
@@ -130,6 +130,7 @@ class CopyproductSetController extends BackendController
 	        				}
 	        					
 	        			}
+                     
 	        	}
         		$transaction->commit();
         		//Yii::app()->user->setFlash('success' , $msgmate);
