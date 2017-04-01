@@ -111,16 +111,22 @@
 									</div>
 									<?php endif;?>
 									<?php }else{?>
-									
-									<div class="form-group">
-									<LABEL class="col-md-3 control-label ">是否开通线上支付</LABEL>
-										<div class="col-md-4">
-											<SELECT class="form-control pay_online">
-												<OPTION value="1">开通</OPTION>
-												<OPTION value="0">不开通</OPTION>
-											</SELECT>
-										</div>
-									</div>
+										<?php if(Yii::app()->user->role <5 || $type2 == 'create'):?>
+											
+											<div class="form-group">
+											<LABEL class="col-md-3 control-label ">是否开通线上支付</LABEL>
+												<div class="col-md-4">
+													<SELECT class="form-control pay_online">
+														<OPTION value="0">不开通</OPTION>
+														<OPTION value="2">开通线上支付（个人）</OPTION>
+														<OPTION value="1">开通线上支付（总部）</OPTION>
+													</SELECT>
+												</div>
+											</div>
+											<?php else:?>
+											
+											
+										<?php endif;?>
 									<?php }?>
 									<input type="hidden" id="pay_online" name="pay_online" value="" />
 									<div class="form-group">
@@ -304,6 +310,7 @@
 		    geocoder.getLocation(address);
 		}
 		$(document).ready(function(){
+			
 			init();
 			var province = $('#province').children('option:selected').val();
 	        var city = $('#city').children('option:selected').val();
@@ -333,19 +340,17 @@
 				// 创建地址解析器实例
 				codeAddress(real_address);
 			});
-		     $("#su").on('click',function() {
+		     $("#su").on('click',function(){
 
 		    	 var pay_online = $('.pay_online').children('option:selected').val();
 		         //alert(pay_online);
-		         //layer.msg('网络开小差了！建议重新查询...',{icon:5});
 		         //return false;
 		         var province = $('#province').children('option:selected').val();
 		         var city = $('#city').children('option:selected').val();
 		         var area = $('#area').children('option:selected').val();
 		         
 		         var dayendzero = "00:00";
-		         //var ss = "";
-		       // if(aa.checked){
+		       
 		         if(province == null || province == 'undefind' || province == ''){
 		        	 alert("<?php echo yii::t('app','请填写店铺所处省市信息。。。');?>");
 		        	 return false;

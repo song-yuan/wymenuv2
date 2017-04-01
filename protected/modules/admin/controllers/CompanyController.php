@@ -141,7 +141,7 @@ class CompanyController extends BackendController
 							'create_at'=>date('Y-m-d H:i:s',time()),
 							'update_at'=>date('Y-m-d H:i:s',time()),
 							'pay_type'=>$pay_online,
-							'pay_channel'=>'',
+							'pay_channel'=>$pay_online,
 							'delete_flag'=>'0',
 					);
 					$command = $db->createCommand()->insert('nb_company_property',$data);
@@ -187,12 +187,12 @@ class CompanyController extends BackendController
 							'create_at'=>date('Y-m-d H:i:s',time()),
 							'update_at'=>date('Y-m-d H:i:s',time()),
 							'pay_type'=>$pay_online,
-							'pay_channel'=>'',
+							'pay_channel'=>$pay_online,
 							'delete_flag'=>'0',
 					);
 					$command = $db->createCommand()->insert('nb_company_property',$data);
                                         
-                                        $manu = new Sequence("manufacturer_classification");
+                    $manu = new Sequence("manufacturer_classification");
 					$manu_lid = $manu->nextval();
                                         $manu_data = array(
 							'lid'=>$manu_lid,
