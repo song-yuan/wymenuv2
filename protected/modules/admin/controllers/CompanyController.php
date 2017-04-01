@@ -191,13 +191,28 @@ class CompanyController extends BackendController
 							'delete_flag'=>'0',
 					);
 					$command = $db->createCommand()->insert('nb_company_property',$data);
-					
+                                        
+                                        $manu = new Sequence("manufacturer_classification");
+					$manu_lid = $manu->nextval();
+                                        $manu_data = array(
+							'lid'=>$manu_lid,
+							'dpid'=>$comp_dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'classification_name'=>'总部',                                          
+					);
+					$manu_command =$db->createCommand()->insert('nb_manufacturer_classification',$manu_data);
+                                                                         
 					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
 					$this->redirect(array('company/index','companyId'=> $this->companyId));
+                                        
+                                       
+                                        
 				} else {
 					Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
 				}
 			}
+                         
 		}
 			$role = Yii::app()->user->role;
 			$printers = $this->getPrinterList();
