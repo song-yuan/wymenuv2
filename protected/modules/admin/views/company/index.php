@@ -123,7 +123,7 @@
 										default: echo '未知';break;
 								} $paytype = $model->property->pay_type;
 								}else{
-									$paytype = $model->property->pay_type;
+									$paytype = '0';
 								};?>
 								</td>
 								<?php $address = $model->province.$model->city.$model->county_area;?>
