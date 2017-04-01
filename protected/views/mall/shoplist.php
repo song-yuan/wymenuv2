@@ -123,7 +123,9 @@
 		    }
 		    $("#activeshop").html(str);
 	    }
-
+	    $('#activeshop').on('click','a',function(event){
+	    	event.preventDefault()
+		});
 	    $('#activeshop').on('click','li',function(){
 		    var href = $(this).attr('href');
 		    location.href = href;
