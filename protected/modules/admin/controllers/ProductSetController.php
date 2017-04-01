@@ -102,7 +102,7 @@ class ProductSetController extends BackendController
 			$up -> set("allowtype", array("png", "jpg","jpeg"));
 		
 			if($up -> upload("file")) {
-				$msg = '/wymenuv2/uploads/company_'.$this->companyId.'/'.$up->getFileName();
+				$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
 			}else{
 				$msg = $up->getErrorMsg();
 			}
