@@ -30,7 +30,7 @@
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
 						<div class="info small font_l" style="margin-top:5px;">地址: <?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></div>
-						<div class="misinfo small" style="margin-top:5px;"><span class="left font_l">电话: <?php echo trim($child['telephone'].' '.$child['mobile']);?></span><span class="right font_org"></span></div>
+						<div class="misinfo small" style="margin-top:5px;"><span class="left font_l">电话: <?php echo trim('<a href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span><span class="right font_org"></span></div>
 					</div>
 				</li>
 				<?php endforeach;?>
