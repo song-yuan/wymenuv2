@@ -76,7 +76,7 @@ class ProductSetController extends BackendController
 			$model->delete_flag = '0';
 			$py=new Pinyin();
 			$model->simple_code = $py->py($model->set_name);
-			var_dump($model);exit;
+			
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productSet/detailindex','lid' => $model->lid , 'companyId' => $model->dpid , 'status' => ''));
