@@ -1135,6 +1135,7 @@ class DataSyncOperation {
 				if($resObj->status){
 					array_push($lidArr, $lid);
 				}else{
+					Helper::writeLog('同步失败:同步内容:'.$dpid.json_encode($obj).'错误信息:'.$resObj->msg);
 					// 插入同步不成功数据
 					$data = array('dpid'=>$dpid,'jobid'=>$padLid,'pos_sync_lid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
 					$resFail = self::setSyncFailure($data);
@@ -1174,6 +1175,8 @@ class DataSyncOperation {
 					$resObj = json_decode($result);
 					if($resObj->status){
 						self::delSyncFailure($lid,$dpid);
+					}else{
+						Helper::writeLog('再次同步失败:同步内容:'.$dpid.json_encode($sync).'错误信息:'.$resObj->msg);
 					}
 				}
 			}
