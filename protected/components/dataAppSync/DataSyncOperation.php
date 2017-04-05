@@ -1165,7 +1165,7 @@ class DataSyncOperation {
 						// 退款
 						$contentArr = split('::', $content);
 						$createAt = isset($contentArr[7])?$contentArr[7]:'';
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
+						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 						$result = self::retreatOrder($pData);
 					}elseif($type==3){
 						// 增加会员卡

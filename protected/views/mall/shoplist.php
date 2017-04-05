@@ -9,17 +9,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/shop.css">
 
 <body class="shop_list bg_lgrey">
-	<!-- 
-	<div id="topbar" class="bg_white pad_10">
-		<span class="area"><a href="shop_area.php">区域</a></span>
-		<span class="tabset">
-			<span class="allshop current">全部门店</span>
-			<span class="actshop">活动门店</span>
-		</span>
-		<span class="nearby">附近</span>
-
-	</div>
-	-->
+	<div id="topbar" class="bg_white pad_10" style="text-align:left;">当前位置:<span id="current_position" class="font_org"></span> </div>
 	<div class="shops">
 		<div class="search"><input id="name-search" type="text" value="" placeholder="请输入搜索关键字"></div>
 		<div class="shopcontainer">
@@ -42,7 +32,16 @@
 			<div id="tips" class="info" style="text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
 	    </div>
 	</div>
+	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 	<script type="text/javascript">
+		var geocoder;
+		var init = function() {
+		    geocoder = new qq.maps.Geocoder({
+		        complete : function(result){
+		          	$('#current_position').html(result.detail.address);
+		        }
+		    });
+		}
 		/**
 	     * approx distance between two points on earth ellipsoid
 	     * @param {Object} lat1
@@ -123,18 +122,20 @@
 		    }
 		    $("#activeshop").html(str);
 	    }
-	    $('#activeshop').on('click','a',function(event){
-	    	event.stopPropagation();
-		});
-	    $('#activeshop').on('click','li',function(){
-		    var href = $(this).attr('href');
-		    location.href = href;
-		});
-		
-		$("#name-search").change(function(){
-			searchShop();
-		});
+	    window.onload = init();
+    	$('#activeshop').on('click','a',function(event){
+ 	    	event.stopPropagation();
+ 		});
+ 	    $('#activeshop').on('click','li',function(){
+ 		    var href = $(this).attr('href');
+ 		    location.href = href;
+ 		});
+ 		
+ 		$("#name-search").change(function(){
+ 			searchShop();
+ 		});
 	    wx.ready(function () {
+		    
 	    	wx.getLocation({
 			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 			    success: function (res) {
@@ -142,7 +143,11 @@
 			        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 			        var speed = res.speed; // 速度，以米/每秒计
 			        var accuracy = res.accuracy; // 位置精度
-
+			        
+			        var latLng = new qq.maps.LatLng(latitude, longitude);
+			        //调用获取位置方法
+			        geocoder.getAddress(latLng);
+			        
 			        var originDistanceArr = new Array();
 					var shopDistanceArr = new Array();
 			        $('#allshop').find('li').each(function(){
