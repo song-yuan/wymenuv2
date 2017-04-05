@@ -142,9 +142,6 @@
 			        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 			        var speed = res.speed; // 速度，以米/每秒计
 			        var accuracy = res.accuracy; // 位置精度
-			        var latLng = new qq.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
-			        //调用获取位置方法
-			        geocoder.getAddress(latLng);
 			        
 			        var originDistanceArr = new Array();
 					var shopDistanceArr = new Array();
@@ -180,6 +177,9 @@
 						$("#tips").hide();
 						sortShop(originDistanceArr,shopDistanceArr);
 					}
+			        var latLng = new qq.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+			        //调用获取位置方法
+			        geocoder.getAddress(latLng);
 			    }
 			});
 	    });
