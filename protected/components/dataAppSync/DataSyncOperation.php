@@ -1135,6 +1135,7 @@ class DataSyncOperation {
 				if($resObj->status){
 					array_push($lidArr, $lid);
 				}else{
+					Helper::writeLog('同步失败:同步内容:'.$dpid.json_encode($obj).'错误信息:'.$resObj->msg);
 					// 插入同步不成功数据
 					$data = array('dpid'=>$dpid,'jobid'=>$padLid,'pos_sync_lid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
 					$resFail = self::setSyncFailure($data);
@@ -1164,7 +1165,7 @@ class DataSyncOperation {
 						// 退款
 						$contentArr = split('::', $content);
 						$createAt = isset($contentArr[7])?$contentArr[7]:'';
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
+						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 						$result = self::retreatOrder($pData);
 					}elseif($type==3){
 						// 增加会员卡
@@ -1174,6 +1175,8 @@ class DataSyncOperation {
 					$resObj = json_decode($result);
 					if($resObj->status){
 						self::delSyncFailure($lid,$dpid);
+					}else{
+						Helper::writeLog('再次同步失败:同步内容:'.$dpid.json_encode($sync).'错误信息:'.$resObj->msg);
 					}
 				}
 			}
