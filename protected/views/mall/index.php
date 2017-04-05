@@ -207,7 +207,7 @@ function getProduct(){
             				cartStr +='<span class="j-item-num foodop-num">'+promotionProduct.num+'</span> ';
             				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
             				cartStr +='</div>';
-            				cartStr +='<span class="cart-dtl-price">'+promotionProduct.price+'</span>';
+            				cartStr +='<span class="cart-dtl-price">¥'+promotionProduct.price+'</span>';
             				cartStr +='</div>';
             				cartStr +='</div>';
              		}else{
@@ -263,7 +263,7 @@ function getProduct(){
         				cartStr +='<span class="j-item-num foodop-num">'+pProduct.num+'</span> ';
         				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
         				cartStr +='</div>';
-        				cartStr +='<span class="cart-dtl-price">'+pProduct.original_price+'</span>';
+        				cartStr +='<span class="cart-dtl-price">¥'+pProduct.original_price+'</span>';
         				cartStr +='</div>';
         				cartStr +='</div>';
          			}else{
@@ -310,7 +310,7 @@ function getProduct(){
         				cartStr +='<span class="j-item-num foodop-num">'+pProductSet.num+'</span> ';
         				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
         				cartStr +='</div>';
-        				cartStr +='<span class="cart-dtl-price">'+pProductSet.set_price+'</span>';
+        				cartStr +='<span class="cart-dtl-price">¥'+pProductSet.set_price+'</span>';
         				cartStr +='</div>';
         				cartStr +='</div>';
          			}else{
@@ -417,7 +417,7 @@ $(document).ready(function(){
         				cartStr +='<span class="j-item-num foodop-num">1</span> ';
         				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
         				cartStr +='</div>';
-        				cartStr +='<span class="cart-dtl-price">'+pPrice+'</span>';
+        				cartStr +='<span class="cart-dtl-price">¥'+pPrice+'</span>';
         				cartStr +='</div>';
         				cartStr +='</div>';
         				$('.j-cart-dtl-list-inner').append(cartStr);
@@ -507,6 +507,9 @@ $(document).ready(function(){
         $('#cart-dtl').animate({bottom:-hight});
     });
     $('footer').on('click','.ft-lt',function(){
+        if($('.cart-dtl-item').length == 0){
+            return;
+        }
         if($('.j-mask').is(':visible')){
         	$('.j-mask').hide();
              var hight = $('#cart-dtl').outerHeight();
