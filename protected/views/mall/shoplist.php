@@ -145,7 +145,7 @@
 			        var speed = res.speed; // 速度，以米/每秒计
 			        var accuracy = res.accuracy; // 位置精度
 			        alert(latitude);alert(longitude);
-			        var latLng = new qq.maps.LatLng(latitude, longitude);
+			        var latLng = new qq.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
 			        //调用获取位置方法
 			        geocoder.getAddress(latLng);
 			        
