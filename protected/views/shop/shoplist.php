@@ -143,7 +143,6 @@
 						}else{
 							var distance = getFlatternDistance(latitude,longitude,lat,lng);
 						}
-						alert(distance);
 						$(this).attr('distance',distance);
 						var searil = $(this).attr('searil');
 						if(distance >= 1000 && distance <= 5000){
@@ -153,7 +152,6 @@
 							distance = (distance/1000).toFixed(2)+'千米';
 							$(this).find('span.right').html(distance);
 						}else if(distance < 1000){
-							alert('distance2');
 							originDistanceArr[searil] = distance;
 				 	  		shopDistanceArr[searil] = distance;
 							distance = distance.toFixed(2)+'米';
@@ -165,7 +163,6 @@
 							return true;
 						}
 				    });
-				    alert(JSON.stringify(res));
 			        if(shopDistanceArr.length==0){
 						$("#tips").show();
 					}else{
