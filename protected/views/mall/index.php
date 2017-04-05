@@ -8,13 +8,16 @@
 		$this->setPageTitle('自助点单');
 	}
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
+<link rel="stylesheet" type="text/css"
+	href="<?php echo $baseUrl;?>/css/mall/style.css">
+<link rel="stylesheet" type="text/css"
+	href="<?php echo $baseUrl;?>/css/mall/index.css">
 <style type="text/css">
-.layui-layer-content img{
-	width:100%;
-	height:100%;
+.layui-layer-content img {
+	width: 100%;
+	height: 100%;
 }
+
 .boll {
 	width: 15px;
 	height: 15px;
@@ -23,59 +26,134 @@
 	-moz-border-radius: 15px;
 	-webkit-border-radius: 15px;
 	border-radius: 15px;
-	z-index:5;
-	display:none;
-}
-.none{
-	display:none;
+	z-index: 5;
+	display: none;
 }
 
+.none {
+	display: none;
+}
 </style>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
+<script type="text/javascript"
+	src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
+<script type="text/javascript"
+	src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
 <div class="nav-lf">
-<ul id="nav">
-  
-</ul>
+	<ul id="nav">
+
+	</ul>
 </div>
 
 
 <div id="container" class="container">
-<!-- 特价优惠  -->
+	<!-- 特价优惠  -->
 
-<!-- end特价优惠  -->
+	<!-- end特价优惠  -->
 
 
-   
+
 </div>
 
 <footer>
 	<div class="ft-lt">
-        <p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
-    </div>
+		<p>
+			合计:<span id="total" class="total">0.00元</span><span class="nm">(<label
+				class="share"></label>份)
+			</span>
+		</p>
+	</div>
     <?php if($this->type==2):?>
 	    <?php if($start&&$start['fee_price']):?>
-		    <div class="ft-rt start" start-price="<?php echo $start['fee_price'];?>">
-		    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
-		    </div>
-		    <div class="ft-rt no-start" style="background:#6A706E" start-price="<?php echo $start['fee_price'];?>">
-		    	<p><?php echo (int)$start['fee_price'];?>元起送</p>
-		    </div>
+		    <div class="ft-rt start"
+		start-price="<?php echo $start['fee_price'];?>">
+		<p>
+			<a
+				href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a>
+		</p>
+	</div>
+	<div class="ft-rt no-start" style="background: #6A706E"
+		start-price="<?php echo $start['fee_price'];?>">
+		<p><?php echo (int)$start['fee_price'];?>元起送</p>
+	</div>
 	    <?php else:?>
 		    <div class="ft-rt" start-price="0">
-		    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
-		    </div>
+		<p>
+			<a
+				href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a>
+		</p>
+	</div>
 	    <?php endif;?>
      <?php else:?>
      <div class="ft-rt">
-    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
-    </div>
+		<p>
+			<a
+				href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a>
+		</p>
+	</div>
     <?php endif;?>
     <div class="clear"></div>
 </footer>
 
 <div id="boll" class="boll"></div>
 
+
+<div class="j-mask mask cart-mask" style="display:none;"></div>
+<div id="cart-dtl" class="cart-dtl" style="display:none;">
+	<div class="cart-dtl-head">
+		<span class="j-cart-dusbin cart-dusbin"><i></i>清空购物车</span>
+	</div>
+	<div class="j-cart-dtl-list cart-dtl-list">
+		<div class="j-cart-dtl-list-inner" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+			<div class="j-fooditem cart-dtl-item" data-orderid="31517410">
+				<div class="cart-dtl-item-inner">
+					<i class="cart-dtl-dot"></i>
+					<p class="cart-goods-name">腐竹</p>
+					<div class="j-item-console cart-dtl-oprt">
+						<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a> 
+						<span class="j-item-num foodop-num">1</span> 
+						<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>
+					</div>
+					<span class="cart-dtl-price">¥7</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="j-cart-dtl-list cart-dtl-list">
+		<div class="j-cart-dtl-list-inner" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+			<div class="j-fooditem cart-dtl-item" data-orderid="31517410">
+				<div class="cart-dtl-item-inner">
+					<i class="cart-dtl-dot"></i>
+					<p class="cart-goods-name">腐竹</p>
+					<div class="j-item-console cart-dtl-oprt">
+						<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a> 
+						<span class="j-item-num foodop-num">1</span> 
+						<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>
+					</div>
+					<span class="cart-dtl-price">¥7</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="j-cart-dtl-list cart-dtl-list">
+		<div class="j-cart-dtl-list-inner" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+			<div class="j-fooditem cart-dtl-item" data-orderid="31517410">
+				<div class="cart-dtl-item-inner">
+					<i class="cart-dtl-dot"></i>
+					<p class="cart-goods-name">腐竹</p>
+					<div class="j-item-console cart-dtl-oprt">
+						<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a> 
+						<span class="j-item-num foodop-num">1</span> 
+						<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>
+					</div>
+					<span class="cart-dtl-price">¥7</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
 <script> 
 function setTotal(){ 
     var s=0;
@@ -392,6 +470,16 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
+    $("body").on('click','.j-mask',function(){
+        $(this).hide();
+        var hight = $('#cart-dtl').outerHeight();
+        $('#cart-dtl').animate({bottom:-hight});
+    });
+    $('footer').on('click','p',function(){
+        $('.j-mask').show();
+        $('#cart-dtl').show();
+        $('#cart-dtl').animate({bottom:51});
+    });
     $("body").on('click','.lt-lt',function(){
     	var str = $(this).html();
     	layer.open({
@@ -406,4 +494,4 @@ $(document).ready(function(){
 		$('.layui-layer-content').css('overflow','hidden');
     });
 });
-</script> 
+</script>
