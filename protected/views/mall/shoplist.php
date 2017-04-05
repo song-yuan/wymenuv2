@@ -38,6 +38,7 @@
 		var init = function() {
 		    geocoder = new qq.maps.Geocoder({
 		        complete : function(result){
+			        alert(JSON.stringify(result));
 		          	$('#current_position').html(result.detail.address);
 		        }
 		    });
