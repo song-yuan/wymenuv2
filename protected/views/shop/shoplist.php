@@ -146,7 +146,6 @@
 						$(this).attr('distance',distance);
 						var searil = $(this).attr('searil');
 						if(distance >= 1000 && distance <= 5000){
-							alert('distance1');
 							originDistanceArr[searil] = distance;
 				 	  		shopDistanceArr[searil] = distance;
 							distance = (distance/1000).toFixed(2)+'千米';
@@ -157,7 +156,6 @@
 							distance = distance.toFixed(2)+'米';
 							$(this).find('span.right').html(distance);
 						}else{
-							alert('distance3');
 							distance = (distance/1000).toFixed(2)+'千米';
 							$(this).find('span.right').html(distance);
 							return true;
