@@ -171,6 +171,7 @@
 							return true;
 						}
 				    });
+				    alert(JSON.stringify(res));
 			        if(shopDistanceArr.length==0){
 						$("#tips").show();
 					}else{
