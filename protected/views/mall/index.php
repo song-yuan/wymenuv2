@@ -517,7 +517,7 @@ $(document).ready(function(){
         }else{
         	 $('.j-mask').show();
              $('#cart-dtl').show();
-             $('#cart-dtl').animate({bottom:51});
+             $('#cart-dtl').animate({bottom:50});
         }
     });
     $("body").on('click','.lt-lt',function(){
