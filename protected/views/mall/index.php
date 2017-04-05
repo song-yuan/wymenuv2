@@ -420,6 +420,7 @@ $(document).ready(function(){
         				cartStr +='<span class="cart-dtl-price">'+pPrice+'</span>';
         				cartStr +='</div>';
         				cartStr +='</div>';
+        				$('.j-cart-dtl-list-inner').append(cartStr);
 			        }
 			        setTotal();
 			        //动画
