@@ -137,8 +137,8 @@ class ProductMaterial extends CActiveRecord
 	public static function getJitStock($materialId,$dpid)
 	{
 		$sql = 'select sum(stock) as stock_all from nb_product_material_stock where dpid='.$dpid.' and material_id='.$materialId.' and delete_flag=0';
-		$command = Yii::app()->db->createCommand($sql);
-		$stockAll = $command->queryRow()['stock_all'];
+		$command = Yii::app()->db->createCommand($sql)->queryRow();
+		$stockAll = $command['stock_all'];
 		return $stockAll;
 	}
 	

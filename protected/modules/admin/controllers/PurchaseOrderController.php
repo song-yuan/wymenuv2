@@ -171,8 +171,8 @@ class PurchaseOrderController extends BackendController
 			
 			$db = Yii::app()->db;
 			$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.lid = '.$model->material_id;
-			$command2 = $db->createCommand($sql);
-			$stockUnitId = $command2->queryRow()['mphs_code'];
+			$command2 = $db->createCommand($sql)->queryRow();
+			$stockUnitId = $command2['mphs_code'];
 			
 			if($stockUnitId){
 				$se=new Sequence("purchase_order_detail");
