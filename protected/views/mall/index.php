@@ -3,7 +3,7 @@
 	if($this->type==2){
 		$this->setPageTitle('外卖点单');
 	}elseif($this->type==6){
-		$this->setPageTitle('店堂点单');
+		$this->setPageTitle('店铺点单');
 	}else{
 		$this->setPageTitle('自助点单');
 	}
@@ -104,52 +104,6 @@
 	</div>
 	<div class="j-cart-dtl-list cart-dtl-list">
 		<div class="j-cart-dtl-list-inner" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
-			<div class="j-fooditem cart-dtl-item" data-orderid="31517410">
-				<div class="cart-dtl-item-inner">
-					<i class="cart-dtl-dot"></i>
-					<p class="cart-goods-name">腐竹</p>
-					<div class="j-item-console cart-dtl-oprt">
-						<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a> 
-						<span class="j-item-num foodop-num">1</span> 
-						<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>
-					</div>
-					<span class="cart-dtl-price">¥7</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="j-cart-dtl-list cart-dtl-list">
-		<div class="j-cart-dtl-list-inner" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
-			<div class="j-fooditem cart-dtl-item" data-orderid="31517410">
-				<div class="cart-dtl-item-inner">
-					<i class="cart-dtl-dot"></i>
-					<p class="cart-goods-name">腐竹</p>
-					<div class="j-item-console cart-dtl-oprt">
-						<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a> 
-						<span class="j-item-num foodop-num">1</span> 
-						<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>
-					</div>
-					<span class="cart-dtl-price">¥7</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="j-cart-dtl-list cart-dtl-list">
-		<div class="j-cart-dtl-list-inner" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
-			<div class="j-fooditem cart-dtl-item" data-orderid="31517410">
-				<div class="cart-dtl-item-inner">
-					<i class="cart-dtl-dot"></i>
-					<p class="cart-goods-name">腐竹</p>
-					<div class="j-item-console cart-dtl-oprt">
-						<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a> 
-						<span class="j-item-num foodop-num">1</span> 
-						<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>
-					</div>
-					<span class="cart-dtl-price">¥7</span>
-				</div>
-			</div>
 		</div>
 	</div>
 	
@@ -217,6 +171,7 @@ function getProduct(){
 			var promotionStr = '';
 			var productStr = '';
 			var productSetStr = '';
+			var cartStr = '';
 			
 			if(promotions.length > 0){
 				navLi += '<li class="current"><a href="#st-1">优惠</a><b></b></li>';
@@ -241,6 +196,18 @@ function getProduct(){
              		if(parseInt(promotionProduct.num)){
              				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly value="'+promotionProduct.num+'">';
             				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+            				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+promotion.is_set+'_'+promotionProduct.lid+'_'+promotion.normal_promotion_id+'">';
+            				cartStr +='<div class="cart-dtl-item-inner">';
+            				cartStr +='<i class="cart-dtl-dot"></i>';
+            				cartStr +='<p class="cart-goods-name">'+promotionProduct.product_name+'</p>';
+            				cartStr +='<div class="j-item-console cart-dtl-oprt">';
+            				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
+            				cartStr +='<span class="j-item-num foodop-num">'+promotionProduct.num+'</span> ';
+            				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+            				cartStr +='</div>';
+            				cartStr +='<span class="cart-dtl-price">'+promotionProduct.price+'</span>';
+            				cartStr +='</div>';
+            				cartStr +='</div>';
              		}else{
              			if(parseInt(promotionProduct.store_number) != 0){
              				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly value="0">';
@@ -282,6 +249,19 @@ function getProduct(){
          			if(parseInt(pProduct.num)){
          				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
         				productStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div></div>';
+
+        				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="0_'+pProduct.lid+'_-1">';
+        				cartStr +='<div class="cart-dtl-item-inner">';
+        				cartStr +='<i class="cart-dtl-dot"></i>';
+        				cartStr +='<p class="cart-goods-name">'+ pProduct.product_name +'</p>';
+        				cartStr +='<div class="j-item-console cart-dtl-oprt">';
+        				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
+        				cartStr +='<span class="j-item-num foodop-num">'+pProduct.num+'</span> ';
+        				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+        				cartStr +='</div>';
+        				cartStr +='<span class="cart-dtl-price">'+pProduct.original_price+'</span>';
+        				cartStr +='</div>';
+        				cartStr +='</div>';
          			}else{
          				if(parseInt(pProduct.store_number) != 0){
 	         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
@@ -314,6 +294,19 @@ function getProduct(){
          			if(parseInt(pProductSet.num)){
          				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
          				productSetStr +='<div class="add">+</div><div class="clear"></div></div>';
+
+         				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="1_'+pProductSet.lid+'_-1">';
+        				cartStr +='<div class="cart-dtl-item-inner">';
+        				cartStr +='<i class="cart-dtl-dot"></i>';
+        				cartStr +='<p class="cart-goods-name">'+ pProductSet.set_name +'</p>';
+        				cartStr +='<div class="j-item-console cart-dtl-oprt">';
+        				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
+        				cartStr +='<span class="j-item-num foodop-num">'+pProductSet.num+'</span> ';
+        				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+        				cartStr +='</div>';
+        				cartStr +='<span class="cart-dtl-price">'+pProductSet.set_price+'</span>';
+        				cartStr +='</div>';
+        				cartStr +='</div>';
          			}else{
          				if(parseInt(pProductSet.store_number) != 0){
          					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="0">';
@@ -341,6 +334,7 @@ function getProduct(){
 			}
 			$('#nav').append(navLi);
 			$('#container').append(promotionStr + productStr + productSetStr);
+			$('.j-cart-dtl-list-inner').html(cartStr);
 			setTotal();
 			layer.closeAll('loading');
 		},
@@ -475,10 +469,16 @@ $(document).ready(function(){
         var hight = $('#cart-dtl').outerHeight();
         $('#cart-dtl').animate({bottom:-hight});
     });
-    $('footer').on('click','p',function(){
-        $('.j-mask').show();
-        $('#cart-dtl').show();
-        $('#cart-dtl').animate({bottom:51});
+    $('footer').on('click','.ft-lt',function(){
+        if($('.j-mask').is(':visible')){
+        	$('.j-mask').hide();
+             var hight = $('#cart-dtl').outerHeight();
+             $('#cart-dtl').animate({bottom:-hight});
+        }else{
+        	 $('.j-mask').show();
+             $('#cart-dtl').show();
+             $('#cart-dtl').animate({bottom:51});
+        }
     });
     $("body").on('click','.lt-lt',function(){
     	var str = $(this).html();
