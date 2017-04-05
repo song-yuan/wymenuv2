@@ -511,13 +511,15 @@ $(document).ready(function(){
             return;
         }
         if($('.j-mask').is(':visible')){
-        	$('.j-mask').hide();
              var hight = $('#cart-dtl').outerHeight();
-             $('#cart-dtl').animate({bottom:-hight});
+             $('#cart-dtl').animate({bottom:-hight},function(){
+            	 $('.j-mask').hide();
+             });
         }else{
-        	 $('.j-mask').show();
              $('#cart-dtl').show();
-             $('#cart-dtl').animate({bottom:50});
+             $('#cart-dtl').animate({bottom:50},function(){
+            	 $('.j-mask').show();
+             });
         }
     });
     $("body").on('click','.lt-lt',function(){
