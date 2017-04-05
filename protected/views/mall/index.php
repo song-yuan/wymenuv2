@@ -504,7 +504,9 @@ $(document).ready(function(){
     $('.j-mask').on('click',function(){
         $(this).hide();
         var hight = $('#cart-dtl').outerHeight();
-        $('#cart-dtl').animate({bottom:-hight});
+        $('#cart-dtl').animate({bottom:-hight},function(){
+       	 	$('.j-mask').hide();
+        });
     });
     $('footer').on('click','.ft-lt',function(){
         if($('.cart-dtl-item').length == 0){
