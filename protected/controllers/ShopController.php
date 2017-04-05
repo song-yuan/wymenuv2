@@ -3,6 +3,7 @@
 class ShopController extends Controller
 {
 	public $companyId = 0;
+	public $type = 0;
 	
 	public $layout = '/layouts/shopmain';
 	public function init()
