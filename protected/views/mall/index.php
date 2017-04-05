@@ -180,13 +180,15 @@ function getProduct(){
 					var promotion = promotions[i];
 					var promotionProduct = promotion['product'];
 					promotionStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+promotionProduct.main_picture+'"></div>';
-					promotionStr +='<div class="lt-ct"><p><span>'+ promotionProduct.product_name +'</span> <span>';
+					promotionStr +='<div class="lt-ct"><p><span class="name">'+ promotionProduct.product_name +'</span>';
 					if(promotionProduct.spicy==1){
-						promotionStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/>';
+						promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
 					}else if(promotionProduct.spicy==2){
-						promotionStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/>';
+						promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
 					}else if(promotionProduct.spicy==3){
-						promotionStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span></p>';
+						promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+					}else{
+						promotionStr +='</p>';
 					}
 					promotionStr +='<p class="pr">¥<span class="price">'+promotionProduct.price+'</span>';
 					if(promotionProduct.price != promotionProduct.original_price){
@@ -237,13 +239,15 @@ function getProduct(){
 				for(var pp in product.product_list){
 					var pProduct = product.product_list[pp];
 					productStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProduct.main_picture+'"></div>';
-					productStr +='<div class="lt-ct"><p><span>'+ pProduct.product_name +'</span> <span>';
+					productStr +='<div class="lt-ct"><p><span class="name">'+ pProduct.product_name +'</span>';
 					if(pProduct.spicy==1){
-						productStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/>';
+						productStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
 					}else if(pProduct.spicy==2){
-						productStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/>';
+						productStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
 					}else if(pProduct.spicy==3){
-						productStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span></p>';
+						productStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+					}else{
+						productStr +='</p>';
 					}
 					productStr +='<p class="pr">¥<span class="price">'+pProduct.original_price+'</span></p>';
          			if(parseInt(pProduct.num)){
@@ -282,13 +286,15 @@ function getProduct(){
 					var pProductSet = productSets[q];
 					var pDetail = pProductSet['detail'];
 					productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
-					productSetStr +='<div class="lt-ct"><p><span>'+ pProductSet.set_name +'</span> <span>';
+					productSetStr +='<div class="lt-ct"><p><span class="name">'+ pProductSet.set_name +'</span>';
 					if(pProductSet.spicy==1){
-						productSetStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/>';
+						productSetStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
 					}else if(pProductSet.spicy==2){
-						productSetStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/>';
+						productSetStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
 					}else if(pProductSet.spicy==3){
-						productSetStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span></p>';
+						productSetStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+					}else{
+						productSetStr +='</p>';
 					}
 					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.set_price+'</span></p>';
          			if(parseInt(pProductSet.num)){
@@ -371,12 +377,13 @@ $(document).ready(function(){
        
     });
 
-    $("body").on('touchstart','.add',function(){
+    $('body').on('touchstart','.add',function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
-    	
-        var t=$(this).parent().find('input[class*=result]');
+
+    	var parObj = $(this).parent();
+        var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
@@ -393,6 +400,26 @@ $(document).ready(function(){
 			        if(parseInt(t.val()) > 0){
 			            t.siblings(".minus").removeClass('zero');
 			            t.removeClass('zero');
+			        }
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'"]');
+			        if(cartObj.length > 0){
+			        	cartObj.find('.foodop-num').html(t.val());
+			        }else{
+				        var pName = parObj.find('.name').html();
+				        var pPrice = parObj.find('.price').html();
+				        var cartStr = '';
+					    cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+isSet+'_'+productId+'_'+promoteId+'">';
+        				cartStr +='<div class="cart-dtl-item-inner">';
+        				cartStr +='<i class="cart-dtl-dot"></i>';
+        				cartStr +='<p class="cart-goods-name">'+ pName +'</p>';
+        				cartStr +='<div class="j-item-console cart-dtl-oprt">';
+        				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
+        				cartStr +='<span class="j-item-num foodop-num">1</span> ';
+        				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+        				cartStr +='</div>';
+        				cartStr +='<span class="cart-dtl-price">'+pPrice+'</span>';
+        				cartStr +='</div>';
+        				cartStr +='</div>';
 			        }
 			        setTotal();
 			        //动画
@@ -426,8 +453,9 @@ $(document).ready(function(){
         });
     });
      
-    $("body").on('touchstart','.minus',function(){ 
-        var t=$(this).parent().find('input[class*=result]');
+    $('body').on('touchstart','.minus',function(){ 
+    	var parObj = $(this).parent();
+        var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
@@ -452,7 +480,15 @@ $(document).ready(function(){
 			       t.val(parseInt(t.val())-1);
 			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
-			   	    } 
+			   	    }
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'"]');
+			        if(cartObj.length > 0){
+				        if(parseInt(t.val()) == 0){
+				        	cartObj.remove();
+					    }else{
+					    	cartObj.find('.foodop-num').html(t.val());
+						}
+			        }
 			    	setTotal(); 
         		}else{
         			layer.msg(msg.msg);
@@ -464,7 +500,7 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
-    $("body").on('click','.j-mask',function(){
+    $('.j-mask').on('click',function(){
         $(this).hide();
         var hight = $('#cart-dtl').outerHeight();
         $('#cart-dtl').animate({bottom:-hight});
