@@ -382,7 +382,7 @@ $(document).ready(function(){
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
 
-    	var parObj = $(this).parent();
+    	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -455,7 +455,7 @@ $(document).ready(function(){
     });
      
     $('body').on('touchstart','.minus',function(){ 
-    	var parObj = $(this).parent();
+    	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
