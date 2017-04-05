@@ -88,6 +88,8 @@
 		<?php endif;?>
 	</div>
 <!-- 地址 -->
+<?php elseif($this->type==6):?>
+	<div class="order-site"><div class="lt">就餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:10px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
 <?php endif;?>
 
 <!-- 购物车商品 -->
@@ -276,6 +278,7 @@
 	</div>
 </div>
 	<input type="hidden" name="cupon" value="0" />
+	<input type="hidden" name="takeout_typeid" value="0" />
 </form>
 
  <!--BEGIN dialog1-->
@@ -423,7 +426,14 @@ $(document).ready(function(){
 	$('#total').html(totalFee);
 	$('#total').attr('total',totalFee);
 	<?php endif;?>
-	
+
+	$('button').click(function(){
+		var typeId = $(this).attr('type_id');
+		$('button').addClass('bttn_grey');
+		$(this).removeClass('bttn_grey');
+		$(this).addClass('bttn_orange');
+		$('input[name="takeout_typeid"]').val(typeId);
+	});
 	$('.num-minus').click(function(){
 		var number = $('.number').val();
 		<?php if($this->type==1):?>

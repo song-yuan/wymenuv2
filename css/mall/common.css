@@ -2168,36 +2168,34 @@ input#checkall {
 
 /*add to cart animation*/
 .aniele {
-	
-	 
 	  -webkit-transform:translate3d(120px, -230px, 0);
        -moz-transform:translate3d(120px, -230px, 0);
-            transform:translate3d(120px, -230px, 0);
-            background-color:red;
-            width: 16px;
-            height: 16px;
-            border-radius: 8px;
-            left: 10px;
-            bottom: 40px;
-            position: fixed;
-            visibility: hidden;
-            	-webkit-transition: all 0s ease;
-	  			-moz-transition: all 0s ease;
-	  		-ms-transition: all 0s ease;
-	  		-o-transition: all 0s ease;
+       transform:translate3d(120px, -230px, 0);
+       background-color:red;
+       width: 16px;
+       hheigt: 16px;
+       border-radius: 8px;
+       left: 10px;
+       bottom: 40px;
+       position: fixed;
+       visibility: hidden;
+       	-webkit-transition: all 0s ease;
+		-moz-transition: all 0s ease;
+		-ms-transition: all 0s ease;
+		-o-transition: all 0s ease;
 }
 
 
 
 .aniele.added {
 	-webkit-transform:translate3d(0, 0, 0);
-       -moz-transform:translate3d(0, 0, 0);
-            transform:translate3d(0, 0, 0);
-            -webkit-transition: all 0.5s ease;
-	  			-moz-transition: all 0.5s ease;
-	  		-ms-transition: all 0.5s ease;
-	  		-o-transition: all 0.5s ease;
-	  		/*opacity: 0;*/
+    -moz-transform:translate3d(0, 0, 0);
+    transform:translate3d(0, 0, 0);
+    -webkit-transition: all 0.5s ease;
+ 	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+ 	/*opacity: 0;*/
 }
 
 
@@ -2217,9 +2215,9 @@ input#checkall {
 	text-align: center;
 	font-size: 0.9em;
 	-webkit-transition: all 0.5s ease;
-	  -moz-transition: all 0.5s ease;
-	  -ms-transition: all 0.5s ease;
-	  -o-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
 }
 
 
@@ -2237,7 +2235,6 @@ input#checkall {
 	height: 75px;
 	margin-right: 10px;
 	border-radius: 4px;
-	
 	float: left;
 	border: 2px solid #dddddd;
 	position: relative;
@@ -2523,13 +2520,13 @@ input#checkall {
 
 .group .indicate .tri {
 	width: 0;
-height: 0;
-border-style: solid;
-border-width: 15px 7.5px 0 7.5px;
-border-color: #F16E65 transparent transparent transparent;
-position: absolute;
-bottom: -7.5px;
-left: 10px;
+	height: 0;
+	border-style: solid;
+	border-width: 15px 7.5px 0 7.5px;
+	border-color: #F16E65 transparent transparent transparent;
+	position: absolute;
+	bottom: -7.5px;
+	left: 10px;
 }
 
 .group .proprice {
@@ -2624,6 +2621,10 @@ left: 10px;
 	color: red;
 }
 
+.specialbttn{
+	padding: 3px 5px;
+	font-size: 0.9em;
+}
 
 .accountinfo {
 	

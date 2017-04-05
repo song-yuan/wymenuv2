@@ -22,6 +22,7 @@ class WxOrder
 	public $seatingFee = 0;
 	public $packingFee = 0;
 	public $freightFee = 0;
+	public $takeoutTypeId = 0;
 	public $cart = array();
 	public $normalPromotionIds = array();
 	public $tastes = array();//原始产品口味
@@ -30,7 +31,7 @@ class WxOrder
 	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,price))
 	public $order = false;
 	
-	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array()){
+	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array(),$takeoutTypeId){
 		$this->dpid = $dpid;
 		$this->userId = $user['lid'];
 		$this->user = $user;
@@ -38,6 +39,7 @@ class WxOrder
 		$this->type = $type;
 		$this->number = $number;
 		$this->tastes = $tastes;
+		$this->takeoutTypeId = $takeoutTypeId;
 		$this->setDetail = $productSet;
 		$this->getCart();
 		$this->dealTastes();
@@ -224,6 +226,7 @@ class WxOrder
 	        	'number'=>$this->number,
 	        	'order_status'=>2,
 	        	'order_type'=>$this->type,
+	    		'takeout_typeid'=>$this->takeoutTypeId,
 	        	'is_sync'=>DataSync::getInitSync(),
 	        );
 		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);

@@ -154,6 +154,7 @@ class MallController extends Controller
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$paytype = Yii::app()->request->getPost('paytype');
 		$cuponId = Yii::app()->request->getPost('cupon',0);
+		$takeoutTypeId = Yii::app()->request->getPost('takeout_typeid',0);
 		$yue = Yii::app()->request->getPost('yue',0);
 		$addressId = Yii::app()->request->getPost('address',-1);
 		$orderTime = Yii::app()->request->getPost('order_time',null);
@@ -184,7 +185,7 @@ class MallController extends Controller
 		$tastes = Yii::app()->request->getPost('taste',array());
 		$user = WxBrandUser::get($userId, $this->companyId);
 		try{
-			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$addressId);
+			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$takeoutTypeId);
 			if(empty($orderObj->cart)){
 				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}
