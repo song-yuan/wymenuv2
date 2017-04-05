@@ -32,16 +32,7 @@
 			<div id="tips" class="info" style="text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
 	    </div>
 	</div>
-	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 	<script type="text/javascript">
-		var geocoder;
-		var init = function() {
-		    geocoder = new qq.maps.Geocoder({
-		        complete : function(result){
-		          	$('#current_position').html(result.detail.address);
-		        }
-		    });
-		}
 		/**
 	     * approx distance between two points on earth ellipsoid
 	     * @param {Object} lat1
@@ -122,7 +113,6 @@
 		    }
 		    $("#activeshop").html(str);
 	    }
-	    window.onload = init();
     	$('#activeshop').on('click','a',function(event){
  	    	event.stopPropagation();
  		});

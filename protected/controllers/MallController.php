@@ -25,8 +25,7 @@ class MallController extends Controller
 		$this->type = $type;
 		$this->company = WxCompany::get($this->companyId);
 		if($this->company['type']=='0'){
-			$children = WxCompany::getCompanyChildren($this->companyId);
-			$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type,'children'=>$children));
+			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
 	}
