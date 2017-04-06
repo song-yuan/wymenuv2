@@ -19,7 +19,7 @@
 				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
-						<div class="info small font_l" style="margin-top:5px;">地址: <?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></div>
+						<div class="info small font_l" style="margin-top:5px;">地址: <?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?><span><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" width="28px" height="28px"></span></div>
 						<div class="misinfo small" style="margin-top:5px;"><span class="left font_l">电话: <?php echo trim('<a class="font_l" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="font_l" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span><span class="right font_org"></span></div>
 					</div>
 				</li>
@@ -124,10 +124,11 @@
  			searchShop();
  		});
 	    wx.ready(function () {
-		    
+		    layer.load(2);
 	    	wx.getLocation({
 			    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 			    success: function (res) {
+			    	layer.closeAll('loading');
 			        var latitude = parseFloat(res.latitude); // 纬度，浮点数，范围为90 ~ -90
 			        var longitude = parseFloat(res.longitude); // 经度，浮点数，范围为180 ~ -180。
 			        var speed = res.speed; // 速度，以米/每秒计
@@ -170,7 +171,11 @@
 			        var latLng = new qq.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
 			        //调用获取位置方法
 			        geocoder.getAddress(latLng);
-			    }
+			    },
+		    	cancel: function (res) {
+		    		layer.closeAll('loading');
+		            layer.msg('用户拒绝授权获取地理位置');
+		        }
 			});
 	    });
 	</script>
