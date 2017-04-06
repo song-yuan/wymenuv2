@@ -341,6 +341,7 @@ class DataSyncTables
 				"chs_code varchar(12) NOT NULL,".
 				"type varchar(3) NOT NULL DEFAULT '0',".
         		"cate_type tinyint NOT NULL DEFAULT '0',".
+        		"cate_type varchar(2) NOT NULL DEFAULT '1',".
 				"main_picture varchar(255) NOT NULL,".
 				"order_num int(4) NOT NULL DEFAULT '0',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
