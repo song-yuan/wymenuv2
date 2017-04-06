@@ -110,6 +110,7 @@ var orderType = '<?php echo $this->type;?>';
 var hasclose = false;
 <?php if($closeShop):?>
 hasclose = true;
+var resMsg = '<?php echo $this->company['rest_message']?$this->company['rest_message']:"店铺休息中....";?>';
 <?php endif;?>
 function setTotal(){ 
     var s=0;
@@ -373,7 +374,7 @@ $(document).ready(function(){
 	var j = 0;
 	window.load = getProduct(); 
 	if(hasclose){
-		$('footer').html('<p class="sh-close">店铺休息中....</p>');
+		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
 	}
     $('#nav').on('touchstart','li',function(){
     	var _this = $(this);
