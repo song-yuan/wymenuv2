@@ -44,11 +44,11 @@
 	</ul>
 </div>
 
-
+<div id="product-top" class="container-top">
+	<div></div>
+</div>
 <div id="container" class="container">
-	<div id="product-top" class="section">
-		<div class="prt-title top"></div>
-	</div>
+	
 </div>
 
 <footer>
@@ -175,7 +175,7 @@ function getProduct(){
 			
 			if(promotions.length > 0){
 				current = true;
-				$('#product-top').find('.prt-title').html('优惠专区');
+				$('#product-top').find('div').html('优惠专区');
 				navLi += '<li class="current"><a href="#st-1">优惠专区</a><b></b></li>';
 				promotionStr +='<div class="section" id="st-1"><div class="prt-title">优惠专区</div>';
 				for(var i=0; i<promotions.length; i++){
@@ -236,7 +236,7 @@ function getProduct(){
 						navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
 					}else{
 						current = true;
-						$('#product-top').find('.prt-title').html(category.category_name);
+						$('#product-top').find('div').html(category.category_name);
 						navLi += '<li class="current"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
 					}
 				}
@@ -379,7 +379,7 @@ $(document).ready(function(){
             if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) > 0){
                 var pName = $(this).find('.prt-title').html();
                 if(top!=0){
-                	$('#product-top').find('.prt-title').html(pName);
+                	$('#product-top').find('div').html(pName);
                 }
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
