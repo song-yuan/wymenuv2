@@ -64,7 +64,7 @@
                      </div>
                 </div>
                 <?php endif;?>
-                <?php if($model->pid!=0):?>
+                <?php if($model->pid==0):?>
                 <div class="form-group">
                      <?php echo $form->label($model, 'show_type',array('class' => 'col-md-3 control-label'));?>
                      <div class="col-md-4">
