@@ -19,7 +19,7 @@
 				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
-						<div class="info small font_l" style="margin-top:5px;">地址: <?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?><span><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>
+						<div class="info small font_l" style="margin-top:5px;">地址: <span class="address_info"><?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></span><span class="open-location"><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>
 						<div class="misinfo small" style="margin-top:5px;"><span class="left font_l">电话: <?php echo trim('<a class="font_l" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="font_l" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span><span class="right font_org"></span></div>
 					</div>
 				</li>
@@ -115,6 +115,23 @@
 	    }
     	$('#activeshop').on('click','a',function(event){
  	    	event.stopPropagation();
+ 		});
+    	$('#activeshop').on('click','.open-location',function(event){
+ 	    	event.stopPropagation();
+ 	    	var liObj = $(this).parents('li');
+ 	    	var latitude = liObj.attr('lat');
+ 	    	var longitude = liObj.attr('lng');
+ 	    	var name = liObj.find('h1').html();
+ 	    	var address = liObj.find('.address_info').html();
+ 	    	var infoUrl = '<?php echo Yii::app()->request->getHostInfo();?>'+liObj.attr('href');
+ 	    	wx.openLocation({
+ 	    	    latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+ 	    	    longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+ 	    	    name: name, // 位置名
+ 	    	    address: address, // 地址详情说明
+ 	    	    scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
+ 	    	    infoUrl: infoUrl // 在查看位置界面底部显示的超链接,可点击跳转
+ 	    	});
  		});
  	    $('#activeshop').on('click','li',function(){
  		    var href = $(this).attr('href');
