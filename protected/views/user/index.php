@@ -4,11 +4,11 @@
 ?>
 
 
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/zepto.min.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/example.js');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
-<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
+<?php Yii::app()->clientScript->registerScriptFile( $baseUrl.'/js/wechat_js/zepto.min.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( $baseUrl.'/js/wechat_js/example.js');?>
+<?php Yii::app()->clientScript->registerCssFile( $baseUrl.'/css/wechat_css/weui.css');?>
+<?php Yii::app()->clientScript->registerCssFile( $baseUrl.'/css/wechat_css/example.css');?>
+<?php Yii::app()->clientScript->registerCssFile($baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
 
 <style>
     .hd {
@@ -148,7 +148,7 @@
     <div class="container js_container">
         <div class="page">
            <div class="hd" style="position: relative;">
-               <div class="img-box" style="background-image:url(<?php echo isset($img['bg_img'])?$img['bg_img']:Yii::app()->request->baseUrl.'/img/wechat_img/hyk22.jpg'?>)">
+               <div class="img-box" style="background-image:url(<?php echo isset($img['bg_img'])?$img['bg_img']:$baseUrl.'/img/wechat_img/hyk22.jpg'?>)">
                    <div class="level_num">
                        <span class="num">卡号：<?php echo substr($user['card_id'],5);?></span>
                    </div>
@@ -157,7 +157,7 @@
             <div class="bd">
                 <div class="weui_cells weui_cells_access global_navs">
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/money',array('companyId'=>$this->companyId));?>" >
-                        <span class="weui_cell_hd "><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdcz.png" class="icon_nav" alt=""/></span>
+                        <span class="weui_cell_hd "><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png" class="icon_nav" alt=""/></span>
                         
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>我的储值</p>
@@ -167,7 +167,7 @@
                     </a>
                     
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/point',array('companyId'=>$this->companyId));?>" >
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdjf.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdjf.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>我的积分</p>
                         </div>
@@ -175,7 +175,7 @@
                         </div>
                     </a>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/ticket',array('companyId'=>$this->companyId));?>" >
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdq.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdq.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>我的券</p>
                         </div>
@@ -184,7 +184,7 @@
                     </a>
                     <a class="weui_cell js_cell" href="javascript:;"  id="showDialog2" >
                         <span class="weui_cell_hd">
-                            <img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdewm.png" class="icon_nav" alt="">
+                            <img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdewm.png" class="icon_nav" alt="">
                         </span>
                         <div  id='qrcode-btn' class="weui_cell_bd weui_cell_primary" user_id="<?php echo $user['lid'];?>" user_dpid="<?php echo $user['dpid'];?>">
                             <p>我的二维码</p>
@@ -207,7 +207,7 @@
                     <!--END dialog2-->
                     <div class="empty1"></div>                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="privilege" data_target="#chanel_demo1">
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdzxtq.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdzxtq.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>我的专享特权</p>
                         </div>
@@ -231,7 +231,7 @@
                     
                     <div class="empty2">商家优惠活动</div>
                     <a class="weui_cell js_cell" href="javascript:;" data-id="sale1" data_target="#chanel_demo2">
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>满减</p>
                         </div>
@@ -262,7 +262,7 @@
                     </div>
                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="sale2" data_target="#chanel_demo3">
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>满送</p>
                         </div>
@@ -294,7 +294,7 @@
                     </div>
                     <div class="empty1"></div>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/setUserInfo',array('companyId'=>$this->companyId));?>">
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-grxx.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-grxx.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>个人信息</p>
                         </div>
@@ -302,7 +302,7 @@
                         </div>
                     </a>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/address',array('companyId'=>$this->companyId));?>">
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon_location.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>收货地址</p>
                         </div>
@@ -310,7 +310,7 @@
                         </div>
                     </a>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>" >
-                        <span class="weui_cell_hd"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
+                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>账单</p>
                         </div>
