@@ -42,6 +42,7 @@
 		      'onMenuShareTimeline',
 		      'onMenuShareAppMessage',
 		      'getLocation',
+		      'openLocation',
 		      'showMenuItems'
 		    ]
 	  	});
