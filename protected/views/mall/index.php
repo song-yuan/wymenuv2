@@ -344,9 +344,8 @@ function getProduct(){
 	         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div>';
 	         				}
 	         			}
-	         			productSetStr +='<div class="clear"></div>';
 					}
-					productSetStr +='</div>';
+					productSetStr +='</div><div class="clear"></div>';
          			// 套餐详情
          			productSetStr +='<div class="tips">';
          			for(var ps=0; ps<pDetail.length; ps++){
