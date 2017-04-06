@@ -164,7 +164,8 @@ function getProduct(){
 		dataType:'json',
 		timeout:'30000',
 		success:function(data){
-			var current = false;
+			var current = false; //当前默认分类
+			var hideCategoryArr = new Array();
 			var categorys = data.categorys;
 			var promotions = data.promotions;
 			var products = data.products;
@@ -230,7 +231,8 @@ function getProduct(){
 			for(var k in categorys){
 				var category = categorys[k];
 				if(category.show_type=='2'&&orderType=='2'||category.show_type=='3'&&orderType=='6'||category.show_type=='4'){
-					navLi += '<li class="zero"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
+					hideCategoryArr.push(category.lid);
+					continue;
 				}else{
 					if(current){
 						navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
@@ -243,6 +245,9 @@ function getProduct(){
 			
 			for(var p in products){
 				var product = products[p];
+				if(hideCategoryArr.indexOf(product.lid) > -1){
+					continue;
+				}
 				productStr +='<div class="section" id="st'+ product.lid  +'"><div class="prt-title">' + product.category_name + '</div>';
 				for(var pp in product.product_list){
 					var pProduct = product.product_list[pp];
