@@ -64,6 +64,15 @@
                      </div>
                 </div>
                 <?php endif;?>
+                <?php if($model->pid==0):?>
+                <div class="form-group">
+                     <?php echo $form->label($model, 'show_type',array('class' => 'col-md-3 control-label'));?>
+                     <div class="col-md-4">
+                          <?php echo $form->dropDownList($model, 'show_type', array('1' => yii::t('app','都显示') , '2' => yii::t('app','外卖不显示') , '3' => yii::t('app','堂食不显示') , '4' => yii::t('app','微信端都不显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('show_type')));?>
+                          <?php echo $form->error($model, 'show_type' )?>
+                     </div>
+                </div>
+                <?php endif;?>
 			</div>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>

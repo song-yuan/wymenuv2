@@ -35,7 +35,7 @@ class ProductCategory extends CActiveRecord
 			array('category_name', 'length','min'=>1, 'max'=>45,),
 			//	array('category_name' , 'unique' , 'message'=>'类别名已经存在'),
 			array('pid,dpid', 'length', 'max'=>10),
-			array('cate_type', 'length', 'max'=>2),
+			array('cate_type , show_type', 'length', 'max'=>2),
             array('order_num', 'length', 'max'=>4),
             array('type', 'length', 'max'=>3),
 			array('delete_flag', 'length', 'max'=>1),
@@ -44,7 +44,7 @@ class ProductCategory extends CActiveRecord
             array('main_picture', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, order_num, create_at, tree, category_name, chs_code, main_picture, type, cate_type, dpid, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, order_num, create_at, tree, category_name, chs_code, main_picture, type, cate_type, show_type, dpid, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +74,7 @@ class ProductCategory extends CActiveRecord
 			'main_picture' => yii::t('app','类别图片'),
             'type' => yii::t('app','是否参与排名'),
 			'cate_type' => yii::t('app','选择分类类型'),
+			'show_type' => yii::t('app','微信端是否显示'),
 			'dpid' => yii::t('app','公司'),
             'order_num' => yii::t('app','显示顺序'),
 			'delete_flag' => yii::t('app','状态'),
@@ -107,6 +108,7 @@ class ProductCategory extends CActiveRecord
         $criteria->compare('pid',$this->pid,true);
         $criteria->compare('type',$this->type,true);
         $criteria->compare('cate_type',$this->cate_type,true);
+        $criteria->compare('show_type',$this->show_type,true);
         $criteria->compare('order_num',$this->order_num,true);
         $criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
