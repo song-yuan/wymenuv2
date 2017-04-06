@@ -718,7 +718,7 @@ class MallController extends Controller
 	 */
 	public function actionEmptyCart()
 	{
-		$userId = Yii::app()->request->getParam('userId');
+		$userId = Yii::app()->session['userId'];
 		$companyId = Yii::app()->request->getParam('companyId');
 		$carts = WxCart::isEmptyCart($userId,$companyId);
 		if(empty($carts)){
