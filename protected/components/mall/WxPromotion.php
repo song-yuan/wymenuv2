@@ -53,7 +53,7 @@ class WxPromotion
 				}
 			}
 		}
-		$this->promotionProductList = $results;
+		$this->promotionProductList = array_merge($results);
 	}
 	/**
 	 * 获取活动信息

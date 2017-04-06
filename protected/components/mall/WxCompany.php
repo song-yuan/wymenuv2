@@ -10,7 +10,7 @@ class WxCompany
 {
 	// 获取公司的信息
 	public static function get($dpid){
-		$sql = 'select * from nb_company where dpid=:dpid';
+		$sql = 'select t.*,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.rest_message,t1.shop_time,t1.closing_time from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.dpid=:dpid and t.delete_flag=0 and t1.delete_flag=0';
 		$company = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
@@ -31,7 +31,7 @@ class WxCompany
 	}
 	// 获取总部的字店铺
 	public static function getCompanyChildren($dpid){
-		$sql = 'select * from nb_company where comp_dpid=:dpid and type=1 and delete_flag=0';
+		$sql = 'select t.*,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.rest_message,t1.shop_time,t1.closing_time from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.comp_dpid=:dpid and t.type=1 and t.delete_flag=0 and t1.delete_flag=0';
 		$companys = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
