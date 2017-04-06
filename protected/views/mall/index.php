@@ -198,7 +198,7 @@ function getProduct(){
              		if(parseInt(promotionProduct.num)){
              				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly value="'+promotionProduct.num+'">';
             				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
-            				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+promotion.is_set+'_'+promotionProduct.lid+'_'+promotion.normal_promotion_id+'">';
+            				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+promotion.is_set+'_'+promotionProduct.lid+'_'+promotion.normal_promotion_id+'_'+promotion.to_group+'">';
             				cartStr +='<div class="cart-dtl-item-inner">';
             				cartStr +='<i class="cart-dtl-dot"></i>';
             				cartStr +='<p class="cart-goods-name">'+promotionProduct.product_name+'</p>';
@@ -254,7 +254,7 @@ function getProduct(){
          				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
         				productStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div></div>';
 
-        				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="0_'+pProduct.lid+'_-1">';
+        				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="0_'+pProduct.lid+'_-1_-1">';
         				cartStr +='<div class="cart-dtl-item-inner">';
         				cartStr +='<i class="cart-dtl-dot"></i>';
         				cartStr +='<p class="cart-goods-name">'+ pProduct.product_name +'</p>';
@@ -301,7 +301,7 @@ function getProduct(){
          				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
          				productSetStr +='<div class="add">+</div><div class="clear"></div></div>';
 
-         				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="1_'+pProductSet.lid+'_-1">';
+         				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="1_'+pProductSet.lid+'_-1_-1">';
         				cartStr +='<div class="cart-dtl-item-inner">';
         				cartStr +='<i class="cart-dtl-dot"></i>';
         				cartStr +='<p class="cart-goods-name">'+ pProductSet.set_name +'</p>';
@@ -401,14 +401,14 @@ $(document).ready(function(){
 			            t.siblings(".minus").removeClass('zero');
 			            t.removeClass('zero');
 			        }
-			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'"]');
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
 			        if(cartObj.length > 0){
 			        	cartObj.find('.foodop-num').html(t.val());
 			        }else{
 				        var pName = parObj.find('.name').html();
 				        var pPrice = parObj.find('.price').html();
 				        var cartStr = '';
-					    cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+isSet+'_'+productId+'_'+promoteId+'">';
+					    cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'">';
         				cartStr +='<div class="cart-dtl-item-inner">';
         				cartStr +='<i class="cart-dtl-dot"></i>';
         				cartStr +='<p class="cart-goods-name">'+ pName +'</p>';
@@ -482,7 +482,7 @@ $(document).ready(function(){
 			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
 			   	    }
-			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'"]');
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
 			        if(cartObj.length > 0){
 				        if(parseInt(t.val()) == 0){
 				        	cartObj.remove();
@@ -501,6 +501,93 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
+   $('.j-cart-dtl-list-inner').on('click','.add-food',function(){
+        var parentObj = $(this).parents('.cart-dtl-item');
+        var dataId = parentObj.attr('data-orderid');
+        var dataArr = dataId.split('_');
+        
+        var isSet = dataArr[0];
+        var productId = dataArr[1];
+        var promoteId = dataArr[2];
+        var toGroup = dataArr[3];
+        
+        var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"]');
+        var timestamp=new Date().getTime()
+        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId));?>',
+        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
+        	success:function(msg){
+        		if(msg.status){
+        			 t.val(parseInt(t.val())+1);
+			        if(parseInt(t.val()) > 0){
+			            t.siblings(".minus").removeClass('zero');
+			            t.removeClass('zero');
+			        }
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
+			        if(cartObj.length > 0){
+			        	cartObj.find('.foodop-num').html(t.val());
+			        }
+			        setTotal();
+        		}
+        	},
+        	error:function(){
+        		layer.msg('添加失败,请检查网络');
+            },
+        	dataType:'json'
+        });
+    });
+    $('.j-cart-dtl-list-inner').on('click','.remove-food',function(){
+       var parentObj = $(this).parents('.cart-dtl-item');
+       var dataId = parentObj.attr('data-orderid');
+       var dataArr = dataId.split('_');
+       
+       var isSet = dataArr[0];
+       var productId = dataArr[1];
+       var promoteId = dataArr[2];
+       var toGroup = dataArr[3];
+       
+       var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"]');
+       var storeNum = t.attr('store-number');
+       
+       var timestamp=new Date().getTime()
+       var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+       $.ajax({
+	       	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId));?>',
+	       	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
+	       	success:function(msg){
+	       		if(msg.status){
+	   			  if(parseInt(t.val())==1){
+			          t.siblings(".minus").addClass('zero');
+			          t.addClass('zero');
+			          if(parseInt(storeNum)==0){
+			          	t.siblings(".add").addClass('zero');
+			          	t.siblings(".sale-out").removeClass('zero');
+			          }
+			       }
+			       t.val(parseInt(t.val())-1);
+			       if(parseInt(t.val()) < 0){ 
+			           t.val(0); 
+			   	    }
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
+			        if(cartObj.length > 0){
+				        if(parseInt(t.val()) == 0){
+				        	cartObj.remove();
+					    }else{
+					    	cartObj.find('.foodop-num').html(t.val());
+						}
+			        }
+			    	setTotal(); 
+	       		}else{
+	       			layer.msg(msg.msg);
+	       		}
+	       	},
+	       	error:function(){
+	       		layer.msg('移除失败,请检查网络');
+	        },
+	       	dataType:'json'
+       });
+    });
     $('.j-mask').on('click',function(){
         $(this).hide();
         var hight = $('#cart-dtl').outerHeight();
