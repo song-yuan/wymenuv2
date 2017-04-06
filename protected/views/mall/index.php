@@ -572,6 +572,9 @@ $(document).ready(function(){
 			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
 			        if(cartObj.length > 0){
 				        if(parseInt(t.val()) == 0){
+				        	if($('.cart-dtl-item').length == 1){
+				        		$('.ft-lt').trigger('click');
+				        	}
 				        	cartObj.remove();
 					    }else{
 					    	cartObj.find('.foodop-num').html(t.val());
@@ -588,12 +591,32 @@ $(document).ready(function(){
 	       	dataType:'json'
        });
     });
-    $('.j-mask').on('click',function(){
-        $(this).hide();
-        var hight = $('#cart-dtl').outerHeight();
-        $('#cart-dtl').animate({bottom:-hight},function(){
-       	 	$('.j-mask').hide();
+    $('.j-cart-dusbin').on('click',function(){
+    	var timestamp=new Date().getTime()
+        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'all'=>1));?>',
+        	success:function(msg){
+        		if(msg){
+            		$('input[class="result"]').each(function(){
+                		$(this).addClass('zero');
+                		$(this).parent().find('.minus').addClass('zero');
+                		$(this).val(0);
+                	});
+            		$('.ft-lt').trigger('click');
+        			$('.j-cart-dtl-list-inner').html('');
+			        setTotal();
+        		}else{
+        			layer.msg('清空购物车失败,请重试');
+        		}
+        	},
+        	error:function(){
+        		layer.msg('清空购物车失败,请检查网络');
+            }
         });
+    });
+    $('.j-mask').on('click',function(){
+        $('.ft-lt').trigger('click');
     });
     $('footer').on('click','.ft-lt',function(){
         if($('.cart-dtl-item').length == 0){
