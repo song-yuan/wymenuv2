@@ -201,6 +201,12 @@
 						</div>
 					</a>
 					<?php endif;?>
+					<a href="<?php echo $this->createUrl('companyWx/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple wxdp"></div>
+							<div class="ku-item-info">微店营业</div>
+						</div>
+					</a>
 					<!--
 					<a href="#">
 						<div class="pull-left margin-left-right">
