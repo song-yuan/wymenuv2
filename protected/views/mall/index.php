@@ -346,6 +346,7 @@ function getProduct(){
 	         			}
 	         			productSetStr +='<div class="clear"></div>';
 					}
+					productSetStr +='</div>';
          			// 套餐详情
          			productSetStr +='<div class="tips">';
          			for(var ps=0; ps<pDetail.length; ps++){
@@ -357,7 +358,7 @@ function getProduct(){
 							}
                  		}
              		}
-         			productSetStr +='</div></div></div>';
+         			productSetStr +='</div></div>';
 				}
 				productSetStr +='</div>';
 			}
