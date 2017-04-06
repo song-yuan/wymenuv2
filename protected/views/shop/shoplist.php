@@ -118,11 +118,12 @@
  		});
     	$('#activeshop').on('click','.open-location',function(event){
  	    	var liObj = $(this).parents('li');
- 	    	var latitude = liObj.attr('lat');
- 	    	var longitude = liObj.attr('lng');
+ 	    	var latitude = parseFloat(liObj.attr('lat'));
+ 	    	var longitude = parseFloat(liObj.attr('lng'));
  	    	var name = liObj.find('h1').html();
  	    	var address = liObj.find('.address_info').html();
  	    	var infoUrl = '<?php echo Yii::app()->request->getHostInfo();?>'+liObj.attr('href');
+ 	    	alert(latitude);alert(longitude);alert(name);alert(address);alert(infoUrl);
  	    	wx.openLocation({
  	    	    latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
  	    	    longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
