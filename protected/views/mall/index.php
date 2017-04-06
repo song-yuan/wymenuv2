@@ -109,6 +109,7 @@
 	
 </div>
 <script> 
+var orderType = '<?php echo $this->type;?>';
 function setTotal(){ 
     var s=0;
     var v=0;
@@ -163,6 +164,7 @@ function getProduct(){
 		dataType:'json',
 		timeout:'30000',
 		success:function(data){
+			var current = false;
 			var categorys = data.categorys;
 			var promotions = data.promotions;
 			var products = data.products;
@@ -174,6 +176,7 @@ function getProduct(){
 			var cartStr = '';
 			
 			if(promotions.length > 0){
+				current = true;
 				navLi += '<li class="current"><a href="#st-1">优惠</a><b></b></li>';
 				promotionStr +='<div class="section" id="st-1"><div class="prt-title">优惠专区</div>';
 				for(var i=0; i<promotions.length; i++){
@@ -226,10 +229,15 @@ function getProduct(){
 			
 			for(var k in categorys){
 				var category = categorys[k];
-				if((k==0) && (promotions.length==0)){
-					navLi += '<li class="current"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
+				if(category.show_type=='2'&&orderType=='2'||category.show_type=='3'&&orderType=='6'||category.show_type=='4'){
+					navLi += '<li class="zero"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
 				}else{
-					navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
+					if(current){
+						navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
+					}else{
+						current = true;
+						navLi += '<li class="current"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
+					}
 				}
 			}
 			
