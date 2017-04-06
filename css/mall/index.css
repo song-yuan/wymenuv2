@@ -87,7 +87,7 @@ body {
     background: #f7f7f7;
     z-index: 10;
 }
-.container-top >div {
+.container-top div {
 	font-size: 18px;
 	padding-left: 20px;
 }
