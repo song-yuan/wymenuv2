@@ -15,10 +15,10 @@
 		<div class="shopcontainer">
 			<!-- 全部门店 -->
 			<ul id="allshop">
-				<?php foreach ($children as $k=>$child):?>
+				<?php foreach ($children as $k=>$child): if($child['is_rest']==0){continue;}?>
 				<li href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid'],'type'=>$type));?>" distance="" searil="<?php echo $k;?>" lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
 					<div class="right">
-						<h1><?php echo $child['company_name'];?></h1>
+						<h1><span class="com-name"><?php echo $child['company_name'];?></span><span class="rest_message small font_l"><?php if($child['is_rest']==1||$child['is_rest']==2){ echo '(休息中...)';}?></span></h1>
 						<div class="info small font_l" style="margin-top:5px;">地址: <span class="address_info"><?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></span><span class="open-location"><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>
 						<div class="misinfo small" style="margin-top:5px;"><span class="left font_l">电话: <?php echo trim('<a class="font_l" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="font_l" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span><span class="right font_org"></span></div>
 					</div>
@@ -88,7 +88,7 @@
 		 	$('#allshop').find('li').each(function(){
 			 	var searil = $(this).attr('searil');
 			 	var shopDistance =  $(this).attr('distance');
-			 	var name = $(this).find('h1').html();
+			 	var name = $(this).find('.com-name').html();
 	 	 	 	var patt = new RegExp(search);
 		 	  	if(patt.test(name)){
 		 	  		originDistanceArr[searil] = shopDistance;
@@ -120,7 +120,7 @@
  	    	var liObj = $(this).parents('li');
  	    	var latitude = parseFloat(liObj.attr('lat'));
  	    	var longitude = parseFloat(liObj.attr('lng'));
- 	    	var name = liObj.find('h1').html();
+ 	    	var name = liObj.find('.com-name').html();
  	    	var address = liObj.find('.address_info').html();
  	    	var infoUrl = '<?php echo Yii::app()->request->getHostInfo();?>'+liObj.attr('href');
  	    	wx.openLocation({
