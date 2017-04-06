@@ -78,7 +78,19 @@ body {
 	height: 92%;;
 	overflow-y: scroll;
 }
-
+.container-top{
+	position: fixed;
+	right: 0;
+	width: 3rem;
+	height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    background: #f7f7f7;
+    z-index: 10;
+}
+.container-top >div {
+	padding-left: 20px;
+}
 .current {
 	background-color: #fff;
 }
