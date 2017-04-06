@@ -46,12 +46,9 @@
 
 
 <div id="container" class="container">
-	<!-- 特价优惠  -->
-
-	<!-- end特价优惠  -->
-
-
-
+	<div id="product-top" class="section">
+		<div class="prt-title top"></div>
+	</div>
 </div>
 
 <footer>
@@ -178,7 +175,8 @@ function getProduct(){
 			
 			if(promotions.length > 0){
 				current = true;
-				navLi += '<li class="current"><a href="#st-1">优惠</a><b></b></li>';
+				$('#product-top').find('.prt-title').html('优惠专区');
+				navLi += '<li class="current"><a href="#st-1">优惠专区</a><b></b></li>';
 				promotionStr +='<div class="section" id="st-1"><div class="prt-title">优惠专区</div>';
 				for(var i=0; i<promotions.length; i++){
 					var promotion = promotions[i];
@@ -238,6 +236,7 @@ function getProduct(){
 						navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
 					}else{
 						current = true;
+						$('#product-top').find('.prt-title').html(category.category_name);
 						navLi += '<li class="current"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
 					}
 				}
@@ -378,11 +377,9 @@ $(document).ready(function(){
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
             if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) > 0){
+                var pName = $(this).find('.prt-title').html();
                 if(top!=0){
-                    if(!$(this).find('.prt-title').hasClass('top')){
-                    	$('.prt-title').removeClass('top');
-                    	$(this).find('.prt-title').addClass('top');
-                    }
+                	$('#product-top').find('.prt-title').html(pName);
                 }
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
