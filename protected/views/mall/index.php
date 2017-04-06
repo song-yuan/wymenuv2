@@ -373,14 +373,16 @@ $(document).ready(function(){
     });
     $('#container').scroll(function(){
         var ptHeight = $('.prt-title').outerHeight();
-    	$('.prt-title').removeClass('top');
         $('.section').each(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
             if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) > 0){
                 if(top!=0){
-                	$(this).find('.prt-title').addClass('top');
+                    if(!$(this).find('.prt-title').hasClass('top')){
+                    	$('.prt-title').removeClass('top');
+                    	$(this).find('.prt-title').addClass('top');
+                    }
                 }
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
