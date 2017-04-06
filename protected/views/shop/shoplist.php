@@ -117,7 +117,6 @@
  	    	event.stopPropagation();
  		});
     	$('#activeshop').on('click','.open-location',function(event){
- 	    	event.stopPropagation();
  	    	var liObj = $(this).parents('li');
  	    	var latitude = liObj.attr('lat');
  	    	var longitude = liObj.attr('lng');
@@ -132,6 +131,7 @@
  	    	    scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
  	    	    infoUrl: infoUrl // 在查看位置界面底部显示的超链接,可点击跳转
  	    	});
+ 	    	event.stopPropagation();
  		});
  	    $('#activeshop').on('click','li',function(){
  		    var href = $(this).attr('href');
