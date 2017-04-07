@@ -322,7 +322,7 @@ function getProduct(){
 						productSetStr +='</p>';
 					}
 					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.member_price+'</span>';
-					if(pProductSet.member_price!= pProductSet.original_price){
+					if(pProductSet.member_price!= pProductSet.set_price){
 						productSetStr +='<span class="oprice"><strike>¥'+pProductSet.set_price+'</strike></span>';
 					}
 					productSetStr +='</p>';
