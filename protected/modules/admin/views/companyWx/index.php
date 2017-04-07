@@ -1,4 +1,13 @@
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_002.css');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll.css');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_003.css');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_002.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_004.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_003.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_005.js');?> 
 <style>
 .selectedclass{
 	font-size: 14px;
@@ -6,6 +15,20 @@
 	height: 34px;
 	line-height: 34px;
 	padding: 6px 12px;
+}
+.timeset{
+	width: 88%;
+	margin-left: 6%;
+	padding-top: 10px;
+}
+.timeset{
+	width: 88%;
+	margin-left: 6%;
+	padding-top: 10px;
+}
+.android-ics .dw {
+	top: 50px;
+    left: 650px;
 }
 </style>
 
@@ -30,7 +53,7 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-	<div id="main2" name="main2" style="min-width: 500px;min-height:300px;display:none;" onMouseOver="this.style.backgroundColor='rgba(255,222,212,1)'" onmouseout="this.style.backgroundColor=''">
+	<div id="main2" name="main2" style="min-width: 300px;min-height:200px;display:none;" onMouseOver="this.style.backgroundColor='rgba(255,222,212,1)'" onmouseout="this.style.backgroundColor=''">
 		<div id="content"></div>
 	</div>
 	
@@ -110,6 +133,7 @@
 								};?></td>
 								<td class="center">
 									<div class="actions">
+									<?php if($model->type == 1):?>
                                         <?php if(Yii::app()->user->role < User::ADMIN_AREA) : ?>
                                         	<?php if($model->property):
                                         		if($model->property->is_rest == '0'):?>
@@ -119,8 +143,8 @@
                                         		<?php elseif($model->property->is_rest == '2'):?>
                                         			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开店');?></a>
                                         		<?php elseif($model->property->is_rest == '3'):?>
-                                        			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
-                                        			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','强制关店');?></a>
+                                        			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
+                                        			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','强制关店');?></a>
                                         		<?php endif;?>
                                         	<?php else:?>
                                         		<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开通');?></a>
@@ -131,13 +155,14 @@
                                         		if($model->property->is_rest == '2'):?>
                                         			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开店');?></a>
                                         		<?php elseif($model->property->is_rest == '3'):?>
-                                        			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
+                                        			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
                                         		<?php endif;?>
                                         	<?php else:?>
                                         		
                                         	<?php endif;?>
                                         <?php endif;?>
-                                         <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','编辑');?></a>
+                                         <a  class='btn blue setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>" dpidname="<?php echo $model->company_name;?>"><?php echo yii::t('app','编辑');?></a>
+                                    <?php endif;?>
                                     </div>	
 								</td>
 							</tr>
@@ -184,6 +209,11 @@
 	</div>
 	<!-- END PAGE CONTENT-->
 <script>
+jQuery(document).ready(function() {
+								
+
+
+								
 	new PCAS("province","city","area","<?php echo $province;?>","<?php echo $city;?>","<?php echo $area;?>");
 	function genQrcode(that){
 		var id = $(that).attr('lid');
@@ -246,12 +276,15 @@
         });
 		});
 	$('.setAppid').on('click',function(){
+
 		
 		$('#content').html('');
 		var dpid = $(this).attr('dpid');
-		var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="shop_time" placeholder="营业时间"/></div>'
-					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="closing_time" placeholder="打烊时间"/></div>'
-					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><button id="appid_store" class="btn green">确认</button></div>'
+		var dpidname = $(this).attr('dpidname');
+		var content = '<div class="timeset"><span style="font-size: 18px;">'+dpidname+'</span><span>  营业时间设置</span></div>'
+					+ '<div class="timeset"><input id="shop_time" placeholder="营业时间"/></div>'
+					+ '<div class="timeset"><input id="closing_time" placeholder="打烊时间"/></div>'
+					+ '<div class="timeset"><button id="appid_store" dpid="'+dpid+'" class="btn green">确认</button></div>'
 					;
 		$('#content').html(content);
 		//alert(dpid);
@@ -261,7 +294,7 @@
 		     shade: [0.5,'#fff'],
 		     //move:'#main2',
 		     moveOut:true,
-		     offset:['10px','350px'],
+		     offset:['100px','200px'],
 		     shade: false,
 		     title: false, //不显示标题
 		     area: ['auto', 'auto'],
@@ -275,32 +308,68 @@
 		   layer.style(layer_zhexiantu, {
 			   backgroundColor: 'rgba(255,255,255,0.2)',
 			 });
+
+
+			var currYear = (new Date()).getFullYear();
+			var opt = {};
+			opt.time = {
+			    preset : 'time'
+			};
+			opt.default = {
+				theme : 'android-ics light', //皮肤样式
+				display : 'modal', //显示方式
+				mode : 'scroller', //日期选择模式
+				dateFormat : 'hh:mm:ss',
+				//width : cHeight / 1.2,
+				//height : cHeight / 1.6,
+				width:100,
+				height:40,
+				circular:true,
+				showScrollArrows:true,
+				lang : 'zh',
+				showNow : true,
+				nowText : "现在",
+				startYear : currYear , //开始年份
+				endYear : currYear  //结束年份
+			};
+			
+			var optDateTime = $.extend(opt['time'], opt['default']);
+			$("#shop_time").mobiscroll(optDateTime).time(optDateTime);
+			$("#closing_time").mobiscroll(optDateTime).time(optDateTime);
+			 
 		$('#appid_store').on('click',function(){
 			var shop_time = $('#shop_time').val();
 			var closing_time = $('#closing_time').val();
+			var dpid = $(this).attr('dpid');
 			//alert(appid);
-			var url = "<?php echo $this->createUrl('companyWx/storetime',array('companyId'=>$this->companyId));?>/shop_time/"+shop_time+"/closing_time/"+closing_time;
-	        $.ajax({
-	            url:url,
-	            type:'GET',
-	            //data:orderid,//CF
-	            async:false,
-	            dataType: "json",
-	            success:function(msg){
-	                var data=msg;
-	                if(data.status){
-	                	layer.msg('成功！！！');
-	                	layer.close(layer_zhexiantu);
-	   		        	layer_zhexiantu=0;
-	                }else{
-	                	layer.msg('失败！！！');
-	                }
-	            },
-	            error: function(msg){
-	                layer.msg('网络错误！！！');
-	            }
-	        });
+			if(shop_time&&closing_time){
+				
+				//return false;
+				var url = "<?php echo $this->createUrl('companyWx/storetime');?>/companyId/"+dpid+"/shop_time/"+shop_time+"/closing_time/"+closing_time;
+		        $.ajax({
+		            url:url,
+		            type:'GET',
+		            //data:orderid,//CF
+		            async:false,
+		            dataType: "json",
+		            success:function(msg){
+		                var data=msg;
+		                if(data.status){
+		                	layer.msg('成功！！！');
+		                	layer.close(layer_zhexiantu);
+		   		        	layer_zhexiantu=0;
+		   		        	location.reload();
+		                }else{
+		                	layer.msg('失败！！！');
+		                }
+		            },
+		            error: function(msg){
+		                layer.msg('网络错误！！！');
+		            }
+		        });
+			}else{
+				layer.msg('请完善信息！！！');}
 		});
 	});
-	
+});	
 </script>

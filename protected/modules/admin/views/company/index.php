@@ -118,8 +118,8 @@
 								<?php if($model->property){
 										switch ($model->property->pay_type){
 										case 0: echo '未开通';break;
-										case 1: echo '开通（个人）';break;
-										case 2: echo '开通（总部）';break;
+										case 1: echo '开通（总部）';break;
+										case 2: echo '开通（个人）';break;
 										default: echo '未知';break;
 								} $paytype = $model->property->pay_type;
 								}else{
