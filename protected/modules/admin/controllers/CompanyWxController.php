@@ -95,5 +95,42 @@ class CompanyWxController extends BackendController
 		}
 		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 	}
+	public function actionStoretime(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		$shop_time = Yii::app()->request->getParam('shop_time');
+		$closing_time = Yii::app()->request->getParam('closing_time');
+		//var_dump($dpid,$appid);exit;
+	
+		//****查询公司的产品分类。。。****
+		$db = Yii::app()->db;
+		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
+		//var_dump($compros);
+		if(!empty($compros)){
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",shop_time ="'.$shop_time.'",closing_time ="'.$closing_time.'" where dpid ='.$dpid;
+			//var_dump($sql);exit;
+			$command = $db->createCommand($sql);
+			$command->execute();
+		}else{
+			$se = new Sequence("company_property");
+			$id = $se->nextval();
+			$data = array(
+					'lid'=>$id,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'pay_type'=>'1',
+					'pay_channel'=>'2',
+					'appId'=>'',
+					'code'=>'',
+					'is_rest'=>'0',
+					'shop_time'=>$shop_time,
+					'closing_time'=>$closing_time,
+					'delete_flag'=>'0',
+			);
+			//var_dump($data);exit;
+			$command = $db->createCommand()->insert('nb_company_property',$data);
+		}
+		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+	}
 	
 }
