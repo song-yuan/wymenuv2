@@ -20,8 +20,13 @@
 					<div class="right">
 						<h1><span class="com-name"><?php echo $child['company_name'];?></span><span class="rest_message small font_l"><?php if($child['is_rest']==1||$child['is_rest']==2){ echo '(休息中...)';}?></span></h1>
 						<div class="info small font_l" style="margin-top:5px;">地址: <span class="address_info"><?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></span><span class="open-location"><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>
-						<div class="info small font_l" style="margin-top:5px;">营业时间: <?php echo $child['shop_time'].'-'.$child['closing_time'];?></div>
-						<div class="misinfo small" style="margin-top:5px;"><span class="left font_l">电话: <?php echo trim('<a class="font_l" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="font_l" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span><span class="right font_org"></span></div>
+						<div class="misinfo small" style="margin-top:5px;">
+							<span class="left">
+								<span class=" font_l">营业时间: <?php echo $child['shop_time'].'-'.$child['closing_time'];?></span><br>
+								<span class=" font_l">电话: <?php echo trim('<a class="font_l" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="font_l" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span>
+							</span>
+							<span class="right font_org"></span>
+						</div>
 					</div>
 				</li>
 				<?php endforeach;?>
