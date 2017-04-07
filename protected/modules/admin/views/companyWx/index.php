@@ -133,6 +133,7 @@
 								};?></td>
 								<td class="center">
 									<div class="actions">
+									<?php if($model->type == 1):?>
                                         <?php if(Yii::app()->user->role < User::ADMIN_AREA) : ?>
                                         	<?php if($model->property):
                                         		if($model->property->is_rest == '0'):?>
@@ -142,8 +143,8 @@
                                         		<?php elseif($model->property->is_rest == '2'):?>
                                         			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开店');?></a>
                                         		<?php elseif($model->property->is_rest == '3'):?>
-                                        			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
-                                        			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','强制关店');?></a>
+                                        			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
+                                        			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','强制关店');?></a>
                                         		<?php endif;?>
                                         	<?php else:?>
                                         		<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开通');?></a>
@@ -154,13 +155,14 @@
                                         		if($model->property->is_rest == '2'):?>
                                         			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开店');?></a>
                                         		<?php elseif($model->property->is_rest == '3'):?>
-                                        			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
+                                        			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
                                         		<?php endif;?>
                                         	<?php else:?>
                                         		
                                         	<?php endif;?>
                                         <?php endif;?>
-                                         <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>" dpidname="<?php echo $model->company_name;?>"><?php echo yii::t('app','编辑');?></a>
+                                         <a  class='btn blue setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>" dpidname="<?php echo $model->company_name;?>"><?php echo yii::t('app','编辑');?></a>
+                                    <?php endif;?>
                                     </div>	
 								</td>
 							</tr>
@@ -332,10 +334,8 @@ jQuery(document).ready(function() {
 			};
 			
 			var optDateTime = $.extend(opt['time'], opt['default']);
-			// var optTime = $.extend(opt['time'], opt['default']);
 			$("#shop_time").mobiscroll(optDateTime).time(optDateTime);
 			$("#closing_time").mobiscroll(optDateTime).time(optDateTime);
-
 			 
 		$('#appid_store').on('click',function(){
 			var shop_time = $('#shop_time').val();
