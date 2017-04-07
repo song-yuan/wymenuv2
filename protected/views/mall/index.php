@@ -3,7 +3,7 @@
 	if($this->type==2){
 		$this->setPageTitle('外卖点单');
 	}elseif($this->type==6){
-		$this->setPageTitle('店铺点单');
+		$this->setPageTitle('店内点单');
 	}else{
 		$this->setPageTitle('自助点单');
 	}
@@ -268,7 +268,10 @@ function getProduct(){
 					}else{
 						productStr +='</p>';
 					}
-					productStr +='<p class="pr">¥<span class="price">'+pProduct.original_price+'</span></p>';
+					productStr +='<p class="pr">¥<span class="price">'+pProduct.member_price+'</span></p>';
+					if(pProduct.member_price!= pProduct.original_price){
+						productStr +='<span class="oprice"><strike>¥'+pProduct.original_price+'</strike></span>';
+					}
 					if(!hasclose){
 	         			if(parseInt(pProduct.num)){
 	         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
@@ -283,7 +286,7 @@ function getProduct(){
 	        				cartStr +='<span class="j-item-num foodop-num">'+pProduct.num+'</span> ';
 	        				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
 	        				cartStr +='</div>';
-	        				cartStr +='<span class="cart-dtl-price">¥'+pProduct.original_price+'</span>';
+	        				cartStr +='<span class="cart-dtl-price">¥'+pProduct.member_price+'</span>';
 	        				cartStr +='</div>';
 	        				cartStr +='</div>';
 	         			}else{
@@ -317,7 +320,10 @@ function getProduct(){
 					}else{
 						productSetStr +='</p>';
 					}
-					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.set_price+'</span></p>';
+					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.member_price+'</span></p>';
+					if(pProductSet.member_price!= pProductSet.original_price){
+						productSetStr +='<span class="oprice"><strike>¥'+pProductSet.set_price+'</strike></span>';
+					}
 					if(!hasclose){
 	         			if(parseInt(pProductSet.num)){
 	         				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
@@ -332,7 +338,7 @@ function getProduct(){
 	        				cartStr +='<span class="j-item-num foodop-num">'+pProductSet.num+'</span> ';
 	        				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
 	        				cartStr +='</div>';
-	        				cartStr +='<span class="cart-dtl-price">¥'+pProductSet.set_price+'</span>';
+	        				cartStr +='<span class="cart-dtl-price">¥'+pProductSet.member_price+'</span>';
 	        				cartStr +='</div>';
 	        				cartStr +='</div>';
 	         			}else{
