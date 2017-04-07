@@ -14,7 +14,12 @@ $data = array(
 $result = MicroPayModel::insert($data);
 
 if($authCode!=''&&$result['status']){
-	if($this->compaychannel=='2'){
+	if($this->compaychannel['pay_type']==0){
+		$msg = array('status'=>false);
+		echo json_encode($msg);
+		exit;
+	}
+	if($this->compaychannel['pay_channel']=='2'){
 		$result = SqbPay::pay(array(
 				'type'=>'1',
 				'device_id'=>$poscode,
