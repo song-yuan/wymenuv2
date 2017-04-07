@@ -7,13 +7,12 @@ class AlipayController extends Controller
 	public $gateway_config = array();
 	public $alipay_config = array();
 	public $f2fpay_config = array();
-	public $compaychannel = '1';
+	public $compaychannel = array();
     public function init(){
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
-		$compaychannel = WxCompany::getpaychannel($this->companyId);
-		$this->compaychannel = $compaychannel['pay_channel'];
-		if($this->compaychannel=='1'){
+		$this->compaychannel = WxCompany::getpaychannel($this->companyId);
+		if($this->compaychannel['pay_channel']=='1'){
 			$alipayAccount = AlipayAccount::get($this->companyId);
 			//支付宝网关
 			$this->gateway_config = array(
