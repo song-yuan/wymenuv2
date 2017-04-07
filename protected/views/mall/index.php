@@ -268,10 +268,11 @@ function getProduct(){
 					}else{
 						productStr +='</p>';
 					}
-					productStr +='<p class="pr">¥<span class="price">'+pProduct.member_price+'</span></p>';
+					productStr +='<p class="pr">¥<span class="price">'+pProduct.member_price+'</span>';
 					if(pProduct.member_price!= pProduct.original_price){
 						productStr +='<span class="oprice"><strike>¥'+pProduct.original_price+'</strike></span>';
 					}
+					productStr +='</p>';
 					if(!hasclose){
 	         			if(parseInt(pProduct.num)){
 	         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
@@ -320,10 +321,11 @@ function getProduct(){
 					}else{
 						productSetStr +='</p>';
 					}
-					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.member_price+'</span></p>';
+					productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.member_price+'</span>';
 					if(pProductSet.member_price!= pProductSet.original_price){
 						productSetStr +='<span class="oprice"><strike>¥'+pProductSet.set_price+'</strike></span>';
 					}
+					productSetStr +='</p>';
 					if(!hasclose){
 	         			if(parseInt(pProductSet.num)){
 	         				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly value="'+pProductSet.num+'">';
