@@ -22,8 +22,8 @@
 						<div class="info small font_l" style="margin-top:5px;">地址: <span class="address_info"><?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></span><span class="open-location"><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>
 						<div class="misinfo small" style="margin-top:5px;">
 							<span class="left">
-								<span class="">电话: <?php echo trim('<a class="" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span><br>
-								<span class=" font_l">营业时间: <?php echo date('H:i',strtotime($child['shop_time'])).'-'.date('H:i',strtotime($child['closing_time']));?></span>
+							<span class=" font_l">营业时间: <?php echo date('H:i',strtotime($child['shop_time'])).'-'.date('H:i',strtotime($child['closing_time']));?></span><br>
+								<span class="">电话: <?php echo trim('<a class="" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span>
 							</span>
 							<span class="right font_org"></span>
 						</div>
