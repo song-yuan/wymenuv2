@@ -23,7 +23,7 @@
 						<div class="misinfo small" style="margin-top:5px;">
 							<span class="left">
 							<span class=" font_l">营业时间: <?php echo date('H:i',strtotime($child['shop_time'])).'-'.date('H:i',strtotime($child['closing_time']));?></span><br>
-								<span class="">电话: <?php echo trim('<a class="" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span>
+								<span style="font-weight:800;">电话: <?php echo trim('<a class="" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span>
 							</span>
 							<span class="right font_org"></span>
 						</div>
