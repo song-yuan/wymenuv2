@@ -86,10 +86,20 @@
 			<input type="hidden" name="address" value="-1"/>
 		</div>
 		<?php endif;?>
+		<div class="order-time arrowright">
+			<div class="time-lt">预约时间</div>
+			<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
+			<div class="clear"></div>
+		</div>
 	</div>
 <!-- 地址 -->
 <?php elseif($this->type==6):?>
 	<div class="order-site"><div class="lt">就餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:10px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
+	<div class="order-time arrowright">
+		<div class="time-lt">就餐时间</div>
+		<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择就餐时间" readonly="readonly" value="<?php echo date('Y-m-d H:i:s');?>"></div>
+		<div class="clear"></div>
+	</div>
 <?php endif;?>
 
 <!-- 购物车商品 -->
@@ -209,13 +219,6 @@
 		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount']*10;?>折优惠</li>
 	</ul>
 </div>
-<?php endif;?>
-<?php if($this->type==3):?>
-	<div class="order-time arrowright">
-		<div class="time-lt">预约时间</div>
-		<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
-		<div class="clear"></div>
-	</div>
 <?php endif;?>
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
