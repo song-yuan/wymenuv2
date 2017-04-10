@@ -1,3 +1,6 @@
+  <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/mobiscroll.min.css');?>
+    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/mobiscroll.min.js');?>
+
 <?php $form=$this->beginWidget('CActiveForm', array(
                 'id' => 'normalpromotion-form',
                 'errorMessageCssClass' => 'help-block',
@@ -135,9 +138,9 @@
                                                 </span>
                                         </div> -->
                                          <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-                                                 <?php echo $form->textField($model,'begin_time',array('class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_time'))); ?>
+                                                 <?php echo $form->textField($model,'begin_time',array('class' => 'form-control ui_timepicker','readonly'=>'true','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_time'))); ?>
                                                  <span class="input-group-addon"> ~ </span>
-                                                 <?php echo $form->textField($model,'end_time',array('class'=>'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_time'))); ?>
+                                                 <?php echo $form->textField($model,'end_time',array('class'=>'form-control ui_timepicker','readonly'=>'true','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_time'))); ?>
                                         </div> 
                                         <!-- /input-group -->
                                         <?php echo $form->error($model,'begin_time'); ?>
@@ -220,21 +223,38 @@
         ),
 )); ?>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 
-	 $(document).ready(function(){ 
-		 $('#NormalPromotion_to_group').change(function(){ 
-		 //alert($(this).children('option:selected').val()); 
-		 var p1=$(this).children('option:selected').val();//这就是selected的值 
-			//alert(p1);
-			 if(p1=="2"){
-				 $("#yincang").show();
-			 }else{
-				$("#yincang").hide();
-				 }
-		
-		 }) 
-		 }); 
+ $(document).ready(function(){ 
+        $('#NormalPromotion_to_group').change(function(){ 
+        //alert($(this).children('option:selected').val()); 
+        var p1=$(this).children('option:selected').val();//这就是selected的值 
+               //alert(p1);
+                if(p1=="2"){
+                        $("#yincang").show();
+                }else{
+                       $("#yincang").hide();
+                        }
+
+        }); 
+
+        var bgin_instance = mobiscroll.time('#NormalPromotion_day_begin', {
+            theme: 'mobiscroll',
+            lang: 'zh',
+            display: 'center',
+            headerText: false,
+            maxWidth: 90
+        });
+        
+         var end_instace = mobiscroll.time('#NormalPromotion_day_end', {
+            theme: 'mobiscroll',
+            lang: 'zh',
+            display: 'center',
+            headerText: false,
+            maxWidth: 90
+        });
+    
+}); 
 		 
 //	 	 function aa() {
 //	 		 //alert(222);

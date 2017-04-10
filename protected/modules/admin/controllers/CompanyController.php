@@ -104,131 +104,149 @@ class CompanyController extends BackendController
 			return false;
 		}
 	}
-	public function actionCreate(){
-		$type = '-1';
-		$type2 = 'create';
-		if(Yii::app()->user->role <= User::ADMIN_AREA) {
-		
-		$model = new Company();
-		$model->create_at = date('Y-m-d H:i:s');
-		//var_dump($model);exit;
-		$db = Yii::app()->db;
-		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE){
-			if(Yii::app()->request->isPostRequest) {
-				$model->attributes = Yii::app()->request->getPost('Company');
-				
-				$pay_online = Yii::app()->request->getParam('pay_online');
-				
-				$province = Yii::app()->request->getParam('province1');
-				$city = Yii::app()->request->getParam('city1');
-				$area = Yii::app()->request->getParam('area1');
-				
-				$model->country = 'china';
-				$model->province = $province;
-				$model->city = $city;
-				$model->county_area = $area;
-	            $model->create_at = date('Y-m-d H:i:s',time());
-	            $model->update_at = date('Y-m-d H:i:s',time());
-	            //$model->comp_dpid=mysql_insert_id();
-	            $model->type="0";
-				if($model->save()){
-					$comp_dpid = Yii::app()->db->getLastInsertID();
-					$userid = new Sequence("company_property");
-					$id = $userid->nextval();
-					$data = array(
-							'lid'=>$id,
-							'dpid'=>$comp_dpid,
-							'create_at'=>date('Y-m-d H:i:s',time()),
-							'update_at'=>date('Y-m-d H:i:s',time()),
-							'pay_type'=>$pay_online,
-							'pay_channel'=>$pay_online,
-							'delete_flag'=>'0',
-					);
-					$command = $db->createCommand()->insert('nb_company_property',$data);
-						
-					$sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
-					$command=Yii::app()->db->createCommand($sql);
-					$command->execute();
-					//$model->comp_dpid = $post->attributes['dpid'];
-					//var_dump($id);exit;
-					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
-					$this->redirect(array('company/index','companyId'=> $this->companyId));
-				} else {
-					Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
-				}
-			}
-		}
-		elseif(Yii::app()->user->role > 3 && Yii::app()->user->role <= 9){
-			if(Yii::app()->request->isPostRequest) {
-				$model->attributes = Yii::app()->request->getPost('Company');
-				
-				$pay_online = Yii::app()->request->getParam('pay_online');
-				
-				$province = Yii::app()->request->getParam('province1');
-				$city = Yii::app()->request->getParam('city1');
-				$area = Yii::app()->request->getParam('area1');
-				
-				$model->country = 'china';
-				$model->province = $province;
-				$model->city = $city;
-				$model->county_area = $area;
-				$model->create_at=date('Y-m-d H:i:s',time());
-				$model->update_at=date('Y-m-d H:i:s',time());
-				$model->comp_dpid = $this->getCompanyId(Yii::app()->user->username);
-				//var_dump($model);exit;
-				//$model->type="0";
-				if($model->save()){
-					$comp_dpid = Yii::app()->db->getLastInsertID();
-					$userid = new Sequence("company_property");
-					$id = $userid->nextval();
-					$data = array(
-							'lid'=>$id,
-							'dpid'=>$comp_dpid,
-							'create_at'=>date('Y-m-d H:i:s',time()),
-							'update_at'=>date('Y-m-d H:i:s',time()),
-							'pay_type'=>$pay_online,
-							'pay_channel'=>$pay_online,
-							'delete_flag'=>'0',
-					);
-					$command = $db->createCommand()->insert('nb_company_property',$data);
-                                        
-                    $manu = new Sequence("manufacturer_classification");
-					$manu_lid = $manu->nextval();
-                                        $manu_data = array(
-							'lid'=>$manu_lid,
-							'dpid'=>$comp_dpid,
-							'create_at'=>date('Y-m-d H:i:s',time()),
-							'update_at'=>date('Y-m-d H:i:s',time()),
-							'classification_name'=>'总部',                                          
-					);
-					$manu_command =$db->createCommand()->insert('nb_manufacturer_classification',$manu_data);
+public function actionCreate(){
+        $type = '-1';
+        $type2 = 'create';
+        if(Yii::app()->user->role <= User::ADMIN_AREA) {
+
+        $model = new Company();
+        $model->create_at = date('Y-m-d H:i:s');
+        //var_dump($model);exit;
+        $db = Yii::app()->db;
+        if(Yii::app()->user->role <= User::POWER_ADMIN_VICE){
+            if(Yii::app()->request->isPostRequest) {
+                $model->attributes = Yii::app()->request->getPost('Company');
+
+                $pay_online = Yii::app()->request->getParam('pay_online');
+
+                $province = Yii::app()->request->getParam('province1');
+                $city = Yii::app()->request->getParam('city1');
+                $area = Yii::app()->request->getParam('area1');
+
+                $model->country = 'china';
+                $model->province = $province;
+                $model->city = $city;
+                $model->county_area = $area;
+                $model->create_at = date('Y-m-d H:i:s',time());
+                $model->update_at = date('Y-m-d H:i:s',time());
+                //$model->comp_dpid=mysql_insert_id();
+                $model->type="0";
+                if($model->save()){
+                    $comp_dpid = Yii::app()->db->getLastInsertID();
+                    $userid = new Sequence("company_property");
+                    $id = $userid->nextval();
+                    $data = array(
+                                    'lid'=>$id,
+                                    'dpid'=>$comp_dpid,
+                                    'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'update_at'=>date('Y-m-d H:i:s',time()),
+                                    'pay_type'=>$pay_online,
+                                    'pay_channel'=>$pay_online,
+                                    'delete_flag'=>'0',
+                    );
+                    $command = $db->createCommand()->insert('nb_company_property',$data);
+
+                    $sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
+                    $command=Yii::app()->db->createCommand($sql);
+                    $command->execute();
+                    //$model->comp_dpid = $post->attributes['dpid'];
+                    //var_dump($id);exit;
+                    Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
+                    $this->redirect(array('company/index','companyId'=> $this->companyId));
+                } else {
+                    Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
+                }
+            }
+        }else if(Yii::app()->user->role > 3 && Yii::app()->user->role <= 9){
+            if(Yii::app()->request->isPostRequest) {
+                    $model->attributes = Yii::app()->request->getPost('Company');
+
+                    $pay_online = Yii::app()->request->getParam('pay_online');
+
+                    $province = Yii::app()->request->getParam('province1');
+                    $city = Yii::app()->request->getParam('city1');
+                    $area = Yii::app()->request->getParam('area1');
+
+                    $model->country = 'china';
+                    $model->province = $province;
+                    $model->city = $city;
+                    $model->county_area = $area;
+                    $model->create_at=date('Y-m-d H:i:s',time());
+                    $model->update_at=date('Y-m-d H:i:s',time());
+                    $model->comp_dpid = $this->getCompanyId(Yii::app()->user->username);   
+                    //var_dump($model);exit;
+                    //$model->type="0";
+                    if($model->save()){
+                            $comp_dpid = Yii::app()->db->getLastInsertID();
+                            $userid = new Sequence("company_property");
+                            $id = $userid->nextval();
+                            $data = array(
+                                            'lid'=>$id,
+                                            'dpid'=>$comp_dpid,
+                                            'create_at'=>date('Y-m-d H:i:s',time()),
+                                            'update_at'=>date('Y-m-d H:i:s',time()),
+                                            'pay_type'=>$pay_online,
+                                            'pay_channel'=>$pay_online,
+                                            'delete_flag'=>'0',
+                            );
+                            $command = $db->createCommand()->insert('nb_company_property',$data);
+                            
+                            //厂商分类
+                            $manu = new Sequence("manufacturer_classification");
+                            $manu_lid = $manu->nextval();
+                            $manu_data = array(
+                                            'lid'=>$manu_lid,
+                                            'dpid'=>$comp_dpid,
+                                            'create_at'=>date('Y-m-d H:i:s',time()),
+                                            'update_at'=>date('Y-m-d H:i:s',time()),
+                                            'classification_name'=>'总部',                                          
+                            );
+                            $manu_command =$db->createCommand()->insert('nb_manufacturer_classification',$manu_data);
+                            
+                            //厂商信息
+                            //1.查找总部信息。
+                            $hq_sql = 'SELECT * FROM nb_company WHERE dpid = :dpid and delete_flag=0';
+                            $hq =  Yii::app()->db->createCommand($hq_sql)->bindValue(':dpid',$model->comp_dpid)->queryRow();
+                            //2.把总部信息插入厂商信息表。
+                            $info = new Sequence("manufacturer_information");
+                            $info_lid = $manu->nextval();
+                            $info_data = array(
+                                            'lid'=>$info_lid,
+                                            'dpid'=>$comp_dpid,
+                                            'create_at'=>date('Y-m-d H:i:s',time()),
+                                            'update_at'=>date('Y-m-d H:i:s',time()),
+                                            'classification_id'=>$manu_lid,
+                                            'manufacturer_name'=>'总部', 
+                                            'address' => $hq['province'].$hq['city'].$hq['county_area'],
+                                            'contact_name'=>$hq['contact_name'],
+                                            'contact_tel'=>$hq['mobile']
+                            );
+                            $info_command =$db->createCommand()->insert('nb_manufacturer_information',$info_data);
+                                          
                                                                          
-					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
-					$this->redirect(array('company/index','companyId'=> $this->companyId));
-                                        
-                                       
-                                        
-				} else {
-					Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
-				}
-			}
-                         
-		}
-			$role = Yii::app()->user->role;
-			$printers = $this->getPrinterList();
-			//var_dump($printers);exit;
-			return $this->render('create',array(
-					'model' => $model,
-					'printers'=>$printers,
-					'role'=>$role,
-	                'companyId'=>  $this->companyId,
-					'type'=> $type,
-					'type2'=> $type2,
-			));
-		}else{
-			$this->redirect(array('company/index','companyId'=>  $this->companyId));
-		}
-	}
+                            Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
+                            $this->redirect(array('company/index','companyId'=> $this->companyId)); 
+                        } else {
+                                Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
+                        }
+                }
+
+        }
+        $role = Yii::app()->user->role;
+        $printers = $this->getPrinterList();
+        //var_dump($printers);exit;
+        return $this->render('create',array(
+                        'model' => $model,
+                        'printers'=>$printers,
+                        'role'=>$role,
+        'companyId'=>  $this->companyId,
+                        'type'=> $type,
+                        'type2'=> $type2,
+        ));
+}else{
+        $this->redirect(array('company/index','companyId'=>  $this->companyId));
+}
+}
 	public function actionUpdate(){
 		$role = Yii::app()->user->role;
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
