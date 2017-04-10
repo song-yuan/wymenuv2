@@ -175,6 +175,16 @@
 							<div class="ku-item-info">双屏设置</div>
 						</div>
 					</a>
+                                       
+                                        <?php if(Yii::app()->user->role <= 7):?>
+					<a href="<?php echo $this->createUrl('copyScreen/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple spsz"></div>
+							<div class="ku-item-info">双屏下发</div>
+						</div>
+					</a>
+					<?php endif;?>
+                                    
 					<?php if(Yii::app()->user->role < User::ADMIN):?>
 					<a href="<?php echo $this->createUrl('postable/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
