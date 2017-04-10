@@ -37,7 +37,6 @@
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_003.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_005.js" type="text/javascript"></script>
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <style>
 .layui-layer-btn{height:42px;}
 .weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:65%;}
@@ -86,18 +85,31 @@
 			<input type="hidden" name="address" value="-1"/>
 		</div>
 		<?php endif;?>
-		<div class="order-time arrowright">
-			<div class="time-lt">预约时间</div>
-			<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
-			<div class="clear"></div>
-		</div>
 	</div>
 <!-- 地址 -->
+	<div class="order-time arrowright" style="margin:10px 0;">
+		<div class="time-lt">预约时间</div>
+		<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
+		<div class="clear"></div>
+	</div>
 <?php elseif($this->type==6):?>
 	<div class="order-site"><div class="lt">就餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:10px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
 	<div class="order-time arrowright" style="margin:10px 0;">
 		<div class="time-lt">就餐时间</div>
-		<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" placeholder="选择就餐时间" readonly="readonly" value="<?php echo date('Y-m-d H:i:s',time());?>"></div>
+		<div class="time-rt">
+			<select name="select">
+                 <option selected="" value="0">即食</option>
+                 <option value="5">5分钟</option>
+                 <option value="10">10分钟</option>
+                 <option value="15">15分钟</option>
+                 <option value="20">20分钟</option>
+                 <option value="25">25分钟</option>
+                 <option value="30">30分钟</option>
+                 <option value="40">40分钟</option>
+                 <option value="50">50分钟</option>
+                 <option value="60">1小时</option>
+            </select>
+		</div>
 		<div class="clear"></div>
 	</div>
 <?php endif;?>

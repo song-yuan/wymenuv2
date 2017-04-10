@@ -34,6 +34,7 @@ footer .ft-rrt p{ font-size:0.2rem; color:#fff; text-align:center;}
 .order-time{padding: 25px;font-size: 18px;background: white url(../images/icon_arrow.png) no-repeat right;}
 .order-time .time-lt{float: left;width: 50%;text-align: left;}
 .order-time .time-rt{float: left;width: 50%;text-align: right;color: rgb(199,93,48);}
+.order-time .time-rt select{border: 0;outline: 0;background-color: transparent;-webkit-appearance: none;}
 .pay-type{padding: 25px;font-size: 18px;background: white;}
 .pay-type img {height: 50px;}
 .pay-type .pay-ico{float: left;}
