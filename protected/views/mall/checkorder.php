@@ -97,8 +97,8 @@
 	<div class="order-time arrowright" style="margin:10px 0;">
 		<div class="time-lt">就餐时间</div>
 		<div class="time-rt">
-			<select name="select">
-                 <option selected="" value="0">即食</option>
+			<select name="order_time">
+                 <option selected="selected" value="0">即食</option>
                  <option value="5">5分钟</option>
                  <option value="10">10分钟</option>
                  <option value="15">15分钟</option>
