@@ -64,16 +64,16 @@ class ProductMaterialController extends BackendController
 			
 					$db = Yii::app()->db;
 					$sql = 'select t.* from nb_material_category t where t.delete_flag = 0 and t.lid = '.$model->category_id;
-					$command1 = $db->createCommand($sql);
-					$categoryCode = $command1->queryRow()['mchs_code'];
+					$command1 = $db->createCommand($sql)->queryRow();
+					$categoryCode = $command1['mchs_code'];
 					
 					$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->stock_unit_id;
-					$command2 = $db->createCommand($sql);
-					$stockUnitId = $command2->queryRow()['muhs_code'];
+					$command2 = $db->createCommand($sql)->queryRow();
+					$stockUnitId = $command2['muhs_code'];
 					
 					$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
-					$command3 = $db->createCommand($sql);
-					$salesUnitId = $command3->queryRow()['muhs_code'];
+					$command3 = $db->createCommand($sql)->queryRow();
+					$salesUnitId = $command3['muhs_code'];
 					
 					$sql = 'select t.* from nb_material_unit_ratio t where t.delete_flag = 0 and t.sales_unit_id = '.$model->sales_unit_id.' and t.stock_unit_id = '.$model->stock_unit_id;
 					$command4 = $db->createCommand($sql);
@@ -183,6 +183,7 @@ class ProductMaterialController extends BackendController
 				'papage' => $papage,
 		));
 	}
+        
 	public function actionDelete(){
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -190,12 +191,24 @@ class ProductMaterialController extends BackendController
 		}
 		$papage = Yii::app()->request->getParam('papage');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$ids = Yii::app()->request->getPost('ids');
+		$ids = Yii::app()->request->getParam('ids');
+               
         //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_product_material set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
-			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
+                   
+                    foreach($ids as $val){
+                    $material_sql = 'select material_name from nb_product_material where lid = '.$val;
+                    $material = Yii::app()->db->createCommand($material_sql)->queryRow();   
+                    $bom_sql = 'select * from nb_product_bom where dpid = '.$companyId.' and delete_flag = 0 and material_id = '.$val;
+                    $boms = Yii::app()->db->createCommand($bom_sql)->queryAll();
+                    if(empty($boms)){
+                       Yii::app()->db->createCommand('update nb_product_material set delete_flag=1 where lid = :val and dpid = :companyId')
+			->execute(array(':val'=>$val, ':companyId' => $this->companyId));
+                    }else{
+                       Yii::app()->user->setFlash('error' , yii::t('app',$material['material_name'].'在产品配方中被使用，请先在产品配方中删除'.$material['material_name'])); 
+                    }    
+                 }
+                        $this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
 			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;

@@ -70,7 +70,7 @@ class Taste extends CActiveRecord
 			'name' => '口味描述',
 			'allflae' => '1整单口味，0不是',
 			//'other_price' => '加价金额',
-			'price' => '加价金额2',
+			'price' => '加价金额',
 			'delete_flag' => 'Delete Flag',
 				'is_sync' => yii::t('app','是否同步'),
 		);
