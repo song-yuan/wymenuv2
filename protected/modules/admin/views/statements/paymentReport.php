@@ -250,7 +250,7 @@
 		            <td><?php  echo $cash_total; ?></td>
 		            <td><?php  echo $wechat_total;?></td>
 		            <td><?php  echo $wxorder_total;?></td>
-		            <td><?php  echo $wxwaimai_total_total;?></td>
+		            <td><?php  echo $wxwaimai_total;?></td>
 		            <td><?php  echo $alipay_total;?></td>
 		            <td><?php  echo $unionpay_total;?></td>
 		            <td><?php  echo $vipcard_total; ?></td>
