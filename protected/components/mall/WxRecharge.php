@@ -150,4 +150,17 @@ class WxRecharge
 				  ->queryAll();
 	    return $recharges;		  
 	}
+	/**
+	 * 
+	 * 获取充值记录
+	 * 
+	 */
+	public static function getRechargeRecord($dpid,$userId){
+		$sql = 'select * from nb_recharge_record where dpid=:dpid and brand_user_lid=:userId and delete_flag=0 order by lid desc limit 10';
+		$recharges = Yii::app()->db->createCommand($sql)
+		->bindValue(':dpid',$dpid)
+		->bindValue(':userId',$userId)
+		->queryAll();
+		return $recharges;
+	}
 }
