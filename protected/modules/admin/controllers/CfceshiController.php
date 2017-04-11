@@ -171,11 +171,14 @@ class CfceshiController extends BackendController
 	
 	public function actionSqbaddordpay(){
 		$dpid = Yii::app()->request->getParam('dpid');
+		//var_dump($dpid);exit;
 		$sql = 'select * from nb_notify_wxwap where dpid ='.$dpid;
 		$orders = Yii::app()->db->createCommand($sql)
 		->queryAll();
+		//var_dump($orders);exit;
 		if(!empty($orders)){
 			foreach ($orders as $order){
+				$total_amount = $order['total_amount'];
 				$client_sn = $order['client_sn'];
 				$account_nos = explode('-',$client_sn);
 				$orderid = $account_nos[0];
@@ -183,31 +186,42 @@ class CfceshiController extends BackendController
 				$sql = 'select * from nb_order where dpid ='.$dpid.' and lid ='.$orderid;
 				$orderdatas = Yii::app()->db->createCommand($sql)
 				->queryRow();
+				//var_dump($orderdatas);
 				if(!empty($orderdatas)){
-					$total_amount = $orderdatas['total_amount'];
-					if($orderdatas['order_type'] == '1' || $orderdatas['order_type'] == '6' || $orderdatas['order_type'] == '3' ){
+					
+					if($orderdatas['order_type'] == '1' || $orderdatas['order_type'] == '6' || $orderdatas['order_type'] == '3'){
 						$pay_type = '12';
-					}elseif($orderdatas['order_type' == '2']){
+					}elseif($orderdatas['order_type'] == '2'){
 						$pay_type = '13';
 					}else{
 						$pay_type = '1';
 					}
-					$se = new Sequence ( "order_pay" );
-					$orderpayId = $se->nextval ();
-					$orderpayData = array (
-							'lid' => $orderpayId,
-							'dpid' => $orderdpid,
-							'create_at' => $orderdatas['create_at'],
-							'update_at' => $orderdatas['update_at'],
-							'order_id' => $orderid,
-							'account_no' => $orderdatas['account_no'],
-							'pay_amount' => number_format($total_amount/100,2),
-							'paytype' => $pay_type,
-							'remark' => '收钱吧公众号支付',
-					);
-					$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
+					$sql = 'select * from nb_order_pay where dpid ='.$dpid.' and order_id ='.$orderid.' and account_no ="'.$orderdatas['account_no'].'" and paytype ='.$pay_type;
+					$orderpays = Yii::app()->db->createCommand($sql)
+					->queryRow();
+					if(!empty($orderpays)){
+						
+					}else{
+						$se = new Sequence ( "order_pay" );
+						$orderpayId = $se->nextval ();
+						$orderpayData = array (
+								'lid' => $orderpayId,
+								'dpid' => $orderdpid,
+								'create_at' => $orderdatas['create_at'],
+								'update_at' => $orderdatas['update_at'],
+								'order_id' => $orderid,
+								'account_no' => $orderdatas['account_no'],
+								'pay_amount' => number_format($total_amount/100,2),
+								'paytype' => $pay_type,
+								'remark' => '收钱吧公众号支付',
+						);
+						$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
+					}
 				}
 			}
+			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功！')));
+		}else{
+			Yii::app()->end(json_encode(array("status"=>"error",'msg'=>'失败')));
 		}
 	}
 	

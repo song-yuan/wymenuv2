@@ -348,11 +348,12 @@
 	$("#stockAddordpay").on("click",function(){
 		
 	    var dpid = $("#dpid").val();
+	    //alert(dpid);
 	    $.ajax({
 	        type:'POST',
 			url:"<?php echo $this->createUrl('cfceshi/sqbaddordpay',array('companyId'=>$this->companyId,));?>/dpid/"+dpid,
 			async: false,
-			data: {device_id: device_id},
+			
 	        //cache:false,
 	        dataType:'json',
 			success:function(msg){

@@ -169,13 +169,13 @@
 		                echo $wechat;
 		            ?></td>
 		            <td><?php 
-		                $wxorderpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,11,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxorderpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,12,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $wxorder_total += $wxorderpay;
 		                echo $wxorderpay;
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxwaimaipay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,12,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxwaimaipay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,13,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $wxwaimai_total += $wxwaimaipay;
 		                echo $wxwaimaipay;
 		                ?>
