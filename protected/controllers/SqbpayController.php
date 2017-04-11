@@ -112,7 +112,7 @@ class SqbpayController extends Controller
 									'update_at' => date ( 'Y-m-d H:i:s', time()),
 									'order_id' => $orderid,
 									'account_no' => $orders['account_no'],
-									'pay_amount' => $total_amount,
+									'pay_amount' => number_format($total_amount/100,2),
 									'paytype' => $pay_type,
 									'remark' => '收钱吧公众号支付',
 							);
