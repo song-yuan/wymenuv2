@@ -260,7 +260,7 @@ $('document').ready(function(){
             $('#dialog2').hide();
     });
     $('.backUrl').click(function(){
-            history.go(-1);
+            history.back();
     });
        
     $('.bttn_small').click(function(){
