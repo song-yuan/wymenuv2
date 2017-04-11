@@ -279,7 +279,7 @@ class WxOrder
 				$setName = $this->productSetDetail[$cart['product_id']]['set_name'];
 				$totalProductPrice = $this->productSetDetail[$cart['product_id']]['total_original_price'];
 				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
-					if($i==='total_original_price'){
+					if($i==='total_original_price'||$i==='set_name'){
 						continue;
 					}
 					$ortherPrice = $detail[3];
