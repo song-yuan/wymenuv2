@@ -25,7 +25,7 @@ class WxCompany
 		->bindValue(':dpid',$dpid)
 		->queryRow();
 		if(!$company){
-			$company = array('pay_channel'=>'0');
+			$company = array('pay_type'=>'0','pay_channel'=>'0');
 		}
 		return $company;
 	}

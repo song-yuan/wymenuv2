@@ -64,8 +64,8 @@ class WxOrder
 	}
 	//获取购物车信息
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.delete_flag=0';
-		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=1 and t1.delete_flag=0';
+		$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.delete_flag=0';
+		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=1 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
@@ -82,9 +82,8 @@ class WxOrder
 				$results[$k]['price'] = $productPrice['price'];
 				$results[$k]['promotion'] = $productPrice;
 			}else{
-				$productPrice = new WxProductPrice($result['product_id'],$result['dpid'],$result['is_set']);
-				$results[$k]['price'] = $productPrice->price;
-				$results[$k]['promotion'] = $productPrice->promotion;
+				$results[$k]['price'] = $results[$k]['member_price'];
+				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
 			$this->cartNumber +=$result['num'];
 		}
@@ -394,7 +393,11 @@ class WxOrder
 			 	}
 			 	$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			 }else{
-			 	$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+			 	if($cart['is_member_discount']){
+			 		$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+			 	}else{
+			 		$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
+			 	}
 			 }
 			 $realityPrice += ($cart['original_price']+$ortherPrice)*$cart['num'];
 		}

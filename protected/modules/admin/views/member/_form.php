@@ -90,7 +90,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'enable_date',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->textField($model, 'enable_date',array('class' => 'form-control ui_timepicker','placeholder'=>$model->getAttributeLabel('enable_date')));?>
+					<?php echo $form->textField($model, 'enable_date',array('class' => 'form-control ui_timepicker','readonly'=>'true', 'placeholder'=>$model->getAttributeLabel('enable_date')));?>
 					<?php echo $form->error($model, 'enable_date' )?>
 					
 				</div>

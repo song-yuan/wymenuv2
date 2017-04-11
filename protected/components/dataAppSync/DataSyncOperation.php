@@ -214,7 +214,7 @@ class DataSyncOperation {
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			//订单数据
-			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and is_sync<>0';
+			$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status=3 or order_status=4) and is_sync<>0';
 			$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			foreach ( $results as $result ) {
 				$order = array ();

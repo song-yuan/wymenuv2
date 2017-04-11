@@ -22,8 +22,8 @@
 						<div class="info small font_l" style="margin-top:5px;">地址: <span class="address_info"><?php echo $child['province'].($child['city']!='市辖区'?$child['city']:'').$child['county_area'].$child['address'];?></span><span class="open-location"><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>
 						<div class="misinfo small" style="margin-top:5px;">
 							<span class="left">
-								<span class=" font_l">电话: <?php echo trim('<a class="font_l" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>'.' '.'<a class="font_l" href="tel:'.$child['mobile'].'">'.$child['mobile'].'</a>');?></span><br>
-								<span class=" font_l">营业时间: <?php echo date('H:i',strtotime($child['shop_time'])).'-'.date('H:i',strtotime($child['closing_time']));?></span>
+							<span class=" font_l">营业时间: <?php echo date('H:i',strtotime($child['shop_time'])).'-'.date('H:i',strtotime($child['closing_time']));?></span><br>
+								<span style="font-weight:800;">电话: <?php echo '<a class="" href="tel:'.$child['telephone'].'">'.$child['telephone'].'</a>';?></span>
 							</span>
 							<span class="right font_org"></span>
 						</div>
@@ -169,7 +169,7 @@
 						}
 						$(this).attr('distance',distance);
 						var searil = $(this).attr('searil');
-						if(distance >= 1000 && distance <= 5000){
+						if(distance >= 1000){
 							originDistanceArr[searil] = distance;
 				 	  		shopDistanceArr[searil] = distance;
 							distance = (distance/1000).toFixed(2)+'千米';
@@ -179,10 +179,6 @@
 				 	  		shopDistanceArr[searil] = distance;
 							distance = distance.toFixed(2)+'米';
 							$(this).find('span.right').html(distance);
-						}else{
-							distance = (distance/1000).toFixed(2)+'千米';
-							$(this).find('span.right').html(distance);
-							return true;
 						}
 				    });
 			        if(shopDistanceArr.length==0){

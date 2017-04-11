@@ -37,7 +37,6 @@
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_003.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_005.js" type="text/javascript"></script>
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <style>
 .layui-layer-btn{height:42px;}
 .weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:65%;}
@@ -88,8 +87,31 @@
 		<?php endif;?>
 	</div>
 <!-- 地址 -->
+	<div class="order-time arrowright" style="margin:10px 0;">
+		<div class="time-lt">预约时间</div>
+		<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
+		<div class="clear"></div>
+	</div>
 <?php elseif($this->type==6):?>
 	<div class="order-site"><div class="lt">就餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:10px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
+	<div class="order-time arrowright" style="margin:10px 0;">
+		<div class="time-lt">就餐时间</div>
+		<div class="time-rt">
+			<select name="order_time">
+                 <option selected="selected" value="0">即食</option>
+                 <option value="5">5分钟</option>
+                 <option value="10">10分钟</option>
+                 <option value="15">15分钟</option>
+                 <option value="20">20分钟</option>
+                 <option value="25">25分钟</option>
+                 <option value="30">30分钟</option>
+                 <option value="40">40分钟</option>
+                 <option value="50">50分钟</option>
+                 <option value="60">1小时</option>
+            </select>
+		</div>
+		<div class="clear"></div>
+	</div>
 <?php endif;?>
 
 <!-- 购物车商品 -->
@@ -209,13 +231,6 @@
 		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount']*10;?>折优惠</li>
 	</ul>
 </div>
-<?php endif;?>
-<?php if($this->type==3):?>
-	<div class="order-time arrowright">
-		<div class="time-lt">预约时间</div>
-		<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
-		<div class="clear"></div>
-	</div>
 <?php endif;?>
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
@@ -743,14 +758,18 @@ $(document).ready(function(){
 			}
 			layer.load(2);
 			$('form').submit();
+			layer.closeAll('loading');
 		<?php else:?>
 			layer.load(2);
 			$('form').submit();
+			layer.closeAll('loading');
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
+		layer.load(2);
 		$('#dialog').hide();
 		$('form').submit();
+		layer.closeAll('loading');
 	});
 	$('#dialog .default').click(function(){
 		$('#dialog').hide();
