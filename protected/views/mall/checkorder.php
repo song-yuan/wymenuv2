@@ -758,14 +758,18 @@ $(document).ready(function(){
 			}
 			layer.load(2);
 			$('form').submit();
+			layer.closeAll('loading');
 		<?php else:?>
 			layer.load(2);
 			$('form').submit();
+			layer.closeAll('loading');
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
+		layer.load(2);
 		$('#dialog').hide();
 		$('form').submit();
+		layer.closeAll('loading');
 	});
 	$('#dialog .default').click(function(){
 		$('#dialog').hide();
