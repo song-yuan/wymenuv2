@@ -197,8 +197,8 @@ class CfceshiController extends BackendController
 					$orderpayData = array (
 							'lid' => $orderpayId,
 							'dpid' => $orderdpid,
-							'create_at' => date ( 'Y-m-d H:i:s', time()),
-							'update_at' => date ( 'Y-m-d H:i:s', time()),
+							'create_at' => $orderdatas['create_at'],
+							'update_at' => $orderdatas['update_at'],
 							'order_id' => $orderid,
 							'account_no' => $orderdatas['account_no'],
 							'pay_amount' => number_format($total_amount/100,2),
