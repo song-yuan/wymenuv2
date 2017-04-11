@@ -68,6 +68,7 @@ class SqbpayController extends Controller
 			$trade_no = Yii::app()->request->getParam('trade_no');
 			$result_code = Yii::app()->request->getParam('result_code');
 			$result_message = Yii::app()->request->getParam('result_message');
+			$total_amount = Yii::app()->request->getParam('total_amount');
 			
 			$data = '{"收钱吧同步返回参数":"result";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
 			Helper::writeLog($data);
@@ -86,20 +87,64 @@ class SqbpayController extends Controller
 				$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
 				$orders = Yii::app()->db->createCommand($sql)
 				->queryRow();
-				if($orders['order_status'] == '4' || $orders['order_status'] == '8' ){
-					$orderstatus = false;
-					Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
-					//跳转到该页面。
-					$this->redirect(array('/user/orderinfo',
-							'orderId'=>$client_sn,
-							'orderDpid'=>$dpid,
-							'companyId'=>$companyId,
-					));
-					
+				if(!empty($orders)){
+					if($orders['order_status'] == '4' || $orders['order_status'] == '8' ){
+						
+						$sql = 'select * from nb_order_pay where dpid ='.$orderdpid.' and order_id ='.$orderid;
+						$orderpays = Yii::app()->db->createCommand($sql)
+						->queryRow();
+						if(!empty($orderpays)){
+							
+						}else{
+							if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
+								$pay_type = '12';
+							}elseif($orders['order_type' == '2']){
+								$pay_type = '13';
+							}else{
+								$pay_type = '1';
+							}
+							$se = new Sequence ( "order_pay" );
+							$orderpayId = $se->nextval ();
+							$orderpayData = array (
+									'lid' => $orderpayId,
+									'dpid' => $orderdpid,
+									'create_at' => date ( 'Y-m-d H:i:s', time()),
+									'update_at' => date ( 'Y-m-d H:i:s', time()),
+									'order_id' => $orderid,
+									'account_no' => $orders['account_no'],
+									'pay_amount' => $total_amount,
+									'paytype' => $pay_type,
+									'remark' => '收钱吧公众号支付',
+							);
+							$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
+							
+							Helper::writeLog('轮询次数：'.$i.'结果：插入order_pay表！');
+						}
+						
+						$orderstatus = false;
+						Helper::writeLog('轮询次数：'.$i.'结果：已支付！');
+						//跳转到该页面。
+						$this->redirect(array('/user/orderinfo',
+								'orderId'=>$client_sn,
+								'orderDpid'=>$dpid,
+								'companyId'=>$companyId,
+						));
+						
+					}else{
+						$orderstatus = true;
+						//Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
+						//echo '';
+						if($i==50){
+							Helper::writeLog('轮询次数：'.$i.'结果：错误！');
+							$this->redirect(array('/user/orderinfo',
+									'orderId'=>$client_sn,
+									'orderDpid'=>$dpid,
+									'companyId'=>$companyId,
+							));
+
+						}
+					}
 				}else{
-					$orderstatus = true;
-					//Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
-					//echo '';
 					if($i==50){
 						Helper::writeLog('轮询次数：'.$i.'结果：错误！');
 						$this->redirect(array('/user/orderinfo',
@@ -107,11 +152,7 @@ class SqbpayController extends Controller
 								'orderDpid'=>$dpid,
 								'companyId'=>$companyId,
 						));
-//						echo '错误';
-// 						$this->render('wappayreturn',array(
-// 								'is_success'=>$is_success,
-// 								'status'=>$status,
-// 						));
+					
 					}
 				}
 			}
