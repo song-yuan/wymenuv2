@@ -230,7 +230,9 @@
 		
 		$('#content').html('');
 		var dpid = $(this).attr('dpid');
-		var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid"/></div>'
+		var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paytype" placeholder="1表示总部，2表示个人，0表示不开通。"/></div>'
+					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paychannel" placeholder="1表示官方支付，2表示收钱吧，3表示翼码。"/></div>'
+					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="code" placeholder="code"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><button id="appid_store" class="btn green">确认</button></div>'
 					;
@@ -257,10 +259,16 @@
 			   backgroundColor: 'rgba(255,255,255,0.2)',
 			 });
 		$('#appid_store').on('click',function(){
+			var paytype = $('#paytype').val();
+			var paychannel = $('#paychannel').val();
 			var appid = $('#appid').val();
 			var code = $('#code').val();
 			//alert(appid);
-			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code;
+			if(paytype == '' || paychannel == '' || appid == '' || code == ''){
+				layer.msg('请完善信息！！！');
+				return false;
+			}
+			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel;
 	        $.ajax({
 	            url:url,
 	            type:'GET',
