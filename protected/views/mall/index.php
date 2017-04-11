@@ -8,7 +8,7 @@
 		$this->setPageTitle('自助点单');
 	}
 	$closeShop = false;
-	if($this->company['is_rest']==0||$this->company['is_rest']==1||$this->company['is_rest']==2){
+	if($this->company['is_rest'] < 3){
 		$closeShop = true;
 	}else{
 		$currentTime = date('H:i:s');
