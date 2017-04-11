@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/recharge.css">
 <div class="section">
-	<div class="title">充值</div>
+	<div class="title">充值金额</div>
 	<?php foreach($recharges as $k=>$recharge):?>
 	<?php 
 		$se = new Sequence("order_subno");
