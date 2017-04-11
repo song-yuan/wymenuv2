@@ -119,16 +119,16 @@ class ProductBomController extends BackendController
 				//var_dump($model);exit;
 				$db = Yii::app()->db;
 				$sql = 'select t.* from nb_product t where t.delete_flag = 0 and t.lid = '.$pblid;
-				$command1 = $db->createCommand($sql);
-				$productCode = $command1->queryRow()['phs_code'];
+				$command1 = $db->createCommand($sql)->queryRow();
+				$productCode = $command1['phs_code'];
 				
 				$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.lid = '.$model->material_id;
-				$command2 = $db->createCommand($sql);
-				$materialId = $command2->queryRow()['mphs_code'];
+				$command2 = $db->createCommand($sql)->queryRow();
+				$materialId = $command2['mphs_code'];
 				
 				$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
-				$command3 = $db->createCommand($sql);
-				$salesUnitId = $command3->queryRow()['muhs_code'];
+				$command3 = $db->createCommand($sql)->queryRow();
+				$salesUnitId = $command3['muhs_code'];
 				//var_dump($productCode);var_dump($materialId);var_dump($salesUnitId);exit;
 				if($productCode&&$materialId&&$salesUnitId){
 					$se=new Sequence("product_bom");
