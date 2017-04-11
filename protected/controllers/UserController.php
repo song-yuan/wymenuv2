@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','ticket','oldindex','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard'))){
+		if(in_array($actin->id,array('index','ticket','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard','money'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -102,7 +102,10 @@ class UserController extends Controller
 	
     }  
     public function actionMoney(){
-        $this->render('money');
+    	$userId = Yii::app()->session['userId'];
+    	$recharges = WxRecharge::getWxRecharge($this->companyId);
+    	$rechargeRecords = WxRecharge::getRechargeRecord($this->companyId,$userId);
+        $this->render('money',array('recharges'=>$recharges,'records'=>$rechargeRecords));
     } 
      public function actionPoint(){
         $userId = Yii::app()->session['userId'];
@@ -110,7 +113,6 @@ class UserController extends Controller
         $remain_points = WxPoints::getAvaliablePoints($userId,$user['dpid']);  
         $this->render('point',array( 
                      'remain_points' => $remain_points,
-                     
                 ));
     }
     public function actionPointRecord(){
