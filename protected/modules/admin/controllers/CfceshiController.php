@@ -169,4 +169,46 @@ class CfceshiController extends BackendController
 		var_dump($result);exit;
 	}
 	
+	public function actionSqbaddordpay(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$sql = 'select * from nb_notify_wxwap where dpid ='.$dpid;
+		$orders = Yii::app()->db->createCommand($sql)
+		->queryAll();
+		if(!empty($orders)){
+			foreach ($orders as $order){
+				$client_sn = $order['client_sn'];
+				$account_nos = explode('-',$client_sn);
+				$orderid = $account_nos[0];
+				$orderdpid = $account_nos[1];
+				$sql = 'select * from nb_order where dpid ='.$dpid.' and lid ='.$orderid;
+				$orderdatas = Yii::app()->db->createCommand($sql)
+				->queryRow();
+				if(!empty($orderdatas)){
+					$total_amount = $orderdatas['total_amount'];
+					if($orderdatas['order_type'] == '1' || $orderdatas['order_type'] == '6' || $orderdatas['order_type'] == '3' ){
+						$pay_type = '12';
+					}elseif($orderdatas['order_type' == '2']){
+						$pay_type = '13';
+					}else{
+						$pay_type = '1';
+					}
+					$se = new Sequence ( "order_pay" );
+					$orderpayId = $se->nextval ();
+					$orderpayData = array (
+							'lid' => $orderpayId,
+							'dpid' => $orderdpid,
+							'create_at' => date ( 'Y-m-d H:i:s', time()),
+							'update_at' => date ( 'Y-m-d H:i:s', time()),
+							'order_id' => $orderid,
+							'account_no' => $orderdatas['account_no'],
+							'pay_amount' => number_format($total_amount/100,2),
+							'paytype' => $pay_type,
+							'remark' => '收钱吧公众号支付',
+					);
+					$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
+				}
+			}
+		}
+	}
+	
 }
