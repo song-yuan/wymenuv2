@@ -66,6 +66,12 @@
 						<input id="dynamicId" class="form-control" value="">
 					</div>
 				</div>
+				<div style="min-height: 30px;" class="form-group">
+	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">店铺:</lable>
+					<div style="margin-top: 5px;" class="col-md-4">
+						<input id="dpid" class="form-control" value="">
+					</div>
+				</div>
 				<div class="form-actions fluid">
 						<div class="col-md-offset-9 col-md-3">
 							<button style="display: none;" type="button" class="btn green" id="stocktaking">激活</button> 
@@ -76,7 +82,8 @@
 							<button type="button" class="btn green" id="stockPayAli">支付宝支付</button> 
 							<button type="button" class="btn green" id="stockRefundWei">微信退款</button>
 							<button type="button" class="btn green" id="stockRefundAli">支付宝退款</button>   
-							<button type="button" class="btn green" id="stockFind">查询</button>                        
+							<button type="button" class="btn green" id="stockFind">查询</button>    
+							<button type="button" class="btn green" id="stockAddordpay">添加到order_pay</button>                       
 						</div>
 					</div>
 			</div>
@@ -316,6 +323,37 @@
 			url:"<?php echo $this->createUrl('cfceshi/sqbprecreate',array('companyId'=>$this->companyId,));?>/pad_code/"+device_id,
 			async: false,
 			data: {device_id: device_id},
+	        //cache:false,
+	        dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg.status=="success")
+	            {            
+		            
+			        layer.msg("成功！");
+			          
+		            //location.reload();
+	            }else{
+		            layer.mag("11");
+		            //location.reload();
+	            }
+			},
+	        error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+	    
+	});
+
+	$("#stockAddordpay").on("click",function(){
+		
+	    var dpid = $("#dpid").val();
+	    //alert(dpid);
+	    $.ajax({
+	        type:'POST',
+			url:"<?php echo $this->createUrl('cfceshi/sqbaddordpay',array('companyId'=>$this->companyId,));?>/dpid/"+dpid,
+			async: false,
+			
 	        //cache:false,
 	        dataType:'json',
 			success:function(msg){

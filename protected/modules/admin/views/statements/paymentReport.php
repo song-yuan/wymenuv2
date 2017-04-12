@@ -82,6 +82,8 @@
 		               <?php endif;?>
 		               <th><?php echo yii::t('app','现金');?></th>
 		               <th><?php echo yii::t('app','微信');?></th>
+		               <th><?php echo yii::t('app','微点单');?></th>
+		               <th><?php echo yii::t('app','微外卖');?></th>
 		               <th><?php echo yii::t('app','支付宝');?></th>
 		               <th><?php echo yii::t('app','银联');?></th>
 		               <th><?php echo yii::t('app','会员卡');?></th>
@@ -110,6 +112,8 @@
 		         $gather_total=0;      // 实收款 
 		         $cash_total=0;        // 现金
 		         $wechat_total = 0;    // 微信
+		         $wxorder_total = 0;    // 微信点单
+		         $wxwaimai_total = 0;    // 微信外卖
 		         $alipay_total = 0;    // 支付宝
 		         $unionpay_total=0;    // 银联
 		         $vipcard_total = 0;   // 会员卡 
@@ -164,6 +168,18 @@
 		                $wechat_total +=$wechat;
 		                echo $wechat;
 		            ?></td>
+		            <td><?php 
+		                $wxorderpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,12,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxorder_total += $wxorderpay;
+		                echo $wxorderpay;
+		                ?>
+		            </td>
+		            <td><?php 
+		                $wxwaimaipay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,13,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxwaimai_total += $wxwaimaipay;
+		                echo $wxwaimaipay;
+		                ?>
+		            </td>
 		            <td><?php
 		                $alipay=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
 		                $alipay_total += $alipay;
@@ -233,6 +249,8 @@
 		            <?php endif;?>
 		            <td><?php  echo $cash_total; ?></td>
 		            <td><?php  echo $wechat_total;?></td>
+		            <td><?php  echo $wxorder_total;?></td>
+		            <td><?php  echo $wxwaimai_total;?></td>
 		            <td><?php  echo $alipay_total;?></td>
 		            <td><?php  echo $unionpay_total;?></td>
 		            <td><?php  echo $vipcard_total; ?></td>

@@ -27,8 +27,8 @@ class WxOrder
 	public $normalPromotionIds = array();
 	public $tastes = array();//原始产品口味
 	public $productTastes = array();//处理后的产品口味
-	public $setDetail = array();  // 套餐详情 set_id - product_id - price
-	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,price))
+	public $setDetail = array();  // 套餐详情 set_id - product_id - number - price
+	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,number,price))
 	public $order = false;
 	
 	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array(),$takeoutTypeId){
@@ -141,6 +141,7 @@ class WxOrder
 			// 套餐内单品
 			foreach ($this->productSetDetail as $k=>$setdetail){
 				$totalOriginPrice = 0;
+				$productSet = WxProduct::getProductSet($k, $this->dpid);
 				foreach ($setdetail as $key=>$val){
 					$setProduct = WxProduct::getProduct($val[1], $this->dpid);
 					$totalOriginPrice += $setProduct['original_price']*$val[2];
@@ -148,6 +149,7 @@ class WxOrder
 					$this->productSetDetail[$k][$key]['main_picture'] = $setProduct['main_picture'];
 					$this->productSetDetail[$k][$key]['original_price'] = $setProduct['original_price'];
 				}
+				$this->productSetDetail[$k]['set_name'] = $productSet['set_name'];
 				$this->productSetDetail[$k]['total_original_price'] = $totalOriginPrice;
 			}
 		}
@@ -274,9 +276,10 @@ class WxOrder
 			if($cart['is_set'] > 0){
 				$hasPrice = 0;
 				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(set_id,product_id,num,price); price 套餐内加价
+				$setName = $this->productSetDetail[$cart['product_id']]['set_name'];
 				$totalProductPrice = $this->productSetDetail[$cart['product_id']]['total_original_price'];
 				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
-					if($i==='total_original_price'){
+					if($i==='total_original_price'||$i==='set_name'){
 						continue;
 					}
 					$ortherPrice = $detail[3];
@@ -311,6 +314,7 @@ class WxOrder
 							'amount'=>$cart['num']*$detail[2],
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>9,
+							'taste_memo'=>$setName,
 							'is_sync'=>DataSync::getInitSync(),
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);

@@ -350,6 +350,8 @@ public function actionCreate(){
 		$dpid = Yii::app()->request->getParam('companyId');
 		$appid = Yii::app()->request->getParam('appid');
 		$code = Yii::app()->request->getParam('code');
+		$paytype = Yii::app()->request->getParam('paytype');
+		$paychannel = Yii::app()->request->getParam('paychannel');
 		//var_dump($dpid,$appid);exit;
 	
 		//****查询公司的产品分类。。。****
