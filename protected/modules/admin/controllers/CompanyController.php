@@ -253,7 +253,7 @@ public function actionCreate(){
 		$type = Yii::app()->request->getParam('type');
 		$type2 = 'update';
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
-		if(Yii::app()->user->role >= User::SHOPKEEPER) {
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('company/index' , 'companyId' => $this->companyId)) ;
 		}
