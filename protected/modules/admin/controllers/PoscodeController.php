@@ -120,5 +120,23 @@ class PoscodeController extends BackendController
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 		}
 	}
+	public function actionSqbstartonline(){
+		$device_id = $_POST['device_id'];
+		//var_dump($device_id);exit;
+		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$this->companyId));
+		if(!empty($compros)){
+			$appId = $compros['appId'];
+			$code = $compros['code'];
+		}else{
+			Yii::app()->end(json_encode(array("status"=>"ERROR",'msg'=>'尚未开通')));
+			exit;
+		}
+
+		Yii::app()->db->createCommand('update nb_pad_setting set pay_activate = 1 where pad_code ='.$device_id.' and dpid ='.$this->companyId)
+		->execute();
+
+		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+		
+	}
 
 }

@@ -13,7 +13,7 @@ class ProductBomController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		//$pbId=Yii::app()->request->getParam('lid');
 		$criteria = new CDbCriteria;
-		//$criteria->with=array('product');
+		
 		$criteria->order='t.dpid desc';
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.delete_flag=0 ';
 		if($categoryId){
@@ -22,7 +22,7 @@ class ProductBomController extends BackendController
 		$pages = new CPagination(Product::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-
+		$criteria->with=array('productbom');
 		$models = Product::model()->findAll($criteria);
 		//var_dump($models);
 		$categories = $this->getProductCategories();

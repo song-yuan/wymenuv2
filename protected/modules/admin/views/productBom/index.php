@@ -60,6 +60,7 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','产品名称');?></th>
+								<th><?php echo yii::t('app','配方');?></th>
   								<th>&nbsp;</th>
   								<th>&nbsp;</th>
 							</tr>
@@ -68,6 +69,13 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td ><?php echo $model->product_name ;?></td>
+								<td >
+								<?php if($model->productbom):?>
+									<?php foreach ($model->productbom as $pbs):?>
+									<?php echo ProductBom::getProductMaterialName($pbs->material_id,$model->dpid);?>
+									<?php endforeach;?>
+								<?php endif;?>
+								</td>
 								<td style="width:10%" class="add_btn" pid="<?php echo $model->lid;?>" compid="<?php echo $model->dpid;?>" prodname="<?php echo $model->product_name;?>" phscode="<?php echo $model->phs_code;?>" data-toggle="modal"> <a href="" ><?php echo yii::t('app','批量添加配方');?></a></td>
                                 <td style="width:10%" class="center">
 								<a href="<?php echo $this->createUrl('productBom/detailindex',array('pblid' => $model->lid , 'companyId' => $model->dpid , 'prodname'=>$model->product_name,'papage'=>$pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑修改配方');?></a>
