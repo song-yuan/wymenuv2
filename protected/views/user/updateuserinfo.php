@@ -99,7 +99,9 @@
     </div>
 </div>
 <div class="bttnbar">
-	<button class="bttn_black2 bttn_large backUrl" type="button">取消</button>
+        <a  href="<?php echo $this->createUrl('user/index',array('companyId'=>$this->companyId));?>" >
+            <button class="bttn_black2 bttn_large backUrl" type="button">取消</button>
+        </a>
 	<button class="bttn_black2 bttn_large" type="submit" onclick="return validate()">保存</button>
 </div>
 <input type="hidden" id="user_id" name="user[lid]" value="<?php echo $user['lid'];?>"/>
@@ -259,9 +261,9 @@ $('document').ready(function(){
     $('#confirm').click(function(){
             $('#dialog2').hide();
     });
-    $('.backUrl').click(function(){
-            history.back();
-    });
+//    $('.backUrl').click(function(){
+//            history.back();
+//    });
        
     $('.bttn_small').click(function(){
                $('#mobile').removeAttr('readonly');
