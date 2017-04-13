@@ -98,26 +98,32 @@ class SqbpayController extends Controller
 						}else{
 							if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
 								$pay_type = '12';
-							}elseif($orders['order_type' == '2']){
+							}elseif($orders['order_type'] == '2'){
 								$pay_type = '13';
 							}else{
 								$pay_type = '1';
 							}
-							$se = new Sequence ( "order_pay" );
-							$orderpayId = $se->nextval ();
-							$orderpayData = array (
-									'lid' => $orderpayId,
-									'dpid' => $orderdpid,
-									'create_at' => date ( 'Y-m-d H:i:s', time()),
-									'update_at' => date ( 'Y-m-d H:i:s', time()),
-									'order_id' => $orderid,
-									'account_no' => $orders['account_no'],
-									'pay_amount' => number_format($total_amount/100,2),
-									'paytype' => $pay_type,
-									'remark' => '收钱吧公众号支付',
-							);
-							$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
-							
+							$sql = 'select * from nb_order_pay where dpid ='.$dpid.' and order_id ='.$orderid.' and account_no ="'.$orderdatas['account_no'].'" and paytype ='.$pay_type;
+							$orderpays = Yii::app()->db->createCommand($sql)
+							->queryRow();
+							if(!empty($orderpays)){
+								
+							}else{
+								$se = new Sequence ( "order_pay" );
+								$orderpayId = $se->nextval ();
+								$orderpayData = array (
+										'lid' => $orderpayId,
+										'dpid' => $orderdpid,
+										'create_at' => $orderdatas['create_at'],
+										'update_at' => $orderdatas['update_at'],
+										'order_id' => $orderid,
+										'account_no' => $orderdatas['account_no'],
+										'pay_amount' => number_format($total_amount/100,2),
+										'paytype' => $pay_type,
+										'remark' => '收钱吧公众号支付',
+								);
+								$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
+							}
 							Helper::writeLog('轮询次数：'.$i.'结果：插入order_pay表！');
 						}
 						
