@@ -84,7 +84,7 @@ class WechatMarketController extends BackendController {
          }
          if($findsex!="%")
          {
-         	$sql.= "t.sex like '".$findsex."'";
+         	$sql.= "and t.sex like '".$findsex."'";
          }
          if($findcountry!="%")
          {
