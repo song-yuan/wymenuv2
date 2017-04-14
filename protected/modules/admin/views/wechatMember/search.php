@@ -219,7 +219,7 @@
                                     <td><?php echo $model['country'];?> <?php echo $model['province'];?> <?php echo $model['city'];?></td>											
                                     <td><?php echo $model['company_name'];?></td>
                                     <td class="button-column">
-                                        <a  class='btn default btn-sm blue'  href="<?php echo $this->createUrl('wechatMember/SearchDetail',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>"><i class="fa fa-search"></i>详情</a>
+                                        <a  class='btn default btn-sm blue'  href="<?php echo $this->createUrl('wechatMember/searchdetail',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>"><i class="fa fa-search"></i>详情</a>
                                     </td>
                                 </tr>
                             <?php endforeach;?>	

@@ -57,7 +57,7 @@ class WechatMemberController extends BackendController {
         $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid=".$this->companyId);            
 
          // var_dump(BrandUser::model()->findAll($criteria));exit; 
-        $this->render('searchDetail',array( 'brand_user_model'=> $brand_user_model,
+        $this->render('searchdetail',array( 'brand_user_model'=> $brand_user_model,
                                        
                                         'cupon_model'=> $cupon_model,
                                         'orderPay'=>$orderPay,
