@@ -30,7 +30,7 @@
 <div class="page">
     <div class="item1">
         <div class="money1 clearfix"><span class="left">我的储值余额(元)</span><a href="<?php echo $this->createUrl('/mall/recharge',array('companyId'=>$this->companyId));?>"><span class="right">去充值 ></span></a></div>
-        <div class="money2">0.00</div>
+        <div class="money2"><?php echo $remainMoey;?></div>
      </div>
      <?php if(!empty($recharges)):?>
      <div class="empty2">充值有优惠</div>
@@ -58,7 +58,7 @@
            	 <?php foreach ($records as $record):?>
              <a class="weui_cell js_cell" href="javascript:;" >
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
-                 	<span class="left"><?php echo $record['create_at'];?></span><span class="left"><?php echo $record['recharge_money'];?></span><span class="left"><?php echo $record['cashback_num'];?></span><span class="left"><?php echo $record['point_num'];?></span>
+                 	<span class="left"><?php echo date('Y-m-d',strtotime($record['create_at']));?></span><span class="left"><?php echo $record['recharge_money'];?></span><span class="left"><?php echo $record['cashback_num'];?></span><span class="left"><?php echo $record['point_num'];?></span>
                   </div>
               </a>
               <?php endforeach;?>
