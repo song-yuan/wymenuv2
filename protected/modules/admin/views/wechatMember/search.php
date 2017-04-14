@@ -1,534 +1,359 @@
+<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
+<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
 <style>
-    body{
-        font-size: 15px;
-    }
-
-.portlet-body>.row{
-    margin:15px 0 30px 0;
+.modal-dialog{
+        width: 80%;
+        height: 70%;
 }
-.item-header{
-    text-align: right;
-    padding:0px;
-}
-input[type='button']{
-   
-  
-}
-@media (max-width: 768px) {
-    .item-header{
-        text-align: left;
-        font-size:15px;
-        margin-bottom: 10px;
-        background-color:#f9f9f9;
-        padding:10px;
-        
-    }
-    .form-group{
-        width:66.666%!important;
-}
-}
-@media (min-width: 768px) {
-.find{
-    margin-top: 20px;
-    margin-left: 250px;
-    margin-bottom: 20px;
-} 
-.find_item1{
-    padding-right: 0px !important;
-}
-.find_item2{
-    padding-left: 5px !important;
-}
-}
-ul {
-    padding:0;
-    margin:0
-}
-li{
-   
-   list-style-type :none;
-}
-.person_info{
-        font-size: 16px;
-        padding-left: 8px;
-        margin-bottom: 30px;
-        font-weight: bold;
-    }
-
-.small{
-    font-size: 14px;
-    color: #696969;
-}
-.person_info li{
-    
-    margin-right: 40px;
-}
-.base_info{
-    margin-bottom: 30px;
-}
-.info_header{
-    padding-left: 8px;
-    font-weight: bold;
-    margin-bottom: 3px;
-    
-}
-
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
-  
-    border: 0px;
-    color:#2d78f4;
-    border-bottom:1px solid #2d78f4; 
-}
-.nav a{
-   color:#000;
-   font-weight: bold;
-}
-.contentheadtip{
-		width: 96%;
-		margin-left: 2%;
-		padding: 4px;
-		border-bottom: 1px solid white;
-	}
-
-.contenthead{
-		width: 96%;
-		margin-left: 2%;
-		padding: 4px;
-		border-bottom: 1px solid red;
-	}
-.contentdiv{
-        text-align: center;
-        width: 50%;
-        float: left;
-}
-.clear{
-        clear: both;
-}
-.font20{
-        font-size: 20px;
-}
-.font18{
-        font-size: 18px;
-}
-.detaildivtip{
-        color: blue;		
-        width: 96%;
-        margin-left: 2%;
-        padding: 6px;
-        border-bottom: 1px solid blue;
-}
-.detailcontent{
-        width: 96%;
-        margin-left: 2%;
-        padding: 4px;		
-        border-bottom: 1px solid blue;
-}
-.detaildiv{
-        text-align: center;
-        width: 33%;
-        float: left;
-}
-</style>
-
+ .more-condition{
+     margin-bottom: 15px !important;
+ }
+</style>    	
+<!-- END SIDEBAR -->
+<!-- BEGIN PAGE -->
 <div class="page-content">
-    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
-    <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                    <div class="modal-content">
-                            <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                    <h4 class="modal-title">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                    Widget settings form goes here
-                            </div>
-                            <div class="modal-footer">
-                                    <button type="button" class="btn blue">Save changes</button>
-                                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                            </div>
-                    </div>
-                    <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-    </div>
-    <div id="main2" name="main2" 
-         style="min-width: 500px;min-height:300px;display:none;" 
-         onMouseOver="this.style.backgroundColor='rgba(255,222,212,1)'" 
-         onmouseout="this.style.backgroundColor=''">
-    </div>
- <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('wechatMember/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员查询'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMember/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
-<div class="row">   
-    <div class="col-md-12">
-    <div class="portlet purple box">
-        <div class="portlet-body" >
-            <form action="" method="post" >     
-                    <div class="row find">
-                            <div class="col-xs-12 col-sm-5 form-group find_item1">                                    
-                                <input type="text" name="num" class="form-control" value=""  placeholder="卡号" >
-                            </div>     
-                            <div class="col-xs-12 col-sm-2 find_item2">
-                                <input type="submit"   class=' btn  btn-primary  ' value="查 询"/>           
-                            </div>
-                    </div>              
-            </form>   
-            <div class="info">
-                <div class="person_info">
-                      <?php if($brand_user_model) :?>
-                    <ul>
-                        <li class="pull-left">
-                            <span><?php echo $brand_user_model->nickname;?></span>
-                            
-                        </li>
-                        <li class="pull-left">
-                            <span> 性别：
-                                <?php if(($brand_user_model->sex)=="1")  echo "男";?>
-                                <?php if(($brand_user_model->sex)=="2") echo "女";?>
-                            </span>
-                        </li>
-                        <li class="pull-left">
-                          <?php                           
-                           if( isset($brand_user_model->level))
-                                   echo $brand_user_model->level->level_name;
-                               
-                           ?>
-                        </li>
-                        <li class="pull-left">
-                            <span><?php echo $brand_user_model->mobile_num;?></span>
-                            <span>（卡号：<span><?php echo $brand_user_model->card_id;?></span>）</span>     
-                        </li>
-                        <li class="pull-left">
-                            <span>生日：</span>
-                            <span></span>
-                        </li>
-                    </ul>
-                    <div style="clear:both;"></div>                                          
-                </div>                
-                <div class="base_info">
-                    <div class="info_header"></div>
-                    <div class="info_content"> 
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                     <th>卡内余额</th>
-                                     <th>返现余额</th>
-                                     <th>累计积分额</th>
-                                    <th>开卡时间</th>
-                                    <th>省市</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><?php echo $brand_user_model->remain_money;?></td>
-                                    <td><?php echo $cashback;?></td>
-                                    <td><?php echo $brand_user_model->consume_point_history;?></td>
-                                    <td><?php echo $brand_user_model->create_at;?></td>
-                                    <td><?php echo $brand_user_model->province;?>&nbsp;&nbsp;<?php echo $brand_user_model->city;?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>                       
-            <div class="base_info">
-                    <div class="info_header">未使用优惠券</div>
-                    <div class="info_content"> 
-                        <table class="table table-striped table-bordered table-hover">  
-                            <thead>
-                                <tr>                                  
-                                <th>券名称</th>
-                                <th>面额</th>
-                                <th>最低消费</th>
-                                <th>过期时间</th>
-                                </tr>
-                            </thead>
-                            <tbody>                               
-                                <?php  
-                               // var_dump($cupon_model);
-                                $cupon_arrays=$brand_user_model->cupon_branduser;
-                                if(!empty($cupon_arrays)): 
-                                    foreach($cupon_arrays as $cupon_array):   
-                                      if(($cupon_array->is_used)==1):
-                                        foreach ($cupon_model as $v):
-                                          if((date('Y-m-d H:i:s',time())>=$v->begin_time)&&(date('Y-m-d H:i:s',time())<=$v->end_time)):
-                                            if(($cupon_array->cupon_id)==($v->lid)) :
-                                ?>
-                                <tr>
-                                    <td><?php echo $v->cupon_title;?></td>
-                                    <td><?php echo $v->cupon_money;?></td>
-                                    <td><?php echo $v->min_consumer;?></td>
-                                    <td><?php echo $v->end_time;?></td>
-                                </tr>
-                                <?php 
-                                         endif;
-                                        endif;
-                                    endforeach; 
-                                 endif;
-                                endforeach;
-                               endif;
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="modal fade" id="portlet-consume" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Modal title</h4>
                 </div>
-            </div>            
-            <div class="detail_info">                
-                <div class="info_header">历史账单明细</div>
-                <ul class="nav nav-tabs"id="attr_info" role="tablist">
-                    <li role="presentation" class="active"><a href="javascript:void(0)" data-target ='zhangdantable'>账单</a></li>
-                    <li role="presentation" ><a href="javascript:void(0)" data-target ='jifentable'>积分</a></li>
-                    <li role="presentation"><a href="javascript:void(0)" data-target ='cupontable'>优惠券</a></li>                   
-                </ul>
-                <div class="info_content"> 
-                          <table class="info_item table table-striped table-bordered table-hover" id="zhangdantable">
-                             <thead>
-                                <tr>
-                                    <th>账单号</th>    
-                                    <th>时间</th>
-                                    <th>金额</th>
-                                                               
-                                </tr>
-                            </thead>
-                            <?php 
-                             if(!empty($orderPay)):
-                                 foreach ($orderPay as $v):                                     
-                             ?>                           
-                            <tbody>
-                                 <tr>
-                                     <td class="accountno" 
-                                         accountno="<?php echo $v->account_no;?>" 
-                                         orderid="<?php echo $v->order_id?>" 
-                                         originalp="<?php echo sprintf("%.2f",$v->order4->reality_total);?>" 
-                                         shouldp="<?php echo sprintf("%.2f",$v->order4->should_total);?>" 
-                                         youhuip="<?php echo sprintf("%.2f",($v->order4->reality_total)-($v->order4->should_total));?>"
-                                         >
-                                         <?php echo $v->account_no;?>
-                                     </td>
-                                    
-                                    
-                                    <td><?php echo $v->create_at;?></td> 
-                                    <td><?php echo $v->pay_amount;?></td> 
-                                </tr>
-                            </tbody>
-                            <?php 
-                             endforeach;
-                            endif;
-                            ?>
-                        </table>
-                        <table class="info_item table table-striped table-bordered table-hover" id="jifentable">
-                             <thead>
-                                <tr>
-                                    <th>来源</th>    
-                                    <th>积分</th>
-                                    <th>时间</th>
-                                                      
-                                </tr>
-                            </thead>
-                            <?php 
-                             if(!empty($brand_user_model->point)):
-                                 foreach (($brand_user_model->point) as $v): 
+                <div class="modal-body">
+                        Widget settings form goes here
+                </div>
+                <div class="modal-footer">
+                        <button type="button" class="btn blue">Save changes</button>
+                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+            <!-- /.modal-dialog -->
+    </div>         
+    <!-- BEGIN PAGE HEADER-->
+    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('wechatMember/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员查询'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMember/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <?php $form=$this->beginWidget('CActiveForm', array(
+                    'id'=>'Promote',
+                    'clientOptions'=>array(
+                            'validateOnSubmit'=>true,
+                    ),
+                    'htmlOptions'=>array(
+                            'class'=>'form-inline'
+                    ),
+            )); ?>
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <div class="form-group more-condition" style="float:left;width:150px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                        <div class="input-group" style="width:95%;">
+                            <span class="input-group-addon">性别</span>
+                            <select class="form-control" name="findsex">
+                                <option value="%" <?php if("%"==$findsex) echo 'selected';?>>全部</option>
+                                <option value="0" <?php if("0"==$findsex) echo 'selected';?>>未知</option>
+                                <option value="1" <?php if("1"==$findsex) echo 'selected';?>>男</option>
+                                <option value="2" <?php if("2"==$findsex) echo 'selected';?>>女</option>
+                            </select>												
+                        </div>
+                    </div>
+									
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                            <div class="input-group" style="width:95%;">
+                                    <span class="input-group-addon">年龄</span>
+                                    <input type="text" maxlength="2" class="form-control" name="agefrom" value="<?php echo $agefrom; ?>"><span class="input-group-addon">~</span><input type="text" maxlength="3" class="form-control" name="ageto" value="<?php echo $ageto; ?>">
+                            </div>
+                    </div>
+                    
+                    <div class="form-group more-condition" style="float:left;width:260px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                            <div class="input-group" style="width:95%;">
+                                    <span class="input-group-addon">出生日期</span>
+                                    <input type="text" maxlength="5" class="form-control" name="birthfrom" value="<?php echo $birthfrom; ?>"><span class="input-group-addon">~</span><input type="text" maxlength="5" class="form-control" name="birthto" value="<?php echo $birthto; ?>">
+                            </div>
+                    </div>
+									 
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                            <div class="input-group" style="width:95%;">
+                                    <span class="input-group-addon">会员等级</span>
+                                    <select class="form-control" name="finduserlevel">
+                                            <option value="0">--全体--</option>
+                                            <?php if(!empty($userlevels)):?>
+                                            <?php foreach($userlevels as $userlevel):?>
+                                            <option value="<?php echo $userlevel->lid;?>" <?php if($userlevel->lid==$finduserlevel) echo 'selected';?>><?php echo $userlevel->level_name;?></option>
+                                            <?php endforeach;?>
+                                            <?php endif;?>
+                                    </select>												
+                            </div>
+                    </div>
+                    
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                        <div class="input-group" style="width:95%;">
+                            <span class="input-group-addon">未消费时长</span>
+                            <select class="form-control" name="noordertime" id="noordertime">
+                                <option value="%" <?php if("%"==$noordertime) echo 'selected';?>>--全部--</option>
+                                <option value="1" <?php if("1"==$noordertime) echo 'selected';?>>1个月</option>
+                                <option value="2" <?php if("2"==$noordertime) echo 'selected';?>>2个月</option>
+                                <option value="3" <?php if("3"==$noordertime) echo 'selected';?>>3个月</option>
+                                <option value="4" <?php if("4"==$noordertime) echo 'selected';?>>4个月</option>
+                                <option value="5" <?php if("5"==$noordertime) echo 'selected';?>>5个月</option>
+                                <option value="6" <?php if("6"==$noordertime) echo 'selected';?>>半年</option>
+                                <option value="12" <?php if("12"==$noordertime) echo 'selected';?>>一年</option>
+                                <option value="18" <?php if("18"==$noordertime) echo 'selected';?>>一年半</option>
+                                <option value="24" <?php if("24"==$noordertime) echo 'selected';?>>二年</option>
+                            </select>
+                        </div>
+                    </div>
+            
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                        <div class="input-group" style="width:95%;">
+                            <span class="input-group-addon">国家</span>
+                            <select class="form-control" name="findcountry" id="findcountryid">
+                                    <option value="%">--全体--</option>
+                                    <?php if(!empty($modelcountrys)):?>
+                                    <?php foreach($modelcountrys as $key=>$modelcountry):?>
+                                    <option value="<?php echo $modelcountry['country'];?>" <?php if($modelcountry['country']==$findcountry) echo 'selected';?>><?php echo $modelcountry['country'];?></option>
+                                    <?php endforeach;?>
+                                    <?php endif;?>
+                            </select>
+                        </div>
+                    </div>
+                                                        
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                        <div class="input-group" style="width:95%;">
+                                <span class="input-group-addon">省份</span>
+                                <select class="form-control" name="findprovince" id="findprovinceid">
+                                    <option country="%" value="%">--全体--</option>
+                                    <?php if(!empty($modelprovinces)):?>
+                                        <?php foreach($modelprovinces as $key=>$modelprovince):?>
+                                            <option country="<?php echo $modelprovince['country']; ?>"
+                                                    style="display:<?php if($modelprovince['country']==$findcountry){echo "";}else{ echo "none";} ?>"
+                                                    value="<?php echo $modelprovince['province'];?>" 
+                                            <?php if($modelprovince['province']==$findprovince && $modelprovince['country']==$findcountry) echo 'selected';?>>
+                                            <?php echo $modelprovince['province'];?>
+                                            </option>
+                                        <?php endforeach;?>
+                                        <?php endif;?>
+                                </select>
+                        </div>
+                    </div>
+                                                        
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                        <div class="input-group" style="width:95%;">
+                            <span class="input-group-addon">市区</span>
+                            <select class="form-control" name="findcity" id="findcityid">
+                                <option country="%" province="%" value="%">--全体--</option>
+                                <?php if(!empty($modelcitys)):?>
+                                <?php foreach($modelcitys as $key=>$modelcity):?>
+                                    <option country="<?php echo $modelprovince['country']; ?>" province="<?php echo $modelprovince['province'] ?>"
+                                        style="display:<?php if($modelcity['country']==$findcountry && $modelcity['province']==$findprovince){echo "";}else{ echo "none";} ?>"
+                                        value="<?php echo $modelcity['city'];?>" 
+                                    <?php if($modelcity['city']==$findcity && $modelcity['province']==$findprovince && $modelcity['country']==$findcountry) echo 'selected';?>>
+                                    <?php echo $modelcity['city'];?>
+                                    </option>
+                                <?php endforeach;?>
+                                <?php endif;?>
+                            </select>												
+                        </div>
+                    </div>   
+                                                        					
+                    <hr class="more-condition" style="color:#000;width:100%;size:6;display: <?php echo isset($more) && $more?'':'none';?>;">
 
-                             ?>                           
-                            <tbody>
-                                 <tr>
-                                      <td> 
-                                          <?php if(($v->point_resource)=="0")  echo "消费";?>
-                                           <?php if(($v->point_resource)=="1")  echo "充值";?>
-                                      </td> 
-                                     <td><?php echo $v->points;?></td> 
-                                    <td><?php echo $v->create_at;?></td> 
-                                    
-                                </tr>
-                            </tbody>
-                            <?php 
-                             endforeach;
-                            endif;
-                            ?>
-                        </table>
-                        <table class="info_item table table-striped table-bordered table-hover" id="cupontable" style="display: none">
-                             <thead>
-                                <tr>                                  
-                                <th>券名称</th>
-                                <th>面额</th>
-                                <th>最低消费</th>
-                                <th>过期时间</th>
-                                <th>状态</th>
-                                </tr>
-                            </thead>
-                            <tbody>                               
-                                <?php                                 
-                                $cupon_arrays=$brand_user_model->cupon_branduser;
-                                if($cupon_arrays): 
-                                   // var_dump($cupon_arrays);
-                               // exit();
-                                    foreach($cupon_arrays as $cupon_array):   
-                                    //    if(($cupon_array->is_used)==1):
-                                            foreach ($cupon_model as $v):
-                                                if(($cupon_array->cupon_id)==($v->lid)) :
-                                ?>
+                    <div class="input-group" style="float:left;width:650px;margin-bottom:15px;">
+                        <span class="input-group-addon">会员卡号或电话号码</span><input type="text" name="cardmobile" class="form-control" style="width:200px;" value="<?php echo $cardmobile;?>"/>
+                        <button type="submit" class="btn green">
+                                查找 &nbsp; 
+                        <i class="m-icon-swapright m-icon-white"></i>
+                        </button>
+                        <button type="button" class="btn gray" style="margin-left:20px;" onclick="location.href='<?php echo $this->createUrl('wechatMember/search',array('companyId' => $this->companyId));?>'">
+                                复位 &nbsp; 
+                        <i class="m-icon-swapright m-icon-white"></i>
+                        </button>
+                    </div>                                                                    									
+                                                                    
+                    <div style="text-align:center;display:inline;width:200px;float:left;margin-bottom:15px;">                                                                                    
+                        <?php if(isset($more) && $more):?>
+                        <a href="javascript:;"><span class="glyphicon glyphicon-chevron-up">收起</span></a>
+                        <?php else:?>
+                        <a href="javascript:;"><span class="glyphicon glyphicon-chevron-down">更多查找条件</span></a>
+                        <?php endif;?>
+                        <input type="hidden" name="more" id="more" value="<?php echo isset($more) && $more?1:0;?>"/>                                                                                    
+                    </div>
+                                                                   	
+                </div>
+            </div>
+            
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet box purple">
+                <div class="portlet-title">
+                    <div class="caption"><i class="fa fa-group"></i>会员列表</div>
+                    <div class="actions">
+                    </div>
+                </div>					
+                <div class="portlet-body" id="table-manage">
+                    <table class="table table-bordered table-hover" id="sample_1">
+                        <thead>
                                 <tr>
-                                    <td><?php echo $v->cupon_title;?></td> 
-                                    <td><?php echo $v->cupon_money;?></td> 
-                                    <td><?php echo $v->min_consumer;?></td>
-                                    <td><?php echo $v->end_time;?></td>
-                                    <td><?php 
-                                       
-                                        if($cupon_array->is_used=="1"){
-                                            if(((date('Y-m-d H:i:s',time()))>=$v->begin_time)&&((date('Y-m-d H:i:s',time()))<=$v->end_time)){
-                                                echo "未使用";
-                                            }
-                                            if((date('Y-m-d H:i:s',time()))>=$v->end_time){
-                                                echo "已过期";
-                                            }
-                                        }
-                                        if(($cupon_array->is_used)=="2"){ 
-                                            echo "已使用";
-                                        }
-                                        ?>
+                                <th>卡号</th>
+                                <th>姓名|昵称</th>
+                                <th>性别</th>
+                                <th>手机号</th>
+                                <th>生日</th>
+                                <th>等级</th>
+                                <th>地区</th>
+                                <th>来源</th>
+                                <th>操作</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                            <?php if($models):?>
+                            <?php foreach($models as $model):?>
+                                <tr>
+                                    <td><?php echo substr($model['card_id'],5,9);?></td>
+                                    <td><?php echo $model['user_name']."|".$model['nickname'];?></td>
+                                    <td><?php switch ($model['sex']){case 0:echo "未知"; break; case 1:echo "男";break; case 2:echo "女";};?></td>
+                                    <td><?php echo $model['mobile_num'];?></td>
+                                    <td><?php echo substr($model['user_birthday'],0,10);?></td>
+                                    <td><?php echo $model['level_name'];?></td>
+                                    <td><?php echo $model['country'];?> <?php echo $model['province'];?> <?php echo $model['city'];?></td>											
+                                    <td><?php echo $model['company_name'];?></td>
+                                    <td class="button-column">
+                                        <a  class='btn default btn-sm blue'  href="<?php echo $this->createUrl('wechatMember/SearchDetail',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>"><i class="fa fa-search"></i>详情</a>
                                     </td>
                                 </tr>
-                                <?php 
-                                        endif;
-                                    endforeach; 
-                               // endif;
-                                endforeach;
-                               endif;
-                                ?>
-                            </tbody>
-                        </table>
+                            <?php endforeach;?>	
+                            <?php else:?>
+                                    <tr>
+                                    <td colspan="12">没有找到数据</td>
+                                    </tr>
+                            <?php endif;?>
+                        </tbody>
+                    </table>
+                    <?php if($pages->getItemCount()):?>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-12">
+                                <div class="dataTables_info">
+                                    <?php echo yii::t('app','共');?>
+                                    <?php echo $pages->getPageCount();?>
+                                    <?php echo yii::t('app','页');?>  , 
+                                    <?php echo $pages->getItemCount();?>
+                                    <?php echo yii::t('app','条数据');?> , 
+                                    <?php echo yii::t('app','当前是第');?> 
+                                    <?php echo $pages->getCurrentPage()+1;?>
+                                    <?php echo yii::t('app','页');?>
+                                </div>
+                            </div>
+                            <div class="col-md-7 col-sm-12">
+                                <div class="dataTables_paginate paging_bootstrap">
+                                <?php $this->widget('CLinkPager', array(
+                                        'pages' => $pages,
+                                        'header'=>'',
+                                        'firstPageLabel' => '<<',
+                                        'lastPageLabel' => '>>',
+                                        'firstPageCssClass' => '',
+                                        'lastPageCssClass' => '',
+                                        'maxButtonCount' => 8,
+                                        'nextPageCssClass' => '',
+                                        'previousPageCssClass' => '',
+                                        'prevPageLabel' => '<',
+                                        'nextPageLabel' => '>',
+                                        'selectedPageCssClass' => 'active',
+                                        'internalPageCssClass' => '',
+                                        'hiddenPageCssClass' => 'disabled',
+                                        'htmlOptions'=>array('class'=>'pagination pull-right')
+                                    ));
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif;?>
                 </div>
+            <?php $this->endWidget(); ?>
+            <!-- END EXAMPLE TABLE PORTLET-->
             </div>
-          <?php endif;?>  
-        </div> 
-    </div>        
-</div>
-</div>
-</div>
+        </div>
+    <!-- END PAGE CONTENT-->
+    </div>
+    <!-- END PAGE -->
+    <div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div id="ajax-modal" class="modal fade" tabindex="-1"  style="width:600px;">
+            </div>
+            <div class="modal-dialog">
+                    <div class="modal-content">
+
+                    </div>
+            </div>
+    </div>
 <script>
-    $(function(){
-      $("input[name=num]").focus();
-      
-      
-        $(".info_item").hide();
-        $(".info_item").eq(0).show();
-        $("#attr_info li a").click(function(){
-            $(this).parent("li").siblings("li").removeClass("active");
-            $(this).parent("li").addClass("active");
-            //全部隐藏
-            $(".info_item").hide();
-            //当前对应的显示
-           $("#"+$(this).attr("data-target")).show();
-        });
-        
-    });
-    
-$('.accountno').click(function() {
-          //alert(111);
-        $('#orderdetaildiv').remove();
-        var orderid = $(this).attr('orderid');
-        var accountno = $(this).attr('accountno');
-        var originalp = $(this).attr('originalp');
-        var shouldp = $(this).attr('shouldp');
-        var youhuip = $(this).attr('youhuip');
-         //alert(originalp); alert(shouldp);
-        var url = "<?php echo $this->createUrl('wechatMember/accountDetail',array('companyId'=>$this->companyId));?>/orderid/"+orderid;
-        $.ajax({
-                   url:url,
-                   type:'POST',
-                   data:orderid,//CF
-                   //async:false,
-                   dataType: "json",
-                   success:function(msg){
-                       var data=msg;
-                       if(data.status){
-                    //alert(data.msg);
-                            var model = data.msg;
-                            var change = data.change;
-                            var money = data.money;
-                            var prodDetailDivAll = '<div id="orderdetaildiv"><div class="contentheadtip font20">账单号：'+accountno+'</div><div class="contenthead font20"><div class="contentdiv"><span>菜品名称</span></div><div class="contentdiv"><span>数量</span></div><div class="clear"></div></div>';
-                            var prodDetailEnd = '</div>';
-                            var proDetailpayAll = '';
-                            for (var i in model){
-                                    prodName = model[i].product_name;
-                                    prodNum = model[i].all_amount;
-                                    setName = model[i].set_name;
-                                    var sets = '';
-                                    if(setName){
-                                            sets = '('+setName+')';
-                                            }
-                                        //alert(prodName);alert(prodNum);
-                                        var prodDetailDivBody = '<div class="contenthead font18"><div class="contentdiv"><span>'+prodName+sets+'</span></div><div class="contentdiv"><span>'+prodNum+'</span></div><div class="clear"></div></div>' 
-                                        prodDetailDivAll = prodDetailDivAll + prodDetailDivBody;
-                                        }
-                                    var proDetailBodyEnd = '<div class="font20 detaildivtip">账单详情</div>'
-                                                                                    +'<div class="detailcontent font18"><div class="detaildiv">原价:<span>'+originalp+'</span></div><div class="detaildiv">折后价:<span>'+shouldp+'</span></div><div class="detaildiv">优惠:<span>'+youhuip+'</span></div><div class="clear"></div></div>'
-                                                                                    +'<div class="detailcontent font18"><div class="detaildiv">收款现金:<span>'+money+'</span></div><div class="detaildiv">找零:<span>'+change+'</span></div><div class="clear"></div></div>';
-                                    //var proDetailDiv = prodDetailDivAll+proDetailBodyEnd;
-                                    var proDetailDiv = prodDetailDivAll;//去掉账单收支详情
-                                    if(data.allpayment){
-                                            var proDetailpayHead = '<div class="font20 detaildivtip">其他支付方式:</div>'
-                                            var allpayment = data.allpayment;
-                                            var proDetailpaymentall = '';
-                                            for (var a in allpayment){
-                                                    var name = allpayment[a].name; 
-                                                    var nameprice = allpayment[a].pay_amount;
-                                                    var paytype = allpayment[a].paytype;
-                                                    if(name){
-                                                            //alert(name);
-                                                            var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+name+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
+jQuery(document).ready(function() {       
+   //App.init();
+   //checkSelect();
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+                     format: 'yyyy-mm-dd',
+             language: 'zh-CN',
+             rtl: App.isRTL(),
+             autoclose: true
+         });
+         $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+        }
+   });
 
-                                                            }else if(paytype){
-                                                                    //alert(paytype);
-                                                                    var paytypename = '';
-                                                                    if (paytype==1){
-                                                                            paytypename = '微信支付';
-                                                                    }else if(paytype==2){
-                                                                            paytypename = '支付宝支付';
-                                                                    }else if(paytype==4){
-                                                                            paytypename = '会员卡支付';
-                                                                    }else if(paytype==5){
-                                                                            paytypename = '银联支付';
-                                                                    }else if(paytype==9){
-                                                                            paytypename = '微信代金券';
-                                                                    }else if(paytype==10){
-                                                                            paytypename = '微信余额支付';
-                                                                    }
-                                                                    var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+paytypename+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
-                                                                    }
-                                                    var proDetailpaymentall = proDetailpaymentall + proDetailpayment;
-                                                    }
-                                            var proDetailpayAll =  proDetailpayHead + proDetailpaymentall + prodDetailEnd;
-                                            }
-                                    var proDetail = proDetailDiv + proDetailpayAll;
-                                    $("#main2").append(proDetail);
-            			   layer_zhexiantu=layer.open({
-            				     type: 1,
-            				     //shift:5,
-            				     shade: [0.5,'#fff'],
-            				     move:'#main2',
-            				     moveOut:true,
-            				     offset:['10px','350px'],
-            				     shade: false,
-            				     title: false, //不显示标题
-            				     area: ['auto', 'auto'],
-            				     content: $('#main2'),//$('#productInfo'), //捕获的元素
-            				     cancel: function(index){
-            				         layer.close(index);
-            				         layer_zhexiantu=0;
-            				     }
-            				 });
-            			   layer.style(layer_zhexiantu, {
-            				   backgroundColor: 'rgba(255,255,255,0.2)',
-            				 });  
-                          
-                       }else{
-                           
-                       }
-                   },
-                   error: function(msg){
-                       layer.msg('网络错误！！！');
-                   }
-               });
-			   
+$(".glyphicon").click(function(){
+        if($(this).hasClass('glyphicon-chevron-down')){
+                    $(this).removeClass('glyphicon-chevron-down').addClass("glyphicon-chevron-up");
+                    $(this).html('收起');
+                    $('.more-condition').show();
+                        $('#more').val(1);
+        } else {
+                    $(this).removeClass('glyphicon-chevron-up').addClass("glyphicon-chevron-down");
+                    $(this).html('更多查找条件');
+                    $('.more-condition').hide();
+                    $('#more').val(0);
+        }
+});	        
 
-	        });
-</script>
+var selectcountry;
+$("#findcountryid").on("change",function(){
+        selectcountry=$(this).val();
+        if(selectcountry=="%")
+        {
+            $("#findprovinceid").val("%");
+        }
+        $("#findprovinceid").find("option").each(function(){
+            if($(this).attr("country")=="%" || $(this).attr("country")==selectcountry)
+            {
+               $(this).show(); 
+            }else{
+                $(this).hide();
+            }
+        })
+        $("#findcityid").val("%");
+        $("#findcityid").find("option").each(function(){
+            $(this).hide();
+        })
+})
 
+$("#findprovinceid").on("change",function(){
+        var thisval=$.trim($(this).val());
+        //alert(thisval);
+        if(thisval=="%")
+        {
+            $("#findcityid").val("%");
+        }
+        $("#findcityid").find("option").each(function(){
+            if($(this).attr("country")=="%" || $(this).attr("country")==selectcountry)
+            {
+                if($(this).attr("province")=="%" || $.trim($(this).attr("province"))==thisval)
+                {
+                   $(this).show();
+               }else{
+                    $(this).hide();
+               }
+            }else{
+                $(this).hide();
+            }
+        })
+})
+</script>	
