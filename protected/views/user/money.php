@@ -51,14 +51,14 @@
       <div class="bd"> 
         <div class="weui_cells weui_cells_access global_navs">
         	<a class="weui_cell js_cell" href="javascript:;" >
-                 <div class="weui_cell_bd weui_cell_primary record">
+                 <div class="weui_cell_bd weui_cell_primary record clearfix">
                  	<span class="left">充值时间</span><span class="left">充值金额</span><span class="left">返现金额</span><span class="left">赠送积分</span>
                   </div>
               </a>
            	 <?php foreach ($records as $record):?>
              <a class="weui_cell js_cell" href="javascript:;" >
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
-                 	<span><?php echo $record['create_at'];?></span><span><?php echo $record['recharge_money'];?></span><span><?php echo $record['cashback_num'];?></span><span><?php echo $record['point_num'];?></span>
+                 	<span class="left"><?php echo $record['create_at'];?></span><span class="left"><?php echo $record['recharge_money'];?></span><span class="left"><?php echo $record['cashback_num'];?></span><span class="left"><?php echo $record['point_num'];?></span>
                   </div>
               </a>
               <?php endforeach;?>
