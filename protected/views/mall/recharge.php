@@ -24,7 +24,7 @@
 			$input->SetBody("点餐订单");
 			$input->SetAttach("1");
 			$input->SetOut_trade_no($rechargeId);
-			$input->SetTotal_fee((int)$recharge['recharge_money']*100);
+			$input->SetTotal_fee($recharge['recharge_money']*100);
 			$input->SetTime_start(date("YmdHis"));
 			$input->SetTime_expire(date("YmdHis", time() + 600));
 			$input->SetGoods_tag("充值订单");
