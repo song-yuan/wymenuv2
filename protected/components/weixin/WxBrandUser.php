@@ -144,10 +144,9 @@ class WxBrandUser {
 	 * 
 	 */
 	public static function getCashBackYue($userId,$dpid) {
-		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$userId.' and dpid='.$dpid.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
-		$cashback = Yii::app()->db->createCommand($sql)->queryRow();
-		return $cashback['total'] ? $cashback['total']:0;
+		$brandUser = self::get($userId,$dpid);
+		$remainMoney = $brandUser['remain_back_money'];
+		return $remainMoney;
 	}
 	/**
 	 * 
