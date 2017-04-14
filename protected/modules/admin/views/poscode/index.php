@@ -90,6 +90,9 @@
 									<div class="actions">
 									<?php if($model['pay_activate']==0):?>
 										<button type="button" class="btn payonline" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">未开通</button> 
+										<?php if(yii::app()->user->role <=5):?>
+										<button type="button" class="btn blue starteonline" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">开通</button>
+										<?php endif;?>
                                     <?php elseif($model['pay_activate']==1):?>
                                     	<button type="button" class="btn green stocktaking" id="stocktaking<?php echo $model->lid;?>" device_id="<?php echo $model->pad_code;?>">激活</button> 
                                     <?php elseif($model['pay_activate']==2):?>
@@ -177,6 +180,36 @@
     		            location.reload();
     	            }else{
     		            layer.msg("不能重复激活！！！");
+    		            location.reload();
+    	            }
+    			},
+                error:function(){
+    				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+    			},
+    		});
+            
+    		});
+    	$(".starteonline").on('click',function(){
+        	
+            var device_id = $(this).attr('device_id');
+           	//return false;
+            $.ajax({
+                type:'POST',
+    			url:"<?php echo $this->createUrl('poscode/sqbstartonline',array('companyId'=>$this->companyId,));?>",
+    			async: false,
+                data: {
+                	device_id: device_id,
+                },
+                cache:false,
+                dataType:'json',
+    			success:function(msg){
+    	            //alert(msg.status);
+    	            if(msg.status=="success")
+    	            {            
+    			        layer.msg("成功！");
+    		            location.reload();
+    	            }else{
+    		            layer.msg("失败！！！");
     		            location.reload();
     	            }
     			},

@@ -84,7 +84,7 @@
                                         </a> 
                                     </div>
                                     <div class="col-sm-3 col-xs-6">
-                                        <a href="javascript:void(0)">
+                                        <a href="<?php echo $this->createUrl('wxrecharge/index',array('companyId' => $this->companyId))?>">
                                             <span class="fa fa-yen  list_picture"></span>
                                             <div class="list_text">储值</div>
                                         </a> 

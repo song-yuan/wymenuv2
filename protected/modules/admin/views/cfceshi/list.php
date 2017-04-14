@@ -24,7 +24,7 @@
 						<input id="code" class="form-control" value="14599168">
 					</div>
 				</div>
-				<div style="min-height: 30px;display:none" class="form-group">
+				<div style="min-height: 30px;display:" class="form-group">
 	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">设备号:</lable>
 					<div style="margin-top: 5px;" class="col-md-4">
 						<input id="device_id" class="form-control" value="01760027562502">
@@ -193,11 +193,12 @@
         
 	});
 	$("#stockCheck").on("click",function(){
+		var device_id = $("#device_id").val();
     $.ajax({
         type:'POST',
 		url:"<?php echo $this->createUrl('cfceshi/sqbcheck',array('companyId'=>$this->companyId,));?>",
 		async: false,
-		data: {device_id:'011686776456'},
+		data: {device_id:device_id},
         cache:false,
         dataType:'json',
 		success:function(msg){
@@ -205,7 +206,7 @@
             if(msg.status=="success")
             {            
 	            
-		        layer.msg("盘点成功！");
+		        layer.msg("成功！");
 		          
 	            location.reload();
             }else{

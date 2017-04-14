@@ -103,10 +103,10 @@ class SqbpayController extends Controller
 							}else{
 								$pay_type = '1';
 							}
-							$sql = 'select * from nb_order_pay where dpid ='.$dpid.' and order_id ='.$orderid.' and account_no ="'.$orderdatas['account_no'].'" and paytype ='.$pay_type;
-							$orderpays = Yii::app()->db->createCommand($sql)
+							$sql = 'select * from nb_order_pay where dpid ='.$dpid.' and order_id ='.$orderid.' and account_no ="'.$orders['account_no'].'" and paytype ='.$pay_type;
+							$ordpays = Yii::app()->db->createCommand($sql)
 							->queryRow();
-							if(!empty($orderpays)){
+							if(!empty($ordpays)){
 								
 							}else{
 								$se = new Sequence ( "order_pay" );
@@ -114,10 +114,10 @@ class SqbpayController extends Controller
 								$orderpayData = array (
 										'lid' => $orderpayId,
 										'dpid' => $orderdpid,
-										'create_at' => $orderdatas['create_at'],
-										'update_at' => $orderdatas['update_at'],
+										'create_at' => $orders['create_at'],
+										'update_at' => $orders['update_at'],
 										'order_id' => $orderid,
-										'account_no' => $orderdatas['account_no'],
+										'account_no' => $orders['account_no'],
 										'pay_amount' => number_format($total_amount/100,2),
 										'paytype' => $pay_type,
 										'remark' => '收钱吧公众号支付',

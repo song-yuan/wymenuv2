@@ -22,12 +22,12 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员中心'),'subhead'=>yii::t('app','充值模板'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('member/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','微信会员设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('member/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('wechatMember/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','储值'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMember/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
-            <div class="col-md-12 col-sm-12">
+            <div style="display: none;" class="col-md-12 col-sm-12 ">
                     <ul class="nav nav-tabs">
                             <li><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/wxlevel/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">会员等级</a></li>
                             <li><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/wxpoint/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">消费积分比例模板</a></li>
@@ -58,15 +58,15 @@
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
-                                                    <tr>
-                                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-                                                        <th><?php echo yii::t('app','名称');?></th>
-                                                        <th><?php echo yii::t('app','充值金额');?></th>
-                                                        <th><?php echo yii::t('app','返积分');?></th>
-                                                        <th><?php echo yii::t('app','返现');?></th>
-                                                        <th><?php echo yii::t('app','是否有效');?></th>
-                                                        <th>&nbsp;</th>
-                                                    </tr>
+                        <tr>
+	                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+	                        <th><?php echo yii::t('app','名称');?></th>
+	                        <th><?php echo yii::t('app','充值金额');?></th>
+	                        <th><?php echo yii::t('app','返积分');?></th>
+	                        <th><?php echo yii::t('app','返现');?></th>
+	                        <th><?php echo yii::t('app','是否有效');?></th>
+	                        <th>&nbsp;</th>
+                        </tr>
 						</thead>
 						<tbody>
 						<?php if($models):?>
@@ -75,10 +75,10 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
 								<td ><?php echo $model->wr_name;?></td>
 								<td ><?php echo $model->recharge_money;?></td>
-                                                                <td ><?php echo $model->recharge_pointback;?></td>
-                                                                <td ><?php echo $model->recharge_cashback;?></td>
-                                                                <td>
-                                                                        <?php if($model->is_available) {echo '否';} else {echo '是';} ?>
+                                <td ><?php echo $model->recharge_pointback;?></td>
+                                <td ><?php echo $model->recharge_cashback;?></td>
+                                <td>
+                                	<?php if($model->is_available) {echo '否';} else {echo '是';} ?>
 								</td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('wxrecharge/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
