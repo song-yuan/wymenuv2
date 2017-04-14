@@ -78,7 +78,6 @@ class BrandUser extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    
                     'point' => array(self::HAS_MANY , 'MemberPoints' ,'','on'=> 't.lid=point.card_id and point.dpid=t.dpid and point.delete_flag=0 and point.card_type=1'),
                     'cupon_branduser'=>array(self::HAS_MANY , 'CuponBranduser' ,'','on'=>'t.lid=cupon_branduser.brand_user_lid and cupon_branduser.dpid=t.dpid and cupon_branduser.delete_flag < 1'),
                     'level' => array(self::BELONGS_TO , 'BrandUserLevel' ,'','on'=> 't.user_level_lid=level.lid and level.dpid=t.dpid and level.delete_flag<1 and level.level_type=1'),

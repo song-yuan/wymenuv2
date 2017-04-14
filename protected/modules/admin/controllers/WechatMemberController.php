@@ -1,16 +1,16 @@
 <?php
 
 class WechatMemberController extends BackendController {
-    	public function actions() {
-		return array(
-				'upload'=>array(
-						'class'=>'application.extensions.swfupload.SWFUploadAction',
-						//注意这里是绝对路径,.EXT是文件后缀名替代符号
-						'filepath'=>Helper::genFileName().'.EXT',
-						//'onAfterUpload'=>array($this,'saveFile'),
-				)
-		);
-	}
+    public function actions() {
+            return array(
+                            'upload'=>array(
+                                            'class'=>'application.extensions.swfupload.SWFUploadAction',
+                                            //注意这里是绝对路径,.EXT是文件后缀名替代符号
+                                            'filepath'=>Helper::genFileName().'.EXT',
+                                            //'onAfterUpload'=>array($this,'saveFile'),
+                            )
+            );
+    }
 
     public function actionList() {
        
@@ -24,44 +24,178 @@ class WechatMemberController extends BackendController {
         
        	$this->render('menu');
     }
-	public function actionSearch(){
-	   $brand_user_model='';
-	   $cupon_model = '';
-	   
-	   $orderPay='';
-	   $cashback=0;
-	   $userLid = 0;
-	   if(Yii::app()->request->isPostRequest){
-	       $num = Yii::app()->request->getPost('num');
-	        if($num !=''){
-	          $card_id = $num;
-	        //查找主要信息。
-	          $brand_user_model = BrandUser::model()->with(array('point','level','cupon_branduser'))->find("(t.dpid=".$this->companyId ." or t.weixin_group = ".$this->companyId.")and (t.card_id like '%".$card_id."%' or t.mobile_num='".$num."')");          
-	          
-	          if($brand_user_model){
-	              $userLid = $brand_user_model->lid;
-                      $card_id = $brand_user_model->card_id;
-	          }else{
-			Yii::app()->user->setFlash('error' ,yii::t('app', '没有查询到该会员'));                
-		  }
-	        $now = date('Y-m-d H:i:s',time());
-               
-	        $db = Yii::app()->db; 
-	        $sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$userLid.' and dpid='.$this->companyId.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
-	        $back = Yii::app()->db->createCommand($sql)->queryRow();
-	        $cashback= $back['total'];
-	          $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid='".$this->companyId."'");
-	         }   
-	        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid=".$this->companyId);            
-	          }
-	       
-	        $this->render('search',array( "brand_user_model"=> $brand_user_model,
-	                                        "cupon_model"=> $cupon_model,
-	                                        'orderPay'=>$orderPay,
-	                                        'cashback'=>$cashback
-	                    )
-	                    );
-	}
+    public function actionSearchDetail(){
+        $num = Yii::app()->request->getParam('num');       
+        $card_id = Yii::app()->request->getParam('card_id'); 
+        $companyId = Yii::app()->request->getParam('companyId'); 
+        $brand_user_model = '';
+        $cupon_model = '';
+
+        $orderPay = '';
+        $cashback = 0;
+       
+        
+        $criteria = new CDbCriteria;
+        $criteria->with = array('point','level','cupon_branduser');
+        $criteria->addCondition("t.dpid=".$this->companyId ." or t.weixin_group = ".$this->companyId);
+        $criteria->addCondition("t.lid=".$num);        
+       
+        $brand_user_model = BrandUser::model()->find($criteria);          
+       
+         
+        $now = date('Y-m-d H:i:s',time());
+
+        $db = Yii::app()->db; 
+        $sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$num.' and dpid='.$this->companyId.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
+        $back = Yii::app()->db->createCommand($sql)->queryRow();
+        if($back){
+            $cashback= $back['total'];           
+        }
+
+        $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid='".$this->companyId."'");
+          
+        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid=".$this->companyId);            
+
+         // var_dump(BrandUser::model()->findAll($criteria));exit; 
+        $this->render('searchdetail',array( 'brand_user_model'=> $brand_user_model,
+                                       
+                                        'cupon_model'=> $cupon_model,
+                                        'orderPay'=>$orderPay,
+                                        'cashback'=>$cashback
+                    )
+                    );
+    }
+    public function actionSearch(){
+        $db=Yii::app()->db;
+        $companyId = Yii::app()->request->getParam('companyId',"0000000000");       
+        $more = Yii::app()->request->getPost('more',"0");
+        $findsex = Yii::app()->request->getPost('findsex',"%");
+        $agefrom = Yii::app()->request->getPost('agefrom',"0");
+        $ageto = Yii::app()->request->getPost('ageto',"100");
+        $birthfrom = Yii::app()->request->getPost('birthfrom',"01-01");
+        $birthto = Yii::app()->request->getPost('birthto',"12-31");
+        $finduserlevel=Yii::app()->request->getPost('finduserlevel',"0000000000");
+      
+        $noordertime=Yii::app()->request->getPost('noordertime',"%");
+        $findcountry=Yii::app()->request->getPost('findcountry',"%");
+        $findprovince=Yii::app()->request->getPost('findprovince',"%");
+        $findcity=Yii::app()->request->getPost('findcity',"%");
+        $pointfrom = Yii::app()->request->getPost('pointfrom',"0");       
+        $cardmobile = Yii::app()->request->getPost('cardmobile',"%");
+        if(empty($cardmobile))
+        {
+                $cardmobile="%";
+        }
+        if($noordertime!="%"){
+                $begintime = date('Y-m-d',strtotime("-".$noordertime." month"));
+                $endtime = date('Y-m-d',time());
+                $sql = 'select ifnull(k.user_id,0000000000) as user_id from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$companyId.' and k.create_at >="'.$begintime.' 00:00:00" and k.create_at <="'.$endtime.' 23:59:59" group by k.user_id';
+                $orders = $db->createCommand($sql)->queryAll();
+                $users ='0000000000';
+                foreach ($orders as $order){
+                        $users = $users .','.$order['user_id'];
+                }
+        }else{
+                $users = '0000000000';
+        }
+        $criteria = new CDbCriteria;
+        //var_dump($sql);exit;
+        //用sql语句查询出所有会员及消费总额、历史积分、余额、
+        $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
+            .",t.province,t.city,t.mobile_num,com.dpid,com.company_name"				
+            . " from nb_brand_user t "
+            . " LEFT JOIN  nb_company com on com.dpid = t.weixin_group "  
+            . " LEFT JOIN (select dpid,user_id from nb_order"
+            . " where order_type in ('1','2','6') and order_status in ('3','4','8')"
+            . " group by dpid,user_id) tct on t.dpid = tct.dpid and t.lid = tct.user_id "
+            . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
+            . " where t.lid not in(".$users.") and t.dpid = ".$companyId." ";
+           // echo $sql;exit;    
+        if($finduserlevel!="0000000000")
+        {
+              $sql.= " and tl.lid = ".$finduserlevel;
+        }
+        if($findsex!="%")
+        {
+               $sql.= "and t.sex like '".$findsex."'";
+        }
+        if($findcountry!="%")
+        {
+               $sql.= " and t.country like '".$findcountry."'";
+        }
+        if($findprovince!="%")
+        {
+               $sql.= " and t.province like '".$findprovince."'";
+        }
+        if($findcity!="%")
+        {
+               $sql.= " and t.city like '".$findcity."'";
+        }
+        if($cardmobile!="%")
+        {
+               $sql.= " and (t.card_id like '%".$cardmobile."%' or t.mobile_num like '%".$cardmobile."%')";
+        }
+      
+        
+        $yearnow=date('Y',time());
+        $yearbegin=$yearnow-$ageto;
+        $yearend=$yearnow-$agefrom;
+        $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) <= '".$yearend."'";
+        $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) <= '".$birthto."'";
+
+        $models = $pdata =$db->createCommand($sql)->queryAll();
+        $pages = new CPagination(count($models));  
+        $pages->pageSize = 10;
+        $pages->applylimit($criteria);
+        $models=Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
+        $models->bindValue(':offset', $pages->currentPage*$pages->pageSize);
+        $models->bindValue(':limit', $pages->pageSize);
+        $models=$models->queryAll();
+
+
+        //检索条件会员等级
+        $criteriauserlevel = new CDbCriteria;
+        $criteriauserlevel->condition =  ' t.delete_flag=0 and t.dpid='.$companyId;
+        $userlevels = BrandUserLevel::model()->findAll($criteriauserlevel);
+
+        //获取国家、省、市
+        $sqlcountry="select distinct country from nb_brand_user where dpid=".$companyId;
+        $modelcountrys=$db->createCommand($sqlcountry)->queryAll();
+        //$findcountry="中国";
+
+        $sqlprovince="select distinct country,province from nb_brand_user where dpid=".$companyId;
+        $modelprovinces=$db->createCommand($sqlprovince)->queryAll();
+        //$findprovince="上海市";
+
+        $sqlcity="select distinct country,province,city from nb_brand_user where dpid=".$companyId;
+        $modelcitys=$db->createCommand($sqlcity)->queryAll();
+        //$findcity="杨浦区";
+
+       
+        $this->render('search',array(
+                'models'=>$models,
+                'pages'=>$pages,
+                'findsex'=>$findsex,
+                'agefrom'=>$agefrom,
+                'ageto'=>$ageto,
+                'birthfrom'=>$birthfrom,
+                'birthto'=>$birthto,
+                'userlevels'=>$userlevels,
+                'finduserlevel'=>$finduserlevel,
+		       
+	        'modelcountrys'=>$modelcountrys,
+                'modelprovinces'=>$modelprovinces,
+	        'modelcitys'=>$modelcitys,
+                'noordertime'=>$noordertime,
+	        'findcountry'=>$findcountry,
+	        'findprovince'=>$findprovince,
+                'findcity'=>$findcity,
+                'pointfrom'=>$pointfrom,
+                'cardmobile'=>$cardmobile,
+                'more'=>$more,
+			));
+    }
+
     public function actionVip() {
         $criteria = new CDbCriteria;
         $criteria->select = 'MemberWxCardStyle.bg_img as bgimg,t.*';
