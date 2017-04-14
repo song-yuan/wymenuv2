@@ -44,7 +44,7 @@
 			$jsApiParameters = '';
 		}
 	?>
-	<div class="item" onclick="callpay<?php echo $k;?>()"><div class="top"><?php echo (int)$recharge['recharge_money'];?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo (int)$recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
+	<div class="item" onclick="callpay<?php echo $k;?>()"><div class="top"><?php echo $recharge['recharge_money'];?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
 	<script type="text/javascript">
 	<?php if($canpWxpay):?>
 		//调用微信JS api 支付
