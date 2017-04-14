@@ -150,27 +150,13 @@ class WxCashBack
 	 * 
 	 */
 	 public static function userCashBack($total,$userId,$dpid,$isAll = 0){
-	 	$cash = 0;
-	 	$now = date('Y-m-d H:i:s',time());
 	 	$is_sync = DataSync::getInitSync();
 	 	if($isAll){
-			$sql = 'update nb_cashback_record set remain_cashback_num=0,is_sync='.$is_sync.'  where brand_user_lid = '.$userId.' and dpid='.$dpid.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
+			$sql = 'update nb_brand_user set remain_back_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 	 	}else{
-	 		$sql = 'select * from nb_cashback_record where brand_user_lid = '.$userId.' and dpid='.$dpid.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1) order by end_timestamp asc , lid asc';
-	 		$cashbacks = Yii::app()->db->createCommand($sql)->queryAll();
-	 		foreach($cashbacks as $cashback){
-	 			$cash += $cashback['remain_cashback_num'];
-	 			if($cash < $total){
-	 				$sql = 'update nb_cashback_record set remain_cashback_num=0,is_sync='.$is_sync.'  where lid = '.$cashback['lid'].' and dpid='.$dpid;
-	 				Yii::app()->db->createCommand($sql)->execute();
-	 			}else{
-	 				
-	 				$sql = 'update nb_cashback_record set remain_cashback_num = remain_cashback_num - '.($total - ($cash - $cashback['remain_cashback_num'])).',is_sync='.$is_sync.'  where lid = '.$cashback['lid'].' and dpid='.$dpid;
-	 				Yii::app()->db->createCommand($sql)->execute();
-	 				break;
-	 			}
-	 		}
+ 			$sql = 'update nb_cashback_record set remain_back_money = remain_back_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+ 			Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 }
 	

@@ -24,7 +24,7 @@
 			$input->SetBody("点餐订单");
 			$input->SetAttach("1");
 			$input->SetOut_trade_no($rechargeId);
-			$input->SetTotal_fee((int)$recharge['recharge_money']*100);
+			$input->SetTotal_fee($recharge['recharge_money']*100);
 			$input->SetTime_start(date("YmdHis"));
 			$input->SetTime_expire(date("YmdHis", time() + 600));
 			$input->SetGoods_tag("充值订单");
@@ -44,7 +44,7 @@
 			$jsApiParameters = '';
 		}
 	?>
-	<div class="item" onclick="callpay<?php echo $k;?>()"><div class="top"><?php echo (int)$recharge['recharge_money'];?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo (int)$recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
+	<div class="item" onclick="callpay<?php echo $k;?>()"><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
 	<script type="text/javascript">
 	<?php if($canpWxpay):?>
 		//调用微信JS api 支付
