@@ -86,7 +86,8 @@ class Product extends CActiveRecord
 			'printerWay' => array(self::HAS_ONE , 'PrinterWay' ,'','on'=>'t.printer_way_id=printerWay.lid and t.dpid=printerWay.dpid and printerWay.delete_flag=0'),
 			'productImg' => array(self::HAS_MANY , 'ProductPicture' ,'','on'=>'t.lid=productImg.product_id and t.dpid=productImg.dpid and productImg.delete_flag=0'),
 			'PrivatePromotionDetail' => array(self::BELONGS_TO , 'PrivatePromotionDetail' ,'','on'=> 't.lid=PrivatePromotionDetail.product_id and PrivatePromotionDetail.dpid=t.dpid and PrivatePromotionDetail.delete_flag=0'),
-	
+			'productbom' => array(self::HAS_MANY , 'ProductBom' ,'','on'=> 't.lid=productbom.product_id and productbom.dpid=t.dpid and productbom.delete_flag=0'),
+			
 		);
 	}
 

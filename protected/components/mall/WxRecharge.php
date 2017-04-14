@@ -65,7 +65,7 @@ class WxRecharge
 	  */
 	  public function updateBrandUser(){
 		  $isSync = DataSync::getInitSync();
-		  $sql = 'update nb_brand_user set remain_money = remain_money + '.$this->recharge['recharge_money'].',is_sync='.$isSync.' where lid='.$this->userId.' and dpid='.$this->dpid;
+		  $sql = 'update nb_brand_user set remain_money = remain_money + '.$this->recharge['recharge_money'].',remain_back_money = remain_back_money + '.$this->recharge['recharge_cashback'].',is_sync='.$isSync.' where lid='.$this->userId.' and dpid='.$this->dpid;
 		  $result = Yii::app()->db->createCommand($sql)->execute();
 		  if(!$result){
        		throw new Exception('更新会员余额失败!');

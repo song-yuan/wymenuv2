@@ -124,4 +124,9 @@ class ProductBom extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	public static function getProductMaterialName($printerwayId,$dpid){
+		$sql = 'SELECT material_name from nb_product_material where lid=:lid and dpid=:dpid and delete_flag = 0';
+		$printerway = Yii::app()->db->createCommand($sql)->bindValue(':lid',$printerwayId)->bindValue(':dpid',$dpid)->queryRow();
+		return $printerway['material_name'];
+	}
 }
