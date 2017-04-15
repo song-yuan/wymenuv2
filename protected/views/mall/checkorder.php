@@ -93,9 +93,9 @@
 		<div class="clear"></div>
 	</div>
 <?php elseif($this->type==6):?>
-	<div class="order-site"><div class="lt">就餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:10px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
+	<div class="order-site"><div class="lt">取餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
 	<div class="order-time arrowright" style="margin:10px 0;">
-		<div class="time-lt">就餐时间</div>
+		<div class="time-lt">取餐时间</div>
 		<div class="time-rt">
 			<select name="order_time">
                  <option selected="selected" value="0">即食</option>
