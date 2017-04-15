@@ -156,21 +156,11 @@ li{
          onMouseOver="this.style.backgroundColor='rgba(255,222,212,1)'" 
          onmouseout="this.style.backgroundColor=''">
     </div>
- <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('wechatMember/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员查询'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMember/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+ <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','会员查询'),'url'=>$this->createUrl('wechatMember/search' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMember/search' , array('companyId' => $this->companyId,'type'=>0)))));?>
 <div class="row">   
     <div class="col-md-12">
     <div class="portlet purple box">
         <div class="portlet-body" >
-            <form action="" method="post" >     
-                    <div class="row find">
-                            <div class="col-xs-12 col-sm-5 form-group find_item1">                                    
-                                <input type="text" name="num" class="form-control" value=""  placeholder="卡号" >
-                            </div>     
-                            <div class="col-xs-12 col-sm-2 find_item2">
-                                <input type="submit"   class=' btn  btn-primary  ' value="查 询"/>           
-                            </div>
-                    </div>              
-            </form>   
             <div class="info">
                 <div class="person_info">
                       <?php if($brand_user_model) :?>
@@ -243,7 +233,7 @@ li{
                             <tbody>                               
                                 <?php  
                                // var_dump($cupon_model);
-                                $cupon_arrays=$brand_user_model->cupon_branduser;
+                                $cupon_arrays = $brand_user_model->cupon_branduser;
                                 if(!empty($cupon_arrays)): 
                                     foreach($cupon_arrays as $cupon_array):   
                                       if(($cupon_array->is_used)==1):
@@ -404,9 +394,7 @@ li{
 </div>
 <script>
     $(function(){
-      $("input[name=num]").focus();
-      
-      
+
         $(".info_item").hide();
         $(".info_item").eq(0).show();
         $("#attr_info li a").click(function(){
