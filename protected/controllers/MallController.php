@@ -24,7 +24,7 @@ class MallController extends Controller
 		$this->companyId = $companyId;
 		$this->type = $type;
 		$this->company = WxCompany::get($this->companyId);
-		if($this->company['type']=='0'){
+		if($this->company['type']=='0'&&$actin->id!='reCharge'){
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
