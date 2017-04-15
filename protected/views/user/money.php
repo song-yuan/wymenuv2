@@ -29,7 +29,7 @@
 </style>
 <div class="page">
     <div class="item1">
-        <div class="money1 clearfix"><span class="left">我的储值余额(元)</span><a href="<?php echo $this->createUrl('/mall/recharge',array('companyId'=>$this->companyId));?>"><span class="right">去充值 ></span></a></div>
+        <div class="money1 clearfix"><span class="left">我的储值余额(元)</span><a href="<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$this->companyId));?>"><span class="right">去充值 ></span></a></div>
         <div class="money2"><?php echo $remainMoey;?></div>
      </div>
      <?php if(!empty($recharges)):?>
