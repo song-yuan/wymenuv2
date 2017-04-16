@@ -23,7 +23,7 @@
     text-align: center;
 }
 .record span{
-	width:25%;
+	width:33.33%;
 	text-align:center;
 }
 </style>
@@ -40,7 +40,7 @@
              <a class="weui_cell js_cell" href="javascript:;" >
                  <span class="weui_cell_hd "><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdcz.png" class="icon_nav" alt=""/></span>
                  <div class="weui_cell_bd weui_cell_primary">
-                     <p><?php echo $recharge['wr_name'];?></p>
+                     <p>充<?php if($recharge['recharge_money']-(int)$recharge['recharge_money'] > 0){ echo $recharge['recharge_money'];}else{echo (int)$recharge['recharge_money'];}?>返<?php echo $recharge['recharge_cashback'];?></p>
                   </div>
               </a>
               <?php endforeach;?>
@@ -52,13 +52,13 @@
         <div class="weui_cells weui_cells_access global_navs">
         	<a class="weui_cell js_cell" href="javascript:;" >
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
-                 	<span class="left">充值时间</span><span class="left">充值金额</span><span class="left">返现金额</span><span class="left">赠送积分</span>
+                 	<span class="left">充值时间</span><span class="left">充值金额</span><span class="left">返现金额</span>
                   </div>
               </a>
            	 <?php foreach ($records as $record):?>
              <a class="weui_cell js_cell" href="javascript:;" >
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
-                 	<span class="left"><?php echo date('Y-m-d',strtotime($record['create_at']));?></span><span class="left"><?php echo $record['recharge_money'];?></span><span class="left"><?php echo $record['cashback_num'];?></span><span class="left"><?php echo $record['point_num'];?></span>
+                 	<span class="left"><?php echo date('Y-m-d',strtotime($record['create_at']));?></span><span class="left"><?php echo $record['recharge_money'];?></span><span class="left"><?php echo $record['cashback_num'];?></span>
                   </div>
               </a>
               <?php endforeach;?>
