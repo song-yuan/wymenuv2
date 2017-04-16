@@ -155,7 +155,7 @@ class WxCashBack
 			$sql = 'update nb_brand_user set remain_back_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 	 	}else{
- 			$sql = 'update nb_cashback_record set remain_back_money = remain_back_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+ 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
  			Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 }
