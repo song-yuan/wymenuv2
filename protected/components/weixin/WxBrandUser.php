@@ -123,7 +123,7 @@ class WxBrandUser {
 		$brandUser = self::get($userId,$dpid);
 		$remainMoney = $brandUser['remain_money'];
 		
-		$cashback = self::getCashBackYue($userId,$dpid);
+		$cashback = $brandUser['remain_back_money'];
 		
 		return $cashback ? $cashback + $remainMoney : $remainMoney;
 	}
