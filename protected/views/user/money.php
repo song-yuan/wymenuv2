@@ -40,7 +40,7 @@
              <a class="weui_cell js_cell" href="javascript:;" >
                  <span class="weui_cell_hd "><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdcz.png" class="icon_nav" alt=""/></span>
                  <div class="weui_cell_bd weui_cell_primary">
-                     <p>充<?php if($recharge['recharge_money']-(int)$recharge['recharge_money'] > 0){ echo $recharge['recharge_money'];}else{echo (int)$recharge['recharge_money'];}?>返<?php echo $recharge['recharge_cashback'];?></p>
+                     <p>充<?php if($recharge['recharge_money']-(int)$recharge['recharge_money'] > 0){ echo $recharge['recharge_money'];}else{echo (int)$recharge['recharge_money'];}?>元,返<?php echo $recharge['recharge_cashback'];?>元</p>
                   </div>
               </a>
               <?php endforeach;?>
