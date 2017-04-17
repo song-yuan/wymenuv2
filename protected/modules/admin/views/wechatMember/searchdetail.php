@@ -209,7 +209,7 @@ li{
                             <tbody>
                                 <tr>
                                     <td><?php echo $brand_user_model->remain_money;?></td>
-                                    <td><?php echo $cashback;?></td>
+                                    <td><?php echo $brand_user_model->remain_back_money;?></td>
                                     <td><?php echo $brand_user_model->consume_point_history;?></td>
                                     <td><?php echo $brand_user_model->create_at;?></td>
                                     <td><?php echo $brand_user_model->province;?>&nbsp;&nbsp;<?php echo $brand_user_model->city;?></td>
