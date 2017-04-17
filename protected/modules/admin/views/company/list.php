@@ -101,6 +101,12 @@
     		background-repeat: no-repeat;
 			background-size: 90%;
 		}
+		.ku-item.ggsz{
+			background-image:url(../../../../img/icon-announcement.png);
+			background-position: 8px 10px;
+    		background-repeat: no-repeat;
+			background-size: 90%;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -176,7 +182,7 @@
 						</div>
 					</a>
                                        
-                                        <?php if(Yii::app()->user->role <= 7):?>
+                    <?php if(Yii::app()->user->role <= 7):?>
 					<a href="<?php echo $this->createUrl('copyScreen/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple spsz"></div>
@@ -217,6 +223,14 @@
 							<div class="ku-item-info">微店营业</div>
 						</div>
 					</a>
+					<?php if(Yii::app()->user->role < User::SHOPKEEPER):?>
+					<a href="<?php echo $this->createUrl('announcement/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple ggsz"></div>
+							<div class="ku-item-info">公告设置</div>
+						</div>
+					</a>
+					<?php endif;?>
 					<!--
 					<a href="#">
 						<div class="pull-left margin-left-right">

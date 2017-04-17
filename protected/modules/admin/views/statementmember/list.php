@@ -41,6 +41,12 @@
 			background-position: -750px 16px;
     		background-repeat: no-repeat;
 		}
+		.ku-item.qcsj{
+			background-image:url(../../../../../../img/deletedata.jpg);
+			background-position: 10px 10px;
+    		background-repeat: no-repeat;
+    		background-size: 88%;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -59,6 +65,8 @@
 	<!-- BEGIN PAGE CONTENT-->
 	<?php if($type==2):?>
 		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','会员数据'),'url'=>''))));?>
+	<?php elseif($type==3):?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','清除数据'),'url'=>''))));?>
 	<?php endif;?>
 	<div class="row">
 		<div class="col-md-12">
@@ -66,6 +74,7 @@
 			      	<div class="portlet-title">
 					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','营业数据');?></span></a></div>
 					<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
+					<div class="caption"><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app','清除数据');?></span></a></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					
@@ -81,6 +90,13 @@
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sdbb"></div>
 							<div class="ku-item-info">实卡会员</div>
+						</div>
+					</a>
+					<?php elseif($type==3):?>
+					<a href="<?php echo $this->createUrl('statementmember/clearTestdata',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey qcsj"></div>
+							<div class="ku-item-info">数据清除</div>
 						</div>
 					</a>
 					<?php endif;?>
