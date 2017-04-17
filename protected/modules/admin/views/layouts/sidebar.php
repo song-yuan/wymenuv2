@@ -17,7 +17,7 @@
             -->
    <?php if(Yii::app()->user->role <= '15'): ?>
         <?php if(Yii::app()->user->role != '8'): ?>
-            <li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWifi', 'user' ,'synchronous','poscode','postable','connectUs','uploadApk' ))) echo 'active';?>">
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWx', 'user' ,'synchronous','poscode','postable','connectUs','uploadApk','announcement' ))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('company/list',array('companyId' => $this->companyId));?>">
                         <i class="fa fa-home"></i> 
                         <span class="title"><?php echo yii::t('app','店铺管理');?></span>					

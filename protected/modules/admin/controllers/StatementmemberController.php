@@ -517,4 +517,12 @@ class StatementmemberController extends BackendController
 		header('Cache-Control: max-age=0');
 		$objWriter->save('php://output');
 	}
+	
+	public function actionClearTestdata() {
+		$type = Yii::app()->request->getParam('type');
+		$this->render('clearTestdata',array(
+				'companyId' => $this->companyId,
+				'type'=>$type,
+		));
+	}
 }
