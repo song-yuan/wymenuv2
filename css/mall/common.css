@@ -1079,13 +1079,16 @@ div.chooselist a {
 }
 
 .points {
-	padding: 10px 15px !important;
+	padding: 20px !important;
 	height: 23px;
 }
 
 .points .left {
 	width: 70%;
-	padding-top: 5px;
+}
+
+.points .right {
+	width: 15%;
 }
 
 
