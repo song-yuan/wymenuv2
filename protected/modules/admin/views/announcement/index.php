@@ -72,7 +72,7 @@
 							<tr class="odd gradeX">                                    
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<?php if(Yii::app()->user->role <5):?>
-                                <td><?php echo $model->company->company_name;?></td>
+                                <td><?php if($model->company) echo $model->company->company_name;?></td>
                                 <?php endif;?>
 								
 								<td>
