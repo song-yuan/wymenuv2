@@ -43,14 +43,6 @@ class WechatMemberController extends BackendController {
         $brand_user_model = BrandUser::model()->find($criteria);          
        
          
-        $now = date('Y-m-d H:i:s',time());
-
-        $db = Yii::app()->db; 
-        $sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$num.' and dpid='.$this->companyId.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
-        $back = Yii::app()->db->createCommand($sql)->queryRow();
-        if($back){
-            $cashback= $back['total'];           
-        }
 
         $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid='".$this->companyId."'");
           
@@ -61,7 +53,6 @@ class WechatMemberController extends BackendController {
                                        
                                         'cupon_model'=> $cupon_model,
                                         'orderPay'=>$orderPay,
-                                        'cashback'=>$cashback
                     )
                     );
     }
