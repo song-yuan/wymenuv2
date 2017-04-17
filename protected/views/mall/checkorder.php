@@ -99,8 +99,6 @@
 		<div class="time-rt">
 			<select name="order_time">
                  <option selected="selected" value="0">即食</option>
-                 <option value="5">5分钟</option>
-                 <option value="10">10分钟</option>
                  <option value="15">15分钟</option>
                  <option value="20">20分钟</option>
                  <option value="25">25分钟</option>
