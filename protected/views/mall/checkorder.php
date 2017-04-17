@@ -247,6 +247,15 @@
 	</div>
 <?php endif;?>
 
+<!-- 余额 -->
+<div class="chooselist points">
+	<div class="left">余额 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
+	<div class="right">
+	<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+	</div>
+</div>
+<!-- 余额 -->
+
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="备注"></textarea>
 </div>
@@ -261,14 +270,6 @@
 	</div>
 </div>
 
-<!-- 余额 -->
-<div class="chooselist points">
-	<div class="left">余额 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
-	<div class="right">
-	<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
-	</div>
-</div>
-<!-- 余额 -->
 
 <div class="bottom"></div>
 
