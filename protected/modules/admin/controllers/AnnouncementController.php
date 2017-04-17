@@ -34,7 +34,7 @@ class AnnouncementController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Announcement');
 			if(Yii::app()->user->role <5){
-				$model->dpid = '0';
+				$model->dpid = $this->companyId;
 			}else{
 				$model->dpid = $this->companyId;
 				$model->type = '2';
