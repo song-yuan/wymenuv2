@@ -247,20 +247,19 @@
 	</div>
 <?php endif;?>
 
-<!-- 余额 -->
-<div class="chooselist points">
-	<div class="left">余额 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
-	<div class="right">
-	<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
-	</div>
-</div>
-<!-- 余额 -->
-
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="备注"></textarea>
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
+	<!-- 余额 -->
+	<div class="chooselist points">
+		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
+		<div class="right">
+		<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+		</div>
+	</div>
+	<!-- 余额 -->
 	<div class="paytype">
 		<div class="item wx on" paytype="2" style="border:none;"><img src="<?php echo $baseUrl;?>/img/mall/wxpay.png"/> 微信支付</div>
 		<!-- 
