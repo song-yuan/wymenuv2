@@ -93,14 +93,12 @@
 		<div class="clear"></div>
 	</div>
 <?php elseif($this->type==6):?>
-	<div class="order-site"><div class="lt">就餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:10px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
+	<div class="order-site"><div class="lt">取餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
 	<div class="order-time arrowright" style="margin:10px 0;">
-		<div class="time-lt">就餐时间</div>
+		<div class="time-lt">取餐时间</div>
 		<div class="time-rt">
 			<select name="order_time">
                  <option selected="selected" value="0">即食</option>
-                 <option value="5">5分钟</option>
-                 <option value="10">10分钟</option>
                  <option value="15">15分钟</option>
                  <option value="20">20分钟</option>
                  <option value="25">25分钟</option>
@@ -252,6 +250,14 @@
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
+	<!-- 余额 -->
+	<div class="chooselist points" style="padding:15px;">
+		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
+		<div class="right">
+		<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+		</div>
+	</div>
+	<!-- 余额 -->
 	<div class="paytype">
 		<div class="item wx on" paytype="2" style="border:none;"><img src="<?php echo $baseUrl;?>/img/mall/wxpay.png"/> 微信支付</div>
 		<!-- 
@@ -261,14 +267,6 @@
 	</div>
 </div>
 
-<!-- 余额 -->
-<div class="chooselist points">
-	<div class="left">余额 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
-	<div class="right">
-	<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
-	</div>
-</div>
-<!-- 余额 -->
 
 <div class="bottom"></div>
 

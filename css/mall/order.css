@@ -46,9 +46,9 @@ body{ background-color:#E5E5E5;}
 .user-cupon .cupon-container{padding:20px;overflow:auto;}
 .order-paytype .select-type{padding:10px 10px 0;margin-top:5px;color:#FF5151}
 .order-paytype .paytype{padding:10px;background:rgb(255,255,255);}
-.order-paytype .item,.user-cupon .item{padding:10px;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 20px 20px;}
+.order-paytype .item,.user-cupon .item{padding:10px;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 23px 23px;}
 .order-paytype .item img{width:20px;height:20px;vertical-align:middle;}
-.order-paytype .on,.user-cupon .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 20px 20px;}
+.order-paytype .on,.user-cupon .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 23px 23px;}
 .paytype .item:last-child,.user-cupon .item:last-child{border:none;}
 .bottom{width:100%;height:100px;background-color:#E5E5E5;}
 

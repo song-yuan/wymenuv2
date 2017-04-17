@@ -809,6 +809,7 @@ class WxOrder
 	 public static function reduceYue($user,$order){
 	 	$payMoney = 0;
 	 	$userId = $user['lid'];
+	 	$userDpId = $user['dpid'];
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
 	 	
@@ -829,13 +830,13 @@ class WxOrder
 		
 	 	$isSync = DataSync::getInitSync();
 	 	
-	 	$yue = WxBrandUser::getYue($userId,$dpid);//余额
-	 	$cashback = WxBrandUser::getCashBackYue($userId,$dpid);//返现余额
+	 	$yue = WxBrandUser::getYue($userId,$userDpId);//余额
+	 	$cashback = WxBrandUser::getCashBackYue($userId,$userDpId);//返现余额
 	 	
 	 	if($cashback > 0){
 	 		//返现余额大于等于支付
 	 		if($cashback >= $total){
-	 			WxCashBack::userCashBack($total,$userId,$dpid,0);
+	 			WxCashBack::userCashBack($total,$userId,$userDpId,0);
 	 			//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
 				//修改订单产品状态
