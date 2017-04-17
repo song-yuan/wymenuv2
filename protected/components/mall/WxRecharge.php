@@ -81,63 +81,72 @@ class WxRecharge
 	 	$sql = 'select * from nb_points_valid where dpid='.$this->dpid.' and is_available=0 and delete_flag=0';
 		$this->pointsValid = Yii::app()->db->createCommand($sql)->queryRow();
 	 }
-	  /**
-	   * 
-	   * 插入积分、返现记录
-	   * 
-	   * 
-	   */
-	   public function insertPoints(){
-	   	   $time = time();
-	   	   if($this->recharge['recharge_pointback']){
-	   	   		if($this->pointsValid){
-					$endTime = date('Y-m-d H:i:s',strtotime('+'.$this->pointsValid['valid_days'].' day'));
-				}else{
-					$endTime = date('Y-m-d H:i:s',strtotime('+1 year'));
-				}
-				$se = new Sequence("member_points");
-			    $lid = $se->nextval();
-				$pointRecordData = array(
-									'lid'=>$lid,
-						        	'dpid'=>$this->dpid,
-						        	'create_at'=>date('Y-m-d H:i:s',$time),
-						        	'update_at'=>date('Y-m-d H:i:s',$time),
-						        	'card_type'=>1,
-									'card_id'=>$this->userId,
-									'point_resource'=>1,
-						        	'resource_id'=>$this->rechargeId,
-						        	'points'=>$this->recharge['recharge_pointback'],
-						        	'remain_points'=>$this->recharge['recharge_pointback'],
-						        	'end_time'=>$endTime,
-						        	'is_sync'=>DataSync::getInitSync(),
-									);
-				$result = Yii::app()->db->createCommand()->insert('nb_member_points', $pointRecordData);
-				if(!$result){
-	       			throw new Exception('插入积分失败!');
-	       	   }
-	   	   }
-	   	   
-	   	   if($this->recharge['recharge_cashback']){
-				$se = new Sequence("cashback_record");
-			    $lid = $se->nextval();
-				$pointRecordData = array(
-									'lid'=>$lid,
-						        	'dpid'=>$this->dpid,
-						        	'create_at'=>date('Y-m-d H:i:s',$time),
-						        	'update_at'=>date('Y-m-d H:i:s',$time),
-						        	'point_type'=>1,
-						        	'type_lid'=>$this->rechargeId,
-						        	'cashback_num'=>$this->recharge['recharge_cashback'],
-						        	'remain_cashback_num'=>$this->recharge['recharge_cashback'],
-						        	'brand_user_lid'=>$this->userId,
-						        	'is_sync'=>DataSync::getInitSync(),
-									);
-				$result = Yii::app()->db->createCommand()->insert('nb_cashback_record', $pointRecordData);
-				if(!$result){
-	       			throw new Exception('插入返现失败!');
-	       	   }
-	   	   }
-	   }
+ 	 /**
+   	* 
+  	 * 插入积分、返现记录
+  	 * 
+   	* 
+   	*/
+   	public function insertPoints(){
+   	   $time = time();
+   	   if($this->recharge['recharge_pointback']){
+   	   		if($this->pointsValid){
+				$endTime = date('Y-m-d H:i:s',strtotime('+'.$this->pointsValid['valid_days'].' day'));
+			}else{
+				$endTime = date('Y-m-d H:i:s',strtotime('+1 year'));
+			}
+			$se = new Sequence("member_points");
+		    $lid = $se->nextval();
+			$pointRecordData = array(
+								'lid'=>$lid,
+					        	'dpid'=>$this->dpid,
+					        	'create_at'=>date('Y-m-d H:i:s',$time),
+					        	'update_at'=>date('Y-m-d H:i:s',$time),
+					        	'card_type'=>1,
+								'card_id'=>$this->userId,
+								'point_resource'=>1,
+					        	'resource_id'=>$this->rechargeId,
+					        	'points'=>$this->recharge['recharge_pointback'],
+					        	'remain_points'=>$this->recharge['recharge_pointback'],
+					        	'end_time'=>$endTime,
+					        	'is_sync'=>DataSync::getInitSync(),
+								);
+			$result = Yii::app()->db->createCommand()->insert('nb_member_points', $pointRecordData);
+			if(!$result){
+       			throw new Exception('插入积分失败!');
+       	   }
+   	   }
+   	   
+   	   if($this->recharge['recharge_cashback']){
+			$se = new Sequence("cashback_record");
+		    $lid = $se->nextval();
+			$pointRecordData = array(
+								'lid'=>$lid,
+					        	'dpid'=>$this->dpid,
+					        	'create_at'=>date('Y-m-d H:i:s',$time),
+					        	'update_at'=>date('Y-m-d H:i:s',$time),
+					        	'point_type'=>1,
+					        	'type_lid'=>$this->rechargeId,
+					        	'cashback_num'=>$this->recharge['recharge_cashback'],
+					        	'remain_cashback_num'=>$this->recharge['recharge_cashback'],
+					        	'brand_user_lid'=>$this->userId,
+					        	'is_sync'=>DataSync::getInitSync(),
+								);
+			$result = Yii::app()->db->createCommand()->insert('nb_cashback_record', $pointRecordData);
+			if(!$result){
+       			throw new Exception('插入返现失败!');
+       	   }
+   	   }
+   	}
+   	public static function getWxRechargeComment($dpid,$type,$useType){
+   		$sql = 'select * from nb_announcement where dpid=:dpid and type=:type and use_type=:userType and delete_flag=0';
+   		$comments = Yii::app()->db->createCommand($sql)
+			   		->bindValue(':dpid',$dpid)
+			   		->bindValue(':type',$type)
+			   		->bindValue(':userType',$useType)
+			   		->queryAll();
+   		return $comments;
+   	}  
 	/**
 	 * 
 	 * 获取微信充值模板

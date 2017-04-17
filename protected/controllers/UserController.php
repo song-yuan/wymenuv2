@@ -104,11 +104,11 @@ class UserController extends Controller
     public function actionMoney(){
     	$userId = Yii::app()->session['userId'];
     	$remainMoey = WxBrandUser::getYue($userId, $this->companyId);
-    	$recharges = WxRecharge::getWxRecharge($this->companyId);
+    	$comments = WxRecharge::getWxRechargeComment($this->companyId,2,2);
     	$rechargeRecords = WxRecharge::getRechargeRecord($this->companyId,$userId);
-        $this->render('money',array('remainMoey'=>$remainMoey,'recharges'=>$recharges,'records'=>$rechargeRecords));
+        $this->render('money',array('remainMoey'=>$remainMoey,'comments'=>$comments,'records'=>$rechargeRecords));
     } 
-     public function actionPoint(){
+    public function actionPoint(){
         $userId = Yii::app()->session['userId'];
         $user = $this->brandUser;
         $remain_points = WxPoints::getAvaliablePoints($userId,$user['dpid']);  

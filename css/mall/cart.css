@@ -74,7 +74,6 @@ input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-
 .section .detail-items .item-group{margin:10px;}
 
 .points {
-    padding: 10px 15px !important;
     height: 28px;
     font-size: 16px;
     background:rgb(255,255,255);
@@ -83,18 +82,11 @@ input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-
 .points .left {
 	float:left;
     width: 70%;
-    padding-top: 5px;
 }
-.small {
-    font-size: 0.8em !important;
-}
-.font_l {
-    color: #999999;
-}
-.points .right {
-	float:right;
-    width: 15%;
-    padding-right: 5px;
+.chooselist img{
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
 }
 input[type="checkbox"] {
     position: absolute;

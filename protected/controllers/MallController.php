@@ -24,13 +24,13 @@ class MallController extends Controller
 		$this->companyId = $companyId;
 		$this->type = $type;
 		$this->company = WxCompany::get($this->companyId);
-		if($this->company['type']=='0'){
-			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
-			exit;
-		}
 	}
 	
 	public function beforeAction($actin){
+		if($this->company['type']=='0'&&$actin->id!='reCharge'){
+			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
+			exit;
+		}
 		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
