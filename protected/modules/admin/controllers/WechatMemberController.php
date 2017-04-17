@@ -109,7 +109,7 @@ class WechatMemberController extends BackendController {
             . " where order_type in ('1','2','6') and order_status in ('3','4','8')"
             . " group by dpid,user_id) tct on t.dpid = tct.dpid and t.lid = tct.user_id "
             . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
-            . " where t.lid not in(".$users.") and t.dpid = ".$companyId." ";
+            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")";
            // echo $sql;exit;    
         if($finduserlevel!="0000000000")
         {
