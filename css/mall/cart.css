@@ -74,7 +74,6 @@ input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-
 .section .detail-items .item-group{margin:10px;}
 
 .points {
-    padding: 10px 15px !important;
     height: 28px;
     font-size: 16px;
     background:rgb(255,255,255);
@@ -83,7 +82,6 @@ input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-
 .points .left {
 	float:left;
     width: 70%;
-    padding-top: 5px;
 }
 .chooselist img{
     width: 20px;
