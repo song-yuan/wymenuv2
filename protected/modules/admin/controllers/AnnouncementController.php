@@ -14,7 +14,7 @@ class AnnouncementController extends BackendController
      	
 			$criteria = new CDbCriteria;
 			$criteria->condition = ' t.delete_flag=0';
-			if(Yii::app()->user->role >5){
+			if(Yii::app()->user->role >=5){
 				$criteria->addCondition('t.dpid='.$this->companyId);
 			}
 			$criteria->with = 'company';
