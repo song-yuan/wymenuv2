@@ -45,9 +45,15 @@ class DoubleScreenController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('DoubleScreen');
                         $se=new Sequence("double_screen");
+                       
                         $model->lid = $se->nextval();
+                        $code=new Sequence("phs_code");
+			$phs_code = $code->nextval();
+                        
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->update_at = date('Y-m-d H:i:s',time());
+                        $model->phs_code = ProductCategory::getChscode($this->companyId, $model->lid, $phs_code);
+			$model->source = '0';
                         $model->is_able = '1';
                         $model->delete_flag = '0';
                         
