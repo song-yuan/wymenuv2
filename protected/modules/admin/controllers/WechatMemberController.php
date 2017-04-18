@@ -42,8 +42,8 @@ class WechatMemberController extends BackendController {
         $brand_user_model = BrandUser::model()->find($criteria);          
        
          $company = Company::model()->find('dpid='.$this->companyId);
-         if($company->type!=0){
-         	$companys = Company::model()->find('comp_dpid='.$this->companyId);
+         if($company->type==0){
+         	$companys = Company::model()->findAll('comp_dpid='.$this->companyId);
          	$companyIds = '';
          	foreach ($companys as $com){
          		$companyIds .= $com->dpid.',';
@@ -52,7 +52,6 @@ class WechatMemberController extends BackendController {
          }else{
          	$companyIds = $this->companyId;
          }
-
         $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid in (".$companyIds.")");
           
         $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid in (".$companyIds.")");            
