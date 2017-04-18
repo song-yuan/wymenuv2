@@ -582,11 +582,11 @@ class WxOrder
 			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2)';
 			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}elseif($type==2){
-			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (3,4) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
+			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4,8)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (3,4,8) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}else{
-			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2,3,4) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
+			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4,8)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2,3,4,8) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 	    return $orderList;
