@@ -274,7 +274,7 @@ li{
                                     <th>账单号</th>    
                                     <th>时间</th>
                                     <th>金额</th>
-                                                               
+                                     <th>消费门店</th>                         
                                 </tr>
                             </thead>
                             <?php 
@@ -295,7 +295,7 @@ li{
                                     
                                     
                                     <td><?php echo $v->create_at;?></td> 
-                                    <td><?php echo $v->pay_amount;?></td> 
+                                    <td><?php echo $v->company->company_name;?></td> 
                                 </tr>
                             </tbody>
                             <?php 

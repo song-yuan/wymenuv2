@@ -52,7 +52,7 @@ class WechatMemberController extends BackendController {
          }else{
          	$companyIds = $this->companyId;
          }
-        $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid in (".$companyIds.")");
+        $orderPay = OrderPay::model()->with(array('order4','company'))->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid in (".$companyIds.") group by order_id");
           
         $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid in (".$companyIds.")");            
 
