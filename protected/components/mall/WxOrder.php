@@ -828,76 +828,19 @@ class WxOrder
 		}
 		$total = $orderTotal - $payCupon - $payPoints;
 		
-	 	$isSync = DataSync::getInitSync();
-	 	
-	 	$yue = WxBrandUser::getYue($userId,$userDpId);//余额
-	 	$cashback = WxBrandUser::getCashBackYue($userId,$userDpId);//返现余额
-	 	
-	 	if($cashback > 0){
-	 		//返现余额大于等于支付
-	 		if($cashback >= $total){
-	 			WxCashBack::userCashBack($total,$userId,$userDpId,0);
-	 			//修改订单状态
-				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-				//修改订单产品状态
-				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-				//修改座位状态
-				if($order['order_type']==1){
-					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-				}else{
-					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-				}
-				$payMoney = $total;
-	 		}else{
-	 			WxCashBack::userCashBack($total,$userId,$dpid,1);
-	 			if($yue > $total){//剩余充值大于支付
- 					$sql = 'update nb_brand_user set remain_money = remain_money-'.($total - $cashback).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					
-					//修改订单状态
-					WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-					//修改订单产品状态
-					WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-					//修改座位状态
-					if($order['order_type']==1){
-						WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-					}else{
-						WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-					}
-					
-					$payMoney = $total;
-	 			}else{
-	 				$sql = 'update nb_brand_user set remain_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					
-					$payMoney = $yue;
-	 			}
-	 		}
-	 	}else{
-	 		if($yue > $total){
-				$sql = 'update nb_brand_user set remain_money = remain_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-				$result = Yii::app()->db->createCommand($sql)->execute();
-				
-				//修改订单状态
-				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-				//修改订单产品状态
-				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-				//修改座位状态
-				if($order['order_type']==1){
-					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-				}else{
-					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-				}
-				
-				$payMoney = $total;
- 			}else{
- 				$sql = 'update nb_brand_user set remain_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-				$result = Yii::app()->db->createCommand($sql)->execute();
-				
-				$payMoney = $yue;
- 			}
-	 	}
-	 	
+		$payMoney = WxBrandUser::reduceYue($userId, $userDpId, $total);	
+		if($payMoney==$total){
+			//修改订单状态
+			WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+			//修改订单产品状态
+			WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
+			//修改座位状态
+			if($order['order_type']==1){
+				WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+			}else{
+				WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
+			}
+		} 	
 	 	return $payMoney;
 	 }
      /**
