@@ -49,6 +49,7 @@
 					</div>
 				</div>
 				<div class="form-actions fluid">
+					<lable style="font-size: 16px;text-align: left;color: red; " class="col-md-5 control-label">注意：数据清除之后无法恢复，请慎用！！！</lable>
 					<div class="col-md-offset-9 col-md-3">  
 						<button type="button" class="btn green stockClear" id="stockClear" cleartype="1">清除</button>  
 						<button style="display: none;" type="button" class="btn green stockClear" id="stockClearall" cleartype="2">清除所有</button>                       

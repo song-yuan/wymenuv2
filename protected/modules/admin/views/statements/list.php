@@ -185,13 +185,9 @@
 			<div class="portlet purple box">
 			      	<div class="portlet-title">
 					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','营业数据');?></span></a></div>
-					<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
-					<div class="caption"><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app','清除数据');?></span></a></div>
-					
-					<!--<em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-truck">&nbsp</em><a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存数据');?></span></a> -->
-					<div class="actions">
-						<!-- <a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>  -->
-					</div>
+					<div class="caption"><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-truck">&nbsp</em><a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','进销存数据');?></span></a></div>
+					<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-group">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
+					<div class="caption"><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-warning ">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app','清除数据');?></span></a></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					<?php if($type==0):?>
@@ -321,38 +317,8 @@
 					</a>
 					 -->
 					
-					
 					<?php elseif($type==1):?>
-					<a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey cgzh"></div>
-							<div class="ku-item-info">采购综合</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey cszh"></div>
-							<div class="ku-item-info">产商综合</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey csls"></div>
-							<div class="ku-item-info">产商零售</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey kczh"></div>
-							<div class="ku-item-info">库存综合</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sskc"></div>
-							<div class="ku-item-info">实时库存</div>
-						</div>
-					</a>
+					
 					<?php endif;?>
 				</div>
 			</div>
