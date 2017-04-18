@@ -27,7 +27,6 @@ class WechatMemberController extends BackendController {
     public function actionSearchDetail(){
         $num = Yii::app()->request->getParam('num');       
         $card_id = Yii::app()->request->getParam('card_id'); 
-        $companyId = Yii::app()->request->getParam('companyId'); 
         $brand_user_model = '';
         $cupon_model = '';
 
@@ -42,13 +41,26 @@ class WechatMemberController extends BackendController {
        
         $brand_user_model = BrandUser::model()->find($criteria);          
        
+         $company = Company::model()->find('dpid='.$this->companyId);
+         if($company->type==0){
+         	$companys = Company::model()->findAll('comp_dpid='.$this->companyId);
+         	$companyIds = '';
+         	foreach ($companys as $com){
+         		$companyIds .= $com->dpid.',';
+         	}
+         	$companyIds = trim($companyIds,',');
+         }else{
+         	$companyIds = $this->companyId;
+         }
+         $criteria1 = new CDbCriteria;
+         $criteria1->with = array('order4','company');
+         $criteria1->group = 't.order_id';
+         $criteria1->addCondition("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid in (".$companyIds.")");
          
-
-        $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid='".$this->companyId."'");
+        $orderPay = OrderPay::model()->findAll($criteria1);
           
-        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid=".$this->companyId);            
+        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid in (".$companyIds.")");            
 
-         // var_dump(BrandUser::model()->findAll($criteria));exit; 
         $this->render('searchdetail',array( 'brand_user_model'=> $brand_user_model,
                                        
                                         'cupon_model'=> $cupon_model,
