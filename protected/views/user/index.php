@@ -160,10 +160,9 @@
                         <span class="weui_cell_hd "><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png" class="icon_nav" alt=""/></span>
                         
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>我的储值<span class="small font_org right"><?php echo number_format($remainMoney,2);?></span></p>
+                            <p>我的储值</p>
                         </div>
-                        <div class="weui_cell_ft">
-                        </div>         
+                        <div class="weui_cell_ft small font_org"><?php echo number_format($remainMoney,2);?></div>         
                     </a>
                     
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/point',array('companyId'=>$this->companyId));?>" >
