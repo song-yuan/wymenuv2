@@ -144,7 +144,7 @@ class WxCashBack
 	/**
 	 * 
 	 * 
-	 * 使用消费余额
+	 * 使用返现余额
 	 * $isAll 是否全部使用
 	 * 
 	 * 
@@ -162,5 +162,25 @@ class WxCashBack
 	 		throw new Exception('余额支付失败');
 	 	}
 	 }
-	
+	 /**
+	  *
+	  *
+	  * 使用储值余额
+	  * $isAll 是否全部使用
+	  *
+	  *
+	  */
+	 public static function userCashRecharge($total,$userId,$dpid,$isAll = 0){
+	 	$is_sync = DataSync::getInitSync();
+	 	if($isAll){
+	 		$sql = 'update nb_brand_user set remain_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+	 		$result = Yii::app()->db->createCommand($sql)->execute();
+	 	}else{
+	 		$sql = 'update nb_brand_user set remain_money = remain_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+	 		$result = Yii::app()->db->createCommand($sql)->execute();
+	 	}
+	 	if(!$result){
+	 		throw new Exception('余额支付失败');
+	 	}
+	 }
 }
