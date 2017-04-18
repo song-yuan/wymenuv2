@@ -64,6 +64,13 @@ class MemberController extends BackendController
 			if($model->haspassword){
 				$model->password_hash = MD5($model->password_hash);
 			}
+			if($model->rfid){
+				$members = MemberCard::model()->find('rfid=:lid and dpid=:dpid', array(':lid' => $model->rfid,':dpid'=>  $this->companyId));
+				if(!empty($members)){
+					Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败，该卡已添加过！！'));
+				}
+			}
+			
             $se=new Sequence("member_card");
             $model->lid = $se->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
