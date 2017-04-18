@@ -150,7 +150,6 @@ class WxCashBack
 	 * 
 	 */
 	 public static function userCashBack($total,$userId,$dpid,$isAll = 0){
-	 	Helper::writeLog('1123123123132');
 	 	$is_sync = DataSync::getInitSync();
 	 	if($isAll){
 			$sql = 'update nb_brand_user set remain_back_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
