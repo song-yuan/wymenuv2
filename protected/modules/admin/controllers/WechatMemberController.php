@@ -43,14 +43,6 @@ class WechatMemberController extends BackendController {
         $brand_user_model = BrandUser::model()->find($criteria);          
        
          
-        $now = date('Y-m-d H:i:s',time());
-
-        $db = Yii::app()->db; 
-        $sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$num.' and dpid='.$this->companyId.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
-        $back = Yii::app()->db->createCommand($sql)->queryRow();
-        if($back){
-            $cashback= $back['total'];           
-        }
 
         $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid='".$this->companyId."'");
           
@@ -61,7 +53,6 @@ class WechatMemberController extends BackendController {
                                        
                                         'cupon_model'=> $cupon_model,
                                         'orderPay'=>$orderPay,
-                                        'cashback'=>$cashback
                     )
                     );
     }
@@ -109,7 +100,7 @@ class WechatMemberController extends BackendController {
             . " where order_type in ('1','2','6') and order_status in ('3','4','8')"
             . " group by dpid,user_id) tct on t.dpid = tct.dpid and t.lid = tct.user_id "
             . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
-            . " where t.lid not in(".$users.") and t.dpid = ".$companyId." ";
+            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")";
            // echo $sql;exit;    
         if($finduserlevel!="0000000000")
         {
@@ -140,8 +131,8 @@ class WechatMemberController extends BackendController {
         $yearnow=date('Y',time());
         $yearbegin=$yearnow-$ageto;
         $yearend=$yearnow-$agefrom;
-        $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) <= '".$yearend."'";
-        $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) <= '".$birthto."'";
+        $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) <= '".$yearend."'";
+        $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) <= '".$birthto."'";
 
         $models = $pdata =$db->createCommand($sql)->queryAll();
         $pages = new CPagination(count($models));  

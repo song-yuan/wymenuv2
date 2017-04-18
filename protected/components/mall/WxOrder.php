@@ -582,11 +582,11 @@ class WxOrder
 			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2)';
 			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}elseif($type==2){
-			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (3,4) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
+			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4,8)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (3,4,8) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}else{
-			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2,3,4) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
+			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4,8)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2,3,4,8) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
 		}
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 	    return $orderList;
@@ -828,76 +828,19 @@ class WxOrder
 		}
 		$total = $orderTotal - $payCupon - $payPoints;
 		
-	 	$isSync = DataSync::getInitSync();
-	 	
-	 	$yue = WxBrandUser::getYue($userId,$userDpId);//余额
-	 	$cashback = WxBrandUser::getCashBackYue($userId,$userDpId);//返现余额
-	 	
-	 	if($cashback > 0){
-	 		//返现余额大于等于支付
-	 		if($cashback >= $total){
-	 			WxCashBack::userCashBack($total,$userId,$userDpId,0);
-	 			//修改订单状态
-				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-				//修改订单产品状态
-				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-				//修改座位状态
-				if($order['order_type']==1){
-					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-				}else{
-					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-				}
-				$payMoney = $total;
-	 		}else{
-	 			WxCashBack::userCashBack($total,$userId,$dpid,1);
-	 			if($yue > $total){//剩余充值大于支付
- 					$sql = 'update nb_brand_user set remain_money = remain_money-'.($total - $cashback).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					
-					//修改订单状态
-					WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-					//修改订单产品状态
-					WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-					//修改座位状态
-					if($order['order_type']==1){
-						WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-					}else{
-						WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-					}
-					
-					$payMoney = $total;
-	 			}else{
-	 				$sql = 'update nb_brand_user set remain_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					
-					$payMoney = $yue;
-	 			}
-	 		}
-	 	}else{
-	 		if($yue > $total){
-				$sql = 'update nb_brand_user set remain_money = remain_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-				$result = Yii::app()->db->createCommand($sql)->execute();
-				
-				//修改订单状态
-				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-				//修改订单产品状态
-				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-				//修改座位状态
-				if($order['order_type']==1){
-					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-				}else{
-					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-				}
-				
-				$payMoney = $total;
- 			}else{
- 				$sql = 'update nb_brand_user set remain_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
-				$result = Yii::app()->db->createCommand($sql)->execute();
-				
-				$payMoney = $yue;
- 			}
-	 	}
-	 	
+		$payMoney = WxBrandUser::reduceYue($userId, $userDpId, $total);	
+		if($payMoney==$total){
+			//修改订单状态
+			WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+			//修改订单产品状态
+			WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
+			//修改座位状态
+			if($order['order_type']==1){
+				WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+			}else{
+				WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
+			}
+		} 	
 	 	return $payMoney;
 	 }
      /**
