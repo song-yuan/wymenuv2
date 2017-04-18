@@ -295,6 +295,7 @@ li{
                                     
                                     
                                     <td><?php echo $v->create_at;?></td> 
+                                    <td><?php echo $v->order4->should_total;?></td> 
                                     <td><?php echo $v->company->company_name;?></td> 
                                 </tr>
                             </tbody>
