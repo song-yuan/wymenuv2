@@ -525,4 +525,29 @@ class StatementmemberController extends BackendController
 				'type'=>$type,
 		));
 	}
+	public function actionClearOrderdata(){
+		$cleartype = Yii::app()->request->getParam('cleartype');
+		$begin_time = Yii::app()->request->getParam('begin_time');
+		$end_time = Yii::app()->request->getParam('end_time');
+	
+		$sqlorder = 'select * from nb_order where order_status in(3,4,8) and dpid='.$this->companyId.' and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'"';
+		$res = Yii::app()->db->createCommand($sqlorder)->queryAll();
+		
+		if(!empty($res)){
+			if($cleartype == '1'){
+				$sql = 'update nb_order set order_status =7 where dpid='.$this->companyId.' and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'"';
+			}else{
+				$sql = 'update nb_order set order_status =7 where dpid='.$this->companyId;
+			}
+			$result = Yii::app()->db->createCommand($sql)->execute();
+			if($result){
+				Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功！')));
+			}else{
+				Yii::app()->end(json_encode(array("status"=>"eror",'msg'=>'失败')));
+			}
+		}else{
+			Yii::app()->end(json_encode(array("status"=>"eror",'msg'=>'无可清除数据')));
+		}
+		exit;
+	}
 }

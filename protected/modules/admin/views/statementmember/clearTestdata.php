@@ -29,11 +29,11 @@
 						
 					</div>
 				</div>
-				
+				<?php if(Yii::app()->user->role<=7):?>
 				<div style="min-height: 30px;" class="form-group">
 	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">起始时间:</lable>
 					<div style="margin-top: 5px;" class="col-md-4">
-						<input id="begin_time" class="form-control ui_timepicker" value="<?php echo date('Y-m-d H:i:s',strtotime('-1 day'));?>">
+						<input id="begin_time" class="form-control ui_timepicker" value="<?php echo date('Y-m-d 00:00:00',time());?>">
 					</div>
 				</div>
 				<div style="min-height: 30px;" class="form-group">
@@ -42,13 +42,23 @@
 						<input id="end_time" class="form-control ui_timepicker" value="<?php echo date('Y-m-d H:i:s',time());?>">
 					</div>
 				</div>
-				
-				<div class="form-actions fluid">
-						<div class="col-md-offset-9 col-md-3">  
-							<button type="button" class="btn green stockClear" id="stockClear" cleartype="1">清除</button>  
-							<button type="button" class="btn green stockClear" id="stockClearall" cleartype="2">清除所有</button>                       
-						</div>
+				<div style="min-height: 30px;display: none;" class="form-group">
+	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">是否恢复原料库存:</lable>
+					<div style="margin-top: 5px;" class="col-md-4">
+						<input style="padding: 10px 10px;" id="end_time" type="checkbox" class="form-control" >
 					</div>
+				</div>
+				<div class="form-actions fluid">
+					<div class="col-md-offset-9 col-md-3">  
+						<button type="button" class="btn green stockClear" id="stockClear" cleartype="1">清除</button>  
+						<button style="display: none;" type="button" class="btn green stockClear" id="stockClearall" cleartype="2">清除所有</button>                       
+					</div>
+				</div>
+				<?php else:?>
+				<div class="form-actions fluid">
+					<lable style="font-size: 16px;text-align: right;color: red; " class="col-md-3 control-label">抱歉！您无权限进行数据清除！</lable>
+				</div>
+				<?php endif;?>
 			</div>
 		</div>
 	</div>
@@ -71,62 +81,29 @@
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var cleartype = $(this).attr('cleartype');
-		layer.msg(begin_time);
-	    return false;
-	    $.ajax({
-	        type:'POST',
-			url:"<?php echo $this->createUrl('cfceshi/sqbprecreate',array('companyId'=>$this->companyId,));?>/pad_code/"+device_id,
-			async: false,
-			data: {device_id: device_id},
-	        cache:false,
-	        dataType:'json',
-			success:function(msg){
-	            //alert(msg.status);
-	            if(msg.status=="success")
-	            {            
-		            
-			        layer.msg("盘点成功！");
-			          
-		            location.reload();
-	            }else{
-		            layer.mag("11");
-		            location.reload();
-	            }
-			},
-	        error:function(){
-				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
-			},
-		});
-	    
-	});
-
-	$("#stockWappay").on("click",function(){
 		
-	    var device_id = $("#device_id").val();
-	    $.ajax({
-	        type:'POST',
-			url:"<?php echo $this->createUrl('cfceshi/sqbprecreate',array('companyId'=>$this->companyId,));?>/pad_code/"+device_id,
-			async: false,
-			data: {device_id: device_id},
-	        //cache:false,
-	        dataType:'json',
-			success:function(msg){
-	            //alert(msg.status);
-	            if(msg.status=="success")
-	            {            
-		            
-			        layer.msg("成功！");
-			          
-		            //location.reload();
-	            }else{
-		            layer.mag("11");
-		            //location.reload();
-	            }
-			},
-	        error:function(){
-				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
-			},
-		});
+	    if(window.confirm("数据清除之后无法找回！！确认清除数据？？？")){
+		    $.ajax({
+		        type:'POST',
+				url:"<?php echo $this->createUrl('statementmember/clearOrderdata',array('companyId'=>$this->companyId,));?>/cleartype/"+cleartype+"/begin_time/"+begin_time+"/end_time/"+end_time,
+				async: false,
+		        cache:false,
+		        dataType:'json',
+				success:function(msg){
+		            if(msg.status=="success")
+		            {            
+				        layer.msg("清除成功！");
+			            location.reload();
+		            }else{
+			            layer.msg(msg.msg);
+			            location.reload();
+		            }
+				},
+		        error:function(){
+					layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+				},
+			});
+	    }
 	    
 	});
 
