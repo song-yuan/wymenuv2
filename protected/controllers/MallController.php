@@ -59,7 +59,7 @@ class MallController extends Controller
 				}
 			}else{
 //				pc 浏览
-				$userId = 2082;
+				$userId = 2112;
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = -1;
 			}

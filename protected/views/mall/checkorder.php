@@ -221,14 +221,17 @@
 		</div>
 		<!-- end餐位费 -->
 	<?php endif;?>
+	<div class="totalinfo font_l" style="padding-top:10px">总计 ￥<?php echo $price;?></div>
 </div>
 <?php if($this->type!=2&&$user['level']):?>
+<!-- 
 <div class="discount">
 	<ul>
 		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品享受<?php echo $user['level']['level_discount']*10;?>折优惠</li>
 		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount']*10;?>折优惠</li>
 	</ul>
 </div>
+ -->
 <?php endif;?>
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
@@ -272,10 +275,10 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+        <p>待付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">确认下单</a></p>
+        <p><a id="payorder" href="javascript:;">提交订单</a></p>
     </div>
     <div class="clear"></div>
 </footer>

@@ -13,11 +13,11 @@ body{ background-color:#E5E5E5;}
 .order-info .ht1{width:100%;height:1px;background-color:#E5E5E5;}
 .order-info .taste{padding:5px;font-size:15px;color:gray;}
 
-.order-num{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
+.order-num{padding:10px;font-size:18px;margin-top:10px;background:rgb(255,255,255);}
 .order-num .num-lt{float:left;width:35%;}
 .order-num .num-rt{float:left;width:65%;text-align:right;}
 
-.order-time{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
+.order-time{padding:10px;font-size:18px;margin-top:10px;background:rgb(255,255,255);}
 .order-time .time-lt{float:left;width:35%;}
 .order-time .time-rt{float:left;width:55%;}
 .order-time input{width:80%;height:100%;border:none;text-align:right;font-size: 16px; color:#FF5151;}
@@ -36,10 +36,10 @@ body{ background-color:#E5E5E5;}
 
 .weui_cells_tips {margin-top: .3em;color: #888;padding-left: 15px;padding-right: 15px;font-size: 14px;}
 
-.order-copun{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
+.order-copun{padding:10px;font-size:18px;margin-top:10px;background:rgb(255,255,255);}
 .order-copun .copun-lt{float:left;width:65%;}
 .order-copun .copun-rt{float:left;width:35%;color:#FF5151;}
-.order-remark{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
+.order-remark{padding:10px;font-size:18px;margin-top:10px;background:rgb(255,255,255);}
 .order-remark textarea{border:none;width:100%;height:30px;color:#999999}
 .order-paytype{font-size:16px;}
 .user-cupon {width:100%;height:100%;font-size: 14px;display: none;}

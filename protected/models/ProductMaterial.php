@@ -64,6 +64,7 @@ class ProductMaterial extends CActiveRecord
 		'category' => array(self::BELONGS_TO , 'MaterialCategory' ,'','on'=> 't.category_id=category.lid and category.dpid=t.dpid'),
 		'unit' =>array(self::BELONGS_TO , 'MaterialUnit','','on'=>'t.stock_unit_id=unit.lid or t.sales_unit_id =unit.lid'),
 		'material_stock' => array(self::HAS_ONE , 'ProductMaterialStock' , '', 'on'=>'t.lid  = material_stock.material_id'),
+		'bom' => array(self::HAS_MANY , 'ProductBom' , '', 'on'=>'t.dpid  = bom.dpid and bom.material_id=t.lid and bom.delete_flag=0'),
 		);
 	}
 

@@ -15,7 +15,7 @@ body {
   margin: 0;
   padding: 0;
 }
-a span {
+a img {
   border: 0;
 }
 a {
@@ -333,13 +333,6 @@ input.weui_btn_plain_default {
 .weui_cell {
   position: relative;
 }
-.border{
-    padding-right: 0;
-    margin-right: 0;
-    width: 100%;
-   border-bottom: 8px solid #D9D9D9; 
-}
-
 .weui_cell:before {
   content: " ";
   position: absolute;
@@ -347,7 +340,7 @@ input.weui_btn_plain_default {
   top: 0;
   width: 100%;
   height: 1px;
- border-top: 1px solid #D9D9D9;
+  border-top: 1px solid #D9D9D9;
   -webkit-transform-origin: 0 0;
       -ms-transform-origin: 0 0;
           transform-origin: 0 0;
@@ -356,62 +349,11 @@ input.weui_btn_plain_default {
           transform: scaleY(0.5);
   left: 15px;
 }
-.empty1{
-    height: 20px;
-    border-top: 1px solid #CFCFCF;
-    border-bottom: 1px solid #CFCFCF;
-    background-color: #EDEDED;
-}
-.empty2{
-    height: 40px;
-    border-top: 1px solid #CFCFCF;
-    border-bottom: 1px solid #CFCFCF;
-    color:#787878; 
-    line-height: 40px;
-    padding-left: 20px;
-     background-color: #EDEDED;
-     font-size: 15px;
-}
-.empty3{
-    height: 20px;
-    border-top: 1px solid #CFCFCF; 
-     background-color: #EDEDED;
-}
-.put_into{
-    
-    color:#FFFFFF;
-    margin: 0px 15px 0px 15px;
-    font-size: 18px;
-}
-.put_into_bg{
-   background-color: #EDEDED;
-   padding-bottom: 50px;
-}
-
-.point1{
-   font-size: 17px;
-    padding:20px 0px 0px 15px;    
-}
-.point2{
-     font-size: 50px;
-    /* float: right; */
-    text-align: right;
-    vertical-align: middle;
-    padding-right: 15px;
-    
-}
-.point_style{
-    margin-top: 0px;
-    background-color: #04BE02;
-    color:#FFFFFF;
-}
-
-
 .weui_cell:first-child:before {
   display: none;
 }
 .weui_cells {
- /* margin-top: 1.17647059em;*/
+  margin-top: 1.17647059em;
   background-color: #FFFFFF;
   line-height: 1.41176471;
   font-size: 17px;
@@ -859,14 +801,14 @@ input.weui_btn_plain_default {
 .weui_dialog {
   position: fixed;
   z-index: 13;
-  width: 75%;
+  width: 85%;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  background-color: #FFF;
- 
+  background-color: #FAFAFC;
+  text-align: center;
   border-radius: 3px;
 }
 .weui_dialog_confirm .weui_dialog .weui_dialog_hd {

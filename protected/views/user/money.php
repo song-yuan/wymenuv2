@@ -2,8 +2,8 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('我的储值');
 ?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/weui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/example.css">
 <style>
 .item1{
     margin-top: 0px;
