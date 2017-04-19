@@ -32,7 +32,7 @@ class ProductMaterialController extends BackendController
 		$pages = new CPagination(ProductMaterial::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-		$models = ProductMaterial::model()->findAll($criteria);
+		$models = ProductMaterial::model()->with("bom")->findAll($criteria);
 		$categories = $this->getCategories();
 		$this->render('index',array(
 				'models'=>$models,
@@ -197,18 +197,20 @@ class ProductMaterialController extends BackendController
 		if(!empty($ids)) {
                    
                     foreach($ids as $val){
-                    $material_sql = 'select material_name from nb_product_material where lid = '.$val;
-                    $material = Yii::app()->db->createCommand($material_sql)->queryRow();   
-                    $bom_sql = 'select * from nb_product_bom where dpid = '.$companyId.' and delete_flag = 0 and material_id = '.$val;
-                    $boms = Yii::app()->db->createCommand($bom_sql)->queryAll();
-                    if(empty($boms)){
-                       Yii::app()->db->createCommand('update nb_product_material set delete_flag=1 where lid = :val and dpid = :companyId')
-			->execute(array(':val'=>$val, ':companyId' => $this->companyId));
-                    }else{
-                       Yii::app()->user->setFlash('error' , yii::t('app',$material['material_name'].'在产品配方中被使用，请先在产品配方中删除'.$material['material_name'])); 
-                    }    
-                 }
-                        $this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
+                        //$material_sql = 'select material_name from nb_product_material where lid = '.$val;
+                        //$material = Yii::app()->db->createCommand($material_sql)->queryRow();   
+                        //$bom_sql = 'select * from nb_product_bom where dpid = '.$companyId.' and delete_flag = 0 and material_id = '.$val;
+                        //$boms = Yii::app()->db->createCommand($bom_sql)->queryAll();
+                        //if($boms){
+                        Yii::app()->db->createCommand('update nb_product_bom set delete_flag=1 where  material_id = :val and dpid = :companyId')
+                            ->execute(array(':val'=>$val, ':companyId' => $this->companyId));    
+                       // }
+                        Yii::app()->db->createCommand('update nb_product_material set delete_flag=1 where lid = :val and dpid = :companyId')
+                            ->execute(array(':val'=>$val, ':companyId' => $this->companyId));
+                    
+                    }
+                    
+                    $this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
 			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
