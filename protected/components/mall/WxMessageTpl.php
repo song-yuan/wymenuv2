@@ -19,7 +19,6 @@ class WxMessageTpl
         $this->access_token = $accessToken->accessToken;
 		$this->getMsgTpl();
 		$this->getData();
-		$this->sent();
 	}
 	public function getMsgTpl(){
 		$sql = 'select * from nb_weixin_messagetpl where dpid in(:dpid) and message_type=:type and delete_flag=0';
@@ -30,7 +29,7 @@ class WxMessageTpl
 	}
 	public function getData(){
 		if(!$this->msgTpl){
-			exit;
+			return;
 		}
 		$msgTplId = $this->msgTpl['message_tpl_id'];
 		
@@ -88,6 +87,7 @@ class WxMessageTpl
 		}else{
 			unset($this->megTplData['data']['keyword4']);
 		}
+		$this->sent();
 	}
 	public function sent(){
 		$tplUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$this->access_token;

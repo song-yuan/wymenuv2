@@ -191,24 +191,24 @@ class WxCupon
 	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId){
 		$company = WxCompany::get($dpid);
 		$now = date('Y-m-d H:i:s',time());
-		$se = new Sequence("cupon_branduser");
-		$lid = $se->nextval();
-		$data = array(
-				'lid'=>$lid,
-	        	'dpid'=>$dpid,
-	        	'create_at'=>$now,
-	        	'update_at'=>$now,
-	        	'cupon_id'=>$cuponId,
-	        	'to_group'=>3,
-	        	'brand_user_lid'=>$userId,
-	        	'cupon_source'=>$source,
-	        	'source_id'=>$source_id,
-	        	'is_used'=>1,
-	        	'is_sync'=>DataSync::getInitSync(),
-				);
-		$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
 		$cupon = self::getCupon($dpid, $cuponId);
 		if($cupon){
+			$se = new Sequence("cupon_branduser");
+			$lid = $se->nextval();
+			$data = array(
+					'lid'=>$lid,
+					'dpid'=>$dpid,
+					'create_at'=>$now,
+					'update_at'=>$now,
+					'cupon_id'=>$cuponId,
+					'to_group'=>3,
+					'brand_user_lid'=>$userId,
+					'cupon_source'=>$source,
+					'source_id'=>$source_id,
+					'is_used'=>1,
+					'is_sync'=>DataSync::getInitSync(),
+			);
+			$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
 			if($source==0){
 				$sourceStr = '活动领取';
 			}elseif($source==1){
