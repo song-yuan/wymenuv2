@@ -26,6 +26,13 @@
 	width:33.33%;
 	text-align:center;
 }
+.circle{
+	width:6px;
+	height:6px;
+	border-radius:3px;
+	background:#787878;
+	margin-right:5px;
+}
 </style>
 <div class="page">
     <div class="item1">
@@ -37,8 +44,8 @@
      <div class="bd"> 
         <div class="weui_cells weui_cells_access global_navs">
            	 <?php foreach ($comments as $comment):?>
-             <a class="weui_cell js_cell" href="javascript:;" >
-                 <span class="weui_cell_hd "><img src="<?php echo Yii::app()->request->baseUrl;?>/img/wechat_img/icon-wdcz.png" class="icon_nav" alt=""/></span>
+             <a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;padding:5px 15px;">
+                 <div class="weui_cell_hd "><div class="circle"></div></div>
                  <div class="weui_cell_bd weui_cell_primary">
                      <p><?php echo $comment['content'];?></p>
                   </div>

@@ -200,10 +200,42 @@ class WxBrandUser {
 		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'openid=:openid',array(':openid'=>$openid));
 		return $result;
 	}
+	public static function reduceYue($userId,$userDpId,$total){
+		$yue = WxBrandUser::getYue($userId,$userDpId);//余额
+		$cashRecharge = WxBrandUser::getRechargeYue($userId,$userDpId);//返现余额
+		 
+		if($cashRecharge > 0){
+			// 储值余额 大于0
+			if($cashRecharge >= $total){
+				//储值余额大于等于支付
+				WxCashBack::userCashRecharge($total,$userId,$userDpId,0);
+				$payMoney = $total;
+			}else{
+				WxCashBack::userCashRecharge($total,$userId,$userDpId,1);
+				if($yue > $total){//剩余返现大于支付
+					WxCashBack::userCashBack($total - $cashRecharge,$userId,$userDpId,0);
+					$payMoney = $total;
+				}else{
+					//剩余返现小于等于支付
+					WxCashBack::userCashBack($total,$userId,$userDpId,1);
+					$payMoney = $yue;
+				}
+			}
+		}else{
+			// 储值余额 小于=0
+			if($yue > $total){
+				WxCashBack::userCashBack($total,$userId,$userDpId,0);
+				$payMoney = $total;
+			}else{
+				WxCashBack::userCashBack($total,$userId,$userDpId,1);
+				$payMoney = $yue;
+			}
+		}
+		return $payMoney;
+	}
 	public static function dealYue($userId,$dpid,$money){
-		$sql = 'update nb_brand_user set remain_money = remain_money+'.$money.' where lid='.$userId.' and dpid='.$dpid;
-		$result = Yii::app()->db->createCommand($sql)->execute();
-		return $result;
+		$payMoney = self::reduceYue($userId,$dpid,-$money);
+		return $payMoney;
 	}
 	/**
 	 * 

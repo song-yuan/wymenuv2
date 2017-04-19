@@ -209,7 +209,7 @@ li{
                             <tbody>
                                 <tr>
                                     <td><?php echo $brand_user_model->remain_money;?></td>
-                                    <td><?php echo $cashback;?></td>
+                                    <td><?php echo $brand_user_model->remain_back_money;?></td>
                                     <td><?php echo $brand_user_model->consume_point_history;?></td>
                                     <td><?php echo $brand_user_model->create_at;?></td>
                                     <td><?php echo $brand_user_model->province;?>&nbsp;&nbsp;<?php echo $brand_user_model->city;?></td>
@@ -274,7 +274,7 @@ li{
                                     <th>账单号</th>    
                                     <th>时间</th>
                                     <th>金额</th>
-                                                               
+                                     <th>消费门店</th>                         
                                 </tr>
                             </thead>
                             <?php 
@@ -295,7 +295,8 @@ li{
                                     
                                     
                                     <td><?php echo $v->create_at;?></td> 
-                                    <td><?php echo $v->pay_amount;?></td> 
+                                    <td><?php echo $v->order4->should_total;?></td> 
+                                    <td><?php echo $v->company->company_name;?></td> 
                                 </tr>
                             </tbody>
                             <?php 

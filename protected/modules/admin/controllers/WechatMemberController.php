@@ -27,7 +27,6 @@ class WechatMemberController extends BackendController {
     public function actionSearchDetail(){
         $num = Yii::app()->request->getParam('num');       
         $card_id = Yii::app()->request->getParam('card_id'); 
-        $companyId = Yii::app()->request->getParam('companyId'); 
         $brand_user_model = '';
         $cupon_model = '';
 
@@ -42,26 +41,30 @@ class WechatMemberController extends BackendController {
        
         $brand_user_model = BrandUser::model()->find($criteria);          
        
+         $company = Company::model()->find('dpid='.$this->companyId);
+         if($company->type==0){
+         	$companys = Company::model()->findAll('comp_dpid='.$this->companyId);
+         	$companyIds = '';
+         	foreach ($companys as $com){
+         		$companyIds .= $com->dpid.',';
+         	}
+         	$companyIds = trim($companyIds,',');
+         }else{
+         	$companyIds = $this->companyId;
+         }
+         $criteria1 = new CDbCriteria;
+         $criteria1->with = array('order4','company');
+         $criteria1->group = 't.order_id';
+         $criteria1->addCondition("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid in (".$companyIds.")");
          
-        $now = date('Y-m-d H:i:s',time());
-
-        $db = Yii::app()->db; 
-        $sql = 'select sum(remain_cashback_num) as total from nb_cashback_record where brand_user_lid = '.$num.' and dpid='.$this->companyId.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
-        $back = Yii::app()->db->createCommand($sql)->queryRow();
-        if($back){
-            $cashback= $back['total'];           
-        }
-
-        $orderPay = OrderPay::model()->with('order4')->findAll("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid='".$this->companyId."'");
+        $orderPay = OrderPay::model()->findAll($criteria1);
           
-        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid=".$this->companyId);            
+        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid in (".$companyIds.")");            
 
-         // var_dump(BrandUser::model()->findAll($criteria));exit; 
         $this->render('searchdetail',array( 'brand_user_model'=> $brand_user_model,
                                        
                                         'cupon_model'=> $cupon_model,
                                         'orderPay'=>$orderPay,
-                                        'cashback'=>$cashback
                     )
                     );
     }
@@ -109,7 +112,7 @@ class WechatMemberController extends BackendController {
             . " where order_type in ('1','2','6') and order_status in ('3','4','8')"
             . " group by dpid,user_id) tct on t.dpid = tct.dpid and t.lid = tct.user_id "
             . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
-            . " where t.lid not in(".$users.") and t.dpid = ".$companyId." ";
+            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")";
            // echo $sql;exit;    
         if($finduserlevel!="0000000000")
         {
