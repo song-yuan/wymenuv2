@@ -179,6 +179,7 @@ class WxCashBack
 	 		$sql = 'update nb_brand_user set remain_money = remain_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
 	 		$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}
+	 	Helper::writeLog($sql);
 	 	if(!$result){
 	 		throw new Exception('余额支付失败');
 	 	}
