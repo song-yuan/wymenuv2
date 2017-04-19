@@ -260,6 +260,13 @@ class WxCart
 		}
 		return number_format($price,2);
 	}
+	public static function getCartOrigianPrice($cartArrs){
+		$price = 0;
+		foreach($cartArrs as $cart){
+			$price += $cart['price']*$cart['num'];
+		}
+		return number_format($price,2);
+	}
 	public static function clearCart($userId,$dpid){
 		$sql = 'delete from nb_cart where dpid='.$dpid.' and user_id='.$userId;
 		$result = Yii::app()->db->createCommand($sql)->execute();
