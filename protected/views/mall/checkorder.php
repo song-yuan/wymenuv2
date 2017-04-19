@@ -221,7 +221,7 @@
 		</div>
 		<!-- end餐位费 -->
 	<?php endif;?>
-	<div class="totalinfo font_l" style="padding-top:10px"><?php if($original!=$price) echo '优惠 ￥'.number_format($original-$price,2);?>总计 ￥<?php echo $original;?></div>
+	<div class="totalinfo" style="padding-top:10px"><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">优惠￥'.number_format($original-$price,2).'</span>';?> 总计￥<?php echo $original;?></div>
 </div>
 <?php if($this->type!=2&&$user['level']):?>
 <!-- 
