@@ -3,10 +3,11 @@
 	$this->setPageTitle('充值中心');
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 ?>
-
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/weui.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/recharge.css">
 <div class="section">
+<?php if($this->brandUser['user_name']&&$this->brandUser['mobile_num']):?>
 	<div class="title">充值金额</div>
 	<?php foreach($recharges as $k=>$recharge):?>
 	<?php 
@@ -86,4 +87,16 @@
 	</script>
 	<?php endforeach;?>
 	<div class="clear"></div>
-	</div>
+<?php else:?>
+	<div class="weui_dialog_alert" id="dialog2">
+         <div class="weui_mask"></div>
+         <div class="weui_dialog">
+                <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+                  <div class="weui_dialog_bd">注册会员后才能使用充值功能哦</div>
+                   <div class="weui_dialog_ft">
+                      <a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>" class="weui_btn_dialog primary">去注册</a>
+               </div>
+         </div>
+    </div>
+<?php endif;?>
+</div>
