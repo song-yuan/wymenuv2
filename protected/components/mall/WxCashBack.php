@@ -180,6 +180,7 @@ class WxCashBack
 	 		$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 	Helper::writeLog($sql);
+	 	Helper::writeLog($result);
 	 	if(!$result){
 	 		throw new Exception('余额支付失败');
 	 	}
