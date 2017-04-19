@@ -45,7 +45,7 @@ class Cupon extends CActiveRecord
 			array('cupon_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, cupon_abstract', 'length', 'max'=>255),
 			array('is_available, delete_flag, to_group', 'length', 'max'=>2),
-			array('create_at, begin_time, end_time', 'safe'),
+			array('create_at, begin_time, end_time, cupon_memo', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, cupon_title, is_sync, main_picture, to_group, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point, begin_time, end_time, is_available, delete_flag', 'safe', 'on'=>'search'),

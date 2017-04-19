@@ -56,7 +56,7 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+								<th class="table-checkbox"><input type="checkbox"  class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:16%"><?php echo yii::t('app','原料编号');?></th>
 								<th ><?php echo yii::t('app','原料名称');?></th>
 								<th ><?php echo yii::t('app','类型');?></th>
@@ -71,9 +71,19 @@
 						</thead>
 						<tbody>
 						<?php if($models) :?>
+                                               
 						<?php foreach ($models as $model):?>
+                                                  
+                                                    <?php  $is_used =0;
+                                                           foreach ($model->bom as $each_material){
+                                                               if($each_material->material_id == $model->lid){
+                                                                   $is_used =1;
+                                                                   break;
+                                                               }
+                                                           }
+                                                    ?>        
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td><input  data-used ="<?php echo $is_used; ?>" data-name ="<?php echo $model->material_name;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td><?php echo $model->material_identifier;?></td>
 								<td ><?php echo $model->material_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
@@ -132,26 +142,50 @@
 		<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
-	<script type="text/javascript">
-	$(document).ready(function(){
-		$('#material-form').submit(function(){
-			if(!$('.checkboxes:checked').length){
-				alert("<?php echo yii::t('app','请选择要删除的项');?>");
-				return false;
-			}
-			return true;
-		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('productMaterial/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('productMaterial/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('productMaterial/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
-		});
-	});
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#material-form').submit(function(){
+        if(!$('.checkboxes:checked').length){
+                alert("<?php echo yii::t('app','请选择要删除的项');?>");
+                return false;
+        }
+        else{
+                var material_used_list ='';
+                var materials_string = '';
+                $('.checkboxes:checked').each(function(){
+                   materials_string += $(this).attr("data-name")+",";
+                   if($(this).attr("data-used")==1){
+                       material_used_list += $(this).attr("data-name")+",";
+                   }
+                });
+                var is_del = confirm("是否确认删除原料: "+materials_string);
+                if( is_del ){
+                    if( material_used_list != '' ){ 
+                        is_del = confirm("原料: "+material_used_list+"在产品配方中存在,确认删除将同时删除产品配方中的原料。是否确认删除？");
+                        if( is_del ){
+                            return true;
+                        }else{ 
+                            return false;
+                            }
+                    }else{
+                            return true;
+                        }
+                }else{
+                       return false;
+                   }
+            }
+        });
+    $('.s-btn').on('switch-change', function () {
+            var id = $(this).find('input').attr('pid');
+        $.get('<?php echo $this->createUrl('productMaterial/status',array('companyId'=>$this->companyId));?>/id/'+id);
+    });
+    $('.r-btn').on('switch-change', function () {
+            var id = $(this).find('input').attr('pid');
+        $.get('<?php echo $this->createUrl('productMaterial/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
+    });
+    $('#selectCategory').change(function(){
+            var cid = $(this).val();
+            location.href="<?php echo $this->createUrl('productMaterial/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+    });
+});
 	</script>	
