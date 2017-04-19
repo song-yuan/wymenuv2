@@ -181,7 +181,7 @@ class WxCashBack
 	 	}
 	 	Helper::writeLog($sql);
 	 	Helper::writeLog($result);
-	 	if(!$result){
+	 	if($result < 1){
 	 		throw new Exception('余额支付失败');
 	 	}
 	 }
