@@ -138,7 +138,7 @@
 										<?php echo $form->label($model, yii::t('app','使用说明'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
 											<?php echo $form->textArea($model, 'cupon_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cupon_memo')));?>
-											<?php echo $form->error($model, 'cupon_memo' )?>
+											<?php echo $form->error($model, 'cupon_memo' );?>
 										</div>
 									</div><!-- 图文说明 -->
 									<div class="form-actions fluid">
@@ -148,19 +148,8 @@
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
-							<?php $this->widget('ext.kindeditor.KindEditorWidget',array(
-								'id'=>'Cupon_cupon_memo',	//Textarea id
-								'language'=>'zh_CN',
-								// Additional Parameters (Check http://www.kindsoft.net/docs/option.html)
-								'items' => array(
-									'height'=>'200px',
-									'width'=>'100%',
-									'themeType'=>'simple',
-									'resizeType'=>1,
-									'allowImageUpload'=>true,
-									'allowFileManager'=>true,
-								),
-							)); ?>
+                                                        
+							
 							
 	<script>
 	 $(document).ready(function(){ 
