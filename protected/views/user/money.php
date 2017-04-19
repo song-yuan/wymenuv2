@@ -63,7 +63,7 @@
                   </div>
               </a>
            	 <?php foreach ($records as $record):?>
-             <a class="weui_cell js_cell" href="javascript:;" >
+             <a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
                  	<span class="left"><?php echo date('Y-m-d',strtotime($record['create_at']));?></span><span class="left"><?php echo $record['recharge_money'];?></span><span class="left"><?php echo $record['cashback_num'];?></span>
                   </div>
