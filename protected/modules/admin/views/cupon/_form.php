@@ -137,7 +137,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','使用说明'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
-											<?php echo $form->textArea($model, 'cupon_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cupon_memo')));?>
+											<?php echo $form->textArea($model, 'cupon_memo' , array('class' => 'form-control','rows'=>5,'placeholder'=>$model->getAttributeLabel('cupon_memo')));?>
 											<?php echo $form->error($model, 'cupon_memo' );?>
 										</div>
 									</div><!-- 图文说明 -->
