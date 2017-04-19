@@ -300,9 +300,9 @@ $(function () {
 												paytypename = '微信代金券';
 											}else if(paytype==10){
 												paytypename = '微信余额支付';
-											}}else if(paytype==12){
+											}else if(paytype==12){
 												paytypename = '微点单支付';
-											}}else if(paytype==13){
+											}else if(paytype==13){
 												paytypename = '微外卖支付';
 											}
 											var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+paytypename+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
