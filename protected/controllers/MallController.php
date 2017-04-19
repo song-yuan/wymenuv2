@@ -129,8 +129,8 @@ class MallController extends Controller
 		
 		$user = WxBrandUser::get($userId, $this->companyId);
 		
-		$original = WxCart::getCartOrigianPrice($cartArrs);
-		$price = WxCart::getCartPrice($carts,$user,$this->type);
+		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
+		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		
