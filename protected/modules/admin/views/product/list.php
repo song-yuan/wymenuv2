@@ -397,12 +397,21 @@
 							<div class="ku-item-info">打印机设置</div>
 						</div>
 					</a>
+                                        
 					<a href="<?php echo $this->createUrl('printerWay/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cdsz"></div>
 							<div class="ku-item-info">厨打设置</div>
 						</div>
 					</a>
+                                        <?php if(Yii::app()->user->role <= 7):?>
+                                        <a href="<?php echo $this->createUrl('CopyPrinter/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple dyjsz"></div>
+							<div class="ku-item-info">一键下发</div>
+						</div>
+					</a>
+                                        <?php endif;?>
 					<a href="<?php echo $this->createUrl('pad/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple padsz"></div>
