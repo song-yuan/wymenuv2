@@ -255,7 +255,7 @@
 	<div class="select-type">选择支付方式</div>
 	<!-- 余额 -->
 	<div class="chooselist points" style="padding:15px;">
-		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_org">剩余￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>可使用<?php echo $remainMoney > $price?$price:$remainMoney;?></span></div>
+		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_org">剩余￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span> 可使用￥<?php echo $remainMoney > $price?$price:$remainMoney;?></span></div>
 		<div class="right">
 		<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
 		</div>
