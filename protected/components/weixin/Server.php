@@ -175,6 +175,7 @@ class Server {
      * @return String 
      */
 	public function generalResponse() {
+		Helper::writeLog('generalResponse');
 		$subPushs = array();
 		$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
     	if(!empty($promotionPushs)){
