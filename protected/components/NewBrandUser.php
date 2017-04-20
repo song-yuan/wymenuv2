@@ -95,11 +95,9 @@ class NewBrandUser {
 		new PullUserInfo($this->brandId, $this->userId);
 	}
 	public function sentCupon() {
-		Helper::writeLog('sentCupon');
 		WxCupon::getWxSentCupon($this->brandId, 0, $this->userId,$this->openId);
 	}
 	public function sentGift() {
-		Helper::writeLog('sentGift');
 		WxGiftCard::sentGift($this->brandId,$this->userId);
 	}
 }
