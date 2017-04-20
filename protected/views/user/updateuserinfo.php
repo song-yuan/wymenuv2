@@ -170,12 +170,18 @@
                 return false;
             }
         }
-       
-        if($('#birthday').val() == ''||$('#birthday').html() == ''){
-            $('#dialog2').find('.weui_dialog_bd').html('请填写生日！');
-            $('#dialog2').show();
-            return false;
-        }
+        if($("#birthday").attr("data")=='true'){
+            return true;
+         }else{
+        	 if($('#birthday').val() == ''){
+                 $('#dialog2').find('.weui_dialog_bd').html('请填写生日！');
+                 $('#dialog2').show();
+                 return false;
+             }
+              $("#revise_birth").css("display","block");
+              $('.sp-lightbox1').css('display','block');
+              return false;           
+         }
         
         if(verify_flag){
             var success = true;
@@ -200,14 +206,6 @@
               return false; 
            }
             
-        }
-     
-        if($("#birthday").attr("data")=='true'){
-           return true;
-        }else{
-             $("#revise_birth").css("display","block");
-              $('.sp-lightbox1').css('display','block');
-              return false;           
         }
     }
     
