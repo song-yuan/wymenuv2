@@ -59,7 +59,7 @@ class MallController extends Controller
 				}
 			}else{
 //				pc 浏览
-				$userId = 2082;
+				$userId = 2112;
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = -1;
 			}
@@ -129,7 +129,8 @@ class MallController extends Controller
 		
 		$user = WxBrandUser::get($userId, $this->companyId);
 		
-		$price = WxCart::getCartPrice($carts,$user,$this->type);
+		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
+		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
 		
@@ -141,7 +142,7 @@ class MallController extends Controller
 		
 		$address = WxAddress::getDefault($userId,$user['dpid']);
 		
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -214,7 +215,7 @@ class MallController extends Controller
 		
 			//使用现金券
 			if($cuponId){
-			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
 			}
 			//预订时间
 			if($orderTime){

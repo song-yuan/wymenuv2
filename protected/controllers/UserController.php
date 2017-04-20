@@ -33,7 +33,7 @@ class UserController extends Controller
 				Yii::app()->session['userId'] = $userId;
 			}else{
 				//pc 浏览
-				$userId = 2082;
+				$userId = 2112;
 				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 				Yii::app()->session['userId'] = $userId;
 			}
@@ -518,7 +518,7 @@ class UserController extends Controller
 		
 		$transaction=Yii::app()->db->beginTransaction();
 		try{
-			$result = WxOrder::cancelOrder($orderId,$dpid);
+			 WxOrder::cancelOrder($orderId,$dpid);
 			 $transaction->commit();
 			 echo 1;
 		}catch (Exception $e) {

@@ -159,7 +159,7 @@ class WxCashBack
  			$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 	if(!$result){
-	 		throw new Exception('余额支付失败');
+	 		throw new Exception('储值支付失败');
 	 	}
 	 }
 	 /**
@@ -180,7 +180,7 @@ class WxCashBack
 	 		$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 	if(!$result){
-	 		throw new Exception('余额支付失败');
+	 		throw new Exception('储值支付失败');
 	 	}
 	 }
 }

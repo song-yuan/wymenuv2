@@ -69,7 +69,7 @@ class WxGiftCard
 	 */
 	public static function getAutoGift($dpid){
 		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select * from nb_gift where dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
+		$sql = 'select * from nb_gift where dpid=:dpid and begin_time <=:now and :now <= end_time and is_sent=1 and delete_flag=0';
 		$gifts = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->bindValue(':now',$now)
@@ -128,10 +128,6 @@ class WxGiftCard
 	   		$gifts = self::getAutoGift($dpid);
 	   		foreach($gifts as $gift){
 	   			$code = self::code(11);
-		   		do{
-		   			$result = self::getUserGiftByCode($dpid,$code);
-		   		}while ($result['total']);
-		   		
 	   			$total = self::getUserGiftTotal($dpid,$userId,$gift['lid']);
 	   			if($gift['count'] > $total['total']){
 	   					$time = time();

@@ -108,8 +108,8 @@ class WxBrandUser {
 	 * 
 	 */
 	public static function getFromCardId($dpid,$cardId) {
-		$dpids = WxCompany::getDpids($dpid);
-		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_brand_user t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t1.level_type=1 and t1.delete_flag=0 where t.dpid in ('.$dpids.') and t.card_id = "'.$cardId.'"';
+		$comdpid = WxCompany::getCompanyDpid($dpid);
+		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_brand_user t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t1.level_type=1 and t1.delete_flag=0 where t.dpid = '.$comdpid.' and t.card_id = "'.$cardId.'"';
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUser;
 	}
@@ -202,8 +202,8 @@ class WxBrandUser {
 	}
 	public static function reduceYue($userId,$userDpId,$total){
 		$yue = WxBrandUser::getYue($userId,$userDpId);//余额
-		$cashRecharge = WxBrandUser::getRechargeYue($userId,$userDpId);//返现余额
-		 
+		$cashRecharge = WxBrandUser::getRechargeYue($userId,$userDpId);//储值余额
+		$cashBack = WxBrandUser::getCashBackYue($userId,$userDpId);//返现余额
 		if($cashRecharge > 0){
 			// 储值余额 大于0
 			if($cashRecharge >= $total){
@@ -217,17 +217,23 @@ class WxBrandUser {
 					$payMoney = $total;
 				}else{
 					//剩余返现小于等于支付
-					WxCashBack::userCashBack($total,$userId,$userDpId,1);
+					if($cashBack > 0){
+						WxCashBack::userCashBack($total,$userId,$userDpId,1);
+					}
 					$payMoney = $yue;
 				}
 			}
 		}else{
-			// 储值余额 小于=0
+			// 储值余额 等于=0
 			if($yue > $total){
-				WxCashBack::userCashBack($total,$userId,$userDpId,0);
+				if($cashBack > 0){
+					WxCashBack::userCashBack($total,$userId,$userDpId,0);
+				}
 				$payMoney = $total;
 			}else{
-				WxCashBack::userCashBack($total,$userId,$userDpId,1);
+				if($cashBack > 0){
+					WxCashBack::userCashBack($total,$userId,$userDpId,1);
+				}
 				$payMoney = $yue;
 			}
 		}

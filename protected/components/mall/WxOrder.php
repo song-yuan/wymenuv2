@@ -645,13 +645,17 @@ class WxOrder
 	 * 
 	 * 插入订单代金券表
 	 * 并减少订单相应的金额
+	 * @$cuponBranduserLid 由nb_cupon_branduser 的lid和dpid组成
 	 * 
 	 */
-	public static function updateOrderCupon($orderId,$dpid,$cuponBranduserLid){
+	public static function updateOrderCupon($orderId,$dpid,$cuponBranduser,$user){
 		$now = date('Y-m-d H:i:s',time());
+		$cuponBranduserArr = split('-', $cuponBranduser);
+		$cuponBranduserLid = $cuponBranduserArr[0];
+		$cuponBranduserDpid = $cuponBranduserArr[1];
 		$order = self::getOrder($orderId,$dpid);
-		$sql = 'select t.cupon_id,t1.cupon_money,t1.min_consumer from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
-				' and t.dpid='.$dpid.' and t1.begin_time <= "'.$now.'" and "'.$now.'" <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
+		$sql = 'select t.lid,t.cupon_id,t1.cupon_money,t1.min_consumer from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
+				' and t.dpid='.$cuponBranduserDpid.' and t1.begin_time <= "'.$now.'" and "'.$now.'" <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result && $order['should_total'] >= $result['min_consumer']){
 			$isSync = DataSync::getInitSync();
@@ -669,12 +673,13 @@ class WxOrder
 		        	'account_no'=>$order['account_no'],
 		        	'pay_amount'=>$cuponMoney,
 		        	'paytype'=>9,
-		        	'paytype_id'=>$result['cupon_id'],
+		        	'paytype_id'=>$result['lid'],
+		    		'remark'=>$user['card_id'],
 		        	'is_sync'=>$isSync,
 		     );
 			$orderPay = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 			
-			WxCupon::dealCupon($order['dpid'], $cuponBranduserLid, 2);
+			WxCupon::dealCupon($cuponBranduserDpid, $cuponBranduserLid, 2);
 			if($money == 0){
 				//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
@@ -707,7 +712,12 @@ class WxOrder
 	 */
 	 public static function cancelOrder($orderId,$dpid){
 	 	$order = self::getOrder($orderId,$dpid);
-	 	
+	 	if(!$order){
+	 		throw new Exception('订单不存在!');
+	 	}
+	 	if($order['order_status']==7){
+	 		throw new Exception('订单已经取消,无法重复取消!');
+	 	}
 	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and is_print=1';
 	 	$resluts = Yii::app()->db->createCommand($sql)
 	 							 ->bindValue(':orderId',$orderId)
@@ -716,7 +726,6 @@ class WxOrder
 	 	if(!empty($resluts)){
 	 		return 0;
 	 	}else{
-	 		$isSync = DataSync::getInitSync();
 	 		foreach($resluts as $orderProduct){
 	 			$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
 				$product = Yii::app()->db->createCommand($sql)
@@ -730,11 +739,26 @@ class WxOrder
 	 		}
 			$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			$result = Yii::app()->db->createCommand($sql)->execute();
-			if($order['cupon_branduser_lid'] > 0){
-				$sql = 'update nb_cupon_branduser set is_used=1,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
-				$cuponBranduser = Yii::app()->db->createCommand($sql)->execute();
+			if(!$result){
+				throw new Exception('订单取消失败!');
 			}
-			return $result;
+			$orderPays = WxOrderPay::get($orderId,$dpid);
+			foreach ($orderPays as $orderpay){
+				if($orderpay['paytype']==9){
+					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
+					$sql = 'update nb_cupon_branduser set is_used=1 where lid='.$orderpay['paytype_id'].' and brand_user_lid='.$user['lid'];
+					$result = Yii::app()->db->createCommand($sql)->execute();
+					if(!$result){
+						throw new Exception('现金券退回失败!');
+					}
+				}else if($orderpay['paytype']==10){
+					$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$orderpay['pay_amount'].' where card_id='.$orderpay['remark'];
+					$result = Yii::app()->db->createCommand($sql)->execute();
+					if(!$result){
+						throw new Exception('储值退回失败!');
+					}
+				}
+			}
 	 	}
 	}
 	/**

@@ -168,7 +168,7 @@
 	<?php endif;?>
 	<?php if($payYue > 0):?>
 	<div class="item" >
-		<div class="lt">余额支付:</div><div class="rt">-￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
+		<div class="lt">储值支付:</div><div class="rt">-￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>

@@ -129,22 +129,22 @@ html,body {
 }
 
 .font_l {
-	color: #999999;
+	color: #999999 !important;
 }
 .font_m {
-	color: #666666;
+	color: #666666 !important;
 }
 
 .font_red {
-	color: #f5342f;
+	color: #f5342f !important;
 }
 
 .font_brown {
-	color: #908371;
+	color: #908371 !important;
 }
 
 .font_org {
-	color: #ff9933;
+	color: #ff9933 !important;
 }
 
 body {

@@ -3,13 +3,11 @@
 	$this->setPageTitle('会员中心');
 ?>
 
-
-<?php Yii::app()->clientScript->registerScriptFile( $baseUrl.'/js/wechat_js/zepto.min.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( $baseUrl.'/js/wechat_js/example.js');?>
-<?php Yii::app()->clientScript->registerCssFile( $baseUrl.'/css/wechat_css/weui.css');?>
-<?php Yii::app()->clientScript->registerCssFile( $baseUrl.'/css/wechat_css/example.css');?>
-<?php Yii::app()->clientScript->registerCssFile($baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
-
+<script src="<?php echo $baseUrl;?>/js/wechat_js/zepto.min.js"></script>
+<script src="<?php echo $baseUrl;?>/js/wechat_js/example.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/weui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/example.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/plugins/font-awesome/css/font-awesome.min.css">
 <style>
     .hd {
     padding:15px 0px 8px 0px;

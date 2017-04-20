@@ -93,7 +93,7 @@
 		<div class="clear"></div>
 	</div>
 <?php elseif($this->type==6):?>
-	<div class="order-site"><div class="lt">取餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
+	<div class="order-site"><div class="lt">取餐方式</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
 	<div class="order-time arrowright" style="margin:10px 0;">
 		<div class="time-lt">取餐时间</div>
 		<div class="time-rt">
@@ -221,14 +221,17 @@
 		</div>
 		<!-- end餐位费 -->
 	<?php endif;?>
+	<div class="totalinfo" style="padding-top:10px"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 </div>
 <?php if($this->type!=2&&$user['level']):?>
+<!-- 
 <div class="discount">
 	<ul>
 		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品享受<?php echo $user['level']['level_discount']*10;?>折优惠</li>
 		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount']*10;?>折优惠</li>
 	</ul>
 </div>
+ -->
 <?php endif;?>
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
@@ -252,7 +255,7 @@
 	<div class="select-type">选择支付方式</div>
 	<!-- 余额 -->
 	<div class="chooselist points" style="padding:15px;">
-		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
+		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 可用￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span><span></span></div>
 		<div class="right">
 		<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
 		</div>
@@ -272,10 +275,10 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+        <p>待付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">确认下单</a></p>
+        <p><a id="payorder" href="javascript:;">提交订单</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -284,7 +287,7 @@
 	<div class="cupon-container">
 	<?php if($isCupon):?>
 	<?php foreach($cupons as $coupon):?>
-		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
+		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'].'-'.$coupon['dpid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
 	<?php endforeach;?>
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
