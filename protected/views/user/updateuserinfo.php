@@ -92,8 +92,11 @@
         <div class="weui_cell">
             <div class="weui_cell_hd"><label for="" class="weui_label">生日</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                
-                <input class="weui_input" <?php echo $user['user_birthday']?'readonly="readonly"':'' ?> data="<?php echo $user['user_birthday']?'true':'false'; ?>" id="birthday" name="user[user_birthday]" type="text" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>" placeholder="请填写生日" />
+                <?php if($user['user_birthday']):?>
+                <input class="weui_input" readonly="readonly" data="true" id="birthday" name="user[user_birthday]" type="text" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>" placeholder="请填写生日" />
+            	<?php else:?>
+            	 <input class="weui_input"  data="false" id="birthday" name="user[user_birthday]" type="text" value="" placeholder="请填写生日" />
+            	<?php endif;?>
             </div>
         </div>
     </div>
