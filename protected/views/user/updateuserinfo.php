@@ -94,6 +94,7 @@
             <div class="weui_cell_bd weui_cell_primary">
                 <?php if($user['user_birthday']):?>
                 <span id="birthday" class="weui_input" data="true"><?php echo date('Y-m-d',strtotime($user['user_birthday']));?></span>
+            	<input type="hidden" name="user[user_birthday]" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>">
             	<?php else:?>
             	 <input class="weui_input"  data="false" id="birthday" name="user[user_birthday]" type="text" value="" placeholder="请填写生日" />
             	<?php endif;?>
@@ -170,7 +171,7 @@
             }
         }
        
-        if($('#birthday').val() == ''){
+        if($('#birthday').val() == ''||$('#birthday').html() == ''){
             $('#dialog2').find('.weui_dialog_bd').html('请填写生日！');
             $('#dialog2').show();
             return false;
