@@ -93,7 +93,7 @@
 		<div class="clear"></div>
 	</div>
 <?php elseif($this->type==6):?>
-	<div class="order-site"><div class="lt">取餐方式:</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
+	<div class="order-site"><div class="lt">取餐方式</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
 	<div class="order-time arrowright" style="margin:10px 0;">
 		<div class="time-lt">取餐时间</div>
 		<div class="time-rt">
@@ -255,7 +255,7 @@
 	<div class="select-type">选择支付方式</div>
 	<!-- 余额 -->
 	<div class="chooselist points" style="padding:15px;">
-		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
+		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 可用￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span><span></span></div>
 		<div class="right">
 		<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
 		</div>
@@ -287,7 +287,7 @@
 	<div class="cupon-container">
 	<?php if($isCupon):?>
 	<?php foreach($cupons as $coupon):?>
-		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
+		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'].'-'.$coupon['dpid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
 	<?php endforeach;?>
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>

@@ -88,6 +88,7 @@ class WxCupon
 	/**
 	 * 
 	 * 获取会员该订单可用
+	 * @dpid 点单的门店id
 	 * 
 	 */
 	public static function getUserAvaliableCupon($total,$userId,$dpid){
@@ -103,12 +104,13 @@ class WxCupon
 		if($isCanUse){
 			$now = date('Y-m-d H:i:s',time());
 			$user = WxBrandUser::get($userId,$dpid);
-			$sql = 'select m.lid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where dpid=:dpid and to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0' .
-					' union select * from nb_cupon_branduser where dpid=:dpid and to_group=2 and brand_user_lid=:userLevelId and is_used=1 and delete_flag=0)m ,nb_cupon n' .
+			$sql = 'select m.lid,m.dpid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where (dpid=:dpid or dpid=:userDpid) and to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0' .
+					' union select * from nb_cupon_branduser where (dpid=:dpid or dpid=:userDpid) and to_group=2 and brand_user_lid=:userLevelId and is_used=1 and delete_flag=0)m ,nb_cupon n' .
 					' where m.cupon_id=n.lid and m.dpid=n.dpid and n.begin_time <=:now and :now <=n.end_time and n.min_consumer <=:total and n.delete_flag=0 and n.is_available=0';
 			$cupon = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':userId',$userId)
 					  ->bindValue(':dpid',$dpid)
+					  ->bindValue(':userDpid',$user['dpid'])
 					  ->bindValue(':userLevelId',$user['user_level_lid'])
 					  ->bindValue(':now',$now)
 					  ->bindValue(':total',$total)

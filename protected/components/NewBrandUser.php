@@ -27,6 +27,7 @@ class NewBrandUser {
 			$this->newBrandUser();
 			$this->pullUserInfo();
 			$this->sentCupon();
+			$this->sentGift();
 			$this->success = true;
 			$transaction->commit();
 		} catch(Exception $e) {
@@ -95,6 +96,9 @@ class NewBrandUser {
 	}
 	public function sentCupon() {
 		WxCupon::getWxSentCupon($this->brandId, 0, $this->userId,$this->openId);
+	}
+	public function sentGift() {
+		WxGiftCard::sentGift($this->brandId,$this->userId);
 	}
 }
  

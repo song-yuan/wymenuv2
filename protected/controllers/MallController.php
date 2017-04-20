@@ -215,7 +215,7 @@ class MallController extends Controller
 		
 			//使用现金券
 			if($cuponId){
-			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
 			}
 			//预订时间
 			if($orderTime){

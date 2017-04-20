@@ -518,7 +518,7 @@ class UserController extends Controller
 		
 		$transaction=Yii::app()->db->beginTransaction();
 		try{
-			$result = WxOrder::cancelOrder($orderId,$dpid);
+			 WxOrder::cancelOrder($orderId,$dpid);
 			 $transaction->commit();
 			 echo 1;
 		}catch (Exception $e) {

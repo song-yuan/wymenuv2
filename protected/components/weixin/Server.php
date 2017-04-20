@@ -304,7 +304,6 @@ class Server {
     		$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
     		$this->brandUser = $newBrandUser->brandUser;
     		$this->userId = $this->brandUser['lid'];
-    		WxGiftCard::sentGift($this->brandId,$this->userId);
     	}else {
             if($this->brandUser['unsubscribe'])
             	$this->cancelUnsubscribe();
