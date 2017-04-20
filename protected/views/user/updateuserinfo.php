@@ -275,7 +275,7 @@ $('document').ready(function(){
         theme: 'android-holo-light',
         lang: 'zh',
         display: 'center',
-        startYear: 1970, //开始年份
+        startYear: 1971, //开始年份
     });
     $("#birthday[data = 'true']").click(function(){
         $('#no_revise').css('display','block');
