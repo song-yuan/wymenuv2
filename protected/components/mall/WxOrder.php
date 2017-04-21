@@ -701,11 +701,11 @@ class WxOrder
 							array_push($productTasteArr, $taste['taste_id']);
 						}
 					}
-					$productBoms = DataSyncOperation::getBom($orderId, $product['product_id'], $productTasteArr);
+					$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
 							$stock = $bom['number']*$product['amount'];
-							DataSyncOperation::updateMaterialStock($orderId,$bom['material_id'],$stock);
+							DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
 						}
 					}
 				}
@@ -877,21 +877,18 @@ class WxOrder
 			
 			//减少库存
 			$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
-			Helper::writeLog('11');
 			foreach($orderProducts as $product){
-				Helper::writeLog('22');
 				$productTasteArr = array();
 				if(isset($product['taste'])&&!empty($product['taste'])){
 					foreach ($product['taste'] as $taste){
 						array_push($productTasteArr, $taste['taste_id']);
 					}
 				}
-				$productBoms = DataSyncOperation::getBom($orderId, $product['product_id'], $productTasteArr);
+				$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
 				if(!empty($productBoms)){
 					foreach ($productBoms as $bom){
-						Helper::writeLog('33');
 						$stock = $bom['number']*$product['amount'];
-						DataSyncOperation::updateMaterialStock($orderId,$bom['material_id'],$stock);
+						DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
 					}
 				}
 			}
