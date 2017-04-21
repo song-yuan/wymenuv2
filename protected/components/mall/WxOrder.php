@@ -797,6 +797,7 @@ class WxOrder
 		        	'account_no'=>$order['account_no'],
 		        	'pay_amount'=>$payMoney,
 		        	'paytype'=>$paytype,
+		    		'remark'=>$user['card_id'],
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
@@ -830,6 +831,7 @@ class WxOrder
 		        	'account_no'=>$order['account_no'],
 		        	'pay_amount'=>$payPrice,
 		        	'paytype'=>$paytype,
+		    		'remark'=>$order['lid'].'-'.$order['dpid'],
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
