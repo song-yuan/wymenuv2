@@ -38,13 +38,35 @@ class CopyPrinterController extends BackendController
         $db = Yii::app()->db;
         if(!empty($dpids)){
             $printer_hqs = Printer::model()->findAll('dpid=:dpid and delete_flag=0 ',array(':dpid'=>$companyId));
+            if(!empty($printer_hqs)){ 
+                foreach($printer_hqs as $printer_hq){
+                    if(empty($printer_hq['phs_code'])){
+                                    $printer_code=new Sequence("phs_code");
+                                    $printer_phs_code = $printer_code->nextval();
+                                    $printer_hq['phs_code'] = ProductCategory::getChscode($companyId,$printer_hq['lid'] , $printer_phs_code);   
+                                    $printer_hq->update();
+                                    
+                    } 
+                }          
+            }
             $printer_way_hqs = PrinterWay::model()->findAll('dpid=:dpid and delete_flag=0 ',array(':dpid'=>$companyId));
-            
+             if(!empty($printer_way_hqs)){
+                foreach ($printer_way_hqs as $printer_way_hq){
+                    if(empty($printer_way_hq['phs_code'])){
+                                    $way_code=new Sequence("phs_code");
+                                    $way_phs_code = $printer_code->nextval();
+                                    $printer_way_hq['phs_code'] = ProductCategory::getChscode($companyId,$printer_way_hq['lid'] , $way_phs_code);   
+                                    $printer_way_hq->update();
+                                    
+                    }                     
+                }
+            }
             $transaction = $db->beginTransaction();
         	try{ 
                     foreach ($dpids as $dpid){
-                        if(!empty($printer_hqs)){
+                        if(!empty($printer_hqs)){ 
                             foreach ($printer_hqs as $printer_hq){
+                                                                  
                                 $printer_branch_exist = Printer::model()->find('phs_code =:phs_code and dpid=:dpid and delete_flag=0 ',array(':dpid'=>$dpid,':phs_code'=>$printer_hq['phs_code']));
                                
                                 if(!empty($printer_branch_exist)){
@@ -83,6 +105,7 @@ class CopyPrinterController extends BackendController
                         }
                         if(!empty($printer_way_hqs)){
                             foreach ($printer_way_hqs as $printer_way_hq){
+                                    
                                 $way_branch_exist = PrinterWay::model()->find('phs_code =:phs_code and dpid=:dpid and delete_flag=0 ',array(':dpid'=>$dpid,':phs_code'=>$printer_way_hq['phs_code']));
                                 if(!empty($way_branch_exist)){
                                     $way_branch_exist->delete_flag = 1;
