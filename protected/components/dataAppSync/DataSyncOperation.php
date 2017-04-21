@@ -911,10 +911,9 @@ class DataSyncOperation {
 		}
 		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4,8)';
 		$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
-		
 		if($order){	
 			$orderId = $order['lid'];
-			$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
+			$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype != 11';
 			$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
 			if($orderPay && !empty($orderPay['total'])){
 				if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
@@ -933,7 +932,6 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 				foreach ($pruductIds as $productId){
@@ -1020,10 +1018,10 @@ class DataSyncOperation {
 				    	}
 				    }
 				}
-				
-				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype < 11';
+				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype != 11';
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
-				
+				Helper::writeLog('aa');
+				Helper::writeLog(json_encode($orderPayArr));
 				$allOrderRetreat = false; // 是否整单退
 				if($order['should_total'] == -$retreatprice){
 					// 整单全退
@@ -1031,6 +1029,7 @@ class DataSyncOperation {
 				}
 				
 				foreach ($orderPayArr as $pay){
+					Helper::writeLog($pay['paytype']);
 					if($allOrderRetreat){
 						$refund_fee = $pay['pay_amount'];
 					}else{
@@ -1068,10 +1067,11 @@ class DataSyncOperation {
 							throw new Exception('会员卡退款失败');
 						}
 					}elseif ($pay['paytype']==9){
-						$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
+						$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
 						WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 					}elseif ($pay['paytype']==10){
-						WxBrandUser::refundYue($refund_fee, $orderpay['remark']);
+						Helper::writeLog($pay['remark']);
+						WxBrandUser::refundYue($refund_fee, $pay['remark']);
 					}
 					$se = new Sequence ( "order_pay" );
 					$orderPayId = $se->nextval ();
