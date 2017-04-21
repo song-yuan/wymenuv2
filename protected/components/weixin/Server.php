@@ -304,6 +304,10 @@ class Server {
     		$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
     		$this->brandUser = $newBrandUser->brandUser;
     		$this->userId = $this->brandUser['lid'];
+    		
+    		// 关注自动送券
+    		WxCupon::getWxSentCupon($this->brandId, 0, $this->userId,$this->brandUser['openid']);
+    		WxGiftCard::sentGift($this->brandId,$this->userId);
     	}else {
             if($this->brandUser['unsubscribe'])
             	$this->cancelUnsubscribe();
