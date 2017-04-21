@@ -925,7 +925,6 @@ class DataSyncOperation {
 					return $msg;
 				}
 			}
-			Helper::writeLog('8');
 		}else{
 			$msg = json_encode ( array (
 					'status' => false,
@@ -933,11 +932,9 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		Helper::writeLog('1');
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 				foreach ($pruductIds as $productId){
-					Helper::writeLog('2');
 					$productArr = split(',', $productId);
 					$psetId = $productArr[0];
 					$pproductId = $productArr[1];
@@ -982,7 +979,6 @@ class DataSyncOperation {
 				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
 				    	}
 				    }else{
-				    	Helper::writeLog('3');
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice.' and is_retreat=0';
 				    	$orderProduct =  Yii::app ()->db->createCommand ($sql)->queryRow();
 				    	if($orderProduct){
@@ -1001,7 +997,6 @@ class DataSyncOperation {
 			    					return $msg;
 			    				}
 				    		}
-				    		Helper::writeLog('4');
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
 				    		Yii::app ()->db->createCommand ($sql)->execute();
 				    		 
@@ -1023,7 +1018,6 @@ class DataSyncOperation {
 				    	}
 				    }
 				}
-				Helper::writeLog('5');
 				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype != 11';
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				
@@ -1071,10 +1065,10 @@ class DataSyncOperation {
 							throw new Exception('会员卡退款失败');
 						}
 					}elseif ($pay['paytype']==9){
-						Helper::writeLog($orderpay['remark']);
 						$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
 						WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 					}elseif ($pay['paytype']==10){
+						Helper::writeLog($orderpay['remark']);
 						WxBrandUser::refundYue($refund_fee, $orderpay['remark']);
 					}
 					$se = new Sequence ( "order_pay" );
