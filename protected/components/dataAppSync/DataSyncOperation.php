@@ -1070,7 +1070,7 @@ class DataSyncOperation {
 						$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
 						WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 					}elseif ($pay['paytype']==10){
-						Helper::writeLog($orderpay['remark']);
+						Helper::writeLog($pay['remark']);
 						WxBrandUser::refundYue($refund_fee, $pay['remark']);
 					}
 					$se = new Sequence ( "order_pay" );
