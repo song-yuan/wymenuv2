@@ -912,7 +912,7 @@ class DataSyncOperation {
 		}
 		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4,8)';
 		$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
-		
+		Helper::writeLog(json_encode($order));
 		if($order){	
 			$orderId = $order['lid'];
 			$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
@@ -1022,7 +1022,7 @@ class DataSyncOperation {
 				    }
 				}
 				
-				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype < 11';
+				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype != 11';
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				
 				$allOrderRetreat = false; // 是否整单退
