@@ -899,6 +899,7 @@ class DataSyncOperation {
 		if(isset($data ['data'])){
 			$content = $data ['data'];
 		}
+		Helper::writeLog($content);
 		if(isset($adminId) && $adminId != "" ){
 			$admin = WxAdminUser::get($dpid, $adminId);
 			if(!$admin){
@@ -1068,6 +1069,7 @@ class DataSyncOperation {
 							throw new Exception('会员卡退款失败');
 						}
 					}elseif ($pay['paytype']==9){
+						Helper::writeLog($orderpay['remark']);
 						$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
 						WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 					}elseif ($pay['paytype']==10){
