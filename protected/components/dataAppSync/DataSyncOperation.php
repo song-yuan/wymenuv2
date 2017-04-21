@@ -899,7 +899,6 @@ class DataSyncOperation {
 		if(isset($data ['data'])){
 			$content = $data ['data'];
 		}
-		Helper::writeLog($content);
 		if(isset($adminId) && $adminId != "" ){
 			$admin = WxAdminUser::get($dpid, $adminId);
 			if(!$admin){
@@ -912,10 +911,9 @@ class DataSyncOperation {
 		}
 		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4,8)';
 		$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
-		Helper::writeLog(json_encode($order));
 		if($order){	
 			$orderId = $order['lid'];
-			$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
+			$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype != 11';
 			$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
 			if($orderPay && !empty($orderPay['total'])){
 				if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
@@ -927,6 +925,7 @@ class DataSyncOperation {
 					return $msg;
 				}
 			}
+			Helper::writeLog('8');
 		}else{
 			$msg = json_encode ( array (
 					'status' => false,
@@ -934,10 +933,11 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		
+		Helper::writeLog('1');
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 				foreach ($pruductIds as $productId){
+					Helper::writeLog('2');
 					$productArr = split(',', $productId);
 					$psetId = $productArr[0];
 					$pproductId = $productArr[1];
@@ -982,6 +982,7 @@ class DataSyncOperation {
 				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
 				    	}
 				    }else{
+				    	Helper::writeLog('3');
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice.' and is_retreat=0';
 				    	$orderProduct =  Yii::app ()->db->createCommand ($sql)->queryRow();
 				    	if($orderProduct){
@@ -1000,6 +1001,7 @@ class DataSyncOperation {
 			    					return $msg;
 			    				}
 				    		}
+				    		Helper::writeLog('4');
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
 				    		Yii::app ()->db->createCommand ($sql)->execute();
 				    		 
@@ -1021,7 +1023,7 @@ class DataSyncOperation {
 				    	}
 				    }
 				}
-				
+				Helper::writeLog('5');
 				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype != 11';
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				
