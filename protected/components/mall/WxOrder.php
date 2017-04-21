@@ -691,6 +691,24 @@ class WxOrder
 				}else{
 					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 				}
+				
+				//减少库存
+				$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
+				foreach($orderProducts as $product){
+					$productTasteArr = array();
+					if(isset($product['taste'])&&!empty($product['taste'])){
+						foreach ($product['taste'] as $taste){
+							array_push($productTasteArr, $taste['taste_id']);
+						}
+					}
+					$productBoms = DataSyncOperation::getBom($orderId, $product['product_id'], $productTasteArr);
+					if(!empty($productBoms)){
+						foreach ($productBoms as $bom){
+							$stock = $bom['number']*$product['amount'];
+							DataSyncOperation::updateMaterialStock($orderId,$bom['material_id'],$stock);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -855,6 +873,24 @@ class WxOrder
 				WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
 			}else{
 				WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
+			}
+			
+			//减少库存
+			$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
+			foreach($orderProducts as $product){
+				$productTasteArr = array();
+				if(isset($product['taste'])&&!empty($product['taste'])){
+					foreach ($product['taste'] as $taste){
+						array_push($productTasteArr, $taste['taste_id']);
+					}
+				}
+				$productBoms = DataSyncOperation::getBom($orderId, $product['product_id'], $productTasteArr);
+				if(!empty($productBoms)){
+					foreach ($productBoms as $bom){
+						$stock = $bom['number']*$product['amount'];
+						DataSyncOperation::updateMaterialStock($orderId,$bom['material_id'],$stock);
+					}
+				}
 			}
 		} 	
 	 	return $payMoney;

@@ -94,6 +94,11 @@ class Notify extends WxPayNotify
 		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
 		foreach($orderProducts as $product){
 			$productTasteArr = array();
+			if(isset($product['taste'])&&!empty($product['taste'])){
+				foreach ($product['taste'] as $taste){
+					array_push($productTasteArr, $taste['taste_id']);
+				}
+			}
 			$productBoms = DataSyncOperation::getBom($orderIdArr[1], $product['product_id'], $productTasteArr);
 			if(!empty($productBoms)){
 				foreach ($productBoms as $bom){
