@@ -1036,7 +1036,7 @@ class DataSyncOperation {
 					}else{
 						$refund_fee = -$retreatprice;
 					}
-					if($pay['paytype']==1){
+					if($pay['paytype']==1||$pay['paytype']==12||$pay['paytype']==13){
 						// 微信支付
 						$rData = array('dpid'=>$dpid,'poscode'=>$poscode,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
 						$result = self::refundWxPay($rData);
@@ -1067,6 +1067,11 @@ class DataSyncOperation {
 						if(!$resObj->status){
 							throw new Exception('会员卡退款失败');
 						}
+					}elseif ($pay['paytype']==9){
+						$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
+						WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
+					}elseif ($pay['paytype']==10){
+						WxBrandUser::refundYue($orderpay['pay_amount'], $orderpay['remark']);
 					}
 					$se = new Sequence ( "order_pay" );
 					$orderPayId = $se->nextval ();

@@ -746,17 +746,9 @@ class WxOrder
 			foreach ($orderPays as $orderpay){
 				if($orderpay['paytype']==9){
 					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
-					$sql = 'update nb_cupon_branduser set is_used=1 where lid='.$orderpay['paytype_id'].' and brand_user_lid='.$user['lid'];
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					if(!$result){
-						throw new Exception('现金券退回失败!');
-					}
+					WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 				}else if($orderpay['paytype']==10){
-					$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$orderpay['pay_amount'].' where card_id='.$orderpay['remark'];
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					if(!$result){
-						throw new Exception('储值退回失败!');
-					}
+					WxBrandUser::refundYue($orderpay['pay_amount'], $orderpay['remark']);
 				}
 			}
 	 	}
