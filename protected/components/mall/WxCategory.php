@@ -28,7 +28,7 @@ class WxCategory
 		$categorys = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':showType',$showType)->queryAll();
 		foreach ($categorys as $category){
 			$childe = self::getChrildrenIds($dpid,$category['lid']);
-			array_merge($hideCategory,$childe);
+			$hideCategory = array_merge($hideCategory,$childe);
 		}
 		return $hideCategory;
 	}

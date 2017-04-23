@@ -133,6 +133,7 @@ class WxCart
 				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
 			}else{
 				$categoryStr = join(',', $hideCate);
+				Helper::writeLog($categoryStr);
 				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
 			}
 		}elseif($this->type==6){
