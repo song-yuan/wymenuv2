@@ -22,4 +22,14 @@ class WxCategory
 		$categorys = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':categoryId',$categoryId)->queryColumn();
 		return $categorys;
 	}
+	public static function getHideCate($dpid,$showType){
+		$hideCategory = array();
+		$sql = 'select * from nb_product_category where dpid=:dpid and pid=0 and show_type=:showType and delete_flag=0 order by order_num asc,lid desc';
+		$categorys = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':showType',$showType)->queryAll();
+		foreach ($categorys as $category){
+			$childe = self::getChrildrenIds($dpid,$category['lid']);
+			array_merge($hideCategory,$childe);
+		}
+		return $hideCategory;
+	}
 }

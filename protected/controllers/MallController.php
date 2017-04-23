@@ -90,7 +90,7 @@ class MallController extends Controller
 			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
 		}
 		
-		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
+		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		if(empty($carts)){
@@ -121,7 +121,7 @@ class MallController extends Controller
 				$siteOpen = true;
 			}
 		}
-		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
+		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
@@ -620,7 +620,7 @@ class MallController extends Controller
 		$isSet =  Yii::app()->request->getParam('isSet');
 		
 		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
-		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
+		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$this->type);
 		
 		//检查活动商品数量
 		if($promoteId > 0){
@@ -671,7 +671,7 @@ class MallController extends Controller
 		
 		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		
-		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
+		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$this->type);
 		if($cart->deleteCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
 		}else{
