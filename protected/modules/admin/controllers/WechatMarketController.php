@@ -109,14 +109,14 @@ class WechatMarketController extends BackendController {
 		$yearnow=date('Y',time());
 		$yearbegin=$yearnow-$ageto;
 		$yearend=$yearnow-$agefrom;
-		$sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) <= '".$yearend."'";
-		$sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) <= '".$birthto."'";
+		$sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) <= '".$yearend."'";
+		$sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) <= '".$birthto."'";
 		//$sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
 		//$sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) >= "
 		//	.$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) <=".$remainto;
         $sql.=" and ifnull(tct.consumetotal,0) >= ".$consumetotalfrom." and ifnull(tct.consumetotal,0)<=".$consumetotalto;
         $sql.=" and ifnull(tct.consumetimes,0) >= ".$timesfrom." and ifnull(tct.consumetimes,0)<=".$timesto;
-	
+	//echo $sql;exit;
         $sort=" ASC";
 	    if($s=="1")
 	    {

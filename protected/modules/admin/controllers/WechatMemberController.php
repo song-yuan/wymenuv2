@@ -105,14 +105,14 @@ class WechatMemberController extends BackendController {
         //var_dump($sql);exit;
         //用sql语句查询出所有会员及消费总额、历史积分、余额、
         $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
-            .",t.province,t.city,t.mobile_num,com.dpid,com.company_name"				
+            .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"				
             . " from nb_brand_user t "
             . " LEFT JOIN  nb_company com on com.dpid = t.weixin_group "  
             . " LEFT JOIN (select dpid,user_id from nb_order"
             . " where order_type in ('1','2','6') and order_status in ('3','4','8')"
             . " group by dpid,user_id) tct on t.dpid = tct.dpid and t.lid = tct.user_id "
             . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
-            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")";
+            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.") group by t.lid";
            // echo $sql;exit;    
         if($finduserlevel!="0000000000")
         {
@@ -411,6 +411,49 @@ public function actionAccountDetail(){
                     "weixin" => $weixin
                     )  
                 );
+     }
+
+     public function actionAddcash(){
+     	$companyId = Yii::app()->request->getParam('companyId');
+     	$dpid = Yii::app()->request->getParam('dpid');
+     	$userid = Yii::app()->request->getParam('userid');
+     	$money = Yii::app()->request->getParam('money');
+     	 
+     	//****查询公司的产品分类。。。****
+     	$db = Yii::app()->db;
+     	$user = BrandUser::model()->find('dpid=:companyId and lid=:lid' , array(':companyId'=>$dpid,':lid'=>$userid));
+     	if(!empty($user)){
+     		$all_money = $user->remain_back_money + $money;
+     		$sql = 'update nb_brand_user set update_at ="'.date('Y-m-d H:i:s',time()).'",remain_back_money ="'.$all_money.'" where dpid ='.$dpid.' and lid ='.$userid;
+     		$result = $db->createCommand($sql)->execute();
+     		if($result){
+     			
+     			$se = new Sequence("recharge_record");
+     			$id = $se->nextval();
+     			$data = array(
+     					'lid'=>$id,
+     					'dpid'=>$dpid,
+     					'create_at'=>date('Y-m-d H:i:s',time()),
+     					'update_at'=>date('Y-m-d H:i:s',time()),
+     					'recharge_lid'=>'0',
+     					'recharge_money'=>'0.00',
+     					'cashback_num'=>$money,
+     					'brand_user_lid'=>$userid,
+     					'who_recharge'=>Yii::app()->user->username,
+     					'delete_flag'=>'0',
+     					'is_sync'=>'11111',
+     			);
+     			//var_dump($dataprod);exit;
+     			$command = $db->createCommand()->insert('nb_recharge_record',$data);
+     			
+     			Yii::app()->end(json_encode(array("status"=>true,'msg'=>'成功')));
+     		}else{
+     			Yii::app()->end(json_encode(array("status"=>false,'msg'=>'失败')));
+     		}
+     	}else{
+     		Yii::app()->end(json_encode(array("status"=>false,'msg'=>'失败')));
+     	}
+     	
      }
 }
 

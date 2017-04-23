@@ -30,7 +30,12 @@
             <!-- /.modal-content -->
         </div>
             <!-- /.modal-dialog -->
-    </div>         
+    </div>
+    
+    <div id="main2" name="main2" style="min-width: 260px;min-height:170px;display:none;" onMouseOver="this.style.backgroundColor='rgba(255,222,212,1)'" onmouseout="this.style.backgroundColor=''">
+		<div id="content"></div>
+	</div>
+	         
     <!-- BEGIN PAGE HEADER-->
     <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('wechatMember/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员查询'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMember/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
     <!-- END PAGE HEADER-->
@@ -203,6 +208,7 @@
                                 <th>等级</th>
                                 <th>地区</th>
                                 <th>来源</th>
+                                <th>余额</th>
                                 <th>操作</th>
                                 </tr>
                         </thead>
@@ -218,8 +224,12 @@
                                     <td><?php echo $model['level_name'];?></td>
                                     <td><?php echo $model['country'];?> <?php echo $model['province'];?> <?php echo $model['city'];?></td>											
                                     <td><?php echo $model['company_name'];?></td>
+                                    <td><?php echo $model['all_money'];?></td>
                                     <td class="button-column">
                                         <a  class='btn default btn-sm blue'  href="<?php echo $this->createUrl('wechatMember/searchdetail',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>"><i class="fa fa-search"></i>详情</a>
+                                        <?php if(Yii::app()->user->role <=5):?>
+                                        <a  class='btn default yellow addCash' id="setAppid<?php echo $model['dpid'];?>" userid="<?php echo $model['lid'];?>" dpid="<?php echo $model['dpid'];?>" name="<?php echo $model['user_name'].'|'.$model['nickname'];?>"><i class="fa fa-rmb"></i><?php echo yii::t('app','充值');?></a>
+                                        <?php endif;?>
                                     </td>
                                 </tr>
                             <?php endforeach;?>	
@@ -356,4 +366,66 @@ $("#findprovinceid").on("change",function(){
             }
         })
 })
+		$('.addCash').on('click',function(){
+
+			$('#content').html('');
+			var name = $(this).attr('name');
+			var userid = $(this).attr('userid');
+			var dpid = $(this).attr('dpid');
+
+			var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10%;"><span>'+name+'</span></div>'
+						+ '<div style="width: 88%;margin-left: 6%;padding-top: 10%;"><input id="addmoney" placeholder="输入金额"/></div>'
+						+ '<div style="width: 88%;margin-left: 6%;padding-top: 20px;"><button id="add_cash" class="btn green">确认</button></div>'
+						;
+			$('#content').html(content);
+			layer_chongzhi=layer.open({
+			     type: 1,
+			     //shift:5,
+			     shade: [0.5,'#fff'],
+			     //move:'#main2',
+			     moveOut:true,
+			     offset:['100px','350px'],
+			     shade: false,
+			     title: false, //不显示标题
+			     area: ['100', '100'],
+			     content: $('#main2'),
+			     cancel: function(index){
+			         layer.close(index);
+			         layer_chongzhi=0;
+			     }
+			 });
+			 
+			$('#add_cash').on('click',function(){
+				var money = $('#addmoney').val();
+				layer.msg(money);
+				if(money == ''||money ==null){
+					layer.msg('请输入充值金额！！！');
+					return false;
+				}
+				if(window.confirm("确认进行充值？？")){
+					var url = "<?php echo $this->createUrl('wechatMember/addcash',array('companyId'=>$this->companyId));?>/userid/"+userid+"/dpid/"+dpid+"/money/"+money;
+			        $.ajax({
+			            url:url,
+			            type:'GET',
+			            //data:orderid,//CF
+			            async:false,
+			            dataType: "json",
+			            success:function(msg){
+			                var data=msg;
+			                if(data.status){
+			                	layer.msg('充值成功！！！');
+			                	layer.close(layer_chongzhi);
+			                	layer_chongzhi=0;
+			                	location.reload();
+			                }else{
+			                	layer.msg('充值失败！！！');
+			                }
+			            },
+			            error: function(msg){
+			                layer.msg('网络错误！！！');
+			            }
+			        });
+				}
+			});
+		});
 </script>	
