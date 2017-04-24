@@ -1082,8 +1082,8 @@ class DataSyncOperation {
 							}else{
 								$user = WxBrandUser::get($order['user_id'],$dpid);
 								Helper::writeLog(json_encode($user));
+								$cardId = $user['card_id'];
 							}
-							$cardId = $user['card_id'];
 						}else{
 							$cardId = $pay['remark'];
 						}
