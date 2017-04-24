@@ -35,8 +35,12 @@ class PrinterWayController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('PrinterWay');
                         $se=new Sequence("print_way");
                         $model->lid = $se->nextval();
+                        $code=new Sequence("phs_code");
+                        $phs_code = $code->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->update_at=date('Y-m-d H:i:s',time());
+                        $model->phs_code = ProductCategory::getChscode($this->companyId, $model->lid, $phs_code);
+                        $model->source = '0';
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()) {
