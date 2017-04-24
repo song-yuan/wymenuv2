@@ -26,7 +26,7 @@
     <div class="row">
         <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'copyscreen-form',
-				'action' => $this->createUrl('copyscreen/storProduct' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('CopyScreen/StorProduct' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
                                 'class' => 'form-horizontal',
