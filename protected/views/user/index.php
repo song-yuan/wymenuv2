@@ -142,9 +142,22 @@
         margin-bottom: 40px;
         font-size: 22px;
     }
-    .empty2{
-    	padding:10px 15px;
-    }
+    .empty1{
+	    height: 20px;
+	    border-top: 1px solid #CFCFCF;
+	    border-bottom: 1px solid #CFCFCF;
+	    background-color: #EDEDED;
+	}
+	.empty2{
+	    height: 40px;
+	    border-top: 1px solid #CFCFCF;
+	    border-bottom: 1px solid #CFCFCF;
+	    color:#787878; 
+	    line-height: 40px;
+	    padding-left: 20px;
+	     background-color: #EDEDED;
+	     font-size: 15px;
+	}
 </style>
     <div class="container js_container">
         <div class="page">
