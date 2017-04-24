@@ -27,7 +27,7 @@ class CompanyController extends BackendController
 		$criteria->with = 'property';
 		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE)
 		{
-			$criteria->condition =' t.delete_flag=0 ';
+			$criteria->condition =' t.delete_flag=0 and t.type=0';
 		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
 			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
@@ -64,6 +64,53 @@ class CompanyController extends BackendController
 				'province'=>$provinces,
 				'city'=>$citys,
 				'area'=>$areas,
+		));
+	}
+         public function actionListchidren(){
+                $provinces = Yii::app()->request->getParam('province',0);
+		$citys = Yii::app()->request->getParam('city',0);
+		$areas = Yii::app()->request->getParam('area',0);
+		
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+	
+		$criteria = new CDbCriteria;
+		$criteria->with = 'property';
+       
+                $criteria->condition = ' t.delete_flag=0 and t.comp_dpid='.$companyId;
+		$province = $provinces;
+		$city = $citys;
+		$area = $areas;
+		//var_dump($criteria);exit;
+		if($citys == '市辖区'|| $citys == '省直辖县级行政区划' || $citys == '市辖县'){
+			$city = '0';
+		}
+		if($areas == '市辖区'){
+			$area = '0';
+		}
+		if($province){
+			$criteria->addCondition('t.province like "'.$province.'"');
+		}
+		if($city){
+			$criteria->addCondition('t.city like "'.$city.'"');
+		}
+		if($area){
+			$criteria->addCondition('t.county_area like "'.$area.'"');
+		}
+		$criteria->order = 't.dpid asc';
+		$pages = new CPagination(Company::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+                 
+		$models = Company::model()->findAll($criteria);
+//                var_dump($models);exit;
+//               print_r($criteria);exit;
+		$this->render('listchidren',array(
+				'models'=> $models,
+				'pages'=>$pages,
+				'province'=>$provinces,
+				'city'=>$citys,
+				'area'=>$areas,
+                     
 		));
 	}
 	public function actionIndex1(){

@@ -157,6 +157,7 @@
 		});   
 	})             
 	$("#stocktaking").on("click",function(){
+		var loading = layer.load();
 		//alert("123");
 		//var vid=$(this).attr("id").substr(12,10);
         var arr=document.getElementsByName("idss[]");
@@ -200,21 +201,24 @@
 	            //alert(msg.status);
 	            if(msg.status=="success")
 	            {            
-		            //alert("<?php echo yii::t('app','成功'); ?>");
 		            if(msg.msg !=''){
 		            	alert("下列产品尚未入库，无非进行盘点【"+msg.msg+"】；其他产品盘点正常。点击确认跳转至盘点日志查看");
+		            	
 		            }else{
 			            layer.msg("盘点成功！");
 			        }  
 		            location.href="<?php echo $this->createUrl('stocktakinglog/detailindex' , array('companyId'=>$this->companyId,));?>/id/"+msg.logid
 		            //location.reload();
+		            layer.closeAll('loading');
 	            }else{
 		            alert("<?php echo yii::t('app','失败'); ?>"+"1");
 		            location.reload();
+		            layer.closeAll('loading');
 	            }
 			},
             error:function(){
-				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+				alert("<?php echo yii::t('app','失败'); ?>"+"2");  
+				layer.closeAll('loading');                              
 			},
 		});
         
