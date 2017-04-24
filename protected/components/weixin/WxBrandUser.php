@@ -287,6 +287,7 @@ class WxBrandUser {
 	 */
 	public static function refundYue($amount,$cardId) {
 		$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$amount.' where card_id="'.$cardId.'"';
+		Helper::writeLog($sql);
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		if(!$result){
 			throw new Exception('储值退回失败!');
