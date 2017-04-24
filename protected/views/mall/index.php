@@ -201,6 +201,9 @@ function getProduct(){
 				productStr +='<div class="section" id="st'+ product.lid  +'"><div class="prt-title">' + product.category_name + '</div>';
 				for(var pp in product.product_list){
 					var pProduct = product.product_list[pp];
+					if(pProduct.main_picture==''){
+						pProduct.main_picture = 'img/product_default.png';
+					}
 					productStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProduct.main_picture+'"></div>';
 					productStr +='<div class="lt-ct"><p><span class="name">'+ pProduct.product_name +'</span>';
 					if(pProduct.spicy==1){
@@ -262,6 +265,9 @@ function getProduct(){
 				for(var q in productSets){
 					var pProductSet = productSets[q];
 					var pDetail = pProductSet['detail'];
+					if(pProductSet.main_picture==''){
+						pProductSet.main_picture = 'img/product_default.png';
+					}
 					productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
 					productSetStr +='<div class="lt-ct"><p><span class="name">'+ pProductSet.set_name +'</span>';
 					if(pProductSet.spicy==1){
@@ -328,6 +334,9 @@ function getProduct(){
 				for(var i=0; i<promotions.length; i++){
 					var promotion = promotions[i];
 					var promotionProduct = promotion['product'];
+					if(promotionProduct.main_picture==''){
+						promotionProduct.main_picture = 'img/product_default.png';
+					}
 					promotionStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+promotionProduct.main_picture+'"></div>';
 					promotionStr +='<div class="lt-ct"><p><span class="name">'+ promotionProduct.product_name +'</span>';
 					if(promotionProduct.spicy==1){
