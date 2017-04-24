@@ -142,17 +142,17 @@ function setTotal(){
     
     $(".share").html(v);
     $("#total").html(s.toFixed(2)); 
-    <?php if($this->type==2):?>
-    var startPrice = $('.ft-rt').attr('start-price');
-    var total = $("#total").html();
-    if(parseFloat(startPrice) > parseFloat(total)){
-    	$('.no-start').removeClass('none');
-    	$('.start').addClass('none');
-    }else{
-    	$('.no-start').addClass('none');
-    	$('.start').removeClass('none');
+    if(orderType==2){
+    	var startPrice = $('.ft-rt').attr('start-price');
+        var total = $("#total").html();
+        if(parseFloat(startPrice) > parseFloat(total)){
+        	$('.no-start').removeClass('none');
+        	$('.start').addClass('none');
+        }else{
+        	$('.no-start').addClass('none');
+        	$('.start').removeClass('none');
+        }
     }
-    <?php endif;?>
 } 
 function getProduct(){
 	layer.load(2);
@@ -322,7 +322,7 @@ function getProduct(){
 				productSetStr +='</div>';
 			}
 			// 活动
-			if(promotions.length > 0){
+			if(promotions.length > 0 && orderType!=2){
 				navLi += '<li class=""><a href="#st-promotion">优惠专区</a><b></b></li>';
 				promotionStr +='<div class="section" id="st-promotion"><div class="prt-title">优惠专区</div>';
 				for(var i=0; i<promotions.length; i++){
