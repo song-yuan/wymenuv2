@@ -142,6 +142,9 @@
         margin-bottom: 40px;
         font-size: 22px;
     }
+    .empty2{
+    	padding:10px 15px;
+    }
 </style>
     <div class="container js_container">
         <div class="page">

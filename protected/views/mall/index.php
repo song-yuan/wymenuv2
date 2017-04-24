@@ -175,6 +175,7 @@ function getProduct(){
 			var productStr = '';
 			var productSetStr = '';
 			var cartStr = '';
+			var defaultImg = '../img/product_default.png';
 			// 种类
 			for(var k in categorys){
 				var category = categorys[k];
@@ -202,7 +203,7 @@ function getProduct(){
 				for(var pp in product.product_list){
 					var pProduct = product.product_list[pp];
 					if(pProduct.main_picture==''){
-						pProduct.main_picture = 'img/product_default.png';
+						pProduct.main_picture = defaultImg;
 					}
 					productStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProduct.main_picture+'"></div>';
 					productStr +='<div class="lt-ct"><p><span class="name">'+ pProduct.product_name +'</span>';
@@ -266,7 +267,7 @@ function getProduct(){
 					var pProductSet = productSets[q];
 					var pDetail = pProductSet['detail'];
 					if(pProductSet.main_picture==''){
-						pProductSet.main_picture = 'img/product_default.png';
+						pProductSet.main_picture = defaultImg;
 					}
 					productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
 					productSetStr +='<div class="lt-ct"><p><span class="name">'+ pProductSet.set_name +'</span>';
@@ -335,7 +336,7 @@ function getProduct(){
 					var promotion = promotions[i];
 					var promotionProduct = promotion['product'];
 					if(promotionProduct.main_picture==''){
-						promotionProduct.main_picture = 'img/product_default.png';
+						promotionProduct.main_picture = defaultImg;
 					}
 					promotionStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+promotionProduct.main_picture+'"></div>';
 					promotionStr +='<div class="lt-ct"><p><span class="name">'+ promotionProduct.product_name +'</span>';
