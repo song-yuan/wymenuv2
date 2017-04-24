@@ -1075,13 +1075,13 @@ class DataSyncOperation {
 						}
 						WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 					}elseif ($pay['paytype']==10){
-						if($order['order_type']){
+						if($order['order_type'] > 0){
 							if($pay['remark']!='全款支付'){
-								$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
+								$cardId = $pay['remark'];
 							}else{
 								$user = WxBrandUser::get($order['user_id'],$dpid);
+								$cardId = $user['card_id'];
 							}
-							$cardId = $user['card_id'];
 						}else{
 							$cardId = $pay['remark'];
 						}
