@@ -229,7 +229,7 @@
                     
                     
                     
-                    <div class="empty2">商家优惠活动</div>
+                    <div class="empty2 font_l">商家优惠活动</div>
                     <a class="weui_cell js_cell" href="javascript:;" data-id="sale1" data_target="#chanel_demo2">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
