@@ -323,8 +323,8 @@ function getProduct(){
 			}
 			// 活动
 			if(promotions.length > 0){
-				navLi += '<li class=""><a href="#st-1">优惠专区</a><b></b></li>';
-				promotionStr +='<div class="section" id="st-1"><div class="prt-title">优惠专区</div>';
+				navLi += '<li class=""><a href="#st-promotion">优惠专区</a><b></b></li>';
+				promotionStr +='<div class="section" id="st-promotion"><div class="prt-title">优惠专区</div>';
 				for(var i=0; i<promotions.length; i++){
 					var promotion = promotions[i];
 					var promotionProduct = promotion['product'];
