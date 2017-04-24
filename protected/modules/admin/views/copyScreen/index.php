@@ -66,7 +66,7 @@
                         <?php foreach ($models as $model):?>
                             <tr class="odd gradeX">
                                 <td>  
-                                    <input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" phs_code="<?php echo $model->phs_code;?>" name="ids[]" /> 
+                                    <input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" lid="<?php echo $model->lid;?>" name="ids[]" /> 
                                 </td>
                                 <td ><?php echo $model->title;?></td>
                                 <td><?php echo $model->desc;?></td>
@@ -75,7 +75,7 @@
                             <?php endif;?>
                         </tbody>
                         <div style="display: none;">
-                            <input type="hidden" id="phscode" name="phscode" value="" />
+                            <input type="hidden" id="lid" name="lid" value="" />
                             <input type="hidden" id="dpids" name="dpids" value="" />
                         </div>
                     </table>
@@ -88,7 +88,7 @@
     
     <div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">		                
         <div class="modal-header">
-            <h4 class="modal-title">选择需要下发菜品的店铺</h4>
+            <h4 class="modal-title">选择需要双屏下发的店铺</h4>
         </div>
         <div class="modal-body">
             <div class="portlet-body" id="table-manage">  
@@ -133,14 +133,14 @@ $("#su").on('click',function() {
         var codep=new Array();
         for (var i = 0; i < aa.length; i++) {
             if (aa[i].checked) {
-                codep += aa[i].getAttribute("phs_code") +',';
+                codep += aa[i].getAttribute('lid') +',';
                // layer.msg(aa[i]getAttribute('phs_code'));
             }
         }       
         if(codep!=''){
         	codep = codep.substr(0,codep.length-1);//除去最后一个“，”
         }else{
-       	 	alert("<?php echo yii::t('app','请选择要下发的套餐！！！,');?>");
+       	 	alert("<?php echo yii::t('app','请选择要下发的双屏！！！,');?>");
        		return false;
        	}
     
@@ -170,7 +170,7 @@ $("#su").on('click',function() {
 	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
 	            	//alert(dpids);
 	            	$("#dpids").val(dpids);
-	            	$("#phscode").val(codep);
+	            	$("#lid").val(codep);
 	    	        $("#copyscreen-form").submit();
                     }else{
                             alert("请选择店铺。。。");return;

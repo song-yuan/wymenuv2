@@ -26,12 +26,13 @@ class CuponController extends BackendController
     	//$brand = Yii::app()->admin->getBrand($this->companyId);
     	$criteria = new CDbCriteria;
     	$criteria->select = 't.*';
-    	$criteria->order = ' update_at desc';
+    	$criteria->order = ' lid desc';
     	$criteria->addCondition("t.dpid= ".$this->companyId);
     	$criteria->addCondition('delete_flag=0');
     	//$criteria->params[':brandId'] = $brand->brand_id;
     
     	$pages = new CPagination(Cupon::model()->count($criteria));
+        $pages->pageSize = 12;
     	$pages->applyLimit($criteria);
     	$models = Cupon::model()->findAll($criteria);
     	 
@@ -66,12 +67,15 @@ class CuponController extends BackendController
 		//var_dump($model);exit;
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
+                    
+                    $model->attributes = Yii::app()->request->getPost('cupon');
+                   
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
 			}
 			$db = Yii::app()->db;
-			$model->attributes = Yii::app()->request->getPost('Cupon');
+			
                         
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$gropids = array();

@@ -110,8 +110,8 @@ class CopyPrinterController extends BackendController
                                 if(!empty($way_branch_exist)){
                                     $way_branch_exist->delete_flag = 1;
                                     $way_branch_exist->update();
-                                    $db->createCommand('update nb_printer_way_detail set delete_flag=1 where print_way_id =:print_way_id and dpid = :companyId')
-                                    ->execute(array(':print_way_id'=> $way_branch_exist->lid, ':companyId' => $dpid)); 
+                                    $db->createCommand('update nb_printer_way_detail set delete_flag=1 where print_way_id =:print_way_id and dpid = :dpid')
+                                    ->execute(array(':print_way_id'=> $way_branch_exist->lid, ':dpid' => $dpid)); 
                                 }
 
                                
@@ -137,7 +137,7 @@ class CopyPrinterController extends BackendController
                                 
                                     if(!empty($way_detail_hqs)){
                                         foreach ($way_detail_hqs as $way_detail_hq){
-                                          //  $way_detail_hq['printer_id']
+                                          
                                             $phs_code_sql = 'select phs_code from nb_printer  where delete_flag = 0 and lid ='.$way_detail_hq['printer_id'].' and dpid = '.$companyId;               
                                             $phs_code = $db->createCommand($phs_code_sql)->queryRow();   
                                           
