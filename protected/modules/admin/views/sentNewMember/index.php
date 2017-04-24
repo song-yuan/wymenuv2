@@ -287,7 +287,7 @@
                                 </div>
                             </div>
                             <?php else:?>
-                            <span style=" font-size: 22px;color: red;">请先 '开启' 生日赠券活动，再进行操作！</span>
+                            <span style=" font-size: 22px;color: red;">请先 '开启' 给新会员赠券活动，再进行操作！</span>
                             <?php endif;?>
                             
 			</div>

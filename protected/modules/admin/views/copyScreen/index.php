@@ -140,7 +140,7 @@ $("#su").on('click',function() {
         if(codep!=''){
         	codep = codep.substr(0,codep.length-1);//除去最后一个“，”
         }else{
-       	 	alert("<?php echo yii::t('app','请选择要下发的双屏！！！,');?>");
+       	 	alert("<?php echo yii::t('app','请选择要下发的双屏！！！');?>");
        		return false;
        	}
     
