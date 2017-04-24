@@ -1020,8 +1020,6 @@ class DataSyncOperation {
 				}
 				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype != 11';
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
-				Helper::writeLog('aa');
-				Helper::writeLog(json_encode($orderPayArr));
 				$allOrderRetreat = false; // 是否整单退
 				if($order['should_total'] == -$retreatprice){
 					// 整单全退
@@ -1029,7 +1027,6 @@ class DataSyncOperation {
 				}
 				
 				foreach ($orderPayArr as $pay){
-					Helper::writeLog($pay['paytype']);
 					if($allOrderRetreat){
 						$refund_fee = $pay['pay_amount'];
 					}else{
@@ -1067,11 +1064,28 @@ class DataSyncOperation {
 							throw new Exception('会员卡退款失败');
 						}
 					}elseif ($pay['paytype']==9){
-						$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
+						if($order['order_type']){
+							if($pay['remark']!='全款支付'){
+								$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
+							}else{
+								$user = WxBrandUser::get($order['user_id'],$dpid);
+							}
+						}else{
+							$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
+						}
 						WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 					}elseif ($pay['paytype']==10){
-						Helper::writeLog($pay['remark']);
-						WxBrandUser::refundYue($refund_fee, $pay['remark']);
+						if($order['order_type']){
+							if($pay['remark']!='全款支付'){
+								$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
+							}else{
+								$user = WxBrandUser::get($order['user_id'],$dpid);
+							}
+							$cardId = $user['card_id'];
+						}else{
+							$cardId = $pay['remark'];
+						}
+						WxBrandUser::refundYue($refund_fee, $cardId);
 					}
 					$se = new Sequence ( "order_pay" );
 					$orderPayId = $se->nextval ();
