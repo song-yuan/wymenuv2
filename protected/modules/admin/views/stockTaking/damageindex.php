@@ -208,7 +208,7 @@
         	optval = optval.substr(0,optval.length-1);//除去最后一个“，”
         	//alert(optval);
         }else{
-            alert('请至少盘点一项');
+            alert('请至少盘损一项');
             return false;
             }
         //return false;

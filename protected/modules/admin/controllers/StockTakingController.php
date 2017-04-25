@@ -21,6 +21,7 @@ class StockTakingController extends BackendController
 	}
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$sttype = Yii::app()->request->getParam('sttype',1);
 		$criteria = new CDbCriteria;
 		$criteria->with = array('category');
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
@@ -38,7 +39,8 @@ class StockTakingController extends BackendController
 				'models'=>$models,
 				//'pages'=>$pages,
 				'categories'=>$categories,
-				'categoryId'=>$categoryId
+				'categoryId'=>$categoryId,
+				'sttype'=>$sttype
 
 		));
 	}
@@ -146,6 +148,7 @@ class StockTakingController extends BackendController
 		$username = Yii::app()->user->username;
 		$optvals = Yii::app()->request->getParam('optval');
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$sttype = Yii::app()->request->getParam('sttype',1);
 		$optval = array();
 		$optval = explode(';',$optvals);
 		//var_dump($optval);
@@ -177,8 +180,44 @@ class StockTakingController extends BackendController
 				$nowNum = $opt[2];
 				$originalNum = $opt[3];
 				
+				$all_num = '0.00';
+				$laststocks = '0.00';
+				$laststockid = '0';
+				$laststocktime = '0';
+				$psstock = '0.00';
+				
 				$stocks = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$id.' )',array(':sid'=>$id,':dpid'=>$this->companyId,));
 				if(!empty($stocks)){
+					
+					$sql = 'select sum(t.stock_num) as all_stock from nb_material_stock_log t where t.delete_flag = 0 and t.st_status = 0 and t.type = 1 and t.dpid ='.$dpid.' and t.material_id ='.$id;
+					$salesstock = $db->createCommand($sql)->queryRow();
+					
+					$laststocksql = 'select * from nb_stock_taking_detail t where t.logid in(select tt.lid from nb_stock_taking tt where tt.status =0 and tt.delete_flag =0 and tt.dpid ='.$dpid.') and t.delete_flag = 0 and t.status = 0 and t.dpid ='.$dpid.' and t.material_id ='.$id.' order by lid desc';
+					$laststock = $db->createCommand($laststocksql)->queryRow();
+					
+						
+					if(!empty($salesstock)){
+						$all_num = $salesstock['all_stock'];
+						if(!$all_num){
+							$all_num = '0.00';
+						}
+					}
+					if(!empty($laststock)){
+						$laststocks = $laststock['taking_stock'];
+						$laststockid = $laststock['lid'];
+						$laststocktime = $laststock['create_at'];
+						if(!$laststocks){
+							$laststocks = '0.00';
+							$laststockid = '0';
+						}else{
+							$pandunstocksql = 'select sum(t.number) as all_pansun_num from nb_stock_taking_detail t where t.logid in(select tt.lid from nb_stock_taking tt where tt.status =1 and tt.delete_flag =0 and tt.dpid ='.$dpid.') and t.delete_flag = 0 and t.status = 0 and t.dpid ='.$dpid.' and t.material_id ='.$id.' and t.create_at >="'.$laststocktime.'"';
+							$pansunstock = $db->createCommand($pandunstocksql)->queryRow();
+							if(!empty($pansunstock)){
+								$psstock = $pansunstock['all_pansun_num'];
+							}
+						}	
+					}
+					//var_dump($pansunstock);exit;
 					//对该次盘点进行日志保存
 					$stocktakingdetail = new StockTakingDetail();
 					$se=new Sequence("stock_taking_detail");
@@ -191,16 +230,26 @@ class StockTakingController extends BackendController
 							'logid'=>$logid,
 							'material_id'=>$id,
 							'material_stock_id' => $stocks->lid,
+							'last_stock_id'=>$laststockid,
+							'last_stock_time'=>$laststocktime,
+							'last_stock'=>$laststocks,
 							'reality_stock' => $originalNum,
 							'taking_stock' => $nowNum,
 							'number'=>$difference,
+							'sales_stocks'=>$all_num,
+							'demage_stock'=>$psstock,
 							'reasion'=>'',
 							'status' => 0,
 							'is_sync'=>$is_sync,
 					);
-					//var_dump($stocktakingdetails);
+					//var_dump($stocktakingdetail);exit;
 					$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
-			
+					//var_dump($command);exit;
+					if($command){
+						$sqlupdate = 'update nb_material_stock_log set st_status="'.$detailid.'" where delete_flag = 0 and st_status = 0 and type = 1 and dpid ='.$dpid.' and material_id ='.$id;
+						$result = $db->createCommand($sqlupdate)->execute();
+					}
+					
 					if($difference > 0 ){
 						//盘点操作，当盘点的库存比理论库存多时，直接在后进的库存批次上加上此次的盘点的差值。。。
 							
@@ -225,7 +274,31 @@ class StockTakingController extends BackendController
 						//下面是对该次盘点进行的操作。。。
 						$stocks->stock = $stocks->stock + $difference;
 						$stocks->update_at = date('Y-m-d H:i:s',time());
-						$stocks->update();
+						
+						if($stocks->update()){
+
+							//对该次盘点进行日志保存
+							$stocktakingdetails = new StockTakingDetail();
+							$se=new Sequence("stock_taking_detail");
+							$stocktakingdetails = array(
+									'lid'=>$se->nextval(),
+									'dpid'=>$dpid,
+									'create_at'=>date('Y-m-d H:i:s',time()),
+									'update_at'=>date('Y-m-d H:i:s',time()),
+									'logid'=>$detailid,
+									'material_id'=>$id,
+									'material_stock_id' => $stocks->lid,
+									'reality_stock' => $stocks->stock,
+									'taking_stock' => ''.$nowNum,
+									'number'=>''.$difference,
+									'reasion'=>'',
+									'status' => 1,
+									'is_sync'=>$is_sync,
+							);
+							//var_dump($stocktakingdetails);
+							$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
+						}
+						
 							
 					}else{
 						

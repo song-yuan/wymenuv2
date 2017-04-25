@@ -111,7 +111,7 @@
 					<a href="<?php echo $this->createUrl('statementstock/stockReport',array('companyId'=>$this->companyId,'type'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cgzh"></div>
-							<div class="ku-item-info">进销存损</div>
+							<div class="ku-item-info">进销存日报</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
