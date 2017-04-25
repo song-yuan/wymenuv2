@@ -134,7 +134,7 @@
     <!-- /.modal -->
     <!-- END BEGIN STYLE CUSTOMIZER -->            
     <!-- BEGIN PAGE HEADER-->
-    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信赠券'),'url'=>$this->createUrl('wechatMarket/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','给新会员赠券'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMarket/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信赠券'),'url'=>$this->createUrl('wechatMarket/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','消费返券'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wechatMarket/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
             <!-- END PAGE HEADER-->
             <!-- BEGIN PAGE CONTENT-->
     <div class="row">
@@ -155,7 +155,7 @@
                             <div class="portlet-title">
                                 <div class="caption">
                                     <i class="fa fa-globe"></i>
-                                    <?php echo yii::t('app','给新会员赠券(*为必填项)');?>
+                                    <?php echo yii::t('app','消费返券(*为必填项)');?>
                                 </div>
                                 <div class="actions">
                                     <?php if($model):?>
@@ -194,7 +194,16 @@
                                                     <?php echo $form->textField($model, 'promotion_abstract',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_abstract')));?>
                                                     <?php echo $form->error($model, 'promotion_abstract' )?>
                                             </div>
-                                    </div>								
+                                    </div>
+                                    <div class="form-group" >
+                                    <i style="color: red;" class="fa  fa-star"></i>
+                                    <?php if($model->hasErrors('consume_money')) echo 'has-error';?>
+                                            <?php echo $form->label($model, yii::t('app','消费金额'),array('class' => 'col-md-3 control-label'));?>
+                                            <div class="col-md-4">
+                                                    <?php echo $form->textField($model, 'consume_money',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('consume_money')));?>
+                                                    <?php echo $form->error($model, 'consume_money' )?>
+                                            </div>
+                                    </div>
                                     <div class="form-group">
 	                		<i style="color: red;" class="fa  fa-star"></i>
                                         <label class="control-label col-md-3"><?php echo yii::t('app','活动有效期限');?></label>
@@ -270,7 +279,7 @@
                                 </div>
                             </div>
                             <?php else:?>
-                            <span style=" font-size: 22px;color: red;">请先 '开启' 给新会员赠券活动，再进行操作！</span>
+                            <span style=" font-size: 22px;color: red;">请先 '开启' 消费返券活动，再进行操作！</span>
                             <?php endif;?>
                             
 			</div>
@@ -328,11 +337,11 @@
         $('.staclose').on('click' , function(){
                 //is_new 为1时，表示该店铺没有建立生日赠券活动；2时表示开启生日赠券活动；3表示关闭生日赠券活动。
                 if($(this).hasClass('close1')){
-                    location.href="<?php echo $this->createUrl('sentNewMember/index' , array('companyId'=>$this->companyId));?>/is_new/3";
+                    location.href="<?php echo $this->createUrl('sentConsume/index' , array('companyId'=>$this->companyId));?>/is_new/3";
                      }else if($(this).hasClass('start1')){
-                        location.href="<?php echo $this->createUrl('sentNewMember/index' , array('companyId'=>$this->companyId));?>/is_new/1";
+                        location.href="<?php echo $this->createUrl('sentConsume/index' , array('companyId'=>$this->companyId));?>/is_new/1";
                      }else if($(this).hasClass('start2')){
-                        location.href="<?php echo $this->createUrl('sentNewMember/index' , array('companyId'=>$this->companyId));?>/is_new/2";
+                        location.href="<?php echo $this->createUrl('sentConsume/index' , array('companyId'=>$this->companyId));?>/is_new/2";
                      }
 
         });
@@ -361,9 +370,10 @@
             var title = $('#SentwxcardPromotion_promotion_title').val();
            
             var abstracts = $('#SentwxcardPromotion_promotion_abstract').val();
+            var money = $('#SentwxcardPromotion_consume_money').val();
             var messages = $('#SentwxcardPromotion_promotion_message').val();
 	         
-            if(title&&abstracts&&messages){
+            if(title&&abstracts&&money&&messages){
 
                            }else{
                                    alert("请填写带星号的项！！");
@@ -384,3 +394,4 @@
             $("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
     }
 </script>
+

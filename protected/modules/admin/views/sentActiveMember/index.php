@@ -185,24 +185,7 @@
                                                 <?php echo $form->error($model, 'promotion_title' )?>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <i style="color: red;" class="fa  fa-star"></i>
-                                        <?php if($model->hasErrors('main_picture')) echo 'has-error';?>
-                                        <?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
-                                        <div class="col-md-9">
-                                            <?php
-                                            $this->widget('application.extensions.swfupload.SWFUpload',array(
-                                                    'callbackJS'=>'swfupload_callback',
-                                                    'fileTypes'=> '*.jpg',
-                                                    'buttonText'=> yii::t('app','上传产品图片'),
-                                                    'companyId' => $model->dpid,
-                                                    'imgUrlList' => array($model->main_picture),
-                                            ));
-                                            ?>
-                                            <?php echo $form->hiddenField($model,'main_picture'); ?>
-                                            <?php echo $form->error($model,'main_picture'); ?>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="form-group" >
                                     <i style="color: red;" class="fa  fa-star"></i>
                                     <?php if($model->hasErrors('promotion_abstract')) echo 'has-error';?>
@@ -376,11 +359,11 @@
             var endtime = $('#SentwxcardPromotion_end_time').val();
 
             var title = $('#SentwxcardPromotion_promotion_title').val();
-            var picture = $('#SentwxcardPromotion_main_picture').val();
+            
             var abstracts = $('#SentwxcardPromotion_promotion_abstract').val();
             var messages = $('#SentwxcardPromotion_promotion_message').val();
 	         
-            if(title&&picture&&abstracts&&messages){
+            if(title&&abstracts&&messages){
 
                            }else{
                                    alert("请填写带星号的项！！");

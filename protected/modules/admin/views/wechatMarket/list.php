@@ -156,22 +156,19 @@
                                 <p>营销活动</p>
                                 
                                     <div class="list col-sm-3 col-xs-12">
-                                        <a href="javascrip:void(0)">
-                                             <div class="list_big"> 累计消费返券</div>
-                                            <div class="list_small">建立累计消费满X送Y的活动，如此给力的用户不妨奖励丰厚些，他们将为你带来更多</div>
-                                       
-                                            </a> 
+                                        <a href="<?php echo $this->createUrl('SentTotalConsume/index',array('companyId' => $this->companyId))?>">
+                                            <div class="list_big"> 累计消费返券</div>
+                                            <div class="list_small">建立累计消费满X送Y的活动，如此给力的用户不妨奖励丰厚些，他们将为你带来更多</div>   
+                                        </a> 
                                     </div>  
                                     <div class="list col-sm-3 col-xs-12">
-                                        <a href="javascrip:void(0)">
-                                            
-                                             <div class="list_big"> 消费返券</div>
-                                            <div class="list_small">建立消费满X送Y的活动，用户在消费过后获得一些奖励将会使他们下次光顾的日期大大提前</div>
-                                       
+                                        <a href="<?php echo $this->createUrl('SentConsume/index',array('companyId' => $this->companyId))?>">                                           
+                                            <div class="list_big"> 消费返券</div>
+                                            <div class="list_small">建立消费满X送Y的活动，用户在消费过后获得一些奖励将会使他们下次光顾的日期大大提前</div>                             
                                         </a> 
                                     </div>
                                     <div class="list col-sm-3 col-xs-12">
-                                        <a href="javascrip:void(0)">
+                                        <a href="<?php echo $this->createUrl('SentShare/index',array('companyId' => $this->companyId))?>">
                                             <div class="list_big">分享集券</div>
                                         </a> 
                                     </div>
