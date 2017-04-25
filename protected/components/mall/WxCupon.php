@@ -165,7 +165,6 @@ class WxCupon
 	 */
 	public static function refundCupon($cuponId,$userId){
 		$sql = 'update nb_cupon_branduser set is_used=1 where lid='.$cuponId.' and brand_user_lid='.$userId;
-		Helper::writeLog($sql);
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		if(!$result){
 			throw new Exception('现金券退回失败!');
