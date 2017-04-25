@@ -785,9 +785,12 @@ class WxOrder
 				throw new Exception('订单取消失败!');
 			}
 			$orderPays = WxOrderPay::get($orderId,$dpid);
+			Helper::writeLog(json_encode($orderPays));
 			foreach ($orderPays as $orderpay){
+				Helper::writeLog(json_encode($orderpay));
 				if($orderpay['paytype']==9){
 					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
+					Helper::writeLog(json_encode($user));
 					WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 				}else if($orderpay['paytype']==10){
 					WxBrandUser::refundYue($orderpay['pay_amount'], $orderpay['remark']);
