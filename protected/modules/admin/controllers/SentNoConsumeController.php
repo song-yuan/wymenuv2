@@ -19,7 +19,7 @@ class SentNoConsumeController extends BackendController {
         foreach ($orders as $order){
                 $user_id = $user_id .','.$order['user_id'];
         }
-        $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
+        $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,head_icon,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
             .",t.province,t.city,t.mobile_num,com.dpid,com.company_name"				
             . " from nb_brand_user t "
             . " LEFT JOIN  nb_company com on com.dpid = t.weixin_group "  
