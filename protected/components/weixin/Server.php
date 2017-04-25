@@ -183,7 +183,7 @@ class Server {
     		}
     		return $this->news($subPushs);
     	}else{
-    		array_push($subPushs,array('会员注册', '恭喜你成为新会员,完善资料有惊喜哦', '恭喜你成为新会员,完善资料有惊喜哦', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', Yii::app()->createAbsoluteUrl('user/index', array('companyId'=>$this->brandId))));
+    		array_push($subPushs,array('会员注册', '恭喜你成为新会员,完善资料有惊喜哦!', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', Yii::app()->createAbsoluteUrl('/user/index', array('companyId'=>$this->brandId))));
             return $this->news($subPushs);
     	}
 	}
