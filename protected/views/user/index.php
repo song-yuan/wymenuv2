@@ -142,6 +142,18 @@
         margin-bottom: 40px;
         font-size: 22px;
     }
+    .empty1{
+	    height: 20px;
+	    background-color: #EDEDED;
+	}
+	.empty2{
+	    height: 40px;
+	    color:#787878; 
+	    line-height: 40px;
+	    padding-left: 20px;
+	     background-color: #EDEDED;
+	     font-size: 15px;
+	}
 </style>
     <div class="container js_container">
         <div class="page">
@@ -188,20 +200,7 @@
                         </div>
                         <div class="weui_cell_ft">
                         </div>
-                    </a>       
-                    <!--BEGIN dialog2-->
-                    <div id="dialog2" style="z-index:90;position: fixed; display: none;">                     
-                        <div class="weui_dialog" >                           
-                            <div class="btn_ewm_out">    
-                                <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
-                            </div>
-                            <div id='qrcode-box' class="ewm_out"> 
-                            </div>
-                            <div class="des">到店出示给服务员即可使用</div>
-                        </div>
-                    </div>  
-                    <!--BEGIN dialog2--> 
-                    <!--END dialog2-->
+                    </a>
                     <div class="empty1"></div>                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="privilege" data_target="#chanel_demo1">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdzxtq.png" class="icon_nav" alt=""></span>
@@ -226,7 +225,7 @@
                     
                     
                     
-                    <div class="empty2">商家优惠活动</div>
+                    <div class="empty2 font_l">商家优惠活动</div>
                     <a class="weui_cell js_cell" href="javascript:;" data-id="sale1" data_target="#chanel_demo2">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
@@ -323,8 +322,20 @@
                    -->
                     
                 </div>
-               
             </div>
+            
+            <!--BEGIN dialog2-->
+            <div id="dialog2" style="z-index:90;position: fixed; display: none;">                     
+                 <div class="weui_dialog" >                           
+                     <div class="btn_ewm_out">    
+                          <a href="javascript:;" class="fa fa-times-circle btn_ewm"></a>
+                      </div>
+                      <div id='qrcode-box' class="ewm_out"> 
+                      </div>
+                      <div class="des">到店出示给服务员即可使用</div>
+                  </div>
+              </div>  
+              <!--END dialog2-->
               <div id="uplevel" style="z-index:90;position: absolute; display: <?php echo $upLev ? 'block':'none';?>;">                     
                     <div class="weui_dialog" >                           
                         <div class="btn_ewm_out">    
@@ -341,12 +352,10 @@
     
 <script type="text/javascript">
     $('.weui_cell ').on('click',function(){
-      
         var up_down=(!$(this).find(".up_down1").hasClass('up_down2'))?true:false;
-       $(this).find(".up_down1").toggleClass('up_down2',up_down);     
-       var display_em= $(this).attr("data_target");
-       $(display_em).toggleClass("collapse",!up_down);
-        
+       	$(this).find(".up_down1").toggleClass('up_down2',up_down);     
+       	var display_em= $(this).attr("data_target");
+       	$(display_em).toggleClass("collapse",!up_down);
     });  
     $('#qrcode-btn').click(function(){
         var userId = $(this).attr('user_id');
@@ -361,15 +370,15 @@
                 }else{
                            $("#qrcode-box").empty().append('不存在该会员'); 
                     }
-            },
-            dataType:'json'
-            });
-    });
+           	 },
+            	dataType:'json'
+         	});
+    	});
 
-            $('#uplevel').find('.btn_ewm').on('click', function () {
-                $('#uplevel').hide();
-                $(".sp-lightbox1").hide();
-            });
+        $('#uplevel').find('.btn_ewm').on('click', function () {
+              $('#uplevel').hide();
+              $(".sp-lightbox1").hide();
+        });
 </script>
 
 

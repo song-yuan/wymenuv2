@@ -23,30 +23,34 @@ class PrinterController extends BackendController
 			'pages'=>$pages
 		));
 	}
-	public function actionCreate(){
-		$model = new Printer() ;
-		$model->dpid = $this->companyId ;
-		
-		if(Yii::app()->request->isPostRequest) {
-			if(Yii::app()->user->role > User::SHOPKEEPER) {
-				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-				$this->redirect(array('printer/index' , 'companyId' => $this->companyId)) ;
-			}
-			$model->attributes = Yii::app()->request->getPost('Printer');
+    public function actionCreate(){
+        $model = new Printer() ;
+        $model->dpid = $this->companyId ;
+
+        if(Yii::app()->request->isPostRequest) {
+            if(Yii::app()->user->role > User::SHOPKEEPER) {
+                    Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+                    $this->redirect(array('printer/index' , 'companyId' => $this->companyId)) ;
+            }
+            $model->attributes = Yii::app()->request->getPost('Printer');
             $se=new Sequence("printer");
             $model->lid = $se->nextval();
+            $code=new Sequence("phs_code");
+            $phs_code = $code->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->update_at=date('Y-m-d H:i:s',time());
+            $model->phs_code = ProductCategory::getChscode($this->companyId, $model->lid, $phs_code);
+            $model->source = '0';
             $model->delete_flag = '0';
-			if($model->save()) {
-				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
-				$this->redirect(array('printer/index','companyId' => $this->companyId));
-			}
-		}
-		$this->render('create' , array(
-				'model' => $model 
-		));
-	}
+            if($model->save()) {
+                    Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
+                    $this->redirect(array('printer/index','companyId' => $this->companyId));
+            }
+        }
+        $this->render('create' , array(
+                        'model' => $model 
+        ));
+    }
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
         $model = Printer::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));

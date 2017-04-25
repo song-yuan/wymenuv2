@@ -46,7 +46,7 @@ class SentwxcardPromotion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('sole_code, promotion_title, main_picture, promotion_abstract, promotion_message', 'required'),
+			array('sole_code, promotion_title, promotion_abstract, promotion_message', 'required'),
 			array('lid, dpid, group_id', 'length', 'max'=>10),
 			array('sole_code', 'length', 'max'=>20),
 			array('promotion_title, is_sync', 'length', 'max'=>50),
@@ -54,7 +54,7 @@ class SentwxcardPromotion extends CActiveRecord
 			array('promotion_type, type, to_group, is_available, source, delete_flag', 'length', 'max'=>2),
 			array('weekday', 'length', 'max'=>32),
 			array('day_begin, day_end', 'length', 'max'=>8),
-			array('create_at, update_at, begin_time, promotion_memo, promotion_type, type, end_time, to_group', 'safe'),
+			array('create_at, update_at, begin_time,consume_money, promotion_memo, promotion_type, type, end_time, to_group', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, sole_code, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, type, promotion_message, begin_time, end_time, weekday, day_begin, day_end, to_group, group_id, is_available, source, delete_flag, is_sync', 'safe', 'on'=>'search'),

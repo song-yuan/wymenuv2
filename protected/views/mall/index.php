@@ -142,17 +142,17 @@ function setTotal(){
     
     $(".share").html(v);
     $("#total").html(s.toFixed(2)); 
-    <?php if($this->type==2):?>
-    var startPrice = $('.ft-rt').attr('start-price');
-    var total = $("#total").html();
-    if(parseFloat(startPrice) > parseFloat(total)){
-    	$('.no-start').removeClass('none');
-    	$('.start').addClass('none');
-    }else{
-    	$('.no-start').addClass('none');
-    	$('.start').removeClass('none');
+    if(orderType==2){
+    	var startPrice = $('.ft-rt').attr('start-price');
+        var total = $("#total").html();
+        if(parseFloat(startPrice) > parseFloat(total)){
+        	$('.no-start').removeClass('none');
+        	$('.start').addClass('none');
+        }else{
+        	$('.no-start').addClass('none');
+        	$('.start').removeClass('none');
+        }
     }
-    <?php endif;?>
 } 
 function getProduct(){
 	layer.load(2);
@@ -175,6 +175,7 @@ function getProduct(){
 			var productStr = '';
 			var productSetStr = '';
 			var cartStr = '';
+			var defaultImg = '../img/product_default.png';
 			// 种类
 			for(var k in categorys){
 				var category = categorys[k];
@@ -201,6 +202,9 @@ function getProduct(){
 				productStr +='<div class="section" id="st'+ product.lid  +'"><div class="prt-title">' + product.category_name + '</div>';
 				for(var pp in product.product_list){
 					var pProduct = product.product_list[pp];
+					if(pProduct.main_picture==''){
+						pProduct.main_picture = defaultImg;
+					}
 					productStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProduct.main_picture+'"></div>';
 					productStr +='<div class="lt-ct"><p><span class="name">'+ pProduct.product_name +'</span>';
 					if(pProduct.spicy==1){
@@ -262,6 +266,9 @@ function getProduct(){
 				for(var q in productSets){
 					var pProductSet = productSets[q];
 					var pDetail = pProductSet['detail'];
+					if(pProductSet.main_picture==''){
+						pProductSet.main_picture = defaultImg;
+					}
 					productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
 					productSetStr +='<div class="lt-ct"><p><span class="name">'+ pProductSet.set_name +'</span>';
 					if(pProductSet.spicy==1){
@@ -322,12 +329,15 @@ function getProduct(){
 				productSetStr +='</div>';
 			}
 			// 活动
-			if(promotions.length > 0){
+			if(promotions.length > 0 && orderType!=2){
 				navLi += '<li class=""><a href="#st-promotion">优惠专区</a><b></b></li>';
 				promotionStr +='<div class="section" id="st-promotion"><div class="prt-title">优惠专区</div>';
 				for(var i=0; i<promotions.length; i++){
 					var promotion = promotions[i];
 					var promotionProduct = promotion['product'];
+					if(promotionProduct.main_picture==''){
+						promotionProduct.main_picture = defaultImg;
+					}
 					promotionStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+promotionProduct.main_picture+'"></div>';
 					promotionStr +='<div class="lt-ct"><p><span class="name">'+ promotionProduct.product_name +'</span>';
 					if(promotionProduct.spicy==1){

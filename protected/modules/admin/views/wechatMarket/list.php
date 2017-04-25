@@ -107,7 +107,7 @@
                                          </a> 
                                     </div>
                                     <div class="list col-sm-3 col-xs-12">
-                                         <a href="#">
+                                        <a href="<?php echo $this->createUrl('SentNoConsume/index',array('companyId' => $this->companyId))?>">
                                          <div class="list_big">给开卡未消费会员赠券</div>
                                         <div class="list_small">给已开卡未消费的会员发券，刺激潜在顾客来店消费</div>
                                        
@@ -115,7 +115,7 @@
                                          </a> 
                                     </div>
                                     <div class="list col-sm-3 col-xs-12">
-                                         <a href="#">
+                                        <a href="<?php echo $this->createUrl('SentNewMember/index',array('companyId' => $this->companyId))?>">
                                            <div class="list_big">给新会员赠券</div>
                                             <div class="list_small">给30天内开卡并消费过1次的会员发券，刺激新会员再次来店消费，提高新会员忠诚度 </div>
                                        
@@ -128,7 +128,7 @@
                                  <p>稳固老顾客</p>
                                  
                                       <div class="list col-sm-3 col-xs-12">
-                                         <a href="javascrip:void(0)">
+                                        <a href="<?php echo $this->createUrl('SentActiveMember/index',array('companyId' => $this->companyId))?>">
                                             
                                               <div class="list_big"> 给活跃老会员赠券</div>
                                             <div class="list_small">给60天内消费2次以上的会员发券，他们可是消费的中坚力量，值得更好的奖励 </div>
@@ -136,7 +136,7 @@
                                          </a> 
                                     </div>
                                      <div class="list col-sm-3 col-xs-12">
-                                         <a href="javascrip:void(0)">
+                                        <a href="<?php echo $this->createUrl('SentSleepMember/index',array('companyId' => $this->companyId))?>">
                                              
                                               <div class="list_big"> 给沉寂会员赠券</div>
                                             <div class="list_small">给60天以上未到店消费的会员发券，刺激沉寂会员</div>
@@ -144,7 +144,7 @@
                                          </a> 
                                     </div>
                                      <div class="list col-sm-3 col-xs-12">
-                                         <a href="javascrip:void(0)">
+                                        <a href="<?php echo $this->createUrl('SentOldMember/index',array('companyId' => $this->companyId))?>">
                                              
                                               <div class="list_big"> 给老会员赠券</div>
                                             <div class="list_small">给注册一个月以上，且60天内消费过一次的会员发券，推动他们来店消费</div>
@@ -156,22 +156,19 @@
                                 <p>营销活动</p>
                                 
                                     <div class="list col-sm-3 col-xs-12">
-                                        <a href="javascrip:void(0)">
-                                             <div class="list_big"> 累计消费返券</div>
-                                            <div class="list_small">建立累计消费满X送Y的活动，如此给力的用户不妨奖励丰厚些，他们将为你带来更多</div>
-                                       
-                                            </a> 
+                                        <a href="<?php echo $this->createUrl('SentTotalConsume/index',array('companyId' => $this->companyId))?>">
+                                            <div class="list_big"> 累计消费返券</div>
+                                            <div class="list_small">建立累计消费满X送Y的活动，如此给力的用户不妨奖励丰厚些，他们将为你带来更多</div>   
+                                        </a> 
                                     </div>  
                                     <div class="list col-sm-3 col-xs-12">
-                                        <a href="javascrip:void(0)">
-                                            
-                                             <div class="list_big"> 消费返券</div>
-                                            <div class="list_small">建立消费满X送Y的活动，用户在消费过后获得一些奖励将会使他们下次光顾的日期大大提前</div>
-                                       
+                                        <a href="<?php echo $this->createUrl('SentConsume/index',array('companyId' => $this->companyId))?>">                                           
+                                            <div class="list_big"> 消费返券</div>
+                                            <div class="list_small">建立消费满X送Y的活动，用户在消费过后获得一些奖励将会使他们下次光顾的日期大大提前</div>                             
                                         </a> 
                                     </div>
                                     <div class="list col-sm-3 col-xs-12">
-                                        <a href="javascrip:void(0)">
+                                        <a href="<?php echo $this->createUrl('SentShare/index',array('companyId' => $this->companyId))?>">
                                             <div class="list_big">分享集券</div>
                                         </a> 
                                     </div>

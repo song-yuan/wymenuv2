@@ -775,16 +775,16 @@ class WxOrder
 							  ->bindValue(':productId',$orderProduct['product_id'])
 							  ->queryRow();
 				if($product['store_number'] >= 0){
-					$sql = 'update nb_product set store_number =  store_number+'.$orderProduct['amount'].',is_sync='.$isSync.' where lid='.$orderProduct['product_id'].' and dpid='.$dpid.' and delete_flag=0';
+					$sql = 'update nb_product set store_number =  store_number+'.$orderProduct['amount'].' where lid='.$orderProduct['product_id'].' and dpid='.$dpid.' and delete_flag=0';
 			 		Yii::app()->db->createCommand($sql)->execute();
 				}
 	 		}
-			$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+			$sql = 'update nb_order set order_status=7 where lid='.$orderId.' and dpid='.$dpid;
 			$result = Yii::app()->db->createCommand($sql)->execute();
 			if(!$result){
 				throw new Exception('订单取消失败!');
 			}
-			$orderPays = WxOrderPay::get($orderId,$dpid);
+			$orderPays = WxOrderPay::get($dpid,$orderId);
 			foreach ($orderPays as $orderpay){
 				if($orderpay['paytype']==9){
 					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
