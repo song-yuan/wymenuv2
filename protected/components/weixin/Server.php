@@ -183,7 +183,8 @@ class Server {
     		}
     		return $this->news($subPushs);
     	}else{
-    		$this->text('欢迎关注我要点单官方微信！');
+    		array_push($subPushs,array('会员注册', 'comp_dpid', '恭喜你成为新会员,完善资料有惊喜哦', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', Yii::app()->createAbsoluteUrl('user/index', array('companyId'=>$this->brandId))));
+    		return $this->news($subPushs);
     	}
 	}
 	
@@ -224,7 +225,7 @@ class Server {
 					$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['id']);
 					WxBrandUser::updateByOpenid($data);
 				}
-				$siteArr = array($query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
+				$siteArr = array('会员注册', $query['description'], $query['imgUrl'], $redirectUrl);
 			}
 			
 			array_push($subPushs,$siteArr);
