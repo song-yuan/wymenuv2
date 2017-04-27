@@ -107,6 +107,7 @@
  		});
  		$("#name-search").change(function(){
  			page = 0;
+ 			shopName = $(this).val();
  			getShopList();
  		});
  		$('#more').on('click',function(){
