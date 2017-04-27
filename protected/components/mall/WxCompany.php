@@ -43,7 +43,7 @@ class WxCompany
 		if($keyword!=''){
 			$sql .= ' and t.company_name like "%'.$keyword.'%"';
 		}
-		$sql .= ' limit ' . $page*10 . ', 10';
+		$sql .= ' limit ' . $page*10 . ', 10 order by juli asc';
 		$companys = Yii::app()->db->createCommand($sql)
 		->bindValue(':dpid',$dpid)
 		->queryAll();
