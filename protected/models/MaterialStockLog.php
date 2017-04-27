@@ -17,6 +17,10 @@
  */
 class MaterialStockLog extends CActiveRecord
 {
+	public $y_all;
+	public $m_all;
+	public $d_all;
+	public $all_num;
 	/**
 	 * @return string the associated database table name
 	 */
