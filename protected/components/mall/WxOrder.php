@@ -844,6 +844,11 @@ class WxOrder
 	 			}
 	 		}
 	 		$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2);
+	 		if($order['order_type']==1||$order['order_type']==3||$order['order_type']==6){
+	 			$paytype = 12;
+	 		}elseif($order['order_type']==2){
+	 			$paytype = 13;
+	 		}
 	 		$se = new Sequence("order_pay");
 		    $orderPayId = $se->nextval();
 		    $insertOrderPayArr = array(
