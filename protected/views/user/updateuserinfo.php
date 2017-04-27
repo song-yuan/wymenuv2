@@ -45,7 +45,7 @@
 </style>
 
 <body class="add_address bg_lgrey2">
-<form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId));?>" method="post" >
+<form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId,'type'=>$type,'back'=>$back));?>" method="post" >
 
 <div class="page cell">
 	<div class="weui_cells_title">

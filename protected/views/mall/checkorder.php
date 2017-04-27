@@ -243,7 +243,7 @@
 <?php else:?>
 	<div class="order-copun arrowright disabled">
 		<div class="copun-lt">代金券</div>
-		<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>">去完善资料</a></div>
+		<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId,'type'=>$this->type,'back'=>1));?>">去完善资料</a></div>
 		<div class="clear"></div>
 	</div>
 <?php endif;?>
