@@ -659,7 +659,7 @@ class DataSyncOperation {
 							'is_sync' => $isSync
 					);
 					Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
-					$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid='.$memberPoints->member_card_rfid;
+					$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid="'.$memberPoints->member_card_rfid.'"';
 					Yii::app ()->db->createCommand ($sql)->execute();
 				}else{
 					// 微信会员卡
@@ -696,7 +696,7 @@ class DataSyncOperation {
 			) );
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
-			Helper::writeLog($dpid.'---'.$e->getMessage());
+			Helper::writeLog($dpid.'---'.$orderData.'---'.$e->getMessage());
 			$msg = json_encode ( array (
 					'status' => false,
 					'orderId' => '' 
