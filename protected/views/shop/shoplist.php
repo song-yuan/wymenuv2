@@ -69,6 +69,8 @@
 				        	$('#tips').hide();
 				        	if(msg.length==10){
 				        		$('#more').show();
+				        	}else{
+				        		$('#more').hide();
 				        	}
 				        	$('#activeshop').html(str);
 					    }else{
