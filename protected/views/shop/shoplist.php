@@ -21,21 +21,30 @@
 			
 			</ul>
 			<div id="tips" class="info" style="text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
+			<div id="more" class="info" style="text-align:center;display:none;">点击查看更多</div>
 	    </div>
 	</div>
 	<script type="text/javascript">
 		var page = 0;
-		function getShopList(lat,lng){ 
+		var latitude = 0;
+		var longitude = 0;
+		var shopName = '';
+		function getShopList(){ 
 	    	$.ajax({
 		        url:'<?php echo $this->createUrl('/shop/ajaxGetShop',array('companyId'=>$this->companyId));?>',
-		        data:{page:page,lat:lat,lng:lng},
+		        data:{page:page,lat:latitude,lng:longitude,keyword:shopName},
 		        success:function(msg){
 			        if(msg.length > 0){
-				        $('#tips').hide();
+				        if(page==0){
+				        	$('#tips').hide();
+				        	if(msg.length==10){
+				        		$('#more').show();
+				        	}
+					    }
 			        	var str = '';
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
-					       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>">';
+					       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
 					       str +='<div class="right">';
 					    	   str +='<h1><span class="com-name">'+cObj.company_name+'</span><span class="rest_message small font_l">';
 					    	   if(cObj.is_rest=='1'||cObj.is_rest=='2'){
@@ -62,7 +71,11 @@
 						   	str +='</div>';
 						 	str +='</li>';
 					    }
-					    $('#activeshop').html(str);
+					    $('#activeshop').append(str);
+				    }else{
+					    if(page > 0){
+						    $('#more').hide();
+						}
 				    }
 		        },
 		        dataType : 'json'
@@ -73,14 +86,14 @@
  		});
     	$('#activeshop').on('click','.open-location',function(event){
  	    	var liObj = $(this).parents('li');
- 	    	var latitude = parseFloat(liObj.attr('lat'));
- 	    	var longitude = parseFloat(liObj.attr('lng'));
+ 	    	var latitude1 = parseFloat(liObj.attr('lat'));
+ 	    	var longitude1 = parseFloat(liObj.attr('lng'));
  	    	var name = liObj.find('.com-name').html();
  	    	var address = liObj.find('.address_info').html();
  	    	var infoUrl = '<?php echo Yii::app()->request->getHostInfo();?>'+liObj.attr('href');
  	    	wx.openLocation({
- 	    	    latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
- 	    	    longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+ 	    	    latitude: latitude1, // 纬度，浮点数，范围为90 ~ -90
+ 	    	    longitude: longitude1, // 经度，浮点数，范围为180 ~ -180。
  	    	    name: name, // 位置名
  	    	    address: address, // 地址详情说明
  	    	    scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
@@ -93,7 +106,12 @@
  		    location.href = href;
  		});
  		$("#name-search").change(function(){
- 			searchShop();
+ 			page = 0;
+ 			getShopList();
+ 		});
+ 		$('#more').on('click',function(){
+ 	    	page++;
+ 	    	getShopList();
  		});
 	    wx.ready(function () {
 	    	layer.load(2);
@@ -101,16 +119,16 @@
 			    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 			    success: function (res) {
 			    	layer.closeAll('loading');
-			        var latitude = parseFloat(res.latitude); // 纬度，浮点数，范围为90 ~ -90
-			        var longitude = parseFloat(res.longitude); // 经度，浮点数，范围为180 ~ -180。
+			        latitude = parseFloat(res.latitude); // 纬度，浮点数，范围为90 ~ -90
+			        longitude = parseFloat(res.longitude); // 经度，浮点数，范围为180 ~ -180。
 			        var speed = res.speed; // 速度，以米/每秒计
 			        var accuracy = res.accuracy; // 位置精度
 			     
 			        var latLng = new qq.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
 			        //调用获取位置方法
 			        geocoder.getAddress(latLng);
-
-			        getShopList(latitude,longitude);
+				
+			        getShopList();
 			    },
 		    	cancel: function (res) {
 		    		layer.closeAll('loading');
