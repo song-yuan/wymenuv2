@@ -35,12 +35,6 @@
 		        data:{page:page,lat:latitude,lng:longitude,keyword:shopName},
 		        success:function(msg){
 			        if(msg.length > 0){
-				        if(page==0){
-				        	$('#tips').hide();
-				        	if(msg.length==10){
-				        		$('#more').show();
-				        	}
-					    }
 			        	var str = '';
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
@@ -71,7 +65,15 @@
 						   	str +='</div>';
 						 	str +='</li>';
 					    }
-					    $('#activeshop').append(str);
+				        if(page==0){
+				        	$('#tips').hide();
+				        	if(msg.length==10){
+				        		$('#more').show();
+				        	}
+				        	$('#activeshop').html(str);
+					    }else{
+					    	$('#activeshop').append(str);
+					    }
 				    }else{
 					    if(page > 0){
 						    $('#more').hide();
