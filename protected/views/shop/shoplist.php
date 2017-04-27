@@ -21,7 +21,7 @@
 			
 			</ul>
 			<div id="tips" class="info" style="text-align:center;">附近暂无餐厅可提供该服务,试试搜索吧!</div>
-			<div id="more" class="info" style="text-align:center;display:none;">点击查看更多</div>
+			<div id="more" class="info" style="text-align:center;margin-bottom:20px;display:none;">点击查看更多</div>
 	    </div>
 	</div>
 	<script type="text/javascript">
