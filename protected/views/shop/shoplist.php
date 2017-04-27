@@ -30,6 +30,7 @@
 		        url:'<?php echo $this->createUrl('/shop/ajaxGetShop',array('companyId'=>$this->companyId));?>',
 		        data:{page:page,lat:lat,lng:lng},
 		        success:function(msg){
+			        alert(JSON.stringify(msg));
 			        var str = '';
 			        for(var i=0;i<msg.length;i++){
 				       var cObj = msg[i];
@@ -57,6 +58,9 @@
 				    }
 				    $('#activeshop').html(str);
 		        },
+		        error:function(){
+			        alert('error');
+			    },
 		        dateType:'json'
 		    });
 		} 
@@ -88,7 +92,7 @@
  			searchShop();
  		});
 	    wx.ready(function () {
-		    layer.load(2);
+	    	layer.load(2);
 	    	wx.getLocation({
 			    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 			    success: function (res) {
