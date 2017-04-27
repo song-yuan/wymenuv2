@@ -14,7 +14,11 @@ class ShopController extends Controller
 		$this->type = $type;
 	}
 	public function actionIndex(){
-		$children = WxCompany::getCompanyChildren($this->companyId);
-		$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type,'children'=>$children));
-	} 
+		$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type));
+	}
+	public function actionAjaxGetShop(){
+		$children = WxCompany::getCompanyChildrenPage($this->companyId);
+		echo json_encode($children);
+		exit;
+	}
 }
