@@ -81,6 +81,7 @@
 		        dataType : 'json'
 		    });
 		} 
+		getShopList();
     	$('#activeshop').on('click','a',function(event){
  	    	event.stopPropagation();
  		});
