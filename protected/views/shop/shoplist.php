@@ -30,6 +30,7 @@
 		        url:'<?php echo $this->createUrl('/shop/ajaxGetShop',array('companyId'=>$this->companyId));?>',
 		        data:{page:page,lat:lat,lng:lng},
 		        success:function(msg){
+			        alert(msg);
 			        alert(JSON.stringify(msg));
 			        var str = '';
 			        for(var i=0;i<msg.length;i++){
@@ -60,8 +61,7 @@
 		        },
 		        error:function(){
 			        alert('error');
-			    },
-		        dateType:'json'
+			    }
 		    });
 		} 
     	$('#activeshop').on('click','a',function(event){
