@@ -114,25 +114,25 @@
 							<div class="ku-item-info">进销存日报</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
+					<a href="<?php echo $this->createUrl('statementstock/stockmonthReport',array('companyId'=>$this->companyId,'text'=>2));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cszh"></div>
-							<div class="ku-item-info">产商综合</div>
+							<div class="ku-item-info">进销存月报</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
+					<a href="<?php echo $this->createUrl('statementstock/stockallReport',array('companyId'=>$this->companyId,'text'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey csls"></div>
-							<div class="ku-item-info">产商零售</div>
+							<div class="ku-item-info">进销存汇总</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
+					<a style="display: none;" href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey kczh"></div>
 							<div class="ku-item-info">库存综合</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
+					<a style="display: none;" href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sskc"></div>
 							<div class="ku-item-info">实时库存</div>
