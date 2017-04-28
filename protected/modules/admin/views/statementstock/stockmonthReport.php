@@ -176,6 +176,7 @@ jQuery(document).ready(function() {
 		location.href="<?php echo $this->createUrl('statementstock/stockmonthReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
 	});
 	$('#excel').click(function excel(){
+		layer.msg('此项功能暂未开放！！',{icon: 5});return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#begin_time').val();
 		var text = $('#text').val();
