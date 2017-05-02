@@ -1,4 +1,3 @@
-
 <style>
 		span.tab{
 			color: black;
@@ -301,6 +300,14 @@
 							<div class="ku-item-info">账单支付方式</div>
 						</div>
 					</a>
+                                        <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?> 
+                                         <a href="<?php echo $this->createUrl('Pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey zdzffs"></div>
+							<div class="ku-item-info">收银机统计</div>
+						</div>
+					</a>
+                                        <?php endif;?> 
 					<!-- 
 					<a href="<?php echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
