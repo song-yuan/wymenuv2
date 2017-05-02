@@ -76,7 +76,13 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘点库存');?></div>
+					
 					<div class="actions">
+						<select id="sttype" class="btn yellow" >
+							<option value="1" <?php if ($sttype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','月盘');?></option>
+							<option value="2" <?php if ($sttype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','周盘');?></option>
+							<option value="3" <?php if ($sttype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日盘');?></option>
+						</select>
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
@@ -159,7 +165,7 @@
 	$("#stocktaking").on("click",function(){
 		var loading = layer.load();
 		//alert("123");
-		//var vid=$(this).attr("id").substr(12,10);
+		var sttype = $('#sttype').val();
         var arr=document.getElementsByName("idss[]");
        // var chx=document.getElementById("optionsCheck"+vid);
         var optid;
@@ -192,7 +198,7 @@
 		var categoryId = '<?php echo $categoryId;?>';
         $.ajax({
             type:'GET',
-			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/optval/"+optval+"/cid/"+categoryId,
+			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/optval/"+optval+"/cid/"+categoryId+"/sttype/"+sttype,
 			async: false,
 			//data:"companyId="+company_id+'&padId='+pad_id,
             cache:false,

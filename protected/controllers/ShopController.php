@@ -14,7 +14,15 @@ class ShopController extends Controller
 		$this->type = $type;
 	}
 	public function actionIndex(){
-		$children = WxCompany::getCompanyChildren($this->companyId);
-		$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type,'children'=>$children));
-	} 
+		$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type));
+	}
+	public function actionAjaxGetShop(){
+		$page = Yii::app()->request->getParam('page');
+		$lat = Yii::app()->request->getParam('lat');
+		$lng = Yii::app()->request->getParam('lng');
+		$keyword = Yii::app()->request->getParam('keyword');
+		$children = WxCompany::getCompanyChildrenPage($this->companyId,$lat,$lng,$page,$keyword);
+		echo json_encode($children);
+		exit;
+	}
 }

@@ -37,14 +37,14 @@ class StockTakingDetail extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, dpid, logid, material_id, taking_stock, number,', 'required'),
-			array('lid, dpid, logid, material_id, reality_stock, taking_stock, number', 'length', 'max'=>10),
+			array('lid, dpid, logid, material_id, last_stock, reality_stock, taking_stock, number', 'length', 'max'=>10),
 			array('reasion', 'length', 'max'=>255),
 			array('status, delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at, update_at', 'safe'),
+			array('create_at, update_at, sales_stocks, last_stock, last_stock_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, logid, material_id, reality_stock, taking_stock, number, reasion, status, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, logid, material_id, last_stock_id, last_stock_time, last_stock, reality_stock, taking_stock, number, sales_stocks, reasion, status, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 

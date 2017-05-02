@@ -220,8 +220,10 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$user = $this->brandUser;
+		$back = Yii::app()->request->getParam('back',0);
+		$type = Yii::app()->request->getParam('type',6);
 		
-		$this->render('updateuserinfo',array('companyId'=>$this->companyId,'user'=>$user));
+		$this->render('updateuserinfo',array('companyId'=>$this->companyId,'user'=>$user,'type'=>$type,'back'=>$back));
 	}
 	/**
 	 * 
@@ -230,13 +232,19 @@ class UserController extends Controller
 	 */
 	public function actionSaveUserInfo()
 	{
+		$back = Yii::app()->request->getParam('back');
+		$type = Yii::app()->request->getParam('type',6);
 		if(Yii::app()->request->isPostRequest){
 			$userInfo = Yii::app()->request->getPost('user');
                        
 			$result = WxBrandUser::update($userInfo);
 			if($result){
 				WxCupon::getWxSentCupon($this->companyId, 1, $userInfo['lid'],$this->brandUser['openid']);
-				$this->redirect(array('/user/index','companyId'=>$this->companyId));
+				if($back){
+					$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$type));
+				}else{
+					$this->redirect(array('/user/index','companyId'=>$this->companyId));
+				}
 			}else{
 				$this->redirect(array('/user/setUserInfo','companyId'=>$this->companyId));
 			}

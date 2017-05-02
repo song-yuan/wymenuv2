@@ -45,7 +45,7 @@
 </style>
 
 <body class="add_address bg_lgrey2">
-<form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId));?>" method="post" >
+<form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId,'type'=>$type,'back'=>$back));?>" method="post" >
 
 <div class="page cell">
 	<div class="weui_cells_title">
@@ -233,7 +233,7 @@ $('document').ready(function(){
 
         var mobile = $('#mobile').val();
 
-        var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+        var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/; 
         if(!myreg.test(mobile)){ 
             alert('请输入有效的手机号码！'); 
             return false; 

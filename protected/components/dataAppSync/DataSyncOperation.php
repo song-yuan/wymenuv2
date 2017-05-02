@@ -548,7 +548,7 @@ class DataSyncOperation {
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
 							$stock = $bom['number']*$product->amount;
-							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
+							self::updateMaterialStock($dpid,$bom['material_id'],$stock,$orderProductId);
 						}
 					}
 				}
@@ -659,7 +659,7 @@ class DataSyncOperation {
 							'is_sync' => $isSync
 					);
 					Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
-					$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid='.$memberPoints->member_card_rfid;
+					$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid="'.$memberPoints->member_card_rfid.'"';
 					Yii::app ()->db->createCommand ($sql)->execute();
 				}else{
 					// 微信会员卡
@@ -696,7 +696,7 @@ class DataSyncOperation {
 			) );
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
-			Helper::writeLog($dpid.'---'.$e->getMessage());
+			Helper::writeLog($dpid.'---'.$orderData.'---'.$e->getMessage());
 			$msg = json_encode ( array (
 					'status' => false,
 					'orderId' => '' 
@@ -1530,7 +1530,7 @@ class DataSyncOperation {
 	 * 
 	 * 
 	 */
-	public static function updateMaterialStock($dpid, $materialId, $stock) {
+	public static function updateMaterialStock($dpid, $materialId, $stock,$orderProductId) {
 		$temStock = $stock;
 		$time = time ();
 		$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock <> 0 and delete_flag=0 order by create_at asc';
@@ -1541,6 +1541,11 @@ class DataSyncOperation {
 				$realityStock = $materialStock['stock'];
 				if($realityStock == 0 && $k+1 != $count){
 					continue;
+				}
+				if($materialStock['batch_stock']){
+					$stockPrice = number_format($materialStock['stock_cost'],4);
+				}else{
+					$stockPrice = 0;
 				}
 				$temStock = $temStock - $realityStock;
 				if($temStock > 0){
@@ -1556,9 +1561,12 @@ class DataSyncOperation {
 								'create_at' => date ( 'Y-m-d H:i:s', $time ),
 								'update_at' => date ( 'Y-m-d H:i:s', $time ),
 								'logid'=>$materialStock['lid'],
+								'order_product_id'=>$orderProductId,
 								'material_id' => $materialId,
 								'type' => 1,
 								'stock_num' => $temStock + $realityStock,
+								'original_num'=>$materialStock['batch_stock'],
+								'unit_price'=>$stockPrice,
 								'resean' => '正常消耗',
 								'is_sync' => DataSync::getInitSync ()
 						);
@@ -1575,9 +1583,12 @@ class DataSyncOperation {
 								'create_at' => date ( 'Y-m-d H:i:s', $time ),
 								'update_at' => date ( 'Y-m-d H:i:s', $time ),
 								'logid'=>$materialStock['lid'],
+								'order_product_id'=>$orderProductId,
 								'material_id' => $materialId,
 								'type' => 1,
 								'stock_num' => $realityStock,
+								'original_num'=>$materialStock['batch_stock'],
+								'unit_price'=>$stockPrice,
 								'resean' => '正常消耗',
 								'is_sync' => DataSync::getInitSync ()
 						);
@@ -1595,9 +1606,12 @@ class DataSyncOperation {
 							'create_at' => date ( 'Y-m-d H:i:s', $time ),
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'logid'=>$materialStock['lid'],
+							'order_product_id'=>$orderProductId,
 							'material_id' => $materialId,
 							'type' => 1,
 							'stock_num' => $temStock + $realityStock,
+							'original_num'=>$materialStock['batch_stock'],
+							'unit_price'=>$stockPrice,
 							'resean' => '正常消耗',
 							'is_sync' => DataSync::getInitSync ()
 					);
