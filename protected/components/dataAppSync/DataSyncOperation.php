@@ -1543,7 +1543,7 @@ class DataSyncOperation {
 					continue;
 				}
 				if($materialStock['batch_stock']){
-					$stockPrice = number_format($materialStock['stock_cost'],4);
+					$stockPrice = number_format($materialStock['stock_cost']/$materialStock['batch_stock'],4);
 				}else{
 					$stockPrice = 0;
 				}
