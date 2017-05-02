@@ -1542,7 +1542,7 @@ class DataSyncOperation {
 				if($realityStock == 0 && $k+1 != $count){
 					continue;
 				}
-				if($materialStock['batch_stock']){
+				if($materialStock['batch_stock']>0){
 					Helper::writeLog('进入方法2');
 					$stockPrice = number_format($materialStock['stock_cost']/$materialStock['batch_stock'],4);
 					Helper::writeLog($stockPrice);
