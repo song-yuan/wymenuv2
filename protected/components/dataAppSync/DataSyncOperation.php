@@ -1511,12 +1511,13 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getBom($dpid, $productId, $tasteArr) {
+		
 		if(empty($tasteArr)){
-			$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0';
+			$sql = 'select t.* from nb_product_bom t left join nb_product_material k on(t.dpid = k.dpid and t.material_id = k.lid) where t.dpid='.$dpid.' and t.product_id='.$productId.' and t.taste_id=0 and t.delete_flag=0 and k.delete_flag=0';
 		}else{
 			$tasteStr = join(',', $tasteArr);
-			$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0'.
-					' union select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id in('.$tasteStr.') and delete_flag=0';
+			$sql = 'select t.* from nb_product_bom t left join nb_product_material k on(t.dpid = k.dpid and t.material_id = k.lid) where t.dpid='.$dpid.' and t.product_id='.$productId.' and t.taste_id=0 and t.delete_flag=0 and k.delete_flag =0'.
+					' union select tt.* from nb_product_bom tt left join nb_product_material kk on(tt.dpid = kk.dpid and tt.material_id = kk.lid ) where tt.dpid='.$dpid.' and tt.product_id='.$productId.' and tt.taste_id in('.$tasteStr.') and tt.delete_flag=0 and kk.delete_flag =0';
 		}
 		
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
