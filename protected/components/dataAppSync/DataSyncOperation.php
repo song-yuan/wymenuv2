@@ -1520,7 +1520,7 @@ class DataSyncOperation {
 					' union select tt.* from nb_product_bom tt left join nb_product_material kk on(tt.dpid = kk.dpid and tt.material_id = kk.lid ) where tt.dpid='.$dpid.' and tt.product_id='.$productId.' and tt.taste_id in('.$tasteStr.') and tt.delete_flag=0 and kk.delete_flag =0';
 		}
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-		Helper::writeLog('执行成功');
+		Helper::writeLog($results);
 		return $results;
 	}
 	/**
