@@ -59,7 +59,8 @@ class PadSetting extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'detail'=>array(self::HAS_MANY,'PadSettingDetail','','on'=>'t.lid=detail.pad_setting_id')
+                    'detail'=>array(self::HAS_MANY,'PadSettingDetail','','on'=>'t.lid = detail.pad_setting_id and detail.dpid = t.dpid and detail.delete_flag = 0'),
+                    'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid = company.dpid') ,
 		);
 	}
 
