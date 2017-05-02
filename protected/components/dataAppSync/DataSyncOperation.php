@@ -1543,7 +1543,9 @@ class DataSyncOperation {
 					continue;
 				}
 				if($materialStock['batch_stock']){
+					Helper::writeLog('进入方法2');
 					$stockPrice = number_format($materialStock['stock_cost']/$materialStock['batch_stock'],4);
+					Helper::writeLog($stockPrice);
 				}else{
 					$stockPrice = 0;
 				}
