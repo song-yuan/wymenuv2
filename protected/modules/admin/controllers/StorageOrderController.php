@@ -389,6 +389,7 @@ class StorageOrderController extends BackendController
 						$materialStockLog->resean = '入库单入库';
 						$materialStockLog->save();
 					}
+					//如果没有入库单位和零售单位比的话，要提示没有入库成功。。。
 				}
 				StorageOrder::updateStatus($this->companyId, $sid);
 				$transaction->commit();
