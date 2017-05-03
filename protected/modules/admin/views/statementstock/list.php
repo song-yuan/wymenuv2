@@ -126,10 +126,10 @@
 							<div class="ku-item-info">进销存汇总</div>
 						</div>
 					</a>
-					<a style="display: none;" href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
+					<a href="<?php echo $this->createUrl('statementstock/stockdifferReport',array('companyId'=>$this->companyId,'text'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey kczh"></div>
-							<div class="ku-item-info">库存综合</div>
+							<div class="ku-item-info">库存差异报</div>
 						</div>
 					</a>
 					<a style="display: none;" href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
