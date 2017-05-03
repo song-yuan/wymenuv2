@@ -19,7 +19,7 @@ class PosController extends BackendController
 
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-        $sql = "select dpid from nb_company where  delete_flag = 0 and comp_dpid = ".$companyId;
+        $sql = "select dpid from nb_company where  delete_flag = 0 and type = 1 and comp_dpid = ".$companyId;
         $dpid = Yii::app()->db->createCommand($sql)->queryAll();
         $str ='';
         if(!empty($dpid)){
@@ -28,13 +28,13 @@ class PosController extends BackendController
                     $str .=$val['dpid']; 
                 }else{
                      $str .= ",".$val['dpid'];
-                }
-                  
+                }                  
             }
         }
-         
-        $sql2 = "select pad_setting_id from nb_pad_setting_detail where delete_flag = 0 and dpid in ( ".$str.")";
-        $pos_detail = Yii::app()->db->createCommand($sql2)->queryAll();
+        if($str !=''){ 
+            $sql2 = "select pad_setting_id from nb_pad_setting_detail where delete_flag = 0 and dpid in ( ".$str.")";
+            $pos_detail = Yii::app()->db->createCommand($sql2)->queryAll();
+        }
         $str2 ='';
         if(!empty($pos_detail)){
             foreach ($pos_detail as $val2){
@@ -42,14 +42,20 @@ class PosController extends BackendController
                     $str2 .=$val2['pad_setting_id']; 
                 }else{
                      $str2 .= ",".$val2['pad_setting_id'];
-                }
-                  
+                }                  
             }
         }
        
         $criteria = new CDbCriteria;
         $criteria->with = array('detail','company');
-        $criteria->addCondition("t.delete_flag = 0 and t.dpid in (".$str.")" );
+        $criteria->addCondition("t.delete_flag = 0 " );
+        if($str !=''){ 
+            $criteria->addCondition("t.dpid in (".$str.")");
+        }else{
+            $criteria->addCondition("t.dpid =".$companyId);
+        }
+        $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+        $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
         
         if($pos_type == 1){
             $criteria->addCondition("t.pad_sales_type = 0");
@@ -57,27 +63,15 @@ class PosController extends BackendController
         if($pos_type == 2){
             $criteria->addCondition("t.pad_sales_type = 1");
         }
-        if($status == 0){
-            
-            $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-            $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+        if($str2!=''){
+            if($status == 1){
+                $criteria->addCondition("t.lid not in (".$str2.")");
+            }
+            if($status == 2){
+                $criteria->addCondition("t.lid  in (".$str2.")");
+            }
         }
-        if($status == 1){
-            $criteria->addCondition("t.lid not in (".$str2.")");
-            $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-            $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-        }
-        if($status == 2){
-            $criteria->addCondition("t.lid  in (".$str2.")");
-            $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-            $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-        }
-        $pages = new CPagination(PadSetting::model()->count($criteria));
-        $pages->applyLimit($criteria);
-        
         $models = PadSetting::model()->findAll($criteria); 
-        
-        
         
         $this->render('index',array(
                                 'models'=>$models,
@@ -85,7 +79,7 @@ class PosController extends BackendController
                                 'status'=>$status,
                                 'begin_time'=>$begin_time,
                                 'end_time'=>$end_time,
-                                'pages' => $pages
+                               
                 ));
     }
     public function actionExport(){
