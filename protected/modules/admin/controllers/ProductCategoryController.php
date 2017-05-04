@@ -39,13 +39,11 @@ class ProductCategoryController extends BackendController
 		));
 	}
 	public function actionCreate() {
+//              print_r($_POST);exit;
 		$this->layout = '/layouts/main_picture';
 		$pid = Yii::app()->request->getParam('pid',0);
 		$catetype = Yii::app()->request->getParam('catetype');
-		//var_dump($catetype);
-		
 		$model = new ProductCategory() ;
-		//var_dump($model);
 		$model->dpid = $this->companyId ;
 		if($pid) {
 			$model->pid = $pid;
@@ -55,10 +53,9 @@ class ProductCategoryController extends BackendController
 		}
 		
 		if(Yii::app()->request->isPostRequest) {
-			
-			//var_dump($catetype);var_dump($pid);var_dump($id);EXIT;
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
-			//var_dump($model);var_dump('@@@@');exit;
+
+//                        print_r($model->attributes);exit;
 			if(empty($model->category_name)){
 				Yii::app()->user->setFlash('error' ,yii::t('app', '类别名不能为空'));
 				$this->redirect(array('productCategory/index' , 'companyId' => $this->companyId));
@@ -74,43 +71,77 @@ class ProductCategoryController extends BackendController
 				//Yii::app()->db->createCommand()->setText("lock tables {product_category} WRITE")->execute();
 				$se=new Sequence("product_category");
 				$lid = $se->nextval();
-				
 				$code=new Sequence("chs_code");
 				$chs_code = $code->nextval();
-				
 				$model->lid = $lid;
 				$model->chs_code = ProductCategory::getChscode($this->companyId,$lid, $chs_code);
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->delete_flag = '0';
-				$model->update_at=date('Y-m-d H:i:s',time());
-				
+				$model->update_at = date('Y-m-d H:i:s',time());
 				//$model->save();
 				//Yii::app()->db->createCommand()->setText("unlock tables")->execute();
 				//var_dump($model);var_dump('&&&&');
-				//exit;
+//				exit;
 				if($model->save()){
-					//var_dump(456);exit;
-					//var_dump($model);exit;
 					$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->lid,':dpid'=>  $this->companyId));
-					if($self->pid!='0'){
+                                        if($self->pid!='0'){
 						$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->pid,':dpid'=>  $this->companyId));
 						$self->tree = $parent->tree.','.$self->lid;
 					} else {
 						$self->tree = '0,'.$self->lid;
 					}
-					//var_dump($model);exit;
-					$self->update();
-					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-					$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
-						
+                                      if(Yii::app()->request->getPost('ProductCategory2')){
+                                            $category2 = Yii::app()->request->getPost('ProductCategory2');
+                                            $category3 = Yii::app()->request->getPost('ProductCategory3');
+//                                            print_r($category2);exit;
+                                            $i=0;
+                                            foreach($category2 as $cate2){
+         
+                                                $order = $category3[$i];
+//                                                var_dump( $oreder);exit;
+                                                $i++;
+                                                $categoryName = $cate2['category_name'];
+                                                $model1 = new ProductCategory() ;
+                                                $model1->dpid = $this->companyId ;
+                                                $se=new Sequence("product_category");          
+                                                $lid1 = $se->nextval();
+                                                $code=new Sequence("chs_code");
+                                                $chs_code = $code->nextval();
+                                                $model1->lid = $lid1;
+                                                $model1->chs_code = ProductCategory::getChscode($this->companyId,$lid, $chs_code);
+                                                $model1->create_at = date('Y-m-d H:i:s',time());
+                                                $model1->delete_flag = '0';
+                                                $model1->update_at = date('Y-m-d H:i:s',time());
+                                                $model1->pid = $lid;
+                                                $model1->category_name = $categoryName;
+                                                if(empty($model1->category_name)){
+                                                        Yii::app()->user->setFlash('error' ,yii::t('app', '类别名不能为空'));
+                                                        $this->redirect(array('productCategory/index' , 'companyId' => $this->companyId));
+                                                }else{
+                                                    $category = ProductCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model1->category_name));
+                                                    //var_dump($category);var_dump('####');
+                                                    if($category){
+                                                            //var_dump(123);exit;
+                                                            Yii::app()->user->setFlash('error' ,yii::t('app', '该类别已添加'));
+                                                            $this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
+                                                    }
+                                                }
+                                                $model1->order_num = $order;
+                                                $model1->tree = '0,'.$model1->pid.','. $model1->lid;
+                                                $model1->save();
+                                            }  
+                                      }   
+                                    $self->update();
+                                    Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+                                    $this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
 				}	
-				
 			}
 		}}
+//                $se=new Sequence("product_category");
+//                $lid = $se->nextval();
 		$this->render('_form1' , array(
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/create' , array('companyId'=>$this->companyId,'catetype' => $catetype,)),
-				
 		));
 	}
 	public function actionUpdate() {

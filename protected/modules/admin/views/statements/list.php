@@ -301,7 +301,7 @@
 						</div>
 					</a>
                                         <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?> 
-                                         <a href="<?php echo $this->createUrl('Pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+                                         <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey zdzffs"></div>
 							<div class="ku-item-info">收银机统计</div>
