@@ -59,7 +59,7 @@
                 <div class="form-group">
                      <?php echo $form->label($model, 'cate_type',array('class' => 'col-md-3 control-label'));?>
                      <div class="col-md-4">
-                          <?php echo $form->dropDownList($model, 'cate_type', array('0' => yii::t('app','单一类别') , '1' => yii::t('app','公共类别'), '2' => yii::t('app','类别')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cate_type')));?>
+                          <?php echo $form->dropDownList($model, 'cate_type', array('0' => yii::t('app','单一类别') , '1' => yii::t('app','公共类别'), '2' => yii::t('app','套餐类别')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cate_type')));?>
                           <?php echo $form->error($model, 'cate_type' )?>
                      </div>
                 </div>
