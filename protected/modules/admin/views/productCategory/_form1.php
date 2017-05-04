@@ -59,7 +59,7 @@
                 <div class="form-group">
                      <?php echo $form->label($model, 'cate_type',array('class' => 'col-md-3 control-label'));?>
                      <div class="col-md-4">
-                          <?php echo $form->dropDownList($model, 'cate_type', array('0' => yii::t('app','单一类别') , '1' => yii::t('app','公共类别')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cate_type')));?>
+                          <?php echo $form->dropDownList($model, 'cate_type', array('0' => yii::t('app','单一类别') , '1' => yii::t('app','公共类别'), '2' => yii::t('app','类别')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cate_type')));?>
                           <?php echo $form->error($model, 'cate_type' )?>
                      </div>
                 </div>
@@ -72,16 +72,46 @@
                           <?php echo $form->error($model, 'show_type' )?>
                      </div>
                 </div>
-                <?php endif;?>
-			</div>
+                 <?php if(!isset($model->category_name)){?>
+                    <div class="form-group" id="div">
+                        <label class="col-md-3 control-label" for="category_name">添加二级分类</label>
+                             <div class="col-md-9">
+                                <input style="width: 160px;" id="input" class="form-control" placeholder="添加二级分类" name="ProductCategory2[][category_name]" type="text" maxlength="45">	                    
+                             </div>
+                    </div>
+                    <div class="form-group " id="div1">
+                        <label class="col-md-3 control-label" for="ProductCategory_order_num">显示顺序</label>                    
+                        <div class="col-md-4 ">
+                           <input class="form-control" id="input1" placeholder="显示顺序" name="ProductCategory3[]" type="text" maxlength="4" value="0">                        
+                        </div>
+                    </div>
+                    <a style="margin-left: 320px;"  class="btn btn-xs green add_btn"  data-toggle="modal"><i class="fa fa-plus"></i></a>
+                    
+                   <?php }?>
+                 <?php endif;?>           
+	</div>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
 				<input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
 			</div>
 			<?php $this->endWidget(); ?>
+               
 			<script>
 			function swfupload_callback(name,path,oldname)  {
 				$("#ProductCategory_main_picture").val(name);
 				$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 			}
+                        $(function(){
+                            $(".add_btn").click(function(){
+                               $("#div1:first").after('<div><div class="form-group div"><label class="col-md-3 control-label" for="category_name">添加二级分类</label> <div class="col-md-9"><input style="width: 160px;" id="input" class="form-control" placeholder="添加二级分类" name="ProductCategory2[][category_name]" type="text" maxlength="45"></div></div><div class="form-group div1">'+
+                        '<label class="col-md-3 control-label" for="ProductCategory_order_num">显示顺序</label>'                    
+                       + '<div class="col-md-4 ">'
+                           +'<input class="form-control" id="input1" placeholder="显示顺序" name="ProductCategory3[]" type="text" maxlength="4" value="0">'                        
+                        +'</div>'
+                  + ' </div>'+'<a style="margin-left: 300px;" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a></div>');
+                            });
+                            $(".btn_delete").live("click",function(){
+                                $(this).parent().remove();
+                            });
+                          });
 			</script>
