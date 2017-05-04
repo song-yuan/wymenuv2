@@ -10,7 +10,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','报表中心'),'url'=>$this->createUrl('statementstock/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','进销存日报 '),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statementstock/list' , array('companyId' => $this->companyId,'type'=>1,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','报表中心'),'url'=>$this->createUrl('statementstock/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','库存差异报表 '),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statementstock/list' , array('companyId' => $this->companyId,'type'=>1,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -19,21 +19,23 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存日报');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','库存差异报表');?></div>
 					<div class="actions">
 						<select id="text" class="btn yellow" >
-						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日报');?></option>
+						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','汇总');?></option>
 						</select>
 						<div class="btn-group">
-							 <input type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
+							 <input style="width: 100px;" type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
 						</div>
 						<div class="btn-group">
-							 <input type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
+							 <input style="width: 100px;" type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
 						</div>
 						<div class="btn-group">
-							   <div class="input-group  date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-									<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-							  </div>  
+							<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+								<input type="text" class="form-control ui_timepicker" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+								<span class="input-group-addon">~</span>
+							    <input type="text" class="form-control ui_timepicker" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+						  	</div>  
 						</div>	
 						<div class="btn-group">
 								<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
@@ -53,17 +55,10 @@
 								<th><?php echo yii::t('app','原料编码');?></th>
 								<th><?php echo yii::t('app','名称');?></th>                                                              
                                 <th><?php echo yii::t('app','销售单位');?></th>
-                                <th><?php echo yii::t('app','上期库存');?></th>
-                                <th><?php echo yii::t('app','入库量');?></th>
-								<th><?php echo yii::t('app','进货量');?></th>
-								<th><?php echo yii::t('app','配送量');?></th>
-								<th><?php echo yii::t('app','调拨量');?></th>
-								<th><?php echo yii::t('app','损耗量');?></th>
-								<th><?php echo yii::t('app','销售出库');?></th>
-								<th><?php echo yii::t('app','总消耗量');?></th>
-								<th><?php echo yii::t('app','本期库存');?></th>
-								<th><?php echo yii::t('app','盘点库存');?></th>
-								<th><?php echo yii::t('app','损溢量');?></th>
+								<th><?php echo yii::t('app','销售总出库');?></th>
+								<th><?php echo yii::t('app','销售总成本');?></th>
+								<th><?php echo yii::t('app','差异总数量');?></th>
+								<th><?php echo yii::t('app','差异总成本');?></th>
 								
 							</tr>
 						</thead>
@@ -82,18 +77,18 @@
 								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
 								<td><?php echo $model['unit_name'];?></td>
-								<td><?php $laststock = $model['last_stock']; echo $laststock;?></td>
-								<td><?php $allstoragestock = $model['all_storagestock']; echo $allstoragestock;?></td>
-								<td><?php  $takingstock = $model['taking_stock'];
-											$sunyinum = $model['number']; echo $model['all_storagestock'];?></td>
-								<td><?php echo '';?></td>
-								<td><?php echo '';?></td>
-								<td><?php $demagestock = $model['demage_stock']; echo $demagestock;?></td>
-								<td><?php $salestock = $model['sales_stocks']; echo $salestock;?></td>
-								<td><?php $usestock = $demagestock+$salestock-$sunyinum; echo $usestock;?></td>
-								<td><?php echo $takingstock;?></td>
-								<td><?php echo $model['taking_stock'];?></td>
-								<td><?php echo $sunyinum;?></td>
+								<?php $allsunyi = $model['all_sunyinum'];$allsunyiprice = $model['all_sunyi_price'];
+											$renum = $model['re_num'];
+											if(!$renum){
+												$renum = 1;
+											}?>
+								<?php $demagestock = $model['all_demagestock']; ?>
+								<?php $demageprice = $model['all_demageprice']; ?>
+								<td><?php $salestock = $model['all_salestock']; echo $salestock;?></td>
+								<td><?php $salesprice = $model['all_salesprice']; echo $salesprice;?></td>
+								<!-- 总消耗 = 销售出库+损耗-损益 -->
+								<td><?php echo $allsunyi;?></td>
+								<td><?php echo sprintf("%.4f",$allsunyiprice/$renum);?></td>
 							<?php $a++;?>
 							<?php endforeach;?>	
 							<!-- end foreach-->
@@ -116,28 +111,29 @@
 
 <script>
 
-		//var str=new array();						
-		jQuery(document).ready(function(){
-		    if (jQuery().datepicker) {
-	            $('.date-picker').datepicker({
-	            	format: 'yyyy-mm-dd',
-	            	language: 'zh-CN',
-	                rtl: App.isRTL(),
-	                autoclose: true
-	            });
-	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	            
-           }
-		});
+	//var str=new array();						
+	jQuery(document).ready(function(){
+	    if (jQuery().datepicker) {
+            $('.date-picker').datepicker({
+            	format: 'yyyy-mm-dd',
+            	language: 'zh-CN',
+                rtl: App.isRTL(),
+                autoclose: true
+            });
+            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+            
+       }
+	});
+
   
 	$('#btn_time_query').click(function time() {
 		var begin_time = $('#begin_time').val();
-		var end_time = $('#begin_time').val();
+		var end_time = $('#end_time').val();
 		var text = $('#text').val();
 		var cid = $('#selectCategory').val();
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
-		location.href="<?php echo $this->createUrl('statementstock/stockReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
+		location.href="<?php echo $this->createUrl('statementstock/stockdifferReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
 	});
 	$('#excel').click(function excel(){
 		layer.msg('此项功能暂未开放！！',{icon: 5});return false;
@@ -148,10 +144,11 @@
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statementstock/wxmemberExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
+			location.href="<?php echo $this->createUrl('statementstock/stockdifferReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
 		}
 		else{
-			location.href="<?php echo $this->createUrl('statementstock/wxmemberReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
+			location.href="<?php echo $this->createUrl('statementstock/stockmonthReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
 		}
 	});
+
 </script> 
