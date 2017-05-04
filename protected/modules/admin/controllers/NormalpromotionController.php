@@ -76,18 +76,31 @@ class NormalpromotionController extends BackendController
 			
 		
 			$se=new Sequence("normal_promotion");
-			$model->lid = $se->nextval();
+			$lid = $se->nextval();
+			$model->lid = $lid;
+			
+			$code=new Sequence("promotion_code");
+			$codeid = $code->nextval();
+			
+			$model->create_at = date('Y-m-d H:i:s',time());
+			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->normal_code = Common::getCode($this->companyId,$lid,$codeid);
+			$model->source = 0;
+			$model->weekday = $weekdayID;
+			$model->delete_flag = '0';
+			$model->is_sync = $is_sync;
+			
 			if(!empty($groupID)){
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("normal_branduser");
 					$id = $userid->nextval();
-					
+						
 					$data = array(
 							'lid'=>$id,
 							'dpid'=>$this->companyId,
 							'create_at'=>date('Y-m-d H:i:s',time()),
 							'update_at'=>date('Y-m-d H:i:s',time()),
-							'normal_promotion_id'=>$model->lid,
+							'normal_promotion_id'=>$lid,
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
 							'delete_flag'=>'0',
@@ -97,12 +110,6 @@ class NormalpromotionController extends BackendController
 					//var_dump($gropid);exit;
 				}
 			}
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->weekday = $weekdayID;
-			$model->delete_flag = '0';
-			$model->is_sync = $is_sync;
-			
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('normalpromotion/detailindex','lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product' ));
@@ -215,16 +222,6 @@ class NormalpromotionController extends BackendController
 					}
 				}
 				
-				//$sql = 'select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.normal_promotion_id,t.* from nb_product t left join nb_normal_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0) where t.delete_flag = 0 and t.dpid='.$this->companyId;
-				// 			$command=$db->createCommand($sql);
-				// 			$models= $command->queryAll();
-				// 			//var_dump($sql);exit;
-					
-					
-				// 			$criteria = new CDbCriteria;
-				// 			$criteria->with = array('company','category','normalPromotionDetail');
-				// 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-				// 			//var_dump($criteria);exit;
 				if(!empty($categoryId)){
 					//$criteria->condition.=' and t.category_id = '.$categoryId;
 					$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.normal_promotion_id,t.* from nb_product t left join nb_normal_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.is_set = 0 and t1.delete_flag = 0 and t1.normal_promotion_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.category_id = '.$categoryId.' ) k';

@@ -66,10 +66,21 @@
                 <?php endif;?>
                 <?php if($model->pid==0):?>
                 <div class="form-group">
-                     <?php echo $form->label($model, 'show_type',array('class' => 'col-md-3 control-label'));?>
+                     <label class="col-md-3 control-label" for="ProductCategory_show_type">微信端是否显示</label>
                      <div class="col-md-4">
-                          <?php echo $form->dropDownList($model, 'show_type', array('1' => yii::t('app','都显示') , '2' => yii::t('app','外卖不显示') , '3' => yii::t('app','堂食不显示') , '4' => yii::t('app','微信端都不显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('show_type')));?>
-                          <?php echo $form->error($model, 'show_type' )?>
+                         <select class="form-control" placeholder="微信端是否显示" name="ProductCategory[show_type]" id="ProductCategory_show_type">
+                         <?php if(Yii::app()->user->role < User::SHOPKEEPER){?>
+                                <option value="1" selected="selected">都显示</option>
+                                <option value="2">外卖不显示</option>
+                                <option value="3">堂食不显示</option>
+                                <option value="4">微信端都不显示</option>
+                              <?php }else{?>
+                                <option value="1" disabled="true">都显示</option>
+                                <option value="2" disabled="true">外卖不显示</option>
+                                <option value="3" disabled="true">堂食不显示</option>
+                                <option value="4"selected="true">微信端都不显示</option>
+                                <?php }?>
+                          </select>
                      </div>
                 </div>
                  <?php if(!isset($model->category_name)){?>
@@ -78,6 +89,24 @@
                              <div class="col-md-9">
                                 <input style="width: 160px;" id="input" class="form-control" placeholder="添加二级分类" name="ProductCategory2[][category_name]" type="text" maxlength="45">	                    
                              </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="ProductCategory_show_type">微信端是否显示</label>
+                        <div class="col-md-4">
+                            <select class="form-control" placeholder="微信端是否显示" name="ProductCategory[show_type]">
+                            <?php if(Yii::app()->user->role < User::SHOPKEEPER){?>
+                                   <option value="1" selected="selected">都显示</option>
+                                   <option value="2">外卖不显示</option>
+                                   <option value="3">堂食不显示</option>
+                                   <option value="4">微信端都不显示</option>
+                                 <?php }else{?>
+                                   <option value="1" disabled="true">都显示</option>
+                                   <option value="2" disabled="true">外卖不显示</option>
+                                   <option value="3" disabled="true">堂食不显示</option>
+                                   <option value="4"selected="true">微信端都不显示</option>
+                                   <?php }?>
+                             </select>
+                        </div>
                     </div>
                     <div class="form-group " id="div1">
                         <label class="col-md-3 control-label" for="ProductCategory_order_num">显示顺序</label>                    
@@ -103,12 +132,34 @@
 			}
                         $(function(){
                             $(".add_btn").click(function(){
-                               $("#div1:first").after('<div><div class="form-group div"><label class="col-md-3 control-label" for="category_name">添加二级分类</label> <div class="col-md-9"><input style="width: 160px;" id="input" class="form-control" placeholder="添加二级分类" name="ProductCategory2[][category_name]" type="text" maxlength="45"></div></div><div class="form-group div1">'+
+                               $("#div1:first").after('<div>'
+                       +'<div class="form-group div"><label class="col-md-3 control-label" for="category_name">添加二级分类</label> <div class="col-md-9"><input style="width: 160px;" id="input" class="form-control" placeholder="添加二级分类" name="ProductCategory2[][category_name]" type="text" maxlength="45"></div></div>'
+                        +'<div class="form-group">'
+                            +'<label class="col-md-3 control-label" for="ProductCategory_show_type">微信端是否显示</label>'
+                            +'<div class="col-md-4">'
+                                +'<select class="form-control" placeholder="微信端是否显示" name="ProductCategory[show_type]">'
+                                +'<?php if(Yii::app()->user->role < User::SHOPKEEPER){?>'
+                                       +'<option value="1" selected="selected">都显示</option>'
+                                       +'<option value="2">外卖不显示</option>'
+                                       +'<option value="3">堂食不显示</option>'
+                                      +' <option value="4">微信端都不显示</option>'
+                                     +'<?php }else{?>'
+                                       +'<option value="1" disabled="true">都显示</option>'
+                                      +' <option value="2" disabled="true">外卖不显示</option>'
+                                     +'  <option value="3" disabled="true">堂食不显示</option>'
+                                    +'   <option value="4"selected="true">微信端都不显示</option>'
+                                     +'  <?php }?>'
+                                +' </select>'
+                            +'</div>'
+                   +' </div>'
+                       +'<div class="form-group div1">'+
                         '<label class="col-md-3 control-label" for="ProductCategory_order_num">显示顺序</label>'                    
                        + '<div class="col-md-4 ">'
                            +'<input class="form-control" id="input1" placeholder="显示顺序" name="ProductCategory3[]" type="text" maxlength="4" value="0">'                        
                         +'</div>'
-                  + ' </div>'+'<a style="margin-left: 300px;" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a></div>');
+                  + ' </div>'
+            +'<a style="margin-left: 300px;" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a>'
+       +'</div>');
                             });
                             $(".btn_delete").live("click",function(){
                                 $(this).parent().remove();
