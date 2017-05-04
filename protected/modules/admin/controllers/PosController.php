@@ -48,7 +48,8 @@ class PosController extends BackendController
        
         $criteria = new CDbCriteria;
         $criteria->with = array('detail','company');
-        $criteria->addCondition("t.delete_flag = 0 " );
+        $criteria->addCondition("t.delete_flag = 0 " ); 
+        $criteria->order = 't.dpid asc';
         if($str !=''){ 
             $criteria->addCondition("t.dpid in (".$str.")");
         }else{
@@ -100,13 +101,13 @@ class PosController extends BackendController
                     $str .=$val['dpid']; 
                 }else{
                      $str .= ",".$val['dpid'];
-                }
-                  
+                }                  
             }
         }
-         
-        $sql2 = "select pad_setting_id from nb_pad_setting_detail where delete_flag = 0 and dpid in ( ".$str.")";
-        $pos_detail = Yii::app()->db->createCommand($sql2)->queryAll();
+        if($str !=''){  
+            $sql2 = "select pad_setting_id from nb_pad_setting_detail where delete_flag = 0 and dpid in ( ".$str.")";
+            $pos_detail = Yii::app()->db->createCommand($sql2)->queryAll();
+        }
         $str2 ='';
         if(!empty($pos_detail)){
             foreach ($pos_detail as $val2){
@@ -114,15 +115,21 @@ class PosController extends BackendController
                     $str2 .=$val2['pad_setting_id']; 
                 }else{
                      $str2 .= ",".$val2['pad_setting_id'];
-                }
-                  
+                }                  
             }
         }
        
         $criteria = new CDbCriteria;
         $criteria->with = array('detail','company');
-        $criteria->addCondition("t.delete_flag = 0 and t.dpid in (".$str.")" );
-        
+        $criteria->addCondition("t.delete_flag = 0" );
+        $criteria->order = 't.dpid asc';
+        if($str !=''){ 
+            $criteria->addCondition("t.dpid in (".$str.")");
+        }else{
+            $criteria->addCondition("t.dpid =".$companyId);
+        }
+        $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+        $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
         if($pos_type == 1){
             $pos_name = '单屏、';
             $criteria->addCondition("t.pad_sales_type = 0");
@@ -132,83 +139,75 @@ class PosController extends BackendController
             $criteria->addCondition("t.pad_sales_type = 1");
         }
         if($status == 0){
-            $status_name = '收银机、';
-            $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-            $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+            $status_name = '收银机、';           
         }
         if($status == 1){
             $status_name = '未使用收银机、';
-            $criteria->addCondition("t.lid not in (".$str2.")");
-            $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-            $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+            $criteria->addCondition("t.lid not in (".$str2.")");            
         }
         if($status == 2){
             $status_name = '已使用收银机、';
             $criteria->addCondition("t.lid  in (".$str2.")");
-            $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-        $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
         }
-        $pages = new CPagination(PadSetting::model()->count($criteria));
-        $pages->applyLimit($criteria);
         
         $models = PadSetting::model()->findAll($criteria); 
         
-        		//设置第1行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
-		//设置第2行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
-		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
-		//设置字体
-		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
-		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
-		$styleArray1 = array(
-				'font' => array(
-						'bold' => true,
-						'color'=>array(
-								'rgb' => '000000',
-						),
-						'size' => '20',
-				),
-				'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-				),
-		);
-		$styleArray2 = array(
-				'font' => array(
-						'color'=>array(
-								'rgb' => 'ff0000',
-						),
-						'size' => '16',
-				),
-				'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-				),
-		);
-		//大边框样式 边框加粗
-		$lineBORDER = array(
-				'borders' => array(
-						'outline' => array(
-								'style' => PHPExcel_Style_Border::BORDER_THICK,
-								'color' => array('argb' => '000000'),
-						),
-				),
-		);
-		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
-		//细边框样式
-		$linestyle = array(
-				'borders' => array(
-						'outline' => array(
-								'style' => PHPExcel_Style_Border::BORDER_THIN,
-								'color' => array('argb' => 'FF000000'),
-						),
-				),
-		);
+        //设置第1行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+        //设置第2行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+        $objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+        //设置字体
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+        $objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+        $styleArray1 = array(
+                        'font' => array(
+                                        'bold' => true,
+                                        'color'=>array(
+                                                        'rgb' => '000000',
+                                        ),
+                                        'size' => '20',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        $styleArray2 = array(
+                        'font' => array(
+                                        'color'=>array(
+                                                        'rgb' => 'ff0000',
+                                        ),
+                                        'size' => '16',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        //大边框样式 边框加粗
+        $lineBORDER = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THICK,
+                                                        'color' => array('argb' => '000000'),
+                                        ),
+                        ),
+        );
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+        //细边框样式
+        $linestyle = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array('argb' => 'FF000000'),
+                                        ),
+                        ),
+        );
         $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1',yii::t('app','收银机统计').yii::t('app','生成时间：').date('m-d H:i',time()))
-        ->setCellValue('A2',yii::t('app','查询条件：').$pos_name.$status_name.yii::t('app','时间段：').$begin_time.yii::t('app','  00:00:00 至 ').$end_time."  23:59:59")
-        ->setCellValue('A3',yii::t('app','分店'))
+        ->setCellValue('A1',yii::t('app','壹点吃餐饮管理系统对账单'))
+        ->setCellValue('A2',yii::t('app','查询：').$pos_name.$status_name.yii::t('app','时间段：').$begin_time.yii::t('app','  00:00:00 至 ').$end_time."  23:59:59")
+        ->setCellValue('A3',yii::t('app','店名'))
         ->setCellValue('B3',yii::t('app','类型'))
         ->setCellValue('C3',yii::t('app','POS序列号'))
         ->setCellValue('D3',yii::t('app','创立时间'))        
@@ -230,9 +229,7 @@ class PosController extends BackendController
 			//细边框引用
 				
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->applyFromArray($linestyle);
-			//设置填充颜色
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
+			
 			//设置字体靠左
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			
@@ -255,17 +252,7 @@ class PosController extends BackendController
 		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		//设置字体水平居中
 		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		//字体靠左
-		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-		//设置填充颜色
-		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->getStartColor()->setARGB('fdfc8d');
-		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->getStartColor()->setARGB('fdfc8d');
-		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('FFB848');
-		$objPHPExcel->getActiveSheet()->getStyle('A2:C2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A2:C2')->getFill()->getStartColor()->setARGB('FFB848');
+		
 		//设置每列宽度
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(9);
