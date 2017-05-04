@@ -209,6 +209,7 @@ class NormalpromotionController extends BackendController
 			$categoryId = Yii::app()->request->getParam('cid',"");
 			$fromId = Yii::app()->request->getParam('from','sidebar');
 			$csinquery=Yii::app()->request->getPost('csinquery',"");
+			$code = Yii::app()->request->getParam('code');
 			//var_dump($csinquery);exit;
 			$db = Yii::app()->db;
 			if($typeId=='product')
@@ -245,27 +246,15 @@ class NormalpromotionController extends BackendController
 				$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 				$models = $pdata->queryAll();
 				$categories = $this->getCategories();
-				//var_dump($models);exit;
-				//			$criteria = new CDbCriteria;
-				// 			$pages = new CPagination(count($models));
-				// 				    $pages->setPageSize(1);
-				// 			$pages->applyLimit($criteria);
-				// 			$categories = $this->getCategories();
-					
-				//$pages = new CPagination(Product::model()->count($criteria));
-				//	    $pages->setPageSize(1);
-				//$pages->applyLimit($criteria);
-				//$models = Product::model()->findAll($criteria);
-					
-				//$categories = $this->getCategories();
-				//var_dump($promotionID);exit;
+				
 				$this->render('detailindex',array(
 						'models'=>$models,
 						'pages'=>$pages,
 						'categories'=>$categories,
 						'categoryId'=>$categoryId,
 						'typeId' => $typeId,
-						'promotionID'=>$promotionID
+						'promotionID'=>$promotionID,
+						'code'=>$code,
 				));
 			}else{
 				if(empty($promotionID)){
@@ -281,18 +270,12 @@ class NormalpromotionController extends BackendController
 				$models = $pdata->queryAll();
 		
 		
-				// 			$criteria = new CDbCriteria;
-				// 			$criteria->with = array('normalPromotionDetail');
-				// 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-				// 			$pages = new CPagination(ProductSet::model()->count($criteria));
-				// 			$pages->applyLimit($criteria);
-				// 			$models = ProductSet::model()->findAll($criteria);
-				//var_dump($promotionID);exit;
 				$this->render('detailindex',array(
 						'models'=>$models,
 						'pages'=>$pages,
 						'typeId' => $typeId,
-						'promotionID'=>$promotionID
+						'promotionID'=>$promotionID,
+						'code'=>$code,
 				));
 			}
 		}
@@ -308,11 +291,9 @@ class NormalpromotionController extends BackendController
 			//$promotion_discount = Yii::app()->request->getParam('promotion_discount');
 			//$order_num = Yii::app()->request->getParam('order_num');
 			$is_set = Yii::app()->request->getParam('is_set');
-			//$db = Yii::app()->db;
-			//Yii::app()->end(json_encode(array("status"=>"success")));
-			//var_dump($order_num);exit;
-			//$sql='';
-		
+			$fa_code = Yii::app()->request->getParam('fa_code');
+			$prod_code = Yii::app()->request->getParam('prod_code');
+			//var_dump($fa_code);exit;
 			//Yii::app()->end(json_encode(array("status"=>"success")));
 			$db = Yii::app()->db;
 			$transaction = $db->beginTransaction();
@@ -345,12 +326,15 @@ class NormalpromotionController extends BackendController
 								'create_at'=>date('Y-m-d H:i:s',time()),
 								'update_at'=>date('Y-m-d H:i:s',time()),
 								'normal_promotion_id'=>$promotionID,
+								'normal_code_pa'=>$fa_code,
 								'product_id'=>$id,
+								'pro_code'=>$prod_code,
 								'is_set'=>0,
 								'is_discount'=>0,
 								'promotion_money'=>$proNum,
 								'promotion_discount'=>'1.00',
 								'order_num'=>'0',
+								'is_show'=>'1',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync,
 						);
@@ -371,12 +355,15 @@ class NormalpromotionController extends BackendController
 								'create_at'=>date('Y-m-d H:i:s',time()),
 								'update_at'=>date('Y-m-d H:i:s',time()),
 								'normal_promotion_id'=>$promotionID,
+								'normal_code_pa'=>$fa_code,
 								'product_id'=>$id,
+								'pro_code'=>$prod_code,
 								'is_set'=>0,
 								'is_discount'=>1,
 								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
 								'order_num'=>'0',
+								'is_show'=>'1',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync,
 						);
@@ -401,12 +388,15 @@ class NormalpromotionController extends BackendController
 								'create_at'=>date('Y-m-d H:i:s',time()),
 								'update_at'=>date('Y-m-d H:i:s',time()),
 								'normal_promotion_id'=>$promotionID,
+								'normal_code_pa'=>$fa_code,
 								'product_id'=>$id,
+								'pro_code'=>$prod_code,
 								'is_set'=>1,
 								'is_discount'=>0,
 								'promotion_money'=>$proNum,
 								'promotion_discount'=>'1.00',
 								'order_num'=>'0',
+								'is_show'=>'1',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync,
 						);
@@ -423,12 +413,15 @@ class NormalpromotionController extends BackendController
 								'create_at'=>date('Y-m-d H:i:s',time()),
 								'update_at'=>date('Y-m-d H:i:s',time()),
 								'normal_promotion_id'=>$promotionID,
+								'normal_code_pa'=>$fa_code,
 								'product_id'=>$id,
+								'pro_code'=>$prod_code,
 								'is_set'=>1,
 								'is_discount'=>1,
 								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
 								'order_num'=>'0',
+								'is_show'=>'1',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync
 						);
@@ -482,6 +475,7 @@ class NormalpromotionController extends BackendController
 			$categoryId = Yii::app()->request->getParam('cid',"");
 			$fromId = Yii::app()->request->getParam('from','sidebar');
 			$csinquery=Yii::app()->request->getPost('csinquery',"");
+			$code = Yii::app()->request->getParam('code');
 			//var_dump($csinquery);exit;
 			$db = Yii::app()->db;
 			
@@ -547,7 +541,8 @@ class NormalpromotionController extends BackendController
 						'categories'=>$categories,
 						'categoryId'=>$categoryId,
 						'typeId' => $typeId,
-						'promotionID'=>$promotionID
+						'promotionID'=>$promotionID,
+						'code'=>$code,
 				));
 			
 		}
