@@ -41,7 +41,7 @@ class MemberController extends BackendController
 			}
 		}
 		
-		$criteria->order = ' t.lid desc ';
+		$criteria->order = ' t.lid asc ';
 		$criteria->params[':dpid']=$this->companyId;
 		
 		$pages = new CPagination(MemberCard::model()->count($criteria));
