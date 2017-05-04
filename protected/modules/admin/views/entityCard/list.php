@@ -49,7 +49,7 @@
                     <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?>
                     <div class="col-xs-6 col-sm-3">
                         <a href="<?php echo $this->createUrl('StaffRecharge/index',array('companyId'=>$this->companyId));?>">
-                            <div class="fa fa-rmb list_picture"></div>
+                            <div class="fa fa-dollar  list_picture"></div>
                             <div class="list_text">员工充值</div>
                         </a> 
                     </div>
@@ -80,13 +80,13 @@
                     </div>
                     <div class="col-xs-6 col-sm-3">
                         <a href="<?php echo $this->createUrl('entityCard/active',array('companyId'=>$this->companyId));?>">
-                            <div class="fa  fa-th-large list_picture"></div>
+                            <div class="fa  fa-sun-o list_picture"></div>
                             <div class="list_text">活跃会员</div>
                         </a> 
                     </div> 
                     <div class="col-xs-6 col-sm-3">
                         <a href="<?php echo $this->createUrl('entityCard/unActive',array('companyId'=>$this->companyId));?>">
-                            <div class="fa  fa-th-large list_picture"></div>
+                            <div class="fa  fa-moon-o list_picture"></div>
                             <div class="list_text">不活跃会员</div>
                         </a> 
                     </div>
