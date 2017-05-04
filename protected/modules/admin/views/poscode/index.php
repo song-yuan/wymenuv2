@@ -77,7 +77,7 @@
 								<td ><?php echo $model['lid'];?></td>
                                 <td ><?php echo $model['pad_code'];?></td>
                                 <td ><?php if($model->detail) echo '已使用';else echo '未使用';?></td>
-								<td ><?php if($model['pad_sales_type']==0)echo '单屏模式';else echo '双屏模式';?></td>
+								<td><?php if($model['pad_sales_type']==0)echo '单屏模式';else echo '双屏模式';?></td>
 								<td >
 								<?php switch($model['pay_activate']){
 											case 0: echo '未开通线上支付';break;
