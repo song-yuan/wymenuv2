@@ -51,11 +51,11 @@
 	</ul>
 </div>
 
-<div id="product-top" class="container-top">
-	<div></div>
-</div>
 <div id="container" class="container">
-	
+	<div id="product-top" class="container-top">
+		<div></div>
+	</div>
+
 </div>
 
 <footer>
