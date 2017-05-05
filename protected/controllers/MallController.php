@@ -591,8 +591,7 @@ class MallController extends Controller
 		$product = new WxProduct($this->companyId,$userId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
-		$productSets = $product->productSetLists;
-		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products,'productSets'=>$productSets));
+		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));
 		exit;
 	}
 	/**
