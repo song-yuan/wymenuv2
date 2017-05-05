@@ -270,4 +270,234 @@ class PosController extends BackendController
 		$objWriter->save('php://output');
         
     }
+    public function actionUsed(){
+        $companyId = Yii::app()->request->getParam('companyId');     
+        $pos_type = Yii::app()->request->getParam('pos_type');        
+        $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+        $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+        
+        $sql = "select dpid from nb_company where  delete_flag = 0 and type = 1 and comp_dpid = ".$companyId;
+        $dpid = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $str ='';
+        if(!empty($dpid)){
+            foreach ($dpid as $val){
+                if($str == ''){
+                    $str =$val['dpid']; 
+                }else{
+                     $str .= ",".$val['dpid'];
+                }                  
+            }
+        }
+       
+        $models = Array();
+        if($str !=''){ 
+            
+            if($pos_type == 1){
+                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 0"
+                    . " and  com.dpid = t.dpid"
+                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
+            
+            }elseif($pos_type == 2){
+                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 1"
+                    . " and  com.dpid = t.dpid"
+                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
+           
+            }else{
+                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0"
+                    . " and  com.dpid = t.dpid"
+                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
+           
+            }
+            $models = Yii::app()->db->createCommand($all_sql)->queryAll();
+   
+        }  
+     
+        $this->render('used',array(
+                                'models'=>$models,
+                                'pos_type'=>$pos_type,
+                               
+                                'begin_time'=>$begin_time,
+                                'end_time'=>$end_time,
+                               
+                ));
+    }
+    public function actionUsedExport(){
+        $objPHPExcel = new PHPExcel();
+        $pos_name = '';
+        $companyId = Yii::app()->request->getParam('companyId');
+        $pos_type = Yii::app()->request->getParam('pos_type');
+        
+        $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+        $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+        $sql = "select dpid from nb_company where  delete_flag = 0 and type = 1 and comp_dpid = ".$companyId;
+        $dpid = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $str ='';
+        if(!empty($dpid)){
+            foreach ($dpid as $val){
+                if($str == ''){
+                    $str =$val['dpid']; 
+                }else{
+                     $str .= ",".$val['dpid'];
+                }                  
+            }
+        }
+       
+        $models = Array();
+        if($str !=''){ 
+            
+            if($pos_type == 1){
+                $pos_name = '单屏、';
+                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 0"
+                    . " and  com.dpid = t.dpid"
+                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
+            
+            }elseif($pos_type == 2){
+                $pos_name = '双屏、';
+                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 1"
+                    . " and  com.dpid = t.dpid"
+                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
+           
+            }else{
+                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0"
+                    . " and  com.dpid = t.dpid"
+                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
+           
+            }
+            $models = Yii::app()->db->createCommand($all_sql)->queryAll();
+   
+        }  
+        
+       
+        //设置第1行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+        //设置第2行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+        $objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+        //设置字体
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+        $objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+        $styleArray1 = array(
+                        'font' => array(
+                                        'bold' => true,
+                                        'color'=>array(
+                                                        'rgb' => '000000',
+                                        ),
+                                        'size' => '20',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        $styleArray2 = array(
+                        'font' => array(
+                                        'color'=>array(
+                                                        'rgb' => 'ff0000',
+                                        ),
+                                        'size' => '16',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        //大边框样式 边框加粗
+        $lineBORDER = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THICK,
+                                                        'color' => array('argb' => '000000'),
+                                        ),
+                        ),
+        );
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+        //细边框样式
+        $linestyle = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array('argb' => 'FF000000'),
+                                        ),
+                        ),
+        );
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1',yii::t('app','壹点吃餐饮管理系统对账单'))
+        ->setCellValue('A2',yii::t('app','查询：').$pos_name.yii::t('app','时间段：').$begin_time.yii::t('app','  00:00:00 至 ').$end_time."  23:59:59")
+        ->setCellValue('A3',yii::t('app','店名'))
+        ->setCellValue('B3',yii::t('app','店铺创立时间'))       
+        ->setCellValue('C3',yii::t('app','类型'))
+        ->setCellValue('D3',yii::t('app','POS序列号'))      
+        ->setCellValue('E3',yii::t('app','收银机开始使用时间'))
+        ->setCellValue('F3',yii::t('app','收银机地址'))
+        ->setCellValue('G3',yii::t('app','排序'));
+        $j=4;
+        if($models){
+            $k=1;
+            foreach($models as $v){
+                if( strtotime($v['poscreate_at'])>strtotime($begin_time) && strtotime($v['poscreate_at'])<strtotime($end_time+" 23 hours 59 m 59 s") ){
+
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$j,$v['company_name'])
+                    ->setCellValue('B'.$j,$v['comcreate_at'])        
+                    ->setCellValue('C'.$j,$v['pad_sales_type']==0?'单屏':'双屏')
+                    ->setCellValue('D'.$j,$v['pad_code'])
+                    ->setCellValue('E'.$j,$v['poscreate_at'])        
+                    ->setCellValue('F'.$j,$v['content']) 
+                    ->setCellValue('G'.$j,$k);  
+
+                    //细边框引用
+
+                    $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':G'.$j)->applyFromArray($linestyle);
+
+                    //设置字体靠左
+                    $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':G'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+
+                    $j++;
+                }
+                $k++;
+            }
+        }
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:G1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:G2');
+		//单元格加粗，居中：
+		$objPHPExcel->getActiveSheet()->getStyle('A1:G'.$j)->applyFromArray($lineBORDER);//大边框格式引用
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:G2')->applyFromArray($linestyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($linestyle);
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="收银机统计表（".date('m-d',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+        
+    }
 }

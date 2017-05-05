@@ -17,9 +17,10 @@ class WxPromotion
 	}
 	public function getPromotionDetail(){
 		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select t.*,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and t.delete_flag=0 and t1.delete_flag=0';
+		$sql = 'select t.*,t1.promotion_title,t1.main_picture,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and (t1.is_available=2 or t1.is_available=3) and t.delete_flag=0 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':now',$now)->queryAll();
 		
+		$promotionArr = array();
 		foreach($results as $k=>$result){
 			if($result['is_set']){
 				//套餐	
@@ -36,6 +37,7 @@ class WxPromotion
 					$results[$k]['product'] = $product;
 				}else{
 					unset($results[$k]);
+					continue;
 				}
 			}else{
 				//单品
@@ -50,10 +52,15 @@ class WxPromotion
 					$results[$k]['product'] = $product;
 				}else{
 					unset($results[$k]);
+					continue;
 				}
 			}
+			if(!isset($promotionArr['lid'.$result['normal_promotion_id']])){
+				$promotionArr['lid'.$result['normal_promotion_id']] = array();
+			}
+			array_push($promotionArr['lid'.$result['normal_promotion_id']],$results[$k]);
 		}
-		$this->promotionProductList = array_merge($results);
+		$this->promotionProductList = $promotionArr;
 	}
 	/**
 	 * 获取活动信息

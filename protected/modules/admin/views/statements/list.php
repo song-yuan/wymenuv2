@@ -157,7 +157,19 @@
 			background-position: 14px 20px;
 			background-size: 70%;
     		background-repeat: no-repeat;
-		}		
+		}
+                .ku-item.syjtj{
+			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
+			background-position: 14px 20px;
+			background-size: 70%;
+    		background-repeat: no-repeat;
+		}	
+                .ku-item.syjpx{
+			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
+			background-position: 14px 20px;
+			background-size: 70%;
+    		background-repeat: no-repeat;
+		}	
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -190,7 +202,7 @@
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					<?php if($type==0):?>
-					<!-- <a href="<?php echo $this->createUrl('statements/payallReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<!-- <a href="<?php// echo $this->createUrl('statements/payallReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
 							<div class="ku-item-info">收款统计</div>
@@ -301,22 +313,28 @@
 						</div>
 					</a>
                                         <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?> 
-                                         <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+                                        <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey zdzffs"></div>
+							<div class="ku-item ku-grey syjtj"></div>
 							<div class="ku-item-info">收银机统计</div>
+						</div>
+					</a>
+                                        <a href="<?php echo $this->createUrl('pos/used',array('companyId' => $this->companyId,'pos_type'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey syjpx"></div>
+							<div class="ku-item-info">收银机排序</div>
 						</div>
 					</a>
                                         <?php endif;?> 
 					<!-- 
-					<a href="<?php echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<a href="<?php //echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey ygyye"></div>
 							<div class="ku-item-info">员工营业额</div>
 						</div>
 					</a>
 					
-					<a href="<?php echo $this->createUrl('orderManagement/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<a href="<?php// echo $this->createUrl('orderManagement/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey dpgl"></div>
 							<div class="ku-item-info">订单报表</div>
