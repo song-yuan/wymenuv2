@@ -112,7 +112,7 @@ class NormalpromotionController extends BackendController
 			}
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('normalpromotion/detailindex','lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product' ));
+				$this->redirect(array('normalpromotion/detailindex','lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product' , 'code'=>$model->normal_code));
 			}
 		}
 		
@@ -140,6 +140,10 @@ class NormalpromotionController extends BackendController
 // 		$transaction = $db->beginTransaction();
 // 		try
 // 		{
+		if($model->is_available == '2'&&Yii::app()->user->role >=11){
+			Yii::app()->user->setFlash('error' , yii::t('app','总部审核后无法修改...'));
+			$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId));
+		}
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
