@@ -44,11 +44,7 @@
                         <option value="1" <?php if ($pos_type==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','单屏');?></option>
                         <option value="2" <?php if ($pos_type==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','双屏');?></option>                        
                     </select>
-                    <select id="status" class="btn green" >
-                        <option value="0" <?php if ($status==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部收银机');?></option>
-                        <option value="1" <?php if ($status==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','未使用收银机');?></option>
-                        <option value="2" <?php if ($status==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','已使用收银机');?></option>
-                    </select>
+                    
                     <div class="btn-group">
                         <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
                             <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
@@ -68,27 +64,31 @@
                     <thead>
                         <tr>
                             
-                            <th>店名</th>                                                            
+                            <th>店名</th> 
+                            <th>店铺创立时间</th>
                             <th>类型</th> 
-                            <th>POS序列号</th>
-                            <th>创立时间</th>
-                            <th>开始使用时间</th> 
+                            <th>POS序列号</th>            
+                            <th>收银机开始使用时间</th> 
                             <th>收银机地址</th>                                                               
-                            
+                            <th>排序</th>  
                         </tr>
                     </thead>
                     <tbody>
                         <?php if( $models) :?>
-                        <?php foreach ($models as $model):?>
+                        <?php $k=1; foreach ($models as $model):
+                            if( strtotime($model['poscreate_at'])>strtotime($begin_time) && strtotime($model['poscreate_at'])<strtotime($end_time+" 23 hours 59 m 59 s") ):
+                        ?>
                         <tr class="odd gradeX">
-                            <td><?php echo $model['company']['company_name'];?></td>
+                            <td><?php echo $model['company_name'];?></td>
+                            <td><?php echo $model['comcreate_at'];?></td>
                             <td><?php if($model['pad_sales_type']==0)echo '单屏';else echo '双屏';?></td>
                             <td><?php echo $model['pad_code'];?></td>
-                            <td><?php echo $model['create_at'];?></td>
-                            <td><?php if($model->detail) echo $model->detail[0]->create_at;?></td>
-                            <td><?php if($model->detail) echo $model->detail[0]->content;?></td>
+                            
+                            <td><?php echo $model['poscreate_at'];?></td>
+                            <td><?php echo $model['content'];?></td>
+                            <td><?php echo $k; ?></td>
                         </tr>
-                        <?php endforeach;?>	                       
+                            <?php  endif; $k++; endforeach;?>	                       
                         <?php endif;?>
                     </tbody>
                 </table>
@@ -114,8 +114,8 @@ $('#btn_time_query').click(function time() {
         var begin_time = $('#begin_time').val();
         var end_time = $('#end_time').val();
         var pos_type = $('#pos_type').val();
-        var status = $('#status').val();
-        location.href="<?php echo $this->createUrl('pos/index' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_type/"+pos_type+"/status/"+status;
+       
+        location.href="<?php echo $this->createUrl('pos/used' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_type/"+pos_type;
 			  
 });
 $('#excel').click(function excel(){
@@ -125,7 +125,7 @@ $('#excel').click(function excel(){
         var status = $('#status').val();	    	   
 				  
         if(confirm('确认导出并且下载Excel文件吗？')){
-            location.href="<?php echo $this->createUrl('pos/export' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_type/"+pos_type+"/status/"+status;
+            location.href="<?php echo $this->createUrl('pos/UsedExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_type/"+pos_type;
         }
 });
 </script> 

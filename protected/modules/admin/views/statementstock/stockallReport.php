@@ -69,7 +69,7 @@
 								<th><?php echo yii::t('app','本月库存');?></th>
 								<th><?php echo yii::t('app','盘点库存');?></th>
 								<th><?php echo yii::t('app','损溢总量');?></th>
-								
+								<th><?php echo yii::t('app','损溢成本');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -90,9 +90,16 @@
 								<td><?php $laststock = $model['lms_takingstock']; echo $laststock;?></td>
 								<td><?php $allstoragestock = $model['all_storagestock']; echo $allstoragestock;?></td>
 								<td><?php  $takingstock = $model['mms_takingstock'];
-										$allsunyi = $model['all_sunyi_num']; echo $model['all_storagestock'];?></td>
+										$allsunyi = $model['all_sunyi_num'];
+										$allsunyiprice = $model['all_sunyi_price']; //损益成本
+										 echo $model['all_storagestock'];
+								?></td>
 								<td><?php echo $model['all_storageprice'];?></td>
-								<td><?php echo '';?></td>
+								<td><?php $renum = $model['re_num'];
+											if(!$renum){
+												$renum = 1;
+											}
+								?></td>
 								<td><?php echo '';?></td>
 								<td><?php $demagestock = $model['all_demagestock']; echo $demagestock;?></td>
 								<td><?php $demageprice = $model['all_demageprice']; echo $demageprice;?></td>
@@ -102,7 +109,9 @@
 								<!-- 总消耗 = 销售出库+损耗-损益 -->
 								<td><?php echo $takingstock;?></td>
 								<td><?php echo $takingstock;?></td>
-								<td><?php echo $allsunyi;?></td>
+								<td><?php //echo sprintf("%.2f",$allsunyi/$renum);
+										echo $model['all_sunyinum'];?></td>
+								<td><?php echo sprintf("%.4f",$allsunyiprice/$renum);?></td>
 							<?php $a++;?>
 							<?php endforeach;?>	
 							<!-- end foreach-->

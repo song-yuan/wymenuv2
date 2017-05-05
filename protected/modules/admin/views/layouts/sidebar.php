@@ -96,12 +96,14 @@
                         <span class="title"><?php echo yii::t('app','实体卡');?></span>					
                     </a>
             </li>
+        <?php endif; ?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('entityMarket','discount','normalpromotion','fullSentPromotion','fullMinusPromotion'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('entityMarket/list',array('companyId' => $this->companyId));?>">
                     <i class="fa  fa-info-circle"></i> 
                     <span class="title"><?php echo yii::t('app','营销活动');?></span>					
                     </a>
             </li>
+        <?php if(Yii::app()->user->role != '8'): ?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('bom','stocktakinglog','nowmaterialstock','copymaterial','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','bomProduct','bomproductCategory','stockSetting','materialStockLog','commit','commitDetail','inventory','stockInventory','stockTaking'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('bom/bom',array('companyId' => $this->companyId,'type'=>2));?>">
                     <i class="fa fa-coffee"></i> 

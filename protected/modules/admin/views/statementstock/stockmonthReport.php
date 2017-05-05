@@ -73,7 +73,7 @@
 								<th><?php echo yii::t('app','本月库存');?></th>
 								<th><?php echo yii::t('app','盘点库存');?></th>
 								<th><?php echo yii::t('app','损溢总量');?></th>
-								
+								<th><?php echo yii::t('app','损溢成本');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -96,25 +96,32 @@
 								<td><?php $allstoragestock = $model['all_storagestock'];//总入库量
 											echo $allstoragestock;?></td>
 								<td><?php  $takingstock = $model['mms_takingstock'];//盘点库存
-											$allsunyi = $model['all_sunyi_num']; //损益量
-											echo $model['all_storagestock'];?></td>
-								<td><?php echo $model['all_storageprice'];?></td>
-								<td><?php echo '';?></td>
+											$allsunyi = $model['all_sunyinum']; //损益量
+											$allsunyiprice = $model['all_sunyi_price']; //损益成本
+											echo $model['all_storagestock']; //总入库库存
+								?></td>
+								<td><?php echo $model['all_storageprice']; //进货成本?> </td>
+								<td><?php $renum = $model['re_num'];
+											if(!$renum){
+												$renum = 1;
+											}?></td>
 								<td><?php echo '';?></td>
 								<td><?php $demagestock = $model['all_demagestock']; //盘损量
 											echo $demagestock;?></td>
 								<td><?php $demageprice = $model['all_demageprice']; //盘损成本
 											echo $demageprice;?></td>
-								<td><?php $salestock = $model['all_salestock']; //消耗量
+								<td><?php $salestock = $model['all_salestock']; //销售总量
 											echo $salestock;?></td>
-								<td><?php $salesprice = $model['all_salesprice']; //消耗成本
+								<td><?php $salesprice = $model['all_salesprice']; //销售总成本
 											echo $salesprice;?></td>
 								<td><?php $usestock = $demagestock+$salestock-$allsunyi; 
 											echo $usestock;?></td>
 								<!-- 总消耗 = 销售出库+损耗-损益 -->
 								<td><?php echo $takingstock;?></td>
 								<td><?php echo $takingstock;?></td>
-								<td><?php echo $allsunyi;?></td>
+								<td><?php //echo sprintf("%.2f",$allsunyi/$renum); 
+										echo $model['all_sunyinum'];?></td>
+								<td><?php echo sprintf("%.4f",$allsunyiprice/$renum);?></td>
 							<?php $a++;?>
 							<?php endforeach;?>	
 							<!-- end foreach-->

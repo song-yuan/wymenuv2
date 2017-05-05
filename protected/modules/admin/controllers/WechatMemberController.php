@@ -112,7 +112,7 @@ class WechatMemberController extends BackendController {
             . " where order_type in ('1','2','6') and order_status in ('3','4','8')"
             . " group by dpid,user_id) tct on t.dpid = tct.dpid and t.lid = tct.user_id "
             . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
-            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.") group by t.lid";
+            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.") ";
            // echo $sql;exit;    
         if($finduserlevel!="0000000000")
         {
@@ -120,7 +120,7 @@ class WechatMemberController extends BackendController {
         }
         if($findsex!="%")
         {
-               $sql.= "and t.sex like '".$findsex."'";
+               $sql.= " and t.sex like '".$findsex."'";
         }
         if($findcountry!="%")
         {
@@ -146,14 +146,8 @@ class WechatMemberController extends BackendController {
         $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) <= '".$yearend."'";
         $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) <= '".$birthto."'";
 
-        $models = $pdata =$db->createCommand($sql)->queryAll();
-        $pages = new CPagination(count($models));  
-        $pages->pageSize = 10;
-        $pages->applylimit($criteria);
-        $models=Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
-        $models->bindValue(':offset', $pages->currentPage*$pages->pageSize);
-        $models->bindValue(':limit', $pages->pageSize);
-        $models=$models->queryAll();
+        $models = $db->createCommand($sql)->queryAll();
+        
 
 
         //检索条件会员等级
@@ -177,7 +171,7 @@ class WechatMemberController extends BackendController {
        
         $this->render('search',array(
                 'models'=>$models,
-                'pages'=>$pages,
+             
                 'findsex'=>$findsex,
                 'agefrom'=>$agefrom,
                 'ageto'=>$ageto,
