@@ -79,10 +79,10 @@ class WxCart
 						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 						  ->queryRow();
 			if($now > $result['end_time']){
-				return array('status'=>false,'msg'=>'活动已结束!');
+				return array('status'=>false,'msg'=>'活动已结束,活动时间'.$result['day_begin'].'-'.$result['day_end'].'!');
 			}
 			if($now < $result['begin_time']){
-				return array('status'=>false,'msg'=>'活动未开始!');
+				return array('status'=>false,'msg'=>'活动未开始,活动时间'.$result['day_begin'].'-'.$result['day_end'].'!');
 			}
 			$week = date('w');
 			
@@ -92,7 +92,7 @@ class WxCart
 			}
 			$time = date('H:i');
 			if($time > $result['day_end']||$time < $result['day_begin']){
-				return array('status'=>false,'msg'=>'今天活动未开始!');
+				return array('status'=>false,'msg'=>'今天活动未开始,活动时间'.$result['day_begin'].'-'.$result['day_end'].'!');
 			}
 			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
@@ -110,17 +110,17 @@ class WxCart
 					return array('status'=>true,'msg'=>'OK');
 				}else{
 					if((isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
-						return array('status'=>false,'msg'=>'超过活动商品数量!');
+						return array('status'=>false,'msg'=>'超过活动商品数量,单个最多'.$result['product_num'].'个!');
 					}
 				}
 			}else{
 				if($result['product_num']==0){
 					if(!$this->cart && $resulta['count'] >= $result['order_num']){
-						return array('status'=>false,'msg'=>'超过活动商品数量!');
+						return array('status'=>false,'msg'=>'超过活动商品数量,该活动最多'.$result['order_num'].'个!');
 					}
 				}else{
 					if((!$this->cart &&$resulta['count'] >= $result['order_num'])||(isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
-						return array('status'=>false,'msg'=>'超过活动商品数量!');
+						return array('status'=>false,'msg'=>'超过活动商品数量,该活动最多'.$result['order_num'].'个!');
 					}
 				}
 			}
