@@ -79,10 +79,10 @@ class WxCart
 						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 						  ->queryRow();
 			if($now > $result['end_time']){
-				return array('status'=>false,'msg'=>'活动已结束,活动截至时间'.$result['end_time'].'!');
+				return array('status'=>false,'msg'=>'活动已结束,活动截至时间'.$result['end_time']);
 			}
 			if($now < $result['begin_time']){
-				return array('status'=>false,'msg'=>'活动未开始,活动开始时间'.$result['begin_time'].'!');
+				return array('status'=>false,'msg'=>'活动未开始,活动开始时间'.$result['begin_time']);
 			}
 			$week = date('w');
 			
@@ -94,7 +94,7 @@ class WxCart
 			$promotionBegin = date('H:i',strtotime($result['day_begin']));
 			$promotionEnd = date('H:i',strtotime($result['day_end']));
 			if($time > $promotionEnd||$time < $promotionBegin){
-				return array('status'=>false,'msg'=>'今天活动未开始,活动时间'.$promotionBegin.'-'.$promotionEnd.'!');
+				return array('status'=>false,'msg'=>'今天活动未开始,活动时间'.$promotionBegin.'-'.$promotionEnd);
 			}
 			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
