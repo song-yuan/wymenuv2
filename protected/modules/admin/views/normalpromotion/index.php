@@ -71,28 +71,12 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','普通优惠活动');?></div>
 					<div class="actions">
-					<!-- <p><input type="text" name="datetime" class="ui_timepicker" value=""></p> -->
+						<a href="<?php echo $this->createUrl('copypromotion/copynormalpromotion' , array('companyId' => $this->companyId));?>" class="btn red"><i class="fa fa-pencil"></i> <?php echo yii::t('app','进入下发');?></a>
 						<a href="<?php echo $this->createUrl('normalpromotion/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加普通优惠活动');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除活动');?></button>
 						</div>
 					</div>
-					<!-- <div class="btn-group">
-							 <input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
-					</div>
-                    <div class="btn-group">
-				
-						<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo ""; ?>">  
-							<span class="input-group-addon">~</span>
-							   <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo "";?>">           
-						</div>  
-			         </div>	
-					
-					    <div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<!--  <a href="#" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打 印');?></a>		  --
-					    </div>		 -->
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -127,9 +111,14 @@
 								<td><?php switch ($model->can_cupon){case 0:echo yii::t('app','该活动可以使用代金券');break;case 1:echo yii::t('app','该活动不能使用代金券');break;default:echo '';break;} ;?></td>
 								<td><?php echo $model->begin_time;?></td>
 								<td><?php echo $model->end_time;?></td>
-								<td><?php switch ($model->is_available){case 0:echo yii::t('app','生效');break;case 1:echo yii::t('app','不生效');break;default:echo '';break;} ?></td>
+								<td><?php switch ($model->is_available){case 0:echo yii::t('app','不生效');break;case 1:echo yii::t('app','生效');break;case 2:echo yii::t('app','生效且显示在微信端');break;default:echo '';break;} ?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('normalpromotion/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
+								<?php if($model->is_available == '2'&&Yii::app()->user->role >=11):?>
+								<a><?php echo yii::t('app','总部审核后无法编辑修改');?></a>
+								<?php else:?>
+								<a href="<?php echo $this->createUrl('normalpromotion/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php endif;?>
+								</td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('normalpromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product','code'=>$model->normal_code));?>"><?php echo yii::t('app','设置活动优惠产品');?></a></td>
 								 <td><?php echo '';?></td>
@@ -191,17 +180,18 @@
 					return false;
 				}
 				return true;
+			});
+		    $(function () {
+		        $(".ui_timepicker").datetimepicker({
+		            //showOn: "button",
+		            //buttonImage: "./css/images/icon_calendar.gif",
+		            //buttonImageOnly: true,
+		            showSecond: true,
+		            timeFormat: 'hh:mm:ss',
+		            stepHour: 1,
+		            stepMinute: 1,
+		            stepSecond: 1
+		        })
+		    });
 		});
-	    $(function () {
-	        $(".ui_timepicker").datetimepicker({
-	            //showOn: "button",
-	            //buttonImage: "./css/images/icon_calendar.gif",
-	            //buttonImageOnly: true,
-	            showSecond: true,
-	            timeFormat: 'hh:mm:ss',
-	            stepHour: 1,
-	            stepMinute: 1,
-	            stepSecond: 1
-	        })
-	    });
 	     </script>
