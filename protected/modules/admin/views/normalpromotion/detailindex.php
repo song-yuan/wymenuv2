@@ -40,8 +40,8 @@
               
                     <div class="tabbable tabbable-custom">
                             <ul class="nav nav-tabs">
-                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'product' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','单品');?></a></li>
-                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'set' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','套餐');?></a></li>
+                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'product' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'code'=>$code));?>'"><?php echo yii::t('app','单品');?></a></li>
+                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'set' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'code'=>$code));?>'"><?php echo yii::t('app','套餐');?></a></li>
                             
                             </ul>
                             <div class="tab-content">
@@ -55,7 +55,7 @@
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<div class="btn-group" style="left:3%;">
-							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
+							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId,'code'=>$code));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
@@ -76,7 +76,7 @@
                     <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
                     <div class="actions">
                     	<div class="btn-group" style="left:3%;">
-							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
+							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId,'code'=>$code));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
 						</div>
                     </div>	
                     <?php endif;?>
@@ -126,7 +126,7 @@
                                                 <label class="radio-inline">
                                                 <!--  <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
                                                 <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['order_num'])) echo $model['order_num']; else echo yii::t('app','无限制'); ?>" onfocus=" if (value =='无限制'){value = ''}" onblur="if (value ==''){value='无限制'}" >
-                                                --><input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
+                                                --><input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" code="<?php if($typeId=='product') echo $model['phs_code'];elseif($typeId=='set') echo $model['pshs_code'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
                                                 <input type="button" name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
                                                 </label>
 											</div>
@@ -194,7 +194,8 @@
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			var promotionID='<?php echo $promotionID;?>';
-			location.href="<?php echo $this->createUrl('normalpromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid+"/promotionID/"+promotionID;
+			var code = '<?php echo $code;?>';
+			location.href="<?php echo $this->createUrl('normalpromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid+"/promotionID/"+promotionID+"/code/"+code;
 		});
 	});
         
@@ -202,6 +203,8 @@
             <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
             alert("您没有权限！");return false;
             <?php endif;?>
+            var fa_code = '<?php echo $code;?>';
+            var prod_code = $(this).attr('code');
             var vid=$(this).attr("id").substr(12,10);
             var arr=document.getElementsByName("optionsRadios"+vid);
            // var chx=document.getElementById("optionsCheck"+vid);
@@ -209,8 +212,12 @@
             var optvalue;
            // var checkvalue = '0';
             var cid = $(this).val();
-            //alert(chx);
+            //return false;
 			var promotionID='<?php echo $promotionID;?>';
+			if(fa_code == ''|| prod_code== '' || fa_code == null || prod_code == null){
+				layer.msg('无法保存',{icon: 5});
+				return false;
+			}
             for(var i=0;i<arr.length;i++)
             {
                 if(arr[i].checked)
@@ -234,10 +241,12 @@
                   	return false;
                       }
                 }
-			
+            //var url="<?php echo $this->createUrl('normalpromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/proID/"+optid+"/cid/"+cid+"/page/fa_code/"+fa_code+"/prod_code/"+prod_code;
+			//alert(url);
+ 			//return false;
             $.ajax({
             type:'GET',
- 			url:"<?php echo $this->createUrl('normalpromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
+ 			url:"<?php echo $this->createUrl('normalpromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/proID/"+optid+"/cid/"+cid+"/fa_code/"+fa_code+"/prod_code/"+prod_code,
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
             cache:false,
@@ -247,8 +256,8 @@
                             if(msg.status=="success")
                             {
                                 //alert("<?php echo $promotionID;?>")
-                                alert("<?php echo yii::t('app','成功'); ?>");
-                                
+                                //alert("<?php echo yii::t('app','成功'); ?>");
+                                layer.msg('成功',{icon: 6});
                                 location.reload();
                             }else{
                                 alert("<?php echo yii::t('app','失败'); ?>"+"1")

@@ -73,5 +73,13 @@ class Common{
     	$result = Yii::app()->db->createCommand($sql)->queryAll();
     	return $result;
     }
+    /*
+     * 生成总部唯一编码。。。
+     * */
+    static public function getCode($dpid,$lid,$id)
+    {
+    	$ret = substr("0000000000".$dpid,-3).substr("0000000000".$lid,-4).substr("0000000000".$id,-5);
+    	return $ret;
+    }
 }
 ?>

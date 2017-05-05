@@ -118,14 +118,24 @@
                         <input type="hidden" id="hidden1" name="hidden1" value="" />
                 </div>
         <?php }endif;?>-->
-                <div class="form-group">
-                        <?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
-                        <div class="col-md-4">
-                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','生效') , '1' => yii::t('app','不生效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
-                                <?php echo $form->error($model, 'is_available' )?>
-                        </div>
-                </div><!-- 活动是否生效 -->
-<div class="form-group">
+        				<?php if(Yii::app()->user->role <=5):?>
+		                <div class="form-group">
+		                        <?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
+		                        <div class="col-md-4">
+		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','生效不显示在微信端'), '2' => yii::t('app','生效且显示在微信端')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
+		                                <?php echo $form->error($model, 'is_available' )?>
+		                        </div>
+		                </div><!-- 活动是否生效 -->
+		                <?php else:?>
+		                <div class="form-group">
+		                        <?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
+		                        <div class="col-md-4">
+		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','生效'),) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
+		                                <?php echo $form->error($model, 'is_available' )?>
+		                        </div>
+		                </div><!-- 活动是否生效 -->
+		                <?php endif;?>
+						<div class="form-group">
                                 <label class="control-label col-md-3"><?php echo yii::t('app','活动有效期限');?></label>
                                 <div class="col-md-4">
                                         <!-- <div class="input-group date form_datetime" data-date="2012-12-21T15:25:00Z">                                       

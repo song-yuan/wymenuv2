@@ -45,6 +45,7 @@ class ProductCategoryController extends BackendController
 		$catetype = Yii::app()->request->getParam('catetype');
 		$model = new ProductCategory() ;
 		$model->dpid = $this->companyId ;
+                $companyId = Helper::genUsername(Yii::app()->request->getParam('companyId'));
 		if($pid) {
 			$model->pid = $pid;
 		}
@@ -141,6 +142,7 @@ class ProductCategoryController extends BackendController
 //                $lid = $se->nextval();
 		$this->render('_form1' , array(
 				'model' => $model,
+                                'user'  =>$companyId,
 				'action' => $this->createUrl('productCategory/create' , array('companyId'=>$this->companyId,'catetype' => $catetype,)),
 		));
 	}
