@@ -30,13 +30,14 @@ class WxTaste
 	 * 
 	 */
 	public static function getProductTastes($productId,$dpid){
-		$sql = 'select t.taste_group_id,t.product_id,t1.name from nb_product_taste t,nb_taste_group t1 where t.taste_group_id=t1.lid and t.dpid=t1.dpid and t.product_id=:productId and t.dpid=:dpid and t1.delete_flag=0 and t.delete_flag=0';
+		$sql = 'select t.taste_group_id,t.product_id,t1.name,t1.allflae from nb_product_taste t,nb_taste_group t1 where t.taste_group_id=t1.lid and t.dpid=t1.dpid and t.product_id=:productId and t.dpid=:dpid and t1.allflae=0 and t1.delete_flag=0 and t.delete_flag=0';
+		$sql .=' union select lid as taste_group_id,0 as product_id,name,allflae from nb_taste_group where dpid=:dpid and allflae=1 and delete_flag=0';
 		$tasteGroups = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':productId',$productId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
 		foreach($tasteGroups as $k=>$group){
-			$tastes = self::getTastes($group['taste_group_id'],$dpid,0);
+			$tastes = self::getTastes($group['taste_group_id'],$dpid,$group['allflae']);
 			$tasteGroups[$k]['tastes'] = $tastes;
 		}
 	    return $tasteGroups;

@@ -132,7 +132,7 @@ class MallController extends Controller
 		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
 		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($carts);// 购物车优惠原价
-		$orderTastes = WxTaste::getOrderTastes($this->companyId);
+		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$cupons = WxCupon::getUserAvaliableCupon($canuseCuponPrice,$userId,$this->companyId);
 		
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
