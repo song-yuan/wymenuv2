@@ -900,6 +900,7 @@ class DataSyncTables
         		"promotion_money decimal(10,2) NOT NULL,".
         		"promotion_discount decimal(10,2) NOT NULL,".
         		"order_num int(4) NOT NULL DEFAULT '0',".
+        		"is_show varchar(2) NOT NULL DEFAULT '2',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
