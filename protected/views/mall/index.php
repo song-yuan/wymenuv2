@@ -662,7 +662,7 @@ $(document).ready(function(){
     $('.j-mask').on('click',function(){
         $('.ft-lt').trigger('click');
     });
-    $('footer').on('click','.ft-lt',function(){
+    $('footer').on('click','.ft-lt,.cart-img',function(){
         if($('.cart-dtl-item').length == 0){
             return;
         }
