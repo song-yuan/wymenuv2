@@ -892,7 +892,9 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"normal_promotion_id int(10) NOT NULL DEFAULT '0',".
+        		"normal_code_pa varchar(12) NOT NULL DEFAULT '',".
         		"product_id int(10) NOT NULL DEFAULT '0',".
+        		"pro_code varchar(12) NOT NULL DEFAULT '',".
         		"is_set varchar(2) NOT NULL,".
         		"is_discount varchar(2) NOT NULL,".
         		"promotion_money decimal(10,2) NOT NULL,".
