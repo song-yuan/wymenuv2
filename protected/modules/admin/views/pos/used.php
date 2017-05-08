@@ -25,7 +25,7 @@
     <!-- /.modal -->
     <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
     <!-- BEGIN PAGE HEADER-->
-    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','收银机统计'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','收银机排序'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
@@ -74,22 +74,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if( $models) :?>
-                        <?php $k=1; foreach ($models as $model):
-                            if( strtotime($model['poscreate_at'])>strtotime($begin_time) && strtotime($model['poscreate_at'])<strtotime($end_time+" 23 hours 59 m 59 s") ):
+                        <?php 
+                        if( $models){ 
+                            foreach ($models as $key => $val) {
+                                $k=1;
+                                foreach ($models[$key] as $v) { 
+                                    if( (strtotime($v['poscreate_at'])>strtotime($begin_time)) && ( $v['poscreate_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day"))) ){                       
                         ?>
-                        <tr class="odd gradeX">
-                            <td><?php echo $model['company_name'];?></td>
-                            <td><?php echo $model['comcreate_at'];?></td>
-                            <td><?php if($model['pad_sales_type']==0)echo '单屏';else echo '双屏';?></td>
-                            <td><?php echo $model['pad_code'];?></td>
-                            
-                            <td><?php echo $model['poscreate_at'];?></td>
-                            <td><?php echo $model['content'];?></td>
-                            <td><?php echo $k; ?></td>
-                        </tr>
-                            <?php  endif; $k++; endforeach;?>	                       
-                        <?php endif;?>
+                                        <tr class="odd gradeX">
+                                            <td><?php echo $v['company_name'];?></td>
+                                            <td><?php echo $v['comcreate_at'];?></td>
+                                            <td><?php if($v['pad_sales_type']==0)echo '单屏';else echo '双屏';?></td>
+                                            <td><?php echo $v['pad_code'];?></td>
+
+                                            <td><?php echo $v['poscreate_at'];?></td>
+                                            <td><?php echo $v['content'];?></td>
+                                            <td><?php echo $k; ?></td
+                                        </tr>
+                        <?php 
+                                    } 
+                                    $k++;
+                                }  
+                            }
+                        }
+                        ?>
                     </tbody>
                 </table>
 

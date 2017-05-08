@@ -278,48 +278,41 @@ class PosController extends BackendController
         
         $sql = "select dpid from nb_company where  delete_flag = 0 and type = 1 and comp_dpid = ".$companyId;
         $dpid = Yii::app()->db->createCommand($sql)->queryAll();
-
-        $str ='';
+        $models = Array();
         if(!empty($dpid)){
             foreach ($dpid as $val){
-                if($str == ''){
-                    $str =$val['dpid']; 
+               
+                if($pos_type == 1){
+                   
+                    $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                        . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 0"
+                        . " and  com.dpid = t.dpid"
+                        . " and  t.delete_flag = 0 and  t.dpid = ".$val['dpid']." group by t.pad_setting_id ORDER BY  poscreate_at ASC";
+
+                }elseif($pos_type == 2){
+                   
+                    $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                        . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 1"
+                        . " and  com.dpid = t.dpid"
+                        . " and  t.delete_flag = 0 and  t.dpid = ".$val['dpid']." group by t.pad_setting_id ORDER BY poscreate_at ASC";
+
                 }else{
-                     $str .= ",".$val['dpid'];
-                }                  
+                    $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                        . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0"
+                        . " and  com.dpid = t.dpid"
+                        . " and  t.delete_flag = 0 and  t.dpid =".$val['dpid']." group by t.pad_setting_id ORDER BY poscreate_at ASC";
+
+                }
+            $models[$val['dpid']] = Yii::app()->db->createCommand($all_sql)->queryAll();
             }
+        
         }
-       
-        $models = Array();
-        if($str !=''){ 
-            
-            if($pos_type == 1){
-                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
-                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 0"
-                    . " and  com.dpid = t.dpid"
-                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
-            
-            }elseif($pos_type == 2){
-                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
-                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 1"
-                    . " and  com.dpid = t.dpid"
-                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
-           
-            }else{
-                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
-                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0"
-                    . " and  com.dpid = t.dpid"
-                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
-           
-            }
-            $models = Yii::app()->db->createCommand($all_sql)->queryAll();
-   
-        }  
+
      
         $this->render('used',array(
                                 'models'=>$models,
                                 'pos_type'=>$pos_type,
-                               
+                                'dpid'=>$dpid,
                                 'begin_time'=>$begin_time,
                                 'end_time'=>$end_time,
                                
@@ -329,51 +322,41 @@ class PosController extends BackendController
         $objPHPExcel = new PHPExcel();
         $pos_name = '';
         $companyId = Yii::app()->request->getParam('companyId');
-        $pos_type = Yii::app()->request->getParam('pos_type');
-        
+        $pos_type = Yii::app()->request->getParam('pos_type');        
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+        
         $sql = "select dpid from nb_company where  delete_flag = 0 and type = 1 and comp_dpid = ".$companyId;
         $dpid = Yii::app()->db->createCommand($sql)->queryAll();
-
-        $str ='';
+        $models = Array();
         if(!empty($dpid)){
             foreach ($dpid as $val){
-                if($str == ''){
-                    $str =$val['dpid']; 
+               
+                if($pos_type == 1){
+                   
+                    $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                        . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 0"
+                        . " and  com.dpid = t.dpid"
+                        . " and  t.delete_flag = 0 and  t.dpid = ".$val['dpid']." group by t.pad_setting_id ORDER BY  poscreate_at ASC";
+
+                }elseif($pos_type == 2){
+                   
+                    $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                        . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 1"
+                        . " and  com.dpid = t.dpid"
+                        . " and  t.delete_flag = 0 and  t.dpid = ".$val['dpid']." group by t.pad_setting_id ORDER BY poscreate_at ASC";
+
                 }else{
-                     $str .= ",".$val['dpid'];
-                }                  
+                    $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
+                        . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0"
+                        . " and  com.dpid = t.dpid"
+                        . " and  t.delete_flag = 0 and  t.dpid =".$val['dpid']." group by t.pad_setting_id ORDER BY poscreate_at ASC";
+
+                }
+            $models[$val['dpid']] = Yii::app()->db->createCommand($all_sql)->queryAll();
             }
+        
         }
-       
-        $models = Array();
-        if($str !=''){ 
-            
-            if($pos_type == 1){
-                $pos_name = '单屏、';
-                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
-                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 0"
-                    . " and  com.dpid = t.dpid"
-                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
-            
-            }elseif($pos_type == 2){
-                $pos_name = '双屏、';
-                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
-                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0 and t1.pad_sales_type = 1"
-                    . " and  com.dpid = t.dpid"
-                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
-           
-            }else{
-                $all_sql = "select t.create_at as poscreate_at,t.content,t1.pad_sales_type, t1.pad_code, com.company_name,com.create_at as comcreate_at from nb_pad_setting_detail t,nb_pad_setting  t1,nb_company com  "
-                    . " where t.pad_setting_id = t1.lid and t1.delete_flag = 0"
-                    . " and  com.dpid = t.dpid"
-                    . " and t.content is not null and t.delete_flag = 0 and  t.dpid in ( ".$str.") group by t.pad_setting_id ORDER BY t.dpid ASC,poscreate_at ASC";
-           
-            }
-            $models = Yii::app()->db->createCommand($all_sql)->queryAll();
-   
-        }  
         
        
         //设置第1行的行高
@@ -440,8 +423,9 @@ class PosController extends BackendController
         ->setCellValue('G3',yii::t('app','排序'));
         $j=4;
         if($models){
-            $k=1;
-            foreach($models as $v){
+            foreach ($models as $key => $val) {
+                $k=1;
+                foreach ($models[$key] as $v) { 
                 if( strtotime($v['poscreate_at'])>strtotime($begin_time) && strtotime($v['poscreate_at'])<strtotime($end_time+" 23 hours 59 m 59 s") ){
 
                     $objPHPExcel->setActiveSheetIndex(0)
@@ -463,6 +447,8 @@ class PosController extends BackendController
                     $j++;
                 }
                 $k++;
+                
+                }
             }
         }
 		//冻结窗格

@@ -298,6 +298,18 @@ class EntityCardController extends BackendController {
                     'number'=>$number,
         )); 
     }
+    public function actionDetail() {
+        $companyId = Yii::app()->request->getParam('companyId');
+
+        $criteria = new CDbCriteria;
+        $criteria->addCondition(' t.delete_flag=0 and t.dpid = '.$companyId);
+        $criteria->with = 'brandUserLevel';
+        $models = MemberCard::model()->findAll($criteria);
+        
+        $this->render('detail', array(
+                    'models' => $models ,
+            ));
+    }
         
         
 }
