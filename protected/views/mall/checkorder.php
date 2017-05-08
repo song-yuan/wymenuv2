@@ -123,7 +123,7 @@
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
 	    	<div class="item-group">
 	    		<?php foreach($groups['tastes'] as $taste):?>
-	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
+	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="0" />
 	    		<div class="clear"></div>
@@ -145,20 +145,36 @@
 	    </div>
 	    <!-- 可选择口味 -->
 	    <?php if(isset($model['taste_groups'])&&!empty($model['taste_groups'])):?>
-	    <div class="taste-desc"></div>
-	    <div class="taste">可选口味</div>
 	    <div class="taste-items" product-id="<?php echo $model['product_id'];?>">
-	    	<?php foreach($model['taste_groups'] as $k=>$groups):?>
+	    	<?php 
+	    		$tdesc = ''; 
+	    		foreach($model['taste_groups'] as $k=>$groups):
+	    		$tvalue = 0;
+	    	?>
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
 	    	<div class="item-group">
-	    		<?php foreach($groups['tastes'] as $taste):?>
-	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
+	    		<?php foreach($groups['tastes'] as $tk=>$taste):
+	    			$active = '';
+	    			if($tk==0&&$groups['allflae']==0){
+	    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+	    				$active = 'on';
+	    				$tprice = '';
+	    				if($taste["price"]>0){
+	    					$price += $taste["price"];
+	    					$tprice = '('.$taste["price"].')';
+	    				}
+	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
+	    			}
+	    		?>
+	    			<div class="item t-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
-	    		<input type="hidden" name="taste[]" value="0" />
+	    		<input type="hidden" name="taste[]" value="<?php echo $tvalue;?>" />
 	    		<div class="clear"></div>
 	    	</div>
 	    	<?php endforeach;?>
 	    </div>
+	    <div class="taste-desc"><?php echo $tdesc;?></div>
+	    <div class="taste">可选口味</div>
 	    <?php endif;?>
 	    <!-- 可选择套餐 -->
 	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
@@ -365,7 +381,7 @@ $(document).ready(function(){
 	opt.date = {preset : 'date'};
 	opt.datetime = {preset : 'datetime'};
 	opt.time = {preset : 'time'};
-	opt.default = {
+	opt.default1 = {
 		theme: 'android-ics light', //皮肤样式
         display: 'modal', //显示方式 
         mode: 'scroller', //日期选择模式
@@ -377,8 +393,8 @@ $(document).ready(function(){
         endYear: currYear + 1 //结束年份
 	};
 
-  	var optDateTime = $.extend(opt['datetime'], opt['default']);
-  	var optTime = $.extend(opt['time'], opt['default']);
+  	var optDateTime = $.extend(opt['datetime'], opt['default1']);
+  	var optTime = $.extend(opt['time'], opt['default1']);
     $("#appDateTime").mobiscroll(optDateTime).datetime(optDateTime);
     
     var totalPackFee = 0;
@@ -532,12 +548,16 @@ $(document).ready(function(){
   	var group =  $(this).attr('group');
   	var tastePrice = $(this).attr('taste-pirce');
   	var tastName = $(this).html();
+  	var allflage = $(this).attr('allflage');
   	var num = 1;
   	if(sectionObj.find('.num').length > 0){
   		num = sectionObj.find('.num').html();
   	}
   	
   	if($(this).hasClass('on')){
+  	  	if(allflage=='0'){
+  	  	  	return;
+  	  	}
   		$(this).removeClass('on');
   		$(this).siblings('input').val(0);
   		tasteDesc.find('#'+group+'-'+tasteId).remove();

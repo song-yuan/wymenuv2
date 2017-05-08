@@ -8,7 +8,7 @@
 class WxCategory
 {
 	public static function get($dpid){
-		$sql = 'select * from nb_product_category where dpid=:dpid and pid=0 and cate_type=0 and delete_flag=0 order by order_num asc,lid desc';
+		$sql = 'select * from nb_product_category where dpid=:dpid and pid=0 and (cate_type=0 or cate_type=2) and delete_flag=0 order by order_num asc,lid desc';
 		$categorys = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->queryAll();
 		return $categorys;
 	}

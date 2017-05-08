@@ -79,10 +79,10 @@ class WxCart
 						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 						  ->queryRow();
 			if($now > $result['end_time']){
-				return array('status'=>false,'msg'=>'活动已结束!');
+				return array('status'=>false,'msg'=>'活动已结束,活动截至时间'.$result['end_time']);
 			}
 			if($now < $result['begin_time']){
-				return array('status'=>false,'msg'=>'活动未开始!');
+				return array('status'=>false,'msg'=>'活动未开始,活动开始时间'.$result['begin_time']);
 			}
 			$week = date('w');
 			
@@ -91,8 +91,10 @@ class WxCart
 				return array('status'=>false,'msg'=>'今天无活动!');
 			}
 			$time = date('H:i');
-			if($time > $result['day_end']||$time < $result['day_begin']){
-				return array('status'=>false,'msg'=>'今天活动未开始!');
+			$promotionBegin = date('H:i',strtotime($result['day_begin']));
+			$promotionEnd = date('H:i',strtotime($result['day_end']));
+			if($time > $promotionEnd||$time < $promotionBegin){
+				return array('status'=>false,'msg'=>'今天活动未开始,活动时间'.$promotionBegin.'-'.$promotionEnd);
 			}
 			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
@@ -110,17 +112,17 @@ class WxCart
 					return array('status'=>true,'msg'=>'OK');
 				}else{
 					if((isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
-						return array('status'=>false,'msg'=>'超过活动商品数量!');
+						return array('status'=>false,'msg'=>'超过活动商品数量,单个最多'.$result['product_num'].'个!');
 					}
 				}
 			}else{
 				if($result['product_num']==0){
 					if(!$this->cart && $resulta['count'] >= $result['order_num']){
-						return array('status'=>false,'msg'=>'超过活动商品数量!');
+						return array('status'=>false,'msg'=>'超过活动商品数量,该活动最多'.$result['order_num'].'个!');
 					}
 				}else{
 					if((!$this->cart &&$resulta['count'] >= $result['order_num'])||(isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
-						return array('status'=>false,'msg'=>'超过活动商品数量!');
+						return array('status'=>false,'msg'=>'超过活动商品数量,该活动最多'.$result['order_num'].'个!');
 					}
 				}
 			}

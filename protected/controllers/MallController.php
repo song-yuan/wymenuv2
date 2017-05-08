@@ -132,7 +132,7 @@ class MallController extends Controller
 		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
 		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($carts);// 购物车优惠原价
-		$orderTastes = WxTaste::getOrderTastes($this->companyId);
+		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$cupons = WxCupon::getUserAvaliableCupon($canuseCuponPrice,$userId,$this->companyId);
 		
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
@@ -591,8 +591,7 @@ class MallController extends Controller
 		$product = new WxProduct($this->companyId,$userId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
-		$productSets = $product->productSetLists;
-		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products,'productSets'=>$productSets));
+		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));
 		exit;
 	}
 	/**
@@ -631,9 +630,9 @@ class MallController extends Controller
 			}	
 		}
 		
-		$store = $cart->checkStoreNumber();
-		if(!$store['status']){
-			Yii::app()->end(json_encode($store));
+		$result = $cart->checkStoreNumber();
+		if(!$result['status']){
+			Yii::app()->end(json_encode($result));
 		}	
 		if($cart->addCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));

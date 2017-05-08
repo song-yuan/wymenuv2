@@ -12,14 +12,15 @@ class WxProduct
 	public $siteId;
 	public $categorys = array();
 	public $categoryProductLists = array();
+	public $categoryProductSetLists = array();
 	public $productSetLists = array();
+	
 	
 	public function __construct($dpid,$userId){
 		$this->dpid = $dpid;
 		$this->userId = $userId;
 		$this->getCategory();
 		$this->productList();
-		$this->productSetList();
 	}
 	public function getCategory(){
 		$this->categorys = WxCategory::get($this->dpid);
@@ -33,22 +34,24 @@ class WxProduct
 			}else{
 				$categoryIds = $category['lid'];
 			}
-			$sql = 'select m.*,n.num from (select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.'))m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and is_set=0 and promotion_id=-1 order by m.sort asc,m.lid desc';
-		    $categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->queryAll();
-		    $this->categoryProductLists[$k]['product_list'] = $categoryProducts;
-		}
-	}
-	public function productSetList(){
-		$sql = 'select m.*,n.num from (select * from nb_product_set where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid)m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and is_set=1 and promotion_id=-1 order by m.lid desc';
-		$setProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->queryAll();
-		foreach ($setProducts as $k=>$set){
-			$setDetail = self::getProductSetDetail($set['lid'], $set['dpid']);
-			if(!empty($setDetail)){
-				$setProducts[$k]['detail'] = $setDetail;
-				array_push($this->productSetLists,$setProducts[$k]);
+			
+			if($category['cate_type']!=2){
+				$sql = 'select m.*,n.num from (select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.'))m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and is_set=0 and promotion_id=-1 order by m.sort asc,m.lid desc';
+				$categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->queryAll();
 			}else{
-				unset($setProducts[$k]);
+				$sql = 'select m.*,n.num from (select * from nb_product_set where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.'))m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and is_set=1 and promotion_id=-1 order by m.lid desc';
+				$categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->queryAll();
+				foreach ($categoryProducts as $sk=>$set){
+					$setDetail = self::getProductSetDetail($set['lid'], $set['dpid']);
+					if(!empty($setDetail)){
+						$categoryProducts[$sk]['detail'] = $setDetail;
+					}else{
+						unset($categoryProducts[$sk]);
+						continue;
+					}
+				}
 			}
+			$this->categoryProductLists[$k]['product_list'] = $categoryProducts;
 		}
 	}
 	/**
