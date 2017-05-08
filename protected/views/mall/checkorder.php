@@ -273,7 +273,11 @@
 	<div class="chooselist points" style="padding:15px;">
 		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_org">剩余￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span> 可使用￥<?php echo $remainMoney > $price?$price:$remainMoney;?></span></div>
 		<div class="right">
+		<?php if($remainMoney > 0):?>
+		<label><input type="checkbox" name="yue" checked="checked" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+		<?php else:?>
 		<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+		<?php endif;?>
 		</div>
 	</div>
 	<!-- 余额 -->
@@ -291,7 +295,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>待付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+        <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
         <p><a id="payorder" href="javascript:;">提交订单</a></p>
