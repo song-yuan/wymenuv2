@@ -704,35 +704,11 @@ $(document).ready(function(){
 		});
 	});
 	$('input[name="yue"]').change(function(){
-		var total = $('#total').attr('total');
 		var yue = $('#yue').attr('yue');
 		if(parseFloat(yue) == 0){
 			layer.msg('余额不足!');
 			$(this).prop('checked',false);
 		}
-		
-		if($(this).is(':checked')){
-			if(parseFloat(yue) > parseFloat(total)){
-				var money = 0;
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}else{
-				var money = total - yue;
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}
-		}else{
-			if(parseFloat(yue) > parseFloat(total)){
-				var money = parseFloat(total);
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}else{
-				var money = parseFloat(total);
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}
-		}
-		
 	});
 	$('#payorder').click(function(){
 		<?php if($this->type==1):?>
