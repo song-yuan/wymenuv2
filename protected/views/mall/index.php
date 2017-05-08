@@ -60,7 +60,8 @@
 
 <footer>
 	<div class="ft-lt">
-		<p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
+		<div class="cart-img"><img alt="" src="../img/mall/shopcart_white.png"></div>
+		<p>￥<span id="total" class="total">0.00</span><span class="nm">(<label class="share"></label>份)</span></p>
 	</div>
     <?php if($this->type==2):?>
 	    <?php if($start&&$start['fee_price']):?>

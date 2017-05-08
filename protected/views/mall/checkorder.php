@@ -539,6 +539,7 @@ $(document).ready(function(){
     	}
 	});
   });
+   // 口味选择
   $('.taste-items .t-item').click(function(){
 	var sectionObj = $(this).parents('.section');
   	var tasteItems = $(this).parents('.taste-items');
@@ -599,6 +600,7 @@ $(document).ready(function(){
 	   	}
 		});
  	});
+	// 套餐选择
   $('.detail-items .t-item').click(function(){
 	  if(!$(this).hasClass('on')){
 			var sectionObj = $(this).parents('.section');
@@ -629,6 +631,7 @@ $(document).ready(function(){
 	  	  	}
 	  	}
     });
+  // 选择代金券
 	$('.user-cupon .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
