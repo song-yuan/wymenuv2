@@ -169,7 +169,14 @@
 			background-position: 14px 20px;
 			background-size: 70%;
     		background-repeat: no-repeat;
-		}	
+		}
+                .ku-item.hykxf{
+			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
+			background-position: 14px 20px;
+			background-size: 70%;
+    		background-repeat: no-repeat;
+		}
+                
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -177,7 +184,12 @@
 		.cf-black{
 			color: #000 !important;
 			
-		}		
+		}
+                .portlet-body a{
+                   
+                       display: inline-block;
+                  
+                }
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -312,6 +324,12 @@
 							<div class="ku-item-info">账单支付方式</div>
 						</div>
 					</a>
+                                        <a href="<?php echo $this->createUrl('statements/memberconsume',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time())));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey hykxf"></div>
+							<div class="ku-item-info">会员卡消费</div>
+						</div>
+					</a>
                                         <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?> 
                                         <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
@@ -326,6 +344,7 @@
 						</div>
 					</a>
                                         <?php endif;?> 
+                                       
 					<!-- 
 					<a href="<?php //echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
