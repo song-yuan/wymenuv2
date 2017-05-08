@@ -91,7 +91,7 @@
                         </a> 
                     </div>
                     <div class="col-xs-6 col-sm-3">
-                        <a href="<?php echo $this->createUrl('entityCard/detail',array('companyId'=>$this->companyId));?>">
+                        <a href="#">
                             <div class="fa  fa-files-o list_picture"></div>
                             <div class="list_text">会员流水</div>
                         </a> 
