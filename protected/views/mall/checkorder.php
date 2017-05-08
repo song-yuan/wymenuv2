@@ -114,10 +114,10 @@
 
 <!-- 购物车商品 -->
 <div class="cart-info">
-	<?php if(!empty($orderTastes)):?>
-	<div class="section">
+	<div class="section clearfix">
+		<?php if(!empty($orderTastes)):?>
 		<div class="taste-desc"></div>
-	    <div class="taste">整单口味</div>
+	    <div class="taste left">整单口味</div>
 	    <div class="taste-items" product-id="0">
 	    	<?php foreach($orderTastes as $k=>$groups):?>
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
@@ -130,8 +130,9 @@
 	    	</div>
 	    	<?php endforeach;?>
 	    </div>
+	    <?php endif;?>
+	    <div class="right"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>"><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="../img/mall/icon_add.png">继续加菜</a></div>
 	</div>
-	<?php endif;?>
 	<?php foreach($models as $model):?>
 	<div class="section cartProduct">
 		<!--
