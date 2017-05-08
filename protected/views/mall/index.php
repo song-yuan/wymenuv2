@@ -17,8 +17,8 @@
 		}
 	}
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=123">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=123">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=12323">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=12323">
 <style type="text/css">
 .layui-layer-content img {
 	width: 100%;
@@ -59,8 +59,9 @@
 </div>
 
 <footer>
+	<div class="cart-img"><div><img alt="" src="../img/mall/shopcart_white.png"></div></div>
 	<div class="ft-lt">
-		<p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
+		<p>￥<span id="total" class="total">0.00</span><span class="nm">(<label class="share"></label>份)</span></p>
 	</div>
     <?php if($this->type==2):?>
 	    <?php if($start&&$start['fee_price']):?>
@@ -390,6 +391,8 @@ function getProduct(){
 $(document).ready(function(){ 
 	var i = 0;
 	var j = 0;
+	var cHeight = $('body').height()-50;
+	$('#container').height(cHeight+'px');
 	window.load = getProduct(); 
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
@@ -659,7 +662,7 @@ $(document).ready(function(){
     $('.j-mask').on('click',function(){
         $('.ft-lt').trigger('click');
     });
-    $('footer').on('click','.ft-lt',function(){
+    $('footer').on('click','.ft-lt,.cart-img',function(){
         if($('.cart-dtl-item').length == 0){
             return;
         }

@@ -114,10 +114,10 @@
 
 <!-- 购物车商品 -->
 <div class="cart-info">
-	<?php if(!empty($orderTastes)):?>
-	<div class="section">
+	<div class="section clearfix">
+		<?php if(!empty($orderTastes)):?>
 		<div class="taste-desc"></div>
-	    <div class="taste">整单口味</div>
+	    <div class="taste left">整单口味</div>
 	    <div class="taste-items" product-id="0">
 	    	<?php foreach($orderTastes as $k=>$groups):?>
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
@@ -130,8 +130,9 @@
 	    	</div>
 	    	<?php endforeach;?>
 	    </div>
+	    <?php endif;?>
+	    <div class="right"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>"><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="../img/mall/icon_add.png">继续加菜</a></div>
 	</div>
-	<?php endif;?>
 	<?php foreach($models as $model):?>
 	<div class="section cartProduct">
 		<!--
@@ -273,7 +274,11 @@
 	<div class="chooselist points" style="padding:15px;">
 		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_org">剩余￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span> 可使用￥<?php echo $remainMoney > $price?$price:$remainMoney;?></span></div>
 		<div class="right">
+		<?php if($remainMoney > 0):?>
+		<label><input type="checkbox" name="yue" checked="checked" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+		<?php else:?>
 		<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+		<?php endif;?>
 		</div>
 	</div>
 	<!-- 余额 -->
@@ -291,7 +296,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>待付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+        <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
         <p><a id="payorder" href="javascript:;">提交订单</a></p>
@@ -539,6 +544,7 @@ $(document).ready(function(){
     	}
 	});
   });
+   // 口味选择
   $('.taste-items .t-item').click(function(){
 	var sectionObj = $(this).parents('.section');
   	var tasteItems = $(this).parents('.taste-items');
@@ -599,6 +605,7 @@ $(document).ready(function(){
 	   	}
 		});
  	});
+	// 套餐选择
   $('.detail-items .t-item').click(function(){
 	  if(!$(this).hasClass('on')){
 			var sectionObj = $(this).parents('.section');
@@ -629,6 +636,7 @@ $(document).ready(function(){
 	  	  	}
 	  	}
     });
+  // 选择代金券
 	$('.user-cupon .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
@@ -697,35 +705,11 @@ $(document).ready(function(){
 		});
 	});
 	$('input[name="yue"]').change(function(){
-		var total = $('#total').attr('total');
 		var yue = $('#yue').attr('yue');
 		if(parseFloat(yue) == 0){
 			layer.msg('余额不足!');
 			$(this).prop('checked',false);
 		}
-		
-		if($(this).is(':checked')){
-			if(parseFloat(yue) > parseFloat(total)){
-				var money = 0;
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}else{
-				var money = total - yue;
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}
-		}else{
-			if(parseFloat(yue) > parseFloat(total)){
-				var money = parseFloat(total);
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}else{
-				var money = parseFloat(total);
-				money = money.toFixed(2);
-				$('#total').html(money);
-			}
-		}
-		
 	});
 	$('#payorder').click(function(){
 		<?php if($this->type==1):?>
