@@ -59,8 +59,14 @@ footer .cart-img{
 	border-radius:24px;
 	line-height:35px;
 	background:#fe7058;
+	text-align:center;
 }
-.cart-img img{
+.cart-img div{
+	width:95%;
+	height:95%;
+	text-align:center;
+}
+.cart-img div img{
 	vertical-align: middle;
     width: 100%;
     height: auto;
