@@ -391,6 +391,8 @@ function getProduct(){
 $(document).ready(function(){ 
 	var i = 0;
 	var j = 0;
+	var cHeight = $('body').height()-50;
+	$('#container').height(cHeight+'px');
 	window.load = getProduct(); 
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
