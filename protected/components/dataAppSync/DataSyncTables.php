@@ -865,6 +865,8 @@ class DataSyncTables
         		"dpid int(10) NOT NULL,".
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"normal_code varchar(12) NOT NULL DEFAULT '',".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
         		"promotion_title varchar(50) NOT NULL,".
         		"main_picture varchar(255) NOT NULL,".
         		"promotion_abstract varchar(255) NOT NULL,".
