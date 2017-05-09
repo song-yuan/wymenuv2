@@ -42,9 +42,6 @@ class CuponController extends BackendController
     	));
     }
     
-    
-    
-    
 	public function saveFile($event){
 		$fullName = $event->sender['name'];
 		$extensionName = $event->sender['uploadedFile']->getExtensionName();
@@ -75,23 +72,26 @@ class CuponController extends BackendController
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
 			}
 			$db = Yii::app()->db;
-			
-                        
+			           
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			//$db = Yii::app()->db;
 		
 			$se=new Sequence("cupon");
-                        $lid= $se->nextval();
+            $lid= $se->nextval();
 			$model->lid =$lid;
-                       
-                        $code=new Sequence("cupon_code");
-                        $sole_code = $code->nextval();
-                        $model->sole_code = ProductCategory::getChscode($this->companyId, $lid, $sole_code);
+			
+            $code=new Sequence("cupon_code");
+            $codeid = $code->nextval();
+            $model->sole_code = Common::getCode($this->companyId,$lid,$codeid);
 			$model->source='0';
-                        
-                        if(!empty($groupID)){
+            if(Yii::app()->user->role < 11){
+            	$model->type_dpid = '0';
+            }else{
+            	$model->type_dpid = '1';
+            }
+            if(!empty($groupID)){
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("cupon_branduser");
 					$id = $userid->nextval();
@@ -208,52 +208,216 @@ class CuponController extends BackendController
 		));
 
 	}
-	/**
-	 * 发送现金券
-	 */
-	public function actionSentCupon()
-	{	
-		$success = true;
-		$i = 0;
-		$cuponId = Yii::app()->request->getParam('cuponid');
-		$now = time();
+	
+	public function actionDetailinfo(){
+		$lid = Yii::app()->request->getParam('lid');
+		$cuponcode = Yii::app()->request->getParam('code');
+		//var_dump($lid.'@@@'.$cuponcode);exit;
+		$db = Yii::app()->db;
+		$criteria = new CDbCriteria;
+		$criteria->select = 't.*';
+		$criteria->order = ' lid desc';
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition('delete_flag=0');
+	
+		$sqldpid = 'select k.company_name,t.* from nb_cupon_dpid t left join nb_company k on(t.cupon_dpid = k.dpid and k.delete_flag =0) where t.dpid ='.$this->companyId.' and t.delete_flag =0 and t.cupon_code ="'.$cuponcode.'"';
+		$command=$db->createCommand($sqldpid);
+		$cupondpids = $command->queryAll();
 		
-		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $cuponId,':dpid'=> $this->companyId));
-	    
-	    if(Yii::app()->request->isPostRequest){
-	    	if(Yii::app()->user->role > User::SHOPKEEPER) {
-	    		Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-	    		$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
-	    	}
-	    	$userIds = Yii::app()->request->getPost('userIds');
-	    	$userArr = explode(',',$userIds);
-	    	$pre = 10000 + $this->companyId;
-	    	if(!empty($userArr)){
-	    		foreach($userArr as $k=>$user){
-	    			$brandUser = WxBrandUser::getFromCardId($pre.trim($user));
-	    			if(!$brandUser){
-	    				continue;
-	    			}
-	    			$result = WxCupon::sentCupon($this->companyId,$brandUser['lid'],$cuponId);
-	    			if(!$result){
-	    				$success = false;
-	    			}else{
-	    				$i++;
-	    			}
-	    		}
-	    		if($success){
-	    			Yii::app()->user->setFlash('success','全部发送成功！');	
-	    		}else{
-	    			Yii::app()->user->setFlash('error','发送成功'.($i+1).'成功！');	
-	    		}
-	    	}
-	    	$this->redirect(array('/admin/cupon/index','companyId'=>$this->companyId));
-	    }
-		$this->renderPartial('sentcashcard',array(
-			'model'=>$model,
+		$sqlprod = 'select k.product_name,t.* from nb_cupon_product t left join nb_product k on(t.prod_code = k.phs_code and k.delete_flag =0 and k.dpid=t.dpid) where t.dpid ='.$this->companyId.' and t.delete_flag =0 and t.cupon_code ="'.$cuponcode.'"';
+		$command=$db->createCommand($sqlprod);
+		$cuponprods = $command->queryAll();
+		
+		$sqlcomps = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$command = $db->createCommand($sqlcomps);
+		$dpids = $command->queryAll();
+		//var_dump($dpids);exit;
+		$pages = new CPagination(Cupon::model()->count($criteria));
+		$pages->pageSize = 12;
+		$pages->applyLimit($criteria);
+		$models = Cupon::model()->findAll($criteria);
+	
+		
+		$categories = $this->getCategories();
+		$categoryId=0;
+        $products = $this->getProducts($categoryId);
+        $productslist=CHtml::listData($products, 'phs_code', 'product_name');
+		
+		$this->render('detailinfo',array(
+				'cuponprods'=>$cuponprods,
+				'cupondpids'=>$cupondpids,
+				'pages'=>$pages,
+				'dpids'=>$dpids,
+				'categories' => $categories,
+				'categoryId' => $categoryId,
+                'products' => $productslist,
+				'cuponid' => $lid,
+				'cuponcode' => $cuponcode,
 		));
 	}
 
+
+	/**
+	 * 添加对应单品
+	 */
+	public function actionAddprod(){
+		$db = Yii::app()->db;
+		$prodcode = Yii::app()->request->getParam('prodcode');
+		$cuid = Yii::app()->request->getParam('cuid');
+		$cucode = Yii::app()->request->getParam('cucode');
+		$sql = 'select * from nb_product where dpid ='.$this->companyId.' and phs_code ="'.$prodcode.'" and delete_flag=0';
+		$command = $db->createCommand($sql);
+		$prod = $command->queryRow();
+		
+		$sqls = 'select * from nb_cupon_product where dpid ='.$this->companyId.' and prod_code ="'.$prodcode.'" and delete_flag =0 and cupon_id='.$cuid;
+		$command = $db->createCommand($sqls);
+		$cuprod = $command->queryRow();
+		if(!empty($prod)&&empty($cuprod)){
+			$se = new Sequence("cupon_product");
+			$id = $se->nextval();
+				
+			$data = array(
+					'lid'=>$id,
+					'dpid'=>$this->companyId,
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'cupon_id'=>$cuid,
+					'cupon_code'=>$cucode,
+					'prod_code'=>$prodcode,
+					'delete_flag'=>'0',
+					'is_sync'=>'11111',
+			);
+			//var_dump($data);exit;
+			$command = $db->createCommand()->insert('nb_cupon_product',$data);
+			
+			if($command){
+				$sql = 'update nb_cupon set type_prod = 1 where dpid ='.$this->companyId.' and lid ='.$cuid;
+				$result = $db->createCommand($sql)->execute();
+				Yii::app()->end(json_encode(array("status"=>true)));
+			}else{
+				Yii::app()->end(json_encode(array("status"=>false)));
+			}
+		}else{
+				Yii::app()->end(json_encode(array("status"=>false)));
+		}
+	}
+
+
+	/**
+	 * 添加限制店铺
+	 */
+	public function actionAdddpid(){
+		$db = Yii::app()->db;
+		$cupondpids = Yii::app()->request->getParam('dpids');
+		$cuid = Yii::app()->request->getParam('cuid');
+		$cucode = Yii::app()->request->getParam('cucode');
+		//var_dump($dpids.'@@'.$cuid.'$$'.$cucode);exit;
+		
+		$dpids = array();
+		$dpids = explode(',',$cupondpids);
+		$transaction = $db->beginTransaction();
+		try{
+			foreach ($dpids as $dpid){
+				$sqls = 'select * from nb_cupon_dpid where dpid ='.$this->companyId.' and cupon_dpid ="'.$dpid.'" and delete_flag =0 and cupon_id='.$cuid;
+				$command = $db->createCommand($sqls);
+				$cudpid = $command->queryRow();
+				if(empty($cudpid)){
+					$se = new Sequence("cupon_dpid");
+					$id = $se->nextval();
+					
+					$data = array(
+							'lid'=>$id,
+							'dpid'=>$this->companyId,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'cupon_id'=>$cuid,
+							'cupon_code'=>$cucode,
+							'cupon_dpid'=>$dpid,
+							'delete_flag'=>'0',
+							'is_sync'=>'11111',
+					);
+					//var_dump($data);exit;
+					$command = $db->createCommand()->insert('nb_cupon_dpid',$data);
+				}
+			}
+			$transaction->commit();
+			$sql = 'update nb_cupon set type_dpid = 2 where dpid ='.$this->companyId.' and lid ='.$cuid;
+			$result = $db->createCommand($sql)->execute();
+			Yii::app()->end(json_encode(array("status"=>true)));
+		}catch (Exception $e){
+        		$transaction->rollback();
+        		Yii::app()->end(json_encode(array("status"=>false)));
+        }
+		
+	}
+	
+	/**
+	 * 移除对应单品
+	 */
+	public function actionDelprod(){
+		$db = Yii::app()->db;
+		$prodcode = Yii::app()->request->getParam('prodcode');
+		$cuid = Yii::app()->request->getParam('cuid');
+		$cucode = Yii::app()->request->getParam('cucode');
+		
+		$sqls = 'delete from nb_cupon_product where dpid ='.$this->companyId.' and prod_code ="'.$prodcode.'" and delete_flag =0 and cupon_id='.$cuid;
+		$command = $db->createCommand($sqls);
+		$cuprod = $command->execute();
+		
+		if($cuprod){
+			$sqls = 'select * from nb_cupon_product where dpid ='.$this->companyId.' and delete_flag =0 and cupon_id='.$cuid;
+			$cuponprods = $db->createCommand($sqls)->queryAll();
+			if(!empty($cuponprods)){
+				Yii::app()->end(json_encode(array("status"=>true)));
+			}else{
+				$sql = 'update nb_cupon set type_prod = 0 where dpid ='.$this->companyId.' and lid ='.$cuid;
+				$result = $db->createCommand($sql)->execute();
+				if($result){
+					Yii::app()->end(json_encode(array("status"=>true)));
+				}else{
+					Yii::app()->end(json_encode(array("status"=>false)));
+				}
+			}
+			
+		}else{
+			Yii::app()->end(json_encode(array("status"=>false)));
+		}
+	}
+	
+
+	/**
+	 * 移除限制店铺
+	 */
+	public function actionDeldpid(){
+		$db = Yii::app()->db;
+		$cudpid = Yii::app()->request->getParam('cudpid');
+		$cuid = Yii::app()->request->getParam('cuid');
+		$cucode = Yii::app()->request->getParam('cucode');
+	
+		$sqls = 'delete from nb_cupon_dpid where dpid ='.$this->companyId.' and cupon_dpid ="'.$cudpid.'" and delete_flag =0 and cupon_id='.$cuid;
+		$command = $db->createCommand($sqls);
+		$cudpid = $command->execute();
+	
+		if($cudpid){
+			$sqls = 'select * from nb_cupon_dpid where dpid ='.$this->companyId.' and delete_flag =0 and cupon_id='.$cuid;
+			$cupondpid = $db->createCommand($sqls)->queryAll();
+			if(!empty($cupondpid)){
+				Yii::app()->end(json_encode(array("status"=>true)));
+			}else{
+				$sql = 'update nb_cupon set type_dpid = 0 where dpid ='.$this->companyId.' and lid ='.$cuid;
+				$result = $db->createCommand($sql)->execute();
+				if($result){
+					Yii::app()->end(json_encode(array("status"=>true)));
+				}else{
+					Yii::app()->end(json_encode(array("status"=>false)));
+				}
+			}
+				
+		}else{
+			Yii::app()->end(json_encode(array("status"=>false)));
+		}
+	}
+	
 	private function getBrdulv(){
 		$criteria = new CDbCriteria;
 		$criteria->with = '';
@@ -264,80 +428,7 @@ class CuponController extends BackendController
 			return $brdules;
 		}
 	}
-	
-	public function actionUpdate1($id)
-	{
-		$request = Yii::app()->request;
-		$model=$this->loadModel($id);
-		$objects = Yii::app()->admin->getRegions($this->companyId);
-		$cashcardManage = new CashcardManage($model);
-		$selectedShopIds = $cashcardManage->getSelectedShopIds();
-		
-		if(isset($model->cash)){
-			$model->cash /= 100;
-		}
-		if(isset($model->order_consume)){
-			$model->order_consume /= 100;
-		}
-		if(!$model->isAdmin()){
-			Yii::app()->user->setFlash('error','你没有权限修改');
-			$this->redirect(array('index','cid'=>$this->companyId));
-		}
-		if($request->isPostRequest)
-		{
-			$postData = $request->getPost('Cashcard');
-			if($postData['is_exclusive'] == 0) $postData['order_consume'] = 0;
-			if($postData['exchangeable'] == 0) $postData['consume_point'] = $postData['activity_point'] = 0;
-			
-			
-			$shopIds = $request->getPost('shopId');
-			
-			$model->attributes=$postData;
-			
-			$allShopids = Yii::app()->admin->getShopIds($this->companyId);//判断是否全部选择 如果全部选择 shop_flag = 0
-			$transaction = Yii::app()->db->beginTransaction();
-			if($model->valid($shopIds)){
-				$diffShopIds = array_diff($allShopids,$shopIds);
-				try{
-					if(empty($diffShopIds)){
-						$model->shop_flag = 0;
-						$model->save(false);
-						$cashcardManage->delete($id);
-					}else{
-						$model->shop_flag = 1;
-						$model->save(false);
-						//save gift shop
-						$cashcardManage->saveCashcardShop($shopIds);
-						
-						$regionAdminIds = array();
-						$shopAdminIds = Yii::app()->admin->getShopOwnerIds($shopIds);
-						if(Yii::app()->admin->role_type < AdminWebUser::REGION_ADMIN){
-							$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
-						}
-						$systemMessage = new SystemMessageManage();
-						$title = Yii::app()->user->admin_user_name.' 修改了现金券['.$model->title.']';
-						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
-					}
-					$transaction->commit();
-					Yii::app()->user->setFlash('success','编辑成功！');
-					$this->redirect(array('index','cid'=>$this->companyId));
-				} catch(Exception $e){
-					$transaction->rollback();
-				}
-			}else{
-				$model->start_time = strtotime($model->start_time);
-				$model->end_time = strtotime($model->end_time)+3600*24;
-			}
-		}
 
-		$model->start_time = $model->start_time ?date('Y-m-d',$model->start_time):'';
-		$model->end_time = $model->end_time ?date('Y-m-d',$model->end_time-3600*24):'';
-		$this->render('update',array(
-			'model'=>$model,
-			'objects'=>$objects,
-			'selectedShopIds'=>$selectedShopIds
-		));
-	}
 
 	/**
 	 * 删除现金券
@@ -390,5 +481,61 @@ class CuponController extends BackendController
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+	
+	private function getCategories(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
+	
+		$models = ProductCategory::model()->findAll($criteria);
+	
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+			//var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+			//var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
+	}
+	private function getProducts($categoryId){
+		if($categoryId==0)
+		{
+			$products = Product::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
+		}else{
+			$products = Product::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
+		}
+		$products = $products ? $products : array();
+		return $products;
+		//return CHtml::listData($products, 'lid', 'product_name');
+	}
+	public function actionGetChildren(){
+		$categoryId = Yii::app()->request->getParam('pid',0);
+		// var_dump($productSetId);exit;
+		if(!$categoryId){
+			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
+		}
+		$treeDataSource = array('data'=>array(),'delay'=>400);
+		$produts=  $this->getProducts($categoryId);
+		//var_dump($produts);exit;
+		foreach($produts as $c){
+			$tmp['name'] = $c['product_name'];
+			$tmp['id'] = $c['lid'];
+			$treeDataSource['data'][] = $tmp;
+		}
+		Yii::app()->end(json_encode($treeDataSource));
 	}
 }
