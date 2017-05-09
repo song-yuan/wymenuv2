@@ -67,13 +67,14 @@ class OrderPay extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid=company.dpid') ,
-				'order8' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order8.dpid and t.order_id=order8.lid and order8.order_status in (8)') , //not 4,8
+                'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid=company.dpid') ,
+                'order8' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order8.dpid and t.order_id=order8.lid and order8.order_status in (8)') , //not 4,8
                 'order' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order.dpid and t.order_id=order.lid and order.order_status in (4)') , //not 4,8
-				'order4' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order4.dpid and t.order_id=order4.lid and order4.order_status in (3,4,8)') , //not 4,8
+                'order4' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order4.dpid and t.order_id=order4.lid and order4.order_status in (3,4,8)') , //not 4,8
                 'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
-				'micropay' => array(self::BELONGS_TO , 'MicroPayMode' ,'' ,'on'=>'t.remark = micropay.out_trade_no and t.dpid = micropay.dpid '),
-		);
+                'micropay' => array(self::BELONGS_TO , 'MicroPayMode' ,'' ,'on'=>'t.remark = micropay.out_trade_no and t.dpid = micropay.dpid '),
+                'card' => array(self:: BELONGS_TO, 'MemberCard' ,'' ,'on'=>'t.paytype_id = card.rfid  and t.dpid=card.dpid') ,
+                    );
 	}
 
 	/**

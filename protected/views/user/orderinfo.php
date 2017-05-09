@@ -198,9 +198,9 @@ $(document).ready(function(){
 	$('.payOrder').click(function(){
 		var status = $(this).attr('status');
 		if(parseInt(status) < 2){
-			location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
+			location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
 		}else{
-			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'paytype'=>2));?>';
+			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
 		}
 	});
 	$('.close_window').click(function(){

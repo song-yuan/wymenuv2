@@ -1602,6 +1602,30 @@ public function actionPayallReport(){
 			}
 	}
 /*
+ * 会员卡消费报表
+ */
+    public function actionMemberConsume(){
+        $companyId = Yii::app()->request->getParam('companyId',"0000000000");
+        $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+        $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+        $criteria = new CDbCriteria;
+        $criteria->with = array("card");
+        $criteria->addCondition("t.dpid= ".$companyId." and t.paytype = 4 ");
+        $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+        $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+        $criteria->order = 't.order_id ASC,t.create_at ASC' ;
+        $pages = new CPagination(OrderPay::model()->count($criteria));
+        $pages->applyLimit($criteria);
+        $models=  OrderPay::model()->findAll($criteria);
+        $this->render('memberconsume',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				
+		));
+    }
+/*
  * 渠道占比报表
  */
 	public function actionChannelsproportion(){

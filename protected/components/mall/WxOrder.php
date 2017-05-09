@@ -579,6 +579,10 @@ class WxOrder
 					->bindValue(':setId',$setId)
 					->bindValue(':mainId',$mainId)
 					->queryAll();
+		foreach ($orderProductSet as $k=>$orderSet){
+			$productTaste = self::getOrderTaste($orderSet['lid'],$dpid,0);
+			$orderProductSet[$k]['taste'] = $productTaste;
+		}
 		return $orderProductSet;
 	}
 	public static function getOrderTaste($orderId,$dpid,$isOrder){
@@ -719,17 +723,37 @@ class WxOrder
 				//减少库存
 				$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
 				foreach($orderProducts as $product){
-					$productTasteArr = array();
-					if(isset($product['taste'])&&!empty($product['taste'])){
-						foreach ($product['taste'] as $taste){
-							array_push($productTasteArr, $taste['taste_id']);
+					if($product['set_id'] > 0){
+						// 套餐
+						$setDetails = $product['detail'];
+						foreach($setDetails as $detail){
+							$productTasteArr = array();
+							if(isset($detail['taste'])&&!empty($detail['taste'])){
+								foreach ($detail['taste'] as $taste){
+									array_push($productTasteArr, $taste['taste_id']);
+								}
+							}
+							$productBoms = DataSyncOperation::getBom($dpid, $detail['product_id'], $productTasteArr);
+							if(!empty($productBoms)){
+								foreach ($productBoms as $bom){
+									$stock = $bom['number']*$product['amount'];
+									DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$detail['lid']);
+								}
+							}
 						}
-					}
-					$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
-					if(!empty($productBoms)){
-						foreach ($productBoms as $bom){
-							$stock = $bom['number']*$product['amount'];
-							DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
+					}else{
+						$productTasteArr = array();
+						if(isset($product['taste'])&&!empty($product['taste'])){
+							foreach ($product['taste'] as $taste){
+								array_push($productTasteArr, $taste['taste_id']);
+							}
+						}
+						$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
+						if(!empty($productBoms)){
+							foreach ($productBoms as $bom){
+								$stock = $bom['number']*$product['amount'];
+								DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$product['lid']);
+							}
 						}
 					}
 				}
@@ -909,17 +933,37 @@ class WxOrder
 			//减少库存
 			$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
 			foreach($orderProducts as $product){
-				$productTasteArr = array();
-				if(isset($product['taste'])&&!empty($product['taste'])){
-					foreach ($product['taste'] as $taste){
-						array_push($productTasteArr, $taste['taste_id']);
+				if($product['set_id'] > 0){
+					// 套餐
+					$setDetails = $product['detail'];
+					foreach($setDetails as $detail){
+						$productTasteArr = array();
+						if(isset($detail['taste'])&&!empty($detail['taste'])){
+							foreach ($detail['taste'] as $taste){
+								array_push($productTasteArr, $taste['taste_id']);
+							}
+						}
+						$productBoms = DataSyncOperation::getBom($dpid, $detail['product_id'], $productTasteArr);
+						if(!empty($productBoms)){
+							foreach ($productBoms as $bom){
+								$stock = $bom['number']*$product['amount'];
+								DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$detail['lid']);
+							}
+						}
 					}
-				}
-				$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
-				if(!empty($productBoms)){
-					foreach ($productBoms as $bom){
-						$stock = $bom['number']*$product['amount'];
-						DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
+				}else{
+					$productTasteArr = array();
+					if(isset($product['taste'])&&!empty($product['taste'])){
+						foreach ($product['taste'] as $taste){
+							array_push($productTasteArr, $taste['taste_id']);
+						}
+					}
+					$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
+					if(!empty($productBoms)){
+						foreach ($productBoms as $bom){
+							$stock = $bom['number']*$product['amount'];
+							DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$product['lid']);
+						}
 					}
 				}
 			}
