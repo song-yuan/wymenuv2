@@ -88,6 +88,7 @@ body {
 	width: 3rem;
 	height: 100%;
 	overflow-y: scroll;
+	position:relative;
 }
 .container-top{
 	position: fixed;
