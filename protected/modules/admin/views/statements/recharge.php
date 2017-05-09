@@ -53,7 +53,7 @@
                         </div>  
                     </div>					   
                     <div class="btn-group">
-                              <button type="submit" id="btn_time_query" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+                              <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
                              <!-- <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出excel');?></button> --> 
                              <button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
                                                                                       <!-- <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>-->
@@ -164,38 +164,37 @@
                     </table>
                 <?php endif?>
 				
-                <?php if($pages->getItemCount()):?>
-                <div class="row">
-                        <div class="col-md-5 col-sm-12">
-                                <div class="dataTables_info">
-                                        <?php echo yii::t('app','共 ');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> ,  <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
+                        <?php if($pages->getItemCount()):?>
+                        <div class="row">
+                                <div class="col-md-5 col-sm-12">
+                                        <div class="dataTables_info">
+                                                <?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
+                                        </div>
+                                </div>
+                                <div class="col-md-7 col-sm-12">
+                                        <div class="dataTables_paginate paging_bootstrap">
+                                        <?php $this->widget('CLinkPager', array(
+                                                'pages' => $pages,
+                                                'header'=>'',
+                                                'firstPageLabel' => '<<',
+                                                'lastPageLabel' => '>>',
+                                                'firstPageCssClass' => '',
+                                                'lastPageCssClass' => '',
+                                                'maxButtonCount' => 8,
+                                                'nextPageCssClass' => '',
+                                                'previousPageCssClass' => '',
+                                                'prevPageLabel' => '<',
+                                                'nextPageLabel' => '>',
+                                                'selectedPageCssClass' => 'active',
+                                                'internalPageCssClass' => '',
+                                                'hiddenPageCssClass' => 'disabled',
+                                                'htmlOptions'=>array('class'=>'pagination pull-right')
+                                        ));
+                                        ?>
+                                        </div>
                                 </div>
                         </div>
-                        </div>
-                        <div class="col-md-7 col-sm-12">
-                                <div class="dataTables_paginate paging_bootstrap">
-                                <?php $this->widget('CLinkPager', array(
-                                        'pages' => $pages,
-                                        'header'=>'',
-                                        'firstPageLabel' => '<<',
-                                        'lastPageLabel' => '>>',
-                                        'firstPageCssClass' => '',
-                                        'lastPageCssClass' => '',
-                                        'maxButtonCount' => 8,
-                                        'nextPageCssClass' => '',
-                                        'previousPageCssClass' => '',
-                                        'prevPageLabel' => '<',
-                                        'nextPageLabel' => '>',
-                                        'selectedPageCssClass' => 'active',
-                                        'internalPageCssClass' => '',
-                                        'hiddenPageCssClass' => 'disabled',
-                                        'htmlOptions'=>array('class'=>'pagination pull-right')
-                                ));
-                                ?>
-                                </div>
-                        </div>
-                </div>
-                <?php endif;?>					
+                        <?php endif;?>					
 					
 				</div>
 			</div>
