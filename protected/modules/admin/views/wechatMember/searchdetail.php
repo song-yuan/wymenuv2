@@ -286,16 +286,16 @@ li{
                                      <td class="accountno" 
                                          accountno="<?php echo $v->account_no;?>" 
                                          orderid="<?php echo $v->order_id?>" 
-                                         originalp="<?php echo sprintf("%.2f",$v->order4->reality_total);?>" 
-                                         shouldp="<?php echo sprintf("%.2f",$v->order4->should_total);?>" 
-                                         youhuip="<?php echo sprintf("%.2f",($v->order4->reality_total)-($v->order4->should_total));?>"
+                                         originalp="<?php echo sprintf("%.2f",$v->order4?$v->order4->reality_total:'');?>" 
+                                         shouldp="<?php echo sprintf("%.2f",$v->order4?$v->order4->should_total:'');?>" 
+                                         youhuip="<?php echo sprintf("%.2f",($v->order4?$v->order4->reality_total:'')-($v->order4?$v->order4->should_total:''));?>"
                                          >
                                          <?php echo $v->account_no;?>
                                      </td>
                                     
                                     
                                     <td><?php echo $v->create_at;?></td> 
-                                    <td><?php echo $v->order4->should_total;?></td> 
+                                    <td><?php echo $v->order4?$v->order4->should_total:'';?></td> 
                                     <td><?php echo $v->company->company_name;?></td> 
                                 </tr>
                             </tbody>
