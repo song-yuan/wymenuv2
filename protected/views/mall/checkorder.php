@@ -167,7 +167,7 @@
 	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 	    			}
 	    		?>
-	    			<div class="item t-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
+    			<div class="item t-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="<?php echo $tvalue;?>" />
 	    		<div class="clear"></div>
@@ -245,16 +245,7 @@
 	<?php endif;?>
 	<div class="totalinfo" style="padding-top:10px"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 </div>
-<?php if($this->type!=2&&$user['level']):?>
-<!-- 
-<div class="discount">
-	<ul>
-		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品享受<?php echo $user['level']['level_discount']*10;?>折优惠</li>
-		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount']*10;?>折优惠</li>
-	</ul>
-</div>
- -->
-<?php endif;?>
+
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
 	<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
