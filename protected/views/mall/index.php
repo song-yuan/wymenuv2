@@ -41,11 +41,22 @@
 	display: none;
 }
 </style>
-<script type="text/javascript"
-	src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
-<script type="text/javascript"
-	src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
+<?php if(empty($notices)):?>
 <div class="header"><marquee scrolldelay="150">欢迎光临本店:<?php echo $this->company['company_name'];?></marquee></div>
+<?php else:?>
+<div class="header">
+	<marquee scrolldelay="150">
+	<?php $noticeInfo = '';
+	foreach ($notices as $notice){
+		$noticeInfo .= $notice['content'].';';
+	}
+	echo rtrim($noticeInfo,';');
+	?>
+	</marquee>
+</div>
+<?php endif;?>
 <div class="content">
 	<div class="nav-lf">
 		<ul id="nav">
