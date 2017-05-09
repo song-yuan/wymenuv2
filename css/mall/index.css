@@ -1,7 +1,20 @@
 body {
 	background-color: #efefef;
 }
-
+.header{
+	position:fixed;
+	top:0;
+	left:0;
+	right:0;
+	padding:0 20px;
+	height:40px;
+	line-height:40px;
+	font-size:20px;
+}
+.content{
+	position:relative;
+	padding-top:40px;
+}
 .swiper-container {
 	width: 4rem;
 	height: 0.85rem;
@@ -44,7 +57,7 @@ body {
 	position: absolute;
 	left: 0;
 	width: 1rem;
-	height: 95%;
+	height: 100%;
 	background-color: #efefef;
 	font-size: 0.15rem;
 	text-align: center;
@@ -75,7 +88,7 @@ body {
 	position: absolute;
 	right: 0;
 	width: 3rem;
-	height: 92%;;
+	height: 100%;
 	overflow-y: scroll;
 }
 .container-top{

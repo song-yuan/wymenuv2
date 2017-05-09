@@ -45,19 +45,21 @@
 	src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript"
 	src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
-<div class="nav-lf">
-	<ul id="nav">
-
-	</ul>
-</div>
-
-<div id="container" class="container">
-	<div id="product-top" class="container-top">
-		<div></div>
+<div class="header"><marquee>欢迎光临本店:<?php echo $this->company['company_name'];?></marquee></div>
+<div class="content">
+	<div class="nav-lf">
+		<ul id="nav">
+	
+		</ul>
 	</div>
-
+	
+	<div id="container" class="container">
+		<div id="product-top" class="container-top">
+			<div></div>
+		</div>
+	
+	</div>
 </div>
-
 <footer>
 	<div class="cart-img"><div><img alt="" src="../img/mall/shopcart_white.png"></div></div>
 	<div class="ft-lt">
@@ -391,8 +393,8 @@ function getProduct(){
 $(document).ready(function(){ 
 	var i = 0;
 	var j = 0;
-	var cHeight = $('body').height()-50;
-	$('#container').height(cHeight+'px');
+	var cHeight = $('body').height()-50-40;
+	$(".content").height(cHeight+'px');
 	window.load = getProduct(); 
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
