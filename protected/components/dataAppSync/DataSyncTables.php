@@ -517,6 +517,7 @@ class DataSyncTables
         		"name varchar(50) NOT NULL,".
         		"allflae char(1) NOT NULL DEFAULT '0',".
         		"price decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"is_selected varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".

@@ -105,6 +105,12 @@
                              <?php echo floor($model->cupon_money);?>
                              </span>
                              <span class="type" >元代金券</span>
+                             <?php if($model->type_dpid == '2'):?>
+                             <span style="color: red;border: 1px solid red;border-radius: 14px;float: right;" class="type" >限</span>
+                             <?php endif;?>
+                             <?php if($model->type_prod == '1' ):?>
+                             <span style="color: #eafb03;border: 1px solid red;border-radius: 14px;float: right;" class="type" >限</span>
+                             <?php endif;?>
                          </div>
                          <div class="min_date">
                              <div  class="min">满
@@ -129,18 +135,24 @@
                      </div>
                      <div class="edit_del" style="">
                          <div class="btn-group edit" style="" >
-                             <a type="submit"  class="btn blue"  
+                             <a type=""  class="btn blue"  
                                 href="<?php echo $this->createUrl('cupon/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">
                              <?php echo yii::t('app','编辑');?>
                              </a>
                          </div>
 
-                         <div class="btn-group" >
+                         <div class="btn-group edit" >
                              <a type="submit"  class="btn red"
                                 href="<?php echo $this->createUrl('cupon/delete',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">
                              <?php echo yii::t('app','删除');?>
                              </a>
-                         </div>                                           
+                         </div>  
+                         <div class="btn-group" >
+                             <a type="submit"  class="btn green"
+                             	href="<?php echo $this->createUrl('cupon/detailinfo',array('lid' => $model->lid ,'code' => $model->sole_code, 'companyId' => $model->dpid));?>">
+                             <?php echo yii::t('app','详情');?>
+                             </a>
+                         </div>                                          
                      </div>
                  </div>                                   
                  <?php endforeach;?>	

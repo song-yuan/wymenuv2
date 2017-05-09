@@ -74,6 +74,8 @@ class WxProduct
  		$sql = 'select t.set_id,t.product_id,t.price,t.group_no,t.number,t.is_select,t1.* from nb_product_set_detail t, nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.set_id=:setId and t.dpid=:dpid and t.delete_flag=0 and t1.delete_flag=0';
  		$setDetail = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':setId',$productSetId)->queryAll();
 	 	foreach ($setDetail as $detail){
+	 		$taste = WxTaste::getProductTastes($detail['product_id'], $dpid);
+	 		$detail['taste_groups'] = $taste;
 	 		$setDetails[$detail['group_no']][] = $detail;
 	 	}
  		return array_merge($setDetails);

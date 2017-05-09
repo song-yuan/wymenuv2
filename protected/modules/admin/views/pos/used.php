@@ -89,7 +89,7 @@
 
                                             <td><?php echo $v['poscreate_at'];?></td>
                                             <td><?php echo $v['content'];?></td>
-                                            <td><?php echo $k; ?></td
+                                            <td><?php echo $k; ?></td>
                                         </tr>
                         <?php 
                                     } 

@@ -1,7 +1,23 @@
 body {
 	background-color: #efefef;
 }
+.header{
+	position:fixed;
+	top:0;
+	left:0;
+	right:0;
+	padding-left:34px;
+	height:40px;
+	line-height:40px;
+	font-size:20px;
+	background:url(../../img/mall/notice.png) 4px 8px no-repeat;
+	background-size: 24px 24px;
+}
 
+.content{
+	position:relative;
+	padding-top:40px;
+}
 .swiper-container {
 	width: 4rem;
 	height: 0.85rem;
@@ -41,10 +57,9 @@ body {
 }
 
 .nav-lf {
-	position: absolute;
-	left: 0;
+	float:left;
 	width: 1rem;
-	height: 95%;
+	height: 100%;
 	background-color: #efefef;
 	font-size: 0.15rem;
 	text-align: center;
@@ -72,11 +87,11 @@ body {
 }
 
 .container {
-	position: absolute;
-	right: 0;
+	float:right;
 	width: 3rem;
-	height: 92%;;
+	height: 100%;
 	overflow-y: scroll;
+	position:relative;
 }
 .container-top{
 	position: fixed;

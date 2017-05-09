@@ -70,7 +70,8 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$start = WxCompanyFee::get(4,$this->companyId);
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'start'=>$start));
+		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'start'=>$start,'notices'=>$notices));
 	}
 	/**
 	 * 
