@@ -162,7 +162,7 @@ class WxCart
 				  ->bindValue(':siteId',$this->siteId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
-			if($result['is_set']){
+			if($result['is_set'] > 0){
 				$detail = WxProduct::getProductSetDetail($result['product_id'], $result['dpid']);
 				if(!empty($detail)){
 					$results[$k]['detail'] = $detail;

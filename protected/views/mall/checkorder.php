@@ -177,30 +177,35 @@
 	    <div class="taste-desc"><?php echo $tdesc;?></div>
 	    <div class="taste">可选口味</div>
 	    <?php endif;?>
+	    
 	    <!-- 可选择套餐 -->
 	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
-	     <div class="detail-desc">
-	     <?php foreach ($model['detail'] as $k=>$detail):?>
-	     	<?php foreach($detail as $item):?>
-	     		<?php if($item['is_select'] > 0):?>
-    			<span id="<?php echo $k.'-'.$item['product_id'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></span>
-    			<?php endif;?>
-    		<?php endforeach;?>
-	     <?php endforeach;?>
-	     </div>
-	     <div class="detail">可选套餐</div>
-	     <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
-		     <?php foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
+	    <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
+		     <?php $detailDesc = ''; foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
 		     <div class="item-group">选择一个</div>
 		     <div class="item-group">
-	    		<?php foreach($detail as $item): $on = ''; if($item['is_select'] > 0){$on='on';$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];}?>
-	    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+	    		<?php 
+	    			foreach($detail as $item): 
+	    			$on = '';
+	    			if($item['is_select'] > 0){
+	    				$on='on';
+	    				$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
+	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
+	    				if($item['price'] > 0){
+	    					$detailDesc .='('. $item['price'].')';
+	    				}
+	    				$detailDesc .='</span>';
+	    			}
+	    		?>
+    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="set-detail[]" value="<?php echo $selectItem;?>" />
 	    		<div class="clear"></div>
 	    	</div>
 	     	<?php endforeach;?>
 	     </div>
+	     <div class="detail-desc"><?php echo $detailDesc;?></div>
+	     <div class="detail">可选套餐</div>
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
@@ -349,16 +354,10 @@ function emptyCart(){
 }
 function reset_total(price){
 	var setTotal = $('#total').attr('total');
-	var yue = $('#yue').attr('yue');
 	var total = $('#total').html();
 	var totalFee = parseFloat(total) + parseFloat(price);
 	$('#total').attr('total',parseFloat(setTotal) + parseFloat(price));
 	
-	if($('input[name="yue"]').is(':checked')){
-		if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
-			totalFee = 0;
-		}
-	}
 	if(totalFee > 0){
 		totalFee =  totalFee.toFixed(2);
 	}else{
