@@ -45,7 +45,7 @@
 	src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript"
 	src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
-<div class="header"><marquee>欢迎光临本店:<?php echo $this->company['company_name'];?></marquee></div>
+<div class="header"><marquee scrolldelay="150">欢迎光临本店:<?php echo $this->company['company_name'];?></marquee></div>
 <div class="content">
 	<div class="nav-lf">
 		<ul id="nav">
