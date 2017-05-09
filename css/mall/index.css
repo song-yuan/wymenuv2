@@ -6,11 +6,14 @@ body {
 	top:0;
 	left:0;
 	right:0;
-	padding:0 20px;
+	padding-left:35px;
 	height:40px;
 	line-height:40px;
 	font-size:20px;
+	background:url(../../img/mall/notice.png) 4px 8px no-repeat;
+	background-size: 24px 24px;
 }
+
 .content{
 	position:relative;
 	padding-top:40px;
