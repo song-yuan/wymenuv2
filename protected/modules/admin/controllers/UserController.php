@@ -33,6 +33,7 @@ class UserController extends BackendController
 		//超级副管理员的权限
 		$this->roles5 = array(
 			//'7' => yii::t('app','总部副管理员'),
+			'8' =>yii::t('app','营销员'),
 			//'9' => yii::t('app','区域管理员'),
 			'11' => yii::t('app','店长'),
 			'13' => yii::t('app','副店长'),
