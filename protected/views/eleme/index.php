@@ -1,4 +1,4 @@
 <?php 
-echo "{'data':'success'}";
+echo '{"data":"success"}';
 exit;
 ?>
