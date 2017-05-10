@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'istempp'=>$istempp, 'papage'=>$papage)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'istempp'=>$istempp, 'papage'=>$papage , 'islock'=>$islock)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

@@ -151,6 +151,7 @@ class ProductController extends BackendController
 		$id = Yii::app()->request->getParam('id');
 		$istempp = Yii::app()->request->getParam('istempp');
 		$papage = Yii::app()->request->getParam('papage');
+		$islock = Yii::app()->request->getParam('islock');
 		//var_dump($istempp);exit;
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
 		//var_dump($model);exit;
@@ -180,6 +181,7 @@ class ProductController extends BackendController
 				'categories' => $categories,
 				'istempp' => $istempp,
 				'papage' => $papage,
+				'islock' => $islock,
 		));
 	}
 	public function actionDelete(){
@@ -315,5 +317,25 @@ class ProductController extends BackendController
 		}
 	}
 	
+
+	public function actionStorewx(){
+		$pid = Yii::app()->request->getParam('pid');
+		$shownum = Yii::app()->request->getParam('shownum');
+		$pcode = Yii::app()->request->getParam('pcode');
+		$dpid = $this->companyId;
+		$db = Yii::app()->db;
+		$transaction = $db->beginTransaction();
+		try
+		{
+			Yii::app()->db->createCommand('update nb_product set is_show_wx = '.$shownum.' where lid in ('.$pid.') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
+			$transaction->commit();
+			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+			
+		}catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			Yii::app()->end(json_encode(array("status"=>"fail")));
+		}
+	}
 	
 }

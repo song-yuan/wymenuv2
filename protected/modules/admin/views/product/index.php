@@ -1,3 +1,17 @@
+<style>
+	.shangjia{
+		background-color: #00ffad;
+		color: #fff;
+		font-weight:600;
+		border-radius: 5px;
+	}
+	.xiajia{
+		background-color: #e02222;
+		color: #fff;
+		font-weight:600;
+		border-radius: 5px;
+	}
+</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -105,25 +119,30 @@
                                 <td ><?php switch($model->is_temp_price) {case 0 :echo '自建';break;case 1:echo '总部下发';break;default: echo '';break;}?></td>
                                                                 
 								<td class="center">
-								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid ,'istempp' => $model->is_temp_price ,'papage' => $pages->getCurrentPage()+1 ));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid ,'istempp' => $model->is_temp_price , 'islock' => $model->is_lock ,'papage' => $pages->getCurrentPage()+1 ));?>"><?php echo yii::t('app','编辑');?></a>
 								
 								<?php if(yii::app()->user->role >=9):?>
 									<?php if($model->is_show <=5):?>
-									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" style="background-color: #e02222;color: #fff;font-weight:600;">自下架</button>
+									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" >自下架</button>
 									<?php elseif($model->is_show ==6):?>
 									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" disabled style="background-color: #cdd4d2;color: #fff;font-weight:600;">无法上架</button>
 									<?php elseif($model->is_show ==7):?>
-									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" style="background-color: #00ffad;color: #fff;font-weight:600;">自上架</button>
+									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" >自上架</button>
 									<?php endif;?>
 								<?php else:?>
 									<?php if($model->is_show <=5):?>
-									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" style="background-color: #e02222;color: #fff;font-weight:600;">自下架</button>
+									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7">自下架</button>
 									<?php else:?>
-									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" style="background-color: #00ffad;color: #fff;font-weight:600;">自上架</button>
+									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" >自上架</button>
 									<?php endif;?>
 									<?php if($comtype == 0):?>
-									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "1" style="background-color: #00ffad;color: #fff;font-weight:600;">统一上架</button>
-									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "6" style="background-color: #e02222;color: #fff;font-weight:600;">统一下架</button>
+									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "1" >统一上架</button>
+									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "6" style="">统一下架</button>
+									<?php endif;?>
+									<?php if($model->is_show_wx == '1'):?>
+									<button type="button" class = "on_off_sellwx xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "2" >微店下架</button>
+									<?php else:?>
+									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "1" >微店上架</button>
 									<?php endif;?>
 								<?php endif;?>
 								
@@ -210,6 +229,44 @@
 			            if(msg.status=="success")
 			            {            
 				            //alert("<?php echo yii::t('app','成功'); ?>"); 
+				            layer.msg(msg.msg);              
+				            location.reload();
+			            }else{
+				            alert("<?php echo yii::t('app','失败'); ?>"+"1");
+				            location.reload();
+			            }
+					},
+		            error:function(){
+						alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+					},
+				});
+			}else{
+				alert('该菜品信息有误！无法进行上下架操作！');
+			}
+		})
+
+		$('.on_off_sellwx').on('click',function(){
+			var pid = $(this).attr('pid');
+			var shownum = $(this).attr('shownum');
+			var pcode = $(this).attr('pcode');
+			if(pid!=''&&shownum!=''&&pcode!=''){
+				var istrue = 1;
+			}else{
+				var istrue = 0;
+			}
+			//alert(pid+'@@'+showtype+'##'+shownum+'$$'+pcode);
+			if(window.confirm("确认进行此项操作?")&&istrue){
+				$.ajax({
+		            type:'GET',
+					url:"<?php echo $this->createUrl('product/storewx',array('companyId'=>$this->companyId,));?>/pid/"+pid+"/shownum/"+shownum+"/pcode/"+pcode,
+					async: false,
+					//data:"companyId="+company_id+'&padId='+pad_id,
+		            cache:false,
+		            dataType:'json',
+					success:function(msg){
+			            //alert(msg.status);
+			            if(msg.status=="success")
+			            {            
 				            layer.msg(msg.msg);              
 				            location.reload();
 			            }else{

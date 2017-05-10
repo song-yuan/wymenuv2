@@ -10,6 +10,7 @@
 								#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 								</style>
 								<?php  if($istempp){ $a = true;}else{$a=false;}?>
+								<?php  if(Yii::app()->user->role>=11&&$islock){ $b = true;}else{$b=false;}?>
 								<div class="form-body">
 									<div class="form-group  <?php if($model->hasErrors('category_id')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'category_id',array('class' => 'col-md-3 control-label'));?>
@@ -63,16 +64,17 @@
 									<div class="form-group" <?php if($model->hasErrors('original_price')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'original_price',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'original_price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('original_price')));?>
+											<?php echo $form->textField($model, 'original_price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('original_price'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'original_price' )?>
 										</div>
 									</div>
 									<div class="form-group" <?php if($model->hasErrors('member_price')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'member_price',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'member_price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('member_price')));?>
+											<?php echo $form->textField($model, 'member_price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('member_price'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'member_price' )?>
 											<span style="color: red;"></span>
+											<?php if($islock&&Yii::app()->user->role >=11):?><span style="color: red;">已开通微店，价格已被总部锁定，无法修改。</span><?php endif;?>
 										</div>
 									</div>
 									<div class="form-group" <?php if($model->hasErrors('sort')) echo 'has-error';?>>
