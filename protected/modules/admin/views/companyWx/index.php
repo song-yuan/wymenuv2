@@ -101,6 +101,7 @@
 								<th><?php echo yii::t('app','营业状态');?></th>
 								<th><?php echo yii::t('app','营业时间');?></th>
 								<th><?php echo yii::t('app','打烊时间');?></th>
+								<th><?php echo yii::t('app','是否同步价格');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -131,6 +132,7 @@
 								<td ><?php if($model->property){
 									echo $model->property->closing_time;
 								};?></td>
+								<td><?php if($model->property){if($model->property->is_copyprice) echo '已同步';else echo '未同步';}?></td>
 								<td class="center">
 									<div class="actions">
 									<?php if($model->type == 1):?>
@@ -149,7 +151,7 @@
                                         	<?php else:?>
                                         		<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开通');?></a>
                                         	<?php endif;?>
-                                            <a class='btn green copy-price' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','价格同步');?></a>
+                                            <a class='btn green copy-price' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','同步价格');?></a>
                                             <a style="display: none;" class='btn green lock-price' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','锁定价格');?></a>
                                         <?php else: ?>
                                         	<?php if($model->property):
