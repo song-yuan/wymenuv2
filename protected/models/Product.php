@@ -65,7 +65,7 @@ class Product extends CActiveRecord
 			array('main_picture', 'length', 'max'=>255),
             array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','必须选择二级产品分类')),
 			array('is_temp_price, is_member_discount, is_special, is_discount, status, is_weight_confirm, is_show, delete_flag', 'length', 'max'=>1),
-			array('is_show_wx, is_lock ', 'length', 'max'=>2),
+			array('is_show_wx, is_lock', 'length', 'max'=>2),
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
