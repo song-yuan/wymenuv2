@@ -1,6 +1,6 @@
 <?php 
 $xmlStr = file_get_contents('php://input');
-if(isset($xmlStr)&&!empty($xmlStr)){
+if(!$xmlStr){
 	$data = XML::convertToArr($xmlStr);
 	Helper::writeLog(json_encode($data));
 }else{
