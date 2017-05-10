@@ -72,7 +72,7 @@
 	</div>
 </div>
 <footer>
-	<div class="cart-img"><div><img alt="" src="../img/mall/shopcart_white.png"></div></div>
+	<div class="cart-img"><div><img alt="" src="../img/mall/navcart.png"></div></div>
 	<div class="ft-lt">
 		<p>￥<span id="total" class="total">0.00</span><span class="nm">(<label class="share"></label>份)</span></p>
 	</div>
