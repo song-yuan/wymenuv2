@@ -399,6 +399,9 @@ function getProduct(){
 			setTotal();
 			layer.closeAll('loading');
 		},
+		error:function(){
+			layer.closeAll('loading');
+		},
 	});
 }
 $(document).ready(function(){ 

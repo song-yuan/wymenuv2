@@ -317,6 +317,8 @@ class DataSyncTables
                 "favourite_number int(10) NOT NULL DEFAULT '0',".
                 "printer_way_id int(10) NOT NULL DEFAULT '0',".
                 "is_show char(1) NOT NULL DEFAULT '1',".
+        		"is_show_wx varchar(2) NOT NULL DEFAULT '1',".
+        		"is_lock varchar(1) NOT NULL DEFAULT '0',".
                 "delete_flag char(1) NOT NULL DEFAULT '0',".
                 "is_sync varchar(50) NOT NULL DEFAULT '11111',".
                 "PRIMARY KEY (lid,dpid)".
@@ -399,6 +401,8 @@ class DataSyncTables
 				"order_number int(10) NOT NULL DEFAULT '0',".
 				"favourite_number int(10) NOT NULL DEFAULT '0',".
         		"is_show varchar(2) NOT NULL DEFAULT '1',".
+        		"is_show_wx varchar(2) NOT NULL DEFAULT '1',".
+        		"is_lock varchar(1) NOT NULL DEFAULT '0',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
