@@ -57,6 +57,7 @@ class ProductController extends BackendController
 	public function actionCreate(){
 		$msg = '';
 		$model = new Product();
+		//var_dump($model);exit;
 		$istempp = Yii::app()->request->getParam('istempp',0);
 		$model->dpid = $this->companyId ;
 		//$model->create_time = time();
@@ -152,6 +153,7 @@ class ProductController extends BackendController
 		$papage = Yii::app()->request->getParam('papage');
 		//var_dump($istempp);exit;
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
+		//var_dump($model);exit;
 		$model->dpid = $this->companyId;
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
@@ -163,6 +165,8 @@ class ProductController extends BackendController
                 $py=new Pinyin();
                 $model->simple_code = $py->py($model->product_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
+			//$model->is_lock = '0';
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'.$msg));
 				$this->redirect(array('product/index' , 'companyId' => $this->companyId ,'page' => $papage));
@@ -170,6 +174,7 @@ class ProductController extends BackendController
 		}
 		$categories = $this->getCategoryList();
 		//$departments = $this->getDepartments();
+		
 		$this->render('update' , array(
 				'model' => $model ,
 				'categories' => $categories,

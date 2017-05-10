@@ -121,6 +121,7 @@
 										</div>
 									</div>
 									<?php endif;?>
+									
 									<div class="form-group" <?php if($model->hasErrors('dabao_fee')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'dabao_fee',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
