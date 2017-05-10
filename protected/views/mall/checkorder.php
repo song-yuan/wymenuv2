@@ -167,7 +167,7 @@
 	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 	    			}
 	    		?>
-	    			<div class="item t-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
+    			<div class="item t-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="<?php echo $tvalue;?>" />
 	    		<div class="clear"></div>
@@ -177,30 +177,35 @@
 	    <div class="taste-desc"><?php echo $tdesc;?></div>
 	    <div class="taste">可选口味</div>
 	    <?php endif;?>
+	    
 	    <!-- 可选择套餐 -->
 	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
-	     <div class="detail-desc">
-	     <?php foreach ($model['detail'] as $k=>$detail):?>
-	     	<?php foreach($detail as $item):?>
-	     		<?php if($item['is_select'] > 0):?>
-    			<span id="<?php echo $k.'-'.$item['product_id'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></span>
-    			<?php endif;?>
-    		<?php endforeach;?>
-	     <?php endforeach;?>
-	     </div>
-	     <div class="detail">可选套餐</div>
-	     <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
-		     <?php foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
+	    <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
+		     <?php $detailDesc = ''; foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
 		     <div class="item-group">选择一个</div>
 		     <div class="item-group">
-	    		<?php foreach($detail as $item): $on = ''; if($item['is_select'] > 0){$on='on';$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];}?>
-	    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+	    		<?php 
+	    			foreach($detail as $item): 
+	    			$on = '';
+	    			if($item['is_select'] > 0){
+	    				$on='on';
+	    				$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
+	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
+	    				if($item['price'] > 0){
+	    					$detailDesc .='('. $item['price'].')';
+	    				}
+	    				$detailDesc .='</span>';
+	    			}
+	    		?>
+    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="set-detail[]" value="<?php echo $selectItem;?>" />
 	    		<div class="clear"></div>
 	    	</div>
 	     	<?php endforeach;?>
 	     </div>
+	     <div class="detail-desc"><?php echo $detailDesc;?></div>
+	     <div class="detail">可选套餐</div>
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
@@ -240,16 +245,7 @@
 	<?php endif;?>
 	<div class="totalinfo" style="padding-top:10px"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 </div>
-<?php if($this->type!=2&&$user['level']):?>
-<!-- 
-<div class="discount">
-	<ul>
-		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品享受<?php echo $user['level']['level_discount']*10;?>折优惠</li>
-		<li><img src="<?php echo $baseUrl;?>/img/mall/act_03.png" alt="">无优惠商品商品享受生日<?php echo $user['level']['birthday_discount']*10;?>折优惠</li>
-	</ul>
-</div>
- -->
-<?php endif;?>
+
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
 	<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
@@ -349,16 +345,10 @@ function emptyCart(){
 }
 function reset_total(price){
 	var setTotal = $('#total').attr('total');
-	var yue = $('#yue').attr('yue');
 	var total = $('#total').html();
 	var totalFee = parseFloat(total) + parseFloat(price);
 	$('#total').attr('total',parseFloat(setTotal) + parseFloat(price));
 	
-	if($('input[name="yue"]').is(':checked')){
-		if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
-			totalFee = 0;
-		}
-	}
 	if(totalFee > 0){
 		totalFee =  totalFee.toFixed(2);
 	}else{
