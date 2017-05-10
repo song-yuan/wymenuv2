@@ -19,8 +19,8 @@
 		
 		<div class="form-group" <?php if($model->hasErrors('content')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'content',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-5">
-				<?php echo $form->textArea($model, 'content', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('content')));?>
+			<div class="col-md-6">
+				<?php echo $form->textArea($model, 'content', array('class' => 'form-control', 'rows'=>'5','placeholder'=>$model->getAttributeLabel('content')));?>
 				<?php echo $form->error($model, 'content' )?>
 			</div>
 		</div>

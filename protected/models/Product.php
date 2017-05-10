@@ -32,6 +32,8 @@
  * @property integer $favourite_number
  * @property string $printer_way_id
  * @property string $is_show
+ * @property string $is_show_wx
+ * @property string $is_lock
  * @property string $delete_flag
  * @property string $is_sync
  */
@@ -63,10 +65,11 @@ class Product extends CActiveRecord
 			array('main_picture', 'length', 'max'=>255),
             array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','必须选择二级产品分类')),
 			array('is_temp_price, is_member_discount, is_special, is_discount, status, is_weight_confirm, is_show, delete_flag', 'length', 'max'=>1),
+			array('is_show_wx, is_lock ', 'length', 'max'=>2),
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, category_id,chs_code,phs_code, product_name, simple_code, main_picture, description, rank, sort, spicy, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, member_price, dabao_fee, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, category_id,chs_code,phs_code, product_name, simple_code, main_picture, description, rank, sort, spicy, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, member_price, dabao_fee, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, is_show_wx, is_lock, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -127,8 +130,10 @@ class Product extends CActiveRecord
 			'favourite_number' =>yii::t('app', '总点赞次数'),
 			'printer_way_id' => '打印方案id',
 			'is_show' =>yii::t('app', '可售'),
+			'is_show_wx' =>yii::t('app', '是否在微店显示'),
+			'is_lock' =>yii::t('app', '是否锁定价格'),
 			'delete_flag' => 'Delete Flag',
-				'is_sync' => yii::t('app','是否同步'),
+			'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -180,6 +185,8 @@ class Product extends CActiveRecord
 		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('printer_way_id',$this->printer_way_id,true);
 		$criteria->compare('is_show',$this->is_show,true);
+		$criteria->compare('is_show_wx',$this->is_show_wx,true);
+		$criteria->compare('is_lock',$this->is_lock,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

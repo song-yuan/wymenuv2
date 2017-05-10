@@ -64,7 +64,7 @@
                      </div>
                 </div>
                 <?php endif;?>
-                <?php if($model->pid==0):?>
+                
                 <div class="form-group">
                      <label class="col-md-3 control-label" for="ProductCategory_show_type">微信端是否显示</label>
                      <div class="col-md-4">
@@ -83,6 +83,7 @@
                           </select>
                      </div>
                 </div>
+                <?php if($model->pid==0):?>
                  <?php if(!isset($model->category_name)){?>
                     <div class="form-group" id="div">
                         <label class="col-md-3 control-label" for="category_name">添加二级分类</label>
