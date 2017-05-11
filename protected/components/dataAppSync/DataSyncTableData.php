@@ -7,7 +7,6 @@
  */
 class DataSyncTableData
 {
-	public $tableArr = array('nb_local_company','nb_local_activity','nb_close_account','nb_close_account_detail','nb_order','nb_order_pay');
     public function __construct($data){
     	$this->dpid = $data['dpid'];
     	$this->tableName = $data['tn'];
@@ -17,6 +16,9 @@ class DataSyncTableData
     }
     public function getInitData(){
     	$item = 100;
+    	if(in_array($this->tableName, array('nb_company_setting'))){
+    		$this->dpid = WxCompany::getCompanyDpid($this->dpid);
+    	}
     	$dataArr = array('page'=>0,'currentpage'=>$this->cp+1, 'item'=>$item, 'msg'=>array());
     	$sql = 'select count(*) from ' . $this->tableName . ' where dpid in ('.$this->dpid.')';
     	if($this->begain!=''){
@@ -27,9 +29,6 @@ class DataSyncTableData
     		$end = date('Y-m-d H:i:s',strtotime($this->end)+24*60*60);
     		$sql .= ' and create_at <= "'.$end.'"';
     	}
-//     	if(!in_array($this->tableName,$this->tableArr)){
-//     		$sql .= ' and delete_flag = 0';
-//     	}
     	$dataCount = Yii::app()->db->createCommand($sql)->queryRow();
     	
     	$sql = str_replace('count(*)', '*', $sql);

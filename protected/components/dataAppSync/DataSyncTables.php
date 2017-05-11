@@ -343,7 +343,7 @@ class DataSyncTables
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
 				"product_id int(10) NOT NULL DEFAULT '0',".
                 "icache_picture varchar(255) NOT NULL,".
-                "is_set char(1) NOT NULL DEFAULT '0',".
+                "is_set varchar(2) NOT NULL DEFAULT '0',".
                 "delete_flag char(1) NOT NULL DEFAULT '0',".
                 "is_sync varchar(50) NOT NULL DEFAULT '11111',".
                 "PRIMARY KEY (lid,dpid)".
