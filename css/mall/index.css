@@ -71,6 +71,7 @@ body {
 	height: 0.4rem;
 	line-height: 0.4rem;
 	text-overflow:ellipsis;
+    white-space: nowrap;
 }
 
 .nav-lf ul li b {
