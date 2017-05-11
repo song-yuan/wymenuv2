@@ -133,4 +133,35 @@ class CompanyWxController extends BackendController
 		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 	}
 	
+	public function actionCopyprice(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		//var_dump($dpid,$appid);exit;
+	
+		//****查询公司的产品分类。。。****
+		$db = Yii::app()->db;
+		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
+		
+		$sql = 'select * from nb_company where dpid ='.$dpid;
+		$company = $db->createCommand($sql)->queryRow();
+		
+		$sqlprod = 'select * from nb_product where dpid ='.$dpid.' and delete_flag =0 and is_temp_price =1';
+		$prods = $db->createCommand($sqlprod)->queryAll();
+		//var_dump($prods);exit;
+		if(!empty($prods)){
+			foreach ($prods as $prod){
+				$sqlprodzb = 'select * from nb_product where dpid ='.$company['comp_dpid'].' and delete_flag =0 and phs_code ='.$prod['phs_code'];
+				$prodzb = $db->createCommand($sqlprodzb)->queryRow();
+				//var_dump($prodzb);exit; 
+				if(!empty($prodzb)){
+					if($prod['is_lock'] == '0' || $prodzb['original_price'] != $prod['original_price'] || $prodzb['member_price'] != $prod['member_price'] || $prodzb['is_show_wx'] != $prod['is_show_wx'] ){
+						$sqlcopy = 'update nb_product set original_price ='.$prodzb['original_price'].',member_price ='.$prodzb['member_price'].',is_show_wx ='.$prodzb['is_show_wx'].',is_lock =1 where lid ='.$prod['lid'];
+						$result = $db->createCommand($sqlcopy)->execute();
+					}
+				}
+			}
+		}
+		
+		Yii::app()->end(json_encode(array("status"=>true,'msg'=>'成功')));
+	}
+	
 }

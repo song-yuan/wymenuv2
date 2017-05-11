@@ -101,6 +101,7 @@
 								<th><?php echo yii::t('app','营业状态');?></th>
 								<th><?php echo yii::t('app','营业时间');?></th>
 								<th><?php echo yii::t('app','打烊时间');?></th>
+								<th><?php echo yii::t('app','是否同步价格');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -131,6 +132,7 @@
 								<td ><?php if($model->property){
 									echo $model->property->closing_time;
 								};?></td>
+								<td><?php if($model->property){if($model->property->is_copyprice) echo '已同步';else echo '未同步';}?></td>
 								<td class="center">
 									<div class="actions">
 									<?php if($model->type == 1):?>
@@ -149,7 +151,8 @@
                                         	<?php else:?>
                                         		<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开通');?></a>
                                         	<?php endif;?>
-                                            
+                                            <a class='btn green copy-price' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','同步价格');?></a>
+                                            <a style="display: none;" class='btn green lock-price' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','锁定价格');?></a>
                                         <?php else: ?>
                                         	<?php if($model->property):
                                         		if($model->property->is_rest == '2'):?>
@@ -370,6 +373,32 @@ jQuery(document).ready(function() {
 			}else{
 				layer.msg('请完善信息！！！');}
 		});
+	});
+
+
+	$('.copy-price').on('click',function(){
+		var dpid = $(this).attr('dpid');
+		if(window.confirm("同步价格会锁定价格，店铺将无权限修改价格?")){
+			var url = "<?php echo $this->createUrl('companyWx/copyprice');?>/companyId/"+dpid;
+	        $.ajax({
+	            url:url,
+	            type:'GET',
+	            async:false,
+	            dataType: "json",
+	            success:function(msg){
+	                var data=msg;
+	                if(data.status){
+	                	layer.msg('成功！！！');
+	                	location.reload();
+	                }else{
+	                	layer.msg('失败！！！');
+	                }
+	            },
+	            error: function(msg){
+	                layer.msg('网络错误！！！');
+	            }
+	        });
+		}
 	});
 });	
 </script>
