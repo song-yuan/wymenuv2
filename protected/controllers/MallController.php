@@ -31,7 +31,7 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
+		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();

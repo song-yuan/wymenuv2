@@ -70,6 +70,7 @@ body {
 	width: 1rem;
 	height: 0.4rem;
 	line-height: 0.4rem;
+	text-overflow:ellipsis;
 }
 
 .nav-lf ul li b {
