@@ -14,6 +14,7 @@ class DataSyncTables
     	array("name"=>"收银pos设置","table"=>"nb_pad_setting"),
         array("name"=>"同步失败信息","table"=>"nb_sync_failure"),
         array("name"=>"店铺信息","table"=>"nb_local_company"),
+    	array("name"=>"登录界面配置","table"=>"nb_company_setting"),
         array("name"=>"用户","table"=>"nb_user"),
         array("name"=>"楼层区域","table"=>"nb_floor"),
         array("name"=>"点单PAD","table"=>"nb_pad"),
@@ -191,6 +192,18 @@ class DataSyncTables
 				"is2_cloud char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (dpid)".
+        		")",
+        	"nb_company_setting"=>"CREATE TABLE nb_company_setting (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"show_name varchar(25) NOT NULL DEFAULT '0',".
+        		"logo varchar(255) NOT NULL DEFAULT '0',".
+        		"slogan varchar(16) NOT NULL DEFAULT '0',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
         		")",
             "nb_user"=>"CREATE TABLE nb_user (".
         		"lid int(10) NOT NULL,".
