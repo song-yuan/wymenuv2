@@ -244,7 +244,7 @@
 					</a>
 					<?php endif;?>
 					<?php if(Yii::app()->user->role < 11):?>
-					<a href="<?php echo $this->createUrl('companysetting/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('companySetting/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dljm"></div>
 							<div class="ku-item-info">登陆界面</div>
