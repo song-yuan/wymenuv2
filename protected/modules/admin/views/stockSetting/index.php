@@ -51,7 +51,9 @@
 						日均销量 = 最近 <input type="text" name="StockSetting[dsales_day]" class="" value="<?php echo $model->dsales_day;?>" /> 天的日均销量<br /><br/>
 						日均销量 X <input type="text" name="StockSetting[dsafe_min_day]" class="" value="<?php echo $model->dsafe_min_day;?>" /> 天< 安全库存范围 < 日均销量 X <input type="text" name="StockSetting[dsafe_max_day]" class="" value="<?php echo $model->dsafe_max_day;?>" /> 天<br /><br/>
 					</div>
+					<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
 				</div>
+				<?php if(0):?>
 				<div class="portlet-body">
 					<p>仓库库存(库存小于安全库存范围时自动生成采购订单)</p>
 					<div class="col-md-offset-3">
@@ -61,6 +63,7 @@
 						<!-- <a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a> -->
 					</div>
 				</div>
+				<?php endif;?>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>

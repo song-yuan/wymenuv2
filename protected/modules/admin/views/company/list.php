@@ -113,6 +113,12 @@
     		background-repeat: no-repeat;
             background-size: 60%;
 		}
+		.ku-item.dljm{
+			background-image:url(../../../../img/waiter/icon-login.jpg);
+			background-position: 15px 15px;
+    		background-repeat: no-repeat;
+            background-size: 80%;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -237,7 +243,15 @@
 						</div>
 					</a>
 					<?php endif;?>
-					<a href="<?php echo $this->createUrl('payneedinfo/index',array('companyId'=>$this->companyId));?>">
+					<?php if(Yii::app()->user->role < 11):?>
+					<a href="<?php echo $this->createUrl('companySetting/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple dljm"></div>
+							<div class="ku-item-info">登陆界面</div>
+						</div>
+					</a>
+					<?php endif;?>
+					<a style="display: none;" href="<?php echo $this->createUrl('payneedinfo/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple rwzl"></div>
 							<div class="ku-item-info">入网资料</div>

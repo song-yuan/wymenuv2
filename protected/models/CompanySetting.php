@@ -32,14 +32,14 @@ class CompanySetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at', 'required'),
+			array('logo, dpid, slogan, show_name', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('show_name', 'length', 'max'=>25),
 			array('logo', 'length', 'max'=>255),
 			array('slogan', 'length', 'max'=>16),
 			array('delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at ,update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, show_name, logo, slogan, delete_flag, is_sync', 'safe', 'on'=>'search'),
