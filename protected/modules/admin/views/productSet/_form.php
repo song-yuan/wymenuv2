@@ -174,7 +174,7 @@
                           
    	   		$(this).nextAll().remove();
    	   		$.ajax({
-   	   			url:'<?php echo $this->createUrl('productset/getSetChildren',array('companyId'=>$this->companyId));?>/pid/'+id,
+   	   			url:'<?php echo $this->createUrl('productSet/getSetChildren',array('companyId'=>$this->companyId));?>/pid/'+id,
    	   			type:'GET',
    	   			dataType:'json',
    	   			success:function(result){
