@@ -213,7 +213,7 @@
 							str = str + '<option value="'+value.id+'">'+value.name+'</option>';
 						});                                                                                                                                                                                                       
 					}
-					$('#product_id').html(str); 
+					$('#phs_code').html(str); 
 				}
 			});
 		});
