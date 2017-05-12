@@ -171,7 +171,13 @@ class Helper
 		return stripos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ? true : false;
 	}
 	static public function getCategories($companyId,$pid=0){
-		$command = Yii::app()->db->createCommand('select * from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0');
+		$command = Yii::app()->db->createCommand('select * from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0 and cate_type!=2');
+		$command->bindValue(':companyId',$companyId);
+		$command->bindValue(':pid',$pid);
+		return $command->queryAll();
+	}
+	static public function getSetCategories($companyId,$pid=0){
+		$command = Yii::app()->db->createCommand('select * from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0 and cate_type=2');
 		$command->bindValue(':companyId',$companyId);
 		$command->bindValue(':pid',$pid);
 		return $command->queryAll();

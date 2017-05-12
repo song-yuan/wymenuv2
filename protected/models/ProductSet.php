@@ -45,9 +45,9 @@ class ProductSet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('set_name, lid, category_id', 'required'),
+			array('set_name, lid', 'required'),
 			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, set_price, member_price', 'length', 'max'=>10),
+			array('lid, dpid, set_price, member_price,category_id', 'length', 'max'=>10),
 			array('set_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
