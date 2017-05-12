@@ -266,12 +266,14 @@ class CuponController extends BackendController
 		$cuid = Yii::app()->request->getParam('cuid');
 		$cucode = Yii::app()->request->getParam('cucode');
 		$sql = 'select * from nb_product where dpid ='.$this->companyId.' and phs_code ="'.$prodcode.'" and delete_flag=0';
+		//var_dump($sql);exit;
 		$command = $db->createCommand($sql);
 		$prod = $command->queryRow();
 		
 		$sqls = 'select * from nb_cupon_product where dpid ='.$this->companyId.' and prod_code ="'.$prodcode.'" and delete_flag =0 and cupon_id='.$cuid;
 		$command = $db->createCommand($sqls);
 		$cuprod = $command->queryRow();
+		//var_dump($prod.'##'.$cuprod);exit;
 		if(!empty($prod)&&empty($cuprod)){
 			$se = new Sequence("cupon_product");
 			$id = $se->nextval();
