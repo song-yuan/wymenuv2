@@ -229,6 +229,8 @@ class CopyproductController extends BackendController
         							'order_number'=>$product['order_number'],
         							'favourite_number'=>$product['favourite_number'],
         							'is_show'=>$product['is_show'],
+        							'is_show_wx'=>$product['is_show_wx'],
+        							'is_lock'=>$product['is_lock'],
         							'delete_flag'=>'0',
         							'is_sync'=>$is_sync,
         					);
@@ -263,6 +265,8 @@ class CopyproductController extends BackendController
 	        					$producto->order_number = $product['order_number'];
 	        					$producto->favourite_number = $product['favourite_number'];
 	        					$producto->is_show = $product['is_show'];
+	        					$producto->is_show_wx = $product['is_show_wx'];
+	        					$producto->is_lock = $product['is_lock'];
 	        					$producto->delete_flag = '0';
 	        					$producto->is_sync = $is_sync;
 	        					$producto->save();

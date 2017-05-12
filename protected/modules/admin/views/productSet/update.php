@@ -31,14 +31,14 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改打印方案');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改套餐');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'status'=>$status,'papage'=>$papage)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'status'=>$status,'papage'=>$papage ,'istempp'=>$istempp, 'islock'=>$islock)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

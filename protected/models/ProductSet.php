@@ -8,6 +8,7 @@
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
+ * @property string $category_id
  * @property string $set_name
  * @property string $simple_code
  * @property string $main_picture
@@ -20,6 +21,9 @@
  * @property integer $order_number
  * @property integer $store_number
  * @property integer $favourite_number
+ * @property integer $is_show
+ * @property integer $is_show_wx
+ * @property integer $is_lock
  * @property string $delete_flag
  * @property string $is_sync
  */
@@ -43,16 +47,16 @@ class ProductSet extends CActiveRecord
 		return array(
 			array('set_name, lid', 'required'),
 			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, set_price, member_price', 'length', 'max'=>10),
+			array('lid, dpid, set_price, member_price,category_id', 'length', 'max'=>10),
 			array('set_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
-			array('type, is_show', 'length', 'max'=>2),
+			array('type, is_show, is_show_wx, is_lock', 'length', 'max'=>2),
 			array('is_member_discount, is_special, is_discount, status, delete_flag', 'length', 'max'=>1),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, set_name, type, simple_code, main_picture, set_price, member_price, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, category_id, set_name, type, simple_code, main_picture, set_price, member_price, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, is_show,is_show_wx,is_lock, delete_flag, is_sync', 'safe', 'on'=>'search'),
 
 		);
 	}
@@ -80,6 +84,7 @@ class ProductSet extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
+			'category_id' => '套餐分类',
 			'set_name' => yii::t('app','套餐名称'),
 			'type' => yii::t('app','套餐类型'),
 			'simple_code' => 'Simple Code',
@@ -96,6 +101,8 @@ class ProductSet extends CActiveRecord
 			'order_number' => yii::t('app','总下单次数'),
 			'favourite_number' => yii::t('app','总点赞次数'),
 			'is_show' => yii::t('app','是否只在活动中售卖'),
+			'is_show_wx' => yii::t('app','是否在微信端显示'),
+			'is_lock' => yii::t('app','是否锁定价格'),
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => yii::t('app','是否同步'),
 		);
@@ -123,6 +130,7 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('category_id',$this->category_id,true);
 		$criteria->compare('set_name',$this->set_name,true);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('simple_code',$this->simple_code,true);

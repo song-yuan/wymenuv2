@@ -30,7 +30,8 @@
 																//$("#test").attr("test","aaa")
 															//	}
 															//btn.disabled=true;
-																				</script>';}?>
+																				</script>';
+									}?>
 									<div class="form-group <?php if($model->hasErrors('product_name')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'product_name',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
