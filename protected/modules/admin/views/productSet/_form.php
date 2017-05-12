@@ -6,8 +6,11 @@
 										'enctype' => 'multipart/form-data'
 									),
 							)); ?>
+							<style>
+								#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
+								</style>
 								<div class="form-body">
-								
+								<?php  if($istempp){ $a = true;}else{$a=false;}?>
 								<?php if($status):?>
 								<?php $status=true;?>
 								<?php else: $status=false;?>
@@ -21,6 +24,20 @@
 										</div>
 									</div>
 								<?php endif;?>
+								<div class="form-group  <?php if($model->hasErrors('category_id')) echo 'has-error';?>">
+										<?php echo $form->label($model, 'category_id',array('class' => 'col-md-3 control-label'));?>
+										<div id="category_container" class="col-md-9">
+										<?php $this->widget('application.modules.admin.components.widgets.ProductSetCategorySelecter',array('categoryId'=>$model->category_id,'companyId'=>$this->companyId)); ?>
+										<?php echo $form->error($model, 'category_id' )?>
+										</div>
+										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
+									</div>
+								<?php if($istempp){ echo '<script>
+															$(".category_selecter").each(function(){
+																$(this).attr("disabled",true)
+															});
+															</script>';
+									}?>
 									<div class="form-group">
 										<?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -145,7 +162,40 @@
 								),
 							)); ?>
            <script>
-	   
+    	   $('#category_container').on('change','.category_selecter',function(){
+   	   		var id = $(this).val();
+   	   		var $parent = $(this).parent();
+                           var sid ='0000000000';
+                           var len=$('.category_selecter').eq(1).length;
+                           if(len > 0)
+                           {
+                               sid=$('.category_selecter').eq(1).val();
+                           }
+                          
+   	   		$(this).nextAll().remove();
+   	   		$.ajax({
+   	   			url:'<?php echo $this->createUrl('productset/getSetChildren',array('companyId'=>$this->companyId));?>/pid/'+id,
+   	   			type:'GET',
+   	   			dataType:'json',
+   	   			success:function(result){
+   	   				if(result.data.length){
+   	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
+   	   					'<option value="">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
+   	   					$.each(result.data,function(index,value){
+   	   						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+   	   					});
+   	   					str = str + '</select>';
+   	   					$parent.append(str);
+   	   					$('#ProductSet_category_id').val('');
+   	   					
+   	   					$parent.find('span').remove();
+   	   				}else{                        
+                         $('#ProductSet_category_id').val(sid);                                                
+   	   				}
+   	   			}
+   	   		});
+   	   		
+   	   });
        	$('input[name="file"]').change(function(){
    		  	$('form').ajaxSubmit(function(msg){
    				$('#ProductSet_main_picture').val(msg);

@@ -49,6 +49,13 @@ class CopyproductSetController extends BackendController
 		//****查询公司的产品分类。。。****
 		
 		$db = Yii::app()->db;
+		$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.pid = 0 and t.dpid = '.$this->companyId;
+		$command = $db->createCommand($sql);
+		$catep1 = $command->queryAll();
+		$db = Yii::app()->db;
+		$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.pid != 0 and t.dpid = '.$this->companyId;
+		$command = $db->createCommand($sql);
+		$catep2 = $command->queryAll();
 		$sql = 'select t.* from nb_product t where t.delete_flag = 0 and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$products = $command->queryAll();
@@ -58,17 +65,128 @@ class CopyproductSetController extends BackendController
         	$transaction = $db->beginTransaction();
         	try{
 	        	foreach ($dpids as $dpid){
-                           
+	        		
+	        		if(!empty($catep1)){
+	        			foreach($catep1 as $category){
+	        				$catep = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag =0' , array(':ccode'=>$category['chs_code'],':companyId'=>$dpid));
+	        				if($catep){
+	        					$catep->update_at = date('Y-m-d H:i:s',time());
+	        					$catep->category_name = $category['category_name'];
+	        					$catep->type = $category['type'];
+	        					$catep->cate_type = $category['cate_type'];
+	        					$catep->chs_code = $category['chs_code'];
+	        					$catep->main_picture = $category['main_picture'];
+	        					$catep->order_num = $category['order_num'];
+	        					$catep->update();
+	        					//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
+	        					// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
+	        				}else{//var_dump($catep);exit;
+	        					 
+	        					$se = new Sequence("product_category");
+	        					$id = $se->nextval();
+	        					$data = array(
+	        							'lid'=>$id,
+	        							'dpid'=>$dpid,
+	        							'create_at'=>date('Y-m-d H:i:s',time()),
+	        							'update_at'=>date('Y-m-d H:i:s',time()),
+	        							'category_name'=>$category['category_name'],
+	        							'pid'=>"0",
+	        							'type'=>$category['type'],
+	        							'cate_type'=>$category['cate_type'],
+	        							'chs_code'=> $category['chs_code'],
+	        							'main_picture'=>$category['main_picture'],
+	        							'order_num'=>$category['order_num'],
+	        							'delete_flag'=>'0',
+	        							'is_sync'=>$is_sync,
+	        					);
+	        					$command = $db->createCommand()->insert('nb_product_category',$data);
+	        					 
+	        					//var_dump(mysql_query($command));exit;
+	        					//var_dump($model);exit;
+	        					$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
+	        					//var_dump($self);exit;
+	        					if($self->pid!='0'){
+	        						$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$model->pid,':dpid'=> $dpid));
+	        						$self->tree = $parent->tree.','.$self->lid;
+	        					} else {
+	        						$self->tree = '0,'.$self->lid;
+	        					}
+	        					$self->update();
+	        				}
+	        			}
+	        			if($catep2){
+	        				foreach ($catep2 as $category){
+	        					$sql = 'select t.chs_code,t.tree from nb_product_category t where t.delete_flag =0 and t.lid='.$category['pid'].' and t.dpid='.$this->companyId;
+	        					$command = $db->createCommand($sql);
+	        					$sqltree = $command->queryRow();
+	        					$chscode = $sqltree['chs_code'];
+	        					//$chscodetree = $sqltree['tree'];
+	        					$catep = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$category['chs_code'],':companyId'=>$dpid));
+	        					$cateptree = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$chscode,':companyId'=>$dpid));
+	        					 
+	        					 
+	        					//var_dump($cateptree,$sqltree);exit;
+	        					if($catep){
+	        						$catep->update_at = date('Y-m-d H:i:s',time());
+	        						$catep->category_name = $category['category_name'];
+	        						$catep->type = $category['type'];
+	        						$catep->cate_type = $category['cate_type'];
+	        						$catep->show_type = $category['show_type'];
+	        						$catep->chs_code = $category['chs_code'];
+	        						$catep->main_picture = $category['main_picture'];
+	        						$catep->order_num = $category['order_num'];
+	        						$catep->update();
+	        						//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
+	        						// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
+	        					}else{//var_dump($catep);exit;
+	        		
+	        						$se = new Sequence("product_category");
+	        						$id = $se->nextval();
+	        						$datacate = array(
+	        								'lid'=>$id,
+	        								'dpid'=>$dpid,
+	        								'create_at'=>date('Y-m-d H:i:s',time()),
+	        								'update_at'=>date('Y-m-d H:i:s',time()),
+	        								'category_name'=>$category['category_name'],
+	        								'pid'=>$cateptree['lid'],
+	        								'type'=>$category['type'],
+	        								'cate_type'=>$category['cate_type'],
+	        								'show_type'=>$category['show_type'],
+	        								'chs_code'=> $category['chs_code'],
+	        								'main_picture'=>$category['main_picture'],
+	        								'order_num'=>$category['order_num'],
+	        								'delete_flag'=>'0',
+	        								'is_sync'=>$is_sync,
+	        						);
+	        						$command = $db->createCommand()->insert('nb_product_category',$datacate);
+	        		
+	        						//var_dump(mysql_query($command));exit;
+	        						//var_dump($model);exit;
+	        						$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
+	        						//var_dump($self);exit;
+	        						if($self->pid!='0'){
+	        							//$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->pid,':dpid'=> $dpid));
+	        							$self->tree = $cateptree['tree'].','.$self->lid;
+	        						} else {
+	        							$self->tree = '0,'.$self->lid;
+	        						}
+	        						$self->update();
+	        					}
+	        				}
+	        			}
+	        			 
+	        		}   
 	        			foreach ($pshscodes as $prodsethscode){
 	        				$prodsets = ProductSet::model()->find('pshs_code=:pscode and dpid=:companyId and delete_flag=0' , array(':pscode'=>$prodsethscode,':companyId'=>$this->companyId));
 	        				$prodsetso = ProductSet::model()->find('pshs_code=:pscode and dpid=:companyId and delete_flag=0' , array(':pscode'=>$prodsethscode,':companyId'=>$dpid));
+	        				$categoryId = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$prodsets->chs_code,':companyId'=>$dpid));
 	        				if(!empty($prodsetso)){
 	        					$prodsetso->delete_flag = 1;
 	        					$prodsetso->update();
-                                                                    Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id =:setid and dpid = :companyId')
-                                                                    ->execute(array(':setid'=> $prodsetso->lid, ':companyId' => $dpid));
-                                                                    //Yii::app()->db->createCommand()->update('nb_product_set_detail',array('set_id=:setid' ,'dpid=:dpid'), array(':setid' =>$prodsetso->lid , ':dpid'=>$dpid));
-                                                            }
+                                Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id =:setid and dpid = :companyId')
+                                ->execute(array(':setid'=> $prodsetso->lid, ':companyId' => $dpid));
+                                //Yii::app()->db->createCommand()->update('nb_product_set_detail',array('set_id=:setid' ,'dpid=:dpid'), array(':setid' =>$prodsetso->lid , ':dpid'=>$dpid));
+                                }
                                                             //var_dump($prodsetso);exit;
                                                             if(!empty($prodsets)){
                                                                     $se = new Sequence("porduct_set");
@@ -78,7 +196,9 @@ class CopyproductSetController extends BackendController
                                                                                     'dpid'=>$dpid,
                                                                                     'create_at'=>date('Y-m-d H:i:s',time()),
                                                                                     'update_at'=>date('Y-m-d H:i:s',time()),
+                                                                    				'category_id'=>$categoryId['lid'],
                                                                                     'pshs_code'=>$prodsethscode,
+                                                                    				'chs_code'=>$prodsets->chs_code,
                                                                                     'set_name'=>$prodsets->set_name,
                                                                                     'source'=>1,
                                                                                     'type'=>$prodsets->type,
@@ -92,6 +212,9 @@ class CopyproductSetController extends BackendController
                                                                                     'is_special'=>$prodsets->is_special,
                                                                                     'is_discount'=>$prodsets->is_discount,
                                                                                     'status'=>$prodsets->status,
+                                                                    				'is_show'=>$prodsets->is_show,
+                                                                    				'is_show_wx'=>$prodsets->is_show_wx,
+                                                                    				'is_lock'=>$prodsets->is_lock,
                                                                                     'delete_flag'=>'0',
                                                                                     'is_sync'=>$is_sync,
                                                                     );
@@ -111,16 +234,16 @@ class CopyproductSetController extends BackendController
                                                                                                             'lid'=>$psdlid,
                                                                                                             'dpid'=>$dpid,
                                                                                                             'create_at'=>date('Y-m-d H:i:s',time()),
-                                                                                                        'update_at'=>date('Y-m-d H:i:s',time()),
-                                                                                                    'set_id'=>$pslid,
-			        								'product_id'=>$product->lid,
-			        								'price'=>$prodsetdetail->price,
-			        								'group_no'=>$prodsetdetail->group_no,
-			        								'number'=>$prodsetdetail->number,
-			        								'is_select'=>$prodsetdetail->is_select,
-			        								'delete_flag'=>'0',
-			        								'is_sync'=>$is_sync,
-			        						);
+                                                                                                        	'update_at'=>date('Y-m-d H:i:s',time()),
+                                                                                                    		'set_id'=>$pslid,
+			        																						'product_id'=>$product->lid,
+																	        								'price'=>$prodsetdetail->price,
+																	        								'group_no'=>$prodsetdetail->group_no,
+																	        								'number'=>$prodsetdetail->number,
+																	        								'is_select'=>$prodsetdetail->is_select,
+																	        								'delete_flag'=>'0',
+																	        								'is_sync'=>$is_sync,
+			        																		);
 			        						//var_dump($dataprodsetdetail);exit;
 			        						$command = $db->createCommand()->insert('nb_product_set_detail',$dataprodsetdetail);
 		        						}

@@ -36,6 +36,7 @@ class ProductSetController extends BackendController
 		));
 	}
 	public function actionCreate(){
+		$istempp = Yii::app()->request->getParam('istempp',0);
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
@@ -61,30 +62,45 @@ class ProductSetController extends BackendController
 		$status = '';
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
-			$se=new Sequence("porduct_set");
-			$model->lid = $lid = $se->nextval();
-			$code=new Sequence("phs_code");
-			$pshs_code = $code->nextval();
 			
-			if($model->member_price==''){
-				$model->member_price = $model->set_price;
-			}
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
-			$model->source = 0;
-			$model->delete_flag = '0';
-			$py=new Pinyin();
-			$model->simple_code = $py->py($model->set_name);
-			
-			if($model->save()) {
-				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productSet/detailindex','lid' => $model->lid , 'companyId' => $model->dpid , 'status' => ''));
+			$cateID = $model->category_id;
+			if(!empty($cateID)){
+				$db = Yii::app()->db;
+				$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
+				$command = $db->createCommand($sql);
+				$categoryId = $command->queryRow();
+				
+				$se=new Sequence("porduct_set");
+				$model->lid = $lid = $se->nextval();
+				$code=new Sequence("phs_code");
+				$pshs_code = $code->nextval();
+				
+				if($model->member_price==''){
+					$model->member_price = $model->set_price;
+				}
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
+				$model->chs_code = $categoryId['chs_code'];
+				$model->source = 0;
+				$model->delete_flag = '0';
+				$py=new Pinyin();
+				$model->simple_code = $py->py($model->set_name);
+				//var_dump($model);exit;
+				if($model->save()) {
+					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+					$this->redirect(array('productSet/detailindex','lid' => $model->lid , 'companyId' => $model->dpid , 'status' => ''));
+				}
+			}else{
+				 $model->addError('category_id','必须添加二级分类');
 			}
 		}
+		
+		$categories = $this->getCategoryList();
 		$this->render('create' , array(
 				'model' => $model,
 				'status'=> $status,
+				'istempp' => $istempp,
 		));
 	}
 	public function actionUpdate(){
@@ -111,11 +127,21 @@ class ProductSetController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
 		$papage = Yii::app()->request->getParam('papage');
+		$istempp = Yii::app()->request->getParam('istempp');
+		$islock = Yii::app()->request->getParam('islock');
                 //echo 'ddd';
 		$model = ProductSet::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
+			if(empty($model->chs_code)){
+				$cateID = $model->category_id;
+				$db = Yii::app()->db;
+				$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
+				$command = $db->createCommand($sql);
+				$categoryId = $command->queryRow();
+				$model->chs_code = $categoryId['chs_code'];
+			}
             $py=new Pinyin();
             $model->simple_code = $py->py($model->set_name);
             $model->update_at=date('Y-m-d H:i:s',time());
@@ -126,10 +152,14 @@ class ProductSetController extends BackendController
 				$this->redirect(array('productSet/index' , 'companyId' => $this->companyId ,'page' => $papage));
 			}
 		}
+		$categories = $this->getCategoryList();
 		$this->render('update' , array(
 				'model'=>$model,
+				'categories' => $categories,
 				'status'=>$status,
 				'papage'=>$papage,
+				'istempp' => $istempp,
+				'islock' => $islock,
 		));
 	}
         
@@ -324,14 +354,31 @@ class ProductSetController extends BackendController
 		}
 	}	
         
-        public function actionGetChildren(){
+	public function actionGetSetChildren(){
+		$pid = Yii::app()->request->getParam('pid',0);
+		if(!$pid){
+			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
+		}
+		$treeDataSource = array('data'=>array(),'delay'=>400);
+		$categories = Helper::getSetCategories($this->companyId,$pid);
+	
+		foreach($categories as $c){
+			$tmp['name'] = $c['category_name'];
+			$tmp['id'] = $c['lid'];
+			$treeDataSource['data'][] = $tmp;
+		}
+		Yii::app()->end(json_encode($treeDataSource));
+	}
+	
+
+	public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);
 		$productSetId = Yii::app()->request->getParam('$productSetId',0);
-           // var_dump($productSetId);exit;
+		// var_dump($productSetId);exit;
 		if(!$categoryId){
 			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
 		}
-        $treeDataSource = array('data'=>array(),'delay'=>400);
+		$treeDataSource = array('data'=>array(),'delay'=>400);
 		$produts=  $this->getProducts($categoryId);
 		//var_dump($produts);exit;
 		foreach($produts as $c){
@@ -415,7 +462,7 @@ class ProductSetController extends BackendController
         private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
 		
 		$models = ProductCategory::model()->findAll($criteria);
@@ -442,7 +489,7 @@ class ProductSetController extends BackendController
 	}
         
         private function getCategoryList(){
-		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
+		$categories = ProductCategory::model()->findAll('cate_type=2 and delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		return CHtml::listData($categories, 'lid', 'category_name');
 	}

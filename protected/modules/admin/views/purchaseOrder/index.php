@@ -66,9 +66,9 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购订单列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
-						<!-- 
+						<?php if(Yii::app()->user->role <5):?>
 							<button type="button"  class="btn blue" > <?php echo yii::t('app','自动生成采购单');?></button>
-						 -->
+						 <?php endif;?>
 						</div>
 						<a href="<?php echo $this->createUrl('purchaseOrder/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">

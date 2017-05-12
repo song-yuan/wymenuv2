@@ -223,7 +223,7 @@ class ProductController extends BackendController
 		exit;
 	}
 	private function getCategoryList(){
-		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
+		$categories = ProductCategory::model()->findAll('cate_type !=2 and delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		return CHtml::listData($categories, 'lid', 'category_name');
 	}
