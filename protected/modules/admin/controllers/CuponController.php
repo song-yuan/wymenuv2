@@ -535,7 +535,7 @@ class CuponController extends BackendController
 		//var_dump($produts);exit;
 		foreach($produts as $c){
 			$tmp['name'] = $c['product_name'];
-			$tmp['id'] = $c['lid'];
+			$tmp['id'] = $c['phs_code'];
 			$treeDataSource['data'][] = $tmp;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
