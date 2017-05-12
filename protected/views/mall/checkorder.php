@@ -123,7 +123,7 @@
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
 	    	<div class="item-group">
 	    		<?php foreach($groups['tastes'] as $taste):?>
-	    			<div class="item t-item" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
+	    			<div class="item t-item taste-item"  group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="0" />
 	    		<div class="clear"></div>
@@ -144,7 +144,7 @@
 	        <div class="prt-rt">￥<span class="price"><?php echo $model['price']?></span></div>
 	        <div class="clear"></div>
 	    </div>
-	    <!-- 可选择口味 -->
+	    <!-- b可选择口味 -->
 	    <?php if(isset($model['taste_groups'])&&!empty($model['taste_groups'])):?>
 	    <div class="taste-items" product-id="<?php echo $model['product_id'];?>">
 	    	<?php 
@@ -156,18 +156,18 @@
 	    	<div class="item-group">
 	    		<?php foreach($groups['tastes'] as $tk=>$taste):
 	    			$active = '';
-	    			if($tk==0&&$groups['allflae']==0){
+	    			if($tk==0){
 	    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
 	    				$active = 'on';
 	    				$tprice = '';
 	    				if($taste["price"]>0){
+	    					$original += $taste["price"];
 	    					$price += $taste["price"];
-	    					$tprice = '('.$taste["price"].')';
 	    				}
 	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 	    			}
 	    		?>
-    			<div class="item t-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
+    			<div class="item t-item taste-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="<?php echo $tvalue;?>" />
 	    		<div class="clear"></div>
@@ -177,8 +177,8 @@
 	    <div class="taste-desc"><?php echo $tdesc;?></div>
 	    <div class="taste">可选口味</div>
 	    <?php endif;?>
-	    
-	    <!-- 可选择套餐 -->
+	    <!-- e可选择口味 -->
+	    <!-- b可选择套餐 -->
 	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
 	    <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
 		     <?php $detailDesc = ''; foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
@@ -192,12 +192,49 @@
 	    				$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
 	    				if($item['price'] > 0){
-	    					$detailDesc .='('. $item['price'].')';
+	    					$original += $item["price"];
+	    					$price += $item["price"];
 	    				}
 	    				$detailDesc .='</span>';
 	    			}
 	    		?>
-    			<div class="item t-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+	    		<!-- b套餐中产品口味 -->
+	    		<?php if(!empty($item['taste_groups'])):?>
+	    		<div class="taste-items" product-id="<?php echo $model['product_id'].'-'.$item['product_id'];?>">
+			    	<?php 
+			    		$tdesc = '';
+			    		foreach($item['taste_groups'] as $kk=>$groups):
+			    		$tvalue = 0;
+			    	?>
+			    	<div class="item-group"><?php echo $groups['name'];?></div>
+			    	<div class="item-group">
+			    		<?php foreach($groups['tastes'] as $tk=>$taste):
+			    			$active = '';
+			    			if($tk==0){
+			    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+			    				$active = 'on';
+			    				$tprice = '';
+			    				if($taste["price"]>0){
+			    					$original += $taste["price"];
+			    					$price += $taste["price"];
+			    				}
+			    				$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
+			    			}
+			    		?>
+		    			<div class="item t-item taste-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $kk;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
+			    		<?php endforeach;?>
+			    		<!-- 
+			    		<input type="hidden" name="taste[2][]" value="<?php echo $tvalue;?>" />
+			    		 -->
+			    		<div class="clear"></div>
+			    	</div>
+			    	<?php endforeach;?>
+			    </div>
+			    <div class="item t-item detail-item has-taste <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+			    <?php else:?>
+			    <div class="item t-item detail-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
+	    		<?php endif;?>
+	    		<!-- e套餐中产品口味 -->
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="set-detail[]" value="<?php echo $selectItem;?>" />
 	    		<div class="clear"></div>
@@ -207,6 +244,7 @@
 	     <div class="detail-desc"><?php echo $detailDesc;?></div>
 	     <div class="detail">可选套餐</div>
 	    <?php endif;?>
+	    <!-- e可选择套餐 -->
 	</div>
 	<?php endforeach;?>
 	<?php if($this->type==1||$this->type==3):?>
@@ -535,7 +573,7 @@ $(document).ready(function(){
 	});
   });
    // 口味选择
-  $('.taste-items .t-item').click(function(){
+  $('.taste-items .taste-item').click(function(){
 	var sectionObj = $(this).parents('.section');
   	var tasteItems = $(this).parents('.taste-items');
   	var tasteDesc = sectionObj.find('.taste-desc');
@@ -596,11 +634,32 @@ $(document).ready(function(){
 		});
  	});
 	// 套餐选择
-  $('.detail-items .t-item').click(function(){
-	  if(!$(this).hasClass('on')){
+  $('.detail-items .detail-item').click(function(){
+	  if($(this).hasClass('has-taste')){
+// 		 var _this = $(this);
+// 		 var setId = _this.parents('.detail-items').attr('set-id');
+// 		 var productId = _this.attr('product-id');
+// 		 var str = _this.siblings('.taste-items[product-id="'+setId+'-'+productId+'"]').prop("outerHTML");
+// 		 layer.open({
+// 			    type: 1,
+// 			    title: false,
+// 			    shade: false,
+// 			    closeBtn: 0,
+// 			    area: ['100%','60%'],
+// 			    content: str,
+// 			    btn: '确定',
+// 			    success: function(layero, index){
+// 			        layero.find('.taste-items').show();
+// 			    },
+// 			    yes: function(index, layero){ 
+// 		        	layer.close(index);
+// 		   	}
+// 		});
+	  }else{
+		 if(!$(this).hasClass('on')){
 			var sectionObj = $(this).parents('.section');
 		  	var tasteItems = $(this).parents('.detail-items');
-		  	var detailDesc = sectionObj.find('.detail-desc');
+		  	var detailDesc = sectionObj.children('.detail-desc');
 		  	var setId = tasteItems.attr('set-id');
 		  	var productId = $(this).attr('product-id');
 		  	var group =  $(this).attr('group');
@@ -624,7 +683,8 @@ $(document).ready(function(){
 		  	if(parseFloat(detailPrice) > 0){
 	  			reset_total(detailPrice*num);
 	  	  	}
-	  	}
+  		 }
+	  }
     });
   // 选择代金券
 	$('.user-cupon .item.useCupon').click(function(){

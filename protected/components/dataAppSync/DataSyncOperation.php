@@ -365,6 +365,9 @@ class DataSyncOperation {
 				$tableName = 'nb_company';
 			}
 			$dpid = $data['dpid'];
+			if($tableName=='nb_company_setting'){
+				$dpid = WxCompany::getCompanyDpid($dpid);
+			}
 			$sql = 'select * from '.$tableName.' where dpid in ('.$dpid.') and (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and is_sync<>0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
