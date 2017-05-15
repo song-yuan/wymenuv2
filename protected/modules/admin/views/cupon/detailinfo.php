@@ -157,7 +157,7 @@
 		                      	<div class="form-group">
 									<span class="col-md-5 control-label">选择单品</span>
 									<div class="col-md-4">											
-		                            <?php echo CHtml::dropDownList('product_id', '' , array('0' => yii::t('app','-- 请选择 --'))+$products ,array('class' => 'form-control','placeholder'=>'选择单品'));?>
+		                            <?php echo CHtml::dropDownList('phs_code', '' , array('0' => yii::t('app','-- 请选择 --'))+$products ,array('class' => 'form-control','placeholder'=>'选择单品'));?>
 									</div>
 								</div>
 								<div class="button-style">
@@ -213,13 +213,13 @@
 							str = str + '<option value="'+value.id+'">'+value.name+'</option>';
 						});                                                                                                                                                                                                       
 					}
-					$('#product_id').html(str); 
+					$('#phs_code').html(str); 
 				}
 			});
 		});
 
 		$('#addprod').on('click',function(){
-			var prodcode = $('#product_id').val();
+			var prodcode = $('#phs_code').val();
 			if(prodcode == '0' || prodcode == null){
 				layer.msg('请选择一项单品！',{icon: 6});
 				return false;

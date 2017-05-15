@@ -56,6 +56,7 @@ class ProductCategoryController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
 
+			$ctype = $model->cate_type;
 //                        print_r($model->attributes);exit;
 			if(empty($model->category_name)){
 				Yii::app()->user->setFlash('error' ,yii::t('app', '类别名不能为空'));
@@ -115,6 +116,7 @@ class ProductCategoryController extends BackendController
                                                 $model1->update_at = date('Y-m-d H:i:s',time());
                                                 $model1->pid = $lid;
                                                 $model1->category_name = $categoryName;
+                                                $model1->cate_type = $ctype;
                                                 if(empty($model1->category_name)){
                                                         Yii::app()->user->setFlash('error' ,yii::t('app', '类别名不能为空'));
                                                         $this->redirect(array('productCategory/index' , 'companyId' => $this->companyId));

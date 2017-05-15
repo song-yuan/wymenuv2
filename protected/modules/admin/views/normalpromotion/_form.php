@@ -122,7 +122,7 @@
 		                <div class="form-group">
 		                        <?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 		                        <div class="col-md-4">
-		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','生效不显示在微信端'), '2' => yii::t('app','生效且显示在微信端')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
+		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','只显示在POS机端'), '2' => yii::t('app','只显示在微信端'), '3' => yii::t('app','都显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
 		                                <?php echo $form->error($model, 'is_available' )?>
 		                        </div>
 		                </div><!-- 活动是否生效 -->

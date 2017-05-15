@@ -82,7 +82,7 @@ class PoscodeController extends BackendController
         $companyId = Yii::app()->request->getParam('companyId');          
         $reset = Yii::app()->request->getParam('reset');        
   
-        $sql = 'update nb_pad_setting_detail set delete_flag = 1  where pad_setting_id='.$reset;
+        $sql = 'delete from nb_pad_setting_detail where pad_setting_id='.$reset;
         $result = Yii::app()->db->createCommand($sql)->execute();
 	
         if ($result){
