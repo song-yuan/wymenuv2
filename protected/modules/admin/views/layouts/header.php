@@ -4,7 +4,7 @@
 		<div class="header-inner">
 			<!-- BEGIN LOGO -->  
 			<a class="navbar-brand" href="<?php echo '#'; //echo $this->createUrl('default/index',array("companyId"=>$this->companyId));?>">
-			<span style="margin-left:20px;"><?php echo yii::t('app','壹点吃')?></span>
+			<span style="margin-left:20px;"><?php echo yii::t('app','壹点吃餐饮管理后台')?></span>
 			</a>
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER --> 
