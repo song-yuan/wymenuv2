@@ -496,20 +496,22 @@ class DataSyncOperation {
 				if(isset($product->product_taste)){
 					$productTastes = $product->product_taste;
 					foreach ($productTastes as $taste){
-						$se = new Sequence ( "order_taste" );
-						$orderTasteId = $se->nextval ();
-						$orderTasteData = array (
-								'lid' => $orderTasteId,
-								'dpid' => $dpid,
-								'create_at' => $createAt,
-								'update_at' => date ( 'Y-m-d H:i:s', $time ),
-								'taste_id' => $taste->taste_id,
-								'order_id' => $orderProductId,
-								'is_order' => 0,
-								'is_sync' => $isSync
-						);
-						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
-						array_push($productTasteArr, $taste->taste_id);
+						if((int)$taste->taste_id > 0){
+							$se = new Sequence ( "order_taste" );
+							$orderTasteId = $se->nextval ();
+							$orderTasteData = array (
+									'lid' => $orderTasteId,
+									'dpid' => $dpid,
+									'create_at' => $createAt,
+									'update_at' => date ( 'Y-m-d H:i:s', $time ),
+									'taste_id' => $taste->taste_id,
+									'order_id' => $orderProductId,
+									'is_order' => 0,
+									'is_sync' => $isSync
+							);
+							Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+							array_push($productTasteArr, $taste->taste_id);
+						}
 					}
 				}
 				//产品普通优惠
@@ -579,19 +581,21 @@ class DataSyncOperation {
 			// 订单口味
 			if(!empty($orderTaste)){
 				foreach ( $orderTaste as $taste ) {
-					$se = new Sequence ( "order_taste" );
-					$orderTasteId = $se->nextval ();
-					$orderTasteData = array (
-							'lid' => $orderTasteId,
-							'dpid' => $dpid,
-							'create_at' => $createAt,
-							'update_at' => date ( 'Y-m-d H:i:s', $time ),
-							'taste_id' => $taste->taste_id,
-							'order_id' => $orderId,
-							'is_order' => 1,
-							'is_sync' => $isSync
-					);
-					Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+					if((int)$taste->taste_id > 0){
+						$se = new Sequence ( "order_taste" );
+						$orderTasteId = $se->nextval ();
+						$orderTasteData = array (
+								'lid' => $orderTasteId,
+								'dpid' => $dpid,
+								'create_at' => $createAt,
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'taste_id' => $taste->taste_id,
+								'order_id' => $orderId,
+								'is_order' => 1,
+								'is_sync' => $isSync
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+					}
 				}
 			}
 			
