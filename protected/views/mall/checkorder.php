@@ -365,6 +365,19 @@
     </div>
 </div>
 <!--END dialog1-->
+ <!--BEGIN dialog1-->
+<div class="weui_dialog_confirm" id="dialog1" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">余额支付提示</strong></div>
+        <div class="weui_dialog_bd content" style="text-align:center;">确定使用余额支付?</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+<!--END dialog1-->
 <!--BEGIN actionSheet-->
 <div id="actionSheet_wrap">
    <div class="weui_mask_transition" id="mask"></div>
@@ -822,6 +835,10 @@ $(document).ready(function(){
 				layer.msg('请添加收货地址!');
 				return;
 			}
+			if($('input[name="yue"]').is(':checked')){
+				$('#dialog1').show();
+				return;
+			}
 			$('form').submit();
 		<?php elseif($this->type==3):?>
 			var address = $('input[name="address"]').val();
@@ -840,23 +857,33 @@ $(document).ready(function(){
 				layer.msg('预约时间必须大于当前时间!');
 				return;
 			}
-			layer.load(2);
+			if($('input[name="yue"]').is(':checked')){
+				$('#dialog1').show();
+				return;
+			}
 			$('form').submit();
-			layer.closeAll('loading');
 		<?php else:?>
-			layer.load(2);
+			if($('input[name="yue"]').is(':checked')){
+				$('#dialog1').show();
+				return;
+			}
 			$('form').submit();
-			layer.closeAll('loading');
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
-		layer.load(2);
 		$('#dialog').hide();
 		$('form').submit();
-		layer.closeAll('loading');
 	});
 	$('#dialog .default').click(function(){
 		$('#dialog').hide();
+	});
+	$('#dialog1 .primary').click(function(){
+		$('#dialog1').hide();
+		$('form').submit();
+	});
+	$('#dialog1 .default').click(function(){
+		$('input[name="yue"]').removeAttr('checked');
+		$('#dialog1').hide();
 	});
 });
 </script>
