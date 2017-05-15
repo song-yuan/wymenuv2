@@ -39,7 +39,9 @@
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
 <style>
 .layui-layer-btn{height:42px;}
-.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:65%;}
+.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:50%;}
+.weui_mask{z-index:9002;}
+.weui_dialog{z-index:9003;}
 </style>
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
