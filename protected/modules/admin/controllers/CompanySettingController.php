@@ -23,7 +23,10 @@ class CompanySettingController extends BackendController
         $model = CompanySetting::model()->find('dpid=:dpid',array(':dpid'=>$this->companyId));
         if(!$model){
         	$model = new CompanySetting();
+        	$se=new Sequence("company_setting");
+        	$model->lid = $se->nextval();
         	$model->dpid = $this->companyId ;
+            $postData['create_at'] = date('Y-m-d H:i:s',time());
         }
 
         if(Yii::app()->request->isAjaxRequest){
@@ -43,10 +46,7 @@ class CompanySettingController extends BackendController
         }
         if(Yii::app()->request->isPostRequest){
         	$postData = Yii::app()->request->getPost('CompanySetting');
-        	$se=new Sequence("company_setting");
-            $postData['lid'] = $se->nextval();
-            $postData['dpid'] = $this->companyId;
-            $postData['create_at'] = date('Y-m-d H:i:s',time());
+        	
             $postData['update_at'] = date('Y-m-d H:i:s',time());
         	$model->attributes = $postData;
         	//var_dump($model);exit;
