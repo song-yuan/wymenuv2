@@ -365,7 +365,18 @@
     </div>
 </div>
 <!--END dialog1-->
-
+<!--BEGIN actionSheet-->
+<div id="actionSheet_wrap">
+   <div class="weui_mask_transition" id="mask"></div>
+   <div class="weui_actionsheet" id="weui_actionsheet" style="z-index:9002;">
+         <div class="weui_actionsheet_menu" style="height:3em;overflow-y:auto;">
+         </div>
+         <div class="weui_actionsheet_action">
+         	<div class="weui_actionsheet_cell" id="actionsheet_cancel">确定</div>
+         </div>
+    </div>
+</div>
+<!--END actionSheet-->			
 <script>
 function emptyCart(){
 	var timestamp=new Date().getTime()
@@ -556,8 +567,26 @@ $(document).ready(function(){
 		$('input[name="paytype"]').val(paytype);
 		$(this).addClass('on');
 	});
-	
+	function hideActionSheet(weuiActionsheet, mask) {
+        weuiActionsheet.removeClass('weui_actionsheet_toggle');
+        mask.removeClass('weui_fade_toggle');
+        weuiActionsheet.on('transitionend', function () {
+            mask.hide();
+        }).on('webkitTransitionEnd', function () {
+            mask.hide();
+        });
+    }
    $('.taste').click(function(){
+// 	   var mask = $('#mask');
+//        var weuiActionsheet = $('#weui_actionsheet');
+//        weuiActionsheet.addClass('weui_actionsheet_toggle');
+//        mask.show().addClass('weui_fade_toggle').click(function () {
+//            hideActionSheet(weuiActionsheet, mask);
+//        });
+//        $('#actionsheet_cancel').click(function () {
+//            hideActionSheet(weuiActionsheet, mask);
+//        });
+//        weuiActionsheet.unbind('transitionend').unbind('webkitTransitionEnd');
   	var _this = $(this);
   	layer.open({
 	    type: 1,
