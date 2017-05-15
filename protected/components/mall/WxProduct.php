@@ -9,16 +9,16 @@ class WxProduct
 {
 	public $dpid;
 	public $userId;
+	public $type;
 	public $siteId;
 	public $categorys = array();
 	public $categoryProductLists = array();
-	public $categoryProductSetLists = array();
-	public $productSetLists = array();
 	
 	
-	public function __construct($dpid,$userId){
+	public function __construct($dpid,$userId,$type){
 		$this->dpid = $dpid;
 		$this->userId = $userId;
+		$this->type = $type;
 		$this->getCategory();
 		$this->productList();
 	}
@@ -28,6 +28,10 @@ class WxProduct
 	}
 	public function productList(){
 		foreach($this->categoryProductLists as $k=>$category){
+			if($this->type=='6'&&$category['show_type']=='2'||$category['show_type']=='3'&&$this->type=='6'||$category['show_type']=='4'){
+				unset($this->categoryProductLists[$k]);
+				continue;
+			}
 			$childrenCategorys = WxCategory::getChrildrenIds($this->dpid,$category['lid']);
 			if(!empty($childrenCategorys)){
 				$categoryIds = join(',',$childrenCategorys);
@@ -51,7 +55,11 @@ class WxProduct
 					}
 				}
 			}
-			$this->categoryProductLists[$k]['product_list'] = $categoryProducts;
+			if(empty($categoryProducts)){
+				unset($this->categoryProductLists[$k]);
+			}else{
+				$this->categoryProductLists[$k]['product_list'] = $categoryProducts;
+			}
 		}
 	}
 	/**
