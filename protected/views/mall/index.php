@@ -173,7 +173,7 @@ function getProduct(){
 	var timestamp=new Date().getTime()
     var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
 	$.ajax({
-		url:'<?php echo $this->createUrl('/mall/getProduct',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
+		url:'<?php echo $this->createUrl('/mall/getProduct',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
 		data:{random:random},
 		dataType:'json',
 		timeout:'30000',

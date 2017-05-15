@@ -39,7 +39,7 @@ class MallController extends Controller
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
-				if(!$this->brandUser){
+				if(empty($this->brandUser)){
 					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
