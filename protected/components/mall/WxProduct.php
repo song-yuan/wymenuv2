@@ -23,15 +23,15 @@ class WxProduct
 		$this->productList();
 	}
 	public function getCategory(){
-		$this->categorys = WxCategory::get($this->dpid);
-		$this->categoryProductLists = $this->categorys;
+		$this->categoryProductLists = WxCategory::get($this->dpid);
 	}
 	public function productList(){
 		foreach($this->categoryProductLists as $k=>$category){
-			if($this->type=='6'&&$category['show_type']=='2'||$category['show_type']=='3'&&$this->type=='6'||$category['show_type']=='4'){
+			if(($this->type=='6'&&($category['show_type']=='2'||$category['show_type']=='3'))||$category['show_type']=='4'){
 				unset($this->categoryProductLists[$k]);
 				continue;
 			}
+			
 			$childrenCategorys = WxCategory::getChrildrenIds($this->dpid,$category['lid']);
 			if(!empty($childrenCategorys)){
 				$categoryIds = join(',',$childrenCategorys);
@@ -58,6 +58,7 @@ class WxProduct
 			if(empty($categoryProducts)){
 				unset($this->categoryProductLists[$k]);
 			}else{
+				array_push($this->categorys,$category);
 				$this->categoryProductLists[$k]['product_list'] = $categoryProducts;
 			}
 		}

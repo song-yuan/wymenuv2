@@ -72,7 +72,7 @@ class Server {
      * 此处memcache()方法是设置用于登录的$this->login
      */
     public function brandUser() {
-        $sql = 'select * from nb_brand_user where openid = "' . $this->postArr['FromUserName'] . '"';
+        $sql = 'select * from nb_brand_user where openid = "'.$this->postArr['FromUserName'].'"';
         $this->brandUser = Yii::app()->db->createCommand($sql)->queryRow();
         $this->userId = $this->brandUser ? $this->brandUser['lid'] : null;
     }    

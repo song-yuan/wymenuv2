@@ -24,6 +24,7 @@ class NewBrandUser {
 		try {
 			$this->openId = $opendId;
 			$this->brandId = $brandId;
+			$this->brandUser();
 			$this->newBrandUser();
 			$this->pullUserInfo();
 			$this->sentCupon();
@@ -36,7 +37,13 @@ class NewBrandUser {
 		}
 		
 	}
-	
+	public function brandUser(){
+		$sql = 'select * from nb_brand_user where openid = "'.$this->openId.'"';
+		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		if($brandUser){
+			throw new Exception('该会员已存在');
+		}
+	}
 	/**
      * 添加新用户记录
      * 要获得当前品牌最低会员等级，把该等级的主键ID，插入会员记录的brand_user_rank_id字段
