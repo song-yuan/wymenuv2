@@ -158,8 +158,9 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$type = Yii::app()->request->getParam('t',0);
+		$page = Yii::app()->request->getParam('p',1);
 		
-		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type);
+		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type,$page);
 		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type));
 	}
 	/**
@@ -678,6 +679,21 @@ class UserController extends Controller
 		}
               
                 
+		exit;
+	}
+	/**
+	 *
+	 * ajax订单列表
+	 *
+	 */
+	public function actionAjaxOrderList()
+	{
+		$userId = Yii::app()->session['userId'];
+		$type = Yii::app()->request->getParam('t',0);
+		$page = Yii::app()->request->getParam('p',1);
+	
+		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type,$page);
+		echo json_encode($orderLists);
 		exit;
 	}
 	private function weixinServiceAccount() {	
