@@ -67,7 +67,7 @@
                 <div class="form-group">
                         <?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
                         <div class="col-md-4">
-                                <?php echo $form->dropDownList($model, 'to_group', array( '0' => yii::t('app','所有人'), '2' => yii::t('app','会员等级') ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
+                                <?php echo $form->dropDownList($model, 'to_group', array( '0' => yii::t('app','所有人'), '2' => yii::t('app','会员等级'), '3' => yii::t('app','储值用户') ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
                                 <?php echo $form->error($model, 'to_group' )?>
                         </div>
                 </div>
@@ -81,7 +81,7 @@
                         <?php foreach ($brdulvs as $brdulv):?>
 
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes"  <?php if(!empty($userlvs)){foreach ($userlvs as $userlv){if($userlv['brand_user_lid'] == $brdulv->lid) echo 'checked' ;}}?> value="<?php echo $brdulv->lid;?>" name="chk" /></td>
+                                        <td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" <?php if(!empty($userlvs)){foreach ($userlvs as $userlv){if($userlv['brand_user_lid'] == $brdulv->lid) echo 'checked' ;}}else{echo 'kong';}?> value="<?php echo $brdulv->lid;?>" name="chk" /></td>
                                         <td><?php echo $i,$brdulv->level_name; ?></td>
 
                                 </tr>
@@ -115,7 +115,7 @@
 		                <div class="form-group">
 		                        <?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 		                        <div class="col-md-4">
-		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','只显示在POS机端'), '2' => yii::t('app','只显示在微信端'), '3' => yii::t('app','都显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
+		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','只显示在POS机端'), '2' => yii::t('app','只显示在微信端'), '4' => yii::t('app','只显示在微信堂食'), '5' => yii::t('app','只显示在微信外卖'),'3' => yii::t('app','POS机及微信端都显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
 		                                <?php echo $form->error($model, 'is_available' )?>
 		                        </div>
 		                </div><!-- 活动是否生效 -->

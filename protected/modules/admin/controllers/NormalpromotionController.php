@@ -137,11 +137,12 @@ class NormalpromotionController extends BackendController
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$is_sync = DataSync::getInitSync();
 		
-		$model = Company::model()->find('dpid=:dpid', array(':dpid'=> $this->companyId));
+		$modeldpid = Company::model()->find('dpid=:dpid', array(':dpid'=> $this->companyId));
 		$db = Yii::app()->db;
-		$sql = 'select t1.brand_user_lid from nb_normal_promotion t left join nb_normal_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.normal_promotion_id = t.lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId.' or t.dpid ='.$model->comp_dpid;
+		$sql = 'select t1.brand_user_lid from nb_normal_promotion t left join nb_normal_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.normal_promotion_id = t.lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId.' or t.dpid ='.$modeldpid->comp_dpid;
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
+		//var_dump($userlvs);exit;
 		//$db = Yii::app()->db;
 // 		$transaction = $db->beginTransaction();
 // 		try
@@ -210,6 +211,7 @@ class NormalpromotionController extends BackendController
 		$this->render('update' , array(
 				'model'=>$model,
 				'brdulvs'=>$brdulvs,
+				'userlvs'=>$userlvs,
 		));
 	}		
 		public function actionDetailindex(){
