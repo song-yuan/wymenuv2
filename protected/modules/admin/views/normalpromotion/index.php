@@ -133,7 +133,7 @@
 								</td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('normalpromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product','code'=>$model->normal_code,'source'=>$model->source));?>"><?php echo yii::t('app','设置活动优惠产品');?></a></td>
-								 <td><?php echo '';?></td>
+								 <td><?php if($model->source)echo '来自总部';else echo '自建';?></td>
 								</tr>
 						
 						<?php endforeach;?>	
