@@ -39,7 +39,7 @@ class MallController extends Controller
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
-				if(!$this->brandUser){
+				if(empty($this->brandUser)){
 					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
@@ -589,10 +589,10 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->request->getParam('userId');
 		//普通优惠
-		$promotion = new WxPromotion($this->companyId,$userId);
+		$promotion = new WxPromotion($this->companyId,$userId,$this->type);
 		$promotions = $promotion->promotionProductList;
 		
-		$product = new WxProduct($this->companyId,$userId);
+		$product = new WxProduct($this->companyId,$userId,$userId,$this->type);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
 		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));

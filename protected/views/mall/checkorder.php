@@ -39,7 +39,9 @@
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
 <style>
 .layui-layer-btn{height:42px;}
-.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:65%;}
+.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:50%;}
+.weui_mask{z-index:9002;}
+.weui_dialog{z-index:9003;}
 </style>
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
@@ -365,7 +367,31 @@
     </div>
 </div>
 <!--END dialog1-->
-
+ <!--BEGIN dialog1-->
+<div class="weui_dialog_confirm" id="dialog1" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">余额支付提示</strong></div>
+        <div class="weui_dialog_bd content" style="text-align:center;">确定使用余额支付?</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+<!--END dialog1-->
+<!--BEGIN actionSheet-->
+<div id="actionSheet_wrap">
+   <div class="weui_mask_transition" id="mask"></div>
+   <div class="weui_actionsheet" id="weui_actionsheet" style="z-index:9002;">
+         <div class="weui_actionsheet_menu" style="height:3em;overflow-y:auto;">
+         </div>
+         <div class="weui_actionsheet_action">
+         	<div class="weui_actionsheet_cell" id="actionsheet_cancel">确定</div>
+         </div>
+    </div>
+</div>
+<!--END actionSheet-->			
 <script>
 function emptyCart(){
 	var timestamp=new Date().getTime()
@@ -556,8 +582,26 @@ $(document).ready(function(){
 		$('input[name="paytype"]').val(paytype);
 		$(this).addClass('on');
 	});
-	
+	function hideActionSheet(weuiActionsheet, mask) {
+        weuiActionsheet.removeClass('weui_actionsheet_toggle');
+        mask.removeClass('weui_fade_toggle');
+        weuiActionsheet.on('transitionend', function () {
+            mask.hide();
+        }).on('webkitTransitionEnd', function () {
+            mask.hide();
+        });
+    }
    $('.taste').click(function(){
+// 	   var mask = $('#mask');
+//        var weuiActionsheet = $('#weui_actionsheet');
+//        weuiActionsheet.addClass('weui_actionsheet_toggle');
+//        mask.show().addClass('weui_fade_toggle').click(function () {
+//            hideActionSheet(weuiActionsheet, mask);
+//        });
+//        $('#actionsheet_cancel').click(function () {
+//            hideActionSheet(weuiActionsheet, mask);
+//        });
+//        weuiActionsheet.unbind('transitionend').unbind('webkitTransitionEnd');
   	var _this = $(this);
   	layer.open({
 	    type: 1,
@@ -793,6 +837,10 @@ $(document).ready(function(){
 				layer.msg('请添加收货地址!');
 				return;
 			}
+			if($('input[name="yue"]').is(':checked')){
+				$('#dialog1').show();
+				return;
+			}
 			$('form').submit();
 		<?php elseif($this->type==3):?>
 			var address = $('input[name="address"]').val();
@@ -811,23 +859,33 @@ $(document).ready(function(){
 				layer.msg('预约时间必须大于当前时间!');
 				return;
 			}
-			layer.load(2);
+			if($('input[name="yue"]').is(':checked')){
+				$('#dialog1').show();
+				return;
+			}
 			$('form').submit();
-			layer.closeAll('loading');
 		<?php else:?>
-			layer.load(2);
+			if($('input[name="yue"]').is(':checked')){
+				$('#dialog1').show();
+				return;
+			}
 			$('form').submit();
-			layer.closeAll('loading');
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
-		layer.load(2);
 		$('#dialog').hide();
 		$('form').submit();
-		layer.closeAll('loading');
 	});
 	$('#dialog .default').click(function(){
 		$('#dialog').hide();
+	});
+	$('#dialog1 .primary').click(function(){
+		$('#dialog1').hide();
+		$('form').submit();
+	});
+	$('#dialog1 .default').click(function(){
+		$('input[name="yue"]').removeAttr('checked');
+		$('#dialog1').hide();
 	});
 });
 </script>

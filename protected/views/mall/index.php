@@ -173,7 +173,7 @@ function getProduct(){
 	var timestamp=new Date().getTime()
     var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
 	$.ajax({
-		url:'<?php echo $this->createUrl('/mall/getProduct',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
+		url:'<?php echo $this->createUrl('/mall/getProduct',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
 		data:{random:random},
 		dataType:'json',
 		timeout:'30000',
@@ -183,36 +183,26 @@ function getProduct(){
 			var categorys = data.categorys;
 			var promotions = data.promotions;
 			var products = data.products;
-			var productSets = data.productSets;
 			var navLi = '';
 			var promotionStr = '';
 			var productStr = '';
-			var productSetStr = '';
 			var cartStr = '';
 			var defaultImg = '../img/product_default.png';
 			// 种类
 			for(var k in categorys){
 				var category = categorys[k];
-				if(category.show_type=='2'&&orderType=='2'||category.show_type=='3'&&orderType=='6'||category.show_type=='4'){
-					hideCategoryArr.push(category.lid);
-					continue;
+				if(current){
+					navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
 				}else{
-					if(current){
-						navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
-					}else{
-						current = true;
-						$('#product-top').find('div').html(category.category_name);
-						$('#product-top').show();
-						navLi += '<li class="current"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
-					}
+					current = true;
+					$('#product-top').find('div').html(category.category_name);
+					$('#product-top').show();
+					navLi += '<li class="current"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
 				}
 			}
 			
 			for(var p in products){
 				var product = products[p];
-				if(hideCategoryArr.indexOf(product.lid) > -1){
-					continue;
-				}
 				if(product.cate_type!='2'){
 					productStr +='<div class="section" id="st'+ product.lid  +'"><div class="prt-title">' + product.category_name + '</div>';
 					for(var pp in product.product_list){
@@ -268,33 +258,33 @@ function getProduct(){
 					productStr +='</div>';
 				}else{
 					// 套餐
-					productSetStr +='<div class="section" id="st'+ product.lid +'"><div class="prt-title">' + product.category_name + '</div>';
+					productStr +='<div class="section" id="st'+ product.lid +'"><div class="prt-title">' + product.category_name + '</div>';
 					for(var q in product.product_list){
 						var pProductSet = product.product_list[q];
 						var pDetail = pProductSet['detail'];
 						if(pProductSet.main_picture==''){
 							pProductSet.main_picture = defaultImg;
 						}
-						productSetStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
-						productSetStr +='<div class="lt-ct"><p><span class="name">'+ pProductSet.set_name +'</span>';
+						productStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProductSet.main_picture+'"></div>';
+						productStr +='<div class="lt-ct"><p><span class="name">'+ pProductSet.set_name +'</span>';
 						if(pProductSet.spicy==1){
-							productSetStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
+							productStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
 						}else if(pProductSet.spicy==2){
-							productSetStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
+							productStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
 						}else if(pProductSet.spicy==3){
-							productSetStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+							productStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
 						}else{
-							productSetStr +='</p>';
+							productStr +='</p>';
 						}
-						productSetStr +='<p class="pr">¥<span class="price">'+pProductSet.member_price+'</span>';
+						productStr +='<p class="pr">¥<span class="price">'+pProductSet.member_price+'</span>';
 						if(pProductSet.member_price!= pProductSet.set_price){
-							productSetStr +='<span class="oprice"><strike>¥'+pProductSet.set_price+'</strike></span>';
+							productStr +='<span class="oprice"><strike>¥'+pProductSet.set_price+'</strike></span>';
 						}
-						productSetStr +='</p>';
+						productStr +='</p>';
 						if(!hasclose){
 		         			if(parseInt(pProductSet.num)){
-		         				productSetStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="'+pProductSet.num+'">';
-		         				productSetStr +='<div class="add">+</div><div class="clear"></div></div>';
+		         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="'+pProductSet.num+'">';
+		         				productStr +='<div class="add">+</div><div class="clear"></div></div>';
 		
 		         				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="1_'+pProductSet.lid+'_-1_-1">';
 		        				cartStr +='<div class="cart-dtl-item-inner">';
@@ -310,91 +300,89 @@ function getProduct(){
 		        				cartStr +='</div>';
 		         			}else{
 		         				if(parseInt(pProductSet.store_number) != 0){
-		         					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
-		         					productSetStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
+		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
+		         					productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
 		         				}else{
-		         					productSetStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
-		         					productSetStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
+		         					productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
 		         				}
 		         			}
 						}
-						productSetStr +='</div><div class="clear"></div>';
+						productStr +='</div><div class="clear"></div>';
 	         			// 套餐详情
-	         			productSetStr +='<div class="tips">';
+	         			productStr +='<div class="tips">';
 	         			for(var ps=0; ps<pDetail.length; ps++){
 	             			var detail = pDetail[ps]
 	             			for(var ps1=0;ps1<detail.length;ps1++){
 								var detailItem = detail[ps1];
 								if(detailItem['is_select']=='1'){
-									productSetStr +=detailItem['product_name']+'x'+detailItem['number']+' ';
+									productStr +=detailItem['product_name']+'x'+detailItem['number']+' ';
 								}
 	                 		}
 	             		}
-	         			productSetStr +='</div></div>';
+	         			productStr +='</div></div>';
 					}
-					productSetStr +='</div>';
+					productStr +='</div>';
 				}
 			}
 			// 活动
-			if(orderType!=2){
-				for(var key in promotions){
-					navLi += '<li class=""><a href="#st-promotion'+key+'">'+promotions[key][0].promotion_title+'</a><b></b></li>';
-					promotionStr +='<div class="section" id="st-promotion'+key+'"><div class="prt-title">'+promotions[key][0].promotion_title+'</div>';
-					for(var i=0; i<promotions[key].length; i++){
-						var promotion = promotions[key][i];
-						var promotionProduct = promotion['product'];
-						if(promotionProduct.main_picture==''){
-							promotionProduct.main_picture = defaultImg;
-						}
-						promotionStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+promotionProduct.main_picture+'"></div>';
-						promotionStr +='<div class="lt-ct"><p><span class="name">'+ promotionProduct.product_name +'</span>';
-						if(promotionProduct.spicy==1){
-							promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
-						}else if(promotionProduct.spicy==2){
-							promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
-						}else if(promotionProduct.spicy==3){
-							promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
-						}else{
-							promotionStr +='</p>';
-						}
-						promotionStr +='<p class="pr">¥<span class="price">'+promotionProduct.price+'</span>';
-						if(promotionProduct.price != promotionProduct.original_price){
-							promotionStr +='<span class="oprice"><strike>¥'+promotionProduct.original_price+'</strike></span>';
-						}
-	             		promotionStr +='</p>';
-	             		if(!hasclose){
-		             		if(parseInt(promotionProduct.num)){
-		             				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="'+promotionProduct.num+'">';
-		            				promotionStr +='<div class="add">+</div><div class="clear"></div></div>';
-		            				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+promotion.is_set+'_'+promotionProduct.lid+'_'+promotion.normal_promotion_id+'_'+promotion.to_group+'">';
-		            				cartStr +='<div class="cart-dtl-item-inner">';
-		            				cartStr +='<i class="cart-dtl-dot"></i>';
-		            				cartStr +='<p class="cart-goods-name">'+promotionProduct.product_name+'</p>';
-		            				cartStr +='<div class="j-item-console cart-dtl-oprt">';
-		            				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
-		            				cartStr +='<span class="j-item-num foodop-num">'+promotionProduct.num+'</span> ';
-		            				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
-		            				cartStr +='</div>';
-		            				cartStr +='<span class="cart-dtl-price">¥'+promotionProduct.price+'</span>';
-		            				cartStr +='</div>';
-		            				cartStr +='</div>';
-		             		}else{
-		             			if(parseInt(promotionProduct.store_number) != 0){
-		             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
-		            				promotionStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
-		             			}else{
-		             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
-		            				promotionStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
-		             			}
-		             		}
-	             		}
-	             		promotionStr +='</div></div>';
+			for(var key in promotions){
+				navLi += '<li class=""><a href="#st-promotion'+key+'">'+promotions[key][0].promotion_title+'</a><b></b></li>';
+				promotionStr +='<div class="section" id="st-promotion'+key+'"><div class="prt-title">'+promotions[key][0].promotion_title+'</div>';
+				for(var i=0; i<promotions[key].length; i++){
+					var promotion = promotions[key][i];
+					var promotionProduct = promotion['product'];
+					if(promotionProduct.main_picture==''){
+						promotionProduct.main_picture = defaultImg;
 					}
-					promotionStr +='</div>';
+					promotionStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+promotionProduct.main_picture+'"></div>';
+					promotionStr +='<div class="lt-ct"><p><span class="name">'+ promotionProduct.product_name +'</span>';
+					if(promotionProduct.spicy==1){
+						promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
+					}else if(promotionProduct.spicy==2){
+						promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
+					}else if(promotionProduct.spicy==3){
+						promotionStr +='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+					}else{
+						promotionStr +='</p>';
+					}
+					promotionStr +='<p class="pr">¥<span class="price">'+promotionProduct.price+'</span>';
+					if(promotionProduct.price != promotionProduct.original_price){
+						promotionStr +='<span class="oprice"><strike>¥'+promotionProduct.original_price+'</strike></span>';
+					}
+             		promotionStr +='</p>';
+             		if(!hasclose){
+	             		if(parseInt(promotionProduct.num)){
+	             				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="'+promotionProduct.num+'">';
+	            				promotionStr +='<div class="add">+</div><div class="clear"></div></div>';
+	            				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+promotion.is_set+'_'+promotionProduct.lid+'_'+promotion.normal_promotion_id+'_'+promotion.to_group+'">';
+	            				cartStr +='<div class="cart-dtl-item-inner">';
+	            				cartStr +='<i class="cart-dtl-dot"></i>';
+	            				cartStr +='<p class="cart-goods-name">'+promotionProduct.product_name+'</p>';
+	            				cartStr +='<div class="j-item-console cart-dtl-oprt">';
+	            				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
+	            				cartStr +='<span class="j-item-num foodop-num">'+promotionProduct.num+'</span> ';
+	            				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+	            				cartStr +='</div>';
+	            				cartStr +='<span class="cart-dtl-price">¥'+promotionProduct.price+'</span>';
+	            				cartStr +='</div>';
+	            				cartStr +='</div>';
+	             		}else{
+	             			if(parseInt(promotionProduct.store_number) != 0){
+	             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
+	            				promotionStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
+	             			}else{
+	             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
+	            				promotionStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+	             			}
+	             		}
+             		}
+             		promotionStr +='</div></div>';
 				}
+				promotionStr +='</div>';
 			}
 			$('#nav').append(navLi);
-			$('#container').append(productStr + productSetStr + promotionStr);
+			$('#container').append(productStr + promotionStr);
 			$('.j-cart-dtl-list-inner').html(cartStr);
 			setTotal();
 			layer.closeAll('loading');

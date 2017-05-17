@@ -263,6 +263,8 @@ class DataSyncTables
         		"dpid int(10) NOT NULL,".
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"phs_code varchar(25) NOT NULL DEFAULT '0',".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
         		"name varchar(64) NOT NULL,".
         		"address varchar(64) NOT NULL ,".
         		"language char(2) NOT NULL DEFAULT '1',".
@@ -278,6 +280,8 @@ class DataSyncTables
         		"dpid int(10) NOT NULL,".
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"phs_code varchar(25) NOT NULL DEFAULT '0',".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
         		"name varchar(50) NOT NULL,".
 				"is_onepaper char(1) NOT NULL DEFAULT '1',".
 				"list_no tinyint NOT NULL DEFAULT '1',".

@@ -35,13 +35,12 @@ class WxCupon
 		$now = date('Y-m-d H:i:s',time());
 		$user = WxBrandUser::get($userId,$dpid);
 		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select m.lid,m.dpid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from (select * from nb_cupon_branduser where dpid in (:dpid) and to_group=3 and brand_user_lid=:userId and is_used = 1 and delete_flag=0' .
-				' union select * from nb_cupon_branduser where dpid in (:dpid) and to_group=2 and brand_user_lid=:userLevelId and is_used = 1 and delete_flag=0)m ,nb_cupon n' .
+		$sql = 'select m.lid,m.dpid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used = 1 and delete_flag=0' .
+				' union select * from nb_cupon_branduser where to_group=2 and brand_user_lid=:userLevelId and is_used = 1 and delete_flag=0)m ,nb_cupon n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and n.begin_time <=:now and :now <= n.end_time and n.delete_flag=0';
 		
                 $cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
-				  ->bindValue(':dpid',$dpid)
 				  ->bindValue(':now',$now)
 				  ->bindValue(':userLevelId',$user['user_level_lid'])
 				  ->queryAll();
@@ -55,12 +54,11 @@ class WxCupon
 	public static function getUserUseCupon($userId,$dpid){
 		$user = WxBrandUser::get($userId,$dpid);
 		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where dpid in (:dpid) and to_group=3 and brand_user_lid=:userId and is_used =2 and delete_flag=0' .
-				' union select * from nb_cupon_branduser where dpid in (:dpid) and to_group=2 and brand_user_lid=:userLevelId and is_used = 2 and delete_flag=0)m ,nb_cupon n' .
+		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used =2 and delete_flag=0' .
+				' union select * from nb_cupon_branduser where to_group=2 and brand_user_lid=:userLevelId and is_used = 2 and delete_flag=0)m ,nb_cupon n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and n.delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
-				  ->bindValue(':dpid',$dpid)
 				  ->bindValue(':userLevelId',$user['user_level_lid'])
 				  ->queryAll();
 	    return $cupon;
@@ -74,12 +72,11 @@ class WxCupon
 	 	$now = date('Y-m-d H:i:s',time());
 		$user = WxBrandUser::get($userId,$dpid);
 		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where dpid in (:dpid) and to_group=3 and brand_user_lid=:userId and is_used > 0 and delete_flag=0' .
-				' union select * from nb_cupon_branduser where dpid in (:dpid) and to_group=2 and brand_user_lid=:userLevelId and is_used > 0 and delete_flag=0)m ,nb_cupon n' .
+		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used > 0 and delete_flag=0' .
+				' union select * from nb_cupon_branduser where to_group=2 and brand_user_lid=:userLevelId and is_used > 0 and delete_flag=0)m ,nb_cupon n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and :now > n.end_time and n.delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
-				  ->bindValue(':dpid',$dpid)
 				  ->bindValue(':now',$now)
 				  ->bindValue(':userLevelId',$user['user_level_lid'])
 				  ->queryAll();
@@ -108,9 +105,11 @@ class WxCupon
 			$sql = 'select m.lid,m.dpid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where (dpid=:dpid or dpid=:userDpid) and to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0' .
 					' union select * from nb_cupon_branduser where (dpid=:dpid or dpid=:userDpid) and to_group=2 and brand_user_lid=:userLevelId and is_used=1 and delete_flag=0)m , '.
 					'(select * from nb_cupon where type_dpid=0 and type_prod=0'.
-					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid > "0" and t.type_prod = "0" and t1.cupon_dpid=:dpid'.
+					' union select * from nb_cupon where type_dpid=1 and type_prod=0 and dpid=:dpid'.
+					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid > "1" and t.type_prod = "0" and t1.cupon_dpid=:dpid'.
 					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid = "0" and t.type_prod > "0" and t2.prod_code in ('.$proCodeStr.')'.
-					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid > "0" and t.type_prod > "0" and t1.cupon_dpid=:dpid and t2.prod_code in ('.$proCodeStr.'))n ' .
+					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid = "1" and t.type_prod > "0" and t.dpid=:dpid and t2.prod_code in ('.$proCodeStr.')'.
+					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid > "1" and t.type_prod > "0" and t1.cupon_dpid=:dpid and t2.prod_code in ('.$proCodeStr.'))n ' .
 					' where m.cupon_id=n.lid and m.dpid=n.dpid and n.begin_time <=:now and :now <=n.end_time and n.min_consumer <=:total and n.delete_flag=0 and n.is_available=0';
 			$cupon = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':userId',$userId)
