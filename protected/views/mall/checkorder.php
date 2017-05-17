@@ -52,7 +52,7 @@
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
 	<div class="address arrowright">
-		<?php if($address):?>
+		<?php if(!empty($address)):?>
 			<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
 			<?php if($company['distance']*1000 > $distance):?>
 			<div class="location">
@@ -158,13 +158,14 @@
 	    	<div class="item-group">
 	    		<?php foreach($groups['tastes'] as $tk=>$taste):
 	    			$active = '';
-	    			if($tk==0){
+	    			if($taste['is_selected']==1){
 	    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
 	    				$active = 'on';
 	    				$tprice = '';
 	    				if($taste["price"]>0){
 	    					$original += $taste["price"];
 	    					$price += $taste["price"];
+	    					$tprice = '('.$taste["price"].')';
 	    				}
 	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 	    			}
@@ -189,7 +190,7 @@
 	    		<?php 
 	    			foreach($detail as $item): 
 	    			$on = '';
-	    			if($item['is_select'] > 0){
+	    			if($item['is_select']==1){
 	    				$on='on';
 	    				$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
@@ -212,7 +213,7 @@
 			    	<div class="item-group">
 			    		<?php foreach($groups['tastes'] as $tk=>$taste):
 			    			$active = '';
-			    			if($tk==0){
+			    			if($taste['is_selected']==1){
 			    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
 			    				$active = 'on';
 			    				$tprice = '';
@@ -367,12 +368,12 @@
     </div>
 </div>
 <!--END dialog1-->
- <!--BEGIN dialog1-->
+<!--BEGIN dialog1-->
 <div class="weui_dialog_confirm" id="dialog1" style="display: none;">
     <div class="weui_mask"></div>
     <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">余额支付提示</strong></div>
-        <div class="weui_dialog_bd content" style="text-align:center;">确定使用余额支付?</div>
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">储值支付提示</strong></div>
+        <div class="weui_dialog_bd content" style="text-align:center;">确定使用储值支付?</div>
         <div class="weui_dialog_ft">
             <a href="javascript:;" class="weui_btn_dialog default">取消</a>
             <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
@@ -380,6 +381,19 @@
     </div>
 </div>
 <!--END dialog1-->
+<!--BEGIN dialog2-->
+<div class="weui_dialog_confirm" id="dialog2" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">储值支付提示</strong></div>
+        <div class="weui_dialog_bd content" style="text-align:center;">储值余额不足,请去充值后再下单</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary">去充值</a>
+        </div>
+    </div>
+</div>
+<!--END dialog2-->
 <!--BEGIN actionSheet-->
 <div id="actionSheet_wrap">
    <div class="weui_mask_transition" id="mask"></div>
@@ -428,6 +442,14 @@ $(document).ready(function(){
 	if(msg){
 		layer.msg(msg);
 	}
+	var isMustYue = false;
+	<?php if($isMustYue):?>;
+	isMustYue = true;
+	var yue = $('#yue').attr('yue');
+	if(parseFloat(yue) == 0){
+		$('#dialog2').show();
+	}
+	<?php endif;?>
 	<?php if($this->type==3):?>
 	var today = new Date();
 	var currYear = today.getFullYear();
@@ -799,9 +821,14 @@ $(document).ready(function(){
 		});
 	});
 	$('input[name="yue"]').change(function(){
+		if(isMustYue){
+			layer.msg('有储值支付活动产品<br>需使用储值支付');
+			$(this).prop('checked',true);
+			return;
+		}
 		var yue = $('#yue').attr('yue');
 		if(parseFloat(yue) == 0){
-			layer.msg('余额不足!');
+			layer.msg('储值不足!');
 			$(this).prop('checked',false);
 		}
 	});
@@ -886,6 +913,12 @@ $(document).ready(function(){
 	$('#dialog1 .default').click(function(){
 		$('input[name="yue"]').removeAttr('checked');
 		$('#dialog1').hide();
+	});
+	$('#dialog2 .primary').click(function(){
+		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
+	});
+	$('#dialog2 .default').click(function(){
+		location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";
 	});
 });
 </script>

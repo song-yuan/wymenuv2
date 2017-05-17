@@ -60,6 +60,7 @@ class MallController extends Controller
 			}else{
 //				pc 浏览
 				$userId = 2122;
+				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = -1;
 			}
@@ -113,6 +114,7 @@ class MallController extends Controller
 		$siteType = false;
 		$siteNum = false;
 		$siteOpen = false;
+		$isMustYue = false; // 是否必须储值来支付
 		
 		$site = WxSite::get($siteId,$this->companyId);
 		if($site){
@@ -127,8 +129,8 @@ class MallController extends Controller
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
-		
-		$user = WxBrandUser::get($userId, $this->companyId);
+		$isMustYue = $cartObj->pormotionYue;
+		$user = $this->brandUser;
 		
 		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
 		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
@@ -142,12 +144,19 @@ class MallController extends Controller
 		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
-		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
-		$isPackingFee = WxCompanyFee::get(2,$this->companyId);
-		$isFreightFee = WxCompanyFee::get(3,$this->companyId);
-		
-		$address = WxAddress::getDefault($userId,$user['dpid']);
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
+		if($this->type!=6){
+			$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
+			$isPackingFee = WxCompanyFee::get(2,$this->companyId);
+			$isFreightFee = WxCompanyFee::get(3,$this->companyId);
+			
+			$address = WxAddress::getDefault($userId,$user['dpid']);
+		}else{
+			$isSeatingFee = 0;
+			$isPackingFee = 0;
+			$isFreightFee = 0;
+			$address = array();
+		}
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -576,8 +585,9 @@ class MallController extends Controller
 	 */
 	 public function actionReCharge(){
 	 	$userId = Yii::app()->session['userId'];
+	 	$backUrl = Yii::app()->request->getParam('url',null);
 	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
-	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId));
+	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>urldecode($backUrl)));
 	 }
 	/**
 	 * 
