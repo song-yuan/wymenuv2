@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'normalpromotiondetail-form',
-				'action' => $this->createUrl('normalpromotion/promotiondetail', array('companyId' => $this->companyId,'promotionID'=>$promotionID)),
+				'action' => $this->createUrl('normalpromotion/promotiondetail', array('companyId' => $this->companyId,'typeId'=>"product",'promotionID'=>$promotionID,'source'=>$source)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,9 +40,9 @@
               
         <div class="tabbable tabbable-custom">
             <ul class="nav nav-tabs">
-               <li class="<?php if($typeId=='product') echo 'active';?>"><a href="#tab_1" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'typeId'=>'product','code'=>$code));?>'"><?php echo yii::t('app','单品');?></a></li>
+               <li class="<?php if($typeId=='product') echo 'active';?>"><a href="#tab_1" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'typeId'=>'product','code'=>$code, 'source'=>$source));?>'"><?php echo yii::t('app','单品');?></a></li>
            
-               <li class="<?php if($typeId=='set') echo 'active';?>"><a href="#tab_1_" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'typeId'=>'set','code'=>$code));?>'"><?php echo yii::t('app','套餐');?></a></li>
+               <li class="<?php if($typeId=='set') echo 'active';?>"><a href="#tab_1_" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'typeId'=>'set','code'=>$code, 'source'=>$source));?>'"><?php echo yii::t('app','套餐');?></a></li>
                              			
             
         </ul>
@@ -63,6 +63,7 @@
 						</div>
 						
 					</div>
+					<?php if($typeId == 'product'):?>
                     <div class="col-md-3 pull-right">
 						<div class="input-group">
 		                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
@@ -72,7 +73,7 @@
 		                    </span>
 	                    </div>
                     </div>
-                                        
+                    <?php endif;?>                    
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -117,8 +118,8 @@
                                                 <label class="radio-inline">
                                                 <!--  <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
                                                 <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['order_num'])) echo $model['order_num']; else echo yii::t('app','无限制'); ?>" onfocus=" if (value =='无限制'){value = ''}" onblur="if (value ==''){value='无限制'}" >
-                                                --><input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" code="<?php if($typeId=='product') echo $model['phs_code'];elseif($typeId=='set') echo $model['pshs_code'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
-                                                <input type="button" name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
+                                                --><input type="button" <?php if($source)echo 'disabled';?> name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" code="<?php if($typeId=='product') echo $model['phs_code'];elseif($typeId=='set') echo $model['pshs_code'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
+                                                <input type="button" <?php if($source)echo 'disabled';?> name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
                                                 </label>
 											</div>
 										</div>
@@ -178,15 +179,17 @@
 		$('.s-btn').on('switch-change', function () {
                     var inp = $(this).find('input');
                         var id=inp.attr('pid');
+                        var source = '<?php echo $source;?>';
                         //var typeid=inp.attr('typeid');
-                        var url='<?php echo $this->createUrl('normalpromotion/status',array('companyId'=>$this->companyId));?>/id/'+id;
+                        var url='<?php echo $this->createUrl('normalpromotion/status',array('companyId'=>$this->companyId));?>/id/'+id+'/source/'+source;
                         //alert(url);
                         $.get(url);
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			var promotionID='<?php echo $promotionID;?>';
-			location.href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId'=>$this->companyId));?>/cid/"+cid+"/promotionID/"+promotionID+"/typeId/product";
+			var source = '<?php echo $source;?>';
+			location.href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId'=>$this->companyId));?>/cid/"+cid+"/promotionID/"+promotionID+"/typeId/product"+"/source/"+source;
 		});
 	});
         
@@ -294,6 +297,9 @@
         $("#yichu").on("click",function(){
         	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
             alert("您没有权限！");return false;
+            <?php endif;?>
+            <?php if($source):?>
+            layer.msg('该活动来自总部，无法修改！！！',{icon: 5});return false;
             <?php endif;?>
             //alert(111);
             var aa = document.getElementsByName("idchk");

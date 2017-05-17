@@ -132,7 +132,7 @@
 								<?php endif;?>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('normalpromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product','code'=>$model->normal_code));?>"><?php echo yii::t('app','设置活动优惠产品');?></a></td>
+								<a href="<?php echo $this->createUrl('normalpromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product','code'=>$model->normal_code,'source'=>$model->source));?>"><?php echo yii::t('app','设置活动优惠产品');?></a></td>
 								 <td><?php echo '';?></td>
 								</tr>
 						
