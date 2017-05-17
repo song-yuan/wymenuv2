@@ -158,13 +158,14 @@
 	    	<div class="item-group">
 	    		<?php foreach($groups['tastes'] as $tk=>$taste):
 	    			$active = '';
-	    			if($tk==0){
+	    			if($taste['is_selected']==1){
 	    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
 	    				$active = 'on';
 	    				$tprice = '';
 	    				if($taste["price"]>0){
 	    					$original += $taste["price"];
 	    					$price += $taste["price"];
+	    					$tprice = '('.$taste["price"].')';
 	    				}
 	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 	    			}
@@ -189,7 +190,7 @@
 	    		<?php 
 	    			foreach($detail as $item): 
 	    			$on = '';
-	    			if($item['is_select'] > 0){
+	    			if($item['is_select']==1){
 	    				$on='on';
 	    				$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
@@ -212,7 +213,7 @@
 			    	<div class="item-group">
 			    		<?php foreach($groups['tastes'] as $tk=>$taste):
 			    			$active = '';
-			    			if($tk==0){
+			    			if($taste['is_selected']==1){
 			    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
 			    				$active = 'on';
 			    				$tprice = '';

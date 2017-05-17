@@ -32,7 +32,8 @@ class WxPromotion
 		foreach($results as $k=>$result){
 			if($result['to_group']==2){
 				// 会员等级活动
-				if($user['user_level_lid']!=$result['group_id']){
+				$promotionUser = self::getPromotionUser($this->dpid, $user['user_level_lid'], $result['normal_promotion_id']);
+				if(empty($promotionUser)){
 					continue;
 				}
 			}
@@ -127,5 +128,10 @@ class WxPromotion
 	 			return array('promotion_type'=>-1,'price'=>$product['original_price'],'promotion_info'=>array());
 	 		}
 	 	}
+	 }
+	 public static function getPromotionUser($dpid,$userLevelId,$promotionId){
+	 	$sql = 'select * from nb_normal_branduser where dpid=:dpid and normal_promotion_id=:promotionId and brand_user_lid=:userLevelId and to_group=2 and delete_flag=0';
+	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':userLevelId',$userLevelId)->bindValue(':promotionId',$promotionId)->queryRow();
+	 	return $result;
 	 }
 }
