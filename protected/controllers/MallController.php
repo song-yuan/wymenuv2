@@ -587,7 +587,7 @@ class MallController extends Controller
 	 	$userId = Yii::app()->session['userId'];
 	 	$backUrl = Yii::app()->request->getParam('url',null);
 	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
-	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>$backUrl));
+	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>urldecode($backUrl)));
 	 }
 	/**
 	 * 
