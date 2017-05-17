@@ -57,6 +57,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','口味名称');?></th>
 								<th><?php echo yii::t('app','加价金额');?></th>
+								<th><?php echo yii::t('app','默认口味');?></th>
 								<th><?php echo yii::t('app','添加时间');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -68,6 +69,11 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
 								<td ><?php echo $model->name;?></td>
 								<td><?php echo $model->price;?></td>
+								<td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>">
+										<input pid="<?php echo $model->lid;?>" <?php if($model->is_selected) echo 'checked="checked"';?> type="checkbox" disabled="disabled" class="toggle"/>
+									</div>
+								</td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('taste/detailUpdate',array('lid' => $model->lid,'groupname'=>$groupname , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>

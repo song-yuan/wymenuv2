@@ -66,8 +66,8 @@ class CompanyController extends BackendController
 				'area'=>$areas,
 		));
 	}
-         public function actionListchidren(){
-                $provinces = Yii::app()->request->getParam('province',0);
+    public function actionListchidren(){
+        $provinces = Yii::app()->request->getParam('province',0);
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
 		
@@ -76,7 +76,7 @@ class CompanyController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->with = 'property';
        
-                $criteria->condition = ' t.delete_flag=0 and t.comp_dpid='.$companyId;
+        $criteria->condition = ' t.delete_flag=0 and t.comp_dpid='.$companyId;
 		$province = $provinces;
 		$city = $citys;
 		$area = $areas;
@@ -394,7 +394,7 @@ public function actionCreate(){
 		return $companyId['dpid'];
 	}
 	public function actionStore(){
-		$dpid = Yii::app()->request->getParam('companyId');
+		$dpid = Yii::app()->request->getParam('dpid');
 		$appid = Yii::app()->request->getParam('appid');
 		$code = Yii::app()->request->getParam('code');
 		$paytype = Yii::app()->request->getParam('paytype');

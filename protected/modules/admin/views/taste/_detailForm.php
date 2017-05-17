@@ -21,7 +21,13 @@
 											<?php echo $form->error($model, 'price' )?>
 										</div>
 									</div>
-									
+									<div class="form-group">
+											<?php echo $form->label($model, 'is_selected',array('class' => 'col-md-3 control-label'));?>
+											<div class="col-md-4">
+												<?php echo $form->dropDownList($model, 'is_selected', array( '1' =>yii::t('app','是'), '0' =>yii::t('app','否')) , array('id'=>'isSelectId', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_selected')));?>
+												<?php echo $form->error($model, 'is_selected' )?>
+											</div>
+										</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
