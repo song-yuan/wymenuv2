@@ -23,10 +23,10 @@
 		//通过code获得openid
 		if (!isset($_GET['code'])){
 			//触发微信返回code码
-			unset($_SERVER['HTTP_REFERER']);
 			$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 			$url = $this->__CreateOauthUrlForCode($baseUrl,'snsapi_base');
 			header("Location: $url");
+			unset($_SERVER['HTTP_REFERER']);
 			exit();
 		} else {
 			//获取code码，以获取openid
