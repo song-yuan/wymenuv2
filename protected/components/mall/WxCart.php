@@ -3,18 +3,18 @@
  * 
  * 
  * 微信端购物车类
- * //堂吃必须有siteId
+ * 堂吃必须有siteId
+ * $pormotionYue 是否有储值支付活动
  * productArr = array('product_id'=>1,'num'=>1,'promotion_id'=>-1)
  * 
  */
 class WxCart
 {
-	
-	
 	public $dpid;
 	public $userId;
 	public $siteId;
 	public $type;
+	public $pormotionYue = false;
 	public $productArr = array();
 	public $cart = array();
 	
@@ -174,6 +174,9 @@ class WxCart
 				$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 			}
 			if($result['promotion_id'] > 0){
+				if($result['to_group']==3){
+					$this->pormotionYue = true;
+				}
 				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$result['promotion_id'],$result['to_group']);
 				$results[$k]['price'] = $productPrice['price'];
 				$results[$k]['promotion'] = $productPrice;
