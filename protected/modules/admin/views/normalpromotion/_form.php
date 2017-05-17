@@ -11,14 +11,25 @@
 )); ?>
         <style>
         #category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
+        .noclick{
+        	background-color: silver !important;
+        }
         </style>
+        <?php if($source)$a=true;else $a=false;?>
+        <?php ?>
         <div class="form-body">
 
+        		<div class="form-group">
+                	<em style="color: red;"></em>
+                        <div class="col-md-4">
+                        	<span style="color: red;"> <?php if($a)echo '***注意：该活动属于总部下发活动，无法进行修改！！！';?></span>
+                        </div>
+                </div>
                 <div class="form-group">
                 <em style="color: red;"><?php if($model->hasErrors('promotion_title')) echo '必填项';?></em>
                         <?php echo $form->label($model, yii::t('app','标题'),array('class' => 'col-md-3 control-label'));?>
                         <div class="col-md-4">
-                                <?php echo $form->textField($model, 'promotion_title',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_title')));?>
+                                <?php echo $form->textField($model, 'promotion_title',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_title'),'disabled'=>$a));?>
                                 <?php echo $form->error($model, 'promotion_title' )?>
                         </div>
                 </div><!-- 活动标题 -->
@@ -44,21 +55,21 @@
                 <em style="color: red;"><?php if($model->hasErrors('promotion_abstract')) echo '必填项';?></em>
                         <?php echo $form->label($model, yii::t('app','摘要'),array('class' => 'col-md-3 control-label'));?>
                         <div class="col-md-4">
-                                <?php echo $form->textField($model, 'promotion_abstract',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_abstract')));?>
+                                <?php echo $form->textField($model, 'promotion_abstract',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_abstract'),'disabled'=>$a));?>
                                 <?php echo $form->error($model, 'promotion_abstract' )?>
                         </div>
                 </div><!-- 活动摘要 -->
                 <div class="form-group">
                         <?php echo $form->label($model, yii::t('app','类型'),array('class' => 'col-md-3 control-label'));?>
                         <div class="col-md-4">
-                                <?php echo $form->dropDownList($model, 'promotion_type', array('0' => yii::t('app','独享') , '1' => yii::t('app','共享')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_type')));?>
+                                <?php echo $form->dropDownList($model, 'promotion_type', array('0' => yii::t('app','独享') , '1' => yii::t('app','共享')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_type'),'disabled'=>$a));?>
                                 <?php echo $form->error($model, 'promotion_type' )?>
                         </div>
                 </div><!-- 活动类型 -->
 <div class="form-group">
                         <?php echo $form->label($model, yii::t('app','是否可用代金券'),array('class' => 'col-md-3 control-label'));?>
                         <div class="col-md-4">
-                                <?php echo $form->dropDownList($model, 'can_cupon', array('0' => yii::t('app','可以使用代金券') , '1' => yii::t('app','不能使用代金券')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('can_cupon')));?>
+                                <?php echo $form->dropDownList($model, 'can_cupon', array('0' => yii::t('app','可以使用代金券') , '1' => yii::t('app','不能使用代金券')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('can_cupon'),'disabled'=>$a));?>
                                 <?php echo $form->error($model, 'can_cupon' )?>
                         </div>
                 </div><!-- 是否可用代金券 -->
@@ -67,7 +78,7 @@
                 <div class="form-group">
                         <?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
                         <div class="col-md-4">
-                                <?php echo $form->dropDownList($model, 'to_group', array( '0' => yii::t('app','所有人'), '2' => yii::t('app','会员等级'), '3' => yii::t('app','储值用户') ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
+                                <?php echo $form->dropDownList($model, 'to_group', array( '0' => yii::t('app','所有人'), '2' => yii::t('app','会员等级'), '3' => yii::t('app','储值用户') ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group'),'disabled'=>$a));?>
                                 <?php echo $form->error($model, 'to_group' )?>
                         </div>
                 </div>
@@ -115,7 +126,7 @@
 		                <div class="form-group">
 		                        <?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 		                        <div class="col-md-4">
-		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','只显示在POS机端'), '2' => yii::t('app','只显示在微信端'), '4' => yii::t('app','只显示在微信堂食'), '5' => yii::t('app','只显示在微信外卖'),'3' => yii::t('app','POS机及微信端都显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
+		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','只显示在POS机端'), '2' => yii::t('app','只显示在微信端'), '4' => yii::t('app','只显示在微信堂食'), '5' => yii::t('app','只显示在微信外卖'),'3' => yii::t('app','POS机及微信端都显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available'),'disabled'=>$a));?>
 		                                <?php echo $form->error($model, 'is_available' )?>
 		                        </div>
 		                </div><!-- 活动是否生效 -->
@@ -123,7 +134,7 @@
 		                <div class="form-group">
 		                        <?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 		                        <div class="col-md-4">
-		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','生效'),) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
+		                                <?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','无效') , '1' => yii::t('app','生效'),) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available'),'disabled'=>$a));?>
 		                                <?php echo $form->error($model, 'is_available' )?>
 		                        </div>
 		                </div><!-- 活动是否生效 -->
@@ -141,9 +152,9 @@
                                                 </span>
                                         </div> -->
                                          <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-                                                 <?php echo $form->textField($model,'begin_time',array('class' => 'form-control ui_timepicker','readonly'=>'true','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_time'))); ?>
+                                                 <?php echo $form->textField($model,'begin_time',array('class' => 'form-control ui_timepicker','readonly'=>'true','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_time'),'disabled'=>$a)); ?>
                                                  <span class="input-group-addon"> ~ </span>
-                                                 <?php echo $form->textField($model,'end_time',array('class'=>'form-control ui_timepicker','readonly'=>'true','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_time'))); ?>
+                                                 <?php echo $form->textField($model,'end_time',array('class'=>'form-control ui_timepicker','readonly'=>'true','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_time'),'disabled'=>$a)); ?>
                                         </div> 
                                         <!-- /input-group -->
                                         <?php echo $form->error($model,'begin_time'); ?>
@@ -155,31 +166,31 @@
                         <div class="col-md-4" style="border:1px solid red;">
 
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="7" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("7", $weekdayids)){echo "checked";}}else echo "123";?> value="7" name="week" /></td>
+                                        <td><input type="checkbox" id="7" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("7", $weekdayids)){echo "checked";}}else echo "123";?> value="7" name="week" /></td>
                                         <td><?php echo "星期日"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="1" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("1", $weekdayids)){echo "checked";}}else echo "123";?> value="1" name="week" /></td>
+                                        <td><input type="checkbox" id="1" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("1", $weekdayids)){echo "checked";}}else echo "123";?> value="1" name="week" /></td>
                                         <td><?php echo "星期一"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="2" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("2", $weekdayids)){echo "checked";}}else echo "123";?>  value="2" name="week" /></td>
+                                        <td><input type="checkbox" id="2" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("2", $weekdayids)){echo "checked";}}else echo "123";?>  value="2" name="week" /></td>
                                         <td><?php echo "星期二"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="3" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("3", $weekdayids)){echo "checked";}}else echo "123";?>  value="3" name="week" /></td>
+                                        <td><input type="checkbox" id="3" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("3", $weekdayids)){echo "checked";}}else echo "123";?>  value="3" name="week" /></td>
                                         <td><?php echo "星期三"; ?></td>
                                 </tr></br>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="4" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("4", $weekdayids)){echo "checked";}}else echo "123";?>  value="4" name="week" /></td>
+                                        <td><input type="checkbox" id="4" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("4", $weekdayids)){echo "checked";}}else echo "123";?>  value="4" name="week" /></td>
                                         <td><?php echo "星期四"; ?></td>	
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="5" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("5", $weekdayids)){echo "checked";}}else echo "123";?>  value="5" name="week" /></td>
+                                        <td><input type="checkbox" id="5" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("5", $weekdayids)){echo "checked";}}else echo "123";?>  value="5" name="week" /></td>
                                         <td><?php echo "星期伍"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="6" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("6", $weekdayids)){echo "checked";}}else echo "123";?>  value="6" name="week" /></td>
+                                        <td><input type="checkbox" id="6" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("6", $weekdayids)){echo "checked";}}else echo "123";?>  value="6" name="week" /></td>
                                         <td><?php echo "星期六"; ?></td>
                                 </tr>
                         </div>
@@ -189,9 +200,9 @@
                                 <label class="control-label col-md-3"><?php echo yii::t('app','优惠时段');?></label>
                                 <div class="col-md-4">
                                          <div class="input-group input-large date-picker input-daterange" data-date="10:10" data-date-format="h:i">
-                                                 <?php echo $form->timeField($model,'day_begin',array('class' => 'form-control ','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('day_begin'))); ?>
+                                                 <?php echo $form->timeField($model,'day_begin',array('class' => 'form-control ','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('day_begin'),'disabled'=>$a)); ?>
                                                  <span class="input-group-addon"> ~ </span>
-                                                 <?php echo $form->timeField($model,'day_end',array('class'=>'form-control ','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('day_end'))); ?>
+                                                 <?php echo $form->timeField($model,'day_end',array('class'=>'form-control ','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('day_end'),'disabled'=>$a)); ?>
                                         </div> 
                                         <!-- /input-group -->
                                         <?php echo $form->error($model,'day_begin'); ?>
@@ -201,13 +212,13 @@
                 <div class="form-group">
                         <?php echo $form->label($model, yii::t('app','图文说明'),array('class' => 'col-md-3 control-label'));?>
                         <div class="col-md-8">
-                                <?php echo $form->textArea($model, 'promotion_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_memo')));?>
+                                <?php echo $form->textArea($model, 'promotion_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_memo'),'disabled'=>$a));?>
                                 <?php echo $form->error($model, 'promotion_memo' )?>
                         </div>
                 </div><!-- 图文说明 -->
                 <div class="form-actions fluid">
                         <div class="col-md-offset-3 col-md-9">
-                                <button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定并下一步');?></button>
+                                <button style="background-color: <?php if($a)echo 'silver !important;';?>" type="button" id="su" disabled = <?php echo $a;?> class="btn blue "><?php echo yii::t('app','确定并下一步');?></button>
                                 <a href="<?php echo $this->createUrl('normalpromotion/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
                         </div>
                 </div>

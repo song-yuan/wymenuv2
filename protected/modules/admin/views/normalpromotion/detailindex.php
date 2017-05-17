@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'normalpromotiondetail-form',
-				'action' => $this->createUrl('normalpromotion/detailindex' , array('companyId' => $this->companyId,'typeId'=>"product",'promotionID'=>$promotionID)),
+				'action' => $this->createUrl('normalpromotion/detailindex' , array('companyId' => $this->companyId,'typeId'=>"product",'promotionID'=>$promotionID,'source'=>$source)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,8 +40,8 @@
               
                     <div class="tabbable tabbable-custom">
                             <ul class="nav nav-tabs">
-                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'product' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'code'=>$code));?>'"><?php echo yii::t('app','单品');?></a></li>
-                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'set' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'code'=>$code));?>'"><?php echo yii::t('app','套餐');?></a></li>
+                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'product' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'code'=>$code, 'source'=>$source));?>'"><?php echo yii::t('app','单品');?></a></li>
+                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array('typeId'=>'set' , 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'code'=>$code, 'source'=>$source));?>'"><?php echo yii::t('app','套餐');?></a></li>
                             
                             </ul>
                             <div class="tab-content">
@@ -55,7 +55,7 @@
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<div class="btn-group" style="left:3%;">
-							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId,'code'=>$code));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
+							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId,'code'=>$code,'source'=>$source));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
@@ -76,7 +76,7 @@
                     <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
                     <div class="actions">
                     	<div class="btn-group" style="left:3%;">
-							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId,'code'=>$code));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
+							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId,'code'=>$code,'source'=>$source));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
 						</div>
                     </div>	
                     <?php endif;?>
@@ -126,8 +126,8 @@
                                                 <label class="radio-inline">
                                                 <!--  <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
                                                 <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['order_num'])) echo $model['order_num']; else echo yii::t('app','无限制'); ?>" onfocus=" if (value =='无限制'){value = ''}" onblur="if (value ==''){value='无限制'}" >
-                                                --><input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" code="<?php if($typeId=='product') echo $model['phs_code'];elseif($typeId=='set') echo $model['pshs_code'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
-                                                <input type="button" name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
+                                                --><input type="button" <?php if($source)echo 'disabled';?> name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" code="<?php if($typeId=='product') echo $model['phs_code'];elseif($typeId=='set') echo $model['pshs_code'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
+                                                <input type="button" <?php if($source)echo 'disabled';?> name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
                                                 </label>
 											</div>
 										</div>
@@ -187,7 +187,8 @@
                     var inp = $(this).find('input');
                         var id=inp.attr('pid');
                         var typeid=inp.attr('typeid');
-                        var url='<?php echo $this->createUrl('normalpromotion/status',array('companyId'=>$this->companyId));?>/id/'+id+'/typeId/'+typeid;
+                        var source = '<?php echo $source;?>';
+                        var url='<?php echo $this->createUrl('normalpromotion/status',array('companyId'=>$this->companyId));?>/id/'+id+'/typeId/'+typeid+"/source/"+source;
                         //alert(url);
                         $.get(url);
 		});
@@ -195,7 +196,8 @@
 			var cid = $(this).val();
 			var promotionID='<?php echo $promotionID;?>';
 			var code = '<?php echo $code;?>';
-			location.href="<?php echo $this->createUrl('normalpromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid+"/promotionID/"+promotionID+"/code/"+code;
+			var source = '<?php echo $source;?>';
+			location.href="<?php echo $this->createUrl('normalpromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid+"/promotionID/"+promotionID+"/code/"+code+"/source/"+source;
 		});
 	});
         

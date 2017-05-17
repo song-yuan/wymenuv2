@@ -210,6 +210,7 @@ class NormalpromotionController extends BackendController
 		}
 		$this->render('update' , array(
 				'model'=>$model,
+				'source'=>$model->source,
 				'brdulvs'=>$brdulvs,
 				'userlvs'=>$userlvs,
 		));
@@ -222,6 +223,7 @@ class NormalpromotionController extends BackendController
 			$fromId = Yii::app()->request->getParam('from','sidebar');
 			$csinquery=Yii::app()->request->getPost('csinquery',"");
 			$code = Yii::app()->request->getParam('code');
+			$source = Yii::app()->request->getParam('source');
 			//var_dump($csinquery);exit;
 			$db = Yii::app()->db;
 			if($typeId=='product')
@@ -267,6 +269,7 @@ class NormalpromotionController extends BackendController
 						'typeId' => $typeId,
 						'promotionID'=>$promotionID,
 						'code'=>$code,
+						'source'=>$source,
 				));
 			}else{
 				if(empty($promotionID)){
@@ -288,6 +291,7 @@ class NormalpromotionController extends BackendController
 						'typeId' => $typeId,
 						'promotionID'=>$promotionID,
 						'code'=>$code,
+						'source'=>$source,
 				));
 			}
 		}
@@ -488,6 +492,7 @@ class NormalpromotionController extends BackendController
 			$fromId = Yii::app()->request->getParam('from','sidebar');
 			$csinquery=Yii::app()->request->getPost('csinquery',"");
 			$code = Yii::app()->request->getParam('code');
+			$source = Yii::app()->request->getParam('source');
 			//var_dump($csinquery);exit;
 			$db = Yii::app()->db;
 			
@@ -555,6 +560,7 @@ class NormalpromotionController extends BackendController
 						'typeId' => $typeId,
 						'promotionID'=>$promotionID,
 						'code'=>$code,
+						'source'=>$source,
 				));
 			
 		}

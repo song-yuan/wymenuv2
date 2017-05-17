@@ -185,6 +185,8 @@ class StockTakingController extends BackendController
 				$laststockid = '0';
 				$laststocktime = '0';
 				$psstock = '0.00';
+				$allpansun_price = '0';
+				$all_price = '0';
 				
 				$stocks = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$id.' )',array(':sid'=>$id,':dpid'=>$this->companyId,));
 				if(!empty($stocks)){
