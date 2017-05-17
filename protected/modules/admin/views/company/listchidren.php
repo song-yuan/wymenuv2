@@ -201,12 +201,12 @@
          var city = $('#city').children('option:selected').val();
          var area = $('#area').children('option:selected').val();
 		//alert(111);
-         location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+         location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 // 		if(province == null || province == 'undefind' || province == ''){
 //	       	alert("<?php echo yii::t('app','请填写店铺所处省市信息再进行查询。。。');?>");
 // 	       	return false;
 // 	    }else{
-//	    	location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+//	    	location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 // 		}
 	});
 	$('#province').change(function(){
@@ -223,7 +223,7 @@
 			var city = $('#city').children('option:selected').val();
 	        var area = $('#area').children('option:selected').val();
 	        
-			location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+			location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 			 
 		 }
 	$('.setAppid').on('click',function(){
@@ -268,7 +268,7 @@
 				layer.msg('请完善信息！！！');
 				return false;
 			}
-			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel;
+			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel+"/dpid/"+dpid;
 	        $.ajax({
 	            url:url,
 	            type:'GET',

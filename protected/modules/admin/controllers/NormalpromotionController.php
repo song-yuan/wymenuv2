@@ -136,6 +136,13 @@ class NormalpromotionController extends BackendController
 		$model = NormalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$is_sync = DataSync::getInitSync();
+		
+		$modeldpid = Company::model()->find('dpid=:dpid', array(':dpid'=> $this->companyId));
+		$db = Yii::app()->db;
+		$sql = 'select t1.brand_user_lid from nb_normal_promotion t left join nb_normal_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.normal_promotion_id = t.lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId.' or t.dpid ='.$modeldpid->comp_dpid;
+		$command = $db->createCommand($sql);
+		$userlvs = $command->queryAll();
+		//var_dump($userlvs);exit;
 		//$db = Yii::app()->db;
 // 		$transaction = $db->beginTransaction();
 // 		try
@@ -157,8 +164,8 @@ class NormalpromotionController extends BackendController
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
 				
-				//$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
-				$sql = 'update nb_normal_branuser set delete_flag = "1",is_sync ='.$sync.' where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
+				//$sql = 'update nb_normal_branuser set delete_flag = "1",is_sync ="'.$is_sync.'" where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
@@ -181,7 +188,7 @@ class NormalpromotionController extends BackendController
 				}
 			}else{
 				//$is_sync = DataSync::getInitSync();
-				$sql = 'update nb_normal_branduser set delete_flag = 1,is_sync ='.$is_sync.' where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 			}
@@ -204,6 +211,7 @@ class NormalpromotionController extends BackendController
 		$this->render('update' , array(
 				'model'=>$model,
 				'brdulvs'=>$brdulvs,
+				'userlvs'=>$userlvs,
 		));
 	}		
 		public function actionDetailindex(){

@@ -92,7 +92,7 @@
 								<th><?php echo yii::t('app','是否可用代金券');?></th>
 								<th><?php echo yii::t('app','活动开始日期');?></th>
                                 <th><?php echo yii::t('app','活动结束日期');?></th>
-                                <th><?php echo yii::t('app','是否生效');?></th>
+                                <th><?php echo yii::t('app','是否生效及显示');?></th>
                                 <!--<th><?php echo yii::t('app','支付方式');?></th>-->
                                 <th><?php echo yii::t('app','编辑');?></th>                                                                
                                 <th><?php echo yii::t('app','编辑明细');?></th>
@@ -113,7 +113,17 @@
 								<td><?php switch ($model->can_cupon){case 0:echo yii::t('app','该活动可以使用代金券');break;case 1:echo yii::t('app','该活动不能使用代金券');break;default:echo '';break;} ;?></td>
 								<td><?php echo $model->begin_time;?></td>
 								<td><?php echo $model->end_time;?></td>
-								<td><?php switch ($model->is_available){case 0:echo yii::t('app','不生效');break;case 1:echo yii::t('app','生效');break;case 2:echo yii::t('app','生效且显示在微信端');break;default:echo '';break;} ?></td>
+								<td>
+								<?php switch ($model->is_available){
+										case 0:echo yii::t('app','不生效');break;
+										case 1:echo yii::t('app','生效只显示在POS端');break;
+										case 2:echo yii::t('app','生效且显示在微信端');break;
+										case 3:echo yii::t('app','生效且微信及POS都显示');break;
+										case 4:echo yii::t('app','生效只显示在微信堂食');break;
+										case 5:echo yii::t('app','生效只显示在微信外卖');break;
+										default:echo '';break;
+									} ?>
+								</td>
 								<td class="center">
 								<?php if($model->is_available == '2'&&Yii::app()->user->role >=11):?>
 								<a><?php echo yii::t('app','总部审核后无法编辑修改');?></a>

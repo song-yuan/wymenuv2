@@ -128,6 +128,11 @@ class TasteController extends BackendController
 		$model->dpid = $this->companyId ;		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Taste');
+			
+			if($model->is_selected){
+				$sql ='update nb_taste set is_selected =0 where dpid='.$this->companyId.' and taste_group_id ='.$groupid.' and delete_flag=0';
+				Yii::app()->db->createCommand($sql)->execute();
+			}
                         $se=new Sequence("taste");
                         $model->taste_group_id = $groupid ;
                         $model->allflae = $type;
@@ -144,6 +149,7 @@ class TasteController extends BackendController
                         			//'other_price'=>$model->other_price,
                         			'price'=>$model->price,
                                     'name'=>$model->name,
+                        			'is_selected'=>$model->is_selected,
 					 				'delete_flag'=>'0'
 					);
                         //var_dump($data);exit;
@@ -172,6 +178,10 @@ class TasteController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			//$otherprice = $_POST['other_price'];
 			$model->attributes = Yii::app()->request->getPost('Taste');
+			if($model->is_selected){
+				$sql ='update nb_taste set is_selected =0 where dpid='.$this->companyId.' and taste_group_id ='.$model->taste_group_id.' and delete_flag=0';
+				Yii::app()->db->createCommand($sql)->execute();
+			}
 			//$model->other_price = $otherprice;
                         $model->update_at=date('Y-m-d H:i:s',time());
                         //var_dump($model);exit;
