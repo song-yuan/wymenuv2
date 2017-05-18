@@ -191,6 +191,7 @@
         	//alert(optval);
         }else{
             alert('请至少盘点一项');
+            layer.closeAll('loading');
             return false;
             }
         //
