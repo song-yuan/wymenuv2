@@ -28,7 +28,9 @@ class MallController extends Controller
 	
 	public function beforeAction($actin){
 		if($this->company['type']=='0'&&!in_array($actin->id,array('reCharge'))){
-			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
+			$url = $this->createUrl('/shop/index',array('companyId'=>$this->companyId,'type'=>$this->type));
+			$this->redirect($url);
+// 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
 		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
