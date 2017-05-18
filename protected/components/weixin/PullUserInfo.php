@@ -76,6 +76,7 @@ class PullUserInfo {
 			
 			$this->result = 1;
 		}
+		var_dump($this->response);exit;
 	}
 	
 	
