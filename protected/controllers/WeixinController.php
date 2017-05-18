@@ -87,7 +87,7 @@ class WeixinController extends Controller
 	 	$userInfo = $baseInfo->getSnsapiBase();
 	 	$openid = $userInfo['openid'];
 	 	
-	 	$brandUser = WxBrandUser::getFromOpenId($openId);
+	 	$brandUser = WxBrandUser::getFromOpenId($openid);
 	 	if(empty($brandUser)){
 	 		$newBrandUser = new NewBrandUser($openid, $account['dpid']);
 	 		$brandUser = $newBrandUser->brandUser;
