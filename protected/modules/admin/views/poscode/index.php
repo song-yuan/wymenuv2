@@ -103,7 +103,7 @@
                                             </td>
                                             <td>
                                                 <?php if($model->detail):?>
-                                                <button type="button" class="btn yellow" id="reset" value="<?php echo $model['lid'] ;?>">重置</button>  
+                                                <button type="button" class="btn yellow reset" id="reset" value="<?php echo $model['lid'] ;?>">重置</button>  
                                                 <?php endif;?>
                                             </td>
                                         </tr>
@@ -221,9 +221,10 @@
         });           
     });
 
-    $('#reset').on('click', function(){
+    $('.reset').on('click', function(){
+    	var reset= $(this).val(); 
         if(window.confirm("确认要重置?")){
-            var reset= $('#reset').val();   
+              
             $.ajax({
                     url:'<?php echo $this->createUrl('Poscode/reset',array('companyId'=>$this->companyId));?>',
                     data:{reset:reset},
