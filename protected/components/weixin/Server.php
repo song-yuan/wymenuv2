@@ -308,8 +308,8 @@ class Server {
     	}else {
             if($this->brandUser['unsubscribe']){
             	$this->cancelUnsubscribe();
-            	new PullUserInfo($this->brandId, $this->userId);
             }
+            new PullUserInfo($this->brandId, $this->userId);
         }
     }
     
