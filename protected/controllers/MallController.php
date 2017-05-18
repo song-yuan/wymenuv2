@@ -11,7 +11,6 @@ class MallController extends Controller
 	 */
 	public $companyId;
 	public $type = 0;
-	public $weixinServiceAccount;
 	public $brandUser;
 	public $company;
 	public $layout = '/layouts/mallmain';
@@ -742,10 +741,4 @@ class MallController extends Controller
 		}
 		exit;
 	}
-// 	private function weixinServiceAccount() {	
-// 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
-// 	}
-// 	private function brandUser($openId) {	
-// 		$this->brandUser = WxBrandUser::getFromOpenId($openId);
-// 	}
 }

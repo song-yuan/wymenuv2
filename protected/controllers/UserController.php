@@ -5,7 +5,6 @@ class UserController extends Controller
 
 	public $companyId;
 	public $brandUser;
-	public $weixinServiceAccount;
 	public $layout = '/layouts/mallmain';
 	
 	
@@ -19,18 +18,14 @@ class UserController extends Controller
 		if(in_array($actin->id,array('index','ticket','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard','money'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
-				$this->weixinServiceAccount();
-				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
-				$userInfo = $baseInfo->getSnsapiBase();
-				$openid = $userInfo['openid'];
-				$this->brandUser($openid);
-				if(empty($this->brandUser)){
-                      $newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
-                      $this->brandUser = $newBrandUser->brandUser;
-				}  
-              
-				$userId = $this->brandUser['lid'];
-				Yii::app()->session['userId'] = $userId;
+				$userId = Yii::app()->session['userId'];
+				if(empty($userId)){
+					$url = Yii::app()->request->url;
+					$this->redrect('/weixin/redirect',array('companyId'=>$this->companyId,'url'=>urlencode($url)));
+					exit;
+				}
+				
+				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			}else{
 				//pc 浏览
 				$userId = 2122;
@@ -695,11 +690,5 @@ class UserController extends Controller
 		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type,$page);
 		echo json_encode($orderLists);
 		exit;
-	}
-	private function weixinServiceAccount() {	
-		$this->weixinServiceAccount = WxAccount::get($this->companyId);
-	}
-	private function brandUser($openId) {	
-		$this->brandUser = WxBrandUser::getFromOpenId($openId);
 	}
 }
