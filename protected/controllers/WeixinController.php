@@ -72,4 +72,29 @@ class WeixinController extends Controller
 	
 		$this->render('refund',array('poscode'=>$poscode,'dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'total_fee'=>$totalFee,'refund_fee'=>$refundFee));
 	 }
+	 /**
+	  * 
+	  * 微信授权 并跳转
+	  * 
+	  */
+	 public function actionRedirect()
+	 {
+	 	$companyId = Yii::app()->request->getParam('companyId');
+	 	$url = Yii::app()->request->getParam('url');
+	 	
+	 	$account = WxAccount::get($companyId);
+	 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
+	 	$userInfo = $baseInfo->getSnsapiBase();
+	 	$openid = $userInfo['openid'];
+	 	
+	 	$brandUser = WxBrandUser::getFromOpenId($openId);
+	 	if(empty($brandUser)){
+	 		$newBrandUser = new NewBrandUser($openid, $account['dpid']);
+	 		$brandUser = $newBrandUser->brandUser;
+	 	}
+	 	$userId = $brandUser['lid'];
+	 	Yii::app()->session['userId'] = $userId;
+	 	
+	 	$this->redirect(urldecode($url));
+	 }
 }

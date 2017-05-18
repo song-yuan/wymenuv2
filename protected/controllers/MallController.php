@@ -28,25 +28,20 @@ class MallController extends Controller
 	
 	public function beforeAction($actin){
 		if($this->company['type']=='0'&&!in_array($actin->id,array('reCharge'))){
-			$url = $this->createUrl('/shop/index',array('companyId'=>$this->companyId,'type'=>$this->type));
-			$this->redirect($url);
-// 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
+			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
 		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
-				$this->weixinServiceAccount();
-				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
-				$userInfo = $baseInfo->getSnsapiBase();
-				$openid = $userInfo['openid'];
-				$this->brandUser($openid);
-				if(empty($this->brandUser)){
-					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
-		    		$this->brandUser = $newBrandUser->brandUser;
+				$userId = Yii::app()->session['userId'];
+				if(empty($userId)){
+					$url = Yii::app()->request->url;
+					$this->redrect('/weixin/redirect',array('companyId'=>$this->companyId,'url'=>urlencode($url)));
+					exit;
 				}
-				$userId = $this->brandUser['lid'];
-				Yii::app()->session['userId'] = $userId;
+				
+				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 				if($this->type==1){
 					//堂吃
 					$scaned = WxScanLog::get($this->companyId,$userId);
@@ -747,10 +742,10 @@ class MallController extends Controller
 		}
 		exit;
 	}
-	private function weixinServiceAccount() {	
-		$this->weixinServiceAccount = WxAccount::get($this->companyId);
-	}
-	private function brandUser($openId) {	
-		$this->brandUser = WxBrandUser::getFromOpenId($openId);
-	}
+// 	private function weixinServiceAccount() {	
+// 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
+// 	}
+// 	private function brandUser($openId) {	
+// 		$this->brandUser = WxBrandUser::getFromOpenId($openId);
+// 	}
 }
