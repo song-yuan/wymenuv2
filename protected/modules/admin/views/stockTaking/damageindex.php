@@ -116,7 +116,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td ><?php echo $model['material_name'];?></td>
-								<td><?php if(!empty($model->category_name)) echo $model->category_name;?></td>
+								<td><?php if(!empty($model['category_name'])) echo $model['category_name'];?></td>
 								<td ><?php echo $model['unit_name'];?></td>
 								                               
                                 <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['stock_all'];?>" name="idss[]" />
