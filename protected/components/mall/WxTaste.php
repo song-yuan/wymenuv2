@@ -48,7 +48,7 @@ class WxTaste
 	 * 
 	 */
 	public static function getTastes($tasteGroupId,$dpid,$allflae = 0){
-		$sql = 'select lid,name,price from nb_taste where taste_group_id=:tasteGroupId and dpid=:dpid and allflae=:allflae and delete_flag=0';
+		$sql = 'select * from nb_taste where taste_group_id=:tasteGroupId and dpid=:dpid and allflae=:allflae and delete_flag=0';
 		$tastes = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':tasteGroupId',$tasteGroupId)
 				  ->bindValue(':dpid',$dpid)
