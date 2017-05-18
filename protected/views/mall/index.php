@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$title = '微信点单';
+	$title = '微信点单:'.$this->company['company_name'];;
 	$link = $this->createAbsoluteUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));
 	$desc = '自助点餐,点餐不排队';
 	$imgUrl = Yii::app()->request->getHostInfo().$this->company['logo'];
