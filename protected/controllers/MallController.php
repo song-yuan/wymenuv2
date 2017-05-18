@@ -39,8 +39,12 @@ class MallController extends Controller
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
 				exit;
 			}
-			
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
+			if(empty($this->brandUser)){
+				$url = Yii::app()->request->url;
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				exit;
+			}
 			if($this->type==1){
 				//堂吃
 				$scaned = WxScanLog::get($this->companyId,$userId);

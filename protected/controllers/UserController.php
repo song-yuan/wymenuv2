@@ -26,6 +26,11 @@ class UserController extends Controller
 			}
 			
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
+			if(empty($this->brandUser)){
+				$url = Yii::app()->request->url;
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				exit;
+			}
 		}else{
 			//pc 浏览
 			$userId = 2122;
