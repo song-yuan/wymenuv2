@@ -197,6 +197,23 @@ class ProductController extends BackendController
 			->execute(array( ':companyId' => $this->companyId));
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where product_id in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
+			
+			$deleteids = implode(',' , $ids);
+			$se=new Sequence("b_login");
+			$lid = $se->nextval();
+			$userid = Yii::app()->user->userId;
+			$username = Yii::app()->user->username;
+			$data = array(
+					'lid'=>$lid,
+					'dpid'=>$this->companyId,
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'user_id'=>$userid,
+					'do_what'=>$username.':delete('.$deleteids.')',
+					'out_time'=>"0000-00-00 00:00:00"
+			);
+			Yii::app()->db->createCommand()->insert('nb_b_login',$data);
+			
 			Yii::app()->user->setFlash('success' , yii::t('app','删除成功'));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		} else {

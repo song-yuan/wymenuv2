@@ -61,7 +61,7 @@
 						</div>
 						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+							<button type="button" id="deleteprod"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 					</div>
 				</div>
@@ -281,6 +281,10 @@
 			}else{
 				alert('该菜品信息有误！无法进行上下架操作！');
 			}
+		})
+		$('#deleteprod').on('click',function(){
+			if(window.confirm("确认删除勾选菜品?")){
+				$('#product-form').submit();}
 		})
 	});
 	</script>	

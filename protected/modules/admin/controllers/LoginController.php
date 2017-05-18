@@ -42,6 +42,7 @@ class LoginController extends BackendController
                                     'create_at'=>date('Y-m-d H:i:s',time()),
                                     'update_at'=>date('Y-m-d H:i:s',time()),
                                     'user_id'=>$userarray[0],
+                                	'do_what'=>'login',
                                     'out_time'=>"0000-00-00 00:00:00"                                    
                                 );                            
                                 Yii::app()->db->createCommand()->insert('nb_b_login',$data);
