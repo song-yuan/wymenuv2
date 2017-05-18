@@ -36,7 +36,7 @@ class MallController extends Controller
 				$userId = Yii::app()->session['userId'];
 				if(empty($userId)){
 					$url = Yii::app()->request->url;
-					$this->redrect('/weixin/redirect',array('companyId'=>$this->companyId,'url'=>urlencode($url)));
+					$this->redrect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
 					exit;
 				}
 				
