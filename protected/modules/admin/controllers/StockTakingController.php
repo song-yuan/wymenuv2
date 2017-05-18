@@ -29,7 +29,11 @@ class StockTakingController extends BackendController
 			$cate ='>0';
 		}
 		
-		$sql = 'select k.category_name,t.* from nb_product_material t left join nb_material_category k on(t.category_id = k.lid and t.dpid = k.dpid) where t.delete_flag = 0 and t.dpid ='.$this->companyId.' and t.category_id '.$cate.' order by t.category_id asc,t.lid asc';
+		$sql = 'select ms.stock_all,mu.unit_name,k.category_name,t.* from nb_product_material t '.
+				'left join nb_material_category k on(t.category_id = k.lid and t.dpid = k.dpid)'.
+				'left join nb_material_unit mu on(t.stock_unit_id = mu.lid and t.dpid = mu.dpid and mu.delete_flag =0) '.
+				'left join (select sum(stock) as stock_all,material_id from nb_product_material_stock where dpid='.$this->companyId.' and delete_flag=0 group by material_id) ms on(t.lid = ms.material_id)'.
+				'where t.lid in(select tt.lid from nb_product_material tt where tt.delete_flag = 0 and tt.dpid ='.$this->companyId.' and tt.category_id '.$cate.') order by t.category_id asc,t.lid asc';
 		$models = $db->createCommand($sql)->queryAll();
 		
 // 		$criteria = new CDbCriteria;

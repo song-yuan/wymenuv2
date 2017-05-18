@@ -118,18 +118,21 @@
 								<td><?php echo $model['material_identifier'];?></td>
 								<td ><?php echo $model['material_name'];?></td>
 								<td><?php if(!empty($model['category_name'])) echo $model['category_name'];?></td>
-								<td ><?php echo Common::getStockName($model['stock_unit_id']);?></td>
-								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
-								<!-- <td ><?php echo ProductMaterial::getJitStock($model['lid'],$model['dpid']);?></td>  -->
+								<td ><?php echo $model['unit_name'];?></td>
 								                               
-                                <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo ProductMaterial::getJitStock($model['lid'],$model['dpid']);?>" name="idss[]" />
+                                <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['stock_all'];?>" name="idss[]" />
 								<input class="kucundiv" type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
 								<!-- <input type="button"   onclick ="demo(this)" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
 								 --></td>
-								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
+								<?php if(Yii::app()->user->role <5):?>
+								<?php echo $model['stock_all'];?>
+								<?php endif;?>
 								 </td>
 								<td class="center">
+								<?php if(Yii::app()->user->role <5):?>
+								<?php  echo ProductMaterial::getJitStock($model['lid'],$model['dpid']);?>
+								<?php endif;?>
 								 </td>
 							</tr>
                                              <?php   ;?>
