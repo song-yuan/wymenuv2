@@ -25,7 +25,9 @@
 			//触发微信返回code码
 			$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 			$url = $this->__CreateOauthUrlForCode($baseUrl,'snsapi_base');
-			header("Location: ".$url, true, 302);
+			$res = file_get_contents($url);
+			var_dump($res);exit;
+			//header("Location: ".$url, true, 302);
 			exit();
 		} else {
 			//获取code码，以获取openid
