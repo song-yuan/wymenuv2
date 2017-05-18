@@ -610,19 +610,20 @@ class WxOrder
 				  ->queryAll();
 	    return $orderProduct;
 	}
-	public static function getUserOrderList($userId,$dpid,$type){
+	public static function getUserOrderList($userId,$dpid,$type,$page){
 		$user = WxBrandUser::get($userId, $dpid);
 		$dpid = WxCompany::getDpids($dpid);
 		if($type==1){
-			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
+			$sql = 'select m.*,n.logo,n.company_name from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2) and t1.remark="'.$user['card_id'].'")m,nb_company n where m.dpid=n.dpid order by m.lid desc';
 		}elseif($type==2){
-			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4,8)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (3,4,8) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
+			$sql = 'select m.*,n.logo,n.company_name from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4,8)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (3,4,8) and t1.remark="'.$user['card_id'].'")m,nb_company n where m.dpid=n.dpid order by m.lid desc';
 		}else{
-			$sql = 'select m.* from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4,8)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2,3,4,8) and t1.remark="'.$user['card_id'].'")m where 1 order by lid desc limit 20';
+			$sql = 'select m.*,n.logo,n.company_name from (select * from nb_order where dpid in ('.$dpid.') and user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4,8)';
+			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.dpid in ('.$dpid.') and t.order_type=0 and t.order_status in (1,2,3,4,8) and t1.remark="'.$user['card_id'].'")m,nb_company n where m.dpid=n.dpid order by m.lid desc';
 		}
+		$sql .= '  limit '. ($page-1)*10 .',10';
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
 	    return $orderList;
 	}
