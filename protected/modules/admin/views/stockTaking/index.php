@@ -130,10 +130,8 @@
 								<?php endif;?>
 								 </td>
 								<td class="center">
-								<?php if(Yii::app()->user->role <5):?>
-								<?php  echo ProductMaterial::getJitStock($model['lid'],$model['dpid']);?>
-								<?php endif;?>
-								 </td>
+								
+								</td>
 							</tr>
                                              <?php   ;?>
                                                       
