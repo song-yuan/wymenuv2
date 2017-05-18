@@ -22,18 +22,25 @@ class StockTakingController extends BackendController
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$sttype = Yii::app()->request->getParam('sttype',1);
-		$criteria = new CDbCriteria;
-		$criteria->with = array('category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
+		$db = Yii::app()->db;
 		if($categoryId){
-			$criteria->condition.=' and t.category_id = '.$categoryId;
+			$cate ='='.$categoryId;
+		}else{
+			$cate ='>0';
 		}
-		$criteria->order = 't.category_id asc,t.lid asc';
-	//	$criteria->condition.=' and t.lid = '.$categoryId;
-		//$pages = new CPagination(ProductMaterial::model()->count($criteria));
-		//$pages->setPageSize(1);
-		//$pages->applyLimit($criteria);
-		$models = ProductMaterial::model()->findAll($criteria);
+		
+		$sql = 'select k.category_name,t.* from nb_product_material t left join nb_material_category k on(t.category_id = k.lid and t.dpid = k.dpid) where t.delete_flag = 0 and t.dpid ='.$this->companyId.' and t.category_id '.$cate.' order by t.category_id asc,t.lid asc';
+		$models = $db->createCommand($sql)->queryAll();
+		
+// 		$criteria = new CDbCriteria;
+// 		$criteria->with = array('category');
+// 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
+// 		if($categoryId){
+// 			$criteria->condition.=' and t.category_id = '.$categoryId;
+// 		}
+// 		$criteria->order = 't.category_id asc,t.lid asc';
+// 		$models = ProductMaterial::model()->findAll($criteria);
+		//var_dump($models);exit;
 		$categories = $this->getCategories();
 		$this->render('index',array(
 				'models'=>$models,
