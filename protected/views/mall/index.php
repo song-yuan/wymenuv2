@@ -232,7 +232,7 @@ function getProduct(){
 						productStr +='</p>';
 						if(!hasclose){
 		         			if(parseInt(pProduct.num)){
-		         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly="readonly" value="'+pProduct.num+'">';
+		         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'+pProduct.store_number+'" readonly="readonly" value="'+pProduct.num+'">';
 		        				productStr +='<div class="add">+</div><div class="clear"></div></div><div class="clear"></div>';
 		
 		        				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="0_'+pProduct.lid+'_-1_-1">';
@@ -249,10 +249,10 @@ function getProduct(){
 		        				cartStr +='</div>';
 		         			}else{
 		         				if(parseInt(pProduct.store_number) != 0){
-			         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly="readonly" value="0">';
+			         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'+pProduct.store_number+'" readonly="readonly" value="0">';
 			        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
 		         				}else{
-		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly="readonly" value="0">';
+		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'+pProduct.store_number+'" readonly="readonly" value="0">';
 			        				productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
 		         				}
 		         			}
@@ -287,7 +287,7 @@ function getProduct(){
 						productStr +='</p>';
 						if(!hasclose){
 		         			if(parseInt(pProductSet.num)){
-		         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="'+pProductSet.num+'">';
+		         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'+pProductSet.store_number+'" readonly="readonly" value="'+pProductSet.num+'">';
 		         				productStr +='<div class="add">+</div><div class="clear"></div></div>';
 		
 		         				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="1_'+pProductSet.lid+'_-1_-1">';
@@ -304,10 +304,10 @@ function getProduct(){
 		        				cartStr +='</div>';
 		         			}else{
 		         				if(parseInt(pProductSet.store_number) != 0){
-		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
+		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
 		         					productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
 		         				}else{
-		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
+		         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'+pProductSet.lid+'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'+pProductSet.store_number+'" readonly="readonly" value="0">';
 		         					productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
 		         				}
 		         			}
@@ -357,7 +357,7 @@ function getProduct(){
              		promotionStr +='</p>';
              		if(!hasclose){
 	             		if(parseInt(promotionProduct.num)){
-	             				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="'+promotionProduct.num+'">';
+	             				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" can-cupon="'+promotion.can_cupon+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="'+promotionProduct.num+'">';
 	            				promotionStr +='<div class="add">+</div><div class="clear"></div></div>';
 	            				cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+promotion.is_set+'_'+promotionProduct.lid+'_'+promotion.normal_promotion_id+'_'+promotion.to_group+'">';
 	            				cartStr +='<div class="cart-dtl-item-inner">';
@@ -373,10 +373,10 @@ function getProduct(){
 	            				cartStr +='</div>';
 	             		}else{
 	             			if(parseInt(promotionProduct.store_number) != 0){
-	             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
+	             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" can-cupon="'+promotion.can_cupon+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
 	            				promotionStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
 	             			}else{
-	             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
+	             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'+promotion.is_set+'" product-id="'+promotionProduct.lid+'" promote-id="'+promotion.normal_promotion_id+'" to-group="'+promotion.to_group+'" can-cupon="'+promotion.can_cupon+'" store-number="'+promotionProduct.store_number+'" readonly="readonly" value="0">';
 	            				promotionStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
 	             			}
 	             		}
@@ -466,13 +466,14 @@ $(document).ready(function(){
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
+        var canCupon = t.attr('can-cupon');
         var isSet = t.attr('is-set');
         
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId));?>',
-        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
+        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,random:random},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);

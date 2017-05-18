@@ -631,9 +631,10 @@ class MallController extends Controller
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
+		$canCupon = Yii::app()->request->getParam('canCupon');
 		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$this->type);
 		
 		//检查活动商品数量
