@@ -14,7 +14,9 @@ class WxBrandUser {
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
 		if(empty($brandUser)){
 			$companyId = WxCompany::getCompanyDpid($dpid);
-			$brandUser = self:: get($userId,$companyId);
+			if($companyId!=0){
+				$brandUser = self:: get($userId,$companyId);
+			}
 		}
 		if($brandUser){
 			$brandUserLevel = self::getUserLevel($brandUser['user_level_lid'],$brandUser['dpid']);
