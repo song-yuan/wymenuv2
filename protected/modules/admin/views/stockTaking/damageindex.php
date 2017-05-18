@@ -113,34 +113,32 @@
 						<?php foreach ($models as $model):?>
 
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo $model->material_identifier;?></td>
-								<td ><?php echo $model->material_name;?></td>
-								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
-								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
-								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
-								<!-- <td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td>  -->
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td><?php echo $model['material_identifier'];?></td>
+								<td ><?php echo $model['material_name'];?></td>
+								<td><?php if(!empty($model['category_name'])) echo $model['category_name'];?></td>
+								<td ><?php echo $model['unit_name'];?></td>
 								                               
-                                <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model->lid;?>" value="<?php  echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="idss[]" />
-								<input class="kucundiv form-control" type="text"   style="width:100px;" name="leftnum<?php echo $model->lid;?>" id="idleftnum0<?php echo $model->lid;?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
-								<!-- <input type="button"   onclick ="demo(this)" name="leftbutton<?php echo $model->lid;?>" id="idleftbutton<?php echo $model->lid;?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
+                                <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['stock_all'];?>" name="idss[]" />
+								<input class="kucundiv form-control" type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+								<!-- <input type="button"   onclick ="demo(this)" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
 								 --></td>
 								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
 									<?php if($reasons):?>
-									<select class="form-control" id="selreadam<?php echo $model->lid;?>">
+									<select class="form-control" id="selreadam<?php echo $model['lid'];?>">
 										<option value="0" tip="<?php echo '未填写原因';?>"><?php echo '--请选择--';?></option>
 									<?php foreach ($reasons as $reason):?>
 										<option value="<?php echo $reason->name;?>" tip="<?php echo $reason->tip;?>"><?php echo $reason->name;?></option>
 									<?php endforeach;?>
 									</select>
 									<?php else:?>
-									<a style="color: grey;" href="<?php echo $this->createUrl('stockTaking/damagereason',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','请前去添加盘损原因');?></a>
+									<a style="color: grey;" href="<?php echo $this->createUrl('stockTaking/damagereason',array('id' => $model['lid'] , 'companyId' => $model['dpid']));?>"><?php echo yii::t('app','请前去添加盘损原因');?></a>
 									<?php endif;?>
-								<!-- <a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<!-- <a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model['lid'] , 'companyId' => $model['dpid']));?>"><?php echo yii::t('app','编辑');?></a>
 								 --></td>
 								<td class="center">
-								<!-- <a href="<?php echo $this->createUrl('productMaterial/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid,));?>"><?php echo yii::t('app','查看库存详情');?></a>
+								<!-- <a href="<?php echo $this->createUrl('productMaterial/detailindex',array('id' => $model['lid'] , 'companyId' => $model['dpid'],));?>"><?php echo yii::t('app','查看库存详情');?></a>
 								 --></td>
 							</tr>
                                              <?php   ;?>

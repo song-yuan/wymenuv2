@@ -22,18 +22,29 @@ class StockTakingController extends BackendController
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$sttype = Yii::app()->request->getParam('sttype',1);
-		$criteria = new CDbCriteria;
-		$criteria->with = array('category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
+		$db = Yii::app()->db;
 		if($categoryId){
-			$criteria->condition.=' and t.category_id = '.$categoryId;
+			$cate ='='.$categoryId;
+		}else{
+			$cate ='>0';
 		}
-		$criteria->order = 't.category_id asc,t.lid asc';
-	//	$criteria->condition.=' and t.lid = '.$categoryId;
-		//$pages = new CPagination(ProductMaterial::model()->count($criteria));
-		//$pages->setPageSize(1);
-		//$pages->applyLimit($criteria);
-		$models = ProductMaterial::model()->findAll($criteria);
+		
+		$sql = 'select ms.stock_all,mu.unit_name,k.category_name,t.* from nb_product_material t '.
+				'left join nb_material_category k on(t.category_id = k.lid and t.dpid = k.dpid)'.
+				'left join nb_material_unit mu on(t.stock_unit_id = mu.lid and t.dpid = mu.dpid and mu.delete_flag =0) '.
+				'left join (select sum(stock) as stock_all,material_id from nb_product_material_stock where dpid='.$this->companyId.' and delete_flag=0 group by material_id) ms on(t.lid = ms.material_id)'.
+				'where t.lid in(select tt.lid from nb_product_material tt where tt.delete_flag = 0 and tt.dpid ='.$this->companyId.' and tt.category_id '.$cate.') order by t.category_id asc,t.lid asc';
+		$models = $db->createCommand($sql)->queryAll();
+		
+// 		$criteria = new CDbCriteria;
+// 		$criteria->with = array('category');
+// 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
+// 		if($categoryId){
+// 			$criteria->condition.=' and t.category_id = '.$categoryId;
+// 		}
+// 		$criteria->order = 't.category_id asc,t.lid asc';
+// 		$models = ProductMaterial::model()->findAll($criteria);
+		//var_dump($models);exit;
 		$categories = $this->getCategories();
 		$this->render('index',array(
 				'models'=>$models,
@@ -46,20 +57,21 @@ class StockTakingController extends BackendController
 	}
 	public function actionDamageindex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$criteria = new CDbCriteria;
-		$criteria->with = array('category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
+		$db = Yii::app()->db;
 		if($categoryId){
-			$criteria->condition.=' and t.category_id = '.$categoryId;
+			$cate ='='.$categoryId;
+		}else{
+			$cate ='>0';
 		}
-		$criteria->order = 't.category_id asc,t.lid asc';
-		//	$criteria->condition.=' and t.lid = '.$categoryId;
-		//$pages = new CPagination(ProductMaterial::model()->count($criteria));
-		//$pages->setPageSize(1);
-		//$pages->applyLimit($criteria);
-		$models = ProductMaterial::model()->findAll($criteria);
-		$categories = $this->getCategories();
 		
+		$sql = 'select ms.stock_all,mu.unit_name,k.category_name,t.* from nb_product_material t '.
+				'left join nb_material_category k on(t.category_id = k.lid and t.dpid = k.dpid)'.
+				'left join nb_material_unit mu on(t.stock_unit_id = mu.lid and t.dpid = mu.dpid and mu.delete_flag =0) '.
+				'left join (select sum(stock) as stock_all,material_id from nb_product_material_stock where dpid='.$this->companyId.' and delete_flag=0 group by material_id) ms on(t.lid = ms.material_id)'.
+				'where t.lid in(select tt.lid from nb_product_material tt where tt.delete_flag = 0 and tt.dpid ='.$this->companyId.' and tt.category_id '.$cate.') order by t.category_id asc,t.lid asc';
+		$models = $db->createCommand($sql)->queryAll();
+		
+		$categories = $this->getCategories();
 		$reasons = $this->getReasons();
 		$this->render('damageindex',array(
 				'models'=>$models,
