@@ -30,37 +30,41 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
-			//如果微信浏览器
-			if(Helper::isMicroMessenger()){
-				$userId = Yii::app()->session['userId'];
-				if(empty($userId)){
-					$url = Yii::app()->request->url;
-					$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
-					exit;
-				}
-				
-				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-				if($this->type==1){
-					//堂吃
-					$scaned = WxScanLog::get($this->companyId,$userId);
-					if(!empty($scaned)){
-						$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
-						Yii::app()->session['qrcode-'.$userId] = $scene['id'];
-					}else{
-						Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
-					}
+// 		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
+		//如果微信浏览器
+		if(Helper::isMicroMessenger()){
+			$userId = Yii::app()->session['userId'];
+			if(empty($userId)){
+				$url = Yii::app()->request->url;
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				exit;
+			}
+			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
+			if(empty($this->brandUser)){
+				$url = Yii::app()->request->url;
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				exit;
+			}
+			if($this->type==1){
+				//堂吃
+				$scaned = WxScanLog::get($this->companyId,$userId);
+				if(!empty($scaned)){
+					$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
+					Yii::app()->session['qrcode-'.$userId] = $scene['id'];
 				}else{
-					Yii::app()->session['qrcode-'.$userId] = -1;
+					Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
 				}
 			}else{
-//				pc 浏览
-				$userId = 2122;
-				$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = -1;
 			}
+		}else{
+			//pc 浏览
+			$userId = 2122;
+			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
+			Yii::app()->session['userId'] = $userId;
+			Yii::app()->session['qrcode-'.$userId] = -1;
 		}
+// 		}
 		return true;
 	}
 	public function actionIndex()
@@ -627,9 +631,10 @@ class MallController extends Controller
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
+		$canCupon = Yii::app()->request->getParam('canCupon');
 		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$this->type);
 		
 		//检查活动商品数量

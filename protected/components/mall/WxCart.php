@@ -317,6 +317,10 @@ class WxCart
 		foreach($cartArrs as $cart){
 			if($cart['promotion_id'] < 0){
 				$price += $cart['price']*$cart['num'];
+			}else{
+				if($cart['can_cupon'] == 0){
+					$price += $cart['price']*$cart['num'];
+				}
 			}
 		}
 		return number_format($price,2);
