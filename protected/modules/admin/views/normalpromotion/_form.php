@@ -166,31 +166,31 @@
                         <div class="col-md-4" style="border:1px solid red;">
 
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="7" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("7", $weekdayids)){echo "checked";}}else echo "123";?> value="7" name="week" /></td>
+                                        <td><input type="checkbox" id="7" <?php if($a)echo 'disabled';?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("7", $weekdayids)){echo "checked";}}else echo "123";?> value="7" name="week" /></td>
                                         <td><?php echo "星期日"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="1" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("1", $weekdayids)){echo "checked";}}else echo "123";?> value="1" name="week" /></td>
+                                        <td><input type="checkbox" id="1" <?php if($a)echo 'disabled';?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("1", $weekdayids)){echo "checked";}}else echo "123";?> value="1" name="week" /></td>
                                         <td><?php echo "星期一"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="2" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("2", $weekdayids)){echo "checked";}}else echo "123";?>  value="2" name="week" /></td>
+                                        <td><input type="checkbox" id="2" <?php if($a)echo 'disabled';?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("2", $weekdayids)){echo "checked";}}else echo "123";?>  value="2" name="week" /></td>
                                         <td><?php echo "星期二"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="3" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("3", $weekdayids)){echo "checked";}}else echo "123";?>  value="3" name="week" /></td>
+                                        <td><input type="checkbox" id="3" <?php if($a)echo 'disabled';?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("3", $weekdayids)){echo "checked";}}else echo "123";?>  value="3" name="week" /></td>
                                         <td><?php echo "星期三"; ?></td>
                                 </tr></br>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="4" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("4", $weekdayids)){echo "checked";}}else echo "123";?>  value="4" name="week" /></td>
+                                        <td><input type="checkbox" id="4" <?php if($a)echo 'disabled';?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("4", $weekdayids)){echo "checked";}}else echo "123";?>  value="4" name="week" /></td>
                                         <td><?php echo "星期四"; ?></td>	
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="5" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("5", $weekdayids)){echo "checked";}}else echo "123";?>  value="5" name="week" /></td>
+                                        <td><input type="checkbox" id="5" <?php if($a)echo 'disabled';?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("5", $weekdayids)){echo "checked";}}else echo "123";?>  value="5" name="week" /></td>
                                         <td><?php echo "星期伍"; ?></td>
                                 </tr>
                                 <tr class="odd gradeX">
-                                        <td><input type="checkbox" id="6" disabled =<?php echo $a;?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("6", $weekdayids)){echo "checked";}}else echo "123";?>  value="6" name="week" /></td>
+                                        <td><input type="checkbox" id="6" <?php if($a)echo 'disabled';?> class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("6", $weekdayids)){echo "checked";}}else echo "123";?>  value="6" name="week" /></td>
                                         <td><?php echo "星期六"; ?></td>
                                 </tr>
                         </div>
@@ -218,7 +218,7 @@
                 </div><!-- 图文说明 -->
                 <div class="form-actions fluid">
                         <div class="col-md-offset-3 col-md-9">
-                                <button style="background-color: <?php if($a)echo 'silver !important;';?>" type="button" id="su" disabled = <?php echo $a;?> class="btn blue "><?php echo yii::t('app','确定并下一步');?></button>
+                                <button style="background-color: <?php if($a)echo 'silver !important;';?>" type="button" id="su" <?php if($a)echo 'disabled';?> class="btn blue "><?php echo yii::t('app','确定并下一步');?></button>
                                 <a href="<?php echo $this->createUrl('normalpromotion/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
                         </div>
                 </div>
