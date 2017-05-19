@@ -41,7 +41,7 @@
 					       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
 					       str +='<div class="right">';
 					    	   str +='<h1><span class="com-name">'+cObj.company_name+'</span><span class="rest_message small font_l">';
-					    	   if(cObj.is_rest=='1'||cObj.is_rest=='2'){
+					    	   if(cObj.is_rest=='2'){
 					    		   str +='(休息中...)';
 						    	}
 						    	str +='</span></h1>';
