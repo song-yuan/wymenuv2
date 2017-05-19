@@ -232,6 +232,7 @@ class WxCart
 	        	'site_id'=>$this->siteId,
 	        	'promotion_id'=>$this->productArr['promotion_id'],
 	        	'to_group'=>$this->productArr['to_group'],
+	        	'can_cupon'=>$this->productArr['can_cupon'],
 	        	'is_sync'=>DataSync::getInitSync(),	
 	        );
 			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
