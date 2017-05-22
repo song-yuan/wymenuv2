@@ -385,14 +385,14 @@ class DataSyncOperation {
 	 */
 	public static function operateOrder($data) {
 		$syncLid = 0;
-		if(isset($data ['sync_lid'])){
-			$syncLid = $data ['sync_lid'];
+		if(isset($data['sync_lid'])){
+			$syncLid = $data['sync_lid'];
 		}
-		$dpid = $data ['dpid'];
-		$padSetLid = $data ['posLid']; // pad序列号对于的lid
-		$orderData = $data ['data'];
-		$obj = json_decode ( $orderData );
-		if (isset ( $data ['is_pos'] ) && $data ['is_pos'] > 0) {
+		$dpid = $data['dpid'];
+		$padSetLid = isset($data['posLid'])?$data['posLid']:0; // pad序列号对于的lid
+		$orderData = $data['data'];
+		$obj = json_decode( $orderData );
+		if (isset ( $data['is_pos'] ) && $data['is_pos'] > 0) {
 			$isSync = 0;
 		} else {
 			$isSync = DataSync::getInitSync ();
@@ -1132,7 +1132,7 @@ class DataSyncOperation {
 			$dpid = 0;
 			$lidArr = array();
 			$adminId = $data['admin_id'];
-			$poscode = $data['poscode'];
+			$poscode = isset($data['poscode'])?$data['poscode']:0;
 			$data = $data['data'];
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
