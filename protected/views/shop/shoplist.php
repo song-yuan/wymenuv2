@@ -35,6 +35,11 @@
 		        data:{page:page,lat:latitude,lng:longitude,keyword:shopName},
 		        success:function(msg){
 			        if(msg.length > 0){
+			        	if(msg.length==10){
+			        		$('#more').show();
+			        	}else{
+			        		$('#more').hide();
+			        	}
 			        	var str = '';
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
@@ -67,11 +72,6 @@
 					    }
 				        if(page==0){
 				        	$('#tips').hide();
-				        	if(msg.length==10){
-				        		$('#more').show();
-				        	}else{
-				        		$('#more').hide();
-				        	}
 				        	$('#activeshop').html(str);
 					    }else{
 					    	$('#activeshop').append(str);
