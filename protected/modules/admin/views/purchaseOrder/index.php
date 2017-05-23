@@ -67,7 +67,7 @@
 					<div class="actions">
 						<div class="btn-group">
 						<?php if(Yii::app()->user->role <5):?>
-							<button type="button"  class="btn blue" > <?php echo yii::t('app','自动生成采购单');?></button>
+							<button type="button"  class="btn blue autopurchase" > <?php echo yii::t('app','自动生成采购单');?></button>
 						 <?php endif;?>
 						</div>
 						<a href="<?php echo $this->createUrl('purchaseOrder/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
@@ -192,4 +192,29 @@
 			stepSecond: 1
 		})
 	});
+	$('.autopurchase').on('click',function(){
+		
+		$.ajax({
+            type:'GET',
+			url:"<?php echo $this->createUrl('autoAlltask/autogenpurchase',array('companyId'=>$this->companyId,));?>",
+			async: false,
+			//data:"companyId="+company_id+'&padId='+pad_id,
+            cache:false,
+            dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg.status)
+	            {
+		            layer.msg(msg.msg,{time:5000});     
+		            //location.reload();
+	            }else{
+	            	layer.msg(msg.msg); 
+		            //location.reload();
+	            }
+			},
+            error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+	})
 	</script>	

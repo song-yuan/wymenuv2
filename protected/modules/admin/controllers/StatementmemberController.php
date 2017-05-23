@@ -164,7 +164,327 @@ class StatementmemberController extends BackendController
 		));
 	}
 	
+	/*
+	 * 微信端充值记录报表
+	*/
+	public function actionWxRecharge(){
+	
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$text = Yii::app()->request->getParam('text');
+		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
+		$money = "";
+		$recharge = "";
+	
+		$db = Yii::app()->db;
+		$com_sql = 'select type,comp_dpid ,company_name from nb_company where dpid ='.$companyId;
+		$com = Yii::app()->db->createCommand($com_sql)->queryRow();
+		$branch_sql = 'select dpid,company_name from nb_company where type= 1 and comp_dpid ='.$companyId;
+		$branch = Yii::app()->db->createCommand($branch_sql)->queryAll();
+	
+	
+			if($com['type']==0){
+					 
+				$sql = 'select cf.* from ( select sum(k.recharge_money) as recharge_all,sum(k.cashback_num) as cashback_all,p.pay_all,k.* '
+						. ' from('
+								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,'
+								.' t.recharge_money,t.cashback_num,t.brand_user_lid,com.company_name '
+								.' from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
+								.' where t.brand_user_lid = t1.lid and t1.dpid='.$companyId.' and com.dpid = t1.weixin_group and '
+								.' t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$companyId
+						. ' ) k'
+						. ' left join ('
+								.'select sum(op.pay_amount) as pay_all,op.remark from nb_order_pay op '
+										.'where op.paytype = 10 group by op.remark '
+						. ' ) p on(p.remark = k.card_id) group by k.card_id ) cf';
+			
+			}else{
+				 
+				$sql = 'select cf.* from ( select sum(k.recharge_money) as recharge_all,sum(k.cashback_num) as cashback_all,p.pay_all,k.* '
+						. ' from('
+								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,'
+								.' t.recharge_money,t.cashback_num,t.brand_user_lid,com.company_name '
+								.' from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
+								.' where  t.brand_user_lid = t1.lid and t1.dpid='.$com['comp_dpid'].' and t1.weixin_group = '.$companyId.' and com.dpid = t1.weixin_group and '
+								.' t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$com['comp_dpid']
+						. ' ) k'
+						. ' left join ('
+								.' select sum(op.pay_amount) as pay_all,op.remark from nb_order_pay op '
+										.' where op.paytype = 10 group by op.remark '
+						.' ) p on(p.remark = k.card_id) group by k.card_id ) cf';
+			
+			}
+		
+	
+		$count = $db->createCommand(str_replace('cf.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+	
+	
+		//var_dump($models);exit;
+		$this->render('wxRecharge',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'moneys'=>$money,
+				'recharge'=>$recharge,
+				'text'=>$text,
+				'com'=>$com,
+				'branch'=>$branch
+		));
+	}
+	public function actionPaymentReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text','1');
+		$userid = Yii::app()->request->getParam('userid');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
+	
+		
+		$sql = 'select k.dpid from nb_company k where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0';
+		$dpids = Yii::app()->db->createCommand($sql)->queryAll();
+		$strs ='0000000000';
+		foreach ($dpids as $dpid){
+			$strs = $strs .','.$dpid['dpid'];
+		}
+		
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in ('.$strs.') and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		//var_dump($ords);exit;
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(distinct t.account_no) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
+		$criteria->with = array('company','orderpay');
+		$criteria->condition = 'orderpay.paytype != "11" and t.order_status in (3,4,8)' ;
+		$criteria->addCondition('t.lid in('.$ords.')');
+		if($strs){
+			$criteria->condition = 't.dpid in('.$strs.')';
+		}else{
+			$criteria->condition = 't.dpid ='.$this->companyId;
+		}
+		
+		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+		
+		$criteria->group ='t.dpid';
+		$criteria->order = 'year(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 
+		$criteria->distinct = TRUE;
+		$model = Order::model()->findAll($criteria);
+		//var_dump($model);exit;
+		$payments = $this->getPayment($this->companyId);
+		$username = $this->getUsername($this->companyId);
+		$comName = $this->getComName();
+		//var_dump($model);exit;
+		$this->render('paymentReport',array(
+				'models'=>$model,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				'payments'=>$payments,
+				'username'=>$username,
+				'userid'=>$userid,
+		));
+	}
+	public function actionConsumelist(){
+		$db=Yii::app()->db;
+		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
+		$dpid = Yii::app()->request->getParam('dpid','0');
+		$cardid = Yii::app()->request->getParam('cardid',"0000000000");
+		$name = Yii::app()->request->getParam('name',"");
+		
+		$sql = 'select k.* from ('
+				. ' select com.company_name,mo.should_total,mo.reality_total,mo.order_type,op.create_at,op.order_id,op.account_no,op.pay_amount,op.remark from nb_order_pay op '
+				. ' left join (select o.* from nb_order o where o.order_status in("3","4","8") ) mo on(mo.dpid = op.dpid and mo.lid = op.order_id) '
+				. ' left join nb_company com on(op.dpid = com.dpid)'
+				. ' where op.paytype = 10 and op.remark ='.$cardid
+				. ' and op.dpid in(select com.dpid from nb_company com where com.delete_flag = 0 and com.dpid = '.$companyId.' or com.comp_dpid ='.$companyId.') ) k';
+
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		//var_dump($models);exit;
+		$this->renderPartial('consumelist' , array(
+				'models' => $models,
+				'pages' => $pages,
+				'name' => $name
+		));
+	}
+	
+
+	public function actionRechargelist(){
+		$db=Yii::app()->db;
+		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
+		$dpid = Yii::app()->request->getParam('dpid','0');
+		$cardid = Yii::app()->request->getParam('cardid',"0000000000");
+		$cardlid = Yii::app()->request->getParam('cardlid',"0000000000");
+		$name = Yii::app()->request->getParam('name',"");
+	
+		$sql = 'select k.* from ('
+				. ' select com.company_name,rr.create_at,rr.recharge_money,rr.cashback_num,rr.point_num from nb_recharge_record rr '
+				. ' left join nb_brand_user bu on(bu.dpid = rr.dpid and bu.lid = rr.brand_user_lid) '
+				. ' left join nb_company com on(rr.dpid = com.dpid)'
+				. ' where rr.delete_flag = 0'
+				. ' and rr.brand_user_lid = "'.$cardlid.'" ) k';
+	
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		//var_dump($models);exit;
+		$this->renderPartial('rechargelist' , array(
+				'models' => $models,
+				'pages' => $pages,
+				'name' => $name
+		));
+	}
+	//获取店铺的支付方式....
+	public function getPayments($dpid){
+		$model =  '';
+		if($dpid){
+			$sql = 'select t.* from nb_payment_method t where t.delete_flag = 0 and t.dpid='.$dpid;
+			$connect = Yii::app()->db->createCommand($sql);
+			$models = $connect->queryAll();
+			//$accountMoney = $money['all_zhifu'];
+		}
+		if(!empty($models)){
+			return $models;
+		}else{
+			return $model;
+		}
+	}
+	public function getPayment($dpid){
+		$sql = 'select t.lid,t.dpid,t.name from nb_payment_method t where t.delete_flag = 0 and t.dpid ='.$dpid;
+		$connect = Yii::app()->db->createCommand($sql);
+		$models = $connect->queryAll();
+		return $models;
+	}
+	public function getUsername($dpid){
+		$name='';
+		$sql = 'select t.* from nb_user t where t.delete_flag = 0 and t.dpid='.$dpid;
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryAll();
+		if(!empty($model)){
+			return $model;
+		}else{
+			return $name;
+		}
+	}
+	public function getComName(){
+		$uid = Yii::app()->user->id;
+		$sql = 'select t.lid,t.dpid,t1.company_id,t2.company_name from nb_user t left join nb_user_company t1 on(t.dpid = t1.dpid and t.lid = t1.user_id and t1.delete_flag = 0) left join nb_company t2 on(t1.company_id = t2.dpid ) where t.delete_flag = 0 and t.username = "'.$uid.'"';
+		//var_dump($sql);exit;
+		$connect = Yii::app()->db->createCommand($sql);
+		//var_dump($connect);exit;
+		$models = $connect->queryAll();
+		//var_dump($model);exit;
+		//$options = array();
+		$optionsReturn = array();
+		//var_dump($optionsReturn);exit;
+		if($models) {
+			foreach ($models as $model) {
+				//var_dump($model);exit;
+				$optionsReturn[$model['company_id']] = $model['company_name'];
+				//var_dump($optionsReturn);exit;
+			}
+			//var_dump($optionsReturn);exit;
+		}
+	
+		//var_dump($optionsReturn);exit;
+		return $optionsReturn;
+	}
+
+	//gross profit 毛利润计算
+	public function getGrossProfit($dpid,$begin_time,$end_time){
+	
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$dpid.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+	
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.should_total) as should_all,sum(t.reality_total) as reality_all,count(*) as all_num';//array_count_values()
+		//$criteria->with = array('company','order4');
+		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
+		$criteria->addCondition ('t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59"');
+		$criteria->addCondition('t.lid in('.$ords.')');
+		
+		$model = Order::model()->findAll($criteria);
+		$price = '';
+		//var_dump($model);exit;
+		if(!empty($model)){
+			foreach ($model as $models){
+				$price = $models->reality_all?$models->reality_all:0;
+			}
+		}
+		return $price;
+	}
+	
+	public function getPaymentPrice($dpid,$begin_time,$end_time,$type,$num){
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$dpid.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+	
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+		$criteria->with = array('company','order4');
+		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
+		$criteria->addCondition ('t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59"');
+		$criteria->addCondition('t.order_id in('.$ords.')');
+		
+		if($type==3){
+			$criteria->addCondition("t.paytype =3 and t.payment_method_id ='$num'");
+		}else{
+			$criteria->addCondition("t.paytype ='$num'");
+		}
+		$model = OrderPay::model()->findAll($criteria);
+		$price = '';
+		if(!empty($model)){
+			foreach ($model as $models){
+				$price = $models->all_reality?$models->all_reality:0;
+			}
+		}
+		return $price;
+	}
+	
+
+	/*
+	 * 支付方式报表的退款查询
+	*/
+	public function getPaymentRetreat($dpid,$begin_time,$end_time){
+		$begin_time = $begin_time.' 00:00:00';
+		$end_time = $end_time.' 23:59:59';
+		$db = Yii::app()->db;
+		
+		$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
+		
+		//var_dump($sql2);exit;
+		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
+		return $retreat['retreat_allprice'];
+	}	
+	
 	//办卡记录excel
 	public function actionCardmemberExport(){
 		$str = Yii::app()->request->getParam('str');
