@@ -31,7 +31,7 @@ class WxCupon
 	 * 未使用
 	 * 
 	 */
-	public static function getUserNotUseCupon($userId,$dpid,$productIds){
+	public static function getUserNotUseCupon($userId,$dpid,$productIds=''){
 		$now = date('Y-m-d H:i:s',time());
 		$productcode = 0;
 		if($productIds!=''){
