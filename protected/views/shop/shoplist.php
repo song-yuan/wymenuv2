@@ -35,13 +35,18 @@
 		        data:{page:page,lat:latitude,lng:longitude,keyword:shopName},
 		        success:function(msg){
 			        if(msg.length > 0){
+			        	if(msg.length==10){
+			        		$('#more').show();
+			        	}else{
+			        		$('#more').hide();
+			        	}
 			        	var str = '';
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
 					       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
 					       str +='<div class="right">';
 					    	   str +='<h1><span class="com-name">'+cObj.company_name+'</span><span class="rest_message small font_l">';
-					    	   if(cObj.is_rest=='1'||cObj.is_rest=='2'){
+					    	   if(cObj.is_rest=='2'){
 					    		   str +='(休息中...)';
 						    	}
 						    	str +='</span></h1>';
@@ -67,11 +72,6 @@
 					    }
 				        if(page==0){
 				        	$('#tips').hide();
-				        	if(msg.length==10){
-				        		$('#more').show();
-				        	}else{
-				        		$('#more').hide();
-				        	}
 				        	$('#activeshop').html(str);
 					    }else{
 					    	$('#activeshop').append(str);
