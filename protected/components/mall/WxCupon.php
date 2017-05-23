@@ -37,7 +37,7 @@ class WxCupon
 		if($productIds!=''){
 			$sql = 'select phs_code from nb_product where dpid='.$dpid.' and lid in('.$productIds.')';
 			$productIdArr = Yii::app()->db->createCommand($sql)->queryColumn();
-			$productcode = join(',',$productcode);
+			$productcode = join(',',$productIdArr);
 		}
 		$comdpid = WxCompany::getCompanyDpid($dpid);
 		$sql = 'select m.lid,m.dpid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from nb_cupon_branduser m ,(select * from nb_cupon where type_dpid=0 and type_prod=0 and delete_flag=0'. 
