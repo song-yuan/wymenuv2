@@ -1707,7 +1707,7 @@ class DataSyncOperation {
 	public static function getUserInfo($data) {
 		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
-		$productIds = $data['pro_ids'];
+		$productIds = isset($data['pro_ids'])?$data['pro_ids']:'';
 		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
 			$user['user_birthday'] = date('m.d',strtotime($user['user_birthday']));
