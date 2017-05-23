@@ -4,7 +4,7 @@
 <div class="page-content">
 
     <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
-    <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="portlet-consume" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -201,6 +201,7 @@
 			   location.href="<?php echo $this->createUrl('statementmember/wxRecharge' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/page/"    
 			  
 	        });
+		  });
           var totalurl='';
           var modalconsumetotal;
           $(".consumelist").on("click",function(){
@@ -208,7 +209,7 @@
               var dpid = $(this).attr("dpid");
               var name = $(this).attr("membername");
               //layer.msg(cardid+'@'+dpid);
-              modalconsumetotal=$('#portlet-config');
+              modalconsumetotal=$('#portlet-consume');
                   totalurl='<?php echo $this->createUrl('statementmember/consumelist',array('companyId'=>$this->companyId));?>/dpid/'+dpid+'/cardid/'+cardid+'/name/'+name;
                   modalconsumetotal.find('.modal-content').load(totalurl
                   ,'', function(){
@@ -221,7 +222,7 @@
               var dpid = $(this).attr("dpid");
               var name = $(this).attr("membername");
               //layer.msg(cardid+'@'+dpid);
-              modalconsumetotal=$('#portlet-config');
+              modalconsumetotal=$('#portlet-consume');
                   totalurl='<?php echo $this->createUrl('statementmember/rechargelist',array('companyId'=>$this->companyId));?>/dpid/'+dpid+'/cardid/'+cardid+'/cardlid/'+cardlid+'/name/'+name;
                   modalconsumetotal.find('.modal-content').load(totalurl
                   ,'', function(){
@@ -229,7 +230,7 @@
               });
           })
 	    
-		});
+
                 
 		 $('#excel').click(function excel(){
 
