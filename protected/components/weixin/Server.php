@@ -13,7 +13,7 @@
 class Server {
 	public $brandId;
     public $token;
-    
+    public $hostInfo;
     /**
      * 初始化
      * 公众帐号接口信息中URL
@@ -21,6 +21,7 @@ class Server {
      */
     public function __construct($brandId) {
     	$this->brandId = $brandId;
+    	$this->hostInfo = Yii::app()->request->getHostInfo();
         if(isset($_GET['echostr'])){
         	$this->token();
         	$this->checkSignature();
@@ -176,15 +177,12 @@ class Server {
      */
 	public function generalResponse() {
 		$subPushs = array();
-		$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
-    	if(!empty($promotionPushs)){
-    		foreach($promotionPushs as $push){
-    			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
+		$weixiPushs = WxSubPush::getSubPush($this->brandId);
+    	if(!empty($weixiPushs)){
+    		foreach($weixiPushs as $push){
+    			array_push($subPushs,array($push['title'],$push['desc'],$this->hostInfo.$push['pic_url'],$push['href_url']));
     		}
     		return $this->news($subPushs);
-    	}else{
-    		array_push($subPushs,array('会员注册', '恭喜你成为新会员,完善资料有惊喜哦!', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', Yii::app()->createAbsoluteUrl('/user/index', array('companyId'=>$this->brandId))));
-            return $this->news($subPushs);
     	}
 	}
 	
@@ -193,61 +191,49 @@ class Server {
 	 */
 	public function sceneResponse() {
 		$subPushs = array();
-		
-		$tableArr = array(
-			1=>array('serial', 'type_id','欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
-			3=>array('company_name', 'comp_dpid', '恭喜你成为新会员,完善资料有惊喜哦', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_company'),
-		);
-		
 		$sceneType = $this->scene['type'];
-		
-		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->brandId;
-		if(isset($tableArr[$sceneType][5])){
-			$sql.= ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['id'];
-		}
-		$query = Yii::app()->db->createCommand($sql)->queryRow();
-		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
-
-		if($query) { 
-			$urlArr = array(
-					1=>array('mall/index','companyId'),
-					3=>array('user/index','companyId'),
+		if($sceneType==1){
+			$tableArr = array(
+				1=>array('serial', 'type_id','欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 			);
-			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
-			if($this->scene['type']==1){
+			
+			$sql = 'SELECT '.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->brandId;
+			if(isset($tableArr[$sceneType][5])){
+				$sql.= ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['id'];
+			}
+			$query = Yii::app()->db->createCommand($sql)->queryRow();
+			$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
+			
+			if($query) {
+				$urlArr = array(
+					1=>array('mall/index','companyId'),
+				);
+				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
+				
 				$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$this->brandId;
 				$siteType = Yii::app()->db->createCommand($sql)->queryRow();
-				
+		
 				$typeName = isset($siteType['name'])?$siteType['name']:'';
 				$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
-			}elseif ($this->scene['type']==3){
-				if($this->brandUser['weixin_group']==0){
-					$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['id']);
-					WxBrandUser::updateByOpenid($data);
-				}
-				$siteArr = array('会员注册', $query['description'], $query['imgUrl'], $redirectUrl);
+					
+				array_push($subPushs,$siteArr);
+				
+				return $this->news($subPushs);
+			}else{
+				return $this->generalResponse();
 			}
-			
-			array_push($subPushs,$siteArr);
-	    	
-	    	 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
-	    	 	$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
-	        	if(!empty($promotionPushs)){
-	        		foreach($promotionPushs as $push){
-	        			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
-	        		}
-	        	}
-	    	 }else{
-	    	 	$promotionPushs = WxPromotionActivity::getScanPush($this->brandId);
-		    	if(!empty($promotionPushs)){
-		    		foreach($promotionPushs as $push){
-		    			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
-		    		}
-		    	}
-	    	 }
-			return $this->news($subPushs);
 		}else{
-			return $this->generalResponse();
+			if($this->brandUser['weixin_group']==0){
+				$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['id']);
+				WxBrandUser::updateByOpenid($data);
+			}
+			$weixiPushs = WxSubPush::getSubPush($this->brandId);
+			if(!empty($weixiPushs)){
+				foreach($weixiPushs as $push){
+					array_push($subPushs,array($push['title'],$push['desc'],$this->hostInfo.$push['pic_url'],$push['href_url']));
+				}
+				return $this->news($subPushs);
+			}
 		}
 	}
 	
