@@ -176,14 +176,16 @@ class Server {
      * @return String 
      */
 	public function generalResponse() {
-		$subPushs = array();
-		$weixiPushs = WxSubPush::getSubPush($this->brandId);
-    	if(!empty($weixiPushs)){
-    		foreach($weixiPushs as $push){
-    			array_push($subPushs,array($push['title'],$push['desc'],$this->hostInfo.$push['pic_url'],$push['href_url']));
-    		}
-    		return $this->news($subPushs);
-    	}
+		if($this->event == 'subscribe') {
+			$subPushs = array();
+			$weixiPushs = WxSubPush::getSubPush($this->brandId);
+	    	if(!empty($weixiPushs)){
+	    		foreach($weixiPushs as $push){
+	    			array_push($subPushs,array($push['title'],$push['desc'],$this->hostInfo.$push['pic_url'],$push['href_url']));
+	    		}
+	    		return $this->news($subPushs);
+	    	}
+		}
 	}
 	
 	/**
@@ -227,12 +229,14 @@ class Server {
 				$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['id']);
 				WxBrandUser::updateByOpenid($data);
 			}
-			$weixiPushs = WxSubPush::getSubPush($this->brandId);
-			if(!empty($weixiPushs)){
-				foreach($weixiPushs as $push){
-					array_push($subPushs,array($push['title'],$push['desc'],$this->hostInfo.$push['pic_url'],$push['href_url']));
+			if($this->event == 'subscribe') {
+				$weixiPushs = WxSubPush::getSubPush($this->brandId);
+				if(!empty($weixiPushs)){
+					foreach($weixiPushs as $push){
+						array_push($subPushs,array($push['title'],$push['desc'],$this->hostInfo.$push['pic_url'],$push['href_url']));
+					}
+					return $this->news($subPushs);
 				}
-				return $this->news($subPushs);
 			}
 		}
 	}
