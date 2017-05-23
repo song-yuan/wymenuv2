@@ -31,19 +31,25 @@ class WxCupon
 	 * 未使用
 	 * 
 	 */
-	public static function getUserNotUseCupon($userId,$dpid){
+	public static function getUserNotUseCupon($userId,$dpid,$productIds){
 		$now = date('Y-m-d H:i:s',time());
-		$user = WxBrandUser::get($userId,$dpid);
-		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select m.lid,m.dpid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used = 1 and delete_flag=0' .
-				' union select * from nb_cupon_branduser where to_group=2 and brand_user_lid=:userLevelId and is_used = 1 and delete_flag=0)m ,nb_cupon n' .
-				' where m.cupon_id=n.lid and m.dpid=n.dpid and n.begin_time <=:now and :now <= n.end_time and n.delete_flag=0';
+		$productcode = 0;
+		if($productIds!=''){
+			$sql = 'select phs_code from nb_product where dpid='.$dpid.' and lid in('.$productIds.')';
+			$productIdArr = Yii::app()->db->createCommand($sql)->queryColumn();
+			$productcode = join(',',$productcode);
+		}
+		$comdpid = WxCompany::getCompanyDpid($dpid);
+		$sql = 'select m.lid,m.dpid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from nb_cupon_branduser m ,(select * from nb_cupon where type_dpid=0 and type_prod=0 and delete_flag=0'. 
+				' union select t.* from nb_cupon t left join nb_cupon_product t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid=0 and t.type_prod=1 and t1.prod_code in('.$productcode.') and t.delete_flag=0 and t1.delete_flag=0'.
+				' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid=1 and t.type_prod=0 and t1.cupon_dpid in('.$dpid.') and t.delete_flag=0 and t1.delete_flag=0) n' .
+				' where m.cupon_id=n.lid and m.dpid=n.dpid m.dpid=:comdpid and m.to_group=3 and m.brand_user_lid=:userId and m.is_used = 1 and m.delete_flag=0 and n.begin_time <=:now and :now <= n.end_time';
 		
-                $cupon = Yii::app()->db->createCommand($sql)
-				  ->bindValue(':userId',$userId)
-				  ->bindValue(':now',$now)
-				  ->bindValue(':userLevelId',$user['user_level_lid'])
-				  ->queryAll();
+        $cupon = Yii::app()->db->createCommand($sql)
+        			->bindValue(':comdpid',$comdpid)
+				  	->bindValue(':userId',$userId)
+				  	->bindValue(':now',$now)
+				  	->queryAll();
 	    return $cupon;
 	}
 	/**
