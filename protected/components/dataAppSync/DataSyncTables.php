@@ -439,32 +439,6 @@ class DataSyncTables
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
-        	"nb_product_group"=>"CREATE TABLE IF NOT EXISTS nb_product_group (".
-        		"lid int(10) NOT NULL,".
-        		"dpid int(10) NOT NULL,".
-        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"name varchar(50) NOT NULL,".
-        		"pg_code varchar(12) NOT NULL DEFAULT '0',".
-        		"source varchar(2) NOT NULL DEFAULT '0',".
-        		"delete_flag varchar(1) NOT NULL DEFAULT '0',".
-        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
-        		"PRIMARY KEY (lid,dpid)".
-        		")",
-        	"nb_product_group_detail"=>"CREATE TABLE IF NOT EXISTS nb_product_group_detail (".
-        		"lid int(10) NOT NULL,".
-        		"dpid int(10) NOT NULL,".
-        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"prod_group_id int(10) NOT NULL DEFAULT '0',".
-        		"product_id int(10) NOT NULL DEFAULT '0',".
-        		"price decimal(10,2) NOT NULL DEFAULT '0.00',".
-        		"number tinyint NOT NULL DEFAULT '1',".
-        		"is_select char(1) NOT NULL DEFAULT '1',".
-        		"delete_flag char(1) NOT NULL DEFAULT '0',".
-        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
-        		"PRIMARY KEY (lid,dpid)".
-        		")",
         	"nb_product_set_group"=>"CREATE TABLE IF NOT EXISTS nb_product_set_group (".
         		"lid int(10) NOT NULL,".
         		"dpid int(10) NOT NULL,".
