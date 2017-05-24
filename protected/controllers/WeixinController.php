@@ -93,6 +93,7 @@ class WeixinController extends Controller
 	 		$brandUser = $newBrandUser->brandUser;
 	 	}
 	 	$userId = $brandUser['lid'];
+	 	session_start();
 	 	$_SESSION['userId'] = $userId;
 	 	
 	 	$this->redirect(urldecode($url));
