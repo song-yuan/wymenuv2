@@ -61,28 +61,10 @@
 		                <!-- 	<th>序号</th> -->
 		               <th><?php echo yii::t('app','店铺');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
-		               <th><?php echo yii::t('app','毛利润');?></th> 
-		               <th><?php echo yii::t('app','优惠');?></th>
-		               <th><?php echo yii::t('app','实收款');?></th>
-		               
-		               <th><?php echo yii::t('app','现金');?></th>
-		               <th><?php echo yii::t('app','微信');?></th>
-		               <th><?php echo yii::t('app','微点单');?></th>
-		               <th><?php echo yii::t('app','微外卖');?></th>
-		               <th><?php echo yii::t('app','支付宝');?></th>
-		               <th><?php echo yii::t('app','银联');?></th>
-		               <th><?php echo yii::t('app','会员卡');?></th>
-		               <?php if($payments):?>
-		                    <?php foreach ($payments as $payment):?>
-		                         <th><?php echo $payment['name'];
-		                            $grouppay_item ++;
-		                         ?></th>
-		                    <?php endforeach;?>
-		               <?php endif;?>   
+		               <th><?php echo yii::t('app','实收款');?></th> 
 		               <th><?php echo yii::t('app','系统券');?></th>
 		               <th><?php echo yii::t('app','积分');?></th> 
-		               <th><?php echo yii::t('app','微信余额');?></th>                                                            
-		               <th><?php echo yii::t('app','退款');?></th>
+		               <th><?php echo yii::t('app','微信储值支付');?></th>                                                            
 		
 		            </tr>
 		        </thead>
@@ -91,26 +73,12 @@
 		        <!--foreach-->
 		        <?php $a=1;?>
 		        <?php 
-		         $orders_total=0;      // 总单数
-		         $grossprofit_total=0; // 总毛利润
-		         $discount_total=0;    // 总优惠
-		         $gather_total=0;      // 实收款 
-		         $cash_total=0;        // 现金
-		         $wechat_total = 0;    // 微信
-		         $wxorder_total = 0;    // 微信点单
-		         $wxwaimai_total = 0;    // 微信外卖
-		         $alipay_total = 0;    // 支付宝
-		         $unionpay_total=0;    // 银联
-		         $vipcard_total = 0;   // 会员卡 
-		         $grouppay_arr = array();   //支付宝/美团
-		        for($i =0;$i<$grouppay_item;$i++){
-		           $grouppay_arr[$i] =0; 
-		           // $grouppay.$i =0;
-		        }
-		        $all_wxcards = 0;
-		        $all_wxcharges = 0;
-		        $all_wxpoints = 0;
-		        $retreats = 0;
+		         	$orders_total=0;      // 总单数
+		         	$gather_total=0;      // 实收款 
+		        	$all_wxcards = 0;
+		        	$all_wxcharges = 0;
+		        	$all_wxpoints = 0;
+		        	$retreats = 0;
 		        foreach ($models as $model): ?>
 		
 		        <tr class="odd gradeX">
@@ -120,79 +88,10 @@
 		                $orders_total = $orders_total+$model->all_nums;    //总单数
 		                echo $model->all_nums;?></td>
 		             <td><?php 
-		                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time);
-		                $grossprofit_total+=$reality_all;
-		                echo $reality_all;
-		                ?></td>
-		            
-		            <td><?php 
-						//退款...
-			            $retreat = $this->getPaymentRetreat($model->dpid,$begin_time,$end_time);
-			            $retreats+=$retreat;
-		            	//优惠...
-		                $discount=sprintf("%.2f",$reality_all-$model->all_reality+$retreat);
-		                $discount_total += $discount;
-		                echo $discount;
-		            ?></td>
-		            <td><?php 
 		                $gather=$model->all_reality;
 		                $gather_total += $gather;
 		                echo $gather;
 		            ?></td>
-		            
-		            <td><?php  
-		                $cash = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,0);
-		                $cash_total += $cash;
-		                echo $cash;
-		            ?></td>
-		            <td><?php 
-		                $wechat = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,1);
-		                $wechat_total +=$wechat;
-		                echo $wechat;
-		            ?></td>
-		            <td><?php 
-		                $wxorderpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,12);
-		                $wxorder_total += $wxorderpay;
-		                echo $wxorderpay;
-		                ?>
-		            </td>
-		            <td><?php 
-		                $wxwaimaipay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,13);
-		                $wxwaimai_total += $wxwaimaipay;
-		                echo $wxwaimaipay;
-		                ?>
-		            </td>
-		            <td><?php
-		                $alipay=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2);
-		                $alipay_total += $alipay;
-		                echo $alipay; 
-		            ?></td>
-		            <td><?php 
-		                $unionpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,5);
-		                $unionpay_total += $unionpay;
-		                echo $unionpay;
-		                ?>
-		            </td>
-		            <td id="alipay4"><?php 
-		                $vipcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,4);
-		                $vipcard_total += $vipcard;
-		                echo $vipcard; 
-		                ?>
-		            </td>
-		             <?php if($payments):?>
-		                
-		                <?php $j = 0;foreach ($payments as $payment):?>
-		                    <td><?php 
-		                           $pay_item =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,3,$payment['lid']); 
-		                           $grouppay_arr[$j] +=$pay_item;
-		                          // $grouppay.$i +=$pay_item;
-		                            
-		                            $j++;
-		                            echo $pay_item;
-		                            ?>
-		                    </td>
-		                <?php endforeach;?>
-		            <?php endif;?> 
 		            <td><?php 
 		                $wxcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,9);
 		                $all_wxcards = $all_wxcards + $wxcard;
@@ -211,40 +110,16 @@
 		                echo $wxcharge; 
 		                ?>
 		            </td>
-		            <td><?php echo $retreat;?></td>
 										
 		        </tr>
-		       
 		        <?php endforeach;?>	
-		      
 		        <tr>
 		            <td><?php echo "总计";?></td>
 		            <td><?php echo $orders_total; ?></td>
-		            <td><?php  echo $grossprofit_total;?></td>
-		            <td><?php echo $discount_total; ?></td>
 		            <td><?php  echo $gather_total;?></td>
-		            
-		            <td><?php  echo $cash_total; ?></td>
-		            <td><?php  echo $wechat_total;?></td>
-		            <td><?php  echo $wxorder_total;?></td>
-		            <td><?php  echo $wxwaimai_total;?></td>
-		            <td><?php  echo $alipay_total;?></td>
-		            <td><?php  echo $unionpay_total;?></td>
-		            <td><?php  echo $vipcard_total; ?></td>
-		            <?php if($payments):?>
-		                <?php  $j =0;foreach ($payments as $payment):?>
-		                    <td><?php  echo $grouppay_arr[$j++];
-		                   // echo $grouppay.$i;
-		                   // $i++;
-		                    ?></td>
-		                    
-		                <?php endforeach;?>
-		            <?php endif;?> 
 		            <td><?php echo $all_wxcards;?></td>
 		            <td><?php echo $all_wxpoints;?></td>
 		            <td><?php echo $all_wxcharges;?></td>
-		            <td><?php echo $retreats;?></td>
-										
 		        </tr>
 		      <?php endif;?> 
 		       
