@@ -11,7 +11,8 @@ class PostableController extends BackendController
 		}   
         public function actionIndex(){
 			$criteria = new CDbCriteria;
-			$criteria->condition =  ' t.delete_flag=0';
+			$criteria->condition =  't.delete_flag=0';
+			$criteria->order =  'lid desc';
 			$pages = new CPagination(PostableSync::model()->count($criteria));
 			//	    $pages->setPageSize(1);
 			$pages->applyLimit($criteria);

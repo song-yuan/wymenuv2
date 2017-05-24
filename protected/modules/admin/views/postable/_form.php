@@ -19,7 +19,7 @@
 		<div class="form-group" <?php if($model->hasErrors('table')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'table',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-6">
-				<?php echo $form->textArea($model, 'table', array('class' => 'form-control', 'rows'=>'5','placeholder'=>$model->getAttributeLabel('table')));?>
+				<?php echo $form->textField($model, 'table', array('class' => 'form-control', 'placeholder'=>$model->getAttributeLabel('table')));?>
 				<?php echo $form->error($model, 'table' )?>
 			</div>
 		</div>

@@ -60,8 +60,8 @@ class PostableSync extends CActiveRecord
 			'lid' => '自身id，统一dpid下递增',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'table' => '要更新的表名',
-			'content' => '要更新的sql语句',
+			'table' => '表名',
+			'content' => '表结构',
 			'delete_flag' => '是否删除 0 否 1 是',
 			'is_sync' => '同步标志',
 		);
