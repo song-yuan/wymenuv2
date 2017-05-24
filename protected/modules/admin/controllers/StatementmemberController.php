@@ -246,7 +246,7 @@ class StatementmemberController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 	
 		
-		$sql = 'select k.dpid from nb_company k where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0';
+		$sql = 'select k.dpid from nb_company k left join nb_company_property cp on(cp.dpid = k.dpid) where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0 and cp.is_rest in(2,3)';
 		$dpids = Yii::app()->db->createCommand($sql)->queryAll();
 		$strs ='0000000000';
 		foreach ($dpids as $dpid){
