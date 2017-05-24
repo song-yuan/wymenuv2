@@ -16,7 +16,13 @@
 	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 	</style>
 	<div class="form-body">
-		
+		<div class="form-group" <?php if($model->hasErrors('table')) echo 'has-error';?>>
+			<?php echo $form->label($model, 'table',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-6">
+				<?php echo $form->textField($model, 'table', array('class' => 'form-control', 'placeholder'=>$model->getAttributeLabel('table')));?>
+				<?php echo $form->error($model, 'table' )?>
+			</div>
+		</div>
 		<div class="form-group" <?php if($model->hasErrors('content')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'content',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-6">

@@ -602,7 +602,7 @@ class MallController extends Controller
 		$promotion = new WxPromotion($this->companyId,$userId,$this->type);
 		$promotions = $promotion->promotionProductList;
 		
-		$product = new WxProduct($this->companyId,$userId,$userId,$this->type);
+		$product = new WxProduct($this->companyId,$userId,$this->type);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
 		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));

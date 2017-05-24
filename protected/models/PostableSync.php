@@ -29,14 +29,14 @@ class PostableSync extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('content', 'required'),
+			array('table,content', 'required'),
 			array('lid', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
 			array('update_at, create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, create_at, update_at, content, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, create_at, update_at, table, content, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,7 +60,8 @@ class PostableSync extends CActiveRecord
 			'lid' => '自身id，统一dpid下递增',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'content' => '要更新的sql语句',
+			'table' => '表名',
+			'content' => '表结构',
 			'delete_flag' => '是否删除 0 否 1 是',
 			'is_sync' => '同步标志',
 		);
@@ -87,6 +88,7 @@ class PostableSync extends CActiveRecord
 		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('table',$this->table,true);
 		$criteria->compare('content',$this->content,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);

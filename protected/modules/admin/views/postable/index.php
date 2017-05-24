@@ -57,7 +57,8 @@
                                 </th>
 								<th><?php echo yii::t('app','创建时间');?></th>
 								<th><?php echo yii::t('app','更新时间');?></th>
-								<th><?php echo yii::t('app','内容');?></th>
+								<th><?php echo yii::t('app','表名');?></th>
+								<th><?php echo yii::t('app','表结构');?></th>
 								<th><?php echo yii::t('app','');?></th>
 							</tr>
 						</thead>
@@ -68,6 +69,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td><?php echo $model->create_at;?></td>
 								<td><?php echo $model->update_at;?></td>
+								<td><?php echo $model->table;?></td>
 								<td><?php echo $model->content;?></td>
 								<td class="center">
 									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('postable/update' , array('lid' => $model->lid , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
