@@ -28,9 +28,6 @@ class DataSyncTables
         array("name"=>"产品打印方式","table"=>"nb_product_printerway"),
         array("name"=>"套餐","table"=>"nb_product_set"),
         array("name"=>"套餐明细","table"=>"nb_product_set_detail"),
-    	array("name"=>"产品分组","table"=>"nb_product_group"),
-    	array("name"=>"产品分组详情","table"=>"nb_product_group_detail"),
-    	array("name"=>"套餐对应分组","table"=>"nb_product_set_group"),
         array("name"=>"产品口味","table"=>"nb_product_taste"),
         array("name"=>"退菜理由","table"=>"nb_retreat"),
         array("name"=>"座位","table"=>"nb_site"),
@@ -437,18 +434,6 @@ class DataSyncTables
 				"is_select char(1) NOT NULL DEFAULT '1',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
-        		"PRIMARY KEY (lid,dpid)".
-        		")",
-        	"nb_product_set_group"=>"CREATE TABLE IF NOT EXISTS nb_product_set_group (".
-        		"lid int(10) NOT NULL,".
-        		"dpid int(10) NOT NULL,".
-        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"group_no tinyint NOT NULL DEFAULT '0',".
-        		"set_id int(10) NOT NULL DEFAULT '0',".
-        		"prod_group_id int(10) NOT NULL DEFAULT '0',".
-        		"delete_flag char(1) NOT NULL DEFAULT '0',".
-        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
         	"nb_product_taste"=>"CREATE TABLE IF NOT EXISTS nb_product_taste (".
