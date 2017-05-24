@@ -69,7 +69,7 @@
 
 <div class="page-content">
    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信赠券'),'url'=>''))));?>
- 
+ 					<?php if($isrest=="3"):?>
                     <div class="portlet purple box">
                       <div class="portlet-body" >
                           <div class="panel_body row">
@@ -190,6 +190,12 @@
                             </div> 
 
                     </div>
+                    </div>
+                    <?php endif;?>
+                    <div class="portlet purple box">
+                    	<div style = "color: red;" class="portlet-body" >
+                    	<h5>请联系总部开启微店，才能使用赠券功能。</h5>
+                    	</div>
                     </div>
             </div> 
     
