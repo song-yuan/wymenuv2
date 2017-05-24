@@ -61,8 +61,7 @@
 		                <!-- 	<th>序号</th> -->
 		               <th><?php echo yii::t('app','店铺');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
-		               <th><?php echo yii::t('app','毛利润');?></th> 
-		                  
+		               <th><?php echo yii::t('app','实收款');?></th> 
 		               <th><?php echo yii::t('app','系统券');?></th>
 		               <th><?php echo yii::t('app','积分');?></th> 
 		               <th><?php echo yii::t('app','微信储值支付');?></th>                                                            
@@ -74,26 +73,12 @@
 		        <!--foreach-->
 		        <?php $a=1;?>
 		        <?php 
-		         $orders_total=0;      // 总单数
-		         $grossprofit_total=0; // 总毛利润
-		         $discount_total=0;    // 总优惠
-		         $gather_total=0;      // 实收款 
-		         $cash_total=0;        // 现金
-		         $wechat_total = 0;    // 微信
-		         $wxorder_total = 0;    // 微信点单
-		         $wxwaimai_total = 0;    // 微信外卖
-		         $alipay_total = 0;    // 支付宝
-		         $unionpay_total=0;    // 银联
-		         $vipcard_total = 0;   // 会员卡 
-		         $grouppay_arr = array();   //支付宝/美团
-		        for($i =0;$i<$grouppay_item;$i++){
-		           $grouppay_arr[$i] =0; 
-		           // $grouppay.$i =0;
-		        }
-		        $all_wxcards = 0;
-		        $all_wxcharges = 0;
-		        $all_wxpoints = 0;
-		        $retreats = 0;
+		         	$orders_total=0;      // 总单数
+		         	$gather_total=0;      // 实收款 
+		        	$all_wxcards = 0;
+		        	$all_wxcharges = 0;
+		        	$all_wxpoints = 0;
+		        	$retreats = 0;
 		        foreach ($models as $model): ?>
 		
 		        <tr class="odd gradeX">
@@ -103,11 +88,10 @@
 		                $orders_total = $orders_total+$model->all_nums;    //总单数
 		                echo $model->all_nums;?></td>
 		             <td><?php 
-		                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time);
-		                $grossprofit_total+=$reality_all;
-		                echo $reality_all;
-		                ?></td>
-		            
+		                $gather=$model->all_reality;
+		                $gather_total += $gather;
+		                echo $gather;
+		            ?></td>
 		            <td><?php 
 		                $wxcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,9);
 		                $all_wxcards = $all_wxcards + $wxcard;
@@ -128,19 +112,14 @@
 		            </td>
 										
 		        </tr>
-		       
 		        <?php endforeach;?>	
-		      
 		        <tr>
 		            <td><?php echo "总计";?></td>
 		            <td><?php echo $orders_total; ?></td>
-		            <td><?php  echo $grossprofit_total;?></td>
-		           
+		            <td><?php  echo $gather_total;?></td>
 		            <td><?php echo $all_wxcards;?></td>
 		            <td><?php echo $all_wxpoints;?></td>
 		            <td><?php echo $all_wxcharges;?></td>
-		            
-										
 		        </tr>
 		      <?php endif;?> 
 		       
