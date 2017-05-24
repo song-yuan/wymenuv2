@@ -93,7 +93,7 @@ class WeixinController extends Controller
 	 		$brandUser = $newBrandUser->brandUser;
 	 	}
 	 	$userId = $brandUser['lid'];
-	 	Yii::app()->session['userId'] = $userId;
+	 	$_SESSION['userId'] = $userId;
 	 	
 	 	$this->redirect(urldecode($url));
 	 }
