@@ -30,10 +30,10 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
+		$userId = $_SESSION['userId'];
 // 		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
-			$userId = Yii::app()->session['userId'];
 			if(empty($userId)){
 				$url = Yii::app()->request->url;
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
@@ -50,19 +50,19 @@ class MallController extends Controller
 				$scaned = WxScanLog::get($this->companyId,$userId);
 				if(!empty($scaned)){
 					$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
-					Yii::app()->session['qrcode-'.$userId] = $scene['id'];
+					$_SESSION['qrcode-'.$userId] = $scene['id'];
 				}else{
-					Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
+					$_SESSION['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
 				}
 			}else{
-				Yii::app()->session['qrcode-'.$userId] = -1;
+				$_SESSION['qrcode-'.$userId] = -1;
 			}
 		}else{
 			//pc 浏览
 			$userId = 2122;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-			Yii::app()->session['userId'] = $userId;
-			Yii::app()->session['qrcode-'.$userId] = -1;
+			$_SESSION['userId'] = $userId;
+			$_SESSION['qrcode-'.$userId] = -1;
 		}
 // 		}
 		return true;

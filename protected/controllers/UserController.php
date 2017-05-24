@@ -18,7 +18,7 @@ class UserController extends Controller
 // 		if(in_array($actin->id,array('index','ticket','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard','money'))){
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
-			$userId = Yii::app()->session['userId'];
+			$userId = $_SESSION['userId'];
 			if(empty($userId)){
 				$url = Yii::app()->request->url;
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
@@ -35,7 +35,7 @@ class UserController extends Controller
 			//pc 浏览
 			$userId = 2122;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-			Yii::app()->session['userId'] = $userId;
+			$_SESSION['userId'] = $userId;
 		}
 // 		} 
 		return true;
