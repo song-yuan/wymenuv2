@@ -148,6 +148,7 @@ class DataSyncTables
         		"jobid int(10) NOT NULL DEFAULT '0',".
         		"sync_type varchar(2) NOT NULL DEFAULT '0',".
                 "sync_url varchar(255) NOT NULL DEFAULT '0',".
+				"content text NOT NULL,".
 				"delete_flag varchar(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
