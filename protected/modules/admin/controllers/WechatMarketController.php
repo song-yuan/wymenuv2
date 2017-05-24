@@ -214,11 +214,9 @@ class WechatMarketController extends BackendController {
 		$users = Yii::app()->request->getParam('users',0);
 	
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.is_available = 0 and t.delete_flag=0 and t.dpid='.$this->companyId.' and t.end_time >="'.date('Y-m-d H:i:s',time()).'"';
+		$criteria->condition =  't.is_available = 0 and t.delete_flag=0 and t.dpid='.$this->companyId;
 		$criteria->order = ' t.lid asc ';
 		$models = Cupon::model()->findAll($criteria);
-		//查询原料分类
-	
 		
 		//var_dump($products);exit;
 		$this->render('addprod' , array(
@@ -257,6 +255,15 @@ class WechatMarketController extends BackendController {
 					$cupons = Cupon::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$plid,':companyId'=>$this->companyId));
 					//var_dump($buysentprodetail);exit;
 					if(!empty($cupons)&&!empty($plid)){
+						$timetype = $cupons['time_type'];
+						if($timetype=='1'){
+							$validay = $cupons['begin_time'];
+							$colseday = $cupons['end_time'];
+						}else{
+							$validay = date('Y-m-d H:i:s',strtotime('+'.$cupons['day_begin'].' day'));
+							$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
+						}
+						
 						$se = new Sequence("cupon_branduser");
 						$id = $se->nextval();
 						//$code=new Sequence("sole_code");
@@ -272,6 +279,8 @@ class WechatMarketController extends BackendController {
 								'source_id'=>'0000000000',
 								'to_group'=>'3',
 								'brand_user_lid'=>$userarray,
+								'valid_day'=>$validay,
+								'close_day'=>$colseday,
 								'is_used'=>'1',
 								'used_time'=>'0000-00-00 00:00:00',
 								'delete_flag'=>'0',

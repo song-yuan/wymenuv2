@@ -65,8 +65,8 @@ class CuponController extends BackendController
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
                     
-                    $model->attributes = Yii::app()->request->getPost('cupon');
-                   
+            $model->attributes = Yii::app()->request->getPost('Cupon');
+            
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
@@ -77,10 +77,15 @@ class CuponController extends BackendController
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			//$db = Yii::app()->db;
-		
+			$beginday = Yii::app()->request->getParam('cupon_begin_day');
+			$day = Yii::app()->request->getParam('cupon_day');
+			
 			$se=new Sequence("cupon");
             $lid= $se->nextval();
 			$model->lid =$lid;
+			
+			$model->day_begin = $beginday;
+			$model->day = $day;
 			
             $code=new Sequence("cupon_code");
             $codeid = $code->nextval();
@@ -118,6 +123,7 @@ class CuponController extends BackendController
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId ));
@@ -158,6 +164,8 @@ class CuponController extends BackendController
 			}
 			$model->attributes = Yii::app()->request->getPost('Cupon');
 			$groupID = Yii::app()->request->getParam('hidden1');
+			$beginday = Yii::app()->request->getParam('cupon_begin_day');
+			$day = Yii::app()->request->getParam('cupon_day');
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			$db = Yii::app()->db;
@@ -193,7 +201,8 @@ class CuponController extends BackendController
 				$command->execute();
 			}
 			//print_r(explode(',',$groupID));
-			//var_dump($gropid);exit;
+			$model->day_begin = $beginday;
+			$model->day = $day;
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->is_sync=$is_sync;
 			if($model->save()){

@@ -119,6 +119,7 @@
                                  </span>
                                  元可用
                              </div>
+                             <?php if($model->time_type=='1'):?>
                              <div class="date">
                                  限
                                  <span>
@@ -129,7 +130,20 @@
                                      <?php echo date('Y-m-d',strtotime($model->end_time));?>
                                  </span>  
                                  使用
-                             </div> 
+                             </div>
+                             <?php else:?>
+                             <div class="date">
+                                 领取
+                                 <span>
+                                     <?php echo $model->day_begin?$model->day_begin:'当';?>
+                                 </span> 
+                                 天生效，有效天数：
+                                 <span>
+                                     <?php echo $model->day;?>
+                                 </span>  
+                                 天
+                             </div>
+                             <?php endif;?> 
                          </div>
 
                      </div>

@@ -15,6 +15,9 @@
  * @property string $cupon_money
  * @property string $min_consumer
  * @property integer $change_point
+ * @property string $time_type
+ * @property integer $day
+ * @property integer $day_begin
  * @property string $begin_time
  * @property string $end_time
  * @property string $is_available
@@ -44,11 +47,11 @@ class Cupon extends CActiveRecord
 			array('lid, dpid, cupon_money, min_consumer', 'length', 'max'=>10),
 			array('cupon_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, cupon_abstract', 'length', 'max'=>255),
-			array('is_available, delete_flag, to_group', 'length', 'max'=>2),
-			array('create_at, begin_time, end_time, cupon_memo', 'safe'),
+			array('is_available, delete_flag, to_group, time_type, day_begin', 'length', 'max'=>2),
+			array('create_at, begin_time, end_time, cupon_memo, day', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, cupon_title, is_sync, main_picture, to_group, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point, begin_time, end_time, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, cupon_title, is_sync, main_picture, to_group, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point, time_type, day, day_begin, begin_time, end_time, is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,18 +79,19 @@ class Cupon extends CActiveRecord
 			'cupon_title' => '标题',
 			'main_picture' => '主图片',
 			'cupon_abstract' => '摘要',
-				'to_group'=>'0表示所有人，1表示关注微信，2表示会员等级，3表示会员个人',
+			'to_group'=>'0表示所有人，1表示关注微信，2表示会员等级，3表示会员个人',
 			'cupon_memo' => '规则说明',
 			'cupon_money' => '金额',
 			'min_consumer' => '最低消费',
 			'change_point' => '0表示不需要积分，直接领取；>0表示需要兑换的积分',
-			
+			'time_type' => '限制形式',
 			'begin_time' => '开始时间',
 			'end_time' => '结束时间',
-				
+			'day' => '限制天数',
+			'day_begin' => '开始天数',	
 			'is_available' => '0表示有效，1表示无效',
 			'delete_flag' => '0表示存在，1表示删除',
-				'is_sync' => yii::t('app','是否同步'),
+			'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -121,11 +125,11 @@ class Cupon extends CActiveRecord
 		$criteria->compare('cupon_money',$this->cupon_money,true);
 		$criteria->compare('min_consumer',$this->min_consumer,true);
 		$criteria->compare('change_point',$this->change_point);
-		//$criteria->compare('time_type',$this->time_type,true);
+		$criteria->compare('time_type',$this->time_type,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
-		//$criteria->compare('begin_day',$this->begin_day,true);
-		//$criteria->compare('end_day',$this->end_day,true);
+		$criteria->compare('day_begin',$this->day_begin,true);
+		$criteria->compare('day',$this->day,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);

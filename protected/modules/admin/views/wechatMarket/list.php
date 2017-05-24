@@ -168,7 +168,7 @@
                                         </a> 
                                     </div>
                                     <div class="list col-sm-3 col-xs-12">
-                                        <a href="<?php echo $this->createUrl('SentShare/index',array('companyId' => $this->companyId))?>">
+                                        <a href="<?php echo $this->createUrl('wechatMarket/list',array('companyId' => $this->companyId))?>">
                                             <div class="list_big">分享集券</div>
                                         </a> 
                                     </div>
@@ -191,12 +191,13 @@
 
                     </div>
                     </div>
-                    <?php endif;?>
+                    <?php else:?>
                     <div class="portlet purple box">
                     	<div style = "color: red;" class="portlet-body" >
                     	<h5>请联系总部开启微店，才能使用赠券功能。</h5>
                     	</div>
                     </div>
+                    <?php endif;?>
             </div> 
     
    

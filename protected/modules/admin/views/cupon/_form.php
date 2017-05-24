@@ -112,18 +112,16 @@
 											<?php echo $form->error($model, 'is_available' )?>
 										</div>
 									</div><!-- 活动是否生效 -->
-                                    <div class="form-group">
+									<div class="form-group">
+										<?php echo $form->label($model, yii::t('app','限定日期形式'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'time_type', array( '1' => yii::t('app','固定日期'), '2' => yii::t('app','有效期')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('time_type')));?>
+											<?php echo $form->error($model, 'time_type' )?>
+										</div>
+									</div>
+                                    <div class="form-group timetype1">
 											<label class="control-label col-md-3"><?php echo yii::t('app','活动有效期限');?></label>
 											<div class="col-md-4">
-												<!-- <div class="input-group date form_datetime" data-date="2012-12-21T15:25:00Z">                                       
-													<input type="text" size="16" readonly class="form-control">
-													<span class="input-group-btn">
-													<button class="btn default date-reset" type="button"><i class="fa fa-times"></i></button>
-													</span>
-													<span class="input-group-btn">
-													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-													</span>
-												</div> -->
 												 <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 													 <?php echo $form->textField($model,'begin_time',array('class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_time'))); ?>
 													 <span class="input-group-addon"> ~ </span>
@@ -134,6 +132,31 @@
 												<?php echo $form->error($model,'end_time'); ?>
 											</div>
 										</div>
+										<div style="display: none;" class="form-group timetype2">
+										  	<LABEL class="col-md-3 control-label">有效天数</LABEL>
+										  	<div class="col-md-4">
+										    	<div class="row ">
+											   		<div class="col-md-4 select left">
+													   <select class="form-control" id="begin_day" >
+															<option value="0">当天</option>
+															<?php for($i=1;$i<31;$i++):?>
+															<option value="<?php echo $i;?>"><?php echo $i;?>天</option>
+															<?php endfor;?>
+														</select>
+													</div>
+													<div class="col-md-4 select middle">&nbsp;生效,有效天数 </div>
+													<div class="col-md-4 select left">
+														<select class="form-control" id="day" >
+															<?php for($i=3;$i<361;$i+=3):?>
+															<option value="<?php echo $i;?>" <?php if($i==60) echo 'selected';?>><?php echo $i;?>天</option>
+															<?php endfor;?>
+														</select>
+													</div>
+												</div>
+										  	</div>
+										</div>
+										<input type="hidden" id="cupon_begin_day" name="cupon_begin_day" value="" />
+										<input type="hidden" id="cupon_day" name="cupon_day" value="" />
 									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','使用说明'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
@@ -153,8 +176,12 @@
 							
 	<script>
 	 $(document).ready(function(){ 
-		 $('#Cupon_to_group').change(function(){ 
-		 //alert($(this).children('option:selected').val()); 
+		 var timetype = '<?php echo $model->time_type;?>';
+		 if(timetype=='2'){
+			$(".timetype1").hide();
+			$(".timetype2").show();
+		}
+		 $('#Cupon_to_group').change(function(){
 		 var p1=$(this).children('option:selected').val();//这就是selected的值 
 			//alert(p1);
 			 if(p1=="2"){
@@ -164,6 +191,18 @@
 				 }
 		
 		 }) 
+		 $('#Cupon_time_type').change(function(){
+		 var p1=$(this).children('option:selected').val();//这就是selected的值 
+		 	//layer.msg(p1);
+			 if(p1=="1"){
+				$(".timetype1").show();
+				$(".timetype2").hide();
+			 }else{
+				$(".timetype1").hide();
+				$(".timetype2").show();
+				 }
+		
+		 })
 		 }); 
 		 
 
@@ -173,18 +212,19 @@
                     alert("请填写代金券面值");
                     return false;
                 }
-                 
-	        // alert(11);
+
 	         var p1 = $('#Cupon_to_group').children('option:selected').val();
 	         var aa = document.getElementsByName("chk");
 	         var begintime = $('#Cupon_begin_time').val();
 	         var endtime = $('#Cupon_end_time').val();
+	         var timetype = $('#Cupon_time_type').val();
+	         var beginday = $('#begin_day').children('option:selected').val();
+	         var day = $('#day').children('option:selected').val();
+	         //layer.msg(beginday+'@@'+day);
 	         var str=new Array();
-	        // alert(p1);
-	         //var ss = "";
-	       // if(aa.checked){
+
             
-	         if(endtime<=begintime){
+	         if(timetype=='1'&&endtime<=begintime){
 	           	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
 	           	 return false;
 	            }
@@ -201,13 +241,10 @@
 	        	 return false;
 	        	 }
 	         }
-	         //else{
-	        //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
-	          //   }
-	        // alert(str);
-	      //  }else{
-	        //alert(str);}
+
 	         $("#hidden1").val(str);
+	         $("#cupon_begin_day").val(beginday);
+	         $("#cupon_day").val(day);
 	         $("#cupon-form").submit();
 	     });
 	

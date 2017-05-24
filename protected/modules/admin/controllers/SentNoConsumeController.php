@@ -35,7 +35,7 @@ class SentNoConsumeController extends BackendController {
         $users = Yii::app()->request->getParam('users',0);
 
         $criteria = new CDbCriteria;
-        $criteria->condition =  't.is_available = 0 and t.delete_flag=0 and t.dpid='.$this->companyId.' and t.end_time >="'.date('Y-m-d H:i:s',time()).'"';
+        $criteria->condition =  't.is_available = 0 and t.delete_flag=0 and t.dpid='.$this->companyId;
         $criteria->order = ' t.lid asc ';
         $models = Cupon::model()->findAll($criteria);
         

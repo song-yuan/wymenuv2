@@ -180,8 +180,11 @@
 												<div class="bot" style="">代金券</div>
 											</div>
 										</div>
+										<?php if($model->time_type=='1'):?>
 										<div class="wxcardend" style="">限<span><?php echo date('Y-m-d',strtotime($model->begin_time));?></span> 至<span><?php echo date('Y-m-d',strtotime($model->end_time));?></span>  使用</div>
-										
+										<?php else:?>
+										<div class="wxcardend" style="">领取后<span><?php echo $model->day_begin?$model->day_begin:'当';?></span> 天生效，有效期：<span><?php echo $model->day;?></span> 天</div>
+										<?php endif;?>
 										<div class="wxcardactive uhide" ><img width="50px" style="" src="../../../../img/checked.png"/></div>
 									</div>
 									
@@ -191,7 +194,7 @@
 									
 								</div>
 							</div>
-							<div class="addsave"style="float: right;"><button id="add_save">保存</button></div>
+							<div class="addsave"style="float: right;"><button id="add_save">发送</button></div>
 						</div>
 						</div>
 						<div class="pageend">
@@ -243,11 +246,11 @@ $(document).ready(function(){
             success:function(msg){
                 var data=msg;
                 if(data.status){
-                    layer.msg("保存成功");
+                    layer.msg("发送成功");
                     document.getElementById("close_modal").click();
                      
                 }else{
-                    alert("保存失败");
+                    alert("发送失败");
                 }
             },
             error: function(msg){
