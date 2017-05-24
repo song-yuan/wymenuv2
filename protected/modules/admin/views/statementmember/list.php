@@ -47,6 +47,16 @@
     		background-repeat: no-repeat;
     		background-size: 88%;
 		}
+		.ku-item.czjl{
+			background-image:url(../../../../../../img/waiter/icon-yysj.png);
+			background-position: -295px 16px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.sktj{
+			background-image:url(../../../../../../img/waiter/icon-yysj.png);
+			background-position: 8px 16px;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -93,6 +103,20 @@
 							<div class="ku-item-info">实卡会员</div>
 						</div>
 					</a>
+					<?php if(yii::app()->user->role <5):?>
+					<a href="<?php echo $this->createUrl('statementmember/wxRecharge',array('companyId' => $this->companyId,'text'=>'2','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey czjl"></div>
+							<div class="ku-item-info">充值统计</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('statementmember/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey sktj"></div>
+							<div class="ku-item-info">支付方式</div>
+						</div>
+					</a>
+					<?php endif;?>
 					<?php elseif($type==3):?>
 					<a href="<?php echo $this->createUrl('statementmember/clearTestdata',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">

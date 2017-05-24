@@ -2,7 +2,18 @@
 
 class WechatMarketController extends BackendController {
     public function actionList() {
-		$this->render('list');
+    	
+    	$companyId = $this->companyId;
+    	$isrest = Yii::app()->db->createCommand('select is_rest from nb_company_property where delete_flag =0 and dpid ='.$companyId)->queryRow();
+    	//var_dump($isrest);exit;
+    	if($isrest){
+    		$isrest = $isrest['is_rest'];
+    	}else{
+    		$isrest = 0;
+    	}
+		$this->render('list',array(
+			'isrest' => $isrest,
+		));
     }
     
     public function actionCube() {
