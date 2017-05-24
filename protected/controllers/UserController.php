@@ -16,8 +16,7 @@ class UserController extends Controller
 	
 	public function beforeAction($actin){
 // 		if(in_array($actin->id,array('index','ticket','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard','money'))){
-		session_start();
-		$userId = $_SESSION['userId'];
+		$userId = Yii::app()->session['userId-'.$this->companyId];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
