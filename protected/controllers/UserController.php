@@ -49,11 +49,11 @@ class UserController extends Controller
     public function actionIndex(){
         $upLev = false;
         
-        //$userId就是brand_user表里的lid
-        $userId = Yii::app()->session['userId'];
         //$user就是brand_user表里的一行
 
         $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
         
         $result = WxBrandUser::getAllLevel($user['dpid']);
         $lid = 0;
@@ -102,32 +102,44 @@ class UserController extends Controller
 	
     }  
     public function actionMoney(){
-    	$userId = Yii::app()->session['userId'];
+    	//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
     	$remainMoey = WxBrandUser::getYue($userId, $this->companyId);
     	$comments = WxRecharge::getWxRechargeComment($this->companyId,2,2);
     	$rechargeRecords = WxRecharge::getRechargeRecord($this->companyId,$userId);
         $this->render('money',array('remainMoey'=>$remainMoey,'comments'=>$comments,'records'=>$rechargeRecords));
     } 
     public function actionPoint(){
-        $userId = Yii::app()->session['userId'];
+        //$user就是brand_user表里的一行
+
         $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
         $remain_points = WxPoints::getAvaliablePoints($userId,$user['dpid']);  
         $this->render('point',array( 
                      'remain_points' => $remain_points,
                 ));
     }
     public function actionPointRecord(){
-         $userId = Yii::app()->session['userId'];    
-         $user = $this->brandUser;
-         $points = WxPoints::getPoints($userId,$user['dpid']);
+         //$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
+        $points = WxPoints::getPoints($userId,$user['dpid']);
         $this->render('pointRecord',array(      
                      'points'=>$points
                 ));
     }
     public function actionTicket(){
-        //$userId就是brand_user表里的lid
-            $userId = Yii::app()->session['userId'];
-            $user = $this->brandUser;
+	        //$user就是brand_user表里的一行
+	
+	        $user = $this->brandUser;
+	        //$userId就是brand_user表里的lid
+	        $userId = $user['lid'];
             $not_useds = WxCupon::getUserNotUseCupon($userId,$user['dpid']);
             $expires = WxCupon::getUserExpireCupon($userId,$user['dpid']);
             $useds = WxCupon::getUserUseCupon($userId,$user['dpid']);
@@ -138,9 +150,11 @@ class UserController extends Controller
                     ));       
     }
      public function actionBill(){
-         $userId = Yii::app()->session['userId'];
-        //$user就是brand_user表里的一行
+         //$user就是brand_user表里的一行
+
         $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
         $card_id = $user['card_id'];
         $order_pay = WxBrandUser::getOrderPay($card_id,$user['dpid']);
         $this->render('bill',array(   
@@ -156,12 +170,16 @@ class UserController extends Controller
 	 */
 	public function actionOrderList()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$type = Yii::app()->request->getParam('t',0);
 		$page = Yii::app()->request->getParam('p',1);
 		
 		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type,$page);
-		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type));
+		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type,'userId'=>$userId));
 	}
 	/**
 	 * 
@@ -219,8 +237,11 @@ class UserController extends Controller
 	 */
 	public function actionSetUserInfo()
 	{
-		$userId = Yii::app()->session['userId'];
-		$user = $this->brandUser;
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$back = Yii::app()->request->getParam('back',0);
 		$type = Yii::app()->request->getParam('type',6);
 		
@@ -258,8 +279,11 @@ class UserController extends Controller
 	 */
 	public function actionAddress()
 	{
-		$userId = Yii::app()->session['userId'];
-		$user = $this->brandUser;
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$addresss = WxAddress::get($userId,$user['dpid']);
 		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'user'=>$user));
 	}
@@ -270,8 +294,11 @@ class UserController extends Controller
 	 */
 	public function actionSetAddress()
 	{
-		$userId = Yii::app()->session['userId'];
-		$user = $this->brandUser;
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$url = Yii::app()->request->getParam('url');
 		$type = Yii::app()->request->getParam('type',1);
 		$addresss = WxAddress::get($userId,$user['dpid']);
@@ -285,7 +312,11 @@ class UserController extends Controller
 	 */
 	public function actionAddAddress()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$lid = Yii::app()->request->getParam('lid',0);
 		$url = Yii::app()->request->getParam('url',0);
 		$address = false;
@@ -376,42 +407,66 @@ class UserController extends Controller
 	// 未使用现金券
 	public function actionCupon()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$cupons = WxCupon::getUserNotUseCupon($userId,$this->companyId);
 		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
 	// 已使用现金券
 	public function actionUsedCupon()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$cupons = WxCupon::getUserUseCupon($userId,$this->companyId);
 		$this->render('usedcupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
 	// 已过期现金券
 	public function actionExpireCupon()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$cupons = WxCupon::getUserExpireCupon($userId,$this->companyId);
 		$this->render('expirecupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
 	// 未使用礼品券
 	public function actionGift()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$gifts = WxGiftCard::getUserAvailableGift($userId,$this->companyId);
 		$this->render('gift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
 	}
 	// 已使用礼品券
 	public function actionUsedGift()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$gifts = WxGiftCard::getUserUsedGift($userId,$this->companyId);
 		$this->render('usedgift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
 	}
 	// 已过期礼品券
 	public function actionExpireGift()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$gifts = WxGiftCard::getUserExpireGift($userId,$this->companyId);
 		$this->render('expiregift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
 	}
@@ -423,7 +478,11 @@ class UserController extends Controller
 	public function actionStatistic()
 	{
 		$now = time();
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$day = Yii::app()->request->getParam('day',1);
 		$t = Yii::app()->request->getParam('t',0);
 		if($day==1){
@@ -457,7 +516,11 @@ class UserController extends Controller
 	 */
 	public function actionGiftInfo()
 	{
-		$userId = Yii::app()->session['userId'];
+		//$user就是brand_user表里的一行
+
+        $user = $this->brandUser;
+        //$userId就是brand_user表里的lid
+        $userId = $user['lid'];
 		$giftId = Yii::app()->request->getParam('gid');
 		
 		$gift = WxGiftCard::getUserGift($this->companyId,$userId,$giftId);
@@ -688,7 +751,7 @@ class UserController extends Controller
 	 */
 	public function actionAjaxOrderList()
 	{
-		$userId = Yii::app()->session['userId'];
+		$userId = Yii::app()->request->getParam('userId');;
 		$type = Yii::app()->request->getParam('t',0);
 		$page = Yii::app()->request->getParam('p',1);
 	

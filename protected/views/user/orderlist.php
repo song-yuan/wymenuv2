@@ -120,7 +120,7 @@
 		$('#more').click(function(){
 			layer.load(2);
 			$.ajax({
-				url:'<?php echo $this->createUrl('/user/ajaxOrderList',array('companyId'=>$this->companyId,'t'=>$type));?>',
+				url:'<?php echo $this->createUrl('/user/ajaxOrderList',array('companyId'=>$this->companyId,'t'=>$type,'userId'=>$userId));?>',
 				data:{p:page},
 				dataType:'json',
 				success:function(data){
