@@ -21,7 +21,7 @@
 			<?php foreach($gifts as $gift):?>
 			<li>
 				<img src="<?php echo $baseUrl.$gift['gift_pic'];?>" alt="">
-				<span class="info unavailable"><h2><?php echo $gift['title'];?></h2><span class="small">有效期：<?php echo date('Y-m-d',strtotime($gift['begin_time']));?>-<?php echo date('Y-m-d',strtotime($gift['end_time']));?></span></span>
+				<span class="info unavailable"><h2><?php echo $gift['title'];?></h2><span class="small">有效期：<?php echo date('Y-m-d',strtotime($gift['valid_day']));?>-<?php echo date('Y-m-d',strtotime($gift['close_day']));?></span></span>
 				<span class="status"><img src="<?php echo $baseUrl;?>/img/mall/coupon_expired.png" alt=""></span>
 			</li>
 			<?php endforeach;?>
