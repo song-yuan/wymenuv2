@@ -22,7 +22,7 @@
 				<img src="<?php echo $baseUrl.$cupon['main_picture'];?>" alt="">
 				<span class="info">
 					<h2><?php echo $cupon['cupon_title'];?></h2>
-					<span class="small">有效期：<?php echo date('Y-m-d',strtotime($cupon['begin_time']));?>-<?php echo date('Y-m-d',strtotime($cupon['end_time']));?></span>
+					<span class="small">有效期：<?php echo date('Y-m-d',strtotime($cupon['valid_day']));?>-<?php echo date('Y-m-d',strtotime($cupon['close_day']));?></span>
 					<span class="status"><img src="<?php echo $baseUrl;?>/img/mall/coupon_expired.png" alt=""></span>
 				</span>
 			</li>

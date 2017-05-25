@@ -23,7 +23,7 @@
 				<span class="info">
 					<h2 style="margin-bottom:10px;"><?php echo $cupon['cupon_title'];?></h2>
 					<span class="small">满<?php echo $cupon['min_consumer'];?>元减<?php echo $cupon['cupon_money'];?>元</span><br />
-					<span class="small">有效期：<?php echo date('Y-m-d',strtotime($cupon['begin_time']));?>-<?php echo date('Y-m-d',strtotime($cupon['end_time']));?></span>
+					<span class="small">有效期：<?php echo date('Y-m-d',strtotime($cupon['valid_day']));?>-<?php echo date('Y-m-d',strtotime($cupon['close_day']));?></span>
 				</span>
 			</li>
 			<?php endforeach;?>
