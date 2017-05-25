@@ -5,6 +5,7 @@ class UserController extends Controller
 
 	public $companyId;
 	public $brandUser;
+	public $company;
 	public $layout = '/layouts/mallmain';
 	
 	
@@ -12,12 +13,13 @@ class UserController extends Controller
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId; // 需为总部CompanyId（或者填公众号店铺）
+		$this->company = WxCompany::get($this->companyId);
 	}
 	
 	public function beforeAction($actin){
 		$dpidSelf = Yii::app()->session['dpid_self'];
 		if($dpidSelf==1){
-			$comdpid = $this->companyId;
+			$comdpid = $this->company['dpid'];
 		}else{
 			$comdpid = $this->company['comp_dpid'];
 		}

@@ -32,7 +32,7 @@ class MallController extends Controller
 		}
 		$dpidSelf = Yii::app()->session['dpid_self'];
 		if($dpidSelf==1){
-			$comdpid = $this->companyId;
+			$comdpid = $this->company['dpid'];
 		}else{
 			$comdpid = $this->company['comp_dpid'];
 		}
