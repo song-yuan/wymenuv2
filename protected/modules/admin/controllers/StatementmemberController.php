@@ -173,7 +173,7 @@ class StatementmemberController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$text = Yii::app()->request->getParam('text');
 		$cardnumber = Yii::app()->request->getParam('cardnumber','');
-		$memdpid = Yii::app()->request->getParam('memdpid','0');
+		$memdpid = Yii::app()->request->getParam('memdpid','');
 		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
 		$money = "";
 		$recharge = "";
@@ -183,7 +183,9 @@ class StatementmemberController extends BackendController
 		}else{
 			$cardid = ' >0';
 		}
-		if($memdpid){
+		if(!empty($memdpid)){
+			$dpidname = 'like "%'.$memdpid.'%"';
+		}elseif($memdpid == '0'){
 			$dpidname = 'like "%'.$memdpid.'%"';
 		}else{
 			$dpidname = ' is not null';
