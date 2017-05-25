@@ -203,7 +203,7 @@ class StatementmemberController extends BackendController
 				$sql = 'select cf.* from ( select sum(k.recharge_money) as recharge_all,sum(k.cashback_num) as cashback_all,p.pay_all,k.* '
 						. ' from('
 								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t1.mobile_num,'
-								.' t.recharge_money,t.cashback_num,t.brand_user_lid,com.company_name '
+								.' t.recharge_money,t.cashback_num,t.brand_user_lid,ifnull(com.company_name,"总部") as company_name '
 								.' from nb_recharge_record t left join nb_brand_user t1 on(t.brand_user_lid = t1.lid) left join nb_company com on(t1.weixin_group = com.dpid)'
 								.' where '
 								.' t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$companyId
