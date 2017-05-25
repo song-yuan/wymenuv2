@@ -55,19 +55,19 @@ class MallController extends Controller
 				$scaned = WxScanLog::get($this->companyId,$userId);
 				if(!empty($scaned)){
 					$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
-					$_SESSION['qrcode-'.$userId] = $scene['id'];
+					Yii::app()->session['qrcode-'.$userId] = $scene['id'];
 				}else{
-					$_SESSION['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
+					Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
 				}
 			}else{
-				$_SESSION['qrcode-'.$userId] = -1;
+				Yii::app()->session['qrcode-'.$userId] = -1;
 			}
 		}else{
 			//pc 浏览
 			$userId = 2122;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-			$_SESSION['userId'] = $userId;
-			$_SESSION['qrcode-'.$userId] = -1;
+			Yii::app()->session['userId'] = $userId;
+			Yii::app()->session['qrcode-'.$userId] = -1;
 		}
 		return true;
 	}
