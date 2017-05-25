@@ -139,11 +139,11 @@
                     <div class="describe">限制条件：<?php echo $v['cupon_memo'];?></div>
                     <div class="date">
                            <span>
-                             <?php echo date('Y.m.d',strtotime($v['begin_time']));?>   
+                             <?php echo date('Y.m.d',strtotime($v['valid_day']));?>   
                            </span> 
                            -
                            <span>
-                             <?php echo date('Y.m.d',strtotime($v['end_time']));?>
+                             <?php echo date('Y.m.d',strtotime($v['close_day']));?>
                            </span>                             
                     </div> 
                 </div>
@@ -172,11 +172,11 @@
                     <div class="describe">限制条件：<?php echo $v['cupon_memo'];?></div>
                     <div class="date">
                            <span>
-                              <?php echo date('Y.m.d',strtotime($v['begin_time']));?>  
+                              <?php echo date('Y.m.d',strtotime($v['valid_day']));?>  
                            </span> 
                            -
                            <span>
-                             <?php echo date('Y.m.d',strtotime($v['end_time']));?>
+                             <?php echo date('Y.m.d',strtotime($v['close_day']));?>
                            </span>                             
                     </div> 
                 </div>
@@ -204,11 +204,11 @@
                     <div class="describe">限制条件：<?php echo $v['cupon_memo'];?></div>
                     <div class="date">
                            <span>
-                             <?php echo date('Y.m.d',strtotime($v['begin_time']));?> 
+                             <?php echo date('Y.m.d',strtotime($v['valid_day']));?> 
                            </span> 
                            -
                            <span>
-                             <?php echo date('Y.m.d',strtotime($v['end_time']));?>
+                             <?php echo date('Y.m.d',strtotime($v['close_day']));?>
                            </span>                             
                     </div> 
                 </div>
