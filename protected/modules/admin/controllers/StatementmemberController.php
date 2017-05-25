@@ -256,32 +256,28 @@ class StatementmemberController extends BackendController
 		));
 	}
 	public function actionPaymentReport(){
-		$str = Yii::app()->request->getParam('str');
-		$text = Yii::app()->request->getParam('text','1');
-		$userid = Yii::app()->request->getParam('userid');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
-	
 		
-		$sql = 'select k.dpid from nb_company k left join nb_company_property cp on(cp.dpid = k.dpid) where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0 and cp.is_rest in(2,3)';
-		$dpids = Yii::app()->db->createCommand($sql)->queryAll();
-		$strs ='0000000000';
-		foreach ($dpids as $dpid){
-			$strs = $strs .','.$dpid['dpid'];
-		}
+// 		$sql = 'select k.dpid from nb_company k left join nb_company_property cp on(cp.dpid = k.dpid) where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0 and cp.is_rest in(2,3)';
+// 		$dpids = Yii::app()->db->createCommand($sql)->queryAll();
+// 		$strs ='0000000000';
+// 		foreach ($dpids as $dpid){
+// 			$strs = $strs .','.$dpid['dpid'];
+// 		}
 		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in ('.$strs.') and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
-		}
+// 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in ('.$strs.') and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+// 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+// 		$ords ='0000000000';
+// 		foreach ($orders as $order){
+// 			$ords = $ords .','.$order['lid'];
+// 		}
 		//var_dump($ords);exit;
 		
 		$sql = 'select com.company_name,t.dpid,sum(op.pay_amount) as all_reality,count(distinct t.account_no) as all_num,count(distinct op.order_id) as all_nums from '
 				.' nb_order t left join nb_company com on(t.dpid = com.dpid and com.delete_flag =0 ) '
 				.' left join nb_order_pay op on(op.dpid = t.dpid and t.lid = op.order_id)'
-				.' where t.order_status in(3,4,8) and t.dpid in ('.$strs.') and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" '
+				.' where t.order_status in(3,4,8) and t.dpid in (select k.dpid from nb_company k left join nb_company_property cp on(cp.dpid = k.dpid) where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0 and cp.is_rest in(2,3)) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" '
 				.' group by t.dpid order by year(t.create_at) asc,sum(op.pay_amount) desc,t.dpid asc';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		
@@ -314,18 +310,18 @@ class StatementmemberController extends BackendController
 		if($models){
 			foreach ($models as $model){
 				
-				$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$model['dpid'].' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-				$orders = Yii::app()->db->createCommand($sql)->queryAll();
-				$ords ='0000000000';
-				foreach ($orders as $order){
-					$ords = $ords .','.$order['lid'];
-				}
+// 				$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$model['dpid'].' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+// 				$orders = Yii::app()->db->createCommand($sql)->queryAll();
+// 				$ords ='0000000000';
+// 				foreach ($orders as $order){
+// 					$ords = $ords .','.$order['lid'];
+// 				}
 				
 				$payprice = array();
 				$payprice[8] = '0.00';
 				$payprice[9] = '0.00';
 				$payprice[10] = '0.00';
-				$sqlprice = 'select sum(t.pay_amount) as all_reality,t.paytype from nb_order_pay t where t.dpid ='.$model['dpid'].' and t.paytype in(8,9,10) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_id in('.$ords.') group by t.paytype';
+				$sqlprice = 'select sum(t.pay_amount) as all_reality,t.paytype from nb_order_pay t where t.dpid ='.$model['dpid'].' and t.paytype in(8,9,10) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_id in(select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$model['dpid'].' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at) group by t.paytype';
 				$prices = Yii::app()->db->createCommand($sqlprice)->queryAll();
 				if(!empty($prices)){
 					foreach ($prices as $price){
@@ -348,12 +344,8 @@ class StatementmemberController extends BackendController
 				'models'=>$cfmodels,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-				'text'=>$text,
-				'str'=>$str,
 				'comName'=>$comName,
 				'payments'=>$payments,
-				'username'=>$username,
-				'userid'=>$userid,
 		));
 	}
 	public function actionConsumelist(){

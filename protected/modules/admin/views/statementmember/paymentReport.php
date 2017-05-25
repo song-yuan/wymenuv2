@@ -48,7 +48,7 @@
                     <div class="btn-group">
                                     <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
                                     <button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-                                    <!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
+                                    <!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
                     </div>			
                 </div>
             </div> 
@@ -153,9 +153,7 @@ jQuery(document).ready(function(){
 
      	var begin_time = $('#begin_time').val();
      	var end_time = $('#end_time').val();
-     	var text = $('#text').val();
-     	var userid = $('#userid').val();
-     	location.href="<?php echo $this->createUrl('statementmember/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid     
+     	location.href="<?php echo $this->createUrl('statementmember/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time    
 
 	});
 	
@@ -163,10 +161,8 @@ jQuery(document).ready(function(){
 		layer.msg('暂未开放');return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
-		var text = $('#text').val();
-		var userid = $('#userid').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/paymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
+			location.href="<?php echo $this->createUrl('statements/paymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 		}else{
 			// location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 		}
