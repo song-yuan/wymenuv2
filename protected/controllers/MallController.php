@@ -30,8 +30,13 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		$userId = $_SESSION['userId'];
-// 		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
+		$dpidSelf = Yii::app()->session['dpid_self'];
+		if($dpidSelf==1){
+			$comdpid = $this->company['dpid'];
+		}else{
+			$comdpid = $this->company['comp_dpid'];
+		}
+		$userId = Yii::app()->session['userId-'.$comdpid];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
@@ -50,26 +55,28 @@ class MallController extends Controller
 				$scaned = WxScanLog::get($this->companyId,$userId);
 				if(!empty($scaned)){
 					$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
-					$_SESSION['qrcode-'.$userId] = $scene['id'];
+					Yii::app()->session['qrcode-'.$userId] = $scene['id'];
 				}else{
-					$_SESSION['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
+					Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
 				}
 			}else{
-				$_SESSION['qrcode-'.$userId] = -1;
+				Yii::app()->session['qrcode-'.$userId] = -1;
 			}
 		}else{
 			//pc 浏览
 			$userId = 2122;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-			$_SESSION['userId'] = $userId;
-			$_SESSION['qrcode-'.$userId] = -1;
+			$userId = $this->brandUser['lid'];
+			$userDpid = $this->brandUser['dpid'];
+			Yii::app()->session['userId-'.$userDpid] = $userId;
+			Yii::app()->session['qrcode-'.$userId] = -1;
 		}
-// 		}
 		return true;
 	}
 	public function actionIndex()
 	{
-		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
+        $userId = $user['lid'];
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
 		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'start'=>$start,'notices'=>$notices));
@@ -81,7 +88,8 @@ class MallController extends Controller
 	 */
 	public function actionCart()
 	{
-		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
+        $userId = $user['lid'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$siteType = false;
 		$siteNum = false;
@@ -108,7 +116,8 @@ class MallController extends Controller
 	 */
 	public function actionCheckOrder()
 	{
-		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
+        $userId = $user['lid'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$msg = Yii::app()->request->getParam('msg',null);
 		$siteType = false;
@@ -130,7 +139,6 @@ class MallController extends Controller
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		$isMustYue = $cartObj->pormotionYue;
-		$user = $this->brandUser;
 		
 		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
 		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
@@ -165,7 +173,8 @@ class MallController extends Controller
 	 */
 	public function actionGeneralOrder()
 	{
-		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
+        $userId = $user['lid'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$paytype = Yii::app()->request->getPost('paytype');
 		$cuponId = Yii::app()->request->getPost('cupon',0);
@@ -200,7 +209,6 @@ class MallController extends Controller
 		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
-		$user = WxBrandUser::get($userId, $this->companyId);
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$takeoutTypeId);
 			if(empty($orderObj->cart)){
@@ -281,7 +289,8 @@ class MallController extends Controller
 	 */
 	 public function actionPayOrder()
 	 {
-	 	$userId = Yii::app()->session['userId'];
+	 	$user = $this->brandUser;
+        $userId = $user['lid'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		$address = false;
 		$seatingFee = 0;
@@ -318,7 +327,6 @@ class MallController extends Controller
 		}
 
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
-		$user = $this->brandUser;
 	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	 /**
@@ -341,7 +349,8 @@ class MallController extends Controller
 	 */
 	 public function actionOrder()
 	 {
-	 	$userId = Yii::app()->session['userId'];
+	 	$user = $this->brandUser;
+        $userId = $user['lid'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		$siteType = false;
 		$address = false;
@@ -377,7 +386,6 @@ class MallController extends Controller
 		
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$user = $this->brandUser;
 		
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
@@ -388,7 +396,8 @@ class MallController extends Controller
 	  */
 	  public function actionOrderCupon(){
 	  		$contion = null;
-		  	$userId = Yii::app()->session['userId'];
+		  	$user = $this->brandUser;
+        	$userId = $user['lid'];
 			$orderId = Yii::app()->request->getParam('orderId');
 			$paytype = Yii::app()->request->getPost('paytype');
 			$addressId = Yii::app()->request->getPost('address',-1);
@@ -482,7 +491,8 @@ class MallController extends Controller
 	 */
 	 public function actionCupon()
 	{
-		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
+        $userId = $user['lid'];
 		$activeId = Yii::app()->request->getParam('activeId');//promotion_activity的lid
 		$active = WxPromotionActivity::getActivity($this->companyId,$activeId);
 		if($active){
@@ -500,7 +510,8 @@ class MallController extends Controller
 	 */
 	 public function actionCuponInfo()
 	{
-		$userId = Yii::app()->session['userId'];
+		$user = $this->brandUser;
+        $userId = $user['lid'];
 		$activeDetailId = Yii::app()->request->getParam('detailid');//promotion_activity的lid
 		$deatil = WxPromotionActivity::getDetailItem($this->companyId,$activeDetailId);
 		$lid = WxPromotionActivity::sent($this->companyId,$userId,$deatil['promotion_type'],$deatil['promotion_lid'],$deatil['activity_lid']);
@@ -512,7 +523,8 @@ class MallController extends Controller
 	 * 
 	 */
 	public function actionShare(){
-	 	$userId = Yii::app()->session['userId'];
+	 	$user = $this->brandUser;
+        $userId = $user['lid'];
 		$redPacketId = Yii::app()->request->getParam('redptId');//红包id
 		$redPacketDetails = array();
 		$redPacket = WxRedPacket::getRedPacket($this->companyId,$redPacketId);
@@ -530,7 +542,8 @@ class MallController extends Controller
 	 * 
 	 */
 	 public function actionBill(){
-	    $userId = Yii::app()->session['userId'];
+	    $user = $this->brandUser;
+        $userId = $user['lid'];
 	 	$this->render('bill',array('userId'=>$userId));
 	 }
      /**
@@ -584,7 +597,8 @@ class MallController extends Controller
 	 * 
 	 */
 	 public function actionReCharge(){
-	 	$userId = Yii::app()->session['userId'];
+	 	$user = $this->brandUser;
+        $userId = $user['lid'];
 	 	$backUrl = Yii::app()->request->getParam('url',null);
 	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
 	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>urldecode($backUrl)));
@@ -615,7 +629,7 @@ class MallController extends Controller
 	 */
 	public function actionAddCart()
 	{
-		$userId = Yii::app()->session['userId'];
+		$userId = Yii::app()->request->getParam('userId');
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
 		if($userId < 0){
@@ -662,7 +676,7 @@ class MallController extends Controller
 	 */
 	public function actionDeleteCart()
 	{
-		$userId = Yii::app()->session['userId'];
+		$userId = Yii::app()->request->getParam('userId');
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
 		if($userId < 0){
@@ -736,7 +750,7 @@ class MallController extends Controller
 	 */
 	public function actionEmptyCart()
 	{
-		$userId = Yii::app()->session['userId'];
+		$userId = Yii::app()->request->getParam('userId');
 		$companyId = Yii::app()->request->getParam('companyId');
 		$carts = WxCart::isEmptyCart($userId,$companyId);
 		if(empty($carts)){

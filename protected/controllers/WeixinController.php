@@ -93,7 +93,14 @@ class WeixinController extends Controller
 	 		$brandUser = $newBrandUser->brandUser;
 	 	}
 	 	$userId = $brandUser['lid'];
-	 	$_SESSION['userId'] = $userId;
+	 	$userDpid = $brandUser['dpid'];
+	 	// 是否是自己店铺会员（自己店铺有公众号）
+	 	if($companyId==$userDpid){
+	 		Yii::app()->session['dpid_self'] = 1;
+	 	}else{
+	 		Yii::app()->session['dpid_self'] = 0;
+	 	}
+	 	Yii::app()->session['userId-'.$userDpid] = $userId;
 	 	
 	 	$this->redirect(urldecode($url));
 	 }
