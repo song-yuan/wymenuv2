@@ -204,8 +204,8 @@ class StatementmemberController extends BackendController
 						. ' from('
 								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t1.mobile_num,'
 								.' t.recharge_money,t.cashback_num,t.brand_user_lid,ifnull(com.company_name,"总部") as company_name '
-								.' from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
-								.' where t.brand_user_lid = t1.lid and t1.dpid='.$companyId.' and com.dpid = t1.weixin_group and '
+								.' from nb_recharge_record t,nb_brand_user t1 left join nb_company com on(com.dpid = t1.weixin_group)'
+								.' where t.brand_user_lid = t1.lid and t1.dpid='.$companyId.' and '
 								.' t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$companyId
 						. ' ) k'
 						. ' left join ('
@@ -219,8 +219,8 @@ class StatementmemberController extends BackendController
 						. ' from('
 								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t1.mobile_num,'
 								.' t.recharge_money,t.cashback_num,t.brand_user_lid,ifnull(com.company_name,"总部") as company_name '
-								.' from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
-								.' where  t.brand_user_lid = t1.lid and t1.dpid='.$com['comp_dpid'].' and t1.weixin_group = '.$companyId.' and com.dpid = t1.weixin_group and '
+								.' from nb_recharge_record t,nb_brand_user t1 left join nb_company com on(com.dpid = t1.weixin_group)'
+								.' where  t.brand_user_lid = t1.lid and t1.dpid='.$com['comp_dpid'].' and t1.weixin_group = '.$companyId.' and '
 								.' t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$com['comp_dpid']
 						. ' ) k'
 						. ' left join ('
