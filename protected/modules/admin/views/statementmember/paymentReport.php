@@ -83,29 +83,29 @@
 		
 		        <tr class="odd gradeX">
 		        	
-		        	<td><?php echo $model->company->company_name;?></td>
+		        	<td><?php echo $model['company_name'];?></td>
 		            <td><?php 
-		                $orders_total = $orders_total+$model->all_nums;    //总单数
-		                echo $model->all_nums;?></td>
+		                $orders_total = $orders_total+$model['all_nums'];    //总单数
+		                echo $model['all_nums'];?></td>
 		             <td><?php 
-		                $gather=$model->all_reality;
+		                $gather=$model['all_reality'];
 		                $gather_total += $gather;
 		                echo $gather;
 		            ?></td>
 		            <td><?php 
-		                $wxcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,9);
+		                $wxcard=$model['wxcard_cupon'];
 		                $all_wxcards = $all_wxcards + $wxcard;
 		                echo $wxcard; 
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxpoint=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,8);
+		                $wxpoint=$model['wxcard_point'];
 		                $all_wxpoints = $all_wxpoints + $wxpoint;
 		                echo $wxpoint; 
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxcharge=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,10);
+		                $wxcharge=$model['wxcard_charge'];
 		                $all_wxcharges = $all_wxcharges + $wxcharge;
 		                echo $wxcharge; 
 		                ?>
