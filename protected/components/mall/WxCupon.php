@@ -113,21 +113,17 @@ class WxCupon
 		if($isCanUse){
 			$proCodeStr = join(',', $proCodeArr);
 			$now = date('Y-m-d H:i:s',time());
-			$user = WxBrandUser::get($userId,$dpid);
-			$sql = 'select m.lid,m.dpid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where (dpid=:dpid or dpid=:userDpid) and to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0' .
-					' union select * from nb_cupon_branduser where (dpid=:dpid or dpid=:userDpid) and to_group=2 and brand_user_lid=:userLevelId and is_used=1 and delete_flag=0)m , '.
+			$sql = 'select m.lid,m.dpid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0)m , '.
 					'(select * from nb_cupon where type_dpid=0 and type_prod=0'.
 					' union select * from nb_cupon where type_dpid=1 and type_prod=0 and dpid=:dpid'.
 					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid > "1" and t.type_prod = "0" and t1.cupon_dpid=:dpid'.
 					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid = "0" and t.type_prod > "0" and t2.prod_code in ('.$proCodeStr.')'.
 					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid = "1" and t.type_prod > "0" and t.dpid=:dpid and t2.prod_code in ('.$proCodeStr.')'.
 					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid > "1" and t.type_prod > "0" and t1.cupon_dpid=:dpid and t2.prod_code in ('.$proCodeStr.'))n ' .
-					' where m.cupon_id=n.lid and m.dpid=n.dpid and n.begin_time <=:now and :now <=n.end_time and n.min_consumer <=:total and n.delete_flag=0 and n.is_available=0';
+					' where m.cupon_id=n.lid and m.dpid=n.dpid and m.valid_day <=:now and :now <=m.close_day and n.min_consumer <=:total and n.delete_flag=0 and n.is_available=0';
 			$cupon = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':userId',$userId)
 					  ->bindValue(':dpid',$dpid)
-					  ->bindValue(':userDpid',$user['dpid'])
-					  ->bindValue(':userLevelId',$user['user_level_lid'])
 					  ->bindValue(':now',$now)
 					  ->bindValue(':total',$total)
 					  ->queryAll();
