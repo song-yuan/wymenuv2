@@ -229,7 +229,7 @@ class WxCupon
 				$validDay = date('Y-m-d H:i:s',strtotime('+'.$dayBegin.' day'));
 				$closeDay = date('Y-m-d H:i:s',strtotime('+'.($dayBegin+$day).' day'));
 			}
-			if($closeDay>$now&&$now>$validDay){
+			if($closeDay>$now){
 				$se = new Sequence("cupon_branduser");
 				$lid = $se->nextval();
 				$data = array(
