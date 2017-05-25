@@ -15,8 +15,13 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-// 		if(in_array($actin->id,array('index','ticket','orderList','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo','bindMemberCard','money'))){
-		$userId = Yii::app()->session['userId-'.$this->companyId];
+		$dpidSelf = Yii::app()->session['dpid_self'];
+		if($dpidSelf==1){
+			$comdpid = $this->companyId;
+		}else{
+			$comdpid = $this->company['comp_dpid'];
+		}
+		$userId = Yii::app()->session['userId-'.$comdpid];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
@@ -37,7 +42,6 @@ class UserController extends Controller
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$_SESSION['userId'] = $userId;
 		}
-// 		} 
 		return true;
 	}
         /**

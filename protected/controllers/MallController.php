@@ -30,9 +30,13 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		$comdpid = $this->company['comp_dpid'];
+		$dpidSelf = Yii::app()->session['dpid_self'];
+		if($dpidSelf==1){
+			$comdpid = $this->companyId;
+		}else{
+			$comdpid = $this->company['comp_dpid'];
+		}
 		$userId = Yii::app()->session['userId-'.$comdpid];
-// 		if(in_array($actin->id,array('index','checkOrder','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
@@ -65,7 +69,6 @@ class MallController extends Controller
 			$_SESSION['userId'] = $userId;
 			$_SESSION['qrcode-'.$userId] = -1;
 		}
-// 		}
 		return true;
 	}
 	public function actionIndex()
