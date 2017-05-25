@@ -173,7 +173,7 @@ class StatementmemberController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$text = Yii::app()->request->getParam('text');
 		$cardnumber = Yii::app()->request->getParam('cardnumber','');
-		$memdpid = Yii::app()->request->getParam('memdpid','0');
+		$memdpid = Yii::app()->request->getParam('memdpid','');
 		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
 		$money = "";
 		$recharge = "";
@@ -183,7 +183,9 @@ class StatementmemberController extends BackendController
 		}else{
 			$cardid = ' >0';
 		}
-		if($memdpid){
+		if(!empty($memdpid)){
+			$dpidname = 'like "%'.$memdpid.'%"';
+		}elseif($memdpid == '0'){
 			$dpidname = 'like "%'.$memdpid.'%"';
 		}else{
 			$dpidname = ' is not null';
@@ -202,8 +204,8 @@ class StatementmemberController extends BackendController
 						. ' from('
 								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t1.mobile_num,'
 								.' t.recharge_money,t.cashback_num,t.brand_user_lid,com.company_name '
-								.' from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
-								.' where t.brand_user_lid = t1.lid and t1.dpid='.$companyId.' and com.dpid = t1.weixin_group and '
+								.' from nb_recharge_record t,nb_brand_user t1 left join nb_company com on(t1.weixin_group = com.dpid)'
+								.' where t.brand_user_lid = t1.lid and t1.dpid='.$companyId.' and '
 								.' t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$companyId
 						. ' ) k'
 						. ' left join ('
@@ -302,13 +304,33 @@ class StatementmemberController extends BackendController
 		$cfmodels = array();
 		if($models){
 			foreach ($models as $model){
+				
+				$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$model->dpid.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+				$orders = Yii::app()->db->createCommand($sql)->queryAll();
+				$ords ='0000000000';
+				foreach ($orders as $order){
+					$ords = $ords .','.$order['lid'];
+				}
+				
+				$payprice = array();
+				$payprice[8] = '0.00';
+				$payprice[9] = '0.00';
+				$payprice[10] = '0.00';
+				$sqlprice = 'select sum(t.pay_amount) as all_reality,t.paytype from nb_order_pay t where t.dpid ='.$model->dpid.' and t.paytype in(8,9,10) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_id in('.$ords.') group by t.paytype';
+				$prices = Yii::app()->db->createCommand($sqlprice)->queryAll();
+				if(!empty($prices)){
+					foreach ($prices as $price){
+						$payprice[$price['paytype']] = $price['all_reality']?$price['all_reality']:'0.00';
+					}
+				}
+				//var_dump($payprice);exit;
 				$cfmodel = array();
 				$cfmodel['company_name'] = $model->company->company_name;
 				$cfmodel['all_nums'] = $model->all_nums;
 				$cfmodel['all_reality'] = $model->all_reality;
-				$cfmodel['wxcard_cupon'] = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,9);
-				$cfmodel['wxcard_point'] = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,8);
-				$cfmodel['wxcard_charge'] = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,10);
+				$cfmodel['wxcard_cupon'] = $payprice[9];
+				$cfmodel['wxcard_point'] = $payprice[8];
+				$cfmodel['wxcard_charge'] = $payprice[10];
 				$cfmodels[] = $cfmodel;
 			}
 		}
@@ -467,37 +489,6 @@ class StatementmemberController extends BackendController
 		}
 		return $price;
 	}
-	
-	public function getPaymentPrice($dpid,$begin_time,$end_time,$type,$num){
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$dpid.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
-		}
-	
-		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
-		$criteria->with = array('company','order4');
-		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
-		$criteria->addCondition ('t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59"');
-		$criteria->addCondition('t.order_id in('.$ords.')');
-		
-		if($type==3){
-			$criteria->addCondition("t.paytype =3 and t.payment_method_id ='$num'");
-		}else{
-			$criteria->addCondition("t.paytype ='$num'");
-		}
-		$model = OrderPay::model()->findAll($criteria);
-		$price = '';
-		if(!empty($model)){
-			foreach ($model as $models){
-				$price = $models->all_reality?$models->all_reality:0;
-			}
-		}
-		return $price;
-	}
-	
 
 	/*
 	 * 支付方式报表的退款查询
