@@ -62,6 +62,7 @@ class NewBrandUser {
 			        	'card_id'=>$this->newBrandUserCardId(),
 			        	'create_at'=>date('Y-m-d H:i:s',$time),
 			        	'update_at'=>date('Y-m-d H:i:s',$time), 
+                		'weixin_group'=>$this->brandId,
                 		'scene_type'=>0,
         				'is_sync'=>DataSync::getInitSync(),	
         				);

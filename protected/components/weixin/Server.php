@@ -225,7 +225,7 @@ class Server {
 				return $this->generalResponse();
 			}
 		}else{
-			if($this->brandUser['weixin_group']==0){
+			if($this->brandUser['weixin_group']==$this->brandId){
 				$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['id']);
 				WxBrandUser::updateByOpenid($data);
 			}
