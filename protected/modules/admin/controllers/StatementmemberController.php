@@ -172,10 +172,23 @@ class StatementmemberController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$text = Yii::app()->request->getParam('text');
+		$cardnumber = Yii::app()->request->getParam('cardnumber','');
+		$memdpid = Yii::app()->request->getParam('memdpid','0');
 		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
 		$money = "";
 		$recharge = "";
 	
+		if($cardnumber){
+			$cardid = 'like "%'.$cardnumber.'%"';
+		}else{
+			$cardid = ' >0';
+		}
+		if($memdpid){
+			$dpidname = 'like "%'.$memdpid.'%"';
+		}else{
+			$dpidname = ' is not null';
+		}
+			
 		$db = Yii::app()->db;
 		$com_sql = 'select type,comp_dpid ,company_name from nb_company where dpid ='.$companyId;
 		$com = Yii::app()->db->createCommand($com_sql)->queryRow();
@@ -187,7 +200,7 @@ class StatementmemberController extends BackendController
 					 
 				$sql = 'select cf.* from ( select sum(k.recharge_money) as recharge_all,sum(k.cashback_num) as cashback_all,p.pay_all,k.* '
 						. ' from('
-								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,'
+								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t1.mobile_num,'
 								.' t.recharge_money,t.cashback_num,t.brand_user_lid,com.company_name '
 								.' from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
 								.' where t.brand_user_lid = t1.lid and t1.dpid='.$companyId.' and com.dpid = t1.weixin_group and '
@@ -196,13 +209,13 @@ class StatementmemberController extends BackendController
 						. ' left join ('
 								.'select sum(op.pay_amount) as pay_all,op.remark from nb_order_pay op '
 										.'where op.paytype = 10 group by op.remark '
-						. ' ) p on(p.remark = k.card_id) group by k.card_id ) cf';
+						. ' ) p on(p.remark = k.card_id) where k.company_name '.$dpidname.' and (k.card_id '.$cardid.' or k.mobile_num '.$cardid.') group by k.card_id) cf';
 			
 			}else{
 				 
 				$sql = 'select cf.* from ( select sum(k.recharge_money) as recharge_all,sum(k.cashback_num) as cashback_all,p.pay_all,k.* '
 						. ' from('
-								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,'
+								.' select t1.dpid,t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t1.mobile_num,'
 								.' t.recharge_money,t.cashback_num,t.brand_user_lid,com.company_name '
 								.' from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
 								.' where  t.brand_user_lid = t1.lid and t1.dpid='.$com['comp_dpid'].' and t1.weixin_group = '.$companyId.' and com.dpid = t1.weixin_group and '
@@ -211,11 +224,11 @@ class StatementmemberController extends BackendController
 						. ' left join ('
 								.' select sum(op.pay_amount) as pay_all,op.remark from nb_order_pay op '
 										.' where op.paytype = 10 group by op.remark '
-						.' ) p on(p.remark = k.card_id) group by k.card_id ) cf';
+						.' ) p on(p.remark = k.card_id) where k.company_name '.$dpidname.' and (k.card_id '.$cardid.' or k.mobile_num '.$cardid.') group by k.card_id ) cf';
 			
 			}
 		
-	
+		//echo $sql;exit;
 		$count = $db->createCommand(str_replace('cf.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
@@ -235,7 +248,9 @@ class StatementmemberController extends BackendController
 				'recharge'=>$recharge,
 				'text'=>$text,
 				'com'=>$com,
-				'branch'=>$branch
+				'branch'=>$branch,
+				'cardnumber'=>$cardnumber,
+				'memdpid'=>$memdpid,
 		));
 	}
 	public function actionPaymentReport(){
@@ -309,7 +324,7 @@ class StatementmemberController extends BackendController
 				. ' left join nb_company com on(op.dpid = com.dpid)'
 				. ' where op.paytype = 10 and op.remark ='.$cardid
 				. ' and op.dpid in(select com.dpid from nb_company com where com.delete_flag = 0 and com.dpid = '.$companyId.' or com.comp_dpid ='.$companyId.') ) k';
-
+		//echo $sql;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);

@@ -11,6 +11,7 @@
                                                                             <tr>
                                                                             	<th><?php echo yii::t('app','账单号');?></th>
                                                                                 <th><?php echo yii::t('app','时间');?></th>
+                                                                                <th><?php echo yii::t('app','消费门店');?></th>
                                                                                 <th><?php echo yii::t('app','性质');?></th>
                                                                                 <th><?php echo yii::t('app','订单金额');?></th>
                                                                                 <th><?php echo yii::t('app','储值支付');?></th>                                                                                    
@@ -21,6 +22,7 @@
                                                                             <tr class="odd gradeX">
                                                                             	<td ><?php echo $model['account_no'];?></td>
 	                                                                            <td ><?php echo $model['create_at'];?></td>
+	                                                                            <td ><?php echo $model['company_name'];?></td>
 	                                                                            <td >
 	                                                                            <?php switch($model['order_type']){ 
 	                                                                            		case "0": echo '堂食';break;
@@ -39,6 +41,8 @@
                                                                             </tr>
                                                                     <?php endforeach;?>
                                                                     </tbody>                                                                    
+                                                                    <?php else:?>
+                                                                    <span>未查询到数据</span>
                                                                     <?php endif;?>
                                                             </table>
                                                     <?php if($pages->getItemCount()):?>

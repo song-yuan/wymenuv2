@@ -1,6 +1,15 @@
 <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
 <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
-   
+  
+  <style>
+  .modal-dialog {
+	    right: auto;
+	    left: 50%;
+	    width: 700px;
+	    padding-top: 30px;
+	    padding-bottom: 30px;
+    }
+    </style> 
 <div class="page-content">
 
     <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -40,6 +49,12 @@
                         <?php echo yii::t('app','充值记录报表');?>
                 </div>
                 <div class="actions">
+                	<div class="btn-group">
+						<input type="text" class="form-control" name="codename" id="cardnumber" placeholder="<?php echo yii::t('app','会员卡号/手机号');?>" value="<?php echo $cardnumber;?>" > 
+					</div>
+					<div class="btn-group">
+						<input type="text" class="form-control" name="codename" id="memdpid" placeholder="<?php echo yii::t('app','会员来源');?>" value="<?php echo $memdpid;?>" > 
+					</div>
                     <select id="text" class="btn yellow" >
                         <option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信会员卡');?></option>
                     </select>
@@ -94,6 +109,7 @@
                             <tr>
                                 <th><?php echo yii::t('app','会员卡号');?></th>
                                 <th><?php echo yii::t('app','姓名|昵称');?></th>
+                                <th><?php echo yii::t('app','联系方式');?></th>
                                 <th><?php echo yii::t('app','来源');?></th>
                                 <th><?php echo yii::t('app','总充值金额');?></th>                                                                
                                 <th><?php echo yii::t('app','总返现');?></th>
@@ -108,6 +124,7 @@
                                         <tr class="odd gradeX">
                                             <td><?php echo $model['card_id'];?></td>
                                             <td><?php echo $model['user_name']."|".$model['nickname'];?></td>
+                                            <td><?php echo $model['mobile_num'];?></td>
                                             <td>
                                                 <?php
                                                     if($com['type']==0){
@@ -198,7 +215,9 @@
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
-			   location.href="<?php echo $this->createUrl('statementmember/wxRecharge' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/page/"    
+			   var cardnumber = $('#cardnumber').val();
+			   var memdpid = $('#memdpid').val();
+			   location.href="<?php echo $this->createUrl('statementmember/wxRecharge' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/cardnumber/"+cardnumber+"/memdpid/"+memdpid+"/page/"    
 			  
 	        });
 		  });
