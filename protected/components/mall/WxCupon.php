@@ -196,7 +196,27 @@ class WxCupon
 							->bindValue(':type',$type)
 							->queryAll();
 		foreach ($sentPromotion as $promotion){
-			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId);
+			// 查询代金券有效期
+			$sql = 'select * from nb_cupon where lid=:lid and dpid=:dpid';
+			$cuopn = Yii::app()->db->createCommand($sql)
+							->bindValue(':dpid',$dpid)
+							->bindValue(':lid',$promotion['wxcard_id'])
+							->queryRow();
+			if($cuopn){
+				$validDay = '';
+				$closeDay = '';
+				if($cuopn['time_type']==1){
+					$validDay = $cuopn['begin_time'];
+					$closeDay = $cuopn['end_time'];
+				}else{
+					$day = $cuopn['day'];
+					$dayBegin = $cuopn['day_begin'];
+					
+					$validDay = date('Y-m-d H:i:s',strtotime('+'.$dayBegin.' day'));
+					$closeDay = date('Y-m-d H:i:s',strtotime('+'.($dayBegin+$day).' day')); 
+				}
+				self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId,$validDay,$closeDay);
+			}
 		}
 	}
 	public static function getOneMonthByBirthday(){
@@ -214,7 +234,7 @@ class WxCupon
 	 * 
 	 * 发放代金券
 	 */
-	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId){
+	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId,$validDay,$closeDay){
 		$company = WxCompany::get($dpid);
 		$now = date('Y-m-d H:i:s',time());
 		$cupon = self::getCupon($dpid, $cuponId);
@@ -231,6 +251,8 @@ class WxCupon
 					'brand_user_lid'=>$userId,
 					'cupon_source'=>$source,
 					'source_id'=>$source_id,
+					'valid_day'=>$validDay,
+					'close_day'=>$closeDay,
 					'is_used'=>1,
 					'is_sync'=>DataSync::getInitSync(),
 			);
