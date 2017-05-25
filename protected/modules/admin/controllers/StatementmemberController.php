@@ -293,14 +293,28 @@ class StatementmemberController extends BackendController
 		$criteria->order = 'year(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 
 		$criteria->distinct = TRUE;
-		$model = Order::model()->findAll($criteria);
-		//var_dump($model);exit;
+		$models = Order::model()->findAll($criteria);
+		//var_dump($models);exit;
 		$payments = $this->getPayment($this->companyId);
 		$username = $this->getUsername($this->companyId);
 		$comName = $this->getComName();
-		//var_dump($model);exit;
+		
+		$cfmodels = array();
+		if($models){
+			foreach ($models as $model){
+				$cfmodel = array();
+				$cfmodel['company_name'] = $model->company->company_name;
+				$cfmodel['all_nums'] = $model->all_nums;
+				$cfmodel['all_reality'] = $model->all_reality;
+				$cfmodel['wxcard_cupon'] = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,9);
+				$cfmodel['wxcard_point'] = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,8);
+				$cfmodel['wxcard_charge'] = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,10);
+				$cfmodels[] = $cfmodel;
+			}
+		}
+		//var_dump($cfmodels);exit;
 		$this->render('paymentReport',array(
-				'models'=>$model,
+				'models'=>$cfmodels,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
