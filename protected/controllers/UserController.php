@@ -143,10 +143,7 @@ class UserController extends Controller
                 ));
     }
     public function actionTicket(){
-	        //$user就是brand_user表里的一行
-	
 	        $user = $this->brandUser;
-	        //$userId就是brand_user表里的lid
 	        $userId = $user['lid'];
             $not_useds = WxCupon::getUserNotUseCupon($userId,$user['dpid']);
             $expires = WxCupon::getUserExpireCupon($userId,$user['dpid']);
@@ -158,10 +155,7 @@ class UserController extends Controller
                     ));       
     }
      public function actionBill(){
-         //$user就是brand_user表里的一行
-
         $user = $this->brandUser;
-        //$userId就是brand_user表里的lid
         $userId = $user['lid'];
         $card_id = $user['card_id'];
         $order_pay = WxBrandUser::getOrderPay($card_id,$user['dpid']);
