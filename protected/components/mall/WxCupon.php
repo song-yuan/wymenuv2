@@ -150,12 +150,10 @@ class WxCupon
 	 * 
 	 */
 	public static function getCupon($dpid,$cuponId){
-		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select * from nb_cupon where lid=:lid and dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
+		$sql = 'select * from nb_cupon where lid=:lid and dpid=:dpid and delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':lid',$cuponId)
 				  ->bindValue(':dpid',$dpid)
-				  ->bindValue(':now',$now)
 				  ->queryRow();
 	    return $cupon;
 	}
@@ -196,27 +194,7 @@ class WxCupon
 							->bindValue(':type',$type)
 							->queryAll();
 		foreach ($sentPromotion as $promotion){
-			// 查询代金券有效期
-			$sql = 'select * from nb_cupon where lid=:lid and dpid=:dpid';
-			$cuopn = Yii::app()->db->createCommand($sql)
-							->bindValue(':dpid',$dpid)
-							->bindValue(':lid',$promotion['wxcard_id'])
-							->queryRow();
-			if($cuopn){
-				$validDay = '';
-				$closeDay = '';
-				if($cuopn['time_type']==1){
-					$validDay = $cuopn['begin_time'];
-					$closeDay = $cuopn['end_time'];
-				}else{
-					$day = $cuopn['day'];
-					$dayBegin = $cuopn['day_begin'];
-					
-					$validDay = date('Y-m-d H:i:s',strtotime('+'.$dayBegin.' day'));
-					$closeDay = date('Y-m-d H:i:s',strtotime('+'.($dayBegin+$day).' day')); 
-				}
-				self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId,$validDay,$closeDay);
-			}
+			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId);
 		}
 	}
 	public static function getOneMonthByBirthday(){
@@ -234,48 +212,61 @@ class WxCupon
 	 * 
 	 * 发放代金券
 	 */
-	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId,$validDay,$closeDay){
+	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId){
 		$company = WxCompany::get($dpid);
 		$now = date('Y-m-d H:i:s',time());
 		$cupon = self::getCupon($dpid, $cuponId);
 		if($cupon){
-			$se = new Sequence("cupon_branduser");
-			$lid = $se->nextval();
-			$data = array(
-					'lid'=>$lid,
-					'dpid'=>$dpid,
-					'create_at'=>$now,
-					'update_at'=>$now,
-					'cupon_id'=>$cuponId,
-					'to_group'=>3,
-					'brand_user_lid'=>$userId,
-					'cupon_source'=>$source,
-					'source_id'=>$source_id,
-					'valid_day'=>$validDay,
-					'close_day'=>$closeDay,
-					'is_used'=>1,
-					'is_sync'=>DataSync::getInitSync(),
-			);
-			$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
-			if($source==0){
-				$sourceStr = '活动领取';
-			}elseif($source==1){
-				$sourceStr = '红包领取';
+			$validDay = '';
+			$closeDay = '';
+			if($cupon['time_type']==1){
+				$validDay = $cupon['begin_time'];
+				$closeDay = $cupon['end_time'];
 			}else{
-				$sourceStr = '商家赠送';
+				$day = $cupon['day'];
+				$dayBegin = $cupon['day_begin'];
+					
+				$validDay = date('Y-m-d H:i:s',strtotime('+'.$dayBegin.' day'));
+				$closeDay = date('Y-m-d H:i:s',strtotime('+'.($dayBegin+$day).' day'));
 			}
-			$data = array(
-					'touser'=>$openId,
-					'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
-					'first'=>'现金券已经领取成功',
-					'keyword1'=>$cupon['cupon_money'].'元现金券一张',
-					'keyword2'=>$sourceStr,
-					'keyword3'=>$cupon['end_time'],
-					'keyword4'=>$cupon['cupon_abstract'],
-					'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['telephone'].'咨询'
-			);
-			new WxMessageTpl($dpid,$userId,1,$data);
+			if($closeDay>$now&&$now>$validDay){
+				$se = new Sequence("cupon_branduser");
+				$lid = $se->nextval();
+				$data = array(
+						'lid'=>$lid,
+						'dpid'=>$dpid,
+						'create_at'=>$now,
+						'update_at'=>$now,
+						'cupon_id'=>$cuponId,
+						'to_group'=>3,
+						'brand_user_lid'=>$userId,
+						'cupon_source'=>$source,
+						'source_id'=>$source_id,
+						'valid_day'=>$validDay,
+						'close_day'=>$closeDay,
+						'is_used'=>1,
+						'is_sync'=>DataSync::getInitSync(),
+				);
+				$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
+				if($source==0){
+					$sourceStr = '活动领取';
+				}elseif($source==1){
+					$sourceStr = '红包领取';
+				}else{
+					$sourceStr = '商家赠送';
+				}
+				$data = array(
+						'touser'=>$openId,
+						'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
+						'first'=>'现金券已经领取成功',
+						'keyword1'=>$cupon['cupon_money'].'元现金券一张',
+						'keyword2'=>$sourceStr,
+						'keyword3'=>$closeDay,
+						'keyword4'=>$cupon['cupon_abstract'],
+						'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['telephone'].'咨询'
+				);
+				new WxMessageTpl($dpid,$userId,1,$data);
+			}
 		}
-	    return $result;
 	}
 }
