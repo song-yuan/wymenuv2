@@ -64,9 +64,11 @@ class MallController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 0000002122;
+			$userId = 2122;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-			Yii::app()->session['userId'] = $userId;
+			$userId = $this->brandUser['lid'];
+			$userDpid = $this->brandUser['dpid'];
+			Yii::app()->session['userId-'.$userDpid] = $userId;
 			Yii::app()->session['qrcode-'.$userId] = -1;
 		}
 		return true;

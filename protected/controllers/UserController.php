@@ -42,7 +42,9 @@ class UserController extends Controller
 			//pc 浏览
 			$userId = 2122;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-			Yii::app()->session['userId'] = $userId;
+			$userId = $this->brandUser['lid'];
+			$userDpid = $this->brandUser['dpid'];
+			Yii::app()->session['userId-'.$userDpid] = $userId;
 		}
 		return true;
 	}
