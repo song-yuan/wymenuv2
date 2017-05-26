@@ -445,8 +445,9 @@ $(document).ready(function(){
 	var isMustYue = false;
 	<?php if($isMustYue):?>;
 	isMustYue = true;
+	var totalPrice = $('#total').html();
 	var yue = $('#yue').attr('yue');
-	if(parseFloat(yue) == 0){
+	if(parseFloat(yue) < parseFloat(totalPrice)){
 		$('#dialog2').show();
 	}
 	<?php endif;?>
@@ -911,11 +912,16 @@ $(document).ready(function(){
 		$('form').submit();
 	});
 	$('#dialog1 .default').click(function(){
+		if(isMustYue){
+			layer.msg('有储值支付活动产品<br>需使用储值支付');
+			$(this).prop('checked',true);
+			return;
+		}
 		$('input[name="yue"]').removeAttr('checked');
 		$('#dialog1').hide();
 	});
 	$('#dialog2 .primary').click(function(){
-		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
+		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$user['dpid'],'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
 	});
 	$('#dialog2 .default').click(function(){
 		location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";

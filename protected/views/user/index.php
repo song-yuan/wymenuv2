@@ -201,6 +201,7 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
+                    <!-- 
                     <div class="empty1"></div>                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="privilege" data_target="#chanel_demo1">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdzxtq.png" class="icon_nav" alt=""></span>
@@ -220,7 +221,7 @@
                         <div class="introduce">暂无等级特权</div>
                         <?php endif; ?>
                     </div>
-  
+   					-->
                     
                     
                     
