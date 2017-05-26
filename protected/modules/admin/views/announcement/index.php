@@ -28,7 +28,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('connectUs/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('announcement/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
