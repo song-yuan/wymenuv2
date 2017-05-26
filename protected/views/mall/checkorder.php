@@ -914,11 +914,11 @@ $(document).ready(function(){
 	$('#dialog1 .default').click(function(){
 		if(isMustYue){
 			layer.msg('有储值支付活动产品<br>需使用储值支付');
-			$(this).prop('checked',true);
-			return;
+			location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";
+		}else{
+			$('input[name="yue"]').removeAttr('checked');
+			$('#dialog1').hide();
 		}
-		$('input[name="yue"]').removeAttr('checked');
-		$('#dialog1').hide();
 	});
 	$('#dialog2 .primary').click(function(){
 		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$user['dpid'],'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
