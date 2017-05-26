@@ -921,7 +921,7 @@ $(document).ready(function(){
 		$('#dialog1').hide();
 	});
 	$('#dialog2 .primary').click(function(){
-		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
+		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$user['dpid'],'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
 	});
 	$('#dialog2 .default').click(function(){
 		location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";
