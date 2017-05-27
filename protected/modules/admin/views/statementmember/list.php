@@ -111,7 +111,7 @@
 						</div>
 					</a>
 					<?php endif;?>
-					<?php if(yii::app()->user->role <5):?>
+					<?php if(yii::app()->user->role <=5):?>
 					<a href="<?php echo $this->createUrl('statementmember/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>

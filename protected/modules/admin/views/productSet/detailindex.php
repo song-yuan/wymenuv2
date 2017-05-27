@@ -42,12 +42,10 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?>-><?php echo yii::t('app','套餐明细列表');?></div>
 					<div class="actions">
-					<?php if((Yii::app()->user->role == User::POWER_ADMIN)||($status==0 && Yii::app()->user->role >= User::ADMIN && Yii::app()->user->role <= User::SHOPKEEPER)):?>
 						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid,'type'=>0, 'papage'=>$papage));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
-					<?php endif;?>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
