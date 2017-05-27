@@ -336,7 +336,9 @@
         <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">提交订单</a></p>
+    	<a id="payorder" href="javascript:;">
+        <p>提交订单</p>
+        </a>
     </div>
     <div class="clear"></div>
 </footer>
