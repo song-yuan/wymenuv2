@@ -99,9 +99,9 @@
 	    <?php endif;?>
      <?php else:?>
      <div class="ft-rt">
-		<p>
-			<a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a>
-		</p>
+     	<a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">
+		<p>选好了</p>
+		</a>
 	</div>
     <?php endif;?>
     <div class="clear"></div>
