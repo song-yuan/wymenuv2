@@ -821,8 +821,10 @@ class WxOrder
 				if($orderpay['paytype']==9){
 					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
 					WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
+					WxOrderPay::refundOrderPay($orderpay);
 				}else if($orderpay['paytype']==10){
 					WxBrandUser::refundYue($orderpay['pay_amount'], $orderpay['remark']);
+					WxOrderPay::refundOrderPay($orderpay);
 				}
 			}
 	 	}
