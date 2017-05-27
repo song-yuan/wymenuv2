@@ -259,89 +259,59 @@ class StatementmemberController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 		
-// 		$sql = 'select k.dpid from nb_company k left join nb_company_property cp on(cp.dpid = k.dpid) where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0 and cp.is_rest in(2,3)';
-// 		$dpids = Yii::app()->db->createCommand($sql)->queryAll();
-// 		$strs ='0000000000';
-// 		foreach ($dpids as $dpid){
-// 			$strs = $strs .','.$dpid['dpid'];
-// 		}
-		
-// 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in ('.$strs.') and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-// 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-// 		$ords ='0000000000';
-// 		foreach ($orders as $order){
-// 			$ords = $ords .','.$order['lid'];
-// 		}
-		//var_dump($ords);exit;
-		
-		$sql = 'select com.company_name,t.dpid,sum(op.pay_amount) as all_reality,count(distinct t.account_no) as all_num,count(distinct op.order_id) as all_nums from '
-				.' nb_order t left join nb_company com on(t.dpid = com.dpid and com.delete_flag =0 ) '
-				.' left join nb_order_pay op on(op.dpid = t.dpid and t.lid = op.order_id)'
-				.' where t.order_status in(3,4,8) and t.dpid in (select k.dpid from nb_company k left join nb_company_property cp on(cp.dpid = k.dpid) where k.dpid = '.$this->companyId.' or k.comp_dpid = '.$this->companyId.' and k.delete_flag =0 and cp.is_rest in(2,3)) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" '
-				.' group by t.dpid order by year(t.create_at) asc,sum(op.pay_amount) desc,t.dpid asc';
+		$sql = 'select com.company_name,pri.all_reality,pri.all_nums,point.point_price,cupon.cupon_price,recharge_price from '
+				.' nb_company com '
+				.' left join '
+					.'( select op.dpid,sum(op.pay_amount) as all_reality,count(distinct op.order_id) as all_nums '
+					.' from nb_order_pay op '
+						.' left join nb_order o '
+							.' on(o.dpid = op.dpid and op.order_id = o.lid) '
+					.' where o.order_status in(3,4,8) and op.dpid in( '
+						.' select c.dpid from nb_company c,nb_company_property cp '
+							.' where c.delete_flag =0 and c.dpid=cp.dpid and cp.is_rest in(2,3) and (c.dpid ='.$this->companyId.' or c.comp_dpid ='.$this->companyId.') '
+					.' ) and op.paytype !=11 and op.create_at >= "'.$begin_time.' 00:00:00" and op.create_at <= "'.$end_time.' 23:59:59" group by op.dpid'
+				.' ) pri on(pri.dpid = com.dpid) '
+				.' left join '
+					.'( select opp.dpid,sum(opp.pay_amount) as point_price '
+					.' from nb_order_pay opp '
+						.' left join nb_order opo '
+							.' on(opo.dpid = opp.dpid and opp.order_id = opo.lid) '
+					.' where opo.order_status in(3,4,8) and opp.dpid in( '
+						.' select cc.dpid from nb_company cc,nb_company_property ccp '
+							.' where cc.delete_flag =0 and cc.dpid = ccp.dpid and ccp.is_rest in(2,3) and (cc.dpid ='.$this->companyId.' or cc.comp_dpid ='.$this->companyId.') '
+					.' ) and opp.create_at >="'.$begin_time.' 00:00:00" and opp.create_at <="'.$end_time.' 23:59:59" and opp.paytype =8 group by opp.dpid'
+				.' ) point on(point.dpid = com.dpid) '
+				.' left join '
+					.'( select opc.dpid,sum(opc.pay_amount) as cupon_price '
+					.' from nb_order_pay opc '
+						.' left join nb_order oc '
+							.' on(oc.dpid = opc.dpid and opc.order_id = oc.lid) '
+					.' where oc.order_status in(3,4,8) and opc.dpid in( '
+						.' select ccc.dpid from nb_company ccc,nb_company_property cccp '
+							.' where ccc.delete_flag =0 and ccc.dpid = cccp.dpid and cccp.is_rest in(2,3) and (ccc.dpid ='.$this->companyId.' or ccc.comp_dpid ='.$this->companyId.') '
+					.' ) and opc.create_at >="'.$begin_time.' 00:00:00" and opc.create_at <="'.$end_time.' 23:59:59" and opc.paytype =9 group by opc.dpid'
+				.' ) cupon on(cupon.dpid = com.dpid) '
+				.' left join '
+					.'( select opr.dpid,sum(opr.pay_amount) as recharge_price '
+					.' from nb_order_pay opr '
+						.' left join nb_order orp '
+							.' on(orp.dpid = opr.dpid and opr.order_id = orp.lid) '
+					.' where orp.order_status in(3,4,8) and opr.dpid in( '
+						.' select ccr.dpid from nb_company ccr,nb_company_property ccrp '
+							.' where ccr.delete_flag =0 and ccr.dpid = ccrp.dpid and ccrp.is_rest in(2,3) and (ccr.dpid ='.$this->companyId.' or ccr.comp_dpid ='.$this->companyId.') '
+					.' ) and opr.create_at >="'.$begin_time.' 00:00:00" and opr.create_at <="'.$end_time.' 23:59:59" and opr.paytype =10 group by opr.dpid'
+				.' ) rech on(rech.dpid = com.dpid) '
+				.' left join nb_company_property cdp on(cdp.dpid = com.dpid) '
+				.' where com.delete_flag =0 and (com.dpid ='.$this->companyId.' or com.comp_dpid ='.$this->companyId.') and cdp.is_rest in(2,3)';
+		//echo $sql;
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		
-		
-// 		$criteria = new CDbCriteria;
-// 		$criteria->select = 't.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(distinct t.account_no) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
-// 		$criteria->with = array('company','orderpay');
-// 		$criteria->condition = 'orderpay.paytype != "11" and t.order_status in (3,4,8)' ;
-// 		$criteria->addCondition('t.lid in('.$ords.')');
-// 		if($strs){
-// 			$criteria->condition = 't.dpid in('.$strs.')';
-// 		}else{
-// 			$criteria->condition = 't.dpid ='.$this->companyId;
-// 		}
-		
-// 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-// 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-		
-// 		$criteria->group ='t.dpid';
-// 		$criteria->order = 'year(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
-
-// 		$criteria->distinct = TRUE;
-// 		$models = Order::model()->findAll($criteria);
-		//var_dump($models);exit;
 		$payments = $this->getPayment($this->companyId);
 		$username = $this->getUsername($this->companyId);
 		$comName = $this->getComName();
-		
-		$cfmodels = array();
-		if($models){
-			foreach ($models as $model){
-				
-// 				$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$model['dpid'].' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-// 				$orders = Yii::app()->db->createCommand($sql)->queryAll();
-// 				$ords ='0000000000';
-// 				foreach ($orders as $order){
-// 					$ords = $ords .','.$order['lid'];
-// 				}
-				
-				$payprice = array();
-				$payprice[8] = '0.00';
-				$payprice[9] = '0.00';
-				$payprice[10] = '0.00';
-				$sqlprice = 'select sum(t.pay_amount) as all_reality,t.paytype from nb_order_pay t where t.dpid ='.$model['dpid'].' and t.paytype in(8,9,10) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_id in(select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$model['dpid'].' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at) group by t.paytype';
-				$prices = Yii::app()->db->createCommand($sqlprice)->queryAll();
-				if(!empty($prices)){
-					foreach ($prices as $price){
-						$payprice[$price['paytype']] = $price['all_reality']?$price['all_reality']:'0.00';
-					}
-				}
-				//var_dump($payprice);exit;
-				$cfmodel = array();
-				$cfmodel['company_name'] = $model['company_name'];
-				$cfmodel['all_nums'] = $model['all_nums'];
-				$cfmodel['all_reality'] = $model['all_reality'];
-				$cfmodel['wxcard_cupon'] = $payprice[9];
-				$cfmodel['wxcard_point'] = $payprice[8];
-				$cfmodel['wxcard_charge'] = $payprice[10];
-				$cfmodels[] = $cfmodel;
-			}
-		}
-		//var_dump($cfmodels);exit;
+
 		$this->render('paymentReport',array(
-				'models'=>$cfmodels,
+				'models'=>$models,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'comName'=>$comName,

@@ -93,19 +93,19 @@
 		                echo $gather;
 		            ?></td>
 		            <td><?php 
-		                $wxcard=$model['wxcard_cupon'];
+		                $wxcard=$model['cupon_price'];
 		                $all_wxcards = $all_wxcards + $wxcard;
 		                echo $wxcard; 
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxpoint=$model['wxcard_point'];
+		                $wxpoint=$model['point_price'];
 		                $all_wxpoints = $all_wxpoints + $wxpoint;
 		                echo $wxpoint; 
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxcharge=$model['wxcard_charge'];
+		                $wxcharge=$model['recharge_price'];
 		                $all_wxcharges = $all_wxcharges + $wxcharge;
 		                echo $wxcharge; 
 		                ?>
