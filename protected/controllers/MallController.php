@@ -255,7 +255,7 @@ class MallController extends Controller
 			//使用余额
 			if($yue){
 				$order = WxOrder::getOrder($orderId,$this->companyId);
-				if($order['order_status']==3){
+				if($order['order_status'] < 3){
 					$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 					if($remainMoney > 0){
 						WxOrder::insertOrderPay($order,10);
