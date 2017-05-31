@@ -44,6 +44,9 @@
 .min_date .date{
     font-size: 14px;text-align: left;
 }
+.min_date span{
+    color: red;
+}
 .edit_del{
     margin-top:10px;display: none;
 }
@@ -135,13 +138,13 @@
                              <div class="date">
                                  领取
                                  <span>
-                                     <?php echo $model->day_begin?$model->day_begin:'当';?>
+                                     <?php echo $model->day_begin?$model->day_begin:'当';?>天
                                  </span> 
-                                 天生效，有效天数：
+                                 生效，有效天数：
                                  <span>
-                                     <?php echo $model->day;?>
+                                     <?php echo $model->day;?>天
                                  </span>  
-                                 天
+                                 
                              </div>
                              <?php endif;?> 
                          </div>
