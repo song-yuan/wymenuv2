@@ -4,12 +4,26 @@
 ?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/weui.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/example.css');?>
-
+<style>
+.point_style{
+    margin-top: 0px;
+    background-color: #04BE02;
+    color:#FFFFFF;
+}
+.point1{
+    font-size: 17px;
+    padding:20px;    
+}
+.point2{
+    font-size: 50px;
+    padding-right: 15px;
+    text-align: center;
+}
+</style>
      <div class="page">
-           
            <div class="point_style">
                 <div class="point1">
-                    <span> 我的积分(元)</span>
+                    <span> 我的积分(个)</span>
                 </div>
                 <div class="point2">
                     <span><?php echo $remain_points ?></span>
@@ -34,7 +48,6 @@
                             </div>
                             <div class="weui_cell_ft">
                             </div> 
-                       
                     </a>
                  </div>
            </div> 
