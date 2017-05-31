@@ -366,7 +366,7 @@
             data:{user_id:userId,user_dpid:userDpid},
             success:function(msg){
                 if(msg.status){
-                    var content = '<img src="<?php echo $baseUrl;?>/'+msg.url+'" style="width:100%;height:100%;"/>';
+                    var content = '<img src="<?php echo $baseUrl;?>/'+msg.url+'" style="width:70%;height:70%;"/>';
                     $("#qrcode-box").empty().append(content);
                 }else{
                            $("#qrcode-box").empty().append('不存在该会员'); 
