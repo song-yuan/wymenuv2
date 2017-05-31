@@ -265,8 +265,11 @@
 												<div class="bot" style="">代金券</div>
 											</div>
 										</div>
+										<?php if($cupon->time_type == '1'):?>
 										<div class="wxcardend" style="">限<span><?php echo date('Y-m-d',strtotime($cupon->begin_time));?></span> 至<span><?php echo date('Y-m-d',strtotime($cupon->end_time));?></span>  使用</div>
-										
+										<?php else:?>
+										<div class="wxcardend" style="">领取后<span><?php echo $cupon->day_begin?$cupon->day_begin:'当';?></span> 天生效，有效期：<span><?php echo $cupon->day;?></span> 天</div>
+										<?php endif;?>
 										<div class="wxcardactive <?php if(in_array($cupon->lid, $selcups)) echo '';else echo 'uhide';?>" ><img width="50px" style="" src="<?php if($is_new) echo '../../../../../../img/checked.png';else echo '../../../../img/checked.png';?>"/></div>
 									</div>
 								<?php endforeach;?>
