@@ -74,6 +74,8 @@ class CopypromotionController extends BackendController
 	        				$sqlnpd = 'select t.* from nb_normal_promotion_detail t where t.delete_flag = 0 and t.normal_promotion_id ='.$promotioncomp->lid.' and t.dpid ='.$this->companyId;
 	        				$promotioncompdetails = $db->createCommand($sqlnpd)->queryAll();
 	        				
+	        				$sqlnpb = 'select t.* from nb_normal_branduser t where t.delete_flag = 0 and t.normal_promotion_id ='.$promotioncomp->lid.' and t.dpid ='.$this->companyId;
+	        				$promotionbrandusers = $db->createCommand($sqlnpb)->queryAll();
 	        				if(!empty($promotioncompdetails)){
 		        				if(!empty($promotionself)){
 		        					
@@ -129,6 +131,24 @@ class CopypromotionController extends BackendController
 		        					//var_dump($datanormalpromotion);exit;
 		        					$command = $db->createCommand()->insert('nb_normal_promotion',$datanormalpromotion);
 		        					 
+		        				}
+		        				
+		        				if(!empty($promotionbrandusers)){
+		        					foreach ($promotionbrandusers as $promotionbranduser){
+		        						$se = new Sequence("normal_branduser");
+		        						$lid = $se->nextval();
+		        						$datanorprombrands = array(
+		        								'lid'=>$lid,
+		        								'dpid'=>$dpid,
+		        								'create_at'=>date('Y-m-d H:i:s',time()),
+		        								'update_at'=>date('Y-m-d H:i:s',time()),
+		        								'normal_promotion_id'=> $falid,
+		        								'to_group'=> $promotionbranduser['to_group'],
+		        								'brand_user_lid'=> $promotionbranduser['brand_user_lid'],
+		        								'delete_flag' => '0',
+		        						);
+		        						$command = $db->createCommand()->insert('nb_normal_branduser',$datanorprombrands);
+		        					}
 		        				}
 		        				
 		        				foreach ($promotioncompdetails as $promotioncompdetail){
