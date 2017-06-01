@@ -4,8 +4,10 @@ class WechatMarketController extends BackendController {
     public function actionList() {
     	
     	$companyId = $this->companyId;
+    	$iscom = Yii::app()->db->createCommand('select type from nb_company where delete_flag =0 and dpid ='.$companyId)->queryRow();
     	$isrest = Yii::app()->db->createCommand('select is_rest from nb_company_property where delete_flag =0 and dpid ='.$companyId)->queryRow();
-    	//var_dump($isrest);exit;
+    	//var_dump($iscom);exit;
+    	
     	if($isrest){
     		$isrest = $isrest['is_rest'];
     	}else{
@@ -13,6 +15,7 @@ class WechatMarketController extends BackendController {
     	}
 		$this->render('list',array(
 			'isrest' => $isrest,
+			'iscom' => $iscom,
 		));
     }
     
