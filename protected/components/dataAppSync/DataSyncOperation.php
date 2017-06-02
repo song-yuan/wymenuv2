@@ -355,7 +355,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$syncTime = $data['sync_at'];
 		$results = array();
-		$diffTable = array('nb_pad_setting','nb_site_type','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_retreat','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_shift_detail','nb_sync_failure');
+		$diffTable = array('nb_pad_setting','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_retreat','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_shift_detail','nb_sync_failure');
 		$dataBase = new DataSyncTables ();
 		$allTables = $dataBase->getAllTableName ();
 		$allTable = array_diff($allTables, $diffTable);
@@ -706,6 +706,7 @@ class DataSyncOperation {
 			Helper::writeLog($dpid.'---'.$orderData.'---'.$e->getMessage());
 			$msg = json_encode ( array (
 					'status' => false,
+					'msg' => $e->getMessage(),
 					'orderId' => '' 
 			) );
 		}
