@@ -312,26 +312,35 @@
 							<div class="ku-item-info">聚餐人数</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<?php if(Yii::app()->user->role >=11):?>
+					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式(员工营业额)</div>
+							<div class="ku-item-info">支付方式(员工业绩)</div>
 						</div>
 					</a>
+					<?php else:?>
+					<a href="<?php echo $this->createUrl('statements/comPaymentReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey sktj"></div>
+							<div class="ku-item-info">支付方式</div>
+						</div>
+					</a>
+					<?php endif;?>
 					<a href="<?php echo $this->createUrl('statements/orderpaytype',array('companyId' => $this->companyId,'text'=>'3','paymentid'=>'0','paytype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey zdzffs"></div>
 							<div class="ku-item-info">账单支付方式</div>
 						</div>
 					</a>
-                                        <a href="<?php echo $this->createUrl('statements/memberconsume',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time())));?>">
+                    <a href="<?php echo $this->createUrl('statements/memberconsume',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time())));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey hykxf"></div>
 							<div class="ku-item-info">会员卡消费</div>
 						</div>
 					</a>
-                                        <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?> 
-                                        <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+                    <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?> 
+                    <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey syjtj"></div>
 							<div class="ku-item-info">收银机统计</div>
