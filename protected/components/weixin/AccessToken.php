@@ -58,7 +58,7 @@ class AccessToken {
 				Yii::app()->db->createCommand($sql)->execute();
 				return $accessTokenStdClass->access_token;
 			}else{
-				throw new Exception('请检查appid及appsecret是否填写正确!');
+				throw new Exception('请检查appid及appsecret是否填写正确!error:'.$weixinServerReturn);
 			}
 		}else
 			throw new Exception('无法从微信服务器获取access_token的信息');
