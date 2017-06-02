@@ -36,20 +36,16 @@
             <div class="portlet-title">
                 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式（员工营业额）报表');?></div>
             	<div class="actions">
-                    <select id="userid" class="btn yellow" >
-                            <option value="0" <?php if ($userid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择服务员--');?></option>
-                            <option value="-1" <?php if ($userid==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','--列出所有--');?></option>
-                            <?php if($username):?>
-                            <?php foreach ($username as $user):?>
-                            <option value="<?php echo $user['username'];?>" <?php if ($userid==$user['username']){?> selected="selected" <?php }?> ><?php echo $user['username'].'('.$user['staff_no'].')';?></option>
-                            <?php endforeach;?>
-                            <?php endif;?>
-                    </select>
                     <select id="text" class="btn yellow" >
                             <option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
                             <option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
                             <option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
                     </select>
+                    <?php if(Yii::app()->user->role <11):?>
+                    <div class="btn-group" style="width: 140px;">
+						<input type="text" class="form-control" name="dpname" id="dpname" placeholder="<?php echo yii::t('app','店铺名称');?>" value="<?php echo $dpname;?>" > 
+					</div>
+					<?php endif;?>
                     <div class="btn-group">
 	                    <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
@@ -71,14 +67,13 @@
 		        <thead>
 		            <tr>
 		                <?php  $grouppay_item = 0;?>
+		               <th><?php echo yii::t('app','店铺');?></th>
 		               <th><?php echo yii::t('app','时间');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','毛利润');?></th> 
 		               <th><?php echo yii::t('app','优惠');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
-		               <?php if($userid != '0'): ?>
-		               <th><?php echo yii::t('app','营业员');?></th>
-		               <?php endif;?>
+		               
 		               <th><?php echo yii::t('app','现金');?></th>
 		               <th><?php echo yii::t('app','微信');?></th>
 		               <th><?php echo yii::t('app','微点单');?></th>
@@ -86,13 +81,7 @@
 		               <th><?php echo yii::t('app','支付宝');?></th>
 		               <th><?php echo yii::t('app','银联');?></th>
 		               <th><?php echo yii::t('app','会员卡');?></th>
-		               <?php if($payments):?>
-		                    <?php foreach ($payments as $payment):?>
-		                         <th><?php echo $payment['name'];
-		                            $grouppay_item ++;
-		                         ?></th>
-		                    <?php endforeach;?>
-		               <?php endif;?>   
+		               <th><?php echo yii::t('app','后台支付');?></th>  
 		               <th><?php echo yii::t('app','系统券');?></th>
 		               <th><?php echo yii::t('app','积分');?></th> 
 		               <th><?php echo yii::t('app','微信余额');?></th>                                                            
@@ -101,46 +90,44 @@
 		            </tr>
 		        </thead>
 				<tbody>
-		        <?php if( $models) :?>
+		        
 		        <!--foreach-->
 		        <?php $a=1;?>
 		        <?php 
-		         $orders_total=0;      // 总单数
-		         $grossprofit_total=0; // 总毛利润
-		         $discount_total=0;    // 总优惠
-		         $gather_total=0;      // 实收款 
-		         $cash_total=0;        // 现金
-		         $wechat_total = 0;    // 微信
-		         $wxorder_total = 0;    // 微信点单
-		         $wxwaimai_total = 0;    // 微信外卖
-		         $alipay_total = 0;    // 支付宝
-		         $unionpay_total=0;    // 银联
-		         $vipcard_total = 0;   // 会员卡 
-		         $grouppay_arr = array();   //支付宝/美团
-		        for($i =0;$i<$grouppay_item;$i++){
-		           $grouppay_arr[$i] =0; 
-		           // $grouppay.$i =0;
-		        }
-		        $all_wxcards = 0;
-		        $all_wxcharges = 0;
-		        $all_wxpoints = 0;
-		        $retreats = 0;
+		        $orders_total=0;      // 总单数
+		        $grossprofit_total=0; // 总毛利润
+		        $discount_total=0;    // 总优惠
+		        $gather_total=0;      // 实收款 
+		        $cash_total=0;        // 现金
+		        $wechat_total = 0;    // 微信
+		        $wxorder_total = 0;    // 微信点单
+		        $wxwaimai_total = 0;    // 微信外卖
+		        $alipay_total = 0;    // 支付宝
+		        $unionpay_total=0;    // 银联
+		        $vipcard_total = 0;   // 会员卡 
+		        $htpay_total = 0;		//后台支付统计
+		        $all_wxcards = 0;		//系统券
+		        $all_wxcharges = 0;		//微信余额
+		        $all_wxpoints = 0;		//积分
+		        $retreats = 0;			//退款
+		        if( $models) :
 		        foreach ($models as $model): ?>
 		
 		        <tr class="odd gradeX">
+		        	<td><?php echo $model->dpid;?></td>
 		            <td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 		            <td><?php 
 		                $orders_total = $orders_total+$model->all_nums;    //总单数
 		                echo $model->all_nums;?></td>
 		             <td><?php 
-		                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $reality_all = $this->getComGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $grossprofit_total+=$reality_all;
 		                echo $reality_all;
 		                ?></td>
 		            
 		            <td><?php 
 						//退款...
-			            $retreat = $this->getPaymentRetreat($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+			            $retreat = $this->getComPaymentRetreat($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all);
 			            $retreats+=$retreat;
 		            	//优惠...
 		                $discount=sprintf("%.2f",$reality_all-$model->all_reality+$retreat);
@@ -152,78 +139,63 @@
 		                $gather_total += $gather;
 		                echo $gather;
 		            ?></td>
-		            <?php if($userid != '0'): ?>
-		            <td><?php 
-		                echo $model->username.'('.$this->getUserstaffno($this->companyId,$model->username).')';
-		             ?></td>
-		            <?php endif;?>
+		            
 		            <td><?php  
-		                $cash = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $cash = $this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,0,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $cash_total += $cash;
 		                echo $cash;
 		            ?></td>
 		            <td><?php 
-		                $wechat = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,1,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wechat = $this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,1,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $wechat_total +=$wechat;
 		                echo $wechat;
 		            ?></td>
 		            <td><?php 
-		                $wxorderpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,12,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxorderpay =  $this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,12,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $wxorder_total += $wxorderpay;
 		                echo $wxorderpay;
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxwaimaipay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,13,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxwaimaipay =  $this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,13,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $wxwaimai_total += $wxwaimaipay;
 		                echo $wxwaimaipay;
 		                ?>
 		            </td>
 		            <td><?php
-		                $alipay=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $alipay=$this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $alipay_total += $alipay;
 		                echo $alipay; 
 		            ?></td>
 		            <td><?php 
-		                $unionpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,5,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $unionpay =  $this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,5,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $unionpay_total += $unionpay;
 		                echo $unionpay;
 		                ?>
 		            </td>
 		            <td id="alipay4"><?php 
-		                $vipcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,4,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $vipcard=$this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,4,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $vipcard_total += $vipcard;
 		                echo $vipcard; 
 		                ?>
 		            </td>
-		             <?php if($payments):?>
-		                
-		                <?php $j = 0;foreach ($payments as $payment):?>
-		                    <td><?php 
-		                           $pay_item =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username); 
-		                           $grouppay_arr[$j] +=$pay_item;
-		                          // $grouppay.$i +=$pay_item;
-		                            
-		                            $j++;
-		                            echo $pay_item;
-		                            ?>
-		                    </td>
-		                <?php endforeach;?>
-		            <?php endif;?> 
+		            <td>
+		            <?php echo '';?>
+		            </td> 
 		            <td><?php 
-		                $wxcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,9,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxcard=$this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,9,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $all_wxcards = $all_wxcards + $wxcard;
 		                echo $wxcard; 
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxpoint=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,8,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxpoint=$this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,8,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $all_wxpoints = $all_wxpoints + $wxpoint;
 		                echo $wxpoint; 
 		                ?>
 		            </td>
 		            <td><?php 
-		                $wxcharge=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,10,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->username);
+		                $wxcharge=$this->getComPaymentPrice($model->dpid,$begin_time,$end_time,0,10,$text,$model->y_all,$model->m_all,$model->d_all);
 		                $all_wxcharges = $all_wxcharges + $wxcharge;
 		                echo $wxcharge; 
 		                ?>
@@ -233,44 +205,130 @@
 		        </tr>
 		       
 		        <?php endforeach;?>	
-		      
+		        <?php endif;if($prices):?>
+		      <?php foreach ($prices as $m): ?>
+		
+		        <tr class="odd gradeX">
+		        	<td><?php echo $m['company_name'];?></td>
+		            <td><?php 
+		            		if($text==1){
+		            			echo $m['y_all'];
+		            		}elseif($text==2){ 
+								echo $m['y_all'].-$m['m_all'];
+							}else{
+								echo $m['y_all'].-$m['m_all'].-$m['d_all'];
+							}
+					?></td>
+		            <td><?php $orders_total = $orders_total+$m['all_nums'];
+		                echo $m['all_nums'];?></td>
+		            <td><?php
+		            		$reality_all = $m['all_should'];
+		             		$grossprofit_total+=$reality_all;
+		             		echo $reality_all;
+		            ?></td>
+		            
+		            <td><?php 
+				            //退款...
+				            $retreat = $this->getComPaymentRetreat($m['dpid'],$begin_time,$end_time,$text,$m['y_all'],$m['m_all'],$m['d_all']);
+				            $retreats+=$retreat;
+				            $discount=sprintf("%.2f",$reality_all-$m['all_reality']+$retreat);
+				            $discount_total += $discount;
+				            echo $discount;
+		            ?></td>
+		            <td><?php 
+		                	$gather=$m['all_reality'];
+		                	$gather_total += $gather;
+		                	echo $gather;
+		            ?></td>
+		            
+		            <td><?php 
+		            		$cash = $m['all_cash'];
+				            $cash_total += $cash;
+				            echo $cash;
+		            ?></td>
+		            <td><?php
+				            $wechat = $m['all_wxpay']; 
+				            $wechat_total +=$wechat;
+				            echo $wechat;
+		            ?></td>
+		            <td><?php
+				            $wxorderpay = $m['all_wxdd'];
+				            $wxorder_total += $wxorderpay;
+				            echo $wxorderpay;
+		            ?></td>
+		            <td><?php 
+				            $wxwaimaipay = $m['all_wxwm'];
+				            $wxwaimai_total += $wxwaimaipay;
+				            echo $wxwaimaipay;
+		            ?></td>
+		            <td><?php
+				            $alipay = $m['all_alipay'];
+				            $alipay_total += $alipay;
+				            echo $alipay;
+		            ?></td>
+		            <td><?php 
+				            $unionpay = $m['all_bankpay'];
+				            $unionpay_total += $unionpay;
+				            echo $unionpay;
+		            ?></td>
+		            <td id="alipay4"><?php 
+				            $vipcard = $m['all_member'];
+				            $vipcard_total += $vipcard;
+				            echo $vipcard;
+		            ?></td>
+		            <td><?php
+		            $htpay = $m['all_htpay'];
+		            $htpay_total += $htpay;
+		            echo $htpay;  
+		            ?></td>
+		            <td>
+		            <?php 
+		            $wxcard = $m['all_cupon'];
+		            $all_wxcards = $all_wxcards + $wxcard;
+		                echo $wxcard;
+		                ?>
+		            </td> 
+		            <td><?php 
+		            $wxpoint = $m['all_point'];
+		            $all_wxpoints = $all_wxpoints + $wxpoint;
+		            echo $wxpoint;
+		                ?>
+		            </td>
+		            <td><?php 
+		            $wxcharge = $m['all_wxmember'];
+		            $all_wxcharges = $all_wxcharges + $wxcharge;
+		            echo $wxcharge;
+		                ?>
+		            </td>
+		            <td><?php 
+		            		echo $retreat;
+		            ?></td>
+		            					
+		        </tr>
+		       
+		        <?php endforeach;?>
 		        <tr>
+		        	<td></td>
 		            <td><?php echo "总计";?></td>
 		            <td><?php echo $orders_total; ?></td>
-		            <td><?php  echo $grossprofit_total;?></td>
+		            <td><?php echo $grossprofit_total;?></td>
 		            <td><?php echo $discount_total; ?></td>
-		            <td><?php  echo $gather_total;?></td>
-		            <?php if($userid != '0'): ?>
-		                <td><?php   
-		                       // echo $model->username.'('.$this->getUserstaffno($this->companyId,$model->username).')';
-		                    ?>
-		                </td>
-		            <?php endif;?>
-		            <td><?php  echo $cash_total; ?></td>
-		            <td><?php  echo $wechat_total;?></td>
-		            <td><?php  echo $wxorder_total;?></td>
-		            <td><?php  echo $wxwaimai_total;?></td>
-		            <td><?php  echo $alipay_total;?></td>
-		            <td><?php  echo $unionpay_total;?></td>
-		            <td><?php  echo $vipcard_total; ?></td>
-		            <?php if($payments):?>
-		                <?php  $j =0;foreach ($payments as $payment):?>
-		                    <td><?php  echo $grouppay_arr[$j++];
-		                   // echo $grouppay.$i;
-		                   // $i++;
-		                    ?></td>
-		                    
-		                <?php endforeach;?>
-		            <?php endif;?> 
+		            <td><?php echo $gather_total;?></td>
+		            <td><?php echo $cash_total; ?></td>
+		            <td><?php echo $wechat_total;?></td>
+		            <td><?php echo $wxorder_total;?></td>
+		            <td><?php echo $wxwaimai_total;?></td>
+		            <td><?php echo $alipay_total;?></td>
+		            <td><?php echo $unionpay_total;?></td>
+		            <td><?php echo $vipcard_total; ?></td>
+		            <td><?php echo $htpay_total;?></td>
 		            <td><?php echo $all_wxcards;?></td>
 		            <td><?php echo $all_wxpoints;?></td>
 		            <td><?php echo $all_wxcharges;?></td>
 		            <td><?php echo $retreats;?></td>
 										
 		        </tr>
-		      <?php endif;?> 
-		       
-		        
+		       	<?php endif;?>
 		        </tbody>
     	</table>
 
@@ -302,7 +360,8 @@ jQuery(document).ready(function(){
      	var end_time = $('#end_time').val();
      	var text = $('#text').val();
      	var userid = $('#userid').val();
-     	location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
+     	var dpname = $('#dpname').val();
+     	location.href="<?php echo $this->createUrl('statements/comPaymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname    
 
 	});
 	
@@ -313,7 +372,7 @@ jQuery(document).ready(function(){
 		var text = $('#text').val();
 		var userid = $('#userid').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/paymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
+			location.href="<?php echo $this->createUrl('statements/comPaymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
 		}else{
 			// location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 		}
