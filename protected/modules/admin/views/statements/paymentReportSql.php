@@ -311,12 +311,12 @@ jQuery(document).ready(function(){
      	var end_time = $('#end_time').val();
      	var text = $('#text').val();
      	var userid = $('#userid').val();
-     	location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
+     	location.href="<?php echo $this->createUrl('statements/paymentReportSql' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
 
 	});
 	
 	$('#excel').click(function excel(){
-
+		layer.msg('暂未开放');return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();
