@@ -1712,7 +1712,7 @@ class DataSyncOperation {
 		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
 			$user['user_birthday'] = date('m.d',strtotime($user['user_birthday']));
-			$cupon = WxCupon::getUserPosCupon($user['lid'],$user['dpid'],$productIds);
+			$cupon = WxCupon::getUserPosCupon($user['lid'],$dpid,$productIds);
 			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
 			$msg = array('status'=>true,'user'=>$user,'cupon'=>$cupon,'points'=>$point);
 		}else{
