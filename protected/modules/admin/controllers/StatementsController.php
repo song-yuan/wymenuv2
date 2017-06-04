@@ -3820,8 +3820,13 @@ public function actionPayallReport(){
 		->setCellValue('H3',yii::t('app','微信'))
 		->setCellValue('I3',yii::t('app','支付宝'))
 		->setCellValue('J3',yii::t('app','银联'))
-		->setCellValue('K3',yii::t('app','会员卡'));
-		$letternext= 'L';
+		->setCellValue('K3',yii::t('app','会员卡'))
+		->setCellValue('L3',yii::t('app','微点单'))
+		->setCellValue('M3',yii::t('app','微外卖'))
+		->setCellValue('N3',yii::t('app','系统券'))
+		->setCellValue('O3',yii::t('app','积分'))
+		->setCellValue('P3',yii::t('app','微信余额'));
+		$letternext= 'Q';
 		if($payments){
 			$let = '0';
 			$letter='';
@@ -3830,16 +3835,15 @@ public function actionPayallReport(){
 				$paymentname = $payment['name'];
 				$let++;
 				switch ($let){
-					case 1: $letter = 'L3';$letternext = 'M';break;
-					case 2: $letter = 'M3';$letternext = 'N';break;
-					case 3: $letter = 'N3';$letternext = 'O';break;
-					case 4: $letter = 'O3';$letternext = 'P';break;
-					case 5: $letter = 'P3';$letternext = 'Q';break;
-					case 6: $letter = 'Q3';$letternext = 'R';break;
-					case 7: $letter = 'R3';$letternext = 'S';break;
-					case 8: $letter = 'S3';$letternext = 'T';break;
-					case 9: $letter = 'T3';$letternext = 'U';break;
-					case 10: $letter = 'U3';$letternext = 'V';break;
+					case 1: $letter = 'Q3';$letternext = 'R';break;
+					case 2: $letter = 'R3';$letternext = 'S';break;
+					case 3: $letter = 'S3';$letternext = 'T';break;
+					case 4: $letter = 'T3';$letternext = 'U';break;
+					case 5: $letter = 'U3';$letternext = 'V';break;
+					case 6: $letter = 'V3';$letternext = 'W';break;
+					case 7: $letter = 'W3';$letternext = 'X';break;
+					case 8: $letter = 'X3';$letternext = 'Y';break;
+					case 9: $letter = 'Y3';$letternext = 'Z';break;
 					default:break;
 				}
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
@@ -3872,9 +3876,14 @@ public function actionPayallReport(){
 				->setCellValue('H'.$j,$wechat = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,1,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('I'.$j,$alipay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,2,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('J'.$j,$unionpay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,5,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
-				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
+				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('L'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,12,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('M'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,13,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('N'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,9,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('O'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,8,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('P'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,10,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
 				$letters='';
-				$letternexts= 'L';
+				$letternexts= 'Q';
 				if($payments){
 					$let = '0';
 					
@@ -3883,16 +3892,15 @@ public function actionPayallReport(){
 						$paymentname = $payment['name'];
 						$let++;
 						switch ($let){
-							case 1: $letters = 'L';$letternexts = 'M';break;
-							case 2: $letters = 'M';$letternexts = 'N';break;
-							case 3: $letters = 'N';$letternexts = 'O';break;
-							case 4: $letters = 'O';$letternexts = 'P';break;
-							case 5: $letters = 'P';$letternexts = 'Q';break;
-							case 6: $letters = 'Q';$letternexts = 'R';break;
-							case 7: $letters = 'R';$letternexts = 'S';break;
-							case 8: $letters = 'S';$letternexts = 'T';break;
-							case 9: $letters = 'T';$letternexts = 'U';break;
-							case 10: $letters = 'U';$letternexts = 'V';break;
+							case 1: $letters = 'Q';$letternexts = 'R';break;
+							case 2: $letters = 'R';$letternexts = 'S';break;
+							case 3: $letters = 'S';$letternexts = 'T';break;
+							case 4: $letters = 'T';$letternexts = 'U';break;
+							case 5: $letters = 'U';$letternexts = 'V';break;
+							case 6: $letters = 'V';$letternexts = 'W';break;
+							case 7: $letters = 'W';$letternexts = 'X';break;
+							case 8: $letters = 'X';$letternexts = 'Y';break;
+							case 9: $letters = 'Y';$letternexts = 'Z';break;
 							default:break;
 						}
 						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
@@ -3907,7 +3915,7 @@ public function actionPayallReport(){
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':'.$letternext.$j)->applyFromArray($linestyle);
 					//设置填充颜色
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
+					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
 					//设置字体靠左、靠右
 					$objPHPExcel->getActiveSheet()->getStyle('B'.$j.':'.$letternext.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 					//细边框样式引用
@@ -3938,11 +3946,11 @@ public function actionPayallReport(){
 		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 		//设置填充颜色
 		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		//$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->getStartColor()->setARGB('fdfc8d');
 		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->getStartColor()->setARGB('FFB848');
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->getStartColor()->setARGB('FFB848');
 		$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->getStartColor()->setARGB('FFB848');
+		//$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->getStartColor()->setARGB('FFB848');
 		//设置每列宽度
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(8);
