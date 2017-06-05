@@ -188,7 +188,7 @@ public function actionCreate(){
                                     'create_at'=>date('Y-m-d H:i:s',time()),
                                     'update_at'=>date('Y-m-d H:i:s',time()),
                                     'pay_type'=>$pay_online,
-                                    'pay_channel'=>$pay_online,
+                                    'pay_channel'=>'2',
                                     'delete_flag'=>'0',
                     );
                     $command = $db->createCommand()->insert('nb_company_property',$data);
@@ -233,7 +233,7 @@ public function actionCreate(){
                                             'create_at'=>date('Y-m-d H:i:s',time()),
                                             'update_at'=>date('Y-m-d H:i:s',time()),
                                             'pay_type'=>$pay_online,
-                                            'pay_channel'=>$pay_online,
+                                            'pay_channel'=>'2',
                                             'delete_flag'=>'0',
                             );
                             $command = $db->createCommand()->insert('nb_company_property',$data);
@@ -286,7 +286,7 @@ public function actionCreate(){
                         'model' => $model,
                         'printers'=>$printers,
                         'role'=>$role,
-        'companyId'=>  $this->companyId,
+        				'companyId'=>  $this->companyId,
                         'type'=> $type,
                         'type2'=> $type2,
         ));
@@ -310,6 +310,7 @@ public function actionCreate(){
 			$province = Yii::app()->request->getParam('province1');
 			$city = Yii::app()->request->getParam('city1');
 			$area = Yii::app()->request->getParam('area1');
+			//$pay_online = Yii::app()->request->getParam('pay_online');
 			
 			$model->country = 'china';
 			$model->province = $province;
@@ -405,7 +406,7 @@ public function actionCreate(){
 		$db = Yii::app()->db;
 		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
 		if(!empty($compros)){
-			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",appId ="'.$appid.'",code ="'.$code.'" where dpid ='.$dpid;
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",appId ="'.$appid.'",code ="'.$code.'",pay_type ="'.$paytype.'",pay_channel ="'.$paychannel.'" where dpid ='.$dpid;
 			$command = $db->createCommand($sql);
 			$command->execute();
 		}else{
@@ -416,8 +417,8 @@ public function actionCreate(){
 					'dpid'=>$dpid,
 					'create_at'=>date('Y-m-d H:i:s',time()),
 					'update_at'=>date('Y-m-d H:i:s',time()),
-					'pay_type'=>'1',
-					'pay_channel'=>'2',
+					'pay_type'=>$paytype,
+					'pay_channel'=>$paychannel,
 					'appId'=>$appid,
 					'code'=>$code,
 					'delete_flag'=>'0',
