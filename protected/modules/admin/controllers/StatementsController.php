@@ -1007,6 +1007,45 @@ public function actionPayallReport(){
 		return $price;
 	}
 	
+	public function getPaymentSqlPrice($dpid,$begin_time,$end_time,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		
+		if($usertype != '0'){
+			$usern = 'o.username ="'.$userid.'"';
+		}else{
+			$usern = 'o.username != "-1"';
+		}
+		if($text==1){
+			$times = ' and year(o.create_at) ="'.$y_all.'"';
+		}elseif($text==2){
+			$times = ' and year(o.create_at) ="'.$y_all.'" and month(o.create_at) ="'.$m_all.'"';
+		}elseif($text==3){
+			$times = ' and year(o.create_at) ="'.$y_all.'" and month(o.create_at) ="'.$m_all.'" and day(o.create_at) ="'.$d_all.'"';
+		}
+		
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.pay_amount) as all_reality,count(*) as all_num, '
+				.' t.dpid,t.create_at,t.paytype,t.payment_method_id '
+				.' from nb_order_pay t'
+				.' left join nb_order o on(t.dpid = o.dpid and t.order_id = o.lid) '
+				.' where t.paytype ="3" and t.dpid ='.$dpid
+				.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" '
+				.' and t.order_id in( '
+					.' select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid ='.$dpid
+					.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" '
+					.' group by k.user_id,k.account_no,k.create_at '
+				.' ) '
+				.' and t.payment_method_id ='.$num
+				.' and '.$usern.' '.$times;
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		//$model = OrderPay::model()->findAll($criteria);
+		$price = '';
+		if(!empty($model)){
+			
+			$price = $model['all_reality']?$model['all_reality']:'';
+			
+		}
+		return $price;
+	}
+	
 
 	public function getComPaymentPrice($dpid,$begin_time,$end_time,$type,$num,$text,$y_all,$m_all,$d_all){
 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$dpid.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
@@ -3921,6 +3960,403 @@ public function actionPayallReport(){
 					//细边框样式引用
 					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
 					$j++;
+		}
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.$j)->applyFromArray($lineBORDER);
+		//大边框样式引用
+		//$objPHPExcel->getActiveSheet()->getStyle('A2:E'.$j)->applyFromArray($linestyle);
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:'.$letternext.'1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:'.$letternext.'2');
+		//单元格加粗，居中：
+	
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+	
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//$objPHPExcel->getActiveSheet()->getStyle('D4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		//$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		//$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(8);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(12);
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="支付方式（员工营业额）报表（".date('y年m月d日  H时i分',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
+	}
+	
+	//导出支付方式员工营业额的报表
+	public function actionPaymentSqlExport(){
+		date_default_timezone_set('PRC');
+		$objPHPExcel = new PHPExcel();
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
+		$dpname = Yii::app()->request->getParam('dpname','');
+		
+		if(empty($begin_time) && Yii::app()->user->role >=11){
+			$begin_time = date('Y-m-d',time());
+		}
+		if(empty($end_time) && Yii::app()->user->role >=11){
+			$end_time = date('Y-m-d',time());
+		}
+		
+		if($text==1){
+			if($userid != '0'){
+				$users ='oo.dpid,year(oo.create_at),oo.username';
+				$useros = 't.dpid,year(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),ot.username';
+				$usernames = ' = t.username';
+			}else{
+				$users ='oo.dpid,year(oo.create_at)';
+				$useros = 't.dpid,year(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at)';
+				$usernames = ' != -1';
+			}
+		}elseif($text == 2){
+			if($userid != '0'){
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),oo.username';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),ot.username';
+				$usernames = ' = t.username';
+			}else{
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at)';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at)';
+				$usernames = ' != -1';
+			}
+		}else{
+			if($userid != '0'){
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at),oo.username';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at),ot.username';
+				$usernames = ' = t.username';
+			}else{
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at)';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at)';
+				$usernames = ' != -1';
+			}
+		}
+		
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
+				.' t.dpid,t.username,t.create_at '
+				.' ,op.all_reality ,o.all_should, '
+				.' op.all_nums,o.all_num,op0.all_cash,op1.all_wxpay,op2.all_alipay,op3.all_htpay,op4.all_member,op5.all_bankpay,op8.all_point,op9.all_cupon,op10.all_wxmember,op12.all_wxdd,op13.all_wxwm '
+				.' from nb_order t '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_reality,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype !=11 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op on(t.dpid = op.dpid and op.username '.$usernames.' and year(t.create_at) = op.y_oo and month(t.create_at) = op.m_oo and day(t.create_at) = op.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_cash,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =0 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op0 on(t.dpid = op0.dpid and op0.username '.$usernames.' and year(t.create_at) = op0.y_oo and month(t.create_at) = op0.m_oo and day(t.create_at) = op0.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_wxpay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =1 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op1 on(t.dpid = op1.dpid and op1.username '.$usernames.' and year(t.create_at) = op1.y_oo and month(t.create_at) = op1.m_oo and day(t.create_at) = op1.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_alipay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =2 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op2 on(t.dpid = op2.dpid and op2.username '.$usernames.' and year(t.create_at) = op2.y_oo and month(t.create_at) = op2.m_oo and day(t.create_at) = op2.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_htpay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =3 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op3 on(t.dpid = op3.dpid and op3.username '.$usernames.' and year(t.create_at) = op3.y_oo and month(t.create_at) = op3.m_oo and day(t.create_at) = op3.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_member,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =4 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op4 on(t.dpid = op4.dpid and op4.username '.$usernames.' and year(t.create_at) = op4.y_oo and month(t.create_at) = op4.m_oo and day(t.create_at) = op4.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_bankpay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =5 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op5 on(t.dpid = op5.dpid and op5.username '.$usernames.' and year(t.create_at) = op5.y_oo and month(t.create_at) = op5.m_oo and day(t.create_at) = op5.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_point,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =8 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op8 on(t.dpid = op8.dpid and op8.username '.$usernames.' and year(t.create_at) = op8.y_oo and month(t.create_at) = op8.m_oo and day(t.create_at) = op8.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_cupon,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =9 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op9 on(t.dpid = op9.dpid and op9.username '.$usernames.' and year(t.create_at) = op9.y_oo and month(t.create_at) = op9.m_oo and day(t.create_at) = op9.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_wxmember,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =10 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op10 on(t.dpid = op10.dpid and op10.username '.$usernames.' and year(t.create_at) = op10.y_oo and month(t.create_at) = op10.m_oo and day(t.create_at) = op10.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_wxdd,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =12 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op12 on(t.dpid = op12.dpid and op12.username '.$usernames.' and year(t.create_at) = op12.y_oo and month(t.create_at) = op12.m_oo and day(t.create_at) = op12.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_wxwm,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
+					.' from nb_order_pay top '
+							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
+					.' where top.paytype =13 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by '.$users
+				.' ) op13 on(t.dpid = op13.dpid and op13.username '.$usernames.' and year(t.create_at) = op13.y_oo and month(t.create_at) = op13.m_oo and day(t.create_at) = op13.d_oo) '
+				.' left join ('
+				.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid,ot.username,year(ot.create_at) as y_ot,month(ot.create_at) as m_ot,day(ot.create_at) as d_ot '
+				.' from nb_order ot '
+				.' where ot.order_status in(3,4,8) and ot.lid in('.$ords.') and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
+				.' group by '.$userots
+				.' ) o on(t.dpid = o.dpid and o.username '.$usernames.' and year(t.create_at) = o.y_ot and month(t.create_at) = o.m_ot and day(t.create_at) = o.d_ot)'
+				
+				.' where '
+				.' op.all_reality is not null and '
+				.' t.order_status in(3,4,8) and t.lid in('.$ords.') and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and '
+				.' t.dpid ='.$this->companyId
+				.' group by '.$useros;
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		//var_dump($models);exit;
+		$payments = $this->getPayment($this->companyId);
+		$username = $this->getUsername($this->companyId);
+		$comName = $this->getComName();
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(17);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+			
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1',yii::t('app','支付方式（员工营业额）报表'))
+		->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59   ".yii::t('app','报表生成时间：').date('Y-m-d H:i:s',time()))
+		->setCellValue('A3',yii::t('app','时间'))
+		->setCellValue('B3',yii::t('app','总单数'))
+		->setCellValue('C3',yii::t('app','毛利润'))
+		->setCellValue('D3',yii::t('app','优惠'))
+		->setCellValue('E3',yii::t('app','实收款'))
+		->setCellValue('F3',yii::t('app','营业员'))
+		->setCellValue('G3',yii::t('app','现金'))
+		->setCellValue('H3',yii::t('app','微信'))
+		->setCellValue('I3',yii::t('app','支付宝'))
+		->setCellValue('J3',yii::t('app','银联'))
+		->setCellValue('K3',yii::t('app','会员卡'))
+		->setCellValue('L3',yii::t('app','微点单'))
+		->setCellValue('M3',yii::t('app','微外卖'))
+		->setCellValue('N3',yii::t('app','系统券'))
+		->setCellValue('O3',yii::t('app','积分'))
+		->setCellValue('P3',yii::t('app','微信余额'));
+		$letternext= 'Q';
+		if($payments){
+			$let = '0';
+			$letter='';
+				
+			foreach ($payments as $payment){
+				$paymentname = $payment['name'];
+				$let++;
+				switch ($let){
+					case 1: $letter = 'Q3';$letternext = 'R';break;
+					case 2: $letter = 'R3';$letternext = 'S';break;
+					case 3: $letter = 'S3';$letternext = 'T';break;
+					case 4: $letter = 'T3';$letternext = 'U';break;
+					case 5: $letter = 'U3';$letternext = 'V';break;
+					case 6: $letter = 'V3';$letternext = 'W';break;
+					case 7: $letter = 'W3';$letternext = 'X';break;
+					case 8: $letter = 'X3';$letternext = 'Y';break;
+					case 9: $letter = 'Y3';$letternext = 'Z';break;
+					default:break;
+				}
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
+			}
+		}
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternext.'3',yii::t('app','退款'));
+		$j=4;
+		foreach($models as $v){
+			//print_r($v);
+			
+			if ($text==1){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v['y_all']);
+			}elseif($text==2){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v['y_all'].'-'.$v['m_all']);
+			}else{
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v['y_all'].'-'.$v['m_all'].'-'.$v['d_all']);
+			}
+			if($userid !='0'){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j,$v['username'].'('.$this->getUserstaffno($this->companyId,$v['username']).')');
+			}else{
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j);
+			}
+			$retreats = $this->getPaymentRetreat($v['dpid'],$begin_time,$end_time,$text,$v['y_all'],$v['m_all'],$v['d_all'],$userid,$v['username']);
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('B'.$j,$v['all_nums'])
+			->setCellValue('C'.$j,$reality_all = $v['all_should'])
+			->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v['all_reality']+$retreats))
+			->setCellValue('E'.$j,$v['all_reality'])
+			->setCellValue('G'.$j,$cash = $v['all_cash'])
+			->setCellValue('H'.$j,$wechat = $v['all_wxpay'])
+			->setCellValue('I'.$j,$alipay = $v['all_alipay'])
+			->setCellValue('J'.$j,$unionpay = $v['all_bankpay'])
+			->setCellValue('K'.$j,$vipcard = $v['all_member'])
+			->setCellValue('L'.$j,$wxorderpay = $v['all_wxdd'])
+			->setCellValue('M'.$j,$wxwaimaipay = $v['all_wxwm'])
+			->setCellValue('N'.$j,$wxcard = $v['all_cupon'])
+			->setCellValue('O'.$j,$wxpoint = $v['all_point'])
+			->setCellValue('P'.$j,$wxcharge = $v['all_wxmember']);
+			$letters='';
+			$letternexts= 'Q';
+			if($payments){
+				$let = '0';
+					
+					
+				foreach ($payments as $payment){
+					$paymentname = $payment['name'];
+					$let++;
+					switch ($let){
+						case 1: $letters = 'Q';$letternexts = 'R';break;
+						case 2: $letters = 'R';$letternexts = 'S';break;
+						case 3: $letters = 'S';$letternexts = 'T';break;
+						case 4: $letters = 'T';$letternexts = 'U';break;
+						case 5: $letters = 'U';$letternexts = 'V';break;
+						case 6: $letters = 'V';$letternexts = 'W';break;
+						case 7: $letters = 'W';$letternexts = 'X';break;
+						case 8: $letters = 'X';$letternexts = 'Y';break;
+						case 9: $letters = 'Y';$letternexts = 'Z';break;
+						default:break;
+					}
+					$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v['dpid'],$begin_time,$end_time,3,$payment['lid'],$text,$v['y_all'],$v['m_all'],$v['d_all'],$userid,$v['username']));
+				}
+				$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+	
+			}
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternexts.$j,$retreats);
+			//细边框引用
+			$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':'.$letternext.$j)->applyFromArray($linestyle);
+			//设置填充颜色
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
+			//设置字体靠左、靠右
+			$objPHPExcel->getActiveSheet()->getStyle('B'.$j.':'.$letternext.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+			//细边框样式引用
+			//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
+			$j++;
 		}
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
