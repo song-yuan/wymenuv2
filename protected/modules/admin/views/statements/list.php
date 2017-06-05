@@ -324,7 +324,7 @@
 					<a href="<?php echo $this->createUrl('statements/paymentReportSql',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式(员工业绩)</div>
+							<div class="ku-item-info">支付方式(优化)</div>
 						</div>
 					</a>
 					<?php endif;if(Yii::app()->user->role <=5):?>
