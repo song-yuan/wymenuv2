@@ -31,7 +31,9 @@ class MeituanController extends Controller
 	}
 	public function actionUnboundToken(){
 		$data = file_get_contents('php://input');
-		MtOrder::UnboundShop($data);
+		$remt = MtOrder::UnboundShop($data);
+		echo $remt;
+		exit();
 	}
 }
 ?>
