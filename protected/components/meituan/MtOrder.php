@@ -38,7 +38,7 @@ class MtOrder
 		$result = MtUnit::postHttps($url, $data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			$sql1 = "select * from token where ePoiId=".$ePoiId;
+			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId;
 			$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
 			$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
 			$array= array('appAuthToken'=>"$res1->appAuthToken",'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
@@ -50,27 +50,25 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
-		if($data){
-			$resArr = MtUnit::dealData($data);
-			$ePoiId = $resArr['ePoiId'];
-			$appAuthToken = $resArr['appAuthToken'];
-			$se=new Sequence("meituan_token");
-			$lid = $se->nextval();
-			$creat_at = date("Y-m-d H:i:s");
-			$update_at = date("Y-m-d H:i:s");
-			$dpid = $ePoiId;
-			$inserData = array(
+		$resArr = MtUnit::dealData($data);
+		$ePoiId = $resArr['ePoiId'];
+		$appAuthToken = $resArr['appAuthToken'];
+		$se=new Sequence("meituan_token");
+		$lid = $se->nextval();
+		$creat_at = date("Y-m-d H:i:s");
+		$update_at = date("Y-m-d H:i:s");
+		$dpid = $ePoiId;
+		$inserData = array(
 					'lid'=>	$lid,
 					'dpid'=> $dpid,
-					'create_at'=>	$creat_at,
-					'update_at'=>	$update_at,
+					'create_at'=>$creat_at,
+					'update_at'=>$update_at,
 					'ePoiId'=>	$ePoiId,
-					'appAuthToken'=>	$appAuthToken,
+					'appAuthToken'=>$appAuthToken,
 			);
 			$res = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
-			if($res){
-				return '{ "data": "success"}';
-			}
+		if($res){
+			return '{ "data": "success"}';
 		}
 		return '{ "data": "ERROR"}';
 	}
