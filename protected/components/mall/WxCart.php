@@ -90,7 +90,9 @@ class WxCart
 				return array('status'=>false,'msg'=>'活动未开始,活动开始时间'.$result['begin_time']);
 			}
 			$week = date('w');
-			
+			if($week==0){
+				$week = 7;
+			}
 			$weekday = explode(',',$result['weekday']);
 			if(!in_array($week, $weekday)){
 				return array('status'=>false,'msg'=>'今天无活动!');
