@@ -5,10 +5,9 @@
 class MtUnit
 {
 	
-	public static function dealData($data)
+	public static function dealData($params)
 	{
 		$paramsArr = explode('&',$params); 
-   
        	foreach($paramsArr as $k=>$v) 
        	{ 
           	$a = explode('=',$v); 

@@ -50,23 +50,27 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
-		Helper::writeLog($data);
-		$resArr = MtUnit::dealData($data);
-		Helper::writeLog(json_encode($resArr));
-		$ePoiId = $resArr['ePoiId'];
-		Helper::writeLog($ePoiId);
-		$appAuthToken = $resArr['appAuthToken'];
-		Helper::writeLog($appAuthToken);
-		$se=new Sequence("meituan_token");
-		$lid = $se->nextval();
-		$creat_at = date("Y-m-d H:i:s");
-		$update_at = date("Y-m-d H:i:s");
-		$dpid = $ePoiId;
-		$sql = "insert into nb_meituan_token values($lid,$creat_at,$update_at,$dpid,$ePoiId,'$appAuthToken')";
-		Helper::writeLog($sql);
-		$res = Yii::app()->db->createCommand($sql)->execute();
-		if($res){
-			return '{ "data": "success"}';
+		if($data){
+			$resArr = MtUnit::dealData($data);
+			$ePoiId = $resArr['ePoiId'];
+			$appAuthToken = $resArr['appAuthToken'];
+			$se=new Sequence("meituan_token");
+			$lid = $se->nextval();
+			$creat_at = date("Y-m-d H:i:s");
+			$update_at = date("Y-m-d H:i:s");
+			$dpid = $ePoiId;
+			$inserData = array(
+					'lid'=>	$lid,
+					'dpid'=> $dpid,
+					'create_at'=>	$creat_at,
+					'update_at'=>	$update_at,
+					'ePoiId'=>	$ePoiId,
+					'appAuthToken'=>	$appAuthToken,
+			);
+			$res = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
+			if($res){
+				return '{ "data": "success"}';
+			}
 		}
 		return '{ "data": "ERROR"}';
 	}
