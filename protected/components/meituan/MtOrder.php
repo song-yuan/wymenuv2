@@ -52,8 +52,11 @@ class MtOrder
 	public static function token($data){
 		Helper::writeLog($data);
 		$resArr = MtUnit::dealData($data);
+		Helper::writeLog(json_encode($resArr));
 		$ePoiId = $resArr['ePoiId'];
+		Helper::writeLog($ePoiId);
 		$appAuthToken = $resArr['appAuthToken'];
+		Helper::writeLog($appAuthToken);
 		$se=new Sequence("meituan_token");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");
