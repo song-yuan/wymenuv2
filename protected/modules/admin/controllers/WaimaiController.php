@@ -1,5 +1,5 @@
 <?php
-class WaiMaiController extends BackendController
+class WaimaiController extends BackendController
 {
 	public function actions() {
 		return array(
