@@ -60,6 +60,7 @@ class MtOrder
 		$update_at = date("Y-m-d H:i:s");
 		$dpid = $ePoiId;
 		$sql = "insert into nb_meituan_token values($lid,$creat_at,$update_at,$dpid,$ePoiId,'$appAuthToken')";
+		Helper::writeLog($sql);
 		$res = Yii::app()->db->createCommand($sql)->execute();
 		if($res){
 			return '{ "data": "success"}';
