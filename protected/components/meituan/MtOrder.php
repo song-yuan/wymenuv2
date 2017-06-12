@@ -50,6 +50,7 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
+		Helper::writeLog($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
