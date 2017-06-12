@@ -67,7 +67,7 @@ span.tab{
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
-                 <a href="https://open-erp.meituan.com/storemap?developerId=<?php echo $developerId;?>&businessId=2&ePoiId=<?php echo $this->companyId;?>&signKey=<?php echo $signkey;?>&netStore=1">
+                 <a href="https://open-erp.meituan.com/storemap?developerId=<?php echo $developerId;?>&businessId=2&ePoiId=<?php echo $this->companyId;?>&signKey=<?php echo $signkey;?>&callbackUrl=http%3a%2f%2fmenu.wymenu.com%2fwymenuv2%2fmeituan%2ftoken">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item-info">店铺映射</div>
 						</div>
