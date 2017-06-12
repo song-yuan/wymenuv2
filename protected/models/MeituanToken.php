@@ -1,21 +1,26 @@
-
 <?php
 
 /**
- * This is the model class for table "nb_token".
+ * This is the model class for table "nb_meituan_token".
  *
- * The followings are the available columns in table 'nb_token':
- * @property string $ePoiId
+ * The followings are the available columns in table 'nb_meituan_token':
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
+ * @property integer $ePoiId
  * @property string $appAuthToken
+ * @property string $delete_flag
+ * @property string $is_sync
  */
-class Token extends CActiveRecord
+class MeituanToken extends CActiveRecord
 {
     /**
      * @return string the associated database table name
      */
     public function tableName()
     {
-        return 'nb_token';
+        return 'nb_meituan_token';
     }
 
     /**
@@ -26,12 +31,16 @@ class Token extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('ePoiId, appAuthToken', 'required'),
-            array('ePoiId', 'length', 'max'=>11),
+            array('update_at, appAuthToken', 'required'),
+            array('ePoiId', 'numerical', 'integerOnly'=>true),
+            array('lid, dpid', 'length', 'max'=>10),
             array('appAuthToken', 'length', 'max'=>100),
+            array('delete_flag', 'length', 'max'=>2),
+            array('is_sync', 'length', 'max'=>50),
+            array('create_at', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('ePoiId, appAuthToken', 'safe', 'on'=>'search'),
+            array('lid, dpid, create_at, update_at, ePoiId, appAuthToken, delete_flag, is_sync', 'safe', 'on'=>'search'),
         );
     }
 
@@ -52,8 +61,14 @@ class Token extends CActiveRecord
     public function attributeLabels()
     {
         return array(
+            'lid' => 'Lid',
+            'dpid' => 'Dpid',
+            'create_at' => 'Create At',
+            'update_at' => 'Update At',
             'ePoiId' => 'E Poi',
             'appAuthToken' => 'App Auth Token',
+            'delete_flag' => 'Delete Flag',
+            'is_sync' => 'Is Sync',
         );
     }
 
@@ -75,8 +90,14 @@ class Token extends CActiveRecord
 
         $criteria=new CDbCriteria;
 
-        $criteria->compare('ePoiId',$this->ePoiId,true);
+        $criteria->compare('lid',$this->lid,true);
+        $criteria->compare('dpid',$this->dpid,true);
+        $criteria->compare('create_at',$this->create_at,true);
+        $criteria->compare('update_at',$this->update_at,true);
+        $criteria->compare('ePoiId',$this->ePoiId);
         $criteria->compare('appAuthToken',$this->appAuthToken,true);
+        $criteria->compare('delete_flag',$this->delete_flag,true);
+        $criteria->compare('is_sync',$this->is_sync,true);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
@@ -87,10 +108,11 @@ class Token extends CActiveRecord
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
      * @param string $className active record class name.
-     * @return Token the static model class
+     * @return MeituanToken the static model class
      */
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
     }
 }
+?>

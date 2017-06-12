@@ -19,7 +19,7 @@ class WaimaiController extends BackendController
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$epoiid= 'ePoiId='.$companyId;
-		$tokenmodel = Token::model()->find($epoiid);
+		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$signkey='8isnqx6h2xewfmiu';
 		$developerId=100746;
 		$this->render('index',array(
@@ -31,7 +31,7 @@ class WaimaiController extends BackendController
 	public function actionCaipinyingshe(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$epoiid= 'ePoiId='.$companyId;
-		$tokenmodel = Token::model()->find($epoiid);
+		$tokenmodel = MeituanToken::model()->find($epoiid);
 		// print_r($tokenmodel);exit;
 		$criteria = " dpid=".$companyId." and delete_flag=0";
 		$productmodels = Product::model()->findAll($criteria);
