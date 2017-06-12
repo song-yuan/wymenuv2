@@ -58,7 +58,7 @@ class MtOrder
 		$creat_at = date("Y-m-d H:i:s");
 		$update_at = date("Y-m-d H:i:s");
 		$dpid = $ePoiId;
-		$sql = "insert into nb_token values($lid,$creat_at,$update_at,$dpid,$ePoiId,'$appAuthToken')";
+		$sql = "insert into nb_meituan_token values($lid,$creat_at,$update_at,$dpid,$ePoiId,'$appAuthToken')";
 		$res = Yii::app()->db->createCommand($sql);
 		if($res){
 			return '{ "data": "success"}';
@@ -89,7 +89,7 @@ class MtOrder
 	}
 	public function UnboundShop($data){
 		$order = json_decode($data);
-		$sql = "delete from nb_token where ePoiId=".$order->epoiId;
+		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$order->epoiId;
 		$res = Yii::app()->db->createCommand($sql);
 	}
 }
