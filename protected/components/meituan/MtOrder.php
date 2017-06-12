@@ -60,7 +60,7 @@ class MtOrder
 		$update_at = date("Y-m-d H:i:s");
 		$dpid = $ePoiId;
 		$sql = "insert into nb_meituan_token values($lid,$creat_at,$update_at,$dpid,$ePoiId,'$appAuthToken')";
-		$res = Yii::app()->db->createCommand($sql);
+		$res = Yii::app()->db->createCommand($sql)->execute();
 		if($res){
 			return '{ "data": "success"}';
 		}
@@ -71,7 +71,7 @@ class MtOrder
 		$order = $resArr['order'];
 		$obj = json_decode($order);
 		$sql = "update nb_order set order_status=".$obj->status." where account_no=".$obj->orderId." and order_type=7";
-		$res = Yii::app()->db->createCommand($sql);
+		$res = Yii::app()->db->createCommand($sql)->execute();
 		if($res){
 			return '{ "data": "OK"}';
 		}
@@ -82,7 +82,7 @@ class MtOrder
 		$order = $resArr['orderCancel'];
 		$obj = json_decode($order);
 		$sql = "update nb_order set order_status=7 where account_no=".$obj->orderId." and order_type=7";
-		$res = Yii::app()->db->createCommand($sql);
+		$res = Yii::app()->db->createCommand($sql)->execute();
 		if($res){
 			return '{ "data": "OK"}';
 		}
@@ -91,6 +91,6 @@ class MtOrder
 	public function UnboundShop($data){
 		$order = json_decode($data);
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$order->epoiId;
-		$res = Yii::app()->db->createCommand($sql);
+		$res = Yii::app()->db->createCommand($sql)->execute();
 	}
 }
