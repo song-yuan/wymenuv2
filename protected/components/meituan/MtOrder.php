@@ -95,8 +95,10 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public function UnboundShop($data){
+		Helper::writeLog($data);
 		$order = json_decode($data);
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$order->epoiId;
+		Helper::writeLog($sql);
 		$res = Yii::app()->db->createCommand($sql)->execute();
 	}
 }
