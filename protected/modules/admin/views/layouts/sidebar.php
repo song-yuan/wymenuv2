@@ -126,6 +126,14 @@
                     </a>
             </li>
             <?php endif;?>
+            <?php if(Yii::app()->user->role <11):?>
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('tmall',))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('tmall/list',array('companyId' => $this->companyId,'type'=>0));?>">
+                    <i class="fa fa-shopping-cart"></i> 
+                    <span class="title"><?php echo yii::t('app','商城配置');?></span>					
+                    </a>
+            </li>
+            <?php endif;?>
             <!-- 
             <li class="<?php if(in_array(Yii::app()->controller->id , array('weixin','member','wxlevel','wxcashback','wxpoint','wxpointvalid','wxrecharge'))) echo 'active';?>">
                     <a href="">
