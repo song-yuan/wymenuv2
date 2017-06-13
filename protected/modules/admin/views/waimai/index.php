@@ -67,7 +67,7 @@ span.tab{
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
-                 <a href="https://open-erp.meituan.com/storemap?developerId=<?php echo $developerId;?>&businessId=2&ePoiId=<?php echo $this->companyId;?>&signKey=<?php echo $signkey;?>&callbackUrl=http%3a%2f%2fmenu.wymenu.com%2fwymenuv2%2fmeituan%2ftoken">
+                 <a href="<?php echo $this->createUrl('waimai/dpbd',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item-info">店铺映射</div>
 						</div>
@@ -77,13 +77,11 @@ span.tab{
 							<div class="ku-item-info">菜品映射</div>
 						</div>
 					</a>
-					<?php if(!empty($tokenmodel['appAuthToken'])):?>
-						<a href="https://open-erp.meituan.com/releasebinding?signKey=<?php echo $signkey;?>&businessId=2&appAuthToken=<?php echo $tokenmodel['appAuthToken'];?>">
+					<a href="<?php echo $this->createUrl('waimai/jcbd',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item-info">解除绑定</div>
 						</div>
 					</a>
-					<?php endif;?>
 				</div>
 			</div>
 		</div>

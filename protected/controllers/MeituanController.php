@@ -25,15 +25,13 @@ class MeituanController extends Controller
 	public function actionToken(){
 		//绑定门店获取appAuthToken
 		$data = file_get_contents('php://input');
-		Helper::writeLog('绑定:'.$data);
 		$remt = MtOrder::token($data);
 		echo $remt;
 		exit();
 	}
-	public function actionUnboundToken(){
+	public function actionShopToken(){
 		$data = file_get_contents('php://input');
-		Helper::writeLog('解绑:'.$data);
-		$remt = MtOrder::UnboundShop($data);
+		$remt = MtOrder::Jcbd($data);
 		echo $remt;
 		exit();
 	}

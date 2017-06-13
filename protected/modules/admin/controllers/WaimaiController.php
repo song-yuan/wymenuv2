@@ -44,5 +44,24 @@ class WaimaiController extends BackendController
 				"setmodels"=>$setmodels
 			));
 	}
+	public function actionDpbd(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$signkey = '8isnqx6h2xewfmiu';
+		// echo $signkey;exit;
+		$developerId = 100746;
+		$this->render('dpbd',array(
+			'companyId'=>$companyId,
+			'developerId'=>$developerId,
+			'signkey'=>$signkey
+			));
+	}
+	public function actionJcbd(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$epoiid = "ePoiId=".$companyId." and delete_flag=0";
+		$tokenmodel = MeituanToken::model()->find($epoiid);
+		$this->render('jcbd',array(
+			'tokenmodel' =>$tokenmodel
+			));
+	}
 }
 ?>

@@ -38,7 +38,7 @@ class MtOrder
 		$result = MtUnit::postHttps($url, $data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId;
+			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId." and delete_flag=0";
 			$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
 			$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
 			$array= array('appAuthToken'=>"$res1->appAuthToken",'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
@@ -94,7 +94,7 @@ class MtOrder
 		}
 		return '{ "data": "ERROR"}';
 	}
-	public function UnboundShop($data){
+	public function Jcbd($data){
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
