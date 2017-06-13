@@ -95,7 +95,7 @@ class ProductSet extends CActiveRecord
 			'rank' => yii::t('app','推荐星级'),
 			'is_member_discount' => yii::t('app','是否参与会员折扣'),
 			'is_special' => yii::t('app','是否特价菜'),
-			'is_discount' => yii::t('app','可折'),
+			'is_discount' => yii::t('app','是否可折扣'),
 			'status' => yii::t('app','是否沽清'),
             'store_number' =>yii::t('app', '库存数量'),
 			'order_number' => yii::t('app','总下单次数'),
