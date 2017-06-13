@@ -17,11 +17,12 @@
 									padding: 6px 12px;
 								}
 							</style>
+							<?php if(Yii::app()->user->role <11) $role = false;else $role = true;?>
 								<div class="form-body">
 									<div class="form-group">
 										<?php echo $form->label($model, 'company_name',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'company_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('company_name')));?>
+											<?php echo $form->textField($model, 'company_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('company_name'),'disabled'=>$role));?>
 											<?php echo $form->error($model, 'company_name' )?>
 										</div>
 									</div>
@@ -43,7 +44,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'contact_name',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'contact_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('contact_name')));?>
+											<?php echo $form->textField($model, 'contact_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('contact_name'),'disabled'=>$role));?>
 											<?php echo $form->error($model, 'contact_name' )?>
 										</div>
 									</div>
@@ -132,12 +133,12 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'mobile',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'mobile',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('mobile')));?>
+											<?php echo $form->textField($model, 'mobile',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('mobile'),'disabled'=>$role));?>
 											<?php echo $form->error($model, 'mobile' )?>
 										</div>
 									</div>
 									<div class="form-group">
-										<?php echo $form->label($model, 'telephone',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, '外卖电话',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'telephone',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('telephone')));?>
 											<?php echo $form->error($model, 'telephone' )?>
