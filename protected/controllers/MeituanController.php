@@ -30,10 +30,10 @@ class MeituanController extends Controller
 		exit();
 	}
 	public function actionShopToken(){
-		$data = file_get_contents('php://input');
-		$remt = MtOrder::Jcbd($data);
-		echo $remt;
-		exit();
+// 		$data = file_get_contents('php://input');
+// 		$remt = MtOrder::Jcbd($data);
+// 		echo $remt;
+// 		exit();
 	}
 }
 ?>
