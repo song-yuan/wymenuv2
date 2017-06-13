@@ -148,6 +148,11 @@ class CompanyWxController extends BackendController
 		$prods = $db->createCommand($sqlprod)->queryAll();
 		//var_dump($prods);exit;
 		if(!empty($prods)){
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",is_copyprice = 1 where dpid ='.$dpid;
+			//var_dump($sql);exit;
+			$command = $db->createCommand($sql);
+			$command->execute();
+			
 			foreach ($prods as $prod){
 				$sqlprodzb = 'select * from nb_product where dpid ='.$company['comp_dpid'].' and delete_flag =0 and phs_code ='.$prod['phs_code'];
 				$prodzb = $db->createCommand($sqlprodzb)->queryRow();
