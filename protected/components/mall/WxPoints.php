@@ -16,10 +16,9 @@ class WxPoints
 	 */
 	public static function getAvaliablePoints($userId,$dpid){
 		$date = date('Y-m-d H:i:s',time());
-		$sql = 'select sum(remain_points) as total from nb_member_points where card_type=1 and card_id=:userId and dpid=:dpid and end_time >= "'.$date.'" and remain_points > 0 and delete_flag=0';
+		$sql = 'select sum(remain_points) as total from nb_member_points where card_type=1 and card_id=:userId and end_time >= "'.$date.'" and remain_points > 0 and delete_flag=0';
 		$point = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
-				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
 	    return $point['total']?$point['total']:0;
 	}
@@ -30,7 +29,7 @@ class WxPoints
 	 */
 	public static function getPoints($userId,$dpid){
 		$date = date('Y-m-d H:i:s',time());
-		$sql = 'select create_at,points,remain_points,end_time from nb_member_points where card_type=1 and card_id=:userId and dpid=:dpid   and delete_flag=0';
+		$sql = 'select create_at,points,remain_points,end_time from nb_member_points where card_type=1 and card_id=:userId and delete_flag=0';
 		$point = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
 				  ->bindValue(':dpid',$dpid)

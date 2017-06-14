@@ -204,8 +204,6 @@ class MallController extends Controller
 			}
 		}elseif($this->type==3){
 			$number = Yii::app()->request->getPost('number');
-		}elseif($this->type==6){
-			$orderTime = date('Y-m-d H:i:s',strtotime('+'. $orderTime*60 .' seconds'));
 		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
@@ -240,6 +238,9 @@ class MallController extends Controller
 			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
 			}
 			//预订时间
+			if($this->type==6){
+				$orderTime = date('Y-m-d H:i:s',strtotime('+'. $orderTime*60 .' seconds'));
+			}
 			if($orderTime){
 				$contion = $contion.' appointment_time="'.$orderTime.'",';
 			}
