@@ -32,7 +32,6 @@ class WxPoints
 		$sql = 'select create_at,points,remain_points,end_time from nb_member_points where card_type=1 and card_id=:userId and delete_flag=0';
 		$point = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
-				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
                  return $point;
 	}
