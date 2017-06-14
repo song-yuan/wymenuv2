@@ -714,8 +714,9 @@ $(document).ready(function(){
              });
         }
     });
-    $("body").on('click','.lt-lt',function(){
+    $("#container").on('click','.lt-lt',function(){
     	var str = $(this).html();
+    	alert(str);
     	layer.open({
 		    type: 1,
 		    title: false,
