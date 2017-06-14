@@ -248,6 +248,8 @@ class WechatMarketController extends BackendController {
 		try{
 			//var_dump($materialnums);exit;
 			foreach ($userarrays as $userarray){
+				$openId = BrandUser::model()->find('lid=:lid' , array(':lid'=>$userarray));
+					
 				//var_dump($userarray);exit;
 				foreach ($materialnums as $materialnum){
 					$materials = array();
@@ -289,10 +291,12 @@ class WechatMarketController extends BackendController {
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync,
 						);
+						
 						//$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
 						//var_dump($data);exit;
 						$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
 						//exit;	
+						Cupon::sentCupon($dpid, $userarray, $cupons['cupon_money'], $cupons['cupon_abstract'], $colseday, 0, $openId['openid']);
 					}
 		
 				}

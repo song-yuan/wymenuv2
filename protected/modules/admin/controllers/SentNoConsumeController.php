@@ -63,6 +63,7 @@ class SentNoConsumeController extends BackendController {
         try{
             //var_dump($materialnums);exit;
             foreach ($userarrays as $userarray){
+            	$openId = BrandUser::model()->find('lid=:lid' , array(':lid'=>$userarray));
                 //var_dump($userarray);exit;
                 foreach ($materialnums as $materialnum){
                     $materials = array();
@@ -73,26 +74,38 @@ class SentNoConsumeController extends BackendController {
                     $cupons = Cupon::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$plid,':companyId'=>$this->companyId));
                     
                     if(!empty($cupons)&&!empty($plid)){
+                    	$timetype = $cupons['time_type'];
+                    	if($timetype=='1'){
+                    		$validay = $cupons['begin_time'];
+                    		$colseday = $cupons['end_time'];
+                    	}else{
+                    		$validay = date('Y-m-d H:i:s',strtotime('+'.$cupons['day_begin'].' day'));
+                    		$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
+                    	}
                         $se = new Sequence("cupon_branduser");
                         $id = $se->nextval();
-                         $data = array(
-                                        'lid'=>$id,
-                                        'dpid'=>$dpid,
-                                        'create_at'=>date('Y-m-d H:i:s',time()),
-                                        'update_at'=>date('Y-m-d H:i:s',time()),
-                                        'cupon_id'=>$plid,
-                                        'cupon_source'=>'2',
-                                        'source_id'=>'0000000000',
-                                        'to_group'=>'3',
-                                        'brand_user_lid'=>$userarray,
-                                        'is_used'=>'1',
-                                        'used_time'=>'0000-00-00 00:00:00',
-                                        'delete_flag'=>'0',
-                                        'is_sync'=>$is_sync,
-                                        );
+                       	$data = array(
+								'lid'=>$id,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'cupon_id'=>$plid,
+								'cupon_source'=>'2',
+								'source_id'=>'0000000000',
+								'to_group'=>'3',
+								'brand_user_lid'=>$userarray,
+								'valid_day'=>$validay,
+								'close_day'=>$colseday,
+								'is_used'=>'1',
+								'used_time'=>'0000-00-00 00:00:00',
+								'delete_flag'=>'0',
+								'is_sync'=>$is_sync,
+						);
                         //$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
                         //var_dump($data);exit;
                         $command = $db->createCommand()->insert('nb_cupon_branduser',$data);
+                        
+                        Cupon::sentCupon($dpid, $userarray, $cupons['cupon_money'], $cupons['cupon_abstract'], $colseday, 0, $openId['openid']);
                         //exit;	
                     }
                 }

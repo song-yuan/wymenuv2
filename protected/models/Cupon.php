@@ -149,4 +149,34 @@ class Cupon extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	
+	/**
+	 *
+	 * 发放代金券
+	 */
+	public static function sentCupon($dpid,$userId,$cuponmoney,$cuponmemo,$closeDay,$source,$openId){
+		$company = WxCompany::get($dpid);
+		
+		if($source==0){
+			$sourceStr = '活动领取';
+		}elseif($source==1){
+			$sourceStr = '红包领取';
+		}else{
+			$sourceStr = '商家赠送';
+		}
+		$data = array(
+				'touser'=>$openId,
+				'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
+				'first'=>'现金券已经领取成功',
+				'keyword1'=>$cuponmoney.'元现金券一张',
+				'keyword2'=>$sourceStr,
+				'keyword3'=>$closeDay,
+				'keyword4'=>$cuponmemo,
+				'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['telephone'].'咨询'
+		);
+		new WxMessageTpl($dpid,$userId,1,$data);
+	
+
+	}
 }
