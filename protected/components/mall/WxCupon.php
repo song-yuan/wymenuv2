@@ -42,9 +42,9 @@ class WxCupon
 				$productcode = 0;
 			}
 		}
-		$sql = 'select m.lid,m.dpid,m.is_used,m.valid_day,m.close_day,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from nb_cupon_branduser m ,(select * from nb_cupon where type_dpid=0 and type_prod=0 and delete_flag=0'.
-				' union select t.* from nb_cupon t left join nb_cupon_product t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid=0 and t.type_prod=1 and t1.prod_code in('.$productcode.') and t.delete_flag=0 and t1.delete_flag=0'.
-				' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid=1 and t.type_prod=0 and t1.cupon_dpid in('.$dpid.') and t.delete_flag=0 and t1.delete_flag=0) n' .
+		$sql = 'select m.lid,m.dpid,m.is_used,m.valid_day,m.close_day,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from nb_cupon_branduser m ,(select * from nb_cupon where type in(0,1) and type_dpid=0 and type_prod=0 and delete_flag=0'.
+				' union select t.* from nb_cupon t left join nb_cupon_product t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type in(0,1) and t.type_dpid=0 and t.type_prod=1 and t1.prod_code in('.$productcode.') and t.delete_flag=0 and t1.delete_flag=0'.
+				' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type in(0,1) and t.type_dpid=1 and t.type_prod=0 and t1.cupon_dpid in('.$dpid.') and t.delete_flag=0 and t1.delete_flag=0) n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and m.to_group=3 and m.brand_user_lid=:userId and m.is_used = 1 and m.delete_flag=0 and m.valid_day <=:now and :now <= m.close_day';
 	
 		$cupon = Yii::app()->db->createCommand($sql)
