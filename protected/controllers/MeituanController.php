@@ -29,11 +29,19 @@ class MeituanController extends Controller
 		echo $remt;
 		exit();
 	}
-	public function actionShopToken(){
-// 		$data = file_get_contents('php://input');
-// 		$remt = MtOrder::Jcbd($data);
-// 		echo $remt;
-// 		exit();
+	public function actionXintiao(){
+		echo '{"data":"OK"}';
+	}
+	public function actionShop(){
+		$data = file_get_contents('php://input');
+		$remt = MtOrder::Jcbd($data);
+		echo $remt;
+		exit();
+	}
+	public function actionCompleteOrder(){
+		$data = file_get_contents('php://input');
+		echo '{ "data": "OK"}';
+		exit();
 	}
 }
 ?>

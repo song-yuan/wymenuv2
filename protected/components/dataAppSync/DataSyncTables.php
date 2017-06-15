@@ -270,6 +270,7 @@ class DataSyncTables
         		"brand varchar(50) NOT NULL,".
         		"remark varchar(50) NOT NULL,".
         		"printer_type varchar(2) NOT NULL DEFAULT '0',".
+        		"width_type varchar(2) NOT NULL DEFAULT '1',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".

@@ -8,6 +8,7 @@ class MtUnit
 	public static function dealData($params)
 	{
 		$paramsArr = explode('&',$params); 
+   
        	foreach($paramsArr as $k=>$v) 
        	{ 
           	$a = explode('=',$v); 
@@ -29,6 +30,7 @@ class MtUnit
 	}
 	public static function sign($data){
 		ksort($data);
+		$sign='';
 		foreach ($data as $key => $value) {
 			$sign.= $key.$value;
 		}

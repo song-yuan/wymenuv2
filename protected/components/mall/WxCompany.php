@@ -54,6 +54,18 @@ class WxCompany
 		$company = self::get($dpid);
 		return $company['comp_dpid'];
 	}
+	// 查出总部下所有店铺
+	public static function getAllDpids($dpid){
+		$coompany = self::get($dpid);
+		$comDpid = $coompany['comp_dpid'];
+		if($comDpid==0){
+			$comDpid = $dpid;
+		}
+		$sql = 'select dpid from nb_company where (comp_dpid='.$comDpid.' or (dpid='.$dpid.' and comp_dpid=0)) and delete_flag=0';
+		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
+		$dpidJoin = join(',',$dpids);
+		return $dpidJoin;
+	}
 	// 查询出公司 会员密码一致的 拼接起来
 	public static function getDpids($dpid){
 		$coompany = self::get($dpid);

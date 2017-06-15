@@ -31,6 +31,10 @@
 	<?php endif;?>
 <?php endif;?>
 <div class="order-site">
+	<?php if($order['order_type']==6):?>
+	<span>类型: <?php if($order['takeout_typeid']){ echo '打包';}else{ echo '堂食';}?></span>
+	<span>取餐时间: <?php echo $order['appointment_time'];?></span>
+	<?php endif;?>
 	<span>交易序号: <?php echo $order['account_no'];?></span>
 	<span>下单时间: <?php echo $order['create_at'];?></span>
 </div>

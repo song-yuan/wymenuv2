@@ -7,6 +7,7 @@
 class MtOrder
 {
 	public static function order($data){
+		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
@@ -19,14 +20,13 @@ class MtOrder
 			$phsCode =  $array_detail[$key]['app_food_code'];
 			$price = $array_detail[$key]['price'];
 			$amount = $array_detail[$key]['quantity'];
-			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code='.$phsCode.
-			' and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code='.$phsCode.' and delete_flag=0 ';
+			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code='.$phsCode.' and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code='.$phsCode.' and delete_flag=0 ';
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
-			if( $res->is_set==0){
-			    	$orderProduct = array('is_set'=>$res->is_set,'set_id'=>0,'product_id'=>$res->lid,'product_name'=>$res->name,'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+			if( $res['is_set']==0){
+			    	$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
 			    }else{
-			    	$orderProduct = array('is_set'=>$res->is_set,'set_id'=>$res->lid,'product_id'=>$res->lid,'product_name'=>$res->name,'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+			    	$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
 			    }  
 		}
@@ -34,22 +34,23 @@ class MtOrder
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr, JSON_UNESCAPED_UNICODE);
 		$url = 'http://menu.wymenu.com/wymenuv2/admin/dataAppSync/createOrder';
-		$data = array('dpid'=>$dpid,'data'=>$orderStr);
+		$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
 		$result = MtUnit::postHttps($url, $data);
 		$reobj = json_decode($result);
 		if($reobj->status){
 			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId." and delete_flag=0";
 			$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
 			$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
-			$array= array('appAuthToken'=>"$res1->appAuthToken",'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
+			$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
 			$sign=MtUnit::sign($array);
-			$data1 = "appAuthToken=$res1->appAuthToken&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
+			$data1 = "appAuthToken=".$res1['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
 			$result1 = MtUnit::postHttps($url1, $data1);
 			return '{ "data": "OK"}';
 		}
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
+		Helper::writeLog("绑定：".$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
@@ -73,6 +74,7 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function orderconfirm($data){
+		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['order'];
 		$obj = json_decode($order);
@@ -83,7 +85,7 @@ class MtOrder
 		}
 		return '{ "data": "ERROR"}';
 	}
-	public function orderCancel($data){
+	public static function orderCancel($data){
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['orderCancel'];
 		$obj = json_decode($order);
@@ -94,7 +96,8 @@ class MtOrder
 		}
 		return '{ "data": "ERROR"}';
 	}
-	public function Jcbd($data){
+	public static function Jcbd($data){
+		Helper::writeLog("解绑：".$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
