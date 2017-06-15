@@ -106,6 +106,13 @@
 									</div>
 								<?php }endif;?>
 									<div class="form-group">
+										<?php echo $form->label($model, yii::t('app','可用对象'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'type', array( '0' => yii::t('app','所有可用'), '1' => yii::t('app','仅POS机端可用'), '2' => yii::t('app','仅微信端可用'), '3' => yii::t('app','仅微信堂食可用'), '4' => yii::t('app','仅微信外卖可用')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
+											<?php echo $form->error($model, 'type' )?>
+										</div>
+									</div>
+									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','生效') , '1' => yii::t('app','不生效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
