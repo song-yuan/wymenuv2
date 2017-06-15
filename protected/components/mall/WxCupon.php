@@ -103,10 +103,21 @@ class WxCupon
 	 * @dpid 点单的门店id
 	 * 
 	 */
-	public static function getUserAvaliableCupon($proCodeArr,$total,$userId,$dpid){
+	public static function getUserAvaliableCupon($proCodeArr,$total,$userId,$dpid,$type){
 		$isCanUse = true;
 		$set = WxTotalPromotion::get($dpid);
 		
+		if($type == 2){
+			//waimai\
+			$types = ' t.type in (0,2,4) and ';
+			$typess = ' type in (0,2,4) and ';
+		}elseif($type ==6){
+			//tangshi
+			$types = ' t.type in (0,2,3) and ';
+			$typess = ' type in (0,2,4) and ';
+		}else{
+			$type = '';
+		}
 		if($set){
 			$orders = WxOrder::getOrderUseCupon($userId,$dpid);
 			if($set['is_cupon'] >= 0 && count($orders) >= $set['is_cupon']){
@@ -117,12 +128,12 @@ class WxCupon
 			$proCodeStr = join(',', $proCodeArr);
 			$now = date('Y-m-d H:i:s',time());
 			$sql = 'select m.lid,m.dpid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0)m , '.
-					'(select * from nb_cupon where type_dpid=0 and type_prod=0'.
-					' union select * from nb_cupon where type_dpid=1 and type_prod=0 and dpid=:dpid'.
-					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type_dpid > "1" and t.type_prod = "0" and t1.cupon_dpid=:dpid'.
-					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid = "0" and t.type_prod > "0" and t2.prod_code in ('.$proCodeStr.')'.
-					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid = "1" and t.type_prod > "0" and t.dpid=:dpid and t2.prod_code in ('.$proCodeStr.')'.
-					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where t.type_dpid > "1" and t.type_prod > "0" and t1.cupon_dpid=:dpid and t2.prod_code in ('.$proCodeStr.'))n ' .
+					'(select * from nb_cupon where '.$typess.' type_dpid=0 and type_prod=0'.
+					' union select * from nb_cupon where '.$typess.' type_dpid=1 and type_prod=0 and dpid=:dpid'.
+					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where '.$types.' t.type_dpid > "1" and t.type_prod = "0" and t1.cupon_dpid=:dpid'.
+					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where '.$types.' t.type_dpid = "0" and t.type_prod > "0" and t2.prod_code in ('.$proCodeStr.')'.
+					' union select t.* from nb_cupon t left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where '.$types.' t.type_dpid = "1" and t.type_prod > "0" and t.dpid=:dpid and t2.prod_code in ('.$proCodeStr.')'.
+					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid left join nb_cupon_product t2 on t.lid=t2.cupon_id and t.dpid=t2.dpid where '.$types.' t.type_dpid > "1" and t.type_prod > "0" and t1.cupon_dpid=:dpid and t2.prod_code in ('.$proCodeStr.'))n ' .
 					' where m.cupon_id=n.lid and m.dpid=n.dpid and m.valid_day <=:now and :now <=m.close_day and n.min_consumer <=:total and n.delete_flag=0 and n.is_available=0';
 			$cupon = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':userId',$userId)

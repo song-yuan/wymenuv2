@@ -149,7 +149,7 @@ class MallController extends Controller
 		foreach($carts as $cart){
 			array_push($productCodeArr,$cart['pro_code']);
 		}
-		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId);
+		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
 		if($this->type!=6){
