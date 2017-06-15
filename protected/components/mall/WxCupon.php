@@ -114,9 +114,10 @@ class WxCupon
 		}elseif($type ==6){
 			//tangshi
 			$types = ' t.type in (0,2,3) and ';
-			$typess = ' type in (0,2,4) and ';
+			$typess = ' type in (0,2,3) and ';
 		}else{
 			$type = '';
+			$typess = '';
 		}
 		if($set){
 			$orders = WxOrder::getOrderUseCupon($userId,$dpid);
