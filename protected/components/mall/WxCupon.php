@@ -116,7 +116,7 @@ class WxCupon
 			$types = ' t.type in (0,2,3) and ';
 			$typess = ' type in (0,2,3) and ';
 		}else{
-			$type = '';
+			$types = '';
 			$typess = '';
 		}
 		if($set){
