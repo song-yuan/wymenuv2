@@ -721,10 +721,10 @@ $(document).ready(function(){
     	layer.open({
 		    type: 1,
 		    title: false,
-		    closeBtn: 0,
+		    closeBtn: true,
 		    area: ['100%', 'auto'],
 		    skin: 'layui-layer-nobg', //没有背景色
-		    shadeClose: true,
+		    shadeClose: false,
 		    content: str
 		});
 		$('.layui-layer-content').css('overflow','hidden');
