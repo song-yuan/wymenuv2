@@ -139,17 +139,17 @@ class WxPromotion
 	 	$now = date('Y-m-d H:i:s',time());
 	 	$promotion = self::getPromotion($dpid, $promotionId);
 	 	if($promotion){
-	 		if($promotion['end_time'] > $now > $promotion['begin_time']){
+	 		if($promotion['end_time'] >= $now&&$now >= $promotion['begin_time']){
 	 			$week = date('w');
 	 			if($week==0){
 	 				$week = 7;
 	 			}
-	 			$weekday = explode(',',$result['weekday']);
+	 			$weekday = explode(',',$promotion['weekday']);
 	 			if(in_array($week, $weekday)){
 		 			$time = date('H:i');
-		 			$promotionBegin = date('H:i',strtotime($result['day_begin']));
-		 			$promotionEnd = date('H:i',strtotime($result['day_end']));
-		 			if($promotionEnd >= $time >= $promotionBegin){
+		 			$promotionBegin = date('H:i',strtotime($promotion['day_begin']));
+		 			$promotionEnd = date('H:i',strtotime($promotion['day_end']));
+		 			if($promotionEnd >= $time&&$time >= $promotionBegin){
 		 				return true;
 		 			}else{
 		 				return false;
