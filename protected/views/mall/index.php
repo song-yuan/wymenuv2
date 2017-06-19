@@ -714,7 +714,7 @@ $(document).ready(function(){
              });
         }
     });
-//     $('#container').on('click','img',function(){
+    $('#container').on('touchstart','img',function(){
 // //     	var str = $(this).html();
 // 		var src = $(this).attr('src');
 // 		var str = '<img src="'+src+'"/>';
@@ -728,6 +728,6 @@ $(document).ready(function(){
 // 		    content: str
 // 		});
 // 		$('.layui-layer-content').css('overflow','hidden');
-//     });
+    });
 });
 </script>
