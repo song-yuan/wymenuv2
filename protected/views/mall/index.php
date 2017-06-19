@@ -714,18 +714,18 @@ $(document).ready(function(){
              });
         }
     });
-    $('.content').on('click','.lt-lt',function(){
-    	var str = $(this).html();
-    	layer.open({
-		    type: 1,
-		    title: false,
-		    closeBtn: 0,
-		    area: ['100%', 'auto'],
-		    skin: 'layui-layer-nobg', //没有背景色
-		    shadeClose: true,
-		    content: str
-		});
-		$('.layui-layer-content').css('overflow','hidden');
-    });
+//     $('.content').on('click','.lt-lt',function(){
+//     	var str = $(this).html();
+//     	layer.open({
+// 		    type: 1,
+// 		    title: false,
+// 		    closeBtn: 0,
+// 		    area: ['100%', 'auto'],
+// 		    skin: 'layui-layer-nobg', //没有背景色
+// 		    shadeClose: true,
+// 		    content: str
+// 		});
+// 		$('.layui-layer-content').css('overflow','hidden');
+//     });
 });
 </script>
