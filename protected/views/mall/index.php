@@ -29,7 +29,7 @@
 	height: 100%;
 }
 .layui-layer-setwin .layui-layer-close2 {
-	right: -10px;
+	right: -12px;
 }
 .boll {
 	width: 15px;
