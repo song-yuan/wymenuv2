@@ -714,7 +714,7 @@ $(document).ready(function(){
              });
         }
     });
-    $('#content').on('click','.lt-lt',function(){
+    $('#content').on('click','.lt-lt img',function(){
     	var str = $(this).html();
     	layer.open({
 		    type: 1,
