@@ -102,6 +102,11 @@ class WxOrder
 			}
 			$results[$k]['store_number'] = $store['msg'];
 			if($result['promotion_id'] > 0){
+				$promotion = WxPromotion::isPromotionValid($this->dpid, $result['promotion_id']);
+				if(!$promotion){
+					unset($results[$k]);
+					continue;
+				}
 				if($result['to_group']==2){
 					// 会员等级活动
 					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $this->user['user_level_lid'], $result['promotion_id']);
