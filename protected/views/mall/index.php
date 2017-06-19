@@ -28,7 +28,9 @@
 	width: 100%;
 	height: 100%;
 }
-
+.layui-layer-setwin .layui-layer-close2 {
+	right: -12px;
+}
 .boll {
 	width: 15px;
 	height: 15px;
@@ -451,12 +453,15 @@ $(document).ready(function(){
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
 	        	return false;
+            }else{
+            	var pName = $('#nav').find('li.current').find('a').html();
+            	$('#product-top').find('div').html(pName);
             }
         });
        
     });
 
-    $('body').on('touchstart','.add',function(){
+    $('#container').on('touchstart','.add',function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
@@ -534,7 +539,7 @@ $(document).ready(function(){
         });
     });
      
-    $('body').on('touchstart','.minus',function(){ 
+    $('#container').on('touchstart','.minus',function(){ 
     	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
@@ -714,15 +719,16 @@ $(document).ready(function(){
              });
         }
     });
-    $("#container").on('click','.lt-lt',function(){
-    	var str = $(this).html();
+    $('#container').on('touchstart','img',function(){
+		var src = $(this).attr('src');
+		var str = '<img src="'+src+'"/>';
     	layer.open({
 		    type: 1,
 		    title: false,
-		    closeBtn: 0,
+		    closeBtn: true,
 		    area: ['100%', 'auto'],
 		    skin: 'layui-layer-nobg', //没有背景色
-		    shadeClose: true,
+		    shadeClose: false,
 		    content: str
 		});
 		$('.layui-layer-content').css('overflow','hidden');

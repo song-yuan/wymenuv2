@@ -181,6 +181,11 @@ class WxCart
 				$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 			}
 			if($result['promotion_id'] > 0){
+				$promotion = WxPromotion::isPromotionValid($this->dpid, $result['promotion_id']);
+				if(!$promotion){
+					unset($results[$k]);
+					continue;
+				}
 				if($result['to_group']==3){
 					$this->pormotionYue = true;
 				}elseif($result['to_group']==2){

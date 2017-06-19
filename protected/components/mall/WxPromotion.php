@@ -134,4 +134,34 @@ class WxPromotion
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':userLevelId',$userLevelId)->bindValue(':promotionId',$promotionId)->queryRow();
 	 	return $result;
 	 }
+	 // 活动是否有效
+	 public static function isPromotionValid($dpid,$promotionId){
+	 	$now = date('Y-m-d H:i:s',time());
+	 	$promotion = self::getPromotion($dpid, $promotionId);
+	 	if($promotion){
+	 		if($promotion['end_time'] >= $now&&$now >= $promotion['begin_time']){
+	 			$week = date('w');
+	 			if($week==0){
+	 				$week = 7;
+	 			}
+	 			$weekday = explode(',',$promotion['weekday']);
+	 			if(in_array($week, $weekday)){
+		 			$time = date('H:i');
+		 			$promotionBegin = date('H:i',strtotime($promotion['day_begin']));
+		 			$promotionEnd = date('H:i',strtotime($promotion['day_end']));
+		 			if($promotionEnd >= $time&&$time >= $promotionBegin){
+		 				return true;
+		 			}else{
+		 				return false;
+		 			}
+	 			}else{
+	 				return false;
+	 			}
+	 		}else{
+	 			return false;
+	 		}
+	 	}else{
+	 		return false;
+	 	}
+	 }
 }
