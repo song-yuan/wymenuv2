@@ -447,12 +447,15 @@ $(document).ready(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
-            if(top <= ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) >= 0){
+            if(top < ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) > 0){
                 var pName = $(this).find('.prt-title').html();
                 $('#product-top').find('div').html(pName);
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
 	        	return false;
+            }else{
+            	var pName = $('#nav').find('li.current').find('a').html();
+            	$('#product-top').find('div').html(pName);
             }
         });
        
