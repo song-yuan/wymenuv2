@@ -28,7 +28,9 @@
 	width: 100%;
 	height: 100%;
 }
-
+.layui-layer-setwin .layui-layer-close2 {
+	right: -10px;
+}
 .boll {
 	width: 15px;
 	height: 15px;
@@ -715,7 +717,6 @@ $(document).ready(function(){
         }
     });
     $('#container').on('touchstart','img',function(){
-// //     	var str = $(this).html();
 		var src = $(this).attr('src');
 		var str = '<img src="'+src+'"/>';
     	layer.open({
