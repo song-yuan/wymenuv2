@@ -248,22 +248,15 @@
                     modalconsumetotal.modal();
               });
           })
-	    
-
                 
 		 $('#excel').click(function excel(){
-
-			 layer.msg('暂未开放');return false;
-	    	   var begin_time = $('#begin_time').val();
+			 	var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
-			  
-			   //alert(str);
+			   var cardnumber = $('#cardnumber').val();
+			   var memdpid = $('#memdpid').val();
 		       if(confirm('确认导出并且下载Excel文件吗？')){
-		    	   location.href="<?php echo $this->createUrl('statementmember/rechargeReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-		       }
-		       else{
-		    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+		    	   location.href="<?php echo $this->createUrl('statementmember/rechargeReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/cardnumber/"+cardnumber+"/memdpid/"+memdpid;
 		       }
 		      
 		   });
