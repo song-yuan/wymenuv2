@@ -714,7 +714,7 @@ $(document).ready(function(){
              });
         }
     });
-    $('#container').on('click','.lt-lt img',function(){
+    $('#container').on('click','img',function(){
 //     	var str = $(this).html();
 		var src = $(this).attr('src');
 		var str = '<img src="'+src+'"/>';
