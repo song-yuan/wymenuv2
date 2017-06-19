@@ -714,10 +714,10 @@ $(document).ready(function(){
              });
         }
     });
-    $('#container').on('click','img',function(){
-//     	var str = $(this).html();
-		var src = $(this).attr('src');
-		var str = '<img src="'+src+'"/>';
+//     $('#container').on('click','img',function(){
+// //     	var str = $(this).html();
+// 		var src = $(this).attr('src');
+// 		var str = '<img src="'+src+'"/>';
 //     	layer.open({
 // 		    type: 1,
 // 		    title: false,
@@ -728,6 +728,6 @@ $(document).ready(function(){
 // 		    content: str
 // 		});
 // 		$('.layui-layer-content').css('overflow','hidden');
-    });
+//     });
 });
 </script>
