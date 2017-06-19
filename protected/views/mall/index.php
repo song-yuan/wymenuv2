@@ -456,7 +456,7 @@ $(document).ready(function(){
        
     });
 
-    $('body').on('touchstart','.add',function(){
+    $('#content').on('touchstart','.add',function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
@@ -534,7 +534,7 @@ $(document).ready(function(){
         });
     });
      
-    $('body').on('touchstart','.minus',function(){ 
+    $('#content').on('touchstart','.minus',function(){ 
     	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
@@ -714,7 +714,7 @@ $(document).ready(function(){
              });
         }
     });
-    $("#content").on('click','.lt-lt',function(){
+    $('#content').on('click','.lt-lt',function(){
     	var str = $(this).html();
     	layer.open({
 		    type: 1,
