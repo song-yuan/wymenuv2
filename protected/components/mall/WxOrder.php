@@ -696,7 +696,8 @@ class WxOrder
 		$cuponBranduserDpid = $cuponBranduserArr[1];
 		$order = self::getOrder($orderId,$dpid);
 		$sql = 'select t.lid,t.cupon_id,t1.cupon_money,t1.min_consumer from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
-				' and t.dpid='.$cuponBranduserDpid.' and t1.begin_time <= "'.$now.'" and "'.$now.'" <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
+				' and t.dpid='.$cuponBranduserDpid.' and t.valid_day <= "'.$now.'" and "'.$now.'" <= t.close_day and t1.delete_flag=0 and t1.is_available=0';
+		
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result && $order['should_total'] >= $result['min_consumer']){
 			$isSync = DataSync::getInitSync();
