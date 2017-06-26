@@ -129,9 +129,8 @@ $('#btn_time_query').click(function time() {
 $('#excel').click(function excel(){
 	var begin_time = $('#begin_time').val();
         var end_time = $('#end_time').val();
-        var pos_type = $('#pos_type').val();
-        var status = $('#status').val();	    	   
-				  
+        var pos_type = $('#pos_type').val();	    	   
+		//alert(begin_time);alert(end_time);		  
         if(confirm('确认导出并且下载Excel文件吗？')){
             location.href="<?php echo $this->createUrl('pos/UsedExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_type/"+pos_type;
         }

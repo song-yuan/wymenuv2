@@ -321,7 +321,7 @@ class PosController extends BackendController
     public function actionUsedExport(){
         $objPHPExcel = new PHPExcel();
         $pos_name = '';
-        $companyId = Yii::app()->request->getParam('companyId');
+        $companyId = Yii::app()->request->getParam('companyId');     
         $pos_type = Yii::app()->request->getParam('pos_type');        
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
@@ -357,7 +357,7 @@ class PosController extends BackendController
             }
         
         }
-        
+        //var_dump($models);exit;
        
         //设置第1行的行高
         $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -425,8 +425,9 @@ class PosController extends BackendController
         if($models){
             foreach ($models as $key => $val) {
                 $k=1;
-                foreach ($models[$key] as $v) { 
-                if( strtotime($v['poscreate_at'])>strtotime($begin_time) && strtotime($v['poscreate_at'])<strtotime($end_time+" 23 hours 59 m 59 s") ){
+                foreach ($models[$key] as $v) {
+                
+                if( (strtotime($v['poscreate_at'])>=strtotime($begin_time)) && (strtotime($v['poscreate_at'])<strtotime("$end_time + 1 day")) ){
 
                     $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$j,$v['company_name'])
