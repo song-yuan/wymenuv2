@@ -1,27 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "nb_printer".
+ * This is the model class for table "nb_pad_setting_status".
  *
- * The followings are the available columns in table 'nb_printer':
- * @property string $printer_id
- * @property string $company_id
- * @property string $width_type
- * @property string $name
- * @property string $address
- * @property string $language
- * @property string $brand
- * @property string $remark
+ * The followings are the available columns in table 'nb_pad_setting_status':
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
+ * @property string $pad_setting_id
+ * @property string $status
+ * @property string $use_status
+ * @property string $delete_flag
  * @property string $is_sync
  */
-class Printer extends CActiveRecord
+class PadSettingStatus extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_printer';
+		return 'nb_pad_setting_status';
 	}
 
 	/**
@@ -32,15 +32,15 @@ class Printer extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, dpid, lid', 'required'),
-			array('lid, dpid', 'length', 'max'=>10),
-			array('remark, brand', 'length', 'max'=>45),
-            array('language, printer_type, width_type', 'length', 'max'=>2),
-            array('name, address', 'length', 'max'=>64),
-			array('is_sync','length','max'=>50),
+			array('lid, update_at', 'required'),
+			array('lid, pad_setting_id', 'length', 'max'=>16),
+			array('dpid', 'length', 'max'=>10),
+			array('status, use_status, delete_flag', 'length', 'max'=>2),
+			array('is_sync', 'length', 'max'=>50),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, name, address, create_at, language, printer_type, width_type, brand, remark, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, pad_setting_id, status, use_status, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,16 +61,15 @@ class Printer extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => 'Printer',
-			'dpid' => 'Company',
-			'name' => yii::t('app','打印机名称'),
-            'address'=>yii::t('app','地址(IP/USB/COM)'),
-			'language' => yii::t('app','语言'),
-			'brand' => yii::t('app','品牌'),
-            'printer_type' => yii::t('app','类型'),
-			'width_type' => yii::t('app','打印纸宽度'),
-			'remark' => yii::t('app','备注'),
-			'is_sync' => yii::t('app','是否同步'),
+			'lid' => '自身id，统一dpid下递增',
+			'dpid' => '公司id',
+			'create_at' => 'Create At',
+			'update_at' => '更新时间',
+			'pad_setting_id' => 'Pad_setting表id',
+			'status' => 'POS机结算状态，0为未结算，1为已结算',
+			'use_status' => 'POS机使用状态，0为未使用，1为已使用',
+			'delete_flag' => 'Delete Flag',
+			'is_sync' => 'Is Sync',
 		);
 	}
 
@@ -94,12 +93,12 @@ class Printer extends CActiveRecord
 
 		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('dpid',$this->dpid,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('language',$this->language,true);
-		$criteria->compare('printer_type',$this->printer_type,true);
-		$criteria->compare('width_type',$this->width_type,true);
-		$criteria->compare('brand',$this->brand,true);
-		$criteria->compare('remark',$this->remark,true);
+		$criteria->compare('create_at',$this->create_at,true);
+		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('pad_setting_id',$this->pad_setting_id,true);
+		$criteria->compare('status',$this->status,true);
+		$criteria->compare('use_status',$this->use_status,true);
+		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
@@ -111,7 +110,7 @@ class Printer extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Printer the static model class
+	 * @return PadSettingStatus the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
