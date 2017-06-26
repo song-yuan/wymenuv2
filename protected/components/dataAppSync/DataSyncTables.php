@@ -124,8 +124,8 @@ class DataSyncTables
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"jobid int(10) NOT NULL DEFAULT '0',".
 	        	"pad_code varchar(50) NOT NULL,".
-				"pad_sales_type varchar(2) NOT NULL,".
-        		"screen_type varchar(2) NOT NULL,".
+				"pad_sales_type varchar(2) NOT NULL DEFAULT '0',".
+        		"screen_type varchar(2) NOT NULL DEFAULT '0',".
         		"item_count varchar(2) NOT NULL DEFAULT '4',".
 				"pad_type varchar(2) NOT NULL,".
 				"pad_ip varchar(20) NOT NULL,".
