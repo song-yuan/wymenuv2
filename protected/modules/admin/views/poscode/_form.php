@@ -12,7 +12,14 @@
                                    <div class="form-group">
 										<?php echo $form->label($model, 'pad_sales_type',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'pad_sales_type', array('0' => yii::t('app','单屏模式'),'1' => yii::t('app','双屏模式'),),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('pad_sales_type')));?>
+											<?php echo $form->dropDownList($model, 'pad_sales_type', array('0' => yii::t('app','西餐模式'),'1' => yii::t('app','中餐模式'),),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('pad_sales_type')));?>
+											<?php echo $form->error($model, 'pad_sales_type' )?>
+										</div>
+									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'screen_type',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'screen_type', array('0' => yii::t('app','单屏收款机'),'1' => yii::t('app','双屏收款机'),),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('screen_type')));?>
 											<?php echo $form->error($model, 'pad_sales_type' )?>
 										</div>
 									</div>
