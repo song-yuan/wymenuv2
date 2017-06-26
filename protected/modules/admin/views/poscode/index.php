@@ -61,7 +61,8 @@
                                         <th><?php echo yii::t('app','序号');?></th>
                                         <th><?php echo yii::t('app','POS序列号');?></th>
                                         <th><?php echo yii::t('app','是否使用');?></th>
-                                        <th><?php echo yii::t('app','模式');?></th>
+                                        <th><?php echo yii::t('app','店铺模式');?></th>
+                                        <th><?php echo yii::t('app','收款机类型');?></th>
                                         <th><?php echo yii::t('app','线上支付');?></th>
                                         <th><?php echo yii::t('app','收银机mac地址');?></th>
                                         <?php if(Yii::app()->user->role <=5):?>
@@ -77,7 +78,8 @@
                                             <td><?php echo $model['lid'];?></td>
                                             <td><?php echo $model['pad_code'];?></td>
                                             <td><?php if($model->detail) echo '已使用';else echo '未使用';?></td>
-                                            <td><?php if($model['pad_sales_type']==0)echo '单屏模式';else echo '双屏模式';?></td>
+                                            <td><?php if($model['pad_sales_type']==0)echo '西餐模式';else echo '中餐模式';?></td>
+                                            <td><?php if($model['screen_type']==0)echo '单屏收款机';else echo '双屏收款机';?></td>
                                             <td>
                                                 <?php switch($model['pay_activate']){
                                                         case 0: echo '未开通线上支付';break;

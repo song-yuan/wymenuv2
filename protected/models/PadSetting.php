@@ -41,13 +41,13 @@ class PadSetting extends CActiveRecord
 			array('pad_code' , 'unique' , 'message'=>'请重新添加，有未知错误'),
 			array('lid, dpid', 'numerical', 'integerOnly'=>true),
 			array('pad_code, is_sync', 'length', 'max'=>50),
-			array('pad_sales_type, pad_type, pay_activate', 'length', 'max'=>2),
+			array('pad_sales_type, screen_type, pad_type, pay_activate', 'length', 'max'=>2),
 			array('pad_ip, pad_fip, bt_mac', 'length', 'max'=>20),
 			array('is_product_free, delete_flag', 'length', 'max'=>1),
 			array('create_at, update_at, sync_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, pad_code, pay_activate, pad_sales_type, pad_type, pad_ip, pad_fip, bt_mac, is_product_free, sync_at, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, pad_code, pay_activate, pad_sales_type, screen_type, pad_type, pad_ip, pad_fip, bt_mac, is_product_free, sync_at, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,7 +76,8 @@ class PadSetting extends CActiveRecord
 			'update_at' => 'Update At',
 			'pad_code' => '店铺同步码',
 			'pay_activate' => '激活开通支付',
-			'pad_sales_type' => '屏幕模式 ',
+			'pad_sales_type' => '店铺模式 ',
+			'screen_type' => '收款机类型 ',
 			'pad_type' => 'pos类型 0 主pos 1从pos',
 			'pad_ip' => 'Pad Ip',
 			'pad_fip' => 'Pad Fip',
