@@ -220,7 +220,7 @@ class PosController extends BackendController
                         $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$j,$v['company']['company_name'])
                         ->setCellValue('B'.$j,$v['pad_sales_type']==0?'单屏':'双屏')
-                        ->setCellValue('C'.$j,$v['pad_code'])
+                        ->setCellValueExplicit('C'.$j,$v['pad_code'],PHPExcel_Cell_DataType::TYPE_STRING)
                         ->setCellValue('D'.$j,$v['create_at'])        
                         ->setCellValue('E'.$j,empty($v['detail'])?'':$v->detail[0]->create_at)
                         ->setCellValue('F'.$j,empty($v['detail'])?'':$v->detail[0]->content)

@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'nb_printer':
  * @property string $printer_id
  * @property string $company_id
+ * @property string $width_type
  * @property string $name
  * @property string $address
  * @property string $language
@@ -31,15 +32,15 @@ class Printer extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name,dpid,lid', 'required'),
+			array('name, dpid, lid', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('remark, brand', 'length', 'max'=>45),
-                        array('language,printer_type', 'length', 'max'=>2),
-                        array('name,address', 'length', 'max'=>64),
-				array('is_sync','length','max'=>50),
+            array('language, printer_type, width_type', 'length', 'max'=>2),
+            array('name, address', 'length', 'max'=>64),
+			array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, name, address, create_at,language,printer_type,brand,remark,is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, name, address, create_at, language, printer_type, width_type, brand, remark, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,12 +64,13 @@ class Printer extends CActiveRecord
 			'lid' => 'Printer',
 			'dpid' => 'Company',
 			'name' => yii::t('app','打印机名称'),
-                        'address'=>yii::t('app','地址(IP/USB/COM)'),
+            'address'=>yii::t('app','地址(IP/USB/COM)'),
 			'language' => yii::t('app','语言'),
 			'brand' => yii::t('app','品牌'),
-                        'printer_type' => yii::t('app','类型'),
+            'printer_type' => yii::t('app','类型'),
+			'width_type' => yii::t('app','打印纸宽度'),
 			'remark' => yii::t('app','备注'),
-				'is_sync' => yii::t('app','是否同步'),
+			'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -95,6 +97,7 @@ class Printer extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('language',$this->language,true);
 		$criteria->compare('printer_type',$this->printer_type,true);
+		$criteria->compare('width_type',$this->width_type,true);
 		$criteria->compare('brand',$this->brand,true);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
