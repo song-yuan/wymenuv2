@@ -191,13 +191,14 @@ class WxOrder
 	}
 	//获取座位状态
 	public function getSite(){
-		$site = WxSite::get($this->siteId,$this->dpid);
+		$siteNo = WxSite::getSiteNo($this->siteId,$this->dpid);
+		if(!$siteNo){
+			throw new Exception('请联系服务员,开台后下单');
+		}
 		if(!in_array($site['status'],array(1,2,3))){
-			if(empty($this->number)){
-				 throw new Exception('开台餐位数不能为0，请添加餐位数！');
-			}
-			$this->orderOpenSite();
+			throw new Exception('请联系服务员,开台后下单');
 		}elseif($site['status'] == 1){
+			$this->siteId = $siteNo['lid'];
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
 		}
 	}

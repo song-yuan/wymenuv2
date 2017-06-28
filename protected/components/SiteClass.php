@@ -140,26 +140,6 @@ class SiteClass
                 'delete_flag'=>'0'
             );                            
             $db->createCommand()->insert('nb_site_no',$data);
-            
-            $sef=new Sequence("order_feedback");
-            $lidf = $sef->nextval();
-            $dataf = array(
-                'lid'=>$lidf,
-                'dpid'=>$companyId,
-                'create_at'=>date('Y-m-d H:i:s',time()),
-                'update_at'=>date('Y-m-d H:i:s',time()),
-                'is_temp'=>$istemp,
-                'site_id'=>$site_id,
-                'is_deal'=>'0',
-                'feedback_id'=>0,
-                'order_id'=>0,
-                'is_order'=>'1',
-                'feedback_memo'=>yii::t('app','开台'),
-                'delete_flag'=>'0'
-            );
-            $db->createCommand()->insert('nb_order_feedback',$dataf);  
-            
-             
              $transaction->commit();
 	         return $code;
         } catch (Exception $e) {

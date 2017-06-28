@@ -17,6 +17,14 @@ class WxSite
 				  ->queryRow();
 	    return $site;
 	}
+	public static function getSiteNo($siteId,$dpid){
+		$sql = 'select * from nb_site_no where site_id=:siteId and dpid=:dpid and delete_flag=0 limit 1';
+		$siteNo = Yii::app()->db->createCommand($sql)
+				->bindValue(':siteId',$siteId)
+				->bindValue(':dpid',$dpid)
+				->queryRow();
+		return $siteNo;
+	}
 	/**
 	 * 
 	 * 查找未开台的外卖台
