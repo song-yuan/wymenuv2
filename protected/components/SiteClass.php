@@ -175,17 +175,17 @@ class SiteClass
                 try {                          
                     if($istemp=="0")
                     {
-                        $sqlsite="update nb_site set status=1,number=:number where lid=:sid and dpid=:companyId";
-                        $commandsite=$db->createCommand($sqlsite);
-                        $commandsite->bindValue(":number" , $siteNumber);
-                        $commandsite->bindValue(":sid" , $sid);
-                        $commandsite->bindValue(":companyId" , $companyId);
-                        $commandsite->execute();
+                        $sqlsite = "update nb_site set status=1,number=:number where lid=:sid and dpid=:companyId";
+                        $commandsite = $db->createCommand($sqlsite);
+			                        $commandsite->bindValue(":number" , $siteNumber);
+			                        $commandsite->bindValue(":sid" , $sid);
+			                        $commandsite->bindValue(":companyId" , $companyId);
+			                        $commandsite->execute();
                     }                           
                              
-                    $se=new Sequence("site_no");
+                    $se = new Sequence("site_no");
                     $lid = $se->nextval();
-                    $site_id=$sid;
+                    $site_id = $sid;
                     if($istemp!=0)
                     {
                         $se=new Sequence("temp_site");
@@ -194,12 +194,12 @@ class SiteClass
                     //return array('status'=>0,'message'=>"dddddd22",'siteid'=>$sid);
                     ///开台之前删除可能产生的脏数据
                     
-                    $sqlsiteno="update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2')";
-                    $commandsiteno=$db->createCommand($sqlsiteno);
-                    $commandsiteno->bindValue(":sid" , $sid);
-                    $commandsiteno->bindValue(":istemp" , $istemp);
-                    $commandsiteno->bindValue(":companyId" , $companyId);
-                    $commandsiteno->execute();
+                    $sqlsiteno = "update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2')";
+                    $commandsiteno = $db->createCommand($sqlsiteno);
+				                    $commandsiteno->bindValue(":sid" , $sid);
+				                    $commandsiteno->bindValue(":istemp" , $istemp);
+				                    $commandsiteno->bindValue(":companyId" , $companyId);
+				                    $commandsiteno->execute();
                     /////
                     
                     $code = "0000";//SiteClass::getCode($companyId);
@@ -217,26 +217,6 @@ class SiteClass
                         'delete_flag'=>'0'
                     );                            
                     $db->createCommand()->insert('nb_site_no',$data);
-
-                    ///***********insert to order feedback
-//                    $sef=new Sequence("order_feedback");
-//                    $lidf = $sef->nextval();
-//                    $dataf = array(
-//                        'lid'=>$lidf,
-//                        'dpid'=>$companyId,
-//                        'create_at'=>date('Y-m-d H:i:s',time()),
-//                        'update_at'=>date('Y-m-d H:i:s',time()),
-//                        'is_temp'=>$istemp,
-//                        'site_id'=>$site_id,
-//                        'is_deal'=>'0',
-//                        'feedback_id'=>0,
-//                        'order_id'=>0,
-//                        'is_order'=>'1',
-//                        'feedback_memo'=>'开台',
-//                        'delete_flag'=>'0'
-//                    );
-//                    $db->createCommand()->insert('nb_order_feedback',$dataf);
-                    ///*************print
                     $transaction->commit(); //提交事务会真正的执行数据库操作
                     return array('status'=>1,'msg'=>yii::t('app','开台成功'),'siteid'=>$site_id);  
                     //return true;

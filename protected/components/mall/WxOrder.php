@@ -44,21 +44,19 @@ class WxOrder
 		$this->getCart();
 		$this->dealTastes();
 		$this->dealProductSet();
+		$this->isTemp = 1;
 		if($this->type==1){
 			$this->isTemp = 0;
 			$this->getSite();
 			$this->getSeatingFee();
 		}elseif($this->type==2){
-			$this->isTemp = 1;
 			$this->orderOpenSite();
 			$this->getPackingFee();
 			$this->getFreightFee();
 		}elseif($this->type==3){
-			$this->isTemp = 1;
 			$this->orderOpenSite();
 			$this->getPackingFee();
 		}else{
-			$this->isTemp = 1;
 			$this->orderOpenSite();
 		}
 	}
