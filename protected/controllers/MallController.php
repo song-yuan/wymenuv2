@@ -135,6 +135,7 @@ class MallController extends Controller
 		}
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
+		var_dump($carts);exit;
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
