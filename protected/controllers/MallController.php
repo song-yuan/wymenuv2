@@ -126,6 +126,7 @@ class MallController extends Controller
 		$isMustYue = false; // 是否必须储值来支付
 		
 		$site = WxSite::get($siteId,$this->companyId);
+		var_dump($site);exit;
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
