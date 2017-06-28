@@ -477,7 +477,7 @@ $(document).ready(function(){
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
-        	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
+        	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
         	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,random:random},
         	success:function(msg){
         		if(msg.status){
@@ -551,7 +551,7 @@ $(document).ready(function(){
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
-        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
+        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
         	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
         	success:function(msg){
         		if(msg.status){
