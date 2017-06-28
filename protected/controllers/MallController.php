@@ -126,7 +126,6 @@ class MallController extends Controller
 		$isMustYue = false; // 是否必须储值来支付
 		
 		$site = WxSite::get($siteId,$this->companyId);
-		var_dump($site);exit;
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
@@ -136,6 +135,7 @@ class MallController extends Controller
 		}
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
+		var_dump($carts);exit;
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
