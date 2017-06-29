@@ -213,7 +213,7 @@ class WxCart
 		return array_merge($results);
 	}
 	public function getCartPromotion(){
-		$sql = 'select t.*,t1.promotion_type from nb_cart t,nb_normal_promotion t1 where t.promotion_id=t.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.promotion_id > 0 and t.promotion_id!=:privationPromotionId and t.delete_flag=0';
+		$sql = 'select t.*,t1.promotion_type from nb_cart t,nb_normal_promotion t1 where t.promotion_id=t.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.promotion_id > 0 and t.promotion_id!=:privationPromotionId and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
