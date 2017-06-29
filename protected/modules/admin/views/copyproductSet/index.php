@@ -44,7 +44,7 @@ function fun()
 		         <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
 			         <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
 			         <?php if($dpids):?>
-			         <?php foreach($dpids as $dpid):?>
+			         <?php foreach($dpids as $dpid): if($dpid['type']!=0):?>
 				         <li style="width:50%;float:left;">
 					         <div style="width:10%;float:left;"><?php echo $a++;?></div>
 					         <div style="width:10%;float:left;">
@@ -52,7 +52,7 @@ function fun()
 					         </div>
 					         <div style="width:70%;float:left;"><label for="aa<?php echo $dpid['dpid'];?>"><?php echo $dpid['company_name'];?></label></div>
 				         </li>
-				     <?php endforeach;?>
+				     <?php endif;endforeach;?>
 				     <?php endif;?>
 				         <li style="width:100%;">
 					         <div style="width:10%;float:left;"></div>
@@ -151,6 +151,24 @@ function fun()
 		<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+
+	<div id="noticed" style="margin:0;padding:0;display:none;width:96%;height:96%;">
+         <div class="modal-header">
+         	<span style="color:red;font:900 35px '微软雅黑' ;">注意 :</span>
+         </div>
+         <div class="modal-body">
+	         <div class="portlet-body" id="table-manage">
+		         <div id="report" style="color:red;display:inline-block;width:100%;font:900 35px '微软雅黑' ;">
+			        请勿关闭网页,正在跑步下发菜品,让子弹飞一会儿......
+		         </div>
+	         </div>
+	         <div class="modal-footer">
+		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
+	         </div>
+		 </div>
+
+
+
 	<script type="text/javascript">
 
 	$("#su").on('click',function() {
@@ -200,6 +218,19 @@ function fun()
 	            	$("#pshscode").val(codep);
 	            	$("#pgroups").val(groups);
 	    	        $("#copyproductset-form").submit();
+	    	        $("#printall").attr('disabled','disabled');
+
+					layer_index_printreportlist=layer.open({
+			            type: 1,
+			            shade: false,
+			            title: false, //不显示标题
+			            area: ['60%', '60%'],
+			            content: $('#noticed'),//$('#productInfo'), //捕获的元素
+			            cancel: function(index){
+			                layer.close(index);
+			                layer_index_printreportlist=0;
+			            }
+			        });
 		            }else{
 						alert("请选择店铺。。。");return;
 			            }
