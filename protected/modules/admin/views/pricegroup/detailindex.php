@@ -143,7 +143,7 @@
 								var mb_price =$('#mb_price'+num).val();
 								var ist =$('#ist'+num).val();
 								var pid =$('#pid'+num).val();
-								location.href="<?php echo $this->createUrl('/saved',array('companyId'=>$this->companyId,'pricegroupid'=>$pricegroupid));?>/lid/"+lid+"/price/"+price+"/mb_price/"+mb_price+"/ist/"+ist+"/pid/"+pid;
+								location.href="<?php echo $this->createUrl('pricegroup/saved',array('companyId'=>$this->companyId,'pricegroupid'=>$pricegroupid));?>/lid/"+lid+"/price/"+price+"/mb_price/"+mb_price+"/ist/"+ist+"/pid/"+pid;
 							});
 							</script>
 						</tbody>
