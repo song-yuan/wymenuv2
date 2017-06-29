@@ -29,14 +29,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组设置'),'url'=>$this->createUrl('priceGroup/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','价格信息编辑'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('priceGroup/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组设置'),'url'=>$this->createUrl('pricegroup/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','价格信息编辑'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroup/index' , array('companyId' => $this->companyId,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'price-group-detail-form',
-				'action' => $this->createUrl('priceGroup/detailindex' , array('companyId' => $this->companyId,'pricegroupid'=>$pricegroupid,'is_post'=>1)),
+				'action' => $this->createUrl('pricegroup/detailindex' , array('companyId' => $this->companyId,'pricegroupid'=>$pricegroupid,'is_post'=>1)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -143,7 +143,7 @@
 								var mb_price =$('#mb_price'+num).val();
 								var ist =$('#ist'+num).val();
 								var pid =$('#pid'+num).val();
-								location.href="<?php echo $this->createUrl('priceGroup/saved',array('companyId'=>$this->companyId,'pricegroupid'=>$pricegroupid));?>/lid/"+lid+"/price/"+price+"/mb_price/"+mb_price+"/ist/"+ist+"/pid/"+pid;
+								location.href="<?php echo $this->createUrl('/saved',array('companyId'=>$this->companyId,'pricegroupid'=>$pricegroupid));?>/lid/"+lid+"/price/"+price+"/mb_price/"+mb_price+"/ist/"+ist+"/pid/"+pid;
 							});
 							</script>
 						</tbody>

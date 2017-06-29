@@ -65,7 +65,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'price-group-create-form',
-				'action' => $this->createUrl('priceGroup/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('pricegroup/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -80,7 +80,7 @@
 						<span class="tab tab-active"><?php echo yii::t('app','价格分组列表');?></span>
 					</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('priceGroup/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('pricegroup/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                         <a href="javascript:void(0)" class="btn red" id='deleted' ><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
 					</div>
 				</div>
@@ -105,10 +105,10 @@
 								<td><?php echo $model->group_desc;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('priceGroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('pricegroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('priceGroup/detailIndex',array('pricegroupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
+								<a href="<?php echo $this->createUrl('pricegroup/detailIndex',array('pricegroupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

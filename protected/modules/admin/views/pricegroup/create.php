@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组'),'url'=>$this->createUrl('priceGroup/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加价格分组'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('priceGroup/index' , array('companyId'=>$this->companyId)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组'),'url'=>$this->createUrl('pricegroup/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加价格分组'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroup/index' , array('companyId'=>$this->companyId)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -66,7 +66,7 @@
 
 							    <div class="col-md-offset-3 col-md-9" style="margin-top:10px;">
 									<?php echo CHtml::submitButton('确定',array('class' => 'btn blue')); ?>
-							    	<a href="<?php echo $this->createUrl('priceGroup/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
+							    	<a href="<?php echo $this->createUrl('pricegroup/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
 							    </div>
 
 							<?php $this->endWidget(); ?>
