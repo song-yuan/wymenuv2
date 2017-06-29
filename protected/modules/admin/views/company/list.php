@@ -124,17 +124,15 @@
 			margin-right:10px;
 		}
 		.ku-item.cpfl{
-					background-image:url(../../../../../../img/waiter/icon-cpsz.png);
-					background-position: 15px 15px;
-		    		background-repeat: no-repeat;
-				}
+			background-image:url(../../../../img/waiter/icon-cpsz.png);
+			background-position: 15px 15px;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
 		}
-				/*边框效果*/
-		.hov{border:1px solid white;}
-		.hov:hover{border:1px solid orange;}
+		
 	</style>
 	<div class="page-content">
 		<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -284,7 +282,7 @@
 							<div class="ku-item-info">店铺分组</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('priceGroup/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('pricegroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple cpfl"></div>
 							<div class="ku-item-info">价格分组</div>
