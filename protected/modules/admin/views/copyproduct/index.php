@@ -1,18 +1,18 @@
 <script type="text/javascript">
 function fun()
 		{
-			
+
 			if($(this).checked){
 				document.$("FirstItem").checked;
 			}
 
 		};
-		
-		
-		
+
+
+
 </script>
 <div class="page-content">
-	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -32,24 +32,24 @@ function fun()
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-	
-	
-	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">		                
+
+
+	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
          <div class="modal-header">
          	<h4 class="modal-title">选择需要下发菜品的店铺</h4>
          </div>
          <div class="modal-body">
-	         <div class="portlet-body" id="table-manage">  
+	         <div class="portlet-body" id="table-manage">
 		         <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
 			         <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
 			         <?php if($dpids):?>
 			         <?php foreach($dpids as $dpid):?>
 				         <li style="width:50%;float:left;">
 					         <div style="width:10%;float:left;"><?php echo $a++;?></div>
-					         <div style="width:70%;float:left;"><?php echo $dpid['company_name'];?></div>
 					         <div style="width:10%;float:left;">
-					         	<input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" />
+					         	<input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" id="rep<?php echo $dpid['dpid'];?>"/>
 					         </div>
+					         <div style="width:70%;float:left;"><label for="rep<?php echo $dpid['dpid'];?>"><?php echo $dpid['company_name'];?></label></div>
 				         </li>
 				     <?php endforeach;?>
 				     <?php endif;?>
@@ -60,25 +60,36 @@ function fun()
 					         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
 					         	全选
 					         </div>
-					         
-				         </li>                                                                       
+
+				         </li>
 			         </ul>
 		         </div>
 	         </div>
 	         <div class="modal-footer">
+
+				<select name="groups" id="groups" class="btn" style="border:1px solid gray;" disabled>
+					<?php if (!$groups):?>
+						<option value="">您还没有添加区域价格分组,(默认总部价格)</option>
+					<?php else:?>
+						<option value="0" >-默认(已设置)-</option>
+						<?php foreach($groups as $group ): ?>
+							<option value="<?php echo $group['lid']; ?>" >-<?php echo $group['group_name']; ?>-</option>
+						<?php endforeach; ?>
+					<?php endif;?>
+				</select>
 		         <button id="printall" type="button" class="btn blue">确认下发</button>
 		         <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
 		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
-		         
 	         </div>
+	         <span style="color:red;">注意 : 下发可能需要点时间,请耐心等待</span>
 		 </div>
-				                	
+
 		</div>
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品下发'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
-	
+
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -101,9 +112,9 @@ function fun()
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 <!-- 						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>-->
-							<div class="btn-group"> 
+							<div class="btn-group">
 							<button type="button" id="su"  class="btn red form-control" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','菜单下发');?></button>
- 						</div> 
+ 						</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -113,7 +124,7 @@ function fun()
 								<th style="width:10%" class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /><?php echo yii::t('app','全选');?></th>
 								<th style="width:25%"><?php echo yii::t('app','名称');?></th>
 								<th><?php echo yii::t('app','类别');?></th>
-								<th><?php echo yii::t('app','现价');?></th>
+								<th><?php echo yii::t('app','总部价格');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -125,7 +136,7 @@ function fun()
 								<td style="width:25%"><?php echo $model->product_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
-								
+
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -134,12 +145,13 @@ function fun()
 						<input type="hidden" id="phscode" name="phscode" value="" />
 						<input type="hidden" id="chscode" name="chscode" value="" />
 						<input type="hidden" id="dpids" name="dpids" value="" />
+						<input type="hidden" id="pgroups" name="groups" value="" />
 						</div>
 					</table>
-					
+
 <!-- 						<php if($pages->getItemCount()):?>
 <!-- 						<div class="row"> --
-<!-- 							<div class="col-md-5 col-sm-12"> 
+<!-- 							<div class="col-md-5 col-sm-12">
 <!-- 								<div class="dataTables_info">
 									<php echo yii::t('app','共');?> <php echo $pages->getPageCount();?> <php echo yii::t('app','页');?> , <php echo $pages->getItemCount();?> <php echo yii::t('app','条数据');?> , <php echo yii::t('app','当前是第');?> <php echo $pages->getCurrentPage()+1;?> <php echo yii::t('app','页');?>
 <!-- 								</div> --
@@ -166,9 +178,9 @@ function fun()
 // 								?>
 <!-- 								</div> -->
 <!-- 							</div> -->
-<!-- 						</div> 
-						<php endif;?>					
--->					
+<!-- 						</div>
+						<php endif;?>
+-->
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -178,7 +190,7 @@ function fun()
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		
+
 		$('#product-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
 				alert("<?php echo yii::t('app','请选择要删除的项');?>");
@@ -202,7 +214,7 @@ function fun()
 
 
 	$("#su").on('click',function() {
-		
+
         //alert(11);
 		var aa = document.getElementsByName("ids[]");
 		//var aa = document.getElementsByName("ids[]");
@@ -220,7 +232,7 @@ function fun()
        	 	alert("<?php echo yii::t('app','请选择要下发的菜品！！！');?>");
        		return false;
        	}
-        
+
         for (var i = 0; i < aa.length; i++) {
             if (aa[i].checked) {
                 //var str = aa[i].getAttribute("chs_code");
@@ -234,7 +246,7 @@ function fun()
        		return false;
        	}
      	//alert(str);
-        
+
 		if(window.confirm("确认进行此项操作?")){
 			layer_index_printreportlist=layer.open({
 	            type: 1,
@@ -244,7 +256,7 @@ function fun()
 	            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
 	            cancel: function(index){
 	                layer.close(index);
-	                layer_index_printreportlist=0;                                                                                                     
+	                layer_index_printreportlist=0;
 	            }
 	        });
 			$("#printall").on("click",function(){
@@ -253,14 +265,16 @@ function fun()
 	            var dpids="";
 	            $('.checkdpids:checked').each(function(){
 	                dpids += $(this).val()+',';
-	                //alert(dpids);
 	            });
+	            var groups = $('#groups').find("option:selected").val();
+	                // alert(groups);
 	            if(dpids!=''){
 	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
 	            	//alert(dpids);
 	            	$("#dpids").val(dpids);
 	            	$("#chscode").val(codec);
 	            	$("#phscode").val(codep);
+	            	$("#pgroups").val(groups);
 	    	        $("#copyproduct-form").submit();
 		            }else{
 						alert("请选择店铺。。。");return;
@@ -275,5 +289,5 @@ function fun()
 			return false;
 			}
 	});
-	
-	</script>	
+
+	</script>

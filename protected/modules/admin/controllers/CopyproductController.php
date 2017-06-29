@@ -29,17 +29,20 @@ class CopyproductController extends BackendController
 		}
 
 		$models = Product::model()->findAll($criteria);
-		
+
 		$db = Yii::app()->db;
 		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
+		$sql2 = 'select * from nb_price_group where dpid = '.$this->companyId. ' and delete_flag=0';
+        $groups = $db->createCommand($sql2)->queryALL();
 		//var_dump($dpids);exit;
 		$categories = $this->getCategories();
 //                var_dump($categories);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
+				'groups'=>$groups,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId
 		));
@@ -52,7 +55,9 @@ class CopyproductController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
 		$chscode = Yii::app()->request->getParam('chscode');
 		$phscode = Yii::app()->request->getParam('phscode');
+		$groups = Yii::app()->request->getParam('groups');
 		$dpid = Yii::app()->request->getParam('dpids');
+		// p($_POST);
 		$chscodes = array();
 		$chscodes = explode(',',$chscode);
 		$phscodes = array();
@@ -60,7 +65,7 @@ class CopyproductController extends BackendController
 		$dpids = array();
 		$dpids = explode(',',$dpid);
 		//var_dump($ids,$chscodes,$dpids,$phscodes);exit;
-		
+
 		//****查询公司的产品分类。。。****
 		$db = Yii::app()->db;
 		$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.pid = 0 and t.dpid = '.$this->companyId;
@@ -93,7 +98,7 @@ class CopyproductController extends BackendController
 //         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
 // 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
         				}else{//var_dump($catep);exit;
-        					
+
 	                        $se = new Sequence("product_category");
 	                        $id = $se->nextval();
 	                        $data = array(
@@ -112,7 +117,7 @@ class CopyproductController extends BackendController
 	                        		'is_sync'=>$is_sync,
 	                        );
 	                        $command = $db->createCommand()->insert('nb_product_category',$data);
-	                      
+
 	                        	//var_dump(mysql_query($command));exit;
 	                        	//var_dump($model);exit;
  	                        	$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
@@ -123,7 +128,7 @@ class CopyproductController extends BackendController
 	                        	} else {
 	                        		$self->tree = '0,'.$self->lid;
 	                        	}
-	                        	$self->update();    
+	                        	$self->update();
         				}
         			}
         			if($catep2){
@@ -135,8 +140,8 @@ class CopyproductController extends BackendController
         					//$chscodetree = $sqltree['tree'];
         					$catep = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$category['chs_code'],':companyId'=>$dpid));
         					$cateptree = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$chscode,':companyId'=>$dpid));
-        					
-        					
+
+
         					//var_dump($cateptree,$sqltree);exit;
         					if($catep){
         						$catep->update_at = date('Y-m-d H:i:s',time());
@@ -150,7 +155,7 @@ class CopyproductController extends BackendController
         						//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
         						// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
         					}else{//var_dump($catep);exit;
-        				
+
         						$se = new Sequence("product_category");
         						$id = $se->nextval();
         						$datacate = array(
@@ -169,7 +174,7 @@ class CopyproductController extends BackendController
         								'is_sync'=>$is_sync,
         						);
         						$command = $db->createCommand()->insert('nb_product_category',$datacate);
-        				
+
         						//var_dump(mysql_query($command));exit;
         						//var_dump($model);exit;
         						$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
@@ -180,23 +185,67 @@ class CopyproductController extends BackendController
         						} else {
         							$self->tree = '0,'.$self->lid;
         						}
-        						$self->update();        				
+        						$self->update();
         					}
         				}
         			}
-        			
+
         		}
-        		
+
         		if($products){
         			foreach ($phscodes as $prodhscode){
         				$producto = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
         				$product =  Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
         				$categoryId = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$product['chs_code'],':companyId'=>$dpid));
-        				//var_dump($product,$producto,$categoryId);exit;
-        				//var_dump(!empty($producto));exit;
+        				/*
+        					判断分组,
+        						如果为0就查询是否已设置分组
+        							(店铺dpid,)
+        							如果没有就默认总部,,,
+        							如果有就查询,
+								如果不为0就查询分组价格,并且更新店铺的详情设置
+									总部dpid,    $this->companyId
+									分组lid,    $groups
+									菜品id     $product->lid
+        				*/
+        				if ($groups==0) {
+        					$group = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid))->price_group_id;
+        					// p($group);
+        					if($group){
+        						$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$group.' and product_id='.$product->lid.' and delete_flag=0';
+	        					$gp_info = $db->createCommand($sql)->queryAll();
+	        					// p($gp_info);
+	        					$price=$gp_info[0]['price'];
+	        					$mb_price=$gp_info[0]['mb_price'];
+        					}else{
+        						$price=$product['original_price'];
+        						$mb_price=$product['member_price'];
+        					}
+        				}else{
+        					$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$groups.' and product_id='.$product->lid.' and delete_flag=0';
+        					$gp_info = $db->createCommand($sql)->queryAll();
+        					$price=$gp_info[0]['price'];
+        					$mb_price=$gp_info[0]['mb_price'];
+
+        					$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid));
+			                // p($model);
+			                if ($model) {
+			                    $model->saveAttributes(array('price_group_id'=>$groups,'update_at'=>date('Y-m-d H:i:s',time())));
+			                }else{
+			                    $se=new Sequence("company_property");
+			                    $lid = $se->nextval();
+			                    // p($lid);
+			                    $data = array(
+			                            'lid'=>$lid,
+			                            'dpid'=>$dpid,
+			                            'update_at'=>date('Y-m-d H:i:s',time()),
+			                            'price_group_id'=>$groups,
+			                            'delete_flag'=>'0',
+			                    );
+			                    $command = $db->createCommand()->insert('nb_company_property',$data);
+			                }
+        				}
         				if((!empty($product))&&(empty($producto))&&(!empty($categoryId))){
-        					//var_dump($catep);exit;
-        						
         					$se = new Sequence("product");
         					$id = $se->nextval();
         					$dataprod = array(
@@ -220,8 +269,8 @@ class CopyproductController extends BackendController
         							'status'=>$product['status'],
         							'dabao_fee'=>$product['dabao_fee'],
         							'is_discount'=>$product['is_discount'],
-        							'original_price'=>$product['original_price'],
-        							'member_price'=>$product['member_price'],
+        							'original_price'=>$price,
+        							'member_price'=>$mb_price,
         							'product_unit'=>$product['product_unit'],
         							'weight_unit'=>$product['weight_unit'],
         							'is_weight_confirm'=>$product['is_weight_confirm'],
@@ -236,9 +285,9 @@ class CopyproductController extends BackendController
         					);
         					//var_dump($dataprod);exit;
         					$command = $db->createCommand()->insert('nb_product',$dataprod);
-        					
+
         				}elseif((!empty($product))&&(!empty($producto))&&(!empty($categoryId))){
-	        					
+
 	        					$producto->update_at = date('Y-m-d H:i:s',time());
 	        					$producto->category_id = $categoryId['lid'];
 	        					$producto->phs_code = $product['phs_code'];
@@ -256,8 +305,8 @@ class CopyproductController extends BackendController
 	        					$producto->status = $product['status'];
 	        					$producto->dabao_fee = $product['dabao_fee'];
 	        					$producto->is_discount = $product['is_discount'];
-	        					$producto->original_price = $product['original_price'];
-	        					$producto->member_price = $product['member_price'];
+	        					$producto->original_price = $price;
+	        					$producto->member_price = $mb_price;
 	        					$producto->product_unit = $product['product_unit'];
 	        					$producto->weight_unit = $product['weight_unit'];
 	        					$producto->is_weight_confirm = $product['is_weight_confirm'];
@@ -277,11 +326,11 @@ class CopyproductController extends BackendController
         	}
         	Yii::app()->user->setFlash('success' , yii::t('app','菜品下发成功！！！'));
         	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
-        	
+
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
         	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
-        }        
+        }
 
 	}
 	public function actionStatus(){
@@ -296,7 +345,7 @@ class CopyproductController extends BackendController
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		
+
 		if($product){
 			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0,'update_at'=>date('Y-m-d H:i:s',time())));
 		}
@@ -314,7 +363,7 @@ class CopyproductController extends BackendController
 		}
 		$treeDataSource = array('data'=>array(),'delay'=>400);
 		$categories = Helper::getCategories($this->companyId,$pid);
-	
+
 		foreach($categories as $c){
 			$tmp['name'] = $c['category_name'];
 			$tmp['id'] = $c['lid'];
@@ -327,9 +376,9 @@ class CopyproductController extends BackendController
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
-		
+
 		$models = ProductCategory::model()->findAll($criteria);
-                
+
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
@@ -354,5 +403,5 @@ class CopyproductController extends BackendController
 		$departments = Department::model()->findAll('company_id=:companyId',array(':companyId'=>$this->companyId)) ;
 		return CHtml::listData($departments, 'department_id', 'name');
 	}
-	
+
 }
