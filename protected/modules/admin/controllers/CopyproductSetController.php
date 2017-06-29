@@ -41,7 +41,7 @@ class CopyproductSetController extends BackendController
 		$pshscode = Yii::app()->request->getParam('pshscode');
 		$groups = Yii::app()->request->getParam('groups');
 		$copydpids = Yii::app()->request->getParam('dpids');
-		
+		// p($groups);
 		$pshscodes = array();
 		$pshscodes = explode(',',$pshscode);
 		$dpids = array();
@@ -190,55 +190,64 @@ class CopyproductSetController extends BackendController
                             ->execute(array(':setid'=> $prodsetso->lid, ':companyId' => $dpid));
                             //Yii::app()->db->createCommand()->update('nb_product_set_detail',array('set_id=:setid' ,'dpid=:dpid'), array(':setid' =>$prodsetso->lid , ':dpid'=>$dpid));
                             }
-			            /*
-        					判断分组,
-        						如果为0就查询是否已设置分组
-        							(店铺dpid,)
-        							如果没有就默认总部,,,
-        							如果有就查询,
-								如果不为0就查询分组价格,并更新公司属性表里的分组id
-									总部dpid,    $this->companyId
-									分组lid,    $groups
-									菜品id     $product->lid
-        				*/
-        				if ($groups==0) {
-        					$group = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid))->price_group_id;
-        					// p($group);
-        					if($group){
-        						$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$group.' and product_id='.$prodsets->lid.' and delete_flag=0';
-	        					$gp_info = $db->createCommand($sql)->queryAll();
-	        					// p($gp_info);
-	        					$price=$gp_info[0]['price'];
-	        					$mb_price=$gp_info[0]['mb_price'];
-        					}else{
-        						$price=$prodsets->set_price;
-        						$mb_price=$prodsets->member_price;
-        					}
-        				}else{
-        					$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$groups.' and product_id='.$prodsets->lid.' and delete_flag=0';
-        					$gp_info = $db->createCommand($sql)->queryAll();
-        					$price=$gp_info[0]['price'];
-        					$mb_price=$gp_info[0]['mb_price'];
-        					
-        					$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid));
-			                // p($model);
-			                if ($model) {
-			                    $model->saveAttributes(array('price_group_id'=>$groups,'update_at'=>date('Y-m-d H:i:s',time())));
-			                }else{
-			                    $se=new Sequence("company_property");
-			                    $lid = $se->nextval();
-			                    // p($lid);
-			                    $data = array(
-			                            'lid'=>$lid,
-			                            'dpid'=>$dpid,
-			                            'update_at'=>date('Y-m-d H:i:s',time()),
-			                            'price_group_id'=>$groups,
-			                            'delete_flag'=>'0',
-			                    );
-			                    $command = $db->createCommand()->insert('nb_company_property',$data);
-			                }
-        				}
+                            // p($categoryId);
 			            if(!empty($prodsets)){
+    				            /*
+    	        					判断分组,
+    	        						如果为0就查询是否已设置分组
+    	        							(店铺dpid,)
+    	        							如果没有就默认总部,,,
+    	        							如果有就查询,
+
+
+    									如果不为0就查询分组价格,并更新公司属性表里的分组id
+    										总部dpid,    $this->companyId
+    										分组lid,    $groups
+    										菜品id     $product->lid
+    	        				*/
+    	        				if ($groups==0) {
+    	        					$group = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid))->price_group_id;
+    	        					// p($group);
+    	        					if($group){
+    	        						$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$group.' and product_id='.$prodsets->lid.' and delete_flag=0';
+    		        					$gp_info = $db->createCommand($sql)->queryAll();
+    		        					// p($gp_info);
+    		        					if ($gp_info==null) {
+    		        						$price=$prodsets->set_price;
+    	        							$mb_price=$prodsets->member_price;
+    		        					}else{
+    		        						$price=$gp_info[0]['price'];
+    		        						$mb_price=$gp_info[0]['mb_price'];
+    		        					}
+    	        					}else{
+    	        						$price=$prodsets->set_price;
+    	        						$mb_price=$prodsets->member_price;
+    	        					}
+    	        				}else{
+    	        					$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$groups.' and product_id='.$prodsets->lid.' and delete_flag=0';
+    	        					$gp_info = $db->createCommand($sql)->queryAll();
+    	        					$price=$gp_info[0]['price'];
+    	        					$mb_price=$gp_info[0]['mb_price'];
+    	        					
+    	        					$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid));
+    				                // p($model);
+    				                if ($model) {
+    				                    $model->saveAttributes(array('price_group_id'=>$groups,'update_at'=>date('Y-m-d H:i:s',time())));
+    				                }else{
+    				                    $se=new Sequence("company_property");
+    				                    $lid = $se->nextval();
+    				                    // p($lid);
+    				                    $data = array(
+    				                            'lid'=>$lid,
+    				                            'dpid'=>$dpid,
+    				                            'update_at'=>date('Y-m-d H:i:s',time()),
+    				                            'price_group_id'=>$groups,
+    				                            'delete_flag'=>'0',
+    				                    );
+    				                    $command = $db->createCommand()->insert('nb_company_property',$data);
+    				                }
+    	        				}
+
 			                    $se = new Sequence("porduct_set");
 			                    $pslid = $se->nextval();
 			                    $dataprodset = array(
@@ -273,7 +282,7 @@ class CopyproductSetController extends BackendController
 			                        'delete_flag'=>'0',
 			                        'is_sync'=>$is_sync,
 			                    );
-			                    //var_dump($dataprodset);exit;
+			                    // p($dataprodset);exit;
 			                    $command = $db->createCommand()->insert('nb_product_set',$dataprodset);
 
 			                    $prodsetdetails = ProductSetDetail::model()->findAll('set_id=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsets->lid,':companyId'=>$this->companyId));
@@ -309,12 +318,15 @@ class CopyproductSetController extends BackendController
         					
         			}
         			$transaction->commit();
+        			Yii::app()->user->setFlash('success' , yii::t('app','套餐下发成功！！！'));
+    				$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId,)) ;
     			}catch (Exception $e){
     				$transaction->rollback();
     				//echo 'false';exit;
     				$dpidnames = ''.$dpid;
-    				//Yii::app()->user->setFlash('eror' , yii::t('app','套餐下发失败！！！'));
-    				//$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId)) ;
+    				// Yii::app()->user->setFlash('error' , yii::t('app','套餐下发失败！！！'));
+    				Helper::writeLog('套餐下发：['.$dpidnames.']结果：以上下发未成功。');
+    				$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId)) ;
     			}  
         	}
     		
