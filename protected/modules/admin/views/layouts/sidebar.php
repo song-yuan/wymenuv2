@@ -15,7 +15,7 @@
                     </a>
             </li>
             -->
-   <?php if(Yii::app()->user->role <= '15'): ?>
+   <?php if($this->comptype != 2 && Yii::app()->user->role <= '15'): ?>
         <?php if(Yii::app()->user->role != '8'): ?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWx', 'user' ,'synchronous','poscode','postable','connectUs','uploadApk','announcement' ))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('company/list',array('companyId' => $this->companyId));?>">
@@ -131,11 +131,12 @@
                     </a>
             </li>
             <?php endif;?>
-            <?php if(Yii::app()->user->role <11):?>
+        <?php endif; ?>
+            <?php if($this->comptype == 2):?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('tmall',))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('tmall/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-shopping-cart"></i> 
-                    <span class="title"><?php echo yii::t('app','商城配置');?></span>					
+                    <span class="title"><?php echo yii::t('app','仓库配置');?></span>					
                     </a>
             </li>
             <?php endif;?>
@@ -227,7 +228,7 @@
                 </li>
 
                 -->
-                <?php endif; ?>
+                
         </ul>
         <!-- END SIDEBAR MENU -->
 </div>

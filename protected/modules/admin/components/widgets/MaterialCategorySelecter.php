@@ -15,9 +15,9 @@ class MaterialCategorySelecter extends CWidget {
 		$selecter = '';
                 
 		$rootCategoties = Helper::getCategory($this->companyId);
-                //var_dump($this->categoryId,$rootCategoties);exit;
+            //var_dump($this->categoryId,$rootCategoties,$this->companyId);exit;
 		if($this->categoryId!=0 && $category = MaterialCategory::model()->find('t.lid = :cid and t.dpid=:dpid',array(':cid'=>$this->categoryId,':dpid'=>$this->companyId))){
-			//var_dump($category->tree);exit;
+			//var_dump();exit;
                         $categoryTree = explode(',',$category['tree']);
                         echo $this->getSelecter($categoryTree);
 		}else{
