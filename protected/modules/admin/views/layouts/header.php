@@ -3,13 +3,15 @@
 		<!-- BEGIN TOP NAVIGATION BAR -->
 		<div class="header-inner">
 			<!-- BEGIN LOGO -->  
-			<a class="navbar-brand" href="<?php echo '#'; //echo $this->createUrl('default/index',array("companyId"=>$this->companyId));?>">
-			<span style="margin-left:20px;"><?php echo yii::t('app','壹点吃餐饮管理后台')?></span>
+			<a class="navbar-brand" style="display:inline-block;padding:0;height:42px;" href="<?php echo '#'; //echo $this->createUrl('default/index',array("companyId"=>$this->companyId));?>">
+			<!-- <span style="display:inline-block;margin-left:20px;font:900 italic 36px '华文新魏';color:orange;height:42px;line-height: 42px;"><?php echo yii::t('app','壹点吃')?></span> -->
+
+            <img src="<?php echo Yii::app()->request->baseUrl;?>/img/ydclogo1.png" alt="一点吃" style="height:36px;margin-top:3px;">
 			</a>
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER --> 
 			<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-			<img src="<?php echo Yii::app()->request->baseUrl;?>/img/menu-toggler.png" alt="" />
+			<img src="<?php echo Yii::app()->request->baseUrl;?>/img/menu-toggler.png" alt="" style="border-radius:15px;"/>
 			</a> 
 			<!-- END RESPONSIVE MENU TOGGLER -->
                         
@@ -110,7 +112,7 @@
 				<!-- BEGIN USER LOGIN DROPDOWN -->
                                 <li class="dropdown user">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-					<img alt="" src="<?php echo Yii::app()->request->baseUrl;?>/img/house_small.jpg"/>
+					<img alt="" src="<?php echo Yii::app()->request->baseUrl;?>/img/house_small.jpg"  style="border-radius:15px;"/>
 					<span class="username"><?php echo Helper::getCompanyName($this->companyId);?></span>
 					<i class="fa fa-angle-down"></i>
 					</a>
@@ -121,7 +123,7 @@
 				</li>
 				<li class="dropdown user">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-					<img alt="" src="<?php echo Yii::app()->request->baseUrl;?>/img/avatar1_small.jpg"/>
+					<img alt="" src="<?php echo Yii::app()->request->baseUrl;?>/img/avatar1_small.jpg" style="border-radius:15px;"/>
                                         <span class="username"><?php echo Yii::app()->user->name; ?></span>
 					<i class="fa fa-angle-down"></i>
 					</a>
@@ -144,7 +146,7 @@
 				</li>
 				<li class="dropdown user">
 					<a class="dropdown-toggle" href="javascript:void(0);" onclick="window.open('http://www.wymenu.com/net/HelperHTML/index.html');">
-					<img alt="" style="width:29px;height:29px;" src="<?php echo Yii::app()->request->baseUrl;?>/img/help_book_question.png"/>
+					<img alt="帮助文档" title="帮助文档" style="width:29px;height:29px;background:white;border-radius:19px;" src="<?php echo Yii::app()->request->baseUrl;?>/img/help_book_question.png"/>
                     <span class="username"><?php echo '&nbsp'; ?></span>
 					</a>
 				</li>
