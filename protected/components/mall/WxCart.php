@@ -76,7 +76,7 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
 					  
-			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=:isSet and t.delete_flag=0';
+			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=:isSet and t.delete_flag=0 and t1.delete_flag=0';
 			$result = Yii::app()->db->createCommand($sql)
 						  ->bindValue(':dpid',$this->dpid)
 						  ->bindValue(':productId',$this->productArr['product_id'])
@@ -107,9 +107,11 @@ class WxCart
 				$cartPromotions = $this->getCartPromotion();
 				if(!empty($cartPromotions)){
 					foreach($cartPromotions as $promotion){
-						$privatePromotion = WxPromotion::getPromotion($this->dpid,$promotion['promotion_id']);
-						if($privatePromotion['promotion_type']==0){
-							return array('status'=>false,'msg'=>'本活动不与其他活动同时使用!');
+						if($promotion['promotion_type']==0){
+							$privatePromotion = WxPromotion::getProductPromotion($this->dpid,$promotion['promotion_id'],$promotion['product_id'],$promotion['is_set']);
+							if($privatePromotion){
+								return array('status'=>false,'msg'=>'本活动不与其他活动同时使用!');
+							}
 						}
 					}
 				}
@@ -180,6 +182,11 @@ class WxCart
 				$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 			}
 			if($result['promotion_id'] > 0){
+				$productPromotion = WxPromotion::getProductPromotion($this->dpid,$result['promotion_id'],$result['product_id'],$result['is_set']);
+				if(!$productPromotion){
+					unset($results[$k]);
+					continue;
+				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid, $result['promotion_id']);
 				if(!$promotion){
 					unset($results[$k]);
@@ -206,7 +213,7 @@ class WxCart
 		return array_merge($results);
 	}
 	public function getCartPromotion(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and promotion_id > 0 and promotion_id!=:privationPromotionId';
+		$sql = 'select t.*,t1.promotion_type from nb_cart t,nb_normal_promotion t1 where t.promotion_id=t.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.promotion_id > 0 and t.promotion_id!=:privationPromotionId and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)

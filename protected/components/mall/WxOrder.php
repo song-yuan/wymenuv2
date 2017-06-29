@@ -99,6 +99,11 @@ class WxOrder
 			}
 			$results[$k]['store_number'] = $store['msg'];
 			if($result['promotion_id'] > 0){
+				$productPromotion = WxPromotion::getProductPromotion($this->dpid,$result['promotion_id'],$result['product_id'],$result['is_set']);
+				if(!$productPromotion){
+					unset($results[$k]);
+					continue;
+				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid, $result['promotion_id']);
 				if(!$promotion){
 					unset($results[$k]);

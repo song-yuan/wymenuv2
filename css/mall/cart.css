@@ -49,7 +49,7 @@ footer .ft-rrt p{ font-size:0.2rem; color:#fff; text-align:center;}
 .order-desc .info-lt{float: left;width: 50%;text-align: left;}
 .order-desc .info-rt{float: left;width: 50%;text-align: right;color: rgb(199,93,48);}
 
-.site_no{padding:10px;font-size:16px;text-align:center;}
+.site_no{padding:10px;font-size:18px;font-weight:600;}
 
 input.serial{color: #FF5151;width:100px;height:30px;margin-left:5px;font-size:16px;border-top:none;border-left:none;border-right:none;border-bottom:none;background-color:#E5E5E5;}
 

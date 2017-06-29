@@ -127,6 +127,7 @@ class MallController extends Controller
 		
 		$site = WxSite::get($siteId,$this->companyId);
 		if($site){
+			$siteNo = WxSite::getSiteNo($siteId,$this->companyId);
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
 			if(in_array($site['status'],array(1,2,3))){
