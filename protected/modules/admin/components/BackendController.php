@@ -3,6 +3,7 @@ class BackendController extends CController
 {
 	public $layout = '/layouts/main_admin';
 	public $companyId = 0;
+	public $comptype = 1;
 	public function beforeAction($action) {
 		date_default_timezone_set('PRC');
 		parent::beforeAction($action);
@@ -40,6 +41,8 @@ class BackendController extends CController
 				//var_dump($results);exit;
 				if($results){
 					$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
+					$comptype = Yii::app()->db->createCommand('select type from nb_company where delete_flag = 0 and  dpid ='.Yii::app()->request->getParam('companyId',"0000000000"))->queryRow();
+					$this->comptype = $comptype['type'];
 				}else{//var_dump('222');exit;
 					//var_dump($companyId);var_dump($dpids);var_dump($results);var_dump(Yii::app()->user->role);exit;
 					$this->redirect(Yii::app()->params['admin_return_url']);
@@ -48,6 +51,8 @@ class BackendController extends CController
 			}
 			else{//var_dump($this->companyId);exit;
 				$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
+				$comptype = Yii::app()->db->createCommand('select type from nb_company where delete_flag = 0 and  dpid ='.Yii::app()->request->getParam('companyId',"0000000000"))->queryRow();
+				$this->comptype = $comptype['type'];
 				//var_dump($this->companyId);
 			}
 		}
