@@ -44,21 +44,19 @@ class WxOrder
 		$this->getCart();
 		$this->dealTastes();
 		$this->dealProductSet();
+		$this->isTemp = 1;
 		if($this->type==1){
 			$this->isTemp = 0;
 			$this->getSite();
 			$this->getSeatingFee();
 		}elseif($this->type==2){
-			$this->isTemp = 1;
 			$this->orderOpenSite();
 			$this->getPackingFee();
 			$this->getFreightFee();
 		}elseif($this->type==3){
-			$this->isTemp = 1;
 			$this->orderOpenSite();
 			$this->getPackingFee();
 		}else{
-			$this->isTemp = 1;
 			$this->orderOpenSite();
 		}
 	}
@@ -67,18 +65,18 @@ class WxOrder
 		if($this->type==2){
 			$hideCate = WxCategory::getHideCate($this->dpid, 2);
 			if(empty($hideCate)){
-				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
+				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.delete_flag=0';
 			}else{
 				$categoryStr = join(',', $hideCate);
-				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
+				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.delete_flag=0';
 			}
 		}elseif($this->type==6){
 			$hideCate = WxCategory::getHideCate($this->dpid, 3);
 			if(empty($hideCate)){
-				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
+				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.delete_flag=0';
 			}else{
 				$categoryStr = join(',', $hideCate);
-				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
+				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.delete_flag=0';
 			}
 		}else{
 			$hideCate = WxCategory::getHideCate($this->dpid, 4);
@@ -86,14 +84,13 @@ class WxOrder
 				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
 			}else{
 				$categoryStr = join(',', $hideCate);
-				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.site_id=:siteId and t.is_set=0 and t1.delete_flag=0';
+				$sql = 'select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.delete_flag=0';
 			}
 		}
-		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId and t.is_set=1 and t1.delete_flag=0';
+		$sql .= ' union select t.dpid,t.product_id,t.is_set,t.num,t.promotion_id,t.to_group,t1.set_name as product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=1 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
-				  ->bindValue(':siteId',$this->siteId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
 			$store = $this->checkStoreNumber($this->dpid,$result['product_id'],$result['is_set'],$result['num']);
@@ -193,13 +190,14 @@ class WxOrder
 	}
 	//获取座位状态
 	public function getSite(){
-		$site = WxSite::get($this->siteId,$this->dpid);
+		$siteNo = WxSite::getSiteNo($this->siteId,$this->dpid);
+		if(!$siteNo){
+			throw new Exception('请联系服务员,开台后下单');
+		}
 		if(!in_array($site['status'],array(1,2,3))){
-			if(empty($this->number)){
-				 throw new Exception('开台餐位数不能为0，请添加餐位数！');
-			}
-			$this->orderOpenSite();
+			throw new Exception('请联系服务员,开台后下单');
 		}elseif($site['status'] == 1){
+			$this->siteId = $siteNo['lid'];
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
 		}
 	}

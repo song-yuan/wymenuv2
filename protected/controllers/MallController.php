@@ -634,12 +634,13 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->request->getParam('userId');
 		$siteId = Yii::app()->session['qrcode-'.$userId];
+		$type = Yii::app()->request->getParam('type');
 		
 		if($userId < 0){
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众进行点餐')));
 		}
 		
-		if($this->type==1){
+		if($type==1){
 			if($siteId < 0){
 				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
 			}
@@ -652,7 +653,7 @@ class MallController extends Controller
 		$isSet =  Yii::app()->request->getParam('isSet');
 		
 		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
-		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$this->type);
+		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$type);
 		
 		//检查活动商品数量
 		if($promoteId > 0){
@@ -681,6 +682,7 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->request->getParam('userId');
 		$siteId = Yii::app()->session['qrcode-'.$userId];
+		$type = Yii::app()->request->getParam('type');
 		
 		if($userId < 0){
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
@@ -703,7 +705,7 @@ class MallController extends Controller
 		
 		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		
-		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$this->type);
+		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$type);
 		if($cart->deleteCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
 		}else{

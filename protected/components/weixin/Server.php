@@ -210,7 +210,7 @@ class Server {
 				$urlArr = array(
 					1=>array('mall/index','companyId'),
 				);
-				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
+				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId,'type'=>1));
 				
 				$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$this->brandId;
 				$siteType = Yii::app()->db->createCommand($sql)->queryRow();
