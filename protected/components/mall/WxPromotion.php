@@ -86,6 +86,15 @@ class WxPromotion
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$promotionId)->queryRow();
 	 	return $result;
 	 }
+	 /**
+	  * 获取单品活动详情
+	  *
+	  */
+	 public static function getProductPromotion($dpid,$promotionId,$productId,$isSet){
+	 	$sql = 'select * from  nb_normal_promotion_detail where dpid=:dpid and normal_promotion_id=:promotionId and product_id=:productId and is_set=:isSet and delete_flag=0';
+	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->bindValue(':isSet',$isSet)->queryRow();
+	 	return $result;
+	 }
 	/**
 	 * 
 	 * 产品特价活动价格

@@ -48,7 +48,10 @@
 <div class="order-title">确认订单</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
+<!-- 
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'].'>';}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteOpen){echo '0';}else{if($siteNum){ echo (int)$siteNum['max_persons'];}else{echo '3';}}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
+	 -->
+	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌台:<?php echo $siteType['name'].$site['serial'];?></div>
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
 	<div class="address arrowright">
@@ -287,6 +290,8 @@
 	<div class="totalinfo" style="padding-top:10px"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 </div>
 
+<!-- 如果是餐座 则显示下单 不需要支付  -->
+<?php if($this->type!=1):?>
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
 	<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
@@ -342,7 +347,19 @@
     </div>
     <div class="clear"></div>
 </footer>
-
+<?php else:?>
+<footer>
+    <div class="ft-lt">
+        <p style="margin-left:10px;">合计 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+    </div>
+    <div class="ft-rt">
+    	<a id="payorder" href="javascript:;">
+        <p>下单</p>
+        </a>
+    </div>
+    <div class="clear"></div>
+</footer>
+<?php endif;?>
 <div class="user-cupon" id="cuponList">
 	<div class="cupon-container">
 	<?php if($isCupon):?>
