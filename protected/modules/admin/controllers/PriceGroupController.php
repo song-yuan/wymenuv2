@@ -2,7 +2,7 @@
 /**
 * 区域价格分组
 */
-class PriceGroupController extends BackendController
+class PricegroupController extends BackendController
 {
 	/*
 	 *区域价格分组列表
