@@ -425,7 +425,7 @@ class WxOrder
 						'price'=>$cart['price']+$ortherPrice,
 						'original_price'=>$cart['original_price']+$ortherPrice,
 						'amount'=>$cart['num'],
-						'product_order_status'=>9,
+						'product_order_status'=>$orderProductStatus,
 						'is_sync'=>DataSync::getInitSync(),
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
