@@ -126,14 +126,21 @@ class MallController extends Controller
 		$isMustYue = false; // 是否必须储值来支付
 		
 		$site = WxSite::get($siteId,$this->companyId);
-		if($site){
-			$siteNo = WxSite::getSiteNo($siteId,$this->companyId);
-			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
-			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
-			if(in_array($site['status'],array(1,2,3))){
-				$siteOpen = true;
+		if($this->type==1){
+			if($site){
+				$siteNo = WxSite::getSiteNo($siteId,$this->companyId);
+				$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+				$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
+				if(in_array($siteNo['status'],array(1,2,3))){
+					$siteOpen = true;
+				}else{
+					$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
+				}
+			}else{
+				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}
 		}
+		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
 		if(empty($carts)){
@@ -187,25 +194,6 @@ class MallController extends Controller
 		
 		$contion = null;
 		$number = 1;
-		if($this->type==1){
-			$serial = Yii::app()->request->getPost('serial');
-			$number = Yii::app()->request->getPost('number');
-			$serialArr = explode('>',$serial);
-			if(count($serialArr)==1){
-				$serial = $serialArr[0];
-			}else{
-				$serial = $serialArr[1];
-			}
-			$site = WxSite::getBySerial($serial,$this->companyId);
-			if(!$site){
-				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
-			}else{
-				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
-				$siteId = $site['lid'];
-			}
-		}elseif($this->type==3){
-			$number = Yii::app()->request->getPost('number');
-		}
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
 		try{
