@@ -347,7 +347,7 @@
 <?php else:?>
 <footer>
     <div class="ft-lt">
-        <p style="margin-left:10px;">合计 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+        <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
     	<a id="payorder" href="javascript:;">

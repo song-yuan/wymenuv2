@@ -196,6 +196,7 @@ class WxOrder
 	//获取座位状态
 	public function getSite(){
 		$siteNo = WxSite::getSiteNo($this->siteId,$this->dpid);
+		var_dump($siteNo);exit;
 		if(!$siteNo){
 			throw new Exception('请联系服务员,开台后下单');
 		}
