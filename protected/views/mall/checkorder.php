@@ -809,6 +809,11 @@ $(document).ready(function(){
 				return;
 			}
 			$('form').submit();
+		<?php elseif($this->type==6):?>
+			if($('input[name="yue"]').is(':checked')){
+				$('#dialog1').show();
+				return;
+			}
 		<?php else:?>
 			$('form').submit();
 		<?php endif;?>
