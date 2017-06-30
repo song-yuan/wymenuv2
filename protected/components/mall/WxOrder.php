@@ -201,7 +201,7 @@ class WxOrder
 		}
 		if(!in_array($siteNo['status'],array(1,2,3))){
 			throw new Exception('请联系服务员,开台后下单');
-		}elseif($site['status'] != 1){
+		}elseif($siteNo['status'] != 1){
 			$this->siteId = $siteNo['lid'];
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
 		}
