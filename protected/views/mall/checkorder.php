@@ -533,11 +533,12 @@ $(document).ready(function(){
 	totalPackFee = totalPackFee.toFixed(2);
 	$('.packingFee').find('.num').html(totalPackNum);
 	$('.packingFee').find('.price').html(totalPackFee);
-	<?php endif;?>
+
 	var totalFee = parseFloat(total) + parseFloat(totalPackFee) + parseFloat(freightFee);
 	totalFee =  totalFee.toFixed(2);
 	$('#total').html(totalFee);
 	$('#total').attr('total',totalFee);
+	<?php endif;?>
 	
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'type'=>$this->type,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
