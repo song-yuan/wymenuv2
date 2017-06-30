@@ -20,7 +20,7 @@ class CopyproductSetController extends BackendController
 		
 		$db = Yii::app()->db;
 		//$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 ';
-		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.type,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		$sql2 = 'select * from nb_price_group where dpid = '.$this->companyId. ' and delete_flag=0';
@@ -50,7 +50,7 @@ class CopyproductSetController extends BackendController
 		$msgprod = '下列产品尚未下发至选择店铺，请先下发产品再下发配方：';
 		$dpidnames = '';
 		//var_dump($dpids,$pshscodes);exit;
-		// p($_POST);
+		// p($dpids);
 		//****查询公司的产品分类。。。****
 		
 		$db = Yii::app()->db;
@@ -318,22 +318,17 @@ class CopyproductSetController extends BackendController
         					
         			}
         			$transaction->commit();
-        			Yii::app()->user->setFlash('success' , yii::t('app','套餐下发成功！！！'));
-    				$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId,)) ;
     			}catch (Exception $e){
     				$transaction->rollback();
     				//echo 'false';exit;
     				$dpidnames = ''.$dpid;
-    				// Yii::app()->user->setFlash('error' , yii::t('app','套餐下发失败！！！'));
-    				Helper::writeLog('套餐下发：['.$dpidnames.']结果：以上下发未成功。');
-    				$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId)) ;
     			}  
         	}
     		
     		//Yii::app()->user->setFlash('success' , $msgmate);
     		Yii::app()->user->setFlash('success' , yii::t('app','套餐下发成功！！！'));
     		$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId,)) ;
-    		//echo 'true';exit;
+    		// //echo 'true';exit;
     		Helper::writeLog('套餐下发：['.$dpidnames.']结果：以上下发未成功。');
         	
         }else{

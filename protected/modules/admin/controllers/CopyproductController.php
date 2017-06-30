@@ -31,7 +31,7 @@ class CopyproductController extends BackendController
 		$models = Product::model()->findAll($criteria);
 
 		$db = Yii::app()->db;
-		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.type,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		$sql2 = 'select * from nb_price_group where dpid = '.$this->companyId. ' and delete_flag=0';
@@ -203,6 +203,8 @@ class CopyproductController extends BackendController
         							(店铺dpid,)
         							如果没有就默认总部,,,
         							如果有就查询,
+        								存在就下发
+        								不存在就下发总部
 								如果不为0就查询分组价格,并且更新店铺的详情设置
 									总部dpid,    $this->companyId
 									分组lid,    $groups
@@ -215,8 +217,14 @@ class CopyproductController extends BackendController
         						$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$group.' and product_id='.$product->lid.' and delete_flag=0';
 	        					$gp_info = $db->createCommand($sql)->queryAll();
 	        					// p($gp_info);
-	        					$price=$gp_info[0]['price'];
-	        					$mb_price=$gp_info[0]['mb_price'];
+	        					if ($gp_info==null) {
+	        						$price=$product['original_price'];
+        							$mb_price=$product['member_price'];
+	        					}else{
+	        						$price=$gp_info[0]['price'];
+	        						$mb_price=$gp_info[0]['mb_price'];
+	        					}
+	        					
         					}else{
         						$price=$product['original_price'];
         						$mb_price=$product['member_price'];
