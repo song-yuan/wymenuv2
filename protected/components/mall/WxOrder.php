@@ -584,7 +584,7 @@ class WxOrder
 	 * 
 	 */
 	public static function getOrderBySiteId($siteId,$dpid){
-		$sql = 'select * from nb_order where site_id=:siteId and dpid=:dpid and order_status=1 and is_temp=0 and order_type=1';
+		$sql = 'select * from nb_order where site_id=:siteId and dpid=:dpid and order_status=2 and is_temp=0 and order_type=1';
 		$order = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':siteId',$siteId)
 				  ->bindValue(':dpid',$dpid)
