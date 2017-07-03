@@ -13,10 +13,10 @@
 <div class="order-title">我的订单</div>
 <div class="order-site">桌号:<?php echo $siteType['name'];?><?php echo $site['serial'];?></div>
 <div class="order-info">
-	<div class="item">
-		<div class="rt"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>"><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="../img/mall/icon_add.png">继续加菜</a></div>
-		<div class="clear"></div>
-	</div>
+	<div class="right"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>"><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="../img/mall/icon_add.png">继续加菜</a></div>
+	<div class="clear"></div>
+</div>
+<div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
 		<div class="lt"><?php echo $product['product_name'];?></div>
