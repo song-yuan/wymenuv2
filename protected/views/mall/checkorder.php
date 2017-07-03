@@ -814,6 +814,7 @@ $(document).ready(function(){
 				$('#dialog1').show();
 				return;
 			}
+			$('form').submit();
 		<?php else:?>
 			$('form').submit();
 		<?php endif;?>

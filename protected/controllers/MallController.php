@@ -133,6 +133,7 @@ class MallController extends Controller
 				$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
 				if(in_array($siteNo['status'],array(1,2,3))){
 					$siteOpen = true;
+					$siteNum = $siteNo['number'];
 				}
 			}
 		}
