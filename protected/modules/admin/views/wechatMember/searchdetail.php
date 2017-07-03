@@ -192,7 +192,8 @@ li{
                         </li>
                         <div style="clear:both;"></div> 
                     </ul>
-                    <ul class="pull-left"><li><span>openid:<?php echo $brand_user_model->openid;?></span></li></ul>
+                    <br>
+                    <ul class="pull-left"><li><span>会员openid：<?php echo $brand_user_model->openid;?></span></li></ul>
                 </div>                
                 <div class="base_info">
                     <div class="info_header"></div>
