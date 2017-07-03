@@ -454,6 +454,7 @@ class WxOrder
 							'promotion_type'=>$cart['promotion']['promotion_type'],
 							'promotion_id'=>$promotion['poromtion_id'],
 							'promotion_money'=>$promotion['promotion_money'],
+							'can_cupon'=>$promotion['can_cupon'],
 							'delete_flag'=>0,
 							'is_sync'=>DataSync::getInitSync(),
 					);
@@ -603,11 +604,15 @@ class WxOrder
 					    ->queryAll();
 		foreach ($orderProduct as $k=>$product){
 			if($product['set_id']>0){
+				$oProduct = WxProduct::getProductSet($product['set_id'], $dpid);
 				$productSet = self::getOrderProductSetDetail($product['order_id'],$dpid,$product['set_id'],$product['main_id']);
 				$orderProduct[$k]['detail'] = $productSet;
+				$orderProduct[$k]['pro_code'] = $oProduct['phs_code'];
 			}else{
+				$oProduct = WxProduct::getProduct($product['product_id'], $dpid);
 				$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
 				$orderProduct[$k]['taste'] = $productTaste;
+				$orderProduct[$k]['pro_code'] = $oProduct['phs_code'];
 			}
 		}
 	    return $orderProduct;
@@ -668,6 +673,14 @@ class WxOrder
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
 	    return $address;
+	}
+	public static function getOrderProductPromotion($orderProductId,$dpid){
+		$sql = 'select * from nb_order_product_promotion where order_id=:orderProductId and dpid=:dpid and delete_flag=0';
+		$promotion = Yii::app()->db->createCommand($sql)
+				->bindValue(':orderProductId',$orderProductId)
+				->bindValue(':dpid',$dpid)
+				->queryRow();
+		return $promotion;
 	}
 	/**
 	 * 

@@ -104,34 +104,34 @@ class WxPromotion
 	 	$now = date('Y-m-d H:i:s',time());
 	 	if($isSet){
 	 		$product = WxProduct::getProductSet($productId,$dpid);
-	 		$sql = 'select t.*,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.normal_promotion_id=:promotionId and t.product_id=:productId and t1.begin_time <= :now and t1.end_time >= :now and t.is_set=1 and t.delete_flag=0 and t1.delete_flag=0';
+	 		$sql = 'select t.*,t1.can_cupon,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.normal_promotion_id=:promotionId and t.product_id=:productId and t1.begin_time <= :now and t1.end_time >= :now and t.is_set=1 and t.delete_flag=0 and t1.delete_flag=0';
 	 		$promotion = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->bindValue(':now',$now)->queryRow();
 	 		if($promotion){
 	 			if($promotion['is_discount']==0){
 	 				$price = ($product['set_price'] - $promotion['promotion_money']) > 0 ? number_format($product['set_price'] - $promotion['promotion_money'],2) : number_format(0,2);
 	 				$promotion_money = $price ? $promotion['promotion_money'] : $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
 	 			}else{
 	 				$price = number_format($product['set_price']*$promotion['promotion_discount'],2);
 	 				$promotion_money = $product['set_price'] - $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>1,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>1,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
 	 			}
 	 		}else{
 	 			return array('promotion_type'=>-1,'price'=>$product['original_price'],'promotion_info'=>array());
 	 		}
 	 	}else{
 	 		$product = WxProduct::getProduct($productId,$dpid);
-	 		$sql = 'select t.*,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.normal_promotion_id=:promotionId and t.product_id=:productId and t1.begin_time <= :now and t1.end_time >= :now and t.is_set=0 and t.delete_flag=0 and t1.delete_flag=0';
+	 		$sql = 'select t.*,t1.can_cupon,t1.to_group,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.normal_promotion_id=:promotionId and t.product_id=:productId and t1.begin_time <= :now and t1.end_time >= :now and t.is_set=0 and t.delete_flag=0 and t1.delete_flag=0';
 	 		$promotion = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->bindValue(':now',$now)->queryRow();
 	 		if($promotion){
 	 			if($promotion['is_discount']==0){
 	 				$price = ($product['original_price'] - $promotion['promotion_money']) > 0 ? number_format($product['original_price'] - $promotion['promotion_money'],2) : number_format(0,2);
 	 				$promotion_money = $price ? $promotion['promotion_money'] : $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
 	 			}else{
 	 				$price = number_format($product['original_price']*$promotion['promotion_discount'],2);
 	 				$promotion_money = $product['original_price'] - $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>1,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>1,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
 	 			}
 	 		}else{
 	 			return array('promotion_type'=>-1,'price'=>$product['original_price'],'promotion_info'=>array());

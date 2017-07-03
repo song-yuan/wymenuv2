@@ -111,7 +111,7 @@ class WxCupon
 			//waimai\
 			$types = ' t.type in (0,2,4) and ';
 			$typess = ' type in (0,2,4) and ';
-		}elseif($type ==6 || $type ==3){
+		}elseif($type ==1 || $type ==6 || $type ==3){
 			//tangshi
 			$types = ' t.type in (0,2,3) and ';
 			$typess = ' type in (0,2,3) and ';

@@ -400,9 +400,28 @@ class MallController extends Controller
 				$freightFee += $freightProduct['price']*$freightProduct['amount'];
 			}
 		}
-		
-		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		
+		$proCodeArr = array();
+		$productArr = array();
+		foreach ($orderProducts as $product){
+			if($product['set_id'] > 0){
+				$amount = $product['zhiamount'];
+			}else{
+				$amount = $product['amount'];
+			}
+			$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
+			array_push($proCodeArr, $product['phs_code']);
+			if($orderPromotion){
+				array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon']));
+			}else{
+				array_push($productArr, array('promotion_id'=>-1,'num'=>$amount,'price'=>$product['price'],'can_cupon'=>1));
+			}
+		}
+		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr);// 购物车优惠原价
+		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
+		
+		$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
 		
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
