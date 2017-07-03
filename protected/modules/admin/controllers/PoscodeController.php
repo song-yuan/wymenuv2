@@ -30,7 +30,8 @@ class PoscodeController extends BackendController
         //查询总公司
         $cdpid = Yii::app()->request->getParam('cdpid');
         $download = Yii::app()->request->getParam('download');
-        $model = Yii::app()->db->createCommand("select * from nb_company where comp_dpid=0 and delete_flag =0")->queryALL();
+        $model = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
+        // p($model);
         $models=0;
         $CompanyName=null;
         if($cdpid){
@@ -75,7 +76,7 @@ class PoscodeController extends BackendController
         $download = Yii::app()->request->getParam('download');
         $statu = Yii::app()->request->getParam('statu');
         $use_statu = Yii::app()->request->getParam('use_statu');
-        $model = Yii::app()->db->createCommand("select * from nb_company where comp_dpid=0 and delete_flag =0")->queryALL();
+        $model = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
         $models=0;
         $CompanyName=null;
         if($cdpid){
@@ -211,7 +212,7 @@ class PoscodeController extends BackendController
                 }
                 $data[] = $arr;
             }
-            $name = $hqCname.date('Y-m-d H:i:s',time());//若无中文店名,将compnents/config/Excel.php:155$filename注释
+            $name = $hqCname.date('Y-m-d H:i:s',time());//若文件名无中文店名,将compnents/config/Excel.php:155$filename注释
             //var_dump($name);exit;
         Until::exportFile($data,$export,$name);
         }
@@ -409,7 +410,7 @@ class PoscodeController extends BackendController
         // 总公司的dpid
         $cdpid = Yii::app()->request->getParam('cdpid');
         $CompanyName = Company::model()->findByPk($cdpid)->company_name;
-        $model = Yii::app()->db->createCommand("select * from nb_company where comp_dpid=0 and delete_flag =0")->queryALL();
+        $model = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
         $sql='select c.company_name,count(pst.dpid) as cnum from nb_pad_setting pst '.'left join nb_company c on (c.dpid=pst.dpid) where pst.delete_flag=0 and pst.dpid in (select dpid from nb_company where comp_dpid='.$cdpid.' and delete_flag=0) group by pst.dpid';
         $models = Yii::app()->db->createCommand($sql)->queryALL();
         $this->render('hqcount',array(
