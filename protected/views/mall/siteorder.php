@@ -81,7 +81,7 @@
 <script>
 $(document).ready(function(){
 	$('#payorder').click(function(){
-		location.href = '<?php echo $this->createUrl('/mall/payorder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
+		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 	});
 });
 </script>
