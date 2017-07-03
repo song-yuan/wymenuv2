@@ -589,6 +589,9 @@ class WxOrder
 				  ->bindValue(':siteId',$siteId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
+	  	if($order){
+	  		$order['taste'] = self::getOrderTaste($order['lid'], $dpid, 1);
+	  	}
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){

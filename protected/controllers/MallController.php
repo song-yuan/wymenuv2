@@ -255,6 +255,9 @@ class MallController extends Controller
 			$msg = $e->getMessage();
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
+		if($this->type==1){
+			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
+		}
 		if($paytype == 1){
 			//支付宝支付
 			WxOrder::updatePayType($orderId,$this->companyId,2);
@@ -269,6 +272,31 @@ class MallController extends Controller
 			WxOrder::updatePayType($orderId,$this->companyId,1);
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
+	}
+	public function actionSiteOrder()
+	{
+		$user = $this->brandUser;
+        $userId = $user['lid'];
+		$siteId = Yii::app()->session['qrcode-'.$userId];
+		$msg = '';
+		$site = WxSite::get($siteId, $dpid);
+		if($site){
+			$siteNo = WxSite::getSiteNo($siteId, $dpid);
+			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+			$siteNoLid = $siteNo['lid'];
+			$order = WxOrder::getOrderBySiteId($siteNoLid, $dpid);
+			if($order){
+				$orderProducts = WxOrder::getOrderProduct($order['lid'],$this->companyId);
+			}else{
+				$msg = '不存在该餐桌';
+				$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+			}
+		}else{
+			$msg = '不存在该餐桌';
+			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+		}
+		
+		$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$user,'siteType'=>$siteType,'siteNo'=>$siteNo));
 	}
 	 /**
 	 * 
