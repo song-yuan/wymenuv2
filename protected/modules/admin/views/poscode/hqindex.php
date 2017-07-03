@@ -10,9 +10,9 @@
     background:orange;
     color: white;
 }
-</style>  
+</style>
 <div class="page-content">
-    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
     <div class="modal fade" id="portlet-pad-bind" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -55,8 +55,6 @@
                             <?php endforeach; ?>
                         </select>
 
-
-
                             <?php if(Yii::app()->user->role <User::ADMIN):?>
                                 <div class="btn-group">
                                     <select name="use_statu" id="use_statu" class="selectedclass btn" >
@@ -74,7 +72,11 @@
                                     <button type="submit"  class="btn orange" id="countNum"><?php echo yii::t('app','统计');?></button>
                                 <div class="btn-group">
                                     <button type="submit"  class="btn green" id="counts"><?php echo yii::t('app','批量结算');?></button>
+                                </div>
+                                <div class="btn-group">
                                     <button type="submit"  class="btn red" id="nocounts"><?php echo yii::t('app','批量取消结算');?></button>
+                                </div>
+                                <div class="btn-group">
                                     <button type="submit"  class="btn blue" id="putout"><?php echo yii::t('app','导出Excel');?></button>
                                 </div>
                             <?php endif;?>
@@ -104,23 +106,23 @@
                                         <?php endif;?>
                                     </tr>
                                 </thead>
-                                <tbody>						
+                                <tbody>
                                     <?php foreach ($models as $model):?>
                                         <tr class="odd gradeX">
                                             <td>
                                             <input type="checkbox" class="checkboxes" value="<?php echo $model['lid']; ?>" name="ids[]" />
                                             </td>
-                                        
+
                                             <td><?php echo $model['lid']; ?></td>
                                             <td><?php echo $model['pad_code'];?></td>
                                             <td><?php if($model['use_status']) echo '已使用';else echo '未使用';?>
                                             </td>
                                             <td><?php if($model['pad_sales_type']==0)echo '单屏模式';else echo '双屏模式';?>
                                             </td>
-                                            
+
                                             <td>  <?php  echo $model['company_name'];?> </td>
                                             <td id= 'stat'>
-                                                <?php switch($model['status']){ 
+                                                <?php switch($model['status']){
                                                         case 0: echo '<p style="color:red;">未结算</p>';break;
                                                         case 1: echo '<p style="color:green;">已结算</p>';break;
                                                         default: echo '<p style="color:blue;">未知状态</p>';break;
@@ -189,7 +191,8 @@
 
     $("#counts").on('click',function(){
         var lid = [];
-        $('input:checkbox:checked').each(function() {
+        // $('input:checkbox:checked').each(function() {
+        $('input:checkbox:checked[name="ids[]"]').each(function() {
             lid.push($(this).val());
         });
         // alert(lid);
@@ -219,7 +222,7 @@
 
     $("#nocounts").on('click',function(){
         var lid = [];
-        $('input:checkbox:checked').each(function() {
+        $('input:checkbox:checked[name="ids[]"]').each(function() {
             lid.push($(this).val());
         });
         // alert(lid);
@@ -266,7 +269,7 @@
     location.href="<?php echo $this->createUrl('poscode/hqindex' , array('companyId'=>$this->companyId));?>/cdpid/"+val;
 
     });
-   
+
     $('#countNum').click(function(){
     var index = document.getElementById('cdpid').selectedIndex;
     var val = document.getElementById('cdpid').options[index].value;
