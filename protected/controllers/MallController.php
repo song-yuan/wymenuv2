@@ -279,12 +279,12 @@ class MallController extends Controller
         $userId = $user['lid'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$msg = '';
-		$site = WxSite::get($siteId, $dpid);
+		$site = WxSite::get($siteId, $this->companyId);
 		if($site){
-			$siteNo = WxSite::getSiteNo($siteId, $dpid);
+			$siteNo = WxSite::getSiteNo($siteId, $this->companyId);
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 			$siteNoLid = $siteNo['lid'];
-			$order = WxOrder::getOrderBySiteId($siteNoLid, $dpid);
+			$order = WxOrder::getOrderBySiteId($siteNoLid, $this->companyId);
 			if($order){
 				$orderProducts = WxOrder::getOrderProduct($order['lid'],$this->companyId);
 			}else{
