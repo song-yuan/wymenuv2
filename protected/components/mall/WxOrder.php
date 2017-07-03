@@ -199,9 +199,9 @@ class WxOrder
 		if(!$siteNo){
 			throw new Exception('请联系服务员,开台后下单');
 		}
-		if(!in_array($site['status'],array(1,2,3))){
+		if(!in_array($siteNo['status'],array(1,2,3))){
 			throw new Exception('请联系服务员,开台后下单');
-		}elseif($site['status'] == 1){
+		}elseif($siteNo['status'] != 1){
 			$this->siteId = $siteNo['lid'];
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
 		}
@@ -245,38 +245,63 @@ class WxOrder
 		$time = time();
 		$orderPrice = 0;
 		$realityPrice = 0;
-		$accountNo = 0;
-		$se = new Sequence("order");
-	    $orderId = $se->nextval();
-	    
-	    if($this->type==1 && $this->order){
-			$accountNo = $this->order['account_no'];
+	    $orderProductStatus = 9;
+	    if($this->type==1){
+	    	// 餐桌
+	    	$orderProductStatus = 1;
+	    	if($this->order){
+	    		$orderId = $this->order['lid'];
+	    		$orderPrice = $this->order['should_total'];
+	    		$realityPrice = $this->order['reality_total'];
+	    	}else{
+	    		$se = new Sequence("order");
+	    		$orderId = $se->nextval();
+	    		$accountNo = self::getAccountNo($this->dpid,$this->siteId,0,$orderId);
+	    		$insertOrderArr = array(
+	    				'lid'=>$orderId,
+	    				'dpid'=>$this->dpid,
+	    				'create_at'=>date('Y-m-d H:i:s',$time),
+	    				'update_at'=>date('Y-m-d H:i:s',$time),
+	    				'account_no'=>$accountNo,
+	    				'user_id'=>$this->userId,
+	    				'site_id'=>$this->siteId,
+	    				'is_temp'=>$this->isTemp,
+	    				'number'=>$this->number,
+	    				'order_status'=>2,
+	    				'order_type'=>$this->type,
+	    				'takeout_typeid'=>$this->takeoutTypeId,
+	    				'is_sync'=>DataSync::getInitSync(),
+	    		);
+	    		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+	    	}
 		}else{
+			// 不带餐桌
+			$se = new Sequence("order");
+			$orderId = $se->nextval();
 			$accountNo = self::getAccountNo($this->dpid,$this->siteId,0,$orderId);
-		}
-		
-	    $insertOrderArr = array(
-	        	'lid'=>$orderId,
-	        	'dpid'=>$this->dpid,
-	        	'create_at'=>date('Y-m-d H:i:s',$time),
-	        	'update_at'=>date('Y-m-d H:i:s',$time), 
-	        	'account_no'=>$accountNo,
-	        	'user_id'=>$this->userId,
-	        	'site_id'=>$this->siteId,
-	        	'is_temp'=>$this->isTemp,
-	        	'number'=>$this->number,
-	        	'order_status'=>2,
-	        	'order_type'=>$this->type,
-	    		'takeout_typeid'=>$this->takeoutTypeId,
-	        	'is_sync'=>DataSync::getInitSync(),
-	        );
-		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
-		
-		//外卖订单地址
-		if(in_array($this->type,array(2,3))){
-			$address = WxAddress::getDefault($this->userId,$this->user['dpid']);
-			if($address){
-				WxOrderAddress::addOrderAddress($orderId,$this->dpid,$address);
+			$insertOrderArr = array(
+					'lid'=>$orderId,
+					'dpid'=>$this->dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'account_no'=>$accountNo,
+					'user_id'=>$this->userId,
+					'site_id'=>$this->siteId,
+					'is_temp'=>$this->isTemp,
+					'number'=>$this->number,
+					'order_status'=>2,
+					'order_type'=>$this->type,
+					'takeout_typeid'=>$this->takeoutTypeId,
+					'is_sync'=>DataSync::getInitSync(),
+			);
+			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+			
+			//外卖订单地址
+			if(in_array($this->type,array(2,3))){
+				$address = WxAddress::getDefault($this->userId,$this->user['dpid']);
+				if($address){
+					WxOrderAddress::addOrderAddress($orderId,$this->dpid,$address);
+				}
 			}
 		}
 		//整单口味
@@ -287,18 +312,18 @@ class WxOrder
 					$realityPrice +=$ordertaste[2];
 				}
 				$se = new Sequence("order_taste");
-    			$orderTasteId = $se->nextval();
-		 		$orderTasteData = array(
-		 								'lid'=>$orderTasteId,
-										'dpid'=>$this->dpid,
-										'create_at'=>date('Y-m-d H:i:s',$time),
-			        					'update_at'=>date('Y-m-d H:i:s',$time),
-			        					'taste_id'=>$ordertaste[1],
-			        					'order_id'=>$orderId,
-			        					'is_order'=>1,
-			        					'is_sync'=>DataSync::getInitSync(),
-		 								);
-		 		$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
+				$orderTasteId = $se->nextval();
+				$orderTasteData = array(
+						'lid'=>$orderTasteId,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'taste_id'=>$ordertaste[1],
+						'order_id'=>$orderId,
+						'is_order'=>1,
+						'is_sync'=>DataSync::getInitSync(),
+				);
+				$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
 		}
 		$levelDiscount = 1;
@@ -335,7 +360,7 @@ class WxOrder
 						$itemPrice = $eachPrice + $ortherPrice;
 					}
 					$itemPrice = number_format($itemPrice,4);
-					
+						
 					$se = new Sequence("order_product");
 					$orderProductId = $se->nextval();
 					$orderProductData = array(
@@ -352,7 +377,7 @@ class WxOrder
 							'original_price'=>$detail['original_price']+$ortherPrice,
 							'amount'=>$cart['num']*$detail[2],
 							'zhiamount'=>$cart['num'],
-							'product_order_status'=>9,
+							'product_order_status'=>$orderProductStatus,
 							'taste_memo'=>$setName,
 							'is_sync'=>DataSync::getInitSync(),
 					);
@@ -400,124 +425,123 @@ class WxOrder
 						'price'=>$cart['price']+$ortherPrice,
 						'original_price'=>$cart['original_price']+$ortherPrice,
 						'amount'=>$cart['num'],
-						'product_order_status'=>9,
+						'product_order_status'=>$orderProductStatus,
 						'is_sync'=>DataSync::getInitSync(),
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-				
+		
 				$isSync = DataSync::getInitSync();
 				if($cart['store_number'] > 0){
 					$sql = 'update nb_product set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
 					Yii::app()->db->createCommand($sql)->execute();
 				}
 			}
-			
-			 
-			 //插入订单优惠
-			 if($cart['promotion_id'] > 0){
-			 	foreach($cart['promotion']['promotion_info'] as $promotion){
-			 		$se = new Sequence("order_product_promotion");
-	    			$orderproductpromotionId = $se->nextval();
-			 		$orderProductPromotionData =array(
-		 										'lid'=>$orderproductpromotionId,
-												'dpid'=>$this->dpid,
-												'create_at'=>date('Y-m-d H:i:s',$time),
-					        					'update_at'=>date('Y-m-d H:i:s',$time), 
-												'order_id'=>$orderId,
-												'order_product_id'=>$orderProductId,
-												'account_no'=>$accountNo,
-												'promotion_type'=>$cart['promotion']['promotion_type'],
-												'promotion_id'=>$promotion['poromtion_id'],
-												'promotion_money'=>$promotion['promotion_money'],
-												'delete_flag'=>0,
-												'is_sync'=>DataSync::getInitSync(),
-		 										);
-		 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
-			 	}
-			 	$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
-			 }else{
-			 	if($cart['is_member_discount']){
-			 		$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
-			 	}else{
-			 		$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
-			 	}
-			 }
-			 $realityPrice += ($cart['original_price']+$ortherPrice)*$cart['num'];
+				
+		
+			//插入订单优惠
+			if($cart['promotion_id'] > 0){
+				foreach($cart['promotion']['promotion_info'] as $promotion){
+					$se = new Sequence("order_product_promotion");
+					$orderproductpromotionId = $se->nextval();
+					$orderProductPromotionData =array(
+							'lid'=>$orderproductpromotionId,
+							'dpid'=>$this->dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'order_id'=>$orderId,
+							'order_product_id'=>$orderProductId,
+							'account_no'=>$accountNo,
+							'promotion_type'=>$cart['promotion']['promotion_type'],
+							'promotion_id'=>$promotion['poromtion_id'],
+							'promotion_money'=>$promotion['promotion_money'],
+							'delete_flag'=>0,
+							'is_sync'=>DataSync::getInitSync(),
+					);
+					Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);
+				}
+				$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
+			}else{
+				if($cart['is_member_discount']){
+					$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+				}else{
+					$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
+				}
+			}
+			$realityPrice += ($cart['original_price']+$ortherPrice)*$cart['num'];
 		}
-		 if(($this->type==1||$this->type==3) && $this->seatingFee > 0){
-			 	$se = new Sequence("order_product");
-		    	$orderProductId = $se->nextval();
-	         	$orderProductData = array(
-								'lid'=>$orderProductId,
-								'dpid'=>$this->dpid,
-								'create_at'=>date('Y-m-d H:i:s',$time),
-	        					'update_at'=>date('Y-m-d H:i:s',$time), 
-								'order_id'=>$orderId,
-								'set_id'=>0,
-								'product_id'=>0,
-								'product_name'=>'餐位费',
-								'product_pic'=>'',
-								'product_type'=>1,
-								'price'=>$this->seatingFee,
-								'original_price'=>$this->seatingFee,
-								'amount'=>$this->number,
-								'product_order_status'=>9,
-								'is_sync'=>DataSync::getInitSync(),
-								);
-				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-				$orderPrice +=  $this->seatingFee*$this->number;
-			 	$realityPrice += $this->seatingFee*$this->number;
-		  }elseif($this->type==2){
-		  		if($this->packingFee > 0){
-		  			$se = new Sequence("order_product");
-			    	$orderProductId = $se->nextval();
-		         	$orderProductData = array(
-									'lid'=>$orderProductId,
-									'dpid'=>$this->dpid,
-									'create_at'=>date('Y-m-d H:i:s',$time),
-		        					'update_at'=>date('Y-m-d H:i:s',$time), 
-									'order_id'=>$orderId,
-									'set_id'=>0,
-									'product_id'=>0,
-									'product_name'=>'包装费',
-									'product_pic'=>'',
-									'product_type'=>2,
-									'price'=>$this->packingFee,
-									'original_price'=>$this->packingFee,
-									'amount'=>$this->cartNumber,
-									'product_order_status'=>9,
-									'is_sync'=>DataSync::getInitSync(),
-									);
-					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-					$orderPrice +=  $this->packingFee*$this->cartNumber;
-				 	$realityPrice += $this->packingFee*$this->cartNumber;
-		  		}
-			 	if($this->type==2 && $this->freightFee > 0){
-			 		$se = new Sequence("order_product");
-			    	$orderProductId = $se->nextval();
-		         	$orderProductData = array(
-									'lid'=>$orderProductId,
-									'dpid'=>$this->dpid,
-									'create_at'=>date('Y-m-d H:i:s',$time),
-		        					'update_at'=>date('Y-m-d H:i:s',$time), 
-									'order_id'=>$orderId,
-									'set_id'=>0,
-									'product_id'=>0,
-									'product_name'=>'配送费',
-									'product_pic'=>'',
-									'product_type'=>3,
-									'price'=>$this->freightFee,
-									'original_price'=>$this->freightFee,
-									'amount'=>1,
-									'product_order_status'=>9,
-									'is_sync'=>DataSync::getInitSync(),
-									);
-					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-					$orderPrice +=  $this->freightFee;
-				 	$realityPrice += $this->freightFee;
-			 	}
-		  }
-			 
+		if(($this->type==3) && $this->seatingFee > 0){
+			$se = new Sequence("order_product");
+			$orderProductId = $se->nextval();
+			$orderProductData = array(
+					'lid'=>$orderProductId,
+					'dpid'=>$this->dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'order_id'=>$orderId,
+					'set_id'=>0,
+					'product_id'=>0,
+					'product_name'=>'餐位费',
+					'product_pic'=>'',
+					'product_type'=>1,
+					'price'=>$this->seatingFee,
+					'original_price'=>$this->seatingFee,
+					'amount'=>$this->number,
+					'product_order_status'=>9,
+					'is_sync'=>DataSync::getInitSync(),
+			);
+			Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+			$orderPrice +=  $this->seatingFee*$this->number;
+			$realityPrice += $this->seatingFee*$this->number;
+		}elseif($this->type==2){
+			if($this->packingFee > 0){
+				$se = new Sequence("order_product");
+				$orderProductId = $se->nextval();
+				$orderProductData = array(
+						'lid'=>$orderProductId,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'order_id'=>$orderId,
+						'set_id'=>0,
+						'product_id'=>0,
+						'product_name'=>'包装费',
+						'product_pic'=>'',
+						'product_type'=>2,
+						'price'=>$this->packingFee,
+						'original_price'=>$this->packingFee,
+						'amount'=>$this->cartNumber,
+						'product_order_status'=>9,
+						'is_sync'=>DataSync::getInitSync(),
+				);
+				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				$orderPrice +=  $this->packingFee*$this->cartNumber;
+				$realityPrice += $this->packingFee*$this->cartNumber;
+			}
+			if($this->type==2 && $this->freightFee > 0){
+				$se = new Sequence("order_product");
+				$orderProductId = $se->nextval();
+				$orderProductData = array(
+						'lid'=>$orderProductId,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'order_id'=>$orderId,
+						'set_id'=>0,
+						'product_id'=>0,
+						'product_name'=>'配送费',
+						'product_pic'=>'',
+						'product_type'=>3,
+						'price'=>$this->freightFee,
+						'original_price'=>$this->freightFee,
+						'amount'=>1,
+						'product_order_status'=>9,
+						'is_sync'=>DataSync::getInitSync(),
+				);
+				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				$orderPrice +=  $this->freightFee;
+				$realityPrice += $this->freightFee;
+			}
+		}
 		if($orderPrice==0){
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status=3,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
@@ -525,7 +549,6 @@ class WxOrder
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
-		
 		//清空购物车
 		$sql = 'delete from nb_cart where user_id='.$this->userId.' and dpid='.$this->dpid;
 		Yii::app()->db->createCommand($sql)->execute();
@@ -561,7 +584,7 @@ class WxOrder
 	 * 
 	 */
 	public static function getOrderBySiteId($siteId,$dpid){
-		$sql = 'select * from nb_order where site_id=:siteId and dpid=:dpid and order_status=1 and order_type=1';
+		$sql = 'select * from nb_order where site_id=:siteId and dpid=:dpid and order_status=2 and is_temp=0 and order_type=1';
 		$order = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':siteId',$siteId)
 				  ->bindValue(':dpid',$dpid)

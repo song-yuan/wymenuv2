@@ -48,9 +48,6 @@
 <div class="order-title">确认订单</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
-<!-- 
-	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'].'>';}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteOpen){echo '0';}else{if($siteNum){ echo (int)$siteNum['max_persons'];}else{echo '3';}}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
-	 -->
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌台:<?php echo $siteType['name'].$site['serial'];?></div>
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
@@ -253,7 +250,7 @@
 	    <!-- e可选择套餐 -->
 	</div>
 	<?php endforeach;?>
-	<?php if($this->type==1||$this->type==3):?>
+	<?php if($this->type==3):?>
 		<!-- begain餐位费 -->
 		<div class="section seatingFee" price="<?php echo $seatingFee;?>">
 			 <div class="prt">
@@ -350,7 +347,7 @@
 <?php else:?>
 <footer>
     <div class="ft-lt">
-        <p style="margin-left:10px;">合计 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+        <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
     	<a id="payorder" href="javascript:;">
@@ -536,86 +533,22 @@ $(document).ready(function(){
 	totalPackFee = totalPackFee.toFixed(2);
 	$('.packingFee').find('.num').html(totalPackNum);
 	$('.packingFee').find('.price').html(totalPackFee);
-	
+
 	var totalFee = parseFloat(total) + parseFloat(totalPackFee) + parseFloat(freightFee);
 	totalFee =  totalFee.toFixed(2);
 	$('#total').html(totalFee);
 	$('#total').attr('total',totalFee);
+	<?php endif;?>
 	
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'type'=>$this->type,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
-	<?php elseif($this->type==1):?>
-	var number = $('.number').val();
-	var seatFee = $('.seatingFee').attr('price');
-	var total = $('#total').html();
-	
-	$('.seatingFee').find('.num').html(number);
-	$('.seatingFee').find('.price').html(parseInt(number)*seatFee);
-	
-	var totalFee = parseFloat(total) + parseInt(number)*seatFee;
-	totalFee =  totalFee.toFixed(2);
-	
-	$('#total').html(totalFee);
-	$('#total').attr('total',totalFee);
-	<?php endif;?>
-
 	$('button').click(function(){
 		var typeId = $(this).attr('type_id');
 		$('button').addClass('bttn_grey');
 		$(this).removeClass('bttn_grey');
 		$(this).addClass('bttn_orange');
 		$('input[name="takeout_typeid"]').val(typeId);
-	});
-	$('.num-minus').click(function(){
-		var number = $('.number').val();
-		<?php if($this->type==1):?>
-		var seatFee = $('.seatingFee').attr('price');
-		<?php elseif($this->type==3):?>
-		var seatFee = $('.packingFee').attr('price');
-		<?php endif;?>
-		
-		if(parseInt(number) > 1 ){
-			$('.number').val(parseInt(number)-1);
-			<?php if($this->type==1):?>
-			$('.seatingFee').find('.num').html(parseInt(number)-1);
-			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
-			<?php endif;?>
-			if(parseFloat(seatFee)>0){
-				reset_total(-seatFee);
-			}
-		}else if(parseInt(number) == 1){
-			<?php if($siteOpen):?>
-				$('.number').val(parseInt(number)-1);
-				<?php if($this->type==1):?>
-				$('.seatingFee').find('.num').html(parseInt(number)-1);
-				$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
-				<?php endif;?>
-			
-				if(parseFloat(seatFee)>0){
-					reset_total(-seatFee);
-				}
-			<?php endif;?>
-		}
-	});
-	
-	//参数人数增减
-	$('.num-add').click(function(){
-		var number = $('.number').val();
-		<?php if($this->type==1):?>
-		var seatFee = $('.seatingFee').attr('price');
-		<?php elseif($this->type==3):?>
-		var seatFee = $('.packingFee').attr('price');
-		<?php endif;?>
-		$('.number').val(parseInt(number)+1);
-		<?php if($this->type==1):?>
-		$('.seatingFee').find('.num').html(parseInt(number)+1);
-		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
-		<?php endif;?>
-		
-		if(parseFloat(seatFee)>0){
-			reset_total(seatFee);
-		}
 	});
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
@@ -634,16 +567,6 @@ $(document).ready(function(){
         });
     }
    $('.taste').click(function(){
-// 	   var mask = $('#mask');
-//        var weuiActionsheet = $('#weui_actionsheet');
-//        weuiActionsheet.addClass('weui_actionsheet_toggle');
-//        mask.show().addClass('weui_fade_toggle').click(function () {
-//            hideActionSheet(weuiActionsheet, mask);
-//        });
-//        $('#actionsheet_cancel').click(function () {
-//            hideActionSheet(weuiActionsheet, mask);
-//        });
-//        weuiActionsheet.unbind('transitionend').unbind('webkitTransitionEnd');
   	var _this = $(this);
   	layer.open({
 	    type: 1,
@@ -853,32 +776,7 @@ $(document).ready(function(){
 		}
 	});
 	$('#payorder').click(function(){
-		<?php if($this->type==1):?>
-			var serial = $('.serial').val();
-			var number = $('.number').val();
-			var seatingFee = $('.seatingFee').find('.price').html();
-			if(serial && number){
-				if(serial=='>'){
-					layer.msg('请输入座位号!');
-					return;
-				}
-				if(isNaN(number)||(parseInt(number)!=number)||number < 0){
-					layer.msg('输入人数为大于0的整数!');
-					return;
-				}
-				$('#dialog .content').html('餐位数:'+number+'人;餐位费:'+seatingFee+'元');
-				$('#dialog').show();
-			}else{
-				if(!serial||serial=='>'){
-					layer.msg('请输入座位号!');
-					return;
-				}
-				if(!number){
-					layer.msg('请输入人数!');
-					return;
-				}
-			}
-		<?php elseif($this->type==2):?>
+		<?php if($this->type==2):?>
 			var address = $('input[name="address"]').val();
 			if(parseInt(address) < 0){
 				layer.msg('请添加收货地址!');
@@ -911,11 +809,13 @@ $(document).ready(function(){
 				return;
 			}
 			$('form').submit();
-		<?php else:?>
+		<?php elseif($this->type==6):?>
 			if($('input[name="yue"]').is(':checked')){
 				$('#dialog1').show();
 				return;
 			}
+			$('form').submit();
+		<?php else:?>
 			$('form').submit();
 		<?php endif;?>
 	});
