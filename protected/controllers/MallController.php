@@ -77,6 +77,17 @@ class MallController extends Controller
 	{
 		$user = $this->brandUser;
         $userId = $user['lid'];
+        $siteId = Yii::app()->session['qrcode-'.$userId];
+        if($this->type==1){
+        	$site = WxSite::get($siteId,$this->companyId);
+        	if($site){
+        		$siteId = $site['lid'];
+        		$siteNo = WxSite::getSiteNo($siteId,$this->companyId);
+        		if(in_array($siteNo['status'],array(1,2,3))){
+        			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
+        		}
+        	}
+        }
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
 		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'start'=>$start,'notices'=>$notices));
