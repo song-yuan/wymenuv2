@@ -296,7 +296,7 @@ class MallController extends Controller
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		
-		$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$user,'siteType'=>$siteType,'siteNo'=>$siteNo));
+		$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$user,'site'=>$site,'siteType'=>$siteType,'siteNo'=>$siteNo));
 	}
 	 /**
 	 * 
