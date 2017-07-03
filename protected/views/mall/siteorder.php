@@ -81,7 +81,7 @@
 <script>
 $(document).ready(function(){
 	$('#payorder').click(function(){
-		
+		location.herf = '<?php echo $this->createUrl('/mall/payorder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 	});
 });
 </script>
