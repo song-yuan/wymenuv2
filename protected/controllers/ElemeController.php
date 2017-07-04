@@ -248,7 +248,6 @@ class ElemeController extends Controller
 		$data = file_get_contents('php://input');
 		if($data){
 			$data = urldecode($data);
-			Helper::writeLog($data);
 			$obj = json_decode($data);
 			$type = $obj->type;
 			$message = $obj->message;

@@ -49,7 +49,6 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
-		Helper::writeLog("绑定：".$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
@@ -96,7 +95,6 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function Jcbd($data){
-		Helper::writeLog("解绑：".$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
