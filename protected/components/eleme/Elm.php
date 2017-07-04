@@ -16,7 +16,7 @@ class Elm
 			$key = ElmConfig::key;
 			$secret = ElmConfig::secret;
 			$callback_url = Yii::app()->createAbsoluteUrl('/eleme/elemetoken');
-			$token_url = "https://open-api-sandbox.shop.ele.me/token";
+			$token_url = ElmConfig::token;
 			$header = array(
 	            "Authorization: Basic " . base64_encode(urlencode($key) . ":" . urlencode($secret)),
 	            "Content-Type: application/x-www-form-urlencoded; charset=utf-8",
@@ -67,7 +67,7 @@ class Elm
 				$refresh_token = $res['refresh_token'];
 				$key = ElmConfig::key;
 				$secret = ElmConfig::secret;
-				$token_url = "https://open-api-sandbox.shop.ele.me/token";
+				$token_url = ElmConfig::token;
 				$header = array(
 		            "Authorization: Basic " . base64_encode(urlencode($key) . ":" . urlencode($secret)),
 		            "Content-Type: application/x-www-form-urlencoded; charset=utf-8",
@@ -256,7 +256,7 @@ class Elm
 		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr, JSON_UNESCAPED_UNICODE);
-		$url = 'http://menu.wymenu.com/wymenuv2/admin/dataAppSync/createOrder';
+		$url = Yii::app()->createAbsoluteUrl('/admin/dataAppSync/createOrder');;
 		$data = array('dpid'=>$me->openId,'data'=>$orderStr);
 		$result = MtUnit::postHttps($url, $data);
 		Helper::writeLog($result);
