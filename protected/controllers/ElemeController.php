@@ -246,20 +246,22 @@ class ElemeController extends Controller
 	}
 	public function actionElemeOrder(){
 		$data = file_get_contents('php://input');
-		$data = urldecode($data);
-		Helper::writeLog($data);
-		$obj = json_decode($data);
-		$type = $obj->type;
-		$message = $obj->message;
-		$me = json_decode($message);
-		if($type==10){
-			Elm::order($me);
-		}
-		if($type==12){
-			Elm::orderStatus($me);
-		}
-		if($type==18){
-			Elm::orderStatus($me);
+		if($data){
+			$data = urldecode($data);
+			Helper::writeLog($data);
+			$obj = json_decode($data);
+			$type = $obj->type;
+			$message = $obj->message;
+			$me = json_decode($message);
+			if($type==10){
+				Elm::order($me);
+			}
+			if($type==12){
+				Elm::orderStatus($me);
+			}
+			if($type==18){
+				Elm::orderStatus($me);
+			}
 		}
 		echo '{"message":"ok"}';
 	}
