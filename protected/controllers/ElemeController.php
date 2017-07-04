@@ -263,6 +263,6 @@ class ElemeController extends Controller
 				Elm::orderStatus($me);
 			}
 		}
-		echo '{"message":"ok"}';
+		echo '{"message":"ok"}';exit;
 	}
 }
