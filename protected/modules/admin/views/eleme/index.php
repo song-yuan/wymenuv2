@@ -72,7 +72,7 @@ span.tab{
 							<div class="ku-item-info">店铺授权</div>
 						</div>
 					</a>
-					<a href="http://menu.wymenu.com/wytest/wymenuv2/eleme/shopid?dpid=<?php echo $companyId;?>">
+					<a href="<?php echo $this->createUrl('/eleme/shopid',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item-info">店铺对应</div>
 						</div>
