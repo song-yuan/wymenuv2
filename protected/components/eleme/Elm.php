@@ -256,11 +256,8 @@ class Elm
 		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr);
-		Helper::writeLog($orderStr);
 		$data = array('dpid'=>$me->openId,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
-// 		$result = MtUnit::postHttps($url, $data);
-		Helper::writeLog($result);
 		$order = self::confirmOrder($dpid,$orderId);
 	}
 	public static function confirmOrder($dpid,$orderId){
