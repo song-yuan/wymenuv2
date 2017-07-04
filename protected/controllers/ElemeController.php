@@ -54,7 +54,7 @@ class ElemeController extends Controller
 		}
 	}
 	public function actionShopId(){
-		$dpid = $_GET['dpid'];
+		$dpid = $_GET['companyId'];
 		$result = Elm::elemeUpdateId($dpid);
 		echo $result;
         
