@@ -57,6 +57,12 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
+							<input type="text" class="form-control" name="pname" id="pname">
+						</div>
+						<div class="btn-group">
+							<input type="button" value="查询" class="btn blue" id="pnamebtn">
+						</div>
+						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
@@ -193,6 +199,11 @@
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
+		$(document).keydown(function(event){
+		  switch(event.keyCode){
+		     case 13:return false; 
+		     }
+		});
 		$('#product-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
 				alert("<?php echo yii::t('app','请选择要删除的项');?>");
@@ -201,6 +212,25 @@
 			return true;
 		});
 		
+		$('#pnamebtn').click(function(event) {
+			var pname = $('#pname').val();
+			// alert(pname);
+			if (pname) {
+				location.href='<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId))?>/pname/'+pname;
+			}
+		});
+		document.onkeydown=function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+
+            if(e && e.keyCode==13){ // enter 键
+                 //要做的事情
+			var pname = $('#pname').val();
+			// alert(pname);
+			if (pname) {
+				location.href='<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId))?>/pname/'+pname;
+			}
+            }
+        };
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('product/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;

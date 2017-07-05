@@ -31,11 +31,16 @@ class ProductController extends BackendController
 			
 			//var_dump($comtype);exit;
 			$categoryId = Yii::app()->request->getParam('cid',0);
+			$pname = Yii::app()->request->getParam('pname',null);
+
 			$criteria = new CDbCriteria;
 			$criteria->with = array('company','category');
 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
 			if($categoryId){
 				$criteria->condition.=' and t.category_id = '.$categoryId;
+			}
+			if($pname){
+				$criteria->condition.=' and t.product_name like "%'.$pname.'%"';
 			}
 			$criteria->order = 't.sort asc,t.lid asc';
 			$pages = new CPagination(Product::model()->count($criteria));
