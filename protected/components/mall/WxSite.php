@@ -17,12 +17,30 @@ class WxSite
 				  ->queryRow();
 	    return $site;
 	}
+	/**
+	 * 
+	 *  通过siteId 获取餐桌
+	 * 
+	 */
 	public static function getSiteNo($siteId,$dpid){
 		$sql = 'select * from nb_site_no where site_id=:siteId and dpid=:dpid and is_temp=0 and delete_flag=0 order by lid desc limit 1';
 		$siteNo = Yii::app()->db->createCommand($sql)
 				->bindValue(':siteId',$siteId)
 				->bindValue(':dpid',$dpid)
 				->queryRow();
+		return $siteNo;
+	}
+	/**
+	 *
+	 *  通过lId 获取餐桌
+	 *
+	 */
+	public static function getSiteNoByLid($siteNoId,$dpid){
+		$sql = 'select * from nb_site_no where lid=:siteNoId and dpid=:dpid and is_temp=0 and delete_flag=0 order by lid desc limit 1';
+		$siteNo = Yii::app()->db->createCommand($sql)
+			->bindValue(':siteNoId',$siteId)
+			->bindValue(':dpid',$dpid)
+			->queryRow();
 		return $siteNo;
 	}
 	/**

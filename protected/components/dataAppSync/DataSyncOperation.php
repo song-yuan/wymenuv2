@@ -1110,6 +1110,7 @@ class DataSyncOperation {
 							'paytype' => $pay['paytype'],
 							'payment_method_id' => $pay['payment_method_id'],
 							'paytype_id' => $pay['paytype_id'],
+							'remark' => $cardId,
 							'is_sync' => 0
 					);
 					Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );

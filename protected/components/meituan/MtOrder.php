@@ -32,10 +32,9 @@ class MtOrder
 		}
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
-		$orderStr = json_encode($orderArr, JSON_UNESCAPED_UNICODE);
-		$url = 'http://menu.wymenu.com/wymenuv2/admin/dataAppSync/createOrder';
+		$orderStr = json_encode($orderArr);
 		$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
-		$result = MtUnit::postHttps($url, $data);
+		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
 			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId." and delete_flag=0";
@@ -50,7 +49,6 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
-		Helper::writeLog("绑定：".$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
@@ -97,7 +95,6 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function Jcbd($data){
-		Helper::writeLog("解绑：".$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
@@ -106,5 +103,16 @@ class MtOrder
 			return '{"data":"OK"}';
 		}
 		return '{"data":"error"}';
+	}
+	public static function orderDistr($dpid,$orderId,$courierName,$courierPhone){
+		$sql = "select appAuthToken from nb_meituan_token where dpid=$dpid and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$url = "http://api.open.cater.meituan.com/waimai/order/delivering";
+		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$orderId );
+		$sign=MtUnit::sign($array);
+		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$orderId&courierName=$courierName&courierPhone=$courierPhone";
+		$result = MtUnit::postHttps($url, $data);
+		return $result;
+	
 	}
 }

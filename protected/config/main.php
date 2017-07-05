@@ -28,6 +28,7 @@ return array(
 		'application.components.wxcard.*',
 		'application.components.shouqianba.*',
 		'application.components.meituan.*',
+		'application.components.eleme.*',
 		'application.components.alipay.*',
 		'application.components.alipay.f2fpay.*',
 		'application.components.alipay.f2fpay.aop.*',

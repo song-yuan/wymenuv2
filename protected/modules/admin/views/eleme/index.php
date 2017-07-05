@@ -32,18 +32,6 @@ span.tab{
 		.ku-grey{
 			background-color:rgb(68,111,120);
 		}
-		.ku-item.mtwm{
-			background-image:url(../../../../../../img/waiter/icon-mtwm.png);
-			background-position: 0px 0px;
-            background-repeat: no-repeat;
-            background-size: 100px;
-		}
-		.ku-item.eleme{
-			background-image:url(../../../../../../img/waiter/icon-eleme.png);
-			background-position: 0px 20px;
-            background-repeat: no-repeat;
-            background-size: 100px;
-		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -79,27 +67,27 @@ span.tab{
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
-                 <a href="<?php echo $this->createUrl('waimai/index',array('companyId'=>$this->companyId));?>">
+                 <a href="https://open-api-sandbox.shop.ele.me/authorize?response_type=code&client_id=agblKhjXsr&redirect_uri=http%3a%2f%2fmenu.wymenu.com%2fwytest%2fwymenuv2%2feleme%2felemetoken&state=<?php echo $companyId?>&scope=all">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple mtwm"></div>
-							<div class="ku-item-info">美团外卖</div>
+							<div class="ku-item-info">店铺授权</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('eleme/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('/eleme/shopid',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple eleme"></div>
-							<div class="ku-item-info">饿了么外卖</div>
+							<div class="ku-item-info">店铺对应</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('eleme/cpfl',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item-info">菜品分类</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('eleme/cpdy',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item-info">菜品对应</div>
 						</div>
 					</a>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- END PAGE CONTENT-->
-	<script>
-        $(document).ready(function() {
-        	 $('.relation').click(function(){
-                 $('.modal').modal();
-            });
-        });
-	</script>

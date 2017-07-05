@@ -387,11 +387,12 @@ class MallController extends Controller
 		$freightFee = 0;
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
-		$site = WxSite::get($order['site_id'],$this->companyId);
-		
-		if($site){
+		if($order['order_type']==1){
+			$siteNo = WxSite::getSiteNoByLid($order['site_id'],$this->companyId);
+			$site = WxSite::get($siteNo['site_id'], $this->companyId);
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		}
+		
 		if(in_array($order['order_type'],array(2,3))){
 			$address = WxAddress::getDefault($userId,$this->companyId);
 		}
