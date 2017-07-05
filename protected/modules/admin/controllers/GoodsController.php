@@ -55,6 +55,7 @@ class GoodsController extends BackendController
 		$model = new Goods();
 		//var_dump($model);exit;
 		$istempp = Yii::app()->request->getParam('istempp',0);
+		$goodmatecode = '0';
 		$model->dpid = $this->companyId ;
 		
 		$comps = Yii::app()->db->createCommand('select comp_dpid from nb_company where delete_flag = 0 and dpid ='.$this->companyId)->queryRow();
@@ -88,7 +89,8 @@ class GoodsController extends BackendController
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Goods');
-			//var_dump($model);exit;
+			$goodmatid = Yii::app()->request->getParam('Goods_material_id','0');
+			//var_dump($goodmatid);exit;
 			$cateID = $model->category_id;
 			if(!empty($cateID)){
 				$db = Yii::app()->db;
@@ -126,6 +128,25 @@ class GoodsController extends BackendController
 				$py=new Pinyin();
 				$model->simple_code = $py->py($model->goods_name);
 				//var_dump($model);exit;
+				if($goodmatid>0){
+					$goodmats = Yii::app()->db->createCommand('select * from nb_product_material where lid ='.$goodmatid)->queryRow();
+					$se=new Sequence("goods_material");
+					$lid = $se->nextval();
+					$data = array(
+							'lid'=>$lid,
+							'dpid'=>$this->companyId,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'goods_id'=>$model->lid,
+							'goods_code'=>$model->goods_code,
+							'material_code'=>$goodmats['mphs_code'],
+							'is_selected'=>'',
+							'delete_flag'=>0,
+							'is_sync'=>'11111',
+					);
+					Yii::app()->db->createCommand()->insert('nb_goods_material',$data);
+						
+				}
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 					$this->redirect(array('goods/index' , 'companyId' => $this->companyId ));
@@ -143,6 +164,7 @@ class GoodsController extends BackendController
 			'compid' => $compid,
 			//'categories' => $categories,
 			'istempp' => $istempp,
+			'goodmatecode' => $goodmatecode,
 		));
 	}
 	
@@ -182,17 +204,51 @@ class GoodsController extends BackendController
 		$islock = Yii::app()->request->getParam('islock');
 		//var_dump($istempp);exit;
 		$model = Goods::model()->find('lid=:goodsId and dpid=:dpid' , array(':goodsId' => $id,':dpid'=>  $this->companyId));
-		//var_dump($model);exit;
+		$goods_mate = Yii::app()->db->createCommand('select * from nb_goods_material where delete_flag =0 and dpid ='.$this->companyId.' and goods_id ='.$model->lid)->queryRow();
+		//var_dump($goods_mate);exit;
+		if(!empty($goods_mate)){
+			$goodmatecode = $goods_mate['material_code'];
+		}else{
+			$goodmatecode = '0';
+		}
 		$model->dpid = $this->companyId;
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(Yii::app()->request->isPostRequest) {
+		if(Yii::app()->request->isPostRequest){
 			$model->attributes = Yii::app()->request->getPost('Goods');
+			$goodmatid = Yii::app()->request->getParam('Goods_material_id','0');
+			//var_dump($goodmatid);exit;
 			if($model->category_id){
 				$categoryId = MaterialCategory::model()->find('lid=:lid and delete_flag=0' , array(':lid'=>$model->category_id));
 				$model->cate_code = $categoryId['mchs_code'];
 			}
-                $py=new Pinyin();
-                $model->simple_code = $py->py($model->goods_name);
+			if($goodmatid >0){
+				$mats = Yii::app()->db->createCommand('select * from nb_product_material where lid ='.$goodmatid)->queryRow();
+				$goodmats = Yii::app()->db->createCommand('select * from nb_goods_material where delete_flag = 0 and goods_id ='.$model->lid)->queryRow();
+				if((!empty($mats)) && (empty($goodmats))){
+					$se=new Sequence("goods_material");
+					$lid = $se->nextval();
+					$data = array(
+							'lid'=>$lid,
+							'dpid'=>$this->companyId,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'goods_id'=>$model->lid,
+							'goods_code'=>$model->goods_code,
+							'material_code'=>$mats['mphs_code'],
+							'is_selected'=>'',
+							'delete_flag'=>0,
+							'is_sync'=>'11111',
+					);
+					Yii::app()->db->createCommand()->insert('nb_goods_material',$data);
+				
+				}elseif ((!empty($mats)) && (!empty($goodmats))){
+					Yii::app()->db->createCommand('update nb_goods_material set update_at ="'.date('Y-m-d H:i:s',time()).'",material_code ="'.$mats['mphs_code'].'" where delete_flag = 0 and goods_id ='.$model->lid.' and dpid ='.$this->companyId)->execute();
+				}
+			}elseif($goodmatid == 0 || $goodmatid =='' || $goodmatid ==null){
+				$result = Yii::app()->db->createCommand('update nb_goods_material set delete_flag = 1,update_at ="'.date('Y-m-d H:i:s',time()).'" where goods_id ='.$model->lid.' and dpid ='.$this->companyId)->execute();
+			}
+            $py=new Pinyin();
+            $model->simple_code = $py->py($model->goods_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
 			//$model->is_lock = '0';
 			//var_dump($model);exit;
@@ -211,6 +267,7 @@ class GoodsController extends BackendController
 				'istempp' => $istempp,
 				'papage' => $papage,
 				'islock' => $islock,
+				'goodmatecode' => $goodmatecode,
 		));
 	}
 	public function actionDelete(){
@@ -286,6 +343,23 @@ class GoodsController extends BackendController
 			$tmp['id'] = $c['lid'];
 			$treeDataSource['data'][] = $tmp;
 		}
+		Yii::app()->end(json_encode($treeDataSource));
+	}
+	public function actionGetMaterials(){
+		$pid = Yii::app()->request->getParam('pid',0);
+		$compid = Yii::app()->request->getParam('companyId',$this->companyId);
+		if(!$pid){
+			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
+		}
+		$treeDataSource = array('data'=>array(),'delay'=>400);
+		//$categories = Helper::getCategory($compid,$pid);
+		$categories = Yii::app()->db->createCommand('select * from nb_product_material where delete_flag =0 and dpid ='.$compid.' and category_id ='.$pid)->queryAll();
+		foreach($categories as $c){
+			$tmp['name'] = $c['material_name'];
+			$tmp['id'] = $c['lid'];
+			$treeDataSource['data'][] = $tmp;
+		}
+		//var_dump($categories);exit;
 		Yii::app()->end(json_encode($treeDataSource));
 	}
 	private function getCategories(){
