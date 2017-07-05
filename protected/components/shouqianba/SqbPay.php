@@ -457,6 +457,7 @@ class SqbPay{
     	 
     	$dpid = $data['dpid'];
     	$client_sn = $data['client_sn'];
+    	
     	/*必须在商户系统内唯一；且长度不超过32字节*/
     	$total_amount = ''.$data['total_amount']*100;
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
@@ -514,6 +515,7 @@ class SqbPay{
     		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
     		$paramsStr = $paramsStr."&sign=".$sign;
     		//var_dump($paramsStr);
+    		Helper::writeLog($client_sn.'&&'.$terminal_sn);
     		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
     		//exit;
     	}else{

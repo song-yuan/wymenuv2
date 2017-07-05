@@ -44,7 +44,7 @@ class SqbpayController extends Controller
 		$sign = Yii::app()->request->getParam('sign');
 		$reflect = Yii::app()->request->getParam('reflect');
 		$client_sn = Yii::app()->request->getParam('client_sn');
-		//Helper::writeLog('获取参数：'.$is_success.';'.$reflect);
+		Helper::writeLog('获取参数：is:'.$is_success.';reflect:'.$reflect.';client_sn:'.$client_sn);
 		
 		$reflect = json_decode($reflect);
 		//var_dump($reflect);exit;
@@ -54,7 +54,7 @@ class SqbpayController extends Controller
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
-			//Helper::writeLog('获取参数：'.$error_code.';'.$error_message);
+			Helper::writeLog('获取参数：'.$error_code.';'.$error_message);
 			//exit;
 			$this->redirect(array('/user/orderinfo',
 					'orderId'=>$client_sn,
