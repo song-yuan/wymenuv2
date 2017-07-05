@@ -31,12 +31,23 @@ class MeituanController extends Controller
 	}
 	public function actionXintiao(){
 		echo '{"data":"OK"}';
+		exit();
 	}
 	public function actionShop(){
 		$data = file_get_contents('php://input');
 		$remt = MtOrder::Jcbd($data);
 		echo $remt;
 		exit();
+	}
+	public function actionDistribution(){
+		//配送员上传
+		$dpid = $_POST['companyId'];
+		$orderId = $_POST['orderid'];
+		$courierName = $_POST['name'];
+		$courierPhone = $_POST['phone'];
+		$result = MtOrder::orderDistr($dpid,$orderId,$courierName,$courierPhone); 
+		echo $result;
+
 	}
 	public function actionCompleteOrder(){
 		$data = file_get_contents('php://input');

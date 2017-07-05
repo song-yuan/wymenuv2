@@ -104,4 +104,15 @@ class MtOrder
 		}
 		return '{"data":"error"}';
 	}
+	public static function orderDistr($dpid,$orderId,$courierName,$courierPhone){
+		$sql = "select appAuthToken from nb_meituan_token where dpid=$dpid and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$url = "http://api.open.cater.meituan.com/waimai/order/delivering";
+		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$orderId );
+		$sign=MtUnit::sign($array);
+		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$orderId&courierName=$courierName&courierPhone=$courierPhone";
+		$result = MtUnit::postHttps($url, $data);
+		return $result;
+	
+	}
 }
