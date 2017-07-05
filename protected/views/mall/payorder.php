@@ -69,6 +69,7 @@
 				'notify_url'=>$notifyUrl,
 				'return_url'=>$returnUrl,
 		);
+		Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
 	}else{
 		$jsApiParameters = '';
