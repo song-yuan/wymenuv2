@@ -26,32 +26,33 @@ class ProductController extends BackendController
 	}
 	public function actionIndex(){
 		
-		$company = Company::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$this->companyId));
-		$comtype = $company->type;
+			$company = Company::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$this->companyId));
+			$comtype = $company->type;
+			
+			//var_dump($comtype);exit;
+			$categoryId = Yii::app()->request->getParam('cid',0);
+			$criteria = new CDbCriteria;
+			$criteria->with = array('company','category');
+			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
+			if($categoryId){
+				$criteria->condition.=' and t.category_id = '.$categoryId;
+			}
+			$criteria->order = 't.sort asc,t.lid asc';
+			$pages = new CPagination(Product::model()->count($criteria));
+			//	    $pages->setPageSize(1);
+			$pages->applyLimit($criteria);
+			$models = Product::model()->findAll($criteria);
+			//var_dump($models);exit;
+			$categories = $this->getCategories();
+	//      var_dump($categories);exit;
+			$this->render('index',array(
+					'models'=>$models,
+					'pages'=>$pages,
+					'categories'=>$categories,
+					'categoryId'=>$categoryId,
+					'comtype'=>$comtype,
+			));
 		
-		//var_dump($comtype);exit;
-		$categoryId = Yii::app()->request->getParam('cid',0);
-		$criteria = new CDbCriteria;
-		$criteria->with = array('company','category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
-		if($categoryId){
-			$criteria->condition.=' and t.category_id = '.$categoryId;
-		}
-		$criteria->order = 't.sort asc,t.lid asc';
-		$pages = new CPagination(Product::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = Product::model()->findAll($criteria);
-		//var_dump($models);exit;
-		$categories = $this->getCategories();
-//                var_dump($categories);exit;
-		$this->render('index',array(
-				'models'=>$models,
-				'pages'=>$pages,
-				'categories'=>$categories,
-				'categoryId'=>$categoryId,
-				'comtype'=>$comtype,
-		));
 	}
 
 	public function actionCreate(){
