@@ -25,6 +25,7 @@
  * @property integer $order_number
  * @property integer $favourite_number
  * @property string $is_show
+ * @property string $is_show_wx
  * @property string $is_lock
  * @property string $delete_flag
  * @property string $is_sync
@@ -54,11 +55,11 @@ class Goods extends CActiveRecord
 			array('goods_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
-			array('is_member_discount, is_discount, is_show, is_lock, delete_flag', 'length', 'max'=>2),
+			array('is_member_discount, is_discount, is_show, is_show_wx, is_lock, delete_flag', 'length', 'max'=>2),
 			array('member_price, description, main_picture, goods_code, cate_code, update_at, create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, category_id, cate_code, goods_code, goods_name, simple_code, main_picture, description, sort, is_member_discount, is_discount, original_price, member_price, goods_unit, store_number, order_number, favourite_number, is_show, is_lock, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, category_id, cate_code, goods_code, goods_name, simple_code, main_picture, description, sort, is_member_discount, is_discount, original_price, member_price, goods_unit, store_number, order_number, favourite_number, is_show, is_show_wx, is_lock, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -100,6 +101,7 @@ class Goods extends CActiveRecord
 			'order_number' => '总下单次数',
 			'favourite_number' => '总点赞次数',
 			'is_show' => '是否显示',
+			'is_show_wx' => '是否显示在微信端',
 			'is_lock' => '控制价格是否锁定，0不锁定，价格可以修改；1锁定，价格不能修改。',
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => '同步标志',
@@ -145,6 +147,7 @@ class Goods extends CActiveRecord
 		$criteria->compare('order_number',$this->order_number);
 		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('is_show',$this->is_show,true);
+		$criteria->compare('is_show_wx',$this->is_show_wx,true);
 		$criteria->compare('is_lock',$this->is_lock,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
