@@ -114,6 +114,9 @@
                                 <th><?php echo yii::t('app','总充值金额');?></th>                                                                
                                 <th><?php echo yii::t('app','总返现');?></th>
                                 <th><?php echo yii::t('app','总消费')?></th>
+                                <?php if(Yii::app()->user->role <5):?>
+                                <th><?php echo yii::t('app','余额')?></th>
+                                <?php endif;?>
                                 <th><?php echo yii::t('app','备注');?></th>
                             </tr>
                         </thead>
@@ -147,6 +150,9 @@
                                             <td><?php echo $model['recharge_all'];?></td>
                                             <td><?php echo $model['cashback_all'];?></td>
                                             <td><?php echo $model['pay_all']?><a class="btn default btn-xs blue consumelist" title="消费详情" data-id="<?php echo $model['card_id'];?>" dpid="<?php echo $model['dpid'];?>" membername="<?php echo $model['user_name'];?>"  href="javascript:;" style="float: right;"><i class="fa fa-edit"></i></a></td>
+                                            <?php if(Yii::app()->user->role):?>
+                                            <td><?php echo $this->getMoney($model['card_id']);?></td>
+                                            <?php endif;?>
                                             <td><a class="btn default btn-xs blue branduserdetail" title="充值详情" href="javascript:;"
                                                 dpid="<?php echo $model['dpid'];?>" membername="<?php echo $model['user_name'];?>" cardlid="<?php echo $model['brand_user_lid'];?>"
                                                 cardid="<?php echo $model['card_id'];?>"><i class="fa fa-search"></i>充值详情</a>

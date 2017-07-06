@@ -214,6 +214,12 @@
 			background-size: 60% ;
     		background-repeat: no-repeat;
 		}
+		.ku-item.lbpt{
+			background-image:url(../../../../../../img/waiter/label_print.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -410,8 +416,14 @@
 							<div class="ku-item-info">厨打设置</div>
 						</div>
 					</a>
-                                        <?php if(Yii::app()->user->role <= 7):?>
-                                        <a href="<?php echo $this->createUrl('CopyPrinter/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('productLabel/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right hov">
+							<div class="ku-item ku-purple lbpt"></div>
+							<div class="ku-item-info">标签打印</div>
+						</div>
+					</a>
+                    <?php if(Yii::app()->user->role <= 7):?>
+                    <a href="<?php echo $this->createUrl('CopyPrinter/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dyjsz"></div>
 							<div class="ku-item-info">一键下发</div>

@@ -152,7 +152,7 @@ $this->addRow ($v);
 public function generateXML ($filename = 'excel-export')
 {
 // correct/validate filename
-$filename = preg_replace('/[^aA-zZ0-9\_\-]/', '', $filename);
+//$filename = preg_replace('/[^aA-zZ0-9\_\-]/', '', $filename);
 
 // deliver header (as recommended in php manual)
 header("Content-Type: application/vnd.ms-excel; charset=" . $this->sEncoding);

@@ -20,6 +20,15 @@
 										</div>
 										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 									</div>
+								
+									<div class="form-group  ">
+										<lable style="font-size: 14px;" class="col-md-3 control-label"><?php echo '对应的原料';?></lable>
+										<div id="category_container" class="col-md-4 mater_sel">
+										<?php $this->widget('application.modules.admin.components.widgets.MaterialSelected',array('categoryId'=>$model->category_id,'companyId'=>$compid, 'goodmatecode'=>$goodmatecode)); ?>
+										<span style="color: pink;">可以不选择</span>
+										</div>
+										<input class="form-control" name="Goods_material_id" id="Goods_material_id" type="hidden" value="-1"></input>
+									</div>
 								<?php if($istempp){ echo '<script>
 															$(".category_selecter").each(function(){
 																$(this).attr("disabled",true)
@@ -107,7 +116,13 @@
 											<?php echo $form->error($model, 'is_show' )?>
 										</div>
 									</div>
-									
+									<div class="form-group">
+										<?php echo $form->label($model, 'is_show_wx',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_show_wx', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx')));?>
+											<?php echo $form->error($model, 'is_show_wx' )?>
+										</div>
+									</div>
 									<div class="form-group" <?php if($model->hasErrors('goods_unit')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'goods_unit',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -145,6 +160,7 @@
 							)); ?>
 							
 	<script>
+	$(document).ready(function(){
 	  $('input[name="file"]').change(function(){
 		  	$('form').ajaxSubmit(function(msg){
 				$('#Goods_main_picture').val(msg);
@@ -168,8 +184,8 @@
 	   			dataType:'json',
 	   			success:function(result){
 	   				if(result.data.length){
-	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
-	   					'<option value="">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
+	   					var str = '<select class="form-control category_selecter material_select" tabindex="-1" name="category_id_selecter" <?php if ($a) echo 'disabled = true';else echo '';?>>'+
+	   					'<option value="0">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
 	   					$.each(result.data,function(index,value){
 	   						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
 	   					});
@@ -183,14 +199,50 @@
 	   				}
 	   			}
 	   		});
-	   		
 	   });
-		function a(){
-			alert('wodaole');
-			document.getElementByName("category_id_selecter").setAttribute("disabled","true");
-			}
 		function swfupload_callback(name,path,oldname)  {
 			$("#Goods_main_picture").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
+
+		$('#category_container').on('change','.material_select',function (){
+	   		var id = $('.material_select').val();
+	   		layer.msg(id);
+	   		var $parent = $('.mater_sel');
+            var sid ='0000000000';
+                      
+	   		$('.mater_sel').empty();
+	   		$.ajax({
+	   			url:'<?php echo $this->createUrl('goods/getMaterials',array('companyId'=>$compid));?>/pid/'+id,
+	   			type:'GET',
+	   			dataType:'json',
+	   			success:function(result){
+	   				if(result.data.length){
+	   					var str = '<select class="form-control materials" tabindex="-1" name="category_id_selecter" id="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
+	   					'<option value="0">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
+	   					$.each(result.data,function(index,value){
+	   						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+	   					});
+	   					str = str + '</select>';
+	   					$parent.append(str);
+	   					$parent.find('span').remove();
+	   				}else{
+		   				layer.msg('ceshi');
+		   				var str = '<select class="form-control materials" tabindex="-1" name="category_id_selecter" id="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
+	   					'<option value="0">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
+	   					str = str + '</select>';
+	   					$parent.append(str);
+	   				}
+	   			}
+	   		});
+	   		
+	   });
+
+		   $('.mater_sel').on('change','.materials',function(){
+		   		var id = $(this).val();
+		   		layer.msg(id);
+		   		$('#Goods_material_id').val(id);
+		   });
+
+	});
 	</script>

@@ -475,6 +475,22 @@ class StatementmemberController extends BackendController
 		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		return $retreat['retreat_allprice'];
 	}	
+	/**
+	 * 获取会员余额
+	 * */
+	public function getMoney($id){
+		$db = Yii::app()->db;
+		$sql2 = 'select remain_money,remain_back_money from nb_brand_user where card_id ='.$id;
+	
+		//var_dump($sql2);exit;
+		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
+		if(!empty($retreat)){
+			$msg = $retreat['remain_money'].'&'.$retreat['remain_back_money'];
+		}else{
+			$msg = 0;
+		}
+		return $msg;
+	}
 	
 	//办卡记录excel
 	public function actionCardmemberExport(){
