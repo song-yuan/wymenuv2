@@ -100,7 +100,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php ?>" name="ids[]" /></td>
-								<td style="width:10%"><img src="<?php echo $model['logo'];?>" alt=""></td>
+								<td ><img style="width: 100px;" src="<?php echo $model['logo'];?>" alt=""></td>
 								<td ><?php echo $model['company_name'];?></td>
 								<td ><?php echo $model['contact_name'];?></td>
 								<td ><?php echo $model['mobile'];?></td>
