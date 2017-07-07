@@ -355,9 +355,10 @@ class DataSyncOperation {
 	 */
 	public static function getNewDataByTime($data) {
 		$dpid = $data['dpid'];
+		$code = isset($data['code'])?$data['code']:'';
 		$syncTime = $data['sync_at'];
 		$results = array();
-		$diffTable = array('nb_pad_setting','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_retreat','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_shift_detail','nb_sync_failure');
+		$diffTable = array('nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_retreat','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_shift_detail','nb_sync_failure');
 		$dataBase = new DataSyncTables ();
 		$allTables = $dataBase->getAllTableName ();
 		$allTable = array_diff($allTables, $diffTable);
@@ -371,6 +372,9 @@ class DataSyncOperation {
 				$dpid = WxCompany::getCompanyDpid($dpid);
 			}
 			$sql = 'select * from '.$tableName.' where dpid in ('.$dpid.') and (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and is_sync<>0';
+			if($tableName=='nb_pad_setting'){
+				$sql .= ' and pad_code="'.$code.'"';
+			}
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
 				array_push($results,$table);

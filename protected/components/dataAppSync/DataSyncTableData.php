@@ -9,6 +9,7 @@ class DataSyncTableData
 {
     public function __construct($data){
     	$this->dpid = $data['dpid'];
+    	$this->code = isset($data['code'])?$data['code']:'';
     	$this->tableName = $data['tn'];
     	$this->cp = isset($data['cp'])?$data['cp']:0;
     	$this->begain = isset($data['begain'])?$data['begain']:'';
@@ -21,6 +22,9 @@ class DataSyncTableData
     	}
     	$dataArr = array('page'=>0,'currentpage'=>$this->cp+1, 'item'=>$item, 'msg'=>array());
     	$sql = 'select count(*) from ' . $this->tableName . ' where dpid in ('.$this->dpid.')';
+    	if($this->tableName=='nb_pad_setting'){
+    		$sql .= ' and pad_code="'.$this->code.'"';
+    	}
     	if($this->begain!=''){
     		$begain = date('Y-m-d H:i:s',strtotime($this->begain));
     		$sql .= ' and create_at >= "'.$begain.'"';
