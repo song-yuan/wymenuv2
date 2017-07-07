@@ -9,7 +9,7 @@ class DataSyncTableData
 {
     public function __construct($data){
     	$this->dpid = $data['dpid'];
-    	$this->code = $data['code'];
+    	$this->code = isset($data['code'])?$data['code']:'';
     	$this->tableName = $data['tn'];
     	$this->cp = isset($data['cp'])?$data['cp']:0;
     	$this->begain = isset($data['begain'])?$data['begain']:'';
