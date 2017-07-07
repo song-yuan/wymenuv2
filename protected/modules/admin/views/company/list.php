@@ -128,6 +128,11 @@
 			background-position: 15px 15px;
     		background-repeat: no-repeat;
 		}
+		.ku-purple.area{
+			background-image:url(../../../../img/waiter/icon_area.jpg);
+			background-position: 0px 0px;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -286,6 +291,13 @@
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple cpfl"></div>
 							<div class="ku-item-info">价格分组</div>
+						</div>
+					</a>
+					
+					<a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right hov" >
+							<div class="ku-item ku-purple area"></div>
+							<div class="ku-item-info">地區分组</div>
 						</div>
 					</a>
 					<?php endif; ?>
