@@ -731,6 +731,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$rand = rand(100,999);
 		$out_refund_no = $now.'-'.$dpid.'-'.$rand;
+		$paytype = isset($data['paytype'])?$data['paytype']:1;
 		if(isset($data['admin_id']) && $data['admin_id'] != "" ){
 			$admin_id = $data['admin_id'];
 			$admin = WxAdminUser::get($dpid, $admin_id);
@@ -748,11 +749,13 @@ class DataSyncOperation {
 			$total_fee = $data['total_fee'];
 			$refund_fee = $data['refund_fee'];
 			
-			$microPay = MicroPayModel::get($dpid, $out_trade_no, 0);
-			if(empty($microPay)||empty($microPay['transaction_id'])){
-				// 不存在支付记录 则直接退款成功
-				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
-				return json_encode($msg);
+			if($paytype==1){
+				$microPay = MicroPayModel::get($dpid, $out_trade_no, 0);
+				if(empty($microPay)||empty($microPay['transaction_id'])){
+					// 不存在支付记录 则直接退款成功
+					$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
+					return json_encode($msg);
+				}
 			}
 			$compaychannel = WxCompany::getpaychannel($dpid);
 			if($compaychannel['pay_channel']=='2'){
@@ -1048,7 +1051,7 @@ class DataSyncOperation {
 					}
 					if($pay['paytype']==1||$pay['paytype']==12||$pay['paytype']==13){
 						// 微信支付
-						$rData = array('dpid'=>$dpid,'poscode'=>$poscode,'admin_id'=>$adminId,'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
+						$rData = array('dpid'=>$dpid,'poscode'=>$poscode,'admin_id'=>$adminId,'paytype'=>$pay['paytype'],'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
 						$result = self::refundWxPay($rData);
 						$resObj = json_decode($result);
 						if(!$resObj->status){
