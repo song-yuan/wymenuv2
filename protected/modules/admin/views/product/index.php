@@ -121,7 +121,13 @@
                                 <td ><?php echo $model->favourite_number;?></td> -->
                                 <td ><?php echo $model->is_member_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
 								<td ><?php echo $model->is_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
-                                <td ><?php echo $model->is_show=='0'?yii::t('app','否'):yii::t('app','是');?></td>
+                                <td ><?php switch($model->is_show){
+                                	case 0: echo '不可售';break;
+                                	case 1: echo '可售';break;
+                                	case 6: echo '公司下架';break;
+                                	case 7: echo '自下架';break;
+                                	default: echo '未知';break;
+                                }?></td>
                                 <td ><?php switch($model->is_temp_price) {case 0 :echo '自建';break;case 1:echo '总部下发';break;default: echo '';break;}?></td>
                                                                 
 								<td class="center">
