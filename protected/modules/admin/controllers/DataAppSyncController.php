@@ -9,269 +9,282 @@
  */
 class DataAppSyncController extends Controller
 {	
-    
-/**
- * 获取服务器端图片列表
-*/
-public function actionServerImglist(){
-    $company_id = Yii::app()->request->getParam('companyId',0);
-    $filesnames1 = scandir("uploads/company_".$company_id);
-    $fnj=  json_encode($filesnames1);
-    Yii::app()->end($fnj);
-}
-/**
- * 
- * 获取服务器时间
- * 
- */
-public function actionGetServerTime(){
-	$now = time();
-	$date = date('Y-m-d H:i:s');
-	return $date;
-}
-/**
- * 
- * 获取pos设备信息
- * 
- */
-public function actionGetSyncPosInfo(){
-	$code = Yii::app()->request->getParam('code',0);
-	$mac = Yii::app()->request->getParam('mac','');
-	$posinfo = DataSyncOperation::getDataSyncPosInfor($code,$mac);
-	echo json_encode($posinfo);exit;
-}
-/**
- * 
- * 获取基础数据表
- * 
- */ 
- public function actionGetSyncBaseTables(){
-   $baseTable = DataSyncOperation::getDataSyncBaseTables();
-   echo json_encode($baseTable);exit;
-}
-/**
- * 
- * 获取全部数据表
- * 
- */ 
- public function actionGetSyncAllTables(){
-   $allTable = DataSyncOperation::getDataSyncAllTables();
-   echo json_encode($allTable);exit;
-}
-/**
- * 
- * 获取基础数据表 数据
- * 
- */ 
-public function actionGetSyncTableData(){
-   $data = $_GET;
-   $tableStruct = DataSyncOperation::getDataSyncData($data);
-   echo json_encode($tableStruct);exit;
-}
-/**
- * 
- * 
- * 
- */
-public function actionGetData(){
-   echo json_encode(array('status'=>true,'msg'=>'success'));exit;
-}
-/**
- * 
- * pad实时获取云端数据
- * is_sync 不为0时是需要同步的数据
- * 返回json格式
- * array(array('table_name'="",data=>array()),array('table_name'="",data=>array()));
- * 
- */
- public function actionGetSyncData(){
-    $dpid = Yii::app()->request->getParam('dpid');
-    $result = DataSyncOperation::getSyncData($dpid);
- 	echo $result;exit;
- }
- 
-/**
- * 
- * 登录验证
- * 
- */
- public function actionValidateLogin(){
- 	$result = DataSyncOperation::validateUser($_POST);
- 	echo $result;exit;
-}
-/**
- * 
- * 检验是否有新的表结构数据
- * 
- */
-public function actionValidateNewPosTableData(){
-	$result = DataSyncOperation::getNewPosTableData($_POST);
-	echo $result;exit;
-}
-/**
- * 
- * 
- * 检验是否有新数据
- * 
- */
-public function actionValidateNewData(){
-	$result = DataSyncOperation::getNewDataByTime($_POST);
-	echo $result;exit;
-}
-/**
- * 
- * 获取订单状态
- * 
- */
-  public function actionGetOrderStatus(){
-  	$dpid = Yii::app()->request->getParam('companyId');
-    $orderId = Yii::app()->request->getParam('orderId');
- 	$result = DataSyncOperation::getOrderStaus($dpid,$orderId);
- 	echo $result;exit;
-}
-/**
- * 
- * 
- * 
- */
-/**
- * 
- * app订单同步云端
- * sid 台号
- * isTemp 是否是临时台
- * post传参
- * 
- */
- public function actionCreateOrder(){
- 	$result = DataSyncOperation::operateOrder($_POST);
- 	echo $result;exit;
-}
-/*
- * app更新
- */
-public function actionAppUpdate(){
-	$result = DataSyncAppVersion::checkVersion($_POST);
-	echo $result;exit;
-}
-/*
- * app更新
-*/
-public function actionGetConnectinfo(){
-	$result = DataSyncAppVersion::getConnectUsInfo($_POST);
-	echo $result;exit;
-}
-/**
- * 
- * 退单
- * 按照订单详情来退
- * 
- */
-public function actionRetreatOrder(){
-	$result = DataSyncOperation::retreatOrder($_POST);
-	echo $result;exit;
-}
-/**
- * 
- * 增加会员卡
- * 
- */
-public function actionAddMemberCard(){
- 	$result = DataSyncOperation::addMemberCard($_POST);
- 	echo $result;exit;
-}
-/**
- *
- * 获取会员卡 信息
- *
- */
-public function actionGetMemberCard(){
-	$result = DataSyncOperation::getMemberCard($_POST);
-	echo $result;exit;
-}
-/**
- * 
- * 获取会员卡余额
- * 
- */
-public function actionGetMemberCardYue(){
-	$result = DataSyncOperation::getMemberCardYue($_POST);
-	echo $result;exit;
-}
-/**
- * 
- *会员卡支付 
- * 
- */
- public function actionPayByMemberCard(){
- 	$result = DataSyncOperation::payMemberCard($_POST);
- 	echo $result;exit;
-}
-/**
- * 
- * 批量同步
- * 
- */
-public function actionBatchSync(){
-	$result = DataSyncOperation::batchSync($_POST);
-	echo $result;exit;
-}
-/**
- * 
- * 会员卡退款
- * 
- */
-public function actionRefundMemberCard(){
-	$result = DataSyncOperation::refundMemberCard($_POST);
-	echo $result;exit;
-}
-/**
- * 日结订单
- * 
- */
- public function actionCloseAccount(){
- 	$dpid = Yii::app()->request->getParam('dpid');
- 	$userId = Yii::app()->request->getParam('uid');
- 	$result = DataSyncOperation::operateCloseAccount($dpid,$userId);
- 	echo $result;exit;
-}
-/**
- * 
- * 获取双屏活动
- * 
- */
-public function actionDoubleScreen(){
- 	$dpid = Yii::app()->request->getParam('dpid');
- 	$result = DataSyncOperation::getDoubleScreen($dpid);
- 	echo $result;exit;
-}
-/**
- *
- *获取微信会员信息
- *
- */
-public function actionGetUserInfo(){
-	$result = DataSyncOperation::getUserInfo($_POST);
-	echo $result;exit;
-}
-/**
- * 
- * 微信会员卡提交
- * 
- */
-public function actionDealWxHykPay(){
-	$result = DataSyncOperation::dealWxHykPay($_POST);
-	echo $result;exit;
-}
-/**
- *
- * 原材料 消耗
- *
- */
-public function actionGetMaterial(){
-	$dpid = Yii::app()->request->getParam('dpid');
-	$startTime = Yii::app()->request->getParam('start_time');
-	$endTime = Yii::app()->request->getParam('end_time');
-	$result = DataSyncOperation::getMaterial($dpid,$startTime,$endTime);
-	echo json_encode($result);exit;
-}
+	/**
+	 * 获取服务器端图片列表
+	*/
+	public function actionServerImglist(){
+	    $company_id = Yii::app()->request->getParam('companyId',0);
+	    $filesnames1 = scandir("uploads/company_".$company_id);
+	    $fnj=  json_encode($filesnames1);
+	    Yii::app()->end($fnj);
+	}
+	/**
+	 * 
+	 * 获取服务器时间
+	 * 
+	 */
+	public function actionGetServerTime(){
+		$now = time();
+		$date = date('Y-m-d H:i:s');
+		return $date;
+	}
+	/**
+	 * 
+	 * 获取pos设备信息
+	 * 
+	 */
+	public function actionGetSyncPosInfo(){
+		$code = Yii::app()->request->getParam('code',0);
+		$mac = Yii::app()->request->getParam('mac','');
+		$posinfo = DataSyncOperation::getDataSyncPosInfor($code,$mac);
+		echo json_encode($posinfo);exit;
+	}
+	/**
+	 * 
+	 * 获取基础数据表
+	 * 
+	 */ 
+	 public function actionGetSyncBaseTables(){
+	   $baseTable = DataSyncOperation::getDataSyncBaseTables();
+	   echo json_encode($baseTable);exit;
+	}
+	/**
+	 * 
+	 * 获取全部数据表
+	 * 
+	 */ 
+	 public function actionGetSyncAllTables(){
+	   $allTable = DataSyncOperation::getDataSyncAllTables();
+	   echo json_encode($allTable);exit;
+	}
+	/**
+	 * 
+	 * 获取基础数据表 数据
+	 * 
+	 */ 
+	public function actionGetSyncTableData(){
+	   $data = $_GET;
+	   $tableStruct = DataSyncOperation::getDataSyncData($data);
+	   echo json_encode($tableStruct);exit;
+	}
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public function actionGetData(){
+	   echo json_encode(array('status'=>true,'msg'=>'success'));exit;
+	}
+	/**
+	 * 
+	 * pad实时获取云端数据
+	 * is_sync 不为0时是需要同步的数据
+	 * 返回json格式
+	 * array(array('table_name'="",data=>array()),array('table_name'="",data=>array()));
+	 * 
+	 */
+	 public function actionGetSyncData(){
+	    $dpid = Yii::app()->request->getParam('dpid');
+	    $result = DataSyncOperation::getSyncData($dpid);
+	 	echo $result;exit;
+	 }
+	 
+	/**
+	 * 
+	 * 登录验证
+	 * 
+	 */
+	 public function actionValidateLogin(){
+	 	$result = DataSyncOperation::validateUser($_POST);
+	 	echo $result;exit;
+	}
+	/**
+	 * 
+	 * 检验是否有新的表结构数据
+	 * 
+	 */
+	public function actionValidateNewPosTableData(){
+		$result = DataSyncOperation::getNewPosTableData($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 * 
+	 * 检验是否有新数据
+	 * 
+	 */
+	public function actionValidateNewData(){
+		$result = DataSyncOperation::getNewDataByTime($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 * 获取订单状态
+	 * 
+	 */
+	  public function actionGetOrderStatus(){
+	  	$dpid = Yii::app()->request->getParam('companyId');
+	    $orderId = Yii::app()->request->getParam('orderId');
+	 	$result = DataSyncOperation::getOrderStaus($dpid,$orderId);
+	 	echo $result;exit;
+	}
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	/**
+	 * 
+	 * app订单同步云端
+	 * sid 台号
+	 * isTemp 是否是临时台
+	 * post传参
+	 * 
+	 */
+	 public function actionCreateOrder(){
+	 	$result = DataSyncOperation::operateOrder($_POST);
+	 	echo $result;exit;
+	}
+	/*
+	 * app更新
+	 */
+	public function actionAppUpdate(){
+		$result = DataSyncAppVersion::checkVersion($_POST);
+		echo $result;exit;
+	}
+	/*
+	 * app更新
+	*/
+	public function actionGetConnectinfo(){
+		$result = DataSyncAppVersion::getConnectUsInfo($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 * 退单
+	 * 按照订单详情来退
+	 * 
+	 */
+	public function actionRetreatOrder(){
+		$result = DataSyncOperation::retreatOrder($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 * 增加会员卡
+	 * 
+	 */
+	public function actionAddMemberCard(){
+	 	$result = DataSyncOperation::addMemberCard($_POST);
+	 	echo $result;exit;
+	}
+	/**
+	 *
+	 * 获取会员卡 信息
+	 *
+	 */
+	public function actionGetMemberCard(){
+		$result = DataSyncOperation::getMemberCard($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 * 获取会员卡余额
+	 * 
+	 */
+	public function actionGetMemberCardYue(){
+		$result = DataSyncOperation::getMemberCardYue($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 *会员卡支付 
+	 * 
+	 */
+	 public function actionPayByMemberCard(){
+	 	$result = DataSyncOperation::payMemberCard($_POST);
+	 	echo $result;exit;
+	}
+	/**
+	 * 
+	 * 批量同步
+	 * 
+	 */
+	public function actionBatchSync(){
+		$result = DataSyncOperation::batchSync($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 * 会员卡退款
+	 * 
+	 */
+	public function actionRefundMemberCard(){
+		$result = DataSyncOperation::refundMemberCard($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 日结订单
+	 * 
+	 */
+	 public function actionCloseAccount(){
+	 	$dpid = Yii::app()->request->getParam('dpid');
+	 	$userId = Yii::app()->request->getParam('uid');
+	 	$result = DataSyncOperation::operateCloseAccount($dpid,$userId);
+	 	echo $result;exit;
+	}
+	/**
+	 * 
+	 * 获取双屏活动
+	 * 
+	 */
+	public function actionDoubleScreen(){
+	 	$dpid = Yii::app()->request->getParam('dpid');
+	 	$result = DataSyncOperation::getDoubleScreen($dpid);
+	 	echo $result;exit;
+	}
+	/**
+	 *
+	 *获取微信会员信息
+	 *
+	 */
+	public function actionGetUserInfo(){
+		$result = DataSyncOperation::getUserInfo($_POST);
+		echo $result;exit;
+	}
+	/**
+	 * 
+	 * 微信会员卡提交
+	 * 
+	 */
+	public function actionDealWxHykPay(){
+		$result = DataSyncOperation::dealWxHykPay($_POST);
+		echo $result;exit;
+	}
+	/**
+	 *
+	 * 原材料 消耗
+	 *
+	 */
+	public function actionGetMaterial(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$startTime = Yii::app()->request->getParam('start_time');
+		$endTime = Yii::app()->request->getParam('end_time');
+		$result = DataSyncOperation::getMaterial($dpid,$startTime,$endTime);
+		echo json_encode($result);exit;
+	}
+	/**
+	 *
+	 * 餐桌开台
+	 *
+	 */
+	public function actionOpenSite(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$adminId = Yii::app()->request->getParam('admin_id');
+		$posId = Yii::app()->request->getParam('pos_id');
+		$siteId = Yii::app()->request->getParam('site_id');
+		$number = Yii::app()->request->getParam('number');
+		$result = SiteClass::openSite($dpid,$startTime,$endTime);
+		echo json_encode($result);exit;
+	}
 }
