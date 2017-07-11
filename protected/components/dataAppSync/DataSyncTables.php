@@ -39,7 +39,9 @@ class DataSyncTables
         array("name"=>"外卖渠道表","table"=>"nb_channel"),
         array("name"=>"送餐员","table"=>"nb_takeaway_member"),
         array("name"=>"口味","table"=>"nb_taste"),
-        array("name"=>"口味分组","table"=>"nb_taste_group"),        
+        array("name"=>"口味分组","table"=>"nb_taste_group"), 
+    	array("name"=>"产品标签","table"=>"nb_product_label"),
+    	array("name"=>"产品标签详情","table"=>"nb_product_label_detail"),
     );
     
     //实时同步数据包括
@@ -596,6 +598,30 @@ class DataSyncTables
         		"tghs_code varchar(12) NOT NULL DEFAULT '',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
         		"allflae char(1) NOT NULL DEFAULT '0',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_product_label"=>"CREATE TABLE IF NOT EXISTS nb_product_label (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"product_id int(10) NOT NULL,".
+        		"is_print_date varchar(2) NOT NULL DEFAULT '1',".
+        		"is_print_bar varchar(2) NOT NULL DEFAULT '1',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_product_label_detail"=>"CREATE TABLE IF NOT EXISTS nb_product_label_detail (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"product_label_id int(10) NOT NULL,".
+        		"font_size varchar(2) NOT NULL DEFAULT '1',".
+        		"content varchar(255) NOT NULL DEFAULT '1',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
