@@ -198,11 +198,11 @@ class SiteClass
                     );                            
                     $db->createCommand()->insert('nb_site_no',$data);
                     $transaction->commit(); //提交事务会真正的执行数据库操作
-                    return array('status'=>1,'msg'=>yii::t('app','开台成功'),'siteid'=>$site_id);  
+                    return array('status'=>true,'msg'=>yii::t('app','开台成功'),'siteid'=>$site_id);  
                     //return true;
             } catch (Exception $e) {
                     $transaction->rollback(); //如果操作失败, 数据回滚
-                    return array('status'=>0,'msg'=>yii::t('app','开台失败'),'siteid'=>$site_id); 
+                    return array('status'=>false,'msg'=>yii::t('app','开台失败'),'siteid'=>$site_id); 
                     //return false;
             }    
         }
