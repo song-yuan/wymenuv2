@@ -1,7 +1,7 @@
 <?php
 class ProductGroupController extends BackendController
 {
-        public function actions() {
+    public function actions() {
 		return array(
 				'upload'=>array(
 						'class'=>'application.extensions.swfupload.SWFUploadAction',
@@ -11,7 +11,7 @@ class ProductGroupController extends BackendController
 				)
 		);
 	}
-    
+
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
@@ -129,6 +129,7 @@ class ProductGroupController extends BackendController
 		$pwlid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status',0);
 		$papage = Yii::app()->request->getParam('papage');
+		$pg_code = Yii::app()->request->getParam('pg_code');
 		//var_dump($pwlid);exit;
 		$criteria = new CDbCriteria;
         $criteria->with = array('product');
@@ -146,10 +147,12 @@ class ProductGroupController extends BackendController
                 
 		$psmodel = ProductGroup::model()->find($criteria2);
         //var_dump($models);exit;
+        // p($models);
 		$this->render('detailindex',array(
 			'models'=>$models,
             'psmodel'=>$psmodel,
 			'pages'=>$pages,
+			'pg_code'=>$pg_code,
 			'status'=>$status,
 			'papage'=>$papage,
 		));
@@ -160,6 +163,7 @@ class ProductGroupController extends BackendController
 		$model = new ProductGroupDetail();
 		$model->dpid = $this->companyId ;
 		$prodgroupId = Yii::app()->request->getParam('prodgroupId');
+		$pg_code = Yii::app()->request->getParam('pg_code');
 		$papage = Yii::app()->request->getParam('papage');
 		$status = '';
 		$type = 0;
@@ -170,7 +174,9 @@ class ProductGroupController extends BackendController
         	$this->redirect(array('productGroup/detailindex' , 'companyId' => $this->companyId,'prodgroupId' => $prodgroupId , 'papage'=>$papage)) ;
         }
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ProductGroupDetail');
+			$model->attributes = Yii::app()->request->getPost('ProductGroupDetail');;
+			$pgds = Yii::app()->request->getPost('ProductGroupDetail');
+    		$phs_code = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$pgds['product_id'],'dpid'=>$this->companyId))->phs_code;
 			$isselect = Yii::app()->request->getParam('isselect');
 			$number = Yii::app()->request->getParam('number');
 			//var_dump($model);exit;
@@ -178,24 +184,27 @@ class ProductGroupController extends BackendController
             $model->lid = $se->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->update_at = date('Y-m-d H:i:s',time());
+            $model->pg_code = $pg_code;
+            $model->phs_code = $phs_code;
             $model->delete_flag = '0';
             $model->is_select = $isselect;
             $model->number = $number;
             $model->prod_group_id = $prodgroupId;
-    
+    		// p($model);
 			if($model->save()) {
                             
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productGroup/detailindex','companyId' => $this->companyId,'lid'=>$model->prod_group_id,'papage'=>$papage));
+				$this->redirect(array('productGroup/detailindex','companyId' => $this->companyId,'lid'=>$model->prod_group_id,'pg_code' => $pg_code,'papage'=>$papage));
 			}
 		}
        			
                 $categories = $this->getCategories();
                 $categoryId=0;
                 $products = $this->getProducts($categoryId);
-                $productslist=CHtml::listData($products, 'lid', 'product_name');
+                $productslist=CHtml::listData($products, 'lid', 'product_name','phs_code');
 				$this->render('detailcreate' , array(
 				'model' => $model,
+				'pg_code' => $pg_code,
 				'categories' => $categories,
 				'categoryId' => $categoryId,
 				'prodgroupId'=>$prodgroupId,				
@@ -211,23 +220,28 @@ class ProductGroupController extends BackendController
 		$type = Yii::app()->request->getParam('type');
 		$status = Yii::app()->request->getParam('status');
 		$papage = Yii::app()->request->getParam('papage');
+		$pg_code = Yii::app()->request->getParam('pg_code');
 		
 		
 		$model = ProductGroupDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-			$this->redirect(array('productGroup/detailindex' , 'companyId' => $this->companyId,'lid' => $model->prod_group_id)) ;
+			$this->redirect(array('productGroup/detailindex' , 'companyId' => $this->companyId,'pg_code' => $pg_code,'lid' => $model->prod_group_id)) ;
 		}
         //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductGroupDetail');
+			$pgds = Yii::app()->request->getPost('ProductGroupDetail');
+    		$phs_code = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$pgds['product_id'],'dpid'=>$this->companyId))->phs_code;
+			// p($phs_code);
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->pg_code = $pg_code;
+			$model->phs_code = $phs_code;
 			//只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
 			$modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_group_detail t where t.dpid='.$this->companyId.' and t.lid='.$model->prod_group_id.' and t.delete_flag=0')->queryRow();
-		
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('productGroup/detailindex' , 'companyId' => $this->companyId,'lid' => $model->prod_group_id ,'status'=>$status));
+				$this->redirect(array('productGroup/detailindex' , 'companyId' => $this->companyId,'lid' => $model->prod_group_id ,'pg_code' => $pg_code,'status'=>$status));
 			} 
 		}
                 $categories = $this->getCategories();
@@ -235,15 +249,16 @@ class ProductGroupController extends BackendController
                 $products = $this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
 				$this->render('detailupdate' , array(
-				'model' => $model,
-                'categories' => $categories,
-                'categoryId' => $categoryId,
-				'prodgroupId' => $model->prod_group_id,
-                'products' => $productslist,
-				'type' => $type,
-				'status' => $status,
-				'papage' => $papage,
-		));
+						'model' => $model,
+		                'categories' => $categories,
+		                'categoryId' => $categoryId,
+						'prodgroupId' => $model->prod_group_id,
+		                'products' => $productslist,
+						'type' => $type,
+						'pg_code' => $pg_code,
+						'status' => $status,
+						'papage' => $papage,
+				));
 	}
         
 	public function actionDetailDelete(){

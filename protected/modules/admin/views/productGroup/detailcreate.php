@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','添加套餐明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐分组列表'),'url'=>$this->createUrl('productGroup/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','套餐分组明细列表'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->lid, 'papage'=>$papage))),array('word'=>yii::t('app','添加套餐分组明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId' => $model->dpid,'lid' => $model->lid ,'status'=>$status,'papage'=>$papage)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品组合列表'),'url'=>$this->createUrl('productGroup/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','产品组合明细列表'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->lid, 'pg_code' => $pg_code,'papage'=>$papage))),array('word'=>yii::t('app','添加产品到组内'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId' => $model->dpid,'lid' => $prodgroupId ,'status'=>$status,'pg_code' => $pg_code,'papage'=>$papage)))));?>
 				
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,14 +31,14 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加套餐分组明细');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加产品到组内');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'prodgroupId'=>$prodgroupId,'categoryId'=>$categoryId,'products'=>$products,'type'=>$type,'status'=>$status, 'papage'=>$papage)); ?>
+							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'prodgroupId'=>$prodgroupId,'categoryId'=>$categoryId,'products'=>$products,'type'=>$type,'status'=>$status,'pg_code'=>$pg_code, 'papage'=>$papage)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

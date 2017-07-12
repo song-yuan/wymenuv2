@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐分组'),'url'=>'productGroup/index')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '0',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品组合列表'),'url'=>'productGroup/index')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '0',)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','分组列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','组合列表');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('productGroup/create' , array('companyId' => $this->companyId,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
@@ -63,7 +63,7 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','分组名称');?></th>
+								<th><?php echo yii::t('app','组合名称');?></th>
                                 <th><?php echo yii::t('app','编码');?></th>
                                 <th><?php echo yii::t('app','来源');?></th>
 								<th>&nbsp;</th>
@@ -83,7 +83,7 @@
 									<a href="<?php echo $this->createUrl('productGroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source, 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
                                 <td class="center">
-									<a href="<?php echo $this->createUrl('productGroup/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source , 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑明细');?></a>
+									<a href="<?php echo $this->createUrl('productGroup/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source ,'pg_code'=>$model->pg_code, 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

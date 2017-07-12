@@ -11,7 +11,7 @@ class ProductSetController extends BackendController
 				)
 		);
 	}
-    
+
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
@@ -27,9 +27,9 @@ class ProductSetController extends BackendController
 		$pages = new CPagination(ProductSet::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-		
+
 		$models = ProductSet::model()->findAll($criteria);
-		
+
 		$this->render('index',array(
 			'models'=>$models,
 			'pages'=>$pages
@@ -49,7 +49,7 @@ class ProductSetController extends BackendController
 			$up -> set("path", $path);
 			$up -> set("maxsize", 2*1024*1024);
 			$up -> set("allowtype", array("png", "jpg","jpeg"));
-		
+
 			if($up -> upload("file")) {
 				$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
 			}else{
@@ -62,19 +62,19 @@ class ProductSetController extends BackendController
 		$status = '';
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
-			
+
 			$cateID = $model->category_id;
 			if(!empty($cateID)){
 				$db = Yii::app()->db;
 				$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
 				$command = $db->createCommand($sql);
 				$categoryId = $command->queryRow();
-				
+
 				$se=new Sequence("porduct_set");
 				$model->lid = $lid = $se->nextval();
 				$code=new Sequence("phs_code");
 				$pshs_code = $code->nextval();
-				
+
 				if($model->member_price==''){
 					$model->member_price = $model->set_price;
 				}
@@ -95,7 +95,7 @@ class ProductSetController extends BackendController
 				 $model->addError('category_id','必须添加二级分类');
 			}
 		}
-		
+
 		$categories = $this->getCategoryList();
 		$this->render('create' , array(
 				'model' => $model,
@@ -116,7 +116,7 @@ class ProductSetController extends BackendController
 			$up -> set("path", $path);
 			$up -> set("maxsize", 2*1024*1024);
 			$up -> set("allowtype", array("png", "jpg","jpeg"));
-		
+
 			if($up -> upload("file")) {
 				$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
 			}else{
@@ -162,14 +162,14 @@ class ProductSetController extends BackendController
 				'islock' => $islock,
 		));
 	}
-        
+
 	public function actionDelete(){
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		
+
 		$papage = Yii::app()->request->getParam('papage');
 		//var_dump($papage);exit;
 		$ids = Yii::app()->request->getPost('ids');
@@ -177,7 +177,7 @@ class ProductSetController extends BackendController
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_set set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			
+
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('productSet/index' , 'companyId' => $companyId, 'page' => $papage));
@@ -186,30 +186,47 @@ class ProductSetController extends BackendController
 			$this->redirect(array('productSet/index' , 'companyId' => $companyId, 'page' => $papage));
 		}
 	}
-        
+
+
+
+
+
         public function actionDetailIndex(){
 		$pwlid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');// var_dump($pwlid);exit;
 		$papage = Yii::app()->request->getParam('papage');
-		
+
 		$criteria = new CDbCriteria;
         $criteria->with = array('product');
         $criteria->order =  't.group_no';
         //$criteria->with = 'printer';
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.set_id='.$pwlid.' and t.delete_flag=0 and product.delete_flag=0';
-        
+
+
+        $sql='select pg.lid as pglid,pg.*,psg.*,psg.lid as psgid,pgd.* from nb_product_group pg '
+        	.' left join nb_product_set_group psg on(pg.dpid=psg.dpid and psg.delete_flag=0 and pg.lid=psg.prod_group_id)'
+        	.' left join nb_product_group_detail pgd on(pg.dpid=pgd.dpid and pgd.delete_flag=0 and pg.lid=pgd.prod_group_id and pgd.is_select=1)'
+        	.' where pg.dpid='.$this->companyId.' and psg.set_id='.$pwlid.' and psg.delete_flag=0';
+
+        $db=Yii::app()->db;
+
+        $infos = $db->createCommand($sql)->queryAll();
+		// p($infos);
 		$criteria2 = new CDbCriteria;
 		$criteria2->condition =  't.dpid='.$this->companyId .' and t.lid='.$pwlid.' and t.delete_flag=0';
-                
-		$pages = new CPagination(ProductSetDetail::model()->count($criteria));
-		//	    $pages->setPageSize(1);
+
+		$pages = new CPagination(ProductSetDetail::model()->count($criteria)+count($infos));
+		// $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-		
+
 		$models = ProductSetDetail::model()->findAll($criteria);
-                
+        // p($models);
+
 		$psmodel = ProductSet::model()->find($criteria2);
-               // var_dump($psmodel);exit;
+        // var_dump($psmodel);exit;
 		$this->render('detailindex',array(
+			'infos'=>$infos,
+			'pslid'=>$pwlid,
 			'models'=>$models,
             'psmodel'=>$psmodel,
 			'pages'=>$pages,
@@ -218,74 +235,173 @@ class ProductSetController extends BackendController
 		));
 	}
 
+
+
+
+
+
 	public function actionDetailCreate(){
-		
-		$model = new ProductSetDetail();
-		$model->dpid = $this->companyId ;
+
 		$pslid = Yii::app()->request->getParam('psid');
 		$type = Yii::app()->request->getParam('type');
+		$kind = Yii::app()->request->getParam('kind');
+		$groupid = Yii::app()->request->getPost('prod_group_id');
 		$papage = Yii::app()->request->getParam('papage'); //var_dump($pslid);exit;
 		$status = '';
-        $model->set_id=$pslid;
-        if(Yii::app()->user->role > User::SHOPKEEPER) {
-        	Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-        	$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid , 'papage'=>$papage)) ;
-        }
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
-			$groupno = Yii::app()->request->getParam('groupno');
-			$isselect = Yii::app()->request->getParam('isselect');
-			$number = Yii::app()->request->getParam('number');
-			//var_dump($model);exit;
-            $se=new Sequence("porduct_set_detail");
-            $model->lid = $se->nextval();
-            $model->create_at = date('Y-m-d H:i:s',time());
-            $model->delete_flag = '0';
-            $model->group_no = $groupno;
-            $model->is_select = $isselect;
-            $model->number = $number;
-            //var_dump($model);exit; 
-            $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$pslid.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
-            //var_dump($modelsp);exit;
-            if($model->is_select=="1")
-            {
-                $sqlgroup="update nb_product_set_detail set is_select=0 where group_no=".$model->group_no." and dpid=".$this->companyId." and set_id=".$model->set_id;
-                Yii::app()->db->createCommand($sqlgroup)->execute();
-            }
-			if($model->save()) {
-                            
-				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id,'papage'=>$papage));
+		$maxgroupno=$this->getMaxGroupNo($pslid);
+		$maxgroupno2=$this->getMaxGroupNo2($pslid);
+		$categories = $this->getCategories();
+		$categoryId=0;
+		$products = $this->getProducts($categoryId);
+		$productslist=CHtml::listData($products, 'lid', 'product_name');
+
+		$groups = $this->getGroupnos($pslid);
+		$groupslist=CHtml::listData($groups, 'group_no' , 'product_name');
+		$maxgroupno=$maxgroupno>$maxgroupno2?$maxgroupno:$maxgroupno2;
+		if ($kind==0) {
+			$model = new ProductSetDetail();
+			$model->dpid = $this->companyId ;
+	        $model->set_id=$pslid;
+	        if(Yii::app()->user->role > User::SHOPKEEPER) {
+	        	Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+	        	$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid , 'papage'=>$papage)) ;
+	        }
+			if(Yii::app()->request->isPostRequest) {
+				$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
+				$groupno = Yii::app()->request->getParam('groupno');
+				$isselect = Yii::app()->request->getParam('isselect');
+				$number = Yii::app()->request->getParam('number');
+				//var_dump($model);exit;
+	            $se=new Sequence("porduct_set_detail");
+	            $model->lid = $se->nextval();
+	            $model->create_at = date('Y-m-d H:i:s',time());
+	            $model->delete_flag = '0';
+	            $model->group_no = $groupno;
+	            $model->is_select = $isselect;
+	            $model->number = $number;
+	            //var_dump($model);exit;
+	            $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$pslid.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
+	            //var_dump($modelsp);exit;
+	            if($model->is_select=="1")
+	            {
+	                $sqlgroup="update nb_product_set_detail set is_select=0 where group_no=".$model->group_no." and dpid=".$this->companyId." and set_id=".$model->set_id;
+	                Yii::app()->db->createCommand($sqlgroup)->execute();
+	            }
+				if($model->save()) {
+
+					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+					$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id,'papage'=>$papage));
+				}
 			}
-		}
-                $maxgroupno=$this->getMaxGroupNo($pslid);
-                $categories = $this->getCategories();
-                $categoryId=0;
-                $products = $this->getProducts($categoryId);
-                $productslist=CHtml::listData($products, 'lid', 'product_name');
-                
-                $groups = $this->getGroupnos($pslid);
-                $groupslist=CHtml::listData($groups, 'group_no' , 'product_name');
-                //var_dump($model);exit;
-		$this->render('detailcreate' , array(
+				$this->render('detailcreate' , array(
+					'model' => $model,
+					'categories' => $categories,
+					'categoryId' => $categoryId,
+					'products' => $productslist,
+					'maxgroupno'=>$maxgroupno,
+					'groups' =>$groupslist,
+					'type'=>$type,
+					'psid'=>$pslid,
+					'kind'=>$kind,
+					'status'=>$status,
+					'papage'=>$papage,
+				));
+		}elseif($kind==1){
+			$model = ProductSetGroup::model();
+			$pgroups = ProductGroup::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId));
+			// p($pgroups);
+			if (Yii::app()->request->isPostRequest) {
+				$info = $model->find('dpid=:dpid and set_id=:set_id and prod_group_id=:groupid',array(':dpid'=>$this->companyId,':groupid'=>$groupid,':set_id'=>$pslid));
+				// p($info);
+				if($info){
+					$info->dpid=$this->companyId;
+					$info->update_at=date('Y-m-d H:i:s',time());
+					$info->delete_flag=0;
+					if ($info->save()) {
+						Yii::app()->user->setFlash('success',Yii::t('app','添加成功'));
+						$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid,'papage'=>$papage)) ;
+					}else{
+						Yii::app()->user->setFlash('error',Yii::t('app','添加失败'));
+						$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid,'papage'=>$papage)) ;
+					}
+				}else{
+					$model = new ProductSetGroup();
+					$se=new Sequence("product_set_group");
+					$lid = $se->nextval();
+
+					$model->lid=$lid;
+					$model->dpid=$this->companyId;
+					$model->create_at=date('Y-m-d H:i:s',time());
+					$model->update_at=date('Y-m-d H:i:s',time());
+					$model->group_no=$maxgroupno+1;
+					$model->set_id=$pslid;
+					$model->prod_group_id=$groupid;
+					$model->delete_flag=0;
+					// p($modeld);
+					if ($model->save()) {
+						Yii::app()->user->setFlash('success',Yii::t('app','添加成功'));
+						$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid,'papage'=>$papage)) ;
+					}else{
+						Yii::app()->user->setFlash('error',Yii::t('app','添加失败'));
+						$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid,'papage'=>$papage)) ;
+					}
+				}
+			}
+			$this->render('detailcreate' , array(
 				'model' => $model,
+				'pgroups' => $pgroups,
 				'categories' => $categories,
 				'categoryId' => $categoryId,
 				'products' => $productslist,
 				'maxgroupno'=>$maxgroupno,
 				'groups' =>$groupslist,
 				'type'=>$type,
+				'psid'=>$pslid,
+				'kind'=>$kind,
 				'status'=>$status,
 				'papage'=>$papage,
-		));
+			));
+		}
 	}
+
+
+	public function actionGroupdelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
+		}
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+
+		$papage = Yii::app()->request->getParam('papage');
+		//var_dump($papage);exit;
+		$pslid = Yii::app()->request->getParam('pslid');
+		$pglid = Yii::app()->request->getParam('pglid');
+		// p($pslid);
+        //Until::isUpdateValid(array($ids),$companyId,$this);//0,表示企业任何时候都在云端更新。
+		if(!empty($pglid)) {
+			$info = Yii::app()->db->createCommand('update nb_product_set_group set delete_flag=1 where lid=:lid  and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId,':lid'=>$pglid));
+			if ($info) {
+				Yii::app()->user->setFlash('success' ,yii::t('app', '删除成功'));
+				$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId, 'lid' => $pslid));
+			}else{
+				Yii::app()->user->setFlash('error' ,yii::t('app', '删除失败'));
+				$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId, 'lid' => $pslid));
+			}
+		} else {
+			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
+			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId, 'lid' => $pslid));
+		}
+	}
+
+
 	public function actionDetailUpdate(){
-		
+
 		$lid = Yii::app()->request->getParam('lid');
 		$type = Yii::app()->request->getParam('type');
 		$status = Yii::app()->request->getParam('status');
 		$papage = Yii::app()->request->getParam('papage');
-		
+
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 	if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -297,7 +413,7 @@ class ProductSetController extends BackendController
 			$groupno = Yii::app()->request->getParam('groupno');
 			$isselect = Yii::app()->request->getParam('isselect');
 			$number = Yii::app()->request->getParam('number');
-			
+
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->group_no = $groupno;
 			$model->is_select = $isselect;
@@ -317,7 +433,7 @@ class ProductSetController extends BackendController
                 $categoryId=  $this->getCategoryId($lid);
                 $products = $this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
-                
+
                 $groups = $this->getGroupnos($model->set_id);
                 $groupslist=CHtml::listData($groups, 'group_no' , 'product_name');
 		$this->render('detailupdate' , array(
@@ -332,28 +448,67 @@ class ProductSetController extends BackendController
 				'papage'=>$papage,
 		));
 	}
-        
-	public function actionDetailDelete(){
+
+        public function actionGroupdetail(){
+
+		$pwlid = Yii::app()->request->getParam('lid');
+		$status = Yii::app()->request->getParam('status',0);
+		$papage = Yii::app()->request->getParam('papage');
+		$pslid = Yii::app()->request->getParam('pslid');
+		//var_dump($pwlid);exit;
+		$criteria = new CDbCriteria;
+        $criteria->with = array('product');
+        $criteria->order = 't.prod_group_id';
+        //var_dump($criteria);exit;
+		$criteria->condition =  't.dpid='.$this->companyId .' and t.prod_group_id='.$pwlid.' and t.delete_flag=0 and product.delete_flag=0';
+		$criteria2 = new CDbCriteria;
+		$criteria2->condition = 't.dpid='.$this->companyId .' and t.lid='.$pwlid.' and t.delete_flag=0'; 
+
+		$pages = new CPagination(ProductGroupDetail::model()->count($criteria));
+		//$pages->setPageSize(1);
+		$pages->applyLimit($criteria);
 		
+		$models = ProductGroupDetail::model()->findAll($criteria);
+                
+		$psmodel = ProductGroup::model()->find($criteria2);
+        //var_dump($models);exit;
+		$this->render('groupdetail',array(
+			'models'=>$models,
+			'pslid'=>$pslid,
+            'psmodel'=>$psmodel,
+			'pages'=>$pages,
+			'status'=>$status,
+			'papage'=>$papage,
+		));
+	}
+
+	public function actionDetailDelete(){
+
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-        $printset = Yii::app()->request->getParam('psid');  
+        $printset = Yii::app()->request->getParam('psid');
         $papage = Yii::app()->request->getParam('papage');
 		$ids = Yii::app()->request->getPost('ids');
+		$glids = Yii::app()->request->getPost('glids');
+		// p($glids);
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		}
                 //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
-			->execute(array( ':companyId' => $this->companyId));
+		if(!empty($ids)||!empty($glids)) {
+			if (!empty($ids)) {
+				Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')->execute(array( ':companyId' => $this->companyId));
+			}
+			if (!empty($glids)){
+				Yii::app()->db->createCommand('update nb_product_set_group set delete_flag=1 where lid in ('.implode(',' , $glids).') and dpid = :companyId')->execute(array( ':companyId' => $this->companyId));
+			}
 			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
 			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		}
-	}	
-        
+	}
+
 	public function actionGetSetChildren(){
 		$pid = Yii::app()->request->getParam('pid',0);
 		if(!$pid){
@@ -361,7 +516,7 @@ class ProductSetController extends BackendController
 		}
 		$treeDataSource = array('data'=>array(),'delay'=>400);
 		$categories = Helper::getSetCategories($this->companyId,$pid);
-	
+
 		foreach($categories as $c){
 			$tmp['name'] = $c['category_name'];
 			$tmp['id'] = $c['lid'];
@@ -369,7 +524,7 @@ class ProductSetController extends BackendController
 		}
 		Yii::app()->end(json_encode($treeDataSource));
 	}
-	
+
 
 	public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);
@@ -388,7 +543,7 @@ class ProductSetController extends BackendController
 		}
 		Yii::app()->end(json_encode($treeDataSource));
 	}
-        
+
    public function actionIsDoubleSetDetail(){
 		$productId = Yii::app()->request->getParam('productid',0);
         $productSetId = Yii::app()->request->getParam('productSetId',0);
@@ -401,7 +556,7 @@ class ProductSetController extends BackendController
 		}
 		Yii::app()->end(json_encode($treeDataSource));
 	}
-        
+
 	private function getProducts($categoryId){
                 if($categoryId==0)
                 {
@@ -416,10 +571,10 @@ class ProductSetController extends BackendController
                 return $products;
 		//return CHtml::listData($products, 'lid', 'product_name');
 	}
-        
+
         private function getSetProducts($categoryId,$productSetId){
                 $db = Yii::app()->db;
-                
+
                 if($categoryId==0)
                 {
                     $sql = "SELECT lid,product_name from nb_product where dpid=:companyId and delete_flag=0 and lid not in (select product_id from nb_product_set_detail where set_id=:productSetId and dpid=:dpid)";
@@ -434,14 +589,14 @@ class ProductSetController extends BackendController
                     $command->bindValue(":dpid" , $this->companyId);
                     $command->bindValue(":productSetId" , $productSetId);
                     $command->bindValue(":categoryId" , $categoryId);
-                }                
+                }
                 $products=$command->queryAll();
                 $products = $products ? $products : array();
                 //var_dump($sql);exit;
                 return $products;
 		//return CHtml::listData($products, 'lid', 'product_name');
 	}
-        
+
         private function getCategoryId($lid){
                 $db = Yii::app()->db;
                 $sql = "SELECT category_id from nb_product_set_detail sd,nb_product p where sd.dpid=p.dpid and sd.product_id=p.lid and sd.lid=:lid";
@@ -449,7 +604,7 @@ class ProductSetController extends BackendController
                 $command->bindValue(":lid" , $lid);
                 return $command->queryScalar();
 	}
-        
+
         private function getMaxGroupNo($psid){
                 $db = Yii::app()->db;
                 $sql = "SELECT max(group_no) from nb_product_set_detail where delete_flag = 0 and dpid=:dpid and set_id=:psid";
@@ -458,15 +613,23 @@ class ProductSetController extends BackendController
                 $command->bindValue(":psid" , $psid);
                 return $command->queryScalar();
 	}
-        
+        private function getMaxGroupNo2($psid){
+                $db = Yii::app()->db;
+                $sql = "SELECT max(group_no) from nb_product_set_group where delete_flag = 0 and dpid=:dpid and set_id=:psid";
+                $command=$db->createCommand($sql);
+                $command->bindValue(":dpid" , $this->companyId);
+                $command->bindValue(":psid" , $psid);
+                return $command->queryScalar();
+	}
+
         private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
-		
+
 		$models = ProductCategory::model()->findAll($criteria);
-                
+
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
@@ -487,7 +650,7 @@ class ProductSetController extends BackendController
 		}
 		return $optionsReturn;
 	}
-        
+
         private function getCategoryList(){
 		$categories = ProductCategory::model()->findAll('cate_type=2 and delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;

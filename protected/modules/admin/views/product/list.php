@@ -298,7 +298,7 @@
 							<div class="ku-item-info">菜品录入</div>
 						</div>
 					</a>
-					<a style="display: none;" href="<?php echo $this->createUrl('productGroup/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('productGroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple tcsz"></div>
 							<div class="ku-item-info">套餐分组</div>
