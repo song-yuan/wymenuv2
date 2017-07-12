@@ -607,7 +607,7 @@ class WxOrder
 				$oProduct = WxProduct::getProductSet($product['set_id'], $dpid);
 				$productSet = self::getOrderProductSetDetail($product['order_id'],$dpid,$product['set_id'],$product['main_id']);
 				$orderProduct[$k]['detail'] = $productSet;
-				$orderProduct[$k]['phs_code'] = $oProduct['phs_code'];
+				$orderProduct[$k]['phs_code'] = $oProduct['pshs_code'];
 			}else{
 				$oProduct = WxProduct::getProduct($product['product_id'], $dpid);
 				$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
