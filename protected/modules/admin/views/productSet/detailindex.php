@@ -40,9 +40,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?>-><?php echo yii::t('app','套餐明细列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?> => <?php echo yii::t('app','套餐明细列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid,'type'=>0, 'papage'=>$papage));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid,'type'=>0, 'papage'=>$papage,'kind'=>0));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
@@ -52,19 +52,45 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 					<?php if($models):?>
 						<thead>
-							<tr>
+							<tr style="background: lightblue;">
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','单品名称');?></th>
+								<th><?php echo yii::t('app','名称');?></th>
                                 <th><?php echo yii::t('app','图片');?></th>
                                 <th><?php echo yii::t('app','套餐内价格');?></th>
                                 <th><?php echo yii::t('app','分组号');?></th>
                                 <th><?php echo yii::t('app','数量');?></th>
                                 <th><?php echo yii::t('app','默认选择');?></th>
-								<th>&nbsp;</th>                                                                
+                                <th><?php echo yii::t('app','产品组合');?></th>
+								<th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
-						
+						<?php if ($pages->getCurrentPage()+1==1||$pages->getCurrentPage()+1==null):?>
+							<?php foreach ($infos as $key => $info):?>
+							<tr class="odd gradeX" >
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $info['psgid'] ;?>" name="glids[]" /></td>
+								<td ><?php echo $info['name'] ;?></td>
+								<td ><img width="100" src="<?php echo Yii::app()->request->baseUrl;?>/img/product/productgroup.png" /></td>
+                                <td><?php echo $info['price'];?></td>
+                                <td><?php echo $info['group_no'];?></td>
+                                <td><?php echo $info['number'];?></td>
+                                <td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>">
+										<input pid="<?php echo $info['lid'];?>" <?php if($info['is_select']) echo 'checked="checked"';?> type="checkbox" disabled="disabled" class="toggle"/>
+									</div>
+								</td>
+								<td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>">
+										<input checked="checked" type="checkbox" disabled="disabled" class="toggle"/>
+									</div>
+								</td>
+								<td class="center">
+								<a href="<?php echo $this->createUrl('productSet/groupdetail',array('lid' => $info['prod_group_id'] , 'companyId' => $info['dpid'], 'status'=>$status, 'papage'=>$papage,'pslid' => $pslid ));?>" class="btn yellow"><?php echo yii::t('app','详情');?></a>
+								<a href="<?php echo $this->createUrl('productSet/groupdelete',array('pslid' => $pslid , 'companyId' => $info['dpid'], 'pglid'=>$info['pglid']));?>" class="btn red"><?php echo yii::t('app','删除');?></a>
+								</td>             
+							</tr>
+						<?php endforeach;?>
+						<?php endif;?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
@@ -78,9 +104,14 @@
 										<input pid="<?php echo $model->lid;?>" <?php if($model->is_select) echo 'checked="checked"';?> type="checkbox" disabled="disabled" class="toggle"/>
 									</div>
 								</td>
+								<td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>">
+										<input  type="checkbox" disabled="disabled" class="toggle"/>
+									</div>
+								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid, 'type'=>'1' , 'status'=>$status, 'papage'=>$papage));?>"><?php echo yii::t('app','编辑');?></a>
-								</td>             
+								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid, 'type'=>'1' , 'status'=>$status, 'papage'=>$papage));?>" class="btn blue"><?php echo yii::t('app','编辑');?></a>
+								</td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>

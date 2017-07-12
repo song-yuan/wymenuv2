@@ -31,7 +31,7 @@
 										<?php echo $form->error($model, 'category_id' )?>
 										</div>
 										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
-									</div>
+								</div>
 								<?php if($istempp){ echo '<script>
 															$(".category_selecter").each(function(){
 																$(this).attr("disabled",true)

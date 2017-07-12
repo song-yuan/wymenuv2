@@ -100,6 +100,7 @@
 									<input type="hidden" id="groupno" name="groupno" value="" />
 									<input type="hidden" id="isselect" name="isselect" value="" />
 									<input type="hidden" id="number" name="number" value="" />
+									<input type="hidden" id="pg_code" name="number" value="<?php echo $pg_code; ?>" />
 									
 							<?php $this->endWidget(); ?>
 							

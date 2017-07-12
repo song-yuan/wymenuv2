@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐分组'),'url'=>$this->createUrl('productGroup/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','套餐分组明细列表'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->prod_group_id,'status'=>$status, 'papage'=>$papage))),array('word'=>yii::t('app','修改套餐分组明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId' => $model->dpid,'lid' => $model->prod_group_id ,'status'=>$status,'papage'=>$papage,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品组合列表'),'url'=>$this->createUrl('productGroup/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','产品组合明细列表'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->prod_group_id,'status'=>$status, 'pg_code' => $pg_code,'papage'=>$papage))),array('word'=>yii::t('app','修改产品组合明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productGroup/detailindex' , array('companyId' => $model->dpid,'lid' => $model->prod_group_id ,'status'=>$status,'pg_code' => $pg_code,'papage'=>$papage,)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'prodgroupId'=>$prodgroupId,'categoryId'=>$categoryId,'products'=>$products,'type'=>$type,'status'=>$status)); ?>
+							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'prodgroupId'=>$prodgroupId,'categoryId'=>$categoryId,'products'=>$products,'type'=>$type,'pg_code' => $pg_code,'status'=>$status)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

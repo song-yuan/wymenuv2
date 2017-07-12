@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','产品组合列表'),'url'=>$this->createUrl('productGroup/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','产品组合明细列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productGroup/index' , array('companyId' => $this->companyId,'page'=>$papage)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','套餐设置'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','套餐明细管理'),'url'=>''),array('word'=>yii::t('app','产品分组明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productSet/detailindex' , array('companyId' => $this->companyId,'page'=>$papage,'lid'=>$pslid)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,14 +40,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->name ;?> => <?php echo yii::t('app','组内明细列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->name ;?>-><?php echo yii::t('app','产品分组明细列表');?></div>
 					<div class="actions">
-					<?php if((Yii::app()->user->role == User::POWER_ADMIN)||($status==0 && Yii::app()->user->role >= User::ADMIN && Yii::app()->user->role <= User::SHOPKEEPER)):?>
-						<a href="<?php echo $this->createUrl('productGroup/detailcreate' , array('companyId' => $this->companyId,'prodgroupId'=>$psmodel->lid,'type'=>0, 'pg_code'=>$pg_code, 'papage'=>$papage));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-						</div>
-					<?php endif;?>
+
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -55,20 +50,17 @@
 					<?php if($models):?>
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
                                 <th><?php echo yii::t('app',' 单品名称');?></th>
                                 <th><?php echo yii::t('app','图片');?></th>
                                 <th><?php echo yii::t('app','价格');?></th>
                                 <th><?php echo yii::t('app','数量');?></th>
                                 <th><?php echo yii::t('app','默认选择');?></th>
-							    <th>&nbsp;</th>                                                      
-							</tr>
+                            </tr>
 						</thead>
 						<tbody>
 						
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->product->product_name ;?></td>
 								<td ><img width="100" src="<?php echo $model->product->main_picture ;?>" /></td>
                                 <td><?php echo $model->price;?></td>
@@ -79,14 +71,11 @@
 										<input pid="<?php echo $model->lid;?>" <?php if($model->is_select) echo 'checked="checked"';?> type="checkbox" disabled="disabled" class="toggle"/>
 									</div>
 								</td>
-								<td class="center">
-								<a href="<?php echo $this->createUrl('productGroup/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid, 'type'=>'1' , 'status'=>$status, 'pg_code'=>$pg_code,'papage'=>$papage));?>"><?php echo yii::t('app','编辑');?></a>
-								</td>             
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td><?php echo yii::t('app','还没有添加详细产品,请点击右上角  [ 添加 ] ,进行相关操作!!!');?></td></tr>
+						<tr><td><?php echo yii::t('app','还没有添加详细产品');?></td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>

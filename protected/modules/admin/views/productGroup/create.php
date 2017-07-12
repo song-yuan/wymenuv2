@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐分类设置'),'url'=>$this->createUrl('productGroup/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','套餐分类列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productGroup/index' , array('companyId' => $this->companyId,'type' => '0',)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品组合设置'),'url'=>$this->createUrl('productGroup/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加产品组合'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productGroup/index' , array('companyId' => $this->companyId,'type' => '0',)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加套餐分类');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加产品组合名');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
