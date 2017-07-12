@@ -216,6 +216,12 @@
 		}
 		.ku-item.lbpt{
 			background-image:url(../../../../../../img/waiter/label_print.png);
+			background-position: 20px 22px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.cpfz{
+			background-image:url(../../../../../../img/waiter/product_group.png);
 			background-position: 22px 20px;
 			background-size: 60% ;
     		background-repeat: no-repeat;
@@ -228,6 +234,9 @@
 			color: #000 !important;
 			
 		}
+		/*边框效果*/
+		.hov{border:1px solid white;}
+		.hov:hover{border:1px solid orange;}
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -261,6 +270,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	
+
 	<!-- BEGIN PAGE CONTENT-->
 	<?php if($type==0):?>
 		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>''))));?>
@@ -286,117 +296,118 @@
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					<?php if($type==0):?>
+
 					<a href="<?php echo $this->createUrl('productCategory/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple cpfl"></div>
 							<div class="ku-item-info">菜品分类</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple cplr"></div>
 							<div class="ku-item-info">菜品录入</div>
 						</div>
 					</a>
-					<a style="display: none;" href="<?php echo $this->createUrl('productGroup/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple tcsz"></div>
-							<div class="ku-item-info">套餐分组</div>
-						</div>
-					</a>
 					<a href="<?php echo $this->createUrl('productSet/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple tcsz"></div>
 							<div class="ku-item-info">套餐设置</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('productGroup/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right hov">
+							<div class="ku-item ku-purple cpfz"></div>
+							<div class="ku-item-info">产品组合</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('taste/index',array('companyId'=>$this->companyId,'type'=>'0'));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple kwsz"></div>
 							<div class="ku-item-info">口味设置</div>
 						</div>
 					</a>
 					<?php if(Yii::app()->user->role < User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('copyproduct/index',array('companyId'=>$this->companyId));?>">
-						<div id="cpxf" class="pull-left margin-left-right">
+						<div id="cpxf" class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple cpxf"></div>
 							<div class="ku-item-info">菜品下发</div>
 						</div>
 					</a>
 					
 					<a href="<?php echo $this->createUrl('copyproductSet/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple tcxf"></div>
 							<div class="ku-item-info">套餐下发</div>
 						</div>
 					</a>
 					
 					<a href="<?php echo $this->createUrl('copytaste/index',array('companyId'=>$this->companyId,'type'=>'0'));?>">
-						<div id="kwxf" class="pull-left margin-left-right">
+						<div id="kwxf" class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple kwxf"></div>
 							<div class="ku-item-info">口味下发</div>
 						</div>
 					</a>
 					<?php endif;?>
 					<a href="<?php echo $this->createUrl('muchupdateProd/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple plxg"></div>
 							<div class="ku-item-info">批量修改</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('productClean/index',array('companyId'=>$this->companyId,'typeId'=>'product'));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple gqlb"></div>
 							<div class="ku-item-info">估清列表</div>
 						</div>
 					</a>
 					
 					<a href="<?php echo $this->createUrl('productSim/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple cpjx"></div>
 							<div class="ku-item-info">菜品简写</div>
 						</div>
 					</a>
 					
 					<a href="<?php echo $this->createUrl('productImg/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple cptp"></div>
 							<div class="ku-item-info">产品图片</div>
 						</div>
 					</a>
 					<?php elseif($type==1):?>
 					<a href="<?php echo $this->createUrl('floor/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple lcqy"></div>
 							<div class="ku-item-info">楼层区域</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('siteType/index',array('companyId'=>$this->companyId,'type'=>0));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple czzl"></div>
 							<div class="ku-item-info">餐桌种类</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('sitePersons/index',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple czrs"></div>
 							<div class="ku-item-info">餐桌人数</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('siteChannel/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple wmcd"></div>
 							<div class="ku-item-info">外卖渠道</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('site/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple czmx"></div>
 							<div class="ku-item-info">餐桌明细</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple scy"></div>
 							<div class="ku-item-info">外卖送餐员</div>
 						</div>
@@ -404,46 +415,45 @@
 					<?php elseif($type==2):?>
 					<?php if(Yii::app()->user->role <= User::SHOPKEEPER_VICE):?>
 					<a href="<?php echo $this->createUrl('printer/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple dyjsz"></div>
 							<div class="ku-item-info">打印机设置</div>
 						</div>
 					</a>
-                                        
 					<a href="<?php echo $this->createUrl('printerWay/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple cdsz"></div>
 							<div class="ku-item-info">厨打设置</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('pad/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right hov">
+							<div class="ku-item ku-purple padsz"></div>
+							<div class="ku-item-info">PAD设置</div>
+						</div>
+					</a>
+
+
+
+
 					<a href="<?php echo $this->createUrl('productLabel/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple lbpt"></div>
 							<div class="ku-item-info">标签打印</div>
 						</div>
 					</a>
-                    <?php if(Yii::app()->user->role <= 7):?>
-                    <a href="<?php echo $this->createUrl('CopyPrinter/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple dyjsz"></div>
-							<div class="ku-item-info">一键下发</div>
-						</div>
-					</a>
-                                        <?php endif;?>
-					<a href="<?php echo $this->createUrl('pad/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple padsz"></div>
-							<div class="ku-item-info">PAD设置</div>
-						</div>
-					</a>
+
+
+
+
 					<a href="<?php echo $this->createUrl('productPrinter/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple dpdy"></div>
 							<div class="ku-item-info">单品厨打对应</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('muchprinterProd/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple cdplsz"></div>
 							<div class="ku-item-info">厨打批量设置</div>
 						</div>
@@ -451,20 +461,20 @@
 					<?php endif;?>
 					<?php elseif($type==3):?>
 					<a href="<?php echo $this->createUrl('payMethod/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple zfsz"></div>
 							<div class="ku-item-info">支付设置</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('basicFee/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple fysz"></div>
 							<div class="ku-item-info">费用设置</div>
 						</div>
 					</a>
 					 
 					<a href="<?php echo $this->createUrl('retreat/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple tucsz"></div>
 							<div class="ku-item-info">退菜设置</div>
 						</div>
@@ -479,38 +489,38 @@
 					 -->
 					 <?php elseif($type==4):?>
 					<a href="<?php echo $this->createUrl('materialCategory/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple pxfl"></div>
 							<div class="ku-item-info">原料分类</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>0));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple rkdw"></div>
 							<div class="ku-item-info">入库单位</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple lsdw"></div>
 							<div class="ku-item-info">零售单位</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple pxxx"></div>
 							<div class="ku-item-info">原料信息</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnitRatio/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple dwxs"></div>
 							<div class="ku-item-info">单位系数</div>
 						</div>
 					</a>
 					<?php if(Yii::app()->user->role <= User::SHOPKEEPER_VICE):?>
 					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
+						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple bomxx"></div>
 							<div class="ku-item-info">产品配方</div>
 						</div>
@@ -518,13 +528,13 @@
 					<?php endif;?>
 					<?php if(Yii::app()->user->role < User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>">
-						<div id="ylxfs" class="pull-left margin-left-right ylxfs">
+						<div id="ylxfs" class="pull-left margin-left-right ylxfs hov">
 							<div class="ku-item ku-purple pxxf"></div>
 							<div class="ku-item-info">原料下发</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('copyproductbom/index',array('companyId'=>$this->companyId));?>"> 
-						<div id="pfxfs" class="pull-left margin-left-right pfxfs">
+						<div id="pfxfs" class="pull-left margin-left-right pfxfs hov">
 							<div class="ku-item ku-purple pfxf"></div>
 							<div class="ku-item-info">配方下发</div>
 						</div>
@@ -550,15 +560,17 @@
 		</div>
 	</div>
 	<!-- END PAGE CONTENT-->
+
+
+
+
+
 	<script>
-	$(document).ready(function() {
-		window.$ = function(id) {
-			  return (typeof id == 'string') ? document.getElementById(id) : id;
-			}
-		  	var k = $('cpxf');
-		  	var k2 = $('kwxf');
-		  	var k3 = $('ylxfs');
-		  	var k4 = $('pfxfs');
+	$(function() {
+		  	var k = document.getElementById('cpxf');
+		  	var k2 = document.getElementById('kwxf');
+		  	var k3 = document.getElementById('ylxfs');
+		  	var k4 = document.getElementById('pfxfs');
 		  	//if(!k) return;
 		  	if(k){
 			  	onhover(function() {
@@ -578,7 +590,10 @@
 		  	}
 		    //alert(1);
 		});
-		 
+
+
+
+
 		function onhover(fun, obj, time) {
 		  var s;
 		  obj.onmouseover = function() {
