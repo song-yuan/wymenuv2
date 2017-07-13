@@ -246,6 +246,7 @@ class ElemeController extends Controller
 	}
 	public function actionElemeOrder(){
 		$data = file_get_contents('php://input');
+		Helper::writeLog($data);
 		if($data){
 			$data = urldecode($data);
 			$obj = json_decode($data);
