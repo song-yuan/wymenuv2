@@ -205,4 +205,17 @@ class SiteClass
                     //return false;
             }    
         }
+        public static function closeSite($companyId=0, $istemp, $sid){
+        	$sqlsiteno = "update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2')";
+        	$commandsiteno = $db->createCommand($sqlsiteno);
+        	$commandsiteno->bindValue(":sid" , $sid);
+        	$commandsiteno->bindValue(":istemp" , $istemp);
+        	$commandsiteno->bindValue(":companyId" , $companyId);
+        	$commandsiteno->execute();
+        	if($sqlsiteno){
+        		return array('status'=>true,'msg'=>yii::t('app','撤台成功'),'siteid'=>$sid);
+        	}else{
+        		return array('status'=>false,'msg'=>yii::t('app','撤台失败'),'siteid'=>$sid);
+        	}
+        } 
 }
