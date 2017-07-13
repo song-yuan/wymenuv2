@@ -148,7 +148,7 @@ class SiteClass
         } 
 	}
         
-        public static function openSite($companyId = 0,$siteNumber = 1,$istemp = 1,$sid = 0){
+        public static function openSite($companyId = 0,$siteNumber = 1,$istemp = 1,$sid = 0,$waiterId,$code){
                 $db = Yii::app()->db;
                 //return array('status'=>0,'msg'=>yii::t('app','开台失败122'),'siteid'=>"111");
                 $transaction = $db->beginTransaction();
@@ -182,8 +182,6 @@ class SiteClass
 				                    $commandsiteno->execute();
                     /////
                     
-                    $code = "0000";//SiteClass::getCode($companyId);
-                    
                     $data = array(
                         'lid'=>$lid,
                         'dpid'=>$companyId,
@@ -193,6 +191,7 @@ class SiteClass
                         'site_id'=>$site_id,
                         'status'=>'1',
                         'code'=>$code,
+                    	'waiter_id'=>$waiterId,
                         'number'=>$siteNumber,
                         'delete_flag'=>'0'
                     );                            
