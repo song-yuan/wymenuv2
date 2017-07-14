@@ -57,7 +57,6 @@ class Elm
 	public static function elemeGetToken($dpid){
 		$sql = "select * from nb_eleme_token where dpid=$dpid and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
-
 		if($res){
 			$nowtime = time();
 			if($res['expires_in']>$nowtime){
@@ -87,6 +86,8 @@ class Elm
 					return $access_token;
 				}
 			}
+		}else{
+			return false;
 		}
 	}
 	public static function elemeId($dpid){
@@ -111,6 +112,9 @@ class Elm
 	}
 	public static function elemeUpdateId($dpid){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$resultid = self::ElemeId($dpid);
 		$obj = json_decode($resultid);
 		$auth = $obj->result->authorizedShops;
@@ -133,10 +137,29 @@ class Elm
         );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
         $result =ElUnit::post($url,$protocol);
+        $obj = json_decode($result);
+        if(!empty($obj->result)){
+        	$se=new Sequence("eleme_dpdy");
+			$lid = $se->nextval();
+			$creat_at = date("Y-m-d H:i:s");
+			$update_at = date("Y-m-d H:i:s");
+			$shopid = $obj->result->id;
+			$inserData = array(
+						'lid'=>	$lid,
+						'dpid'=> $dpid,
+						'create_at'=>$creat_at,
+						'update_at'=>$update_at,
+						'shopId'=>$shopid
+				);
+			$res = Yii::app()->db->createCommand()->insert('nb_eleme_dpdy',$inserData);
+        }
 	    return "店铺对应成功";
 	}
 	public static function productCategory($dpid,$cpid,$name,$shopid){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -160,6 +183,9 @@ class Elm
 	}
 	public static function getShopCategories($dpid){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$resultid = self::ElemeId($dpid);
 		$obj = json_decode($resultid);
 		$auth = $obj->result->authorizedShops;
@@ -201,6 +227,9 @@ class Elm
 	}
 	public static function batchCreateItems($dpid,$id,$product_id,$name,$phs_code,$original_price){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -240,9 +269,8 @@ class Elm
 	public static function order($me){
 		$orderId = $me->orderId;
 		$dpid = $me->openId;
-		$me->stutas = 2;
 		$orderArr = array();
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s'),'account_no'=>$me->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>$me->status,'order_type'=>8,'should_total'=>$me->totalPrice,'reality_total'=>$me->originalPrice,'takeout_typeid'=>0,'callno'=>'');
+		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s'),'account_no'=>$me->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>2,'order_type'=>8,'should_total'=>$me->totalPrice,'reality_total'=>$me->originalPrice,'takeout_typeid'=>0,'callno'=>'');
 		$orderArr['order_product'] = array();
 		$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$me->openId.' and phs_code='.$me->groups[0]->items[0]->barCode.' and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$me->openId.' and pshs_code='.$me->groups[0]->items[0]->barCode.' and delete_flag=0 ';
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
@@ -255,13 +283,20 @@ class Elm
 	    } 
 		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+
 		$orderStr = json_encode($orderArr);
+		// $url = Yii::app()->createAbsoluteUrl('/admin/dataAppSync/createOrder');
+		// echo $url;
+		// exit;
 		$data = array('dpid'=>$me->openId,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
 		$order = self::confirmOrder($dpid,$orderId);
 	}
 	public static function confirmOrder($dpid,$orderId){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -282,8 +317,7 @@ class Elm
         $result =ElUnit::post($url,$protocol);
 	}
 	public static function orderStatus($me){
-		$me->status = 4;
-		$sql = "update nb_order set order_status=".$me->status." where account_no=".$me->orderId." and order_type=8";
+		$sql = "update nb_order set order_status=4 where account_no=".$me->orderId." and order_type=8";
 		$res = Yii::app()->db->createCommand($sql)->execute();
 	}
 	public static function productUpdate($lid){
@@ -293,6 +327,9 @@ class Elm
 	}
 	public static function updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -330,6 +367,9 @@ class Elm
 	}
 	public static function deleteItem($itemid,$dpid){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -352,6 +392,9 @@ class Elm
 	}
 	public static function updateCategory($elemeID,$dpid,$name){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -375,6 +418,9 @@ class Elm
 	}
 	public static function removeCategory($elemeID,$dpid){
 		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -394,6 +440,80 @@ class Elm
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
         $result =ElUnit::post($url,$protocol);
         return $result;
+	}
+	public static function orderCancel($me){
+		$se=new Sequence("waimai_status");
+		$lid = $se->nextval();
+		$creat_at = date("Y-m-d H:i:s");
+		$update_at = date("Y-m-d H:i:s");
+		$shopId = $me->shopId;
+		$sql = "select dpid from nb_eleme_dpdy where shopId=$shopId and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$dpid = $res['dpid'];
+		$orderId = $me->orderId;
+		$status = $me->refundStatus;
+		$reason = $me->reason;
+		$inserData = array(
+					'lid'=>	$lid,
+					'dpid'=>$dpid,
+					'create_at'=>$creat_at,
+					'update_at'=>$update_at,
+					'orderId'=>$orderId,
+					'status'=>"$status",
+					'reason'=>"$reason",
+					'type'=>1,
+					'operation'=>'Q'
+			);
+		$res = Yii::app()->db->createCommand()->insert('nb_waimai_status',$inserData);
+	}
+	public static function refundOrder($me){
+		$se=new Sequence("waimai_status");
+		$lid = $se->nextval();
+		$creat_at = date("Y-m-d H:i:s");
+		$update_at = date("Y-m-d H:i:s");
+		$shopId = $me->shopId;
+		$sql = "select dpid from nb_eleme_dpdy where shopId=$shopId and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$dpid = $res['dpid'];
+		$orderId = $me->orderId;
+		$status = $me->refundStatus;
+		$reason = $me->reason;
+		$inserData = array(
+					'lid'=>	$lid,
+					'dpid'=>$dpid,
+					'create_at'=>$creat_at,
+					'update_at'=>$update_at,
+					'orderId'=>$orderId,
+					'status'=>$status,
+					'reason'=>$reason,
+					'type'=>1,
+					'operation'=>'T'
+			);
+		$res = Yii::app()->db->createCommand()->insert('nb_waimai_status',$inserData);
+	}
+	public static function Agree($orderId,$dpid){
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+		$protocol = array(
+            "nop" => '1.0.0',
+            "id" => ElUnit::create_uuid(),
+            "action" => "eleme.order.agreeRefundLite",
+            "token" => $access_token,
+            "metas" => array(
+                "app_key" => $app_key,
+                "timestamp" => time(),
+            ),
+            "params" => array(
+            	'orderId'=>$orderId
+            	)
+        );
+        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+        $result =ElUnit::post($url,$protocol);
 	}
 }
 ?>
