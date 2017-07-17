@@ -118,7 +118,7 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$timestamp = $resArr['timestamp'];
-		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=2 and ePoiId='.$ePoiId.' and timestamp='.$timestamp;
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=2 and ePoiId='.$ePoiId.' and timestamp="'.$timestamp.'"';
 		$releaseBing = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!empty($releaseBing)){
 			return '{"data":"OK"}';
@@ -134,7 +134,7 @@ class MtOrder
 				'update_at'=>$update_at,
 				'type'=>'2',
 				'ePoiId'=>	$ePoiId,
-				'appAuthToken'=>$appAuthToken,
+				'appAuthToken'=>'',
 				'timestamp'=>$timestamp,
 		);
 		$resInser = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
