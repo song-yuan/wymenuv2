@@ -7,6 +7,9 @@
 class MtOrder
 {
 	public static function order($data){
+		if(empty($data)){
+			return '{ "data": "ERROR"}';
+		}
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
