@@ -59,6 +59,7 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
+		$timestamp = $resArr['timestamp'];
 		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");
@@ -69,8 +70,10 @@ class MtOrder
 					'dpid'=> $dpid,
 					'create_at'=>$creat_at,
 					'update_at'=>$update_at,
+					'type'=>'1',
 					'ePoiId'=>	$ePoiId,
 					'appAuthToken'=>$appAuthToken,
+					'timestamp'=>$timestamp,
 			);
 			$res = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
 		if($res){
@@ -114,7 +117,24 @@ class MtOrder
 		Helper::writeLog('jcbd:'.$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
-		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
+		$timestamp = $resArr['timestamp'];
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=2 and ePoiId='.$ePoiId.' and timestamp='.$timestamp;
+		$releaseBing = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($releaseBing)){
+			return '{"data":"OK"}';
+		}
+		$inserData = array(
+				'lid'=>	$lid,
+				'dpid'=> $ePoiId,
+				'create_at'=>$creat_at,
+				'update_at'=>$update_at,
+				'type'=>'2',
+				'ePoiId'=>	$ePoiId,
+				'appAuthToken'=>$appAuthToken,
+				'timestamp'=>$timestamp,
+		);
+		$resInser = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
+		$sql = "update nb_meituan_token set delete_flag=1 where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId;
 		$res = Yii::app()->db->createCommand($sql)->execute();
 		if($res){
 			return '{"data":"OK"}';
