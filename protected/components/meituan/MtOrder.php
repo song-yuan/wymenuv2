@@ -123,6 +123,10 @@ class MtOrder
 		if(!empty($releaseBing)){
 			return '{"data":"OK"}';
 		}
+		$se = new Sequence("meituan_token");
+		$lid = $se->nextval();
+		$creat_at = date("Y-m-d H:i:s");
+		$update_at = date("Y-m-d H:i:s");
 		$inserData = array(
 				'lid'=>	$lid,
 				'dpid'=> $ePoiId,
