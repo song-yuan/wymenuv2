@@ -23,7 +23,7 @@ class WaimaiController extends BackendController
 	}
 	public function actionCaipinyingshe(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$epoiid= 'ePoiId='.$companyId." and delete_flag=0";
+		$epoiid= 'type=1 and ePoiId='.$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		// print_r($tokenmodel);exit;
 		$criteria = " dpid=".$companyId." and delete_flag=0";
@@ -45,11 +45,14 @@ class WaimaiController extends BackendController
 	}
 	public function actionJcbd(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$epoiid = "ePoiId=".$companyId." and delete_flag=0";
+		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$this->render('jcbd',array(
 			'tokenmodel' =>$tokenmodel
 			));
+	}
+	public function actionSetting(){
+		$this->render('setting');
 	}
 }
 ?>
