@@ -59,7 +59,7 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
-		$se=new Sequence("meituan_token");
+		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");
 		$update_at = date("Y-m-d H:i:s");

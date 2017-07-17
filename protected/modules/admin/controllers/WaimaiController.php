@@ -1,6 +1,8 @@
 <?php
 class WaimaiController extends BackendController
 {
+	public $signkey = '8isnqx6h2xewfmiu';
+	public $developerId = 100746;
 	public function actions() {
 		return array(
 			'upload'=>array(
@@ -17,16 +19,7 @@ class WaimaiController extends BackendController
 		$this->render('list');
 	}
 	public function actionIndex(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$epoiid= 'ePoiId='.$companyId." and delete_flag=0";
-		$tokenmodel = MeituanToken::model()->find($epoiid);
-		$signkey='8isnqx6h2xewfmiu';
-		$developerId=100746;
-		$this->render('index',array(
-			"signkey"=>$signkey,
-			"developerId"=>$developerId,
-			"tokenmodel"=>$tokenmodel
-			));
+		$this->render('index');
 	}
 	public function actionCaipinyingshe(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
@@ -46,13 +39,8 @@ class WaimaiController extends BackendController
 	}
 	public function actionDpbd(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$signkey = '8isnqx6h2xewfmiu';
-		// echo $signkey;exit;
-		$developerId = 100746;
 		$this->render('dpbd',array(
 			'companyId'=>$companyId,
-			'developerId'=>$developerId,
-			'signkey'=>$signkey
 			));
 	}
 	public function actionJcbd(){
