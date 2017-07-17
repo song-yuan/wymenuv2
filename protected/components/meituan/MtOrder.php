@@ -110,6 +110,7 @@ class MtOrder
 		if(empty($data)){
 			return '200';
 		}
+		Helper::writeLog('jcbd:'.$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
