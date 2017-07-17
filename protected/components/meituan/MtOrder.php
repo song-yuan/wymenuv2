@@ -12,7 +12,7 @@ class MtOrder
 		}
 		$sql = "select * from nb_waimai_setting where dpid=$ePoiId and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
-		if($res['is_receive']==0){
+		if(!$res||$res['is_receive']==0){
 			return '{ "data": "OK"}';
 		}
 		$data = urldecode($data);
