@@ -128,6 +128,11 @@ class MtOrder
 		if(!empty($releaseBing)){
 			return '{"data":"OK"}';
 		}
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=1 and ePoiId='.$ePoiId;
+		$mtToken = Yii::app()->db->createCommand($sql)->queryRow();
+		if(empty($mtToken)){
+			return '{"data":"OK"}';
+		}
 		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");
