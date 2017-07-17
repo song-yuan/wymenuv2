@@ -8,7 +8,7 @@ class MtOrder
 {
 	public static function order($data){
 		if(empty($data)){
-			return '{ "data": "ERROR"}';
+			return '200';
 		}
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
@@ -52,6 +52,9 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
+		if(empty($data)){
+			return '200';
+		}
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
@@ -75,6 +78,9 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function orderconfirm($data){
+		if(empty($data)){
+			return '200';
+		}
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['order'];
@@ -87,6 +93,9 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function orderCancel($data){
+		if(empty($data)){
+			return '200';
+		}
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['orderCancel'];
 		$obj = json_decode($order);
@@ -98,6 +107,9 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function Jcbd($data){
+		if(empty($data)){
+			return '200';
+		}
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
