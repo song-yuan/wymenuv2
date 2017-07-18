@@ -46,14 +46,13 @@ class MtOrder
 		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			$sql1 = "select * from nb_meituan_token where type=2 and dpid=".$ePoiId." and ePoiId=".$ePoiId." and delete_flag=0";
+			$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId." and delete_flag=0";
 			$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
 			$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
 			$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
 			$sign=MtUnit::sign($array);
 			$data1 = "appAuthToken=".$res1['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
 			$result1 = MtUnit::postHttps($url1, $data1);
-			Helper::writeLog($result1);
 			return '{ "data": "OK"}';
 		}
 		return '{ "data": "ERROR"}';
