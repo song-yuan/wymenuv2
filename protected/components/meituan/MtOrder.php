@@ -19,7 +19,7 @@ class MtOrder
 		Helper::writeLog($sql);
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		Helper::writeLog(json_encode($res));
-		if(!$res||$res['is_receive']==0){
+		if(empty($res)||$res['is_receive']==0){
 			return '{ "data": "OK"}';
 		}
 		$orderArr = array();
@@ -43,8 +43,10 @@ class MtOrder
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr);
+		Helper::writeLog($orderStr);
 		$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
+		Helper::writeLog($result);
 		$reobj = json_decode($result);
 		if($reobj->status){
 			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId." and delete_flag=0";
