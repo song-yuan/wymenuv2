@@ -16,7 +16,6 @@ class MtOrder
 		$order = $resArr['order'];
 		$obj = json_decode($order);
 		$sql = "select * from nb_waimai_setting where dpid=".$ePoiId." and delete_flag=0";
-		Helper::writeLog($sql);
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		Helper::writeLog(json_encode($res));
 		if(empty($res)||$res['is_receive']==0){
@@ -43,19 +42,18 @@ class MtOrder
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr);
-		Helper::writeLog($orderStr);
 		$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
-		Helper::writeLog($result);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId." and delete_flag=0";
+			$sql1 = "select * from nb_meituan_token where type=2 and dpid=".$ePoiId." and ePoiId=".$ePoiId." and delete_flag=0";
 			$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
 			$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
 			$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
 			$sign=MtUnit::sign($array);
 			$data1 = "appAuthToken=".$res1['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
 			$result1 = MtUnit::postHttps($url1, $data1);
+			Helper::writeLog($result1);
 			return '{ "data": "OK"}';
 		}
 		return '{ "data": "ERROR"}';
