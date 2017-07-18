@@ -4,7 +4,6 @@
 */
 class MtUnit
 {
-	
 	public static function dealData($params)
 	{
 		$paramsArr = explode('&',$params); 
@@ -15,6 +14,12 @@ class MtUnit
           	$arr[$a[0]] = $a[1]; 
        	} 
        	return $arr;
+	}
+	public static function getWmSetting($dpid)
+	{
+		$sql = 'select * from nb_waimai_setting where dpid='.$dpid.' and delete_flag=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		return $result;
 	}
 	public static function postHttps($url, $data=null) {
 		$ch = curl_init();									// 创建一个新cURL资源

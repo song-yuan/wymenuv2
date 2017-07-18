@@ -284,7 +284,20 @@ class DataAppSyncController extends Controller
 		$posId = Yii::app()->request->getParam('pos_id');
 		$siteId = Yii::app()->request->getParam('site_id');
 		$number = Yii::app()->request->getParam('number');
-		$result = SiteClass::openSite($dpid,$startTime,$endTime);
+		$result = SiteClass::openSite($dpid,$number,'0',$siteId,$adminId,$posId);
+		echo json_encode($result);exit;
+	}
+	/**
+	 *
+	 * 餐桌撤台
+	 *
+	 */
+	public function actionCloseSite(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$adminId = Yii::app()->request->getParam('admin_id');
+		$posId = Yii::app()->request->getParam('pos_id');
+		$siteId = Yii::app()->request->getParam('site_id');
+		$result = SiteClass::closeSite($dpid,'0',$siteId);
 		echo json_encode($result);exit;
 	}
 }

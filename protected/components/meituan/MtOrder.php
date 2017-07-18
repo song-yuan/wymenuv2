@@ -7,11 +7,18 @@
 class MtOrder
 {
 	public static function order($data){
+		if(empty($data)){
+			return '200';
+		}
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
 		$obj = json_decode($order);
+		$res = MtUnit::getWmSetting($ePoiId);
+		if(empty($res)||$res['is_receive']==0){
+			return '{ "data": "OK"}';
+		}
 		$orderArr = array();
 		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s'),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
 		$orderArr['order_product'] = array();
@@ -37,7 +44,7 @@ class MtOrder
 		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			$sql1 = "select * from nb_meituan_token where ePoiId=".$ePoiId." and delete_flag=0";
+			$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId." and delete_flag=0";
 			$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
 			$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
 			$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
@@ -49,10 +56,15 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function token($data){
+		if(empty($data)){
+			return '200';
+		}
+		Helper::writeLog('bd:'.$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
-		$se=new Sequence("meituan_token");
+		$timestamp = $resArr['timestamp'];
+		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");
 		$update_at = date("Y-m-d H:i:s");
@@ -62,8 +74,10 @@ class MtOrder
 					'dpid'=> $dpid,
 					'create_at'=>$creat_at,
 					'update_at'=>$update_at,
+					'type'=>'1',
 					'ePoiId'=>	$ePoiId,
 					'appAuthToken'=>$appAuthToken,
+					'timestamp'=>$timestamp,
 			);
 			$res = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
 		if($res){
@@ -72,6 +86,9 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function orderconfirm($data){
+		if(empty($data)){
+			return '200';
+		}
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['order'];
@@ -84,6 +101,9 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function orderCancel($data){
+		if(empty($data)){
+			return '200';
+		}
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['orderCancel'];
 		$obj = json_decode($order);
@@ -95,9 +115,39 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function Jcbd($data){
+		if(empty($data)){
+			return '200';
+		}
+		Helper::writeLog('jcbd:'.$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
-		$sql = "update nb_meituan_token set delete_flag=1 where ePoiId=".$ePoiId;
+		$timestamp = $resArr['timestamp'];
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=2 and ePoiId='.$ePoiId.' and timestamp="'.$timestamp.'"';
+		$releaseBing = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($releaseBing)){
+			return '{"data":"OK"}';
+		}
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=1 and ePoiId='.$ePoiId;
+		$mtToken = Yii::app()->db->createCommand($sql)->queryRow();
+		if(empty($mtToken)){
+			return '{"data":"OK"}';
+		}
+		$se = new Sequence("meituan_token");
+		$lid = $se->nextval();
+		$creat_at = date("Y-m-d H:i:s");
+		$update_at = date("Y-m-d H:i:s");
+		$inserData = array(
+				'lid'=>	$lid,
+				'dpid'=> $ePoiId,
+				'create_at'=>$creat_at,
+				'update_at'=>$update_at,
+				'type'=>'2',
+				'ePoiId'=>	$ePoiId,
+				'appAuthToken'=>'',
+				'timestamp'=>$timestamp,
+		);
+		$resInser = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
+		$sql = "update nb_meituan_token set delete_flag=1 where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId;
 		$res = Yii::app()->db->createCommand($sql)->execute();
 		if($res){
 			return '{"data":"OK"}';

@@ -66,7 +66,7 @@
 
 							    <div class="col-md-offset-3 col-md-9" style="margin-top:10px;">
 									<?php echo CHtml::submitButton('确定',array('class' => 'btn blue')); ?>
-							    	<a href="<?php echo $this->createUrl('pricegroup/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
+							    	<a href="<?php echo $this->createUrl('pricegroup/index' , array('companyId' => $this->companyId));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
 							    </div>
 
 							<?php $this->endWidget(); ?>

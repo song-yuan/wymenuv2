@@ -74,6 +74,9 @@ class ElemeController extends Controller
 		 	$fen_lei_id = $category['pid'];
 		 	$cpdy = Elm::getProduct($fen_lei_id);
 		 	$id = $cpdy['elemeID'];
+		 	if(!isset($id)){
+		 		$this->redirect(array('/admin/eleme/index','companyId'=>$dpid));
+		 	}
 		 	$result = Elm::batchCreateItems($dpid,$id,$product_id,$name,$phs_code,$original_price);
 		 	$obj = json_decode($result);
 		 	if(!empty($obj->result)){
@@ -246,8 +249,9 @@ class ElemeController extends Controller
 	}
 	public function actionElemeOrder(){
 		$data = file_get_contents('php://input');
-		if($data){
+		if(!empty($data)){
 			$data = urldecode($data);
+			Helper::writeLog($data);
 			$obj = json_decode($data);
 			$type = $obj->type;
 			$message = $obj->message;
@@ -258,10 +262,13 @@ class ElemeController extends Controller
 			if($type==12){
 				Elm::orderStatus($me);
 			}
-			if($type==18){
-				Elm::orderStatus($me);
+			if($type==20){
+				Elm::orderCancel($me);
+			}
+			if($type==30){
+				Elm::refundOrder($me);
 			}
 		}
-		echo '{"message":"ok"}';exit;
+		echo '{"message":"ok"}';
 	}
 }

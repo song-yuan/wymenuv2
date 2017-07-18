@@ -44,6 +44,12 @@ span.tab{
             background-repeat: no-repeat;
             background-size: 100px;
 		}
+		.ku-item.wmsz{
+			background-image:url(../../../../../../img/waiter/icon-wmsz.png);
+			background-position: 0px 20px;
+            background-repeat: no-repeat;
+            background-size: 100px;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -79,6 +85,12 @@ span.tab{
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
+                 <a href="<?php echo $this->createUrl('waimai/Setting',array('companyId'=>$this->companyId));?>">
+					<div class="pull-left margin-left-right">
+						<div class="ku-item ku-purple wmsz"></div>
+						<div class="ku-item-info">外卖设置</div>
+					</div>
+				</a>
                  <a href="<?php echo $this->createUrl('waimai/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple mtwm"></div>

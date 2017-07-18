@@ -148,7 +148,7 @@ class SiteClass
         } 
 	}
         
-        public static function openSite($companyId = 0,$siteNumber = 1,$istemp = 1,$sid = 0){
+        public static function openSite($companyId = 0,$siteNumber = 1,$istemp = 1,$sid = 0,$waiterId,$code){
                 $db = Yii::app()->db;
                 //return array('status'=>0,'msg'=>yii::t('app','开台失败122'),'siteid'=>"111");
                 $transaction = $db->beginTransaction();
@@ -182,8 +182,6 @@ class SiteClass
 				                    $commandsiteno->execute();
                     /////
                     
-                    $code = "0000";//SiteClass::getCode($companyId);
-                    
                     $data = array(
                         'lid'=>$lid,
                         'dpid'=>$companyId,
@@ -193,6 +191,7 @@ class SiteClass
                         'site_id'=>$site_id,
                         'status'=>'1',
                         'code'=>$code,
+                    	'waiter_id'=>$waiterId,
                         'number'=>$siteNumber,
                         'delete_flag'=>'0'
                     );                            
@@ -206,4 +205,17 @@ class SiteClass
                     //return false;
             }    
         }
+        public static function closeSite($companyId=0, $istemp, $sid){
+        	$sqlsiteno = "update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2')";
+        	$commandsiteno = $db->createCommand($sqlsiteno);
+        	$commandsiteno->bindValue(":sid" , $sid);
+        	$commandsiteno->bindValue(":istemp" , $istemp);
+        	$commandsiteno->bindValue(":companyId" , $companyId);
+        	$commandsiteno->execute();
+        	if($sqlsiteno){
+        		return array('status'=>true,'msg'=>yii::t('app','撤台成功'),'siteid'=>$sid);
+        	}else{
+        		return array('status'=>false,'msg'=>yii::t('app','撤台失败'),'siteid'=>$sid);
+        	}
+        } 
 }
