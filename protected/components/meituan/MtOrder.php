@@ -17,7 +17,6 @@ class MtOrder
 		$obj = json_decode($order);
 		$sql = "select * from nb_waimai_setting where dpid=".$ePoiId." and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
-		Helper::writeLog(json_encode($res));
 		if(empty($res)||$res['is_receive']==0){
 			return '{ "data": "OK"}';
 		}
