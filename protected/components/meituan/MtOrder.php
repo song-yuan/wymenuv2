@@ -10,16 +10,16 @@ class MtOrder
 		if(empty($data)){
 			return '200';
 		}
-		$sql = "select * from nb_waimai_setting where dpid=$ePoiId and delete_flag=0";
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
-		if(!$res||$res['is_receive']==0){
-			return '{ "data": "OK"}';
-		}
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
 		$obj = json_decode($order);
+		$sql = "select * from nb_waimai_setting where dpid=$ePoiId and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!$res||$res['is_receive']==0){
+			return '{ "data": "OK"}';
+		}
 		$orderArr = array();
 		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s'),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
 		$orderArr['order_product'] = array();
