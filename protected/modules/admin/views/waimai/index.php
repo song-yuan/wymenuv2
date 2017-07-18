@@ -77,11 +77,12 @@ span.tab{
 							<div class="ku-item-info">菜品映射</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('waimai/jcbd',array('companyId'=>$this->companyId));?>">
+				 
+					<!-- <a href="<?php echo $this->createUrl('waimai/jcbd',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item-info">解除绑定</div>
 						</div>
-					</a>
+					</a>-->
 				</div>
 			</div>
 		</div>
