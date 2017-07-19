@@ -78,7 +78,7 @@ class ElemeController extends BackendController
 		$this->render('dpsq',array(
 				'companyId'=>$companyId,
 				'url'=>$url,
-				'clinetId'=>$clientId,
+				'clientId'=>$clientId,
 				'sqUrl'=>$sqUrl,
 			));
 	}
