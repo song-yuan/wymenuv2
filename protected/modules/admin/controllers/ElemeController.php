@@ -73,9 +73,13 @@ class ElemeController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$url = Yii::app()->createAbsoluteUrl('/eleme/elemetoken');
 		$url = urlencode($url);
+		$clintId = ElmConfig::key;
+		$sqUrl = ElmConfig::squrl;
 		$this->render('dpsq',array(
-			'companyId'=>$companyId,
-			'url'=>$url
+				'companyId'=>$companyId,
+				'url'=>$url,
+				'clintId'=>$clintId,
+				'sqUrl'=>$sqUrl,
 			));
 	}
 }
