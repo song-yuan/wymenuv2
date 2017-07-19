@@ -1,3 +1,7 @@
+<style>
+	li{list-style: none;}
+	#printall{margin-top:5%;}
+</style>
 <script type="text/javascript">
 function fun()
 		{
@@ -34,55 +38,16 @@ function fun()
 	</div>
 	
 	
-	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">		                
-         <div class="modal-header">
-         	<h4 class="modal-title">选择需要下发活动的店铺</h4>
-         </div>
-         <div class="modal-body">
-	         <div class="portlet-body" id="table-manage">  
-		         <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
-			         <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
-			         <?php if($dpids):?>
-			         <?php foreach($dpids as $dpid):?>
-				         <li style="width:50%;float:left;">
-					         <div style="width:10%;float:left;"><?php echo $a++;?></div>
-					         <div style="width:70%;float:left;"><?php echo $dpid['company_name'];?></div>
-					         <div style="width:10%;float:left;">
-					         	<input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" />
-					         </div>
-				         </li>
-				     <?php endforeach;?>
-				     <?php endif;?>
-				         <li style="width:100%;">
-					         <div style="width:10%;float:left;"></div>
-					         <div style="width:60%;float:left;"></div>
-					         <div style="width:14%;float:right;">
-					         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
-					         	全选
-					         </div>
-					         
-				         </li>                                                                       
-			         </ul>
-		         </div>
-	         </div>
-	         <div class="modal-footer">
-		         <button id="printall" type="button" class="btn blue">确认下发</button>
-		         <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
-		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
-		         
-	         </div>
-		 </div>
-				                	
-		</div>
+
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','营销活动'),'url'=>$this->createUrl('entityMarket/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','普通优惠'),'url'=>$this->createUrl('normalpromotion/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','活动下发'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('normalpromotion/index' , array('companyId' => $this->companyId,)))));?>
-	
+
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
-	<?php $form=$this->beginWidget('CActiveForm', array(
+		<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'copyproduct-form',
 				'action' => $this->createUrl('copypromotion/storProduct' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
@@ -91,7 +56,7 @@ function fun()
 					'enctype' => 'multipart/form-data'
 				),
 		)); ?>
-	<div class="col-md-12">
+		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
@@ -113,10 +78,11 @@ function fun()
 							</tr>
 						</thead>
 						<tbody>
-						<?php if($models) :?>
+						<?php if($models) :?> 
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" code="<?php echo $model->normal_code;?>" name="ids[]" />
+								<td>
+									<input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" code="<?php echo $model->normal_code;?>" name="ids[]" />
 								</td>
 								<td style="width:25%"><?php echo $model->promotion_title;?></td>
 								<td><?php echo $model->promotion_abstract;?>&nbsp&nbsp&nbsp<?php echo '活动时间：'.$model->begin_time;echo '~~'; echo $model->end_time;?></td>
@@ -138,6 +104,42 @@ function fun()
 		</div>
 		<?php $this->endWidget(); ?>
 	</div>
+
+
+	<!-- 最后确认弹出窗 -->
+	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
+		<div class="modal-header">
+			<h4 class="modal-title">选择需要下发活动的店铺</h4>
+		</div>
+
+		<div class="modal-body">
+			<div class="portlet-body" id="table-manage">  
+				<div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
+					<ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
+						<?php if($dpids):?>
+			            <?php foreach($dpids as $dpid):?>
+			    	    <li style="width:40%;float:left;">
+			    		    <input style="height:20px;display:inline-block; width:10%;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" id="a<?php echo $a;?>" />
+			    		    <label for="a<?php echo $a;?>" style="height:20px;display:inline-block;"><?php echo $a;?>-<?php echo $dpid['company_name'];?></label>
+			    		    <input type="hidden" value="<?php echo $a++;?>">
+			    	    </li>
+			    	    <?php endforeach;?>
+					    <?php endif;?>
+				        <li style="width:100%;">
+				         
+						    <input style="height:20px;display:inline-block; width:10%;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" id="all" />
+						    <label for="all" style="height:20px;display:inline-block;">全选</label>
+		         	        <div>
+		         		        <button id="printall" type="button" class="btn blue">确认下发</button>
+		         	        </div>
+				        </li>
+			        </ul>
+		        </div>
+	        </div>
+		</div>
+	</div>
+
+
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -172,10 +174,12 @@ function fun()
         var codep=new Array();
         for (var i = 0; i < aa.length; i++) {
             if (aa[i].checked) {
+	    		//document.write(aa[i].getAttribute("code"));return false;
                 //var str = aa[i].getAttribute("chs_code");
                 codep += aa[i].getAttribute("code") +',';
             }
-        }
+        }//获取活动编码
+
         if(codep!=''){
         	codep = codep.substr(0,codep.length-1);//除去最后一个“，”
         }else{
@@ -186,6 +190,7 @@ function fun()
      	//alert(str);
         
 		if(window.confirm("确认进行此项操作?")){
+			//弹出店铺选择对话窗口
 			layer_index_printreportlist=layer.open({
 	            type: 1,
 	            shade: false,
@@ -197,6 +202,8 @@ function fun()
 	                layer_index_printreportlist=0;                                                                                                     
 	            }
 	        });
+
+	        //获取店铺的dpid
 			$("#printall").on("click",function(){
 	            //alert("暂无权限！！！");
 	            var dpids =new Array();
@@ -207,13 +214,12 @@ function fun()
 	            });
 	            if(dpids!=''){
 	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
-	            	//alert(codep);return false;
 	            	$("#dpids").val(dpids);
 	            	$("#code").val(codep);
 	    	        $("#copyproduct-form").submit();
-		            }else{
-						alert("请选择店铺。。。");return;
-			            }
+	            }else{
+					alert("请选择店铺。。。");return;
+		            }
 			});
 	        $("#closeall").on('click',function(){
 		        //alert("123");
