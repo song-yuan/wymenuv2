@@ -66,8 +66,8 @@ class CopypromotionController extends BackendController
 		//var_dump($catep1,$catep2,$products);exit;
         //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
-//         	$transaction = $db->beginTransaction();
-//         	try{
+        	$transaction = $db->beginTransaction();
+        	try{
 	        	foreach ($dpids as $dpid){//遍历需要下发活动的店铺
 
         			foreach ($normalcodes as $normalcode){//遍历需要下发的活动
@@ -231,14 +231,14 @@ class CopypromotionController extends BackendController
         				}
         			}
 	        	}
-// 	        	$transaction->commit();
-// 	        	Yii::app()->user->setFlash('success' , yii::t('app','下发成功！！！'));
-// 	        	$this->redirect(array('copypromotion/copynormalpromotion' , 'companyId' => $companyId , 'types'=>'1')) ;
-//         	}catch (Exception $e){
-//         		$transaction->rollback();
-//         		Yii::app()->user->setFlash('error' , yii::t('app','下发失败！！！'));
-//         		$this->redirect(array('copypromotion/copynormalpromotion' , 'companyId' => $companyId , 'types'=>'1')) ;
-//         	}
+	        	$transaction->commit();
+	        	Yii::app()->user->setFlash('success' , yii::t('app','下发成功！！！'));
+	        	$this->redirect(array('copypromotion/copynormalpromotion' , 'companyId' => $companyId , 'types'=>'1')) ;
+        	}catch (Exception $e){
+        		$transaction->rollback();
+        		Yii::app()->user->setFlash('error' , yii::t('app','下发失败！！！'));
+        		$this->redirect(array('copypromotion/copynormalpromotion' , 'companyId' => $companyId , 'types'=>'1')) ;
+        	}
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
         	$this->redirect(array('copypromotion/copynormalpromotion' , 'companyId' => $companyId , 'types'=>'1')) ;
