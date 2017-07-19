@@ -58,13 +58,13 @@ class WaimaiSetting extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'lid' => 'Lid',
-            'dpid' => 'Dpid',
-            'create_at' => 'Create At',
-            'update_at' => 'Update At',
-            'is_receive' => 'Is Receive',
+            'lid' => '自身id，统一dpid下递增',
+            'dpid' => '店铺id',
+            'create_at' => '添加时间',
+            'update_at' => '更新时间',
+            'is_receive' => yii::t('app','是否自动接单'),
             'delete_flag' => 'Delete Flag',
-            'is_sync' => 'Is Sync',
+            'is_sync' => yii::t('app','是否同步'),
         );
     }
 
