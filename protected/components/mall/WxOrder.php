@@ -235,7 +235,7 @@ class WxOrder
 	}
 	//座位开台
 	public function orderOpenSite(){
-		$result = SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
+		$result = SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId,'0','0');
 		if($this->isTemp==1){
 			$this->siteId = $result['siteid'];
 		}

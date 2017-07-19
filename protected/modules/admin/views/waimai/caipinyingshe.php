@@ -22,7 +22,7 @@ window.addEventListener('message',function(e){
 				{
 			 "categoryName":"套餐",
 			 "eDishCode":"<?php echo $value->pshs_code?>",
-			 "eDishSkuCode":"<?php echo $value->category_id?>",
+			 "eDishSkuCode":"<?php echo $value->pshs_code?>",
 			 "dishNameWithSpec":"<?php echo $value->set_name?>"
 				},
 			<?php }?>
