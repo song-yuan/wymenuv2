@@ -1,5 +1,4 @@
 <?php
-header("Content-type: text/html; charset=utf-8"); 
 class ElemeController extends BackendController
 {
 	public function actions() {
@@ -68,6 +67,19 @@ class ElemeController extends BackendController
 		$this->render('flsc',array(
 			'companyId'=>$companyId,
 			'model'=>$model
+			));
+	}
+	public function actionDpsq(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$url = Yii::app()->createAbsoluteUrl('/eleme/elemetoken');
+		$url = urlencode($url);
+		$clientId = ElmConfig::key;
+		$sqUrl = ElmConfig::squrl;
+		$this->render('dpsq',array(
+				'companyId'=>$companyId,
+				'url'=>$url,
+				'clientId'=>$clientId,
+				'sqUrl'=>$sqUrl,
 			));
 	}
 }
