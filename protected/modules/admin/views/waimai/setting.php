@@ -1,24 +1,25 @@
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Modal title</h4>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title">关系图</h4>
+					</div>
+					<div class="modal-body">
+						<img alt="" src="">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn default" data-dismiss="modal">确定</button>
+					</div>
 				</div>
-				<div class="modal-body">
-					Widget settings form goes here
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn blue">Save changes</button>
-					<button type="button" class="btn default" data-dismiss="modal">Close</button>
-				</div>
+				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal-content -->
+			<!-- /.modal-dialog -->
 		</div>
-		<!-- /.modal-dialog -->
-	</div>
+	<!-- BEGIN PAGE CONTENT-->
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖设置'),'url'=>''))));?>
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
@@ -34,30 +35,35 @@
 					'enctype' => 'multipart/form-data'
 				),
 		)); ?>
-	<div class="col-md-12">
+	<div class="form-body">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
-				<div class="portlet-body" id="table-manage">
-						<table class="table table-striped table-bordered table-hover" id="sample_1">
-						<tbody>
-							<tr class="odd gradeX">
-							<td><?php echo yii::t('app','店铺ID');?></td>
-							<td><input type="text" name="companyId" disabled="disabled" value="<?php echo $this->companyId;?>" name="ids[]" /></td>
-						</tr>
-						<tr>
-							<td><?php echo yii::t('app','是否自动接单');?></td>
-							<td>
-								<select name="jiedan">
-									<option value="0">否</option>
-									<option value="1">是</option>
-								</select>
-							</td>
-						</tr>
-						<tr style="text-align: center;"><td colspan="2"><input type="submit" value="提交"></td></tr>
-						</tbody>
-						</table>
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','是否自动接单');?></div>
+				<div class="tools">
+					<a href="javascript:;" class="collapse"></a>
 				</div>
 			</div>
-			<!-- END EXAMPLE TABLE PORTLET-->
+			<div class="portlet-body form">
+				<div class="form-group">
+				<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
+					<div class="col-md-4">
+					<?php echo $form->textField($model, 'dpid',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+					<?php echo $form->error($model, 'dpid' )?>
+					</div>
+				</div>
+				<div class="form-group">
+				<?php echo $form->label($model, 'is_receive',array('class' => 'col-md-3 control-label'));?>
+					<div class="col-md-4">
+					<?php echo $form->dropDownList($model, 'is_receive', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_receive')));?>
+					</div>
+				</div>
+				<div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>                   
+					</div>
+				</div>
+			</div>
 		</div>
 		<?php $this->endWidget(); ?>
 	</div>

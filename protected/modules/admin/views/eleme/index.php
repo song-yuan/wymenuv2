@@ -1,7 +1,3 @@
-<?php 
-$url = Yii::app()->createAbsoluteUrl('/eleme/elemetoken');
-$url = urlencode($url);
-?>
 <style type="text/css">
 span.tab{
 			color: black;
@@ -71,7 +67,7 @@ span.tab{
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
-                 <a href="https://open-api.shop.ele.me/authorize?response_type=code&client_id=wmEn4JE35z&redirect_uri=<?php echo $url;?>&state=<?php echo $companyId;?>&scope=all">
+                 <a href="<?php echo $this->createUrl('eleme/dpsq',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item-info">店铺授权</div>
 						</div>

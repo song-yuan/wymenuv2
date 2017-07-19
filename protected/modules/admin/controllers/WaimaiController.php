@@ -52,28 +52,33 @@ class WaimaiController extends BackendController
 			));
 	}
 	public function actionSetting(){
-		$model = new WaimaiSetting();
+		$model = WaimaiSetting::model()->find('dpid='.$this->companyId.' and delete_flag=0');
+		if(!$model){
+			$model = new WaimaiSetting();
+			$model->create_at = date('Y-m-d H:i:s',time());
+	        $model->update_at=date('Y-m-d H:i:s',time());
+		}
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$sql = "dpid=$this->companyId and delete_flag=0";
 			$res = $model->find($sql);
-			$model->is_receive = Yii::app()->request->getPost('jiedan');
+			$model->attributes = Yii::app()->request->getPost('WaimaiSetting');
 			$se=new Sequence("waimai_setting");
-			$model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at=date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
-			//var_dump($model);exit;
+	        $model->lid = $se->nextval();
+	        //var_dump($model);exit;
 			if(isset($res['dpid'])){
-				Yii::app()->db->createCommand()->update('nb_waimai_setting',array('is_receive' => $model->is_receive),'dpid=:dpid',array(':dpid' => $this->companyId));
-				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
+				if($model->save()){
+					Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
+				} 
 			}else{
 				if($model->save()){
 					Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				}
 			}
 		}
-		$this->render('setting');
+		$this->render('setting',array(
+			"model"=>$model
+			));
 	}
 }
 ?>
