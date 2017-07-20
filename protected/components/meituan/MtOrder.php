@@ -10,6 +10,7 @@ class MtOrder
 		if(empty($data)){
 			return '200';
 		}
+		Helper::writeLog($data);
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
@@ -142,6 +143,7 @@ class MtOrder
 		}
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['orderCancel'];
+		$ePoiId = $resArr['ePoiId'];
 		$obj = json_decode($order);
 		$sql = "update nb_order set order_status=7 where account_no=".$obj->orderId." and order_type=7";
 		$res = Yii::app()->db->createCommand($sql)->execute();
