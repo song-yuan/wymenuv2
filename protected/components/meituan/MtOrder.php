@@ -10,7 +10,6 @@ class MtOrder
 		if(empty($data)){
 			return '200';
 		}
-		Helper::writeLog($data);
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
@@ -22,7 +21,7 @@ class MtOrder
 		}
 		$orderArr = array();
 		$orderTime = $obj->ctime;
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
+		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
 		$orderArr['order_product'] = array();
 		$array_detail=json_decode($obj->detail,true);
 		foreach ($array_detail as $key => $value) {
@@ -98,17 +97,17 @@ class MtOrder
 		$obj = json_decode($order);
 		$orderTime = $obj->ctime;
 		$createAt = date('Y-m-d H:i:s',$orderTime);
-		$sql = "select * from nb_order where dpid=".$ePoiId." and create_at=".$createAt." and account_no=".$obj->orderId;
+		$sql = "select * from nb_order where dpid=".$ePoiId." and create_at='".$createAt."' and account_no=".$obj->orderId;
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!empty($res)){
-			$sql1 = "update nb_order set order_status=".$obj->status." where dpid=".$ePoiId." account_no=".$obj->orderId." and order_type=7";
+			$sql1 = "update nb_order set order_status=".$obj->status." where dpid=".$ePoiId." and account_no=".$obj->orderId." and order_type=7";
 			$res1 = Yii::app()->db->createCommand($sql1)->execute();
 			if($res1){
 				return '{ "data": "OK"}';
 			}
 		}else{
 			$orderArr = array();
-			$orderArr['order_info'] = array('creat_at'=>$createAt,'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
+			$orderArr['order_info'] = array('creat_at'=>$createAt,'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
 			$orderArr['order_product'] = array();
 			$array_detail=json_decode($obj->detail,true);
 			foreach ($array_detail as $key => $value) {
