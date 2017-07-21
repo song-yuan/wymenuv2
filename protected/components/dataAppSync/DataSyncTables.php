@@ -1041,17 +1041,17 @@ class DataSyncTables
         		"main_picture varchar(255) NOT NULL,".
         		"promotion_abstract varchar(255) NOT NULL,".
         		"promotion_memo text DEFAULT NULL,".
-        		"promotion_type varchar(20) NOT NULL DEFAULT '0',".
+        		"promotion_type varchar(2) NOT NULL DEFAULT '0',".
         		"begin_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"end_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"weekday varchar(32) NOT NULL DEFAULT '0',".
         		"day_begin varchar(8) NOT NULL DEFAULT '00:00',".
         		"day_end varchar(8) NOT NULL DEFAULT '00:00',".
-        		"to_group varchar(2) NOT NULL DEFAULT '0.00',".
+        		"to_group varchar(2) NOT NULL DEFAULT '0',".
         		"group_id int(10) NOT NULL DEFAULT '0',".
         		"is_available varchar(2) NOT NULL DEFAULT '0',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
-        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
@@ -1069,10 +1069,10 @@ class DataSyncTables
         		"buy_num int(3) NOT NULL DEFAULT '0',".
         		"sent_num int(3) NOT NULL DEFAULT '0',".
         		"limit_num int(3) NOT NULL DEFAULT '0',".
-        		"group_no varchar(15) NOT NULL DEFAULT '0.00',".
+        		"group_no varchar(15) NOT NULL DEFAULT '0',".
         		"is_available varchar(2) NOT NULL DEFAULT '1',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
-        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
