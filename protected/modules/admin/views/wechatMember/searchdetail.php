@@ -350,8 +350,8 @@ li{
                                 <?php                                 
                                 $cupon_arrays=$brand_user_model->cupon_branduser;
                                 if($cupon_arrays): 
-                                   // var_dump($cupon_arrays);
-                               // exit();
+                                //var_dump($cupon_arrays);
+                                //exit();
                                     foreach($cupon_arrays as $cupon_array):   
                                     //    if(($cupon_array->is_used)==1):
                                             foreach ($cupon_model as $v):
@@ -361,14 +361,14 @@ li{
                                     <td><?php echo $v->cupon_title;?></td> 
                                     <td><?php echo $v->cupon_money;?></td> 
                                     <td><?php echo $v->min_consumer;?></td>
-                                    <td><?php echo $v->end_time;?></td>
+                                    <td><?php echo $cupon_array->close_day;?></td>
                                     <td><?php 
                                        
                                         if($cupon_array->is_used=="1"){
-                                            if(((date('Y-m-d H:i:s',time()))>=$v->begin_time)&&((date('Y-m-d H:i:s',time()))<=$v->end_time)){
+                                            if(((date('Y-m-d H:i:s',time()))>=$cupon_array->valid_day)&&((date('Y-m-d H:i:s',time()))<=$cupon_array->close_day)){
                                                 echo "未使用";
                                             }
-                                            if((date('Y-m-d H:i:s',time()))>=$v->end_time){
+                                            if((date('Y-m-d H:i:s',time()))>=$cupon_array->close_day){
                                                 echo "已过期";
                                             }
                                         }
