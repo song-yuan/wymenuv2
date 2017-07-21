@@ -496,18 +496,19 @@
 							<div class="ku-item-info">零售单位</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple pxxx"></div>
-							<div class="ku-item-info">原料信息</div>
-						</div>
-					</a>
 					<a href="<?php echo $this->createUrl('materialUnitRatio/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dwxs"></div>
 							<div class="ku-item-info">单位系数</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pxxx"></div>
+							<div class="ku-item-info">原料信息</div>
+						</div>
+					</a>
+					
 					<?php if(Yii::app()->user->role <= User::SHOPKEEPER_VICE):?>
 					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
