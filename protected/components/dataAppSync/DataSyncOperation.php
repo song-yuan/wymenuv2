@@ -480,6 +480,7 @@ class DataSyncOperation {
 					'should_total' => $orderInfo->should_total,
 					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
 					'callno' => isset($orderInfo->callno) ? $orderInfo->callno : $orderInfo->callno,
+					'remark' => isset ( $orderInfo->remark ) ? $orderInfo->remark : '',
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 
 			);
