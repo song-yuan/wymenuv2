@@ -42,6 +42,16 @@ class DataSyncOperation {
 							return $msg;
 						}
 					}
+					$sql = 'select * from nb_pad_setting_status where dpid='.$dpid.' and delete_flag=0';
+					$padSettingStatus = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+					if($padSettingStatus['use_status']==0){
+						$sql = 'update nb_pad_setting_status set update_at='.date ( 'Y-m-d H:i:s', time () ).',use_status=1 where lid='.$padSettingStatus['lid'].' and dpid='.$dpid;
+						$result = Yii::app ()->db->createCommand ( $sql )->execute ();
+						if(!$result){
+							$msg = array('status'=>false,'msg'=>'使用失败,请重新使用');
+							return $msg;
+						}
+					}
 					$isSync = DataSync::getInitSync ();
 					$se = new Sequence ( "pad_setting_detail" );
 					$lid = $se->nextval ();
@@ -470,6 +480,7 @@ class DataSyncOperation {
 					'should_total' => $orderInfo->should_total,
 					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
 					'callno' => isset($orderInfo->callno) ? $orderInfo->callno : $orderInfo->callno,
+					'remark' => isset ( $orderInfo->remark ) ? $orderInfo->remark : '',
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 
 			);

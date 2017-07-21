@@ -21,11 +21,11 @@ class MtOrder
 		}
 		$orderArr = array();
 		$orderTime = $obj->ctime;
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
+		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'','remark'=>$obj->caution);
 		$orderArr['order_product'] = array();
 		$array_detail=json_decode($obj->detail,true);
 		foreach ($array_detail as $key => $value) {
-			$phsCode =  $array_detail[$key]['app_food_code'];
+			$phsCode =  $array_detail[$key]['sku_id'];
 			$price = $array_detail[$key]['price'];
 			$amount = $array_detail[$key]['quantity'];
 			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code='.$phsCode.' and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code='.$phsCode.' and delete_flag=0 ';
@@ -92,12 +92,47 @@ class MtOrder
 		}
 		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
+		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
 		$obj = json_decode($order);
-		$sql = "update nb_order set order_status=".$obj->status." where account_no=".$obj->orderId." and order_type=7";
-		$res = Yii::app()->db->createCommand($sql)->execute();
-		if($res){
-			return '{ "data": "OK"}';
+		$orderTime = $obj->ctime;
+		$createAt = date('Y-m-d H:i:s',$orderTime);
+		$sql = "select * from nb_order where dpid=".$ePoiId." and create_at='".$createAt."' and account_no=".$obj->orderId;
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($res)){
+			$sql1 = "update nb_order set order_status=".$obj->status." where dpid=".$ePoiId." and account_no=".$obj->orderId." and order_type=7";
+			$res1 = Yii::app()->db->createCommand($sql1)->execute();
+			if($res1){
+				return '{ "data": "OK"}';
+			}
+		}else{
+			$orderArr = array();
+			$orderArr['order_info'] = array('creat_at'=>$createAt,'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
+			$orderArr['order_product'] = array();
+			$array_detail=json_decode($obj->detail,true);
+			foreach ($array_detail as $key => $value) {
+				$phsCode =  $array_detail[$key]['app_food_code'];
+				$price = $array_detail[$key]['price'];
+				$amount = $array_detail[$key]['quantity'];
+				$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code='.$phsCode.' and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code='.$phsCode.' and delete_flag=0 ';
+				$res = Yii::app()->db->createCommand($sql)->queryRow();
+				if( $res['is_set']==0){
+					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+					array_push($orderArr['order_product'], $orderProduct);
+				}else{
+					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+					array_push($orderArr['order_product'], $orderProduct);
+				}
+			}
+			$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
+			$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+			$orderStr = json_encode($orderArr);
+			$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
+			$result = DataSyncOperation::operateOrder($data);
+			$objArr = json_decode($result);
+			if($objArr->status){
+				return '{ "data": "OK"}';
+			}
 		}
 		return '{ "data": "ERROR"}';
 	}
@@ -107,6 +142,7 @@ class MtOrder
 		}
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['orderCancel'];
+		$ePoiId = $resArr['ePoiId'];
 		$obj = json_decode($order);
 		$sql = "update nb_order set order_status=7 where account_no=".$obj->orderId." and order_type=7";
 		$res = Yii::app()->db->createCommand($sql)->execute();

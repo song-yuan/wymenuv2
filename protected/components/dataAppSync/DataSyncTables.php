@@ -76,7 +76,9 @@ class DataSyncTables
         array("name"=>"普通活动","table"=>"nb_normal_promotion"),
     	array("name"=>"普通活动详情","table"=>"nb_normal_promotion_detail"),
         array("name"=>"满送满减活动","table"=>"nb_full_sent"),
-    	array("name"=>"满送满减活动详情","table"=>"nb_full_sent_detail"),      
+    	array("name"=>"满送满减活动详情","table"=>"nb_full_sent_detail"),
+    	array("name"=>"满送满减活动","table"=>"nb_buysent_promotion"),
+    	array("name"=>"满送满减活动详情","table"=>"nb_buysent_promotion_detail"),
     );
 
     
@@ -1026,6 +1028,51 @@ class DataSyncTables
         		"promotion_discount decimal(10,2) NOT NULL DEFAULT '1.00',".
         		"number int(3) NOT NULL DEFAULT '1',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_buysent_promotion" => "CREATE TABLE IF NOT EXISTS nb_buysent_promotion (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"sole_code varchar(20) NOT NULL,". 
+        		"promotion_title varchar(50) NOT NULL,".
+        		"main_picture varchar(255) NOT NULL,".
+        		"promotion_abstract varchar(255) NOT NULL,".
+        		"promotion_memo text DEFAULT NULL,".
+        		"promotion_type varchar(2) NOT NULL DEFAULT '0',".
+        		"begin_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"end_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"weekday varchar(32) NOT NULL DEFAULT '0',".
+        		"day_begin varchar(8) NOT NULL DEFAULT '00:00',".
+        		"day_end varchar(8) NOT NULL DEFAULT '00:00',".
+        		"to_group varchar(2) NOT NULL DEFAULT '0',".
+        		"group_id int(10) NOT NULL DEFAULT '0',".
+        		"is_available varchar(2) NOT NULL DEFAULT '0',".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
+        		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_buysent_promotion_detail" => "CREATE TABLE IF NOT EXISTS nb_buysent_promotion_detail (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"sole_code varchar(20) NOT NULL,".
+        		"buysent_pro_id int(10) NOT NULL,".
+        		"fa_sole_code varchar(20) NOT NULL,".
+        		"is_set varchar(2) NOT NULL DEFAULT '0',".
+        		"product_id int(10) NOT NULL DEFAULT '0',".
+        		"phs_code varchar(15) NOT NULL DEFAULT '0',".
+        		"buy_num int(3) NOT NULL DEFAULT '0',".
+        		"sent_num int(3) NOT NULL DEFAULT '0',".
+        		"limit_num int(3) NOT NULL DEFAULT '0',".
+        		"group_no varchar(15) NOT NULL DEFAULT '0',".
+        		"is_available varchar(2) NOT NULL DEFAULT '1',".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
+        		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
