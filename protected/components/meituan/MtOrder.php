@@ -45,12 +45,12 @@ class MtOrder
 					if($i+1 == count($detail)){
 						$leavePrice = $hasPrice - $price;
 						if($leavePrice > 0){
-							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+							$itemPrice =  $eachPrice - $leavePrice;
 						}else{
-							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+							$itemPrice =  $eachPrice - $leavePrice;
 						}
 					}else{
-						$itemPrice = $eachPrice + $ortherPrice;
+						$itemPrice = $eachPrice;
 					}
 					$itemPrice = number_format($itemPrice,4);
 		    		$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
@@ -159,12 +159,12 @@ class MtOrder
 						if($i+1 == count($detail)){
 							$leavePrice = $hasPrice - $price;
 							if($leavePrice > 0){
-								$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+								$itemPrice =  $eachPrice - $leavePrice;
 							}else{
-								$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
+								$itemPrice =  $eachPrice - $leavePrice;
 							}
 						}else{
-							$itemPrice = $eachPrice + $ortherPrice;
+							$itemPrice = $eachPrice;
 						}
 						$itemPrice = number_format($itemPrice,4);
 			    		$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
