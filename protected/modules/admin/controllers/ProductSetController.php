@@ -101,6 +101,7 @@ class ProductSetController extends BackendController
 				'model' => $model,
 				'status'=> $status,
 				'istempp' => $istempp,
+				'islock' => '0',
 		));
 	}
 	public function actionUpdate(){
