@@ -64,7 +64,12 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
-		$timestamp = $resArr['timestamp'];
+		$timestamp = isset($resArr['timestamp'])?$resArr['timestamp']:time();
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and delete_flag=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if($result){
+			return '{ "data": "success"}';
+		}
 		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");

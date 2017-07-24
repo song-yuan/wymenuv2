@@ -26,7 +26,7 @@ class WaimaiController extends BackendController
 		$epoiid= 'type=1 and ePoiId='.$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		// print_r($tokenmodel);exit;
-		$criteria = " dpid=".$companyId." and delete_flag=0";
+		$criteria = " dpid=".$companyId." and is_show=1 and delete_flag=0";
 		$productmodels = Product::model()->findAll($criteria);
 		$setmodels = ProductSet::model()->findAll($criteria);
 		// print_r($productmodels);exit;

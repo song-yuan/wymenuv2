@@ -233,9 +233,12 @@ class DataSyncOperation {
 					   ' union select *,"" as set_name,"0.00" as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id = 0 and delete_flag=0';
 				$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				foreach ( $orderProduct as $k => $product ) {
-					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and t.dpid='.$dpid.' and t.is_order=0 and t.delete_flag=0';
+					$sql = 'select create_at,taste_id,order_id,is_order,taste_name as name from nb_order_taste where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and is_order=0 and delete_flag=0';
 					$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					$orderProduct [$k] ['product_taste'] = $orderProductTaste;
+					$sql = 'select promotion_title,promotion_type,promotion_id,promotion_money,can_cupon from nb_order_product_promotion where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and delete_flag=0';
+					$orderProductPromotion = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+					$orderProduct [$k] ['product_promotion'] = $orderProductPromotion;
 					if($product['set_id'] > 0){
 						$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'];
 						$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
@@ -250,12 +253,15 @@ class DataSyncOperation {
 				$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
 				$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_pay'] = $orderPay;
-				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and t.dpid='.$dpid.' and t.is_order=1 and t.delete_flag=0';
+				$sql = 'select create_at,taste_id,order_id,is_order,taste_name as name from nb_order_taste where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and is_order=1 and delete_flag=0';
 				$orderTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_taste'] = $orderTaste;
 				$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
 				$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_address'] = $orderAddress;
+				$sql = 'select * from nb_order_account_discount where dpid='.$dpid.' and order_id='.$result ['lid'].' and delete_flag=0';
+				$orderDiscount = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+				$order ['nb_order_account_discount'] = $orderDiscount;
 				$sql = 'update nb_order set is_sync=0 where dpid=' . $dpid . ' and lid=' . $result ['lid'];
 				$res = Yii::app ()->db->createCommand ( $sql )->execute ();
 				if($res){
@@ -276,6 +282,7 @@ class DataSyncOperation {
 			$transaction->commit (); // 事物结束
 		} catch ( Exception $e ) {
 			$transaction->rollback (); // 回滚函数
+			echo $e->getMessage();exit;
 			$data ['order'] = array ();
 			$data ['member_card'] = array ();
 		}
@@ -524,6 +531,7 @@ class DataSyncOperation {
 									'taste_id' => $taste->taste_id,
 									'order_id' => $orderProductId,
 									'is_order' => 0,
+									'taste_name' => isset($taste->taste_name)?$taste->taste_name:'',
 									'is_sync' => $isSync
 							);
 							Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
@@ -545,6 +553,7 @@ class DataSyncOperation {
 								'order_id' => $orderId,
 								'order_product_id' => $orderProductId,
 								'account_no' => $accountNo,
+								'promotion_title' => isset($promotion->promotion_title)?$promotion->promotion_title:'',
 								'promotion_type' => $promotion->promotion_type,
 								'promotion_id' => $promotion->promotion_id,
 								'promotion_money' => $promotion->promotion_money,
@@ -609,6 +618,7 @@ class DataSyncOperation {
 								'taste_id' => $taste->taste_id,
 								'order_id' => $orderId,
 								'is_order' => 1,
+								'taste_name' => isset($taste->taste_name)?$taste->taste_name:'',
 								'is_sync' => $isSync
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
@@ -628,6 +638,7 @@ class DataSyncOperation {
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'order_id' => $orderId,
 							'account_no' => $accountNo,
+							'discount_title' => isset($promotion->discount_title)?$promotion->discount_title:'',
 							'discount_type' => $discount->discount_type,
 							'discount_id' => $discount->discount_id,
 							'discount_money' => $discount->discount_money,
