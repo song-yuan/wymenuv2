@@ -38,6 +38,9 @@ class MtOrder
 					array_push($orderArr['order_product'], $orderProduct);
 			    }  
 		}
+		if(empty($orderArr['order_product'])){
+			return '{ "data": "OK"}';
+		}
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr);
