@@ -236,7 +236,7 @@ class DataSyncOperation {
 					$sql = 'select create_at,taste_id,order_id,is_order,taste_name as name from nb_order_taste where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and is_order=0 and delete_flag=0';
 					$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					$orderProduct [$k] ['product_taste'] = $orderProductTaste;
-					$sql = 'select promotion_title,promotion_type,promotion_id,promotion_money,can_cupon from nb_order_product_promotion where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and is_order=0 and delete_flag=0';
+					$sql = 'select promotion_title,promotion_type,promotion_id,promotion_money,can_cupon from nb_order_product_promotion where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and delete_flag=0';
 					$orderProductPromotion = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					$orderProduct [$k] ['product_promotion'] = $orderProductPromotion;
 					if($product['set_id'] > 0){
