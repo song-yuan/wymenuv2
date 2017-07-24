@@ -275,7 +275,7 @@ class Elm
 			$orderArr = array();
 			$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$me->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>2,'order_type'=>8,'should_total'=>$me->totalPrice,'reality_total'=>$me->originalPrice,'takeout_typeid'=>0,'callno'=>'');
 			$orderArr['order_product'] = array();
-			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$me->openId.' and phs_code='.$me->groups[0]->items[0]->barCode.' and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$me->openId.' and pshs_code='.$me->groups[0]->items[0]->barCode.' and delete_flag=0 ';
+			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$me->openId.' and phs_code="'.$me->groups[0]->items[0]->barCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$me->openId.' and pshs_code="'.$me->groups[0]->items[0]->barCode.'" and delete_flag=0 ';
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			if( $res['is_set']==0){
 				$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$me->originalPrice,'price'=>$me->totalPrice,'amount'=>$me->groups[0]->items[0]->quantity,'zhiamount'=>$me->groups[0]->items[0]->quantity,'product_taste'=>array(),'product_promotion'=>array());
@@ -283,6 +283,9 @@ class Elm
 			}else{
 				$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$me->originalPrice,'price'=>$me->totalPrice,'amount'=>$me->groups[0]->items[0]->quantity,'zhiamount'=>$me->groups[0]->items[0]->quantity,'product_taste'=>array(),'product_promotion'=>array());
 				array_push($orderArr['order_product'], $orderProduct);
+			}
+			if(empty($orderArr['order_product'])){
+				return '{"message":"ok"}';
 			}
 			$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 			$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
