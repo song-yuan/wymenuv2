@@ -86,6 +86,8 @@
 		               <th><?php echo yii::t('app','支付宝');?></th>
 		               <th><?php echo yii::t('app','银联');?></th>
 		               <th><?php echo yii::t('app','会员卡');?></th>
+		               <th><?php echo yii::t('app','美团·外卖');?></th>
+		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
 		               <?php if($payments):?>
 		                    <?php foreach ($payments as $payment):?>
 		                         <th><?php echo $payment['name'];
@@ -116,6 +118,8 @@
 		         $alipay_total = 0;    // 支付宝
 		         $unionpay_total=0;    // 银联
 		         $vipcard_total = 0;   // 会员卡 
+		         $mtwm_total = 0;   // 对接美团
+		         $eleme_total = 0;   // 对接饿了么
 		         $htpay_total = 0;
 		         $grouppay_arr = array();   //支付宝/美团
 		        for($i =0;$i<$grouppay_item;$i++){
@@ -201,7 +205,16 @@
 				            $vipcard_total += $vipcard;
 				            echo $vipcard;
 		            ?></td>
-		            
+		            <td id="mtwm"><?php 
+				            $mtwm = $m['all_mtwm'];
+				            $mtwm_total += $mtwm;
+				            echo $mtwm;
+		            ?></td>
+		            <td id="elemewm"><?php 
+				            $elemewm = $m['all_elemewm'];
+				            $eleme_total += $elemewm;
+				            echo $elemewm;
+		            ?></td>
 		            <?php if($payments):?>
 		                
 		                <?php $j = 0;foreach ($payments as $payment):?>
@@ -262,6 +275,8 @@
 		            <td><?php  echo $alipay_total;?></td>
 		            <td><?php  echo $unionpay_total;?></td>
 		            <td><?php  echo $vipcard_total; ?></td>
+		            <td><?php  echo $mtwm_total; ?></td>
+		            <td><?php  echo $eleme_total; ?></td>
 		            <?php if($payments):?>
 		                <?php  $j =0;foreach ($payments as $payment):?>
 		                    <td><?php  echo $grouppay_arr[$j++];

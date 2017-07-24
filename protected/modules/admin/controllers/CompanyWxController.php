@@ -151,7 +151,7 @@ class CompanyWxController extends BackendController
 		$prodsets = $db->createCommand($sqlprod)->queryAll();
 		//var_dump($prods);exit;
 	
-		$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",is_copyprice = 1 where dpid ='.$dpid;
+		$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",is_copyprice = 1,is_lock = 1 where dpid ='.$dpid;
 		//var_dump($sql);exit;
 		$command = $db->createCommand($sql);
 		$command->execute();
@@ -211,6 +211,36 @@ class CompanyWxController extends BackendController
 			}
 		}
 		
+		Yii::app()->end(json_encode(array("status"=>true,'msg'=>'成功')));
+	}
+
+	public function actionDislockprice(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		//var_dump($dpid,$appid);exit;
+	
+		
+		$db = Yii::app()->db;
+		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
+	
+		$sql = 'select * from nb_company where dpid ='.$dpid;
+		$company = $db->createCommand($sql)->queryRow();
+	
+	
+		$sql1 = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",is_lock = 0 where dpid ='.$dpid;
+		//var_dump($sql);exit;
+		$command = $db->createCommand($sql1);
+		$command->execute();
+	
+		$sql2 = 'update nb_product set is_lock = 0 where dpid ='.$dpid;
+		//var_dump($sql);exit;
+		$command = $db->createCommand($sql2);
+		$command->execute();
+		
+		$sql3 = 'update nb_product_set set is_lock = 0 where dpid ='.$dpid;
+		//var_dump($sql);exit;
+		$command = $db->createCommand($sql3);
+		$command->execute();
+	
 		Yii::app()->end(json_encode(array("status"=>true,'msg'=>'成功')));
 	}
 	
