@@ -311,6 +311,11 @@ class WxOrder
 					$orderPrice +=$ordertaste[2];
 					$realityPrice +=$ordertaste[2];
 				}
+				$sql = 'select * from nb_taste where lid='.$ordertaste[1].' and dpid='.$this->dpid.' and delete_flag=0';
+				$tasteRes = Yii::app()->db->createCommand($sql)->queryRow();
+				if(!$tasteRes){
+					continue;
+				}
 				$se = new Sequence("order_taste");
 				$orderTasteId = $se->nextval();
 				$orderTasteData = array(
@@ -318,6 +323,7 @@ class WxOrder
 						'dpid'=>$this->dpid,
 						'create_at'=>date('Y-m-d H:i:s',$time),
 						'update_at'=>date('Y-m-d H:i:s',$time),
+						'taste_name'=>$tasteRes['name'],
 						'taste_id'=>$ordertaste[1],
 						'order_id'=>$orderId,
 						'is_order'=>1,
@@ -397,6 +403,11 @@ class WxOrder
 						if($taste[2] > 0){
 							$ortherPrice +=$taste[2];
 						}
+						$sql = 'select * from nb_taste where lid='.$taste[1].' and dpid='.$this->dpid.' and delete_flag=0';
+						$tasteRes = Yii::app()->db->createCommand($sql)->queryRow();
+						if(!$tasteRes){
+							continue;
+						}
 						$se = new Sequence("order_taste");
 						$orderTasteId = $se->nextval();
 						$orderTasteData = array(
@@ -404,6 +415,7 @@ class WxOrder
 								'dpid'=>$this->dpid,
 								'create_at'=>date('Y-m-d H:i:s',$time),
 								'update_at'=>date('Y-m-d H:i:s',$time),
+								'taste_name'=>$tasteRes['name'],
 								'taste_id'=>$taste[1],
 								'order_id'=>$orderProductId,
 								'is_order'=>0,
