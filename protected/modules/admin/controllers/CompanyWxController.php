@@ -157,14 +157,14 @@ class CompanyWxController extends BackendController
 		$command->execute();
 		
 		$prodpg = $db->createCommand('select price_group_id from nb_company_property where dpid = '.$dpid .' and delete_flag =0 ')->queryRow();
-		//var_dump($prodpg);exit;
+		//var_dump($prodpg);
 		if(!empty($prodpg)){
 			$pgid = $prodpg['price_group_id'];
 		}else{
 			$pgid = '0';
 		}
 		
-		if($prodpg){
+		if($pgid){
 			$compgs = $db->createCommand('select t1.phs_code,t1.is_show_wx,t.* from nb_price_group_detail t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid) where t.is_set = 0 and t.price_group_id ='.$prodpg['price_group_id'])->queryAll();
 			$compsgs = $db->createCommand('select t1.pshs_code,t1.is_show_wx,t.* from nb_price_group_detail t left join nb_product_set t1 on(t.dpid = t1.dpid and t.product_id = t1.lid) where t.is_set = 1 and t.price_group_id ='.$prodpg['price_group_id'])->queryAll();
 			
@@ -174,6 +174,7 @@ class CompanyWxController extends BackendController
 					$result = $db->createCommand($sqlcopy)->execute();
 				}
 			}
+			//var_dump($compsgs);var_dump('111');exit;
 			if(!empty($compsgs)){
 				foreach ($compsgs as $prod){
 					$sqlcopy = 'update nb_product_set set set_price ='.$prod['price'].',member_price ='.$prod['mb_price'].',is_show_wx ='.$prod['is_show_wx'].',is_lock =1 where pshs_code ='.$prod['pshs_code'].' and dpid ='.$dpid;
@@ -195,7 +196,7 @@ class CompanyWxController extends BackendController
 					}
 				}
 			}
-			
+			//var_dump($prodsets);var_dump('222');exit;
 			if(!empty($prodsets)){
 				//exit;
 				foreach ($prodsets as $prod){
