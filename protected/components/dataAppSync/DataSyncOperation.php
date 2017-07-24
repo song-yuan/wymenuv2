@@ -282,6 +282,7 @@ class DataSyncOperation {
 			$transaction->commit (); // 事物结束
 		} catch ( Exception $e ) {
 			$transaction->rollback (); // 回滚函数
+			echo $e->getMessage();exit;
 			$data ['order'] = array ();
 			$data ['member_card'] = array ();
 		}
