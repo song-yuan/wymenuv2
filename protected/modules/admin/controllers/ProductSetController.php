@@ -101,6 +101,7 @@ class ProductSetController extends BackendController
 				'model' => $model,
 				'status'=> $status,
 				'istempp' => $istempp,
+				'islock' => '0',
 		));
 	}
 	public function actionUpdate(){
@@ -141,6 +142,11 @@ class ProductSetController extends BackendController
 				$command = $db->createCommand($sql);
 				$categoryId = $command->queryRow();
 				$model->chs_code = $categoryId['chs_code'];
+			}
+			if(empty($model->pshs_code)){
+				$code=new Sequence("phs_code");
+				$pshs_code = $code->nextval();
+				$model->pshs_code = ProductCategory::getChscode($this->companyId, $model->lid, $pshs_code);
 			}
             $py=new Pinyin();
             $model->simple_code = $py->py($model->set_name);

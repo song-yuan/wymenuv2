@@ -30,22 +30,52 @@ class PricegroupController extends BackendController
 	public function actionCreate(){
 		$model = new PriceGroup ;
 		$dpid = Yii::app()->request->getParam('companyId');
+		$db = Yii::app()->db;
 		if(Yii::app()->request->isPostRequest) {
 			$formdata = Yii::app()->request->getPost('PriceGroup');
-			$se=new Sequence("price_group");
-            $lid = $se->nextval();
-            
-            $model->lid = $lid;
-            $model->dpid = $dpid;
-            $model->create_at = date('Y-m-d H:i:s');
-            $model->update_at = date('Y-m-d H:i:s');
-            $model->group_name = $formdata['group_name'];
-            $model->group_desc = $formdata['group_desc'];
-			// p($model);
-			if ($model->save()) {
+			$transaction = $db->beginTransaction();
+			try{
+				$se=new Sequence("price_group");
+	            $lid = $se->nextval();
+	            $model->lid = $lid;
+	            $model->dpid = $dpid;
+	            $model->create_at = date('Y-m-d H:i:s');
+	            $model->update_at = date('Y-m-d H:i:s');
+	            $model->group_name = $formdata['group_name'];
+	            $model->group_desc = $formdata['group_desc'];
+				// p($model);
+				if ($model->save()) {
+					$sql='select  d.lid,s.lid as plid,s.member_price,s.set_name as name,s.main_picture,1 as is_set ,s.set_price as yuanjia,d.price,d.mb_price from nb_product_set s left JOIN nb_price_group_detail d on (s.lid=d.product_id and s.dpid=d.dpid and d.is_set=1 and d.delete_flag=0 and d.price_group_id='.$lid.')  where s.delete_flag=0 and s.dpid='.$dpid
+					. ' union ' .
+					' select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$lid.' )  where t.delete_flag=0 and t.dpid='.$dpid;
+					$models = Yii::app()->db->createCommand($sql)->queryALL();
+					foreach ($models as $key => $model) {
+						$se=new Sequence("price_group_detail");
+						$lidd = $se->nextval();
+						// p($lid);
+						$data = array(
+								'lid'=>$lidd,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'price_group_id'=>$lid,
+								'is_set'=>$model['is_set'],
+								'price'=>$model['yuanjia'],
+								'mb_price'=>$model['member_price'],
+								'product_id'=>$model['plid'],
+								'delete_flag'=>'0',
+						);
+						$command = $db->createCommand()->insert('nb_price_group_detail',$data);
+					}
+				}
+				$transaction->commit();
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('pricegroup/index' , 'companyId' => $this->companyId));
-			}
+				$this->redirect(array('priceGroup/index' , 'companyId' => $dpid));
+			}catch(Exception $e){
+	                $transaction->rollBack();
+	                Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败,请重试'));
+	                $this->redirect(array('priceGroup/index','companyId' => $dpid));
+	        }
 		}
 		$this->render('create',array(
 			'model' => $model,
@@ -68,7 +98,7 @@ class PricegroupController extends BackendController
 			// p($model);
 			if ($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '编辑成功'));
-				$this->redirect(array('pricegroup/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('priceGroup/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('create',array(
@@ -89,9 +119,9 @@ class PricegroupController extends BackendController
 			try{
 				foreach ($formdata as $lid) {
 					$model = PriceGroup::model()->find('lid=:lid and dpid=:companyId' , array(':lid' => $lid , ':companyId' => $dpid)) ;
-					if($model) {
+					if(!empty($model)) {
 						$command = $model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
-						if ($command) {
+						if (!empty($command)) {
 							$modell = PriceGroupDetail::model()->findAll('price_group_id=:lid and dpid=:companyId' , array(':lid' => $lid , ':companyId' => $dpid)) ;
 							foreach ($modell as $modells) {
 								$commandl = $modells->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
@@ -101,15 +131,15 @@ class PricegroupController extends BackendController
 				}
 				$transaction->commit();
 				Yii::app()->user->setFlash('success' ,yii::t('app', '删除成功'));
-				$this->redirect(array('pricegroup/index' , 'companyId' => $dpid));
+				$this->redirect(array('priceGroup/index' , 'companyId' => $dpid));
 			}catch(Exception $e){
 	                $transaction->rollBack();
 	                Yii::app()->user->setFlash('error' ,yii::t('app', '删除失败'));
-	                $this->redirect(array('pricegroup/index','companyId' => $dpid));
+	                $this->redirect(array('priceGroup/index','companyId' => $dpid));
 	        }
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('pricegroup/index' , 'companyId' => $dpid)) ;
+			$this->redirect(array('priceGroup/index' , 'companyId' => $dpid)) ;
 		}
 	}
 	public function actionDetailIndex(){
@@ -122,9 +152,9 @@ class PricegroupController extends BackendController
 		if(!Yii::app()->request->isPostRequest) {
 			$sql='select  d.lid,s.lid as plid,s.member_price,s.set_name as name,s.main_picture,1 as is_set ,s.set_price as yuanjia,d.price,d.mb_price from nb_product_set s left JOIN nb_price_group_detail d on (s.lid=d.product_id and s.dpid=d.dpid and d.is_set=1 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.')  where s.delete_flag=0 and s.dpid='.$dpid
 				. ' union ' .
-				' select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.' )  where t.delete_flag=0 and t.dpid='.$dpid;//.' limit 10';
-			// p($sql);
+				' select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.' )  where t.delete_flag=0 and t.dpid='.$dpid;
 			$models = Yii::app()->db->createCommand($sql)->queryALL();
+			// p($models);
 
 			$count = count($models);
 			//var_dump($count);exit;
@@ -135,7 +165,7 @@ class PricegroupController extends BackendController
 			$models = $pdata->queryAll();
 		}else{
 			$formdata = $_POST;
-			// p($_GET);
+			// p($formdata);
 			/*
 				批量插入新的产品价格
 			*/
@@ -196,12 +226,12 @@ class PricegroupController extends BackendController
 			//执行事务
             $transaction->commit();
 			Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-			$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid,'page'=>$page));
+			$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid,'page'=>$page));
 			// p($formdata);
 			}catch(Exception $e){
                 $transaction->rollBack();
                 Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-                $this->redirect(array('pricegroup/detailIndex','companyId' => $this->companyId));
+                $this->redirect(array('priceGroup/detailIndex','companyId' => $this->companyId));
             }
 		}
 
@@ -221,17 +251,17 @@ class PricegroupController extends BackendController
 		$pricegroupid = Yii::app()->request->getParam('pricegroupid');
 		$dpid = Yii::app()->request->getParam('companyId');
 		$db = Yii::app()->db;
-		if ($lid) {
+		if (!empty($lid)) {
 			$data = PriceGroupDetail::model();
 			$info = $data->find('lid=:lid',array(':lid'=>$lid));
 			if($info) {
 				$command = $info->saveAttributes(array('price'=>$price,'mb_price'=>$mb_price,'update_at'=>date('Y-m-d H:i:s',time())));
 				if($command){
 					Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-					$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+					$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 				}else{
 					Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-					$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+					$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 				}
 			}
 		}else{
@@ -250,12 +280,12 @@ class PricegroupController extends BackendController
 					'delete_flag'=>'0',
 			);
 			$command = $db->createCommand()->insert('nb_price_group_detail',$data);
-			if($command){
+			if(!empty($command)){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+				$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 			}else{
 				Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-				$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+				$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 			}
 		}
 	}

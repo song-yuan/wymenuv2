@@ -281,18 +281,19 @@
 						</div>
 					</a>
 					<?php if(Yii::app()->user->role <= 7):?>
-					<a href="<?php echo $this->createUrl('companyGroup/index',array('companyId'=>$this->companyId));?>" >
-						<div class="pull-left margin-left-right hov">
-							<div class="ku-item ku-purple dpgl"></div>
-							<div class="ku-item-info">店铺分组</div>
-						</div>
-					</a>
 					<a href="<?php echo $this->createUrl('pricegroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple cpfl"></div>
 							<div class="ku-item-info">价格分组</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('companyGroup/index',array('companyId'=>$this->companyId));?>" >
+						<div class="pull-left margin-left-right hov">
+							<div class="ku-item ku-purple dpgl"></div>
+							<div class="ku-item-info">店铺分组</div>
+						</div>
+					</a>
+					
 					
 					<a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov" >
