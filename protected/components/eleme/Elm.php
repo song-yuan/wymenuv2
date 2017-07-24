@@ -269,10 +269,11 @@ class Elm
 	public static function order($me){
 		$orderId = $me->orderId;
 		$dpid = $me->openId;
+		$createdAt = $me->createdAt;
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
 			$orderArr = array();
-			$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s'),'account_no'=>$me->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>2,'order_type'=>8,'should_total'=>$me->totalPrice,'reality_total'=>$me->originalPrice,'takeout_typeid'=>0,'callno'=>'');
+			$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$me->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>0,'order_status'=>2,'order_type'=>8,'should_total'=>$me->totalPrice,'reality_total'=>$me->originalPrice,'takeout_typeid'=>0,'callno'=>'');
 			$orderArr['order_product'] = array();
 			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$me->openId.' and phs_code='.$me->groups[0]->items[0]->barCode.' and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$me->openId.' and pshs_code='.$me->groups[0]->items[0]->barCode.' and delete_flag=0 ';
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
