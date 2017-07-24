@@ -74,7 +74,7 @@ class PricegroupController extends BackendController
 			}catch(Exception $e){
 	                $transaction->rollBack();
 	                Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败,请重试'));
-	                $this->redirect(array('priceGroup/index','companyId' => $dpid));
+	                $this->redirect(array('pricegroup/index','companyId' => $dpid));
 	        }
 		}
 		$this->render('create',array(
@@ -98,7 +98,7 @@ class PricegroupController extends BackendController
 			// p($model);
 			if ($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '编辑成功'));
-				$this->redirect(array('priceGroup/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('pricegroup/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('create',array(
@@ -131,15 +131,15 @@ class PricegroupController extends BackendController
 				}
 				$transaction->commit();
 				Yii::app()->user->setFlash('success' ,yii::t('app', '删除成功'));
-				$this->redirect(array('priceGroup/index' , 'companyId' => $dpid));
+				$this->redirect(array('pricegroup/index' , 'companyId' => $dpid));
 			}catch(Exception $e){
 	                $transaction->rollBack();
 	                Yii::app()->user->setFlash('error' ,yii::t('app', '删除失败'));
-	                $this->redirect(array('priceGroup/index','companyId' => $dpid));
+	                $this->redirect(array('pricegroup/index','companyId' => $dpid));
 	        }
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('priceGroup/index' , 'companyId' => $dpid)) ;
+			$this->redirect(array('pricegroup/index' , 'companyId' => $dpid)) ;
 		}
 	}
 	public function actionDetailIndex(){
@@ -226,12 +226,12 @@ class PricegroupController extends BackendController
 			//执行事务
             $transaction->commit();
 			Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-			$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid,'page'=>$page));
+			$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid,'page'=>$page));
 			// p($formdata);
 			}catch(Exception $e){
                 $transaction->rollBack();
                 Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-                $this->redirect(array('priceGroup/detailIndex','companyId' => $this->companyId));
+                $this->redirect(array('pricegroup/detailIndex','companyId' => $this->companyId));
             }
 		}
 
@@ -258,10 +258,10 @@ class PricegroupController extends BackendController
 				$command = $info->saveAttributes(array('price'=>$price,'mb_price'=>$mb_price,'update_at'=>date('Y-m-d H:i:s',time())));
 				if($command){
 					Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-					$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+					$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 				}else{
 					Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-					$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+					$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 				}
 			}
 		}else{
@@ -282,10 +282,10 @@ class PricegroupController extends BackendController
 			$command = $db->createCommand()->insert('nb_price_group_detail',$data);
 			if(!empty($command)){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+				$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 			}else{
 				Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-				$this->redirect(array('priceGroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+				$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
 			}
 		}
 	}
