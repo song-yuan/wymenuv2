@@ -520,23 +520,21 @@ class DataSyncOperation {
 				if(isset($product->product_taste)){
 					$productTastes = $product->product_taste;
 					foreach ($productTastes as $taste){
-						if((int)$taste->taste_id > 0){
-							$se = new Sequence ( "order_taste" );
-							$orderTasteId = $se->nextval ();
-							$orderTasteData = array (
-									'lid' => $orderTasteId,
-									'dpid' => $dpid,
-									'create_at' => $createAt,
-									'update_at' => date ( 'Y-m-d H:i:s', $time ),
-									'taste_id' => $taste->taste_id,
-									'order_id' => $orderProductId,
-									'is_order' => 0,
-									'taste_name' => isset($taste->taste_name)?$taste->taste_name:'',
-									'is_sync' => $isSync
-							);
-							Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
-							array_push($productTasteArr, $taste->taste_id);
-						}
+						$se = new Sequence ( "order_taste" );
+						$orderTasteId = $se->nextval ();
+						$orderTasteData = array (
+								'lid' => $orderTasteId,
+								'dpid' => $dpid,
+								'create_at' => $createAt,
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'taste_id' => $taste->taste_id,
+								'order_id' => $orderProductId,
+								'is_order' => 0,
+								'taste_name' => isset($taste->taste_name)?$taste->taste_name:'',
+								'is_sync' => $isSync
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+						array_push($productTasteArr, $taste->taste_id);
 					}
 				}
 				//产品普通优惠
