@@ -257,18 +257,20 @@ class ElemeController extends Controller
 			$message = $obj->message;
 			$me = json_decode($message);
 			if($type==10){
-				Elm::order($me);
+				$result = Elm::order($me);
+			}elseif($type==12){
+				$result = Elm::orderStatus($me);
+			}elseif($type==20){
+				$result = Elm::orderCancel($me);
+			}elseif($type==30){
+				$result = Elm::refundOrder($me);
 			}
-			if($type==12){
-				Elm::orderStatus($me);
-			}
-			if($type==20){
-				Elm::orderCancel($me);
-			}
-			if($type==30){
-				Elm::refundOrder($me);
+			if($result){
+				echo '{"message":"ok"}';
+			}else{
+				echo '{"message":"error"}';
 			}
 		}
-		echo '{"message":"ok"}';
+		exit;
 	}
 }

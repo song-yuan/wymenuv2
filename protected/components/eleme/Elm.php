@@ -307,7 +307,7 @@ class Elm
 				}
 			}
 			if(empty($orderArr['order_product'])){
-				return '{"message":"ok"}';
+				return true;
 			}
 			$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 			$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
@@ -316,8 +316,18 @@ class Elm
 			
 			$data = array('dpid'=>$me->openId,'data'=>$orderStr);
 			$result = DataSyncOperation::operateOrder($data);
-			$order = self::confirmOrder($dpid,$orderId);
-			return $order;
+			$reobj = json_decode($result);
+			if($reobj->status){
+				$order = self::confirmOrder($dpid,$orderId);
+				$obj = json_decode($order);
+				if(empty($obj->error)){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
 		}
 	}
 	public static function confirmOrder($dpid,$orderId){
@@ -342,7 +352,8 @@ class Elm
             	),
         );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-        $result =ElUnit::post($url,$protocol);
+        $result = ElUnit::post($url,$protocol);
+        return $result;
 	}
 	public static function orderStatus($me){
 		$sql = "update nb_order set order_status=4 where account_no=".$me->orderId." and order_type=8";
