@@ -534,7 +534,9 @@ class DataSyncOperation {
 								'is_sync' => $isSync
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
-						array_push($productTasteArr, $taste->taste_id);
+						if((int)$taste->taste_id > 0){
+							array_push($productTasteArr, $taste->taste_id);
+						}
 					}
 				}
 				//产品普通优惠
