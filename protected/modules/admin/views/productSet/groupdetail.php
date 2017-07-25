@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->name ;?>-><?php echo yii::t('app','产品分组明细列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->name ;?>=><?php echo yii::t('app','产品分组明细列表');?></div>
 					<div class="actions">
 
 					</div>

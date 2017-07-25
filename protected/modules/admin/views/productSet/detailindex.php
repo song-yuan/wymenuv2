@@ -85,8 +85,8 @@
 									</div>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productSet/groupdetail',array('lid' => $info['prod_group_id'] , 'companyId' => $info['dpid'], 'status'=>$status, 'papage'=>$papage,'pslid' => $pslid ));?>" class="btn yellow"><?php echo yii::t('app','详情');?></a>
-								<a href="<?php echo $this->createUrl('productSet/groupdelete',array('pslid' => $pslid , 'companyId' => $info['dpid'], 'pglid'=>$info['pglid']));?>" class="btn red"><?php echo yii::t('app','删除');?></a>
+								<a href="<?php echo $this->createUrl('productSet/groupdetail',array('lid' => $info['pglid'] , 'companyId' => $info['dpid'], 'status'=>$status, 'papage'=>$papage,'pslid' => $pslid ));?>" class="btn yellow"><?php echo yii::t('app','详情');?></a>
+								<a href="<?php echo $this->createUrl('productSet/groupdelete',array('pslid' => $pslid , 'companyId' => $info['dpid'], 'pglid'=>$info['pglid'], 'lid'=>$info['psgid']));?>" class="btn red"><?php echo yii::t('app','删除');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>
