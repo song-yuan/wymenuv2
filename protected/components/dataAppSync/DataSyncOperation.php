@@ -638,7 +638,7 @@ class DataSyncOperation {
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'order_id' => $orderId,
 							'account_no' => $accountNo,
-							'discount_title' => isset($promotion->discount_title)?$promotion->discount_title:'',
+							'discount_title' => isset($discount->discount_title)?$discount->discount_title:'',
 							'discount_type' => $discount->discount_type,
 							'discount_id' => $discount->discount_id,
 							'discount_money' => $discount->discount_money,
