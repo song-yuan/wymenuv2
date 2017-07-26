@@ -251,19 +251,17 @@ class ElemeController extends Controller
 		$data = file_get_contents('php://input');
 		if(!empty($data)){
 			$data = urldecode($data);
-			Helper::writeLog($data);
 			$obj = json_decode($data);
 			$type = $obj->type;
 			$message = $obj->message;
-			$me = json_decode($message);
 			if($type==10){
-				$result = Elm::order($me);
+				$result = Elm::order($message);
 			}elseif($type==12){
-				$result = Elm::orderStatus($me);
+				$result = Elm::orderStatus($message);
 			}elseif($type==20){
-				$result = Elm::orderCancel($me);
+				$result = Elm::orderCancel($message);
 			}elseif($type==30){
-				$result = Elm::refundOrder($me);
+				$result = Elm::refundOrder($message);
 			}
 			if($result){
 				echo '{"message":"ok"}';

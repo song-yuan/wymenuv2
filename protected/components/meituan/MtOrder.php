@@ -11,7 +11,6 @@ class MtOrder
 			return '200';
 		}
 		$data = urldecode($data);
-		Helper::writeLog($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
@@ -224,13 +223,13 @@ class MtOrder
 				}
 			}
 		}
-		if(empty($orderArr['order_product'])){
-			return '{ "data": "OK"}';
-		}
 		// 配送费
 		if($obj->shippingFee > 0){
 			$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$obj->shippingFee,'price'=>$obj->shippingFee,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
 			array_push($orderArr['order_product'], $orderProduct);
+		}
+		if(empty($orderArr['order_product'])){
+			return '{ "data": "OK"}';
 		}
 		$extras = json_decode($obj->extras,true);
 		// 整单优惠
