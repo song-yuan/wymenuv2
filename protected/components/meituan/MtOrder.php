@@ -165,7 +165,7 @@ class MtOrder
 			$phsCode =  $array_detail[$key]['sku_id'];
 			$price = $array_detail[$key]['price'];
 			$amount = $array_detail[$key]['quantity'];
-			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
+			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$dpid.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$dpid.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			
 			if(!res){
@@ -189,9 +189,9 @@ class MtOrder
 					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
 				}else{
-					$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+					$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 					$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
-					$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+					$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 					$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
 					$hasPrice = 0;
 					foreach ($productDetails as $i=>$detail){
@@ -238,12 +238,12 @@ class MtOrder
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr);
-		$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
+		$data = array('dpid'=>$dpid,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
 			if($type==1){
-				$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId." and delete_flag=0";
+				$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$dpid." and ePoiId=".$dpid." and delete_flag=0";
 				$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
 				$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
 				$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
