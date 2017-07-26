@@ -45,6 +45,7 @@ class MallController extends Controller
 				exit;
 			}
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
+			var_dump($this->brandUser);exit;
 			if(empty($this->brandUser)){
 				$url = Yii::app()->request->url;
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));

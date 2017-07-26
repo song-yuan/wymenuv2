@@ -67,7 +67,7 @@ class NewBrandUser {
         				'is_sync'=>DataSync::getInitSync(),	
         				);
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
-        if($result){
+        if(!$result){
         	throw new Exception('会员注册失败');
         }
         $this->userId = $lid;
