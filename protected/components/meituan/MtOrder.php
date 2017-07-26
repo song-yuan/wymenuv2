@@ -11,6 +11,7 @@ class MtOrder
 			return '200';
 		}
 		$data = urldecode($data);
+		Helper::writeLog($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
