@@ -14,70 +14,8 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
-		$obj = json_decode($order);
-		$res = MtUnit::getWmSetting($ePoiId);
-		if(empty($res)||$res['is_receive']==0){
-			return '{ "data": "OK"}';
-		}
-		$orderArr = array();
-		$orderTime = $obj->ctime;
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'','remark'=>$obj->caution);
-		$orderArr['order_product'] = array();
-		$array_detail=json_decode($obj->detail,true);
-		foreach ($array_detail as $key => $value) {
-			$phsCode =  $array_detail[$key]['sku_id'];
-			$price = $array_detail[$key]['price'];
-			$amount = $array_detail[$key]['quantity'];
-			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
-			$res = Yii::app()->db->createCommand($sql)->queryRow();
-			if( $res['is_set']==0){
-		    	$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
-				array_push($orderArr['order_product'], $orderProduct);
-		    }else{
-		    	$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
-		    	$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
-		    	$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
-		    	$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
-		    	$hasPrice = 0;
-		    	foreach ($productDetails as $i=>$detail){
-		    		$eachPrice = $detail['original_price']*$detail['number']/$totalProductPrice*$price;
-					$hasPrice += $eachPrice;
-					if($i+1 == count($detail)){
-						$leavePrice = $hasPrice - $price;
-						if($leavePrice > 0){
-							$itemPrice =  $eachPrice - $leavePrice;
-						}else{
-							$itemPrice =  $eachPrice - $leavePrice;
-						}
-					}else{
-						$itemPrice = $eachPrice;
-					}
-					$itemPrice = number_format($itemPrice,4);
-		    		$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
-		    		array_push($orderArr['order_product'], $orderProduct);
-		    	}
-		    }  
-		}
-		if(empty($orderArr['order_product'])){
-			return '{ "data": "OK"}';
-		}
-		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
-		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
-		$orderStr = json_encode($orderArr);
-		$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
-		$result = DataSyncOperation::operateOrder($data);
-		$reobj = json_decode($result);
-		if($reobj->status){
-			$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId." and delete_flag=0";
-			$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
-			$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
-			$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
-			$sign=MtUnit::sign($array);
-			$data1 = "appAuthToken=".$res1['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
-			$result1 = MtUnit::postHttps($url1, $data1);
-			return '{ "data": "OK"}';
-		}
-		return '{ "data": "ERROR"}';
+		$result = self::dealOrder($order,1);
+		return $result;
 	}
 	public static function token($data){
 		if(empty($data)){
@@ -134,53 +72,8 @@ class MtOrder
 				return '{ "data": "OK"}';
 			}
 		}else{
-			$orderArr = array();
-			$orderArr['order_info'] = array('creat_at'=>$createAt,'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>'');
-			$orderArr['order_product'] = array();
-			$array_detail=json_decode($obj->detail,true);
-			foreach ($array_detail as $key => $value) {
-				$phsCode =  $array_detail[$key]['app_food_code'];
-				$price = $array_detail[$key]['price'];
-				$amount = $array_detail[$key]['quantity'];
-				$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
-				$res = Yii::app()->db->createCommand($sql)->queryRow();
-				if( $res['is_set']==0){
-					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
-					array_push($orderArr['order_product'], $orderProduct);
-				}else{
-					$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
-			    	$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
-			    	$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
-			    	$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
-			    	$hasPrice = 0;
-			    	foreach ($productDetails as $i=>$detail){
-			    		$eachPrice = $detail['original_price']*$detail['number']/$totalProductPrice*$price;
-						$hasPrice += $eachPrice;
-						if($i+1 == count($detail)){
-							$leavePrice = $hasPrice - $price;
-							if($leavePrice > 0){
-								$itemPrice =  $eachPrice - $leavePrice;
-							}else{
-								$itemPrice =  $eachPrice - $leavePrice;
-							}
-						}else{
-							$itemPrice = $eachPrice;
-						}
-						$itemPrice = number_format($itemPrice,4);
-			    		$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
-			    		array_push($orderArr['order_product'], $orderProduct);
-			    	}
-				}
-			}
-			$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
-			$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
-			$orderStr = json_encode($orderArr);
-			$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
-			$result = DataSyncOperation::operateOrder($data);
-			$objArr = json_decode($result);
-			if($objArr->status){
-				return '{ "data": "OK"}';
-			}
+			$result = self::dealOrder($order,2);
+			return $result;
 		}
 		return '{ "data": "ERROR"}';
 	}
@@ -249,5 +142,107 @@ class MtOrder
 		$result = MtUnit::postHttps($url, $data);
 		return $result;
 	
+	}
+	/**
+	 * 
+	 * @param $data 订单数据
+	 * @param $type 类型 1 推送 2 确认
+	 * @return string
+	 * 
+	 */
+	public static function dealOrder($data,$type){
+		$obj = json_decode($data);
+		$res = MtUnit::getWmSetting($ePoiId);
+		if(empty($res)||$res['is_receive']==0){
+			return '{ "data": "OK"}';
+		}
+		$orderArr = array();
+		$orderTime = $obj->ctime;
+		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'remark'=>$obj->caution);
+		$orderArr['order_product'] = array();
+		$array_detail=json_decode($obj->detail,true);
+		foreach ($array_detail as $key => $value) {
+			$phsCode =  $array_detail[$key]['sku_id'];
+			$price = $array_detail[$key]['price'];
+			$amount = $array_detail[$key]['quantity'];
+			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$ePoiId.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$ePoiId.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
+			$res = Yii::app()->db->createCommand($sql)->queryRow();
+				
+			if( $res['is_set']==0){
+				$foodProperty = $value['food_property'];
+				$tasteArr = array();
+				if($foodProperty!=''){
+					$spes = split(',', $foodProperty);
+					foreach ($spes as $k => $val) {
+						array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$val));
+					}
+				}
+				$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
+				array_push($orderArr['order_product'], $orderProduct);
+			}else{
+				$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+				$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
+				$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+				$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
+				$hasPrice = 0;
+				foreach ($productDetails as $i=>$detail){
+					$eachPrice = $detail['original_price']*$detail['number']/$totalProductPrice*$price;
+					$hasPrice += $eachPrice;
+					if($i+1 == count($detail)){
+						$leavePrice = $hasPrice - $price;
+						if($leavePrice > 0){
+							$itemPrice =  $eachPrice - $leavePrice;
+						}else{
+							$itemPrice =  $eachPrice - $leavePrice;
+						}
+					}else{
+						$itemPrice = $eachPrice;
+					}
+					$itemPrice = number_format($itemPrice,4);
+					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+					array_push($orderArr['order_product'], $orderProduct);
+				}
+			}
+			if(!empty($value['box_price'])){
+				$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$value['box_price'],'price'=>$value['box_price'],'amount'=>$value['box_num'],'zhiamount'=>$value['box_num'],'product_type'=>2,'product_taste'=>array(),'product_promotion'=>array());
+				array_push($orderArr['order_product'], $orderProduct);
+			}
+		}
+		if(empty($orderArr['order_product'])){
+			return '{ "data": "OK"}';
+		}
+		// 配送费
+		if($obj->shippingFee > 0){
+			$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$obj->shippingFee,'price'=>$obj->shippingFee,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
+			array_push($orderArr['order_product'], $orderProduct);
+		}
+		$extras = json_decode($obj->extras,true);
+		// 整单优惠
+		$orderArr['order_discount'] = array();
+		if(!empty($extras)){
+			foreach ($extras as  $extra) {
+				array_push($orderArr['order_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
+			}
+		}
+		
+		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
+		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		$orderStr = json_encode($orderArr);
+		$data = array('dpid'=>$ePoiId,'data'=>$orderStr);
+		$result = DataSyncOperation::operateOrder($data);
+		$reobj = json_decode($result);
+		if($reobj->status){
+			if($type==1){
+				$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId." and delete_flag=0";
+				$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
+				$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
+				$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
+				$sign=MtUnit::sign($array);
+				$data1 = "appAuthToken=".$res1['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
+				$result1 = MtUnit::postHttps($url1, $data1);
+			}
+			return '{ "data": "OK"}';
+		}
+		return '{ "data": "ERROR"}';
 	}
 }

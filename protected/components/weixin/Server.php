@@ -196,7 +196,7 @@ class Server {
 		$sceneType = $this->scene['type'];
 		if($sceneType==1){
 			$tableArr = array(
-				1=>array('serial', 'type_id','欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
+				1=>array('serial', 'type_id','欢迎前来就餐', $this->hostInfo.'/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 			);
 			
 			$sql = 'SELECT '.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->brandId;
