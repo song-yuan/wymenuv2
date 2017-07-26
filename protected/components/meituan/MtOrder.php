@@ -238,7 +238,6 @@ class MtOrder
 		
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
-		var_dump($orderArr);exit;
 		$orderStr = json_encode($orderArr);
 		$data = array('dpid'=>$dpid,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
