@@ -169,7 +169,8 @@ class MtOrder
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			
 			if(!$res){
-				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'未对应菜品','original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+				$foodName = $value['food_name'];
+				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>$foodName.'(未对应菜品)','original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 				array_push($orderArr['order_product'], $orderProduct);
 				
 				if(!empty($value['box_price'])){
