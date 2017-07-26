@@ -14,7 +14,7 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
-		$result = self::dealOrder($order,1);
+		$result = self::dealOrder($order,$ePoiId,1);
 		return $result;
 	}
 	public static function token($data){
@@ -72,7 +72,7 @@ class MtOrder
 				return '{ "data": "OK"}';
 			}
 		}else{
-			$result = self::dealOrder($order,2);
+			$result = self::dealOrder($order,$ePoiId,2);
 			return $result;
 		}
 		return '{ "data": "ERROR"}';
@@ -150,12 +150,12 @@ class MtOrder
 	 * @return string
 	 * 
 	 */
-	public static function dealOrder($data,$type){
-		$obj = json_decode($data);
-		$res = MtUnit::getWmSetting($ePoiId);
+	public static function dealOrder($data,$dpid,$type){
+		$res = MtUnit::getWmSetting($dpid);
 		if(empty($res)||$res['is_receive']==0){
 			return '{ "data": "OK"}';
 		}
+		$obj = json_decode($data);
 		$orderArr = array();
 		$orderTime = $obj->ctime;
 		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$obj->total,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'remark'=>$obj->caution);
