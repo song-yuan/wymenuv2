@@ -507,6 +507,7 @@ class DataSyncOperation {
 						'product_name' => $product->product_name,
 						'product_pic' => '',
 						'price' => $product->price,
+						'product_type'=>isset($product->product_type)?$product->product_type:'0',
 						'original_price' => $product->original_price,
 						'amount' => $product->amount,
 						'zhiamount' => isset($product->zhiamount)?$product->zhiamount:1,

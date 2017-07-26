@@ -162,13 +162,13 @@ class MtOrder
 		$orderArr['order_product'] = array();
 		$array_detail=json_decode($obj->detail,true);
 		foreach ($array_detail as $key => $value) {
-			$phsCode =  $array_detail[$key]['sku_id'];
-			$price = $array_detail[$key]['price'];
-			$amount = $array_detail[$key]['quantity'];
+			$phsCode =  $value['sku_id'];
+			$price = $value['price'];
+			$amount = $value['quantity'];
 			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$dpid.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$dpid.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			
-			if(!res){
+			if(!$res){
 				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'未对应菜品','original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 				array_push($orderArr['order_product'], $orderProduct);
 				
@@ -229,14 +229,16 @@ class MtOrder
 		$extras = json_decode($obj->extras,true);
 		// 整单优惠
 		$orderArr['order_discount'] = array();
-		if(!empty($extras)){
-			foreach ($extras as  $extra) {
+		
+		foreach ($extras as  $extra) {
+			if(!empty($extra)){
 				array_push($orderArr['order_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
 			}
 		}
 		
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		var_dump($orderArr);exit;
 		$orderStr = json_encode($orderArr);
 		$data = array('dpid'=>$dpid,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
