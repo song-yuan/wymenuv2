@@ -30,9 +30,6 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		var_dump($_SESSION['dpid_self']);exit;
-		$dpidSelf = Yii::app()->session->get('dpid_self');
-		var_dump($dpidSelf);exit;
 		$dpidSelf = Yii::app()->session['dpid_self'];
 		if($dpidSelf==1){
 			$comdpid = $this->company['dpid'];
@@ -48,7 +45,6 @@ class MallController extends Controller
 				exit;
 			}
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
-			var_dump($this->brandUser);exit;
 			if(empty($this->brandUser)){
 				$url = Yii::app()->request->url;
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
