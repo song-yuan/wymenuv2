@@ -30,6 +30,7 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
+		var_dump($_SESSION['dpid_self']);exit;
 		$dpidSelf = Yii::app()->session->get('dpid_self');
 		var_dump($dpidSelf);exit;
 		$dpidSelf = Yii::app()->session['dpid_self'];
