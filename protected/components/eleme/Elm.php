@@ -404,8 +404,9 @@ class Elm
         $result = ElUnit::post($url,$protocol);
         return $result;
 	}
-	public static function orderStatus($me){
-		$sql = "update nb_order set order_status=4 where account_no=".$me->orderId." and order_type=8";
+	public static function orderStatus($message){
+		$me = json_decode($message);
+		$sql = "update nb_order set order_status=4 where account_no=".$me->id." and order_type=8";
 		$res = Yii::app()->db->createCommand($sql)->execute();
 	}
 	public static function productUpdate($lid){
@@ -529,7 +530,8 @@ class Elm
         $result =ElUnit::post($url,$protocol);
         return $result;
 	}
-	public static function orderCancel($me){
+	public static function orderCancel($message){
+		$me = json_decode($message);
 		$se=new Sequence("waimai_status");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");
@@ -555,6 +557,7 @@ class Elm
 		$res = Yii::app()->db->createCommand()->insert('nb_waimai_status',$inserData);
 	}
 	public static function refundOrder($me){
+		$me = json_decode($message);
 		$se=new Sequence("waimai_status");
 		$lid = $se->nextval();
 		$creat_at = date("Y-m-d H:i:s");
