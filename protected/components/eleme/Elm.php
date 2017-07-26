@@ -267,11 +267,11 @@ class Elm
         return $result;
 	}
 	public static function order($message){
+		$me = json_decode($message);
+		$dpid = $me->openId;
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
-			$me = json_decode($message);
 			$orderId = $me->id;
-			$dpid = $me->openId;
 			$createdAt = $me->createdAt;
 			$price = $me->totalPrice;
 			$originalPrice = $me->originalPrice;
@@ -352,7 +352,7 @@ class Elm
 			}
 			
 			if($deliverFee!=$vipDeliveryFeeDiscount){
-				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$deliverFee,'price'=>$obj->$deliverFee-$vipDeliveryFeeDiscount,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
+				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$deliverFee,'price'=>$deliverFee-$vipDeliveryFeeDiscount,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
 				array_push($orderArr['order_product'], $orderProduct);
 			}
 			if(empty($orderArr['order_product'])){
