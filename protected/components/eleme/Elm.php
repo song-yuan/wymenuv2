@@ -305,7 +305,7 @@ class Elm
 						$attributes = $item->attributes;
 						$tasteArr = array();
 						foreach ($newSpecs as $newSpec){
-							if(strpos($foodName,$newSpec->value)===false){
+							if(strpos($foodName,$newSpec->value)==false){
 								array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
 							}
 						}
