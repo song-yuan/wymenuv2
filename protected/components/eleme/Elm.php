@@ -308,7 +308,7 @@ class Elm
 							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
 						}
 						foreach ($attributes as $attribute){
-							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
+							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
 						}
 						$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$dpid.' and phs_code="'.$barCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$dpid.' and pshs_code="'.$barCode.'" and delete_flag=0 ';
 						$res = Yii::app()->db->createCommand($sql)->queryRow();
@@ -363,6 +363,7 @@ class Elm
 			$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 			
 			if(!empty($orderActivities)){
+				$orderArr['order_discount'] = array();
 				foreach ($orderActivities as $orderActivitive){
 					array_push($orderArr['order_discount'],array('discount_title'=>$orderActivitive->name,'discount_type'=>'5','discount_id'=>'0','discount_money'=>abs($orderActivitive->amount)));
 				}
