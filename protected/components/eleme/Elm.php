@@ -413,7 +413,7 @@ class Elm
 	}
 	public static function orderStatus($message){
 		$me = json_decode($message);
-		$sql = "update nb_order set order_status=4 where account_no=".$me->id." and order_type=8";
+		$sql = "update nb_order set order_status=4 where account_no=".$me->orderId." and order_type=8";
 		$res = Yii::app()->db->createCommand($sql)->execute();
 	}
 	public static function productUpdate($lid){
