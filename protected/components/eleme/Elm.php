@@ -279,6 +279,7 @@ class Elm
 			$groups = $me->groups;
 			$deliverFee = $me->deliverFee;// 配送费
 			$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
+			$orderActivities = $me->orderActivities;// 订单活动
 			
 			$orderArr = array();
 			$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>2,'order_type'=>8,'should_total'=>$price,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
@@ -360,6 +361,12 @@ class Elm
 			}
 			$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 			$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+			
+			if(empty($orderActivities)){
+				foreach ($orderActivities as $orderActivitive){
+					array_push($orderArr['order_discount'],array('discount_title'=>$orderActivitive->name,'discount_type'=>'5','discount_id'=>'0','discount_money'=>abs($orderActivitive->amount)));
+				}
+			}
 			
 			$orderStr = json_encode($orderArr);
 			
