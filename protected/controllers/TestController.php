@@ -21,7 +21,7 @@ class TestController extends Controller
 		$key = 'test';
 		$cache = Yii::app()->cache->get($key);
 		if($cache!=false){
-			var_dump($cache);
+			var_dump($cache[0]);
 		}else{
 			Yii::app()->cache->set($key,array('a','b','c'),300);
 		}
