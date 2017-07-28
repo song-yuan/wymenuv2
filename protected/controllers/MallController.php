@@ -93,13 +93,14 @@ class MallController extends Controller
         
         $cache = Yii::app()->cache->get('productList');
         if($cache!=false){
-        	$products = $cache['product'];
+        	$cacheArr = json_decode($cache,true);
+        	$products = $cacheArr['product'];
         }else{
         	$cacheArr = array();
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
         	$cacheArr['product'] = $products;
-        	Yii::app()->cache->set('productList',$cacheArr);
+        	Yii::app()->cache->set('productList',json_encode($cacheArr));
         }
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
