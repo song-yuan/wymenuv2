@@ -20,6 +20,191 @@
 			$closeShop = true;
 		}
 	}
+	$current = false;
+	$defaultImg = '';
+	$navLiStr = '';
+	$productStr = '';
+	$cartStr = '';
+	$topTitle = '';
+	foreach ($promotions as $key=>$promotion){
+		if($current){
+			$navLiStr .= '<li class=""><a href="#st-promotion'.$key.'">'.$promotion[0]['promotion_title'].'</a><b></b></li>';
+		}else{
+			$current = true;
+			$topTitle = $promotion[0]['promotion_title'];
+			$navLiStr .= '<li class="current"><a href="#st-promotion'.$key.'">'.$promotion[0]['promotion_title'].'</a><b></b></li>';
+		}
+		$productStr .= '<div class="section" id="st-promotion'.$key.'"><div class="prt-title">'.$promotion[0]['promotion_title'].'</div>';
+		foreach ($promotion as $objPro){
+			$promotionProduct = $objPro['product'];
+			$spicy = $promotionProduct['spicy'];
+			if($promotionProduct['main_picture']==''){
+				$promotionProduct['main_picture'] = $defaultImg;
+			}
+			$productStr .= '<div class="prt-lt"><div class="lt-lt"><img src="'.$promotionProduct['main_picture'].'"></div>';
+			$productStr .= '<div class="lt-ct"><p><span class="name">'.$promotionProduct['product_name'].'</span>';
+			if($spicy==1){
+				$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
+			}else if($spicy==2){
+				$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
+			}else if($spicy==3){
+				$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+			}
+			$productStr .='</p>';
+			$productStr .= '<p class="pr">¥<span class="price">'.$promotionProduct['price'].'</span>';
+			if($promotionProduct['price'] != $promotionProduct['original_price']){
+				$productStr .='<span class="oprice"><strike>¥'.$promotionProduct['original_price'].'</strike></span>';
+			}
+			$promotionStr .='</p>';
+			if(!$closeShop){
+				if($promotionProduct['num'] > 0){
+					$productStr .='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="'.$objPro['is_set'].'" product-id="'.$promotionProduct['lid'].'" promote-id="'.$objPro['normal_promotion_id'].'" to-group="'.$objPro['to_group'].'" can-cupon="'.$objPro['can_cupon'].'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="'.$promotionProduct['num'].'">';
+					$productStr .='<div class="add">+</div><div class="clear"></div></div>';
+					$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="'.$objPro['is_set'].'_'.$promotionProduct['lid'].'_'.$objPro['normal_promotion_id'].'_'.$objPro['to_group'].'">';
+					$cartStr .='<div class="cart-dtl-item-inner">';
+					$cartStr .='<i class="cart-dtl-dot"></i>';
+					$cartStr .='<p class="cart-goods-name">'.$promotionProduct['product_name'].'</p>';
+					$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+					$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+					$cartStr .='<span class="j-item-num foodop-num">'.$promotionProduct['num'].'</span> ';
+					$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+					$cartStr .='</div>';
+					$cartStr .='<span class="cart-dtl-price">¥'.$promotionProduct['price'].'</span>';
+					$cartStr .='</div></div>';
+				}else{
+					if($promotionProduct['store_number']!=0){
+						$productStr .='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'.$objPro['is_set'].'" product-id="'.$promotionProduct['lid'].'" promote-id="'.$objPro['normal_promotion_id'].'" to-group="'.$objPro['to_group'].'" can-cupon="'.$objPro['can_cupon'].'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="0">';
+						$productStr .='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
+					}else{
+						$productStr .='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="'.$objPro['is_set'].'" product-id="'.$promotionProduct['lid'].'" promote-id="'.$objPro['normal_promotion_id'].'" to-group="'.$objPro['to_group'].'" can-cupon="'.$objPro['can_cupon'].'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="0">';
+						$productStr .='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+					}
+				}
+			}
+			$productStr .='</div></div>';
+		}
+		$productStr .='</div>';
+	}
+	foreach ($products as $product){
+		if($current){
+			$navLiStr .= '<li class=""><a href="#st'.$product['lid'].'">'.$product['category_name'].'</a><b></b></li>';
+		}else{
+			$current = true;
+			$topTitle = $product['category_name'];
+			$navLiStr .= '<li class="current"><a href="#st'.$product['lid'].'">'.$product['category_name'].'</a><b></b></li>';
+		}
+		$productLists = $product['product_list'];
+		if($product['cate_type']!='2'){
+			$productStr .='<div class="section" id="st'.$product['lid'].'"><div class="prt-title">'.$product['category_name']. '</div>';
+			foreach ($productLists as $pProduct){
+				if($pProduct['main_picture']==''){
+					$pProduct['main_picture'] = $defaultImg;
+				}
+				$productStr .='<div class="prt-lt"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
+				$productStr .='<div class="lt-ct"><p><span class="name">'.$pProduct['product_name'].'</span>';
+				$spicy = $pProduct['spicy'];
+				if($spicy==1){
+					$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
+				}else if($spicy==2){
+					$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
+				}else if($spicy==3){
+					$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+				}
+				$productStr .='</p>';
+				$productStr .='<p class="pr">¥<span class="price">'.$pProduct['member_price'].'</span>';
+				if($pProduct['member_price']!= $pProduct['original_price']){
+					$productStr .='<span class="oprice"><strike>¥'.$pProduct['original_price'].'</strike></span>';
+				}
+				$productStr .='</p>';
+				if(!$closeShop){
+					if($pProduct['num'] > 0){
+						$productStr .='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="0" product-id="'.$pProduct['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$pProduct['num'].'">';
+						$productStr .='<div class="add">+</div><div class="clear"></div></div>';
+		
+						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="0_'.$pProduct['lid'].'_-1_-1">';
+						$cartStr .='<div class="cart-dtl-item-inner">';
+						$cartStr .='<i class="cart-dtl-dot"></i>';
+						$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
+						$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+						$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+						$cartStr .='<span class="j-item-num foodop-num">'.$pProduct['num'].'</span> ';
+						$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+						$cartStr .='</div>';
+						$cartStr .='<span class="cart-dtl-price">¥'.$pProduct['member_price'].'</span>';
+						$cartStr .='</div>';
+						$cartStr .='</div>';
+					}else{
+						if($pProduct['store_number'] != 0){
+							$productStr .='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'.$pProduct['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
+						}else{
+							$productStr .='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="0" product-id="'.$pProduct['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
+						}
+					}
+				}
+				$productStr .='</div></div>';
+			}
+			$productStr .='</div>';
+		}else{
+			// 套餐
+			$productStr .='<div class="section" id="st'.$product['lid'].'"><div class="prt-title">'.$product['category_name']. '</div>';
+			foreach($productLists as $pProductSet){
+				$pDetail = $pProductSet['detail'];
+				if($pProductSet['main_picture']==''){
+					$pProductSet['main_picture'] = $defaultImg;
+				}
+				$productStr .='<div class="prt-lt"><div class="lt-lt"><img src="'.$pProductSet['main_picture'].'"></div>';
+				$productStr .='<div class="lt-ct"><p><span class="name">'.$pProductSet['set_name'].'</span>';
+				
+				$productStr .='</p>';
+				$productStr .='<p class="pr">¥<span class="price">'.$pProductSet['member_price'].'</span>';
+				if($pProductSet['member_price']!= $pProductSet['set_price']){
+					$productStr .='<span class="oprice"><strike>¥'.$pProductSet['set_price'].'</strike></span>';
+				}
+				$productStr .='</p>';
+				if(!$closeShop){
+					if($pProductSet['num'] > 0){
+						$productStr .='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" is-set="1" product-id="'.$pProductSet['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$pProductSet['num'].'">';
+						$productStr .='<div class="add">+</div><div class="clear"></div></div>';
+		
+						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="1_'.$pProductSet['lid'].'_-1_-1">';
+						$cartStr .='<div class="cart-dtl-item-inner">';
+						$cartStr .='<i class="cart-dtl-dot"></i>';
+						$cartStr .='<p class="cart-goods-name">'.$pProductSet['set_name'].'</p>';
+						$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+						$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+						$cartStr .='<span class="j-item-num foodop-num">'.$pProductSet['num'].'</span> ';
+						$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+						$cartStr .='</div>';
+						$cartStr .='<span class="cart-dtl-price">¥'.$pProductSet['member_price'].'</span>';
+						$cartStr .='</div>';
+						$cartStr .='</div>';
+					}else{
+						if($pProductSet['store_number'] != 0){
+							$productStr .='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'.$pProductSet['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
+						}else{
+							$productStr .='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" is-set="1" product-id="'.$pProductSet['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+						}
+					}
+				}
+				$productStr .='</div><div class="clear"></div>';
+				// 套餐详情
+				$productStr .='<div class="tips">';
+				foreach($pDetail as $detail){
+					foreach ($detail as $detailItem){
+						if($detailItem['is_select']=='1'){
+							$productStr .=$detailItem['product_name']+'x'+$detailItem['number']+' ';
+						}
+					}
+				}
+				$productStr .='</div></div>';
+			}
+			$productStr .='</div>';
+		}
+	}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201705091424">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201705091424">
@@ -66,15 +251,15 @@
 <div class="content">
 	<div class="nav-lf">
 		<ul id="nav">
-	
+			<?php echo $navLiStr;?>
 		</ul>
 	</div>
 	
 	<div id="container" class="container">
-		<div id="product-top" class="container-top">
-			<div></div>
+		<div id="product-top" class="container-top" style="display:block;">
+			<div><?php echo $topTitle;?></div>
 		</div>
-	
+		<?php echo $productStr;?>
 	</div>
 </div>
 <footer>
@@ -119,13 +304,14 @@
 	</div>
 	<div class="j-cart-dtl-list cart-dtl-list">
 		<div class="j-cart-dtl-list-inner" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+		<?php echo $cartStr;?>
 		</div>
 	</div>
 	
 </div>
 <script> 
-var orderType = '<?php echo $this->type;?>';
-var hasclose = false;
+var orderType = '<?php echo $this->type;?>';//订单类型
+var hasclose = false; // 店铺是否休息
 <?php if($closeShop):?>
 hasclose = true;
 var resMsg = '<?php echo $this->company['rest_message']?$this->company['rest_message']:"店铺休息中....";?>';
@@ -430,7 +616,8 @@ $(document).ready(function(){
 	var j = 0;
 	var cHeight = $('body').height()-50-40;
 	$(".content").height(cHeight+'px');
-	window.load = getProduct(); 
+// 	window.load = getProduct(); 
+	setTotal();
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
 	}
