@@ -115,7 +115,7 @@ return array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		'memcache'=>$params['memcache'],
+		'cache'=>$params['memcache'],
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
