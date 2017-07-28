@@ -196,7 +196,7 @@
 				foreach($pDetail as $detail){
 					foreach ($detail as $detailItem){
 						if($detailItem['is_select']=='1'){
-							$productStr .=$detailItem['product_name']+'x'+$detailItem['number']+' ';
+							$productStr .=$detailItem['product_name'].'x'.$detailItem['number'].' ';
 						}
 					}
 				}
