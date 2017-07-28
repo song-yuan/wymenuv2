@@ -18,12 +18,12 @@ class TestController extends Controller
 		$this->render('micropay',array('companyId'=>$companyId,'orderId'=>$orderId));
 	}
 	public function actionMemercache(){
-		$key = 'product';
+		$key = 'test';
 		$cache = Yii::app()->cache->get($key);
 		if($cache!=false){
-			echo $cache;
+			var_dump($cache);
 		}else{
-			Yii::app()->cache->set($key,'addbdfdfdfd');
+			Yii::app()->cache->set($key,array('a','b','c'),300);
 		}
 	}
 }
