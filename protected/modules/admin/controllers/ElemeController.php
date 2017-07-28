@@ -26,11 +26,19 @@ class ElemeController extends BackendController
 	}
 	public function actionCpdy(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$sql = "dpid=$companyId and delete_flag=0 order by category_id ASC";
-		$model = Product::model()->findAll($sql);
+		$sql = 'select * from nb_eleme_dpdy where dpid='.$companyId.' and delete_flag=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!$result){
+			Yii::app()->user->setFlash('error' , yii::t('app','请先绑定店铺'));
+			$this->redirect(array('eleme/index','companyId' => $this->companyId));
+		}
+		$shopid = $result['shopId'];
+		$category = Elm::getShopCategories($companyId,$shopid);
+		$category_id = json_decode($category);
+		
 		$this->render('cpdy',array(
 			'companyId'=>$companyId,
-			'model'=>$model
+			'category_id'=>$category_id
 			));
 	}
 	public function actionCpgx(){
