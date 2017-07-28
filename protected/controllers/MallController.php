@@ -88,21 +88,18 @@ class MallController extends Controller
         		}
         	}
         }
+        $promotion = new WxPromotion($this->companyId,$userId,$this->type);
+        $promotions = $promotion->promotionProductList;
+        
         $cache = Yii::app()->cache->get('productList');
         if($cache!=false){
-        	$cacheArr = json_decode($cache,true);
-        	$promotions = $cacheArr['promotion'];
-        	$products = $cacheArr['product'];
+        	$products = $cache['product'];
         }else{
         	$cacheArr = array();
-        	$promotion = new WxPromotion($this->companyId,$userId,$this->type);
-        	$promotions = $promotion->promotionProductList;
-        	
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-        	$cacheArr['promotion'] = $promotions;
         	$cacheArr['product'] = $products;
-        	Yii::app()->cache->set('productList',json_encode($cacheArr));
+        	Yii::app()->cache->set('productList',$cacheArr);
         }
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
