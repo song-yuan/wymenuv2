@@ -91,7 +91,6 @@ class MallController extends Controller
         $promotion = new WxPromotion($this->companyId,$userId,$this->type);
         $promotions = $promotion->promotionProductList;
         
-        
         $product = new WxProduct($this->companyId,$userId,$this->type);
         $products = $product->categoryProductLists;
 		$start = WxCompanyFee::get(4,$this->companyId);
