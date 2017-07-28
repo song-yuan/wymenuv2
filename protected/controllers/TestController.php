@@ -20,7 +20,10 @@ class TestController extends Controller
 	public function actionMemercache(){
 		$key = 'product';
 		$cache = Yii::app()->memcache->get($key);
-		var_dump($cache);
-		exit;
+		if($cache!=false){
+			echo $cache;
+		}else{
+			Yii::app()->memcache->set($key,'addbdfdfdfd');
+		}
 	}
 }
