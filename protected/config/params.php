@@ -77,8 +77,13 @@ return array(
                 ),
                 //memcache的定义
                 'memcache'=>array(
-                    //'server'=>'120.27.29.4',
-                	'server'=>'121.42.12.97',
-                    'port'=>11211,
+                   'class'=>'CMemCache',
+					'servers'=>array(
+							array(
+									'host'=>'121.42.12.97',
+									'port'=>11211,
+									'weight'=>60,
+							),
+					),
                 ),
 );

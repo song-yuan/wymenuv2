@@ -17,5 +17,13 @@ class TestController extends Controller
 		$orderId = Yii::app()->request->getParam('orderId');
 		$this->render('micropay',array('companyId'=>$companyId,'orderId'=>$orderId));
 	}
-	
+	public function actionMemercache(){
+		$key = 'product';
+		$cache = yii::app()->memcache->get($key);
+		if($cache!=false){
+			echo $cache;
+		}else{
+			yii::app()->cache->set($key,'addbdfdfdfd');
+		}
+	}
 }
