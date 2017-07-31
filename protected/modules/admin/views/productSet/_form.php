@@ -11,6 +11,7 @@
 								</style>
 								<div class="form-body">
 								<?php  if($istempp){ $a = true;}else{$a=false;}?>
+								<?php  if(Yii::app()->user->role>=11&&$islock){ $b = true;}else{$b=false;}?>
 								<?php if($status):?>
 								<?php $status=true;?>
 								<?php else: $status=false;?>
@@ -19,7 +20,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'dpid', array('0' => yii::t('app','-- 请选择 --')) +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->dropDownList($model, 'dpid', array('0' => yii::t('app','-- 请选择 --')) +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'dpid' )?>
 										</div>
 									</div>
@@ -32,7 +33,7 @@
 										</div>
 										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 								</div>
-								<?php if($istempp){ echo '<script>
+								<?php if($b){ echo '<script>
 															$(".category_selecter").each(function(){
 																$(this).attr("disabled",true)
 															});
@@ -55,7 +56,7 @@
                                     <div class="form-group">
 										<?php echo $form->label($model, 'set_price',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'set_price', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_price')));?>
+											<?php echo $form->textField($model, 'set_price', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_price'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'set_price' )?>
 											<span style="color: red;">套餐总价格 = 套餐基础价格 + 套餐明细里的各个菜品价格</span>
 										
@@ -64,7 +65,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'member_price',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'member_price', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('member_price')));?>
+											<?php echo $form->textField($model, 'member_price', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('member_price'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'member_price' )?>
 											<span style="color: red;">设置该价格只针对会员进行优惠</span>
 										
@@ -73,28 +74,28 @@
                                    <div class="form-group">
 										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2', '3' => '3', '4' => '4', '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank')));?>
+											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2', '3' => '3', '4' => '4', '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'rank' )?>
 										</div>
 									</div>
                                     <div class="form-group">
 										<?php echo $form->label($model, 'is_member_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
+											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount') ,'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_member_discount' )?>
 										</div>
 									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_discount', array('1' => yii::t('app','否') , '0' => yii::t('app','是')) , array('class' => 'form-control',));?>
+											<?php echo $form->dropDownList($model, 'is_discount', array('1' => yii::t('app','否') , '0' => yii::t('app','是')) , array('class' => 'form-control','disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_discount' )?>
 										</div>
 									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show', array('1' => yii::t('app','否') , '0' => yii::t('app','是')) , array('class' => 'form-control',));?>
+											<?php echo $form->dropDownList($model, 'is_show', array('1' => yii::t('app','否') , '0' => yii::t('app','是')) , array('class' => 'form-control','disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_show' )?>
 										</div>
 									</div>
@@ -102,7 +103,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'is_show_wx',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show_wx', array('1' => yii::t('app','是') , '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx')));?>
+											<?php echo $form->dropDownList($model, 'is_show_wx', array('1' => yii::t('app','是') , '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_show_wx' )?>
 										</div>
 									</div>
@@ -110,7 +111,7 @@
 									<div style="display: none;" class="form-group">
 										<?php echo $form->label($model, 'is_show_wx',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show_wx', array( '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx')));?>
+											<?php echo $form->dropDownList($model, 'is_show_wx', array( '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_show_wx' )?>
 										</div>
 									</div>
@@ -119,21 +120,21 @@
                                                                         <!--<div class="form-group">
 										<?php echo $form->label($model, 'is_special',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_special', array('0' =>yii::t('app','否')  , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_special')));?>
+											<?php echo $form->dropDownList($model, 'is_special', array('0' =>yii::t('app','否')  , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_special'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_special' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount')));?>
+											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_discount' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'status',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'status', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('status')));?>
+											<?php echo $form->dropDownList($model, 'status', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('status'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'status' )?>
 										</div>
 									</div>-->
@@ -162,13 +163,13 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'description',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
-											<?php echo $form->textArea($model, 'description' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('description')));?>
+											<?php echo $form->textArea($model, 'description' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('description'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="submit" <?php if($b){echo 'disabled';}?> class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<!-- <a href="<?php echo $this->createUrl('productSet/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a> -->
 										</div>
 									</div>
