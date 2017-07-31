@@ -138,6 +138,12 @@
 							<div class="ku-item-info">实时库存</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('statementstock/stocksalesReport',array('companyId'=>$this->companyId,'type'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey sskc"></div>
+							<div class="ku-item-info">库存消耗</div>
+						</div>
+					</a>
 					<?php endif;?>
 				</div>
 			</div>

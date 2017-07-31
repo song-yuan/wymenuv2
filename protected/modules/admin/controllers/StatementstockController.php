@@ -372,5 +372,24 @@ class StatementstockController extends BackendController
 		}
 		return $optionsReturn;
 	}
+	
+	public function actionStocksalesReport(){
+		$dpid = $this->companyId;
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$text = 1;
+		
+		$sql = 'select t.material_id,sum(t.stock_num) as material_num,t1.material_name,t2.unit_name from nb_material_stock_log t left join nb_product_material t1 on t.material_id=t1.lid and t.dpid=t1.dpid left join nb_material_unit t2 on t1.sales_unit_id=t2.lid and t1.dpid=t2.dpid where t.dpid='.$dpid.' and t.create_at >= "'.$begin_time.'" and "'.$end_time.'" >= t.create_at and t.type=1 and t.material_id in(select k.lid from nb_product_material k where k.delete_flag = 0 and k.dpid = '.$dpid.') group by t.material_id';
+		$result = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+	
+		
+		$this->render('stocksalesReport',array(
+				'sqlmodels'=>$result,
+				//'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+		));
+	}
 
 }
