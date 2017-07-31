@@ -1110,7 +1110,7 @@ public function actionPayallReport(){
 			$setids = '>=0';
 		}
 		if(empty($categoryId)){
-			return '';exit;
+			return '0.0000';exit;
 		} 
 		$db = Yii::app()->db;
 		if ($text==1) {
