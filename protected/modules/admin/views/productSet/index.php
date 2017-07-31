@@ -80,7 +80,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->set_name ;?></td>
+								<td ><?php echo $model->set_name.'('.$model->pshs_code.')';?></td>
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
 								<td><?php echo $model->set_price;?></td>
                                 <td><?php echo $model->member_price;?></td>
