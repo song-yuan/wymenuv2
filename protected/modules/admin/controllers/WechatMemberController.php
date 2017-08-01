@@ -85,6 +85,8 @@ class WechatMemberController extends BackendController {
         $findcity=Yii::app()->request->getPost('findcity',"%");
         $pointfrom = Yii::app()->request->getPost('pointfrom',"0");       
         $cardmobile = Yii::app()->request->getPost('cardmobile',"%");
+        $source = Yii::app()->request->getPost('source',"");
+        //var_dump($source);exit;
         if(empty($cardmobile))
         {
                 $cardmobile="%";
@@ -138,7 +140,9 @@ class WechatMemberController extends BackendController {
         {
                $sql.= " and (t.card_id like '%".$cardmobile."%' or t.mobile_num like '%".$cardmobile."%')";
         }
-      
+      if($source){
+      	$sql.= " and com.company_name like '%".$source."%'";
+      }
         
         $yearnow=date('Y',time());
         $yearbegin=$yearnow-$ageto;
@@ -198,6 +202,7 @@ class WechatMemberController extends BackendController {
                 'pointfrom'=>$pointfrom,
                 'cardmobile'=>$cardmobile,
                 'more'=>$more,
+        		'source'=>$source,
 			));
     }
 

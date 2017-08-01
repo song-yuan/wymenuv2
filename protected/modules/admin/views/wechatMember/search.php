@@ -161,6 +161,13 @@
                                 <?php endif;?>
                             </select>												
                         </div>
+                    </div>
+                    
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                        <div class="input-group" style="width:95%;">
+                            <span class="input-group-addon">来源</span>
+                            <input id="source" name="source" class="form-control" placeholder="<?php echo $source;?>" />												
+                        </div>
                     </div>   
                                                         					
                     <hr class="more-condition" style="color:#000;width:100%;size:6;display: <?php echo isset($more) && $more?'':'none';?>;">

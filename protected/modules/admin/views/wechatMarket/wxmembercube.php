@@ -174,7 +174,17 @@
 												</select>												
 												</div>
 										</div>   
-                                                        
+                                        <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+					                        <div class="input-group" style="width:95%;">
+					                            <span class="input-group-addon">来源</span>
+					                            <input id="source" name="source" class="form-control" placeholder="<?php echo $source;?>" />												
+					                        </div>
+					                    </div>  
+					                    <div class="form-group more-condition" style="float:left;width:340px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group date-picker input-daterange" style="width:95%;">
+												<span class="input-group-addon">关注时间</span><input type="text" class="form-control" name="foucsfrom" value="<?php echo $foucsfrom; ?>"><span class="input-group-addon">~</span><input type="text" class="form-control" name="foucsto" value="<?php echo $foucsto; ?>">
+											</div>
+										</div>             
                                        <!-- <div class="form-group more-condition" style="float:left;width:350px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
 											<div class="input-group" style="width:95%;">
 												<span class="input-group-addon">积分</span>
@@ -254,10 +264,11 @@
 										<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
                                         <th width="8%">卡号</th>
                                         <th width="15%">名称|昵称</th>
-                                        <th width="6%">性别</th>
-                                        <th width="12%">出生日期</th>
+                                        <th width="4%">性别</th>
+                                        <th width="6%">出生日期</th>
+                                        <th width="10%">关注日期</th>
                                         <th width="8%">等级</th>
-                                        <th width="15%">地区</th>
+                                        <th width="13%">地区</th>
 										<th width="10%">手机号</th>				
                                         <th width="15%"><a href="javascript:;" onclick="sort(1,<?php echo $sort?0:1;?>);">消费总额|次数 <i class="fa <?php echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
 										<th width="6%">操作</th>
@@ -271,7 +282,8 @@
                                             <td><?php echo substr($model['card_id'],-5,5);?></td>
                                             <td><?php echo $model['user_name']."|".$model['nickname'];?></td>
                                             <td><?php switch ($model['sex']){case 0:echo "未知"; break; case 1:echo "男";break; case 2:echo "女";};?></td>
-                                            <td><?php echo substr($model['user_birthday'],0,10);?></td>
+                                            <td><?php echo substr($model['user_birthday'],5,5);?></td>
+                                            <td><?php echo substr($model['create_at'],0,10);?></td>
                                             <td><?php echo $model['level_name'];//(!empty($model->level)) echo $model->level->level_name;?></td>
                                             <!-- <td><?php 
                                             	$hasname=false;
