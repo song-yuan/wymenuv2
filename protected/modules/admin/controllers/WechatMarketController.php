@@ -91,7 +91,7 @@ class WechatMarketController extends BackendController {
 				. " from nb_brand_user t "
 				. " left join nb_company com on com.dpid = t.weixin_group "
 				. " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
-				. " where order_type in ('1','2') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
+				. " where order_type in ('1','2','6') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
 				. " group by dpid,user_id) tct on t.dpid=tct.dpid and t.lid=tct.user_id "
                 . " LEFT JOIN nb_brand_user_level tl on tl.dpid=t.dpid and tl.lid=t.user_level_lid and tl.delete_flag=0 and tl.level_type=1 "
                 //. " LEFT JOIN nb_order t2 on t2.dpid=t.dpid and t2.lid not in(".$users.") "
