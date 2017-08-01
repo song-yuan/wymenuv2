@@ -56,6 +56,7 @@ class ProductController extends BackendController
 					'categories'=>$categories,
 					'categoryId'=>$categoryId,
 					'comtype'=>$comtype,
+					'pname'=>$pname,
 			));
 		
 	}

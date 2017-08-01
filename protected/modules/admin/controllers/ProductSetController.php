@@ -198,11 +198,12 @@ class ProductSetController extends BackendController
 
 
 
-        public function actionDetailIndex(){
+	public function actionDetailIndex(){
 		$pwlid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');// var_dump($pwlid);exit;
 		$papage = Yii::app()->request->getParam('papage');
 		$dpid = Yii::app()->request->getParam('companyId');
+		$islock = Yii::app()->request->getParam('islock');
 
 		$criteria = new CDbCriteria;
         $criteria->with = array('product');
@@ -240,6 +241,7 @@ class ProductSetController extends BackendController
 			'pages'=>$pages,
 			'status'=>$status,
 			'papage'=>$papage,
+			'islock'=>$islock,
 		));
 	}
 

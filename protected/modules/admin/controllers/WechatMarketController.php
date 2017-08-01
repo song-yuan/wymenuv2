@@ -41,6 +41,10 @@ class WechatMarketController extends BackendController {
 		$findprovince=Yii::app()->request->getPost('findprovince',"%");
 		$findcity=Yii::app()->request->getPost('findcity',"%");
 		$pointfrom = Yii::app()->request->getPost('pointfrom',"0");
+		$source = Yii::app()->request->getPost('source',"");
+		$foucsfrom = Yii::app()->request->getPost('foucsfrom',"");
+		$foucsto = Yii::app()->request->getPost('foucsto',"");
+		
 		if($pointfrom==0)
 		{
 			$pointfrom=-999999;
@@ -81,12 +85,13 @@ class WechatMarketController extends BackendController {
 		}
 		//var_dump($sql);exit;
 		//用sql语句查询出所有会员及消费总额、历史积分、余额、
-		$sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
+		$sql="select t.lid,t.dpid,t.create_at,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
 				.",t.province,t.city,t.mobile_num,ifnull(tct.consumetotal,0) as consumetotal,"
 				. "ifnull(tct.consumetimes,0) as consumetimes"
 				. " from nb_brand_user t "
+				. " left join nb_company com on com.dpid = t.weixin_group "
 				. " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
-				. " where order_type in ('1','2') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
+				. " where order_type in ('1','2','6') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
 				. " group by dpid,user_id) tct on t.dpid=tct.dpid and t.lid=tct.user_id "
                 . " LEFT JOIN nb_brand_user_level tl on tl.dpid=t.dpid and tl.lid=t.user_level_lid and tl.delete_flag=0 and tl.level_type=1 "
                 //. " LEFT JOIN nb_order t2 on t2.dpid=t.dpid and t2.lid not in(".$users.") "
@@ -120,6 +125,15 @@ class WechatMarketController extends BackendController {
          {
               $sql.= " and t.weixin_group = ".$findweixingroup;
 		}
+		if($source){
+			$sql.= " and com.company_name like '%".$source."%'";
+		}
+		if($foucsfrom){
+			$sql .= " and t.create_at >='".$foucsfrom."'";
+		}
+		if($foucsto){
+			$sql .= " and t.create_at <='".$foucsto."'";
+		}
 		$yearnow=date('Y',time());
 		$yearbegin=$yearnow-$ageto;
 		$yearend=$yearnow-$agefrom;
@@ -143,11 +157,12 @@ class WechatMarketController extends BackendController {
 		//$models=$db->createCommand($sql)->queryAll();
 		//		$criteria = new CDbCriteria;
 			//		$criteria->condition =  ' t.dpid='.$companyId;
-			//$pages = new CPagination($db->createCommand("select count(*) from (".$sql.") a")->queryScalar());
-			//$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-			//$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-			//$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-			$models = $pdata =$db->createCommand($sql)->queryAll();
+			$pages = new CPagination($db->createCommand("select count(*) from (".$sql.") a")->queryScalar());
+			$pages -> pageSize = 100;
+			$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+			$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+			$models = $pdata ->queryAll();
 			//echo $sql;exit;
 			//		$pages->applyLimit($criteria);
 			//                $criteria->with =  array("level");
@@ -208,7 +223,10 @@ class WechatMarketController extends BackendController {
             'more'=>$more,
             'order'=>$o,
             'sort'=>$s,
-            //'pages'=>$pages
+            'pages'=>$pages,
+            'source'=>$source,
+            'foucsfrom'=>$foucsfrom,
+            'foucsto'=>$foucsto,
 			));
 	}
 

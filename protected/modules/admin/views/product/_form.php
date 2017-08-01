@@ -81,7 +81,7 @@
 									<div class="form-group" <?php if($model->hasErrors('sort')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'sort',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'sort',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sort')));?>
+											<?php echo $form->textField($model, 'sort',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sort'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'sort' )?>
 											<span style="color: red;">数字越小，显示越靠前。</span>
 										</div>
@@ -89,21 +89,21 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'is_member_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','不参与') , '1' => yii::t('app','参与')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
+											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','不参与') , '1' => yii::t('app','参与')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_member_discount' )?>
 										</div>
 									</div>
                                     <div class="form-group">
 										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount')));?>
+											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_discount' )?>
 										</div>
 									</div>
                                     <div class="form-group">
 										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show')));?>
+											<?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_show' )?>
 										</div>
 									</div>
@@ -111,7 +111,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'is_show_wx',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show_wx', array('1' => yii::t('app','是') , '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx')));?>
+											<?php echo $form->dropDownList($model, 'is_show_wx', array('1' => yii::t('app','是') , '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_show_wx' )?>
 										</div>
 									</div>
@@ -119,7 +119,7 @@
 									<div style="display: none;" class="form-group">
 										<?php echo $form->label($model, 'is_show_wx',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show_wx', array( '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx')));?>
+											<?php echo $form->dropDownList($model, 'is_show_wx', array( '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_show_wx' )?>
 										</div>
 									</div>
@@ -128,7 +128,7 @@
 									<div class="form-group" <?php if($model->hasErrors('dabao_fee')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'dabao_fee',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'dabao_fee',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dabao_fee')));?>
+											<?php echo $form->textField($model, 'dabao_fee',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dabao_fee'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'dabao_fee' )?>
 										</div>
 									</div>
@@ -136,48 +136,48 @@
 									<div class="form-group" <?php if($model->hasErrors('spicy')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'spicy',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'spicy', array('0' => '0' , '1' => '1' , '2' => '2' , '3' => '3' ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('spicy')));?>
+											<?php echo $form->dropDownList($model, 'spicy', array('0' => '0' , '1' => '1' , '2' => '2' , '3' => '3' ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('spicy'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'spicy' )?>
 										</div>
 									</div>
 									<div class="form-group" <?php if($model->hasErrors('rank')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2' , '3' => '3' , '4' => '4' , '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank')));?>
+											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2' , '3' => '3' , '4' => '4' , '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'rank' )?>
 										</div>
 									</div>
 									<div class="form-group" <?php if($model->hasErrors('product_unit')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'product_unit',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'product_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('product_unit')));?>
+											<?php echo $form->textField($model, 'product_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('product_unit'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'product_unit' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_weight_confirm',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_weight_confirm', array('0' =>yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_weight_confirm')));?>
+											<?php echo $form->dropDownList($model, 'is_weight_confirm', array('0' =>yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_weight_confirm'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_weight_confirm' )?>
 										</div>
 									</div>
                                                                         <div class="form-group" <?php if($model->hasErrors('weight_unit')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'weight_unit',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'weight_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('weight_unit')));?>
+											<?php echo $form->textField($model, 'weight_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('weight_unit'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'weight_unit' )?>
 										</div>
 									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'description',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
-											<?php echo $form->textArea($model, 'description' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('description')));?>
+											<?php echo $form->textArea($model, 'description' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('description'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="submit" <?php if($b){echo 'disabled';}?> class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<!-- <a href="<?php echo $this->createUrl('product/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a> -->                              
 										</div>
 									</div>

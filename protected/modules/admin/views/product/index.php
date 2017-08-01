@@ -57,7 +57,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
-							<input type="text" class="form-control" name="pname" id="pname">
+							<input type="text" class="form-control" name="pname" id="pname" placeholder='<?php echo $pname;?>'>
 						</div>
 						<div class="btn-group">
 							<input type="button" value="查询" class="btn blue" id="pnamebtn">
@@ -134,12 +134,14 @@
 								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid ,'istempp' => $model->is_temp_price , 'islock' => $model->is_lock ,'papage' => $pages->getCurrentPage()+1 ));?>"><?php echo yii::t('app','编辑');?></a>
 								
 								<?php if(yii::app()->user->role >=9):?>
-									<?php if($model->is_show <=5):?>
-									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" >自下架</button>
-									<?php elseif($model->is_show ==6):?>
-									<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" disabled style="background-color: #cdd4d2;color: #fff;font-weight:600;">无法上架</button>
-									<?php elseif($model->is_show ==7):?>
-									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" >自上架</button>
+									<?php if(!($model->is_lock)):?>
+										<?php if($model->is_show <=5):?>
+										<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" >自下架</button>
+										<?php elseif($model->is_show ==6):?>
+										<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" disabled style="background-color: #cdd4d2;color: #fff;font-weight:600;">无法上架</button>
+										<?php elseif($model->is_show ==7):?>
+										<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" >自上架</button>
+										<?php endif;?>
 									<?php endif;?>
 								<?php else:?>
 									<?php if($model->is_show <=5):?>
@@ -156,6 +158,7 @@
 									<?php else:?>
 									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "1" >微店上架</button>
 									<?php endif;?>
+									
 								<?php endif;?>
 								
 								</td>
@@ -221,9 +224,9 @@
 		$('#pnamebtn').click(function(event) {
 			var pname = $('#pname').val();
 			// alert(pname);
-			if (pname) {
+			
 				location.href='<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId))?>/pname/'+pname;
-			}
+			
 		});
 		document.onkeydown=function(event){
             var e = event || window.event || arguments.callee.caller.arguments[0];
@@ -232,9 +235,9 @@
                  //要做的事情
 			var pname = $('#pname').val();
 			// alert(pname);
-			if (pname) {
+			
 				location.href='<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId))?>/pname/'+pname;
-			}
+			
             }
         };
 		$('#selectCategory').change(function(){

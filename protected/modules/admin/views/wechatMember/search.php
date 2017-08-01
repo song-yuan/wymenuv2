@@ -161,6 +161,13 @@
                                 <?php endif;?>
                             </select>												
                         </div>
+                    </div>
+                    
+                    <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                        <div class="input-group" style="width:95%;">
+                            <span class="input-group-addon">来源</span>
+                            <input id="source" name="source" class="form-control" value="<?php echo $source;?>" />												
+                        </div>
                     </div>   
                                                         					
                     <hr class="more-condition" style="color:#000;width:100%;size:6;display: <?php echo isset($more) && $more?'':'none';?>;">
@@ -240,7 +247,37 @@
                             <?php endif;?>
                         </tbody>
                     </table>
-
+						<?php if($pages->getItemCount()):?>
+						<div class="row">
+							<div class="col-md-5 col-sm-12">
+								<div class="dataTables_info">
+									<?php echo yii::t('app','共 ');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> ,  <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
+								</div>
+							</div>
+							<div class="col-md-7 col-sm-12">
+								<div class="dataTables_paginate paging_bootstrap">
+								<?php $this->widget('CLinkPager', array(
+									'pages' => $pages,
+									'header'=>'',
+									'firstPageLabel' => '<<',
+									'lastPageLabel' => '>>',
+									'firstPageCssClass' => '',
+									'lastPageCssClass' => '',
+									'maxButtonCount' => 8,
+									'nextPageCssClass' => '',
+									'previousPageCssClass' => '',
+									'prevPageLabel' => '<',
+									'nextPageLabel' => '>',
+									'selectedPageCssClass' => 'active',
+									'internalPageCssClass' => '',
+									'hiddenPageCssClass' => 'disabled',
+									'htmlOptions'=>array('class'=>'pagination pull-right')
+								));
+								?>
+								</div>
+							</div>
+						</div>
+						<?php endif;?>
                 </div>
             <?php $this->endWidget(); ?>
             <!-- END EXAMPLE TABLE PORTLET-->

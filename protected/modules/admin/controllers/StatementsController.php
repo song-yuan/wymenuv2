@@ -1109,6 +1109,9 @@ public function actionPayallReport(){
 		}else{
 			$setids = '>=0';
 		}
+		if(empty($categoryId)){
+			return '0.0000';exit;
+		} 
 		$db = Yii::app()->db;
 		if ($text==1) {
 				$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,

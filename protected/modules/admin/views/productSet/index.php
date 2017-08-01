@@ -89,10 +89,10 @@
 								<td><?php if($model->is_show)echo '都可售';else echo '仅活动可售';?>&nbsp;<?php if($model->is_discount)echo '可整折';else echo '不可整折';?>&nbsp;<?php if($model->is_member_discount)echo '会员可折';else echo '会员不可折';?>&nbsp;<?php if($model->is_show_wx == "1")echo '显示在微信端';else echo '不显示在微信端';?></td>
 								<td><?php switch ($model->source){case 0: echo yii::t('app','自建');break;case 1: echo yii::t('app','总部下发');break;default: echo '';break;}?></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source, 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid ,'islock' => $model->is_lock, 'status' => $model->source, 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
                                 <td class="center">
-									<a href="<?php echo $this->createUrl('productSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source , 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑明细');?></a>
+									<a href="<?php echo $this->createUrl('productSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source ,'islock' => $model->is_lock, 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

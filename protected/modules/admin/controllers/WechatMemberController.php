@@ -85,6 +85,8 @@ class WechatMemberController extends BackendController {
         $findcity=Yii::app()->request->getPost('findcity',"%");
         $pointfrom = Yii::app()->request->getPost('pointfrom',"0");       
         $cardmobile = Yii::app()->request->getPost('cardmobile',"%");
+        $source = Yii::app()->request->getPost('source',"");
+        //var_dump($source);exit;
         if(empty($cardmobile))
         {
                 $cardmobile="%";
@@ -138,7 +140,9 @@ class WechatMemberController extends BackendController {
         {
                $sql.= " and (t.card_id like '%".$cardmobile."%' or t.mobile_num like '%".$cardmobile."%')";
         }
-      
+      if($source){
+      	$sql.= " and com.company_name like '%".$source."%'";
+      }
         
         $yearnow=date('Y',time());
         $yearbegin=$yearnow-$ageto;
@@ -146,9 +150,17 @@ class WechatMemberController extends BackendController {
         $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) <= '".$yearend."'";
         $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) <= '".$birthto."'";
 
-        $models = $db->createCommand($sql)->queryAll();
+        $sql = 'select cf.* from ('.$sql.') cf';
+        //$models = $db->createCommand($sql)->queryAll();
         
-
+        $count = $db->createCommand(str_replace('cf.*','count(*)',$sql))->queryScalar();
+        //var_dump($count);exit;
+        $pages = new CPagination($count);
+        $pages->pageSize = 100;
+        $pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+        $pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+        $pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+        $models = $pdata->queryAll();
 
         //检索条件会员等级
         $criteriauserlevel = new CDbCriteria;
@@ -171,7 +183,7 @@ class WechatMemberController extends BackendController {
        
         $this->render('search',array(
                 'models'=>$models,
-             
+             	'pages'=>$pages,
                 'findsex'=>$findsex,
                 'agefrom'=>$agefrom,
                 'ageto'=>$ageto,
@@ -190,6 +202,7 @@ class WechatMemberController extends BackendController {
                 'pointfrom'=>$pointfrom,
                 'cardmobile'=>$cardmobile,
                 'more'=>$more,
+        		'source'=>$source,
 			));
     }
 

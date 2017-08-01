@@ -32,6 +32,7 @@
 					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改套餐');?></div>
+							<span style="color: red;">&nbsp;<?php if($islock) echo '(改套餐总部已锁定价格，无法进行修改！)';?></span>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
