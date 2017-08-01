@@ -146,9 +146,17 @@ class WechatMemberController extends BackendController {
         $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) <= '".$yearend."'";
         $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) <= '".$birthto."'";
 
-        $models = $db->createCommand($sql)->queryAll();
+        $sql = 'select cf.* from ('.$sql.') cf';
+        //$models = $db->createCommand($sql)->queryAll();
         
-
+        $count = $db->createCommand(str_replace('cf.*','count(*)',$sql))->queryScalar();
+        //var_dump($count);exit;
+        $pages = new CPagination($count);
+        $pages->pageSize = 100;
+        $pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+        $pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+        $pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+        $models = $pdata->queryAll();
 
         //检索条件会员等级
         $criteriauserlevel = new CDbCriteria;
@@ -171,7 +179,7 @@ class WechatMemberController extends BackendController {
        
         $this->render('search',array(
                 'models'=>$models,
-             
+             	'pages'=>$pages,
                 'findsex'=>$findsex,
                 'agefrom'=>$agefrom,
                 'ageto'=>$ageto,
