@@ -574,14 +574,12 @@ class DataSyncOperation {
 					}
 					Yii::app()->db->createCommand($sql)->execute();
 				}
-				if($isSync==0){
-					// 消耗原材料库存
-					$productBoms = self::getBom($dpid, $product->product_id, $productTasteArr);
-					if(!empty($productBoms)){
-						foreach ($productBoms as $bom){
-							$stock = $bom['number']*$product->amount;
-							self::updateMaterialStock($dpid,$bom['material_id'],$stock,$orderProductId);
-						}
+				// 消耗原材料库存
+				$productBoms = self::getBom($dpid, $product->product_id, $productTasteArr);
+				if(!empty($productBoms)){
+					foreach ($productBoms as $bom){
+						$stock = $bom['number']*$product->amount;
+						self::updateMaterialStock($dpid,$bom['material_id'],$stock,$orderProductId);
 					}
 				}
 			}
