@@ -399,6 +399,19 @@
 			url += $('#Promote').serialize();
 			location.href=url;
 		}
+		$(function(){
+		    $('#yw0').on('click',"li a",function(event) {
+		        // 获取这个a标签的href中的url
+		        url = $(this).attr("href");
+		        //alert(url);return false;
+		        // 取消点击事件的默认动作
+		        event.preventDefault();
+		        // 修改form中的action动作
+		        $("#Promote").attr("action", url);
+		        // 提交表单
+		        $("#Promote").submit();
+		    });
+		});
 		
 		jQuery(document).ready(function() {       
 		   //App.init();
