@@ -143,11 +143,12 @@ class WechatMarketController extends BackendController {
 		//$models=$db->createCommand($sql)->queryAll();
 		//		$criteria = new CDbCriteria;
 			//		$criteria->condition =  ' t.dpid='.$companyId;
-			//$pages = new CPagination($db->createCommand("select count(*) from (".$sql.") a")->queryScalar());
-			//$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-			//$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-			//$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-			$models = $pdata =$db->createCommand($sql)->queryAll();
+			$pages = new CPagination($db->createCommand("select count(*) from (".$sql.") a")->queryScalar());
+			$pages -> pageSize = 100;
+			$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+			$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+			$models = $pdata ->queryAll();
 			//echo $sql;exit;
 			//		$pages->applyLimit($criteria);
 			//                $criteria->with =  array("level");
@@ -208,7 +209,7 @@ class WechatMarketController extends BackendController {
             'more'=>$more,
             'order'=>$o,
             'sort'=>$s,
-            //'pages'=>$pages
+            'pages'=>$pages
 			));
 	}
 
