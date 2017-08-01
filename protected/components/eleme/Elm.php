@@ -267,122 +267,8 @@ class Elm
 		$dpid = $me->openId;
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
-			$orderId = $me->id;
-			$createdAt = $me->createdAt;
-			$price = $me->totalPrice;
-			$originalPrice = $me->originalPrice;
-			$daySn = $me->daySn;
-			$groups = $me->groups;
-			$deliverFee = $me->deliverFee;// 配送费
-			$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
-			$orderActivities = $me->orderActivities;// 订单活动
-			
-			$orderArr = array();
-			$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>2,'order_type'=>8,'should_total'=>$price,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
-			$orderArr['order_product'] = array();
-			foreach ($groups as $group){
-				$groupType = $group->type;
-				$items = $group->items;
-				if($groupType=='extra'){
-					foreach ($items as $item){
-						$amount = $item->quantity;
-						$itemprice = $item->price;
-						$foodName = $item->name;
-						$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'餐盒费','original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_type'=>2,'product_taste'=>array(),'product_promotion'=>array());
-						array_push($orderArr['order_product'], $orderProduct);
-					}
-				}else{
-					foreach ($items as $item){
-						$elemeId = $item->id;
-						$amount = $item->quantity;
-						$itemprice = $item->price;
-						$foodName = $item->name;
-						$newSpecs = $item->newSpecs;
-						$attributes = $item->attributes;
-						$tasteArr = array();
-						foreach ($newSpecs as $newSpec){
-							if(strpos($foodName,$newSpec->value)===false){
-								array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
-							}
-						}
-						foreach ($attributes as $attribute){
-							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
-						}
-						$sql = 'select t1.* from nb_eleme_cpdy t,(select 0 as is_set,lid,product_name as name,phs_code from nb_product where dpid='.$dpid.' and delete_flag=0 union select 1 as is_set,lid,set_name as name,pshs_code as phs_code  from nb_product_set where dpid='.$dpid.' and delete_flag=0) t1 where t.phs_code=t1.phs_code and t.elemeID='.$elemeId;
-						$res = Yii::app()->db->createCommand($sql)->queryRow();
-						if(!$res){
-							$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>$foodName.'(未对应菜品)','original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
-							array_push($orderArr['order_product'], $orderProduct);
-						}else{
-							if( $res['is_set']==0){
-								$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
-								array_push($orderArr['order_product'], $orderProduct);
-							}else{
-								$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
-								$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
-								$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
-								$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
-								$hasPrice = 0;
-								foreach ($productDetails as $i=>$detail){
-									if($totalProductPrice > 0){
-										$eachPrice = $detail['original_price']*$detail['number']/$totalProductPrice*$itemprice;
-									}else{
-										$eachPrice = 0;
-									}
-									$hasPrice += $eachPrice;
-									if($i+1 == count($detail)){
-										$leavePrice = $hasPrice - $price;
-										if($leavePrice > 0){
-											$itemPrice =  $eachPrice - $leavePrice;
-										}else{
-											$itemPrice =  $eachPrice - $leavePrice;
-										}
-									}else{
-										$itemPrice = $eachPrice;
-									}
-									$itemPrice = number_format($itemPrice,4);
-									$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
-									array_push($orderArr['order_product'], $orderProduct);
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			if($deliverFee!=$vipDeliveryFeeDiscount){
-				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$deliverFee,'price'=>$deliverFee-$vipDeliveryFeeDiscount,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
-				array_push($orderArr['order_product'], $orderProduct);
-			}
-			if(empty($orderArr['order_product'])){
-				return true;
-			}
-			$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
-			$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
-			
-			if(!empty($orderActivities)){
-				$orderArr['order_discount'] = array();
-				foreach ($orderActivities as $orderActivitive){
-					array_push($orderArr['order_discount'],array('discount_title'=>$orderActivitive->name,'discount_type'=>'5','discount_id'=>'0','discount_money'=>abs($orderActivitive->amount)));
-				}
-			}
-			
-			$orderStr = json_encode($orderArr);
-			
-			$data = array('dpid'=>$dpid,'data'=>$orderStr);
-			$result = DataSyncOperation::operateOrder($data);
-			$reobj = json_decode($result);
-			if($reobj->status){
-				$order = self::confirmOrder($dpid,$orderId);
-				$obj = json_decode($order);
-				if(empty($obj->error)){
-					return true;
-				}else{
-					return false;
-				}
-			}else{
-				return false;
-			}
+			$res = self::dealOrder($me,$dpid);
+			return $res;
 		}
 	}
 	public static function confirmOrder($dpid,$orderId){
@@ -412,8 +298,47 @@ class Elm
 	}
 	public static function orderStatus($message){
 		$me = json_decode($message);
-		$sql = "update nb_order set order_status=4 where account_no=".$me->orderId." and order_type=8";
-		$res = Yii::app()->db->createCommand($sql)->execute();
+		$accountNo = $me->orderId;
+		$sql = 'select * from nb_order where account_no='.$accountNo.' and order_type=8';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if($result){
+			$sql = "update nb_order set order_status=4 where account_no=".$me->orderId." and order_type=8";
+			$res = Yii::app()->db->createCommand($sql)->execute();
+			return $res;
+		}else{
+			$access_token = self::elemeGetToken($dpid);
+			if(!$access_token){
+				return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+			}
+			$app_key = ElmConfig::key;
+			$secret = ElmConfig::secret;
+			$url = ElmConfig::url;
+			$protocol = array(
+					"nop" => '1.0.0',
+					"id" => ElUnit::create_uuid(),
+					"action" => "eleme.order.getOrder",
+					"token" => $access_token,
+					"metas" => array(
+							"app_key" => $app_key,
+							"timestamp" => time(),
+					),
+					"params" => array(
+							'orderId'=>$accountNo
+					),
+			);
+			$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+			$result = ElUnit::post($url,$protocol);
+			$orderObj = json_decode($result);
+			$me = $orderObj->result;
+			if($me){
+				$dpid = $me->openId;
+				$res = self::dealOrder($me,$dpid);
+				return $res;
+			}else{
+				return false;
+			}
+		}
+		
 	}
 	public static function productUpdate($lid){
 		$sql = "select * from nb_eleme_cpdy where fen_lei_id=$lid and delete_flag=0";
@@ -637,6 +562,125 @@ class Elm
 		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
 		$result =ElUnit::post($url,$protocol);
 		return $result;
+	}
+	public static function dealOrder($order,$dpid){
+		$me = $order;
+		$orderId = $me->id;
+		$createdAt = $me->createdAt;
+		$price = $me->totalPrice;
+		$originalPrice = $me->originalPrice;
+		$daySn = $me->daySn;
+		$groups = $me->groups;
+		$deliverFee = $me->deliverFee;// 配送费
+		$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
+		$orderActivities = $me->orderActivities;// 订单活动
+			
+		$orderArr = array();
+		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>2,'order_type'=>8,'should_total'=>$price,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
+		$orderArr['order_product'] = array();
+		foreach ($groups as $group){
+			$groupType = $group->type;
+			$items = $group->items;
+			if($groupType=='extra'){
+				foreach ($items as $item){
+					$amount = $item->quantity;
+					$itemprice = $item->price;
+					$foodName = $item->name;
+					$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'餐盒费','original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_type'=>2,'product_taste'=>array(),'product_promotion'=>array());
+					array_push($orderArr['order_product'], $orderProduct);
+				}
+			}else{
+				foreach ($items as $item){
+					$elemeId = $item->id;
+					$amount = $item->quantity;
+					$itemprice = $item->price;
+					$foodName = $item->name;
+					$newSpecs = $item->newSpecs;
+					$attributes = $item->attributes;
+					$tasteArr = array();
+					foreach ($newSpecs as $newSpec){
+						if(strpos($foodName,$newSpec->value)===false){
+							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
+						}
+					}
+					foreach ($attributes as $attribute){
+						array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
+					}
+					$sql = 'select t1.* from nb_eleme_cpdy t,(select 0 as is_set,lid,product_name as name,phs_code from nb_product where dpid='.$dpid.' and delete_flag=0 union select 1 as is_set,lid,set_name as name,pshs_code as phs_code  from nb_product_set where dpid='.$dpid.' and delete_flag=0) t1 where t.phs_code=t1.phs_code and t.elemeID='.$elemeId;
+					$res = Yii::app()->db->createCommand($sql)->queryRow();
+					if(!$res){
+						$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>$foodName.'(未对应菜品)','original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+						array_push($orderArr['order_product'], $orderProduct);
+					}else{
+						if( $res['is_set']==0){
+							$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
+							array_push($orderArr['order_product'], $orderProduct);
+						}else{
+							$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+							$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
+							$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+							$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
+							$hasPrice = 0;
+							foreach ($productDetails as $i=>$detail){
+								if($totalProductPrice > 0){
+									$eachPrice = $detail['original_price']*$detail['number']/$totalProductPrice*$itemprice;
+								}else{
+									$eachPrice = 0;
+								}
+								$hasPrice += $eachPrice;
+								if($i+1 == count($detail)){
+									$leavePrice = $hasPrice - $price;
+									if($leavePrice > 0){
+										$itemPrice =  $eachPrice - $leavePrice;
+									}else{
+										$itemPrice =  $eachPrice - $leavePrice;
+									}
+								}else{
+									$itemPrice = $eachPrice;
+								}
+								$itemPrice = number_format($itemPrice,4);
+								$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+								array_push($orderArr['order_product'], $orderProduct);
+							}
+						}
+					}
+				}
+			}
+		}
+			
+		if($deliverFee!=$vipDeliveryFeeDiscount){
+			$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$deliverFee,'price'=>$deliverFee-$vipDeliveryFeeDiscount,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
+			array_push($orderArr['order_product'], $orderProduct);
+		}
+		if(empty($orderArr['order_product'])){
+			return true;
+		}
+		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
+		$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+			
+		if(!empty($orderActivities)){
+			$orderArr['order_discount'] = array();
+			foreach ($orderActivities as $orderActivitive){
+				array_push($orderArr['order_discount'],array('discount_title'=>$orderActivitive->name,'discount_type'=>'5','discount_id'=>'0','discount_money'=>abs($orderActivitive->amount)));
+			}
+		}
+			
+		$orderStr = json_encode($orderArr);
+			
+		$data = array('dpid'=>$dpid,'data'=>$orderStr);
+		$result = DataSyncOperation::operateOrder($data);
+		$reobj = json_decode($result);
+		if($reobj->status){
+			$order = self::confirmOrder($dpid,$orderId);
+			$obj = json_decode($order);
+			if(empty($obj->error)){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
 	}
 }
 ?>
