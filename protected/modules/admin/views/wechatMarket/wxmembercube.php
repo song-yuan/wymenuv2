@@ -177,7 +177,7 @@
                                         <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
 					                        <div class="input-group" style="width:95%;">
 					                            <span class="input-group-addon">来源</span>
-					                            <input id="source" name="source" class="form-control" placeholder="<?php echo $source;?>" />												
+					                            <input id="source" name="source" class="form-control" value="<?php echo $source;?>" />												
 					                        </div>
 					                    </div>  
 					                    <div class="form-group more-condition" style="float:left;width:340px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
