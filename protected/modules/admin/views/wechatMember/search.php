@@ -309,6 +309,19 @@ jQuery(document).ready(function() {
          $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
         }
    });
+$(function(){
+    $('#yw0').on('click',"li a",function(event) {
+        // 获取这个a标签的href中的url
+        url = $(this).attr("href");
+        //alert(url);return false;
+        // 取消点击事件的默认动作
+        event.preventDefault();
+        // 修改form中的action动作
+        $("#Promote").attr("action", url);
+        // 提交表单
+        $("#Promote").submit();
+    });
+});
 
 $(".glyphicon").click(function(){
         if($(this).hasClass('glyphicon-chevron-down')){
