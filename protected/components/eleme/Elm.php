@@ -269,6 +269,8 @@ class Elm
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
 			$res = self::dealOrder($me,$dpid);
 			return $res;
+		}else{
+			return true;
 		}
 	}
 	public static function confirmOrder($dpid,$orderId){
