@@ -43,7 +43,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?> => <?php echo yii::t('app','套餐明细列表');?></div>
 					<span style="color: red;">&nbsp;&nbsp;<?php if($islock) echo '(该套餐总部已锁定价格，无法修改)';?></span>
 					<div class="actions">
-					<?php if((!($islock)) &&(Yii::app()->user->role >=11)):?>
+					<?php if(((!($islock)) &&(Yii::app()->user->role >=11)) || Yii::app()->user->role <=5):?>
 						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid,'type'=>0, 'papage'=>$papage,'kind'=>0));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
