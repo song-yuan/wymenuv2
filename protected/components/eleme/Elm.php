@@ -207,7 +207,7 @@ class Elm
         return $result;
 	}
 	public static function getErpDpid($shopId){
-		$sql = "select * from nb_eleme_dpdy where shopId=".$shopId." delete_flag=0";
+		$sql = "select * from nb_eleme_dpdy where shopId=".$shopId." and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		return $res;
 	}
