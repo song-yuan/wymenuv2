@@ -253,22 +253,29 @@ class ElemeController extends Controller
 			$data = urldecode($data);
 			$obj = json_decode($data);
 			$type = $obj->type;
+			$shopId = $obj->shopId;
 			$message = $obj->message;
-			if($type==10){
-				$result = Elm::order($message);
-			}elseif($type==12){
-				$result = Elm::orderStatus($message);
-			}elseif($type==20){
-				$result = Elm::orderCancel($message);
-			}elseif($type==30){
-				$result = Elm::refundOrder($message);
-			}else {
-				$result = true;
-			}
-			if($result){
-				echo '{"message":"ok"}';
+			$elemeDy = Elm::getErpDpid($shopId);
+			if($elemeDy){
+				$dpid = $elemeDy['dpid'];
+				if($type==10){
+					$result = Elm::order($message,$dpid);
+				}elseif($type==12){
+					$result = Elm::orderStatus($message,$dpid);
+				}elseif($type==20){
+					$result = Elm::orderCancel($message,$dpid);
+				}elseif($type==30){
+					$result = Elm::refundOrder($message,$dpid);
+				}else {
+					$result = true;
+				}
+				if($result){
+					echo '{"message":"ok"}';
+				}else{
+					echo '{"message":"error"}';
+				}
 			}else{
-				echo '{"message":"error"}';
+				echo '{"message":"ok"}';
 			}
 		}
 		exit;
