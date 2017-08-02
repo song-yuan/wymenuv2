@@ -297,6 +297,7 @@ span.oprice {
 .add img, .minus img{
 	width:20px;
 	height:20px;
+	vertical-align: middle;
 }
 .prt-lt .lt-rt input.result {
 	border: none;
