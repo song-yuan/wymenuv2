@@ -275,7 +275,7 @@
 		<div id="product-top" class="container-top" style="display:block;">
 			<div><?php echo $topTitle;?></div>
 		</div>
-		<?php echo $productStr;?>
+		
 	</div>
 </div>
 <footer>
@@ -410,9 +410,11 @@ $(document).ready(function(){
 	var isScroll = false;
 	var cHeight = $('body').height()-50-40;
 	var navListr = '<?php echo $navLiStr;?>';
+	var productStr = '<?php echo $productStr;?>';
     $('#nav').find('li:first-child').next().addClass('b-radius-rt');
 	$(".content").height(cHeight+'px');
 	$('#nav').html(navListr);
+	$('#container').append(productStr);
 	setTotal();
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
@@ -443,8 +445,8 @@ $(document).ready(function(){
 
     $('#container').scroll(function(){
 		// alert(isScroll);
-    var ptHeight = $('.prt-title').outerHeight();
-    $('.section').each(function(){
+	    var ptHeight = $('.prt-title').outerHeight();
+	    $('.section').each(function(){
 		if(isScroll){
 			isScroll = false;
 			return false;
