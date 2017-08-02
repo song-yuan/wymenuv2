@@ -113,7 +113,7 @@
 									</div>
 								</td>
 								<td class="center">
-								<?php if((!($islock)) &&(Yii::app()->user->role >=11)):?>
+								<?php if(!(($islock) &&(Yii::app()->user->role >=11))):?>
 								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid, 'type'=>'1' , 'status'=>$status, 'papage'=>$papage));?>" class="btn blue"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>
