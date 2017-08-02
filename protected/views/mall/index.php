@@ -409,9 +409,10 @@ $(document).ready(function(){
 	var j = 0;
 	var isScroll = false;
 	var cHeight = $('body').height()-50-40;
+	var navListr = <?php echo $navLiStr;?>;
     $('#nav').find('li:first-child').next().addClass('b-radius-rt');
 	$(".content").height(cHeight+'px');
-	$('#nav').html(<?php echo $navLiStr;?>);
+	$('#nav').html(navListr);
 	setTotal();
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
