@@ -553,8 +553,8 @@ $(document).ready(function(){
 			    	var bool = new Parabola({
 						el: "#boll"+i,
 						offset: [-left+10, height-top-25],
-						curvature: 0.01,
-						duration: 100,
+						curvature: 0.005,
+						duration: 500,
 						callback:function(){
 							$('#boll'+j).css('display','none');
 							j++;
