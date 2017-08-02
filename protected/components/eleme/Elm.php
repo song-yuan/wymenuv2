@@ -206,6 +206,11 @@ class Elm
         $result =ElUnit::post($url,$protocol);
         return $result;
 	}
+	public static function getErpDpid($shopId){
+		$sql = "select * from nb_eleme_dpdy where shopId=".$shopId." and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		return $res;
+	}
 	public static function selectProduct($product_id){
 		$sql = "select lid,category_id,product_name,phs_code,original_price from nb_product where lid=$product_id and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
@@ -262,13 +267,14 @@ class Elm
         $result =ElUnit::post($url,$protocol);
         return $result;
 	}
-	public static function order($message){
+	public static function order($message,$dpid){
 		$me = json_decode($message);
-		$dpid = $me->openId;
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
-			$res = self::dealOrder($me,$dpid);
+			$res = self::dealOrder($me,$dpid,2);
 			return $res;
+		}else{
+			return true;
 		}
 	}
 	public static function confirmOrder($dpid,$orderId){
@@ -296,13 +302,13 @@ class Elm
         $result = ElUnit::post($url,$protocol);
         return $result;
 	}
-	public static function orderStatus($message){
+	public static function orderStatus($message,$dpid){
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
-		$sql = 'select * from nb_order where account_no='.$accountNo.' and order_type=8';
+		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_type=8';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result){
-			$sql = "update nb_order set order_status=4 where account_no=".$me->orderId." and order_type=8";
+			$sql = "update nb_order set order_status=4 where dpid='.$dpid.' and account_no=".$me->orderId." and order_type=8";
 			$res = Yii::app()->db->createCommand($sql)->execute();
 			return $res;
 		}else{
@@ -331,8 +337,7 @@ class Elm
 			$orderObj = json_decode($result);
 			$me = $orderObj->result;
 			if($me){
-				$dpid = $me->openId;
-				$res = self::dealOrder($me,$dpid);
+				$res = self::dealOrder($me,$dpid,4);
 				return $res;
 			}else{
 				return false;
@@ -563,7 +568,7 @@ class Elm
 		$result =ElUnit::post($url,$protocol);
 		return $result;
 	}
-	public static function dealOrder($order,$dpid){
+	public static function dealOrder($order,$dpid,$orderStatus){
 		$me = $order;
 		$orderId = $me->id;
 		$createdAt = $me->createdAt;
@@ -576,7 +581,7 @@ class Elm
 		$orderActivities = $me->orderActivities;// 订单活动
 			
 		$orderArr = array();
-		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>2,'order_type'=>8,'should_total'=>$price,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
+		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$price,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
 		$orderArr['order_product'] = array();
 		foreach ($groups as $group){
 			$groupType = $group->type;

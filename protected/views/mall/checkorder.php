@@ -133,7 +133,7 @@
 	    	<?php endforeach;?>
 	    </div>
 	    <?php endif;?>
-	    <div class="right"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>"><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="../img/mall/icon_add.png">继续加菜</a></div>
+	    <div class="right"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>" ><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="<?php echo $baseUrl; ?>/img/mall/icon_edit.png"><span style="vertical-align:middle;">订单修改</span></a></div>
 	</div>
 	<?php foreach($models as $model):?>
 	<div class="section cartProduct">
