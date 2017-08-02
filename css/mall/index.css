@@ -80,6 +80,7 @@ body {
 	text-overflow:ellipsis;
 	user-select: none; 
 	color:#7C756D;
+    padding: 0.1rem 0;
 /*	z-index: 1!important;
     white-space: nowrap;*/
 }
