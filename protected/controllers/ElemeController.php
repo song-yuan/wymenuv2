@@ -262,6 +262,8 @@ class ElemeController extends Controller
 				$result = Elm::orderCancel($message);
 			}elseif($type==30){
 				$result = Elm::refundOrder($message);
+			}else {
+				$result = true;
 			}
 			if($result){
 				echo '{"message":"ok"}';
