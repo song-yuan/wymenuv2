@@ -23,7 +23,7 @@
 
 	$current = false;
     $defaultImg = $baseUrl.'/img/product_default.png';
-    $defaultNavImg = $baseUrl.'/img/product_nav_default.jpg';
+    $defaultNavImg = $baseUrl.'/img/product_nav_default.png';
 	$navLiStr = '';
 	$productStr = '';
 	$cartStr = '';
