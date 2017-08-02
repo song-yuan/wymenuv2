@@ -267,7 +267,7 @@
 <div class="content">
 	<div class="nav-lf">
 		<ul id="nav">
-			<?php echo $navLiStr;?>
+			
 		</ul>
 	</div>
 	
@@ -411,6 +411,7 @@ $(document).ready(function(){
 	var cHeight = $('body').height()-50-40;
     $('#nav').find('li:first-child').next().addClass('b-radius-rt');
 	$(".content").height(cHeight+'px');
+	$('#nav').html(<?php echo $navLiStr;?>);
 	setTotal();
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
