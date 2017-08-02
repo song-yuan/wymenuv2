@@ -29,7 +29,7 @@
 	$cartStr = '';
 	$topTitle = '';
     foreach ($promotions as $key=>$promotion){
-		if(empty($promotion[0]['main_picture'])){
+		if($promotion[0]['main_picture']==''){
 			$promotion[0]['main_picture']=$defaultNavImg;
 		}
         if($current){
@@ -281,7 +281,7 @@
 <footer>
 	<div class="cart-img"><div><img alt="" src="/img/mall/navcart.png"></div></div>
 	<div class="ft-lt">
-		<p>￥<span id="total" class="total">0.00</span><span class="nm">(<label class="share"></label>份) <span style="font-size: 0.5em;">未优惠前价格</span></span></p>
+		<p>￥<span id="total" class="total">0.00</span><span class="nm">(<label class="share"></label>份)</span></p>
 	</div>
     <?php if($this->type==2):?>
 	    <?php if($start&&$start['fee_price']):?>
