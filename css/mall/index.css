@@ -83,6 +83,9 @@ body {
 /*	z-index: 1!important;
     white-space: nowrap;*/
 }
+.nav-lf ul li a{
+	display:block;
+}
 .nav-lf ul li a:hover{
 	-webkit-tap-highlight-color: transparent;
 }
@@ -480,9 +483,8 @@ i {
 	margin-left:1em;
 }
 .nav-img{
-	width:0.5rem;
-	height:0.5rem;
-	padding:0.05rem 0.15rem;
+	width:0.35rem;
+	height:0.35rem;
 }
 .nav-span{
 	position:absolute;
