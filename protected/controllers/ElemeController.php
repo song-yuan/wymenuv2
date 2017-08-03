@@ -248,6 +248,16 @@ class ElemeController extends Controller
 		}
 	}
 	public function actionElemeOrder(){
+		ob_end_flush();
+		ob_start();
+		echo '{"message":"ok"}';
+		
+		header("Content-Type: text/html;charset=utf-8");
+		header("Connection: close");
+		header('Content-Length: '. ob_get_length());
+		
+		ob_flush();
+		flush();
 		$data = file_get_contents('php://input');
 		if(!empty($data)){
 			$data = urldecode($data);

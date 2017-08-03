@@ -1,6 +1,19 @@
 <?php 
 class MeituanController extends Controller
 {
+	public function init()
+	{
+		ob_end_flush();
+		ob_start();
+		echo '{ "data": "OK"}';
+		
+		header("Content-Type: text/html;charset=utf-8");
+		header("Connection: close");
+		header('Content-Length: '. ob_get_length());
+		
+		ob_flush();
+		flush();
+	}
 	public function actionReceiveOrder(){
 		//推送订单
         $data = file_get_contents('php://input');
