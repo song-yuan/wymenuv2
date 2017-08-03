@@ -14,6 +14,11 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
+		
+		$res = MtUnit::getWmSetting($ePoiId);
+		if(empty($res)||$res['is_receive']==0){
+			return '{ "data": "OK"}';
+		}
 		$result = self::dealOrder($order,$ePoiId,1);
 		return $result;
 	}
@@ -151,10 +156,6 @@ class MtOrder
 	 * 
 	 */
 	public static function dealOrder($data,$dpid,$type){
-		$res = MtUnit::getWmSetting($dpid);
-		if(empty($res)||$res['is_receive']==0){
-			return '{ "data": "OK"}';
-		}
 		$obj = json_decode($data);
 		$orderArr = array();
 		$orderTime = $obj->ctime;
