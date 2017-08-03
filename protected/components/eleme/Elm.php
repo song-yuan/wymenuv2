@@ -649,7 +649,7 @@ class Elm
 							array_push($orderArr['order_product'], $orderProduct);
 						}else{
 							$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
-							$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
+							$totalProductPrice = Yii::app()->db->createCommand($sql)->queryScalar();
 							$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 							$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
 							$hasPrice = 0;
