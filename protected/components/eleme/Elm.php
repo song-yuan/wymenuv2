@@ -305,10 +305,10 @@ class Elm
 	public static function orderStatus($message,$dpid){
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
-		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_type=8';
+		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_type=8';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result){
-			$sql = "update nb_order set order_status=4 where dpid='.$dpid.' and account_no=".$me->orderId." and order_type=8";
+			$sql = "update nb_order set order_status=4 where dpid=".$dpid." and account_no='".$accountNo."' and order_type=8";
 			$res = Yii::app()->db->createCommand($sql)->execute();
 			return $res;
 		}else{
