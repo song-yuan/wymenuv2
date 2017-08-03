@@ -59,12 +59,12 @@
 			}
 			$productStr .='</p>';
 
-            $promotionStr .='<p class="pr">';
+            $productStr .='<p class="pr">';
             if($promotionProduct['price'] != $promotionProduct['original_price']){
                 $productStr .='<span class="oprice"><strike>¥'.$promotionProduct['original_price'].'</strike></span>';
             }
             $productStr .= ' ¥<span class="price">'.$promotionProduct['price'].'</span>';
-            $promotionStr .='</p>';
+            $productStr .='</p>';
 
 			if(!$closeShop){
 				if($promotionProduct['num'] > 0){

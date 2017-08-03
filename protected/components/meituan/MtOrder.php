@@ -14,6 +14,11 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
+		
+		$res = MtUnit::getWmSetting($ePoiId);
+		if(empty($res)||$res['is_receive']==0){
+			return '{ "data": "OK"}';
+		}
 		$result = self::dealOrder($order,$ePoiId,1);
 		return $result;
 	}
@@ -151,10 +156,6 @@ class MtOrder
 	 * 
 	 */
 	public static function dealOrder($data,$dpid,$type){
-		$res = MtUnit::getWmSetting($dpid);
-		if(empty($res)||$res['is_receive']==0){
-			return '{ "data": "OK"}';
-		}
 		$obj = json_decode($data);
 		$orderArr = array();
 		$orderTime = $obj->ctime;
@@ -218,7 +219,7 @@ class MtOrder
 					}
 				}
 				if(!empty($value['box_price'])){
-					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$value['box_price'],'price'=>$value['box_price'],'amount'=>$value['box_num'],'zhiamount'=>$value['box_num'],'product_type'=>2,'product_taste'=>array(),'product_promotion'=>array());
+					$orderProduct = array('is_set'=>'0','set_id'=>'0','product_id'=>'0','product_name'=>'餐盒费','original_price'=>$value['box_price'],'price'=>$value['box_price'],'amount'=>$value['box_num'],'zhiamount'=>$value['box_num'],'product_type'=>2,'product_taste'=>array(),'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
 				}
 			}
