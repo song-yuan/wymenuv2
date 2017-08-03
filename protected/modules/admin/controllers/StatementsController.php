@@ -1680,13 +1680,13 @@ public function actionPayallReport(){
 		$criteria->addCondition("t.order_id in(".$ords.")");
 	
 		if($text==1){
-			$criteria->group ='t.product_id,year(t.create_at)';
+			$criteria->group =' t.product_type,t.product_id,year(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}elseif($text==2){
-			$criteria->group ='t.product_id,month(t.create_at)';
+			$criteria->group =' t.product_type,t.product_id,month(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}else{
-			$criteria->group ='t.product_id,day(t.create_at)';
+			$criteria->group =' t.product_type,t.product_id,day(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}
 	
