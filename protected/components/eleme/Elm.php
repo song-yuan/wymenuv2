@@ -602,6 +602,7 @@ class Elm
 					$foodName = $item->name;
 					$newSpecs = $item->newSpecs;
 					$attributes = $item->attributes;
+					$extendCode = $item->extendCode;
 					$tasteArr = array();
 					foreach ($newSpecs as $newSpec){
 						if(strpos($foodName,$newSpec->value)===false){
@@ -611,7 +612,7 @@ class Elm
 					foreach ($attributes as $attribute){
 						array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
 					}
-					$sql = 'select t1.* from nb_eleme_cpdy t,(select 0 as is_set,lid,product_name as name,phs_code from nb_product where dpid='.$dpid.' and delete_flag=0 union select 1 as is_set,lid,set_name as name,pshs_code as phs_code  from nb_product_set where dpid='.$dpid.' and delete_flag=0) t1 where t.phs_code=t1.phs_code and t.elemeID='.$elemeId;
+					$sql = 'select 0 as is_set,lid,product_name as name,phs_code from nb_product where dpid='.$dpid.' and phs_code="'.$extendCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name,pshs_code as phs_code  from nb_product_set where dpid='.$dpid.' and pshs_code="'.$extendCode.'" and delete_flag=0';
 					$res = Yii::app()->db->createCommand($sql)->queryRow();
 					if(!$res){
 						$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>$foodName.'(未对应菜品)','original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
