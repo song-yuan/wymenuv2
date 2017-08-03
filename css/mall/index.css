@@ -76,7 +76,7 @@ body {
 	width: 1rem;
 	height: 0.74rem;
 	line-height: 0.74rem;
-	background-color: #f7f7f7;
+	background-color: #efefef;
 	text-overflow:ellipsis;
 	user-select: none; 
 	color:#7C756D;
@@ -223,6 +223,7 @@ body {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+	text-align: right;
 }
 
 .prt-lt .lt-ct p.pr {
@@ -482,7 +483,7 @@ i {
 	margin-right:0.5em;
 }
 .prt-lt .lt-ct p .name{
-	margin-left:1em;
+	margin-right:1em;
 }
 .nav-img{
 	width:0.35rem;
