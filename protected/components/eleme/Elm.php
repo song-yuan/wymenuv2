@@ -568,6 +568,32 @@ class Elm
 		$result =ElUnit::post($url,$protocol);
 		return $result;
 	}
+	public static function getItem($dpid,$id){
+		//查询菜品
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+		$protocol = array(
+				"nop" => '1.0.0',
+				"id" => ElUnit::create_uuid(),
+				"action" => "eleme.product.item.getItem",
+				"token" => $access_token,
+				"metas" => array(
+						"app_key" => $app_key,
+						"timestamp" => time(),
+				),
+				"params" => array(
+						'itemId'=>$id
+				),
+		);
+		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+		$result =ElUnit::post($url,$protocol);
+		return $result;
+	}
 	public static function dealOrder($order,$dpid,$orderStatus){
 		$me = $order;
 		$orderId = $me->id;
@@ -622,9 +648,9 @@ class Elm
 							$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$itemprice,'price'=>$itemprice,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
 							array_push($orderArr['order_product'], $orderProduct);
 						}else{
-							$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+							$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 							$totalProductPrice = Yii::app()->db->createCommand($sql)->queryColumn();
-							$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$ePoiId.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+							$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 							$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
 							$hasPrice = 0;
 							foreach ($productDetails as $i=>$detail){
