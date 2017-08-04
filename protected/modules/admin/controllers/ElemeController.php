@@ -53,7 +53,7 @@ class ElemeController extends BackendController
 			$elememodel = ElemeCpdy::model()->find($sql);
 			if(empty($elememodel)){
 				$rest = Elm::updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code);
-				$obj = json_decode($res);
+				$obj = json_decode($rest);
 				if(!empty($obj->result)){
 					$se = new Sequence("eleme_cpdy");
 					$lid = $se->nextval();
@@ -72,7 +72,7 @@ class ElemeController extends BackendController
 				}
 			}else{
 				$rest = Elm::updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code);
-				$obj = json_decode($res);
+				$obj = json_decode($rest);
 				if(!empty($obj->result)){
 					$sql = "update nb_eleme_cpdy set phs_code=".$phs_code." where dpid=".$companyId." and elemeID=".$itemid." and delete_flag=0";
 					$res = Yii::app()->db->createCommand($sql)->execute();
