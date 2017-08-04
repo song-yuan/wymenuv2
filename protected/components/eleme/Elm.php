@@ -110,15 +110,11 @@ class Elm
          $result =ElUnit::post($url,$protocol);
          return $result;
 	}
-	public static function elemeUpdateId($dpid){
+	public static function elemeUpdateId($dpid,$shopid){
 		$access_token = self::elemeGetToken($dpid);
 		if(!$access_token){
 			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
 		}
-		$resultid = self::ElemeId($dpid);
-		$obj = json_decode($resultid);
-		$auth = $obj->result->authorizedShops;
-		$shopid = $auth[0]->id;
 		$app_key = ElmConfig::key;
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
@@ -137,23 +133,7 @@ class Elm
         );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
         $result =ElUnit::post($url,$protocol);
-        $obj = json_decode($result);
-        if(!empty($obj->result)){
-        	$se=new Sequence("eleme_dpdy");
-			$lid = $se->nextval();
-			$creat_at = date("Y-m-d H:i:s");
-			$update_at = date("Y-m-d H:i:s");
-			$shopid = $obj->result->id;
-			$inserData = array(
-						'lid'=>	$lid,
-						'dpid'=> $dpid,
-						'create_at'=>$creat_at,
-						'update_at'=>$update_at,
-						'shopId'=>$shopid
-				);
-			$res = Yii::app()->db->createCommand()->insert('nb_eleme_dpdy',$inserData);
-        }
-	    return "店铺对应成功";
+	    return $result;
 	}
 	public static function productCategory($dpid,$cpid,$name,$shopid){
 		$access_token = self::elemeGetToken($dpid);
@@ -307,6 +287,7 @@ class Elm
 		$accountNo = $me->orderId;
 		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_type=8';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		
 		if($result){
 			$sql = "update nb_order set order_status=4 where dpid=".$dpid." and account_no='".$accountNo."' and order_type=8";
 			$res = Yii::app()->db->createCommand($sql)->execute();
@@ -649,13 +630,17 @@ class Elm
 							array_push($orderArr['order_product'], $orderProduct);
 						}else{
 							$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+
 							$totalProductPrice = Yii::app()->db->createCommand($sql)->queryScalar();
 							$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
+							
 							$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
+
 							$hasPrice = 0;
 							foreach ($productDetails as $i=>$detail){
 								if($totalProductPrice > 0){
 									$eachPrice = $detail['original_price']*$detail['number']/$totalProductPrice*$itemprice;
+									
 								}else{
 									$eachPrice = 0;
 								}
@@ -671,6 +656,7 @@ class Elm
 									$itemPrice = $eachPrice;
 								}
 								$itemPrice = number_format($itemPrice,4);
+
 								$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$itemPrice,'price'=>$itemPrice,'amount'=>$amount*$detail['number'],'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 								array_push($orderArr['order_product'], $orderProduct);
 							}
@@ -679,7 +665,7 @@ class Elm
 				}
 			}
 		}
-			
+		
 		if($deliverFee!=$vipDeliveryFeeDiscount){
 			$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$deliverFee,'price'=>$deliverFee-$vipDeliveryFeeDiscount,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
 			array_push($orderArr['order_product'], $orderProduct);
