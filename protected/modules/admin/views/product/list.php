@@ -220,6 +220,12 @@
 			background-size: 60% ;
     		background-repeat: no-repeat;
 		}
+		.ku-item.catep{
+			background-image:url(../../../../../../img/waiter/icon_catep.png);
+			background-position: 22px 20px;
+			background-size: 65% ;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -335,6 +341,12 @@
 						<div id="kwxf" class="pull-left margin-left-right">
 							<div class="ku-item ku-purple kwxf"></div>
 							<div class="ku-item-info">口味下发</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('copycatep/index',array('companyId'=>$this->companyId,'type'=>'0'));?>">
+						<div  class="pull-left margin-left-right hov">
+							<div class="ku-item ku-purple catep"></div>
+							<div class="ku-item-info">分类下发</div>
 						</div>
 					</a>
 					<?php endif;?>

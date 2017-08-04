@@ -83,10 +83,6 @@
 <script type="text/javascript">
 	var $modal = $('.modal');
     $('.add_btn').on('click', function(){
-        <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
-         alert("您没有权限！！！");
-         return false;
-        <?php endif;?>
         id = $(this).attr('pid');
     	//alert(catetype);alert(pid);
         $modal.find('.modal-content').load('<?php echo $this->createUrl('eleme/glcp',array('companyId'=>$this->companyId));?>/id/'+id+'', function(){

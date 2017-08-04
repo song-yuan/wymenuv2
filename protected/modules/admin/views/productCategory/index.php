@@ -46,6 +46,7 @@
 						</div>
 						<div class="portlet-body">
 							<div class="table-responsive">
+							<span style="color: red;"><?php echo yii::t('app',' * 建议一级分类序号分别设置为0 , 200 , 400 , ...  , 0的二级分类序号要在0到200之间的整数 , 不能大于等于200 ;200的二级分类序号在200到400之间 , 同样不能大于等于400;以此类推...一级分类的区间的大小根据实际情况确定。');?></span>
 								<table class="tree table table-striped table-hover table-bordered dataTable">
 									<?php foreach($models as $model):?>
 									<tr class="treegrid-<?php echo $model->lid?> <?php if($model->pid!='0') echo 'treegrid-parent-'.$model->pid;?>">
@@ -60,15 +61,6 @@
 									</tr>
 									<?php endforeach;?>
 								</table>
-								<span style="color: red;"><?php echo yii::t('app','注意');?>：<br>
-								<?php echo yii::t('app','*:必须设置二级分类');?><br>
-								<?php echo yii::t('app','*:分类之间名称不能重复');?><br></span>
-                                <?php echo yii::t('app','说明');?>：<br>
-                                <?php echo yii::t('app','1:（）内数字是各个分类的产品在前台的显示顺序，数值越小的排在最前面。');?><br>
-                                <?php echo yii::t('app','2:所有数字小于9999');?><br>
-                                <span style="color: red;"><?php echo yii::t('app','3:一级分类排好顺序后，不同一级分类内的二级分类排序数值不要交叉。');?></span>
-                                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo yii::t('app','如：三个一级分类显示顺序是1、2、3，');?>
-                                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo yii::t('app','那么显示顺序是2的一级分类所对应的二级分类的显示顺序数值不能比1内的二级分类显示顺序小，不能比3内的二级分类显示顺序大。');?>
                             </div>
 						</div>
 					</div>
