@@ -786,54 +786,7 @@ class WxOrder
 			
 			WxCupon::dealCupon($cuponBranduserDpid, $cuponBranduserLid, 2);
 			if($money == 0){
-				//修改订单状态
-				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-				//修改订单产品状态
-				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-				//修改座位状态
-				if($order['order_type']==1){
-					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-				}else{
-					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-				}
-				
-				//减少库存
-				$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
-				foreach($orderProducts as $product){
-					if($product['set_id'] > 0){
-						// 套餐
-						$setDetails = $product['detail'];
-						foreach($setDetails as $detail){
-							$productTasteArr = array();
-							if(isset($detail['taste'])&&!empty($detail['taste'])){
-								foreach ($detail['taste'] as $taste){
-									array_push($productTasteArr, $taste['taste_id']);
-								}
-							}
-							$productBoms = DataSyncOperation::getBom($dpid, $detail['product_id'], $productTasteArr);
-							if(!empty($productBoms)){
-								foreach ($productBoms as $bom){
-									$stock = $bom['number']*$product['amount'];
-									DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$detail['lid']);
-								}
-							}
-						}
-					}else{
-						$productTasteArr = array();
-						if(isset($product['taste'])&&!empty($product['taste'])){
-							foreach ($product['taste'] as $taste){
-								array_push($productTasteArr, $taste['taste_id']);
-							}
-						}
-						$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
-						if(!empty($productBoms)){
-							foreach ($productBoms as $bom){
-								$stock = $bom['number']*$product['amount'];
-								DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$product['lid']);
-							}
-						}
-					}
-				}
+				self::dealOrder($user,$order);
 			}
 		}
 	}
@@ -998,56 +951,74 @@ class WxOrder
 		
 		$payMoney = WxBrandUser::reduceYue($userId, $userDpId, $total);	
 		if($payMoney==$total){
-			//修改订单状态
-			WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
-			//修改订单产品状态
-			WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
-			//修改座位状态
-			if($order['order_type']==1){
-				WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-			}else{
-				WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-			}
-			
-			//减少库存
-			$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
-			foreach($orderProducts as $product){
-				if($product['set_id'] > 0){
-					// 套餐
-					$setDetails = $product['detail'];
-					foreach($setDetails as $detail){
-						$productTasteArr = array();
-						if(isset($detail['taste'])&&!empty($detail['taste'])){
-							foreach ($detail['taste'] as $taste){
-								array_push($productTasteArr, $taste['taste_id']);
-							}
-						}
-						$productBoms = DataSyncOperation::getBom($dpid, $detail['product_id'], $productTasteArr);
-						if(!empty($productBoms)){
-							foreach ($productBoms as $bom){
-								$stock = $bom['number']*$product['amount'];
-								DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$detail['lid']);
-							}
-						}
-					}
-				}else{
-					$productTasteArr = array();
-					if(isset($product['taste'])&&!empty($product['taste'])){
-						foreach ($product['taste'] as $taste){
-							array_push($productTasteArr, $taste['taste_id']);
-						}
-					}
-					$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
-					if(!empty($productBoms)){
-						foreach ($productBoms as $bom){
-							$stock = $bom['number']*$product['amount'];
-							DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$product['lid']);
-						}
-					}
-				}
-			}
+			self::dealOrder($user,$order);
 		} 	
 	 	return $payMoney;
+	 }
+	 /**
+	  * 
+	  * 订单支付成功处理
+	  * 
+	  */ 
+	 public static function dealOrder($user,$order){
+	 	$orderId = $order['lid'];
+	 	$dpid = $order['dpid'];
+	 	
+	 	$userId = $user['lid'];
+	 	$userOrder = WxOrder::isUserOrder($userId);
+	 	if(!$userOrder){
+	 		$openId = $user['openid'];
+	 		$param = array('openid'=>$openId,'group'=>$dpid);
+	 		WxBrandUser::updateByOpenid($param);
+	 	}
+	 	//修改订单状态
+	 	WxOrder::updateOrderStatus($orderId,$dpid);
+	 	//修改订单产品状态
+	 	WxOrder::updateOrderProductStatus($orderId,$dpid);
+	 	//修改座位状态
+	 	if($order['order_type']==1){
+	 		WxSite::updateSiteStatus($order['site_id'],$dpid,3);
+	 	}else{
+	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,3);
+	 	}
+	 		
+	 	//减少库存
+	 	$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
+	 	foreach($orderProducts as $product){
+	 		if($product['set_id'] > 0){
+	 			// 套餐
+	 			$setDetails = $product['detail'];
+	 			foreach($setDetails as $detail){
+	 				$productTasteArr = array();
+	 				if(isset($detail['taste'])&&!empty($detail['taste'])){
+	 					foreach ($detail['taste'] as $taste){
+	 						array_push($productTasteArr, $taste['taste_id']);
+	 					}
+	 				}
+	 				$productBoms = DataSyncOperation::getBom($dpid, $detail['product_id'], $productTasteArr);
+	 				if(!empty($productBoms)){
+	 					foreach ($productBoms as $bom){
+	 						$stock = $bom['number']*$product['amount'];
+	 						DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$detail['lid']);
+	 					}
+	 				}
+	 			}
+	 		}else{
+	 			$productTasteArr = array();
+	 			if(isset($product['taste'])&&!empty($product['taste'])){
+	 				foreach ($product['taste'] as $taste){
+	 					array_push($productTasteArr, $taste['taste_id']);
+	 				}
+	 			}
+	 			$productBoms = DataSyncOperation::getBom($dpid, $product['product_id'], $productTasteArr);
+	 			if(!empty($productBoms)){
+	 				foreach ($productBoms as $bom){
+	 					$stock = $bom['number']*$product['amount'];
+	 					DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$product['lid']);
+	 				}
+	 			}
+	 		}
+	 	}
 	 }
      /**
       * 

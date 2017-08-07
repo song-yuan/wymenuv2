@@ -297,12 +297,11 @@ class SqbpayController extends Controller
 					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
 					//exit;
 					$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-					$orders = Yii::app()->db->createCommand($sql)
-					->queryRow();
+					$orders = Yii::app()->db->createCommand($sql)->queryRow();
 					if(!empty($orders)){
 						//sleep(15);
-						$resultorder = Yii::app()->db->createCommand('update nb_order set order_status = 4 where dpid='.$orderdpid.' and lid ='.$orderid)
-						->execute();
+						$user = WxBrandUser::getFromOpenId($payer_uid);
+						WxOrder::dealOrder($user, $orders);
 					}
 				}
 			}
