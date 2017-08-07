@@ -578,6 +578,15 @@ class WxOrder
 		}
 	    return $order;
 	}
+	public static function isUserOrder($userId){
+		$sql = 'select * from nb_order where user_id='.$userId.' and order_status in(3,4,8)';
+		$order = Yii::app()->db->createCommand($sql)->queryRow();
+		if($order){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	/**
 	 * 
 	 * 获取未付款的 订单产品

@@ -25,7 +25,7 @@
 <div class="form-group">
      <label class="col-md-3 control-label" for="ProductCategory_show_type">套餐关联</label>
      <div class="col-md-4">
-         <select class="form-control" placeholder="套餐关联" name="eleme[phs_code]">
+         <select class="form-control" placeholder="套餐关联" name="eleme[phps_code]">
          <option value="">选择套餐</option>
             <?php foreach ($modelsets as $set):?>
 					<option value="<?php echo $set->pshs_code;?>"><?php echo $set->set_name;?></option>

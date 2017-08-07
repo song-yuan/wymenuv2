@@ -40,6 +40,9 @@ class ElemeController extends BackendController
 		$eleme = Yii::app()->request->getParam('eleme');
 		if($eleme){
 			$phs_code = $eleme['phs_code'];
+			if($phs_code==''){
+				$phs_code = $eleme['phps_code'];
+			}
 			$itemid = $eleme['elemeId'];
 			$item = Elm::getItem($companyId,$itemid);
 			$ite = json_decode($item);
@@ -49,7 +52,7 @@ class ElemeController extends BackendController
 			foreach ($specs as $spec) {
 				$original_price = $spec->price;
 			}
-			$sql = "elemeID=".$itemid." and delete_flag=0";
+			$sql = "elemeID='".$itemid."' and delete_flag=0";
 			$elememodel = ElemeCpdy::model()->find($sql);
 			if(empty($elememodel)){
 				$rest = Elm::updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code);
@@ -69,6 +72,12 @@ class ElemeController extends BackendController
 								'phs_code'=>$phs_code
 					);
 					$res = Yii::app()->db->createCommand()->insert('nb_eleme_cpdy',$inserData);
+					if($res){
+						Yii::app()->user->setFlash('success' , yii::t('app','关联成功'));
+					}
+				}else{
+					$message = $obj->error->message;
+					Yii::app()->user->setFlash('error' , yii::t('app',$message));
 				}
 			}else{
 				$rest = Elm::updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code);

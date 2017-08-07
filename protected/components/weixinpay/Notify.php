@@ -78,6 +78,11 @@ class Notify extends WxPayNotify
 			exit;
 		}
 		//orderpay表插入数据
+		$userOrder = WxOrder::isUserOrder($brandUser['lid']);
+		if(!$userOrder){
+			$param = array('openid'=>$openId,'group'=>$orderIdArr[1]);
+			WxBrandUser::updateByOpenid($param);
+		}
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
 		WxOrder::insertOrderPay($order,1);
 		//修改订单状态

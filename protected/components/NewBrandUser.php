@@ -14,6 +14,7 @@ class NewBrandUser {
 	public $brandId;
 	public $success = false;
 	public $errorMessage;
+	public $brandUser = null;
 	
 	/**
 	 * @param String $openId 微信会员对微信服务号唯一识别标识openId
