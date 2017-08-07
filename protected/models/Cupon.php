@@ -45,13 +45,14 @@ class Cupon extends CActiveRecord
 			array('lid, dpid', 'required'),
 			array('change_point', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, cupon_money, min_consumer', 'length', 'max'=>10),
+			array('sole_code', 'length', 'max'=>20),
 			array('cupon_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, cupon_abstract', 'length', 'max'=>255),
-			array('is_available, delete_flag, to_group, time_type, day_begin', 'length', 'max'=>2),
+			array('type, type_dpid, type_prod, is_available, delete_flag, to_group, time_type, day_begin', 'length', 'max'=>2),
 			array('create_at, begin_time, end_time, cupon_memo, day', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, cupon_title, is_sync, main_picture, to_group, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point, time_type, day, day_begin, begin_time, end_time, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, type, type_dpid, type_prod, sole_code, cupon_title, is_sync, main_picture, to_group, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point, time_type, day, day_begin, begin_time, end_time, is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
