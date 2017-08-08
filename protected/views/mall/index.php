@@ -106,6 +106,7 @@
 		$productStr .='</div>';
 	}
 	foreach ($products as $product){
+		var_dump($product);exit;
 		if(empty($product['main_picture'])){
 			$product['main_picture']=$defaultNavImg;
 		}
@@ -116,7 +117,6 @@
 			$topTitle = $product['category_name'];
 			$navLiStr .= '<li class="current"><a href="#st'.$product['lid'].'"><img src="'.$product['main_picture'].'" class="nav-img" onselectstart="return false"/><span class="nav-span" onselectstart="return false">'.$product['category_name'].'</span></a><b></b></li>';
 		}
-		var_dump($product);exit;
 		$productLists = $product['product_list'];
 		if($product['cate_type']!='2'){
 			$productStr .='<div class="section" id="st'.$product['lid'].'"><div class="prt-title">'.$product['category_name']. '</div>';
