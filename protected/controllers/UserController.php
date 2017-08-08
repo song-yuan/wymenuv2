@@ -177,11 +177,12 @@ class UserController extends Controller
         $user = $this->brandUser;
         //$userId就是brand_user表里的lid
         $userId = $user['lid'];
+        $cardId = $user['card_id'];
 		$type = Yii::app()->request->getParam('t',0);
 		$page = Yii::app()->request->getParam('p',1);
 		
-		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type,$page);
-		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type,'userId'=>$userId));
+		$orderLists = WxOrder::getUserOrderList($userId,$cardId,$type,$page);
+		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type,'userId'=>$userId,'cardId'=>$cardId));
 	}
 	/**
 	 * 
@@ -753,11 +754,12 @@ class UserController extends Controller
 	 */
 	public function actionAjaxOrderList()
 	{
-		$userId = Yii::app()->request->getParam('userId');;
+		$userId = Yii::app()->request->getParam('userId');
+		$cardId = Yii::app()->request->getParam('cardId');
 		$type = Yii::app()->request->getParam('t',0);
 		$page = Yii::app()->request->getParam('p',1);
 	
-		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type,$page);
+		$orderLists = WxOrder::getUserOrderList($userId,$cardId,$type,$page);
 		echo json_encode($orderLists);
 		exit;
 	}
