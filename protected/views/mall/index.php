@@ -106,7 +106,6 @@
 		$productStr .='</div>';
 	}
 	foreach ($products as $product){
-		var_dump($product);exit;
 		if(empty($product['main_picture'])){
 			$product['main_picture']=$defaultNavImg;
 		}
@@ -143,7 +142,6 @@
                 }
                 $productStr .='¥<span class="price">'.$pProduct['member_price'].'</span>';
 				$productStr .='</p>';
-				echo 666666;exit;
 				if(!$closeShop){
 					$productId = $pProduct['lid'];
 					$isSet = 0;

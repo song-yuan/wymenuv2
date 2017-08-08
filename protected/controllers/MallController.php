@@ -96,7 +96,7 @@ class MallController extends Controller
         
         $cache = Yii::app()->cache->get($key);
         if($cache!=false){
-        	$products = json_decode($cache);
+        	$products = json_decode($cache,true);
         }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
