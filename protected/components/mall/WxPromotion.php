@@ -144,10 +144,23 @@ class WxPromotion
 	 	return $result;
 	 }
 	 // 活动是否有效
-	 public static function isPromotionValid($dpid,$promotionId){
+	 public static function isPromotionValid($dpid,$promotionId,$type){
 	 	$now = date('Y-m-d H:i:s',time());
 	 	$promotion = self::getPromotion($dpid, $promotionId);
 	 	if($promotion){
+	 		if($type==2){
+	 			if(!in_array($promotion['is_available'], array(2,3,5))){
+	 				return false;
+	 			}
+	 		}elseif($type==6){
+	 			if(!in_array($promotion['is_available'], array(2,3,4))){
+	 				return false;
+	 			}
+	 		}else{
+	 			if(!in_array($promotion['is_available'], array(2,3))){
+	 				return false;
+	 			}
+	 		}
 	 		if($promotion['end_time'] >= $now&&$now >= $promotion['begin_time']){
 	 			$week = date('w');
 	 			if($week==0){
@@ -160,17 +173,10 @@ class WxPromotion
 		 			$promotionEnd = date('H:i',strtotime($promotion['day_end']));
 		 			if($promotionEnd >= $time&&$time >= $promotionBegin){
 		 				return true;
-		 			}else{
-		 				return false;
 		 			}
-	 			}else{
-	 				return false;
 	 			}
-	 		}else{
-	 			return false;
 	 		}
-	 	}else{
-	 		return false;
 	 	}
+	 	return false;
 	 }
 }
