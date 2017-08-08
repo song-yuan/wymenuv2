@@ -761,7 +761,7 @@ $(document).ready(function(){
              });
         }
     });
-    $('#container').on('touchstart','.lt-lt img',function(){
+    $('#container').on('click','.lt-lt img',function(){
 		var src = $(this).attr('src');
 		var str = '<img src="'+src+'"/>';
     	layer.open({
