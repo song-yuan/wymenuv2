@@ -142,6 +142,7 @@
                 }
                 $productStr .='¥<span class="price">'.$pProduct['member_price'].'</span>';
 				$productStr .='</p>';
+				echo 666666;exit;
 				if(!$closeShop){
 					$productId = $pProduct['lid'];
 					$isSet = 0;
@@ -149,7 +150,6 @@
 					$toGroup = -1;
 					$canCupon = 0;
 					$cartKey = $productId.'-0--1--1-0';
-					echo $cartKey;exit;
 					if(isset($cartList[$cartKey])){
 						$cartItem = $cartList[$cartKey];
 						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
