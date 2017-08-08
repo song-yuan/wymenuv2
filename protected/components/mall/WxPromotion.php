@@ -19,7 +19,6 @@ class WxPromotion
 	}
 	public function getPromotionDetail(){
 		$now = date('Y-m-d H:i:s',time());
-		$user = WxBrandUser::get($this->userId, $this->dpid);
 		if($this->type == '6'){
 			$sql = 'select t.*,t1.promotion_title,t1.main_picture,t1.to_group,t1.can_cupon,t1.group_id,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and (t1.is_available=2 or t1.is_available=3 or t1.is_available=4) and t.delete_flag=0 and t1.delete_flag=0';
 		}elseif($this->type == '2'){
@@ -32,6 +31,7 @@ class WxPromotion
 		foreach($results as $k=>$result){
 			if($result['to_group']==2){
 				// 会员等级活动
+				$user = WxBrandUser::get($this->userId, $this->dpid);
 				$promotionUser = self::getPromotionUser($this->dpid, $user['user_level_lid'], $result['normal_promotion_id']);
 				if(empty($promotionUser)){
 					continue;
