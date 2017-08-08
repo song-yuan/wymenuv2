@@ -114,7 +114,6 @@ class MallController extends Controller
         	$cartKey = $productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
         	$cartList[$cartKey] = $cart;
         }
-        var_dump($cartList);exit;
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
 		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'products'=>$products,'cartList'=>$cartList,'start'=>$start,'notices'=>$notices));
