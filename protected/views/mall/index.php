@@ -20,7 +20,6 @@
 			$closeShop = true;
 		}
 	}
-var_dump($cartList);exit;
 	$current = false;
 	$plus = '<img src="'.$baseUrl.'/img/mall/plus.png"/>';
 	$minus = '<img src="'.$baseUrl.'/img/mall/minus.png"/>';
@@ -70,9 +69,9 @@ var_dump($cartList);exit;
             $productStr .='</p>';
 
 			if(!$closeShop){
-				$productId = $promotionProduct['lid'];
+				$productId = (int)$promotionProduct['lid'];
 				$isSet = $objPro['is_set'];
-				$promotionId = $objPro['normal_promotion_id'];
+				$promotionId = (int)$objPro['normal_promotion_id'];
 				$toGroup = $objPro['to_group'];
 				$canCupon = $objPro['can_cupon'];
 				$cartKey = $productId.'-'.$isSet.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
@@ -143,7 +142,7 @@ var_dump($cartList);exit;
                 $productStr .='¥<span class="price">'.$pProduct['member_price'].'</span>';
 				$productStr .='</p>';
 				if(!$closeShop){
-					$productId = $pProduct['lid'];
+					$productId = (int)$pProduct['lid'];
 					$isSet = 0;
 					$promotionId = -1;
 					$toGroup = -1;
@@ -199,7 +198,7 @@ var_dump($cartList);exit;
                 $productStr .='¥<span class="price">'.$pProductSet['member_price'].'</span>';
 				$productStr .='</p>';
 				if(!$closeShop){
-					$productId = $pProductSet['lid'];
+					$productId = (int)$pProductSet['lid'];
 					$cartKey = $productId.'-1--1--1-0';
 					if(isset($cartList[$cartKey])){
 						$cartItem = $cartList[$cartKey];
