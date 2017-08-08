@@ -75,8 +75,11 @@ class MallController extends Controller
 	}
 	public function actionIndex()
 	{
+		$key = 'productList';
+		$expire = 10*60; // 过期时间
 		$user = $this->brandUser;
         $userId = $user['lid'];
+        $cartList = array();
         $siteId = Yii::app()->session['qrcode-'.$userId];
         if($this->type==1){
         	$site = WxSite::get($siteId,$this->companyId);
@@ -91,11 +94,29 @@ class MallController extends Controller
         $promotion = new WxPromotion($this->companyId,$userId,$this->type);
         $promotions = $promotion->promotionProductList;
         
-        $product = new WxProduct($this->companyId,$userId,$this->type);
-        $products = $product->categoryProductLists;
+        $cache = Yii::app()->cache->get($key);
+        if($products!=false){
+        	$products = json_decode($cache);
+        }else{
+        	$product = new WxProduct($this->companyId,$userId,$this->type);
+        	$products = $product->categoryProductLists;
+        	Yii::app()->cache->set($key,json_encode($products),$expire);
+        }
+        
+        $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
+        $carts = $cartObj->getCart();
+        foreach ($carts as $cart){
+        	$productId = $cart['product_id'];
+        	$isSte = $cart['is_set'];
+        	$promotionId = $cart['promotion_id'];
+        	$toGroup = $cart['to_group'];
+        	$canCupon = $cart['can_cupon'];
+        	$cartKey = $productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
+        	$cartList[$cartKey] = $cart;
+        }
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'products'=>$products,'start'=>$start,'notices'=>$notices));
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'products'=>$products,'cartList'=>$cartList,'start'=>$start,'notices'=>$notices));
 	}
 	/**
 	 * 

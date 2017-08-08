@@ -70,26 +70,33 @@
             $productStr .='</p>';
 
 			if(!$closeShop){
-				if($promotionProduct['num'] > 0){
-					$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$objPro['is_set'].'" product-id="'.$promotionProduct['lid'].'" promote-id="'.$objPro['normal_promotion_id'].'" to-group="'.$objPro['to_group'].'" can-cupon="'.$objPro['can_cupon'].'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="'.$promotionProduct['num'].'">';
+				$productId = $promotionProduct['lid'];
+				$isSet = $objPro['is_set'];
+				$promotionId = $objPro['normal_promotion_id'];
+				$toGroup = $objPro['to_group'];
+				$canCupon = $objPro['can_cupon'];
+				$cartKey = $productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
+				if(isset($cartList[$cartKey])){
+					$cartItem = $cartList[$cartKey];
+					$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 					$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
-					$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="'.$objPro['is_set'].'_'.$promotionProduct['lid'].'_'.$objPro['normal_promotion_id'].'_'.$objPro['to_group'].'">';
+					$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'">';
 					$cartStr .='<div class="cart-dtl-item-inner">';
 					$cartStr .='<i class="cart-dtl-dot"></i>';
 					$cartStr .='<p class="cart-goods-name">'.$promotionProduct['product_name'].'</p>';
 					$cartStr .='<div class="j-item-console cart-dtl-oprt">';
 					$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-					$cartStr .='<span class="j-item-num foodop-num">'.$promotionProduct['num'].'</span> ';
+					$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
 					$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
 					$cartStr .='</div>';
 					$cartStr .='<span class="cart-dtl-price">¥'.$promotionProduct['price'].'</span>';
 					$cartStr .='</div></div>';
 				}else{
 					if($promotionProduct['store_number']!=0){
-						$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$objPro['is_set'].'" product-id="'.$promotionProduct['lid'].'" promote-id="'.$objPro['normal_promotion_id'].'" to-group="'.$objPro['to_group'].'" can-cupon="'.$objPro['can_cupon'].'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="0">';
+						$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="0">';
 						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
 					}else{
-						$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$objPro['is_set'].'" product-id="'.$promotionProduct['lid'].'" promote-id="'.$objPro['normal_promotion_id'].'" to-group="'.$objPro['to_group'].'" can-cupon="'.$objPro['can_cupon'].'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="0">';
+						$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="0">';
 						$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
 					}
 				}
@@ -136,17 +143,24 @@
                 $productStr .='¥<span class="price">'.$pProduct['member_price'].'</span>';
 				$productStr .='</p>';
 				if(!$closeShop){
-					if($pProduct['num'] > 0){
-						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$pProduct['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$pProduct['num'].'">';
+					$productId = $pProduct['lid'];
+					$isSet = 0;
+					$promotionId = -1;
+					$toGroup = -1;
+					$canCupon = 0;
+					$cartKey = $productId.'-0--1--1-0';
+					if(isset($cartList[$cartKey])){
+						$cartItem = $cartList[$cartKey];
+						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 		
-						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="0_'.$pProduct['lid'].'_-1_-1">';
+						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="0_'.$productId.'_-1_-1">';
 						$cartStr .='<div class="cart-dtl-item-inner">';
 						$cartStr .='<i class="cart-dtl-dot"></i>';
 						$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
 						$cartStr .='<div class="j-item-console cart-dtl-oprt">';
 						$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-						$cartStr .='<span class="j-item-num foodop-num">'.$pProduct['num'].'</span> ';
+						$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
 						$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
 						$cartStr .='</div>';
 						$cartStr .='<span class="cart-dtl-price">¥'.$pProduct['member_price'].'</span>';
@@ -154,10 +168,10 @@
 						$cartStr .='</div>';
 					}else{
 						if($pProduct['store_number'] != 0){
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$pProduct['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
 							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
 						}else{
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$pProduct['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
 							$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
 						}
 					}
@@ -185,17 +199,20 @@
                 $productStr .='¥<span class="price">'.$pProductSet['member_price'].'</span>';
 				$productStr .='</p>';
 				if(!$closeShop){
-					if($pProductSet['num'] > 0){
-						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$pProductSet['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$pProductSet['num'].'">';
+					$productId = $pProductSet['lid'];
+					$cartKey = $productId.'-1--1--1-0';
+					if(isset($cartList[$cartKey])){
+						$cartItem = $cartList[$cartKey];
+						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 		
-						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="1_'.$pProductSet['lid'].'_-1_-1">';
+						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="1_'.$productId.'_-1_-1">';
 						$cartStr .='<div class="cart-dtl-item-inner">';
 						$cartStr .='<i class="cart-dtl-dot"></i>';
 						$cartStr .='<p class="cart-goods-name">'.$pProductSet['set_name'].'</p>';
 						$cartStr .='<div class="j-item-console cart-dtl-oprt">';
 						$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-						$cartStr .='<span class="j-item-num foodop-num">'.$pProductSet['num'].'</span> ';
+						$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
 						$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
 						$cartStr .='</div>';
 						$cartStr .='<span class="cart-dtl-price">¥'.$pProductSet['member_price'].'</span>';
@@ -203,10 +220,10 @@
 						$cartStr .='</div>';
 					}else{
 						if($pProductSet['store_number'] != 0){
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$pProductSet['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
 							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
 						}else{
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$pProductSet['lid'].'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
+							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
 							$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
 						}
 					}

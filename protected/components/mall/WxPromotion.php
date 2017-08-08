@@ -39,8 +39,8 @@ class WxPromotion
 			}
 			if($result['is_set'] > 0){
 				//套餐	
-				$sql = 'select t.*,t1.num from nb_product_set t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=1 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1 and t.is_show_wx=1';
-				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->bindValue(':promotionId',$result['normal_promotion_id'])->queryRow();
+				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
 					if($result['is_discount']==0){
 						$product['price'] = ($product['set_price'] - $result['promotion_money']) > 0 ? number_format($product['set_price'] - $result['promotion_money'],2) : number_format(0,2);
@@ -56,8 +56,8 @@ class WxPromotion
 				}
 			}else{
 				//单品
-				$sql = 'select t.*,t1.num from nb_product t left join nb_cart t1 on t.lid=t1.product_id and t1.user_id=:userId and t1.promotion_id=:promotionId and t1.is_set=0 where t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 and t.status=0 and t.is_show=1 and t.is_show_wx=1';
-				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->userId)->bindValue(':promotionId',$result['normal_promotion_id'])->queryRow();
+				$sql = 'select * from nb_product where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
 					if($result['is_discount']==0){
 						$product['price'] = ($product['original_price'] - $result['promotion_money']) > 0 ? number_format($product['original_price'] - $result['promotion_money'],2) : number_format(0,2);
