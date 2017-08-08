@@ -75,7 +75,7 @@
 				$promotionId = $objPro['normal_promotion_id'];
 				$toGroup = $objPro['to_group'];
 				$canCupon = $objPro['can_cupon'];
-				$cartKey = $productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
+				$cartKey = $productId.'-'.$isSet.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
 				if(isset($cartList[$cartKey])){
 					$cartItem = $cartList[$cartKey];
 					$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
