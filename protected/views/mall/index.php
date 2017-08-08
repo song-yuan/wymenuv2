@@ -120,6 +120,7 @@
 		if($product['cate_type']!='2'){
 			$productStr .='<div class="section" id="st'.$product['lid'].'"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach ($productLists as $pProduct){
+				var_dump($pProduct);exit;
 				if($pProduct['main_picture']==''){
 					$pProduct['main_picture'] = $defaultImg;
 				}
