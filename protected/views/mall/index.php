@@ -20,7 +20,7 @@
 			$closeShop = true;
 		}
 	}
-
+var_dump($cartList);exit;
 	$current = false;
 	$plus = '<img src="'.$baseUrl.'/img/mall/plus.png"/>';
 	$minus = '<img src="'.$baseUrl.'/img/mall/minus.png"/>';
