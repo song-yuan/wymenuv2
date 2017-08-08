@@ -320,7 +320,7 @@
 
 <div class="j-mask mask cart-mask" style="display:none;"></div>
 <div id="cart-dtl" class="cart-dtl" style="display:none;">
-	<div class="cart-dtl-head" style="display:none;background-color: white;height:31px;z-index:1;">
+	<div class="cart-dtl-head" style="background-color: white;height:31px;z-index:1;">
 		<span class="j-cart-dusbin cart-dusbin" style="background-color: white;"><i></i>清空购物车</span>
 	</div>
 	<div class="j-cart-dtl-list cart-dtl-list">
@@ -750,15 +750,14 @@ $(document).ready(function(){
         }
         if($('.j-mask').is(':visible')){
              var hight = $('#cart-dtl').outerHeight();
-             $('.cart-dtl-head').hide();
              $('#cart-dtl').animate({bottom:-hight},function(){
                  $('.j-mask').hide();
+                 $('.cart-dtl').hide();
              });
         }else{
              $('#cart-dtl').show();
              $('#cart-dtl').animate({bottom:50},function(){
                  $('.j-mask').show();
-            	 $('.cart-dtl-head').show();
              });
         }
     });
