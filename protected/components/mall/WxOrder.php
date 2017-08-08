@@ -810,14 +810,14 @@ class WxOrder
 	 		throw new Exception('订单不存在!');
 	 	}
 	 	if($order['order_status']==7){
-	 		throw new Exception('订单已经取消,无法重复取消!');
+	 		return 1;
 	 	}
-	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and is_print=1';
+	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid';
 	 	$resluts = Yii::app()->db->createCommand($sql)
 	 							 ->bindValue(':orderId',$orderId)
 	 							 ->bindValue(':dpid',$dpid)
 	 							 ->queryAll();
-	 	if(!empty($resluts)){
+	 	if(empty($resluts)){
 	 		return 0;
 	 	}else{
 	 		foreach($resluts as $orderProduct){
