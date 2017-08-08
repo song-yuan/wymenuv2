@@ -12,7 +12,6 @@ class WxCart
 {
 	public $dpid;
 	public $userId;
-	public $user;
 	public $siteId;
 	public $type;
 	public $pormotionYue = false;
@@ -25,13 +24,9 @@ class WxCart
 		$this->siteId = $siteId;
 		$this->type = $type;
 		$this->productArr = $productArr;
-		$this->brandUser();
 		if(!empty($this->productArr)){
 			$this->isCart();
 		}
-	}
-	public function brandUser(){
-		$this->user = WxBrandUser::get($this->userId, $this->dpid);
 	}
 	//加入购物车 判断
 	public function isCart(){
@@ -196,7 +191,8 @@ class WxCart
 					$this->pormotionYue = true;
 				}elseif($result['to_group']==2){
 					// 会员等级活动
-					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $this->user['user_level_lid'], $result['promotion_id']);
+					$user = WxBrandUser::get($this->userId, $this->dpid);
+					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $user['user_level_lid'], $result['promotion_id']);
 					if(empty($promotionUser)){
 						unset($results[$k]);
 						continue;
