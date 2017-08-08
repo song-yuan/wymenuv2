@@ -416,9 +416,9 @@ $(document).ready(function(){
 	var cHeight = $('body').height()-50-40;
 	var navListr = '<?php echo $navLiStr;?>';
 	var productStr = '<?php echo $productStr;?>';
-    $('#nav').find('li:first-child').next().addClass('b-radius-rt');
 	$(".content").height(cHeight+'px');
 	$('#nav').html(navListr);
+	$('#nav').find('li.current').next().addClass('b-radius-rt');
 	$('#container').append(productStr);
 	setTotal();
 	if(hasclose){
