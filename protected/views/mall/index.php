@@ -105,7 +105,6 @@
 		}
 		$productStr .='</div>';
 	}
-	echo 22222222;exit;
 	foreach ($products as $product){
 		if(empty($product['main_picture'])){
 			$product['main_picture']=$defaultNavImg;
