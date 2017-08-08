@@ -95,7 +95,7 @@ class MallController extends Controller
         $promotions = $promotion->promotionProductList;
         
         $cache = Yii::app()->cache->get($key);
-        if($products!=false){
+        if($cache!=false){
         	$products = json_decode($cache);
         }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
