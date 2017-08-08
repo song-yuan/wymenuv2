@@ -502,7 +502,7 @@ $(document).ready(function(){
 });
 
 
-    $('#container').on('click','.add',function(){
+    $('#container').on('touchstart','.add',function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
@@ -580,7 +580,7 @@ $(document).ready(function(){
         });
     });
      
-    $('#container').on('click','.minus',function(){ 
+    $('#container').on('touchstart','.minus',function(){ 
     	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
@@ -761,7 +761,7 @@ $(document).ready(function(){
              });
         }
     });
-    $('#container').on('click','.lt-lt img',function(){
+    $('#container').on('touchend','.lt-lt img',function(){
 		var src = $(this).attr('src');
 		var str = '<img src="'+src+'"/>';
     	layer.open({
