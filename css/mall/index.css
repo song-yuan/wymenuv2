@@ -65,7 +65,6 @@ body {
 	/*overflow: hidden;*/
 	font-size: 0.15rem;
 	text-align: center;
-	background-color: #efefef;
 }
 ::-webkit-scrollbar{width:0px}
 /*#nav{
@@ -77,12 +76,12 @@ body {
 	width: 1rem;
 	height: 0.74rem;
 	line-height: 0.74rem;
+	background-color: #efefef;
 	text-overflow:ellipsis;
 	user-select: none; 
 	color:#7C756D;
     padding: 0.1rem 0;
 /*	z-index: 1!important;
-	background-color: #efefef;
     white-space: nowrap;*/
 }
 .nav-lf ul li a{
