@@ -43,19 +43,22 @@
 		}
 		$productStr .= '<div class="section" id="st-promotion'.$key.'"><div class="prt-title">'.$promotion[0]['promotion_title'].'</div>';
 		foreach ($promotion as $objPro){
+			$isSet = $objPro['is_set'];
 			$promotionProduct = $objPro['product'];
-			$spicy = $promotionProduct['spicy'];
 			if($promotionProduct['main_picture']==''){
 				$promotionProduct['main_picture'] = $defaultImg;
 			}
 			$productStr .= '<div class="prt-lt"><div class="lt-lt"><img src="'.$promotionProduct['main_picture'].'"></div>';
 			$productStr .= '<div class="lt-ct"><p><span class="name">'.$promotionProduct['product_name'].'</span>';
-			if($spicy==1){
-				$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
-			}else if($spicy==2){
-				$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
-			}else if($spicy==3){
-				$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+			if($isSet==0){
+				$spicy = $promotionProduct['spicy'];
+				if($spicy==1){
+					$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
+				}else if($spicy==2){
+					$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
+				}else if($spicy==3){
+					$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+				}
 			}
 			$productStr .='</p>';
 
