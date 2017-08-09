@@ -743,7 +743,7 @@ $(document).ready(function(){
         	url:"<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'all'=>1));?>",
         	success:function(msg){
         		if(msg){
-            		$('input[class="result"]').each(function(){
+            		$('input.result]').each(function(){
                 		$(this).hide();
                 		$(this).parent().find('.minus').hide();
                 		$(this).val(0);
