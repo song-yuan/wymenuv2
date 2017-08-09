@@ -189,16 +189,13 @@ body {
 }
 
 .prt-lt .lt-lt {
-	position: relative;
 	float: left;
 	width: 1rem;
 	height: 1rem;
-	margin: 0.1rem;
-	margin-top: 0.25rem;
+	margin: 0.25rem 0.1rem;
 }
 
 .prt-lt .lt-lt img {
-	float: left;
 	width: 1rem;
 	height: 1rem;
 }
@@ -218,7 +215,7 @@ body {
 	position: relative;
 	float: left;
 	width: 1.7rem;
-	height: 0.6rem;
+	height: 1.25rem;
 	margin-top: 0.1rem;
 }
 
@@ -231,7 +228,7 @@ body {
 }
 
 .prt-lt .lt-ct p.pr {
-	margin-top: 0.1rem;
+	padding-top: 0.1rem;
 	color: #FF5151;
 	text-align: right;
 }
@@ -244,10 +241,12 @@ span.oprice {
 
 .prt-lt .lt-rt {
 	position: absolute;
-	bottom: -0.6em;
+	bottom: 0.1em;
 	right: 0.1rem;
 	/*width: 0.9rem;*/
 	width: 1.2rem;
+	height: auto;
+	z-index: 99;
 }
 
 .prt-lt .lt-rt .sale-out {
@@ -270,11 +269,11 @@ span.oprice {
 
 .prt-lt .lt-rt input.result {
 	float: left;
-	width: calc(0.9rem - 52px);
-	width: -moz-calc(0.9rem - 52px);
-	width: -webkit-calc(0.9rem - 52px);
+	width: calc(1.2rem - 72px);
+	width: -moz-calc(1.2rem - 72px);
+	width: -webkit-calc(1.2rem - 72px);
 	height: 34px;
-	font-size: 20px;
+	font-size: 25px;
 	border: 1px solid #e5e5e5;
 	text-align: center;
 	background-color: #fff;
