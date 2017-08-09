@@ -740,7 +740,7 @@ $(document).ready(function(){
     	var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
-        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'all'=>1));?>',
+        	url:"<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'all'=>1));?>",
         	success:function(msg){
         		if(msg){
             		$('input[class="result"]').each(function(){
