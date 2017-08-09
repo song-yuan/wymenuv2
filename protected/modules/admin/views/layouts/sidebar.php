@@ -117,13 +117,14 @@
                     </a>
             </li>
         <?php endif; ?>
-			
+			 <?php if(Yii::app()->user->role != '8'): ?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('waimai',))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('waimai/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-gift"></i> 
                     <span class="title"><?php echo yii::t('app','外卖管理');?></span>                 
                     </a>
             </li>
+            <?php endif;?>
              <?php if(Yii::app()->user->role ==1):?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('cfceshi',))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('cfceshi/list',array('companyId' => $this->companyId,'type'=>0));?>">

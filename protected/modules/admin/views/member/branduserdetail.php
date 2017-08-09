@@ -34,7 +34,15 @@
                                                                 <div class="form-group more-condition" style="float:left;width:150px;disabled:true;margin-left:10px;">
                                                                         <div class="input-group" style="width:95%;">
                                                                             <span class="input-group-addon" style="text-align:left;">手机号:
-                                                                                <?php echo $model['mobile_num'];?></span>                                                                                
+                                                                                <?php 
+																			if($model['mobile_num']){
+										                                    	if(Yii::app()->user->role == 8){
+										                                    		$str = substr_replace($model['mobile_num'],'****',3,4);
+										                                    	}else{
+										                                    		$str = $model['mobile_num'];
+										                                    	}
+										                                    	echo $str;
+										                                    };?></span>                                                                              
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group more-condition" style="float:left;width:150px;disabled:true;margin-left:10px;">
