@@ -260,9 +260,10 @@ class DataSyncOperation {
 						$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'];
 						$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 						if(!empty($productSet)){
-							$orderProduct [$k] ['set_name'] = $productSet[0]['set_name'];
-							$orderProduct [$k] ['set_price'] = $product['set_price'];
-							$orderProduct [$k] ['set_detail'] = $productSet;
+							$orderProduct[$k]['amount'] = $product['zhiamount'];
+							$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
+							$orderProduct[$k]['set_price'] = $product['set_price'];
+							$orderProduct[$k]['set_detail'] = $productSet;
 						}
 					}
 				}
