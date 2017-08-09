@@ -271,14 +271,14 @@ span.oprice {
 	width: -moz-calc(0.9rem - 52px);
 	width: -webkit-calc(0.9rem - 52px);
 	height: 34px;
-	font-size: 20px;
+	font-size: 25px;
 	border: 1px solid #e5e5e5;
 	text-align: center;
 	background-color: #fff;
 }
 
 .prt-lt .lt-rt div.add {
-	float: right;
+	float: left;
 	width: 34px;
 	height: 34px;
 	padding: 0;
