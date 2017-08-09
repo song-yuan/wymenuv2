@@ -245,7 +245,7 @@ span.oprice {
 	right: 0.1rem;
 	/*width: 0.9rem;*/
 	width: 1.2rem;
-	height: 38px;
+	height: auto;
 	z-index: 2;
 }
 
