@@ -30,13 +30,15 @@ class WxCart
 	}
 	//加入购物车 判断
 	public function isCart(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and is_set=:isSet and promotion_id=:privationPromotionId';
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and is_set=:isSet and promotion_id=:privationPromotionId and to_group=:toGroup and can_cupon=:canCupon';
 		$this->cart = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':userId',$this->userId)
 					  ->bindValue(':productId',$this->productArr['product_id'])
 					  ->bindValue(':isSet',$this->productArr['is_set'])
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
+					  ->bindValue(':toGroup',$this->productArr['to_group'])
+					  ->bindValue(':canCupon',$this->productArr['can_cupon'])
 					  ->queryRow();
 	}
 	//判断产品库存

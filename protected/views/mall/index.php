@@ -79,7 +79,7 @@
 					$cartItem = $cartList[$cartKey];
 					$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 					$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
-					$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'">';
+					$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
 					$cartStr .='<div class="cart-dtl-item-inner">';
 					$cartStr .='<i class="cart-dtl-dot"></i>';
 					$cartStr .='<p class="cart-goods-name">'.$promotionProduct['product_name'].'</p>';
@@ -105,7 +105,7 @@
 		$productStr .='</div>';
 	}
 	foreach ($products as $product){
-		if(empty($product['main_picture'])){
+		if($product['main_picture']==''){
 			$product['main_picture']=$defaultNavImg;
 		}
 		if($current){
@@ -153,7 +153,7 @@
 						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 		
-						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="0_'.$productId.'_-1_-1">';
+						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="0_'.$productId.'_-1_-1_0">';
 						$cartStr .='<div class="cart-dtl-item-inner">';
 						$cartStr .='<i class="cart-dtl-dot"></i>';
 						$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -205,7 +205,7 @@
 						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 		
-						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="1_'.$productId.'_-1_-1">';
+						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="1_'.$productId.'_-1_-1_0">';
 						$cartStr .='<div class="cart-dtl-item-inner">';
 						$cartStr .='<i class="cart-dtl-dot"></i>';
 						$cartStr .='<p class="cart-goods-name">'.$pProductSet['set_name'].'</p>';
@@ -543,14 +543,14 @@ $(document).ready(function(){
 			            t.siblings(".minus").removeClass('zero');
 			            t.removeClass('zero');
 			        }
-			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
 			        if(cartObj.length > 0){
 			        	cartObj.find('.foodop-num').html(t.val());
 			        }else{
 				        var pName = parObj.find('.name').html();
 				        var pPrice = parObj.find('.price').html();
 				        var cartStr = '';
-					    cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'">';
+					    cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'">';
         				cartStr +='<div class="cart-dtl-item-inner">';
         				cartStr +='<i class="cart-dtl-dot"></i>';
         				cartStr +='<p class="cart-goods-name">'+ pName +'</p>';
@@ -603,13 +603,14 @@ $(document).ready(function(){
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
         var isSet = t.attr('is-set');
+        var canCupon = t.attr('can-cupon');
         var storeNum = t.attr('store-number');
         
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
+        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,random:random},
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
@@ -624,7 +625,7 @@ $(document).ready(function(){
 			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
 			   	    }
-			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
 			        if(cartObj.length > 0){
 				        if(parseInt(t.val()) == 0){
 				        	cartObj.remove();
@@ -652,13 +653,14 @@ $(document).ready(function(){
         var productId = dataArr[1];
         var promoteId = dataArr[2];
         var toGroup = dataArr[3];
+        var canCupon = dataArr[4];
         
-        var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"]');
+        var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
+        	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,random:random},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -666,7 +668,7 @@ $(document).ready(function(){
 			            t.siblings(".minus").removeClass('zero');
 			            t.removeClass('zero');
 			        }
-			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
 			        if(cartObj.length > 0){
 			        	cartObj.find('.foodop-num').html(t.val());
 			        }
@@ -688,15 +690,16 @@ $(document).ready(function(){
        var productId = dataArr[1];
        var promoteId = dataArr[2];
        var toGroup = dataArr[3];
+       var canCupon = dataArr[4];
        
-       var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"]');
+       var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
        var storeNum = t.attr('store-number');
        
        var timestamp=new Date().getTime()
        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
        $.ajax({
 	       	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-	       	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,random:random},
+	       	data:{productId:productId,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,random:random},
 	       	success:function(msg){
 	       		if(msg.status){
 	   			  if(parseInt(t.val())==1){
@@ -711,7 +714,7 @@ $(document).ready(function(){
 			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
 			   	    }
-			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'"]');
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
 			        if(cartObj.length > 0){
 				        if(parseInt(t.val()) == 0){
 				        	if($('.cart-dtl-item').length == 1){
