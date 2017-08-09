@@ -540,8 +540,8 @@ $(document).ready(function(){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
 			        if(parseInt(t.val()) > 0){
-			            t.siblings(".minus").removeClass('zero');
-			            t.removeClass('zero');
+			            t.siblings(".minus").show();
+			            t.show();
 			        }
 			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
 			        if(cartObj.length > 0){
@@ -614,11 +614,11 @@ $(document).ready(function(){
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
-			          t.siblings(".minus").addClass('zero');
-			          t.addClass('zero');
+			          t.siblings(".minus").hide();
+			          t.hide();
 			          if(parseInt(storeNum)==0){
-			          	t.siblings(".add").addClass('zero');
-			          	t.siblings(".sale-out").removeClass('zero');
+			          	t.siblings(".add").hide();
+			          	t.siblings(".sale-out").show();
 			          }
 			       }
 			       t.val(parseInt(t.val())-1);
@@ -665,8 +665,8 @@ $(document).ready(function(){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
 			        if(parseInt(t.val()) > 0){
-			            t.siblings(".minus").removeClass('zero');
-			            t.removeClass('zero');
+			            t.siblings(".minus").show();
+			            t.show();
 			        }
 			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
 			        if(cartObj.length > 0){
@@ -703,11 +703,11 @@ $(document).ready(function(){
 	       	success:function(msg){
 	       		if(msg.status){
 	   			  if(parseInt(t.val())==1){
-			          t.siblings(".minus").addClass('zero');
-			          t.addClass('zero');
+			          t.siblings(".minus").hide();
+			          t.hide();
 			          if(parseInt(storeNum)==0){
-			          	t.siblings(".add").addClass('zero');
-			          	t.siblings(".sale-out").removeClass('zero');
+			          	t.siblings(".add").hide();
+			          	t.siblings(".sale-out").show();
 			          }
 			       }
 			       t.val(parseInt(t.val())-1);
@@ -744,8 +744,8 @@ $(document).ready(function(){
         	success:function(msg){
         		if(msg){
             		$('input[class="result"]').each(function(){
-                		$(this).addClass('zero');
-                		$(this).parent().find('.minus').addClass('zero');
+                		$(this).hide();
+                		$(this).parent().find('.minus').hide();
                 		$(this).val(0);
                 	});
             		$('.ft-lt').trigger('click');
