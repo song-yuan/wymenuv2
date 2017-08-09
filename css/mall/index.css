@@ -245,7 +245,7 @@ span.oprice {
 	right: 0.1rem;
 	/*width: 0.9rem;*/
 	width: 1.2rem;
-	height: auto;
+	height: 38px;
 	z-index: 2;
 }
 
@@ -291,7 +291,7 @@ span.oprice {
 }
 
 .prt-lt .lt-rt div.minus, .prt-lt .lt-rt div.add {
-	/*border-radius: 24px;*/
+	border-radius: 24px;
 	color: #FF5151;
 }
 .add img, .minus img{
