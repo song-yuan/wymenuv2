@@ -265,6 +265,7 @@ span.oprice {
 	border: 1px solid #e5e5e5;
 	text-align: center;
 	background-color: #fff;
+	display: block;
 }
 
 .prt-lt .lt-rt input.result {
