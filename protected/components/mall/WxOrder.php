@@ -997,7 +997,7 @@ class WxOrder
 	 				if(!empty($productBoms)){
 	 					foreach ($productBoms as $bom){
 	 						$stock = $bom['number']*$product['amount'];
-	 						DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$detail['lid']);
+	 						DataSyncOperation::updateMaterialStock($dpid,$order['create_at'],$bom['material_id'],$stock,$detail['lid']);
 	 					}
 	 				}
 	 			}
@@ -1012,7 +1012,7 @@ class WxOrder
 	 			if(!empty($productBoms)){
 	 				foreach ($productBoms as $bom){
 	 					$stock = $bom['number']*$product['amount'];
-	 					DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock,$product['lid']);
+	 					DataSyncOperation::updateMaterialStock($dpid,$order['create_at'],$bom['material_id'],$stock,$product['lid']);
 	 				}
 	 			}
 	 		}
