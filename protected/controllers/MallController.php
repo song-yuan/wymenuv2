@@ -269,7 +269,7 @@ class MallController extends Controller
 			}
 			//备注
 			if($remark){
-				$contion = $contion.' taste_memo="'.$remark.'",';
+				$contion = $contion.' remark="'.$remark.'",';
 			}
 			
 			if($contion){
