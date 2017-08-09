@@ -55,6 +55,241 @@ class MemberController extends BackendController
 				'id'=>$id,
 		));
 	}
+
+
+    public function actionIndexExport(){
+        $objPHPExcel = new PHPExcel();
+
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+		$criteria->order = ' t.lid asc ';
+		$criteria->params[':dpid']=$this->companyId;
+
+        $models = MemberCard::model()->findAll($criteria);
+        // var_dump($models);exit;
+        // gp($models);
+
+        //设置第1行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+        //设置第2行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
+        //设置字体
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+        $objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+        $styleArray1 = array(
+            'font' => array(
+                'bold' => true,
+                'color'=>array(
+                                'rgb' => '000000',
+                ),
+                'size' => '20',
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            ),
+        );
+        $styleArray2 = array(
+            'font' => array(
+                'color'=>array(
+                                'rgb' => 'ff0000',
+                ),
+                'size' => '16',
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            ),
+        );
+        //大边框样式 边框加粗
+        $lineBORDER = array(
+            'borders' => array(
+                'outline' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THICK,
+                    'color' => array('argb' => '000000'),
+                ),
+            ),
+        );
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+        //细边框样式
+        $linestyle = array(
+            'borders' => array(
+                'outline' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array('argb' => 'FF000000'),
+    			),
+            ),
+        );
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1',yii::t('app','壹点吃餐饮管理系统会员列表(表头禁改)'))
+        ->setCellValue('A2',yii::t('app','会员卡号'))
+        ->setCellValue('B2',yii::t('app','姓名'))
+        ->setCellValue('C2',yii::t('app','性别(男,m/女,f)'))
+        ->setCellValue('D2',yii::t('app','生日(1.01)'))
+        ->setCellValue('E2',yii::t('app','联系方式'))
+        ->setCellValue('F2',yii::t('app','金额'))
+        ->setCellValue('G2',yii::t('app','积分'))
+        ->setCellValue('H2',yii::t('app','状态( 正常,0;挂失,1;注销,2)'));
+        // $j=3;
+        // if($models){
+        //     foreach ($models as $key => $v) {
+
+        //         $objPHPExcel->setActiveSheetIndex(0)
+        //         ->setCellValue('A'.$j,$v->selfcode)
+        //         ->setCellValue('B'.$j,$v->name)
+        //         ->setCellValue('C'.$j,$v->sex=='m'?'男':'女')
+        //         ->setCellValue('D'.$j,$v->birthday)
+        //         ->setCellValue('E'.$j,$v->mobile)
+        //         ->setCellValue('F'.$j,$v->all_money)
+        //         ->setCellValue('G'.$j,$v->all_points)
+        //         ->setCellValue('H'.$j,$v->card_status);
+        //         $j++;
+        //     }
+        // }
+
+        //冻结窗格
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        //合并单元格
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:H1');
+        //单元格加粗，居中：
+        // 将A1单元格设置为加粗，居中
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($linestyle);
+        //加粗字体
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true);
+        //设置字体垂直居中
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        //设置字体水平居中
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        //设置每列宽度
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(18);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+        //输出
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $filename="会员统计表---(".date('m-d',time()).").xls";
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+
+    }
+
+    public function actionIndexInput(){
+        $objPHPExcel = new PHPExcel();
+    	if(Yii::app()->request->isPostRequest){
+    	if($_FILES['file']['size']!=0){
+			$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+			$up = new CFileUpload();
+			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+			$up -> set("path", $path);
+			$up -> set("maxsize", 2*1024*1024);
+			$up -> set("allowtype", array("xls"));
+
+			if($up -> upload("file")) {
+				$filename = $path.'/'.$up->getFileName();
+				$excelReader =PHPExcel_IOFactory::createReader('Excel5');
+				$objPHPExcel = $excelReader -> load($filename);//获取需要导入文件
+				$objWorksheet = $objPHPExcel -> getActiveSheet();
+				$highestRow = $objWorksheet -> getHighestRow(); //计算行数
+				$highestColumn = $objWorksheet->getHighestColumn();//计算列数
+				$highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//初始化列数索引总数
+				//验证Excel文件是否合法,根据表头验证
+				$info_verif = $objWorksheet -> getCell('A1') -> getValue();
+				if ($info_verif!='壹点吃餐饮管理系统会员列表(表头禁改)') {
+					@unlink($filename);//导入错误后删除上传文件
+                    Yii::app()->user->setFlash('error' , yii::t('app','您选择的表错误 , 或表头被修改 ,请重新确认! ！！'));
+                    $this->redirect(array('member/index' , 'companyId' => $this->  companyId,)) ;
+				}
+				// p($info_verif);
+				//读取EXCEL数据文件
+				$db = Yii::app()->db;
+				$transaction = $db->beginTransaction();
+                try{
+                	$notice='';
+					for ($row = 3; $row <= $highestRow; $row++){
+					    //获取一行中每列的数据
+					    for ($col = 0 ; $col <$highestColumnIndex; $col++ ){
+					        $list[$col] = $objWorksheet -> getCellByColumnAndRow($col, $row) -> getValue();
+					    }
+					    // 数据格式转换
+						($list[2]=='男' || $list[2]=='m')?$list[2]='m':$list[2]='f';
+						if ($list[7]=='正常'||$list[7]=='0') {
+							$list[7]='0';
+						} else if($list[7]=='挂失'||$list[7]=='1') {
+							$list[7]='1';
+						} else if($list[7]=='注销'||$list[7]=='2') {
+							$list[7]='2';
+						}
+						// p($list);
+						// break;
+						//查询数据是否存在, 存在跳过,不存在插入
+						$info = MemberCard::model()->find('dpid=:dpid and selfcode=:selfcode and delete_flag=0',array(':dpid'=>$this->companyId,':selfcode'=>$list[0]));
+						if (empty($info)) {
+							$model = new MemberCard() ;
+							$se=new Sequence("member_card");
+				            $model->lid = $se->nextval();
+				            $model->dpid = $this->companyId;
+				            $model->create_at = date('Y-m-d H:i:s',time());
+				            $model->update_at=date('Y-m-d H:i:s',time());
+				            $model->selfcode = $list[0];
+				            $model->name = $list[1];
+				            $model->sex = $list[2];
+				            $model->birthday = $list[3];
+				            $model->mobile = $list[4];
+				            $model->all_money = $list[5];
+				            $model->all_points = $list[6];
+				            $model->card_status = $list[7];
+				            $model->delete_flag=0;
+							// p($model);
+							$infos=$model->insert();
+							// p($infos);
+						}else{
+							$notice .= ' ('.$list[0].')';
+							continue;
+						}
+					}
+					$transaction->commit();
+					if ($notice==null) {
+						$notice='';
+					}else{
+						$notice=$notice.' 重复未上传 ! ! !';
+					}
+
+		            @unlink($filename);//导入成功后删除上传文件
+
+                    Yii::app()->user->setFlash('success' , yii::t('app','保存成功！！！'.$notice));
+                    $this->redirect(array('member/index' , 'companyId' => $this->  companyId,)) ;
+                }catch (Exception $e){
+                    $transaction->rollback();
+                    @unlink($filename);//导入失败后删除上传文件
+                    Yii::app()->user->setFlash('error' , yii::t('app','保存失败！！！'));
+                    $this->redirect(array('member/index' , 'companyId' => $this->  companyId,)) ;
+                }
+
+			}else{
+				$msg = $up->getErrorMsg();
+				Yii::app()->user->setFlash('error' ,yii::t('app', $msg));
+				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
+			}
+			// echo $msg;
+			exit;
+		}else{
+			Yii::app()->user->setFlash('error' ,yii::t('app', '未选择文件,请选择Excel文件进行上传'));
+			$this->redirect(array('member/index' , 'companyId' => $this->companyId));
+		}
+		}
+
+    }
+
+
+
 	public function actionCreate() {
 		$model = new MemberCard ;
 		$model->dpid = $this->companyId ;
