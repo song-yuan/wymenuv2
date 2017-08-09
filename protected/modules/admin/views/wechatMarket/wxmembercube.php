@@ -305,7 +305,15 @@
                                                 }
                                             ?></td> -->
                                             <td><?php echo $model['country'];?> <?php echo $model['province'];?> <?php echo $model['city'];?></td>											
-                                            <td><?php echo $model['mobile_num'];?></td>
+                                            <td><?php 
+                                            if($model['mobile_num']){
+                                    			if(Yii::app()->user->role == 8){
+                                    			$str = substr_replace($model['mobile_num'],'****',3,4);
+                                    			}else{
+                                    				$str = $model['mobile_num'];
+                                    			}
+                                    		echo $str;
+                                    		}?></td>
                                             <td><?php echo $model['consumetotal']."|".$model['consumetimes'];//echo $model['consume_total_money'];?><a class="btn default btn-xs blue consumelist" title="消费列表" data-id="<?php echo $model['lid'];?>"  href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
                                                                                    
                                             <td class="button-column">

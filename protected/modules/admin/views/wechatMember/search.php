@@ -226,7 +226,16 @@
                                     <td><?php echo substr($model['card_id'],5,9);?></td>
                                     <td><?php echo $model['user_name']."|".$model['nickname'];?></td>
                                     <td><?php switch ($model['sex']){case 0:echo "未知"; break; case 1:echo "男";break; case 2:echo "女";};?></td>
-                                    <td><?php echo $model['mobile_num'];?></td>
+                                    <td><?php 
+                                    if($model['mobile_num']){
+                                    	if(Yii::app()->user->role == 8){
+                                    		$str = substr_replace($model['mobile_num'],'****',3,4);
+                                    	}else{
+                                    		$str = $model['mobile_num'];
+                                    	}
+                                    	echo $str;
+                                    }
+                                    ?></td>
                                     <td><?php echo substr($model['user_birthday'],0,10);?></td>
                                     <td><?php echo $model['level_name'];?></td>
                                     <td><?php echo $model['country'];?> <?php echo $model['province'];?> <?php echo $model['city'];?></td>											
