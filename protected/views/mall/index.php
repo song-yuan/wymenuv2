@@ -540,8 +540,8 @@ $(document).ready(function(){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
 			        if(parseInt(t.val()) > 0){
-			            t.siblings(".minus").show();
-			            t.show();
+			            t.siblings(".minus").removeClass('zero');
+			            t.removeClass('zero');
 			        }
 			        var cartObj = $('.cart-dtl-item[data-orderid="'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
 			        if(cartObj.length > 0){
