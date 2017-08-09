@@ -246,7 +246,7 @@ span.oprice {
 	/*width: 0.9rem;*/
 	width: 1.2rem;
 	height: auto;
-	display: block;
+	z-index: 2;
 }
 
 .prt-lt .lt-rt .sale-out {
