@@ -106,7 +106,7 @@ footer p.sh-close {
 }
 
 .zero {
-	display: none !important;
+	display: none;
 }
 
 input[type="submit"], input[type="reset"], input[type="button"], button
