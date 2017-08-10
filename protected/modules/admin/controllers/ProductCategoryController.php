@@ -40,6 +40,7 @@ class ProductCategoryController extends BackendController
 	}
 	public function actionCreate() {
 		$this->layout = '/layouts/main_picture';
+		$msg = '';
 		$pid = Yii::app()->request->getParam('pid',0);
 		$catetype = Yii::app()->request->getParam('catetype');
 		$model = new ProductCategory() ;
@@ -52,7 +53,28 @@ class ProductCategoryController extends BackendController
 		if($catetype) {
 			$model->cate_type = $catetype;
 		}
-		
+
+		if(Yii::app()->request->isAjaxRequest){
+			$hidden = Yii::app()->request->getParam('hidden');
+
+				//echo $hidden;exit;
+			if ($hidden==1) {
+				$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+				$up = new CFileUpload();
+				//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+				$up -> set("path", $path);
+				$up -> set("maxsize", 20*1024);
+				$up -> set("allowtype", array("png", "jpg","jpeg"));
+			
+				if($up -> upload("file")) {
+					$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
+					// $msg = '图片上传成功!!!';
+				}else{
+					$msg = $up->getErrorMsg();
+				}
+				echo $msg;exit;
+			}
+		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
 			$ctype = $model->cate_type;
@@ -150,10 +172,33 @@ class ProductCategoryController extends BackendController
 	}
 	public function actionUpdate() {
 		$this->layout = '/layouts/main_picture';
+		$msg = '';
 		$id = Yii::app()->request->getParam('id');
 		//var_dump($id);exit;
 		$model = ProductCategory::model()->find('lid=:id and dpid=:dpid', array(':id' => $id,':dpid'=>  $this->companyId));
         //Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+
+		if(Yii::app()->request->isAjaxRequest){
+			$hidden = Yii::app()->request->getParam('hidden');
+				//echo $hidden;exit;
+			if ($hidden==1) {
+				$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+				$up = new CFileUpload();
+				//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+				$up -> set("path", $path);
+				$up -> set("maxsize", 20*1024);
+				$up -> set("allowtype", array("png", "jpg","jpeg"));
+			
+				if($up -> upload("file")) {
+					$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
+					// $msg = '图片上传成功!!!';
+				}else{
+					$msg = $up->getErrorMsg();
+				}
+				echo $msg;exit;
+			}
+		}
+
 		if(Yii::app()->request->isPostRequest) {
 			//var_dump($id);exit;
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
