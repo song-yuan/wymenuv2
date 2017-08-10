@@ -194,12 +194,9 @@ class WxBrandUser {
 	 */
 	public static function updateByOpenid($param){
 		$openid = $param['openid'];
-		$insertData = array(
-				'scene_type'=>1,
-				'weixin_group'=>$param['group'],
-				'is_sync'=>DataSync::getInitSync(),
-		);
-		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'openid=:openid',array(':openid'=>$openid));
+		$group = $param['group'];
+		$sql = 'update nb_brand_user set scene_type=1,weixin_group='.$group.' where openid="'.$openid.'"';
+		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
 	public static function reduceYue($userId,$userDpId,$total){

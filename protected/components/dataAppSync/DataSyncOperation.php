@@ -260,9 +260,10 @@ class DataSyncOperation {
 						$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'];
 						$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 						if(!empty($productSet)){
-							$orderProduct [$k] ['set_name'] = $productSet[0]['set_name'];
-							$orderProduct [$k] ['set_price'] = $product['set_price'];
-							$orderProduct [$k] ['set_detail'] = $productSet;
+							$orderProduct[$k]['amount'] = $product['zhiamount'];
+							$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
+							$orderProduct[$k]['set_price'] = $product['set_price'];
+							$orderProduct[$k]['set_detail'] = $productSet;
 						}
 					}
 				}
@@ -596,7 +597,7 @@ class DataSyncOperation {
 				if(!empty($productBoms)){
 					foreach ($productBoms as $bom){
 						$stock = $bom['number']*$product->amount;
-						self::updateMaterialStock($dpid,$bom['material_id'],$stock,$orderProductId);
+						self::updateMaterialStock($dpid,$createAt,$bom['material_id'],$stock,$orderProductId);
 					}
 				}
 			}
@@ -1589,7 +1590,7 @@ class DataSyncOperation {
 	 * 
 	 * 
 	 */
-	public static function updateMaterialStock($dpid, $materialId, $stock,$orderProductId) {
+	public static function updateMaterialStock($dpid, $createAt, $materialId, $stock,$orderProductId) {
 		$temStock = $stock;
 		$time = time ();
 		$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock <> 0 and delete_flag=0 order by create_at asc';
@@ -1617,7 +1618,7 @@ class DataSyncOperation {
 						$materialStockLog = array (
 								'lid' => $materialStockLogId,
 								'dpid' => $dpid,
-								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'create_at' => $createAt,
 								'update_at' => date ( 'Y-m-d H:i:s', $time ),
 								'logid'=>$materialStock['lid'],
 								'order_product_id'=>$orderProductId,
@@ -1639,7 +1640,7 @@ class DataSyncOperation {
 						$materialStockLog = array (
 								'lid' => $materialStockLogId,
 								'dpid' => $dpid,
-								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'create_at' => $createAt,
 								'update_at' => date ( 'Y-m-d H:i:s', $time ),
 								'logid'=>$materialStock['lid'],
 								'order_product_id'=>$orderProductId,
@@ -1662,7 +1663,7 @@ class DataSyncOperation {
 					$materialStockLog = array (
 							'lid' => $materialStockLogId,
 							'dpid' => $dpid,
-							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'create_at' => $createAt,
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'logid'=>$materialStock['lid'],
 							'order_product_id'=>$orderProductId,
