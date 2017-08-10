@@ -579,7 +579,7 @@ class WxOrder
 	    return $order;
 	}
 	public static function isUserOrder($userId){
-		$sql = 'select * from nb_order where user_id='.$userId.' and order_status in(3,4,8)';
+		$sql = 'select * from nb_order where user_id='.$userId.' and order_type in(1,2,3,6) and order_status in(3,4,8)';
 		$order = Yii::app()->db->createCommand($sql)->queryRow();
 		if($order){
 			return true;
@@ -963,7 +963,7 @@ class WxOrder
 	 	$dpid = $order['dpid'];
 	 	
 	 	$userId = $user['lid'];
-	 	$userOrder = WxOrder::isUserOrder($userId);
+	 	$userOrder = self::isUserOrder($userId);
 	 	if(!$userOrder){
 	 		$openId = $user['openid'];
 	 		$param = array('openid'=>$openId,'group'=>$dpid);
