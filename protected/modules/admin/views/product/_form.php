@@ -47,7 +47,7 @@
 													<div class="fileupload-new thumbnail"  style="max-width: 200px; max-height: 200px; line-height: 20px;">
 														<img src="<?php echo $model->main_picture?$model->main_picture:'';?>" alt="" />
 													</div>
-													<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
+													<div class="fileupload-preview fileupload-exists thumbnail" id="img1" style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
 													<div>
 														<span class="btn default btn-file">
 														<span class="fileupload-new"><i class="fa fa-paper-clip"></i> 上传产品图片 </span>
@@ -58,7 +58,7 @@
 													</div>
 												</div>
 												<span class="label label-danger">注意:</span>
-												<span>大小：建议300px*300px且不超过2M 格式:jpg 、png、jpeg </span>
+												<span>大小：建议300px*300px且不超过20kb 格式:jpg 、png、jpeg </span>
 										</div>
 										<?php echo $form->hiddenField($model,'main_picture'); ?>
 									</div>
@@ -199,7 +199,19 @@
 	<script>
 	  $('input[name="file"]').change(function(){
 		  	$('form').ajaxSubmit(function(msg){
-				$('#Product_main_picture').val(msg);
+		  		var str = msg.substr(0,1);
+		  		// alert(str);
+		  		if (str=='/') {
+					$('#Product_main_picture').val(msg);
+					layer.msg('图片选择成功!!!');
+		  		}else{
+					layer.msg(msg);
+		  			$('#img1 img').attr({
+						src: '',
+						width: '2px',
+						height: '2px',
+					});
+		  		}
 			});
 	   });
 	   $('#category_container').on('change','.category_selecter',function(){

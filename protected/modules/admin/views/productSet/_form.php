@@ -156,7 +156,7 @@
 													</div>
 												</div>
 												<span class="label label-danger">注意:</span>
-												<span>大小：建议300px*300px且不超过2M 格式:jpg 、png、jpeg </span>
+												<span>大小：建议300px*300px且不超过20kb 格式:jpg 、png、jpeg </span>
 										</div>
 										<?php echo $form->hiddenField($model,'main_picture'); ?>
 									</div>                                                                       
@@ -224,7 +224,19 @@
    	   });
        	$('input[name="file"]').change(function(){
    		  	$('form').ajaxSubmit(function(msg){
-   				$('#ProductSet_main_picture').val(msg);
+   				var str = msg.substr(0,1);
+		  		// alert(str);
+		  		if (str=='/') {
+					$('#ProductSet_main_picture').val(msg);
+					layer.msg('图片选择成功!!!');
+		  		}else{
+					layer.msg(msg);
+		  			$('#img1 img').attr({
+						src: '',
+						width: '2px',
+						height: '2px',
+					});
+		  		}
    			});
    	   	});
 		function swfupload_callback(name,path,oldname)  {

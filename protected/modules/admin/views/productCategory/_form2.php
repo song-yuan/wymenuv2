@@ -1,3 +1,4 @@
+        <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/product/jquery.form.js');?>
 			<?php $form=$this->beginWidget('CActiveForm', array(
 				'id'=>'productCategory-form',
 				'action'=>$action,
@@ -16,22 +17,29 @@
 			</div>
 			<div class="modal-body">
 				<?php if($model->pid==0):?>
-				<div class="form-group">
-					<?php echo $form->label($model,'main_picture',array('class'=>'col-md-3 control-label')); ?>
-					<div class="col-md-9">
-						<?php
-						$this->widget('application.extensions.swfupload.SWFUpload',array(
-							'callbackJS'=>'swfupload_callback',
-							'fileTypes'=> '*.jpg',
-							'buttonText'=> yii::t('app','上传类别图片'),
-							'companyId' => $model->dpid,
-							'imgUrlList' => array($model->main_picture),
-						));
-						?>
-						<?php echo $form->hiddenField($model,'main_picture'); ?>
-						<?php echo $form->error($model,'main_picture'); ?>
-					</div>
-				</div>
+          <div class="form-group <?php if($model->hasErrors('main_picture')) echo 'has-error';?>">
+              <?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
+              <div class="col-md-9">
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <div class="fileupload-new thumbnail"  style="max-width: 200px; max-height: 200px; line-height: 20px;">
+                      <img src="<?php echo $model->main_picture?$model->main_picture:'';?>" alt="" />
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" id="img1" style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
+                    <div>
+                      <span class="btn default btn-file">
+                      <span class="fileupload-new"><i class="fa fa-paper-clip"></i> 上传产品图片 </span>
+                      <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改 </span>
+                      <input type="file" accept="image/png,image/jpg,image/jpeg" name="file" class="default" />
+                      </span>
+                      <a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除 </a>
+                    </div>
+                  </div>
+                  <span class="label label-danger">注意:</span>
+                  <span>大小：建议300px*300px且不超过10kb 格式:jpg 、png、jpeg </span>
+              </div>
+              <input type="hidden" name="hidden" value="1" />
+              <?php echo $form->hiddenField($model,'main_picture'); ?>
+            </div>
 				<?php endif;?>
 				<div class="form-group">
 					<?php echo $form->label($model,'category_name',array('class'=>'col-md-3 control-label')); ?>
@@ -79,8 +87,21 @@
 			<?php $this->endWidget(); ?>
                
 			<script>
-			function swfupload_callback(name,path,oldname)  {
-				$("#ProductCategory_main_picture").val(name);
-				$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
-			}
+			$('input[name="file"]').change(function(){
+            $('form').ajaxSubmit(function(msg){
+                var str = msg.substr(0,1);
+                // alert(str);
+                if (str=='/') {
+                    $('#ProductCategory_main_picture').val(msg);
+                    layer.msg('图片选择成功!!!');
+                }else{
+                    layer.msg(msg);
+                    $('#img1 img').attr({
+                        src: '',
+                        width: '2px',
+                        height: '2px',
+                    });
+                }
+            });
+       });
 			</script>
