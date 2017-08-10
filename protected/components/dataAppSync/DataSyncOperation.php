@@ -1473,6 +1473,32 @@ class DataSyncOperation {
 	}
 	/**
 	 * 
+	 * @param $data
+	 * dpid rfid n_card_id level_id o_card_id
+	 * 
+	 */
+	public static function bindMemberCard($data) {
+		$dpid = $data['dpid'];
+		$rfid = $data['rfid'];
+		$nCardId = $data['n_card_id'];
+		$levelId = $data['level_id'];
+		$oCardId = $data['o_card_id'];
+		$sql = 'select * from nb_member_card where dpid='.$dpid.' and selfcode="'.$oCardId.'" and delete_flag=0';
+		$memcard = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if($memcard){
+			$sql = 'update nb_member_card set rfid="'.$rfid.'",selfcode="'.$nCardId.'",level_id='.$levelId.' where lid='.$memcard['lid'].' and dpid='.$dpid;
+			$result = Yii::app ()->db->createCommand ( $sql )->execute ();
+			if($result){
+				return json_encode(array('status'=>true,'msg'=>'更换成功'));
+			}else{
+				return json_encode(array('status'=>false,'msg'=>'更换失败请重新操作'));
+			}
+		}else{
+			return json_encode(array('status'=>false,'msg'=>'不存在该会员卡'));
+		}
+	}
+	/**
+	 * 
 	 * 
 	 * 
 	 * 获取订单

@@ -206,6 +206,15 @@ class DataAppSyncController extends Controller
 	 	echo $result;exit;
 	}
 	/**
+	 *
+	 * 旧会员卡更换新会员卡
+	 *
+	 */
+	public function actionBindMemberCard(){
+		$result = DataSyncOperation::bindMemberCard($_POST);
+		echo $result;exit;
+	}
+	/**
 	 * 
 	 * 批量同步
 	 * 
