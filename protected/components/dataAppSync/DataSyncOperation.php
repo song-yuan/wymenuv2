@@ -1364,8 +1364,7 @@ class DataSyncOperation {
 		$dpid = $data ['dpid'];
 		$rfid = $data ['rfid'];
 		
-		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
+		$sql = 'select * from nb_member_card where rfid="' . $rfid . '" and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $result) {
 			return '0.00';
@@ -1480,9 +1479,16 @@ class DataSyncOperation {
 	public static function bindMemberCard($data) {
 		$dpid = $data['dpid'];
 		$rfid = $data['rfid'];
+		$userId = $data['user_id'];
 		$nCardId = $data['n_card_id'];
 		$levelId = $data['level_id'];
 		$oCardId = $data['o_card_id'];
+		
+		$sql = 'select * from nb_user where lid='.$userId.' and dpid='.$dpid;
+		$user = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if(!$user){
+			return json_encode(array('status'=>false,'msg'=>'管理员不存在'));
+		}
 		$sql = 'select * from nb_member_card where dpid='.$dpid.' and selfcode="'.$oCardId.'" and delete_flag=0';
 		$memcard = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if($memcard){
@@ -1496,6 +1502,70 @@ class DataSyncOperation {
 		}else{
 			return json_encode(array('status'=>false,'msg'=>'不存在该会员卡'));
 		}
+	}
+	/**
+	 *
+	 * @param $data
+	 * dpid rfid n_card_id level_id o_card_id
+	 *
+	 */
+	public static function chargeMemberCard($data) {
+		$dpid = $data['dpid'];
+		$rfid = $data['rfid'];
+		$userId = $data['user_id'];
+		$chargeMoney = $data['ch_money'];
+		$giveMoney = $data['give_money'];
+	
+		$sql = 'select * from nb_user where lid='.$userId.' and dpid='.$dpid;
+		$user = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if(!$user){
+			return json_encode(array('status'=>false,'msg'=>'管理员不存在'));
+		}
+		$sql = 'select * from nb_member_card where dpid='.$dpid.' and rfid="'.$rfid.'" and delete_flag=0';
+		$memcard = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if($memcard){
+			$transaction = Yii::app ()->db->beginTransaction ();
+			try {
+				$se = new Sequence ( "member_recharge" );
+				$memberRechargeId = $se->nextval ();
+				$insertData = array (
+						'lid' => $memberRechargeId,
+						'dpid' => $dpid,
+						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'admin_id' => $userId,
+						'member_card_id' => $rfid,
+						'reality_money' => $chargeMoney,
+						'give_money' => $giveMoney,
+						'is_sync' => DataSync::getInitSync() 
+				);
+				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_member_recharge', $insertData );
+				if(!$result){
+					throw new Exception('添加充值记录失败');
+				}
+				$allMoney = $chargeMoney + $giveMoney;
+				$sql = 'update nb_member_card set all_money=all_money+'.$allMoney.' where lid='.$memcard['lid'].' and dpid='.$dpid;
+				$result = Yii::app ()->db->createCommand ( $sql )->execute ();
+				if(!$result){
+					throw new Exception('更改会员卡余额失败');
+				}
+				$transaction->commit ();
+				$msg = json_encode ( array (
+						'status' => true,
+						'msg' => '充值成功'
+				) );
+			} catch ( Exception $e ) {
+				$msg = $e->getMessage();
+				$transaction->rollback ();
+				$msg = json_encode ( array (
+						'status' => false,
+						'msg' => $msg
+				) );
+			}
+		}else{
+			$msg = json_encode(array('status'=>false,'msg'=>'不存在该会员卡'));
+		}
+		return $msg;
 	}
 	/**
 	 * 

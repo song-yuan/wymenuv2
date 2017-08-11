@@ -207,6 +207,15 @@ class DataAppSyncController extends Controller
 	}
 	/**
 	 *
+	 * 会员卡充值
+	 *
+	 */
+	public function actionChargeMemberCard(){
+		$result = DataSyncOperation::chargeMemberCard($_POST);
+	}
+	
+	/**
+	 *
 	 * 旧会员卡更换新会员卡
 	 *
 	 */
