@@ -212,6 +212,7 @@ class DataAppSyncController extends Controller
 	 */
 	public function actionChargeMemberCard(){
 		$result = DataSyncOperation::chargeMemberCard($_POST);
+		echo $result;exit;
 	}
 	
 	/**
