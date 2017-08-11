@@ -1510,6 +1510,7 @@ class DataSyncOperation {
 	 *
 	 */
 	public static function chargeMemberCard($data) {
+		$time = time();
 		$dpid = $data['dpid'];
 		$rfid = $data['rfid'];
 		$userId = $data['user_id'];
