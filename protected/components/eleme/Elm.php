@@ -331,7 +331,7 @@ class Elm
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		return $res;
 	}
-	public static function updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code){
+	public static function updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId){
 		$access_token = self::elemeGetToken($dpid);
 		if(!$access_token){
 			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
@@ -354,7 +354,91 @@ class Elm
             	'properties'=>array(
             		'name'=>$name,
             		'specs'=>array(array(
-            			'specId'=>0,
+            			'specId'=>$specId,
+            			'name'=>"",
+            			'price'=>$original_price,
+            			'stock'=>9000,
+            			'maxStock'=>10000,
+            			'packingFee'=>0,
+            			'onShelf'=>1,
+            			'extendCode'=>$phs_code,
+            			'barCode'=>$phs_code,
+            			'weight'=>0
+            			)),
+            	)),
+        );
+        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+        $result =ElUnit::post($url,$protocol);
+        return $result;
+	}
+	public static function updateItem1($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description,$attributes1){
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+			$protocol = array(
+            "nop" => '1.0.0',
+            "id" => ElUnit::create_uuid(),
+            "action" => "eleme.product.item.updateItem",
+            "token" => $access_token,
+            "metas" => array(
+                "app_key" => $app_key,
+                "timestamp" => time(),
+            ),
+            "params" => array(
+            	'itemId'=>$itemid,
+            	'categoryId'=>$categoryid,
+            	'properties'=>array(
+            		'name'=>$name,
+            		'description'=>$description,
+            		'specs'=>array(array(
+            			'specId'=>$specId,
+            			'name'=>"",
+            			'price'=>$original_price,
+            			'stock'=>9000,
+            			'maxStock'=>10000,
+            			'packingFee'=>0,
+            			'onShelf'=>1,
+            			'extendCode'=>$phs_code,
+            			'barCode'=>$phs_code,
+            			'weight'=>0
+            			)),
+            		'attributes'=>$attributes1
+            	)),
+        );
+        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+
+        $result =ElUnit::post($url,$protocol);
+        return $result;
+	}
+	public static function updateItem2($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description){
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+			$protocol = array(
+            "nop" => '1.0.0',
+            "id" => ElUnit::create_uuid(),
+            "action" => "eleme.product.item.updateItem",
+            "token" => $access_token,
+            "metas" => array(
+                "app_key" => $app_key,
+                "timestamp" => time(),
+            ),
+            "params" => array(
+            	'itemId'=>$itemid,
+            	'categoryId'=>$categoryid,
+            	'properties'=>array(
+            		'name'=>$name,
+            		'description'=>$description,
+            		'specs'=>array(array(
+            			'specId'=>$specId,
             			'name'=>"",
             			'price'=>$original_price,
             			'stock'=>9000,
@@ -368,82 +452,7 @@ class Elm
             	)),
         );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-        $result =ElUnit::post($url,$protocol);
-        return $result;
-	}
-	public static function deleteItem($itemid,$dpid){
-		$access_token = self::elemeGetToken($dpid);
-		if(!$access_token){
-			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-		}
-		$app_key = ElmConfig::key;
-		$secret = ElmConfig::secret;
-		$url = ElmConfig::url;
-		$protocol = array(
-            "nop" => '1.0.0',
-            "id" => ElUnit::create_uuid(),
-            "action" => "eleme.product.item.removeItem",
-            "token" => $access_token,
-            "metas" => array(
-                "app_key" => $app_key,
-                "timestamp" => time(),
-            ),
-            "params" => array(
-            	'itemId'=>$itemid
-            	)
-        );
-        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-        $result =ElUnit::post($url,$protocol);
-        return $result;
-	}
-	public static function updateCategory($elemeID,$dpid,$name){
-		$access_token = self::elemeGetToken($dpid);
-		if(!$access_token){
-			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-		}
-		$app_key = ElmConfig::key;
-		$secret = ElmConfig::secret;
-		$url = ElmConfig::url;
-		$protocol = array(
-            "nop" => '1.0.0',
-            "id" => ElUnit::create_uuid(),
-            "action" => "eleme.product.category.updateCategory",
-            "token" => $access_token,
-            "metas" => array(
-                "app_key" => $app_key,
-                "timestamp" => time(),
-            ),
-            "params" => array(
-            	'categoryId'=>$elemeID,
-            	'name'=>$name
-            	)
-        );
-        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-        $result =ElUnit::post($url,$protocol);
-        return $result;
-	}
-	public static function removeCategory($elemeID,$dpid){
-		$access_token = self::elemeGetToken($dpid);
-		if(!$access_token){
-			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-		}
-		$app_key = ElmConfig::key;
-		$secret = ElmConfig::secret;
-		$url = ElmConfig::url;
-		$protocol = array(
-            "nop" => '1.0.0',
-            "id" => ElUnit::create_uuid(),
-            "action" => "eleme.product.category.removeCategory",
-            "token" => $access_token,
-            "metas" => array(
-                "app_key" => $app_key,
-                "timestamp" => time(),
-            ),
-            "params" => array(
-            	'categoryId'=>$elemeID
-            	)
-        );
-        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+
         $result =ElUnit::post($url,$protocol);
         return $result;
 	}
@@ -611,17 +620,13 @@ class Elm
 					$attributes = $item->attributes;
 					$extendCode = $item->extendCode;
 					$tasteArr = array();
-					if(!empty($newSpecs)){
-						foreach ($newSpecs as $newSpec){
-							if(strpos($foodName,$newSpec->value)===false){
-								array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
-							}
+					foreach ($newSpecs as $newSpec){
+						if(strpos($foodName,$newSpec->value)===false){
+							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
 						}
 					}
-					if(!empty($attributes)){
-						foreach ($attributes as $attribute){
-							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
-						}
+					foreach ($attributes as $attribute){
+						array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
 					}
 					$sql = 'select 0 as is_set,lid,product_name as name,phs_code from nb_product where dpid='.$dpid.' and phs_code="'.$extendCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name,pshs_code as phs_code  from nb_product_set where dpid='.$dpid.' and pshs_code="'.$extendCode.'" and delete_flag=0';
 					$res = Yii::app()->db->createCommand($sql)->queryRow();

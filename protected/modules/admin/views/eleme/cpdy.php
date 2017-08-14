@@ -43,7 +43,7 @@
 					<table class="tree table table-striped table-hover table-bordered dataTable">
 						<tr>
  		<td>饿了么外卖菜品</td>
- 		<td>收银机关联菜品</td>
+ 		<td colspan="3">收银机关联菜品</td>
  	</tr>
  	<?php foreach ($result as $category) {?>
  		<?php 
@@ -59,17 +59,23 @@
 			<td>
 				<span class="id" style="display: none;"><?php echo $product['id'];?></span><span><?php echo $product['name'];?></span>
 			</td>
+				<?php if(in_array($product['id'], $itemm)){?>
 			<td>
-			<?php if(in_array($product['id'], $items)){?>
-				<?php echo yii::t('app','菜品已关联')?>
-				<a class="add_btn" pid="<?php echo $product['id'];?>" data-toggle="modal"><?php echo yii::t('app','菜品重新关联')?>
-				</a>
-			<?php }else{?>
-			<a class="add_btn" pid="<?php echo $product['id'];?>" data-toggle="modal"><?php echo yii::t('app','菜品关联')?>
-			</a>
-			<?php }?>
-				
+			<?php foreach ($items as $item):?>
+			<?php if(in_array($product['id'], $item)):?>
+				<span><?php echo $item['name'];?></span>
+				<?php endif;?>
+
+			<?php endforeach;?>		
 			</td>
+			<td>
+				<a class="add_btn" pid="<?php echo $product['id'];?>" data-toggle="modal"><?php echo yii::t('app','菜品重新关联')?></a>
+			</td>
+			<?php }else{?>
+			<td>
+				<a class="add_btn" pid="<?php echo $product['id'];?>" data-toggle="modal"><?php echo yii::t('app','菜品关联')?></a>
+			</td>
+			<?php }?>
  		</tr>
  		<?php }?>
  	<?php }?>
@@ -83,6 +89,10 @@
 <script type="text/javascript">
 	var $modal = $('.modal');
     $('.add_btn').on('click', function(){
+        <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+         alert("您没有权限！！！");
+         return false;
+        <?php endif;?>
         id = $(this).attr('pid');
     	//alert(catetype);alert(pid);
         $modal.find('.modal-content').load('<?php echo $this->createUrl('eleme/glcp',array('companyId'=>$this->companyId));?>/id/'+id+'', function(){

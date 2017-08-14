@@ -41,7 +41,7 @@
 				$res = Yii::app()->db->createCommand()->insert('nb_eleme_dpdy',$inserData);
 				echo  yii::t('app','店铺对应成功');
         	}else{
-        		echo  yii::t('app','店铺已对应');
+        		echo  yii::t('app','店铺已经对应');
         	}
         }
  	?>	
