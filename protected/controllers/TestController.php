@@ -7,6 +7,13 @@ class TestController extends Controller
 	{
 		$this->render('index');
 	}
+	public function actionReadLog()
+	{
+		echo '<meta charset="utf-8">';
+		$log = file_get_contents( Yii::app()->basePath."/data/log.txt");
+		echo $log;
+		exit;
+	}
 	public function actionQrcode(){
 		$url = 'http://www.baidu.com';
 		$code=new QRCode($url);

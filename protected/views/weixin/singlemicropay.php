@@ -20,6 +20,7 @@ $result = MicroPayModel::insert($data);
 
 if(isset($auth_code) && $auth_code != ""&&$result['status']){
 	$compaychannel = WxCompany::getpaychannel($dpid);
+	Helper::writeLog($dpid.'---paytype---'.json_encode($compaychannel));
 	if($compaychannel['pay_type']==0){
 		$msg = array('status'=>false, 'result'=>false);
 		echo json_encode($msg);
@@ -49,8 +50,8 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 		$result = $microPay->pay($input);
 		
 	}
-	//echo $result;
 	if($result){
+		Helper::writeLog($dpid.'---payresult---'.json_encode($result));
 		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
 			$transactionId = $result["transaction_id"];
 			MicroPayModel::update($dpid, $orderId, $transactionId, json_encode($result));
