@@ -9,6 +9,7 @@ class TestController extends Controller
 	}
 	public function actionReadLog()
 	{
+		echo '<meta charset="utf-8">';
 		$log = file_get_contents( Yii::app()->basePath."/data/log.txt");
 		echo $log;
 		exit;
