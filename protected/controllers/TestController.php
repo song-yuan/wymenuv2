@@ -10,6 +10,7 @@ class TestController extends Controller
 	public function actionReadLog()
 	{
 		$log = file_get_contents( Yii::app()->basePath."/data/log.txt");
+		echo $log;
 		exit;
 	}
 	public function actionQrcode(){
