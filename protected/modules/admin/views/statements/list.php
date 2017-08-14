@@ -347,7 +347,7 @@
 							<div class="ku-item-info">会员卡消费</div>
 						</div>
 					</a>
-                    <?php if(Yii::app()->user->role < User::ADMIN):?> 
+                    <?php if(Yii::app()->user->role <= User::ADMIN):?> 
                     <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey syjtj"></div>
