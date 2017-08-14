@@ -2,19 +2,19 @@
 class WebUser extends CWebUser
 {
 	public $role2ModuleId = array(
-		'1' => array('admin','waiter',''),
-		'2' => array('admin' , 'waiter',''),
-		'3' => array('admin' , 'waiter',''),
-		'4' => array('admin' ,'waiter',''),
-		'5' =>array('admin'),
-		'7' =>array('admin'),
-                '8'=>array('admin'),
-		'9' =>array('admin'),
-		'11' =>array('admin'),
-		'13' =>array('admin'),
-		'15' =>array('admin'),
-		'17' =>array(''),
-		'19' =>array(''),
+		'1' => array('admin','waiter','ymall'),
+		'2' => array('admin' , 'waiter','ymall'),
+		'3' => array('admin' , 'waiter','ymall'),
+		'4' => array('admin' ,'waiter','ymall'),
+		'5' => array('admin' , 'ymall'),
+		'7' => array('admin' , 'ymall'),
+        '8' => array('admin' , 'ymall'),
+		'9' => array('admin' , 'ymall'),
+		'11' => array('admin', 'ymall'),
+		'13' => array('admin', 'ymall'),
+		'15' => array('admin'),
+		'17' => array(''),
+		'19' => array(''),
 	);
         public $role2ControllerId = array(
 		'1' => array('','',''),

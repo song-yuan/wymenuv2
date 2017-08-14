@@ -106,6 +106,19 @@ class WxBrandUser {
 		return $brandUser;
 	}
 	/**
+	 * 通过userid查找用户
+	 *
+	 */
+	public static function getFromUserId($userId) {
+		$sql = 'select * from nb_brand_user where lid = "'.$userId.'"';
+		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		if($brandUser){
+			$brandUserLevel = self::getUserLevel($brandUser['user_level_lid'],$brandUser['dpid']);
+			$brandUser['level'] = $brandUserLevel;
+		}
+		return $brandUser;
+	}
+	/**
 	 * 通过card_id查找用户
 	 * 
 	 */

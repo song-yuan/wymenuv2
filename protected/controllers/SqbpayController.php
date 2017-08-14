@@ -105,7 +105,7 @@ class SqbpayController extends Controller
 						//Helper::writeLog('轮询次数：'.$i.'结果：未支付！');
 						//echo '';
 						if($i==50){
-							Helper::writeLog('轮询次数：'.$i.'结果：错误！');
+							Helper::writeLog('轮询次数：'.$i.'结果：错误！'.$client_sn.';dpid:'.$dpid);
 							$this->redirect(array('/user/orderinfo',
 									'orderId'=>$client_sn,
 									'orderDpid'=>$dpid,
@@ -116,7 +116,7 @@ class SqbpayController extends Controller
 					}
 				}else{
 					if($i==50){
-						Helper::writeLog('轮询次数：'.$i.'结果：错误！');
+						Helper::writeLog('轮询次数：'.$i.'结果：错误！'.$client_sn.';dpid:'.$dpid);
 						$this->redirect(array('/user/orderinfo',
 								'orderId'=>$client_sn,
 								'orderDpid'=>$dpid,
@@ -300,7 +300,7 @@ class SqbpayController extends Controller
 					$orders = Yii::app()->db->createCommand($sql)->queryRow();
 					if(!empty($orders)){
 						//sleep(15);
-						$user = WxBrandUser::getFromOpenId($payer_uid);
+						$user = WxBrandUser::getFromUserId($orders['user_id']);
 						WxOrder::dealOrder($user, $orders);
 					}
 				}
