@@ -60,12 +60,12 @@ class MemberController extends BackendController
     public function actionIndexExport(){
         $objPHPExcel = new PHPExcel();
 
-		$criteria = new CDbCriteria;
-		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
-		$criteria->order = ' t.lid asc ';
-		$criteria->params[':dpid']=$this->companyId;
+		// $criteria = new CDbCriteria;
+		// $criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+		// $criteria->order = ' t.lid asc ';
+		// $criteria->params[':dpid']=$this->companyId;
 
-        $models = MemberCard::model()->findAll($criteria);
+  //       $models = MemberCard::model()->findAll($criteria);
         // var_dump($models);exit;
         // gp($models);
 
@@ -218,6 +218,9 @@ class MemberController extends BackendController
 					    for ($col = 0 ; $col <$highestColumnIndex; $col++ ){
 					        $list[$col] = $objWorksheet -> getCellByColumnAndRow($col, $row) -> getValue();
 					    }
+					    if (empty($list[0]) && empty($list[4])) {
+							continue;
+					    }
 					    // 数据格式转换
 						($list[2]=='男' || $list[2]=='m')?$list[2]='m':$list[2]='f';
 						if ($list[7]=='正常'||$list[7]=='0') {
@@ -246,6 +249,128 @@ class MemberController extends BackendController
 				            $model->all_money = $list[5];
 				            $model->all_points = $list[6];
 				            $model->card_status = $list[7];
+				            $model->delete_flag=0;
+							// p($model);
+							$infos=$model->insert();
+							// p($infos);
+						}else{
+							$notice .= ' ('.$list[0].')';
+							continue;
+						}
+					}
+					$transaction->commit();
+					if ($notice==null) {
+						$notice='';
+					}else{
+						$notice=$notice.' 重复未上传 ! ! !';
+					}
+
+		            @unlink($filename);//导入成功后删除上传文件
+
+                    Yii::app()->user->setFlash('success' , yii::t('app','保存成功！！！'.$notice));
+                    $this->redirect(array('member/index' , 'companyId' => $this->  companyId,)) ;
+                }catch (Exception $e){
+                    $transaction->rollback();
+                    @unlink($filename);//导入失败后删除上传文件
+                    Yii::app()->user->setFlash('error' , yii::t('app','保存失败！！！'));
+                    $this->redirect(array('member/index' , 'companyId' => $this->  companyId,)) ;
+                }
+
+			}else{
+				$msg = $up->getErrorMsg();
+				Yii::app()->user->setFlash('error' ,yii::t('app', $msg));
+				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
+			}
+			// echo $msg;
+			exit;
+		}else{
+			Yii::app()->user->setFlash('error' ,yii::t('app', '未选择文件,请选择Excel文件进行上传'));
+			$this->redirect(array('member/index' , 'companyId' => $this->companyId));
+		}
+		}
+
+    }
+    public function actionIndexInput2(){
+        $objPHPExcel = new PHPExcel();
+    	if(Yii::app()->request->isPostRequest){
+    	if($_FILES['file']['size']!=0){
+			$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+			$up = new CFileUpload();
+			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+			$up -> set("path", $path);
+			$up -> set("maxsize", 2*1024*1024);
+			$up -> set("allowtype", array("xls"));
+
+			if($up -> upload("file")) {
+				$filename = $path.'/'.$up->getFileName();
+				$excelReader =PHPExcel_IOFactory::createReader('Excel5');
+				$objPHPExcel = $excelReader -> load($filename);//获取需要导入文件
+				$objWorksheet = $objPHPExcel -> getActiveSheet();
+				$highestRow = $objWorksheet -> getHighestRow(); //计算行数
+				$highestColumn = $objWorksheet->getHighestColumn();//计算列数
+				$highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//初始化列数索引总数
+				//验证Excel文件是否合法,根据表头验证
+				$info_verif = $objWorksheet -> getCell('A1') -> getValue();
+				$info_verif2 = $objWorksheet -> getCell('F1') -> getValue();
+				if ($info_verif!='会员卡号'&&$info_verif2!='身份证号') {
+					@unlink($filename);//导入错误后删除上传文件
+                    Yii::app()->user->setFlash('error' , yii::t('app','您选择的表错误 , 或表头被修改 ,请重新确认! ！！'));
+                    $this->redirect(array('member/index' , 'companyId' => $this->  companyId,)) ;
+				}
+				// p(date('Y-m-d',$info_verif3));
+				//读取EXCEL数据文件
+				$db = Yii::app()->db;
+				$transaction = $db->beginTransaction();
+                try{
+                	$notice='';
+					for ($row = 2; $row <= $highestRow; $row++){
+					    //获取一行中每列的数据
+					    for ($col = 0 ; $col <$highestColumnIndex; $col++ ){
+					        $list[$col] = $objWorksheet -> getCellByColumnAndRow($col, $row) -> getValue();
+					    }
+					    if (empty($list[0]) && empty($list[4])) {
+					    	// p($list);
+							continue;
+					    }
+					    // 数据格式转换
+						// ($list[2]=='男' || $list[2]=='m')?$list[2]='m':$list[2]='f';
+						if ($list[22]=='正常(0)'||$list[22]=='0') {
+							$list[22]='0';
+						} else if($list[22]=='挂失'||$list[22]=='1') {
+							$list[22]='1';
+						} else if($list[22]=='注销'||$list[22]=='2') {
+							$list[22]='2';
+						}
+						$birthday = '';
+						if (empty($list[2]) && !empty($list[3])) {
+							$list[3] = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($list[3]));
+							$arr = explode('-',$list[3]);
+							$birthday = $arr[1].'.'.$arr[2];
+					    } else if(empty($list[3]) && !empty($list[2])) {
+							$list[2] = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($list[2]));
+							$arr = explode('-',$list[2]);
+							$birthday = $arr[1].'.'.$arr[2];
+						}
+						// p($list);
+						// break;
+						//查询数据是否存在, 存在跳过,不存在插入
+						$info = MemberCard::model()->find('dpid=:dpid and selfcode=:selfcode and delete_flag=0',array(':dpid'=>$this->companyId,':selfcode'=>$list[0]));
+						if (empty($info)) {
+							$model = new MemberCard() ;
+							$se=new Sequence("member_card");
+				            $model->lid = $se->nextval();
+				            $model->dpid = $this->companyId;
+				            $model->create_at = date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($list[10]));
+				            $model->update_at= date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($list[12]));
+				            $model->selfcode = $list[0];
+				            $model->name = $list[1];
+				            // $model->sex = $list[2];
+				            $model->birthday = $birthday;
+				            $model->mobile = $list[4];
+				            $model->email = $list[7];
+				            $model->all_points = $list[14];
+				            $model->all_money = $list[19];
+				            $model->card_status = $list[22];
 				            $model->delete_flag=0;
 							// p($model);
 							$infos=$model->insert();

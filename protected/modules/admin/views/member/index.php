@@ -37,6 +37,7 @@
 					<div class="actions">
 					<?php if(Yii::app()->user->role<9):?>
 
+						<button class="btn yellow" id="inExcel2"><i class="fa fa-pencil"></i> <?php echo yii::t('app','导入旧Excel文件');?></button>
 						<button class="btn yellow" id="inExcel"><i class="fa fa-pencil"></i> <?php echo yii::t('app','导入Excel文件');?></button>
 						<a href="<?php echo $this->createUrl('member/indexExport' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-pencil"></i> <?php echo yii::t('app','导出Excel模版');?></a>
 						<a href="<?php echo $this->createUrl('member/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添 加');?></a>
@@ -135,7 +136,6 @@
 		<div class="form-body">
 			<?php $form=$this->beginWidget('CActiveForm', array(
 					'id' => 'excel-form',
-					'action'=>$this->createUrl('member/indexInput',array('companyId'=>$this->companyId)),
 					'errorMessageCssClass' => 'help-block',
 					'htmlOptions' => array(
 						'class' => 'form-horizontal',
@@ -202,31 +202,68 @@
         });
 
 		$('#inExcel').on('click',function(){
-		var heightP =($(window).outerHeight()/3)+'px';
-		var widthP =($(window).outerWidth()/3)+'px';
-		// alert(heightP);
-		// alert(widthP);
-		layer_zhexiantu=layer.open({
-		     type: 1,
-		     //shift:5,
-		     shade: [0.5,'#fff'],
-		     //move:'#main2',
-		     moveOut:true,
-		     offset:[heightP,widthP],
-		     shade: false,
-		     title: false, //不显示标题
-		     area: ['auto', 'auto'],
-		     content: $('#main2'),//$('#productInfo'), //捕获的元素
-		     cancel: function(index){
-		         layer.close(index);
-		         layer_zhexiantu=0;
-		     }
-		 });
+			$('#excel-form').attr({
+				action:"<?php echo $this->createUrl('member/indexInput',array('companyId'=>$this->companyId));?>"
+			});
+			var heightP =($(window).outerHeight()/3)+'px';
+			var widthP =($(window).outerWidth()/3)+'px';
+			// alert(heightP);
+			// alert(widthP);
+			layer_zhexiantu=layer.open({
+			     type: 1,
+			     //shift:5,
+			     shade: [0.5,'#fff'],
+			     //move:'#main2',
+			     moveOut:true,
+			     offset:[heightP,widthP],
+			     shade: false,
+			     title: false, //不显示标题
+			     area: ['auto', 'auto'],
+			     content: $('#main2'),//$('#productInfo'), //捕获的元素
+			     cancel: function(index){
+			         layer.close(index);
+			         layer_zhexiantu=0;
+			     }
+			 });
+		
 
-		layer.style(layer_zhexiantu, {
-			backgroundColor: 'rgba(255,255,255,0.2)',
-		});
+			layer.style(layer_zhexiantu, {
+				backgroundColor: 'rgba(255,255,255,0.2)',
+			});
+		function swfupload_callback(name,path,oldname)  {
+			$("#Product_main_picture").val(name);
+			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
+		}
+	});
+		$('#inExcel2').on('click',function(){
+			$('#excel-form').attr({
+				action:"<?php echo $this->createUrl('member/indexInput2',array('companyId'=>$this->companyId));?>"
+			});
+			var heightP =($(window).outerHeight()/3)+'px';
+			var widthP =($(window).outerWidth()/3)+'px';
+			// alert(heightP);
+			// alert(widthP);
+			layer_zhexiantu=layer.open({
+			     type: 1,
+			     //shift:5,
+			     shade: [0.5,'#fff'],
+			     //move:'#main2',
+			     moveOut:true,
+			     offset:[heightP,widthP],
+			     shade: false,
+			     title: false, //不显示标题
+			     area: ['auto', 'auto'],
+			     content: $('#main2'),//$('#productInfo'), //捕获的元素
+			     cancel: function(index){
+			         layer.close(index);
+			         layer_zhexiantu=0;
+			     }
+			 });
+		
 
+			layer.style(layer_zhexiantu, {
+				backgroundColor: 'rgba(255,255,255,0.2)',
+			});
 		function swfupload_callback(name,path,oldname)  {
 			$("#Product_main_picture").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
