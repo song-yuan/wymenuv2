@@ -3,13 +3,17 @@
 class AllfuncController extends Controller
 {
 	public function actionRijieCode(){
+		/*
+		 * POS日结时调用该方法，插入日结记录表
+		 * 
+		 * */
 		
-		$dpid = Yii::app()->request->getParam('dpid','');
-		$create_at = Yii::app()->request->getParam('create_at','');
-		$poscode = Yii::app()->request->getParam('poscode','');
-		$begintime = Yii::app()->request->getParam('btime','');
-		$endtime = Yii::app()->request->getParam('etime','');
-		//$rjnum = Yii::app()->request->getParam('rjnum','');
+		$dpid = Yii::app()->request->getParam('dpid','');/*该店铺id*/
+		$create_at = Yii::app()->request->getParam('create_at','');/*执行日结操作是的时间*/
+		$poscode = Yii::app()->request->getParam('poscode','');/*执行日结操作的POS机编码*/
+		$begintime = Yii::app()->request->getParam('btime','');/*前一次日结时间*/
+		$endtime = Yii::app()->request->getParam('etime','');/*本次日结时间*/
+		//$rjnum = Yii::app()->request->getParam('rjnum','');/*本次日结次数，默认为1*/
 		$rjcode = Yii::app()->request->getParam('rjcode','');/*日结编码的结构：dpid(4)+日期(8)+次数(2)*/
 		
 		$is_true = true;
@@ -66,6 +70,11 @@ class AllfuncController extends Controller
 	}
 	
 	public function actionRijieing(){
+		/*
+		 * 调用该方法进行日结查询操作
+		 * 然后进行遍历操作统计支付金额
+		 * 
+		 * */
 		$db = Yii::app()->db;
 		$sql = 'select * from nb_rijie_code where delete_flag =0 and is_rijie =0';
 		$rijies = $db -> createCommand($sql)->queryAll();
@@ -134,6 +143,8 @@ class AllfuncController extends Controller
 						//var_dump($data);exit;
 						$command = $db->createCommand()->insert('nb_order_paytype_total',$data);
 					}
+					
+					$result = $db->createCommand('update nb_rijie_code set is_rijie = 1 where lid ='.$rj['lid'].' and dpid ='.$dpid)->execute();
 				}
 
 			}
