@@ -42,11 +42,15 @@ class DataSyncOperation {
 							return $msg;
 						}
 					}
-					$sql = 'select * from nb_pad_setting_status where dpid='.$dpid.' and delete_flag=0';
+					$sql = 'select count(*) from nb_pad_setting_status where dpid='.$dpid.' and delete_flag=0';
+					$padNums = Yii::app ()->db->createCommand ( $sql )->queryScalar();
+					
+					$padNo = $padNums + 1;
+					$sql = 'select * from nb_pad_setting_status where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
 					$padSettingStatus = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 					if($padSettingStatus){
 						if($padSettingStatus['use_status']==0){
-							$sql = 'update nb_pad_setting_status set update_at="'.date ( 'Y-m-d H:i:s', time () ).'",use_status=1,pad_no=pad_no+1 where lid='.$padSettingStatus['lid'].' and dpid='.$dpid;
+							$sql = 'update nb_pad_setting_status set update_at="'.date ( 'Y-m-d H:i:s', time () ).'",use_status=1 where lid='.$padSettingStatus['lid'].' and dpid='.$dpid;
 							$result = Yii::app ()->db->createCommand ( $sql )->execute ();
 							if(!$result){
 								$msg = array('status'=>false,'msg'=>'使用失败,请重新使用');
@@ -64,6 +68,7 @@ class DataSyncOperation {
 								'pad_setting_id' => $padSettingId,
 								'status' => '0',
 								'use_status'=>1,
+								'pad_no'=>$padNo,
 								'is_sync' => $isSync
 						);
 						$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_status', $data );
