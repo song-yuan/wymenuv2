@@ -42,7 +42,7 @@ class DataSyncOperation {
 							return $msg;
 						}
 					}
-					$sql = 'select count(*) from nb_pad_setting_status where dpid='.$dpid.' and delete_flag=0';
+					$sql = 'select count(*) from nb_pad_setting_status where dpid='.$dpid.' and use_status=1 and delete_flag=0';
 					$padNums = Yii::app ()->db->createCommand ( $sql )->queryScalar();
 					
 					$padNo = $padNums + 1;
