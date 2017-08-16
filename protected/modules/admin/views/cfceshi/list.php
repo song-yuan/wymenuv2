@@ -83,7 +83,8 @@
 							<button type="button" class="btn green" id="stockRefundWei">微信退款</button>
 							<button type="button" class="btn green" id="stockRefundAli">支付宝退款</button>   
 							<button type="button" class="btn green" id="stockFind">查询</button>    
-							<button type="button" class="btn green" id="stockAddordpay">添加到order_pay</button>                       
+							<button type="button" class="btn green" id="stockAddordpay">添加到order_pay</button>   
+							<button type="button" class="btn green" id="rijieOrder">日结</button>                      
 						</div>
 					</div>
 			</div>
@@ -367,6 +368,41 @@
 		            //location.reload();
 	            }else{
 		            layer.mag("11");
+		            //location.reload();
+	            }
+			},
+	        error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+	    
+	});
+	$("#rijieOrder").on("click",function(){
+		
+	    var dpid = $("#dpid").val();
+	    var create_at = '2017-08-07';
+	    var poscode = '0000';
+	    var btime = '2017-08-07 00:00:00';
+	    var etime = '2017-08-08 00:00:00';
+	    var rjcode = '0027201708071';
+	    //alert(dpid);
+	    $.ajax({
+	        type:'get',
+			url:"<?php echo $this->createUrl('../allfunc/selfrj',array('companyId'=>$this->companyId,));?>/dpid/"+dpid+"/create_at/"+create_at+"/poscode/"+poscode+"/btime/"+btime+"/etime/"+etime+"/rjcode/"+rjcode,
+			async: false,
+			
+	        //cache:false,
+	        dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg)
+	            {            
+		            
+			        layer.msg("成功！");
+			          
+		            //location.reload();
+	            }else{
+		            layer.msg("11");
 		            //location.reload();
 	            }
 			},
