@@ -58,6 +58,7 @@ class DataSyncOperation {
 							}
 						}
 					}else{
+						$isSync = DataSync::getInitSync ();
 						$se = new Sequence ( "pad_setting_status" );
 						$lid = $se->nextval ();
 						$data = array (
@@ -74,7 +75,6 @@ class DataSyncOperation {
 						$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_status', $data );
 					}
 					
-					$isSync = DataSync::getInitSync ();
 					$se = new Sequence ( "pad_setting_detail" );
 					$lid = $se->nextval ();
 					$data = array (
