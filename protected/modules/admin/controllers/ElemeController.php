@@ -151,7 +151,7 @@ class ElemeController extends BackendController
 	}
 	public function actionGlcp(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$id = Helper::getCompanyId(Yii::app()->request->getParam('id'));
+		$id = Yii::app()->request->getParam('id');
 		$item = Elm::getItem($companyId,$id);
 		$ite = json_decode($item);
 		$name = $ite->result->name;
