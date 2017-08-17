@@ -25,12 +25,10 @@ class TestController extends Controller
 		$this->render('micropay',array('companyId'=>$companyId,'orderId'=>$orderId));
 	}
 	public function actionMemercache(){
-		$key = 'test';
-		$cache = Yii::app()->cache->get($key);
-		if($cache!=false){
-			var_dump($cache[0]);
-		}else{
-			Yii::app()->cache->set($key,array('a','b','c'),300);
-		}
+		$dpid = 30;
+		$sql = 'select count(*) from nb_pad_setting_status where dpid='.$dpid.' and delete_flag=0';
+		$padNums = Yii::app ()->db->createCommand ( $sql )->queryScalar();
+		$padNo = $padNums + 1;
+		var_dump($padNo);exit;
 	}
 }

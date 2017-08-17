@@ -438,6 +438,15 @@ class DataSyncOperation {
 		$padSetLid = isset($data['posLid'])?$data['posLid']:0; // pad序列号对于的lid
 		$orderData = $data['data'];
 		$obj = json_decode( $orderData );
+		if(empty($obj)){
+			Helper::writeLog($dpid.'---'.$orderData.'---数据结构不对');
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '',
+					'orderId' => ''
+			) );
+			return $msg;
+		}
 		if (isset ( $data['is_pos'] ) && $data['is_pos'] > 0) {
 			$isSync = 0;
 		} else {
@@ -446,7 +455,25 @@ class DataSyncOperation {
 		
 		$orderInfo = $obj->order_info;
 		$orderProduct = $obj->order_product;
+		if(!is_array($orderProduct)){
+			Helper::writeLog($dpid.'---'.$orderData.'---orderProduct 非数组');
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '',
+					'orderId' => ''
+			) );
+			return $msg;
+		}
 		$orderPay = $obj->order_pay;
+		if(!is_array($orderPay)){
+			Helper::writeLog($dpid.'---'.$orderData.'---orderPay 非数组');
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '',
+					'orderId' => ''
+			) );
+			return $msg;
+		}
 		
 		if (isset ( $obj->order_taste )) {
 			$orderTaste = $obj->order_taste;
