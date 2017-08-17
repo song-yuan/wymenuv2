@@ -191,10 +191,13 @@ class WxBrandUser {
 	 * 
 	 */
 	public static function update($param){
+		$userName = $param['user_name'];
+		$mobileNum = $param['mobile_num'];
+		$userBirthday = str_replace('/','-',$param['user_birthday']);
 		$insertData = array(
-				        	'user_name'=>$param['user_name'],
-				        	'mobile_num'=>$param['mobile_num'],
-				        	'user_birthday'=>$param['user_birthday'],
+				        	'user_name'=>$userName,
+				        	'mobile_num'=>$mobileNum,
+				        	'user_birthday'=>$userBirthday,
 				        	'is_sync'=>DataSync::getInitSync(),
 							);
 		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));

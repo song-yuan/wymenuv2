@@ -42,11 +42,15 @@ class DataSyncOperation {
 							return $msg;
 						}
 					}
-					$sql = 'select * from nb_pad_setting_status where dpid='.$dpid.' and delete_flag=0';
+					$sql = 'select count(*) from nb_pad_setting_status where dpid='.$dpid.' and use_status=1 and delete_flag=0';
+					$padNums = Yii::app ()->db->createCommand ( $sql )->queryScalar();
+					
+					$padNo = $padNums + 1;
+					$sql = 'select * from nb_pad_setting_status where dpid='.$dpid.' and pad_setting_id='.$padSettingId.' and delete_flag=0';
 					$padSettingStatus = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 					if($padSettingStatus){
 						if($padSettingStatus['use_status']==0){
-							$sql = 'update nb_pad_setting_status set update_at="'.date ( 'Y-m-d H:i:s', time () ).'",use_status=1,pad_no=pad_no+1 where lid='.$padSettingStatus['lid'].' and dpid='.$dpid;
+							$sql = 'update nb_pad_setting_status set update_at="'.date ( 'Y-m-d H:i:s', time () ).'",use_status=1,pad_no='.$padNo.' where lid='.$padSettingStatus['lid'].' and dpid='.$dpid;
 							$result = Yii::app ()->db->createCommand ( $sql )->execute ();
 							if(!$result){
 								$msg = array('status'=>false,'msg'=>'使用失败,请重新使用');
@@ -54,6 +58,7 @@ class DataSyncOperation {
 							}
 						}
 					}else{
+						$isSync = DataSync::getInitSync ();
 						$se = new Sequence ( "pad_setting_status" );
 						$lid = $se->nextval ();
 						$data = array (
@@ -64,12 +69,12 @@ class DataSyncOperation {
 								'pad_setting_id' => $padSettingId,
 								'status' => '0',
 								'use_status'=>1,
+								'pad_no'=>$padNo,
 								'is_sync' => $isSync
 						);
 						$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_status', $data );
 					}
 					
-					$isSync = DataSync::getInitSync ();
 					$se = new Sequence ( "pad_setting_detail" );
 					$lid = $se->nextval ();
 					$data = array (
@@ -433,6 +438,15 @@ class DataSyncOperation {
 		$padSetLid = isset($data['posLid'])?$data['posLid']:0; // pad序列号对于的lid
 		$orderData = $data['data'];
 		$obj = json_decode( $orderData );
+		if(empty($obj)){
+			Helper::writeLog($dpid.'---'.$orderData.'---数据结构不对');
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '',
+					'orderId' => ''
+			) );
+			return $msg;
+		}
 		if (isset ( $data['is_pos'] ) && $data['is_pos'] > 0) {
 			$isSync = 0;
 		} else {
@@ -441,7 +455,25 @@ class DataSyncOperation {
 		
 		$orderInfo = $obj->order_info;
 		$orderProduct = $obj->order_product;
+		if(!is_array($orderProduct)){
+			Helper::writeLog($dpid.'---'.$orderData.'---orderProduct 非数组');
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '',
+					'orderId' => ''
+			) );
+			return $msg;
+		}
 		$orderPay = $obj->order_pay;
+		if(!is_array($orderPay)){
+			Helper::writeLog($dpid.'---'.$orderData.'---orderPay 非数组');
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '',
+					'orderId' => ''
+			) );
+			return $msg;
+		}
 		
 		if (isset ( $obj->order_taste )) {
 			$orderTaste = $obj->order_taste;
