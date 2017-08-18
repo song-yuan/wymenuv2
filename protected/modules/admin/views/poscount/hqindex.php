@@ -12,6 +12,10 @@
     background:orange;
     color: white;
 }
+.table{
+    background: white;
+}
+
 </style>
 <div class="page-content">
     <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -46,15 +50,20 @@
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet box purple">
                     <div class="portlet-title">
-                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','POS状态列表');?></div>
+                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','POS机结算报表');?></div>
                         <div class="actions">
-                        
+                        <span style="color:white;">选择查询状态</span>
 
                             <?php if(Yii::app()->user->role <User::ADMIN):?>
-                                <select id="pos_count" class="btn yellow" >
+                                <select id="pos_count" class="btn yellow width" >
                                     <option value="2" <?php if ($pos_count==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
                                     <option value="1" <?php if ($pos_count==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','已结算');?></option>
                                     <option value="0" <?php if ($pos_count==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','未结算');?></option>
+                                </select>
+                                <select id="pos_used" class="btn yellow width" >
+                                    <option value="2" <?php if ($pos_used==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
+                                    <option value="1" <?php if ($pos_used==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','已使用');?></option>
+                                    <option value="0" <?php if ($pos_used==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','未使用');?></option>
                                 </select>
                                 <div class="btn-group">
                                     <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -66,12 +75,16 @@
                                 <div class="btn-group">
                                     <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
                                 </div>
+
+                                <?php if(Yii::app()->user->role < 5):?>
                                 <div class="btn-group">
                                     <button type="submit"  class="btn green" id="counts"><?php echo yii::t('app','进行结算');?></button>
                                 </div>
                                 <div class="btn-group">
                                     <button type="submit"  class="btn red" id="nocounts"><?php echo yii::t('app','取消结算');?></button>
                                 </div>
+
+                                <?php endif;?>
                                 <div class="btn-group">
                                     <button type="submit"  class="btn blue" id="excel"><?php echo yii::t('app','导出Excel');?></button>
                                 </div>
@@ -79,22 +92,24 @@
                         </div>
                     </div>
                     <div class="portlet-body" id="table-manage">
+                    <span style="font-size:1.5em;color:red;"><?php echo yii::t('app','(注意 : 查询时间为收银机开始使用时间)');?></span>
                         <table class="table table-striped table-bordered table-hover" id="sample_1">
                             <?php if($models):?>
                                 <thead>
                                     <tr>
-                                        <th><?php echo yii::t('app','店名');?></th>
-                                        <th><?php echo yii::t('app','联系人');?></th>
-                                        <th><?php echo yii::t('app','手机号');?></th>
-                                        <th><?php echo yii::t('app','店铺创建时间');?></th>
-                                        <th><?php echo yii::t('app','模式');?></th>
-                                        <th><?php echo yii::t('app','POS序列号');?></th>
-                                        <th><?php echo yii::t('app','收银机开始使用时间');?></th>
-                                        <th><?php echo yii::t('app','收银机MAC地址');?></th>
-                                        <th><?php echo yii::t('app','排序');?></th>
-                                        <th><?php echo yii::t('app','是否结算');?></th>
+                                        <th noWrap><?php echo yii::t('app','店名');?></th>
+                                        <th noWrap><?php echo yii::t('app','联系人');?></th>
+                                        <th noWrap><?php echo yii::t('app','手机号');?></th>
+                                        <th noWrap><?php echo yii::t('app','店铺创建时间');?></th>
+                                        <th noWrap><?php echo yii::t('app','模式');?></th>
+                                        <th noWrap><?php echo yii::t('app','POS序列号');?></th>
+                                        <th noWrap><?php echo yii::t('app','序列号创建时间');?></th>
+                                        <th noWrap><?php echo yii::t('app','收银机是否使用(开始使用时间)');?></th>
+                                        <th noWrap><?php echo yii::t('app','收银机MAC地址');?></th>
+                                        <th noWrap><?php echo yii::t('app','排序');?></th>
+                                        <th noWrap><?php echo yii::t('app','是否结算');?></th>
                                         <?php if(Yii::app()->user->role <=5):?>
-                                        <th class="table-checkbox">
+                                        <th class="table-checkbox" noWrap>
                                             <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
                                         </th>
                                         <!-- <th><?php echo yii::t('app','操作');?></th> -->
@@ -103,7 +118,8 @@
                                 </thead>
                                 <tbody>
                                         <tr>
-                                            <th><?php echo yii::t('app','之前未结算');?></th>
+                                            <th noWrap><?php echo yii::t('app','之前已使用未结算');?></th>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -116,22 +132,22 @@
                                             <th class="table-checkbox"></th>
                                         </tr>
                                     <?php foreach ($models as $model):?>
-                                        <?php if( (strtotime($model['posupdate_at'])<strtotime($begin_time)) && $model['status']==0): ?>
+                                        <?php if( (strtotime($model['used_at'])<strtotime($begin_time)) && $model['status']==0 && $model['use_status']==1 ): ?>
                                         <tr class="odd gradeX">
-
-                                            <td>  <?php  echo $model['company_name'];?> </td>
-                                            <td>  <?php  echo $model['contact_name'];?> </td>
-                                            <td>  <?php  echo $model['mobile'];?> </td>
-                                            <td><?php echo $model['comp_create_time']; ?></td>
-                                            <td><?php if($model['screen_type']==0)echo '单屏模式';else echo '双屏模式';?><!-- screentype -->
+                                            <td noWrap>  <?php  echo $model['company_name'];?> </td>
+                                            <td noWrap>  <?php  echo $model['contact_name'];?> </td>
+                                            <td noWrap>  <?php  echo $model['mobile'];?> </td>
+                                            <td noWrap><?php echo $model['comp_create_time']; ?></td>
+                                            <td noWrap><?php if($model['screen_type']==0)echo '单屏';else echo '双屏';?><!-- screentype -->
                                             </td>
-                                            <td><?php echo $model['pad_code'];?></td>
-                                            <td><?php echo $model['posupdate_at'];?></td>
-                                            <td><?php echo $model['content'];?></td>
-                                            <td><?php echo $model['pad_no'];?></td>
-                                            
-
-                                            <td id= 'stat'>
+                                            <td noWrap><?php echo $model['pad_code'];?></td>
+                                            <td noWrap><?php echo $model['poscreate_at'];?></td>
+                                            <td noWrap>
+                                                <?php if($model['use_status']){echo '<span style="color:green;">是</span> : '.$model['used_at'];}else{echo '<span style="color:red;">否</span>';}?>
+                                            </td>
+                                            <td noWrap><?php echo $model['content'];?></td>
+                                            <td noWrap><?php echo $model['pad_no'];?></td>
+                                            <td noWrap id= 'stat'>
                                                 <?php switch($model['status']){
                                                         case 0: echo '<p style="color:red;">未结算</p>';break;
                                                         case 1: echo '<p style="color:green;">已结算</p>';break;
@@ -139,7 +155,7 @@
                                                 }?>
                                             </td>
 
-                                            <td>
+                                            <td noWrap>
                                             <input type="checkbox" class="checkboxes" value="<?php echo $model['lid']; ?>" name="ids[]" checked/>
                                             </td>
 
@@ -148,7 +164,8 @@
                                     <?php endforeach;?>
 
                                     <tr>
-                                        <th><?php echo yii::t('app','所选时间段的结果');?></th>
+                                        <th noWrap><?php echo yii::t('app','所选时间段的结果');?></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -161,22 +178,23 @@
                                         <th class="table-checkbox"></th>
                                     </tr>
                                     <?php foreach ($models as $model):?>
-                                        <?php if( (strtotime($model['posupdate_at'])>strtotime($begin_time)) && ( $model['posupdate_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day"))) ): ?>
+                                        <?php if( (strtotime($model['used_at'])>strtotime($begin_time)) && ( $model['used_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day"))) ): ?>
                                         <tr class="odd gradeX">
 
-                                            <td>  <?php  echo $model['company_name'];?> </td>
-                                            <td>  <?php  echo $model['contact_name'];?> </td>
-                                            <td>  <?php  echo $model['mobile'];?> </td>
-                                            <td><?php echo $model['comp_create_time']; ?></td>
-                                            <td><?php if($model['screen_type']==0)echo '单屏模式';else echo '双屏模式';?>
-                                            <!-- screentype -->
+                                            <td noWrap>  <?php  echo $model['company_name'];?> </td>
+                                            <td noWrap>  <?php  echo $model['contact_name'];?> </td>
+                                            <td noWrap>  <?php  echo $model['mobile'];?> </td>
+                                            <td noWrap><?php echo $model['comp_create_time']; ?></td>
+                                            <td noWrap><?php if($model['screen_type']==0)echo '单屏';else echo '双屏';?>
+                                            <!-- screen_type -->
                                             </td>
-                                            <td><?php echo $model['pad_code'];?></td>
-                                            <td><?php echo $model['posupdate_at'];?></td>
-                                            <td><?php echo $model['content'];?></td>
-                                            <td><?php echo $model['pad_no'];?></td>
+                                            <td noWrap><?php echo $model['pad_code'];?></td>
+                                            <td noWrap><?php echo $model['poscreate_at'];?></td>
+                                            <td noWrap><?php if($model['use_status']){echo '<span style="color:green;">是</span> : '.$model['used_at'];}else{echo '<span style="color:red;">否</span>';}?></td>
+                                            <td noWrap><?php echo $model['content'];?></td>
+                                            <td noWrap><?php echo $model['pad_no'];?></td>
 
-                                            <td id= 'stat'>
+                                            <td noWrap id= 'stat'>
                                                 <?php switch($model['status']){
                                                         case 0: echo '<p style="color:red;">未结算</p>';break;
                                                         case 1: echo '<p style="color:green;">已结算</p>';break;
@@ -184,7 +202,7 @@
                                                 }?>
                                             </td>
 
-                                            <td>
+                                            <td noWrap>
                                             <input type="checkbox" class="checkboxes" value="<?php echo $model['lid']; ?>" name="ids[]" checked/>
                                             </td>
 
@@ -254,8 +272,8 @@
         $('input:checkbox:checked[name="ids[]"]').each(function() {
             lid.push($(this).val());
         });
-        // alert(lid);
         var status = 1;//结算状态
+        // alert(lid);
         $.ajax({
                 type:'POST',
                 url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
@@ -318,32 +336,34 @@
             var begin_time = $('#begin_time').val();
             var end_time = $('#end_time').val();
             var pos_count = $('#pos_count').val();
+            var pos_used = $('#pos_used').val();
 
-            location.href="<?php echo $this->createUrl('poscount/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count;
+            location.href="<?php echo $this->createUrl('poscount/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
 
     });
 
 
 
-    $('#countNum').click(function(){
-    location.href="<?php echo $this->createUrl('poscount/countNum' , array('companyId'=>$this->companyId));?>";
-    });
+    // $('#countNum').click(function(){
+    // location.href="<?php echo $this->createUrl('poscount/countNum' , array('companyId'=>$this->companyId));?>";
+    // });
 
-    $('#POSsearch').click(function(){
-    var index0 = document.getElementById('statu').selectedIndex;
-    var statu = document.getElementById('statu').options[index0].value;
+    // $('#POSsearch').click(function(){
+    // var index0 = document.getElementById('statu').selectedIndex;
+    // var statu = document.getElementById('statu').options[index0].value;
 
-    var index1 = document.getElementById('use_statu').selectedIndex;
-    var use_statu = document.getElementById('use_statu').options[index1].value;
-    location.href="<?php echo $this->createUrl('poscount/hqsearch' , array('companyId'=>$this->companyId));?>/statu/"+statu+'/use_statu/'+use_statu;
-    });
+    // var index1 = document.getElementById('use_statu').selectedIndex;
+    // var use_statu = document.getElementById('use_statu').options[index1].value;
+    // location.href="<?php echo $this->createUrl('poscount/hqsearch' , array('companyId'=>$this->companyId));?>/statu/"+statu+'/use_statu/'+use_statu;
+    // });
     $('#excel').click(function excel(){
         var begin_time = $('#begin_time').val();
             var end_time = $('#end_time').val();
             var pos_count = $('#pos_count').val();
+            var pos_used = $('#pos_used').val();
             //alert(begin_time);alert(end_time);
             if(confirm('确认导出并且下载Excel文件吗？')){
-                location.href="<?php echo $this->createUrl('poscount/poscountExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count;
+                location.href="<?php echo $this->createUrl('poscount/poscountExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
             }
     });
 

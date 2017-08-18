@@ -298,9 +298,22 @@
 					<a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple area"></div>
-							<div class="ku-item-info">地區分组</div>
+							<div class="ku-item-info">地区分组</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('poscount/hqindex',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right hov">
+							<div class="ku-item ku-purple syjsz"></div>
+							<div class="ku-item-info">收银机结算</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('poscount/used',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right hov">
+							<div class="ku-item ku-purple syjsz"></div>
+							<div class="ku-item-info">收银机排序</div>
+						</div>
+					</a>
+					
 					<?php endif; ?>
 					
 					<!--
