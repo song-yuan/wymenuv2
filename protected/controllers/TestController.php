@@ -31,4 +31,36 @@ class TestController extends Controller
 		$padNo = $padNums + 1;
 		var_dump($padNo);exit;
 	}
+	public function actionEleme(){
+		$data = Yii::app()->request->getParam('eleme');
+		if(!empty($data)){
+			$obj = json_decode($data);
+			$type = $obj->type;
+			$shopId = $obj->shopId;
+			$message = $obj->message;
+			$elemeDy = Elm::getErpDpid($shopId);
+			if($elemeDy){
+				$dpid = $elemeDy['dpid'];
+				if($type==10){
+					$result = Elm::order($message,$dpid);
+				}elseif($type==12){
+					$result = Elm::orderStatus($message,$dpid);
+				}elseif($type==20){
+					$result = Elm::orderCancel($message,$dpid);
+				}elseif($type==30){
+					$result = Elm::refundOrder($message,$dpid);
+				}else {
+					$result = true;
+				}
+				if($result){
+					echo '{"message":"ok"}';
+				}else{
+					echo '{"message":"error"}';
+				}
+			}else{
+				echo '{"message":"ok"}';
+			}
+		}
+		exit;
+	}
 }
