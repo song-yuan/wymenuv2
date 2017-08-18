@@ -103,6 +103,8 @@ class ElemeController extends BackendController
 								'name'=>"$productname"
 					);
 					$res = Yii::app()->db->createCommand()->insert('nb_eleme_cpdy',$inserData);
+				}else{
+					Yii::app()->user->setFlash('error' , $obj->error->message);
 				}
 			}else{
 				if(empty($description) && empty($attr['name'])){
