@@ -75,7 +75,7 @@ class MallController extends Controller
 	}
 	public function actionIndex()
 	{
-		$key = 'productList-'.$this->companyId;
+		$key = 'productList-'.$this->companyId.'-'.$this->type;
 		$expire = 10*60; // 过期时间
 		$user = $this->brandUser;
         $userId = $user['lid'];
