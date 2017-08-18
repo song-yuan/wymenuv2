@@ -29,6 +29,7 @@ class DataSyncOperation {
 			if($result){
 				$padSettingId = $result['lid'];
 				$dpid = $result['dpid'];
+				$isSync = DataSync::getInitSync ();
 				$sql = 'select t.* from nb_pad_setting_detail t,nb_pad_setting t1 where t.pad_setting_id=t1.lid and t.dpid='.$dpid.' and t.pad_setting_id='.$padSettingId.' and t.delete_flag=0 and t1.delete_flag=0';
 				$resDetail = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 				if($resDetail && $resDetail['content']!=$mac){
@@ -58,7 +59,6 @@ class DataSyncOperation {
 							}
 						}
 					}else{
-						$isSync = DataSync::getInitSync ();
 						$se = new Sequence ( "pad_setting_status" );
 						$lid = $se->nextval ();
 						$data = array (
