@@ -51,7 +51,7 @@ class DataSyncOperation {
 					$padSettingStatus = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 					if($padSettingStatus){
 						if($padSettingStatus['use_status']==0){
-							$sql = 'update nb_pad_setting_status set update_at="'.date ( 'Y-m-d H:i:s', time () ).'",use_status=1,pad_no='.$padNo.' where lid='.$padSettingStatus['lid'].' and dpid='.$dpid;
+							$sql = 'update nb_pad_setting_status set use_status=1,used_at="'.date ( 'Y-m-d H:i:s', time () ).'",pad_no='.$padNo.' where lid='.$padSettingStatus['lid'].' and dpid='.$dpid;
 							$result = Yii::app ()->db->createCommand ( $sql )->execute ();
 							if(!$result){
 								$msg = array('status'=>false,'msg'=>'使用失败,请重新使用');
@@ -69,6 +69,7 @@ class DataSyncOperation {
 								'pad_setting_id' => $padSettingId,
 								'status' => '0',
 								'use_status'=>1,
+								'used_at'=>date ( 'Y-m-d H:i:s', time () ),
 								'pad_no'=>$padNo,
 								'is_sync' => $isSync
 						);
