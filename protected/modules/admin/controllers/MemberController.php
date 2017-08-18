@@ -317,7 +317,6 @@ class MemberController extends BackendController
                     Yii::app()->user->setFlash('error' , yii::t('app','您选择的表错误 , 或表头被修改 ,请重新确认! ！！'));
                     $this->redirect(array('member/index' , 'companyId' => $this->  companyId,)) ;
 				}
-				// p(date('Y-m-d',$info_verif3));
 				//读取EXCEL数据文件
 				$db = Yii::app()->db;
 				$transaction = $db->beginTransaction();
@@ -350,9 +349,11 @@ class MemberController extends BackendController
 							$list[2] = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($list[2]));
 							$arr = explode('-',$list[2]);
 							$birthday = $arr[1].'.'.$arr[2];
+						} else if(!empty($list[3]) && !empty($list[2])) {
+							$list[2] = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($list[2]));
+							$arr = explode('-',$list[2]);
+							$birthday = $arr[1].'.'.$arr[2];
 						}
-						// p($list);
-						// break;
 						//查询数据是否存在, 存在跳过,不存在插入
 						$info = MemberCard::model()->find('dpid=:dpid and selfcode=:selfcode and delete_flag=0',array(':dpid'=>$this->companyId,':selfcode'=>$list[0]));
 						if (empty($info)) {
@@ -364,7 +365,6 @@ class MemberController extends BackendController
 				            $model->update_at= date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($list[12]));
 				            $model->selfcode = $list[0];
 				            $model->name = $list[1];
-				            // $model->sex = $list[2];
 				            $model->birthday = $birthday;
 				            $model->mobile = $list[4];
 				            $model->email = $list[7];
@@ -372,21 +372,23 @@ class MemberController extends BackendController
 				            $model->all_money = $list[19];
 				            $model->card_status = $list[22];
 				            $model->delete_flag=0;
-							// p($model);
 							$infos=$model->insert();
-							// p($infos);
 						}else{
-							$notice .= ' ('.$list[0].')';
-							continue;
+							$info->create_at = date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($list[10]));
+				            $info->update_at= date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($list[12]));
+				            $info->selfcode = $list[0];
+				            $info->name = $list[1];
+				            $info->birthday = $birthday;
+				            $info->mobile = $list[4];
+				            $info->email = $list[7];
+				            $info->all_points = $list[14];
+				            $info->all_money = $list[19];
+				            $info->card_status = $list[22];
+				            
+				            $info->update();
 						}
 					}
 					$transaction->commit();
-					if ($notice==null) {
-						$notice='';
-					}else{
-						$notice=$notice.' 重复未上传 ! ! !';
-					}
-
 		            @unlink($filename);//导入成功后删除上传文件
 
                     Yii::app()->user->setFlash('success' , yii::t('app','保存成功！！！'.$notice));
