@@ -284,9 +284,7 @@ class DataSyncOperation {
 			$sql = 'select * from nb_order_account_discount where dpid='.$dpid.' and order_id='.$result ['lid'].' and delete_flag=0';
 			$orderDiscount = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			$order ['nb_order_account_discount'] = $orderDiscount;
-			if($res){
-				array_push ( $data ['order'], $order );
-			}
+			array_push ( $data ['order'], $order );
 		}
 		//会员数据
 		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
