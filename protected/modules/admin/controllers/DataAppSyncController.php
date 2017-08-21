@@ -88,7 +88,17 @@ class DataAppSyncController extends Controller
 	    $result = DataSyncOperation::getSyncData($dpid);
 	 	echo $result;exit;
 	 }
-	 
+	 /**
+	  * 
+	  * pos机接收到订单验证
+	  * 
+	  */
+	 public function actionSyncDataCb(){
+	 	$dpid = Yii::app()->request->getParam('dpid');
+	 	$data = Yii::app()->request->getParam('data');
+	 	$result = DataSyncOperation::syncDataCb($dpid,$data);
+	 	echo $result;exit;
+	 }
 	/**
 	 * 
 	 * 登录验证
