@@ -54,7 +54,6 @@
                         <div class="actions">
                         <span style="color:white;">选择查询状态</span>
 
-                            <?php if(Yii::app()->user->role <User::ADMIN):?>
                                 <select id="pos_count" class="btn yellow width" >
                                     <option value="2" <?php if ($pos_count==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
                                     <option value="1" <?php if ($pos_count==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','已结算');?></option>
@@ -83,16 +82,15 @@
                                 <div class="btn-group">
                                     <button type="submit"  class="btn red" id="nocounts"><?php echo yii::t('app','取消结算');?></button>
                                 </div>
+                            <?php endif;?>
 
-                                <?php endif;?>
                                 <div class="btn-group">
                                     <button type="submit"  class="btn blue" id="excel"><?php echo yii::t('app','导出Excel');?></button>
                                 </div>
-                            <?php endif;?>
                         </div>
                     </div>
                     <div class="portlet-body" id="table-manage">
-                    <span style="font-size:1.5em;color:red;"><?php echo yii::t('app','(注意 : 查询时间为收银机开始使用时间)');?></span>
+                    <span style="font-size:1.5em;color:red;"><?php echo yii::t('app','(注意 : 查询时间为收银机开始使用时间 , 即前边的状态默认是已使用 , 若选择"全部"或者"未使用" , 则所选使用时间段不起作用,查询结果为所有时间的结果)');?></span>
                         <table class="table table-striped table-bordered table-hover" id="sample_1">
                             <?php if($models):?>
                                 <thead>
@@ -112,7 +110,6 @@
                                         <th class="table-checkbox" noWrap>
                                             <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
                                         </th>
-                                        <!-- <th><?php echo yii::t('app','操作');?></th> -->
                                         <?php endif;?>
                                     </tr>
                                 </thead>
@@ -129,7 +126,9 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
+                                            <?php if(Yii::app()->user->role <=5):?>
                                             <th class="table-checkbox"></th>
+                                            <?php endif; ?>
                                         </tr>
                                     <?php foreach ($models as $model):?>
                                         <?php if( (strtotime($model['used_at'])<strtotime($begin_time)) && $model['status']==0 && $model['use_status']==1 ): ?>
@@ -154,17 +153,19 @@
                                                         default: echo '<p style="color:blue;">未知状态</p>';break;
                                                 }?>
                                             </td>
-
+                                            <?php if(Yii::app()->user->role <=5):?>
                                             <td noWrap>
                                             <input type="checkbox" class="checkboxes" value="<?php echo $model['lid']; ?>" name="ids[]" checked/>
                                             </td>
-
+                                            <?php endif; ?>
                                         </tr>
                                         <?php endif; ?>
                                     <?php endforeach;?>
 
                                     <tr>
                                         <th noWrap><?php echo yii::t('app','所选时间段的结果');?></th>
+                                        <th><?php if($pos_count==2){echo '全部';}else if($pos_count==1){echo '已结算';}else if($pos_count==0){ echo '未结算';}?></th>
+                                        <th><?php if($pos_used==2){echo '全部';}else if($pos_used==1){echo '已使用';}else if($pos_used==0){ echo '未使用';}?></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -173,14 +174,23 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th></th>
-                                        <th></th>
+                                        <?php if(Yii::app()->user->role <=5):?>
                                         <th class="table-checkbox"></th>
+                                        <?php endif; ?>
                                     </tr>
                                     <?php foreach ($models as $model):?>
-                                        <?php if( (strtotime($model['used_at'])>strtotime($begin_time)) && ( $model['used_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day"))) ): ?>
+                                        <?php 
+                                            if($pos_count==2&&$pos_used==2){
+                                                $ss = true;
+                                            }else{
+                                                if((strtotime($model['used_at'])>strtotime($begin_time)) && ( $model['used_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day")))){
+                                                    $ss = true;
+                                                }else{
+                                                    $ss = false;
+                                                }
+                                            } ?>
+                                        <?php if( $ss ): ?>
                                         <tr class="odd gradeX">
-
                                             <td noWrap>  <?php  echo $model['company_name'];?> </td>
                                             <td noWrap>  <?php  echo $model['contact_name'];?> </td>
                                             <td noWrap>  <?php  echo $model['mobile'];?> </td>
@@ -201,11 +211,11 @@
                                                         default: echo '<p style="color:blue;">未知状态</p>';break;
                                                 }?>
                                             </td>
-
+                                            <?php if(Yii::app()->user->role <=5):?>
                                             <td noWrap>
                                             <input type="checkbox" class="checkboxes" value="<?php echo $model['lid']; ?>" name="ids[]" checked/>
                                             </td>
-
+                                            <?php endif; ?>
                                             <!-- <td class="center">
                                                 <div class="actions">
                                                     <?php if($model['status']): ?>
@@ -272,31 +282,37 @@
         $('input:checkbox:checked[name="ids[]"]').each(function() {
             lid.push($(this).val());
         });
-        var status = 1;//结算状态
-        // alert(lid);
-        $.ajax({
-                type:'POST',
-                url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
-                // async: false,
-                data: {
-                    ids: lid,
-                    status:status,
-                },
-                cache:false,
-                dataType:'json',//html
-                success:function(data){
-                    if (data) {
-                        layer.msg("结算成功！");
-                        location.reload();
-                    }else{
-                        layer.msg("结算失败!");
-                        location.reload();
-                    }
-                    },
-                error:function(){
-                    layer.msg("<?php echo yii::t('app','结算失败!'); ?>");
-                },
-        });
+        if (lid=='') {
+            alert('请选择要操作的项目')
+        }else{
+            if (confirm('您确定进行结算操作吗?')) {
+                var status = 1;//结算状态
+                // alert(lid);
+                $.ajax({
+                        type:'POST',
+                        url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
+                        // async: false,
+                        data: {
+                            ids: lid,
+                            status:status,
+                        },
+                        cache:false,
+                        dataType:'json',//html
+                        success:function(data){
+                            if (data) {
+                                layer.msg("结算成功！");
+                                location.reload();
+                            }else{
+                                layer.msg("结算失败!");
+                                location.reload();
+                            }
+                            },
+                        error:function(){
+                            layer.msg("<?php echo yii::t('app','结算失败!'); ?>");
+                        },
+                });
+            }
+        }
     });
 
 
@@ -306,30 +322,36 @@
             lid.push($(this).val());
         });
         // alert(lid);
-        var status = 0;//未结算状态
-        $.ajax({
-                type:'POST',
-                url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
-                // async: false,
-                data: {
-                    ids: lid,
-                    status:status,
-                },
-                cache:false,
-                dataType:'json',//html
-                success:function(data){
-                    if (data) {
-                        layer.msg("取消结算成功！");
-                        location.reload();
-                    }else{
-                        layer.msg("取消结算失败！!");
-                        location.reload();
-                    }
+        if (lid=='') {
+            alert('请选择要操作的项目')
+        }else{
+            if (confirm('您确定进行取消结算操作吗?')) {
+            var status = 0;//未结算状态
+            $.ajax({
+                    type:'POST',
+                    url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
+                    // async: false,
+                    data: {
+                        ids: lid,
+                        status:status,
                     },
-                error:function(){
-                    layer.msg("<?php echo yii::t('app','取消结算失败'); ?>");
-                },
-        });
+                    cache:false,
+                    dataType:'json',//html
+                    success:function(data){
+                        if (data) {
+                            layer.msg("取消结算成功！");
+                            location.reload();
+                        }else{
+                            layer.msg("取消结算失败！!");
+                            location.reload();
+                        }
+                        },
+                    error:function(){
+                        layer.msg("<?php echo yii::t('app','取消结算失败'); ?>");
+                    },
+            });
+            }
+        }
     });
 
     $('#btn_time_query').click(function time() {

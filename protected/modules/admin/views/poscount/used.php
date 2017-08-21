@@ -60,10 +60,10 @@
             </div>
 
             <div class="portlet-body" id="table-manage">
+            <span style="font-size:1.5em;color:red;"><?php echo yii::t('app','(注意 : 查询时间为收银机开始使用时间 , 查询结果为所选时间内已使用的结果)');?></span>
                 <table class="table table-striped table-bordered table-hover" id="sample_1">
                     <thead>
                         <tr>
-
                             <th>店名</th>
                             <th>店铺创立时间</th>
                             <th>类型</th>

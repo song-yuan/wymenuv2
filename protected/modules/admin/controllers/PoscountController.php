@@ -21,7 +21,7 @@ class PoscountController extends BackendController
             $cdpid = $this->companyId;
         }
         $pos_count = Yii::app()->request->getParam('pos_count',2);
-        $pos_used = Yii::app()->request->getParam('pos_used',2);
+        $pos_used = Yii::app()->request->getParam('pos_used',1);
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
         $model = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
@@ -37,6 +37,7 @@ class PoscountController extends BackendController
             // p($CompanyName);
             //查询子公司POS机数据
                 $time = $end_time.' 23:59:59';
+                $use_time ='';
                 if ($pos_count==2) {
                     $status='';
                 }else if($pos_count==1){
@@ -48,20 +49,17 @@ class PoscountController extends BackendController
                     $use_status='';
                 }else if($pos_used==1){
                     $use_status=' and pss.use_status=1';
+                    $use_time =' and unix_timestamp(pss.used_at) < unix_timestamp("'.$time.'")';
                 }else if($pos_used==0){
                     $use_status=' and pss.use_status=0';
                 }
                 $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
                         .' left join nb_company c on(c.dpid = t.dpid ) '
-                        .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid ) '
+                        .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid '.$use_time.$use_status.$status.') '
                         .' left join nb_pad_setting_detail psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid ) '
                         .' where t.delete_flag =0 and t.dpid in( '
-                                .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0)'
-                        .' and unix_timestamp(pss.used_at) < unix_timestamp("'.$time.'")'
-                        .$status
-                        .$use_status
+                                .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0  and type = 1)'
                         .' order by c.company_name asc';
-                        // .' order by t.lid asc';
                         //echo $sql;exit;
                 $models = Yii::app()->db->createCommand($sql)->queryALL();
 
@@ -119,25 +117,12 @@ class PoscountController extends BackendController
             $cdpid = $this->companyId;
         }
         $pos_count = Yii::app()->request->getParam('pos_count',2);
-        $pos_used = Yii::app()->request->getParam('pos_used',2);
+        $pos_used = Yii::app()->request->getParam('pos_used',1);
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
         $model = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
         // p($model);
-        if($pos_count=='0'){
-            $str1 = '未结算';
-        }else if($pos_count=='1'){
-            $str1 = '已结算';
-        }else{
-            $str1 = '';
-        }
-        if($pos_used=='0'){
-            $str2 = '未使用';
-        }else if($pos_used=='1'){
-            $str2 = '已使用';
-        }else{
-            $str2 = '';
-        }
+
         if($cdpid){
 
             //获取ajax数据,总公司的dpid-----子公司的comp_dpid
@@ -147,29 +132,28 @@ class PoscountController extends BackendController
             // p($CompanyName);
             //查询子公司POS机数据
             $time = $end_time.' 23:59:59';
-                if ($pos_count==2) {
-                    $status='';
-                }else if($pos_count==1){
-                    $status=' and pss.status=1';
-                }else if($pos_count==0){
-                    $status=' and pss.status=0';
-                }
-                if ($pos_used==2) {
-                    $use_status='';
-                }else if($pos_used==1){
-                    $use_status=' and pss.use_status=1';
-                }else if($pos_used==0){
-                    $use_status=' and pss.use_status=0';
-                }
+            $use_time ='';
+            if ($pos_count==2) {
+                $status='';
+            }else if($pos_count==1){
+                $status=' and pss.status=1';
+            }else if($pos_count==0){
+                $status=' and pss.status=0';
+            }
+            if ($pos_used==2) {
+                $use_status='';
+            }else if($pos_used==1){
+                $use_status=' and pss.use_status=1';
+                $use_time =' and unix_timestamp(pss.used_at) < unix_timestamp("'.$time.'")';
+            }else if($pos_used==0){
+                $use_status=' and pss.use_status=0';
+            }
                 $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
                         .' left join nb_company c on(c.dpid = t.dpid ) '
-                        .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid ) '
+                        .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid '.$use_time.$use_status.$status.') '
                         .' left join nb_pad_setting_detail psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid ) '
                         .' where t.delete_flag =0 and t.dpid in( '
-                                .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0)'
-                                .' and unix_timestamp(pss.update_at) < unix_timestamp("'.$time.'")'
-                                .$status
-                                .$use_status
+                                .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0  and type = 1)'
                         .' order by c.company_name asc';
                         //echo $sql;exit;
             $models = Yii::app()->db->createCommand($sql)->queryALL();
@@ -242,11 +226,11 @@ class PoscountController extends BackendController
         ->setCellValue('H2',yii::t('app','收银机开始使用时间'))
         ->setCellValue('I2',yii::t('app','收银机MAC地址'))
         ->setCellValue('J2',yii::t('app','排序'))
-        ->setCellValue('A3',yii::t('app','之前未结算'));
+        ->setCellValue('A3',yii::t('app','之前已使用未结算'));
         $j=4;
         if($models){
             foreach ($models as $key => $v) {
-                    if( (strtotime($v['used_at'])<strtotime($begin_time)) && $v['status']==0){
+                    if( (strtotime($v['used_at'])<strtotime($begin_time)) && $v['status']==0 && $v['use_status']==1 ){
                         if ($v['content']=='undefined') {
                             $v['content']=='';
                         }
@@ -275,10 +259,33 @@ class PoscountController extends BackendController
         }
         $aa=$j;
         $jj=$j;
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$aa,yii::t('app','查询：(').$str1.$str2.yii::t('app',')时间段：').$begin_time.yii::t('app','  00:00:00 至 ').$end_time."  23:59:59");
+        if($pos_count=='0'){
+            $str1 = '未结算';
+        }else if($pos_count=='1'){
+            $str1 = '已结算';
+        }else{
+            $str1 = '全部';
+        }
+        if($pos_used=='0'){
+            $str2 = '未使用)';
+        }else if($pos_used=='1'){
+            $str2 = '已使用'.yii::t('app',')时间段：').$begin_time.yii::t('app','  00:00:00 至 ').$end_time."  23:59:59";
+        }else{
+            $str2 = '全部)';
+        }
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$aa,yii::t('app','查询：(').$str1.$str2);
         if($models){
             foreach ($models as $key => $v) {
-                    if( (strtotime($v['used_at'])>strtotime($begin_time)) && ( $v['used_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day"))) ){
+                    if($pos_count==2&&$pos_used==2){
+                        $ss = true;
+                    }else{
+                        if((strtotime($v['used_at'])>strtotime($begin_time)) && ( $v['used_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day")))){
+                            $ss = true;
+                        }else{
+                            $ss = false;
+                        }
+                    }
+                    if( $ss ){
                         $jj++;
                         if ($v['content']=='undefined') {
                             $v['content']=='';
@@ -374,12 +381,11 @@ class PoscountController extends BackendController
             // p($status);
                 $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
                     .' left join nb_company c on(c.dpid = t.dpid ) '
-                    .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid ) '
+                    .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid and unix_timestamp(pss.used_at) < unix_timestamp("'.$end_time.' 23:59:59") and unix_timestamp(pss.used_at) > unix_timestamp("'.$begin_time.' 00:00:00")) '
                     .' left join nb_pad_setting_detail psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid ) '
                     .' where t.delete_flag =0 and t.dpid in( '
-                            .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0)'
-                            .' and unix_timestamp(pss.used_at) < unix_timestamp("'.$end_time.' 23:59:59")'
-                            .' and unix_timestamp(pss.used_at) > unix_timestamp("'.$begin_time.' 00:00:00")'
+                            .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0 and type = 1)'
+                            .'  and pss.use_status = 1'
                             .$status
                     .' order by c.company_name asc';
 
@@ -426,12 +432,11 @@ class PoscountController extends BackendController
             // p($status);
                 $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
                     .' left join nb_company c on(c.dpid = t.dpid ) '
-                    .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid ) '
+                    .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid and unix_timestamp(pss.used_at) < unix_timestamp("'.$end_time.' 23:59:59") and unix_timestamp(pss.used_at) > unix_timestamp("'.$begin_time.' 00:00:00")) '
                     .' left join nb_pad_setting_detail psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid ) '
                     .' where t.delete_flag =0 and t.dpid in( '
-                            .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0)'
-                            .' and unix_timestamp(pss.used_at) < unix_timestamp("'.$end_time.' 23:59:59")'
-                            .' and unix_timestamp(pss.used_at) > unix_timestamp("'.$begin_time.' 00:00:00")'
+                            .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0 and type = 1)'
+                            .'  and pss.use_status = 1'
                             .$status
                     .' order by c.company_name asc';
 
