@@ -47,7 +47,7 @@ class ProductSetController extends BackendController
 			$up = new CFileUpload();
 			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
 			$up -> set("path", $path);
-			$up -> set("maxsize", 20*1024);
+			$up -> set("maxsize", 2*1024*1024);
 			$up -> set("allowtype", array("png", "jpg","jpeg"));
 
 			if($up -> upload("file")) {
@@ -114,7 +114,7 @@ class ProductSetController extends BackendController
 			$up = new CFileUpload();
 			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
 			$up -> set("path", $path);
-			$up -> set("maxsize", 20*1024);
+			$up -> set("maxsize", 2*1024*1024);
 			$up -> set("allowtype", array("png", "jpg","jpeg"));
 
 			if($up -> upload("file")) {
@@ -198,7 +198,7 @@ class ProductSetController extends BackendController
 
 
 
-	public function actionDetailIndex(){
+        public function actionDetailIndex(){
 		$pwlid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');// var_dump($pwlid);exit;
 		$papage = Yii::app()->request->getParam('papage');
