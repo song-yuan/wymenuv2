@@ -667,24 +667,22 @@ class DataSyncOperation {
 			}
 			// 第三方平台订单
 			if(!empty($orderPlatform)){
-				foreach ( $orderPlatform as $platform ) {
-					$se = new Sequence ( "order_platform" );
-					$orderPlatformId = $se->nextval ();
-					$orderPlatformData = array (
-							'lid' => $orderPlatformId,
-							'dpid' => $dpid,
-							'create_at' => $createAt,
-							'update_at' => date ( 'Y-m-d H:i:s', $time ),
-							'order_id' => $orderId,
-							'original_total'=> $platform->original_total,
-							'logistics_total'=> $platform->logistics_total,
-							'platform_total' => $platform->platform_total,
-							'pay_total' => $platform->pay_total,
-							'receive_total' => $platform->receive_total,
-							'is_sync' => $isSync
-					);
-					Yii::app ()->db->createCommand ()->insert ( 'nb_order_platform', $orderPlatformData );
-				}
+				$se = new Sequence ( "order_platform" );
+				$orderPlatformId = $se->nextval ();
+				$orderPlatformData = array (
+						'lid' => $orderPlatformId,
+						'dpid' => $dpid,
+						'create_at' => $createAt,
+						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'order_id' => $orderId,
+						'original_total'=> $orderPlatform->original_total,
+						'logistics_total'=> $orderPlatform->logistics_total,
+						'platform_total' => $orderPlatform->platform_total,
+						'pay_total' => $orderPlatform->pay_total,
+						'receive_total' => $orderPlatform->receive_total,
+						'is_sync' => $isSync
+				);
+				Yii::app ()->db->createCommand ()->insert ( 'nb_order_platform', $orderPlatformData );
 			}
 			// 订单口味
 			if(!empty($orderTaste)){
