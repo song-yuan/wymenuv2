@@ -250,6 +250,9 @@ class DataSyncOperation {
 		foreach ( $results as $result ) {
 			$order = array ();
 			$order ['nb_order'] = $result;
+			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
+			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+			$order ['nb_order_platform'] = $orderPlatform;
 			$sql = 'select *,"" as set_name,sum(price) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id > 0 and delete_flag=0 group by set_id ,main_id'.
 				   ' union select *,"" as set_name,"0.00" as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id = 0 and delete_flag=0';
 			$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
@@ -479,7 +482,11 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		
+		if (isset ( $obj->order_platform )) {
+			$orderPlatform = $obj->order_platform;
+		} else {
+			$orderPlatform = array ();
+		}
 		if (isset ( $obj->order_taste )) {
 			$orderTaste = $obj->order_taste;
 		} else {
@@ -657,6 +664,27 @@ class DataSyncOperation {
 						'is_sync' => $isSync
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
+			}
+			// 第三方平台订单
+			if(!empty($orderPlatform)){
+				foreach ( $orderPlatform as $platform ) {
+					$se = new Sequence ( "order_platform" );
+					$orderPlatformId = $se->nextval ();
+					$orderPlatformData = array (
+							'lid' => $orderPlatformId,
+							'dpid' => $dpid,
+							'create_at' => $createAt,
+							'update_at' => date ( 'Y-m-d H:i:s', $time ),
+							'order_id' => $orderId,
+							'original_total'=> $platform->original_total,
+							'logistics_total'=> $platform->logistics_total,
+							'platform_total' => $platform->platform_total,
+							'pay_total' => $platform->pay_total,
+							'receive_total' => $platform->receive_total,
+							'is_sync' => $isSync
+					);
+					Yii::app ()->db->createCommand ()->insert ( 'nb_order_platform', $orderPlatformData );
+				}
 			}
 			// 订单口味
 			if(!empty($orderTaste)){
