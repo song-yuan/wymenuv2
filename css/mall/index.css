@@ -498,8 +498,10 @@ i {
 .nav-span{
 	display:block;
 	width:1rem;
-	height:0.15rem;
-	margin-top:0.15rem;
+	height:0.25rem;
+	line-height: 0.25rem;
+	margin-top:0.1rem;
+	overflow: hidden;
 }
 .b-radius-rt{
 	border-top-right-radius:15px!important;
