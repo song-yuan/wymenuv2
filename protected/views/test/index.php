@@ -1,6 +1,13 @@
 <?php 
-$data = '{"order_info":{"creat_at":"2017-08-08 07:13:22","account_no":"1502147602149","classes":"0","username":"kds3187","site_id":"0","is_temp":"1","number":"1","order_status":"4","order_type":"0","should_total":"30","reality_total":"30","takeout_typeid":"0","callno":"0"},"order_product":[{"is_set":"0","set_id":"0","product_id":"41546","product_name":"葡式蛋挞/4只","original_price":"8.00","price":"8","amount":"1","product_taste":[],"product_promotion":[]},{"is_set":"0","set_id":"0","product_id":"41532","product_name":"麻辣鸡块","original_price":"5.00","price":"5","amount":"1","product_taste":[],"product_promotion":[]},{"is_set":"0","set_id":"0","product_id":"41544","product_name":"脆皮鸡块/1块奶茶1/","original_price":"9.00","price":"9","amount":"1","product_taste":[],"product_promotion":[]},{"is_set":"0","set_id":"0","product_id":"41536","product_name":"招牌奶茶/2杯","original_price":"8.00","price":"8","amount":"1","product_taste":[],"product_promotion":[]}],"order_discount":[],"order_pay":[{"pay_amount":"30","paytype":"0","payment_method_id":"0","paytype_id":"0","remark":""}],"member_points":{"card_type":"0","receive_points":"30","member_card_rfid":"0"}}';
-$obj = json_decode($data);
-var_dump($obj);
-exit;
+	$sql = 'select * from nb_pad_setting where delete_flag=0';
+	$results = Yii::app ()->db->createCommand ( $sql )->queryAll();
+	foreach ($results as $result){
+		$sql = 'select * from nb_pad_setting_detail where pad_setting_id='.$result['lid'].' and dpid='.$result['dpid'].' order by lid desc limit 1';
+		$res = Yii::app ()->db->createCommand ( $sql )->queryRow();
+		if($res){
+			$sql = 'update nb_pad_setting_status set use_status=1, used_at="'.$res['create_at'].'" where dpid='.$result['dpid'].' and pad_setting_id='.$result['lid'];
+			Yii::app ()->db->createCommand ( $sql )->execute();
+		}
+	}
+	exit;
 ?>

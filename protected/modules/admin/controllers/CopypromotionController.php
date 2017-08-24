@@ -34,7 +34,7 @@ class CopypromotionController extends BackendController
 		$dpids = $command->queryAll();
 		//var_dump($dpids);exit;
 		$categories = $this->getCategories();
-//                var_dump($categories);exit;
+		//var_dump($categories);exit;
 		$this->render('copynormalpromotion',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
@@ -63,6 +63,7 @@ class CopypromotionController extends BackendController
 
 		$db = Yii::app()->db;
 
+
 		//var_dump($catep1,$catep2,$products);exit;
         //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
@@ -82,13 +83,15 @@ class CopypromotionController extends BackendController
         				$sqlnpd = 'select t.* from nb_normal_promotion_detail t where t.delete_flag = 0 and t.normal_promotion_id ='.$promotioncomp->lid.' and t.dpid ='.$this->companyId;
         				$promotioncompdetails = $db->createCommand($sqlnpd)->queryAll();
 
+        				// p($promotioncompdetails);
+
         				//查询此活动的试用范围,及那些会员可以享有
         				$sqlnpb = 'select t.* from nb_normal_branduser t where t.delete_flag = 0 and t.normal_promotion_id ='.$promotioncomp->lid.' and t.dpid ='.$this->companyId;
         				$promotionbrandusers = $db->createCommand($sqlnpb)->queryAll();
 	        			// p($promotioncompdetails);
 
         				if(!empty($promotioncompdetails)){//总部详情如果有就下一步判断店铺,没有就提示添加菜品详情
-	        				if(!empty($promotionself)){//判断店铺活动是否存在,有就更新,没有就插入
+	        				if(!empty($promotionself)){//判断店铺活动是否存在,有就更新,没有就插入活动及详情
 	        					$falid = $promotionself->lid;
 
 	        					$promotionself->promotion_title = $promotioncomp->promotion_title;
@@ -118,11 +121,22 @@ class CopypromotionController extends BackendController
 	        							$command = $db->createCommand($sql)->execute();
 	        						}
         							foreach ($promotioncompdetails as $promotioncompdetail) {
+        								//总部与店铺的产品查询
         								$sqlprodcomp = 'select t.* from nb_product t where t.delete_flag = 0 and t.phs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$this->companyId;
 	        							$prodcomp = $db->createCommand($sqlprodcomp)->queryAll();
+
         								$sqlproddpid = 'select t.* from nb_product t where t.delete_flag = 0 and t.phs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$dpid;
         								$proddpid = $db->createCommand($sqlproddpid)->queryRow();
-        								if(!empty($prodcomp)&&!empty($proddpid)){
+
+        								//总部与店铺的套餐查询
+	        							$sqlprodsetcomp = 'select t.* from nb_product_set t where t.delete_flag = 0 and t.pshs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$this->companyId;
+	        							$prodsetcomp = $db->createCommand($sqlprodsetcomp)->queryAll();
+
+        								$sqlprodsetdpid = 'select t.* from nb_product_set t where t.delete_flag = 0 and t.pshs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$dpid;
+        								$prodsetdpid = $db->createCommand($sqlprodsetdpid)->queryRow();
+
+
+        								if((!empty($prodcomp)&&!empty($proddpid)) || (!empty($prodsetcomp)&&!empty($prodsetdpid)) ){//把套餐过滤掉了 , 修改
 		        							$se = new Sequence("normal_promotion_detail");
 		        							$selid = $se->nextval();
 		        							// print_r($proddpid);die;
@@ -133,7 +147,7 @@ class CopypromotionController extends BackendController
 		        									'update_at'=>date('Y-m-d H:i:s',time()),
 		        									'normal_promotion_id'=>$promotionself['lid'],
 		        									'normal_code_pa'=>$promotioncompdetail['normal_code_pa'],//父级活动的编码
-		        									'product_id'=>$proddpid['lid'],//单品或套餐的id
+		        									'product_id'=>$proddpid['lid']?$proddpid['lid']:$prodsetdpid['lid'],//单品或套餐的id
 		        									'pro_code'=>$promotioncompdetail['pro_code'],
 		        									'is_set'=>$promotioncompdetail['is_set'],
 		        									'is_discount'=>$promotioncompdetail['is_discount'],
@@ -144,11 +158,13 @@ class CopypromotionController extends BackendController
 		        									'delete_flag'=>'0',
 		        									'is_sync'=>$promotioncompdetail['is_sync'],
 		        							);
-		        							$db->createCommand()->insert('nb_normal_promotion_detail',$data);
+	        							// p($data);
+	        							$db->createCommand()->insert('nb_normal_promotion_detail',$data);
 		        						}
         							}
 	        					}
 	        				}else{
+	        					//店铺插入活动
 	        					$se = new Sequence("normal_promotion");
 	        					$falid = $se->nextval();
 	        					$datanormalpromotion = array(
@@ -176,14 +192,23 @@ class CopypromotionController extends BackendController
 	        					);
 	        					// var_dump($datanormalpromotion);exit;
 	        					$command = $db->createCommand()->insert('nb_normal_promotion',$datanormalpromotion);
-
+	        					//店铺插入详情
 		        				foreach ($promotioncompdetails as $promotioncompdetail){
 		        					$sqlprodcomp = 'select t.* from nb_product t where t.delete_flag = 0 and t.phs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$this->companyId;
 	        						$prodcomp = $db->createCommand($sqlprodcomp)->queryAll();
 	        						$sqlproddpid = 'select t.* from nb_product t where t.delete_flag = 0 and t.phs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$dpid;
 	        						$proddpid = $db->createCommand($sqlproddpid)->queryRow();
 
-	        						if(!empty($prodcomp)&&!empty($proddpid)){
+    								//总部与店铺的套餐查询
+        							$sqlprodsetcomp = 'select t.* from nb_product_set t where t.delete_flag = 0 and t.pshs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$this->companyId;
+        							$prodsetcomp = $db->createCommand($sqlprodsetcomp)->queryAll();
+
+    								$sqlprodsetdpid = 'select t.* from nb_product_set t where t.delete_flag = 0 and t.pshs_code ="'.$promotioncompdetail['pro_code'].'" and t.dpid ='.$dpid;
+    								$prodsetdpid = $db->createCommand($sqlprodsetdpid)->queryRow();
+
+
+
+	        						if((!empty($prodcomp)&&!empty($proddpid)) || (!empty($prodsetcomp)&&!empty($prodsetdpid)) ){
 	        							$se = new Sequence("normal_promotion_detail");
 	        							$lid = $se->nextval();
 	        							$datanorpromdetail = array(
@@ -193,7 +218,7 @@ class CopypromotionController extends BackendController
 	        									'update_at'=>date('Y-m-d H:i:s',time()),
 	        									'normal_promotion_id'=> $falid,
 	        									'normal_code_pa'=> $normalcode,
-	        									'product_id'=> $proddpid['lid'],
+	        									'product_id'=> $proddpid['lid']?$proddpid['lid']:$prodsetdpid['lid'],
 	        									'pro_code' => $promotioncompdetail['pro_code'],
 	        									'is_set' => $promotioncompdetail['is_set'],
 	        									'is_discount' => $promotioncompdetail['is_discount'],

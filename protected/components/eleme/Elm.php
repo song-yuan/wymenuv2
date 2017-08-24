@@ -590,14 +590,16 @@ class Elm
 		$createdAt = $me->createdAt;
 		$price = $me->totalPrice;
 		$originalPrice = $me->originalPrice;
+		$income = $me->income;//店铺实收
 		$daySn = $me->daySn;
 		$groups = $me->groups;
 		$deliverFee = $me->deliverFee;// 配送费
+		$serviceFee = $me->serviceFee;//饿了么服务费
 		$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
 		$orderActivities = $me->orderActivities;// 订单活动
-			
 		$orderArr = array();
-		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$price,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
+		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$income,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
+		$orderArr['order_platform'] = array('original_total'=>$originalPrice,'logistics_total'=>$deliverFee,'platform_total'=>$serviceFee,'pay_total'=>$price,'receive_total'=>$income);
 		$orderArr['order_product'] = array();
 		foreach ($groups as $group){
 			$groupType = $group->type;
@@ -620,14 +622,19 @@ class Elm
 					$attributes = $item->attributes;
 					$extendCode = $item->extendCode;
 					$tasteArr = array();
-					foreach ($newSpecs as $newSpec){
-						if(strpos($foodName,$newSpec->value)===false){
-							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
+					if(!empty($newSpecs)){
+						foreach ($newSpecs as $newSpec){
+							if(strpos($foodName,$newSpec->value)===false){
+								array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$newSpec->value));
+							}
 						}
 					}
-					foreach ($attributes as $attribute){
-						array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
+					if(!empty($attributes)){
+						foreach ($attributes as $attribute){
+							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$attribute->value));
+						}
 					}
+					
 					$sql = 'select 0 as is_set,lid,product_name as name,phs_code from nb_product where dpid='.$dpid.' and phs_code="'.$extendCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name,pshs_code as phs_code  from nb_product_set where dpid='.$dpid.' and pshs_code="'.$extendCode.'" and delete_flag=0';
 					$res = Yii::app()->db->createCommand($sql)->queryRow();
 					if(!$res){

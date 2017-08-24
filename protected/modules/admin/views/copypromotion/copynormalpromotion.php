@@ -5,18 +5,14 @@
 <script type="text/javascript">
 function fun()
 		{
-			
 			if($(this).checked){
 				document.$("FirstItem").checked;
 			}
-
 		};
-		
-		
-		
 </script>
+
 <div class="page-content">
-	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -36,8 +32,8 @@ function fun()
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-	
-	
+
+
 
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -62,10 +58,10 @@ function fun()
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','活动下发');?></div>
 					<div class="actions">
-						
-							<div class="btn-group"> 
+
+							<div class="btn-group">
 							<button type="button" id="su"  class="btn red form-control" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','下发');?></button>
- 						</div> 
+ 						</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -78,8 +74,8 @@ function fun()
 							</tr>
 						</thead>
 						<tbody>
-						<?php if($models) :?> 
-						<?php foreach ($models as $model):?>
+						<?php if($models) :?>
+ 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td>
 									<input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" code="<?php echo $model->normal_code;?>" name="ids[]" />
@@ -96,7 +92,7 @@ function fun()
 						<input type="hidden" id="dpids" name="dpids" value="" />
 						</div>
 					</table>
-					
+
 
 				</div>
 			</div>
@@ -113,7 +109,7 @@ function fun()
 		</div>
 
 		<div class="modal-body">
-			<div class="portlet-body" id="table-manage">  
+			<div class="portlet-body" id="table-manage">
 				<div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
 					<ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
 						<?php if($dpids):?>
@@ -126,7 +122,7 @@ function fun()
 			    	    <?php endforeach;?>
 					    <?php endif;?>
 				        <li style="width:100%;">
-				         
+
 						    <input style="height:20px;display:inline-block; width:10%;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" id="all" />
 						    <label for="all" style="height:20px;display:inline-block;">全选</label>
 		         	        <div>
@@ -143,7 +139,7 @@ function fun()
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		
+
 		$('#product-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
 				alert("<?php echo yii::t('app','请选择要删除的项');?>");
@@ -167,7 +163,7 @@ function fun()
 
 
 	$("#su").on('click',function() {
-		
+
         //alert(11);
 		var aa = document.getElementsByName("ids[]");
 		//var aa = document.getElementsByName("ids[]");
@@ -186,9 +182,9 @@ function fun()
        	 	alert("<?php echo yii::t('app','请选择要下发的活动！！！');?>");
        		return false;
        	}
-        
+
      	//alert(str);
-        
+
 		if(window.confirm("确认进行此项操作?")){
 			//弹出店铺选择对话窗口
 			layer_index_printreportlist=layer.open({
@@ -199,7 +195,7 @@ function fun()
 	            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
 	            cancel: function(index){
 	                layer.close(index);
-	                layer_index_printreportlist=0;                                                                                                     
+	                layer_index_printreportlist=0;
 	            }
 	        });
 
@@ -230,5 +226,5 @@ function fun()
 			return false;
 			}
 	});
-	
-	</script>	
+
+	</script>
