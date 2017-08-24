@@ -15,8 +15,6 @@ class WxMessageTpl
 		$this->userId = $userId;
 		$this->type = $type;
 		$this->data = $data;
-		$accessToken = new AccessToken($dpid);
-        $this->access_token = $accessToken->accessToken;
 		$this->getMsgTpl();
 		$this->getData();
 	}
@@ -31,6 +29,9 @@ class WxMessageTpl
 		if(!$this->msgTpl){
 			return;
 		}
+		$accessToken = new AccessToken($dpid);
+		$access_token = $accessToken->accessToken;
+		
 		$msgTplId = $this->msgTpl['message_tpl_id'];
 		
 		$this->megTplData = array(
@@ -90,7 +91,7 @@ class WxMessageTpl
 		$this->sent();
 	}
 	public function sent(){
-		$tplUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$this->access_token;
+		$tplUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$access_token;
 		Curl::httpsRequest($tplUrl, json_encode($this->megTplData));
 	}
 	
