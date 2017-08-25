@@ -21,20 +21,21 @@ class MtOrder
 		$order = $resArr['order'];
 		
 		$res = MtUnit::getWmSetting($ePoiId);
-		if(empty($res)||$res['is_receive']==0){
-			return '{ "data": "OK"}';
-		}
-		$obj = json_decode($order);
-		$orderId = $obj->orderId;
-		$mtToken = self::getToken($ePoiId);
-		$timetamp = time();
-		if($mtToken){
-			$url = 'http://api.open.cater.meituan.com/waimai/order/confirm';
-			$array= array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
-			$sign=MtUnit::sign($array);
-			$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
-			$result = MtUnit::postHttps($url, $data);
-			return $result;
+		if(!empty($res)&&$res['is_receive']==1){
+			$obj = json_decode($order);
+			$orderId = $obj->orderId;
+			$mtToken = self::getToken($ePoiId);
+			$timetamp = time();
+			if($mtToken){
+				$url = 'http://api.open.cater.meituan.com/waimai/order/confirm';
+				$array= array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
+				$sign=MtUnit::sign($array);
+				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
+				$result = MtUnit::postHttps($url, $data);
+				return $result;
+			}else{
+				return '{ "data": "OK"}';
+			}
 		}else{
 			return '{ "data": "OK"}';
 		}
