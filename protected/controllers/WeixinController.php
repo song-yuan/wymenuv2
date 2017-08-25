@@ -83,7 +83,6 @@ class WeixinController extends Controller
 	 	$url = Yii::app()->request->getParam('url');
 	 	
 	 	$account = WxAccount::get($companyId);
-	 	Helper::writeLog(json_encode($account));
 	 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
 	 	$userInfo = $baseInfo->getSnsapiBase();
 	 	$openid = $userInfo['openid'];
