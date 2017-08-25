@@ -809,8 +809,11 @@ class WxOrder
 	 	if(!$order){
 	 		throw new Exception('订单不存在!');
 	 	}
+	 	if(in_array($order['order_status'], array(3,4,8))){
+	 		throw new Exception('该订单已支付,不能取消!');
+	 	}
 	 	if($order['order_status']==7){
-	 		return 1;
+	 		throw new Exception('订单已经被取消!');
 	 	}
 	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid';
 	 	$resluts = Yii::app()->db->createCommand($sql)
@@ -818,7 +821,7 @@ class WxOrder
 	 							 ->bindValue(':dpid',$dpid)
 	 							 ->queryAll();
 	 	if(empty($resluts)){
-	 		return 0;
+	 		throw new Exception('订单处理有问题,请联系服务员!');
 	 	}else{
 	 		foreach($resluts as $orderProduct){
 	 			$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
