@@ -23,8 +23,6 @@ class NewBrandUser {
 	public function __construct($opendId, $brandId) {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-			Helper::writeLog($opendId);
-			Helper::writeLog($brandId);
 			$this->openId = $opendId;
 			$this->brandId = $brandId;
 			$this->brandUser();
