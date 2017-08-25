@@ -93,6 +93,7 @@
 		var orderDpid = 0;
 		var page = 2;
 		$('.cancel').click(function(){
+			$(this).removeClass('bttn_orange').addClass('bttn_grey');
 			var orderId = $(this).attr('order-id');
 			var orderDpid = $(this).attr('order-dpid');
 			$('#dialog1').attr('order-id',orderId);
@@ -100,13 +101,13 @@
 			$('#dialog1').show();
 		});
 		$('#dialog1 .primary').click(function(){
+			$('#dialog1').hide();
 			var orderId = $('#dialog1').attr('order-id');
 			var orderDpid = $('#dialog1').attr('order-dpid');
 			$.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
 				data:{orderId:orderId,orderDpid:orderDpid},
 				success:function(data){
-					$('#dialog1').hide();
 					if(parseInt(data)){
 						location.href = '<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>';
 					}else{
@@ -116,9 +117,11 @@
 			});
 		});
 		$('#dialog1 .default').click(function(){
+			$('.bttn_grey').removeClass('bttn_grey').addClass('bttn_orange');
 			$('#dialog1').hide();
 		});	
 		$('#dialog2 .primary').click(function(){
+			$('.bttn_grey').removeClass('bttn_grey').addClass('bttn_orange');
 			$('#dialog2').hide();
 		});	
 		$('#more').click(function(){
