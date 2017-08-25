@@ -63,7 +63,7 @@
 		<!-- 全部 -->
 	</div>
 	 <!--BEGIN dialog1-->
-    <div class="weui_dialog_confirm" id="dialog1" style="display: none;">
+    <div class="weui_dialog_confirm" id="dialog1" order-id="0" order-dpid="0" style="display: none;">
         <div class="weui_mask" style="z-index:1005;"></div>
         <div class="weui_dialog" style="z-index:1006;">
             <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
@@ -93,19 +93,23 @@
 		var orderDpid = 0;
 		var page = 2;
 		$('.cancel').click(function(){
-			orderId = $(this).attr('order-id');
-			orderDpid = $(this).attr('order-dpid');
+			var orderId = $(this).attr('order-id');
+			var orderDpid = $(this).attr('order-dpid');
+			$('#dialog1').attr('order-id',orderId);
+			$('#dialog1').attr('order-dpid',orderDpid);
 			$('#dialog1').show();
 		});
 		$('#dialog1 .primary').click(function(){
+			var orderId = $('#dialog1').attr('order-id');
+			var orderDpid = $('#dialog1').attr('order-dpid');
 			$.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
 				data:{orderId:orderId,orderDpid:orderDpid},
 				success:function(data){
+					$('#dialog1').hide();
 					if(parseInt(data)){
-						history.go(0);
+						location.href = '<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>';
 					}else{
-						$('#dialog1').hide();
 						$('#dialog2').show();
 					}
 				}
