@@ -1,8 +1,8 @@
 <?php 
 class MeituanController extends Controller
 {
-	public function init()
-	{
+	public function actionReceiveOrder(){
+		//推送订单
 		ob_end_flush();
 		ob_start();
 		echo '{ "data": "OK"}';
@@ -13,9 +13,7 @@ class MeituanController extends Controller
 		
 		ob_flush();
 		flush();
-	}
-	public function actionReceiveOrder(){
-		//推送订单
+		
         $data = file_get_contents('php://input');
 		$remt = MtOrder::order($data);
 		echo $remt;
@@ -23,6 +21,17 @@ class MeituanController extends Controller
 	}
 	public function actionConfirmOrder(){
 		//订单确认
+		ob_end_flush();
+		ob_start();
+		echo '{ "data": "OK"}';
+		
+		header("Content-Type: text/html;charset=utf-8");
+		header("Connection: close");
+		header('Content-Length: '. ob_get_length());
+		
+		ob_flush();
+		flush();
+		
 		$data = file_get_contents('php://input');
 		$remt=MtOrder::orderconfirm($data);
 		echo $remt;

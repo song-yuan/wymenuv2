@@ -6,6 +6,11 @@
 */
 class MtOrder
 {
+	public static function getToken($dpid){
+		$sql = "select * from nb_meituan_token where type=1 and dpid=".$dpid." and ePoiId=".$dpid." and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		return $res;
+	}
 	public static function order($data){
 		if(empty($data)){
 			return '200';
@@ -19,8 +24,20 @@ class MtOrder
 		if(empty($res)||$res['is_receive']==0){
 			return '{ "data": "OK"}';
 		}
-		$result = self::dealOrder($order,$ePoiId,1);
-		return $result;
+		$obj = json_decode($order);
+		$orderId = $obj->orderId;
+		$mtToken = self::getToken($ePoiId);
+		$timetamp = time();
+		if($mtToken){
+			$url = 'http://api.open.cater.meituan.com/waimai/order/confirm';
+			$array= array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
+			$sign=MtUnit::sign($array);
+			$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
+			$result = MtUnit::postHttps($url, $data);
+			return $result;
+		}else{
+			return '{ "data": "OK"}';
+		}
 	}
 	public static function token($data){
 		if(empty($data)){
@@ -34,7 +51,12 @@ class MtOrder
 		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and delete_flag=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result){
-			return '{ "data": "success"}';
+			$sql = 'update nb_meituan_token set appAuthToken='.$appAuthToken.',timestamp='.$timestamp.' where lid='.$result['lid'].' and dpid='.$result['dpid'];
+			$res = Yii::app()->db->createCommand($sql)->execute();
+			if($res){
+				return '{ "data": "success"}';
+			}
+			return '{ "data": "ERROR"}';
 		}
 		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
@@ -65,22 +87,9 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
-		$obj = json_decode($order);
-		$orderTime = $obj->ctime;
-		$createAt = date('Y-m-d H:i:s',$orderTime);
-		$sql = "select * from nb_order where dpid=".$ePoiId." and create_at='".$createAt."' and account_no=".$obj->orderId;
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
-		if(!empty($res)){
-			$sql1 = "update nb_order set order_status=".$obj->status." where dpid=".$ePoiId." and account_no=".$obj->orderId." and order_type=7";
-			$res1 = Yii::app()->db->createCommand($sql1)->execute();
-			if($res1){
-				return '{ "data": "OK"}';
-			}
-		}else{
-			$result = self::dealOrder($order,$ePoiId,2);
-			return $result;
-		}
-		return '{ "data": "ERROR"}';
+		
+		$result = self::dealOrder($order,$ePoiId,2);
+		return $result;
 	}
 	public static function orderCancel($data){
 		if(empty($data)){
@@ -252,15 +261,6 @@ class MtOrder
 		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			if($type==1){
-				$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$dpid." and ePoiId=".$dpid." and delete_flag=0";
-				$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
-				$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
-				$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
-				$sign=MtUnit::sign($array);
-				$data1 = "appAuthToken=".$res1['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
-				$result1 = MtUnit::postHttps($url1, $data1);
-			}
 			return '{ "data": "OK"}';
 		}
 		return '{ "data": "ERROR"}';

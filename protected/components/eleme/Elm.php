@@ -251,8 +251,14 @@ class Elm
 		$me = json_decode($message);
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
-			$res = self::dealOrder($me,$dpid,2);
-			return $res;
+			$orderId = $me->id;
+			$order = self::confirmOrder($dpid,$orderId);
+			$obj = json_decode($order);
+			if(empty($obj->error)){
+				return true;
+			}else{
+				return false;
+			}
 		}else{
 			return true;
 		}
@@ -285,46 +291,37 @@ class Elm
 	public static function orderStatus($message,$dpid){
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
-		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_type=8';
-		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		
-		if($result){
-			$sql = "update nb_order set order_status=4 where dpid=".$dpid." and account_no='".$accountNo."' and order_type=8";
-			$res = Yii::app()->db->createCommand($sql)->execute();
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+		$protocol = array(
+				"nop" => '1.0.0',
+				"id" => ElUnit::create_uuid(),
+				"action" => "eleme.order.getOrder",
+				"token" => $access_token,
+				"metas" => array(
+						"app_key" => $app_key,
+						"timestamp" => time(),
+				),
+				"params" => array(
+						'orderId'=>$accountNo
+				),
+		);
+		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+		$result = ElUnit::post($url,$protocol);
+		$orderObj = json_decode($result);
+		$me = $orderObj->result;
+		if($me){
+			$res = self::dealOrder($me,$dpid,4);
 			return $res;
 		}else{
-			$access_token = self::elemeGetToken($dpid);
-			if(!$access_token){
-				return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-			}
-			$app_key = ElmConfig::key;
-			$secret = ElmConfig::secret;
-			$url = ElmConfig::url;
-			$protocol = array(
-					"nop" => '1.0.0',
-					"id" => ElUnit::create_uuid(),
-					"action" => "eleme.order.getOrder",
-					"token" => $access_token,
-					"metas" => array(
-							"app_key" => $app_key,
-							"timestamp" => time(),
-					),
-					"params" => array(
-							'orderId'=>$accountNo
-					),
-			);
-			$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-			$result = ElUnit::post($url,$protocol);
-			$orderObj = json_decode($result);
-			$me = $orderObj->result;
-			if($me){
-				$res = self::dealOrder($me,$dpid,4);
-				return $res;
-			}else{
-				return false;
-			}
+			return false;
 		}
-		
 	}
 	public static function productUpdate($lid){
 		$sql = "select * from nb_eleme_cpdy where fen_lei_id=$lid and delete_flag=0";
@@ -705,13 +702,7 @@ class Elm
 		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			$order = self::confirmOrder($dpid,$orderId);
-			$obj = json_decode($order);
-			if(empty($obj->error)){
-				return true;
-			}else{
-				return false;
-			}
+			return true;
 		}else{
 			return false;
 		}
