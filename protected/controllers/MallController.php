@@ -39,6 +39,7 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId-'.$comdpid];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
+			Helper::writeLog($userId);
 			if(empty($userId)){
 				$url = Yii::app()->request->url;
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
