@@ -11,7 +11,8 @@ class WxMessageTpl
 {
 	
 	public function __construct($dpid,$userId,$type,$data){
-		$this->dpid = WxCompany::getDpids($dpid);
+		$this->dpid = $dpid;
+		$this->dpids = WxCompany::getDpids($dpid);
 		$this->userId = $userId;
 		$this->type = $type;
 		$this->data = $data;
@@ -21,7 +22,7 @@ class WxMessageTpl
 	public function getMsgTpl(){
 		$sql = 'select * from nb_weixin_messagetpl where dpid in(:dpid) and message_type=:type and delete_flag=0';
 		$this->msgTpl = Yii::app()->db->createCommand($sql)
-				  ->bindValue(':dpid',$this->dpid)
+				  ->bindValue(':dpid',$this->dpids)
 				  ->bindValue(':type',$this->type)
 				  ->queryRow();
 	}
@@ -29,9 +30,8 @@ class WxMessageTpl
 		if(!$this->msgTpl){
 			return;
 		}
-		$accessToken = new AccessToken($dpid);
+		$accessToken = new AccessToken($this->dpid);
 		$access_token = $accessToken->accessToken;
-		
 		$msgTplId = $this->msgTpl['message_tpl_id'];
 		
 		$this->megTplData = array(
@@ -88,9 +88,9 @@ class WxMessageTpl
 		}else{
 			unset($this->megTplData['data']['keyword4']);
 		}
-		$this->sent();
+		$this->sent($access_token);
 	}
-	public function sent(){
+	public function sent($access_token){
 		$tplUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$access_token;
 		Curl::httpsRequest($tplUrl, json_encode($this->megTplData));
 	}
