@@ -249,7 +249,9 @@ class DataSyncOperation {
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
-			$result['remark'] = str_replace(array("\r\n", "\n", "\r"), '', $result['remark']);//替换掉换行符等
+			if($result['remark']!=''){
+				$result['remark'] = str_replace(array("\r\n", "\n", "\r"), '', $result['remark']);//替换掉换行符等
+			}
 			$order ['nb_order'] = $result;
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
 			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
@@ -301,7 +303,7 @@ class DataSyncOperation {
 			$sql = 'update nb_member_card set is_sync=0 where dpid=' . $dpid . ' and lid=' . $card ['lid'];
 			Yii::app ()->db->createCommand ( $sql )->execute ();
 		}
-		return json_encode ( $data , true);
+		return json_encode ( $data );
 	}
 	/**
 	 * 
