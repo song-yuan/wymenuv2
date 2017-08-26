@@ -300,6 +300,7 @@ class DataSyncOperation {
 			$sql = 'update nb_member_card set is_sync=0 where dpid=' . $dpid . ' and lid=' . $card ['lid'];
 			Yii::app ()->db->createCommand ( $sql )->execute ();
 		}
+		echo '<meta charset="utf-8">';
 		var_dump($data);exit;
 		return json_encode ( $data , true);
 	}
