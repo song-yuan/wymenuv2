@@ -249,7 +249,7 @@ class DataSyncOperation {
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
-			$result['remark'] = str_replace(PHP_EOL, '', $result['remark']);//替换掉换行符等
+			$result['remark'] = str_replace(array("\r\n", "\n", "\r"), '', $result['remark']);//替换掉换行符等
 			$order ['nb_order'] = $result;
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
 			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
