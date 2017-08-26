@@ -15,6 +15,7 @@ if(orderobj.length > 0){
         var orderTypePre = orderDataPre.order_type;
         var accountNoPre = orderDataPre.account_no;
         var orderKey = orderTypePre+'-'+accountNoPre;
+        alert(orderKey);
         newSyncData.push(orderKey);
     }
     var newSyncDataStr = JSON.stringify(newSyncData);
