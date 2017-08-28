@@ -286,7 +286,6 @@ class DataSyncOperation {
 			$order ['nb_order_taste'] = $orderTaste;
 			$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
 			$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			var_dump($orderAddress);exit;
 			if(isset($orderAddress[0]['street'])){
 				$orderAddress[0]['street'] = Helper::dealString($orderAddress[0]['street']);
 			}
