@@ -313,14 +313,14 @@ class DataSyncOperation {
 	 * pos接收云端订单验证
 	 * 
 	 */
-	public static function syncDataCb($dpid,$data) {
+	public static function syncDataCb($dpid,$data,$userName) {
 		$orderKey = json_decode($data);
 		if(!empty($orderKey)){
 			foreach ($orderKey as $key){
 				$keyArr = explode('-', $key);
 				$orderType = $keyArr[0];
 				$accountNo = $keyArr[1];
-				$sql = 'update nb_order set is_sync=0 where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
+				$sql = 'update nb_order set is_sync=0,username='.$userName.' where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
 		}

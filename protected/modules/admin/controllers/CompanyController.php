@@ -19,7 +19,6 @@ class CompanyController extends BackendController
 
 
 
-
 	public function actionIndex(){
 		$provinces = Yii::app()->request->getParam('province',0);
 		$citys = Yii::app()->request->getParam('city',0);
@@ -32,7 +31,11 @@ class CompanyController extends BackendController
 		$criteria->with = 'property';
 		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE)
 		{
-			$criteria->condition =' t.delete_flag=0 and t.type=0';
+			if ($content=='') {
+				$criteria->condition =' t.delete_flag=0 and t.type=0';
+			}else{
+				$criteria->condition =' t.delete_flag=0 and t.type=1';
+			}
 		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
 			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;

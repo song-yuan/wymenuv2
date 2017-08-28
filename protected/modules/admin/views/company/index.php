@@ -197,7 +197,11 @@
 	// new PCAS("province","city","area");
 	// new PCAS("province","city","area","<?php echo $province;?>","<?php echo $city;?>","<?php echo $area;?>");
     addressInit('province', 'city', 'area', '<?php echo $province;?>', '<?php echo $city;?>', '<?php echo $area;?>');
-
+	$(document).keydown(function(event){
+	  switch(event.keyCode){
+	     case 13:return false; 
+	     }
+	});
 
 
 	function genQrcode(that){
@@ -216,6 +220,16 @@
 		//alert(111);
          location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
 	});
+	document.onkeydown=function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==13){ // enter 键
+             //要做的事情
+		var content = $('#ccontent').val();
+		//alert(111);
+        location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
+		
+        }
+    };
 
 	$('#province').change(function(){
 		changeselect();
