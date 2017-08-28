@@ -13,34 +13,34 @@ class WechatMemberController extends BackendController {
     }
 
     public function actionList() {
-       
+
 		$this->render('list');
     }
      public function actionSetting() {
-      
+
 		$this->render('setting');
     }
      public function actionMenu() {
-        
+
        	$this->render('menu');
     }
     public function actionSearchDetail(){
-        $num = Yii::app()->request->getParam('num');       
-        $card_id = Yii::app()->request->getParam('card_id'); 
+        $num = Yii::app()->request->getParam('num');
+        $card_id = Yii::app()->request->getParam('card_id');
         $brand_user_model = '';
         $cupon_model = '';
 
         $orderPay = '';
         $cashback = 0;
-       
-        
+
+
         $criteria = new CDbCriteria;
         $criteria->with = array('point','level','cupon_branduser');
         $criteria->addCondition("t.dpid=".$this->companyId ." or t.weixin_group = ".$this->companyId);
-        $criteria->addCondition("t.lid=".$num);        
-       
-        $brand_user_model = BrandUser::model()->find($criteria);          
-       
+        $criteria->addCondition("t.lid=".$num);
+
+        $brand_user_model = BrandUser::model()->find($criteria);
+
          $company = Company::model()->find('dpid='.$this->companyId);
          if($company->type==0){
          	$companys = Company::model()->findAll('comp_dpid='.$this->companyId);
@@ -56,13 +56,13 @@ class WechatMemberController extends BackendController {
          $criteria1->with = array('order4','company');
          $criteria1->group = 't.order_id';
          $criteria1->addCondition("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid in (".$companyIds.")");
-         
+
         $orderPay = OrderPay::model()->findAll($criteria1);
-          
-        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid in (".$companyIds.")");            
+
+        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid in (".$companyIds.")");
 
         $this->render('searchdetail',array( 'brand_user_model'=> $brand_user_model,
-                                       
+
                                         'cupon_model'=> $cupon_model,
                                         'orderPay'=>$orderPay,
                     )
@@ -70,89 +70,151 @@ class WechatMemberController extends BackendController {
     }
     public function actionSearch(){
         $db=Yii::app()->db;
-        $companyId = Yii::app()->request->getParam('companyId',"0000000000");       
+        $companyId = Yii::app()->request->getParam('companyId',"0000000000");
         $more = Yii::app()->request->getPost('more',"0");
-        $findsex = Yii::app()->request->getPost('findsex',"%");
-        $agefrom = Yii::app()->request->getPost('agefrom',"0");
-        $ageto = Yii::app()->request->getPost('ageto',"100");
-        $birthfrom = Yii::app()->request->getPost('birthfrom',"01-01");
-        $birthto = Yii::app()->request->getPost('birthto',"12-31");
-        $finduserlevel=Yii::app()->request->getPost('finduserlevel',"0000000000");
-      
-        $noordertime=Yii::app()->request->getPost('noordertime',"%");
-        $findcountry=Yii::app()->request->getPost('findcountry',"%");
-        $findprovince=Yii::app()->request->getPost('findprovince',"%");
-        $findcity=Yii::app()->request->getPost('findcity',"%");
-        $pointfrom = Yii::app()->request->getPost('pointfrom',"0");       
-        $cardmobile = Yii::app()->request->getPost('cardmobile',"%");
-        $source = Yii::app()->request->getPost('source',"");
-        //var_dump($source);exit;
+        $findsex = Yii::app()->request->getPost('findsex',"%");//性别
+        $agefrom = Yii::app()->request->getPost('agefrom',"0");//起始年龄
+        $ageto = Yii::app()->request->getPost('ageto',"100");//终止年龄
+        $birthfrom = Yii::app()->request->getPost('birthfrom',"01-01");//起始生日
+        $birthto = Yii::app()->request->getPost('birthto',"12-31");//终止生日
+        $finduserlevel=Yii::app()->request->getPost('finduserlevel',"0000000000");//会员等级
+        $findweixingroup=Yii::app()->request->getPost('findweixingroup',"0000000000");//会员来源店铺
+        $noordertime=Yii::app()->request->getPost('noordertime',"%");//未消费时长
+
+        //省 市 地区
+        $findprovince=Yii::app()->request->getPost('province',"%");
+        $findcity=Yii::app()->request->getPost('city',"%");
+        $findarea=Yii::app()->request->getPost('area',"%");
+
+        $pointfrom = Yii::app()->request->getPost('pointfrom',"0");
+        $source = Yii::app()->request->getPost('source',"");//来源
+        $foucsfrom = Yii::app()->request->getPost('foucsfrom',"");//关注开始时间
+        $foucsto = Yii::app()->request->getPost('foucsto',"");//关注结束时间时间
+
+        if($pointfrom==0)
+        {
+            $pointfrom=-999999;
+        }
+        $pointto = Yii::app()->request->getPost('pointto',"9999999999");
+        $remainfrom = Yii::app()->request->getPost('remainfrom',"0");
+        // if($remainfrom==0)
+        // {
+        //  $remainfrom=-999999;
+        // }
+        $remainto = Yii::app()->request->getPost('remainto',"9999999999");
+
+        //时间范围
+        $datefrom = Yii::app()->request->getPost('datefrom',"2015-01-01");
+        $dateto = Yii::app()->request->getPost('dateto',date('Y-m-d',time()));
+
+        //总消费额范围
+        $consumetotalfrom = Yii::app()->request->getPost('consumetotalfrom',"0");
+        // if($consumetotalfrom==0)
+        // {
+        //  $consumetotalfrom=-999999;
+        // }
+        $consumetotalto = Yii::app()->request->getPost('consumetotalto',"9999999999");
+
+        //消费次数
+        $timesfrom = Yii::app()->request->getPost('timesfrom',"0");
+        $timesto = Yii::app()->request->getPost('timesto',"999999");
+
+        $cardmobile = Yii::app()->request->getPost('cardmobile',"%");//会员卡号  手机号
         if(empty($cardmobile))
         {
-                $cardmobile="%";
+            $cardmobile="%";
         }
+
+        //未消费时长数据处理
         if($noordertime!="%"){
-                $begintime = date('Y-m-d',strtotime("-".$noordertime." month"));
-                $endtime = date('Y-m-d',time());
-                $sql = 'select ifnull(k.user_id,0000000000) as user_id from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$companyId.' and k.create_at >="'.$begintime.' 00:00:00" and k.create_at <="'.$endtime.' 23:59:59" group by k.user_id';
-                $orders = $db->createCommand($sql)->queryAll();
-                $users ='0000000000';
-                foreach ($orders as $order){
-                        $users = $users .','.$order['user_id'];
-                }
+            $begintime = date('Y-m-d',strtotime("-".$noordertime." month"));
+            $endtime = date('Y-m-d',time());
+            $sql = 'select ifnull(k.user_id,0000000000) as user_id from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$companyId.' and k.create_at >="'.$begintime.' 00:00:00" and k.create_at <="'.$endtime.' 23:59:59" group by k.user_id';
+            $orders = $db->createCommand($sql)->queryAll();
+            $users ='0000000000';
+            foreach ($orders as $order){
+                $users = $users .','.$order['user_id'];
+            }
         }else{
-                $users = '0000000000';
+            $users = '0000000000';
         }
         $criteria = new CDbCriteria;
         //var_dump($sql);exit;
         //用sql语句查询出所有会员及消费总额、历史积分、余额、
+
+        //来源店铺条件 省 市 地区
+        if($findprovince!="请选择..")
+        {
+            $sqlp= " and com.province like '".$findprovince."'";
+        }else{
+            $sqlp='';
+        }
+        if($findcity!="请选择..")
+        {
+            $sqlc= " and com.city like '".$findcity."'";
+        }else{
+            $sqlc='';
+        }
+        if($findarea!="请选择..")
+        {
+            $sqla= " and com.county_area like '".$findarea."'";
+        }else{
+            $sqla='';
+        }
         $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
-            .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"				
+            .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"             
             . " from nb_brand_user t "
-            . " LEFT JOIN  nb_company com on com.dpid = t.weixin_group "  
-            . " LEFT JOIN (select dpid,user_id from nb_order"
-            . " where order_type in ('1','2','6') and order_status in ('3','4','8')"
-            . " group by dpid,user_id) tct on t.dpid = tct.dpid and t.lid = tct.user_id "
+            . " LEFT JOIN  nb_company com on (com.dpid = t.weixin_group )"  
+            . " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
+                    . " where order_type in ('1','2','6') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
+                        . " group by dpid,user_id) tct on (t.weixin_group=tct.dpid and t.lid=tct.user_id) "
             . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
-            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.") ";
-           // echo $sql;exit;    
+            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.") ".$sqlp.$sqlc.$sqla;
+           // echo $sql;exit;
+
+
         if($finduserlevel!="0000000000")
         {
-              $sql.= " and tl.lid = ".$finduserlevel;
+            $sql.= " and tl.lid = ".$finduserlevel;
         }
         if($findsex!="%")
         {
-               $sql.= " and t.sex like '".$findsex."'";
-        }
-        if($findcountry!="%")
-        {
-               $sql.= " and t.country like '".$findcountry."'";
-        }
-        if($findprovince!="%")
-        {
-               $sql.= " and t.province like '".$findprovince."'";
-        }
-        if($findcity!="%")
-        {
-               $sql.= " and t.city like '".$findcity."'";
+            $sql.= "and t.sex like '".$findsex."'";
         }
         if($cardmobile!="%")
         {
-               $sql.= " and (t.card_id like '%".$cardmobile."%' or t.mobile_num like '%".$cardmobile."%')";
+            $sql.= " and (t.card_id like '%".$cardmobile."%' or t.mobile_num like '%".$cardmobile."%')";
         }
-      if($source){
-      	$sql.= " and com.company_name like '%".$source."%'";
-      }
-        
+        if($findweixingroup!="0000000000")
+        {
+            $sql.= " and t.weixin_group = ".$findweixingroup;
+        }
+        if($source){
+            $sql.= " and com.company_name like '%".$source."%'";
+        }
+
+        //关注时间数据处理
+        if($foucsfrom){
+            $sql .= " and t.create_at >='".$foucsfrom."'";
+        }
+        if($foucsto){
+            $sql .= " and t.create_at <='".$foucsto."'";
+        }
+
+
         $yearnow=date('Y',time());
         $yearbegin=$yearnow-$ageto;
         $yearend=$yearnow-$agefrom;
-        $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1970-01-01'),1,4) <= '".$yearend."'";
-        $sql.= " and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1970-01-01'),6,5) <= '".$birthto."'";
-
+        $sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) <= '".$yearend."'";
+        $sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) <= '".$birthto."'";
+        //$sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
+        //$sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) >= "
+        //  .$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) <=".$remainto;
+        $sql.=" and ifnull(tct.consumetotal,0) >= ".$consumetotalfrom." and ifnull(tct.consumetotal,0)<=".$consumetotalto;
+        $sql.=" and ifnull(tct.consumetimes,0) >= ".$timesfrom." and ifnull(tct.consumetimes,0)<=".$timesto;
         $sql = 'select cf.* from ('.$sql.') cf';
         //$models = $db->createCommand($sql)->queryAll();
-        
+
         $count = $db->createCommand(str_replace('cf.*','count(*)',$sql))->queryScalar();
         //var_dump($count);exit;
         $pages = new CPagination($count);
@@ -167,20 +229,8 @@ class WechatMemberController extends BackendController {
         $criteriauserlevel->condition =  ' t.delete_flag=0 and t.dpid='.$companyId;
         $userlevels = BrandUserLevel::model()->findAll($criteriauserlevel);
 
-        //获取国家、省、市
-        $sqlcountry="select distinct country from nb_brand_user where dpid=".$companyId;
-        $modelcountrys=$db->createCommand($sqlcountry)->queryAll();
-        //$findcountry="中国";
 
-        $sqlprovince="select distinct country,province from nb_brand_user where dpid=".$companyId;
-        $modelprovinces=$db->createCommand($sqlprovince)->queryAll();
-        //$findprovince="上海市";
 
-        $sqlcity="select distinct country,province,city from nb_brand_user where dpid=".$companyId;
-        $modelcitys=$db->createCommand($sqlcity)->queryAll();
-        //$findcity="杨浦区";
-
-       
         $this->render('search',array(
                 'models'=>$models,
              	'pages'=>$pages,
@@ -191,18 +241,26 @@ class WechatMemberController extends BackendController {
                 'birthto'=>$birthto,
                 'userlevels'=>$userlevels,
                 'finduserlevel'=>$finduserlevel,
-		       
-	        'modelcountrys'=>$modelcountrys,
-                'modelprovinces'=>$modelprovinces,
-	        'modelcitys'=>$modelcitys,
+
+
                 'noordertime'=>$noordertime,
-	        'findcountry'=>$findcountry,
-	        'findprovince'=>$findprovince,
-                'findcity'=>$findcity,
+
+	            'province'=>$findprovince,
+                'city'=>$findcity,
+                'area'=>$findarea,
+
                 'pointfrom'=>$pointfrom,
+                'consumetotalfrom'=>$consumetotalfrom,
+                'consumetotalto'=>$consumetotalto,
+                'timesfrom'=>$timesfrom,
+                'timesto'=>$timesto,
                 'cardmobile'=>$cardmobile,
                 'more'=>$more,
         		'source'=>$source,
+                'foucsfrom'=>$foucsfrom,
+                'foucsto'=>$foucsto,
+                'datefrom'=>$datefrom,
+                'dateto'=>$dateto,
 			));
     }
 
@@ -213,7 +271,7 @@ class WechatMemberController extends BackendController {
 		$criteria->addCondition('t.level_type = 1 and t.dpid=:dpid and t.delete_flag=0');
 		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
-		
+
 		$pages = new CPagination(BrandUserLevel::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -226,10 +284,10 @@ class WechatMemberController extends BackendController {
     }
 
     public function actionVipCreate() {
-    
+
     	$model = new BrandUserLevel();
     	$member_wxcard_bgimgs = MemberWxcardStyle::model()->findAll('dpid =:companyId and delete_flag = 0',array(':companyId'=>$this->companyId));
-    	 
+
     	if(Yii::app()->request->isPostRequest) {
     		$model->attributes = Yii::app()->request->getPost('BrandUserLevel');
     		$styleid = Yii::app()->request->getParam('style_id');
@@ -251,21 +309,21 @@ class WechatMemberController extends BackendController {
     			$this->redirect(array('WechatMember/vip' , 'companyId' => $this->companyId ));
     		}
     	}
-    	 
+
     	$this->render("vipCreate",
     			array("model"=>$model,
     					"member_wxcard_bgimgs" => $member_wxcard_bgimgs
     			));
-    
+
     }
     public function actionVipUpdate() {
         //通过get方法接收要展示的信息的主键。
         $lid = Yii::app()->request->getParam('lid');
-       
+
         //在数据库查找该主键对应的条目。
         $model = BrandUserLevel::model()->find('lid=:lid' , array(':lid' => $lid)) ;
         $member_wxcard_bgimgs = MemberWxcardStyle::model()->findAll('dpid =:companyId and delete_flag = 0',array(':companyId'=>$this->companyId));
-         
+
        if(Yii::app()->request->isPostRequest) {
             $model->attributes = Yii::app()->request->getPost('BrandUserLevel');
             $styleid = Yii::app()->request->getParam('style_id');
@@ -278,7 +336,7 @@ class WechatMemberController extends BackendController {
             if($model->save()){
                 Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
                 $this->redirect(array('WechatMember/vip' , 'companyId' => $this->companyId ));
-            }  
+            }
         }
         $this->render('vipUpdate',
 				array("model"=>$model,
@@ -299,9 +357,9 @@ class WechatMemberController extends BackendController {
     		Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
     		$this->redirect(array('WechatMember/vip' , 'companyId' => $this->companyId)) ;
     	}
-    
+
     	//$this->redirect(array('WechatMember/vip','companyId'=>$this->companyId));
-    }    
+    }
     public function actionSource() {
        	$this->render('source');
     }
@@ -309,21 +367,21 @@ class WechatMemberController extends BackendController {
        	$this->render('store');
     }
     public function actionPoint(){
-       
+
         //功能状态信息
         $is_available[0] = "开启";
         $is_available[1] = "关闭";
-            
+
       $model = new WxPoint();
-      
-       
+
+
        if(Yii::app()->request->isPostRequest) {
         $wxPoint = Yii::app()->request->getPost('WxPoint');
         $se=new Sequence("wx_point");
         $lid = $se->nextval();
         $model->lid = $lid;
         //特殊的特权内容字段处理
-        
+
         $model->is_available = $wxPoint['is_available'];
         $model->award_rule = $wxPoint['award_rule'];
         $model->award_scope = $wxPoint['award_scope'];
@@ -335,17 +393,17 @@ class WechatMemberController extends BackendController {
         if($model->save()){
             Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
             $this->redirect(array('WechatMember/point' , 'companyId' => $this->companyId ));
-        }  
+        }
 
        }
-       
+
         $this->render("point",array(
                     "model" => $model,
-                    "is_available"=>$is_available)  
+                    "is_available"=>$is_available)
                 );
-        
+
     }
-     
+
       public function actionShop(){
        $this->render('shop');
      }
@@ -364,7 +422,7 @@ public function actionAccountDetail(){
         $sql1 = 'select t.pay_amount from nb_order_pay t where t.paytype =11 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
         $model = Yii::app()->db->createCommand($sql1)->queryRow();
         $change = $model['pay_amount']?$model['pay_amount']:0;
-        //var_dump($models);exit; 
+        //var_dump($models);exit;
         $sql2 = 'select sum(t.pay_amount) as all_money from nb_order_pay t where t.paytype in(0,11) and t.pay_amount >0 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
         $models = Yii::app()->db->createCommand($sql2)->queryRow();
         $money = $models['all_money']?$models['all_money']:0;
@@ -393,7 +451,7 @@ public function actionAccountDetail(){
                     $lid = $se->nextval();
                     $bind->lid = $lid;
                     $bind->dpid = $dpid;
-                }  
+                }
                 $bind->membercard_level_id = $val['membercard_level_id'];
                 $bind->branduser_level_id =$val['branduser_level_id'];
                 $bind->create_at = date('Y-m-d H:i:s',time());
@@ -403,7 +461,7 @@ public function actionAccountDetail(){
             Yii::app()->user->setFlash('success',yii::t('app','绑定成功！'));
             $this->redirect(array('WechatMember/list' , 'companyId' => $this->companyId ));
       }
-        
+
       $entity = BrandUserLevel::model()->with('memberbind')->findALL('t.dpid='.$dpid.' and t.level_type=0 and t.delete_flag=0');
       $weixinAccount = WeixinServiceAccount::model()->find('dpid='.$dpid);
       if(!$weixinAccount){
@@ -416,7 +474,7 @@ public function actionAccountDetail(){
        $this->render('chain',array(
                     "entity" => $entity,
                     "weixin" => $weixin
-                    )  
+                    )
                 );
      }
 
@@ -425,7 +483,7 @@ public function actionAccountDetail(){
      	$dpid = Yii::app()->request->getParam('dpid');
      	$userid = Yii::app()->request->getParam('userid');
      	$money = Yii::app()->request->getParam('money');
-     	 
+
      	//****查询公司的产品分类。。。****
      	$db = Yii::app()->db;
      	$user = BrandUser::model()->find('dpid=:companyId and lid=:lid' , array(':companyId'=>$dpid,':lid'=>$userid));
@@ -434,7 +492,7 @@ public function actionAccountDetail(){
      		$sql = 'update nb_brand_user set update_at ="'.date('Y-m-d H:i:s',time()).'",remain_back_money ="'.$all_money.'" where dpid ='.$dpid.' and lid ='.$userid;
      		$result = $db->createCommand($sql)->execute();
      		if($result){
-     			
+
      			$se = new Sequence("recharge_record");
      			$id = $se->nextval();
      			$data = array(
@@ -452,7 +510,7 @@ public function actionAccountDetail(){
      			);
      			//var_dump($dataprod);exit;
      			$command = $db->createCommand()->insert('nb_recharge_record',$data);
-     			
+
      			Yii::app()->end(json_encode(array("status"=>true,'msg'=>'成功')));
      		}else{
      			Yii::app()->end(json_encode(array("status"=>false,'msg'=>'失败')));
@@ -460,7 +518,7 @@ public function actionAccountDetail(){
      	}else{
      		Yii::app()->end(json_encode(array("status"=>false,'msg'=>'失败')));
      	}
-     	
+
      }
 }
 
