@@ -250,7 +250,7 @@ class DataSyncOperation {
 		foreach ( $results as $result ) {
 			$order = array ();
 			if($result['remark']!=''){
-				$result['remark'] = str_replace(array("\r\n", "\n", "\r"), '', $result['remark']);//替换掉换行符等
+				$result['remark'] = Helper::dealString($result['remark']);
 			}
 			$order ['nb_order'] = $result;
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
@@ -286,6 +286,7 @@ class DataSyncOperation {
 			$order ['nb_order_taste'] = $orderTaste;
 			$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
 			$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+			$orderAddress['street'] = Helper::dealString($orderAddress['street']);
 			$order ['nb_order_address'] = $orderAddress;
 			$sql = 'select * from nb_order_account_discount where dpid='.$dpid.' and order_id='.$result ['lid'].' and delete_flag=0';
 			$orderDiscount = Yii::app ()->db->createCommand ( $sql )->queryAll ();
