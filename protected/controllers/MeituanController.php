@@ -40,8 +40,7 @@ class MeituanController extends Controller
 	public function actionCancelOrder(){
 		//订单取消信息推送
 		$data = file_get_contents('php://input');
-		$remt=MtOrder::orderconfirm($data);
-		echo $remt;
+		echo '{ "data": "OK"}';
 		exit();
 	}
 	public function actionToken(){
