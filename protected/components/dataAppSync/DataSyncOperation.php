@@ -311,7 +311,6 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function syncDataCb($dpid,$data,$userName) {
-		var_dump($data);exit;
 		$orderKey = json_decode($data);
 		if(!empty($orderKey)){
 			foreach ($orderKey as $key){
@@ -320,7 +319,6 @@ class DataSyncOperation {
 				$accountNo = $keyArr[2];
 				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
-				echo $sql;
 			}
 		}
 	}
