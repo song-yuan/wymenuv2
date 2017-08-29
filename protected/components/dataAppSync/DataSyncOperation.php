@@ -317,7 +317,7 @@ class DataSyncOperation {
 				$keyArr = explode('-', $key);
 				$orderType = $keyArr[1];
 				$accountNo = $keyArr[2];
-				$sql = 'update nb_order set is_sync=0,username='.$userName.' where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
+				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
 		}
