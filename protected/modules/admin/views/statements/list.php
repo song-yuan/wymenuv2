@@ -354,7 +354,7 @@
 							<div class="ku-item-info">收银机统计</div>
 						</div>
 					</a>
-                                        <a href="<?php echo $this->createUrl('pos/used',array('companyId' => $this->companyId,'pos_type'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+                                        <a href="<?php echo $this->createUrl('poscount/used',array('companyId' => $this->companyId,'pos_type'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey syjpx"></div>
 							<div class="ku-item-info">收银机排序</div>
