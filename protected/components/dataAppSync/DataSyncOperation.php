@@ -311,6 +311,7 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function syncDataCb($dpid,$data,$userName) {
+		var_dump($data);exit;
 		$orderKey = json_decode($data);
 		if(!empty($orderKey)){
 			foreach ($orderKey as $key){
