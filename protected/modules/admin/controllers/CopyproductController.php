@@ -21,6 +21,7 @@ class CopyproductController extends BackendController
 	}
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$arr_dpid = Yii::app()->request->getParam('arr_dpid','');
 		$criteria = new CDbCriteria;
 		$criteria->with = array('company','category');
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
@@ -31,7 +32,7 @@ class CopyproductController extends BackendController
 		$models = Product::model()->findAll($criteria);
 
 		$db = Yii::app()->db;
-		$sql = 'select t.dpid,t.type,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.type,t.company_name from nb_company t where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		$sql2 = 'select * from nb_price_group where dpid = '.$this->companyId. ' and delete_flag=0';
@@ -44,27 +45,25 @@ class CopyproductController extends BackendController
 				'dpids'=>$dpids,
 				'groups'=>$groups,
 				'categories'=>$categories,
-				'categoryId'=>$categoryId
+				'categoryId'=>$categoryId,
+				'arr_dpid'=>$arr_dpid,
 		));
 	}
 
 	public function actionStorProduct(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$is_sync = DataSync::getInitSync();
-		//var_dump($companyId);exit;
 		$ids = Yii::app()->request->getPost('ids');
 		$chscode = Yii::app()->request->getParam('chscode');
 		$phscode = Yii::app()->request->getParam('phscode');
 		$groups = Yii::app()->request->getParam('groups');
 		$dpid = Yii::app()->request->getParam('dpids');
-		// p($_POST);
 		$chscodes = array();
 		$chscodes = explode(',',$chscode);
 		$phscodes = array();
 		$phscodes = explode(',',$phscode);
 		$dpids = array();
 		$dpids = explode(',',$dpid);
-		//var_dump($ids,$chscodes,$dpids,$phscodes);exit;
 
 		//****查询公司的产品分类。。。****
 		$db = Yii::app()->db;
@@ -79,8 +78,8 @@ class CopyproductController extends BackendController
 		$sql = 'select t.* from nb_product t where t.delete_flag = 0 and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$products = $command->queryAll();
-		//var_dump($catep1,$catep2,$products);exit;
-        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		//设置全局变量记录下发很失败的店铺dpid
+		$dpid_view = '';
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
         	foreach ($dpids as $dpid){
         		if(!empty($catep1)){
@@ -91,15 +90,14 @@ class CopyproductController extends BackendController
         					$catep->category_name = $category['category_name'];
         					$catep->type = $category['type'];
         					$catep->cate_type = $category['cate_type'];
-        					$catep->show_type = $category['show_type'];
         					$catep->chs_code = $category['chs_code'];
         					$catep->main_picture = $category['main_picture'];
         					$catep->order_num = $category['order_num'];
-        					$catep->update();
-//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
-        				}else{//var_dump($catep);exit;
-
+        					$rows = $catep->update();
+        					if (!$rows) {
+        						$dpid_view .= $dpid.',';
+        					}
+        				}else{
 	                        $se = new Sequence("product_category");
 	                        $id = $se->nextval();
 	                        $data = array(
@@ -111,7 +109,6 @@ class CopyproductController extends BackendController
 	                        		'pid'=>"0",
 	                        		'type'=>$category['type'],
 	                        		'cate_type'=>$category['cate_type'],
-	                        		'show_type'=>$category['show_type'],
 	                        		'chs_code'=> $category['chs_code'],
 	                        		'main_picture'=>$category['main_picture'],
 	                        		'order_num'=>$category['order_num'],
@@ -120,17 +117,22 @@ class CopyproductController extends BackendController
 	                        );
 	                        $command = $db->createCommand()->insert('nb_product_category',$data);
 
-	                        	//var_dump(mysql_query($command));exit;
-	                        	//var_dump($model);exit;
- 	                        	$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
- 	                        	//var_dump($self);exit;
-	                        	if($self->pid!='0'){
-	                        		$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$model->pid,':dpid'=> $dpid));
-	                        		$self->tree = $parent->tree.','.$self->lid;
-	                        	} else {
-	                        		$self->tree = '0,'.$self->lid;
-	                        	}
-	                        	$self->update();
+	                        if (!$command) {
+        						$dpid_view .= $dpid.',';
+        					}
+
+	                        $self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
+                        	if($self->pid!='0'){
+                        		$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$model->pid,':dpid'=> $dpid));
+                        		$self->tree = $parent->tree.','.$self->lid;
+                        	} else {
+                        		$self->tree = '0,'.$self->lid;
+                        	}
+                        	$rows = $self->update();
+
+                        	if (!$rows) {
+        						$dpid_view .= $dpid.',';
+        					}
         				}
         			}
         			if($catep2){
@@ -139,12 +141,8 @@ class CopyproductController extends BackendController
         					$command = $db->createCommand($sql);
         					$sqltree = $command->queryRow();
         					$chscode = $sqltree['chs_code'];
-        					//$chscodetree = $sqltree['tree'];
         					$catep = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$category['chs_code'],':companyId'=>$dpid));
         					$cateptree = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$chscode,':companyId'=>$dpid));
-
-
-        					//var_dump($cateptree,$sqltree);exit;
         					if($catep){
         						$catep->update_at = date('Y-m-d H:i:s',time());
         						$catep->category_name = $category['category_name'];
@@ -153,11 +151,11 @@ class CopyproductController extends BackendController
         						$catep->chs_code = $category['chs_code'];
         						$catep->main_picture = $category['main_picture'];
         						$catep->order_num = $category['order_num'];
-        						$catep->update();
-        						//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-        						// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
-        					}else{//var_dump($catep);exit;
-
+        						$rows = $catep->update();
+        						if (!$rows) {
+        							$dpid_view .= $dpid.',';
+        						}
+        					}else{
         						$se = new Sequence("product_category");
         						$id = $se->nextval();
         						$datacate = array(
@@ -177,23 +175,24 @@ class CopyproductController extends BackendController
         						);
         						$command = $db->createCommand()->insert('nb_product_category',$datacate);
 
-        						//var_dump(mysql_query($command));exit;
-        						//var_dump($model);exit;
+        						if (!$command) {
+	        						$dpid_view .= $dpid.',';
+	        					}
+
         						$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
-        						//var_dump($self);exit;
         						if($self->pid!='0'){
-        							//$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->pid,':dpid'=> $dpid));
         							$self->tree = $cateptree['tree'].','.$self->lid;
         						} else {
         							$self->tree = '0,'.$self->lid;
         						}
-        						$self->update();
+        						$rows = $self->update();
+        						if (!$rows) {
+	        						$dpid_view .= $dpid.',';
+	        					}
         					}
         				}
         			}
-
         		}
-
         		if($products){
         			foreach ($phscodes as $prodhscode){
         				$producto = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
@@ -214,11 +213,9 @@ class CopyproductController extends BackendController
         				*/
         				if ($groups==0) {
         					$group = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid))->price_group_id;
-        					// p($group);
         					if($group){
         						$sql = 'select * from nb_price_group_detail where dpid='.$this->companyId.' and price_group_id='.$group.' and product_id='.$product->lid.' and delete_flag=0';
 	        					$gp_info = $db->createCommand($sql)->queryAll();
-	        					// p($gp_info);
 	        					if ($gp_info==null) {
 	        						$price=$product['original_price'];
         							$mb_price=$product['member_price'];
@@ -226,7 +223,6 @@ class CopyproductController extends BackendController
 	        						$price=$gp_info[0]['price'];
 	        						$mb_price=$gp_info[0]['mb_price'];
 	        					}
-	        					
         					}else{
         						$price=$product['original_price'];
         						$mb_price=$product['member_price'];
@@ -236,107 +232,119 @@ class CopyproductController extends BackendController
         					$gp_info = $db->createCommand($sql)->queryAll();
         					$price=$gp_info[0]['price'];
         					$mb_price=$gp_info[0]['mb_price'];
-
         					$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid));
-			                // p($model);
 			                if ($model) {
-			                    $model->saveAttributes(array('price_group_id'=>$groups,'update_at'=>date('Y-m-d H:i:s',time())));
+			                    $rows = $model->saveAttributes(array('price_group_id'=>$groups,'update_at'=>date('Y-m-d H:i:s',time())));
+
+			                    if (!$rows) {
+	        						$dpid_view .= $dpid.',';
+	        					}
 			                }else{
 			                    $se=new Sequence("company_property");
 			                    $lid = $se->nextval();
-			                    // p($lid);
 			                    $data = array(
-			                            'lid'=>$lid,
-			                            'dpid'=>$dpid,
-			                            'update_at'=>date('Y-m-d H:i:s',time()),
-			                            'price_group_id'=>$groups,
-			                            'delete_flag'=>'0',
+		                            'lid'=>$lid,
+		                            'dpid'=>$dpid,
+		                            'update_at'=>date('Y-m-d H:i:s',time()),
+		                            'price_group_id'=>$groups,
+		                            'delete_flag'=>'0',
 			                    );
 			                    $command = $db->createCommand()->insert('nb_company_property',$data);
+			                    if (!$command) {
+	        						$dpid_view .= $dpid.',';
+	        					}
 			                }
         				}
         				if((!empty($product))&&(empty($producto))&&(!empty($categoryId))){
         					$se = new Sequence("product");
         					$id = $se->nextval();
         					$dataprod = array(
-        							'lid'=>$id,
-        							'dpid'=>$dpid,
-        							'create_at'=>date('Y-m-d H:i:s',time()),
-        							'update_at'=>date('Y-m-d H:i:s',time()),
-        							'category_id'=>$categoryId['lid'],
-        							'phs_code'=>$product['phs_code'],
-        							'chs_code'=>$product['chs_code'],
-        							'product_name'=>$product['product_name'],
-        							'simple_code'=>$product['simple_code'],
-        							'main_picture'=>$product['main_picture'],
-        							'description'=>$product['description'],
-        							'rank'=>$product['rank'],
-        							'sort'=>$product['sort'],
-        							'spicy'=>$product['spicy'],
-        							'is_temp_price'=>'1',
-        							'is_member_discount'=>$product['is_member_discount'],
-        							'is_special'=>$product['is_special'],
-        							'status'=>$product['status'],
-        							'dabao_fee'=>$product['dabao_fee'],
-        							'is_discount'=>$product['is_discount'],
-        							'original_price'=>$price,
-        							'member_price'=>$mb_price,
-        							'product_unit'=>$product['product_unit'],
-        							'weight_unit'=>$product['weight_unit'],
-        							'is_weight_confirm'=>$product['is_weight_confirm'],
-        							'store_number'=>$product['store_number'],
-        							'order_number'=>$product['order_number'],
-        							'favourite_number'=>$product['favourite_number'],
-        							'is_show'=>$product['is_show'],
-        							'is_show_wx'=>$product['is_show_wx'],
-        							'is_lock'=>$product['is_lock'],
-        							'delete_flag'=>'0',
-        							'is_sync'=>$is_sync,
+    							'lid'=>$id,
+    							'dpid'=>$dpid,
+    							'create_at'=>date('Y-m-d H:i:s',time()),
+    							'update_at'=>date('Y-m-d H:i:s',time()),
+    							'category_id'=>$categoryId['lid'],
+    							'phs_code'=>$product['phs_code'],
+    							'chs_code'=>$product['chs_code'],
+    							'product_name'=>$product['product_name'],
+    							'simple_code'=>$product['simple_code'],
+    							'main_picture'=>$product['main_picture'],
+    							'description'=>$product['description'],
+    							'rank'=>$product['rank'],
+    							'sort'=>$product['sort'],
+    							'spicy'=>$product['spicy'],
+    							'is_temp_price'=>'1',
+    							'is_member_discount'=>$product['is_member_discount'],
+    							'is_special'=>$product['is_special'],
+    							'status'=>$product['status'],
+    							'dabao_fee'=>$product['dabao_fee'],
+    							'is_discount'=>$product['is_discount'],
+    							'original_price'=>$price,
+    							'member_price'=>$mb_price,
+    							'product_unit'=>$product['product_unit'],
+    							'weight_unit'=>$product['weight_unit'],
+    							'is_weight_confirm'=>$product['is_weight_confirm'],
+    							'store_number'=>$product['store_number'],
+    							'order_number'=>$product['order_number'],
+    							'favourite_number'=>$product['favourite_number'],
+    							'is_show'=>$product['is_show'],
+    							'is_show_wx'=>$product['is_show_wx'],
+    							'is_lock'=>$product['is_lock'],
+    							'delete_flag'=>'0',
+    							'is_sync'=>$is_sync,
         					);
-        					//var_dump($dataprod);exit;
         					$command = $db->createCommand()->insert('nb_product',$dataprod);
-
+        					if (!$command) {
+        						$dpid_view .= $dpid.',';
+        					}
         				}elseif((!empty($product))&&(!empty($producto))&&(!empty($categoryId))){
-
-	        					$producto->update_at = date('Y-m-d H:i:s',time());
-	        					$producto->category_id = $categoryId['lid'];
-	        					$producto->phs_code = $product['phs_code'];
-	        					$producto->chs_code = $product['chs_code'];
-	        					$producto->product_name = $product['product_name'];
-	        					$producto->simple_code = $product['simple_code'];
-	        					$producto->main_picture = $product['main_picture'];
-	        					$producto->description = $product['description'];
-	        					$producto->rank = $product['rank'];
-	        					$producto->sort = $product['sort'];
-	        					$producto->spicy = $product['spicy'];
-	        					$producto->is_temp_price = '1';
-	        					$producto->is_member_discount = $product['is_member_discount'];
-	        					$producto->is_special = $product['is_special'];
-	        					$producto->status = $product['status'];
-	        					$producto->dabao_fee = $product['dabao_fee'];
-	        					$producto->is_discount = $product['is_discount'];
-	        					$producto->original_price = $price;
-	        					$producto->member_price = $mb_price;
-	        					$producto->product_unit = $product['product_unit'];
-	        					$producto->weight_unit = $product['weight_unit'];
-	        					$producto->is_weight_confirm = $product['is_weight_confirm'];
-	        					$producto->store_number = $product['store_number'];
-	        					$producto->order_number = $product['order_number'];
-	        					$producto->favourite_number = $product['favourite_number'];
-	        					$producto->is_show = $product['is_show'];
-	        					$producto->is_show_wx = $product['is_show_wx'];
-	        					$producto->is_lock = $product['is_lock'];
-	        					$producto->delete_flag = '0';
-	        					$producto->is_sync = $is_sync;
-	        					$producto->save();
-        					//var_dump($producto);exit;
+        					$producto->update_at = date('Y-m-d H:i:s',time());
+        					$producto->category_id = $categoryId['lid'];
+        					$producto->phs_code = $product['phs_code'];
+        					$producto->chs_code = $product['chs_code'];
+        					$producto->product_name = $product['product_name'];
+        					$producto->simple_code = $product['simple_code'];
+        					$producto->main_picture = $product['main_picture'];
+        					$producto->description = $product['description'];
+        					$producto->rank = $product['rank'];
+        					$producto->sort = $product['sort'];
+        					$producto->spicy = $product['spicy'];
+        					$producto->is_temp_price = '1';
+        					$producto->is_member_discount = $product['is_member_discount'];
+        					$producto->is_special = $product['is_special'];
+        					$producto->status = $product['status'];
+        					$producto->dabao_fee = $product['dabao_fee'];
+        					$producto->is_discount = $product['is_discount'];
+        					$producto->original_price = $price;
+        					$producto->member_price = $mb_price;
+        					$producto->product_unit = $product['product_unit'];
+        					$producto->weight_unit = $product['weight_unit'];
+        					$producto->is_weight_confirm = $product['is_weight_confirm'];
+        					$producto->store_number = $product['store_number'];
+        					$producto->order_number = $product['order_number'];
+        					$producto->favourite_number = $product['favourite_number'];
+        					$producto->is_show = $product['is_show'];
+        					$producto->is_show_wx = $product['is_show_wx'];
+        					$producto->is_lock = $product['is_lock'];
+        					$producto->delete_flag = '0';
+        					$producto->is_sync = $is_sync;
+        					$rows = $producto->save();
+        					if (!$rows) {
+        						$dpid_view .= $dpid.',';
+        					}
         				}
         			}
         		}
         	}
-        	Yii::app()->user->setFlash('success' , yii::t('app','菜品下发成功！！！'));
-        	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
-
+        	if ($dpid_view != '') {
+	        	$arr_dpids = explode(',',$dpid_view);
+	        	$arr_dpid = array_unique($arr_dpids);
+        	}else{
+        		$arr_dpid = '';
+        		Yii::app()->user->setFlash('success' , yii::t('app','菜品下发成功！！！'));
+        	}
+        	// gp($dpid_view);
+        	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId,'arr_dpid' => $arr_dpid)) ;
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
         	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;

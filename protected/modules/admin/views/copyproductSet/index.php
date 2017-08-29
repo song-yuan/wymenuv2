@@ -166,11 +166,55 @@ function fun()
 		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
 	         </div>
 		 </div>
+	</div>	
+
+	<div id="noticed2" style="margin:0;padding:0;display:none;width:96%;height:96%;">
+         <div class="modal-header">
+         	<span style="color:red;font:900 25px '微软雅黑' ;">注意 : 以下店铺请重新下发</span>
+         </div>
+         <div class="modal-body">
+	         <div class="portlet-body" id="table-manage">
+		         <div id="report" style="display:inline-block;width:100%;">
+			        <table class="table table-striped table-bordered table-hover">
+						<thead>
+							<?php if($arr_dpid):foreach ($arr_dpid as $v):foreach ($dpids as $dpid): ?>
+								<?php if ($v==$dpid['dpid']): ?>
+							<tr>
+								<th><?php echo yii::t('app',$dpid['company_name']);?></th>
+							</tr>
+							<?php endif;endforeach;endforeach;endif;?>
+						</thead>
+					</table>
+		         </div>
+	         </div>
+	         <div class="modal-footer">
+		         <button id="closeall2" type="button" class="btn default" data-dismiss="modal">关闭</button>
+	         </div>
+		 </div>
+	</div>
 
 
 
 	<script type="text/javascript">
-
+	<?php if($arr_dpid != ''): ?>
+		// alert(111);
+		layer_index_printreportlist=layer.open({
+            type: 1,
+            shade: false,
+            title: false, //不显示标题
+            area: ['60%', '60%'],
+            content: $('#noticed2'),//$('#productInfo'), //捕获的元素
+            cancel: function(index){
+                layer.close(index);
+                layer_index_printreportlist=0;
+            }
+        });
+        $("#closeall2").on('click',function(){
+	        //alert("123");
+	        layer.closeAll();
+	        layer_index_printerportlist = 0;
+	        });
+	<?php endif; ?>
 	$("#su").on('click',function() {
 
         //alert(11);

@@ -1,7 +1,7 @@
 <?php
 class CopyproductSetController extends BackendController
 {
-	
+
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
@@ -10,17 +10,18 @@ class CopyproductSetController extends BackendController
 		}
 		return true;
 	}
+
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$arr_dpid = Yii::app()->request->getParam('arr_dpid','');
 		$criteria = new CDbCriteria;
 		//$criteria->with = array('company','category');
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
-		
+
 		$models = ProductSet::model()->findAll($criteria);
-		
+
 		$db = Yii::app()->db;
-		//$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 ';
-		$sql = 'select t.dpid,t.type,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.type,t.company_name from nb_company t where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		$sql2 = 'select * from nb_price_group where dpid = '.$this->companyId. ' and delete_flag=0';
@@ -30,6 +31,7 @@ class CopyproductSetController extends BackendController
 				'models'=>$models,
 				'dpids'=>$dpids,
 				'groups'=>$groups,
+				'arr_dpid'=>$arr_dpid,
 		));
 	}
 
@@ -52,7 +54,7 @@ class CopyproductSetController extends BackendController
 		//var_dump($dpids,$pshscodes);exit;
 		// p($dpids);
 		//****查询公司的产品分类。。。****
-		
+
 		$db = Yii::app()->db;
 		$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.pid = 0 and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
@@ -64,13 +66,11 @@ class CopyproductSetController extends BackendController
 		$sql = 'select t.* from nb_product t where t.delete_flag = 0 and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$products = $command->queryAll();
-		//var_dump($catep1,$catep2,$products);exit;
-        //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
-    	
+
         	foreach ($dpids as $dpid){
-        		$transaction = $db->beginTransaction();
-        		try{
+        		// $transaction = $db->beginTransaction();
+        		// try{
 	        		if(!empty($catep1)){
 	        			foreach($catep1 as $category){
 	        				$catep = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag =0' , array(':ccode'=>$category['chs_code'],':companyId'=>$dpid));
@@ -82,9 +82,11 @@ class CopyproductSetController extends BackendController
 	        					$catep->chs_code = $category['chs_code'];
 	        					$catep->main_picture = $category['main_picture'];
 	        					$catep->order_num = $category['order_num'];
-	        					$catep->update();
+	        					$rows = $catep->update();
+	        					if (!$rows) {
+	        						$dpidnames .= $dpid.',';
+	        					}
 	        				}else{//var_dump($catep);exit;
-	        					 
 	        					$se = new Sequence("product_category");
 	        					$id = $se->nextval();
 	        					$data = array(
@@ -103,7 +105,9 @@ class CopyproductSetController extends BackendController
 	        							'is_sync'=>$is_sync,
 	        					);
 	        					$command = $db->createCommand()->insert('nb_product_category',$data);
-	        					 
+	        					if (!$command) {
+	        						$dpidnames .= $dpid.',';
+	        					}
 	        					//var_dump(mysql_query($command));exit;
 	        					//var_dump($model);exit;
 	        					$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
@@ -114,7 +118,10 @@ class CopyproductSetController extends BackendController
 	        					} else {
 	        						$self->tree = '0,'.$self->lid;
 	        					}
-	        					$self->update();
+	        					$rows = $self->update();
+	        					if (!$rows) {
+	        						$dpidnames .= $dpid.',';
+	        					}
 	        				}
 	        			}
 	        			if($catep2){
@@ -126,8 +133,6 @@ class CopyproductSetController extends BackendController
 	        					//$chscodetree = $sqltree['tree'];
 	        					$catep = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$category['chs_code'],':companyId'=>$dpid));
 	        					$cateptree = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$chscode,':companyId'=>$dpid));
-	        					 
-	        					 
 	        					//var_dump($cateptree,$sqltree);exit;
 	        					if($catep){
 	        						$catep->update_at = date('Y-m-d H:i:s',time());
@@ -138,11 +143,12 @@ class CopyproductSetController extends BackendController
 	        						$catep->chs_code = $category['chs_code'];
 	        						$catep->main_picture = $category['main_picture'];
 	        						$catep->order_num = $category['order_num'];
-	        						$catep->update();
-	        						//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-	        						// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
+	        						$rows = $catep->update();
+	        						if (!$rows) {
+		        						$dpidnames .= $dpid.',';
+		        					}
 	        					}else{//var_dump($catep);exit;
-	        		
+
 	        						$se = new Sequence("product_category");
 	        						$id = $se->nextval();
 	        						$datacate = array(
@@ -162,7 +168,9 @@ class CopyproductSetController extends BackendController
 	        								'is_sync'=>$is_sync,
 	        						);
 	        						$command = $db->createCommand()->insert('nb_product_category',$datacate);
-	        		
+	        						if (!$command) {
+		        						$dpidnames .= $dpid.',';
+		        					}
 	        						//var_dump(mysql_query($command));exit;
 	        						//var_dump($model);exit;
 	        						$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
@@ -173,24 +181,31 @@ class CopyproductSetController extends BackendController
 	        						} else {
 	        							$self->tree = '0,'.$self->lid;
 	        						}
-	        						$self->update();
+	        						$rows = $self->update();
+	        						if (!$rows) {
+		        						$dpidnames .= $dpid.',';
+		        					}
 	        					}
 	        				}
 	        			}
-	        			 
-	        		}   
+
+	        		}
         			foreach ($pshscodes as $prodsethscode){
         				$prodsets = ProductSet::model()->find('pshs_code=:pscode and dpid=:companyId and delete_flag=0' , array(':pscode'=>$prodsethscode,':companyId'=>$this->companyId));
         				$prodsetso = ProductSet::model()->find('pshs_code=:pscode and dpid=:companyId and delete_flag=0' , array(':pscode'=>$prodsethscode,':companyId'=>$dpid));
         				$categoryId = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$prodsets->chs_code,':companyId'=>$dpid));
         				if(!empty($prodsetso)){
         					$prodsetso->delete_flag = 1;
-        					$prodsetso->update();
-                            Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id =:setid and dpid = :companyId')
+        					$rows = $prodsetso->update();
+        					if (!$rows) {
+        						$dpidnames .= $dpid.',';
+        					}
+                            $rows = Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where set_id =:setid and dpid = :companyId')
                             ->execute(array(':setid'=> $prodsetso->lid, ':companyId' => $dpid));
-                            //Yii::app()->db->createCommand()->update('nb_product_set_detail',array('set_id=:setid' ,'dpid=:dpid'), array(':setid' =>$prodsetso->lid , ':dpid'=>$dpid));
+                            if (!$rows) {
+        						$dpidnames .= $dpid.',';
+        					}
                             }
-                            // p($categoryId);
 			            if(!empty($prodsets)){
     				            /*
     	        					判断分组,
@@ -228,11 +243,14 @@ class CopyproductSetController extends BackendController
     	        					$gp_info = $db->createCommand($sql)->queryAll();
     	        					$price=$gp_info[0]['price'];
     	        					$mb_price=$gp_info[0]['mb_price'];
-    	        					
+
     	        					$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$dpid));
     				                // p($model);
     				                if ($model) {
-    				                    $model->saveAttributes(array('price_group_id'=>$groups,'update_at'=>date('Y-m-d H:i:s',time())));
+    				                    $rows = $model->saveAttributes(array('price_group_id'=>$groups,'update_at'=>date('Y-m-d H:i:s',time())));
+    				                    if (!$rows) {
+			        						$dpidnames .= $dpid.',';
+			        					}
     				                }else{
     				                    $se=new Sequence("company_property");
     				                    $lid = $se->nextval();
@@ -245,6 +263,9 @@ class CopyproductSetController extends BackendController
     				                            'delete_flag'=>'0',
     				                    );
     				                    $command = $db->createCommand()->insert('nb_company_property',$data);
+    				                    if (!$command) {
+			        						$dpidnames .= $dpid.',';
+			        					}
     				                }
     	        				}
 
@@ -263,13 +284,8 @@ class CopyproductSetController extends BackendController
 			                        'type'=>$prodsets->type,
 			                        'simple_code'=>$prodsets->simple_code,
 			                        'main_picture'=>$prodsets->main_picture,
-
-
 			                        'set_price'=>$price,
 			                        'member_price'=>$mb_price,
-
-
-
 			                        'description'=>$prodsets->description,
 			                        'rank'=>$prodsets->rank,
 			                        'is_member_discount'=>$prodsets->is_member_discount,
@@ -284,7 +300,9 @@ class CopyproductSetController extends BackendController
 			                    );
 			                    // p($dataprodset);exit;
 			                    $command = $db->createCommand()->insert('nb_product_set',$dataprodset);
-
+			                    if (!$command) {
+	        						$dpidnames .= $dpid.',';
+	        					}
 			                    $prodsetdetails = ProductSetDetail::model()->findAll('set_id=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsets->lid,':companyId'=>$this->companyId));
 			                    foreach ($prodsetdetails as $prodsetdetail){
 		                            $producto = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsetdetail->product_id,':companyId'=>$this->companyId));
@@ -310,33 +328,37 @@ class CopyproductSetController extends BackendController
 													);
 	        						//var_dump($dataprodsetdetail);exit;
 	        						$command = $db->createCommand()->insert('nb_product_set_detail',$dataprodsetdetail);
+	        						if (!$command) {
+		        						$dpidnames .= $dpid.',';
+		        					}
 	        						}
         						}
         					}
         					//var_dump($prodsetdetails);exit;
         				}
-        					
+
         			}
-        			$transaction->commit();
-    			}catch (Exception $e){
-    				$transaction->rollback();
-    				//echo 'false';exit;
-    				$dpidnames = ''.$dpid;
-    			}  
+        		// $transaction->commit();
+    			// }catch (Exception $e){
+    			// 	$transaction->rollback();
+    			// 	//echo 'false';exit;
+    			// }
         	}
-    		
-    		//Yii::app()->user->setFlash('success' , $msgmate);
-    		Yii::app()->user->setFlash('success' , yii::t('app','套餐下发成功！！！'));
-    		$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId,)) ;
-    		// //echo 'true';exit;
-    		Helper::writeLog('套餐下发：['.$dpidnames.']结果：以上下发未成功。');
-        	
+        	if ($dpidnames != '') {
+	        	$arr_dpids = explode(',',$dpidnames);
+	        	$arr_dpid = array_unique($arr_dpids);
+        	}else{
+        		$arr_dpid = '';
+    			Yii::app()->user->setFlash('success' , yii::t('app','套餐下发成功！！！'));
+        	}
+    		$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId,'arr_dpid' => $arr_dpid)) ;
+
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
         	$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId)) ;
-        }        
+        }
 
 	}
 
-	
+
 }

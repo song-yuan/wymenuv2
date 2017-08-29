@@ -11,6 +11,7 @@ function fun()
 
 
 </script>
+<?php //$arr_dpid = Yii::app()->request->getParam('arr_dpid'); ?>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -148,39 +149,6 @@ function fun()
 						<input type="hidden" id="pgroups" name="groups" value="" />
 						</div>
 					</table>
-
-<!-- 						<php if($pages->getItemCount()):?>
-<!-- 						<div class="row"> --
-<!-- 							<div class="col-md-5 col-sm-12">
-<!-- 								<div class="dataTables_info">
-									<php echo yii::t('app','共');?> <php echo $pages->getPageCount();?> <php echo yii::t('app','页');?> , <php echo $pages->getItemCount();?> <php echo yii::t('app','条数据');?> , <php echo yii::t('app','当前是第');?> <php echo $pages->getCurrentPage()+1;?> <php echo yii::t('app','页');?>
-<!-- 								</div> --
-<!-- 							</div> --
-<!-- 							<div class="col-md-7 col-sm-12"> --
-<!-- 								<div class="dataTables_paginate paging_bootstrap"> --
-								<php $this->widget('CLinkPager', array(
-// 									'pages' => $pages,
-// 									'header'=>'',
-// 									'firstPageLabel' => '<<',
-// 									'lastPageLabel' => '>>',
-// 									'firstPageCssClass' => '',
-// 									'lastPageCssClass' => '',
-// 									'maxButtonCount' => 8,
-// 									'nextPageCssClass' => '',
-// 									'previousPageCssClass' => '',
-// 									'prevPageLabel' => '<',
-// 									'nextPageLabel' => '>',
-// 									'selectedPageCssClass' => 'active',
-// 									'internalPageCssClass' => '',
-// 									'hiddenPageCssClass' => 'disabled',
-// 									'htmlOptions'=>array('class'=>'pagination pull-right')
-// 								));
-// 								?>
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 						</div>
-						<php endif;?>
--->
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -199,16 +167,60 @@ function fun()
 		         </div>
 	         </div>
 	         <div class="modal-footer">
-		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
+		         <button id="closeall1" type="button" class="btn default" data-dismiss="modal">关闭</button>
 	         </div>
 		 </div>
+	</div>	
+
+	<div id="noticed2" style="margin:0;padding:0;display:none;width:96%;height:96%;">
+         <div class="modal-header">
+         	<span style="color:red;font:900 25px '微软雅黑' ;">注意 : 以下店铺请重新下发</span>
+         </div>
+         <div class="modal-body">
+	         <div class="portlet-body" id="table-manage">
+		         <div id="report" style="display:inline-block;width:100%;">
+			        <table class="table table-striped table-bordered table-hover">
+						<thead>
+							<?php if($arr_dpid):foreach ($arr_dpid as $v):foreach ($dpids as $dpid): ?>
+								<?php if ($v==$dpid['dpid']): ?>
+							<tr>
+								<th><?php echo yii::t('app',$dpid['company_name']);?></th>
+							</tr>
+							<?php endif;endforeach;endforeach;endif;?>
+						</thead>
+					</table>
+		         </div>
+	         </div>
+	         <div class="modal-footer">
+		         <button id="closeall2" type="button" class="btn default" data-dismiss="modal">关闭</button>
+	         </div>
+		 </div>
+	</div>
 
 
 
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
-
+		<?php if($arr_dpid != ''): ?>
+			// alert(111);
+			layer_index_printreportlist=layer.open({
+	            type: 1,
+	            shade: false,
+	            title: false, //不显示标题
+	            area: ['60%', '60%'],
+	            content: $('#noticed2'),//$('#productInfo'), //捕获的元素
+	            cancel: function(index){
+	                layer.close(index);
+	                layer_index_printreportlist=0;
+	            }
+	        });
+	        $("#closeall2").on('click',function(){
+		        //alert("123");
+		        layer.closeAll();
+		        layer_index_printerportlist = 0;
+		        });
+		<?php endif; ?>
 		$('#product-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
 				alert("<?php echo yii::t('app','请选择要删除的项');?>");
