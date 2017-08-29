@@ -319,6 +319,7 @@ class DataSyncOperation {
 				$accountNo = $keyArr[2];
 				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
+				echo $sql;
 			}
 		}
 	}
