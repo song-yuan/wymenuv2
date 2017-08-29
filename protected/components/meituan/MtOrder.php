@@ -169,9 +169,15 @@ class MtOrder
 		$obj = json_decode($data);
 		$orderArr = array();
 		$orderTime = $obj->ctime;
+		$payType = $obj->payType;
+		if($payType==2){
+			$orderPayPaytype = 15;
+		}else{
+			$orderPayPaytype = 0;
+		}
 		$poiReceiveDetail = json_decode($obj->poiReceiveDetail);
 		
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'remark'=>$obj->caution);
+		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'remark'=>$obj->caution);
 		$orderArr['order_platform'] = array('original_total'=>$obj->originalPrice,'logistics_total'=>$poiReceiveDetail->logisticsFee/100,'platform_total'=>$poiReceiveDetail->foodShareFeeChargeByPoi/100,'pay_total'=>$poiReceiveDetail->onlinePayment/100,'receive_total'=>$poiReceiveDetail->wmPoiReceiveCent/100);
 		$orderArr['order_product'] = array();
 		$array_detail=json_decode($obj->detail,true);
@@ -257,7 +263,7 @@ class MtOrder
 		$obj->recipientAddress = Helper::dealString($obj->recipientAddress);
 		
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
-		$orderArr['order_pay'] = array(array('pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		$orderArr['order_pay'] = array(array('pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr);
 		$data = array('dpid'=>$dpid,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);

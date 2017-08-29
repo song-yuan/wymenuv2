@@ -594,8 +594,15 @@ class Elm
 		$serviceFee = $me->serviceFee;//饿了么服务费
 		$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
 		$orderActivities = $me->orderActivities;// 订单活动
+		if($me->onlinePaid){
+			$payType = 2;
+			$orderPayPaytype = 15;
+		}else{
+			$payType = 1;
+			$orderPayPaytype = 0;
+		}
 		$orderArr = array();
-		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$income,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
+		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$income,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn,'paytype'=>$payType,'remark'=>$me->description);
 		$orderArr['order_platform'] = array('original_total'=>$originalPrice,'logistics_total'=>$deliverFee,'platform_total'=>$serviceFee,'pay_total'=>$price,'receive_total'=>$income);
 		$orderArr['order_product'] = array();
 		foreach ($groups as $group){
@@ -688,7 +695,7 @@ class Elm
 		}
 		$me->deliveryPoiAddress = Helper::dealString($me->deliveryPoiAddress);
 		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
-		$orderArr['order_pay'] = array(array('pay_amount'=>$income,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		$orderArr['order_pay'] = array(array('pay_amount'=>$income,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 			
 		if(!empty($orderActivities)){
 			$orderArr['order_discount'] = array();
