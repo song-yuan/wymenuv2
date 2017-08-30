@@ -16,6 +16,7 @@ class WxPromotion
 		$this->userId = $userId;
 		$this->type = $type;
 		$this->getPromotionDetail();
+		$this->getBuySentDetail();
 	}
 	public function getPromotionDetail(){
 		$now = date('Y-m-d H:i:s',time());
@@ -76,6 +77,58 @@ class WxPromotion
 			array_push($promotionArr['lid'.$result['normal_promotion_id']],$results[$k]);
 		}
 		$this->promotionProductList = $promotionArr;
+	}
+	public function getBuySentDetail(){
+		$now = date('Y-m-d H:i:s',time());
+		if($this->type == '6'){
+			$sql = 'select t.*,t1.promotion_title,t1.main_picture,t1.to_group,t1.can_cupon,t1.group_id,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_buysent_promotion_detail t,nb_buysent_promotion t1 where t.buysent_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and (t1.is_available=2 or t1.is_available=3 or t1.is_available=4) and t.delete_flag=0 and t1.delete_flag=0';
+		}elseif($this->type == '2'){
+			$sql = 'select t.*,t1.promotion_title,t1.main_picture,t1.to_group,t1.can_cupon,t1.group_id,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_buysent_promotion_detail t,nb_buysent_promotion t1 where t.buysent_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and (t1.is_available=2 or t1.is_available=3 or t1.is_available=5) and t.delete_flag=0 and t1.delete_flag=0';
+		}else{
+			$sql = 'select t.*,t1.promotion_title,t1.main_picture,t1.to_group,t1.can_cupon,t1.group_id,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_buysent_promotion_detail t,nb_buysent_promotion t1 where t.buysent_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and (t1.is_available=2 or t1.is_available=3) and t.delete_flag=0 and t1.delete_flag=0';
+		}
+		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':now',$now)->queryAll();
+		$promotionArr = array();
+		foreach($results as $k=>$result){
+			if($result['to_group']==2){
+				// 会员等级活动
+				$user = WxBrandUser::get($this->userId, $this->dpid);
+				$promotionUser = self::getPromotionUser($this->dpid, $user['user_level_lid'], $result['buysent_pro_id']);
+				if(empty($promotionUser)){
+					continue;
+				}
+			}
+			if($result['is_set'] > 0){
+				//套餐
+				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
+				if($product){
+					$product['original_price'] = $product['set_price'];
+					$product['product_name'] = $product['set_name'];
+					$product['price'] = $product['set_price'];
+					$results[$k]['product'] = $product;
+				}else{
+					unset($results[$k]);
+					continue;
+				}
+			}else{
+				//单品
+				$sql = 'select * from nb_product where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
+				if($product){
+					$product['price'] = $product['original_price'];
+					$results[$k]['product'] = $product;
+				}else{
+					unset($results[$k]);
+					continue;
+				}
+			}
+			if(!isset($promotionArr['lid'.$result['buysent_pro_id']])){
+				$promotionArr['lid'.$result['buysent_pro_id']] = array();
+			}
+			array_push($promotionArr['lid'.$result['buysent_pro_id']],$results[$k]);
+		}
+		$this->buySentProductList = $promotionArr;
 	}
 	/**
 	 * 获取活动信息
