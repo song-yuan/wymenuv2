@@ -73,14 +73,26 @@ class WxCart
 					  ->bindValue(':userId',$this->userId)
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->queryRow();
-					  
-			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=:isSet and t.delete_flag=0 and t1.delete_flag=0';
-			$result = Yii::app()->db->createCommand($sql)
-						  ->bindValue(':dpid',$this->dpid)
-						  ->bindValue(':productId',$this->productArr['product_id'])
-						  ->bindValue(':isSet',$this->productArr['is_set'])
-						  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
-						  ->queryRow();
+			
+			if($this->productArr['promotion_type']=='promotion'){
+				// 普通活动
+				$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.normal_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=:isSet and t.delete_flag=0 and t1.delete_flag=0';
+				$result = Yii::app()->db->createCommand($sql)
+							->bindValue(':dpid',$this->dpid)
+							->bindValue(':productId',$this->productArr['product_id'])
+							->bindValue(':isSet',$this->productArr['is_set'])
+							->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
+							->queryRow();
+			}else{
+				// 买送活动
+				$sql = 'select t.limit_num as product_num,t1.order_num,t1.promotion_type,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end from nb_buysent_promotion_detail t,nb_buysent_promotion t1 where t.buysent_pro_id=t1.lid and t.dpid=t1.dpid and t.buysent_pro_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=:isSet and t.delete_flag=0 and t1.delete_flag=0';
+				$result = Yii::app()->db->createCommand($sql)
+							->bindValue(':dpid',$this->dpid)
+							->bindValue(':productId',$this->productArr['product_id'])
+							->bindValue(':isSet',$this->productArr['is_set'])
+							->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
+							->queryRow();
+			}
 			if($now > $result['end_time']){
 				return array('status'=>false,'msg'=>'活动已结束,活动截至时间'.$result['end_time']);
 			}
@@ -106,10 +118,7 @@ class WxCart
 				if(!empty($cartPromotions)){
 					foreach($cartPromotions as $promotion){
 						if($promotion['promotion_type']==0){
-							$privatePromotion = WxPromotion::getProductPromotion($this->dpid,$promotion['promotion_id'],$promotion['product_id'],$promotion['is_set']);
-							if($privatePromotion){
-								return array('status'=>false,'msg'=>'本活动不与其他活动同时使用!');
-							}
+							return array('status'=>false,'msg'=>'本活动不与其他活动同时使用!');
 						}
 					}
 				}
@@ -179,13 +188,16 @@ class WxCart
 			}else{
 				$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 			}
-			if($result['promotion_id'] > 0){
-				$productPromotion = WxPromotion::getProductPromotion($this->dpid,$result['promotion_id'],$result['product_id'],$result['is_set']);
+			
+			$promotionId = $result['promotion_id'];
+			$promotionType = $result['promotion_type'];
+			if($promotionId > 0){
+				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
 				if(!$productPromotion){
 					unset($results[$k]);
 					continue;
 				}
-				$promotion = WxPromotion::isPromotionValid($this->dpid, $result['promotion_id'],$this->type);
+				$promotion = WxPromotion::isPromotionValid($this->dpid, $promotionType, $promotionId,$this->type);
 				if(!$promotion){
 					unset($results[$k]);
 					continue;
@@ -195,15 +207,24 @@ class WxCart
 				}elseif($result['to_group']==2){
 					// 会员等级活动
 					$user = WxBrandUser::get($this->userId, $this->dpid);
-					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $user['user_level_lid'], $result['promotion_id']);
+					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $user['user_level_lid'], $promotionId);
 					if(empty($promotionUser)){
 						unset($results[$k]);
 						continue;
 					}
 				}
-				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$result['promotion_id'],$result['to_group']);
-				$results[$k]['price'] = $productPrice['price'];
-				$results[$k]['promotion'] = $productPrice;
+				
+				if($promotionType=='promotion'){
+					$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$promotionId,$result['to_group']);
+					$results[$k]['price'] = $productPrice['price'];
+					$results[$k]['promotion'] = $productPrice;
+				}elseif($promotionType=='sent'){
+					$results[$k]['price'] = '0.00';
+					$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
+				}else{
+					$results[$k]['price'] = $results[$k]['member_price'];
+					$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
+				}
 			}else{
 				$results[$k]['price'] = $results[$k]['member_price'];
 				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
@@ -212,13 +233,80 @@ class WxCart
 		return array_merge($results);
 	}
 	public function getCartPromotion(){
-		$sql = 'select t.*,t1.promotion_type from nb_cart t,nb_normal_promotion t1 where t.promotion_id=t.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.promotion_id > 0 and t.promotion_id!=:privationPromotionId and t1.delete_flag=0';
+		$sql = 'select t.*,t1.promotion_type from nb_cart t,nb_normal_promotion t1 where t.promotion_id=t.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.promotion_id > 0 and t.promotion_id!=:privationPromotionId and t.promotion_type="promotion" and t1.delete_flag=0'
+				.' union select t.*,t1.promotion_type from nb_cart t,nb_buysent_promotion t1 where t.promotion_id=t.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.promotion_id > 0 and t.promotion_id!=:privationPromotionId and t.promotion_type="buysent" and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
 				  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 				  ->queryAll();
 		return $results;
+	}
+	// 添加 买送产品
+	public function addSentProduct($cartNum){
+		$sentDetail = WxPromotion::getProductPromotion($this->dpid, $this->productArr['promotion_type'], $this->productArr['promotion_id'], $this->productArr['product_id'], $this->productArr['is_set']);
+		if($sentDetail){
+			$sentProductId = $sentDetail['s_product_id'];
+			$buyNum = $sentDetail['buy_num'];
+			$sentNum = $sentDetail['sent_num'];
+			$realNum = floor($cartNum/$buyNum*$sentNum);
+			$sql = 'select * from nb_cart where product_id='.$sentProductId.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and dpid='.$this->dpid.' and user_id='.$this->userId;
+			$res = Yii::app()->db->createCommand($sql)->queryRow();
+			if($res){
+				if($realNum > 0){
+					$sql = 'update nb_cart set num = '.$realNum.' where lid='.$res['lid'].' and dpid='.$res['dpid'];
+					Yii::app()->db->createCommand($sql)->execute();
+				}else{
+					$sql = 'delete from nb_cart where lid='.$res['lid'].' and dpid='.$res['dpid'];
+					Yii::app()->db->createCommand($sql)->execute();
+				}
+			}else{
+				$time = time();
+				$se = new Sequence("cart");
+				$lid = $se->nextval();
+				$insertCartArr = array(
+						'lid'=>$lid,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'user_id'=>$this->userId,
+						'product_id'=>$sentProductId,
+						'is_set'=>$sentDetail['is_set'],
+						'num'=>$realNum,
+						'site_id'=>$this->siteId,
+						'promotion_type'=>'sent',
+						'promotion_id'=>$this->productArr['promotion_id'],
+						'to_group'=>$this->productArr['to_group'],
+						'can_cupon'=>$this->productArr['can_cupon'],
+						'is_sync'=>DataSync::getInitSync(),
+				);
+				$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
+			}
+		}
+	}
+	// 减少买送产品
+	public function delSentProduct($cartNum){
+		$sentDetail = WxPromotion::getProductPromotion($this->dpid, $this->productArr['promotion_type'], $this->productArr['promotion_id'], $this->productArr['product_id'], $this->productArr['is_set']);
+		if($sentDetail){
+			$sentProductId = $sentDetail['s_product_id'];
+			$buyNum = $sentDetail['buy_num'];
+			$sentNum = $sentDetail['sent_num'];
+			$realNum = floor($cartNum/$buyNum*$sentNum);
+			$sql = 'select * from nb_cart where product_id='.$sentProductId.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and dpid='.$this->dpid.' and user_id='.$this->userId;
+			$res = Yii::app()->db->createCommand($sql)->queryRow();
+			if($res){
+				if($realNum > 0){
+					$sql = 'update nb_cart set num = '.$realNum.' where lid='.$res['lid'].' and dpid='.$res['dpid'];
+					Yii::app()->db->createCommand($sql)->execute();
+				}else{
+					$sql = 'delete from nb_cart where lid='.$res['lid'].' and dpid='.$res['dpid'];
+					Yii::app()->db->createCommand($sql)->execute();
+				}
+			}
+		}else{
+			$sql = 'delete from nb_cart where dpid='.$this->dpid.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'];
+			Yii::app()->db->createCommand($sql)->execute();
+		}
 	}
 	/**
 	 * @return boolean
@@ -242,12 +330,16 @@ class WxCart
         		'is_set'=>$this->productArr['is_set'],
 	        	'num'=>$this->productArr['num'],
 	        	'site_id'=>$this->siteId,
+	        	'promotion_type'=>$this->productArr['promotion_type'],
 	        	'promotion_id'=>$this->productArr['promotion_id'],
 	        	'to_group'=>$this->productArr['to_group'],
 	        	'can_cupon'=>$this->productArr['can_cupon'],
 	        	'is_sync'=>DataSync::getInitSync(),	
 	        );
 			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
+	        if($this->productArr['promotion_id'] == 'buysent'){
+	        	$this->addSentProduct(1);
+	        }
 	        if($result){
 	        	$success = true;
 	        }
@@ -257,6 +349,9 @@ class WxCart
 			$result = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':lid',$this->cart['lid'])->execute();
+			if($this->productArr['promotion_type'] == 'buysent'){
+			   $this->addSentProduct($this->cart['num']+1);
+			}
 			if($result){
 	        	$success = true;
 	        }
@@ -278,6 +373,9 @@ class WxCart
 			$result = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':lid',$this->cart['lid'])->execute();
+			if($this->productArr['promotion_type'] == 'buysent'){
+				$this->delSentProduct($this->cart['num']-1);
+			}
 	        if($result){
 	        	$success = true;
 	        }
@@ -286,6 +384,9 @@ class WxCart
 			$result = Yii::app()->db->createCommand($sql) 
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':lid',$this->cart['lid'])->execute();
+		  	if($this->productArr['promotion_type'] == 'buysent'){
+		  		$this->delSentProduct($this->cart['num']-1);
+		  	}
 			if($result){
 	        	$success = true;
 	        }
