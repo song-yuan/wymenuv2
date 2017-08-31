@@ -40,7 +40,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/index' , array('companyId' => $this->companyId,)))));?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -144,7 +144,9 @@
                                             <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type,'pay_online'=>$paytype));?>"><?php echo yii::t('app','编辑');?></a>
                                         <?php endif; ?>
                                             <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
-
+										<?php if(Yii::app()->user->role <= User::POWER_ADMIN):?>
+                                            <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','online-pay');?></a>
+                                    	<?php endif;?>
                                     </div>	
 								</td>
 							</tr>
@@ -212,7 +214,7 @@
 	$('#serch').on('click',function(){
 		 var content = $('#ccontent').val();
 		//alert(111);
-         location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
+         location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/content/"+content;
 	});
 	document.onkeydown=function(event){
         var e = event || window.event || arguments.callee.caller.arguments[0];
@@ -220,7 +222,7 @@
              //要做的事情
 		var content = $('#ccontent').val();
 		//alert(111);
-        location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
+        location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/content/"+content;
 		
         }
     };
@@ -238,7 +240,7 @@
 			var city = $('#city').children('option:selected').val();
 	        var area = $('#area').children('option:selected').val();
 	        
-			location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+			location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 			 
 		 }
 	$('.setAppid').on('click',function(){
@@ -247,7 +249,7 @@
 		var dpid = $(this).attr('dpid');
 		var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paytype" placeholder="1表示总部，2表示个人，0表示不开通。"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paychannel" placeholder="1表示官方支付，2表示收钱吧，3表示翼码。"/></div>'
-					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid"/></div>'
+					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid" value="2017032100000093"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="code" placeholder="code"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><button id="appid_store" class="btn green">确认</button></div>'
 					;
