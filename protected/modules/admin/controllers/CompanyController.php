@@ -16,10 +16,14 @@ class CompanyController extends BackendController
 		
 		$this->render('list');
 	}
+
+
+
 	public function actionIndex(){
 		$provinces = Yii::app()->request->getParam('province',0);
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
+		$content = Yii::app()->request->getParam('content','');
 		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
@@ -27,7 +31,11 @@ class CompanyController extends BackendController
 		$criteria->with = 'property';
 		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE)
 		{
-			$criteria->condition =' t.delete_flag=0 and t.type=0';
+			if ($content=='') {
+				$criteria->condition =' t.delete_flag=0 and t.type=0';
+			}else{
+				$criteria->condition =' t.delete_flag=0 and t.type=1';
+			}
 		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
 			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
@@ -44,6 +52,15 @@ class CompanyController extends BackendController
 		if($areas == '市辖区'){
 			$area = '0';
 		}
+		if ($provinces == '请选择..') {
+			$province = '';
+		}
+		if ($citys == '请选择..') {
+			$city = '';
+		}
+		if ($areas == '请选择..') {
+			$area = '';
+		}
 		if($province){
 			$criteria->addCondition('t.province like "'.$province.'"');
 		}
@@ -52,6 +69,14 @@ class CompanyController extends BackendController
 		}
 		if($area){
 			$criteria->addCondition('t.county_area like "'.$area.'"');
+		}
+		if ($content) {
+			if (is_numeric($content)) {
+				$criteria->addCondition('t.mobile like "'.$content.'"');
+			}else{
+				$criteria->addCondition('t.contact_name like "'.$content.'"');
+				$criteria->addCondition('t.company_name like "'.$content.'"','OR');
+			}
 		}
 		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
@@ -67,7 +92,7 @@ class CompanyController extends BackendController
 		));
 	}
     public function actionListchidren(){
-        $provinces = Yii::app()->request->getParam('province',0);
+                $provinces = Yii::app()->request->getParam('province',0);
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
 		
@@ -76,7 +101,7 @@ class CompanyController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->with = 'property';
        
-        $criteria->condition = ' t.delete_flag=0 and t.comp_dpid='.$companyId;
+                $criteria->condition = ' t.delete_flag=0 and t.comp_dpid='.$companyId;
 		$province = $provinces;
 		$city = $citys;
 		$area = $areas;
@@ -112,7 +137,7 @@ class CompanyController extends BackendController
 				'area'=>$areas,
                      
 		));
-	}
+        }
 	public function actionIndex1(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 
@@ -188,11 +213,10 @@ public function actionCreate(){
                                     'create_at'=>date('Y-m-d H:i:s',time()),
                                     'update_at'=>date('Y-m-d H:i:s',time()),
                                     'pay_type'=>$pay_online,
-                                    'pay_channel'=>'2',
+                                    'pay_channel'=>$pay_online,
                                     'delete_flag'=>'0',
                     );
                     $command = $db->createCommand()->insert('nb_company_property',$data);
-
                     $sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
                     $command=Yii::app()->db->createCommand($sql);
                     $command->execute();
@@ -233,7 +257,7 @@ public function actionCreate(){
                                             'create_at'=>date('Y-m-d H:i:s',time()),
                                             'update_at'=>date('Y-m-d H:i:s',time()),
                                             'pay_type'=>$pay_online,
-                                            'pay_channel'=>'2',
+                                            'pay_channel'=>$pay_online,
                                             'delete_flag'=>'0',
                             );
                             $command = $db->createCommand()->insert('nb_company_property',$data);
@@ -286,7 +310,7 @@ public function actionCreate(){
                         'model' => $model,
                         'printers'=>$printers,
                         'role'=>$role,
-        				'companyId'=>  $this->companyId,
+        'companyId'=>  $this->companyId,
                         'type'=> $type,
                         'type2'=> $type2,
         ));
@@ -310,7 +334,6 @@ public function actionCreate(){
 			$province = Yii::app()->request->getParam('province1');
 			$city = Yii::app()->request->getParam('city1');
 			$area = Yii::app()->request->getParam('area1');
-			//$pay_online = Yii::app()->request->getParam('pay_online');
 			
 			$model->country = 'china';
 			$model->province = $province;
@@ -336,16 +359,36 @@ public function actionCreate(){
 				'type2'=>$type2,
 		));
 	}
+
+
+
+
 	public function actionDelete(){
 		$ids = Yii::app()->request->getPost('companyIds');
         //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        $db = Yii::app()->db;
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_company set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where dpid in ('.implode(',' , $ids).')')
-			->execute();
-			
+			$transaction = $db->beginTransaction();
+        	try{
+				foreach ($ids as $id) {
+					$info = $db->createCommand('update nb_company set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$id)->execute();
+					$infos = $db->createCommand('update nb_user set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$id.' and delete_flag=0')->execute();
+				}
+				$transaction->commit();
+				Yii::app()->user->setFlash('success' , yii::t('app','删除成功！！！'));
+				$this->redirect(array('company/index','companyId'=>$this->companyId));
+        	}catch (Exception $e){
+				$transaction->rollback();
+        		Yii::app()->user->setFlash('error' , yii::t('app','删除失败！！！'));
+				$this->redirect(array('company/index','companyId'=>$this->companyId));
+        	}
 		}
-		$this->redirect(array('company/index','companyId'=>$this->companyId));
 	}
+
+
+
+
+
 	/**
 	 * 生成店铺二维码
 	 */
@@ -395,7 +438,7 @@ public function actionCreate(){
 		return $companyId['dpid'];
 	}
 	public function actionStore(){
-		$dpid = Yii::app()->request->getParam('dpid');
+		$dpid = Yii::app()->request->getParam('companyId');
 		$appid = Yii::app()->request->getParam('appid');
 		$code = Yii::app()->request->getParam('code');
 		$paytype = Yii::app()->request->getParam('paytype');
@@ -406,7 +449,7 @@ public function actionCreate(){
 		$db = Yii::app()->db;
 		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
 		if(!empty($compros)){
-			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",appId ="'.$appid.'",code ="'.$code.'",pay_type ="'.$paytype.'",pay_channel ="'.$paychannel.'" where dpid ='.$dpid;
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",appId ="'.$appid.'",code ="'.$code.'" where dpid ='.$dpid;
 			$command = $db->createCommand($sql);
 			$command->execute();
 		}else{
@@ -417,8 +460,8 @@ public function actionCreate(){
 					'dpid'=>$dpid,
 					'create_at'=>date('Y-m-d H:i:s',time()),
 					'update_at'=>date('Y-m-d H:i:s',time()),
-					'pay_type'=>$paytype,
-					'pay_channel'=>$paychannel,
+					'pay_type'=>'1',
+					'pay_channel'=>'2',
 					'appId'=>$appid,
 					'code'=>$code,
 					'delete_flag'=>'0',

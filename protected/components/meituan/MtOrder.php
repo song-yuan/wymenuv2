@@ -6,6 +6,11 @@
 */
 class MtOrder
 {
+	public static function getToken($dpid){
+		$sql = "select * from nb_meituan_token where type=1 and dpid=".$dpid." and ePoiId=".$dpid." and delete_flag=0";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		return $res;
+	}
 	public static function order($data){
 		if(empty($data)){
 			return '200';
@@ -16,11 +21,24 @@ class MtOrder
 		$order = $resArr['order'];
 		
 		$res = MtUnit::getWmSetting($ePoiId);
-		if(empty($res)||$res['is_receive']==0){
+		if(!empty($res)&&$res['is_receive']==1){
+			$obj = json_decode($order);
+			$orderId = $obj->orderId;
+			$mtToken = self::getToken($ePoiId);
+			$timetamp = time();
+			if($mtToken){
+				$url = 'http://api.open.cater.meituan.com/waimai/order/confirm';
+				$array= array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
+				$sign=MtUnit::sign($array);
+				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
+				$result = MtUnit::postHttps($url, $data);
+				return $result;
+			}else{
+				return '{ "data": "OK"}';
+			}
+		}else{
 			return '{ "data": "OK"}';
 		}
-		$result = self::dealOrder($order,$ePoiId,1);
-		return $result;
 	}
 	public static function token($data){
 		if(empty($data)){
@@ -34,7 +52,12 @@ class MtOrder
 		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and delete_flag=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result){
-			return '{ "data": "success"}';
+			$sql = 'update nb_meituan_token set appAuthToken='.$appAuthToken.',timestamp='.$timestamp.' where lid='.$result['lid'].' and dpid='.$result['dpid'];
+			$res = Yii::app()->db->createCommand($sql)->execute();
+			if($res){
+				return '{ "data": "success"}';
+			}
+			return '{ "data": "ERROR"}';
 		}
 		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
@@ -65,22 +88,9 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
-		$obj = json_decode($order);
-		$orderTime = $obj->ctime;
-		$createAt = date('Y-m-d H:i:s',$orderTime);
-		$sql = "select * from nb_order where dpid=".$ePoiId." and create_at='".$createAt."' and account_no=".$obj->orderId;
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
-		if(!empty($res)){
-			$sql1 = "update nb_order set order_status=".$obj->status." where dpid=".$ePoiId." and account_no=".$obj->orderId." and order_type=7";
-			$res1 = Yii::app()->db->createCommand($sql1)->execute();
-			if($res1){
-				return '{ "data": "OK"}';
-			}
-		}else{
-			$result = self::dealOrder($order,$ePoiId,2);
-			return $result;
-		}
-		return '{ "data": "ERROR"}';
+		
+		$result = self::dealOrder($order,$ePoiId,2);
+		return $result;
 	}
 	public static function orderCancel($data){
 		if(empty($data)){
@@ -159,9 +169,15 @@ class MtOrder
 		$obj = json_decode($data);
 		$orderArr = array();
 		$orderTime = $obj->ctime;
+		$payType = $obj->payType;
+		if($payType==2){
+			$orderPayPaytype = 15;
+		}else{
+			$orderPayPaytype = 0;
+		}
 		$poiReceiveDetail = json_decode($obj->poiReceiveDetail);
 		
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'remark'=>$obj->caution);
+		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'remark'=>$obj->caution);
 		$orderArr['order_platform'] = array('original_total'=>$obj->originalPrice,'logistics_total'=>$poiReceiveDetail->logisticsFee/100,'platform_total'=>$poiReceiveDetail->foodShareFeeChargeByPoi/100,'pay_total'=>$poiReceiveDetail->onlinePayment/100,'receive_total'=>$poiReceiveDetail->wmPoiReceiveCent/100);
 		$orderArr['order_product'] = array();
 		$array_detail=json_decode($obj->detail,true);
@@ -244,23 +260,15 @@ class MtOrder
 				array_push($orderArr['order_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
 			}
 		}
+		$obj->recipientAddress = Helper::dealString($obj->recipientAddress);
 		
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
-		$orderArr['order_pay'] = array(array('pay_amount'=>$obj->total,'paytype'=>14,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		$orderArr['order_pay'] = array(array('pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		$orderStr = json_encode($orderArr);
 		$data = array('dpid'=>$dpid,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			if($type==1){
-				$sql1 = "select * from nb_meituan_token where type=1 and dpid=".$dpid." and ePoiId=".$dpid." and delete_flag=0";
-				$res1 = Yii::app()->db->createCommand($sql1)->queryRow();
-				$url1 = 'http://api.open.cater.meituan.com/waimai/order/confirm';
-				$array= array('appAuthToken'=>$res1['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$obj->orderId );
-				$sign=MtUnit::sign($array);
-				$data1 = "appAuthToken=".$res1['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$obj->orderId";
-				$result1 = MtUnit::postHttps($url1, $data1);
-			}
 			return '{ "data": "OK"}';
 		}
 		return '{ "data": "ERROR"}';

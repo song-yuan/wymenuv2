@@ -76,7 +76,6 @@ body {
 	position: relative;
 	width: 1rem;
 	height: 0.74rem;
-	line-height: 0.74rem;
 	background-color: #efefef;
 	text-overflow:ellipsis;
 	user-select: none; 
@@ -493,14 +492,16 @@ i {
 .nav-img{
 	width:0.35rem;
 	height:0.35rem;
+	display: block;
+    margin: 0 auto;
 }
 .nav-span{
-	position:absolute;
-	top:0.3rem;
-	left:0rem;
+	display:block;
 	width:1rem;
-	height:0.15rem;
-
+	height:0.25rem;
+	line-height: 0.25rem;
+	margin-top:0.1rem;
+	overflow: hidden;
 }
 .b-radius-rt{
 	border-top-right-radius:15px!important;

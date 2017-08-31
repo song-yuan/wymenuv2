@@ -251,8 +251,14 @@ class Elm
 		$me = json_decode($message);
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
-			$res = self::dealOrder($me,$dpid,2);
-			return $res;
+			$orderId = $me->id;
+			$order = self::confirmOrder($dpid,$orderId);
+			$obj = json_decode($order);
+			if(empty($obj->error)){
+				return true;
+			}else{
+				return false;
+			}
 		}else{
 			return true;
 		}
@@ -285,46 +291,37 @@ class Elm
 	public static function orderStatus($message,$dpid){
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
-		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_type=8';
-		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		
-		if($result){
-			$sql = "update nb_order set order_status=4 where dpid=".$dpid." and account_no='".$accountNo."' and order_type=8";
-			$res = Yii::app()->db->createCommand($sql)->execute();
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+		$protocol = array(
+				"nop" => '1.0.0',
+				"id" => ElUnit::create_uuid(),
+				"action" => "eleme.order.getOrder",
+				"token" => $access_token,
+				"metas" => array(
+						"app_key" => $app_key,
+						"timestamp" => time(),
+				),
+				"params" => array(
+						'orderId'=>$accountNo
+				),
+		);
+		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+		$result = ElUnit::post($url,$protocol);
+		$orderObj = json_decode($result);
+		$me = $orderObj->result;
+		if($me){
+			$res = self::dealOrder($me,$dpid,4);
 			return $res;
 		}else{
-			$access_token = self::elemeGetToken($dpid);
-			if(!$access_token){
-				return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-			}
-			$app_key = ElmConfig::key;
-			$secret = ElmConfig::secret;
-			$url = ElmConfig::url;
-			$protocol = array(
-					"nop" => '1.0.0',
-					"id" => ElUnit::create_uuid(),
-					"action" => "eleme.order.getOrder",
-					"token" => $access_token,
-					"metas" => array(
-							"app_key" => $app_key,
-							"timestamp" => time(),
-					),
-					"params" => array(
-							'orderId'=>$accountNo
-					),
-			);
-			$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-			$result = ElUnit::post($url,$protocol);
-			$orderObj = json_decode($result);
-			$me = $orderObj->result;
-			if($me){
-				$res = self::dealOrder($me,$dpid,4);
-				return $res;
-			}else{
-				return false;
-			}
+			return false;
 		}
-		
 	}
 	public static function productUpdate($lid){
 		$sql = "select * from nb_eleme_cpdy where fen_lei_id=$lid and delete_flag=0";
@@ -597,8 +594,15 @@ class Elm
 		$serviceFee = $me->serviceFee;//饿了么服务费
 		$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
 		$orderActivities = $me->orderActivities;// 订单活动
+		if($me->onlinePaid){
+			$payType = 2;
+			$orderPayPaytype = 15;
+		}else{
+			$payType = 1;
+			$orderPayPaytype = 0;
+		}
 		$orderArr = array();
-		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$income,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn);
+		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$income,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn,'paytype'=>$payType,'remark'=>$me->description);
 		$orderArr['order_platform'] = array('original_total'=>$originalPrice,'logistics_total'=>$deliverFee,'platform_total'=>$serviceFee,'pay_total'=>$price,'receive_total'=>$income);
 		$orderArr['order_product'] = array();
 		foreach ($groups as $group){
@@ -689,8 +693,9 @@ class Elm
 		if(empty($orderArr['order_product'])){
 			return true;
 		}
+		$me->deliveryPoiAddress = Helper::dealString($me->deliveryPoiAddress);
 		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
-		$orderArr['order_pay'] = array(array('pay_amount'=>$me->totalPrice,'paytype'=>15,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		$orderArr['order_pay'] = array(array('pay_amount'=>$income,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 			
 		if(!empty($orderActivities)){
 			$orderArr['order_discount'] = array();
@@ -705,13 +710,7 @@ class Elm
 		$result = DataSyncOperation::operateOrder($data);
 		$reobj = json_decode($result);
 		if($reobj->status){
-			$order = self::confirmOrder($dpid,$orderId);
-			$obj = json_decode($order);
-			if(empty($obj->error)){
-				return true;
-			}else{
-				return false;
-			}
+			return true;
 		}else{
 			return false;
 		}

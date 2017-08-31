@@ -1,4 +1,5 @@
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
+<?php //Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/address.js');?>
 <style>
 .selectedclass{
 	font-size: 14px;
@@ -10,7 +11,7 @@
 </style>
 
 <div class="page-content">
-	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -33,7 +34,7 @@
 	<div id="main2" name="main2" style="min-width: 500px;min-height:300px;display:none;" onMouseOver="this.style.backgroundColor='rgba(255,222,212,1)'" onmouseout="this.style.backgroundColor=''">
 		<div id="content"></div>
 	</div>
-	
+
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
@@ -57,31 +58,37 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?></div>
 					<div class="actions">
 					<div class="btn-group">
-						<select id="province" name="province" class="selectedclass"></select>
-						<select id="city" name="city" class="selectedclass"></select>
-						<select id="area" name="area" class="selectedclass"></select>
+						<select id="province" name="province" class="selectedclass">
+						</select>
+						<select id="city" name="city" class="selectedclass">
+						</select>
+						<select id="area" name="area" class="selectedclass">
+						</select>
                     </div>
+					<div class="btn-group">
+						<input type="text" class="form-control" name="ccontent" id="ccontent" placeholder='手机号, 联系人, 店铺名' >
+					</div>
                     <div class="btn-group">
-	                	<button type="button" id="cityselect" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
+	                	<button type="button" id="serch" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
 	                </div>
-                        <?php if(Yii::app()->params->master_slave=='m') : ?>
-						<?php if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role <= User::ADMIN_AREA):?>
-							<a href="<?php echo $this->createUrl('company/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-							<div class="btn-group">
-	                            <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-	                        </div>
-						<?php endif;?>
-						<!-- <div class="btn-group">
-							<a class="btn green" href="#" data-toggle="dropdown">
-							<i class="fa fa-cogs"></i> Tools
-							<i class="fa fa-angle-down"></i>
-							</a>
-							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','冻结');?></a></li>
-							</ul>
-						</div> -->
-                                                
-                                            <?php endif; ?>
+                    <?php if(Yii::app()->params->master_slave=='m') : ?>
+					<?php if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role <= User::ADMIN_AREA):?>
+						<a href="<?php echo $this->createUrl('company/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<div class="btn-group">
+                            <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+                        </div>
+					<?php endif;?>
+					<!-- <div class="btn-group">
+						<a class="btn green" href="#" data-toggle="dropdown">
+						<i class="fa fa-cogs"></i> Tools
+						<i class="fa fa-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu pull-right">
+							<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','冻结');?></a></li>
+						</ul>
+					</div> -->
+
+                    <?php endif; ?>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -90,8 +97,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<?php if(Yii::app()->user->role < '5'): ?><th>ID</th><?php endif; ?>
-                                <th><?php echo yii::t('app','名称');?></th>
-                                <th><?php echo yii::t('app','类型');?></th>
+                                <th><?php echo yii::t('app','店铺名称');?></th>
 								<th>logo</th>
 								<th>店铺二维码</th>
 								<th><?php echo yii::t('app','联系人');?></th>
@@ -108,11 +114,8 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
-								<?php if(Yii::app()->user->role < '5'): ?>
-								<td><?php echo $model->dpid;?></td>
-								<?php endif; ?>
+								<?php if(Yii::app()->user->role < '5'): ?><td><?php echo $model->dpid;?></td><?php endif; ?>
                                 <td><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
-								<td><?php if($model->type) echo '店铺';else echo '公司';?></td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
 								<td ><?php if($model->property&&$model->property->qr_code):?><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->property->qr_code;?>" /><?php endif;?><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->dpid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 								<td ><?php echo $model->contact_name;?></td>
@@ -145,7 +148,7 @@
                                          <?php if(Yii::app()->user->role <= User::POWER_ADMIN):?>
                                              <a class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/listchidren' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app',' 查 看 店 铺 ')?></a>
                                         <?php endif;?>
-                                    </div>	
+                                    </div>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -191,7 +194,16 @@
 	</div>
 	<!-- END PAGE CONTENT-->
 <script>
-	new PCAS("province","city","area","<?php echo $province;?>","<?php echo $city;?>","<?php echo $area;?>");
+	// new PCAS("province","city","area");
+	// new PCAS("province","city","area","<?php echo $province;?>","<?php echo $city;?>","<?php echo $area;?>");
+    addressInit('province', 'city', 'area', '<?php echo $province;?>', '<?php echo $city;?>', '<?php echo $area;?>');
+	$(document).keydown(function(event){
+	  switch(event.keyCode){
+	     case 13:return false; 
+	     }
+	});
+
+
 	function genQrcode(that){
 		var id = $(that).attr('lid');
 		var $parent = $(that).parent();
@@ -203,19 +215,22 @@
 			alert(data.msg);
 		},'json');
 	}
-	$('#cityselect').on('click',function(){
-		 var province = $('#province').children('option:selected').val();
-         var city = $('#city').children('option:selected').val();
-         var area = $('#area').children('option:selected').val();
+	$('#serch').on('click',function(){
+		 var content = $('#ccontent').val();
 		//alert(111);
-         location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
-// 		if(province == null || province == 'undefind' || province == ''){
-//	       	alert("<?php echo yii::t('app','请填写店铺所处省市信息再进行查询。。。');?>");
-// 	       	return false;
-// 	    }else{
-//	    	location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
-// 		}
+         location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
 	});
+	document.onkeydown=function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==13){ // enter 键
+             //要做的事情
+		var content = $('#ccontent').val();
+		//alert(111);
+        location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
+		
+        }
+    };
+
 	$('#province').change(function(){
 		changeselect();
 	});
@@ -226,22 +241,22 @@
 		changeselect();
 	});
 	 function changeselect(){
-		 var province = $('#province').children('option:selected').val();
+			var province = $('#province').children('option:selected').val();
 			var city = $('#city').children('option:selected').val();
 	        var area = $('#area').children('option:selected').val();
-	        
+
 			location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
-			 
+
 		 }
 	$('.setAppid').on('click',function(){
-		
+
 		$('#content').html('');
-		var dpids = $(this).attr('dpid');
+		var dpid = $(this).attr('dpid');
 		var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paytype" placeholder="1表示总部，2表示个人，0表示不开通。"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paychannel" placeholder="1表示官方支付，2表示收钱吧，3表示翼码。"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="code" placeholder="code"/></div>'
-					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><button id="appid_store" dpid="'+dpids+'" class="btn green">确认</button></div>'
+					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><button id="appid_store" class="btn green">确认</button></div>'
 					;
 		$('#content').html(content);
 		//alert(dpid);
@@ -270,12 +285,12 @@
 			var paychannel = $('#paychannel').val();
 			var appid = $('#appid').val();
 			var code = $('#code').val();
-			var dpid = $(this).attr('dpid');
+			//alert(appid);
 			if(paytype == '' || paychannel == '' || appid == '' || code == ''){
 				layer.msg('请完善信息！！！');
 				return false;
 			}
-			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel+"/dpid/"+dpid;
+			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel;
 	        $.ajax({
 	            url:url,
 	            type:'GET',
@@ -298,5 +313,5 @@
 	        });
 		});
 	});
-	
+
 </script>

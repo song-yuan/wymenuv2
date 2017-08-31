@@ -20,6 +20,11 @@ class Helper
 		$text = self::characet ( $text );
 		file_put_contents ( Yii::app()->basePath."/data/log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
 	}
+	// 替换掉换行符等
+	static function dealString($str) {
+		$str = str_replace(array("\r\n", "\n", "\r"), '', $str);
+		return $str;
+	}
 	static public function genPassword($password)
 	{
 			return md5(md5($password).Yii::app()->params['salt']);

@@ -42,6 +42,7 @@ class NewBrandUser {
 		$sql = 'select * from nb_brand_user where openid = "'.$this->openId.'"';
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
 		if($brandUser){
+			$this->brandUser = $brandUser;
 			throw new Exception('该会员已存在');
 		}
 	}

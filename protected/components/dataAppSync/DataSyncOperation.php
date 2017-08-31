@@ -249,6 +249,9 @@ class DataSyncOperation {
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
+			if($result['remark']!=''){
+				$result['remark'] = Helper::dealString($result['remark']);
+			}
 			$order ['nb_order'] = $result;
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
 			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
@@ -307,14 +310,19 @@ class DataSyncOperation {
 	 * pos接收云端订单验证
 	 * 
 	 */
-	public static function syncDataCb($dpid,$data) {
+	public static function syncDataCb($dpid,$data,$userName) {
 		$orderKey = json_decode($data);
 		if(!empty($orderKey)){
 			foreach ($orderKey as $key){
 				$keyArr = explode('-', $key);
-				$orderType = $keyArr[0];
-				$accountNo = $keyArr[1];
-				$sql = 'update nb_order set is_sync=0 where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
+				if(is_numeric($keyArr[0])){
+					$orderType = $keyArr[0];
+					$accountNo = $keyArr[1];
+				}else{
+					$orderType = $keyArr[1];
+					$accountNo = $keyArr[2];
+				}
+				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
 		}
@@ -549,6 +557,7 @@ class DataSyncOperation {
 					'should_total' => $orderInfo->should_total,
 					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
 					'callno' => isset($orderInfo->callno) ? $orderInfo->callno : $orderInfo->callno,
+					'paytype' => isset ( $orderInfo->paytype ) ? $orderInfo->paytype : '2',
 					'remark' => isset ( $orderInfo->remark ) ? $orderInfo->remark : '',
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 

@@ -93,6 +93,7 @@ class MallController extends Controller
         }
         $promotion = new WxPromotion($this->companyId,$userId,$this->type);
         $promotions = $promotion->promotionProductList;
+        $buySentPromotions = $promotion->buySentProductList;
         
         $cache = Yii::app()->cache->get($key);
         if($cache!=false){
@@ -108,15 +109,16 @@ class MallController extends Controller
         foreach ($carts as $cart){
         	$productId = $cart['product_id'];
         	$isSte = $cart['is_set'];
+        	$promotionType = $cart['promotion_type'];
         	$promotionId = $cart['promotion_id'];
         	$toGroup = $cart['to_group'];
         	$canCupon = $cart['can_cupon'];
-        	$cartKey = $productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
+        	$cartKey = $promotionType.'-'.$productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
         	$cartList[$cartKey] = $cart;
         }
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'products'=>$products,'cartList'=>$cartList,'start'=>$start,'notices'=>$notices));
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'products'=>$products,'cartList'=>$cartList,'start'=>$start,'notices'=>$notices));
 	}
 	/**
 	 * 
@@ -717,13 +719,14 @@ class MallController extends Controller
 			}
 		}
 		
+		$promoteType = Yii::app()->request->getParam('promoteType');
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
 		$canCupon = Yii::app()->request->getParam('canCupon');
 		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_type'=>$promoteType,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$type);
 		
 		//检查活动商品数量
@@ -769,13 +772,14 @@ class MallController extends Controller
 			}
 		}
 		
+		$promoteType = Yii::app()->request->getParam('promoteType');
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$toGroup = Yii::app()->request->getParam('toGroup');
 		$canCupon = Yii::app()->request->getParam('canCupon');
 		$isSet =  Yii::app()->request->getParam('isSet');
 		
-		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_type'=>$promoteType,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
 		
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$type);
 		if($cart->deleteCart()){
