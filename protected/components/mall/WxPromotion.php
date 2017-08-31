@@ -134,8 +134,12 @@ class WxPromotion
 	 * 获取活动信息
 	 * 
 	 */
-	 public static function getPromotion($dpid,$promotionId){
-	 	$sql = 'select * from  nb_normal_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
+	 public static function getPromotion($dpid,$promotionType,$promotionId){
+	 	if($promotionType=='promotion'){
+	 		$sql = 'select * from nb_normal_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
+	 	}else{
+	 		$sql = 'select * from nb_buysent_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
+	 	}
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$promotionId)->queryRow();
 	 	return $result;
 	 }
@@ -143,8 +147,12 @@ class WxPromotion
 	  * 获取单品活动详情
 	  *
 	  */
-	 public static function getProductPromotion($dpid,$promotionId,$productId,$isSet){
-	 	$sql = 'select * from  nb_normal_promotion_detail where dpid=:dpid and normal_promotion_id=:promotionId and product_id=:productId and is_set=:isSet and delete_flag=0';
+	 public static function getProductPromotion($dpid,$promotionType,$promotionId,$productId,$isSet){
+	 	if($promotionType=='promotion'){
+	 		$sql = 'select * from  nb_normal_promotion_detail where dpid=:dpid and normal_promotion_id=:promotionId and product_id=:productId and is_set=:isSet and delete_flag=0';
+	 	}else{
+	 		$sql = 'select * from  nb_buysent_promotion_detail where dpid=:dpid and buysent_pro_id=:promotionId and product_id=:productId and is_set=:isSet and delete_flag=0';
+	 	}
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->bindValue(':isSet',$isSet)->queryRow();
 	 	return $result;
 	 }
@@ -197,9 +205,9 @@ class WxPromotion
 	 	return $result;
 	 }
 	 // 活动是否有效
-	 public static function isPromotionValid($dpid,$promotionId,$type){
+	 public static function isPromotionValid($dpid,$promotionType,$promotionId,$type){
 	 	$now = date('Y-m-d H:i:s',time());
-	 	$promotion = self::getPromotion($dpid, $promotionId);
+	 	$promotion = self::getPromotion($dpid,$promotionType, $promotionId);
 	 	if($promotion){
 	 		if($type==2){
 	 			if(!in_array($promotion['is_available'], array(2,3,5))){

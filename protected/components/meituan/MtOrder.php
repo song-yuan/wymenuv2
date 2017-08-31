@@ -171,7 +171,7 @@ class MtOrder
 		$orderTime = $obj->ctime;
 		$payType = $obj->payType;
 		if($payType==2){
-			$orderPayPaytype = 15;
+			$orderPayPaytype = 14;
 		}else{
 			$orderPayPaytype = 0;
 		}
