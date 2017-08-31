@@ -337,7 +337,7 @@ class WxCart
 	        	'is_sync'=>DataSync::getInitSync(),	
 	        );
 			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
-	        if($this->productArr['promotion_id'] == 'buysent'){
+	        if($this->productArr['promotion_type'] == 'buysent'){
 	        	$this->addSentProduct(1);
 	        }
 	        if($result){

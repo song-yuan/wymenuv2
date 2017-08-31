@@ -392,17 +392,23 @@
 				<p><?php echo (int)$start['fee_price'];?>元起送</p>
 			</div>
 	    <?php else:?>
-		    <div class="ft-rt" start-price="0">
+		    <div class="ft-rt has-cart" start-price="0">
 				<p>
 					<a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了 </a>
 				</p>
 			</div>
+			<div class="ft-rt no-cart" style="background: #6A706E" start-price="<?php echo $start['fee_price'];?>">
+				<p>选好了</p>
+			</div>
 	    <?php endif;?>
      <?php else:?>
-     <div class="ft-rt">
+     <div class="ft-rt has-cart">
      	<a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">
 		<p>选好了</p>
 		</a>
+	</div>
+	<div class="ft-rt no-cart" style="background: #6A706E" start-price="<?php echo $start['fee_price'];?>">
+		<p>选好了</p>
 	</div>
     <?php endif;?>
     <div class="clear"></div>
@@ -472,6 +478,14 @@ function setTotal(){
         	$('.no-start').addClass('none');
         	$('.start').removeClass('none');
         }
+    }else{
+       if(v > 0){ 
+    	   $('.has-cart').removeClass('none');
+       	   $('.no-cart').addClass('none');
+       }else{
+    	   $('.has-cart').addClass('none');
+       	   $('.no-cart').removeClass('none');
+       }
     }
 } 
 

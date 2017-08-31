@@ -141,9 +141,9 @@
 	    <div class="prt-cat">/div>
 	    -->
 	    <div class="prt">
-	        <div class="prt-lt"><?php echo $model['product_name']?></div>
-	        <div class="prt-mt">x<span class="num"><?php echo $model['num']?></span></div>
-	        <div class="prt-rt">￥<span class="price"><?php echo $model['price']?></span></div>
+	        <div class="prt-lt"><?php if($model['promotion_type']=='sent'): ?><span class="bttn_orange">赠</span><?php endif;?><?php echo $model['product_name'];?></div>
+	        <div class="prt-mt">x<span class="num"><?php echo $model['num'];?></span></div>
+	        <div class="prt-rt">￥<span class="price"><?php echo $model['price'];?></span></div>
 	        <div class="clear"></div>
 	    </div>
 	    <!-- b可选择口味 -->
