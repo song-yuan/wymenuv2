@@ -305,6 +305,12 @@ $(function () {
 											}else if(paytype==13){
 												paytypename = '微外卖支付';
 											}
+											else if(paytype==14){
+												paytypename = '美团·外卖';
+											}
+											else if(paytype==15){
+												paytypename = '饿了么·外卖';
+											}
 											var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+paytypename+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
 											}
 									var proDetailpaymentall = proDetailpaymentall + proDetailpayment;
