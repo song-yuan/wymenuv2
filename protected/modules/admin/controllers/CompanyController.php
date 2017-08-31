@@ -92,9 +92,10 @@ class CompanyController extends BackendController
 		));
 	}
     public function actionListchidren(){
-                $provinces = Yii::app()->request->getParam('province',0);
+        $provinces = Yii::app()->request->getParam('province',0);
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
+		$content = Yii::app()->request->getParam('content','');
 		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
@@ -112,6 +113,15 @@ class CompanyController extends BackendController
 		if($areas == '市辖区'){
 			$area = '0';
 		}
+		if ($provinces == '请选择..') {
+			$province = '';
+		}
+		if ($citys == '请选择..') {
+			$city = '';
+		}
+		if ($areas == '请选择..') {
+			$area = '';
+		}
 		if($province){
 			$criteria->addCondition('t.province like "'.$province.'"');
 		}
@@ -120,6 +130,14 @@ class CompanyController extends BackendController
 		}
 		if($area){
 			$criteria->addCondition('t.county_area like "'.$area.'"');
+		}
+		if ($content) {
+			if (is_numeric($content)) {
+				$criteria->addCondition('t.mobile like "'.$content.'"');
+			}else{
+				$criteria->addCondition('t.contact_name like "'.$content.'"');
+				$criteria->addCondition('t.company_name like "'.$content.'"','OR');
+			}
 		}
 		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));

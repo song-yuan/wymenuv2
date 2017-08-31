@@ -212,7 +212,7 @@
 	$('#serch').on('click',function(){
 		 var content = $('#ccontent').val();
 		//alert(111);
-         location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
+         location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/content/"+content;
 	});
 	document.onkeydown=function(event){
         var e = event || window.event || arguments.callee.caller.arguments[0];
@@ -220,7 +220,7 @@
              //要做的事情
 		var content = $('#ccontent').val();
 		//alert(111);
-        location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/content/"+content;
+        location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/content/"+content;
 		
         }
     };
@@ -238,7 +238,7 @@
 			var city = $('#city').children('option:selected').val();
 	        var area = $('#area').children('option:selected').val();
 	        
-			location.href="<?php echo $this->createUrl('company/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+			location.href="<?php echo $this->createUrl('company/listchidren' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 			 
 		 }
 	$('.setAppid').on('click',function(){
