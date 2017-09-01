@@ -193,6 +193,8 @@ class WxCart
 			$promotionType = $result['promotion_type'];
 			if($promotionId > 0){
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
+				var_dump($result);
+				echo '<br>';
 				if(!$productPromotion){
 					unset($results[$k]);
 					continue;
@@ -202,8 +204,6 @@ class WxCart
 					unset($results[$k]);
 					continue;
 				}
-				var_dump($result);
-				echo '<br>';
 				if($result['to_group']==3){
 					$this->pormotionYue = true;
 				}elseif($result['to_group']==2){
