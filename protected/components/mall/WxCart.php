@@ -202,6 +202,7 @@ class WxCart
 					unset($results[$k]);
 					continue;
 				}
+				var_dump($result);
 				if($result['to_group']==3){
 					$this->pormotionYue = true;
 				}elseif($result['to_group']==2){
@@ -230,7 +231,7 @@ class WxCart
 				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
 		}
-		var_dump($results);exit;
+		var_dump($results);
 		return array_merge($results);
 	}
 	public function getCartPromotion(){
