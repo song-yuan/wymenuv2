@@ -176,6 +176,7 @@ class WxCart
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
 				  ->queryAll();
+		
 		foreach($results as $k=>$result){
 			if($result['is_set'] > 0){
 				$detail = WxProduct::getProductSetDetail($result['product_id'], $result['dpid']);
@@ -193,8 +194,6 @@ class WxCart
 			$promotionType = $result['promotion_type'];
 			if($promotionId > 0){
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
-				var_dump($result);
-				echo '<br>';
 				if(!$productPromotion){
 					unset($results[$k]);
 					continue;
@@ -232,7 +231,6 @@ class WxCart
 				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
 		}
-		var_dump($results);exit;
 		return array_merge($results);
 	}
 	public function getCartPromotion(){
