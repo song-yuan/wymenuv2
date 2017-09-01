@@ -72,10 +72,10 @@ class CompanyController extends BackendController
 		}
 		if ($content) {
 			if (is_numeric($content)) {
-				$criteria->addCondition('t.mobile like "'.$content.'"');
+				$criteria->addCondition('t.mobile like "%'.$content.'%"');
 			}else{
-				$criteria->addCondition('t.contact_name like "'.$content.'"');
-				$criteria->addCondition('t.company_name like "'.$content.'"','OR');
+				$criteria->addCondition('t.contact_name like "%'.$content.'%"');
+				$criteria->addCondition('t.company_name like "%'.$content.'%"','OR');
 			}
 		}
 		$criteria->order = 't.dpid asc';
