@@ -176,7 +176,7 @@ class WxCart
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
 				  ->queryAll();
-		var_dump($results);exit;
+		
 		foreach($results as $k=>$result){
 			if($result['is_set'] > 0){
 				$detail = WxProduct::getProductSetDetail($result['product_id'], $result['dpid']);
