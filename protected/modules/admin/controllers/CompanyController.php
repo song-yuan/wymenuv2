@@ -29,15 +29,16 @@ class CompanyController extends BackendController
 	
 		$criteria = new CDbCriteria;
 		$criteria->with = 'property';
-		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE)
+		if(Yii::app()->user->role < '5')
 		{
 			if ($content=='') {
 				$criteria->condition =' t.delete_flag=0 and t.type=0';
 			}else{
-				$criteria->condition =' t.delete_flag=0 and t.type=1';
+				$criteria->condition =' t.delete_flag=0';
 			}
 		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
+			//var_dump(Yii::app()->user->role);exit;
 			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
 		}else{
 			$criteria->condition = ' t.delete_flag=0 and t.dpid='.Yii::app()->user->companyId ;
@@ -72,16 +73,16 @@ class CompanyController extends BackendController
 		}
 		if ($content) {
 			if (is_numeric($content)) {
-				$criteria->addCondition('t.mobile like "'.$content.'"');
+				$criteria->addCondition('t.mobile like "%'.$content.'%"');
 			}else{
-				$criteria->addCondition('t.contact_name like "'.$content.'"');
-				$criteria->addCondition('t.company_name like "'.$content.'"','OR');
+				$criteria->addCondition('t.contact_name like "%'.$content.'%" or t.company_name like "%'.$content.'%"');
 			}
 		}
 		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
+		//var_dump($criteria);exit;
 		$models = Company::model()->findAll($criteria);
 		$this->render('index',array(
 				'models'=> $models,
@@ -135,15 +136,14 @@ class CompanyController extends BackendController
 			if (is_numeric($content)) {
 				$criteria->addCondition('t.mobile like "'.$content.'"');
 			}else{
-				$criteria->addCondition('t.contact_name like "'.$content.'"');
-				$criteria->addCondition('t.company_name like "'.$content.'"','OR');
+				$criteria->addCondition('t.contact_name like "%'.$content.'%" or t.company_name like "%'.$content.'%"');
 			}
 		}
 		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-                 
+             
 		$models = Company::model()->findAll($criteria);
 //                var_dump($models);exit;
 //               print_r($criteria);exit;
