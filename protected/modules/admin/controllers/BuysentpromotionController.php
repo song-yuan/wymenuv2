@@ -21,8 +21,8 @@ class BuysentpromotionController extends BackendController
     	return true;
     }
 
-
-
+    
+    
     public function actionIndex(){
     	//$brand = Yii::app()->admin->getBrand($this->companyId);
     	$criteria = new CDbCriteria;
@@ -31,24 +31,24 @@ class BuysentpromotionController extends BackendController
     	$criteria->addCondition("t.dpid= ".$this->companyId);
     	$criteria->addCondition('delete_flag=0');
     	//$criteria->params[':brandId'] = $brand->brand_id;
-
+    
     	$pages = new CPagination(BuysentPromotion::model()->count($criteria));
     	$pages->applyLimit($criteria);
     	$models = BuysentPromotion::model()->findAll($criteria);
-
+    	 
     	$this->render('index',array(
     			'models'=>$models,
     			'pages'=>$pages,
     	));
     }
-
-
-
+    
+    
+    
 	public function saveFile($event){
 		$fullName = $event->sender['name'];
 		$extensionName = $event->sender['uploadedFile']->getExtensionName();
 		$path = $event->sender['path'];
-
+		
 		$fileName = substr($fullName,0,strpos($fullName,'.'));
 		$image = Yii::app()->image->load($path.'/'.$fullName);
 		$image->resize(160,160)->quality(100)->sharpen(20);
@@ -79,10 +79,10 @@ class BuysentpromotionController extends BackendController
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			//$db = Yii::app()->db;
-
+		
 			$code=new Sequence("sole_code");
 			$sole_code = $code->nextval();
-
+			
 			$se=new Sequence("buysent_promotion");
 			$lid = $se->nextval();
 			$model->lid = $lid;
@@ -119,20 +119,20 @@ class BuysentpromotionController extends BackendController
 				$this->redirect(array('buysentpromotion/index' , 'companyId' => $this->companyId ));
 			}
 		}
-
+		
 		$this->render('create' , array(
 				'model' => $model ,
 				'brdulvs'=>$brdulvs,
 				//'categories' => $categories
 		));
 	}
-
+	
 	/**
 	 * 编辑活动
 	 */
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
-
+		
 		$brdulvs = $this->getBrdulv();
 		$is_sync = DataSync::getInitSync();
 		$model = BuysentPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
@@ -142,7 +142,7 @@ class BuysentpromotionController extends BackendController
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
 
-
+		
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -157,7 +157,7 @@ class BuysentpromotionController extends BackendController
 			if(!empty($groupID)){
 				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where delete_flag = 0 and private_promotion_id='.$lid.' and dpid='.$this->companyId.' and to_group =2';
-
+				
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
@@ -202,7 +202,7 @@ class BuysentpromotionController extends BackendController
 	}
 
 
-
+	
 	/**
 	 * 删除现金券
 	 */
@@ -232,25 +232,25 @@ class BuysentpromotionController extends BackendController
 		$pid = Yii::app()->request->getParam('pid',0);
 		$phscode = Yii::app()->request->getParam('phscode',0);
 		$prodname = Yii::app()->request->getParam('prodname',0);
-
+	
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.pid != 0 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$models = ProductCategory::model()->findAll($criteria);
 		//查询原料分类
-
+	
 		$criteria = new CDbCriteria;
 		$criteria->condition =  ' t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$products = Product::model()->findAll($criteria);
 		//查询原料信息
-
+	
 		$db = Yii::app()->db;
 		$sql = 'select t.* from nb_taste t where t.taste_group_id in(select t1.taste_group_id from nb_product_taste t1 where t1.delete_flag = 0 and t1.product_id='.$pid.' and t1.dpid='.$this->companyId.') and t.delete_flag = 0 and t.dpid ='.$this->companyId ;
 		$command1 = $db->createCommand($sql);
 		$prodTastes = $command1->queryAll();
 		//查询产品口味
-
+	
 		//var_dump($products);exit;
 		$this->render('addprod' , array(
 				'models' => $models,
@@ -262,7 +262,7 @@ class BuysentpromotionController extends BackendController
 				'action' => $this->createUrl('buysentpromotion/addprod' , array('companyId'=>$this->companyId))
 		));
 	}
-
+	
 	public function actionDetailindex(){
 		//$sc = Yii::app()->request->getPost('csinquery');
 		$promotionID = Yii::app()->request->getParam('lid');
@@ -275,7 +275,7 @@ class BuysentpromotionController extends BackendController
 		$db = Yii::app()->db;
 		if($typeId=='product')
 		{
-
+			
 			if(empty($promotionID)){
 				$promotionID = Yii::app()->request->getParam('promotionID');
 			}
@@ -286,7 +286,7 @@ class BuysentpromotionController extends BackendController
 			}elseif(!empty($csinquery)){
 				$sql = 'select k.* from(select t1.product_name,t1.main_picture,t.* from nb_buysent_promotion_detail t left join nb_product t1 on(t.product_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) where t.buysent_pro_id = '.$promotionID.' and t.delete_flag = 0 and t.dpid = '.$this->companyId.' and t.is_set = 0 and t1.simple_code like "%'.strtoupper($csinquery).'%" or t1.product_name like "%'.strtoupper($csinquery).'%") k';
 			}else{
-				$sql = 'select k.* from(select t1.product_name,t1.main_picture,t.* from nb_buysent_promotion_detail t left join nb_product t1 on(t.product_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) where t.buysent_pro_id = '.$promotionID.' and t.delete_flag = 0 and t.dpid = '.$this->companyId.' and t.is_set = 0) k';
+				$sql = 'select k.* from(select t1.product_name,t1.main_picture,t.* from nb_buysent_promotion_detail t left join nb_product t1 on(t.product_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) where t.buysent_pro_id = '.$promotionID.' and t.delete_flag = 0 and t.dpid = '.$this->companyId.' and t.is_set = 0) k';	
 			}
 			//var_dump($sql);exit;
 			$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -328,7 +328,7 @@ class BuysentpromotionController extends BackendController
 		}
 
 	}
-
+	
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');
 		$typeId = Yii::app()->request->getParam('typeId');
@@ -346,9 +346,9 @@ class BuysentpromotionController extends BackendController
 		//save to product_out
 		exit;
 	}
-
+	
 	public function actionStorbuysent(){
-
+		
 		$is_sync = DataSync::getInitSync();
 		//var_dump($companyId);exit;
 		$ids = Yii::app()->request->getPost('ids');
@@ -371,14 +371,11 @@ class BuysentpromotionController extends BackendController
 				$mateid = $materials[0];
 				$matecode = $materials[1];
 				$matenum = $materials[2];
-				$sentid = $materials[3];
-				$sentcode = $materials[4];
-				$sentnum = $materials[5];
-				$prods = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$sentid,':companyId'=>$this->companyId));
+				$sentnum = $materials[3];
 				$prodmaterials = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$mateid,':companyId'=>$this->companyId));
 				$buysentprodetail = BuysentPromotionDetail::model()->find('product_id =:prodid and dpid=:companyId and delete_flag=0', array(':prodid'=>$mateid, ':companyId'=>$this->companyId));
 				//var_dump($buysentprodetail);exit;
-				if((!empty($prods))&&(!empty($prodmaterials))&&(!empty($mateid))&&(empty($buysentprodetail))){
+				if(!empty($prodmaterials)&&!empty($mateid)&&empty($buysentprodetail)){
 					$se = new Sequence("buysent_promotion_detail");
 					$id = $se->nextval();
 					$code=new Sequence("sole_code");
@@ -396,8 +393,6 @@ class BuysentpromotionController extends BackendController
 							'product_id'=>$mateid,
 							'phs_code'=>$matecode,
 							'buy_num'=>$matenum,
-							's_product_id'=>$sentid,
-							's_phs_code'=>$sentcode,
 							'sent_num'=>$sentnum,
 							'limit_num'=>'0',
 							'group_no'=>'1',
@@ -409,19 +404,19 @@ class BuysentpromotionController extends BackendController
 					$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
 					//var_dump($dataprodbom);exit;
 					$command = $db->createCommand()->insert('nb_buysent_promotion_detail',$dataprodbom);
-
+					
 				}
-
+				
 			}
-			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
+			//Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
-
+			
 		} catch (Exception $e) {
 				$transaction->rollback(); //如果操作失败, 数据回滚
 				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'保存失败',)));
-			}
-
+			}  
+	
 	}
 
 
@@ -430,9 +425,9 @@ class BuysentpromotionController extends BackendController
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
-
+	
 		$models = ProductCategory::model()->findAll($criteria);
-
+	
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
@@ -453,8 +448,8 @@ class BuysentpromotionController extends BackendController
 		}
 		return $optionsReturn;
 	}
-
-
+	
+	
 	public function actionDetaildelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getParam('id');
@@ -471,7 +466,7 @@ class BuysentpromotionController extends BackendController
 		}
 	}
 	public function actionStordetail(){
-
+	
 		$is_sync = DataSync::getInitSync();
 		//var_dump($companyId);exit;
 		$matids = Yii::app()->request->getParam('matids');
@@ -489,14 +484,14 @@ class BuysentpromotionController extends BackendController
 			//Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
-
+				
 		} catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'保存失败',)));
 		}
-	}
-
-
+	}	
+	
+	
 	public function actionPromotiondetail(){
 		$sc = Yii::app()->request->getPost('csinquery');
 		$promotionID = Yii::app()->request->getParam('lid');
@@ -506,8 +501,8 @@ class BuysentpromotionController extends BackendController
 		$csinquery=Yii::app()->request->getPost('csinquery',"");
 		//var_dump($csinquery);exit;
 		$db = Yii::app()->db;
-
-
+			
+			
 		if(empty($promotionID)){
 			$promotionID = Yii::app()->request->getParam('promotionID');
 		}
@@ -515,30 +510,30 @@ class BuysentpromotionController extends BackendController
 			echo "操作有误！请点击右上角的返回继续编辑";
 			exit;
 		}
-
+	
 		if(!empty($categoryId)){
 			//$criteria->condition.=' and t.category_id = '.$categoryId;
 			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
 							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id  and t1.delete_flag = 0 )
 							where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.' and t1.category_id = '.$categoryId.' ) k';
-
+	
 		}
-
+	
 		elseif(!empty($csinquery)){
 			//$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
 			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
 							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
 									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.' and t1.simple_code like "%'.strtoupper($csinquery).'%" ) k';
-
+	
 		}else{
 			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
 							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
 									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.') k' ;
-
+	
 		}
 		//$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_private_promotion_detail t1  where t1.is_set = 0 and t1.private_promotion_id ='.$promotionID.' t1.delete_flag = 0 and t1.dpid='.$this->companyId.') k' ;
-
-
+	
+	
 		//var_dump($sql);exit;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -556,13 +551,13 @@ class BuysentpromotionController extends BackendController
 				//'typeId' => $typeId,
 				'promotionID'=>$promotionID
 		));
-
+			
 	}
-
+	
 	/*
-	 *
+	 * 
 	 * 获取会员等级。。。
-	 *
+	 * 
 	 * */
 	private function getBrdulv(){
 		$criteria = new CDbCriteria;
@@ -575,7 +570,7 @@ class BuysentpromotionController extends BackendController
 		}
 // 		else{
 // 			return flse;
-// 		}
+// 		}				
 	}
 	public function getProductSetPrice($productSetId,$dpid){
 		$proSetPrice = '';
@@ -592,7 +587,7 @@ class BuysentpromotionController extends BackendController
 			return flse;
 		}
 	}
-
+	
 
 	protected function performAjaxValidation($model)
 	{
