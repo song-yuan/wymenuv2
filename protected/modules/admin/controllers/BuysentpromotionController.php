@@ -371,7 +371,9 @@ class BuysentpromotionController extends BackendController
 				$mateid = $materials[0];
 				$matecode = $materials[1];
 				$matenum = $materials[2];
-				$sentnum = $materials[3];
+				$sentid = $materials[3];
+				$sentcode = $materials[4];
+				$sentnum = $materials[5];
 				$prodmaterials = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$mateid,':companyId'=>$this->companyId));
 				$buysentprodetail = BuysentPromotionDetail::model()->find('product_id =:prodid and dpid=:companyId and delete_flag=0', array(':prodid'=>$mateid, ':companyId'=>$this->companyId));
 				//var_dump($buysentprodetail);exit;
@@ -393,6 +395,8 @@ class BuysentpromotionController extends BackendController
 							'product_id'=>$mateid,
 							'phs_code'=>$matecode,
 							'buy_num'=>$matenum,
+							's_product_id'=>$sentid,
+							's_phs_code'=>$sentcode,
 							'sent_num'=>$sentnum,
 							'limit_num'=>'0',
 							'group_no'=>'1',
