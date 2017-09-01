@@ -251,7 +251,7 @@ class WxCart
 			$buyNum = $sentDetail['buy_num'];
 			$sentNum = $sentDetail['sent_num'];
 			$realNum = floor($cartNum/$buyNum*$sentNum);
-			$sql = 'select * from nb_cart where product_id='.$sentProductId.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and dpid='.$this->dpid.' and user_id='.$this->userId;
+			$sql = 'select * from nb_cart where product_id='.$sentProductId.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and 	promotion_detail_id='.$sentDetail['lid'].' and dpid='.$this->dpid.' and user_id='.$this->userId;
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			if($res){
 				if($realNum > 0){
@@ -277,6 +277,7 @@ class WxCart
 						'site_id'=>$this->siteId,
 						'promotion_type'=>'sent',
 						'promotion_id'=>$this->productArr['promotion_id'],
+						'promotion_detail_id'=>$sentDetail['lid'],
 						'to_group'=>$this->productArr['to_group'],
 						'can_cupon'=>$this->productArr['can_cupon'],
 						'is_sync'=>DataSync::getInitSync(),
@@ -293,7 +294,7 @@ class WxCart
 			$buyNum = $sentDetail['buy_num'];
 			$sentNum = $sentDetail['sent_num'];
 			$realNum = floor($cartNum/$buyNum*$sentNum);
-			$sql = 'select * from nb_cart where product_id='.$sentProductId.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and dpid='.$this->dpid.' and user_id='.$this->userId;
+			$sql = 'select * from nb_cart where product_id='.$sentProductId.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and 	promotion_detail_id='.$sentDetail['lid'].' and dpid='.$this->dpid.' and user_id='.$this->userId;
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			if($res){
 				if($realNum > 0){
@@ -305,7 +306,7 @@ class WxCart
 				}
 			}
 		}else{
-			$sql = 'delete from nb_cart where dpid='.$this->dpid.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'];
+			$sql = 'delete from nb_cart where dpid='.$this->dpid.' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and promotion_detail_id='.$sentDetail['lid'].' and user_id='.$this->userId;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	}

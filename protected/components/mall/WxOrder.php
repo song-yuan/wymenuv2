@@ -119,7 +119,7 @@ class WxOrder
 					}
 				}
 				if($promotionType=='promotion'){
-					$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$promotionId,$result['to_group']);
+					$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$result['promotion_id'],$result['to_group']);
 					$results[$k]['price'] = $productPrice['price'];
 					$results[$k]['promotion'] = $productPrice;
 				}elseif($promotionType=='sent'){
