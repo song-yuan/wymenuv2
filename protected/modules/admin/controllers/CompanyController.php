@@ -46,7 +46,6 @@ class CompanyController extends BackendController
 		$province = $provinces;
 		$city = $citys;
 		$area = $areas;
-		//var_dump($criteria);exit;
 		if($citys == '市辖区'|| $citys == '省直辖县级行政区划' || $citys == '市辖县'){
 			$city = '0';
 		}
