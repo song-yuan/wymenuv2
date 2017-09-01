@@ -363,7 +363,7 @@ class BuysentpromotionController extends BackendController
 		$db = Yii::app()->db;
 		//var_dump($matids,$materialnums);exit;
 		$transaction = $db->beginTransaction();
-		try{
+		//try{
 			//var_dump($materialnums);exit;
 			foreach ($materialnums as $materialnum){
 				$materials = array();
@@ -407,20 +407,20 @@ class BuysentpromotionController extends BackendController
 							'is_sync'=>$is_sync,
 					);
 					$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
-					//var_dump($dataprodbom);exit;
+					var_dump($dataprodbom);exit;
 					$command = $db->createCommand()->insert('nb_buysent_promotion_detail',$dataprodbom);
-
+					var_dump($command);exit;
 				}
 
 			}
-			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
-			$transaction->commit(); //提交事务会真正的执行数据库操作
-			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
+// 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
+// 			$transaction->commit(); //提交事务会真正的执行数据库操作
+// 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
 
-		} catch (Exception $e) {
-				$transaction->rollback(); //如果操作失败, 数据回滚
-				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'保存失败',)));
-			}
+// 		} catch (Exception $e) {
+// 				$transaction->rollback(); //如果操作失败, 数据回滚
+// 				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'保存失败',)));
+// 			}
 
 	}
 

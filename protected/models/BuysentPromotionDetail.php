@@ -15,6 +15,8 @@
  * @property string $product_id
  * @property string $phs_code
  * @property integer $buy_num
+ * @property string $s_product_id
+ * @property string $s_phs_code
  * @property integer $sent_num
  * @property integer $limit_num
  * @property integer $group_no
@@ -43,15 +45,15 @@ class BuysentPromotionDetail extends CActiveRecord
 		return array(
 			array('update_at, sole_code, fa_sole_code, is_set, phs_code, buy_num, sent_num, limit_num, group_no', 'required'),
 			array('buy_num, sent_num, limit_num, group_no', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, buysent_pro_id, product_id', 'length', 'max'=>10),
+			array('lid, dpid, buysent_pro_id, product_id , s_product_id', 'length', 'max'=>10),
 			array('sole_code, fa_sole_code, is_set', 'length', 'max'=>20),
-			array('phs_code', 'length', 'max'=>15),
+			array('phs_code , s_phs_code', 'length', 'max'=>15),
 			array('is_available, source, delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, sole_code, buysent_pro_id, fa_sole_code, is_set, product_id, phs_code, buy_num, sent_num, limit_num, group_no, is_available, source, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, sole_code, buysent_pro_id, fa_sole_code, is_set, product_id, phs_code, buy_num, s_product_id, s_phs_code, sent_num, limit_num, group_no, is_available, source, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +85,8 @@ class BuysentPromotionDetail extends CActiveRecord
 			'product_id' => '参与活动的产品id',
 			'phs_code' => '产品编码',
 			'buy_num' => '购买数量',
+			's_product_id' => '赠送产品id',
+			's_phs_code' => '赠送产品编码',
 			'sent_num' => '赠送数量',
 			'limit_num' => '限制数量',
 			'group_no' => '多级买送的级数,最大三级',
@@ -122,6 +126,8 @@ class BuysentPromotionDetail extends CActiveRecord
 		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('phs_code',$this->phs_code,true);
 		$criteria->compare('buy_num',$this->buy_num);
+		$criteria->compare('s_product_id',$this->s_product_id,true);
+		$criteria->compare('s_phs_code',$this->s_phs_code,true);
 		$criteria->compare('sent_num',$this->sent_num);
 		$criteria->compare('limit_num',$this->limit_num);
 		$criteria->compare('group_no',$this->group_no);

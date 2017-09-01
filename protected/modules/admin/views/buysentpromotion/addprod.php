@@ -249,6 +249,7 @@
 		margin-right:10px;
 	}
 	.selectproduct{
+		width: 150px;
 		border:1px solid silver;
 		padding:0;
 		margin:0 3px;
