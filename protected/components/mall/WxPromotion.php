@@ -141,6 +141,7 @@ class WxPromotion
 	 		$sql = 'select * from nb_buysent_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
 	 	}
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$promotionId)->queryRow();
+	 	var_dump($result);exit;
 	 	return $result;
 	 }
 	 /**
