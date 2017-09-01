@@ -231,7 +231,7 @@ class WxCart
 				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
 		}
-		var_dump($results);
+		var_dump($results);exit;
 		return array_merge($results);
 	}
 	public function getCartPromotion(){
