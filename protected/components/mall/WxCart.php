@@ -198,7 +198,6 @@ class WxCart
 					continue;
 				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid, $promotionType, $promotionId,$this->type);
-				var_dump($promotion);exit;
 				if(!$promotion){
 					unset($results[$k]);
 					continue;
