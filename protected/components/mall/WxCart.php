@@ -203,6 +203,7 @@ class WxCart
 					continue;
 				}
 				var_dump($result);
+				echo '<br>';
 				if($result['to_group']==3){
 					$this->pormotionYue = true;
 				}elseif($result['to_group']==2){
