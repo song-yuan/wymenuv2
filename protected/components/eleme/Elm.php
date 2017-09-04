@@ -249,10 +249,10 @@ class Elm
 	}
 	public static function order($message,$dpid){
 		$me = json_decode($message);
+		$orderId = $me->id;
+		Yii::app()->cache->set($orderId,$message);
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
-			$orderId = $me->id;
-			Yii::app()->cache->set($orderId,$message);
 			$order = self::confirmOrder($dpid,$orderId);
 			$obj = json_decode($order);
 			if(empty($obj->error)){
@@ -296,7 +296,9 @@ class Elm
 		if($cache!=false){
 			$order = json_decode($cache);
 			$res = self::dealOrder($order,$dpid,4);
-			Yii::app()->cache->delete($accountNo);
+			if($res){
+				Yii::app()->cache->delete($accountNo);
+			}
 			return $res;
 		}else{
 			$access_token = self::elemeGetToken($dpid);
@@ -324,8 +326,11 @@ class Elm
 			$orderObj = json_decode($result);
 			$order = $orderObj->result;
 			if($order){
+				Yii::app()->cache->set($accountNo,json_encode($order));
 				$res = self::dealOrder($order,$dpid,4);
-				Yii::app()->cache->delete($accountNo);
+				if($res){
+					Yii::app()->cache->delete($accountNo);
+				}
 				return $res;
 			}else{
 				self::orderStatus($message,$dpid);
