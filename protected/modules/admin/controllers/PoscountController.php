@@ -311,10 +311,10 @@ class PoscountController extends BackendController
                         ->setCellValue('J'.$jj,$v['pad_no']);
                         //细边框引用
 
-                        $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':J'.$jj)->applyFromArray($linestyle);
+                        $objPHPExcel->getActiveSheet()->getStyle('A'.$jj.':J'.$jj)->applyFromArray($linestyle);
 
                         //设置字体靠左
-                        $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':J'.$jj)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                        $objPHPExcel->getActiveSheet()->getStyle('A'.$jj.':J'.$jj)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 
                     }
             }
