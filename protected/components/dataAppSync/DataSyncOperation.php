@@ -1467,8 +1467,7 @@ class DataSyncOperation {
 			) );
 		}
 		$dpid = WxCompany::getDpids($dpid);
-		
-		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
+		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $result) {
 			return json_encode ( array (
