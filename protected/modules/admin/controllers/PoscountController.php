@@ -20,7 +20,7 @@ class PoscountController extends BackendController
         }else{
             $cdpid = $this->companyId;
         }
-        $pos_count = Yii::app()->request->getParam('pos_count',2);
+        $pos_count = Yii::app()->request->getParam('pos_count',0);
         $pos_used = Yii::app()->request->getParam('pos_used',1);
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
