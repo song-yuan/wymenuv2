@@ -120,7 +120,7 @@
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="actions">
-                                        <?php if(Yii::app()->user->role <= User::POWER_ADMIN):?>
+                                        <?php if(Yii::app()->user->role = 4):?>
                                             <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','online-pay');?></a>
                                             <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('comtopay/indexpos',array('companyId'=>$model->dpid));?>"><?php echo yii::t('app','POS机设置');?></a>
                                     	<?php endif;?>
