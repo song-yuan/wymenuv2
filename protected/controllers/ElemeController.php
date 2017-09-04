@@ -32,7 +32,6 @@ class ElemeController extends Controller
 		$data = file_get_contents('php://input');
 		if(!empty($data)){
 			$data = urldecode($data);
-			Helper::writeLog($data);
 			$obj = json_decode($data);
 			$type = $obj->type;
 			$shopId = $obj->shopId;
@@ -40,6 +39,7 @@ class ElemeController extends Controller
 			$elemeDy = Elm::getErpDpid($shopId);
 			if($elemeDy){
 				$dpid = $elemeDy['dpid'];
+				Helper::writeLog($dpid.'--eleme message--'.$data);
 				if($type==10){
 					$result = Elm::order($message,$dpid);
 				}elseif($type==12){

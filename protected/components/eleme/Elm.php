@@ -1,14 +1,14 @@
 <?php 
 /**
 * eleMetoken 授权
-elemeGetToken 更新token
-elemeId 查询店铺ID
-elemeUpdateId 饿了么的店铺建立对应关系
-productCategory 添加菜品分类
-getProduct 获取我方菜品信息
-batchCreateItems 把菜品添加到饿了么
-order 获取订单
-confirmOrder 确认订单
+*elemeGetToken 更新token
+*elemeId 查询店铺ID
+*elemeUpdateId 饿了么的店铺建立对应关系
+*productCategory 添加菜品分类
+*getProduct 获取我方菜品信息
+*batchCreateItems 把菜品添加到饿了么
+*order 获取订单
+*confirmOrder 确认订单
 */
 class Elm
 {
@@ -55,7 +55,7 @@ class Elm
 			}
 	}
 	public static function elemeGetToken($dpid){
-		$sql = "select * from nb_eleme_token where dpid=$dpid and delete_flag=0";
+		$sql = "select * from nb_eleme_token where dpid=".$dpid." and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		if($res){
 			$nowtime = time();
@@ -252,6 +252,7 @@ class Elm
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
 			$orderId = $me->id;
+			Yii::app()->cache->set($orderId,$message);
 			$order = self::confirmOrder($dpid,$orderId);
 			$obj = json_decode($order);
 			if(empty($obj->error)){
@@ -291,36 +292,44 @@ class Elm
 	public static function orderStatus($message,$dpid){
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
-		
-		$access_token = self::elemeGetToken($dpid);
-		if(!$access_token){
-			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-		}
-		$app_key = ElmConfig::key;
-		$secret = ElmConfig::secret;
-		$url = ElmConfig::url;
-		$protocol = array(
-				"nop" => '1.0.0',
-				"id" => ElUnit::create_uuid(),
-				"action" => "eleme.order.getOrder",
-				"token" => $access_token,
-				"metas" => array(
-						"app_key" => $app_key,
-						"timestamp" => time(),
-				),
-				"params" => array(
-						'orderId'=>$accountNo
-				),
-		);
-		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-		$result = ElUnit::post($url,$protocol);
-		$orderObj = json_decode($result);
-		$me = $orderObj->result;
-		if($me){
-			$res = self::dealOrder($me,$dpid,4);
+		$cache = Yii::app()->cache->get($accountNo);
+		if($cache!=false){
+			$order = json_decode($cache);
+			$res = self::dealOrder($order,$dpid,4);
+			Yii::app()->cache->delete($accountNo);
 			return $res;
 		}else{
-			return false;
+			$access_token = self::elemeGetToken($dpid);
+			if(!$access_token){
+				return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+			}
+			$app_key = ElmConfig::key;
+			$secret = ElmConfig::secret;
+			$url = ElmConfig::url;
+			$protocol = array(
+					"nop" => '1.0.0',
+					"id" => ElUnit::create_uuid(),
+					"action" => "eleme.order.getOrder",
+					"token" => $access_token,
+					"metas" => array(
+							"app_key" => $app_key,
+							"timestamp" => time(),
+					),
+					"params" => array(
+							'orderId'=>$accountNo
+					),
+			);
+			$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+			$result = ElUnit::post($url,$protocol);
+			$orderObj = json_decode($result);
+			$order = $orderObj->result;
+			if($order){
+				$res = self::dealOrder($order,$dpid,4);
+				Yii::app()->cache->delete($accountNo);
+				return $res;
+			}else{
+				self::orderStatus($message,$dpid);
+			}
 		}
 	}
 	public static function productUpdate($lid){
@@ -454,56 +463,10 @@ class Elm
         return $result;
 	}
 	public static function orderCancel($message){
-		$me = json_decode($message);
-		$se=new Sequence("waimai_status");
-		$lid = $se->nextval();
-		$creat_at = date("Y-m-d H:i:s");
-		$update_at = date("Y-m-d H:i:s");
-		$shopId = $me->shopId;
-		$sql = "select dpid from nb_eleme_dpdy where shopId=$shopId and delete_flag=0";
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
-		$dpid = $res['dpid'];
-		$orderId = $me->orderId;
-		$status = $me->refundStatus;
-		$reason = $me->reason;
-		$inserData = array(
-					'lid'=>	$lid,
-					'dpid'=>$dpid,
-					'create_at'=>$creat_at,
-					'update_at'=>$update_at,
-					'orderId'=>$orderId,
-					'status'=>"$status",
-					'reason'=>"$reason",
-					'type'=>1,
-					'operation'=>'Q'
-			);
-		$res = Yii::app()->db->createCommand()->insert('nb_waimai_status',$inserData);
+		
 	}
 	public static function refundOrder($me){
-		$me = json_decode($message);
-		$se=new Sequence("waimai_status");
-		$lid = $se->nextval();
-		$creat_at = date("Y-m-d H:i:s");
-		$update_at = date("Y-m-d H:i:s");
-		$shopId = $me->shopId;
-		$sql = "select dpid from nb_eleme_dpdy where shopId=$shopId and delete_flag=0";
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
-		$dpid = $res['dpid'];
-		$orderId = $me->orderId;
-		$status = $me->refundStatus;
-		$reason = $me->reason;
-		$inserData = array(
-					'lid'=>	$lid,
-					'dpid'=>$dpid,
-					'create_at'=>$creat_at,
-					'update_at'=>$update_at,
-					'orderId'=>$orderId,
-					'status'=>$status,
-					'reason'=>$reason,
-					'type'=>1,
-					'operation'=>'T'
-			);
-		$res = Yii::app()->db->createCommand()->insert('nb_waimai_status',$inserData);
+		
 	}
 	public static function Agree($orderId,$dpid){
 		$access_token = self::elemeGetToken($dpid);
