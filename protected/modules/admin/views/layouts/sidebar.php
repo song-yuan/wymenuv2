@@ -105,6 +105,12 @@
                     <span class="title"><?php echo yii::t('app','支付配置');?></span>					
                     </a>
             </li>
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('poscount'))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('poscount/hqindex',array('companyId' => $this->companyId));?>">
+                    <i class="fa fa-shopping-cart"></i> 
+                    <span class="title"><?php echo yii::t('app','收银机结算');?></span>					
+                    </a>
+            </li>
             <?php endif;?>
 
                 
