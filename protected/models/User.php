@@ -28,6 +28,7 @@ class User extends CActiveRecord
 	
 	const POWER_ADMIN = 1;				//超级管理员
 	const POWER_ADMIN_VICE = 3;			//超级副管理员
+	const POWER_ADMIN_PAY = 4;			//支付设置
 	const ADMIN = 5;				//总部管理员
 	const ADMIN_VICE = 7;				//总部副管理员
         const SALESMAN = 8;                             //营销员
