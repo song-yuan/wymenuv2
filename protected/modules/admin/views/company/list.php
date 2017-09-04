@@ -202,7 +202,7 @@
 						</div>
 					</a>
 					<?php endif;?>
-					<?php if(Yii::app()->user->role <5):?>
+					<?php if(Yii::app()->user->role <1):?>
 					<a href="<?php echo $this->createUrl('poscode/hqindex',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple syjsz"></div>
