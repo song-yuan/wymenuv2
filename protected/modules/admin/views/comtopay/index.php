@@ -122,7 +122,7 @@
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="actions">
-                                        <?php if(Yii::app()->user->role <= User::POWER_ADMIN):if($model->type==0):?>
+                                        <?php if(Yii::app()->user->role <= 5):if($model->type==0):?>
                                              <a class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('comtopay/listchidren' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app',' 查 看 店 铺 ')?></a>
                                         <?php endif;?>
                                          <?php if($model->type==1):?>
