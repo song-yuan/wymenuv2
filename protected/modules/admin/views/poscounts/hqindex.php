@@ -255,7 +255,7 @@
         }
         $.ajax({
                 type:'POST',
-                url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
+                url:"<?php echo $this->createUrl('poscounts/counts',array('companyId'=>$this->companyId,));?>",
                 // async: false,
                 data: {
                     ids: lid,
@@ -290,7 +290,7 @@
                 // alert(lid);
                 $.ajax({
                         type:'POST',
-                        url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
+                        url:"<?php echo $this->createUrl('poscounts/counts',array('companyId'=>$this->companyId,));?>",
                         // async: false,
                         data: {
                             ids: lid,
@@ -329,7 +329,7 @@
             var status = 0;//未结算状态
             $.ajax({
                     type:'POST',
-                    url:"<?php echo $this->createUrl('poscount/counts',array('companyId'=>$this->companyId,));?>",
+                    url:"<?php echo $this->createUrl('poscounts/counts',array('companyId'=>$this->companyId,));?>",
                     // async: false,
                     data: {
                         ids: lid,
@@ -360,14 +360,14 @@
             var pos_count = $('#pos_count').val();
             var pos_used = $('#pos_used').val();
 
-            location.href="<?php echo $this->createUrl('poscount/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
+            location.href="<?php echo $this->createUrl('poscounts/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
 
     });
 
 
 
     // $('#countNum').click(function(){
-    // location.href="<?php echo $this->createUrl('poscount/countNum' , array('companyId'=>$this->companyId));?>";
+    // location.href="<?php echo $this->createUrl('poscounts/countNum' , array('companyId'=>$this->companyId));?>";
     // });
 
     // $('#POSsearch').click(function(){
@@ -376,7 +376,7 @@
 
     // var index1 = document.getElementById('use_statu').selectedIndex;
     // var use_statu = document.getElementById('use_statu').options[index1].value;
-    // location.href="<?php echo $this->createUrl('poscount/hqsearch' , array('companyId'=>$this->companyId));?>/statu/"+statu+'/use_statu/'+use_statu;
+    // location.href="<?php echo $this->createUrl('poscounts/hqsearch' , array('companyId'=>$this->companyId));?>/statu/"+statu+'/use_statu/'+use_statu;
     // });
     $('#excel').click(function excel(){
         var begin_time = $('#begin_time').val();
@@ -385,7 +385,7 @@
             var pos_used = $('#pos_used').val();
             //alert(begin_time);alert(end_time);
             if(confirm('确认导出并且下载Excel文件吗？')){
-                location.href="<?php echo $this->createUrl('poscount/poscountExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
+                location.href="<?php echo $this->createUrl('poscounts/poscountExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
             }
     });
 
