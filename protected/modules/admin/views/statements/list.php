@@ -347,26 +347,28 @@
 							<div class="ku-item-info">会员卡消费</div>
 						</div>
 					</a>
-                    <?php if(Yii::app()->user->role <= User::ADMIN):?> 
+                    <?php if(Yii::app()->user->role < '1'):?> 
                     <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey syjtj"></div>
 							<div class="ku-item-info">收银机统计</div>
 						</div>
 					</a>
-                                        <a href="<?php echo $this->createUrl('poscount/used',array('companyId' => $this->companyId,'pos_type'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+                    <a href="<?php echo $this->createUrl('poscount/used',array('companyId' => $this->companyId,'pos_type'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey syjpx"></div>
 							<div class="ku-item-info">收银机排序</div>
 						</div>
 					</a>
+					<?php endif;?>
+					<?php if(Yii::app()->user->role <= '5'):?>
 					<a href="<?php echo $this->createUrl('poscount/hqindex',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple syjsz"></div>
-							<div class="ku-item-info">收银机结算</div>
+							<div class="ku-item-info">收银机排序</div>
 						</div>
 					</a>
-                                        <?php endif;?> 
+                    <?php endif;?> 
                                        
 					<!-- 
 					<a href="<?php //echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
