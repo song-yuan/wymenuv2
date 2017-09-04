@@ -104,7 +104,16 @@
 								
 								<td><?php echo $model->begin_time;?></td>
 								<td><?php echo $model->end_time;?></td>
-								<td><?php switch ($model->is_available){case 0:echo yii::t('app','生效');break;case 1:echo yii::t('app','不生效');break;default:echo '';break;} ?></td>
+								<td><?php switch ($model->is_available){
+										case 0:echo yii::t('app','不生效');break;
+										case 1:echo yii::t('app','生效只显示在POS端');break;
+										case 2:echo yii::t('app','生效且显示在微信端');break;
+										case 3:echo yii::t('app','生效且微信及POS都显示');break;
+										case 4:echo yii::t('app','生效只显示在微信堂食');break;
+										case 5:echo yii::t('app','生效只显示在微信外卖');break;
+										default:echo '';break;
+									} ?>
+								</td>
 								<td class="center">
 									<a href="<?php echo $this->createUrl('buysentpromotion/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>

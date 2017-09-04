@@ -1,0 +1,215 @@
+body{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+.ymall{
+	width: 100%;
+	height: 100%;
+    margin: 0 auto;
+    padding: 0;
+    //min-height: 500px;
+    overflow: hidden;
+    position: relative;
+}
+.y-body{
+	//position:relative;
+	overflow-y: hidden;
+	width: 100%;
+	height: 100%;
+}
+.y-head{
+	width: 100%;
+	height: 40px;
+	background-color: #fff;
+}
+.y-head .icon{
+	width: 18%;
+	height: 40px;
+}
+.y-head .logo{
+	width: 60%;
+	height: 40px;
+	float: left;
+}
+.y-head .left{
+	float: left;
+}
+.y-head .right{
+	float: right;
+}
+.self{
+	width: 40%;
+	margin-left: 12%;
+	height: 40px;
+}
+.search{
+	width: 60%;
+	margin-left: 12%;
+	height: 30px;
+}
+.yidianchi{
+	padding-left: 40%;
+	height: 40px;
+	font-size: 20px;
+	line-height: 40px;
+}
+.self img{
+	height: 25px; 
+	margin-top: 4px;
+}
+.search img{
+	height: 25px; 
+	margin-top: 4px;
+}
+
+.top{
+	min-width: 100%;
+	height: 40px;
+	overflow: scroll;
+	background:rgb(92,96,94);
+	color:rgb(255,255,255);
+}
+.top marquee{
+	line-height: 40px;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+
+.catess{
+	width: 170px;
+	max-height: 300px;
+	position: absolute;
+	top: 100px;
+	left: 2px;
+	overflow: hidden;
+	background: rgba(255,255,255,0);
+	border: 1px solid silver;
+	border-radius: 10px;
+}
+.productcate{
+	width: 100%;
+	max-height: 300px;
+	line-height: 30px;
+	padding-top: 10px;
+	overflow-y: scroll;
+	float: left;
+	background: rgba(223,243,233,0.8);
+}
+.productcate .cates{
+	width: auto;
+	height: 30px;
+	padding: 0 10px 10px 10px;
+	//border-right: 1px solid silver;
+}
+.catsbox{
+	width: 100%;
+	overflow-y: scroll;
+}
+.zhankai{
+	//border: 1px solid red;
+	display: block;
+}
+.shouqi{
+	border: 1px solid silver;
+	display: none;
+}
+
+
+.shoping-car{
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	bottom: 0px;
+	left: 10px;
+	vertical-align: middle;
+	text-align: center;
+	align-items: center;
+	display: flex;
+}
+.shoping-car img{
+	width: 40px;
+	height: 40px;
+}
+.shoping-car .img{
+	width: 40px;
+	height: 40px;
+	background:url(../../img/waiter/shoping-car3.png) ;
+	background-size: 40px 40px;
+	color: red;
+}
+
+.black{
+	background:rgb(231,249,240);
+}
+.dhcont{
+	width: 20px;
+	float: left;
+	vertical-align: middle;
+	text-align: center;
+	align-items: center;
+	display: flex;
+}
+.yincang{
+	display: none;
+}
+
+.goods-pic{
+	width: 96%;
+	margin-left: 2%;
+	margin-top: 10px;
+}
+.goods-pic img{
+	width: 100%;
+	height: 100%;
+}
+
+.goods-class{
+	width: 50%;
+	float: left;
+}
+.float-l{
+	float: left;
+}
+.float-r{
+	float: right;
+}
+.color-r{
+	color: red;
+}
+.of-y{
+	overflow-y: auto;
+}
+.mr-50{
+	margin-right: 20px;
+}
+.bg-color-orig{
+	background-color: whitesmoke;
+}
+
+.content{
+	width: 100%;
+	//height: 500px;
+	overflow: hidden;
+}
+.contentbox{
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.addicon{
+	width: 20px;
+	height: 20px;
+	background-color: red;
+	border-radius: 20px;
+	color: #fff;
+	vertical-align: middle;
+	text-align: center;
+	align-items: center;
+	line-height: 20px;
+	font-size: 20px;
+	font-weight: 600;
+}
+

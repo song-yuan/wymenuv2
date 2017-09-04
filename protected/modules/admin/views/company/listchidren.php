@@ -100,6 +100,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<?php if(Yii::app()->user->role < '5'): ?><th>ID</th><?php endif; ?>
                                 <th><?php echo yii::t('app','店铺名称');?></th>
+                                <th><?php echo yii::t('app','类型');?></th>
 								<th>logo</th>
 								<th>店铺二维码</th>
 								<th><?php echo yii::t('app','联系人');?></th>
@@ -117,7 +118,14 @@
 							<tr class="odd gradeX">
 								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
 								<?php if(Yii::app()->user->role < '5'): ?><td><?php echo $model->dpid;?></td><?php endif; ?>
-                                                                <td><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
+                                <td><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
+								<td><?php switch ($model->type){
+									case 0: echo '公司总部';break;
+									case 1: echo '店铺';break;
+									case 2: echo '仓库';break;
+									default: echo '未知';break;
+								}?>
+								</td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
 								<td ><?php if($model->property&&$model->property->qr_code):?><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->property->qr_code;?>" /><?php endif;?><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->dpid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 								<td ><?php echo $model->contact_name;?></td>

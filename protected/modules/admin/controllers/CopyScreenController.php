@@ -60,7 +60,7 @@ class CopyScreenController extends BackendController
                             $sreen_hq = DoubleScreen::model()->find('lid =:lid and dpid=:dpid and delete_flag=0 ',array(':dpid'=>$companyId,':lid'=>$lid));
                             if(empty($sreen_hq['phs_code'])){
                                     $sreen_code=new Sequence("phs_code");
-                                    $sreen_phs_code = $printer_code->nextval();
+                                    $sreen_phs_code = $sreen_code->nextval();
                                     $sreen_hq['phs_code'] = ProductCategory::getChscode($companyId,$sreen_hq['lid'] , $sreen_phs_code);   
                                     $sreen_hq->update();
 

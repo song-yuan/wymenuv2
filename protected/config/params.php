@@ -6,6 +6,8 @@ return array(
 		'admin_return_url' => array('/admin/login/index'),
 		'waiter_return_url' => 'index.php?r=waiter/user/index',
 		'waiter_home_url' => 'index.php?r=waiter/seat/index',
+		'ymall_home_url' => array('/ymall/product/index'),
+		'ymall_return_url' => array('/ymall/login'),
 		'frontend_home_url' => '',
 		
 		'salt' => 'use this string to gen password',
@@ -76,14 +78,19 @@ return array(
                     'account'=>true,
                 ),
                 //memcache的定义
-                'memcache'=>array(
-                   'class'=>'CMemCache',
-					'servers'=>array(
-							array(
-									'host'=>'121.42.12.97',
-									'port'=>11211,
-									'weight'=>60,
-							),
-					),
-                ),
+//                 'memcache'=>array(
+//                    'class'=>'CMemCache',
+// 					'servers'=>array(
+// 							array(
+// 									'host'=>'121.42.12.97',
+// 									'port'=>11211,
+// 									'weight'=>60,
+// 							),
+// 					),
+//                 ),
+				'memcache'=>array(
+						//'server'=>'120.27.29.4',
+						'server'=>'121.42.12.97',
+						'port'=>11211,
+				),
 );

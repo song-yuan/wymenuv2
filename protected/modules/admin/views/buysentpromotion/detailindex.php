@@ -84,6 +84,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:10%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','购买数量');?></th>
+								<th style="width:10%"><?php echo yii::t('app','赠送产品');?></th>
 								<th ><?php echo yii::t('app','赠送数量');?></th>
 								<th><?php echo yii::t('app','状态');?></th>
 								<th><?php echo yii::t('app','编辑');?></th>
@@ -96,6 +97,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
 								<td style="width:10%"><?php if($typeId=='product') echo $model['product_name']; else echo $model['set_name'];?></td>
 								<td ><?php echo $model['buy_num'];?></td>
+								<td style="width:10%"><?php if($typeId=='product') echo $model['sent_name']; else echo $model['set_name'];?></td>
 								<td ><?php echo $model['sent_num'];?></td>
                                 <td ><?php if($model['is_available'])echo '生效';else echo '失效';?></td>
                                 <td class="xiugai" lid="<?php echo $model['lid'];?>" name = "<?php echo $model['product_name'];?>"><a><?php echo yii::t('app','编辑');?></a></td>
