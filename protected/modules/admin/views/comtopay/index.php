@@ -99,7 +99,7 @@
 							<tr class="odd gradeX">
 								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
 								<?php if(Yii::app()->user->role < '5'): ?><td><?php echo $model->dpid;?></td><?php endif; ?>
-                                <td><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
+                                <td><a href="" ><?php echo $model->company_name;?></a></td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
 								<td ><?php if($model->property&&$model->property->qr_code):?><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->property->qr_code;?>" /><?php endif;?><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->dpid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 								<td ><?php echo $model->contact_name;?></td>
@@ -122,7 +122,7 @@
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="actions">
-                                        <?php if(Yii::app()->user->role <= User::POWER_ADMIN):if($model->type==0):?>
+                                        <?php if(Yii::app()->user->role <= 5):if($model->type==0):?>
                                              <a class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('comtopay/listchidren' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app',' 查 看 店 铺 ')?></a>
                                         <?php endif;?>
                                          <?php if($model->type==1):?>

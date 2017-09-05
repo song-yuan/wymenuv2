@@ -101,8 +101,14 @@
             <?php if(Yii::app()->user->role <= 4 && $this->comptype != 2):?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('comtopay'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('comtopay/index',array('companyId' => $this->companyId));?>">
-                    <i class="fa fa-shopping-cart"></i> 
+                    <i class="fa fa-rmb"></i> 
                     <span class="title"><?php echo yii::t('app','支付配置');?></span>					
+                    </a>
+            </li>
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('poscounts'))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('poscounts/hqindex',array('companyId' => $this->companyId));?>">
+                    <i class="fa fa-money"></i> 
+                    <span class="title"><?php echo yii::t('app','收银机结算');?></span>					
                     </a>
             </li>
             <?php endif;?>
