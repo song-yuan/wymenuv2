@@ -364,20 +364,6 @@
 
     });
 
-
-
-    // $('#countNum').click(function(){
-    // location.href="<?php echo $this->createUrl('poscounts/countNum' , array('companyId'=>$this->companyId));?>";
-    // });
-
-    // $('#POSsearch').click(function(){
-    // var index0 = document.getElementById('statu').selectedIndex;
-    // var statu = document.getElementById('statu').options[index0].value;
-
-    // var index1 = document.getElementById('use_statu').selectedIndex;
-    // var use_statu = document.getElementById('use_statu').options[index1].value;
-    // location.href="<?php echo $this->createUrl('poscounts/hqsearch' , array('companyId'=>$this->companyId));?>/statu/"+statu+'/use_statu/'+use_statu;
-    // });
     $('#excel').click(function excel(){
         var begin_time = $('#begin_time').val();
             var end_time = $('#end_time').val();
