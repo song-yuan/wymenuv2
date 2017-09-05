@@ -293,7 +293,7 @@
 				layer.msg('请完善信息！！！');
 				return false;
 			}
-			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel;
+			var url = "<?php echo $this->createUrl('company/store');?>/companyId/"+dpid+"/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel;
 	        $.ajax({
 	            url:url,
 	            type:'GET',
