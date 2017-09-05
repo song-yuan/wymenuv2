@@ -466,7 +466,7 @@ public function actionCreate(){
 		$db = Yii::app()->db;
 		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
 		if(!empty($compros)){
-			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",appId ="'.$appid.'",code ="'.$code.'" where dpid ='.$dpid;
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",pay_type ="2",pay_channel ="2",appId ="'.$appid.'",code ="'.$code.'" where dpid ='.$dpid;
 			$command = $db->createCommand($sql);
 			$command->execute();
 		}else{
@@ -477,7 +477,7 @@ public function actionCreate(){
 					'dpid'=>$dpid,
 					'create_at'=>date('Y-m-d H:i:s',time()),
 					'update_at'=>date('Y-m-d H:i:s',time()),
-					'pay_type'=>'1',
+					'pay_type'=>'2',
 					'pay_channel'=>'2',
 					'appId'=>$appid,
 					'code'=>$code,

@@ -254,8 +254,9 @@
 		var dpid = $(this).attr('dpid');
 		var content = '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paytype" placeholder="1表示总部，2表示个人，0表示不开通。"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="paychannel" placeholder="1表示官方支付，2表示收钱吧，3表示翼码。"/></div>'
-					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid"/></div>'
+					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="appid" placeholder="appid" value="2017032100000093"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><input id="code" placeholder="code"/></div>'
+					+ '<div style="display: none;width: 88%;margin-left: 6%;padding-top: 10px;"><input id="dpid" placeholder="dpid" value="'+dpid+'"/></div>'
 					+ '<div style="width: 88%;margin-left: 6%;padding-top: 10px;"><button id="appid_store" class="btn green">确认</button></div>'
 					;
 		$('#content').html(content);
@@ -285,12 +286,13 @@
 			var paychannel = $('#paychannel').val();
 			var appid = $('#appid').val();
 			var code = $('#code').val();
+			var dpid = $('#dpid').val();
 			//alert(appid);
 			if(paytype == '' || paychannel == '' || appid == '' || code == ''){
 				layer.msg('请完善信息！！！');
 				return false;
 			}
-			var url = "<?php echo $this->createUrl('company/store',array('companyId'=>$this->companyId));?>/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel;
+			var url = "<?php echo $this->createUrl('company/store');?>/companyId/"+dpid+"/appid/"+appid+"/code/"+code+"/paytype/"+paytype+"/paychannel/"+paychannel;
 	        $.ajax({
 	            url:url,
 	            type:'GET',
