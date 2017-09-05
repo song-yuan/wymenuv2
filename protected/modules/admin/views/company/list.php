@@ -168,12 +168,14 @@
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','店铺管理');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
+					
 					<a href="<?php echo $this->createUrl('company/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dpgl"></div>
 							<div class="ku-item-info">店铺管理</div>
 						</div>
 					</a>
+					<?php if(Yii::app()->user->role !='4'):?>
 					<a href="<?php echo $this->createUrl('user/index',array('companyId'=>$this->companyId,'type'=>0));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple czygl"></div>
@@ -303,7 +305,7 @@
 					</a>
 					
 					<?php endif; ?>
-					
+					<?php endif; ?>
 					<!--
 					<a href="#">
 						<div class="pull-left margin-left-right">
