@@ -29,7 +29,7 @@ class WxOrderAddress
 					        	'province'=>$address['province'],
 					        	'city'=>$address['city'],
 					        	'area'=>$address['area'],
-					        	'street'=>$address['street'],
+					        	'street'=>Helper::dealString($address['street']),
 					        	'postcode'=>$address['postcode'],
 					        	'mobile'=>$address['mobile'],
 					        	'tel'=>$address['tel'],
