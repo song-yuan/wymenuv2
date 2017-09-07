@@ -22,7 +22,7 @@ class Helper
 	}
 	// 替换掉换行符等
 	static function dealString($str) {
-		$str = str_replace(array("\r\n", "\n", "\r", "'", "'"), '', $str);
+		$str = str_replace(array("\r\n", "\n", "\r", "'"), '', $str);
 		return $str;
 	}
 	static public function genPassword($password)
