@@ -166,6 +166,7 @@ class MtOrder
 	 * 
 	 */
 	public static function dealOrder($data,$dpid,$type){
+		$data = Helper::dealString($data);
 		$obj = json_decode($data);
 		$orderArr = array();
 		$orderTime = $obj->ctime;
@@ -260,7 +261,6 @@ class MtOrder
 				array_push($orderArr['order_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
 			}
 		}
-		$obj->recipientAddress = Helper::dealString($obj->recipientAddress);
 		
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
