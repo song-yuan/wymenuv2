@@ -215,7 +215,7 @@ class SqbpayController extends Controller
 						'account_no' => $orders['account_no'],
 						'pay_amount' => number_format($total_amount/100,2),
 						'paytype' => $pay_type,
-						'remark' => '收钱吧公众号支付',
+						'remark' => $client_sn,
 				);
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
 			}

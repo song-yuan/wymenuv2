@@ -59,12 +59,12 @@ span.tab{
 			<!-- /.modal-dialog -->
 		</div>
 	<!-- BEGIN PAGE CONTENT-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖管理'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖管理'),'url'=>$this->createUrl('waimai/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','美团外卖'),'url'=>$this->createUrl('waimai/index' , array('companyId'=>$this->companyId)))),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('waimai/list' , array('companyId' => $this->companyId,'type' =>'0')))));?>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
+					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','美团外卖');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
                  <a href="<?php echo $this->createUrl('waimai/dpbd',array('companyId'=>$this->companyId));?>">
@@ -77,11 +77,16 @@ span.tab{
 							<div class="ku-item-info">菜品映射</div>
 						</div>
 					</a>
-					<!-- <a href="<?php echo $this->createUrl('waimai/jcbd',array('companyId'=>$this->companyId));?>">
+					<!-- <a href="<?php //echo $this->createUrl('waimai/peisong',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item-info">配送</div>
+						</div>
+					</a> -->
+					<a href="<?php echo $this->createUrl('waimai/jcbd',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item-info">解除绑定</div>
 						</div>
-					</a>-->
+					</a>
 				</div>
 			</div>
 		</div>

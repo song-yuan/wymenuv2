@@ -19,7 +19,8 @@
 			<!-- /.modal-dialog -->
 		</div>
 	<!-- BEGIN PAGE CONTENT-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖管理'),'url'=>$this->createUrl('waimai/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','外卖设置'),'url'=>$this->createUrl('waimai/setting' , array('companyId'=>$this->companyId,'type'=>0,))),),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('waimai/list' , array('companyId' => $this->companyId,'type' => '0'))))
+		);?>
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
@@ -48,7 +49,7 @@
 				<div class="form-group">
 				<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
 					<div class="col-md-4">
-					<?php echo $form->textField($model, 'dpid',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+					<?php echo $form->textField($model, 'dpid',array('class' => 'form-control','disabled'=>'disabled','placeholder'=>$model->getAttributeLabel('dpid')));?>
 					<?php echo $form->error($model, 'dpid' )?>
 					</div>
 				</div>
