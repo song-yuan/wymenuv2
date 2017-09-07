@@ -451,54 +451,60 @@ $(document).ready(function(){
     		var sentmatecode = $("#selectproduct"+bommatid ).find('option:selected').attr("smatecode");
     		// alert(sentmatecode);
     		var sentmatid = $("#selectproduct"+bommatid ).find('option:selected').val();
-
-    		if(buynum == '' || sentnum == '' ||sentmatecode == ''){
-    			matenames = matenames + matename +',';
+    		var sentname = $("#selectproduct"+bommatid ).find('option:selected').text();
+    		//alert(sentmatecode);
+    		// console.log(sentmatecode);
+    		// if(sentmatecode == undefined){
+    		// 	alert(111);
+    		// };
+    		// alert(22);
+    		if(buynum == '' || sentnum == '' || sentmatecode == undefined){
+    			matenames = matenames + matename+',';
     		}
     		matids = matids + bommatid +','+ matecode +','+ buynum +','+ sentmatid +','+ sentmatecode +','+ sentnum +';';
     		});
 
 		if(matenames){
 			alert('下列产品数量规则填写不全，请填写完整后再保存：'+matenames);
+		}else{
+			if(matids == ''){
+				alert("请至少添加一项活动产品，再保存！");
+				//return false;
 			}else{
-				if(matids == ''){
-					alert("请至少添加一项活动产品，再保存！");
-					//return false;
-				}else{
-					matids = matids.substr(0,matids.length-1);//除去最后一个“；”
-					//alert(matids);alert(prodid);alert(prodcode);alert(tasteid);
-					var url = "<?php echo $this->createUrl('buysentpromotion/storbuysent',array('companyId'=>$this->companyId));?>/matids/"+matids+"/prodid/"+prodid+"/prodcode/"+prodcode+"/tasteid/"+tasteid;
-		               $.ajax({
-		                   url:url,
-		                   type:'POST',
-		                   data:matids,//CF
-		                   //async:false,
-		                   dataType: "json",
-		                   success:function(msg){
-		                       var data=msg;
-		                       if(data.status){
-			                       alert("保存成功");
-			                       //$("#close_modal").trigger(click);
-			                       if(prodtaste == 0){
-				                       //alert(prodtaste);
-			                       		document.getElementById("close_modal").click();
-			                       }else{
-				                       layer.msg("请添加口味配方；或者点击右下角关闭页面！");
-				                       }
-								//alert(data.matids);
-								//alert(data.prodid);
+				matids = matids.substr(0,matids.length-1);//除去最后一个“；”
+				//alert(matids);alert(prodid);alert(prodcode);alert(tasteid);
+				var url = "<?php echo $this->createUrl('buysentpromotion/storbuysent',array('companyId'=>$this->companyId));?>/matids/"+matids+"/prodid/"+prodid+"/prodcode/"+prodcode+"/tasteid/"+tasteid;
+	               $.ajax({
+	                   url:url,
+	                   type:'POST',
+	                   data:matids,//CF
+	                   //async:false,
+	                   dataType: "json",
+	                   success:function(msg){
+	                       var data=msg;
+	                       if(data.status){
+		                       alert("保存成功");
+		                       //$("#close_modal").trigger(click);
+		                       if(prodtaste == 0){
+			                       //alert(prodtaste);
+		                       		document.getElementById("close_modal").click();
 		                       }else{
-		                           alert("保存失败");
-		                       }
-		                   },
-		                   error: function(msg){
-			                   var data=msg;
-		                       alert(1111);
-		                       alert(data.msg);
-		                   }
-		               });
-					}
+			                       layer.msg("请添加口味配方；或者点击右下角关闭页面！");
+			                       }
+							//alert(data.matids);
+							//alert(data.prodid);
+	                       }else{
+	                           alert("保存失败");
+	                       }
+	                   },
+	                   error: function(msg){
+		                   var data=msg;
+	                       // alert(1111);
+	                       alert(data.msg);
+	                   }
+	               });
 				}
+			}
      });
 
 });
