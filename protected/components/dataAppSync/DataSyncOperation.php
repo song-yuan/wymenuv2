@@ -848,11 +848,11 @@ class DataSyncOperation {
 			$admin_id = $data['admin_id'];
 			$admin = WxAdminUser::get($dpid, $admin_id);
 			if(!$admin){
-				$msg = array('status'=>false);
+				$msg = array('status'=>false,'msg'=>'不存在该管理员');
 				return json_encode($msg);
 			}
 		}else{
-			$msg = array('status'=>false);
+			$msg = array('status'=>false,'msg'=>'未传入admin_id');
 			return json_encode($msg);
 		}
 		
@@ -890,10 +890,10 @@ class DataSyncOperation {
 			if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
 				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
 			}else{
-				$msg = array('status'=>false);
+				$msg = array('status'=>false,'msg'=>$result);
 			}
 		}else{
-			$msg = array('status'=>false);
+			$msg = array('status'=>false,'msg'=>'退款订单号不存在');
 		}
 		return  json_encode($msg);
 	}
@@ -1168,7 +1168,7 @@ class DataSyncOperation {
 						$result = self::refundWxPay($rData);
 						$resObj = json_decode($result);
 						if(!$resObj->status){
-							throw new Exception('微信退款失败');
+							throw new Exception('微信退款失败'.$result);
 						}
 						$remark = $resObj->trade_no;
 					}elseif($pay['paytype']==2){
