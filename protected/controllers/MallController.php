@@ -247,7 +247,7 @@ class MallController extends Controller
 			//生成订单
 			$orderId = $orderObj->createOrder();
 			//订单地址
-			if(in_array($this->type,array(2,3))){
+			if(in_array($this->type,array(2,3,7,8))){
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$user['dpid']);
 					if(!$address){

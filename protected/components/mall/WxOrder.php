@@ -49,7 +49,7 @@ class WxOrder
 			$this->isTemp = 0;
 			$this->getSite();
 			$this->getSeatingFee();
-		}elseif($this->type==2){
+		}elseif(in_array($this->type, array(2,7,8))){
 			$this->orderOpenSite();
 			$this->getPackingFee();
 			$this->getFreightFee();
@@ -306,7 +306,7 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 			
 			//外卖订单地址
-			if(in_array($this->type,array(2,3))){
+			if(in_array($this->type,array(2,3,7,8))){
 				$address = WxAddress::getDefault($this->userId,$this->user['dpid']);
 				if($address){
 					WxOrderAddress::addOrderAddress($orderId,$this->dpid,$address);
@@ -514,7 +514,7 @@ class WxOrder
 			Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 			$orderPrice +=  $this->seatingFee*$this->number;
 			$realityPrice += $this->seatingFee*$this->number;
-		}elseif($this->type==2){
+		}elseif(in_array($this->type, array(2,7,8))){
 			if($this->packingFee > 0){
 				$se = new Sequence("order_product");
 				$orderProductId = $se->nextval();
@@ -539,7 +539,7 @@ class WxOrder
 				$orderPrice +=  $this->packingFee*$this->cartNumber;
 				$realityPrice += $this->packingFee*$this->cartNumber;
 			}
-			if($this->type==2 && $this->freightFee > 0){
+			if(in_array($this->type, array(2,7,8)) && $this->freightFee > 0){
 				$se = new Sequence("order_product");
 				$orderProductId = $se->nextval();
 				$orderProductData = array(
