@@ -49,7 +49,7 @@
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌台:<?php echo $siteType['name'].$site['serial'];?></div>
-<?php elseif($this->type==2):?>
+<?php elseif(in_array($this->type, array(2,7,8))):?>
 <!-- 地址 -->
 	<div class="address arrowright">
 		<?php if(!empty($address)):?>
@@ -262,7 +262,7 @@
 		</div>
 		<div class="weui_cells_tips"><?php echo $seatingTips;?></div>
 		<!-- end餐位费 -->
-	<?php elseif($this->type==2):?>
+	<?php elseif(in_array($this->type, array(2,7,8))):?>
 		<!-- begain餐位费 -->
 		<div class="section packingFee" price="<?php echo $packingFee;?>">
 			 <div class="prt">
@@ -519,7 +519,7 @@ $(document).ready(function(){
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
-	<?php elseif($this->type==2):?>
+	<?php elseif(in_array($this->type, array(2,7,8))):?>
 	var totalPackFee = 0;
 	var totalPackNum = 0;
 	var total = $('#total').html();
@@ -776,7 +776,7 @@ $(document).ready(function(){
 		}
 	});
 	$('#payorder').click(function(){
-		<?php if($this->type==2):?>
+		<?php if(in_array($this->type, array(2,7,8))):?>
 			var address = $('input[name="address"]').val();
 			if(parseInt(address) < 0){
 				layer.msg('请添加收货地址!');

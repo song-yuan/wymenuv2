@@ -179,6 +179,7 @@ class MallController extends Controller
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
 		if(empty($carts)){
+			
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		$isMustYue = $cartObj->pormotionYue;
