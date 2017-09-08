@@ -106,10 +106,10 @@ class MallController extends Controller
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
         foreach ($carts as $cart){
-        	$productId = $cart['product_id'];
+        	$productId = (int)$cart['product_id'];
         	$isSte = $cart['is_set'];
         	$promotionType = $cart['promotion_type'];
-        	$promotionId = $cart['promotion_id'];
+        	$promotionId = (int)$cart['promotion_id'];
         	$toGroup = $cart['to_group'];
         	$canCupon = $cart['can_cupon'];
         	$cartKey = $promotionType.'-'.$productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
