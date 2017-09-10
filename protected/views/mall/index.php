@@ -276,7 +276,7 @@
 				$productStr .='</p>';
 				if(!$closeShop){
 					$productId = (int)$pProductSet['lid'];
-					$cartKey = $productId.'-1--1--1-0';
+					$cartKey = 'normal-'.$productId.'-1--1--1-0';
 					if(isset($cartList[$cartKey])){
 						$cartItem = $cartList[$cartKey];
 						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
