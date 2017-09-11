@@ -890,7 +890,7 @@ $(document).ready(function(){
 	      	data:{lid:lid},
 	      	success:function(msg){
 	      		if(msg.status){
-	      			_this.parents('.section').remove();
+	      			_this.parents('.cart-dtl-item').remove();
 	      		}else{
 	      			layer.msg(msg.msg);
 	      		}
