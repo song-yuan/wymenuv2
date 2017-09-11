@@ -381,6 +381,13 @@ input {
 .cart-dtl-item.disable p,.cart-dtl-item.disable span{
 	color: gainsboro;
 }
+.cart-dtl-item.disable .cart-delete{
+	width: 100px;
+    height: 35px;
+    float: right;
+    font-size:15px;
+    text-align:center;	
+}
 .cart-dtl-item-inner {
     overflow: hidden;
     height: 35px;
