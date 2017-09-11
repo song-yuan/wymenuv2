@@ -42,26 +42,22 @@
 				$toGroup = $disable['to_group'];
 				$canCupon = $disable['can_cupon'];
 				
-				$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="'.$promotionType.'_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+				$cartStr .='<div class="j-fooditem cart-dtl-item disable" data-orderid="'.$promotionType.'_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
 				$cartStr .='<div class="cart-dtl-item-inner">';
 				$cartStr .='<i class="cart-dtl-dot"></i>';
-				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'</p>';
+				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'-'.$disable['msg'].'</p>';
 				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
-				$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-				$cartStr .='<span class="j-item-num foodop-num">'.$disable['num'].'</span> ';
-				$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+				$cartStr .='<span class="cart-delete" lid="'.$disable['lid'].'">删除</span>';
 				$cartStr .='</div>';
 				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
 				$cartStr .='</div></div>';
 			}else{
-				$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="normal_'.$isSet.'_'.$productId.'_-1_-1_0">';
+				$cartStr .='<div class="j-fooditem cart-dtl-item disable" data-orderid="normal_'.$isSet.'_'.$productId.'_-1_-1_0">';
 				$cartStr .='<div class="cart-dtl-item-inner">';
 				$cartStr .='<i class="cart-dtl-dot"></i>';
-				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'</p>';
+				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'-'.$disable['msg'].'</p>';
 				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
-				$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-				$cartStr .='<span class="j-item-num foodop-num">'.$disable['num'].'</span> ';
-				$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+				$cartStr .='<span class="cart-delete" lid="'.$disable['lid'].'">删除</span>';
 				$cartStr .='</div>';
 				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
 				$cartStr .='</div>';
@@ -885,6 +881,26 @@ $(document).ready(function(){
             }
         });
     });
+    $('.j-cart-dtl-list-inner').on('click','.cart-delete',function(){ 
+		var _this = $(this);
+	  	var lid = _this.attr('lid');
+	      
+	    $.ajax({
+	      	url:'<?php echo $this->createUrl('/mall/deleteCartItem',array('companyId'=>$this->companyId));?>',
+	      	data:{lid:lid},
+	      	success:function(msg){
+	      		if(msg.status){
+	      			_this.parents('.section').remove();
+	      		}else{
+	      			layer.msg(msg.msg);
+	      		}
+	      	},
+	      	error:function(){
+	      		layer.msg('移除失败,请检查网络');
+	          },
+	      	dataType:'json'
+	     });
+	});
     $('.j-mask').on('click',function(){
         $('.ft-lt').trigger('click');
     });

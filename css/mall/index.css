@@ -378,6 +378,9 @@ input {
     overflow: hidden;
     padding: 0 0px 10px 0;
 }
+.cart-dtl-item.disable p,.cart-dtl-item.disable span{
+	color: gainsboro;
+}
 .cart-dtl-item-inner {
     overflow: hidden;
     height: 35px;
