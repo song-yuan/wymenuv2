@@ -94,14 +94,14 @@ class MallController extends Controller
         $promotion = new WxPromotion($this->companyId,$userId,$this->type);
         $promotions = $promotion->promotionProductList;
         $buySentPromotions = $promotion->buySentProductList;
-        $cache = Yii::app()->cache->get($key);
-        if($cache!=false){
-        	$products = json_decode($cache,true);
-        }else{
+//         $cache = Yii::app()->cache->get($key);
+//         if($cache!=false){
+//         	$products = json_decode($cache,true);
+//         }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-        	Yii::app()->cache->set($key,json_encode($products),$expire);
-        }
+//         	Yii::app()->cache->set($key,json_encode($products),$expire);
+//         }
         
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
@@ -180,19 +180,21 @@ class MallController extends Controller
 		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
-		if(empty($carts)){
+		if(empty($carts['disable'])&&empty($carts['available'])){
 			
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		$isMustYue = $cartObj->pormotionYue;
 		
-		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
-		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
-		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($carts);// 购物车优惠原价
+		$disables = $carts['disable'];
+		$availables = $carts['available'];
+		$original = WxCart::getCartOrigianPrice($availables); // 购物车原价
+		$price = WxCart::getCartPrice($availables,$user,$this->type);// 购物车优惠原价
+		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables);// 购物车优惠原价
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		
 		$productCodeArr = array();
-		foreach($carts as $cart){
+		foreach($availables as $cart){
 			array_push($productCodeArr,$cart['pro_code']);
 		}
 		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
@@ -210,7 +212,7 @@ class MallController extends Controller
 			$isFreightFee = 0;
 			$address = array();
 		}
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -790,7 +792,21 @@ class MallController extends Controller
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请重新操作')));
 		}
 	}
-	
+	/**
+	 *
+	 * 删除购物车单条记录
+	 *
+	 */
+	public function actionDeleteCartItem(){
+		$dpid = $this->companyId;
+		$lid = Yii::app()->request->getParam('lid');
+		$result = WxCart::deleteCartItem($lid, $dpid);
+		if($result){
+			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
+		}else{
+			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请重新操作')));
+		}
+	}
 	/**
 	 * 
 	 * 获取订单状态
