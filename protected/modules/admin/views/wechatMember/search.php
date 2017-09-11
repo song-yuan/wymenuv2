@@ -4,8 +4,8 @@
     <style>
 <style>
 .modal-dialog{
-        width: 80%;
-        height: 70%;
+    width: 80%;
+    height: 70%;
 }
  .more-condition{
      margin-bottom: 15px !important;
@@ -176,7 +176,7 @@
                         </div>
                     </fieldset>
                     <hr class="more-condition" style="margin-top:0;color:#000;width:100%;size:6;display: <?php echo isset($more) && $more?'':'none';?>;">
-                    <div class="input-group" style="float:left;width:550px;margin-bottom:15px;">
+                    <div class="input-group" style="float:left;width:700px;margin-bottom:15px;">
                         <span class="input-group-addon">会员卡号或电话号码</span><input type="text" name="cardmobile" class="form-control" style="width:200px;" value="<?php if($cardmobile=='%'){echo '';}else{echo $cardmobile;}?>"/>
                         <button type="submit" class="btn green">
                             <i class="fa fa-search"></i>
@@ -185,6 +185,10 @@
                         <button type="button" class="btn gray" style="margin-left:20px;" onclick="location.href='<?php echo $this->createUrl('wechatMember/search',array('companyId' => $this->companyId));?>'">
                             <i class="m-icon-swapright m-icon-white"></i>
                             复位 &nbsp;
+                        </button>
+                        <button type="button" class="btn blue" style="margin-left:20px;" id="download">
+                            <i class="m-icon-swapright m-icon-white"></i>
+                            导出Excel &nbsp;
                         </button>
                     </div>
 
@@ -222,6 +226,7 @@
                                 <th>操作</th>
                                 </tr>
                         </thead>
+
                         <tbody>
                             <?php if($models):?>
                             <?php foreach($models as $model):?>
@@ -348,6 +353,14 @@ $(".glyphicon").click(function(){
                     $('.more-condition').hide();
                     $('#more').val(0);
         }
+});
+$("#download").click(function(){
+    if (confirm('确定导出所选条件的查询结果吗?')) {
+       $('#Promote').attr('action', '<?php echo $this->createUrl('wechatMember/searchExport',array('companyId' => $this->companyId));?>');
+       $('#Promote').submit();
+       $('#Promote').attr('action', '<?php echo $this->createUrl('wechatMember/search',array('companyId' => $this->companyId));?>');
+
+    }
 });
 
 var selectcountry;
