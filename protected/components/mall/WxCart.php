@@ -403,6 +403,23 @@ class WxCart
 		}
 		return $success;
 	}
+	/**
+	 * 
+	 * 删除购物车某条记录
+	 * 
+	 */
+	public static function deleteCartItem($lid,$dpid){
+		$success = false;
+		$sql = 'delete from nb_cart where lid=:lid and dpid=:dpid';
+		$result = Yii::app()->db->createCommand($sql)
+				->bindValue(':dpid',$dpid)
+				->bindValue(':lid',$lid)->execute();
+		
+		if($result){
+			$success = true;
+		}
+		return $success;
+	}
 	public static function getCartPrice($cartArrs,$user,$type){
 		$price = 0;
 		$levelDiscunt = 1;

@@ -135,6 +135,22 @@
 	    <?php endif;?>
 	    <div class="right"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>" ><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="<?php echo $baseUrl; ?>/img/mall/icon_edit.png"><span style="vertical-align:middle;">订单修改</span></a></div>
 	</div>
+	<!--  购物车中无效产品 -->
+	<?php foreach($disables as $disable):?>
+	<div class="section cartProduct disable">
+		<!--
+	    <div class="prt-cat">/div>
+	    -->
+	    <div class="prt">
+	        <div class="prt-lt"><?php if($disable['promotion_type']=='sent'): ?><span class="bttn_orange">赠</span><?php endif;?><?php echo $disable['product_name'];?></div>
+	        <div class="prt-mt">x<span class="num"><?php echo $disable['num'];?></span></div>
+	        <div class="prt-rt">￥<span class="price"><?php echo $disable['member_price'];?></span><span class="cart-delete" lid="<?php echo $disable['lid'];?>">删除</span></div>
+	        <div class="clear"></div>
+	    </div>
+	    <div class="taste-desc"><?php echo $disable['msg'];?></div>
+	</div>
+	<?php endforeach;?>
+	<!--  购物车中可下单产品 -->
 	<?php foreach($models as $model):?>
 	<div class="section cartProduct">
 		<!--
@@ -695,6 +711,26 @@ $(document).ready(function(){
   		 }
 	  }
     });
+	$('.section').on('touchstart','.cart-delete',function(){ 
+		var _this = $(this);
+	  	var lid = _this.attr('lid');
+	      
+	    $.ajax({
+	      	url:'<?php echo $this->createUrl('/mall/deleteCartItem',array('companyId'=>$this->companyId));?>',
+	      	data:{lid:lid},
+	      	success:function(msg){
+	      		if(msg.status){
+	      			_this.parents('.section').remove();
+	      		}else{
+	      			layer.msg(msg.msg);
+	      		}
+	      	},
+	      	error:function(){
+	      		layer.msg('移除失败,请检查网络');
+	          },
+	      	dataType:'json'
+	     });
+	});
   // 选择代金券
 	$('.user-cupon .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');

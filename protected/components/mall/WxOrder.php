@@ -102,20 +102,17 @@ class WxOrder
 				$promotionType = $result['promotion_type'];
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid,$promotionType,$result['promotion_id'],$result['product_id'],$result['is_set']);
 				if(!$productPromotion){
-					unset($results[$k]);
-					continue;
+					throw new Exception('该产品已无优惠活动');
 				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid,$promotionType,$result['promotion_id'],$this->type);
 				if(!$promotion){
-					unset($results[$k]);
-					continue;
+					throw new Exception('优惠活动已结束');
 				}
 				if($result['to_group']==2){
 					// 会员等级活动
 					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $this->user['user_level_lid'], $result['promotion_id']);
 					if(empty($promotionUser)){
-						unset($results[$k]);
-						continue;
+						throw new Exception('会员不是该等级,不能享受优惠');
 					}
 				}
 				if($promotionType=='promotion'){
