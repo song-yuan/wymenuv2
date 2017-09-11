@@ -6,7 +6,7 @@ class WechatMemberController extends BackendController {
                             'upload'=>array(
                                             'class'=>'application.extensions.swfupload.SWFUploadAction',
                                             //注意这里是绝对路径,.EXT是文件后缀名替代符号
-                                            'filepath'=>Helper::genFileName().'.EXT',
+                                            'filepath'=>Helper::IenFileName().'.EXT',
                                             //'onAfterUpload'=>array($this,'saveFile'),
                             )
             );
@@ -162,13 +162,13 @@ class WechatMemberController extends BackendController {
             $sqla='';
         }
         $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
-            .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"             
+            .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"
             . " from nb_brand_user t "
-            . " LEFT JOIN  nb_company com on (com.dpid = t.weixin_group )"  
+            . " LEFT JOIN  nb_company com on (com.dpid = t.weixin_group )"
             . " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
                     . " where order_type in ('1','2','6') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
                         . " group by dpid,user_id) tct on (t.weixin_group=tct.dpid and t.lid=tct.user_id) "
-            . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "            
+            . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "
             . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.") ".$sqlp.$sqlc.$sqla;
            // echo $sql;exit;
 
@@ -262,6 +262,298 @@ class WechatMemberController extends BackendController {
                 'datefrom'=>$datefrom,
                 'dateto'=>$dateto,
 			));
+    }
+    public function actionSearchExport(){
+        $db=Yii::app()->db;
+        $companyId = Yii::app()->request->getParam('companyId',"0000000000");
+        $more = Yii::app()->request->getPost('more',"0");
+        $findsex = Yii::app()->request->getPost('findsex',"%");//性别
+        $agefrom = Yii::app()->request->getPost('agefrom',"0");//起始年龄
+        $ageto = Yii::app()->request->getPost('ageto',"100");//终止年龄
+        $birthfrom = Yii::app()->request->getPost('birthfrom',"01-01");//起始生日
+        $birthto = Yii::app()->request->getPost('birthto',"12-31");//终止生日
+        $finduserlevel=Yii::app()->request->getPost('finduserlevel',"0000000000");//会员等级
+        $findweixingroup=Yii::app()->request->getPost('findweixingroup',"0000000000");//会员来源店铺
+        $noordertime=Yii::app()->request->getPost('noordertime',"%");//未消费时长
+
+        //省 市 地区
+        $findprovince=Yii::app()->request->getPost('province',"%");
+        $findcity=Yii::app()->request->getPost('city',"%");
+        $findarea=Yii::app()->request->getPost('area',"%");
+
+        $pointfrom = Yii::app()->request->getPost('pointfrom',"0");
+        $source = Yii::app()->request->getPost('source',"");//来源
+        $foucsfrom = Yii::app()->request->getPost('foucsfrom',"");//关注开始时间
+        $foucsto = Yii::app()->request->getPost('foucsto',"");//关注结束时间时间
+        // p($_POST);
+        if($pointfrom==0)
+        {
+            $pointfrom=-999999;
+        }
+        $pointto = Yii::app()->request->getPost('pointto',"9999999999");
+        $remainfrom = Yii::app()->request->getPost('remainfrom',"0");
+        // if($remainfrom==0)
+        // {
+        //  $remainfrom=-999999;
+        // }
+        $remainto = Yii::app()->request->getPost('remainto',"9999999999");
+
+        //时间范围
+        $datefrom = Yii::app()->request->getPost('datefrom',"2015-01-01");
+        $dateto = Yii::app()->request->getPost('dateto',date('Y-m-d',time()));
+
+        //总消费额范围
+        $consumetotalfrom = Yii::app()->request->getPost('consumetotalfrom',"0");
+        // if($consumetotalfrom==0)
+        // {
+        //  $consumetotalfrom=-999999;
+        // }
+        $consumetotalto = Yii::app()->request->getPost('consumetotalto',"9999999999");
+
+        //消费次数
+        $timesfrom = Yii::app()->request->getPost('timesfrom',"0");
+        $timesto = Yii::app()->request->getPost('timesto',"999999");
+
+        $cardmobile = Yii::app()->request->getPost('cardmobile',"%");//会员卡号  手机号
+        if(empty($cardmobile))
+        {
+            $cardmobile="%";
+        }
+
+        //未消费时长数据处理
+        if($noordertime!="%"){
+            $begintime = date('Y-m-d',strtotime("-".$noordertime." month"));
+            $endtime = date('Y-m-d',time());
+            $sql = 'select ifnull(k.user_id,0000000000) as user_id from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$companyId.' and k.create_at >="'.$begintime.' 00:00:00" and k.create_at <="'.$endtime.' 23:59:59" group by k.user_id';
+            $orders = $db->createCommand($sql)->queryAll();
+            $users ='0000000000';
+            foreach ($orders as $order){
+                $users = $users .','.$order['user_id'];
+            }
+        }else{
+            $users = '0000000000';
+        }
+        $criteria = new CDbCriteria;
+        //var_dump($sql);exit;
+        //用sql语句查询出所有会员及消费总额、历史积分、余额、
+
+        //来源店铺条件 省 市 地区
+        if($findprovince!="请选择..")
+        {
+            $sqlp= " and com.province like '".$findprovince."'";
+        }else{
+            $sqlp='';
+        }
+        if($findcity!="请选择..")
+        {
+            $sqlc= " and com.city like '".$findcity."'";
+        }else{
+            $sqlc='';
+        }
+        if($findarea!="请选择..")
+        {
+            $sqla= " and com.county_area like '".$findarea."'";
+        }else{
+            $sqla='';
+        }
+        $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
+            .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"
+            . " from nb_brand_user t "
+            . " LEFT JOIN  nb_company com on (com.dpid = t.weixin_group )"
+            . " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
+                    . " where order_type in ('1','2','6') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
+                        . " group by dpid,user_id) tct on (t.weixin_group=tct.dpid and t.lid=tct.user_id) "
+            . " LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid and tl.delete_flag = 0 and tl.level_type = 1 "
+            . " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.") ".$sqlp.$sqlc.$sqla;
+           // echo $sql;exit;
+
+
+        if($finduserlevel!="0000000000")
+        {
+            $sql.= " and tl.lid = ".$finduserlevel;
+        }
+        if($findsex!="%")
+        {
+            $sql.= "and t.sex like '".$findsex."'";
+        }
+        if($cardmobile!="%")
+        {
+            $sql.= " and (t.card_id like '%".$cardmobile."%' or t.mobile_num like '%".$cardmobile."%')";
+        }
+        if($findweixingroup!="0000000000")
+        {
+            $sql.= " and t.weixin_group = ".$findweixingroup;
+        }
+        if($source){
+            $sql.= " and com.company_name like '%".$source."%'";
+        }
+
+        //关注时间数据处理
+        if($foucsfrom){
+            $sql .= " and t.create_at >='".$foucsfrom."'";
+        }
+        if($foucsto){
+            $sql .= " and t.create_at <='".$foucsto."'";
+        }
+
+
+        $yearnow=date('Y',time());
+        $yearbegin=$yearnow-$ageto;
+        $yearend=$yearnow-$agefrom;
+        $sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) <= '".$yearend."'";
+        $sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) <= '".$birthto."'";
+        //$sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
+        //$sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) >= "
+        //  .$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) <=".$remainto;
+        $sql.=" and ifnull(tct.consumetotal,0) >= ".$consumetotalfrom." and ifnull(tct.consumetotal,0)<=".$consumetotalto;
+        $sql.=" and ifnull(tct.consumetimes,0) >= ".$timesfrom." and ifnull(tct.consumetimes,0)<=".$timesto;
+        $sql = 'select cf.* from ('.$sql.') cf';
+        $models = $db->createCommand($sql)->queryAll();
+
+
+// p($models);
+
+
+
+        $objPHPExcel = new PHPExcel();
+        //设置第1行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+        //设置第2行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+        $objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+        //设置字体
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+        $objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+        $styleArray1 = array(
+                        'font' => array(
+                                        'bold' => true,
+                                        'color'=>array(
+                                                        'rgb' => '000000',
+                                        ),
+                                        'size' => '20',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        $styleArray2 = array(
+                        'font' => array(
+                                        'color'=>array(
+                                                        'rgb' => 'ff0000',
+                                        ),
+                                        'size' => '16',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        //大边框样式 边框加粗
+        $lineBORDER = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THICK,
+                                                        'color' => array('argb' => '000000'),
+                                        ),
+                        ),
+        );
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+        //细边框样式
+        $linestyle = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array('argb' => 'FF000000'),
+                                        ),
+                        ),
+        );
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1',yii::t('app','壹点吃微信会员信息表'))
+        ->setCellValue('A2',yii::t('app','注意：该表为所选查询条件的查询结果'))
+        ->setCellValue('A3',yii::t('app','卡号'))
+        ->setCellValue('B3',yii::t('app','姓名|昵称'))
+        ->setCellValue('C3',yii::t('app','性别'))
+        ->setCellValue('D3',yii::t('app','手机号'))
+        ->setCellValue('E3',yii::t('app','生日'))
+        ->setCellValue('F3',yii::t('app','等级'))
+        ->setCellValue('G3',yii::t('app','地区(会员)'))
+        ->setCellValue('H3',yii::t('app','来源店铺'))
+        ->setCellValue('I3',yii::t('app','余额'));
+        $j=4;
+        if($models){
+
+                foreach ($models as $v) {
+                    switch ($v['sex']){
+                        case 0:$v['sex'] = "未知"; break;
+                        case 1:$v['sex'] = "男";break;
+                        case 2:$v['sex'] = "女";
+                    }
+                    if($v['mobile_num']){
+                        if(Yii::app()->user->role == 8){
+                            $str = substr_replace($v['mobile_num'],'****',3,4);
+                        }else{
+                            $str = $v['mobile_num'];
+                        }
+                    }else{
+                        $str='';
+                    }
+
+                    if($v['user_birthday']){
+                        $birth = substr($v['user_birthday'],0,10);
+                    }else{
+                        $birth = '';
+                    }
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValueExplicit('A'.$j,$v['card_id'],PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValue('B'.$j,$v['user_name']?$v['user_name']:$v['nickname'])
+                    ->setCellValue('C'.$j,$v['sex'])
+                    ->setCellValue('D'.$j,$str)
+                    ->setCellValue('E'.$j,$birth)
+                    ->setCellValue('F'.$j,$v['level_name'])
+                    ->setCellValue('G'.$j,$v['country'].$v['province'].$v['city'])
+                    ->setCellValue('H'.$j,$v['company_name'])
+                    ->setCellValue('I'.$j,$v['all_money']);
+                    $j++;
+                }
+            }
+
+        //$objPHPExcel->setActiveSheetIndex(0)->setCellValueExplicit('A'.$a, $k['listing'],PHPExcel_Cell_DataType::TYPE_STRING)//设置数字的科学计数法显示为文本
+        //冻结窗格
+        $objPHPExcel->getActiveSheet()->freezePane('A4');
+        //合并单元格
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:I1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:I2');
+        //单元格加粗，居中：
+        $objPHPExcel->getActiveSheet()->getStyle('A1:I'.$j)->applyFromArray($lineBORDER);//大边框格式引用
+        // 将A1单元格设置为加粗，居中
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:I2')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->applyFromArray($linestyle);
+        //加粗字体
+        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getFont()->setBold(true);
+        //设置字体垂直居中
+        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        //设置字体水平居中
+        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        //设置每列宽度
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+        //输出
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $filename="微信会员统计表（".date('m-d',time())."）.xls";
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
     }
 
     public function actionVip() {
