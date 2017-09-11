@@ -30,6 +30,7 @@
 	$cartStr = '';
 	$topTitle = '';
 	if(!empty($disables)){
+		var_dump($disables);exit;
 		foreach ($disables as $disable){
 			$productId = (int)$disable['product_id'];
 			$promotionId = $disable['promotion_id'];
