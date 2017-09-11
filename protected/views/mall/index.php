@@ -51,7 +51,7 @@
 				$cartStr .='<span class="j-item-num foodop-num">'.$disable['num'].'</span> ';
 				$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
 				$cartStr .='</div>';
-				$cartStr .='<span class="cart-dtl-price">¥'.$disable['price'].'</span>';
+				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
 				$cartStr .='</div></div>';
 			}else{
 				$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="normal_'.$isSet.'_'.$productId.'_-1_-1_0">';
