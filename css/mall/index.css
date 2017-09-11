@@ -385,8 +385,9 @@ input {
 	width: 100px;
     height: 35px;
     float: right;
-    font-size:15px;
-    text-align:center;	
+    font-size: 15px;
+    color: red;
+    text-align: center;	
 }
 .cart-dtl-item-inner {
     overflow: hidden;
