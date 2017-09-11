@@ -29,6 +29,44 @@
 	$productStr = '';
 	$cartStr = '';
 	$topTitle = '';
+	if(!empty($disables)){
+		foreach ($disables as $disable){
+			$productId = (int)$disable['product_id'];
+			$promotionId = $disable['promotion_id'];
+			$isSet = $disable['is_set'];
+			if($promotionId > 0){
+				$promotionType = $disable['promotion_type'];
+				$promotionId = (int)$disable['buysent_pro_id'];
+				$toGroup = $disable['to_group'];
+				$canCupon = $disable['can_cupon'];
+				
+				$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="'.$promotionType.'_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+				$cartStr .='<div class="cart-dtl-item-inner">';
+				$cartStr .='<i class="cart-dtl-dot"></i>';
+				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'</p>';
+				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+				$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+				$cartStr .='<span class="j-item-num foodop-num">'.$disable['num'].'</span> ';
+				$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+				$cartStr .='</div>';
+				$cartStr .='<span class="cart-dtl-price">¥'.$disable['price'].'</span>';
+				$cartStr .='</div></div>';
+			}else{
+				$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="normal_'.$isSet.'_'.$productId.'_-1_-1_0">';
+				$cartStr .='<div class="cart-dtl-item-inner">';
+				$cartStr .='<i class="cart-dtl-dot"></i>';
+				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'</p>';
+				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+				$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+				$cartStr .='<span class="j-item-num foodop-num">'.$disable['num'].'</span> ';
+				$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+				$cartStr .='</div>';
+				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
+				$cartStr .='</div>';
+				$cartStr .='</div>';
+			}
+		}
+	}
 	// 买送活动
 	foreach ($buySentPromotions as $key=>$buysent){
 		if($buysent[0]['main_picture']==''){

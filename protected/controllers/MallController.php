@@ -105,7 +105,9 @@ class MallController extends Controller
         
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
-        foreach ($carts as $cart){
+        $disables = $carts['disable'];
+        $avalibles = $carts['available'];
+        foreach ($avalibles as $cart){
         	$productId = (int)$cart['product_id'];
         	$isSte = $cart['is_set'];
         	$promotionType = $cart['promotion_type'];
@@ -114,10 +116,10 @@ class MallController extends Controller
         	$canCupon = $cart['can_cupon'];
         	$cartKey = $promotionType.'-'.$productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
         	$cartList[$cartKey] = $cart;
-        }
+        }	
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'products'=>$products,'cartList'=>$cartList,'start'=>$start,'notices'=>$notices));
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'products'=>$products,'cartList'=>$cartList,'disables'=>$disables,'start'=>$start,'notices'=>$notices));
 	}
 	/**
 	 * 

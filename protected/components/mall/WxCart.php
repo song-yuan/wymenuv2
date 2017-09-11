@@ -146,6 +146,9 @@ class WxCart
 		}
 	}
 	public function getCart(){
+		$cartListArr = array();
+		$cartListArr['disable'] = array();
+		$cartListArr['available'] = array();
 		if($this->type==2){
 			$hideCate = WxCategory::getHideCate($this->dpid, 2);
 			if(empty($hideCate)){
@@ -177,17 +180,18 @@ class WxCart
 				  ->bindValue(':userId',$this->userId)
 				  ->queryAll();
 		
-		foreach($results as $k=>$result){
+		foreach($results as $result){
 			if($result['is_set'] > 0){
 				$detail = WxProduct::getProductSetDetail($result['product_id'], $result['dpid']);
 				if(!empty($detail)){
-					$results[$k]['detail'] = $detail;
+					$result['detail'] = $detail;
 				}else{
-					unset($results[$k]);
+					$result['msg'] = '请添加套餐明细';
+					array_push($cartListArr['disable'], $result);
 					continue;
 				}
 			}else{
-				$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
+				$result['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 			}
 			
 			$promotionId = $result['promotion_id'];
@@ -195,12 +199,14 @@ class WxCart
 			if($promotionId > 0){
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
 				if(!$productPromotion){
-					unset($results[$k]);
+					$result['msg'] = '该产品已无优惠活动';
+					array_push($cartListArr['disable'], $result);
 					continue;
 				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid, $promotionType, $promotionId,$this->type);
 				if(!$promotion){
-					unset($results[$k]);
+					$result['msg'] = '优惠活动已结束';
+					array_push($cartListArr['disable'], $result);
 					continue;
 				}
 				if($result['to_group']==3){
@@ -210,28 +216,30 @@ class WxCart
 					$user = WxBrandUser::get($this->userId, $this->dpid);
 					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $user['user_level_lid'], $promotionId);
 					if(empty($promotionUser)){
-						unset($results[$k]);
+						$result['msg'] = '会员不是该等级,不能享受优惠';
+						array_push($cartListArr['disable'], $result);
 						continue;
 					}
 				}
 				
 				if($promotionType=='promotion'){
 					$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$promotionId,$result['to_group']);
-					$results[$k]['price'] = $productPrice['price'];
-					$results[$k]['promotion'] = $productPrice;
+					$result['price'] = $productPrice['price'];
+					$result['promotion'] = $productPrice;
 				}elseif($promotionType=='sent'){
-					$results[$k]['price'] = '0.00';
-					$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
+					$result['price'] = '0.00';
+					$result['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 				}else{
-					$results[$k]['price'] = $results[$k]['member_price'];
-					$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
+					$result['price'] = $result['member_price'];
+					$result['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 				}
 			}else{
-				$results[$k]['price'] = $results[$k]['member_price'];
-				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
+				$result['price'] = $result['member_price'];
+				$result['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
+			array_push($cartListArr['available'],$result);
 		}
-		return array_merge($results);
+		return $cartListArr;
 	}
 	public function getCartPromotion(){
 		$sql = 'select t.*,t1.promotion_type from nb_cart t,nb_normal_promotion t1 where t.promotion_id=t.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.promotion_id > 0 and t.promotion_id!=:privationPromotionId and t.promotion_type="promotion" and t1.delete_flag=0'
