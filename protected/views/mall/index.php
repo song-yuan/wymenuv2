@@ -30,14 +30,15 @@
 	$cartStr = '';
 	$topTitle = '';
 	if(!empty($disables)){
-		var_dump($disables);exit;
 		foreach ($disables as $disable){
 			$productId = (int)$disable['product_id'];
 			$promotionId = $disable['promotion_id'];
 			$isSet = $disable['is_set'];
 			if($promotionId > 0){
 				$promotionType = $disable['promotion_type'];
-				$promotionId = (int)$disable['buysent_pro_id'];
+				if($promotionType=='buysent'){
+					$promotionId = (int)$disable['buysent_pro_id'];
+				}
 				$toGroup = $disable['to_group'];
 				$canCupon = $disable['can_cupon'];
 				
