@@ -161,7 +161,7 @@ class WechatMemberController extends BackendController {
         }else{
             $sqla='';
         }
-        $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
+        $sql="select t.lid,t.dpid,t.card_id,t.create_at,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
             .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"
             . " from nb_brand_user t "
             . " LEFT JOIN  nb_company com on (com.dpid = t.weixin_group )"
@@ -356,7 +356,7 @@ class WechatMemberController extends BackendController {
         }else{
             $sqla='';
         }
-        $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
+        $sql="select t.lid,t.dpid,t.card_id,t.create_at,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
             .",t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name"
             . " from nb_brand_user t "
             . " LEFT JOIN  nb_company com on (com.dpid = t.weixin_group )"
@@ -479,7 +479,8 @@ class WechatMemberController extends BackendController {
         ->setCellValue('F3',yii::t('app','等级'))
         ->setCellValue('G3',yii::t('app','地区(会员)'))
         ->setCellValue('H3',yii::t('app','来源店铺'))
-        ->setCellValue('I3',yii::t('app','余额'));
+        ->setCellValue('I3',yii::t('app','关注日期'))
+        ->setCellValue('J3',yii::t('app','余额'));
         $j=4;
         if($models){
 
@@ -504,6 +505,11 @@ class WechatMemberController extends BackendController {
                     }else{
                         $birth = '';
                     }
+                    if($v['create_at']){
+                        $guanzhuri = substr($v['create_at'],0,10);
+                    }else{
+                        $guanzhuri = '';
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValueExplicit('A'.$j,$v['card_id'],PHPExcel_Cell_DataType::TYPE_STRING)
                     ->setCellValue('B'.$j,$v['user_name']?$v['user_name']:$v['nickname'])
@@ -513,7 +519,8 @@ class WechatMemberController extends BackendController {
                     ->setCellValue('F'.$j,$v['level_name'])
                     ->setCellValue('G'.$j,$v['country'].$v['province'].$v['city'])
                     ->setCellValue('H'.$j,$v['company_name'])
-                    ->setCellValue('I'.$j,$v['all_money']);
+                    ->setCellValue('I'.$j,$guanzhuri)
+                    ->setCellValue('J'.$j,$v['all_money']);
                     $j++;
                 }
             }
@@ -522,20 +529,20 @@ class WechatMemberController extends BackendController {
         //冻结窗格
         $objPHPExcel->getActiveSheet()->freezePane('A4');
         //合并单元格
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:I1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:I2');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:J2');
         //单元格加粗，居中：
-        $objPHPExcel->getActiveSheet()->getStyle('A1:I'.$j)->applyFromArray($lineBORDER);//大边框格式引用
+        $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$j)->applyFromArray($lineBORDER);//大边框格式引用
         // 将A1单元格设置为加粗，居中
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:I2')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($linestyle);
         //加粗字体
-        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFont()->setBold(true);
         //设置字体垂直居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         //设置字体水平居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         //设置每列宽度
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
@@ -546,7 +553,8 @@ class WechatMemberController extends BackendController {
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
         //输出
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $filename="微信会员统计表（".date('m-d',time())."）.xls";

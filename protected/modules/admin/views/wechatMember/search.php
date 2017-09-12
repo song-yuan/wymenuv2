@@ -221,6 +221,7 @@
                                 <th>生日</th>
                                 <th>等级</th>
                                 <th>地区(会员)</th>
+                                <th>关注日期</th>
                                 <th>来源店铺</th>
                                 <th>余额</th>
                                 <th>操作</th>
@@ -229,6 +230,7 @@
 
                         <tbody>
                             <?php if($models):?>
+
                             <?php foreach($models as $model):?>
                                 <tr>
                                     <td><?php echo substr($model['card_id'],5,9);?></td>
@@ -247,6 +249,7 @@
                                     <td><?php echo substr($model['user_birthday'],0,10);?></td>
                                     <td><?php echo $model['level_name'];?></td>
                                     <td><?php echo $model['country'];?> <?php echo $model['province'];?> <?php echo $model['city'];?></td>
+                                    <td><?php echo substr($model['create_at'],0,10);?></td>
                                     <td><?php echo $model['company_name'];?></td>
                                     <td><?php echo $model['all_money'];?></td>
                                     <td class="button-column">
