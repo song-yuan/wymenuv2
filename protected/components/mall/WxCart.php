@@ -200,12 +200,14 @@ class WxCart
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
 				if(!$productPromotion){
 					$result['msg'] = '该产品已无优惠活动';
+					$result['buysent_pro_id'] = 0;
 					array_push($cartListArr['disable'], $result);
 					continue;
 				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid, $promotionType, $promotionId,$this->type);
 				if(!$promotion){
 					$result['msg'] = '优惠活动已结束';
+					$result['buysent_pro_id'] = 0;
 					array_push($cartListArr['disable'], $result);
 					continue;
 				}
