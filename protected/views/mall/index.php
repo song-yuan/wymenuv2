@@ -658,10 +658,11 @@ $(document).ready(function(){
         var toGroup = t.attr('to-group');
         var canCupon = t.attr('can-cupon');
         var isSet = t.attr('is-set');
+        var rand = new Date().getTime();
         
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -732,10 +733,11 @@ $(document).ready(function(){
         var isSet = t.attr('is-set');
         var canCupon = t.attr('can-cupon');
         var storeNum = t.attr('store-number');
+        var rand = new Date().getTime();
         
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
@@ -782,9 +784,11 @@ $(document).ready(function(){
         var canCupon = dataArr[5];
         
         var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
+        var rand = new Date().getTime();
+        
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-        	data:{productId:productId,promotionType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+        	data:{productId:productId,promotionType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -819,10 +823,10 @@ $(document).ready(function(){
        
        var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
        var storeNum = t.attr('store-number');
-       
+       var rand = new Date().getTime();
        $.ajax({
 	       	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-	       	data:{productId:productId,promotionType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+	       	data:{productId:productId,promotionType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
 	       	success:function(msg){
 	       		if(msg.status){
 	   			  if(parseInt(t.val())==1){
