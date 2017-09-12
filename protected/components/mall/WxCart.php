@@ -200,14 +200,14 @@ class WxCart
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
 				if(!$productPromotion){
 					$result['msg'] = '该产品已无优惠活动';
-					$result['buysent_pro_id'] = 0;
+					$result['buysent_pro_id'] = $promotionId;
 					array_push($cartListArr['disable'], $result);
 					continue;
 				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid, $promotionType, $promotionId,$this->type);
 				if(!$promotion){
 					$result['msg'] = '优惠活动已结束';
-					$result['buysent_pro_id'] = 0;
+					$result['buysent_pro_id'] = $promotionId;
 					array_push($cartListArr['disable'], $result);
 					continue;
 				}
@@ -219,6 +219,7 @@ class WxCart
 					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $user['user_level_lid'], $promotionId);
 					if(empty($promotionUser)){
 						$result['msg'] = '会员不是该等级,不能享受优惠';
+						$result['buysent_pro_id'] = $promotionId;
 						array_push($cartListArr['disable'], $result);
 						continue;
 					}
