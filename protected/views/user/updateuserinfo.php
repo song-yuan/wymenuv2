@@ -75,7 +75,7 @@
                 <input class="weui_input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
-            <div class="weui_cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;">
+            <div class="weui_cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;color: #3CC51F;">
                 <span id="countSpan" >获取验证码</span>
                 <span id="countdown"></span>
             </div>
