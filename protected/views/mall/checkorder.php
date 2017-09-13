@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('确认订单');
+// 	var_dump($cupons);exit;
 	$isCupon = false;
 	if(!empty($cupons)){
 		$isCupon = true;
@@ -49,7 +50,7 @@
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌台:<?php echo $siteType['name'].$site['serial'];?></div>
-<?php elseif($this->type==2):?>
+<?php elseif(in_array($this->type, array(2,7,8))):?>
 <!-- 地址 -->
 	<div class="address arrowright">
 		<?php if(!empty($address)):?>
@@ -135,6 +136,22 @@
 	    <?php endif;?>
 	    <div class="right"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>" ><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="<?php echo $baseUrl; ?>/img/mall/icon_edit.png"><span style="vertical-align:middle;">订单修改</span></a></div>
 	</div>
+	<!--  购物车中无效产品 -->
+	<?php foreach($disables as $disable):?>
+	<div class="section cartProduct disable">
+		<!--
+	    <div class="prt-cat">/div>
+	    -->
+	    <div class="prt">
+	        <div class="prt-lt"><?php if($disable['promotion_type']=='sent'): ?><span class="bttn_orange">赠</span><?php endif;?><?php echo $disable['product_name'];?></div>
+	        <div class="prt-mt">x<span class="num"><?php echo $disable['num'];?></span></div>
+	        <div class="prt-rt">￥<span class="price"><?php echo $disable['member_price'];?></span><span class="cart-delete" lid="<?php echo $disable['lid'];?>">删除</span></div>
+	        <div class="clear"></div>
+	    </div>
+	    <div class="taste-desc"><?php echo $disable['msg'];?></div>
+	</div>
+	<?php endforeach;?>
+	<!--  购物车中可下单产品 -->
 	<?php foreach($models as $model):?>
 	<div class="section cartProduct">
 		<!--
@@ -262,7 +279,7 @@
 		</div>
 		<div class="weui_cells_tips"><?php echo $seatingTips;?></div>
 		<!-- end餐位费 -->
-	<?php elseif($this->type==2):?>
+	<?php elseif(in_array($this->type, array(2,7,8))):?>
 		<!-- begain餐位费 -->
 		<div class="section packingFee" price="<?php echo $packingFee;?>">
 			 <div class="prt">
@@ -361,7 +378,18 @@
 	<div class="cupon-container">
 	<?php if($isCupon):?>
 	<?php foreach($cupons as $coupon):?>
-		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'].'-'.$coupon['dpid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?><span class="small font_org">(满<?php echo (int)$coupon['min_consumer'];?>减<?php echo (int)$coupon['cupon_money'];?>)</span></div>
+		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'].'-'.$coupon['dpid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>">
+			<div class="item-top">
+				<div class="item-top-left"><?php echo $coupon['cupon_title'];?></div>
+				<div class="item-top-right">￥<?php echo (int)$coupon['cupon_money'];?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="item-bottom">
+				<div class="item-bottom-left">有效期至<?php echo date('Y.m.d',strtotime($coupon['close_day']));?></div>
+				<div class="item-bottom-right">满<?php echo (int)$coupon['min_consumer'];?>可用</div>
+				<div class="clear"></div>
+			</div>
+		</div>
 	<?php endforeach;?>
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
@@ -519,7 +547,7 @@ $(document).ready(function(){
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
-	<?php elseif($this->type==2):?>
+	<?php elseif(in_array($this->type, array(2,7,8))):?>
 	var totalPackFee = 0;
 	var totalPackNum = 0;
 	var total = $('#total').html();
@@ -695,6 +723,26 @@ $(document).ready(function(){
   		 }
 	  }
     });
+	$('.section').on('touchstart','.cart-delete',function(){ 
+		var _this = $(this);
+	  	var lid = _this.attr('lid');
+	      
+	    $.ajax({
+	      	url:'<?php echo $this->createUrl('/mall/deleteCartItem',array('companyId'=>$this->companyId));?>',
+	      	data:{lid:lid},
+	      	success:function(msg){
+	      		if(msg.status){
+	      			_this.parents('.section').remove();
+	      		}else{
+	      			layer.msg(msg.msg);
+	      		}
+	      	},
+	      	error:function(){
+	      		layer.msg('移除失败,请检查网络');
+	          },
+	      	dataType:'json'
+	     });
+	});
   // 选择代金券
 	$('.user-cupon .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
@@ -731,7 +779,6 @@ $(document).ready(function(){
 		var money = 0;
 		
 		$('.user-cupon .item').removeClass('on');
-		$(this).addClass('on');
 		$('input[name="cupon"]').val(userCuponId);
 		
 		$(this).attr('min-money',0);
@@ -776,7 +823,7 @@ $(document).ready(function(){
 		}
 	});
 	$('#payorder').click(function(){
-		<?php if($this->type==2):?>
+		<?php if(in_array($this->type, array(2,7,8))):?>
 			var address = $('input[name="address"]').val();
 			if(parseInt(address) < 0){
 				layer.msg('请添加收货地址!');

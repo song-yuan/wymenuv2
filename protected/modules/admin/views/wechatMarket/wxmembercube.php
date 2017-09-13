@@ -224,9 +224,6 @@
 	<div class="portlet-title">
 		<div class="caption"><i class="fa fa-group"></i>会员列表</div>
 		<div class="actions">
-			<a href="javascript:;" class="btn blue" onclick="exportFile();">
-				<i class="fa fa-pencil"></i> 导出Excel文件
-			</a>
 			<a href="javascript:;" class="btn red add_save">
 				<i class="fa fa-pencil"></i> 手动群发
 			</a>

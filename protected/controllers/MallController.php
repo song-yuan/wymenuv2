@@ -64,7 +64,7 @@ class MallController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2146;
+			$userId = 2182;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
@@ -105,19 +105,21 @@ class MallController extends Controller
         
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
-        foreach ($carts as $cart){
-        	$productId = $cart['product_id'];
+        $disables = $carts['disable'];
+        $avalibles = $carts['available'];
+        foreach ($avalibles as $cart){
+        	$productId = (int)$cart['product_id'];
         	$isSte = $cart['is_set'];
         	$promotionType = $cart['promotion_type'];
-        	$promotionId = $cart['promotion_id'];
+        	$promotionId = (int)$cart['promotion_id'];
         	$toGroup = $cart['to_group'];
         	$canCupon = $cart['can_cupon'];
         	$cartKey = $promotionType.'-'.$productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
         	$cartList[$cartKey] = $cart;
-        }
+        }	
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'products'=>$products,'cartList'=>$cartList,'start'=>$start,'notices'=>$notices));
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'products'=>$products,'cartList'=>$cartList,'disables'=>$disables,'start'=>$start,'notices'=>$notices));
 	}
 	/**
 	 * 
@@ -178,18 +180,21 @@ class MallController extends Controller
 		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
-		if(empty($carts)){
+		if(empty($carts['disable'])&&empty($carts['available'])){
+			
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		$isMustYue = $cartObj->pormotionYue;
 		
-		$original = WxCart::getCartOrigianPrice($carts); // 购物车原价
-		$price = WxCart::getCartPrice($carts,$user,$this->type);// 购物车优惠原价
-		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($carts);// 购物车优惠原价
+		$disables = $carts['disable'];
+		$availables = $carts['available'];
+		$original = WxCart::getCartOrigianPrice($availables); // 购物车原价
+		$price = WxCart::getCartPrice($availables,$user,$this->type);// 购物车优惠原价
+		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables);// 购物车优惠原价
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		
 		$productCodeArr = array();
-		foreach($carts as $cart){
+		foreach($availables as $cart){
 			array_push($productCodeArr,$cart['pro_code']);
 		}
 		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
@@ -207,7 +212,7 @@ class MallController extends Controller
 			$isFreightFee = 0;
 			$address = array();
 		}
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -246,7 +251,7 @@ class MallController extends Controller
 			//生成订单
 			$orderId = $orderObj->createOrder();
 			//订单地址
-			if(in_array($this->type,array(2,3))){
+			if(in_array($this->type,array(2,3,7,8))){
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$user['dpid']);
 					if(!$address){
@@ -787,7 +792,21 @@ class MallController extends Controller
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请重新操作')));
 		}
 	}
-	
+	/**
+	 *
+	 * 删除购物车单条记录
+	 *
+	 */
+	public function actionDeleteCartItem(){
+		$dpid = $this->companyId;
+		$lid = Yii::app()->request->getParam('lid');
+		$result = WxCart::deleteCartItem($lid, $dpid);
+		if($result){
+			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
+		}else{
+			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请重新操作')));
+		}
+	}
 	/**
 	 * 
 	 * 获取订单状态

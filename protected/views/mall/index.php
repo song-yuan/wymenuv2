@@ -29,6 +29,42 @@
 	$productStr = '';
 	$cartStr = '';
 	$topTitle = '';
+	if(!empty($disables)){
+		foreach ($disables as $disable){
+			$productId = (int)$disable['product_id'];
+			$promotionId = $disable['promotion_id'];
+			$isSet = $disable['is_set'];
+			if($promotionId > 0){
+				$promotionType = $disable['promotion_type'];
+				if($promotionType=='buysent'){
+					$promotionId = (int)$disable['buysent_pro_id'];
+				}
+				$toGroup = $disable['to_group'];
+				$canCupon = $disable['can_cupon'];
+				
+				$cartStr .='<div class="j-fooditem cart-dtl-item disable" data-orderid="'.$promotionType.'_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+				$cartStr .='<div class="cart-dtl-item-inner">';
+				$cartStr .='<i class="cart-dtl-dot"></i>';
+				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'-'.$disable['msg'].'</p>';
+				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+				$cartStr .='<span class="cart-delete" lid="'.$disable['lid'].'">删除</span>';
+				$cartStr .='</div>';
+				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
+				$cartStr .='</div></div>';
+			}else{
+				$cartStr .='<div class="j-fooditem cart-dtl-item disable" data-orderid="normal_'.$isSet.'_'.$productId.'_-1_-1_0">';
+				$cartStr .='<div class="cart-dtl-item-inner">';
+				$cartStr .='<i class="cart-dtl-dot"></i>';
+				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'-'.$disable['msg'].'</p>';
+				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+				$cartStr .='<span class="cart-delete" lid="'.$disable['lid'].'">删除</span>';
+				$cartStr .='</div>';
+				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
+				$cartStr .='</div>';
+				$cartStr .='</div>';
+			}
+		}
+	}
 	// 买送活动
 	foreach ($buySentPromotions as $key=>$buysent){
 		if($buysent[0]['main_picture']==''){
@@ -276,7 +312,7 @@
 				$productStr .='</p>';
 				if(!$closeShop){
 					$productId = (int)$pProductSet['lid'];
-					$cartKey = $productId.'-1--1--1-0';
+					$cartKey = 'normal-'.$productId.'-1--1--1-0';
 					if(isset($cartList[$cartKey])){
 						$cartItem = $cartList[$cartKey];
 						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
@@ -622,10 +658,11 @@ $(document).ready(function(){
         var toGroup = t.attr('to-group');
         var canCupon = t.attr('can-cupon');
         var isSet = t.attr('is-set');
+        var rand = new Date().getTime();
         
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -679,9 +716,6 @@ $(document).ready(function(){
         			layer.msg(msg.msg);
         		}
         	},
-        	error:function(){
-        		layer.msg('添加失败,请检查网络');
-            },
         	dataType:'json'
         });
     });
@@ -696,10 +730,11 @@ $(document).ready(function(){
         var isSet = t.attr('is-set');
         var canCupon = t.attr('can-cupon');
         var storeNum = t.attr('store-number');
+        var rand = new Date().getTime();
         
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
@@ -727,9 +762,6 @@ $(document).ready(function(){
         			layer.msg(msg.msg);
         		}
         	},
-        	error:function(){
-        		layer.msg('移除失败,请检查网络');
-            },
         	dataType:'json'
         });
    });
@@ -746,9 +778,11 @@ $(document).ready(function(){
         var canCupon = dataArr[5];
         
         var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
+        var rand = new Date().getTime();
+        
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-        	data:{productId:productId,promotionType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+        	data:{productId:productId,promotionType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -763,9 +797,6 @@ $(document).ready(function(){
 			        setTotal();
         		}
         	},
-        	error:function(){
-        		layer.msg('添加失败,请检查网络');
-            },
         	dataType:'json'
         });
     });
@@ -783,10 +814,10 @@ $(document).ready(function(){
        
        var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
        var storeNum = t.attr('store-number');
-       
+       var rand = new Date().getTime();
        $.ajax({
 	       	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-	       	data:{productId:productId,promotionType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon},
+	       	data:{productId:productId,promoteType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
 	       	success:function(msg){
 	       		if(msg.status){
 	   			  if(parseInt(t.val())==1){
@@ -817,9 +848,6 @@ $(document).ready(function(){
 	       			layer.msg(msg.msg);
 	       		}
 	       	},
-	       	error:function(){
-	       		layer.msg('移除失败,请检查网络');
-	        },
 	       	dataType:'json'
        });
     });
@@ -840,11 +868,25 @@ $(document).ready(function(){
         			layer.msg('清空购物车失败,请重试');
         		}
         	},
-        	error:function(){
-        		layer.msg('清空购物车失败,请检查网络');
-            }
         });
     });
+    $('.j-cart-dtl-list-inner').on('click','.cart-delete',function(){ 
+		var _this = $(this);
+	  	var lid = _this.attr('lid');
+	      
+	    $.ajax({
+	      	url:'<?php echo $this->createUrl('/mall/deleteCartItem',array('companyId'=>$this->companyId));?>',
+	      	data:{lid:lid},
+	      	success:function(msg){
+	      		if(msg.status){
+	      			_this.parents('.cart-dtl-item').remove();
+	      		}else{
+	      			layer.msg(msg.msg);
+	      		}
+	      	},
+	      	dataType:'json'
+	     });
+	});
     $('.j-mask').on('click',function(){
         $('.ft-lt').trigger('click');
     });

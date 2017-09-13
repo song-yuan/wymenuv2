@@ -1,7 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-        $a=$user['user_name']? "个人信息": "会员注册";
-	$this->setPageTitle($a);  
+    $title = $user['user_name']? "个人信息": "会员注册";
+	$this->setPageTitle($title);  
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
@@ -21,8 +21,8 @@
 .bttn_small {
 	padding: 4px 10px;
 	font-size: 16px;
-        background-color: #74d2d4;
-        color: #000;
+        background-color: #3CC51F;
+        color: #FFFFFF;
 }
 .btn_birth{
        font-size: 22px; 
@@ -49,7 +49,7 @@
 
 <div class="page cell">
 	<div class="weui_cells_title">
-            <?php  echo $user['user_name']? "个人信息": "会员注册";?>
+            <?php  echo $title;?>
         </div>
     <div class="weui_cells weui_cells_form">
         <div class="weui_cell">
@@ -75,7 +75,7 @@
                 <input class="weui_input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
-            <div class="weui_cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;">
+            <div class="weui_cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;color: #3CC51F;">
                 <span id="countSpan" >获取验证码</span>
                 <span id="countdown"></span>
             </div>

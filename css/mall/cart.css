@@ -1,5 +1,9 @@
 body{ background-color:#E5E5E5;}
 .section{width: 100%;margin:0 auto; padding: 10px 0; border-bottom: 1px dashed #FF5151;font-size: 15px;}
+.section.disable{color:gainsboro;border-bottom: 1px dashed gainsboro;}
+.section.disable span.price{color:gainsboro;}
+.section.disable span.cart-delete{color:red;float:right;}
+.section.disable .taste-desc{color:#666666;padding:0px;}
 .prt-cat{width: 100%;margin:5px 0;}
 .prt{margin:2px 0;}
 .prt-lt{float: left;width: 33%;}

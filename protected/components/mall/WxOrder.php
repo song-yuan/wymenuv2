@@ -49,7 +49,7 @@ class WxOrder
 			$this->isTemp = 0;
 			$this->getSite();
 			$this->getSeatingFee();
-		}elseif($this->type==2){
+		}elseif(in_array($this->type, array(2,7,8))){
 			$this->orderOpenSite();
 			$this->getPackingFee();
 			$this->getFreightFee();
@@ -102,20 +102,17 @@ class WxOrder
 				$promotionType = $result['promotion_type'];
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid,$promotionType,$result['promotion_id'],$result['product_id'],$result['is_set']);
 				if(!$productPromotion){
-					unset($results[$k]);
-					continue;
+					throw new Exception('该产品已无优惠活动');
 				}
 				$promotion = WxPromotion::isPromotionValid($this->dpid,$promotionType,$result['promotion_id'],$this->type);
 				if(!$promotion){
-					unset($results[$k]);
-					continue;
+					throw new Exception('优惠活动已结束');
 				}
 				if($result['to_group']==2){
 					// 会员等级活动
 					$promotionUser = WxPromotion::getPromotionUser($this->dpid, $this->user['user_level_lid'], $result['promotion_id']);
 					if(empty($promotionUser)){
-						unset($results[$k]);
-						continue;
+						throw new Exception('会员不是该等级,不能享受优惠');
 					}
 				}
 				if($promotionType=='promotion'){
@@ -306,7 +303,7 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 			
 			//外卖订单地址
-			if(in_array($this->type,array(2,3))){
+			if(in_array($this->type,array(2,3,7,8))){
 				$address = WxAddress::getDefault($this->userId,$this->user['dpid']);
 				if($address){
 					WxOrderAddress::addOrderAddress($orderId,$this->dpid,$address);
@@ -514,7 +511,7 @@ class WxOrder
 			Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 			$orderPrice +=  $this->seatingFee*$this->number;
 			$realityPrice += $this->seatingFee*$this->number;
-		}elseif($this->type==2){
+		}elseif(in_array($this->type, array(2,7,8))){
 			if($this->packingFee > 0){
 				$se = new Sequence("order_product");
 				$orderProductId = $se->nextval();
@@ -539,7 +536,7 @@ class WxOrder
 				$orderPrice +=  $this->packingFee*$this->cartNumber;
 				$realityPrice += $this->packingFee*$this->cartNumber;
 			}
-			if($this->type==2 && $this->freightFee > 0){
+			if(in_array($this->type, array(2,7,8)) && $this->freightFee > 0){
 				$se = new Sequence("order_product");
 				$orderProductId = $se->nextval();
 				$orderProductData = array(

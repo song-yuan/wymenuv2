@@ -128,7 +128,7 @@ class WxCupon
 		if($isCanUse){
 			$proCodeStr = join(',', $proCodeArr);
 			$now = date('Y-m-d H:i:s',time());
-			$sql = 'select m.lid,m.dpid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0)m , '.
+			$sql = 'select m.lid,m.dpid,m.close_day,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money from (select * from nb_cupon_branduser where to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0)m , '.
 					'(select * from nb_cupon where '.$typess.' type_dpid=0 and type_prod=0'.
 					' union select * from nb_cupon where '.$typess.' type_dpid=1 and type_prod=0 and dpid=:dpid'.
 					' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where '.$types.' t.type_dpid > "1" and t.type_prod = "0" and t1.cupon_dpid=:dpid'.
