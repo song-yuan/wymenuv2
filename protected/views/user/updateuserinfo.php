@@ -21,8 +21,8 @@
 .bttn_small {
 	padding: 4px 10px;
 	font-size: 16px;
-        background-color: #74d2d4;
-        color: #000;
+        background-color: #3CC51F;
+        color: #FFFFFF;
 }
 .btn_birth{
        font-size: 22px; 
