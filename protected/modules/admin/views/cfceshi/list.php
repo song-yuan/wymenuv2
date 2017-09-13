@@ -72,6 +72,18 @@
 						<input id="dpid" class="form-control" value="">
 					</div>
 				</div>
+				<div style="min-height: 30px;" class="form-group">
+	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">开始时间:</lable>
+					<div style="margin-top: 5px;" class="col-md-4">
+						<input id="btime" class="form-control" value="2017-01-01 00:00:00">
+					</div>
+				</div>
+				<div style="min-height: 30px;" class="form-group">
+	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">结束时间:</lable>
+					<div style="margin-top: 5px;" class="col-md-4">
+						<input id="etime" class="form-control" value="2017-09-01 00:00:00">
+					</div>
+				</div>
 				<div class="form-actions fluid">
 						<div class="col-md-offset-9 col-md-3">
 							<button style="display: none;" type="button" class="btn green" id="stocktaking">激活</button> 
@@ -84,7 +96,8 @@
 							<button type="button" class="btn green" id="stockRefundAli">支付宝退款</button>   
 							<button type="button" class="btn green" id="stockFind">查询</button>    
 							<button type="button" class="btn green" id="stockAddordpay">添加到order_pay</button>   
-							<button type="button" class="btn green" id="rijieOrder">日结</button>                      
+							<button type="button" class="btn green" id="rijieOrder">日结</button>  
+							<button type="button" class="btn green" id="rijieOrderReport">生成日结报表</button>                      
 						</div>
 					</div>
 			</div>
@@ -380,15 +393,44 @@
 	$("#rijieOrder").on("click",function(){
 		
 	    var dpid = $("#dpid").val();
-	    var create_at = '2017-08-07';
-	    var poscode = '0000';
-	    var btime = '2017-08-07 00:00:00';
-	    var etime = '2017-08-08 00:00:00';
-	    var rjcode = '0027201708071';
+	    var btime = $("#btime").val();
+	    var etime = $("#etime").val();
 	    //alert(dpid);
 	    $.ajax({
 	        type:'get',
-			url:"<?php echo $this->createUrl('../allfunc/selfrj',array('companyId'=>$this->companyId,));?>/dpid/"+dpid+"/create_at/"+create_at+"/poscode/"+poscode+"/btime/"+btime+"/etime/"+etime+"/rjcode/"+rjcode,
+			url:"<?php echo $this->createUrl('../allfunc/selfrj',array('companyId'=>$this->companyId,));?>/dpid/"+dpid+"/btime/"+btime+"/etime/"+etime,
+			async: false,
+			
+	        //cache:false,
+	        dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg)
+	            {            
+		            
+			        layer.msg("成功！");
+			          
+		            //location.reload();
+	            }else{
+		            layer.msg("11");
+		            //location.reload();
+	            }
+			},
+	        error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+	    
+	});
+	$("#rijieOrderReport").on("click",function(){
+		
+	    var dpid = $("#dpid").val();
+	    var btime = $("#btime").val();
+	    var etime = $("#etime").val();
+	    //alert(dpid);
+	    $.ajax({
+	        type:'get',
+			url:"<?php echo $this->createUrl('../allfunc/rijieing',array('companyId'=>$this->companyId,));?>/dpid/"+dpid+"/btime/"+btime+"/etime/"+etime,
 			async: false,
 			
 	        //cache:false,

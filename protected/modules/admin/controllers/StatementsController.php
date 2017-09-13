@@ -540,6 +540,37 @@ public function actionPayallReport(){
 		));
 	}
 	
+	public function actionRijie(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
+		$dpname = Yii::app()->request->getParam('dpname','');
+	
+		$sql = 'select * from nb_order_paytype_total where pay_amount_total >0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by create_at,poscode,paytype,payment_id '
+				.' union all '
+				.' select * from nb_order_paytype_total where pay_amount_total <0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by create_at,poscode,paytype,payment_id';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		//var_dump($models);exit;
+		$payments = $this->getPayment($this->companyId);
+		$username = $this->getUsername($this->companyId);
+		$comName = $this->getComName();
+		//var_dump($model);exit;
+		$this->render('rijie',array(
+				'models'=>$models,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				'payments'=>$payments,
+				'username'=>$username,
+				'userid'=>$userid,
+				'dpname'=>$dpname,
+		));
+	}
 	
 	public function actionPaymentReportSql(){
 		$str = Yii::app()->request->getParam('str');
