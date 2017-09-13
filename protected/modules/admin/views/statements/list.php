@@ -329,7 +329,12 @@
 							<div class="ku-item-info">支付方式(员工业绩)</div>
 						</div>
 					</a>
-
+					<a href="<?php echo $this->createUrl('statements/rijie',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey sktj"></div>
+							<div class="ku-item-info">日结统计</div>
+						</div>
+					</a>
 					<?php endif;if(Yii::app()->user->role >=11||Yii::app()->user->role <5):?>
 					<a href="<?php echo $this->createUrl('statements/paymentReportSql',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
 						<div class="pull-left margin-left-right">
