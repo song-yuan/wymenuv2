@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('确认订单');
+// 	var_dump($cupons);exit;
 	$isCupon = false;
 	if(!empty($cupons)){
 		$isCupon = true;
@@ -377,7 +378,18 @@
 	<div class="cupon-container">
 	<?php if($isCupon):?>
 	<?php foreach($cupons as $coupon):?>
-		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'].'-'.$coupon['dpid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?><span class="small font_org">(满<?php echo (int)$coupon['min_consumer'];?>减<?php echo (int)$coupon['cupon_money'];?>)</span></div>
+		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'].'-'.$coupon['dpid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>">
+			<div class="item-top">
+				<div class="item-top-left"><?php echo $coupon['cupon_title'];?></div>
+				<div class="item-top-right">￥<?php echo (int)$coupon['cupon_money'];?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="item-bottom">
+				<div class="item-bottom-left">有效期至<?php echo date('Y.m.d',strtotime($coupon['close_day']));?></div>
+				<div class="item-bottom-right">满<?php echo (int)$coupon['min_consumer'];?>可用</div>
+				<div class="clear"></div>
+			</div>
+		</div>
 	<?php endforeach;?>
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>

@@ -42,13 +42,49 @@ body{ background-color:#E5E5E5;}
 .order-remark{padding:10px;font-size:18px;margin-top:10px;background:rgb(255,255,255);}
 .order-remark textarea{border:none;width:100%;height:30px;color:#999999}
 .order-paytype{font-size:16px;}
-.user-cupon {width:100%;height:100%;font-size: 14px;display: none;}
+.user-cupon {width:100%;height:100%;font-size: 14px;background:#FBF9FE;display: none;}
 .user-cupon .cupon-container{padding:20px;overflow:auto;}
+.user-cupon .item{
+	padding: 15px 30px 15px 15px;
+	background:white;
+	margin-bottom:10px;
+}
+.user-cupon .on{
+	background-image: url(../../img/mall/round_chk.png);
+    background-repeat: no-repeat;
+    background-size: 23px 23px;
+    background-position: right center;
+}
+.item-top .item-top-left{
+	width:60%;
+	float:left;
+	font-size:20px;
+}
+.item-top .item-top-right{
+	width:40%;
+	float:right;
+	color:red;
+	font-size:25px;
+	text-align:right;
+}
+.user-cupon .item .item-bottom{
+	font-size:15px;
+	color:#888;
+}
+.item-bottom .item-bottom-left{
+	width:60%;
+	float:left;
+}
+.item-bottom .item-bottom-right{
+	width:40%;
+	float:right;
+	text-align:right;
+}
 .order-paytype .select-type{padding:10px 10px 0;margin-top:5px;color:#FF5151}
 .order-paytype .paytype{padding:10px;background:rgb(255,255,255);}
-.order-paytype .item,.user-cupon .item{padding:10px;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 23px 23px;}
+.order-paytype .item{padding:10px;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 23px 23px;}
 .order-paytype .item img{width:20px;height:20px;vertical-align:middle;}
-.order-paytype .on,.user-cupon .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 23px 23px;}
+.order-paytype .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 23px 23px;}
 .paytype .item:last-child,.user-cupon .item:last-child{border:none;}
 .bottom{width:100%;height:100px;background-color:#E5E5E5;}
 
