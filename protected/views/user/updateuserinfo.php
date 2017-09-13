@@ -1,7 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-        $a=$user['user_name']? "个人信息": "会员注册";
-	$this->setPageTitle($a);  
+    $title = $user['user_name']? "个人信息": "会员注册";
+	$this->setPageTitle($title);  
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
@@ -49,7 +49,7 @@
 
 <div class="page cell">
 	<div class="weui_cells_title">
-            <?php  echo $user['user_name']? "个人信息": "会员注册";?>
+            <?php  echo $title;?>
         </div>
     <div class="weui_cells weui_cells_form">
         <div class="weui_cell">
