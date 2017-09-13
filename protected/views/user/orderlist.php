@@ -111,7 +111,7 @@
 				success:function(data){
 					layer.closeAll('loading');
 					if(parseInt(data)){
-						location.href = '<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>';
+						history.go(0);
 					}else{
 						$('#dialog2').show();
 					}
