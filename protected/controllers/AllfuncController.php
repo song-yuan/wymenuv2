@@ -105,14 +105,34 @@ class AllfuncController extends Controller
 								.' where ord.dpid ='.$dpid.' and ord.lid in('.$ords.') ) '
 							.' od '
 							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
-						.' where t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
+						.' where t.pay_amount >0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
 						.' group by t.dpid,t.paytype,t.payment_method_id,od.username,od.user_id '
+						.' union all '
+						.' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,od.user_id,ifnull(od.pad_code,od.user_id) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.order_id) as all_nums'
+						.' from nb_order_pay t '
+						.' left join '
+							.'( select ps.pad_code,ord.* from nb_order ord '
+								.' left join nb_pad_setting ps '
+									.' on(ps.dpid = ord.dpid and ps.lid = ord.user_id)'
+								.' where ord.dpid ='.$dpid.' and ord.lid in('.$ords.') ) '
+							.' od '
+							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
+						.' where t.pay_amount <0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
+						.' group by t.dpid,t.paytype,t.payment_method_id,od.username,od.user_id '
+								
 						.' union all '
 						.' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,ifnull(null,0) as user_id,ifnull(null,0) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.order_id) as all_nums'
 						.' from nb_order_pay t '
 						.' left join nb_order od '
 							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
-						.' where t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
+						.' where t.pay_amount >0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
+						.' group by t.dpid,t.paytype,t.payment_method_id,od.username '
+						.' union all '
+						.' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,ifnull(null,0) as user_id,ifnull(null,0) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.order_id) as all_nums'
+						.' from nb_order_pay t '
+						.' left join nb_order od '
+							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
+						.' where t.pay_amount <0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
 						.' group by t.dpid,t.paytype,t.payment_method_id,od.username ';
 				
 				//echo $sql;exit;
@@ -153,7 +173,8 @@ class AllfuncController extends Controller
 	}
 	
 	public function actionSelfrj(){
-		$time = Yii::app()->request->getParam('time','2017-08-15 00:00:00');
+		$etime = Yii::app()->request->getParam('etime','2017-09-15 23:59:59');
+		$btime = Yii::app()->request->getParam('btime','2017-01-01 00:00:00');
 		$dpids = Yii::app()->request->getParam('dpid','0');
 		$db = Yii::app()->db;
 		$sql = 'select * from nb_company where type =1 and delete_flag =0 and dpid in('.$dpids.')';
@@ -161,11 +182,14 @@ class AllfuncController extends Controller
 		if($coms){
 			foreach ($coms as $c){
 				$dpid = $c['dpid'];
-				
-				$sqlor = 'select DATE_FORMAT(t.create_at,"%Y-%m-%d") as times, t.* from nb_order t where t.dpid ='.$dpid.' and t.order_status in(3,4,8) and t.create_at <= "'.$time.'" group by DATE_FORMAT(t.create_at,"%Y-%m-%d")';
+				//var_dump($dpid);
+				$sqlor = 'select DATE_FORMAT(t.create_at,"%Y-%m-%d") as times, t.* from nb_order t where t.dpid ='.$dpid.' and t.order_status in(3,4,8) and t.create_at <= "'.$etime.'" and t.create_at >= "'.$btime.'" group by DATE_FORMAT(t.create_at,"%Y-%m-%d")';
 				$orders = $db->createCommand($sqlor)->queryAll();
 				
-				if($orders){
+				$sqlpos = 'select t.* from nb_pad_setting t where t.dpid ='.$dpid.' and t.delete_flag =0';
+				$pos = $db->createCommand($sqlpos)->queryRow();
+				
+				if($orders && $pos){
 					 foreach ($orders as $order){
 					 	$times = str_replace('-','',$order['times']);
 					 	$rjcode = substr("0000".$dpid,-4).$times.'01';
@@ -181,7 +205,7 @@ class AllfuncController extends Controller
 						 			'dpid'=>$dpid,
 						 			'create_at'=>$order['times'].' 00:00:00',
 						 			'update_at'=>date('Y-m-d H:i:s',time()),
-						 			'pos_code'=>'',
+						 			'pos_code'=>$pos['pad_code'],
 						 			'begin_time'=>$order['times'].' 00:00:00',
 						 			'end_time'=>$order['times'].' 23:59:59',
 						 			'rijie_num'=>1,
@@ -195,8 +219,8 @@ class AllfuncController extends Controller
 					 }
 				}
 			}
+			//exit;
+			Yii::app()->end(json_encode(array("status"=>"true",'msg'=>'成功')));
 		}
 	}
-
-
 }
