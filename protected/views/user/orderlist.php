@@ -101,13 +101,15 @@
 			$('#dialog1').show();
 		});
 		$('#dialog1 .primary').click(function(){
-			$('#dialog1').hide();
+			layer.load(2);
 			var orderId = $('#dialog1').attr('order-id');
 			var orderDpid = $('#dialog1').attr('order-dpid');
+			$('#dialog1').hide();
 			$.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
 				data:{orderId:orderId,orderDpid:orderDpid},
 				success:function(data){
+					layer.closeAll('loading');
 					if(parseInt(data)){
 						location.href = '<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>';
 					}else{

@@ -213,14 +213,16 @@ $(document).ready(function(){
 		$('#dialog1').show();
 	});
 	$('#dialog1 .primary').click(function(){
+		layer.load(2);
+		$('#dialog1').hide();
 		$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
 			data:{orderId:orderId,orderDpid:orderDpid},
 			success:function(data){
+				layer.closeAll('loading');
 				if(parseInt(data)){
 					history.go(0);
 				}else{
-					$('#dialog1').hide();
 					$('#dialog2').show();
 				}
 			}
