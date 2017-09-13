@@ -779,7 +779,6 @@ $(document).ready(function(){
 		var money = 0;
 		
 		$('.user-cupon .item').removeClass('on');
-		$(this).addClass('on');
 		$('input[name="cupon"]').val(userCuponId);
 		
 		$(this).attr('min-money',0);
