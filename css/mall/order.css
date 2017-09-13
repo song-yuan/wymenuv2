@@ -48,6 +48,7 @@ body{ background-color:#E5E5E5;}
 	padding: 15px 30px 15px 15px;
 	background:white;
 	margin-bottom:10px;
+	border-bottom: 1px dashed #ededed !important;
 }
 .user-cupon .on{
 	background-image: url(../../img/mall/round_chk.png);
