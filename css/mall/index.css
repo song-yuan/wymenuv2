@@ -124,7 +124,7 @@ body {
     background: #f7f7f7;
     z-index: 10;
     overflow: hidden;
-    .container-top
+    display:none;
 }
 .container-top div {
 	font-size: 18px;
