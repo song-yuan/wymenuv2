@@ -198,7 +198,7 @@
 	    $('.add_btn').on('click', function(){
 	    	pid = $(this).attr('pid');
 	    	compid = $(this).attr('compid');
-	    	prodname = $(this).attr('prodname');
+	    	prodname = encodeURI($(this).attr('prodname'));
 	    	phscode = $(this).attr('phscode');
 	        $modal.find('.modal-content').load('<?php echo $this->createUrl('buysentpromotion/addprod',array('companyId'=>$this->companyId));?>/pid/'+pid+'/prodname/'+prodname+'/phscode/'+phscode, '', function(){
 	          $modal.modal();

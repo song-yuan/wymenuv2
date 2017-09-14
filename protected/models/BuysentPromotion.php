@@ -49,13 +49,13 @@ class BuysentPromotion extends CActiveRecord
 			array('sole_code', 'length', 'max'=>20),
 			array('promotion_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
-			array('promotion_type, to_group, is_available, source, delete_flag', 'length', 'max'=>2),
+			array('promotion_type, can_cupon, to_group, is_available, source, delete_flag', 'length', 'max'=>2),
 			array('weekday', 'length', 'max'=>32),
 			array('day_begin, day_end', 'length', 'max'=>8),
 			array('create_at, update_at, begin_time, end_time, promotion_memo, to_group, promotion_type ', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, sole_code, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, begin_time, end_time, weekday, day_begin, day_end, to_group, group_id, is_available, source, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, sole_code, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, can_cupon, begin_time, end_time, weekday, day_begin, day_end, to_group, group_id, is_available, source, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,6 +86,7 @@ class BuysentPromotion extends CActiveRecord
 			'promotion_abstract' => '摘要',
 			'promotion_memo' => '图文说明，包括规则',
 			'promotion_type' => '0排他，1万能',
+			'can_cupon' => '是否能使用代金券',
 			'begin_time' => '开始时间',
 			'end_time' => '结束时间',
 			'weekday' => '星期几',
@@ -130,6 +131,7 @@ class BuysentPromotion extends CActiveRecord
 		$criteria->compare('promotion_abstract',$this->promotion_abstract,true);
 		$criteria->compare('promotion_memo',$this->promotion_memo,true);
 		$criteria->compare('promotion_type',$this->promotion_type,true);
+		$criteria->compare('can_cupon',$this->can_cupon,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
 		$criteria->compare('weekday',$this->weekday,true);
