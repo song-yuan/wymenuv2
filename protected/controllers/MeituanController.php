@@ -43,6 +43,12 @@ class MeituanController extends Controller
 		echo '{ "data": "OK"}';
 		exit();
 	}
+	public function actionOrderRefund(){
+		//订单取消信息推送
+		$data = file_get_contents('php://input');
+		echo '{ "data": "OK"}';
+		exit();
+	}
 	public function actionToken(){
 		//绑定门店获取appAuthToken
 		$data = file_get_contents('php://input');

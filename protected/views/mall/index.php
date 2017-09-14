@@ -71,11 +71,11 @@
 			$buysent[0]['main_picture'] = $defaultNavImg;
 		}
 		if($current){
-			$navLiStr .= '<li class="" ><a href="#st-buysent'.$key.'" onselectstart="return false"><img src="'.$buysent[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$buysent[0]['promotion_title'].'</span></a><b></b></li>';
+			$navLiStr .= '<li class="" abstract="'.$buysent[0]['promotion_abstract'].'"><a href="#st-buysent'.$key.'" onselectstart="return false"><img src="'.$buysent[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$buysent[0]['promotion_title'].'</span></a><b></b></li>';
 		}else{
 			$current = true;
-			$topTitle = $buysent[0]['promotion_title'];
-			$navLiStr .= '<li class="current"><a href="#st-buysent'.$key.'" onselectstart="return false"><img src="'.$buysent[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$buysent[0]['promotion_title'].'</span></a><b></b></li>';
+			$topTitle = $buysent[0]['promotion_title'].$buysent[0]['promotion_abstract'];
+			$navLiStr .= '<li class="current" abstract="'.$buysent[0]['promotion_abstract'].'"><a href="#st-buysent'.$key.'" onselectstart="return false"><img src="'.$buysent[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$buysent[0]['promotion_title'].'</span></a><b></b></li>';
 		}
 		$productStr .= '<div class="section" id="st-buysent'.$key.'" type="buysent"><div class="prt-title">'.$buysent[0]['promotion_title'].'</div>';
 		foreach ($buysent as $sent){
@@ -146,11 +146,11 @@
 			$promotion[0]['main_picture']=$defaultNavImg;
 		}
         if($current){
-			$navLiStr .= '<li class="" ><a href="#st-promotion'.$key.'" onselectstart="return false"><img src="'.$promotion[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$promotion[0]['promotion_title'].'</span></a><b></b></li>';
+			$navLiStr .= '<li class="" abstract="'.$promotion[0]['promotion_abstract'].'"><a href="#st-promotion'.$key.'" onselectstart="return false"><img src="'.$promotion[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$promotion[0]['promotion_title'].'</span></a><b></b></li>';
 		}else{
 			$current = true;
-			$topTitle = $promotion[0]['promotion_title'];
-			$navLiStr .= '<li class="current"><a href="#st-promotion'.$key.'" onselectstart="return false"><img src="'.$promotion[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$promotion[0]['promotion_title'].'</span></a><b></b></li>';
+			$topTitle = $promotion[0]['promotion_title'].$promotion[0]['promotion_abstract'];
+			$navLiStr .= '<li class="current"abstract="'.$promotion[0]['promotion_abstract'].'"><a href="#st-promotion'.$key.'" onselectstart="return false"><img src="'.$promotion[0]['main_picture'].'" class="nav-img"/><span class="nav-span">'.$promotion[0]['promotion_title'].'</span></a><b></b></li>';
 		}
 		$productStr .= '<div class="section" id="st-promotion'.$key.'" type="promotion"><div class="prt-title">'.$promotion[0]['promotion_title'].'</div>';
 		foreach ($promotion as $objPro){
@@ -222,11 +222,11 @@
 			$product['main_picture']=$defaultNavImg;
 		}
 		if($current){
-			$navLiStr .= '<li class=""><a href="#st'.$product['lid'].'"><img src="'.$product['main_picture'].'" class="nav-img" onselectstart="return false"/><span class="nav-span" onselectstart="return false">'.$product['category_name'].'</span></a><b></b></li>';
+			$navLiStr .= '<li class="" abstract=""><a href="#st'.$product['lid'].'"><img src="'.$product['main_picture'].'" class="nav-img" onselectstart="return false"/><span class="nav-span" onselectstart="return false">'.$product['category_name'].'</span></a><b></b></li>';
 		}else{
 			$current = true;
 			$topTitle = $product['category_name'];
-			$navLiStr .= '<li class="current"><a href="#st'.$product['lid'].'"><img src="'.$product['main_picture'].'" class="nav-img" onselectstart="return false"/><span class="nav-span" onselectstart="return false">'.$product['category_name'].'</span></a><b></b></li>';
+			$navLiStr .= '<li class="current" abstract=""><a href="#st'.$product['lid'].'"><img src="'.$product['main_picture'].'" class="nav-img" onselectstart="return false"/><span class="nav-span" onselectstart="return false">'.$product['category_name'].'</span></a><b></b></li>';
 		}
 		$productLists = $product['product_list'];
 		if($product['cate_type']!='2'){
@@ -588,7 +588,8 @@ $(document).ready(function(){
         }
         _this.addClass('current');
         var pName = _this.find('a span.nav-span').html();
-        $('#product-top').find('div').html(pName);
+        var desc = _this.attr('abstract');
+        $('#product-top').find('div').html(pName+desc);
     });
 
     $('#container').scroll(function(){
@@ -604,8 +605,6 @@ $(document).ready(function(){
         var top = $(this).offset().top;
         var height = $(this).outerHeight(); //div.section,,,height, padding, border
         if(top <= ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) >= 0){
-            var pName = $(this).find('.prt-title').html();
-            $('#product-top').find('div').html(pName);
             $('a[href=#'+id+']').parents('ul').find('li').removeClass('b-radius-rt');
             $('a[href=#'+id+']').parents('ul').find('li').removeClass('b-radius-rb');
     		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
@@ -616,6 +615,9 @@ $(document).ready(function(){
                 $('a[href=#'+id+']').parent('li').prev().addClass('b-radius-rb');
             }
         	$('a[href=#'+id+']').parent('li').addClass('current');
+        	var pName = $('a[href=#'+id+']').parent('li').find('a span.nav-span').html();
+        	var desc = $('a[href=#'+id+']').parent('li').attr('abstract');
+            $('#product-top').find('div').html(pName+desc);
         	var index = $('a[href=#'+id+']').parent('li').index();
         	var length = $('a[href=#'+id+']').parent('li').parent('ul').find('li').size();
         	var height = $('#nav').outerHeight();
@@ -638,7 +640,8 @@ $(document).ready(function(){
         	return false;
         }else{
         	var pName = $('#nav').find('li.current').find('a span.nav-span').html();
-        	$('#product-top').find('div').html(pName);
+            var desc = $('#nav').find('li.current').attr('abstract');
+            $('#product-top').find('div').html(pName+desc);
         }
     });
    
