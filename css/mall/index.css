@@ -123,7 +123,8 @@ body {
     line-height: 40px;
     background: #f7f7f7;
     z-index: 10;
-    display:none;
+    overflow: hidden;
+    .container-top
 }
 .container-top div {
 	font-size: 18px;
