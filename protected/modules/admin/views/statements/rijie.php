@@ -72,6 +72,8 @@
 		            <tr>
 		                <?php  $grouppay_item = 0;?>
 		               <th><?php echo yii::t('app','时间');?></th>
+		               <th><?php echo yii::t('app','序列号');?></th>
+		               <th><?php echo yii::t('app','操作员');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','金额');?></th> 
 		               <th><?php echo yii::t('app','类型');?></th>
@@ -109,6 +111,8 @@
 		
 		        <tr class="odd gradeX">
 		            <td><?php echo $model['create_at'];?></td>
+		            <td><?php echo $model['poscode'];?></td>
+		            <td><?php echo $model['username'];?></td>
 		            <td><?php echo $model['pay_order_num'];?></td>
 					<td><?php echo $model['pay_amount_total'];?></td>	
 					<td><?php switch($model['paytype']){

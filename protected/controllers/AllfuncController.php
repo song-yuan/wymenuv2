@@ -126,13 +126,13 @@ class AllfuncController extends Controller
 								'dpid'=>$dpid,
 								'create_at'=>$create,
 								'update_at'=>date('Y-m-d H:i:s',time()),
-								'poscode'=>$model['user_id'],
+								'poscode'=>$model['pad_code'],
 								'username'=>$model['username'],
 								'rijie_code'=>$rjcode,
 								'begin_time'=>$begin_time,
 								'end_time'=>$end_time,
 								'paytype'=>'22',
-								'payment_id'=>'',
+								'payment_id'=>'0',
 								'pay_order_num'=>$model['all_nums'],
 								'pay_amount_total'=>$model['all_price'],
 								'delete_flag'=>'0',
@@ -167,13 +167,13 @@ class AllfuncController extends Controller
 								'dpid'=>$dpid,
 								'create_at'=>$create,
 								'update_at'=>date('Y-m-d H:i:s',time()),
-								'poscode'=>$model['user_id'],
+								'poscode'=>$model['pad_code'],
 								'username'=>$model['username'],
 								'rijie_code'=>$rjcode,
 								'begin_time'=>$begin_time,
 								'end_time'=>$end_time,
 								'paytype'=>'20',
-								'payment_id'=>'',
+								'payment_id'=>'0',
 								'pay_order_num'=>$model['all_nums'],
 								'pay_amount_total'=>$model['all_price'],
 								'delete_flag'=>'0',
@@ -227,7 +227,7 @@ class AllfuncController extends Controller
 				$models = $db->createCommand($sql)->queryAll();
 				//var_dump($models);exit;
 				if($models){
-					foreach ($models as $model){
+					foreach ($models as $mod){
 						
 						$lid = new Sequence("order_paytype_total");
 						$id = $lid->nextval();
@@ -236,15 +236,15 @@ class AllfuncController extends Controller
 								'dpid'=>$dpid,
 								'create_at'=>$create,
 								'update_at'=>date('Y-m-d H:i:s',time()),
-								'poscode'=>$model['user_id'],
-								'username'=>$model['username'],
+								'poscode'=>$mod['pad_code'],
+								'username'=>$mod['username'],
 								'rijie_code'=>$rjcode,
 								'begin_time'=>$begin_time,
 								'end_time'=>$end_time,
-								'paytype'=>$model['paytype'],
-								'payment_id'=>$model['payment_method_id'],
-								'pay_order_num'=>$model['all_nums'],
-								'pay_amount_total'=>$model['all_price'],
+								'paytype'=>$mod['paytype'],
+								'payment_id'=>$mod['payment_method_id'],
+								'pay_order_num'=>$mod['all_nums'],
+								'pay_amount_total'=>$mod['all_price'],
 								'delete_flag'=>'0',
 								'is_sync'=>'11111',
 						);
