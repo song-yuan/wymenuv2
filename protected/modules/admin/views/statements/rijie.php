@@ -128,6 +128,10 @@
 						case 13: echo '微外卖';break;
 						case 14: echo '美团';break;
 						case 15: echo '饿了么';break;
+						case 20: echo '毛利润';break;
+						case 21: echo '实收款1';break;
+						case 22: echo '实收款2';break;
+						default: echo '';break;
 					}?></td>				
 		        </tr>
 		       

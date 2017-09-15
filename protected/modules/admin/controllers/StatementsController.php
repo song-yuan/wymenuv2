@@ -548,9 +548,9 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time','');
 		$dpname = Yii::app()->request->getParam('dpname','');
 	
-		$sql = 'select * from nb_order_paytype_total where pay_amount_total >0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by create_at,poscode,paytype,payment_id '
+		$sql = 'select * from nb_order_paytype_total where pay_amount_total >0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" '
 				.' union all '
-				.' select * from nb_order_paytype_total where pay_amount_total <0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by create_at,poscode,paytype,payment_id';
+				.' select * from nb_order_paytype_total where pay_amount_total <0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" ';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		//var_dump($models);exit;
@@ -747,6 +747,94 @@ public function actionPayallReport(){
 				.' op.all_reality is not null and '
 				.' t.order_status in(3,4,8) and t.lid in('.$ords.') and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and '
 				.' t.dpid ='.$this->companyId
+				.' group by '.$useros;
+		$prices = Yii::app()->db->createCommand($sql)->queryAll();
+		//echo $sql;exit;
+		$payments = $this->getPayment($this->companyId);
+		$username = $this->getUsername($this->companyId);
+		$comName = $this->getComName();
+		//var_dump($model);exit;
+		$this->render('paymentReportSql',array(
+				//'models'=>$model,
+				'prices'=>$prices,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				'payments'=>$payments,
+				'username'=>$username,
+				'userid'=>$userid,
+				'dpname'=>$dpname,
+		));
+	}
+	
+	
+
+	public function actionRijieReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
+		$dpname = Yii::app()->request->getParam('dpname','');
+	
+		if(empty($begin_time)){
+			$begin_time = date('Y-m-d',time());
+		}
+		if(empty($end_time)){
+			$end_time = date('Y-m-d',time());
+		}
+	
+		if($text==1){
+			if($userid != '0'){
+				$users ='oo.dpid,year(oo.create_at),oo.username';
+				$useros = 't.dpid,year(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),ot.username';
+				$usernames = ' = t.username';
+			}else{
+				$users ='oo.dpid,year(oo.create_at)';
+				$useros = 't.dpid,year(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at)';
+				$usernames = ' != -1';
+			}
+		}elseif($text == 2){
+			if($userid != '0'){
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),oo.username';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),ot.username';
+				$usernames = ' = t.username';
+			}else{
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at)';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at)';
+				$usernames = ' != -1';
+			}
+		}else{
+			if($userid != '0'){
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at),oo.username';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at),ot.username';
+				$usernames = ' = t.username';
+			}else{
+				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at)';
+				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at)';
+				$usernames = ' != -1';
+			}
+		}
+	
+	
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
+				.' t.username,t.poscode,t.paytype,t.payment_id,t.pay_order_num,t.pay_amount_total, '
+				.' c.company_name '
+				.' sum(t.pay_order_num) as all_nums, sum(t.pay_amount_total) as all_totals '
+				.' form nb_order_paytype_total t '
+				.' left join nb_company c on(c.dpid = t.dpid and c.delete_flag =0 )'
+				.' where t.dpid ='.$this->companyId.' '
+				.' and t.create_at >="'.$begin_time.' 00:00:00" '
+				.' and t.create_at <="'.$end_time.' 23:59:59" '
+				.' and t.username '.$usernames
 				.' group by '.$useros;
 		$prices = Yii::app()->db->createCommand($sql)->queryAll();
 		//echo $sql;exit;
