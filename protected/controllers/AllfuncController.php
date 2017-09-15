@@ -105,14 +105,14 @@ class AllfuncController extends Controller
 								.' where ord.dpid ='.$dpid.' and ord.lid in('.$ords.') ) '
 							.' od '
 							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
-						.' where t.pay_amount >=0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
+						.' where t.pay_amount >=0 and t.paytype != 11 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
 						.' group by t.dpid,od.username,od.user_id '
 						.' union all '
 						.' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,ifnull(null,0) as user_id,ifnull(null,0) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.lid) as all_nums'
 						.' from nb_order_pay t '
 						.' left join nb_order od '
 							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
-						.' where t.pay_amount >=0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
+						.' where t.pay_amount >=0 and t.paytype != 11 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
 						.' group by t.dpid,od.username '
 						;
 				$modelops = $db->createCommand($sqlop)->queryAll();
