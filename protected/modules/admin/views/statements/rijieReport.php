@@ -157,12 +157,12 @@
 				            $retreats+=$retreat;
 				            
 				            //折扣
-				            $discount=sprintf("%.2f",$reality_all-$m['all_reality']);
+				            $discount=sprintf("%.2f",$reality_all-$m['chunli_money']);
 				            $discount_total += $discount;
 				            echo $discount;
 		            ?></td>
 		            <td><?php 
-		                	$gather=$m['all_reality'];
+		                	$gather=$m['chunli_money'];
 		                	$gather_total += $gather;
 		                	echo $gather;
 		            ?></td>
