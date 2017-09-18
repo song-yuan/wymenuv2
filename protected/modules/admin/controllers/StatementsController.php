@@ -788,10 +788,13 @@ public function actionPayallReport(){
 	
 		if($userid == '0'){
 			$username = ' != -1';
+			$user = ' != -1';
 		}elseif($userid == '-1'){
 			$username = ' != -1';
+			$user = ' = t.username ';
 		}else{
 			$username = ' = "'.$userid.'"';
+			$user = ' = "'.$userid.'"';
 		}
 		
 		if($text==1){
@@ -861,91 +864,91 @@ public function actionPayallReport(){
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =0 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op0 on(t.dpid = op0.dpid and op0.username = t.username and year(t.create_at) = op0.y_oo and month(t.create_at) = op0.m_oo and day(t.create_at) = op0.d_oo) '
+				.' ) op0 on(t.dpid = op0.dpid and op0.username '.$user.' and year(t.create_at) = op0.y_oo and month(t.create_at) = op0.m_oo and day(t.create_at) = op0.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =1 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op1 on(t.dpid = op1.dpid and op1.username = t.username and year(t.create_at) = op1.y_oo and month(t.create_at) = op1.m_oo and day(t.create_at) = op1.d_oo) '
+				.' ) op1 on(t.dpid = op1.dpid and op1.username '.$user.' and year(t.create_at) = op1.y_oo and month(t.create_at) = op1.m_oo and day(t.create_at) = op1.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =2 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op2 on(t.dpid = op2.dpid and op2.username = t.username and year(t.create_at) = op2.y_oo and month(t.create_at) = op2.m_oo and day(t.create_at) = op2.d_oo) '
+				.' ) op2 on(t.dpid = op2.dpid and op2.username '.$user.' and year(t.create_at) = op2.y_oo and month(t.create_at) = op2.m_oo and day(t.create_at) = op2.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =3 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op3 on(t.dpid = op3.dpid and op3.username = t.username and year(t.create_at) = op3.y_oo and month(t.create_at) = op3.m_oo and day(t.create_at) = op3.d_oo) '
+				.' ) op3 on(t.dpid = op3.dpid and op3.username '.$user.' and year(t.create_at) = op3.y_oo and month(t.create_at) = op3.m_oo and day(t.create_at) = op3.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =4 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op4 on(t.dpid = op4.dpid and op4.username = t.username and year(t.create_at) = op4.y_oo and month(t.create_at) = op4.m_oo and day(t.create_at) = op4.d_oo) '
+				.' ) op4 on(t.dpid = op4.dpid and op4.username '.$user.' and year(t.create_at) = op4.y_oo and month(t.create_at) = op4.m_oo and day(t.create_at) = op4.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =5 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op5 on(t.dpid = op5.dpid and op5.username = t.username and year(t.create_at) = op5.y_oo and month(t.create_at) = op5.m_oo and day(t.create_at) = op5.d_oo) '
+				.' ) op5 on(t.dpid = op5.dpid and op5.username '.$user.' and year(t.create_at) = op5.y_oo and month(t.create_at) = op5.m_oo and day(t.create_at) = op5.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =8 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op8 on(t.dpid = op8.dpid and op8.username = t.username and year(t.create_at) = op8.y_oo and month(t.create_at) = op8.m_oo and day(t.create_at) = op8.d_oo) '
+				.' ) op8 on(t.dpid = op8.dpid and op8.username '.$user.' and year(t.create_at) = op8.y_oo and month(t.create_at) = op8.m_oo and day(t.create_at) = op8.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =9 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op9 on(t.dpid = op9.dpid and op9.username = t.username and year(t.create_at) = op9.y_oo and month(t.create_at) = op9.m_oo and day(t.create_at) = op9.d_oo) '
+				.' ) op9 on(t.dpid = op9.dpid and op9.username '.$user.' and year(t.create_at) = op9.y_oo and month(t.create_at) = op9.m_oo and day(t.create_at) = op9.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =10 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op10 on(t.dpid = op10.dpid and op10.username = t.username and year(t.create_at) = op10.y_oo and month(t.create_at) = op10.m_oo and day(t.create_at) = op10.d_oo) '
+				.' ) op10 on(t.dpid = op10.dpid and op10.username '.$user.' and year(t.create_at) = op10.y_oo and month(t.create_at) = op10.m_oo and day(t.create_at) = op10.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =12 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op12 on(t.dpid = op12.dpid and op12.username = t.username and year(t.create_at) = op12.y_oo and month(t.create_at) = op12.m_oo and day(t.create_at) = op12.d_oo) '
+				.' ) op12 on(t.dpid = op12.dpid and op12.username '.$user.' and year(t.create_at) = op12.y_oo and month(t.create_at) = op12.m_oo and day(t.create_at) = op12.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =13 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op13 on(t.dpid = op13.dpid and op13.username = t.username and year(t.create_at) = op13.y_oo and month(t.create_at) = op13.m_oo and day(t.create_at) = op13.d_oo) '
+				.' ) op13 on(t.dpid = op13.dpid and op13.username '.$user.' and year(t.create_at) = op13.y_oo and month(t.create_at) = op13.m_oo and day(t.create_at) = op13.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =14 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op14 on(t.dpid = op1.dpid and op14.username = t.username and year(t.create_at) = op14.y_oo and month(t.create_at) = op14.m_oo and day(t.create_at) = op14.d_oo) '
+				.' ) op14 on(t.dpid = op1.dpid and op14.username '.$user.' and year(t.create_at) = op14.y_oo and month(t.create_at) = op14.m_oo and day(t.create_at) = op14.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =15 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op15 on(t.dpid = op1.dpid and op15.username = t.username and year(t.create_at) = op15.y_oo and month(t.create_at) = op15.m_oo and day(t.create_at) = op15.d_oo) '
+				.' ) op15 on(t.dpid = op1.dpid and op15.username '.$user.' and year(t.create_at) = op15.y_oo and month(t.create_at) = op15.m_oo and day(t.create_at) = op15.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =20 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op20 on(t.dpid = op20.dpid and op20.username = t.username and year(t.create_at) = op20.y_oo and month(t.create_at) = op20.m_oo and day(t.create_at) = op20.d_oo) '
+				.' ) op20 on(t.dpid = op20.dpid and op20.username '.$user.' and year(t.create_at) = op20.y_oo and month(t.create_at) = op20.m_oo and day(t.create_at) = op20.d_oo) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =22 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
 					.' group by '.$users
-				.' ) op22 on(t.dpid = op22.dpid and op22.username = t.username and year(t.create_at) = op22.y_oo and month(t.create_at) = op22.m_oo and day(t.create_at) = op22.d_oo) '
+				.' ) op22 on(t.dpid = op22.dpid and op22.username '.$user.' and year(t.create_at) = op22.y_oo and month(t.create_at) = op22.m_oo and day(t.create_at) = op22.d_oo) '
 				.' where t.paytype in(0,1,2,3,4,5,6,8,9,10,12,13,14,15) and t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.username '.$username
 				.' group by '.$useros		
 		;
