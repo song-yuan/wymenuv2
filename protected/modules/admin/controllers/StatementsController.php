@@ -834,11 +834,6 @@ public function actionPayallReport(){
 				$usernames = $username;
 			}
 		}
-		//$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at),top.username';
-		//$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
-		
-		//$usernames = ' = t.username';
-		//$username = ' != -1';
 		
 		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
 				.' t.dpid,t.username,t.create_at,t.poscode, '
