@@ -8494,7 +8494,7 @@ class StatementsController extends BackendController
 		}
 
 		$pages = new CPagination(OrderProduct::model()->count($criteria));
-		//	    $pages->setPageSize(1);
+		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = OrderProduct::model()->findAll($criteria);
 		//var_dump($models);exit();
