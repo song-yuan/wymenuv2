@@ -3,17 +3,13 @@ class MeituanController extends Controller
 {
 	public function actionReceiveOrder(){
 		//推送订单
-        $data = file_get_contents('php://input');
-		$remt = MtOrder::order($data);
-		echo $remt;
-		exit();   
+        $notify = new MtNotify();
+        $notify->Handle('new');
 	}
 	public function actionConfirmOrder(){
 		//订单确认
-		$data = file_get_contents('php://input');
-		$remt=MtOrder::orderconfirm($data);
-		echo $remt;
-		exit();
+		$notify = new MtNotify();
+        $notify->Handle('confirm');
 	}
 	public function actionCancelOrder(){
 		//订单取消信息推送
