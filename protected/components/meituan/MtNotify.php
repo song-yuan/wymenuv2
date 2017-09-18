@@ -16,7 +16,6 @@ class MtNotify
 		}else if($type=='confirm'){
 			$result = MtOrder::callUserFunc(array($this, 'confirmOrderCallBack'));
 		}
-		
 		if($result == false){
 			$this->ReplyNotify(false);
 			return;
