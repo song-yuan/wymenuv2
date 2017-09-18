@@ -548,9 +548,9 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time','');
 		$dpname = Yii::app()->request->getParam('dpname','');
 	
-		$sql = 'select * from nb_order_paytype_total where pay_amount_total >0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by create_at,poscode,paytype,payment_id '
+		$sql = 'select * from nb_order_paytype_total where pay_amount_total >0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" '
 				.' union all '
-				.' select * from nb_order_paytype_total where pay_amount_total <0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by create_at,poscode,paytype,payment_id';
+				.' select * from nb_order_paytype_total where pay_amount_total <0 and dpid ='.$this->companyId.' and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" ';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		//var_dump($models);exit;
@@ -755,6 +755,208 @@ public function actionPayallReport(){
 		$comName = $this->getComName();
 		//var_dump($model);exit;
 		$this->render('paymentReportSql',array(
+				//'models'=>$model,
+				'prices'=>$prices,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				'payments'=>$payments,
+				'username'=>$username,
+				'userid'=>$userid,
+				'dpname'=>$dpname,
+		));
+	}
+	
+	
+
+	public function actionRijieReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
+		$dpname = Yii::app()->request->getParam('dpname','');
+	
+		if(empty($begin_time)){
+			$begin_time = date('Y-m-d',time());
+		}
+		if(empty($end_time)){
+			$end_time = date('Y-m-d',time());
+		}
+	
+		if($userid == '0'){
+			$username = ' != -1';
+		}elseif($userid == '-1'){
+			$username = ' != -1';
+		}else{
+			$username = ' = "'.$userid.'"';
+		}
+		
+		if($text==1){
+			if($userid != '0'){
+				$users ='top.dpid,year(top.create_at),top.username';
+				$useros ='t.dpid,year(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),ot.username';
+				$usernames = $username;
+			}else{
+				$users ='top.dpid,year(top.create_at)';
+				$useros ='t.dpid,year(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at)';
+				$usernames = $username;
+			}
+		}elseif($text == 2){
+			if($userid != '0'){
+				$users ='top.dpid,year(top.create_at),month(top.create_at),top.username';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),ot.username';
+				$usernames = $username;
+			}else{
+				$users ='top.dpid,year(top.create_at),month(top.create_at)';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at)';
+				$usernames = $username;
+			}
+		}else{
+			if($userid != '0'){
+				$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at),top.username';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at),ot.username';
+				$usernames = $username;
+			}else{
+				$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at)';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
+				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at)';
+				$usernames = $username;
+			}
+		}
+		//$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at),top.username';
+		//$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
+		
+		//$usernames = ' = t.username';
+		//$username = ' != -1';
+		
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
+				.' t.dpid,t.username,t.create_at,t.poscode, '
+				.' sum(t.pay_amount_total) as all_reality,sum(t.pay_order_num) as all_nums, '
+				.' op0.all_reality as cash_money,op0.all_nums as cash_nums, '
+				.' op1.all_reality as wx_money,op0.all_nums as wx_nums, '
+				.' op2.all_reality as ali_money,op0.all_nums as ali_nums, '
+				.' op3.all_reality as orther_money,op0.all_nums as orther_nums, '
+				.' op4.all_reality as member_money,op0.all_nums as member_nums, '
+				.' op5.all_reality as visa_money,op0.all_nums as visa_nums, '
+				.' op8.all_reality as jifen_money,op0.all_nums as jifen_nums, '
+				.' op9.all_reality as cupon_money,op0.all_nums as cupon_nums, '
+				.' op10.all_reality as wxyue_money,op0.all_nums as wxyue_nums, '
+				.' op12.all_reality as wxord_money,op0.all_nums as wxord_nums, '
+				.' op13.all_reality as wxwm_money,op0.all_nums as wxwm_nums, '
+				.' op14.all_reality as mt_money,op0.all_nums as mt_nums, '
+				.' op15.all_reality as elem_money,op0.all_nums as elem_nums, '
+				.' op20.all_reality as maoli_money,op0.all_nums as maoli_nums, '
+				.' op22.all_reality as chunli_money,op0.all_nums as chunli_nums '
+				.' from nb_order_paytype_total t '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =0 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op0 on(t.dpid = op0.dpid and op0.username = t.username and year(t.create_at) = op0.y_oo and month(t.create_at) = op0.m_oo and day(t.create_at) = op0.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =1 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op1 on(t.dpid = op1.dpid and op1.username = t.username and year(t.create_at) = op1.y_oo and month(t.create_at) = op1.m_oo and day(t.create_at) = op1.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =2 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op2 on(t.dpid = op2.dpid and op2.username = t.username and year(t.create_at) = op2.y_oo and month(t.create_at) = op2.m_oo and day(t.create_at) = op2.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =3 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op3 on(t.dpid = op3.dpid and op3.username = t.username and year(t.create_at) = op3.y_oo and month(t.create_at) = op3.m_oo and day(t.create_at) = op3.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =4 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op4 on(t.dpid = op4.dpid and op4.username = t.username and year(t.create_at) = op4.y_oo and month(t.create_at) = op4.m_oo and day(t.create_at) = op4.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =5 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op5 on(t.dpid = op5.dpid and op5.username = t.username and year(t.create_at) = op5.y_oo and month(t.create_at) = op5.m_oo and day(t.create_at) = op5.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =8 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op8 on(t.dpid = op8.dpid and op8.username = t.username and year(t.create_at) = op8.y_oo and month(t.create_at) = op8.m_oo and day(t.create_at) = op8.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =9 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op9 on(t.dpid = op9.dpid and op9.username = t.username and year(t.create_at) = op9.y_oo and month(t.create_at) = op9.m_oo and day(t.create_at) = op9.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =10 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op10 on(t.dpid = op10.dpid and op10.username = t.username and year(t.create_at) = op10.y_oo and month(t.create_at) = op10.m_oo and day(t.create_at) = op10.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =12 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op12 on(t.dpid = op12.dpid and op12.username = t.username and year(t.create_at) = op12.y_oo and month(t.create_at) = op12.m_oo and day(t.create_at) = op12.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =13 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op13 on(t.dpid = op13.dpid and op13.username = t.username and year(t.create_at) = op13.y_oo and month(t.create_at) = op13.m_oo and day(t.create_at) = op13.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =14 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op14 on(t.dpid = op1.dpid and op14.username = t.username and year(t.create_at) = op14.y_oo and month(t.create_at) = op14.m_oo and day(t.create_at) = op14.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =15 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op15 on(t.dpid = op1.dpid and op15.username = t.username and year(t.create_at) = op15.y_oo and month(t.create_at) = op15.m_oo and day(t.create_at) = op15.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =20 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op20 on(t.dpid = op20.dpid and op20.username = t.username and year(t.create_at) = op20.y_oo and month(t.create_at) = op20.m_oo and day(t.create_at) = op20.d_oo) '
+				.' left join ('
+					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
+					.' from nb_order_paytype_total top '
+					.' where top.dpid = '.$this->companyId.' and top.paytype =22 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username
+					.' group by '.$users
+				.' ) op22 on(t.dpid = op22.dpid and op22.username = t.username and year(t.create_at) = op22.y_oo and month(t.create_at) = op22.m_oo and day(t.create_at) = op22.d_oo) '
+				.' where t.paytype in(0,1,2,3,4,5,6,8,9,10,12,13,14,15) and t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.username '.$username
+				.' group by '.$useros		
+		;
+		//echo $sql ;exit;
+		$prices = Yii::app()->db->createCommand($sql)->queryAll();
+		//echo $sql;exit;
+		$payments = $this->getPayment($this->companyId);
+		$username = $this->getUsername($this->companyId);
+		$comName = $this->getComName();
+		//var_dump($model);exit;
+		$this->render('rijieReport',array(
 				//'models'=>$model,
 				'prices'=>$prices,
 				'begin_time'=>$begin_time,
@@ -1373,6 +1575,39 @@ public function actionPayallReport(){
 		}
 		return $price;
 	}
+	
+	public function getRijiePrice($dpid,$begin_time,$end_time,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+	
+		if($usertype != '0'){
+			$usern = 't.username ="'.$userid.'"';
+		}else{
+			$usern = 't.username != "-1"';
+		}
+		if($text==1){
+			$times = ' and year(t.create_at) ="'.$y_all.'"';
+		}elseif($text==2){
+			$times = ' and year(t.create_at) ="'.$y_all.'" and month(t.create_at) ="'.$m_all.'"';
+		}elseif($text==3){
+			$times = ' and year(t.create_at) ="'.$y_all.'" and month(t.create_at) ="'.$m_all.'" and day(t.create_at) ="'.$d_all.'"';
+		}
+	
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.pay_amount_total) as all_reality,count(*) as all_num, '
+				.' t.dpid,t.create_at,t.paytype,t.payment_id '
+				.' from nb_order_paytype_total t'
+				.' where t.paytype ="3" and t.dpid ='.$dpid
+				.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" '
+				.' and t.payment_id ='.$num
+				.' and '.$usern.' '.$times;
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		//$model = OrderPay::model()->findAll($criteria);
+		$price = '';
+		if(!empty($model)){
+	
+			$price = $model['all_reality']?$model['all_reality']:'';
+	
+		}
+		return $price;
+	}
 
 
 	public function getComPaymentPrice($dpid,$begin_time,$end_time,$type,$num,$text,$y_all,$m_all,$d_all){
@@ -1724,6 +1959,32 @@ public function actionPayallReport(){
 				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
 			}
 		}
+		//var_dump($sql2);exit;
+		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
+		return $retreat['retreat_allprice'];
+	}
+	
+	/*
+	 * 日结统计报表的退款查询
+	*/
+	public function getRijieRetreat($dpid,$begin_time,$end_time,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		$begin_time = $begin_time.' 00:00:00';
+		$end_time = $end_time.' 23:59:59';
+		$db = Yii::app()->db;
+		
+		if($usertype != '0'){
+			$user = ' and t.username = "'.$userid.'" ';
+		}else{
+			$user = ' and t.username != -1';
+		}
+		if($text==1){
+			$time = ' and year(t.create_at) = "'.$y_all.'" ';
+		}elseif($text==2){
+			$time = ' and year(t.create_at) = "'.$y_all.'" and month(t.create_at) ="'.$m_all.'" ';
+		}elseif($text==3){
+			$time = ' and year(t.create_at) = "'.$y_all.'" and month(t.create_at) ="'.$m_all.'" and day(t.create_at) ="'.$d_all.'" ';
+		}
+		$sql2 = 'select sum(t.pay_amount_total) as retreat_allprice,sum(t.pay_order_num) as retreat_num from nb_order_paytype_total t where t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" '.$time.$user.' and t.pay_amount_total < 0 and t.dpid='.$dpid;
 		//var_dump($sql2);exit;
 		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		return $retreat['retreat_allprice'];

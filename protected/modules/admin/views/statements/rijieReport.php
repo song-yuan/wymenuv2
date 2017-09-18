@@ -72,16 +72,38 @@
 		            <tr>
 		                <?php  $grouppay_item = 0;?>
 		               <th><?php echo yii::t('app','时间');?></th>
-		               <th><?php echo yii::t('app','序列号');?></th>
-		               <th><?php echo yii::t('app','操作员');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
-		               <th><?php echo yii::t('app','金额');?></th> 
-		               <th><?php echo yii::t('app','类型');?></th>
+		               <th><?php echo yii::t('app','毛利润');?></th> 
+		               <th><?php echo yii::t('app','优惠');?></th>
+		               <th><?php echo yii::t('app','实收款');?></th>
+		               <?php if($userid != '0'): ?>
+		               <th><?php echo yii::t('app','营业员');?></th>
+		               <?php endif;?>
+		               <th><?php echo yii::t('app','现金');?></th>
+		               <th><?php echo yii::t('app','微信');?></th>
+		               <th><?php echo yii::t('app','微点单');?></th>
+		               <th><?php echo yii::t('app','微外卖');?></th>
+		               <th><?php echo yii::t('app','支付宝');?></th>
+		               <th><?php echo yii::t('app','银联');?></th>
+		               <th><?php echo yii::t('app','会员卡');?></th>
+		               <th><?php echo yii::t('app','美团·外卖');?></th>
+		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
+		               <?php if($payments):?>
+		                    <?php foreach ($payments as $payment):?>
+		                         <th><?php echo $payment['name'];
+		                            $grouppay_item ++;
+		                         ?></th>
+		                    <?php endforeach;?>
+		               <?php endif;?>   
+		               <th><?php echo yii::t('app','系统券');?></th>
+		               <th><?php echo yii::t('app','积分');?></th> 
+		               <th><?php echo yii::t('app','微信余额');?></th>                                                            
+		               <th><?php echo yii::t('app','退款');?></th>
 		
 		            </tr>
 		        </thead>
 				<tbody>
-		        <?php if( $models) :?>
+		        
 		        <!--foreach-->
 		        <?php $a=1;?>
 		        <?php 
@@ -96,8 +118,9 @@
 		         $alipay_total = 0;    // 支付宝
 		         $unionpay_total=0;    // 银联
 		         $vipcard_total = 0;   // 会员卡 
-		         $meituan_total = 0;   // 对接美团
+		         $mtwm_total = 0;   // 对接美团
 		         $eleme_total = 0;   // 对接饿了么
+		         $htpay_total = 0;
 		         $grouppay_arr = array();   //支付宝/美团
 		        for($i =0;$i<$grouppay_item;$i++){
 		           $grouppay_arr[$i] =0; 
@@ -107,41 +130,169 @@
 		        $all_wxcharges = 0;
 		        $all_wxpoints = 0;
 		        $retreats = 0;
-		        foreach ($models as $model): ?>
+		         if($prices):?>
+		      	<?php foreach ($prices as $m): ?>
 		
 		        <tr class="odd gradeX">
-		            <td><?php echo $model['create_at'];?></td>
-		            <td><?php echo $model['poscode'];?></td>
-		            <td><?php echo $model['username'];?></td>
-		            <td><?php echo $model['pay_order_num'];?></td>
-					<td><?php echo $model['pay_amount_total'];?></td>	
-					<td><?php switch($model['paytype']){
-						case 0: echo '现金';break;
-						case 1: echo '微信';break;
-						case 2: echo '支付宝';break;
-						case 3: echo '后台';break;
-						case 4: echo '会员卡';break;
-						case 5: echo '银联';break;
-						case 6: echo '';break;
-						case 7: echo '';break;
-						case 8: echo '积分';break;
-						case 9: echo '系统券';break;
-						case 10: echo '微信储值';break;
-						case 11: echo '找零';break;
-						case 12: echo '微点单';break;
-						case 13: echo '微外卖';break;
-						case 14: echo '美团';break;
-						case 15: echo '饿了么';break;
-						case 20: echo '毛利润';break;
-						case 21: echo '实收款1';break;
-						case 22: echo '实收款2';break;
-						default: echo '';break;
-					}?></td>				
+		            <td><?php 
+		            		if($text==1){
+		            			echo $m['y_all'];
+		            		}elseif($text==2){ 
+								echo $m['y_all'].-$m['m_all'];
+							}else{
+								echo $m['y_all'].-$m['m_all'].-$m['d_all'];
+							}
+					?></td>
+		            <td><?php $orders_total = $orders_total+$m['all_nums'];
+		                echo $m['all_nums'];?></td>
+		            <td><?php
+		            		$reality_all = $m['maoli_money'];
+		             		$grossprofit_total+=$reality_all;
+		             		echo $reality_all;
+		            ?></td>
+		            
+		            <td><?php 
+				            //退款...
+				            $retreat = $this->getRijieRetreat($m['dpid'],$begin_time,$end_time,$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']);
+				            $retreats+=$retreat;
+				            
+				            //折扣
+				            $discount=sprintf("%.2f",$reality_all-$m['all_reality']);
+				            $discount_total += $discount;
+				            echo $discount;
+		            ?></td>
+		            <td><?php 
+		                	$gather=$m['all_reality'];
+		                	$gather_total += $gather;
+		                	echo $gather;
+		            ?></td>
+		            <?php if($userid != '0'): ?>
+		            <td><?php 
+		                echo $m['username'].'('.$this->getUserstaffno($this->companyId,$m['username']).')';
+		             ?></td>
+		            <?php endif;?>
+		            <td><?php 
+		            		$cash = $m['cash_money'];
+				            $cash_total += $cash;
+				            echo $cash;
+		            ?></td>
+		            <td><?php
+				            $wechat = $m['wx_money']; 
+				            $wechat_total +=$wechat;
+				            echo $wechat;
+		            ?></td>
+		            <td><?php
+				            $wxorderpay = $m['wxord_money'];
+				            $wxorder_total += $wxorderpay;
+				            echo $wxorderpay;
+		            ?></td>
+		            <td><?php 
+				            $wxwaimaipay = $m['wxwm_money'];
+				            $wxwaimai_total += $wxwaimaipay;
+				            echo $wxwaimaipay;
+		            ?></td>
+		            <td><?php
+				            $alipay = $m['ali_money'];
+				            $alipay_total += $alipay;
+				            echo $alipay;
+		            ?></td>
+		            <td><?php 
+				            $unionpay = $m['visa_money'];
+				            $unionpay_total += $unionpay;
+				            echo $unionpay;
+		            ?></td>
+		            <td id="alipay4"><?php 
+				            $vipcard = $m['member_money'];
+				            $vipcard_total += $vipcard;
+				            echo $vipcard;
+		            ?></td>
+		            <td id="mtwm"><?php 
+				            $mtwm = $m['mt_money'];
+				            $mtwm_total += $mtwm;
+				            echo $mtwm;
+		            ?></td>
+		            <td id="elemewm"><?php 
+				            $elemewm = $m['elem_money'];
+				            $eleme_total += $elemewm;
+				            echo $elemewm;
+		            ?></td>
+		            <?php if($payments):?>
+		                
+		                <?php $j = 0;foreach ($payments as $payment):?>
+		                    <td><?php 
+		                           $pay_item =  $this->getRijiePrice($m['dpid'],$begin_time,$end_time,$payment['lid'],$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']); 
+		                           $grouppay_arr[$j] +=$pay_item;
+		                          // $grouppay.$i +=$pay_item;
+		                            
+		                            $j++;
+		                            echo $pay_item;
+		                            ?>
+		                    </td>
+		                <?php endforeach;?>
+		            <?php endif;?> 
+		            <td>
+		            <?php 
+		            $wxcard = $m['cupon_money'];
+		            $all_wxcards = $all_wxcards + $wxcard;
+		                echo $wxcard;
+		                ?>
+		            </td> 
+		            <td><?php 
+		            $wxpoint = $m['jifen_money'];
+		            $all_wxpoints = $all_wxpoints + $wxpoint;
+		            echo $wxpoint;
+		                ?>
+		            </td>
+		            <td><?php 
+		            $wxcharge = $m['wxyue_money'];
+		            $all_wxcharges = $all_wxcharges + $wxcharge;
+		            echo $wxcharge;
+		                ?>
+		            </td>
+		            <td><?php 
+		            	echo $retreat;
+		            ?></td>
+		            					
 		        </tr>
 		       
-		        <?php endforeach;?>	
-		      
-		      <?php endif;?> 
+		        <?php endforeach;?>
+		        <?php endif;?>
+		        <tr>
+		            <td><?php echo "总计";?></td>
+		            <td><?php echo $orders_total; ?></td>
+		            <td><?php  echo $grossprofit_total;?></td>
+		            <td><?php echo $discount_total; ?></td>
+		            <td><?php  echo $gather_total;?></td>
+		            <?php if($userid != '0'): ?>
+		                <td><?php   
+		                    ?>
+		                </td>
+		            <?php endif;?>
+		            <td><?php  echo $cash_total; ?></td>
+		            <td><?php  echo $wechat_total;?></td>
+		            <td><?php  echo $wxorder_total;?></td>
+		            <td><?php  echo $wxwaimai_total;?></td>
+		            <td><?php  echo $alipay_total;?></td>
+		            <td><?php  echo $unionpay_total;?></td>
+		            <td><?php  echo $vipcard_total; ?></td>
+		            <td><?php  echo $mtwm_total; ?></td>
+		            <td><?php  echo $eleme_total; ?></td>
+		            <?php if($payments):?>
+		                <?php  $j =0;foreach ($payments as $payment):?>
+		                    <td><?php  echo $grouppay_arr[$j++];
+		                   // echo $grouppay.$i;
+		                   // $i++;
+		                    ?></td>
+		                    
+		                <?php endforeach;?>
+		            <?php endif;?> 
+		            <td><?php echo $all_wxcards;?></td>
+		            <td><?php echo $all_wxpoints;?></td>
+		            <td><?php echo $all_wxcharges;?></td>
+		            <td><?php echo $retreats;?></td>
+										
+		        </tr>
+
 		       
 		        
 		        </tbody>
@@ -175,18 +326,18 @@ jQuery(document).ready(function(){
      	var end_time = $('#end_time').val();
      	var text = $('#text').val();
      	var userid = $('#userid').val();
-     	location.href="<?php echo $this->createUrl('statements/rijie' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
+     	location.href="<?php echo $this->createUrl('statements/rijieReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
 
 	});
 	
 	$('#excel').click(function excel(){
-
+		//layer.msg('暂未开放');return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();
 		var userid = $('#userid').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/paymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
+			location.href="<?php echo $this->createUrl('statements/paymentSqlExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
 		}else{
 			// location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 		}

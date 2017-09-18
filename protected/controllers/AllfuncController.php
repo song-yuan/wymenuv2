@@ -96,6 +96,94 @@ class AllfuncController extends Controller
 					$ords = $ords .','.$order['lid'];
 				}
 				
+				$sqlop = ' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,od.user_id,ifnull(od.pad_code,od.user_id) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.lid) as all_nums'
+						.' from nb_order_pay t '
+						.' left join '
+							.'( select ps.pad_code,ord.* from nb_order ord '
+								.' left join nb_pad_setting ps '
+									.' on(ps.dpid = ord.dpid and ps.lid = ord.user_id)'
+								.' where ord.dpid ='.$dpid.' and ord.lid in('.$ords.') ) '
+							.' od '
+							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
+						.' where t.pay_amount >=0 and t.paytype != 11 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
+						.' group by t.dpid,od.username,od.user_id '
+						.' union all '
+						.' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,ifnull(null,0) as user_id,ifnull(null,0) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.lid) as all_nums'
+						.' from nb_order_pay t '
+						.' left join nb_order od '
+							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
+						.' where t.pay_amount >=0 and t.paytype != 11 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
+						.' group by t.dpid,od.username '
+						;
+				$modelops = $db->createCommand($sqlop)->queryAll();
+				if($modelops){
+					foreach ($modelops as $model){
+					
+						$lid = new Sequence("order_paytype_total");
+						$id = $lid->nextval();
+						$data = array(
+								'lid'=>$id,
+								'dpid'=>$dpid,
+								'create_at'=>$create,
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'poscode'=>$model['pad_code'],
+								'username'=>$model['username'],
+								'rijie_code'=>$rjcode,
+								'begin_time'=>$begin_time,
+								'end_time'=>$end_time,
+								'paytype'=>'22',
+								'payment_id'=>'0',
+								'pay_order_num'=>$model['all_nums'],
+								'pay_amount_total'=>$model['all_price'],
+								'delete_flag'=>'0',
+								'is_sync'=>'11111',
+						);
+						//var_dump($data);exit;
+						$command = $db->createCommand()->insert('nb_order_paytype_total',$data);
+					}
+				}
+				
+				
+			$sqlor = ' select t.dpid,t.lid,t.username,t.order_type,t.user_id,ifnull(ps.pad_code,t.user_id) as pad_code,sum(t.should_total) as all_money,sum(t.reality_total) as all_price,count(distinct t.lid) as all_nums'
+					.' from nb_order t '
+					.' left join nb_pad_setting ps'
+						.' on( ps.dpid = t.dpid and ps.lid = t.user_id) '
+					.' where t.dpid ='.$dpid.' and t.lid in('.$ords.') and t.order_type =0 '
+					.' group by t.dpid,t.username,t.user_id '
+					.' union all '
+					.' select t.dpid,t.lid,t.username,t.order_type,ifnull(null,0) as user_id,ifnull(null,0) as pad_code,sum(t.should_total) as all_money,sum(t.reality_total) as all_price,count(distinct t.lid) as all_nums'
+					.' from nb_order t '
+					.' where t.dpid ='.$dpid.' and t.lid in('.$ords.') and t.order_type !=0 '
+					.' group by t.dpid,t.username '
+					;
+				$modelors = $db->createCommand($sqlor)->queryAll();
+				if($modelors){
+					foreach ($modelors as $model){
+							
+						$lid = new Sequence("order_paytype_total");
+						$id = $lid->nextval();
+						$data = array(
+								'lid'=>$id,
+								'dpid'=>$dpid,
+								'create_at'=>$create,
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'poscode'=>$model['pad_code'],
+								'username'=>$model['username'],
+								'rijie_code'=>$rjcode,
+								'begin_time'=>$begin_time,
+								'end_time'=>$end_time,
+								'paytype'=>'20',
+								'payment_id'=>'0',
+								'pay_order_num'=>$model['all_nums'],
+								'pay_amount_total'=>$model['all_price'],
+								'delete_flag'=>'0',
+								'is_sync'=>'11111',
+						);
+						//var_dump($data);exit;
+						$command = $db->createCommand()->insert('nb_order_paytype_total',$data);
+					}
+				}
+				
 				$sql = ' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,od.user_id,ifnull(od.pad_code,od.user_id) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.order_id) as all_nums'
 						.' from nb_order_pay t '
 						.' left join '
@@ -105,7 +193,7 @@ class AllfuncController extends Controller
 								.' where ord.dpid ='.$dpid.' and ord.lid in('.$ords.') ) '
 							.' od '
 							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
-						.' where t.pay_amount >0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
+						.' where t.pay_amount >=0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type =0 '
 						.' group by t.dpid,t.paytype,t.payment_method_id,od.username,od.user_id '
 						.' union all '
 						.' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,od.user_id,ifnull(od.pad_code,od.user_id) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.order_id) as all_nums'
@@ -125,7 +213,7 @@ class AllfuncController extends Controller
 						.' from nb_order_pay t '
 						.' left join nb_order od '
 							.' on( od.dpid = t.dpid and od.lid = t.order_id ) '
-						.' where t.pay_amount >0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
+						.' where t.pay_amount >=0 and t.dpid ='.$dpid.' and t.order_id in('.$ords.') and od.order_type !=0 '
 						.' group by t.dpid,t.paytype,t.payment_method_id,od.username '
 						.' union all '
 						.' select t.dpid,t.paytype,t.payment_method_id,od.lid,od.username,od.order_type,ifnull(null,0) as user_id,ifnull(null,0) as pad_code,sum(t.pay_amount) as all_price,count(distinct t.order_id) as all_nums'
@@ -139,7 +227,7 @@ class AllfuncController extends Controller
 				$models = $db->createCommand($sql)->queryAll();
 				//var_dump($models);exit;
 				if($models){
-					foreach ($models as $model){
+					foreach ($models as $mod){
 						
 						$lid = new Sequence("order_paytype_total");
 						$id = $lid->nextval();
@@ -148,15 +236,15 @@ class AllfuncController extends Controller
 								'dpid'=>$dpid,
 								'create_at'=>$create,
 								'update_at'=>date('Y-m-d H:i:s',time()),
-								'poscode'=>$model['user_id'],
-								'username'=>$model['username'],
+								'poscode'=>$mod['pad_code'],
+								'username'=>$mod['username'],
 								'rijie_code'=>$rjcode,
 								'begin_time'=>$begin_time,
 								'end_time'=>$end_time,
-								'paytype'=>$model['paytype'],
-								'payment_id'=>$model['payment_method_id'],
-								'pay_order_num'=>$model['all_nums'],
-								'pay_amount_total'=>$model['all_price'],
+								'paytype'=>$mod['paytype'],
+								'payment_id'=>$mod['payment_method_id'],
+								'pay_order_num'=>$mod['all_nums'],
+								'pay_amount_total'=>$mod['all_price'],
 								'delete_flag'=>'0',
 								'is_sync'=>'11111',
 						);
