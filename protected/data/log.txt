@@ -1,71 +1,800 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-2016-10-27 15:32:48  {"scene":"bar_code","out_trade_no":"1477553568-27-715","total_amount":"1","auth_code":"12345334","timeout_express":"5m","subject":"斗石消费","body":"购买商品共花费1元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[],"store_id":"wy_27","operator_id":"admin","alipay_store_id":""}
-2016-10-27 15:51:30  {"scene":"bar_code","out_trade_no":"1477554690-27-144","total_amount":"1","auth_code":"12345334","timeout_express":"5m","subject":"斗石消费","body":"购买商品共花费1元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[],"store_id":"wy_27","operator_id":"admin","alipay_store_id":""}
-2016-10-27 15:53:53  {"scene":"bar_code","out_trade_no":"1477554833-27-915","total_amount":"0.01","auth_code":"287681470608005722","timeout_express":"5m","subject":"斗石消费","body":"购买商品共花费0.01元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[],"store_id":"wy_27","operator_id":"admin","alipay_store_id":""}
-2016-10-28 10:04:43  {"scene":"bar_code","out_trade_no":"1477620283-27-306","total_amount":"16.00","auth_code":"123456","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费16.00元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[{"goods_id":"1812","goods_name":"劲烧牛肉堡","price":"8.00","quantity":"1"},{"goods_id":"1810","goods_name":"原味鸡腿堡","price":"8.00","quantity":"1"}],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-2016-10-28 10:05:28  {"scene":"bar_code","out_trade_no":"1477620328-27-192","total_amount":"16.00","auth_code":"123456","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费16.00元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-2016-10-28 10:06:56  {"scene":"bar_code","out_trade_no":"1477620416-27-207","total_amount":"16.00","auth_code":"123456","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费16.00元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-2016-10-28 10:07:33  {"scene":"bar_code","out_trade_no":"1477620453-27-730","total_amount":"8.00","auth_code":"123456","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费8.00元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[{"goods_id":"1812","goods_name":"劲烧牛肉堡","price":"8.00","quantity":"1"}],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-2016-10-28 10:08:05  {"scene":"bar_code","out_trade_no":"1477620485-27-204","total_amount":"16.00","auth_code":"123456","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费16.00元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[{"goods_id":"1810","goods_name":"原味鸡腿堡","price":"8.00","quantity":"1"},{"goods_id":"1812","goods_name":"劲烧牛肉堡","price":"8.00","quantity":"1"}],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-2016-10-28 10:14:30  {"scene":"bar_code","out_trade_no":"1477620870-27-487","total_amount":"0.01","auth_code":"282546285563591203","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费0.01元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[{"goods_id":"1810","goods_name":"原味鸡腿堡","price":"0.01","quantity":"1"}],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-2016-10-28 10:15:48  {"scene":"bar_code","out_trade_no":"1477620948-27-626","total_amount":"0.01","auth_code":"287674064907924576","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费0.01元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[{"goods_id":"1996","goods_name":"柳橙汁（小）","price":"0.01","quantity":"1"}],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-2016-10-28 15:56:20  {"scene":"bar_code","out_trade_no":"1477641380-27-986","total_amount":"0.01","auth_code":"284431937458780778","timeout_express":"5m","subject":"斗石-当面付","body":"购买商品共花费0.01元","undiscountable_amount":"0.01","extend_params":{"sys_service_provider_id":"2088811584894868"},"goods_detail":[{"goods_id":"1808","goods_name":"快乐鸡腿堡","price":"0.01","quantity":"1"}],"store_id":"wy_27","operator_id":"","alipay_store_id":""}
-=======
-2016-10-28 11:43:19  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
-2016-10-28 11:44:14  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
-2016-10-28 11:49:36  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
-2016-10-28 11:50:00  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
-2016-10-28 11:50:13  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
-2016-10-28 11:50:38  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
-2016-10-28 12:04:32  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
-2016-10-28 12:04:52  {"product_code":"QUICK_WAP_PAY","out_trade_no":"123","total_amount":0.01,"timeout_express":"5m","subject":"网页支付","body":"购买商品共花费0.01元","seller_id":"2088811584894868"}
->>>>>>> d8d0999c63e9d761d8fed45b27c6ca1ad4573431
-=======
+2017-05-26 16:46:38  666666
+2017-05-26 16:46:52  666666
+2017-05-26 16:46:52  27新增订单 返回:1,3,5,7,9,11,13,15,17
+2017-05-26 17:19:29  27新增订单 返回:1
+2017-05-26 17:24:12  27新增订单 返回:3,5
+2017-05-26 18:59:26  27新增订单 返回:1
+2017-05-26 20:21:21  27新增订单 返回:1
+2017-05-27 09:29:19  27新增订单 返回:3
+2017-05-27 09:31:34  27新增订单 返回:5,7
+2017-05-27 10:13:52  27新增订单 返回:1
+2017-05-27 10:23:42  27新增订单 返回:1
+2017-05-27 10:28:17  27新增订单 返回:1
+2017-05-27 13:38:04  27新增订单 返回:3
+2017-05-27 17:41:47  27新增订单 返回:1
+2017-05-31 09:38:25  27新增订单 返回:3
+2017-05-31 11:51:13  27新增订单 返回:1
+2017-05-31 12:01:33  27新增订单 返回:1
+2017-05-31 14:21:01  27新增订单 返回:1
+2017-05-31 17:51:56  27新增订单 返回:1
+2017-06-01 11:21:28  27新增订单 返回:1
+2017-06-01 14:27:07  27新增订单 返回:1
+2017-06-01 15:55:44  27---{"order_info":{"creat_at":"2017-06-01 15:55:44","account_no":4411739808,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":14.01,"reality_total":14.01,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":0,"set_id":null,"product_id":"1946","product_name":"\u5965\u5c14\u826f\u624b\u67aa\u817f","original_price":5,"price":5,"amount":1,"zhiamount":1,"product_taste":"","product_promotion":""},{"is_set":0,"set_id":null,"product_id":"1812","product_name":"\u52b2\u70e7\u725b\u8089\u5821","original_price":9,"price":9,"amount":1,"zhiamount":1,"product_taste":"","product_promotion":""}],"order_address":{"consignee":"sfsadf(\u5148\u751f)","street":"\u897f\u85cf\u660c\u90fd\u5e02\u6c14\u8c61\u5c40@#\u897f\u85cf\u81ea\u6cbb\u533a\u660c\u90fd\u5e02\u5361\u82e5\u533a\u57ce\u5173\u9547\u6797\u5ed3\u8def286\u53f7","mobile":"13242343534","tel":"13242343534"},"order_pay":{"pay_amount":14.01,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'set_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-06-01 16:26:44  27---{"order_info":{"creat_at":"2017-06-01 16:26:44","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":[{"consignee":null,"street":null,"mobile":null,"tel":null}],"order_pay":[{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-01 16:31:09  27---{"order_info":{"creat_at":"2017-06-01 16:31:09","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":{"consignee":null,"street":null,"mobile":null,"tel":null},"order_pay":{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-01 16:46:24  27---{"order_info":{"creat_at":"2017-06-01 16:46:24","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":{"consignee":null,"street":null,"mobile":null,"tel":null},"order_pay":{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-01 16:56:17  27---{"order_info":{"creat_at":"2017-06-01 16:56:17","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":{"consignee":null,"street":null,"mobile":null,"tel":null},"order_pay":{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-01 17:08:40  27---{"order_info":{"creat_at":"2017-06-01 17:08:40","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":[{"consignee":null,"street":null,"mobile":null,"tel":null}],"order_pay":[{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-01 17:08:42  27---{"order_info":{"creat_at":"2017-06-01 17:08:42","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":[{"consignee":null,"street":null,"mobile":null,"tel":null}],"order_pay":[{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-01 17:24:37  27---{"order_info":{"creat_at":"2017-06-01 17:24:37","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":[{"consignee":null,"street":null,"mobile":null,"tel":null}],"order_pay":[{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-01 17:28:37  27新增订单 返回:1
+2017-06-01 17:46:50  27---{"order_info":{"creat_at":"2017-06-01 17:46:50","account_no":null,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":null,"order_type":7,"should_total":null,"reality_total":null,"takeout_typeid":0,"callno":""},"order_product":[],"order_address":[{"consignee":null,"street":null,"mobile":null,"tel":null}],"order_pay":[{"pay_amount":null,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_no' cannot be null. The SQL statement executed was: INSERT INTO `nb_order` (`lid`, `dpid`, `create_at`, `update_at`, `account_no`, `classes`, `username`, `user_id`, `site_id`, `is_temp`, `number`, `order_status`, `takeout_typeid`, `order_type`, `should_total`, `reality_total`, `callno`, `taste_memo`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :account_no, :classes, :username, :user_id, :site_id, :is_temp, :number, :order_status, :takeout_typeid, :order_type, :should_total, :reality_total, :callno, :taste_memo, :is_sync)
+2017-06-04 09:39:16  27新增订单 返回:1
+2017-06-04 09:45:44  27新增订单 返回:1,3
+2017-06-04 12:44:55  27新增订单 返回:1,3
+2017-06-04 12:52:52  27新增订单 返回:1
+2017-06-04 14:01:17  27新增订单 返回:1,3
+2017-06-05 10:12:59  27新增订单 返回:1
+2017-06-07 09:14:48  27新增订单 返回:1
+2017-06-07 09:17:03  27新增订单 返回:3
+2017-06-07 09:49:34  27新增订单 返回:1
+2017-06-07 12:49:22  28新增订单 返回:1
+2017-06-07 13:03:17  27新增订单 返回:1
+2017-06-07 19:10:16  27新增订单 返回:1,3
+2017-06-08 09:28:54  28新增订单 返回:3
+2017-06-08 13:35:59  27新增订单 返回:1,3
+2017-06-08 15:31:26  27新增订单 返回:1,3,5,7
+2017-06-08 16:13:40  27新增订单 返回:9
+2017-06-12 14:50:49  ePoiId=0000000028&appAuthToken=77eb9aca4bb63d63a0a098cb211587d0cb7c54b8b137af64c487038ccf1cfb39ec6d58bb94e5fa004582ca322b17e47f&businessId=2&timestamp=1497250249616
+2017-06-12 14:50:59  ePoiId=0000000028&appAuthToken=77eb9aca4bb63d63a0a098cb211587d0cb7c54b8b137af64c487038ccf1cfb39ec6d58bb94e5fa004582ca322b17e47f&businessId=2&timestamp=1497250249616
+2017-06-12 14:51:49  ePoiId=0000000028&appAuthToken=77eb9aca4bb63d63a0a098cb211587d0cb7c54b8b137af64c487038ccf1cfb39ec6d58bb94e5fa004582ca322b17e47f&businessId=2&timestamp=1497250249616
+2017-06-12 14:52:27  ePoiId=0000000028&appAuthToken=2f11e9b8a8f7a74666c1f1e3238a944f654cb9c88b17354b40435cf8d02309e65aec7a35c88a76bfa851538849e989d0&businessId=2&timestamp=1497246747902
+2017-06-12 14:55:49  ePoiId=0000000028&appAuthToken=77eb9aca4bb63d63a0a098cb211587d0cb7c54b8b137af64c487038ccf1cfb39ec6d58bb94e5fa004582ca322b17e47f&businessId=2&timestamp=1497250249616
+2017-06-12 15:04:26  ePoiId=0000000028&appAuthToken=06ac26f340a3379d1f5cafcbbbcb024c291c939f808896800fa6fd78c7be5361f5b7a742757e5e4d9d207d979d0cd428&businessId=2&timestamp=1497247466296
+2017-06-12 15:04:31  ePoiId=0000000028&appAuthToken=9a285842648a01abbf721f964b5e20fcbdc2d29ac0d31f7a171e5d0d7bb2d4658a7bd0fe458cca7e9c67db92aa49d59b&businessId=2&timestamp=1497251071614
+2017-06-12 15:04:41  ePoiId=0000000028&appAuthToken=9a285842648a01abbf721f964b5e20fcbdc2d29ac0d31f7a171e5d0d7bb2d4658a7bd0fe458cca7e9c67db92aa49d59b&businessId=2&timestamp=1497251071614
+2017-06-12 15:05:31  ePoiId=0000000028&appAuthToken=9a285842648a01abbf721f964b5e20fcbdc2d29ac0d31f7a171e5d0d7bb2d4658a7bd0fe458cca7e9c67db92aa49d59b&businessId=2&timestamp=1497251071614
+2017-06-12 15:09:31  ePoiId=0000000028&appAuthToken=9a285842648a01abbf721f964b5e20fcbdc2d29ac0d31f7a171e5d0d7bb2d4658a7bd0fe458cca7e9c67db92aa49d59b&businessId=2&timestamp=1497251071614
+2017-06-12 16:44:20  27新增订单 返回:1,3,5,7,9
+2017-06-12 17:09:27  27新增订单 返回:1,3,5,7,9,11
+2017-06-12 17:18:56  27新增订单 返回:1,3,5,7,9,11,13,15,17
+2017-06-12 17:21:08  27新增订单 返回:19
+2017-06-12 17:54:35  27新增订单 返回:21,23,25,27,29,31,33
+2017-06-12 17:58:50  27新增订单 返回:35
+2017-06-12 18:02:19  developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497261739756
+2017-06-12 18:02:29  developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497261739756
+2017-06-12 18:03:19  developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497261739756
+2017-06-12 18:07:19  developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497261739756
+2017-06-12 19:15:15  developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-12 19:15:25  developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-12 19:16:15  developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-12 19:19:23  绑定:ePoiId=0000000028&appAuthToken=f67d6ec9659de901a7664590cd7065ced28040f2ad59e6cefe95f783b24efdce3c3f1af3269a337aca6fa9068b8f039e&businessId=2&timestamp=1497266363508
+2017-06-12 19:20:15  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-12 19:29:27  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497263367989
+2017-06-12 19:45:15  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-12 19:54:56  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-12 19:55:06  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-12 19:55:33  绑定:ePoiId=0000000028&appAuthToken=6fab500ec34f63efcdaee6976a4eed9e4db00266d17c433beb9d4db11da8e7861cc0d1d62fdd90645c50dbced5ffe169&businessId=2&timestamp=1497268533344
+2017-06-12 19:55:56  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-12 19:59:56  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-12 20:00:29  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-12 20:00:39  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-12 20:00:55  绑定:ePoiId=0000000028&appAuthToken=48e4190127aec9738229e6121fa2c1bfad69c1bca897de65ddc45d2b1aae3e03f506aeca7aa3b10ed806b8dbad6ff880&businessId=2&timestamp=1497268855520
+2017-06-12 20:01:11  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-12 20:01:11  绑定:ePoiId=0000000028&appAuthToken=84792bcac2db7be41ab355eb4671d3e06e9f2fbcaa1f2165d66d5cf5786af94728a6c21abbdb6cf73fd7dcb5546188c8&businessId=2&timestamp=1497268871159
+2017-06-12 20:01:21  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-12 20:01:29  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-12 20:02:11  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-12 20:05:29  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-12 20:06:11  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-12 20:11:50  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-12 20:12:00  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-12 20:12:50  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-12 20:12:50  绑定:ePoiId=0000000028&appAuthToken=a119b5839de0bd7f4d6387dcde5596f1eb805498f460f82425ed3311a3064f3f004ca46d3955de3140f008012c72c4a2&businessId=2&timestamp=1497269570149
+2017-06-12 20:15:15  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-12 20:16:50  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-12 20:24:56  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-12 20:30:29  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-12 20:31:11  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-12 20:41:50  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-12 20:54:56  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-12 21:00:29  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-12 21:01:11  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-12 21:11:50  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-12 23:02:19  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497261739756
+2017-06-12 23:11:12  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497262272299
+2017-06-12 23:29:27  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497263367989
+2017-06-13 00:15:15  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-13 00:54:56  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-13 01:00:29  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-13 01:01:11  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-13 01:11:50  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-13 06:02:19  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497261739756
+2017-06-13 06:11:12  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497262272299
+2017-06-13 06:29:27  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497263367989
+2017-06-13 07:15:15  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497266115002
+2017-06-13 07:54:56  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268496851
+2017-06-13 08:00:29  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268829005
+2017-06-13 08:01:11  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497268871107
+2017-06-13 08:11:50  解绑:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1497269510475
+2017-06-13 13:29:39  27新增订单 返回:37,39,41,43,45,47
+2017-06-13 13:55:52  27新增订单 返回:1
+2017-06-13 14:18:54  27新增订单 返回:1
+2017-06-13 14:52:38  27新增订单 返回:1,3
+2017-06-13 15:24:39  27新增订单 返回:1,3,5
+2017-06-13 20:02:12  27新增订单 返回:1,3,5,7,9,11
+2017-06-13 20:06:09  27新增订单 返回:1,3,5
+2017-06-13 20:08:37  28新增订单 返回:1
+2017-06-13 20:36:15  27新增订单 返回:7,9
+2017-06-14 11:21:33  27新增订单 返回:1,3
+2017-06-14 11:23:27  27新增订单 返回:1,3
+2017-06-14 19:13:54  28新增订单 返回:1,3,5,7
+2017-06-14 20:13:45  27新增订单 返回:1,3,5,7,9,11,13,15,17,19,21,23,25,27
+2017-06-14 20:16:35  27新增订单 返回:1,3,5,7
+2017-06-14 20:36:50  27新增订单 返回:9
+2017-06-15 15:28:03  27新增订单 返回:1,3
+2017-06-19 09:36:03  27新增订单 返回:1
+2017-06-19 18:21:51  27新增订单 返回:1
+2017-06-19 20:30:18  27新增订单 返回:1,3,5
+2017-06-20 10:06:26  27新增订单 返回:1,3
+2017-06-20 15:32:23  27新增订单 返回:1,3,5,7
+2017-06-20 19:06:43  27新增订单 返回:1,3,5,7,9,11,13,15
+2017-06-20 20:26:06  27新增订单 返回:1
+2017-06-20 20:30:21  27新增订单 返回:1,3
+2017-06-21 10:06:20  27新增订单 返回:1,3
+2017-06-21 17:35:05  27新增订单 返回:1
+2017-06-23 09:55:44  27新增订单 返回:1
+2017-06-23 10:15:44  27新增订单 返回:3
+2017-06-23 16:08:39  27新增订单 返回:1,3
+2017-06-24 14:08:59  27新增订单 返回:1
+2017-06-24 14:21:44  27新增订单 返回:3
+2017-06-26 14:01:43  27新增订单 返回:1,3,5,7,9,11,13,15
+2017-06-26 15:18:36  27新增订单 返回:1,3
+2017-06-26 17:32:34  27新增订单 返回:1,3,5,7,9
+2017-06-27 09:09:05  27新增订单 返回:1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39
+2017-06-27 09:19:56  27新增订单 返回:1
+2017-06-27 09:36:51  27新增订单 返回:1,3
+2017-06-27 09:41:19  27新增订单 返回:1
+2017-06-27 10:12:20  绑定：
+2017-06-27 14:16:26  27新增订单 返回:1,3,5,7,9,11,13,15,17,19,21
+2017-06-28 13:48:03  27新增订单 返回:1,3,5,7,9,11
+2017-06-28 14:00:33  27新增订单 返回:1
+2017-06-28 14:17:38  27新增订单 返回:3
+2017-06-28 14:30:08  27新增订单 返回:5
+2017-06-28 14:32:25  27新增订单 返回:7,9,11,13,15,17,19,21,23
+2017-06-28 14:36:40  27新增订单 返回:25,27,29
+2017-06-28 15:04:20  27新增订单 返回:1
+2017-06-28 15:52:50  27新增订单 返回:1
+2017-06-28 16:20:23  27新增订单 返回:1
+2017-06-28 16:36:46  27新增订单 返回:1
+2017-06-28 16:44:47  27新增订单 返回:3
+2017-06-28 16:50:01  27新增订单 返回:1
+2017-06-28 17:15:02  27新增订单 返回:3
+2017-06-28 17:17:16  27新增订单 返回:5
+2017-06-28 17:35:47  27新增订单 返回:1,3,5,7
+2017-06-29 11:27:31  27新增订单 返回:1
+2017-06-29 13:11:46  27新增订单 返回:3
+2017-06-29 13:14:34  27新增订单 返回:5
+2017-06-29 13:17:18  27新增订单 返回:7
+2017-06-29 13:22:46  27新增订单 返回:9
+2017-06-29 13:26:41  27新增订单 返回:1,3,5,7,9
+2017-06-29 13:30:47  27新增订单 返回:1
+2017-06-29 14:05:50  27新增订单 返回:1,3
+2017-06-29 14:09:50  27新增订单 返回:5
+2017-07-03 09:34:06  27新增订单 返回:1
+2017-07-03 09:42:16  27新增订单 返回:3
+2017-07-03 10:36:19  27新增订单 返回:1
+2017-07-03 10:41:20  27新增订单 返回:1,3
+2017-07-03 10:48:33  27新增订单 返回:3
+2017-07-03 10:50:50  27新增订单 返回:5
+2017-07-03 10:58:54  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000029326-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-07-03 11:00:34  轮询次数：50结果：错误！
+2017-07-03 11:03:18  27新增订单 返回:1,3
+2017-07-03 11:29:17  27新增订单 返回:1,3
+2017-07-03 12:19:06  27新增订单 返回:1
+2017-07-03 14:12:43  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000029336-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-07-03 14:12:54  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000029336-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-07-03 14:14:24  轮询次数：50结果：错误！
+2017-07-03 14:14:34  轮询次数：50结果：错误！
+2017-07-03 15:09:21  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000029306-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-07-03 15:10:27  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000029306-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-07-03 15:11:01  轮询次数：50结果：错误！
+2017-07-03 15:12:08  轮询次数：50结果：错误！
+2017-07-03 15:13:19  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000029306-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-07-03 15:14:59  轮询次数：50结果：错误！
+2017-07-03 17:15:26  28新增订单 返回:1
+2017-07-03 17:24:40  28新增订单 返回:3
+2017-07-03 17:40:25  28新增订单 返回:5
+2017-07-03 18:05:10  27新增订单 返回:1
+2017-07-03 18:09:10  27新增订单 返回:3,5
+2017-07-03 18:13:24  27新增订单 返回:7,9
+2017-07-04 10:25:08  27新增订单 返回:1,3,5
+2017-07-04 10:31:45  27新增订单 返回:7,9,11
+2017-07-04 13:24:53  
+2017-07-04 14:19:32  
+2017-07-04 14:19:37  
+2017-07-04 14:22:42  
+2017-07-04 14:22:43  
+2017-07-04 14:22:43  
+2017-07-04 14:22:43  
+2017-07-04 14:22:44  
+2017-07-04 14:22:44  
+2017-07-04 14:24:33  {"requestId":"100004279925649522","type":17,"appId":84719338,"message":"{\"orderId\":\"1209863870255587356\",\"state\":\"invalid\",\"shopId\":155550122,\"updateTime\":1499149473,\"role\":3}","shopId":155550122,"timestamp":1499149473645,"signature":"C4F38F9715F5A6159E99B499FBF65C42","userId":363866786278705770}
+2017-07-04 14:25:02  {"requestId":"100004279942410354","type":10,"appId":84719338,"message":"{\"id\":\"1209864279217004572\",\"orderId\":\"1209864279217004572\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-04T14:25:02\",\"activeAt\":\"2017-07-04T14:25:02\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":683914679,\"skuId\":300688630898,\"name\":\"脆皮鸡块（1块）\",\"categoryId\":1,\"price\":6.0,\"quantity\":1,\"total\":6.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026188000188\",\"barCode\":\"026188000188\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":11,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":6.0,\"originalPrice\":6.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":6.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1499149502388,"signature":"283C3B8498F773CEF4B3C780F0E19410","userId":363866786278705770}
+2017-07-04 14:25:02  {"order_info":{"creat_at":"2017-07-04 14:25:02","account_no":"1209864279217004572","classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":"unprocessed","order_type":8,"should_total":6,"reality_total":6,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":"0","set_id":0,"product_id":"2364","product_name":"\u8106\u76ae\u9e21\u5757\uff081\u5757\uff09","original_price":6,"price":6,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u4ee3\u6c38\u80dc(\u5148\u751f)","street":"\u4e1c\u5e73\u56fd\u5bb6\u68ee\u6797\u516c\u56ed\u5317\u6cbf\u516c\u8def3325","mobile":"13329435665","tel":"13329435665"}],"order_pay":[{"pay_amount":6,"paytype":15,"payment_method_id":0,"paytype_id":0,"remark":""}]}
+2017-07-04 14:25:02  {"status":true,"orderId":"29406","syncLid":0,"content":"{\"order_info\":{\"creat_at\":\"2017-07-04 14:25:02\",\"account_no\":\"1209864279217004572\",\"classes\":0,\"username\":\"\",\"site_id\":0,\"is_temp\":1,\"number\":0,\"order_status\":\"unprocessed\",\"order_type\":8,\"should_total\":6,\"reality_total\":6,\"takeout_typeid\":0,\"callno\":\"\"},\"order_product\":[{\"is_set\":\"0\",\"set_id\":0,\"product_id\":\"2364\",\"product_name\":\"\\u8106\\u76ae\\u9e21\\u5757\\uff081\\u5757\\uff09\",\"original_price\":6,\"price\":6,\"amount\":1,\"zhiamount\":1,\"product_taste\":[],\"product_promotion\":[]}],\"order_address\":[{\"consignee\":\"\\u4ee3\\u6c38\\u80dc(\\u5148\\u751f)\",\"street\":\"\\u4e1c\\u5e73\\u56fd\\u5bb6\\u68ee\\u6797\\u516c\\u56ed\\u5317\\u6cbf\\u516c\\u8def3325\",\"mobile\":\"13329435665\",\"tel\":\"13329435665\"}],\"order_pay\":[{\"pay_amount\":6,\"paytype\":15,\"payment_method_id\":0,\"paytype_id\":0,\"remark\":\"\"}]}"}
+2017-07-04 14:25:02  {"requestId":"100004279937971314","type":12,"appId":84719338,"message":"{\"orderId\":\"1209864279217004572\",\"state\":\"valid\",\"shopId\":155550122,\"updateTime\":1499149502,\"role\":3}","shopId":155550122,"timestamp":1499149502854,"signature":"7E8E5749D780E48F400E9ADABBC826A8","userId":363866786278705770}
+2017-07-04 16:37:10  27新增订单 返回:1
+2017-07-05 10:18:01  27新增订单 返回:11,13
+2017-07-05 10:22:16  27新增订单 返回:15
+2017-07-05 10:25:48  27新增订单 返回:1
+2017-07-05 10:29:01  27新增订单 返回:17,19
+2017-07-05 10:42:01  27新增订单 返回:21,23
+2017-07-05 10:46:20  27新增订单 返回:25
+2017-07-05 11:04:53  27新增订单 返回:1
+2017-07-05 11:06:53  27新增订单 返回:3
+2017-07-05 11:09:08  27新增订单 返回:5,7
+2017-07-05 11:11:38  27新增订单 返回:9,11,13
+2017-07-05 11:13:38  27新增订单 返回:15
+2017-07-05 11:15:53  27新增订单 返回:17
+2017-07-05 13:20:42  27新增订单 返回:1,3,5,7,9
+2017-07-05 13:20:43  27新增订单 返回:1,3,5,7,9
+2017-07-06 09:53:12  27新增订单 返回:1
+2017-07-06 09:55:27  27新增订单 返回:3
+2017-07-06 10:50:16  27新增订单 返回:1
+2017-07-07 09:52:23  27新增订单 返回:1
+2017-07-07 10:06:33  27新增订单 返回:1
+2017-07-07 15:58:23  27新增订单 返回:1
+2017-07-07 18:33:04  28新增订单 返回:1,3,5,7
+2017-07-07 20:03:37  27新增订单 返回:1
+2017-07-10 14:18:45  27新增订单 返回:1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39
+2017-07-10 14:20:45  27新增订单 返回:41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79
+2017-07-10 14:22:45  27新增订单 返回:81,83,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113,115,117,119
+2017-07-10 14:24:44  27新增订单 返回:121,123,125,127,129,131,133,135,137,139,141,143,145,147
+2017-07-10 14:44:44  27新增订单 返回:149
+2017-07-10 15:59:59  27新增订单 返回:1,3
+2017-07-10 16:07:59  27新增订单 返回:5
+2017-07-10 16:48:58  27新增订单 返回:7
+2017-07-10 16:52:58  27新增订单 返回:9
+2017-07-10 16:55:14  27新增订单 返回:11,13
+2017-07-10 16:57:14  27新增订单 返回:15
+2017-07-10 16:59:29  27新增订单 返回:17,19
+2017-07-10 17:29:56  27新增订单 返回:1,3
+2017-07-10 18:21:41  27新增订单 返回:1,3,5,7,9,11
+2017-07-11 09:45:39  27新增订单 返回:1,3
+2017-07-11 09:47:39  27新增订单 返回:5
+2017-07-11 09:49:39  27新增订单 返回:7
+2017-07-11 09:51:54  27新增订单 返回:9,11
+2017-07-11 14:20:40  27新增订单 返回:13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51
+2017-07-11 14:22:39  27新增订单 返回:53,55,57,59,61,63,65
+2017-07-11 14:41:08  27新增订单 返回:67
+2017-07-11 14:51:23  27新增订单 返回:69
+2017-07-11 15:01:53  27新增订单 返回:1,3
+2017-07-11 15:10:38  27新增订单 返回:5,7,9
+2017-07-11 15:12:38  27新增订单 返回:11
+2017-07-11 15:18:53  27新增订单 返回:13
+2017-07-12 15:20:45  27新增订单 返回:1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35
+2017-07-12 16:35:12  27新增订单 返回:1
+2017-07-12 18:17:39  27新增订单 返回:1
+2017-07-13 09:29:10  27新增订单 返回:3
+2017-07-13 09:41:25  27新增订单 返回:5,7
+2017-07-13 09:43:25  27新增订单 返回:9,11
+2017-07-13 09:57:43  27新增订单 返回:13,15
+2017-07-13 10:01:58  27新增订单 返回:17
+2017-07-13 10:13:58  27新增订单 返回:19
+2017-07-13 10:23:58  27新增订单 返回:21,23,25
+2017-07-13 10:49:13  27新增订单 返回:1,3,5
+2017-07-13 10:51:13  27新增订单 返回:7,9,11,13,15,17
+2017-07-13 10:59:13  27新增订单 返回:19,21,23
+2017-07-13 11:07:28  27新增订单 返回:25,27
+2017-07-13 11:11:28  27新增订单 返回:29
+2017-07-13 11:21:28  27新增订单 返回:31
+2017-07-13 11:23:28  27新增订单 返回:33
+2017-07-13 11:27:28  27新增订单 返回:35
+2017-07-13 13:35:43  27新增订单 返回:37,39
+2017-07-13 13:43:43  27新增订单 返回:41
+2017-07-13 13:47:43  27新增订单 返回:43
+2017-07-13 14:00:13  27新增订单 返回:45
+2017-07-13 14:02:28  27新增订单 返回:47,49,51
+2017-07-13 14:04:28  27新增订单 返回:53
+2017-07-13 14:10:28  27新增订单 返回:55,57
+2017-07-13 14:14:28  27新增订单 返回:59
+2017-07-13 14:28:19  27新增订单 返回:1
+2017-07-13 14:34:58  27新增订单 返回:61
+2017-07-13 14:40:58  27新增订单 返回:63
+2017-07-13 14:44:58  27新增订单 返回:65
+2017-07-13 14:51:13  27新增订单 返回:67
+2017-07-13 14:55:13  27新增订单 返回:69
+2017-07-13 15:05:13  27新增订单 返回:71
+2017-07-13 15:07:28  27新增订单 返回:73
+2017-07-13 15:19:28  27新增订单 返回:75
+2017-07-13 15:23:27  27新增订单 返回:77
+2017-07-13 15:27:42  27新增订单 返回:79
+2017-07-13 15:33:57  27新增订单 返回:81,83
+2017-07-13 15:35:57  27新增订单 返回:85
+2017-07-13 15:38:13  27新增订单 返回:87
+2017-07-13 15:52:28  27新增订单 返回:89
+2017-07-13 15:54:28  27新增订单 返回:91
+2017-07-13 16:04:27  27新增订单 返回:93
+2017-07-13 16:12:28  27新增订单 返回:95,97,99,101,103,105,107,109
+2017-07-13 16:16:35  27新增订单 返回:1
+2017-07-13 16:46:01  27新增订单 返回:1
+2017-07-13 17:08:46  27新增订单 返回:1
+2017-07-13 17:11:01  27新增订单 返回:3
+2017-07-13 17:32:24  
+2017-07-14 09:39:05  27新增订单 返回:1
+2017-07-14 09:59:50  27新增订单 返回:1,3
+2017-07-14 10:24:50  27新增订单 返回:1
+2017-07-14 10:27:06  27新增订单 返回:3,5
+2017-07-14 10:35:05  27新增订单 返回:7
+2017-07-14 11:29:05  27新增订单 返回:9
+2017-07-14 15:36:08  
+2017-07-17 09:53:00  27新增订单 返回:1
+2017-07-17 09:55:00  27新增订单 返回:3
+2017-07-17 10:33:00  27新增订单 返回:5
+2017-07-17 10:39:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 10:40:06  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 10:40:19  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500257419863
+2017-07-17 10:40:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 10:43:43  0000000222---{"order_info":{"creat_at":"2017-07-17 10:43:43","account_no":5086679587,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":23,"reality_total":24,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":18,"price":18,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":6,"price":6,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u4fde\u4f73\u4e91(\u5148\u751f)","street":"\u5c0f\u66f2\u666f\u82d1 (4\u5e622\u5355\u5143303)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u6d77\u4e30\u897f\u8def598\u53f7","mobile":"15968334445","tel":"15968334445"}],"order_pay":[{"pay_amount":23,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 10:44:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 10:46:27  bd:ePoiId=0000000028&appAuthToken=bbac057195819c508a5e596571ffc85bef839af40832846d08e9a77462a74b14b573d884606fc45d24c93f026afb0b5c&businessId=2&timestamp=1500259587851
+2017-07-17 10:46:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 10:47:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 10:47:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 10:49:43  bd:ePoiId=0000000028&appAuthToken=61431a0160d3b7a5779efc4e30d7679a2c8361f70ffbce352722992972db3f4ea9bded7c7c7d471d4d450b9f8f89e4fb&businessId=2&timestamp=1500259783091
+2017-07-17 10:51:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 11:09:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 11:10:19  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500257419863
+2017-07-17 11:16:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 11:16:12  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 11:16:44  0000000222---{"order_info":{"creat_at":"2017-07-17 11:16:44","account_no":5087859404,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":19,"reality_total":20,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":4,"price":4,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":16,"price":16,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u90b1\u9e4f(\u5148\u751f)","street":"\u767e\u59d3\u767e\u8d27\u5546\u573a (\u697c\u4e0a\u5e73\u53f0\u4f4f\u623f\u4e2d\u95f4\u5e62602)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u6b66\u539f\u8857\u9053\u6d77\u6ee8\u897f\u8def\u7eff\u57ce\u82b1\u82d1","mobile":"13736801078","tel":"13736801078"}],"order_pay":[{"pay_amount":19,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 11:16:47  bd:ePoiId=0000000028&appAuthToken=40d8b22f84ade0efb8b7c24f6e4b81a71398774e9270cf7cb9729f419bfd8d406ecdbcf9350b39383e13d346d14556e4&businessId=2&timestamp=1500261407002
+2017-07-17 11:16:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 11:17:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 11:20:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-17 11:20:37  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-17 11:21:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 11:21:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-17 11:22:50  bd:ePoiId=0000000028&appAuthToken=b1bda30faf9357b4c76056e746d7c14afc9e909b2ed299100bdb4bfaac4240907d67b8845335c86eb2be343c278ecf33&businessId=2&timestamp=1500261770381
+2017-07-17 11:25:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-17 11:39:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 11:45:03  0000000222---{"order_info":{"creat_at":"2017-07-17 11:45:03","account_no":5089177613,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":21,"reality_total":22,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":14,"price":14,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":8,"price":8,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u7f8e\u56e2\u5ba2\u4eba","street":"\u6052\u5927\u5fa1\u666f (3\u53f7\u697c 2502)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u6b66\u539f\u8857\u9053\u660e\u73e0\u6ee8\u6d77\u5927\u9053\u6052\u5927\u5fa1\u666f","mobile":"13750773170","tel":"13750773170"}],"order_pay":[{"pay_amount":21,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 11:46:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 11:46:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 11:50:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-17 12:04:54  0000000202---{"order_info":{"creat_at":"2017-07-17 12:04:54","account_no":5089991455,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":45,"reality_total":49,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":49,"price":49,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u6c5f\u52b1 (\u5973\u58eb)","street":"\u8d75\u538d\u82b1\u56edA\u533a (17\u53f7\u697c605)@#\u6c5f\u82cf\u7701\u82cf\u5dde\u5e02\u6606\u5c71\u5e02\u660e\u661f\u8def\u4e0e\u89c4\u4e8c\u8def\u4ea4\u53c9\u53e3\u897f\u5357150\u7c73","mobile":"15051651263","tel":"15051651263"}],"order_pay":[{"pay_amount":45,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 12:16:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 12:20:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-17 12:55:53  0000000222---{"order_info":{"creat_at":"2017-07-17 12:55:53","account_no":5091535585,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":43,"reality_total":50,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":48,"price":48,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":2,"price":2,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u7b71(\u5973\u58eb)","street":"\u67a3\u56ed\u65b0\u6751 (\u67a3\u56ed\u5c0f\u533a26\u5e62104\u5ba4)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u957f\u6f6d\u8def110\u53f7","mobile":"15168288053","tel":"15168288053"}],"order_pay":[{"pay_amount":43,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 13:14:29  0000000202---{"order_info":{"creat_at":"2017-07-17 13:14:29","account_no":5091915528,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":45,"reality_total":49,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":49,"price":49,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u9ec4\u5764(\u5148\u751f)","street":"\u8d75\u538d\u82b1\u56ed (\u8d75\u538d\u82b1\u56edB\u533a25\u680b605\u5ba4)@#\u6c5f\u82cf\u7701\u82cf\u5dde\u5e02\u6606\u5c71\u5e02\u660e\u661f\u8def\u4e0e\u89c4\u4e8c\u8def\u4ea4\u53c9\u53e3\u897f\u5357150\u7c73","mobile":"13912588930","tel":"13912588930"}],"order_pay":[{"pay_amount":45,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 13:15:29  0000000202---{"order_info":{"creat_at":"2017-07-17 13:15:29","account_no":5091915528,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":45,"reality_total":49,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":49,"price":49,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u9ec4\u5764(\u5148\u751f)","street":"\u8d75\u538d\u82b1\u56ed (\u8d75\u538d\u82b1\u56edB\u533a25\u680b605\u5ba4)@#\u6c5f\u82cf\u7701\u82cf\u5dde\u5e02\u6606\u5c71\u5e02\u660e\u661f\u8def\u4e0e\u89c4\u4e8c\u8def\u4ea4\u53c9\u53e3\u897f\u5357150\u7c73","mobile":"13912588930","tel":"13912588930"}],"order_pay":[{"pay_amount":45,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 13:26:10  0000000222---{"order_info":{"creat_at":"2017-07-17 13:26:10","account_no":5092117208,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":27,"reality_total":31,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":16,"price":16,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":7,"price":7,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":8,"price":8,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u6731(\u5148\u751f)","street":"\u6d77\u76d0\u5144\u5f1f\u62c9\u4e1d\u5382@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u57ce\u897f\u5317\u8def188\u53f7","mobile":"18357355838","tel":"18357355838"}],"order_pay":[{"pay_amount":27,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 13:57:14  27新增订单 返回:7
+2017-07-17 13:58:02  0000000222---{"order_info":{"creat_at":"2017-07-17 13:58:02","account_no":5092542801,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":21,"reality_total":22,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":18,"price":18,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":4,"price":4,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u8bb8(\u5148\u751f)","street":"\u6d77\u76d0\u90ae\u653f\u5927\u53a6 (\u9633\u5149\u5546\u52a1\u5bbe\u9986306)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u65b0\u6865\u5357\u8def48\u53f7","mobile":"15257090239","tel":"15257090239"}],"order_pay":[{"pay_amount":21,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 14:05:14  27新增订单 返回:9,11,13
+2017-07-17 14:07:40  0000000222---{"order_info":{"creat_at":"2017-07-17 14:07:40","account_no":5092689306,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":37,"reality_total":39,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":1,"price":1,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":38,"price":38,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u674e\u7fd4\u5b87(\u5148\u751f)","street":"\u4e8c\u4e8c\u65b0\u533a (409\u680b504\u5ba4)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u76d0\u6e56\u897f\u8def121\u53f7","mobile":"18770210082","tel":"18770210082"}],"order_pay":[{"pay_amount":37,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 14:31:29  27新增订单 返回:15,17
+2017-07-17 14:33:29  27新增订单 返回:19,21,23
+2017-07-17 14:35:29  27新增订单 返回:25
+2017-07-17 14:48:39  0000000222---{"order_info":{"creat_at":"2017-07-17 14:48:39","account_no":5093155701,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":21,"reality_total":22,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":7,"price":7,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":7,"price":7,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":8,"price":8,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u557e\u557e(\u5973\u58eb)","street":"\u91d1\u6c47\u00b7\u540d\u4ed5\u82b1\u82d1 (28\u5e62502)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u73af\u57ce\u5357\u8def\u91d1\u6c47\u00b7\u540d\u4ed5\u82b1\u82d1","mobile":"18368337729","tel":"18368337729"}],"order_pay":[{"pay_amount":21,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 14:54:05  0000000125---{"order_info":{"creat_at":"2017-07-17 14:54:05","account_no":5093211288,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":50,"reality_total":50,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":50,"price":50,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u738b(\u5148\u751f)","street":"\u9e3f\u5174\u57ce\u00b7\u5de7\u514b\u529b\u516c\u9986(\u897f\u95e8) (\u56db\u680b508)@#\u6d59\u6c5f\u7701\u676d\u5dde\u5e02\u8427\u5c71\u533a\u7ecf\u6d4e\u6280\u672f\u5f00\u53d1\u533a\u9e3f\u5174\u8def\u9e3f\u5174\u57ce","mobile":"17382487130","tel":"17382487130"}],"order_pay":[{"pay_amount":50,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 15:09:44  27新增订单 返回:27
+2017-07-17 15:10:19  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500257419863
+2017-07-17 15:11:44  27新增订单 返回:29
+2017-07-17 15:13:59  27新增订单 返回:31
+2017-07-17 15:16:44  27新增订单 返回:33,35,37,39
+2017-07-17 15:18:44  27新增订单 返回:41
+2017-07-17 15:21:00  27新增订单 返回:43,45,47,49,51
+2017-07-17 15:22:59  27新增订单 返回:53,55
+2017-07-17 15:39:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 15:44:01  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-17 15:44:11  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-17 15:45:01  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-17 15:46:19  0000000222---{"order_info":{"creat_at":"2017-07-17 15:46:19","account_no":5093730048,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":21,"reality_total":22,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":16,"price":16,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":6,"price":6,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u5f90\u7433\u5029(\u5973\u58eb)","street":"\u5b9d\u5854\u540e\u5c0f\u686543\u53f7\u697c@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf","mobile":"15858370589","tel":"15858370589"}],"order_pay":[{"pay_amount":21,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 15:46:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 15:49:01  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-17 15:49:48  bd:ePoiId=0000000028&appAuthToken=167ca9a823bb4509fecce21b8725885bc3159a29e52ef5c6e0cc7df8c659e4d6250d61646ab6ec8d42ef5509bf1bbe35&businessId=2&timestamp=1500277788179
+2017-07-17 15:52:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-17 15:52:18  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-17 15:53:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-17 15:54:03  bd:ePoiId=0000000028&appAuthToken=ed63105cdafa4de485cc4a7641070df1a0242ebce6d059a0dfb15d50abcd154eff737de3d02c850f93d98e58351486e8&businessId=2&timestamp=1500278042863
+2017-07-17 15:55:29  0000000222---{"order_info":{"creat_at":"2017-07-17 15:55:29","account_no":5093814880,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":30,"reality_total":32,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":32,"price":32,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u77f3\u8363\u534e(\u5148\u751f)","street":"\u592a\u5b50\u6e7e\u5bbe\u9986(\u767e\u5c3a\u5317\u8def) (516)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u6d77\u4e30\u897f\u8def385\u53f7","mobile":"13424426234","tel":"13424426234"}],"order_pay":[{"pay_amount":30,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 15:57:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-17 15:57:37  27新增订单 返回:1
+2017-07-17 15:59:37  27新增订单 返回:3,5
+2017-07-17 16:01:52  27新增订单 返回:7
+2017-07-17 16:02:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-17 16:02:25  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-17 16:03:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-17 16:07:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-17 16:10:05  bd:ePoiId=0000000028&appAuthToken=260cf6b6f482378a0ffb96c719c4e0f652ed70309f1df185ec23d552f1f5a218c9ff20298b6542a89ff8a9b0281e57b2&businessId=2&timestamp=1500279005683
+2017-07-17 16:14:01  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-17 16:16:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 16:20:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-17 16:22:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-17 16:32:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-17 16:42:07  27新增订单 返回:9
+2017-07-17 16:44:01  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-17 16:44:07  27新增订单 返回:11
+2017-07-17 16:52:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-17 17:01:50  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-17 17:02:00  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-17 17:02:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-17 17:02:22  27新增订单 返回:13
+2017-07-17 17:02:50  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-17 17:04:37  27新增订单 返回:15,17,19
+2017-07-17 17:06:50  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-17 17:12:00  0000000222---{"order_info":{"creat_at":"2017-07-17 17:12:00","account_no":5094725290,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":51,"reality_total":54,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":16,"price":16,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":7,"price":7,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":15,"price":15,"amount":2,"zhiamount":2,"product_taste":[],"product_promotion":[]},{"is_set":null,"set_id":0,"product_id":null,"product_name":null,"original_price":1,"price":1,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u9ec4\u6770(\u5148\u751f)","street":"\u6d77\u76d0\u53bf\u57ce\u897f\u5c0f\u5b66 (\u5b8f\u5229\u6a21\u5177)@#\u6d59\u6c5f\u7701\u5609\u5174\u5e02\u6d77\u76d0\u53bf\u5927\u66f2\u8def58","mobile":"13486330803","tel":"13486330803"}],"order_pay":[{"pay_amount":51,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}---CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'product_id' cannot be null. The SQL statement executed was: INSERT INTO `nb_order_product` (`lid`, `dpid`, `create_at`, `update_at`, `order_id`, `set_id`, `product_id`, `product_name`, `product_pic`, `price`, `original_price`, `amount`, `zhiamount`, `product_order_status`, `is_sync`) VALUES (:lid, :dpid, :create_at, :update_at, :order_id, :set_id, :product_id, :product_name, :product_pic, :price, :original_price, :amount, :zhiamount, :product_order_status, :is_sync)
+2017-07-17 17:20:56  bd:ePoiId=0000000028&appAuthToken=1d630b926b799664f684f9d7b2ce84d2eedb313dbe4993ca2ae8010523a684570fbbbd4749b0fb348d591a875c08ce13&businessId=2&timestamp=1500283256129
+2017-07-17 17:21:33  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-17 17:21:43  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-17 17:22:33  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-17 17:26:33  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-17 17:31:50  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-17 17:51:33  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-17 18:01:50  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-17 18:03:26  bd:ePoiId=0000000154&appAuthToken=c238f3b4a503cfb595a3d96677bd32f77d7ca97d9c7d1244d137350307a495feba5acac9dbc1ab94dd4d153dcfaf0c7d&businessId=2&timestamp=1500285806677
+2017-07-17 18:16:34  bd:ePoiId=0000000028&appAuthToken=75aed60187af267fe19129fdf222b3c4e21349df41cefd95e61f2587a90638b6caa0b38170fb2c99817ec05e105f4cb4&businessId=2&timestamp=1500286594137
+2017-07-17 18:21:33  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-17 20:44:01  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-17 20:52:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-17 21:02:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-17 22:01:50  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-17 22:10:19  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500257419863
+2017-07-17 22:21:33  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-17 22:39:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-17 22:46:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-17 23:16:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-17 23:20:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-18 03:44:01  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277441636
+2017-07-18 03:52:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-18 04:02:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-18 05:01:50  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500282110061
+2017-07-18 05:21:33  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500283293210
+2017-07-18 09:15:41  select * from nb_waimai_setting where dpid=0000000028 and delete_flag=0
+2017-07-18 09:15:41  {"lid":"0000000026","dpid":"0000000028","create_at":"2017-07-18 09:09:13","update_at":"2017-07-18 09:09:13","is_receive":"1","delete_flag":"0","is_sync":"11111"}
+2017-07-18 09:17:35  27新增订单 返回:1
+2017-07-18 09:18:27  select * from nb_waimai_setting where dpid=0000000028 and delete_flag=0
+2017-07-18 09:18:27  {"lid":"0000000026","dpid":"0000000028","create_at":"2017-07-18 09:09:13","update_at":"2017-07-18 09:09:13","is_receive":"1","delete_flag":"0","is_sync":"11111"}
+2017-07-18 09:18:27  {"order_info":{"creat_at":"2017-07-18 09:18:27","account_no":5101078181,"classes":0,"username":"","site_id":0,"is_temp":1,"number":0,"order_status":2,"order_type":7,"should_total":11.01,"reality_total":11.01,"takeout_typeid":0,"callno":""},"order_product":[{"is_set":"0","set_id":0,"product_id":"3332","product_name":"\u5965\u5c14\u826f\u9e21\u817f\u5821","original_price":11,"price":11,"amount":1,"zhiamount":1,"product_taste":[],"product_promotion":[]}],"order_address":[{"consignee":"\u9b54(\u5148\u751f)","street":"\u8272\u91d1\u62c9 (23)@#\u897f\u85cf\u81ea\u6cbb\u533a\u6797\u829d\u5e02\u58a8\u8131\u53bf","mobile":"13665842348","tel":"13665842348"}],"order_pay":[{"pay_amount":11.01,"paytype":14,"payment_method_id":0,"paytype_id":0,"remark":""}]}
+2017-07-18 09:18:28  {"status":true,"orderId":"30066","syncLid":0,"content":"{\"order_info\":{\"creat_at\":\"2017-07-18 09:18:27\",\"account_no\":5101078181,\"classes\":0,\"username\":\"\",\"site_id\":0,\"is_temp\":1,\"number\":0,\"order_status\":2,\"order_type\":7,\"should_total\":11.01,\"reality_total\":11.01,\"takeout_typeid\":0,\"callno\":\"\"},\"order_product\":[{\"is_set\":\"0\",\"set_id\":0,\"product_id\":\"3332\",\"product_name\":\"\\u5965\\u5c14\\u826f\\u9e21\\u817f\\u5821\",\"original_price\":11,\"price\":11,\"amount\":1,\"zhiamount\":1,\"product_taste\":[],\"product_promotion\":[]}],\"order_address\":[{\"consignee\":\"\\u9b54(\\u5148\\u751f)\",\"street\":\"\\u8272\\u91d1\\u62c9 (23)@#\\u897f\\u85cf\\u81ea\\u6cbb\\u533a\\u6797\\u829d\\u5e02\\u58a8\\u8131\\u53bf\",\"mobile\":\"13665842348\",\"tel\":\"13665842348\"}],\"order_pay\":[{\"pay_amount\":11.01,\"paytype\":14,\"payment_method_id\":0,\"paytype_id\":0,\"remark\":\"\"}]}"}
+2017-07-18 09:19:35  27新增订单 返回:3
+2017-07-18 09:21:35  27新增订单 返回:5
+2017-07-18 09:24:38  {"lid":"0000000026","dpid":"0000000028","create_at":"2017-07-18 09:09:13","update_at":"2017-07-18 09:09:13","is_receive":"1","delete_flag":"0","is_sync":"11111"}
+2017-07-18 09:24:38  {"error":{"code":2,"error_type":"param_error","message":"参数异常"}}
 
-2016-12-27 17:38:51  1
-2016-12-27 17:38:51  {"appid":"wxc57dd1ee95c70c2c","err_code":"USERPAYING","err_code_des":"\u9700\u8981\u7528\u6237\u8f93\u5165\u652f\u4ed8\u5bc6\u7801","mch_id":"1246760901","nonce_str":"92F2VuVX76a3ScNo","result_code":"FAIL","return_code":"SUCCESS","return_msg":"OK","sign":"3BC7E122AE560BD70A4FA4DBF8BF7859"}
-2016-12-27 17:38:51  1482831530-27-202
-2016-12-27 17:38:51  query times:15
-2016-12-27 17:38:54  query times:14
-2016-12-27 17:38:56  query times:13
-2016-12-27 17:52:34  1
-2016-12-27 17:52:34  {"appid":"wxc57dd1ee95c70c2c","err_code":"USERPAYING","err_code_des":"\u9700\u8981\u7528\u6237\u8f93\u5165\u652f\u4ed8\u5bc6\u7801","mch_id":"1246760901","nonce_str":"vnPhQSBwDgfCy5z6","result_code":"FAIL","return_code":"SUCCESS","return_msg":"OK","sign":"65C0A397384C83B26E2B81B9A69C7C80"}
-2016-12-27 17:52:34  1482832352-27-400
-2016-12-27 17:52:34  query times:15
-2016-12-27 17:52:37  query times:14
-2016-12-27 17:52:39  query times:13
-2016-12-27 17:52:41  query times:12
-2016-12-27 18:46:08  1
-2016-12-27 18:46:08  {"appid":"wxc57dd1ee95c70c2c","err_code":"USERPAYING","err_code_des":"\u9700\u8981\u7528\u6237\u8f93\u5165\u652f\u4ed8\u5bc6\u7801","mch_id":"1246760901","nonce_str":"o6P9XT9EblJoepTd","result_code":"FAIL","return_code":"SUCCESS","return_msg":"OK","sign":"61EEE211060DC62A2C8E3EEFEF8AF189"}
-2016-12-27 18:46:08  1482835563-27-660
-2016-12-27 18:46:08  query times:15
-2016-12-27 18:46:08  {"appid":"wxc57dd1ee95c70c2c","attach":[],"mch_id":"1246760901","nonce_str":"NBeaqbJQ9efVz7Rk","out_trade_no":"1482835563-27-660","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"714AD8BD8D3CC35B108522D45FD29AEB","trade_state":"USERPAYING","trade_state_desc":"\u9700\u8981\u7528\u6237\u8f93\u5165\u652f\u4ed8\u5bc6\u7801"}
-2016-12-27 18:46:08  query result:
-2016-12-27 18:46:08  waite
-2016-12-27 18:46:10  query times:14
-2016-12-27 18:46:10  {"appid":"wxc57dd1ee95c70c2c","attach":[],"mch_id":"1246760901","nonce_str":"eezgzFPRkLOYDoFU","out_trade_no":"1482835563-27-660","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"F0D21519167F9D0CA612633DDB58383C","trade_state":"USERPAYING","trade_state_desc":"\u9700\u8981\u7528\u6237\u8f93\u5165\u652f\u4ed8\u5bc6\u7801"}
-2016-12-27 18:46:10  query result:
-2016-12-27 18:46:10  waite
-2016-12-27 18:46:12  query times:13
-2016-12-27 18:46:13  {"appid":"wxc57dd1ee95c70c2c","attach":[],"mch_id":"1246760901","nonce_str":"YT5ANpgTlxiuOIQs","out_trade_no":"1482835563-27-660","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"CAA51A3EE70DC83B544A9810974015BC","trade_state":"PAYERROR","trade_state_desc":"\u652f\u4ed8\u5bc6\u7801\u8f93\u5165\u4e0d\u6b63\u786e\uff0c\u5df2\u9519\u8bef0\u6b21\uff0c\u8bf7\u70b9\u51fb\u5fd8\u8bb0\u5bc6\u7801\u8fdb\u884c\u627e\u56de\u6216$key2$\u5206\u949f\u540e\u91cd\u8bd5"}
-2016-12-27 19:00:26  {"appid":"wxc57dd1ee95c70c2c","attach":[],"mch_id":"1246760901","nonce_str":"F0wAyQ4rUFk5yKPe","out_trade_no":"1482836422-27-726","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"2FCA0FC45D7AE62822E921E2BB219672","trade_state":"USERPAYING","trade_state_desc":"\u9700\u8981\u7528\u6237\u8f93\u5165\u652f\u4ed8\u5bc6\u7801"}
-2016-12-27 19:00:28  {"appid":"wxc57dd1ee95c70c2c","attach":[],"mch_id":"1246760901","nonce_str":"Iz2ZuEGx8UL9gHcm","out_trade_no":"1482836422-27-726","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"6D5288A72438E8596F6953F1D887D7AF","trade_state":"USERPAYING","trade_state_desc":"\u9700\u8981\u7528\u6237\u8f93\u5165\u652f\u4ed8\u5bc6\u7801"}
-2016-12-27 19:00:31  {"appid":"wxc57dd1ee95c70c2c","attach":[],"mch_id":"1246760901","nonce_str":"UosAhbdoaRJczXP8","out_trade_no":"1482836422-27-726","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"D83B50208C22D9757333D899D384522D","trade_state":"PAYERROR","trade_state_desc":"\u652f\u4ed8\u5bc6\u7801\u8f93\u5165\u4e0d\u6b63\u786e\uff0c\u5df2\u9519\u8bef0\u6b21\uff0c\u8bf7\u70b9\u51fb\u5fd8\u8bb0\u5bc6\u7801\u8fdb\u884c\u627e\u56de\u6216$key2$\u5206\u949f\u540e\u91cd\u8bd5"}
-2016-12-27 19:00:31  3
-2016-12-27 19:00:31  {"status":false,"result":false}
-2016-12-28 16:02:45  {"appid":"wxc57dd1ee95c70c2c","attach":[],"bank_type":"CFT","cash_fee":"1","fee_type":"CNY","is_subscribe":"Y","mch_id":"1246760901","nonce_str":"Igv3GLiKIgqTUqyc","openid":"oIj93t9Fd5blvCLdQ6qq_iK1Api8","out_trade_no":"1482912161-27-582","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"BEF9531FB3DEE2E35F0A5A94060A2965","time_end":"20161228160245","total_fee":"1","trade_state":"SUCCESS","trade_type":"MICROPAY","transaction_id":"4004702001201612284276188315"}
-2016-12-28 16:23:27  {"appid":"wxc57dd1ee95c70c2c","attach":[],"bank_type":"CFT","cash_fee":"1","fee_type":"CNY","is_subscribe":"Y","mch_id":"1246760901","nonce_str":"1efqH5mpnW1gFWDW","openid":"oIj93t9Fd5blvCLdQ6qq_iK1Api8","out_trade_no":"1482913403-27-978","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"2B45DBFCD84D686BD147781C6E25FF9B","time_end":"20161228162327","total_fee":"1","trade_state":"SUCCESS","trade_type":"MICROPAY","transaction_id":"4004702001201612284279229406"}
-2016-12-28 16:23:27  1
-2016-12-28 16:23:27  4004702001201612284279229406
-2016-12-28 16:23:27  2
-2016-12-28 16:28:53  {"appid":"wxc57dd1ee95c70c2c","attach":[],"bank_type":"CFT","cash_fee":"1","fee_type":"CNY","is_subscribe":"Y","mch_id":"1246760901","nonce_str":"GAG1hhgtyPZUcy4H","openid":"oIj93t9Fd5blvCLdQ6qq_iK1Api8","out_trade_no":"1482913732-27-672","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"493A0AC083D8D48E42E6AEF4C5F0809D","time_end":"20161228162853","total_fee":"1","trade_state":"SUCCESS","trade_type":"MICROPAY","transaction_id":"4004702001201612284279495436"}
-2016-12-28 16:28:53  1
-2016-12-28 16:28:53  4004702001201612284279495436
-2016-12-28 16:28:53  update nb_micro_pay set transaction_id='4004702001201612284279495436', pay_result='{"appid":"wxc57dd1ee95c70c2c","attach":[],"bank_type":"CFT","cash_fee":"1","fee_type":"CNY","is_subscribe":"Y","mch_id":"1246760901","nonce_str":"GAG1hhgtyPZUcy4H","openid":"oIj93t9Fd5blvCLdQ6qq_iK1Api8","out_trade_no":"1482913732-27-672","result_code":"SUCCESS","return_code":"SUCCESS","return_msg":"OK","sign":"493A0AC083D8D48E42E6AEF4C5F0809D","time_end":"20161228162853","total_fee":"1","trade_state":"SUCCESS","trade_type":"MICROPAY","transaction_id":"4004702001201612284279495436"}' where dpid=27 and out_trade_no='1482913732-27-672'
-2016-12-28 16:28:53  2
-2016-12-28 16:32:20  1
-2016-12-28 16:32:20  2016122821001004830218881564
-2016-12-28 16:32:20  update nb_micro_pay set transaction_id='2016122821001004830218881564', pay_result='{"code":"10000","msg":"Success","buyer_logon_id":"186****9563","buyer_pay_amount":"0.01","buyer_user_id":"2088702298583831","fund_bill_list":[{"amount":"0.01","fund_channel":"ALIPAYACCOUNT"}],"gmt_payment":"2016-12-28 16:32:20","invoice_amount":"0.01","open_id":"20880022354111392029604631918683","out_trade_no":"1482913938-27-360","point_amount":"0.00","receipt_amount":"0.01","total_amount":"0.01","trade_no":"2016122821001004830218881564"}' where dpid=27 and out_trade_no='1482913938-27-360'
-2016-12-28 16:32:20  2
->>>>>>> 25d6add359f8b91ecea47b286d1cbcde2da21823
+2017-07-18 09:25:50  27新增订单 返回:7,9,11
+2017-07-18 09:27:50  27新增订单 返回:13
+2017-07-18 09:28:25  {"lid":"0000000026","dpid":"0000000028","create_at":"2017-07-18 09:09:13","update_at":"2017-07-18 09:09:13","is_receive":"1","delete_flag":"0","is_sync":"11111"}
+2017-07-18 09:29:50  27新增订单 返回:15
+2017-07-18 09:37:50  27新增订单 返回:17
+2017-07-18 09:47:50  27新增订单 返回:19,21
+2017-07-18 09:50:05  27新增订单 返回:23
+2017-07-18 09:54:05  27新增订单 返回:25
+2017-07-18 09:58:05  27新增订单 返回:27
+2017-07-18 10:00:20  27新增订单 返回:29
+2017-07-18 10:10:19  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500257419863
+2017-07-18 10:10:20  27新增订单 返回:31,33
+2017-07-18 10:18:20  27新增订单 返回:35
+2017-07-18 10:20:20  27新增订单 返回:37,39
+2017-07-18 10:24:35  27新增订单 返回:41
+2017-07-18 10:31:21  27新增订单 返回:1
+2017-07-18 10:39:56  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259196061
+2017-07-18 10:43:22  27新增订单 返回:1
+2017-07-18 10:46:58  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500259618147
+2017-07-18 11:16:02  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261362304
+2017-07-18 11:19:21  27新增订单 返回:3
+2017-07-18 11:20:27  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500261627719
+2017-07-18 14:27:21  27新增订单 返回:5
+2017-07-18 14:29:51  27新增订单 返回:7,9,11,13,15,17,19
+2017-07-18 14:40:06  27新增订单 返回:21
+2017-07-18 14:50:06  27新增订单 返回:23
+2017-07-18 15:14:06  27新增订单 返回:25
+2017-07-18 15:28:06  27新增订单 返回:27
+2017-07-18 15:36:21  27新增订单 返回:29,31
+2017-07-18 15:38:36  27新增订单 返回:33
+2017-07-18 15:40:36  27新增订单 返回:35
+2017-07-18 15:52:08  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500277928270
+2017-07-18 16:02:15  jcbd:developerId=100746&ePoiId=0000000028&epoiId=0000000028&businessId=2&timestamp=1500278535106
+2017-07-18 16:26:06  27新增订单 返回:37
+2017-07-19 09:15:20  27新增订单 返回:39,41,43,45,47,49,51,53,55,57
+2017-07-19 14:43:25  27新增订单 返回:1,3
+2017-07-19 15:32:02  27新增订单 返回:1
+2017-07-19 15:45:24  27新增订单 返回:1
+2017-07-19 17:16:24  27新增订单 返回:1,3
+2017-07-19 17:49:23  27新增订单 返回:5
+2017-07-20 09:25:40  27新增订单 返回:1
+2017-07-20 09:29:24  27新增订单 返回:1
+2017-07-20 09:59:53  27新增订单 返回:1
+2017-07-20 17:57:23  27新增订单 返回:3
+2017-07-20 17:59:23  27新增订单 返回:5
+2017-07-24 13:12:23  28新增订单 返回:1
+2017-07-24 16:25:57  28新增订单 返回:3
+2017-07-24 16:26:37  28新增订单 返回:5
+2017-07-25 09:05:43  27新增订单 返回:1
+2017-07-25 11:07:26  28新增订单 返回:1
+2017-07-26 08:57:36  28新增订单 返回:1
+2017-07-26 11:29:29  27新增订单 返回:1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39
+2017-07-26 11:31:29  27新增订单 返回:41,43,45,47,49,51,53,55,57,59
+2017-07-26 16:58:56  {"requestId":"200002162056481906","type":10,"appId":84719338,"message":"{\"id\":\"3009691314010316828\",\"orderId\":\"3009691314010316828\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T16:58:56\",\"activeAt\":\"2017-07-26T16:58:56\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240096064,\"skuId\":200000041058369650,\"name\":\"老北京鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026179800178\",\"barCode\":\"026179800178\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240087542,\"skuId\":200000041049643122,\"name\":\"墨西哥鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026180000180\",\"barCode\":\"026180000180\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":1,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":16.0,\"originalPrice\":16.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":16.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059536310,"signature":"C0FA12E3EAC188408762A7C8CAD0D008","userId":363866786278705770}
+2017-07-26 16:58:57  {"requestId":"200002162056481906","type":10,"appId":84719338,"message":"{\"id\":\"3009691314010316828\",\"orderId\":\"3009691314010316828\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T16:58:56\",\"activeAt\":\"2017-07-26T16:58:56\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240096064,\"skuId\":200000041058369650,\"name\":\"老北京鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026179800178\",\"barCode\":\"026179800178\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240087542,\"skuId\":200000041049643122,\"name\":\"墨西哥鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026180000180\",\"barCode\":\"026180000180\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":1,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":16.0,\"originalPrice\":16.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":16.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059536310,"signature":"C0FA12E3EAC188408762A7C8CAD0D008","userId":363866786278705770}
+2017-07-26 16:58:57  {"requestId":"200002162056481906","type":10,"appId":84719338,"message":"{\"id\":\"3009691314010316828\",\"orderId\":\"3009691314010316828\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T16:58:56\",\"activeAt\":\"2017-07-26T16:58:56\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240096064,\"skuId\":200000041058369650,\"name\":\"老北京鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026179800178\",\"barCode\":\"026179800178\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240087542,\"skuId\":200000041049643122,\"name\":\"墨西哥鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026180000180\",\"barCode\":\"026180000180\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":1,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":16.0,\"originalPrice\":16.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":16.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059536310,"signature":"C0FA12E3EAC188408762A7C8CAD0D008","userId":363866786278705770}
+2017-07-26 17:00:29  {"requestId":"200002162140715122","type":14,"appId":84719338,"message":"{\"orderId\":\"3009691314010316828\",\"state\":\"invalid\",\"shopId\":155550122,\"updateTime\":1501059629,\"role\":1}","shopId":155550122,"timestamp":1501059629642,"signature":"4F31FDBC62A18CB02C1F3E5B84201750","userId":363866786278705770}
+2017-07-26 17:00:29  {"requestId":"200002162140715122","type":14,"appId":84719338,"message":"{\"orderId\":\"3009691314010316828\",\"state\":\"invalid\",\"shopId\":155550122,\"updateTime\":1501059629,\"role\":1}","shopId":155550122,"timestamp":1501059629642,"signature":"4F31FDBC62A18CB02C1F3E5B84201750","userId":363866786278705770}
+2017-07-26 17:00:29  {"requestId":"200002162140715122","type":14,"appId":84719338,"message":"{\"orderId\":\"3009691314010316828\",\"state\":\"invalid\",\"shopId\":155550122,\"updateTime\":1501059629,\"role\":1}","shopId":155550122,"timestamp":1501059629642,"signature":"4F31FDBC62A18CB02C1F3E5B84201750","userId":363866786278705770}
+2017-07-26 17:00:43  {"requestId":"200002162151897202","type":10,"appId":84719338,"message":"{\"id\":\"3009691365138882588\",\"orderId\":\"3009691365138882588\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T17:00:43\",\"activeAt\":\"2017-07-26T17:00:43\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240096064,\"skuId\":200000041058369650,\"name\":\"老北京鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026179800178\",\"barCode\":\"026179800178\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240087542,\"skuId\":200000041049643122,\"name\":\"墨西哥鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026180000180\",\"barCode\":\"026180000180\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":2,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":16.0,\"originalPrice\":16.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":16.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059643307,"signature":"8DFAF858C18EC7AC945736815BA985F6","userId":363866786278705770}
+2017-07-26 17:00:43  {"requestId":"200002162151897202","type":10,"appId":84719338,"message":"{\"id\":\"3009691365138882588\",\"orderId\":\"3009691365138882588\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T17:00:43\",\"activeAt\":\"2017-07-26T17:00:43\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240096064,\"skuId\":200000041058369650,\"name\":\"老北京鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026179800178\",\"barCode\":\"026179800178\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240087542,\"skuId\":200000041049643122,\"name\":\"墨西哥鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026180000180\",\"barCode\":\"026180000180\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":2,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":16.0,\"originalPrice\":16.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":16.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059643307,"signature":"8DFAF858C18EC7AC945736815BA985F6","userId":363866786278705770}
+2017-07-26 17:00:43  {"requestId":"200002162151897202","type":10,"appId":84719338,"message":"{\"id\":\"3009691365138882588\",\"orderId\":\"3009691365138882588\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T17:00:43\",\"activeAt\":\"2017-07-26T17:00:43\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240096064,\"skuId\":200000041058369650,\"name\":\"老北京鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026179800178\",\"barCode\":\"026179800178\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240087542,\"skuId\":200000041049643122,\"name\":\"墨西哥鸡肉卷\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026180000180\",\"barCode\":\"026180000180\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":2,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":16.0,\"originalPrice\":16.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":16.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059643307,"signature":"8DFAF858C18EC7AC945736815BA985F6","userId":363866786278705770}
+2017-07-26 17:01:56  {"requestId":"200002162237534322","type":14,"appId":84719338,"message":"{\"orderId\":\"3009691365138882588\",\"state\":\"invalid\",\"shopId\":155550122,\"updateTime\":1501059715,\"role\":1}","shopId":155550122,"timestamp":1501059715993,"signature":"574CB90A7660F115FB2D9E7DFFAF6E2B","userId":363866786278705770}
+2017-07-26 17:01:56  {"requestId":"200002162237534322","type":14,"appId":84719338,"message":"{\"orderId\":\"3009691365138882588\",\"state\":\"invalid\",\"shopId\":155550122,\"updateTime\":1501059715,\"role\":1}","shopId":155550122,"timestamp":1501059715993,"signature":"574CB90A7660F115FB2D9E7DFFAF6E2B","userId":363866786278705770}
+2017-07-26 17:01:56  {"requestId":"200002162237534322","type":14,"appId":84719338,"message":"{\"orderId\":\"3009691365138882588\",\"state\":\"invalid\",\"shopId\":155550122,\"updateTime\":1501059715,\"role\":1}","shopId":155550122,"timestamp":1501059715993,"signature":"574CB90A7660F115FB2D9E7DFFAF6E2B","userId":363866786278705770}
+2017-07-26 17:02:56  {"requestId":"200002162300749938","type":10,"appId":84719338,"message":"{\"id\":\"3009691634966847516\",\"orderId\":\"3009691634966847516\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T17:02:56\",\"activeAt\":\"2017-07-26T17:02:56\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240091594,\"skuId\":200000041053792370,\"name\":\"葡式蛋挞（1只）\",\"categoryId\":1,\"price\":3.0,\"quantity\":1,\"total\":3.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026190600214\",\"barCode\":\"026190600214\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240096075,\"skuId\":200000041058380914,\"name\":\"原味鸡腿堡\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026178600166\",\"barCode\":\"026178600166\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":3,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":11.0,\"originalPrice\":11.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":11.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059776097,"signature":"C83D6F956186A4F3AAEB8CD0CA9AA9BA","userId":363866786278705770}
+2017-07-26 17:02:56  {"requestId":"200002162300749938","type":10,"appId":84719338,"message":"{\"id\":\"3009691634966847516\",\"orderId\":\"3009691634966847516\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T17:02:56\",\"activeAt\":\"2017-07-26T17:02:56\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240091594,\"skuId\":200000041053792370,\"name\":\"葡式蛋挞（1只）\",\"categoryId\":1,\"price\":3.0,\"quantity\":1,\"total\":3.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026190600214\",\"barCode\":\"026190600214\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240096075,\"skuId\":200000041058380914,\"name\":\"原味鸡腿堡\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026178600166\",\"barCode\":\"026178600166\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":3,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":11.0,\"originalPrice\":11.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":11.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059776097,"signature":"C83D6F956186A4F3AAEB8CD0CA9AA9BA","userId":363866786278705770}
+2017-07-26 17:02:56  {"requestId":"200002162300749938","type":10,"appId":84719338,"message":"{\"id\":\"3009691634966847516\",\"orderId\":\"3009691634966847516\",\"address\":\"东平国家森林公园北沿公路3325\",\"createdAt\":\"2017-07-26T17:02:56\",\"activeAt\":\"2017-07-26T17:02:56\",\"deliverFee\":0.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1240091594,\"skuId\":200000041053792370,\"name\":\"葡式蛋挞（1只）\",\"categoryId\":1,\"price\":3.0,\"quantity\":1,\"total\":3.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026190600214\",\"barCode\":\"026190600214\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0},{\"id\":1240096075,\"skuId\":200000041058380914,\"name\":\"原味鸡腿堡\",\"categoryId\":1,\"price\":8.0,\"quantity\":1,\"total\":8.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"026178600166\",\"barCode\":\"026178600166\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"13329435665\"],\"shopId\":155550122,\"shopName\":\"壹点吃测试店铺\",\"daySn\":3,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":219644946,\"totalPrice\":11.0,\"originalPrice\":11.0,\"consignee\":\"代永胜(先生)\",\"deliveryGeo\":\"121.48070013,31.68388995\",\"deliveryPoiAddress\":\"东平国家森林公园北沿公路3325\",\"invoiced\":false,\"income\":11.0,\"serviceRate\":0.0,\"serviceFee\":-0.0,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-0.0,\"shopPart\":-0.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000028\",\"secretPhoneExpireTime\":null,\"orderActivities\":[],\"invoiceType\":null,\"taxpayerId\":\"\"}","shopId":155550122,"timestamp":1501059776097,"signature":"C83D6F956186A4F3AAEB8CD0CA9AA9BA","userId":363866786278705770}
+2017-07-28 09:17:32  27新增订单 返回:1,3
+2017-07-31 09:34:17  27新增订单 返回:1,3,5,7,9
+2017-07-31 09:36:32  27新增订单 返回:11,13
+2017-08-08 15:35:15  view:0000030494-0000000027
+2017-08-10 09:34:52  view:0000030502-0000000027
+2017-08-10 09:35:56  view:0000030504-0000000027
+2017-08-10 09:36:42  view:0000030504-0000000027
+2017-08-10 09:41:35  view:0000030506-0000000027
+2017-08-11 13:06:18  27新增订单 返回:1
+2017-08-15 09:55:06  27新增订单 返回:1
+2017-08-17 15:31:07  27新增订单 返回:1,3
+2017-08-17 15:33:22  27新增订单 返回:5,7
+2017-08-17 16:25:21  27新增订单 返回:9
+2017-08-18 13:46:53  27新增订单 返回:1
+2017-08-21 14:46:38  27新增订单 返回:1
+2017-08-21 16:47:17  27新增订单 返回:1,3
+2017-08-21 17:45:31  27新增订单 返回:1
+2017-08-22 11:01:18  view:0000030676-0000000027
+2017-08-22 11:01:20  0000030676-0000000027&&100000910001262432
+2017-08-22 11:01:25  获取参数：is:T;reflect:{"companyId":"00000027","dpid":"0000000027"};client_sn:0000030676-0000000027
+2017-08-22 11:01:25  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000030676-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-08-22 11:03:05  轮询次数：50结果：错误！0000030676-0000000027;dpid:0000000027
+2017-08-22 11:17:24  27新增订单 返回:1,3,5
+2017-08-22 12:38:55  27新增订单 返回:1,3
+2017-08-22 12:49:40  27新增订单 返回:5,7,9,11
+2017-08-22 12:53:24  27新增订单 返回:1
+2017-08-22 12:59:25  27新增订单 返回:3,5,7
+2017-08-22 16:33:10  27新增订单 返回:1
+2017-08-22 18:53:51  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-22 18:54:27  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-22 18:55:57  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-22 19:25:08  28---paytype---{"lid":"0000000062","dpid":"0000000028","create_at":"2017-04-05 10:32:22","update_at":"2017-07-21 17:27:21","pay_type":"1","pay_channel":"2","appId":"2222","code":"22222","qr_code":"uploads\/company_0000000026\/qrcode\/997C6CC2-F782-42D4-8EDE-78C046290C2B.jpg","is_rest":"2","rest_message":null,"shop_time":"10:00:00","closing_time":"20:00:00","price_group_id":"0","is_copyprice":"1","is_lock":"0","delete_flag":"0","is_sync":"11111"}
+2017-08-22 19:25:43  28---paytype---{"lid":"0000000062","dpid":"0000000028","create_at":"2017-04-05 10:32:22","update_at":"2017-07-21 17:27:21","pay_type":"1","pay_channel":"2","appId":"2222","code":"22222","qr_code":"uploads\/company_0000000026\/qrcode\/997C6CC2-F782-42D4-8EDE-78C046290C2B.jpg","is_rest":"2","rest_message":null,"shop_time":"10:00:00","closing_time":"20:00:00","price_group_id":"0","is_copyprice":"1","is_lock":"0","delete_flag":"0","is_sync":"11111"}
+2017-08-22 19:27:19  28---paytype---{"lid":"0000000062","dpid":"0000000028","create_at":"2017-04-05 10:32:22","update_at":"2017-07-21 17:27:21","pay_type":"1","pay_channel":"2","appId":"2222","code":"22222","qr_code":"uploads\/company_0000000026\/qrcode\/997C6CC2-F782-42D4-8EDE-78C046290C2B.jpg","is_rest":"2","rest_message":null,"shop_time":"10:00:00","closing_time":"20:00:00","price_group_id":"0","is_copyprice":"1","is_lock":"0","delete_flag":"0","is_sync":"11111"}
+2017-08-22 19:28:24  28---paytype---{"lid":"0000000062","dpid":"0000000028","create_at":"2017-04-05 10:32:22","update_at":"2017-07-21 17:27:21","pay_type":"1","pay_channel":"2","appId":"2222","code":"22222","qr_code":"uploads\/company_0000000026\/qrcode\/997C6CC2-F782-42D4-8EDE-78C046290C2B.jpg","is_rest":"2","rest_message":null,"shop_time":"10:00:00","closing_time":"20:00:00","price_group_id":"0","is_copyprice":"1","is_lock":"0","delete_flag":"0","is_sync":"11111"}
+2017-08-22 19:40:14  27新增订单 返回:1
+2017-08-23 09:53:29  28新增订单 返回:1,3
+2017-08-23 12:56:52  27新增订单 返回:1,3
+2017-08-23 16:42:23  28新增订单 返回:1
+2017-08-23 16:50:08  27新增订单 返回:1,3
+2017-08-23 16:52:07  27新增订单 返回:5
+2017-08-23 17:42:49  28新增订单 返回:1,3
+2017-08-24 09:34:01  27新增订单 返回:1,3
+2017-08-24 09:36:16  27新增订单 返回:5,7
+2017-08-24 09:36:32  27新增订单 返回:7,9
+2017-08-24 09:38:16  27新增订单 返回:9
+2017-08-24 09:39:19  27新增订单 返回:1
+2017-08-24 09:44:16  27新增订单 返回:11
+2017-08-24 09:54:16  27新增订单 返回:13
+2017-08-24 10:12:16  27新增订单 返回:1,3,5
+2017-08-24 10:14:31  27新增订单 返回:7,9
+2017-08-24 10:19:01  27新增订单 返回:11,13
+2017-08-24 10:25:16  27新增订单 返回:15,17,19,21
+2017-08-24 10:27:16  27新增订单 返回:23,25
+2017-08-24 10:29:16  27新增订单 返回:27
+2017-08-24 10:31:16  27新增订单 返回:29,31
+2017-08-24 10:33:31  27新增订单 返回:33
+2017-08-24 10:35:31  27新增订单 返回:35,37
+2017-08-24 10:59:31  27新增订单 返回:39
+2017-08-24 11:01:31  27新增订单 返回:41
+2017-08-24 11:03:31  27新增订单 返回:43
+2017-08-24 11:05:31  27新增订单 返回:45
+2017-08-24 11:14:24  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-24 11:15:11  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-24 11:15:36  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-24 11:18:09  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-24 11:18:25  27新增订单 返回:1,3,5
+2017-08-24 11:21:39  27---paytype---{"lid":"0000000002","dpid":"0000000027","create_at":"2017-03-15 00:00:00","update_at":"2017-07-31 14:00:10","pay_type":"1","pay_channel":"2","appId":"2017032100000091","code":"31104782","qr_code":"uploads\/company_0000000027\/qrcode\/3A036BB8-957C-4006-93CB-D93A3CA68E00.jpg","is_rest":"3","rest_message":null,"shop_time":"00:22:00","closing_time":"23:59:00","price_group_id":"0","is_copyprice":"1","is_lock":"1","delete_flag":"0","is_sync":"11111"}
+2017-08-24 11:39:39  27新增订单 返回:7,9
+2017-08-24 11:41:39  27新增订单 返回:11,13
+2017-08-24 11:43:55  27新增订单 返回:15,17,19,21
+2017-08-24 11:45:54  27新增订单 返回:23
+2017-08-24 11:47:54  27新增订单 返回:25
+2017-08-24 11:49:54  27新增订单 返回:27
+2017-08-24 12:48:02  27新增订单 返回:1
+2017-08-24 12:51:02  27新增订单 返回:3,5
+2017-08-24 13:55:31  27新增订单 返回:7,9
+2017-08-24 13:57:31  27新增订单 返回:11
+2017-08-25 10:16:33  27新增订单 返回:1
+2017-08-25 10:19:03  27新增订单 返回:3
+2017-08-25 14:26:21  view:0000030910-0000000027
+2017-08-25 14:26:25  0000030910-0000000027&&100000910001262432
+2017-08-25 14:26:34  获取参数：is:T;reflect:{"companyId":"00000027","dpid":"0000000027"};client_sn:0000030910-0000000027
+2017-08-25 14:26:34  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000030910-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-08-25 14:28:14  轮询次数：50结果：错误！0000030910-0000000027;dpid:0000000027
+2017-08-25 14:35:32  view:0000030914-0000000027
+2017-08-25 15:48:13  view:0000030916-0000000027
+2017-08-25 15:48:44  view:0000030918-0000000027
+2017-08-25 15:55:12  view:0000030920-0000000027
+2017-08-25 16:45:05  
+2017-08-25 16:45:05  {"lid":"0000000026","dpid":"0000000027","create_at":"2016-04-27 16:17:17","update_at":"2017-08-25 16:20:00","token":"zhouchao","appid":"wxc57dd1ee95c70c2c","appsecret":"f14e1de71264c67d5da8423651211797","expire":"1503656400","access_token":"2eXZQkWNDgNlvGcEgSotbM1V7rH-p4YZXMYTrc488yRv29kfvHs1b3tWIcReQvk6iWsGuWYHWv25Hh1pwPOfHh_uJdFzDr6XK2gHTavK7GaYOPZEV9foLf8liomGmDN9XGAbAJABKE","partner_id":"1246760901","key":"wuyunjie887woyaodiandan123wuyunj","operator":null,"check_txt":null,"certificate":"","rootca":null,"apiclient_key":"","multi_customer_service_status":"0","ticket":"sM4AOVdWfPE4DxkXGEs8VBUAChiNfdlVyJwXrGm2IXSGg1Udm6kOAOq428XaWCLGt3zSO1mswEJdHa-v4v8EOQ","ticket_expire":"1503656400","is_sync":"11111"}
+2017-08-25 16:45:05  {"lid":"0000000026","dpid":"0000000027","create_at":"2016-04-27 16:17:17","update_at":"2017-08-25 16:20:00","token":"zhouchao","appid":"wxc57dd1ee95c70c2c","appsecret":"f14e1de71264c67d5da8423651211797","expire":"1503656400","access_token":"2eXZQkWNDgNlvGcEgSotbM1V7rH-p4YZXMYTrc488yRv29kfvHs1b3tWIcReQvk6iWsGuWYHWv25Hh1pwPOfHh_uJdFzDr6XK2gHTavK7GaYOPZEV9foLf8liomGmDN9XGAbAJABKE","partner_id":"1246760901","key":"wuyunjie887woyaodiandan123wuyunj","operator":null,"check_txt":null,"certificate":"","rootca":null,"apiclient_key":"","multi_customer_service_status":"0","ticket":"sM4AOVdWfPE4DxkXGEs8VBUAChiNfdlVyJwXrGm2IXSGg1Udm6kOAOq428XaWCLGt3zSO1mswEJdHa-v4v8EOQ","ticket_expire":"1503656400","is_sync":"11111"}
+2017-08-25 16:45:05  0000002180
+2017-08-25 16:49:19  oIj93t9Fd5blvCLdQ6qq_iK1Api8
+2017-08-25 16:49:19  0000000027
+2017-08-25 17:04:34  0000002172
+2017-08-26 19:08:04  view:0000030924-0000000027
+2017-08-29 10:25:52  27新增订单 返回:1
+2017-08-29 10:26:02  28新增订单 返回:1
+2017-08-30 10:03:53  27新增订单 返回:1,3,5
+2017-08-30 11:34:35  view:0000030994-0000000027
+2017-08-30 15:41:09  27新增订单 返回:1
+2017-09-01 22:58:47  view:0000031038-0000000027
+2017-09-01 23:02:09  view:0000031038-0000000027
+2017-09-04 15:19:35  27新增订单 返回:1,3,5
+2017-09-05 16:19:50  27新增订单 返回:1
+2017-09-05 16:20:05  27新增订单 返回:3
+2017-09-05 16:30:39  27新增订单 返回:1,3
+2017-09-05 16:59:32  view:0000031146-0000000027
+2017-09-05 17:00:44  27新增订单 返回:1
+2017-09-05 17:14:59  27新增订单 返回:1
+2017-09-05 17:46:19  27新增订单 返回:1
+2017-09-06 10:30:53  27新增订单 返回:1
+2017-09-06 11:02:46  27新增订单 返回:1,3
+2017-09-06 11:06:16  27新增订单 返回:5
+2017-09-06 11:22:16  27新增订单 返回:1
+2017-09-06 11:23:01  27新增订单 返回:3
+2017-09-06 11:31:31  27新增订单 返回:5
+2017-09-06 12:41:27  27新增订单 返回:1
+2017-09-06 14:15:49  27新增订单 返回:1,3
+2017-09-07 10:21:37  28新增订单 返回:1
+2017-09-07 10:23:31  27新增订单 返回:1
+2017-09-07 10:23:46  27新增订单 返回:3
+2017-09-07 10:23:52  28新增订单 返回:3,5
+2017-09-07 10:31:46  27新增订单 返回:5
+2017-09-07 10:33:01  27新增订单 返回:7,9
+2017-09-07 10:59:16  27新增订单 返回:11
+2017-09-07 13:16:32  27新增订单 返回:1
+2017-09-07 13:40:45  27新增订单 返回:1
+2017-09-07 13:43:30  27新增订单 返回:3
+2017-09-07 13:44:45  27新增订单 返回:5
+2017-09-07 14:34:34  27新增订单 返回:1
+2017-09-07 14:41:01  27新增订单 返回:1
+2017-09-07 14:57:37  27新增订单 返回:1
+2017-09-07 14:58:07  27新增订单 返回:3
+2017-09-07 14:59:51  27新增订单 返回:5
+2017-09-07 15:15:37  27新增订单 返回:1,3,5
+2017-09-07 16:50:21  27新增订单 返回:7
+2017-09-07 16:57:13  27新增订单 返回:1
+2017-09-07 16:57:43  27新增订单 返回:3
+2017-09-07 16:58:28  27新增订单 返回:5
+2017-09-07 17:00:13  27新增订单 返回:7
+2017-09-07 17:02:13  27新增订单 返回:9
+2017-09-07 17:08:22  27新增订单 返回:1
+2017-09-07 17:09:53  27新增订单 返回:3
+2017-09-07 17:10:07  27新增订单 返回:5
+2017-09-07 17:11:22  27新增订单 返回:7
+2017-09-07 17:17:07  27新增订单 返回:1
+2017-09-07 17:17:52  27新增订单 返回:3
+2017-09-07 17:28:22  27新增订单 返回:5
+2017-09-07 17:28:52  27新增订单 返回:7,9
+2017-09-07 17:29:07  27新增订单 返回:11
+2017-09-07 17:29:37  27新增订单 返回:13
+2017-09-07 17:30:08  view:0000031334-0000000027
+2017-09-07 17:30:10  0000031334-0000000027&&100000910001262432
+2017-09-07 17:30:14  获取参数：is:T;reflect:{"companyId":"0000000027","dpid":"0000000027"};client_sn:0000031334-0000000027
+2017-09-07 17:30:14  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000031334-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-09-07 17:31:54  轮询次数：50结果：错误！0000031334-0000000027;dpid:0000000027
+2017-09-08 09:43:05  27新增订单 返回:1
+2017-09-08 09:43:20  27新增订单 返回:3
+2017-09-08 09:43:35  27新增订单 返回:5
+2017-09-08 09:43:50  27新增订单 返回:7
+2017-09-08 09:45:05  27新增订单 返回:9
+2017-09-08 09:45:20  27新增订单 返回:11
+2017-09-08 09:56:20  27新增订单 返回:1
+2017-09-08 09:57:35  27新增订单 返回:3
+2017-09-08 09:58:35  27新增订单 返回:5
+2017-09-08 09:59:05  27新增订单 返回:7
+2017-09-08 10:01:50  27新增订单 返回:1
+2017-09-08 10:06:50  27新增订单 返回:3
+2017-09-08 10:10:20  27新增订单 返回:5
+2017-09-08 10:11:05  27新增订单 返回:7
+2017-09-08 10:20:05  27新增订单 返回:1
+2017-09-08 10:29:35  27新增订单 返回:1
+2017-09-08 10:33:20  27新增订单 返回:3
+2017-09-08 10:35:35  27新增订单 返回:5
+2017-09-08 10:38:05  27新增订单 返回:7
+2017-09-08 15:44:59  27新增订单 返回:1,3
+2017-09-08 15:46:14  27新增订单 返回:5
+2017-09-08 15:46:44  27新增订单 返回:7
+2017-09-08 15:53:59  27新增订单 返回:9
+2017-09-08 16:08:34  27新增订单 返回:1
+2017-09-08 16:08:49  27新增订单 返回:3
+2017-09-08 16:09:34  27新增订单 返回:5
+2017-09-08 16:10:04  27新增订单 返回:7
+2017-09-08 16:12:19  27新增订单 返回:9
+2017-09-08 16:15:49  27新增订单 返回:11
+2017-09-08 17:21:59  27新增订单 返回:11
+2017-09-08 17:22:44  27新增订单 返回:13
+2017-09-08 17:23:22  27新增订单 返回:1
+2017-09-08 17:45:49  27新增订单 返回:1
+2017-09-08 17:48:19  27新增订单 返回:3
+2017-09-08 17:49:44  27新增订单 返回:15
+2017-09-08 17:50:44  27新增订单 返回:17,19,21
+2017-09-08 17:56:19  27新增订单 返回:1,3
+2017-09-11 11:16:43  27新增订单 返回:1
+2017-09-11 11:17:13  27新增订单 返回:3
+2017-09-11 11:19:13  27新增订单 返回:5
+2017-09-11 11:19:58  27新增订单 返回:7,9,11
+2017-09-11 17:26:38  27新增订单 返回:1,3,5
+2017-09-11 17:30:46  27新增订单 返回:1
+2017-09-11 17:31:01  27新增订单 返回:3
+2017-09-11 17:32:16  27新增订单 返回:5
+2017-09-11 17:35:01  27新增订单 返回:7
+2017-09-11 17:45:27  27新增订单 返回:1
+2017-09-11 17:48:40  27新增订单 返回:1,3,5,7,9
+2017-09-11 18:05:53  27新增订单 返回:1
+2017-09-11 18:06:37  27新增订单 返回:3
+2017-09-11 18:13:22  27新增订单 返回:1
+2017-09-11 18:13:52  27新增订单 返回:3
+2017-09-11 18:14:22  27新增订单 返回:5
+2017-09-11 18:24:25  27新增订单 返回:1
+2017-09-11 18:24:40  27新增订单 返回:3
+2017-09-11 18:24:55  27新增订单 返回:5
+2017-09-11 18:27:25  27新增订单 返回:7
+2017-09-13 09:13:56  view:0000031530-0000000027
+2017-09-13 09:53:11  view:0000031532-0000000027
+2017-09-13 09:56:43  view:0000031534-0000000027
+2017-09-13 09:59:37  view:0000031536-0000000027
+2017-09-13 10:53:39  view:0000031538-0000000027
+2017-09-13 10:54:13  view:0000031540-0000000027
+2017-09-13 16:49:46  27新增订单 返回:1
+2017-09-13 16:50:16  27新增订单 返回:3
+2017-09-13 17:08:58  view:0000031546-0000000027
+2017-09-13 17:09:50  view:0000031548-0000000027
+2017-09-13 17:10:30  view:0000031550-0000000027
+2017-09-13 17:10:51  0000031550-0000000027&&100000910001262432
+2017-09-13 17:11:01  获取参数：is:T;reflect:{"companyId":"00000027","dpid":"0000000027"};client_sn:0000031550-0000000027
+2017-09-13 17:11:01  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000031550-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-09-13 17:11:11  获取参数：is:T;reflect:{"companyId":"00000027","dpid":"0000000027"};client_sn:0000031550-0000000027
+2017-09-13 17:11:11  {"收钱吧同步返回参数":"result";"is_success":"T";"client_sn":"0000031550-0000000027";"trade_no":"";"status":"FAIL";"result_code":"get_brand_wcpay_request:cancel";}
+2017-09-13 17:11:52  获取参数：is:F;reflect:{"companyId":"00000027","dpid":"0000000027"};client_sn:0000031550-0000000027
+2017-09-13 17:11:52  获取参数：ILLEGAL_SIGN;签名错误
+2017-09-13 17:11:54  view:0000031550-0000000027
+2017-09-13 17:11:57  0000031550-0000000027&&100000910001262432
+2017-09-13 17:11:57  获取参数：is:F;reflect:{"companyId":"0000000027","dpid":"0000000027"};client_sn:0000031550-0000000027
+2017-09-13 17:11:57  获取参数：FAIL;client_sn 0000031550-0000000027 在系统中已经存在
+2017-09-13 17:12:00  view:0000031550-0000000027
+2017-09-13 17:12:02  0000031550-0000000027&&100000910001262432
+2017-09-13 17:12:02  获取参数：is:F;reflect:{"companyId":"00000027","dpid":"0000000027"};client_sn:0000031550-0000000027
+2017-09-13 17:12:02  获取参数：ILLEGAL_SIGN;签名错误
+2017-09-13 17:12:02  获取参数：is:F;reflect:{"companyId":"0000000027","dpid":"0000000027"};client_sn:0000031550-0000000027
+2017-09-13 17:12:02  获取参数：FAIL;client_sn 0000031550-0000000027 在系统中已经存在
+2017-09-13 17:12:04  view:0000031550-0000000027
+2017-09-13 17:12:05  0000031550-0000000027&&100000910001262432
+2017-09-13 17:12:06  获取参数：is:F;reflect:{"companyId":"0000000027","dpid":"0000000027"};client_sn:0000031550-0000000027
+2017-09-13 17:12:06  获取参数：FAIL;client_sn 0000031550-0000000027 在系统中已经存在
+2017-09-13 17:12:41  轮询次数：50结果：错误！0000031550-0000000027;dpid:0000000027
+2017-09-13 17:12:51  轮询次数：50结果：错误！0000031550-0000000027;dpid:0000000027
+2017-09-13 18:07:46  27新增订单 返回:5,7
+2017-09-14 09:23:43  27新增订单 返回:9,11
+2017-09-14 09:24:43  27新增订单 返回:13
+2017-09-14 09:32:38  view:0000031564-0000000027
+2017-09-14 11:57:48  27新增订单 返回:1
+2017-09-14 12:03:38  27新增订单 返回:1
+2017-09-14 17:06:08  27新增订单 返回:1
+2017-09-14 18:08:49  27新增订单 返回:1
+2017-09-14 18:13:34  27新增订单 返回:3
+2017-09-15 11:41:38  27新增订单 返回:1
+2017-09-15 12:56:38  27新增订单 返回:3
+2017-09-15 15:17:28  28新增订单 返回:1
+2017-09-15 15:17:58  28新增订单 返回:3
+2017-09-15 15:18:14  28新增订单 返回:5
+2017-09-15 16:39:43  28新增订单 返回:7
+2017-09-15 16:39:58  28新增订单 返回:9
+2017-09-15 16:58:28  28新增订单 返回:11
