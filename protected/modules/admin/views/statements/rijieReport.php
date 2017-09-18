@@ -76,7 +76,6 @@
 		               <th><?php echo yii::t('app','毛利润');?></th> 
 		               <th><?php echo yii::t('app','优惠');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
-		               <th><?php echo yii::t('app','营业员');?></th>
 		               <?php if($userid != '0'): ?>
 		               <th><?php echo yii::t('app','营业员');?></th>
 		               <?php endif;?>
@@ -160,9 +159,6 @@
 		                	$gather_total += $gather;
 		                	echo $gather;
 		            ?></td>
-		            <td><?php 
-		                echo $m['username'].'('.$this->getUserstaffno($this->companyId,$m['username']).')';
-		             ?></td>
 		            <?php if($userid != '0'): ?>
 		            <td><?php 
 		                echo $m['username'].'('.$this->getUserstaffno($this->companyId,$m['username']).')';
@@ -251,7 +247,6 @@
 		            <td><?php  echo $gather_total;?></td>
 		            <?php if($userid != '0'): ?>
 		                <td><?php   
-		                       // echo $model->username.'('.$this->getUserstaffno($this->companyId,$model->username).')';
 		                    ?>
 		                </td>
 		            <?php endif;?>

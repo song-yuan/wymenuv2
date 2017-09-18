@@ -786,48 +786,56 @@ public function actionPayallReport(){
 			$end_time = date('Y-m-d',time());
 		}
 	
+		if($userid == '0'){
+			$username = ' != -1';
+		}elseif($userid == '-1'){
+			$username = ' != -1';
+		}else{
+			$username = ' = "'.$userid.'"';
+		}
+		
 		if($text==1){
 			if($userid != '0'){
-				$users ='oo.dpid,year(oo.create_at),oo.username';
-				$useros = 't.dpid,year(t.create_at),t.username';
+				$users ='top.dpid,year(top.create_at),top.username';
+				$useros ='t.dpid,year(t.create_at),t.username';
 				$userots = 'ot.dpid,year(ot.create_at),ot.username';
-				$usernames = ' = t.username';
+				$usernames = $username;
 			}else{
-				$users ='oo.dpid,year(oo.create_at)';
-				$useros = 't.dpid,year(t.create_at)';
+				$users ='top.dpid,year(top.create_at)';
+				$useros ='t.dpid,year(t.create_at)';
 				$userots = 'ot.dpid,year(ot.create_at)';
-				$usernames = ' != -1';
+				$usernames = $username;
 			}
 		}elseif($text == 2){
 			if($userid != '0'){
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),oo.username';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at),t.username';
+				$users ='top.dpid,year(top.create_at),month(top.create_at),top.username';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at),t.username';
 				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),ot.username';
-				$usernames = ' = t.username';
+				$usernames = $username;
 			}else{
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at)';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at)';
+				$users ='top.dpid,year(top.create_at),month(top.create_at)';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at)';
 				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at)';
-				$usernames = ' != -1';
+				$usernames = $username;
 			}
 		}else{
 			if($userid != '0'){
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at),oo.username';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
+				$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at),top.username';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
 				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at),ot.username';
-				$usernames = ' = t.username';
+				$usernames = $username;
 			}else{
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at)';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
+				$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at)';
+				$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
 				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at)';
-				$usernames = ' != -1';
+				$usernames = $username;
 			}
 		}
-		$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at),top.username';
-		$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
+		//$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at),top.username';
+		//$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
 		
-		$usernames = ' = t.username';
-		$username = ' != -1';
+		//$usernames = ' = t.username';
+		//$username = ' != -1';
 		
 		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
 				.' t.dpid,t.username,t.create_at,t.poscode, '
