@@ -247,6 +247,37 @@ class Elm
         $result =ElUnit::post($url,$protocol);
         return $result;
 	}
+	public static function dealElmData($data){
+		if(!empty($data)){
+			$data = urldecode($data);
+			$obj = json_decode($data);
+			$type = $obj->type;
+			$shopId = $obj->shopId;
+			$message = $obj->message;
+			$elemeDy = Elm::getErpDpid($shopId);
+			if($elemeDy){
+				$dpid = $elemeDy['dpid'];
+				Helper::writeLog($dpid.'--eleme message--'.$data);
+				if($type==10){
+					$result = Elm::order($message,$dpid);
+				}elseif($type==12){
+					$result = Elm::orderStatus($message,$dpid);
+				}elseif($type==20){
+					$result = Elm::orderCancel($message,$dpid);
+				}elseif($type==30){
+					$result = Elm::refundOrder($message,$dpid);
+				}else {
+					$result = true;
+				}
+				if($result){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	public static function order($message,$dpid){
 		$me = json_decode($message);
 		$orderId = $me->id;
@@ -548,6 +579,10 @@ class Elm
 		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
 		$result =ElUnit::post($url,$protocol);
 		return $result;
+	}
+	public static function callUserFunc($callback){
+		$data = file_get_contents('php://input');
+		return call_user_func($callback,$data);
 	}
 	public static function dealOrder($order,$dpid,$orderStatus){
 		$me = $order;
