@@ -90,7 +90,7 @@
 		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
 		               <?php if($payments):?>
 		                    <?php foreach ($payments as $payment):?>
-		                         <th style="display: none;"><?php echo $payment['name'];
+		                         <th><?php echo $payment['name'];
 		                            $grouppay_item ++;
 		                         ?></th>
 		                    <?php endforeach;?>
@@ -152,7 +152,14 @@
 		            ?></td>
 		            
 		            <td><?php 
-				           
+				            //退款...
+				            $retreat = $this->getRijieRetreat($m['dpid'],$begin_time,$end_time,$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']);
+				            $retreats+=$retreat;
+				            
+				            //折扣
+				            $discount=sprintf("%.2f",$reality_all-$m['all_reality']);
+				            $discount_total += $discount;
+				            echo $discount;
 		            ?></td>
 		            <td><?php 
 		                	$gather=$m['all_reality'];
@@ -211,6 +218,17 @@
 		            ?></td>
 		            <?php if($payments):?>
 		                
+		                <?php $j = 0;foreach ($payments as $payment):?>
+		                    <td><?php 
+		                           $pay_item =  $this->getRijiePrice($m['dpid'],$begin_time,$end_time,$payment['lid'],$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']); 
+		                           $grouppay_arr[$j] +=$pay_item;
+		                          // $grouppay.$i +=$pay_item;
+		                            
+		                            $j++;
+		                            echo $pay_item;
+		                            ?>
+		                    </td>
+		                <?php endforeach;?>
 		            <?php endif;?> 
 		            <td>
 		            <?php 
@@ -232,7 +250,7 @@
 		                ?>
 		            </td>
 		            <td><?php 
-		            		echo '';
+		            	echo $retreat;
 		            ?></td>
 		            					
 		        </tr>
@@ -261,7 +279,7 @@
 		            <td><?php  echo $eleme_total; ?></td>
 		            <?php if($payments):?>
 		                <?php  $j =0;foreach ($payments as $payment):?>
-		                    <td style="display: none;"><?php  echo $grouppay_arr[$j++];
+		                    <td><?php  echo $grouppay_arr[$j++];
 		                   // echo $grouppay.$i;
 		                   // $i++;
 		                    ?></td>

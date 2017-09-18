@@ -1575,6 +1575,39 @@ public function actionPayallReport(){
 		}
 		return $price;
 	}
+	
+	public function getRijiePrice($dpid,$begin_time,$end_time,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+	
+		if($usertype != '0'){
+			$usern = 't.username ="'.$userid.'"';
+		}else{
+			$usern = 't.username != "-1"';
+		}
+		if($text==1){
+			$times = ' and year(t.create_at) ="'.$y_all.'"';
+		}elseif($text==2){
+			$times = ' and year(t.create_at) ="'.$y_all.'" and month(t.create_at) ="'.$m_all.'"';
+		}elseif($text==3){
+			$times = ' and year(t.create_at) ="'.$y_all.'" and month(t.create_at) ="'.$m_all.'" and day(t.create_at) ="'.$d_all.'"';
+		}
+	
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.pay_amount_total) as all_reality,count(*) as all_num, '
+				.' t.dpid,t.create_at,t.paytype,t.payment_id '
+				.' from nb_order_paytype_total t'
+				.' where t.paytype ="3" and t.dpid ='.$dpid
+				.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" '
+				.' and t.payment_id ='.$num
+				.' and '.$usern.' '.$times;
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		//$model = OrderPay::model()->findAll($criteria);
+		$price = '';
+		if(!empty($model)){
+	
+			$price = $model['all_reality']?$model['all_reality']:'';
+	
+		}
+		return $price;
+	}
 
 
 	public function getComPaymentPrice($dpid,$begin_time,$end_time,$type,$num,$text,$y_all,$m_all,$d_all){
@@ -1926,6 +1959,32 @@ public function actionPayallReport(){
 				$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
 			}
 		}
+		//var_dump($sql2);exit;
+		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
+		return $retreat['retreat_allprice'];
+	}
+	
+	/*
+	 * 日结统计报表的退款查询
+	*/
+	public function getRijieRetreat($dpid,$begin_time,$end_time,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		$begin_time = $begin_time.' 00:00:00';
+		$end_time = $end_time.' 23:59:59';
+		$db = Yii::app()->db;
+		
+		if($usertype != '0'){
+			$user = ' and t.username = "'.$userid.'" ';
+		}else{
+			$user = ' and t.username != -1';
+		}
+		if($text==1){
+			$time = ' and year(t.create_at) = "'.$y_all.'" ';
+		}elseif($text==2){
+			$time = ' and year(t.create_at) = "'.$y_all.'" and month(t.create_at) ="'.$m_all.'" ';
+		}elseif($text==3){
+			$time = ' and year(t.create_at) = "'.$y_all.'" and month(t.create_at) ="'.$m_all.'" and day(t.create_at) ="'.$d_all.'" ';
+		}
+		$sql2 = 'select sum(t.pay_amount_total) as retreat_allprice,sum(t.pay_order_num) as retreat_num from nb_order_paytype_total t where t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" '.$time.$user.' and t.pay_amount_total < 0 and t.dpid='.$dpid;
 		//var_dump($sql2);exit;
 		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		return $retreat['retreat_allprice'];
