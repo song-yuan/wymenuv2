@@ -3041,3 +3041,39 @@ Stack trace:
 REQUEST_URI=//wymenuv2/uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png
 HTTP_REFERER=http://www.yc.com/ymall/kind/kind/companyId/000000027
 ---
+2017/09/18 16:28:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png".' in /alidata/www/wy/menu/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/wy/menu/framework/web/CWebApplication.php(141): CWebApplication->runController('uploads/goodsco...')
+#1 /alidata/www/wy/menu/framework/base/CApplication.php(184): CWebApplication->processRequest()
+#2 /alidata/www/wy/menu/wymenuv2/index.php(20): CApplication->run()
+#3 {main}
+REQUEST_URI=//wymenuv2/uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png
+HTTP_REFERER=http://www.yc.com/ymall/kind/kind/companyId/000000027
+---
+2017/09/18 16:28:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png".' in /alidata/www/wy/menu/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/wy/menu/framework/web/CWebApplication.php(141): CWebApplication->runController('uploads/goodsco...')
+#1 /alidata/www/wy/menu/framework/base/CApplication.php(184): CWebApplication->processRequest()
+#2 /alidata/www/wy/menu/wymenuv2/index.php(20): CApplication->run()
+#3 {main}
+REQUEST_URI=//wymenuv2/uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png
+HTTP_REFERER=http://www.yc.com/ymall/product/index/companyId/000000027
+---
+2017/09/18 16:31:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png".' in /alidata/www/wy/menu/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/wy/menu/framework/web/CWebApplication.php(141): CWebApplication->runController('uploads/goodsco...')
+#1 /alidata/www/wy/menu/framework/base/CApplication.php(184): CWebApplication->processRequest()
+#2 /alidata/www/wy/menu/wymenuv2/index.php(20): CApplication->run()
+#3 {main}
+REQUEST_URI=//wymenuv2/uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png
+HTTP_REFERER=http://www.yc.com/ymall/kind/kind/companyId/000000027
+---
+2017/09/18 16:31:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png".' in /alidata/www/wy/menu/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/wy/menu/framework/web/CWebApplication.php(141): CWebApplication->runController('uploads/goodsco...')
+#1 /alidata/www/wy/menu/framework/base/CApplication.php(184): CWebApplication->processRequest()
+#2 /alidata/www/wy/menu/wymenuv2/index.php(20): CApplication->run()
+#3 {main}
+REQUEST_URI=//wymenuv2/uploads/goodscompany_0000000027/F72B1E54-E9F4-4C11-ACFE-9EABAE1497EA.png
+HTTP_REFERER=http://www.yc.com/ymall/kind/kind/companyId/000000027
+---
