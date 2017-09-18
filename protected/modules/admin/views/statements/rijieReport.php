@@ -222,7 +222,6 @@
 		                    <td><?php 
 		                           $pay_item =  $this->getRijiePrice($m['dpid'],$begin_time,$end_time,$payment['lid'],$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']); 
 		                           $grouppay_arr[$j] +=$pay_item;
-		                          // $grouppay.$i +=$pay_item;
 		                            
 		                            $j++;
 		                            echo $pay_item;
