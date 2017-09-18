@@ -176,7 +176,7 @@ class MtOrder
 	 * 通过回调函数 先返回结果
 	 * 
 	 */
-	public static function callUserFunc($callback,$data){
+	public static function callUserFunc($callback){
 		$data = file_get_contents('php://input');
 		return call_user_func($callback,$data);
 	}
