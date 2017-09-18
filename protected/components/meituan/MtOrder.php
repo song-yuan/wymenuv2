@@ -16,28 +16,11 @@ class MtOrder
 			return '200';
 		}
 		$data = urldecode($data);
-		$resArr = MtUnit::dealData($data);
-		$ePoiId = $resArr['ePoiId'];
-		$order = $resArr['order'];
-		
-		$res = MtUnit::getWmSetting($ePoiId);
-		if(!empty($res)&&$res['is_receive']==1){
-			$obj = json_decode($order);
-			$orderId = $obj->orderId;
-			$mtToken = self::getToken($ePoiId);
-			$timetamp = time();
-			if($mtToken){
-				$url = 'http://api.open.cater.meituan.com/waimai/order/confirm';
-				$array= array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
-				$sign=MtUnit::sign($array);
-				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
-				$result = MtUnit::postHttps($url, $data);
-				return $result;
-			}else{
-				return '{ "data": "OK"}';
-			}
-		}else{
+		$callRes = self::callUserFunc(array($this,'orderCallBack'), $data);
+		if($callRes){
 			return '{ "data": "OK"}';
+		}else {
+			return '{ "data": "ERROR"}';
 		}
 	}
 	public static function token($data){
@@ -85,12 +68,12 @@ class MtOrder
 			return '200';
 		}
 		$data = urldecode($data);
-		$resArr = MtUnit::dealData($data);
-		$ePoiId = $resArr['ePoiId'];
-		$order = $resArr['order'];
-		
-		$result = self::dealOrder($order,$ePoiId,2);
-		return $result;
+		$callRes = self::callUserFunc(array($this,'orderConfirmCallBack'), $data);
+		if($callRes){
+			return '{ "data": "OK"}';
+		}else {
+			return '{ "data": "ERROR"}';
+		}
 	}
 	public static function orderCancel($data){
 		if(empty($data)){
@@ -157,6 +140,71 @@ class MtOrder
 		$result = MtUnit::postHttps($url, $data);
 		return $result;
 	
+	}
+	/**
+	 * 
+	 * @param unknown $callback
+	 * @param unknown $data
+	 * @return mixed
+	 * 通过回调函数 先返回结果
+	 * 
+	 */
+	public static function callUserFunc($callback,$data){
+		return call_user_func($callback, $data);
+	}
+	/**
+	 * 
+	 * 美团推送订单处理
+	 * 
+	 */
+	public static function orderCallBack($data){
+		$resArr = MtUnit::dealData($data);
+		$ePoiId = $resArr['ePoiId'];
+		$order = $resArr['order'];
+		
+		$obj = json_decode($order);
+		$orderId = $obj->orderId;
+		
+		$res = MtUnit::getWmSetting($ePoiId);
+		if(!empty($res)&&$res['is_receive']==1){
+			$mtToken = self::getToken($ePoiId);
+			$timetamp = time();
+			if($mtToken){
+				$url = 'http://api.open.cater.meituan.com/waimai/order/confirm';
+				$array= array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
+				$sign=MtUnit::sign($array);
+				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
+				$result = MtUnit::postHttps($url, $data);
+				$obj = json_decode($result);
+				if($obj->data=='OK'){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return true;
+			}
+		}else{
+			return true;
+		}
+	}
+	/**
+	 * 
+	 * @param unknown $data
+	 * 确认订单回调处理
+	 * 
+	 */
+	public static function orderConfirmCallBack($data){
+		$resArr = MtUnit::dealData($data);
+		$ePoiId = $resArr['ePoiId'];
+		$order = $resArr['order'];
+		Helper::writeLog($ePoiId.'--meituan message--'.$order);
+		$result = self::dealOrder($order,$ePoiId,2);
+		$reobj = json_decode($result);
+		if($reobj->status){
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * 
@@ -267,10 +315,6 @@ class MtOrder
 		$orderStr = json_encode($orderArr);
 		$data = array('dpid'=>$dpid,'data'=>$orderStr);
 		$result = DataSyncOperation::operateOrder($data);
-		$reobj = json_decode($result);
-		if($reobj->status){
-			return '{ "data": "OK"}';
-		}
-		return '{ "data": "ERROR"}';
+		return $result;
 	}
 }
