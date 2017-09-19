@@ -330,7 +330,7 @@ jQuery(document).ready(function(){
 	});
 	
 	$('#excel').click(function excel(){
-		//layer.msg('暂未开放');return false;
+		layer.msg('暂未开放');return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();
