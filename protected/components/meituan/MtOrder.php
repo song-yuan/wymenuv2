@@ -34,7 +34,7 @@ class MtOrder
 				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
 				$result = MtUnit::postHttps($url, $data);
 				$obj = json_decode($result);
-				if($obj->data=='OK'){
+				if($obj->data=='ok'){
 					return true;
 				}else{
 					return false;
