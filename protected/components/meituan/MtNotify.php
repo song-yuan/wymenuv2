@@ -12,15 +12,16 @@ class MtNotify
 	public function Handle($type)
 	{
 		if($type=='new'){
+			$this->ReplyNotify(true);
 			$result = MtOrder::callUserFunc(array($this, 'newOrderCallBack'));
 		}else if($type=='confirm'){
 			$result = MtOrder::callUserFunc(array($this, 'confirmOrderCallBack'));
-		}
-		if($result == false){
+			if($result){
+				$this->ReplyNotify(true);
+				return;
+			}
 			$this->ReplyNotify(false);
-			return;
 		}
-		$this->ReplyNotify(true);
 	}
 	public function newOrderCallBack($data){
 		$remt = MtOrder::order($data);

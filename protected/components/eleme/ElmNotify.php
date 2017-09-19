@@ -12,11 +12,11 @@ class ElmNotify
 	public function Handle($type)
 	{
 		$result = Elm::callUserFunc(array($this, 'elmOrderCallBack'));
-		if($result == false){
-			$this->ReplyNotify(false);
+		if($result){
+			$this->ReplyNotify(true);
 			return;
 		}
-		$this->ReplyNotify(true);
+		$this->ReplyNotify(false);
 	}
 	public function elmOrderCallBack($data){
 		$remt = Elm::dealElmData($data);
