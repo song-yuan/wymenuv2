@@ -9,7 +9,7 @@
 */
 class ElmNotify
 {
-	public function Handle($type)
+	public function Handle()
 	{
 		$result = Elm::callUserFunc(array($this, 'elmOrderCallBack'));
 		if($result){
