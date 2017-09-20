@@ -322,25 +322,20 @@
 							<div class="ku-item-info">聚餐人数</div>
 						</div>
 					</a>
-					<?php if(Yii::app()->user->role <5):?>
+					<?php if(Yii::app()->user->role <=5):?>
 					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
 							<div class="ku-item-info">支付方式(员工业绩)</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/rijie',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+					<a style="display: none;" href="<?php echo $this->createUrl('statements/rijie',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
 							<div class="ku-item-info">日结统计</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/rijieReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">日结统计(优化)</div>
-						</div>
-					</a>
+					
 					<?php endif;if(Yii::app()->user->role >=11||Yii::app()->user->role <5):?>
 					<a href="<?php echo $this->createUrl('statements/paymentReportSql',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
 						<div class="pull-left margin-left-right">
@@ -348,7 +343,7 @@
 							<div class="ku-item-info">支付方式(优化)</div>
 						</div>
 					</a>
-					<?php endif;if(Yii::app()->user->role <=5):?>
+					<?php endif;if(Yii::app()->user->role <5):?>
 					<a href="<?php echo $this->createUrl('statements/comPaymentReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
@@ -356,6 +351,12 @@
 						</div>
 					</a>
 					<?php endif;?>
+					<a href="<?php echo $this->createUrl('statements/rijieReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey sktj"></div>
+							<div class="ku-item-info">日结统计(优化)</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('statements/orderpaytype',array('companyId' => $this->companyId,'text'=>'3','paymentid'=>'0','paytype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey zdzffs"></div>
