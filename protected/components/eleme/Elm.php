@@ -257,7 +257,6 @@ class Elm
 			$elemeDy = Elm::getErpDpid($shopId);
 			if($elemeDy){
 				$dpid = $elemeDy['dpid'];
-				Helper::writeLog($dpid.'--eleme message--'.$data);
 				if($type==10){
 					$result = Elm::order($message,$dpid);
 				}elseif($type==12){
@@ -582,6 +581,7 @@ class Elm
 	}
 	public static function callUserFunc($callback){
 		$data = file_get_contents('php://input');
+		Helper::writeLog('eleme message--'.$data);
 		return call_user_func($callback,$data);
 	}
 	public static function dealOrder($order,$dpid,$orderStatus){

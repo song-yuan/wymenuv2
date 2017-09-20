@@ -94,7 +94,6 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
-		Helper::writeLog($ePoiId.'--meituan message--'.$order);
 		$result = self::dealOrder($order,$ePoiId,2);
 		$reobj = json_decode($result);
 		if($reobj->status){
@@ -178,6 +177,7 @@ class MtOrder
 	 */
 	public static function callUserFunc($callback){
 		$data = file_get_contents('php://input');
+		Helper::writeLog('meituan message--'.$data);
 		return call_user_func($callback,$data);
 	}
 	/**
