@@ -6172,10 +6172,14 @@ public function actionPayallReport(){
 		$objPHPExcel = new PHPExcel();
 		//$uid = Yii::app()->user->id;
 		$criteria = new CDbCriteria;
+		$otype = Yii::app()->request->getParam('otype','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
 		$criteria->select = 'sum(t.number) as all_number,t.*';
+		if($otype>=0){
+			$criteria->addCondition("t.order_type= ".$otype);
+		}
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addCondition("t.order_status in(3,4,8) ");//只要付款了的账单都进行统计
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
@@ -6188,7 +6192,7 @@ public function actionPayallReport(){
 			}
 		}
 		//$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->with = array("company","paymentMethod");
+		$criteria->with = array("company","paymentMethod","channel");
 
 		$criteria->group = 't.account_no,t.order_status' ;
 		$criteria->order = 't.lid ASC' ;
@@ -6260,10 +6264,26 @@ public function actionPayallReport(){
 		->setCellValue('F3','实收')
 		->setCellValue('G3','现金收款')
 		->setCellValue('H3','找零')
-		->setCellValue('I3','');
+		->setCellValue('I3','状态');
 		$i=4;
 		foreach($model as $v){
 			if($v->is_temp=='1'){
+				$n ='';
+				if($v->order_type == 4){
+					$n = $v->channel->channel_name;
+				}else{
+					switch ($v->order_type){
+						case 0: $n ='堂食';break;
+						case 1: $n ='微信堂食';break;
+						case 2: $n ='微信外卖';break;
+						case 3: $n ='堂食';break;
+						case 5: $n ='自助点单';break;
+						case 6: $n ='微信点单';break;
+						case 7: $n ='美团外卖';break;
+						case 8: $n ='饿了么外卖';break;
+						default: $n ='其他';break;
+					}
+				}
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValueExplicit('A'.$i,$v->account_no,PHPExcel_Cell_DataType::TYPE_STRING)
 				->setCellValue('B'.$i,$v->create_at)
@@ -6273,7 +6293,7 @@ public function actionPayallReport(){
 				->setCellValue('F'.$i,$v->should_total)
 				->setCellValue('G'.$i,sprintf("%.2f",OrderProduct::getMoney($this->companyId,$v->lid)))
 				->setCellValue('H'.$i,sprintf("%.2f",OrderProduct::getChange($this->companyId,$v->lid)))
-				->setCellValue('I'.$i);
+				->setCellValue('I'.$i,$n);
 			}
 			//细边框引用
 			$objPHPExcel->getActiveSheet()->getStyle('A2:I2')->applyFromArray($linestyle);

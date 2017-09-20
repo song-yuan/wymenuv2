@@ -400,15 +400,12 @@ $(function () {
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
-				  
+				   var otype = $('#paymentid').val();
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
 							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/orderdetailExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/orderdetailExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/otype/"+otype+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			      
 			   });
