@@ -112,9 +112,22 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','账单详情报表');?></div>
 					<div class="actions">
-					<div class="btn-group">
+						<div class="btn-group">
 							 <input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
 						</div>
+						<div class="btn-group">
+							<select id="paymentid" class="form-control btn yellow" >
+	                            <option paymentid="1" value="-1" <?php if ($paymentid=='1' && $ordertype=='-1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择订单类型--');?></option>
+	                            <option paymentid="1" value="0" <?php if ($paymentid=='1' && $ordertype=='0'){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
+	                            <option paymentid="1" value="1" <?php if ($paymentid=='1' && $ordertype=='1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信堂食');?></option>
+	                            <option paymentid="1" value="2" <?php if ($paymentid=='1' && $ordertype=='2'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
+	                            <option paymentid="1" value="4" <?php if ($paymentid=='1' && $ordertype=='4'){?> selected="selected" <?php }?> ><?php echo yii::t('app','后台外卖');?></option>
+	                            <option paymentid="1" value="5" <?php if ($paymentid=='1' && $ordertype=='5'){?> selected="selected" <?php }?> ><?php echo yii::t('app','自助点单');?></option>
+	                            <option paymentid="1" value="6" <?php if ($paymentid=='1' && $ordertype=='6'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信点单');?></option>
+	                            <option paymentid="1" value="7" <?php if ($paymentid=='1'&& $ordertype=='7'){?> selected="selected" <?php }?> ><?php echo yii::t('app','美团外卖');?></option>
+	                            <option paymentid="1" value="8" <?php if ($paymentid=='1'&& $ordertype=='8'){?> selected="selected" <?php }?> ><?php echo yii::t('app','饿了么外卖');?></option>
+	                    	</select>
+                    	</div>
                         <div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -140,8 +153,8 @@
 								<th><?php echo yii::t('app','下单时间');?></th>
 								<th><?php echo yii::t('app','人数');?></th>
 								<!-- <th><?php echo yii::t('app','账单更新时间');?></th>
-								<th><?php echo yii::t('app','座位');?></th>
-                                <th><?php echo yii::t('app','状态');?></th> -->
+								<th><?php echo yii::t('app','座位');?></th> -->
+                                <th><?php echo yii::t('app','状态');?></th>
                                 <th><?php echo yii::t('app','原价');?></th>
                                 <th><?php echo yii::t('app','优惠');?></th>                                                                
                                 <th><?php echo yii::t('app','实收');?></th>
@@ -163,6 +176,23 @@
 								<td><?php if($model->is_temp=='1') echo yii::t('app','临时坐').$model->site_id%1000; else echo $this->getSiteName($model->lid);?></td>
 								<td><?php switch($model->order_status) {case 1: echo yii::t('app','未下单'); break; case 2: echo yii::t('app','已下单未支付') ; break; case 3: echo yii::t('app','已支付'); break; case 4: echo yii::t('app','已结单'); break; case 5: echo yii::t('app','被并台'); break; case 6: echo yii::t('app','被换台'); break; case 7: echo yii::t('app','被撤台'); break; case 8: echo yii::t('app','日结'); break;default :echo '';}?></td>
 								 -->
+								<td><?php
+									if($model->order_type == 4){
+										echo $model->channel->channel_name;
+									}else{
+										switch ($model->order_type){
+											case 0: echo '堂食';break;
+											case 1: echo '微信堂食';break;
+											case 2: echo '微信外卖';break;
+											case 3: echo '堂食';break;
+											case 5: echo '自助点单';break;
+											case 6: echo '微信点单';break;
+											case 7: echo '美团外卖';break;
+											case 8: echo '饿了么外卖';break;
+											default: echo '其他';break;
+										}
+									}
+								?></td>
 								<td><?php echo sprintf("%.2f",$model->reality_total);?></td>
 								<td><?php echo sprintf("%.2f",$model->reality_total-$model->should_total);?></td>
 								<td><?php echo sprintf("%.2f",$model->should_total);?></td>
@@ -355,11 +385,13 @@ $(function () {
 			  // alert($('#begin_time').val()); 
 			  // alert($('#end_time').val()); 
 			  // alert(111);
+			  var paymentid = $("#paymentid").find("option:selected").attr("paymentid");
+			  var otype = $('#paymentid').val();
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   //var Did = $('#Did').var();
 			  //var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/orderdetail' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
+			   location.href="<?php echo $this->createUrl('statements/orderdetail' , array('companyId'=>$this->companyId ));?>/otype/"+otype+"/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
 			  
 	        });
 		   $('#excel').click(function excel(){
@@ -368,15 +400,12 @@ $(function () {
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
-				  
+				   var otype = $('#paymentid').val();
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
 							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/orderdetailExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/orderdetailExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/otype/"+otype+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			      
 			   });
