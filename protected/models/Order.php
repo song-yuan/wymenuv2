@@ -92,6 +92,7 @@ class Order extends CActiveRecord
                 'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
 				'channel' => array(self::BELONGS_TO , 'Channel' ,'' ,'on'=>'t.takeout_typeid = channel.lid and t.dpid = channel.dpid '),
 				'orderpay' => array(self::BELONGS_TO , 'OrderPay' ,'' ,'on'=>'t.dpid = orderpay.dpid and t.lid = orderpay.order_id '),
+				'channel' => array(self::BELONGS_TO , 'Channel' ,'' ,'on'=>'t.dpid = channel.dpid and t.takeout_typeid = channel.lid '),
 		);
 	}
 

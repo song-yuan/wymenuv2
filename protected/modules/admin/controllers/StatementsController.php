@@ -2605,10 +2605,14 @@ public function actionPayallReport(){
 	public function actionOrderdetail(){
 		$criteria = new CDbCriteria;
 		$accountno = '';
+		$otype = Yii::app()->request->getParam('otype','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
 		$criteria->select = 'sum(t.number) as all_number,t.*';
+		if($otype>=0){
+			$criteria->addCondition("t.order_type= ".$otype);
+		}
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addCondition("t.order_status in(3,4,8) ");//只要付款了的账单都进行统计
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
@@ -2621,7 +2625,7 @@ public function actionPayallReport(){
 				$criteria->addSearchCondition('account_no',$accountno);
 			}
 		}
-		$criteria->with = array("company","paymentMethod");
+		$criteria->with = array("company","paymentMethod","channel");
 
 		//$connect = Yii::app()->db->createCommand($sql);
 		//$model = $connect->queryAll();
@@ -2640,6 +2644,8 @@ public function actionPayallReport(){
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'accountno'=>$accountno,
+				'ordertype'=>$otype,
+				'paymentid'=>1,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
