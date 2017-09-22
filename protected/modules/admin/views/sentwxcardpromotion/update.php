@@ -178,6 +178,7 @@
 									<div class="fileupload-new thumbnail"  style="max-width: 200px; max-height: 200px; line-height: 20px;">
 										<img src="<?php echo Yii::app()->baseUrl.$model->main_picture?$model->main_picture:'';?>" alt="" />
 									</div>
+									<?php if (!$show):?>
 									<div class="fileupload-preview fileupload-exists thumbnail" id="img1" style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
 									<div>
 										<span class="btn default btn-file">
@@ -187,9 +188,12 @@
 										</span>
 										<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除 </a>
 									</div>
+									<?php endif; ?>
 								</div>
+								<?php if (!$show):?>
 								<span class="label label-danger">注意:</span>
 								<span>大小：建议300px*300px且不超过20kb 格式:jpg 、png、jpeg </span>
+								<?php endif; ?>
 						</div>
 						<?php echo $form->hiddenField($model,'main_picture'); ?>
 					</div>
@@ -262,7 +266,7 @@
 										<?php else:?>
 										<div class="wxcardend" style="">领取后<span><?php echo $cupon->day_begin?$cupon->day_begin:'当';?></span> 天生效，有效期：<span><?php echo $cupon->day;?></span> 天</div>
 										<?php endif;?>
-										<div class="wxcardactive <?php if(in_array($cupon->lid, $selcups)) echo '';else echo 'uhide';?>" ><img width="50px" style="" src="<?php  echo '../../../../../../img/checked.png';?>"/></div>
+										<div class="wxcardactive <?php if(in_array($cupon->lid, $selcups)) echo '';else echo 'uhide';?>" ><img width="50px" style="" src=" <?php  echo Yii::app()->baseUrl; ?>/img/checked.png"/></div>
 									</div>
 								<?php endforeach;?>
 								<?php endif;?>
@@ -276,9 +280,11 @@
 					<input type="hidden" id="facode" name="facode"></input>
 					<input type="hidden" id="sub" name="sub"></input>
 					<div class="form-actions fluid">
+					<?php if (!$show):?>
 						<div class="col-md-offset-3 col-md-9">
 							<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
 						</div>
+					<?php endif; ?>
 					</div>
 				</div>
 				<?php else:?>

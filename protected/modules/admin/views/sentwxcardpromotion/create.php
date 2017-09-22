@@ -278,7 +278,7 @@
 										<?php else:?>
 										<div class="wxcardend" style="">领取后<span><?php echo $cupon->day_begin?$cupon->day_begin:'当';?></span> 天生效，有效期：<span><?php echo $cupon->day;?></span> 天</div>
 										<?php endif;?>
-										<div class="wxcardactive <?php if(in_array($cupon->lid, $selcups)) echo '';else echo 'uhide';?>" ><img width="50px" style="" src="../../../../../../img/checked.png"/></div>
+										<div class="wxcardactive <?php if(in_array($cupon->lid, $selcups)) echo '';else echo 'uhide';?>" ><img width="50px" style="" src="<?php echo Yii::app()->baseUrl; ?>/img/checked.png"/></div>
 									</div>
 								<?php endforeach;?>
 								<?php endif;?>

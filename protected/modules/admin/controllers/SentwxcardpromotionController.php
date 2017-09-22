@@ -166,7 +166,7 @@ class SentwxcardpromotionController extends BackendController
     public function actionUpdate(){
         $brdulvs = $this->getBrdulv();
         $lid = Yii::app()->request->getParam('lid','0');
-        $show1 = Yii::app()->request->getParam('show1','0');
+        $show = Yii::app()->request->getParam('show','0');
         $is_sync = DataSync::getInitSync();
         $models = '';
         $selcups = array();
@@ -307,7 +307,7 @@ class SentwxcardpromotionController extends BackendController
                 'cupons'=>$cupons,
                 'pid' => $pid,
                 'phscode'=>$phscode,
-                'show1'=>$show1,
+                'show'=>$show,
         ));
     }
 

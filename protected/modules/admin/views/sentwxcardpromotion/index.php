@@ -191,6 +191,7 @@
 								<td ><?php echo $model->begin_time;?></td>
 								<td ><?php echo $model->end_time;?></td>
 								<td class="center"><a href=" <?php echo $this->createUrl('sentwxcardpromotion/update',array('companyId'=>$this->companyId,'lid'=>$model->lid)) ?>" class="btn blue">编辑</a>
+								<a href=" <?php echo $this->createUrl('sentwxcardpromotion/update',array('companyId'=>$this->companyId,'lid'=>$model->lid,'show'=>1)) ?>" class="btn yellow">查看详情</a>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
