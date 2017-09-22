@@ -27,6 +27,15 @@ class WxRiJie
 					'msg' => '缺少参数'
 			) );
 		}
+		$sql = 'select * from nb_rijie_code where dpid='.$dpid.' and pos_code="'.$poscode.'" and begin_time="'.$btime.'" and end_time="'.$etime.'" and delete_flag=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if($result){
+			return json_encode ( array (
+					'status' => true,
+					'msg' => ''
+			) );
+		}
+		
 		$lid = new Sequence("rijie_code");
 		$id = $lid->nextval();
 		$data = array(
