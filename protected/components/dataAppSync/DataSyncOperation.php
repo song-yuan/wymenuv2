@@ -1286,6 +1286,16 @@ class DataSyncOperation {
 					// 增加会员卡
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 					$result = self::addMemberCard($pData);
+				}elseif($type==5){
+					$contentArr = split('::', $content);
+					$rjDpid = $contentArr[0];
+					$rjUserId = $contentArr[1];
+					$rjCreateAt = $contentArr[2];
+					$rjPoscode = $contentArr[3];
+					$rjBtime = $contentArr[4];
+					$rjEtime = $contentArr[5];
+					$rjcode = $contentArr[6];
+					$result = WxRijie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 				}
 				$resObj = json_decode($result);
 				if($resObj->status){
@@ -1327,6 +1337,16 @@ class DataSyncOperation {
 						// 增加会员卡
 						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 						$result = self::addMemberCard($pData);
+					}elseif($type==5){
+						$contentArr = split('::', $content);
+						$rjDpid = $contentArr[0];
+						$rjUserId = $contentArr[1];
+						$rjCreateAt = $contentArr[2];
+						$rjPoscode = $contentArr[3];
+						$rjBtime = $contentArr[4];
+						$rjEtime = $contentArr[5];
+						$rjcode = $contentArr[6];
+						$result = WxRijie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 					}
 					$resObj = json_decode($result);
 					if($resObj->status){
