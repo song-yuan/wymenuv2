@@ -265,7 +265,7 @@ class DataAppSyncController extends Controller
 	 	$btime = Yii::app()->request->getParam('btime');
 	 	$etime = Yii::app()->request->getParam('etime');
 	 	$rjcode = Yii::app()->request->getParam('rjcode');
-	 	$result = WxRijie::setRijieCode($dpid,$create_at,$poscode,$btime,$etime,$rjcode);
+	 	$result = WxRiJie::setRijieCode($dpid,$create_at,$poscode,$btime,$etime,$rjcode);
 	 	echo $result;exit;
 	}
 	/**
