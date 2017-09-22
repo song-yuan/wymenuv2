@@ -1346,7 +1346,7 @@ class DataSyncOperation {
 						$rjBtime = $contentArr[4];
 						$rjEtime = $contentArr[5];
 						$rjcode = $contentArr[6];
-						$result = WxRijie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
+						$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 					}
 					$resObj = json_decode($result);
 					if($resObj->status){
