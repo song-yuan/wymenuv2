@@ -224,6 +224,9 @@
 	<div class="portlet-title">
 		<div class="caption"><i class="fa fa-group"></i>会员列表</div>
 		<div class="actions">
+			<a href="javascript:;" class="btn yellow all_save">
+				<i class="fa fa-pencil"></i> 全部群发
+			</a>
 			<a href="javascript:;" class="btn red add_save">
 				<i class="fa fa-pencil"></i> 手动群发
 			</a>
@@ -471,29 +474,41 @@ if (jQuery().datepicker) {
     		});
     })
 
-//var $modal = $('.modal');
-$('.add_save').on('click', function(){
-	<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
-		alert("您没有权限！");return false;
-	<?php endif;?>
-	var aa = document.getElementsByName("idchk");
-	var users=new Array();
-	for (var i = 0; i < aa.length; i++) {
-		if (aa[i].checked){
-			users += aa[i].value +',';
-	            //alert(str);
+	//var $modal = $('.modal');
+	$('.add_save').on('click', function(){
+		<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+			alert("您没有权限！");return false;
+		<?php endif;?>
+		var aa = document.getElementsByName("idchk");
+		var users=new Array();
+		for (var i = 0; i < aa.length; i++) {
+			if (aa[i].checked){
+				users += aa[i].value +',';
+		            //alert(str);
+		    }
+		}
+	    if(users!=''){
+	    	users = users.substr(0,users.length-1);//除去最后一个“，”
+	    }else{
+	    	alert("<?php echo yii::t('app','请勾选会员，再发送优惠券！');?>");
+	    	return false;
 	    }
-	}
-    if(users!=''){
-    	users = users.substr(0,users.length-1);//除去最后一个“，”
-    }else{
-    	alert("<?php echo yii::t('app','请勾选会员，再发送优惠券！');?>");
-    	return false;
-    }
-    //alert(users);
-    modalconsumetotal=$('#portlet-consume');
-    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/addprod',array('companyId'=>$this->companyId));?>/users/'+users, '', function(){modalconsumetotal.modal();});
-});
+	    //alert(users);
+	    modalconsumetotal=$('#portlet-consume');
+	    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/addprod',array('companyId'=>$this->companyId));?>/users/'+users, '', function(){modalconsumetotal.modal();});
+	});
+
+	$('.all_save').on('click', function(){
+		<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
+			alert("您没有权限！");return false;
+		<?php endif;?>
+	    if(confirm('确认要群发所有满足该条件的会员吗 ? ')){
+		    //alert(users);
+		    modalconsumetotal=$('#portlet-consume');
+		    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/addprod',array('companyId'=>$this->companyId,'users'=>$alluserid));?>', '', function(){modalconsumetotal.modal();});
+	    }
+	});
+
 
 var selectcountry;
 
