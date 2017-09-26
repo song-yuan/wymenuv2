@@ -276,6 +276,7 @@ class WxOrder
 	    				'order_status'=>2,
 	    				'order_type'=>$this->type,
 	    				'takeout_typeid'=>$this->takeoutTypeId,
+	    				'appointment_time'=>date('Y-m-d H:i:s',$time),
 	    				'is_sync'=>DataSync::getInitSync(),
 	    		);
 	    		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
