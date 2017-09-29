@@ -991,12 +991,8 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time','');
 		$dpname = Yii::app()->request->getParam('dpname','');
 	
-		$command = Yii::app()->db->createCommand('call cf_opts(27,"2017-08-01","2017-09-30",1,1,@s);select * from nb_optypetotal;');
-		//$models = $command->queryALL();
-		
-		
-		$reg = "davafy@davafy.com";
-		$cmd = Yii::app()->db->createCommand('call cf_opts_dbtet(27,"2017-09-01","2017-09-30",@s);');
+		$reg = 'call cf_opts_dbtet('.$this->companyId.',"'.$begin_time.'","'.$end_time.'",@s);';
+		$cmd = Yii::app()->db->createCommand($reg);
 		$res = $cmd->execute();
 		$s = Yii::app()->db->createCommand("select * from nb_optypetotal;");
 		$prices = $s->queryAll();
