@@ -73,7 +73,8 @@
 			<input type="hidden" name="address" value="-1"/>
 		</div>
 		<?php endif;?>
-		<div class="order-time arrowright" style="margin:10px 0;">
+	</div>
+	<div class="order-time arrowright" style="margin:10px 0;">
 		<div class="time-lt">送达时间</div>
 		<div class="time-rt">
 			<select name="order_time">
@@ -86,7 +87,6 @@
             </select>
 		</div>
 		<div class="clear"></div>
-	</div>
 	</div>
 <?php elseif($this->type==3):?>
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">就餐人数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="3" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
