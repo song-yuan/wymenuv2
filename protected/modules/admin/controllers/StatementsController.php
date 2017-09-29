@@ -850,21 +850,21 @@ public function actionPayallReport(){
 		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
 				.' t.dpid,t.username,t.create_at,t.poscode, '
 				.' sum(t.pay_amount_total) as all_reality,sum(t.pay_order_num) as all_nums, '
-				.' ifnull(op0.all_reality,0) as cash_money, '
-				.' ifnull(op1.all_reality,0) as wx_money, '
-				.' ifnull(op2.all_reality,0) as ali_money, '
-				.' ifnull(op3.all_reality,0) as orther_money, '
-				.' ifnull(op4.all_reality,0) as member_money, '
-				.' ifnull(op5.all_reality,0) as visa_money, '
-				.' ifnull(op8.all_reality,0) as jifen_money, '
-				.' ifnull(op9.all_reality,0) as cupon_money, '
-				.' ifnull(op10.all_reality,0) as wxyue_money, '
-				.' ifnull(op12.all_reality,0) as wxord_money, '
-				.' ifnull(op13.all_reality,0) as wxwm_money, '
-				.' ifnull(op14.all_reality,0) as mt_money, '
-				.' ifnull(op15.all_reality,0) as elem_money, '
-				.' ifnull(op20.all_reality,0) as maoli_money,op20.all_nums as maoli_nums, '
-				.' ifnull(op22.all_reality,0) as chunli_money,op22.all_nums as chunli_nums '
+				.' ifnull(op0.all_reality,"") as cash_money, '
+				.' ifnull(op1.all_reality,"") as wx_money, '
+				.' ifnull(op2.all_reality,"") as ali_money, '
+				.' ifnull(op3.all_reality,"") as orther_money, '
+				.' ifnull(op4.all_reality,"") as member_money, '
+				.' ifnull(op5.all_reality,"") as visa_money, '
+				.' ifnull(op8.all_reality,"") as jifen_money, '
+				.' ifnull(op9.all_reality,"") as cupon_money, '
+				.' ifnull(op10.all_reality,"") as wxyue_money, '
+				.' ifnull(op12.all_reality,"") as wxord_money, '
+				.' ifnull(op13.all_reality,"") as wxwm_money, '
+				.' ifnull(op14.all_reality,"") as mt_money, '
+				.' ifnull(op15.all_reality,"") as elem_money, '
+				.' ifnull(op20.all_reality,"") as maoli_money,op20.all_nums as maoli_nums, '
+				.' ifnull(op22.all_reality,"") as chunli_money,op22.all_nums as chunli_nums '
 				.' from nb_order_paytype_total t '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
@@ -979,6 +979,43 @@ public function actionPayallReport(){
 				'userid'=>$userid,
 				'dpname'=>$dpname,
 		));
+	}
+	
+	
+
+	public function actionRijieReportSp(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
+		$dpname = Yii::app()->request->getParam('dpname','');
+	
+		$reg = 'call cf_opts_dbtet('.$this->companyId.',"'.$begin_time.'","'.$end_time.'",@s);';
+		$cmd = Yii::app()->db->createCommand($reg);
+		$res = $cmd->execute();
+		$s = Yii::app()->db->createCommand("select * from nb_optypetotal;");
+		$prices = $s->queryAll();
+		
+		//var_dump($models);exit;
+		
+			$payments = $this->getPayment($this->companyId);
+			$username = $this->getUsername($this->companyId);
+			$comName = $this->getComName();
+			//var_dump($model);exit;
+			$this->render('rijieReportSp',array(
+					//'models'=>$model,
+					'prices'=>$prices,
+					'begin_time'=>$begin_time,
+					'end_time'=>$end_time,
+					'text'=>$text,
+					'str'=>$str,
+					'comName'=>$comName,
+					'payments'=>$payments,
+					'username'=>$username,
+					'userid'=>$userid,
+					'dpname'=>$dpname,
+			));
 	}
 
 	public function actionComPaymentReport(){
