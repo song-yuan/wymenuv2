@@ -37,7 +37,18 @@
 <div class="order-site">
 	<?php if($order['order_type']==6):?>
 	<span>类型: <?php if($order['takeout_typeid']){ echo '打包';}else{ echo '堂食';}?></span>
+	
+	<?php if($order['appointment_time']!=$order['create_at']):?>
 	<span>取餐时间: <?php echo $order['appointment_time'];?></span>
+	<?php endif;?>
+	
+	<?php elseif($order['order_type']==2):?>
+	<span>类型: 外卖</span>
+	
+	<?php if($order['appointment_time']!=$order['create_at']):?>
+	<span>期望时间: <?php echo $order['appointment_time'];?></span>
+	<?php endif;?>
+	
 	<?php endif;?>
 	<span>交易序号: <?php echo $order['account_no'];?></span>
 	<span>下单时间: <?php echo $order['create_at'];?></span>
