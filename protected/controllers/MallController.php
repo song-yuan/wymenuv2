@@ -267,7 +267,7 @@ class MallController extends Controller
 			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
 			}
 			//预订时间
-			if($this->type==6){
+			if($this->type==6||$this->type==2){
 				$orderTime = date('Y-m-d H:i:s',strtotime('+'. $orderTime*60 .' seconds'));
 			}
 			if($orderTime){
