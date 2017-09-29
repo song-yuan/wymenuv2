@@ -14,7 +14,7 @@
 <div class="order-title">取餐号: <?php echo substr($order['lid'], -4);?></div>
 <div class="order-site">
 	<div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div>
-	<div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '<span class="font_org">已支付</span>';elseif ($order['order_status']==7) echo '<span class="font_l">已取消</span>';else echo '<span class="font_org">已完成</span>';?></div>
+	<div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';elseif ($order['order_status']==7) echo '<span style="color:#999999;font-size:18px;">已取消</span>';else echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';?></div>
 	<div class="clear"></div>
 </div>
 <?php if($address):?>
