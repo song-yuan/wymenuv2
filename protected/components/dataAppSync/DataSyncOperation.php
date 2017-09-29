@@ -883,16 +883,20 @@ class DataSyncOperation {
 						'operator'=>$admin_id,
 				));
 			}else{
+				$total_fee = $total_fee*100;
+				$refund_fee = $refund_fee*100;
 				$input = new WxPayRefund();
 				$input->SetOut_trade_no($out_trade_no);
-				$input->SetTotal_fee($total_fee*100);
-				$input->SetRefund_fee($refund_fee*100);
+				$input->SetTotal_fee($total_fee);
+				$input->SetRefund_fee($refund_fee);
 				$input->SetOut_refund_no($out_refund_no);
 				 
 				$result = WxPayApi::refund($input);
 			}
 			if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
 				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
+			}elseif($result['return_code']=='SUCCESS'&&$result['result_code']=='FAIL'){
+				$msg = array('status'=>true,'msg'=>$result);
 			}else{
 				$msg = array('status'=>false,'msg'=>$result);
 			}
