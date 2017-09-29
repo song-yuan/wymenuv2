@@ -407,7 +407,8 @@
 	
 	<div id="container" class="container">
 		<div id="product-top" class="container-top" style="display:block;">
-			<div><?php echo $topTitle;?></div>
+			<div class="left"><?php echo $topTitle;?></div>
+			<div class="right arrowright">活动 ></div>
 		</div>
 		
 	</div>

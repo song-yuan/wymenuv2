@@ -11,12 +11,15 @@ class WxPromotion
 	public $userId;
 	public $type;
 	public $promotionProductList;
+	public $buySentProductList;
+	public $fullSentList;
 	public function __construct($dpid,$userId,$type){
 		$this->dpid = $dpid;
 		$this->userId = $userId;
 		$this->type = $type;
 		$this->getPromotionDetail();
 		$this->getBuySentDetail();
+		$this->getFullSentDetail();
 	}
 	public function getPromotionDetail(){
 		$now = date('Y-m-d H:i:s',time());
@@ -131,13 +134,27 @@ class WxPromotion
 		$this->buySentProductList = $promotionArr;
 	}
 	/**
+	 * 
+	 * 满送 满减
+	 * 
+	 */
+	public function getFullSentDetail(){
+		$fullsentArr = array();
+		$fullSent = WxFullSent::getAllFullsent($this->dpid, 0);
+		array_push($fullsentArr, $fullSent);
+		$fullMinus = WxFullSent::getAllFullsent($this->dpid, 1);
+		array_push($fullsentArr, $fullMinus);
+		$this->fullSentList = $fullsentArr;
+	}
+	/**
 	 * 获取活动信息
+	 * promotion 普通优惠 buysent 买送优惠 fullsent0 满送 fullsent1 满减
 	 * 
 	 */
 	 public static function getPromotion($dpid,$promotionType,$promotionId){
 	 	if($promotionType=='promotion'){
 	 		$sql = 'select * from nb_normal_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
-	 	}else{
+	 	}elseif($promotionType=='buysent'){
 	 		$sql = 'select * from nb_buysent_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
 	 	}
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$promotionId)->queryRow();
