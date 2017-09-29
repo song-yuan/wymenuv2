@@ -1042,6 +1042,7 @@ class DataSyncTables
         		"promotion_abstract varchar(255) NOT NULL,".
         		"promotion_memo text DEFAULT NULL,".
         		"promotion_type varchar(2) NOT NULL DEFAULT '0',".
+        		"can_cupon varchar(2) NOT NULL DEFAULT '0',".
         		"begin_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"end_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"weekday varchar(32) NOT NULL DEFAULT '0',".
@@ -1049,6 +1050,7 @@ class DataSyncTables
         		"day_end varchar(8) NOT NULL DEFAULT '00:00',".
         		"to_group varchar(2) NOT NULL DEFAULT '0',".
         		"group_id int(10) NOT NULL DEFAULT '0',".
+        		"order_num tinyint(4) NOT NULL DEFAULT '0',".
         		"is_available varchar(2) NOT NULL DEFAULT '0',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
@@ -1066,6 +1068,8 @@ class DataSyncTables
         		"is_set varchar(2) NOT NULL DEFAULT '0',".
         		"product_id int(10) NOT NULL DEFAULT '0',".
         		"phs_code varchar(15) NOT NULL DEFAULT '0',".
+        		"s_product_id int(10) NOT NULL DEFAULT '0',".
+        		"s_phs_code varchar(15) NOT NULL DEFAULT '0',".
         		"buy_num int(3) NOT NULL DEFAULT '0',".
         		"sent_num int(3) NOT NULL DEFAULT '0',".
         		"limit_num int(3) NOT NULL DEFAULT '0',".

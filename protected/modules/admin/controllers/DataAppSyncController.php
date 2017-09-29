@@ -260,7 +260,12 @@ class DataAppSyncController extends Controller
 	 public function actionCloseAccount(){
 	 	$dpid = Yii::app()->request->getParam('dpid');
 	 	$userId = Yii::app()->request->getParam('uid');
-	 	$result = DataSyncOperation::operateCloseAccount($dpid,$userId);
+	 	$create_at = Yii::app()->request->getParam('create_at');
+	 	$poscode = Yii::app()->request->getParam('poscode');
+	 	$btime = Yii::app()->request->getParam('btime');
+	 	$etime = Yii::app()->request->getParam('etime');
+	 	$rjcode = Yii::app()->request->getParam('rjcode');
+	 	$result = WxRiJie::setRijieCode($dpid,$create_at,$poscode,$btime,$etime,$rjcode);
 	 	echo $result;exit;
 	}
 	/**

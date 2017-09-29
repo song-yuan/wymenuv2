@@ -12,7 +12,11 @@
 
 
 <div class="order-title">取餐号: <?php echo substr($order['lid'], -4);?></div>
-<div class="order-site"><div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div><div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '已支付';elseif ($order['order_status']==7) echo '已取消';else echo '已完成';?></div><div class="clear"></div></div>
+<div class="order-site">
+	<div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div>
+	<div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';elseif ($order['order_status']==7) echo '<span style="color:#999999;font-size:18px;">已取消</span>';else echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';?></div>
+	<div class="clear"></div>
+</div>
 <?php if($address):?>
 	<?php if($order['order_type']==2):?>
 	<div class="address">
@@ -33,7 +37,18 @@
 <div class="order-site">
 	<?php if($order['order_type']==6):?>
 	<span>类型: <?php if($order['takeout_typeid']){ echo '打包';}else{ echo '堂食';}?></span>
+	
+	<?php if($order['appointment_time']!=$order['create_at']):?>
 	<span>取餐时间: <?php echo $order['appointment_time'];?></span>
+	<?php endif;?>
+	
+	<?php elseif($order['order_type']==2):?>
+	<span>类型: 外卖</span>
+	
+	<?php if($order['appointment_time']!=$order['create_at']):?>
+	<span>期望时间: <?php echo $order['appointment_time'];?></span>
+	<?php endif;?>
+	
 	<?php endif;?>
 	<span>交易序号: <?php echo $order['account_no'];?></span>
 	<span>下单时间: <?php echo $order['create_at'];?></span>

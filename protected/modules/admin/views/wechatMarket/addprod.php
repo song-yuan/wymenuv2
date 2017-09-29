@@ -106,10 +106,10 @@
 		width: 100%;
 		height: 20px;
 		line-height: 20px;
-		font-size: 16px;
+		font-size: 12px;
 		text-align: center;
-		color: #000;
-		display: none;
+		color: #fff;
+		/*display: none;*/
 	}
 	.wxcardheadr .bot{
 		width: 100%;
@@ -160,7 +160,7 @@
 							<div class="pbom">
 								<div class="pbomhead">
 									<div class="pbomheadtitle mataction" tasteid="0000000000">系统券</div>
-									
+
 									<div class="clear"></div>
 								</div>
 								<div class="pbombody">
@@ -176,8 +176,8 @@
 											</div>
 											<div class="wxcardheadr" style="">
 												<div class="top" style="">满<span><?php echo floor($model->min_consumer);?></span>可使用</div>
-												<div class="cen" style="">赠送1张</div>
 												<div class="bot" style="">代金券</div>
+												<div class="cen" style=""><?php echo $model->cupon_title;?></div>
 											</div>
 										</div>
 										<?php if($model->time_type=='1'):?>
@@ -187,11 +187,11 @@
 										<?php endif;?>
 										<div class="wxcardactive uhide" ><img width="50px" style="" src="../../../../img/checked.png"/></div>
 									</div>
-									
+
 								<?php endforeach;?>
 								<?php endif;?>
 									<div class="clear"></div>
-									
+
 								</div>
 							</div>
 							<div class="addsave"style="float: right;"><button id="add_save">发送</button></div>
@@ -204,9 +204,9 @@
 							<div class="clear"></div>
 						</div>
 					</div>
-							
+
 			</div>
-		
+
 			<!-- END PAGE CONTENT-->
 <script type="text/javascript">
 $(document).ready(function(){
@@ -248,7 +248,7 @@ $(document).ready(function(){
                 if(data.status){
                     layer.msg("发送成功");
                     document.getElementById("close_modal").click();
-                     
+
                 }else{
                     alert("发送失败");
                 }
@@ -264,5 +264,5 @@ $(document).ready(function(){
 
 
 
-});       
-</script>	
+});
+</script>

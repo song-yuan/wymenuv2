@@ -11,6 +11,46 @@ class MtOrder
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		return $res;
 	}
+	public static function token($data){
+		if(empty($data)){
+			return '200';
+		}
+		Helper::writeLog('bd:'.$data);
+		$resArr = MtUnit::dealData($data);
+		$ePoiId = $resArr['ePoiId'];
+		$appAuthToken = $resArr['appAuthToken'];
+		$timestamp = isset($resArr['timestamp'])?$resArr['timestamp']:time();
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and delete_flag=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if($result){
+			$sql = 'update nb_meituan_token set appAuthToken='.$appAuthToken.',timestamp='.$timestamp.' where lid='.$result['lid'].' and dpid='.$result['dpid'];
+			$res = Yii::app()->db->createCommand($sql)->execute();
+			if($res){
+				return '{ "data": "success"}';
+			}
+			return '{ "data": "ERROR"}';
+		}
+		$se = new Sequence("meituan_token");
+		$lid = $se->nextval();
+		$creat_at = date("Y-m-d H:i:s");
+		$update_at = date("Y-m-d H:i:s");
+		$dpid = $ePoiId;
+		$inserData = array(
+				'lid'=>	$lid,
+				'dpid'=> $dpid,
+				'create_at'=>$creat_at,
+				'update_at'=>$update_at,
+				'type'=>'1',
+				'ePoiId'=>	$ePoiId,
+				'appAuthToken'=>$appAuthToken,
+				'timestamp'=>$timestamp,
+		);
+		$res = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
+		if($res){
+			return '{ "data": "success"}';
+		}
+		return '{ "data": "ERROR"}';
+	}
 	public static function order($data){
 		if(empty($data)){
 			return '200';
@@ -46,46 +86,6 @@ class MtOrder
 			return true;
 		}
 	}
-	public static function token($data){
-		if(empty($data)){
-			return '200';
-		}
-		Helper::writeLog('bd:'.$data);
-		$resArr = MtUnit::dealData($data);
-		$ePoiId = $resArr['ePoiId'];
-		$appAuthToken = $resArr['appAuthToken'];
-		$timestamp = isset($resArr['timestamp'])?$resArr['timestamp']:time();
-		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and delete_flag=0';
-		$result = Yii::app()->db->createCommand($sql)->queryRow();
-		if($result){
-			$sql = 'update nb_meituan_token set appAuthToken='.$appAuthToken.',timestamp='.$timestamp.' where lid='.$result['lid'].' and dpid='.$result['dpid'];
-			$res = Yii::app()->db->createCommand($sql)->execute();
-			if($res){
-				return '{ "data": "success"}';
-			}
-			return '{ "data": "ERROR"}';
-		}
-		$se = new Sequence("meituan_token");
-		$lid = $se->nextval();
-		$creat_at = date("Y-m-d H:i:s");
-		$update_at = date("Y-m-d H:i:s");
-		$dpid = $ePoiId;
-		$inserData = array(
-					'lid'=>	$lid,
-					'dpid'=> $dpid,
-					'create_at'=>$creat_at,
-					'update_at'=>$update_at,
-					'type'=>'1',
-					'ePoiId'=>	$ePoiId,
-					'appAuthToken'=>$appAuthToken,
-					'timestamp'=>$timestamp,
-			);
-			$res = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
-		if($res){
-			return '{ "data": "success"}';
-		}
-		return '{ "data": "ERROR"}';
-	}
 	public static function orderconfirm($data){
 		if(empty($data)){
 			return '200';
@@ -94,7 +94,6 @@ class MtOrder
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
-		Helper::writeLog($ePoiId.'--meituan message--'.$order);
 		$result = self::dealOrder($order,$ePoiId,2);
 		$reobj = json_decode($result);
 		if($reobj->status){
@@ -178,6 +177,7 @@ class MtOrder
 	 */
 	public static function callUserFunc($callback){
 		$data = file_get_contents('php://input');
+		Helper::writeLog('meituan message--'.$data);
 		return call_user_func($callback,$data);
 	}
 	/**
@@ -193,6 +193,10 @@ class MtOrder
 		$orderArr = array();
 		$orderTime = $obj->ctime;
 		$payType = $obj->payType;
+		$deliveryTime = $obj->deliveryTime;
+		if($deliveryTime==0){
+			$deliveryTime = $orderTime;
+		}
 		if($payType==2){
 			$orderPayPaytype = 14;
 		}else{
@@ -200,7 +204,7 @@ class MtOrder
 		}
 		$poiReceiveDetail = json_decode($obj->poiReceiveDetail);
 		
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'remark'=>$obj->caution);
+		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'appointment_time'=>date('Y-m-d H:i:s',$deliveryTime),'remark'=>$obj->caution);
 		$orderArr['order_platform'] = array('original_total'=>$obj->originalPrice,'logistics_total'=>$poiReceiveDetail->logisticsFee/100,'platform_total'=>$poiReceiveDetail->foodShareFeeChargeByPoi/100,'pay_total'=>$poiReceiveDetail->onlinePayment/100,'receive_total'=>$poiReceiveDetail->wmPoiReceiveCent/100);
 		$orderArr['order_product'] = array();
 		$array_detail=json_decode($obj->detail,true);

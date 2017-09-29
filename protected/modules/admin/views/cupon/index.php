@@ -21,7 +21,7 @@
     float: left;
 }
 .cupon_item{
-    height: 115px;
+    height: 140px;
     border-radius: 5px;
     border:1px dashed white;
     background-color: #EEA2AD;
@@ -116,7 +116,8 @@
                              <?php endif;?>
                          </div>
                          <div class="min_date">
-                             <div  class="min">满
+                             <div><?php echo $model->cupon_title;?> </div>
+                             <div class="min">满
                                  <span>
                                  <?php echo floor($model->min_consumer);?>
                                  </span>

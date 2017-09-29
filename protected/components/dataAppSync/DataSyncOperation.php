@@ -562,6 +562,7 @@ class DataSyncOperation {
 					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
 					'callno' => isset($orderInfo->callno) ? $orderInfo->callno : $orderInfo->callno,
 					'paytype' => isset ( $orderInfo->paytype ) ? $orderInfo->paytype : '2',
+					'appointment_time' => isset ( $orderInfo->appointment_time ) ? $orderInfo->appointment_time : $createAt,
 					'remark' => isset ( $orderInfo->remark ) ? $orderInfo->remark : '',
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 
@@ -882,16 +883,20 @@ class DataSyncOperation {
 						'operator'=>$admin_id,
 				));
 			}else{
+				$total_fee = $total_fee*100;
+				$refund_fee = $refund_fee*100;
 				$input = new WxPayRefund();
 				$input->SetOut_trade_no($out_trade_no);
-				$input->SetTotal_fee($total_fee*100);
-				$input->SetRefund_fee($refund_fee*100);
+				$input->SetTotal_fee($total_fee);
+				$input->SetRefund_fee($refund_fee);
 				$input->SetOut_refund_no($out_refund_no);
 				 
 				$result = WxPayApi::refund($input);
 			}
 			if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
 				$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
+			}elseif($result['return_code']=='SUCCESS'&&$result['result_code']=='FAIL'){
+				$msg = array('status'=>true,'msg'=>$result);
 			}else{
 				$msg = array('status'=>false,'msg'=>$result);
 			}
@@ -1286,6 +1291,16 @@ class DataSyncOperation {
 					// 增加会员卡
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 					$result = self::addMemberCard($pData);
+				}elseif($type==5){
+					$contentArr = split('::', $content);
+					$rjDpid = $contentArr[0];
+					$rjUserId = $contentArr[1];
+					$rjCreateAt = $contentArr[2];
+					$rjPoscode = $contentArr[3];
+					$rjBtime = $contentArr[4];
+					$rjEtime = $contentArr[5];
+					$rjcode = $contentArr[6];
+					$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 				}
 				$resObj = json_decode($result);
 				if($resObj->status){
@@ -1327,6 +1342,16 @@ class DataSyncOperation {
 						// 增加会员卡
 						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 						$result = self::addMemberCard($pData);
+					}elseif($type==5){
+						$contentArr = split('::', $content);
+						$rjDpid = $contentArr[0];
+						$rjUserId = $contentArr[1];
+						$rjCreateAt = $contentArr[2];
+						$rjPoscode = $contentArr[3];
+						$rjBtime = $contentArr[4];
+						$rjEtime = $contentArr[5];
+						$rjcode = $contentArr[6];
+						$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 					}
 					$resObj = json_decode($result);
 					if($resObj->status){

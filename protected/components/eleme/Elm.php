@@ -257,7 +257,6 @@ class Elm
 			$elemeDy = Elm::getErpDpid($shopId);
 			if($elemeDy){
 				$dpid = $elemeDy['dpid'];
-				Helper::writeLog($dpid.'--eleme message--'.$data);
 				if($type==10){
 					$result = Elm::order($message,$dpid);
 				}elseif($type==12){
@@ -582,6 +581,7 @@ class Elm
 	}
 	public static function callUserFunc($callback){
 		$data = file_get_contents('php://input');
+		Helper::writeLog('eleme message--'.$data);
 		return call_user_func($callback,$data);
 	}
 	public static function dealOrder($order,$dpid,$orderStatus){
@@ -590,6 +590,7 @@ class Elm
 		$createdAt = $me->createdAt;
 		$price = $me->totalPrice;
 		$originalPrice = $me->originalPrice;
+		$book = $me->book; // 是否是预订单
 		$income = $me->income;//店铺实收
 		$daySn = $me->daySn;
 		$groups = $me->groups;
@@ -597,6 +598,11 @@ class Elm
 		$serviceFee = $me->serviceFee;//饿了么服务费
 		$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
 		$orderActivities = $me->orderActivities;// 订单活动
+		if($book){
+			$deliveryTime = $me->deliverTime;
+		}else{
+			$deliveryTime = $createdAt;
+		}
 		if($me->onlinePaid){
 			$payType = 2;
 			$orderPayPaytype = 15;
@@ -605,7 +611,7 @@ class Elm
 			$orderPayPaytype = 0;
 		}
 		$orderArr = array();
-		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$income,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn,'paytype'=>$payType,'remark'=>$me->description);
+		$orderArr['order_info'] = array('creat_at'=>$createdAt,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$orderStatus,'order_type'=>8,'should_total'=>$income,'reality_total'=>$originalPrice,'takeout_typeid'=>0,'callno'=>$daySn,'paytype'=>$payType,'appointment_time'=>$deliveryTime,'remark'=>$me->description);
 		$orderArr['order_platform'] = array('original_total'=>$originalPrice,'logistics_total'=>$deliverFee,'platform_total'=>$serviceFee,'pay_total'=>$price,'receive_total'=>$income);
 		$orderArr['order_product'] = array();
 		foreach ($groups as $group){

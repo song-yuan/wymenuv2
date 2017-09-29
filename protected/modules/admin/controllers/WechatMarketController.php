@@ -178,69 +178,66 @@ class WechatMarketController extends BackendController {
 		$order=" consumetotal";
 
 		$sql=$sql." order by ".$order.$sort;
-		//echo $sql;exit;
-		//$models=$db->createCommand($sql)->queryAll();
-		//		$criteria = new CDbCriteria;
-			//		$criteria->condition =  ' t.dpid='.$companyId;
+		$allmodels=$db->createCommand($sql)->queryAll();
+		$alluserid = array();
+		foreach ($allmodels as $value) {
+			array_push($alluserid,$value['lid']);
+		}
+		$alluserid=implode(',',$alluserid);
+		// echo $alluserid;exit;
 		$pages = new CPagination($db->createCommand("select count(*) from (".$sql.") a")->queryScalar());
 		$pages -> pageSize = 100;
 		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-			$models = $pdata ->queryAll();
-			//echo $sql;exit;
-			//		$pages->applyLimit($criteria);
-			//                $criteria->with =  array("level");
-			//		$models = BrandUser::model()->findAll($criteria);
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata ->queryAll();
 
-			//检索条件会员等级
-			$criteriauserlevel = new CDbCriteria;
-			$criteriauserlevel->condition =  ' t.delete_flag=0 and t.dpid='.$companyId;
-			$userlevels = BrandUserLevel::model()->findAll($criteriauserlevel);
+		//检索条件会员等级
+		$criteriauserlevel = new CDbCriteria;
+		$criteriauserlevel->condition =  ' t.delete_flag=0 and t.dpid='.$companyId;
+		$userlevels = BrandUserLevel::model()->findAll($criteriauserlevel);
 
-			//一下为测试，要调用微信接口，去具体的数据
-			////////////////////////////调用接口，从数据库取出微信分组数据，对应相应的名称，整合成数组。cf
-			$weixingroups=array(array("id"=>"100","name"=>"分组1"),array("id"=>"200","name"=>"分组2"));
+		//一下为测试，要调用微信接口，去具体的数据
+		//调用接口，从数据库取出微信分组数据，对应相应的名称，整合成数组。cf
+		$weixingroups=array(array("id"=>"100","name"=>"分组1"),array("id"=>"200","name"=>"分组2"));
 
 
-		//var_dump($models);exit;
-			$this->render('wxmembercube',array(
-				'models'=>$models,
-				'findsex'=>$findsex,
-				'agefrom'=>$agefrom,
-				'ageto'=>$ageto,
-				'birthfrom'=>$birthfrom,
-				'birthto'=>$birthto,
-				'userlevels'=>$userlevels,
-				'finduserlevel'=>$finduserlevel,
-				'weixingroups'=>$weixingroups,
-				'findweixingroup'=>$findweixingroup,
-
-				'noordertime'=>$noordertime,
-				
-				'province'=>$findprovince,
-				'city'=>$findcity,
-				'area'=>$findarea,
-
-				'pointfrom'=>$pointfrom,
-				'pointto'=>$pointto,
-				'remainfrom'=>$remainfrom,
-				'remainto'=>$remainto,
-				'datefrom'=>$datefrom,
-				'dateto'=>$dateto,
-				'consumetotalfrom'=>$consumetotalfrom,
-				'consumetotalto'=>$consumetotalto,
-				'timesfrom'=>$timesfrom,
-				'timesto'=>$timesto,
-				'cardmobile'=>$cardmobile,
-				'more'=>$more,
-				'order'=>$o,
-				'sort'=>$s,
-				'pages'=>$pages,
-				'source'=>$source,
-				'foucsfrom'=>$foucsfrom,
-				'foucsto'=>$foucsto,
-				));
+	//var_dump($models);exit;
+		$this->render('wxmembercube',array(
+			'models'=>$models,
+			'alluserid'=>$alluserid,
+			'findsex'=>$findsex,
+			'agefrom'=>$agefrom,
+			'ageto'=>$ageto,
+			'birthfrom'=>$birthfrom,
+			'birthto'=>$birthto,
+			'userlevels'=>$userlevels,
+			'finduserlevel'=>$finduserlevel,
+			'weixingroups'=>$weixingroups,
+			'findweixingroup'=>$findweixingroup,
+			'noordertime'=>$noordertime,
+			'province'=>$findprovince,
+			'city'=>$findcity,
+			'area'=>$findarea,
+			'pointfrom'=>$pointfrom,
+			'pointto'=>$pointto,
+			'remainfrom'=>$remainfrom,
+			'remainto'=>$remainto,
+			'datefrom'=>$datefrom,
+			'dateto'=>$dateto,
+			'consumetotalfrom'=>$consumetotalfrom,
+			'consumetotalto'=>$consumetotalto,
+			'timesfrom'=>$timesfrom,
+			'timesto'=>$timesto,
+			'cardmobile'=>$cardmobile,
+			'more'=>$more,
+			'order'=>$o,
+			'sort'=>$s,
+			'pages'=>$pages,
+			'source'=>$source,
+			'foucsfrom'=>$foucsfrom,
+			'foucsto'=>$foucsto,
+			));
 		}
 
 		public function actionAddprod() {
@@ -252,7 +249,7 @@ class WechatMarketController extends BackendController {
 			$criteria->order = ' t.lid asc ';
 			$models = Cupon::model()->findAll($criteria);
 
-		//var_dump($products);exit;
+			// p($models);
 			$this->render('addprod' , array(
 				'models' => $models,
 				'users' => $users,
