@@ -241,8 +241,8 @@ class WxCupon
 				$day = $cupon['day'];
 				$dayBegin = $cupon['day_begin'];
 					
-				$validDay = date('Y-m-d H:i:s',strtotime('+'.$dayBegin.' day'));
-				$closeDay = date('Y-m-d H:i:s',strtotime('+'.($dayBegin+$day).' day'));
+				$validDay = date('Y-m-d 00:00:00',strtotime('+'.$dayBegin.' day'));
+				$closeDay = date('Y-m-d 23:59:59',strtotime('+'.($dayBegin+$day).' day'));
 			}
 			if($closeDay>$now){
 				$se = new Sequence("cupon_branduser");
