@@ -15,7 +15,15 @@
 .table{
     background: white;
 }
-
+.input-large {
+     width: 245px !important;
+}
+.input-large input{
+     width: 105px !important;
+}
+.width2{
+    width: 200px;
+}
 </style>
 <div class="page-content">
     <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -50,10 +58,17 @@
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet box purple">
                     <div class="portlet-title">
-                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','POS机结算报表');?></div>
-                        <div class="actions">
-                        <span style="color:white;">选择查询状态</span>
 
+                        <div class="actions">
+                        <?php if(Yii::app()->user->role < 5):?>
+                            <select id="cdpid" class="btn yellow width" >
+                                <option value="" ><?php echo yii::t('app','- 选择总公司 -');?></option>
+                                <?php foreach ($companys as $company):?>
+                                <option value="<?php echo $company['dpid']; ?>" <?php if ($company['dpid'] == $cdpid){echo "selected";}?> ><?php echo yii::t('app',$company['company_name']);?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
+                            <input type="search" name="cname" id="cname" value="" placeholder="输入店铺名关键字(可选)" class="btn width2">
                                 <select id="pos_count" class="btn yellow width" >
                                     <option value="2" <?php if ($pos_count==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
                                     <option value="1" <?php if ($pos_count==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','已结算');?></option>
@@ -66,9 +81,9 @@
                                 </select>
                                 <div class="btn-group">
                                     <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-                                        <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">
+                                        <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>" <?php if ($pos_used != 1){echo 'disabled';} ?> >
                                         <span class="input-group-addon">~</span>
-                                        <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">
+                                        <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>" <?php if ($pos_used != 1){echo 'disabled';} ?> >
                                     </div>
                                 </div>
                                 <div class="btn-group">
@@ -82,7 +97,7 @@
                                 <div class="btn-group">
                                     <button type="submit"  class="btn red" id="nocounts"><?php echo yii::t('app','取消结算');?></button>
                                 </div>
-                            <?php endif;?>
+                                <?php endif;?>
 
                                 <div class="btn-group">
                                     <button type="submit"  class="btn blue" id="excel"><?php echo yii::t('app','导出Excel');?></button>
@@ -114,6 +129,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php if ($pos_used == 1) : ?>
                                         <tr>
                                             <th noWrap><?php echo yii::t('app','之前已使用未结算');?></th>
                                             <th></th>
@@ -178,8 +194,9 @@
                                         <th class="table-checkbox"></th>
                                         <?php endif; ?>
                                     </tr>
+                                    <?php endif; ?>
                                     <?php foreach ($models as $model):?>
-                                        <?php 
+                                        <?php
                                             if($pos_count==2&&$pos_used==2){
                                                 $ss = true;
                                             }else{
@@ -237,10 +254,10 @@
                         </table>
                     </div>
                 </div>
-			<!-- END EXAMPLE TABLE PORTLET-->
+            <!-- END EXAMPLE TABLE PORTLET-->
             </div>
     </div>
-	<!-- END PAGE CONTENT-->
+    <!-- END PAGE CONTENT-->
 
 
 <script>
@@ -270,8 +287,8 @@
                         location.reload();
                     },
                 error:function(){
-    				layer.msg("<?php echo yii::t('app','结算状态修改失败'); ?>");
-    			},
+                    layer.msg("<?php echo yii::t('app','结算状态修改失败'); ?>");
+                },
         });
     });
 
@@ -359,35 +376,46 @@
             var end_time = $('#end_time').val();
             var pos_count = $('#pos_count').val();
             var pos_used = $('#pos_used').val();
-
-            location.href="<?php echo $this->createUrl('poscount/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
+            var cname = $('#cname').val();
+            <?php if(Yii::app()->user->role < 5):?>
+            var index = document.getElementById('cdpid').selectedIndex;
+            var val = document.getElementById('cdpid').options[index].value;
+            location.href="<?php echo $this->createUrl('poscount/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used+"/cdpid/"+val+"/cname/"+cname;
+            <?php endif;?>
+            location.href="<?php echo $this->createUrl('poscount/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used+"/cname/"+cname;
 
     });
 
+    $('#pos_used').change(function(){
+    var index = document.getElementById('pos_used').selectedIndex;
+    var val = document.getElementById('pos_used').options[index].value;
+    if (val != 1) {
+        $('#begin_time,#end_time').attr('disabled', 'disabled');
+    }else{
+        $('#begin_time,#end_time').removeAttr('disabled');
+    }
 
+    });
 
-    // $('#countNum').click(function(){
-    // location.href="<?php echo $this->createUrl('poscount/countNum' , array('companyId'=>$this->companyId));?>";
-    // });
-
-    // $('#POSsearch').click(function(){
-    // var index0 = document.getElementById('statu').selectedIndex;
-    // var statu = document.getElementById('statu').options[index0].value;
-
-    // var index1 = document.getElementById('use_statu').selectedIndex;
-    // var use_statu = document.getElementById('use_statu').options[index1].value;
-    // location.href="<?php echo $this->createUrl('poscount/hqsearch' , array('companyId'=>$this->companyId));?>/statu/"+statu+'/use_statu/'+use_statu;
-    // });
     $('#excel').click(function excel(){
-        var begin_time = $('#begin_time').val();
+            var begin_time = $('#begin_time').val();
             var end_time = $('#end_time').val();
             var pos_count = $('#pos_count').val();
             var pos_used = $('#pos_used').val();
-            //alert(begin_time);alert(end_time);
+            var cname = $('#cname').val();
+            <?php if(Yii::app()->user->role < 5):?>
+            var index = document.getElementById('cdpid').selectedIndex;
+            var val = document.getElementById('cdpid').options[index].value;
             if(confirm('确认导出并且下载Excel文件吗？')){
-                location.href="<?php echo $this->createUrl('poscount/poscountExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used;
+                location.href="<?php echo $this->createUrl('poscount/poscountExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used+"/cdpid/"+val+"/cname/"+cname;
+            }
+            <?php endif;?>
+            if(confirm('确认导出并且下载Excel文件吗？')){
+                location.href="<?php echo $this->createUrl('poscount/poscountExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used+"/cname/"+cname;
             }
     });
+
+
 
     jQuery(document).ready(function(){
         if (jQuery().datepicker) {
