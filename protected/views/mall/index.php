@@ -445,7 +445,9 @@
 </div>
 <?php if($bottomDesc!=''):?>
 <div class="bottom-des">
-	<?php echo $bottomDesc;?>
+	<div class="scroll-desc">
+		<?php echo $bottomDesc;?>
+	</div>
 </div>
 <?php endif;?>
 <footer>
