@@ -45,19 +45,26 @@ ul, li {
 .scroll-desc span{
 	display:block;
 }
-@keyframes scrospan {
-    0% {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-    100% {
-        -webkit-transform: translate3d(0, -30px, 0);
-        transform: translate3d(0, -30px, 0);
-    }
+ @-webkit-keyframes anim1{
+   0% {top: 30px;opacity: 1}
+   50% {top: -30px;opacity: 1}
+   75% {top: -30px ;opacity: 0}
+   100%{top:30px;opacity: 0}
+ }
+ @-webkit-keyframes anim2{
+
+   0% {top: -30px;opacity: 0}
+   25% {top: 30px;opacity: 0}
+   50% {top: 30px;opacity: 1}
+   100%{top: -30px;opacity: 1}
+ }
+ .scroll-desc span:nth-child(1){
+    -webkit-animation:anim1 3s linear infinite;
+    animation:anim1 3s linear infinite;
 }
-.bottom-des .scroll-desc{
-    -webkit-animation: 3s scrospan linear infinite normal;
-    animation: 3s scrospan linear infinite normal;
+ .scroll-desc span:nth-child(2){
+    -webkit-animation:anim2 3s linear infinite;
+    animation:anim2 3s linear infinite;
 }
 footer {
 	width: 100%;
