@@ -33,7 +33,7 @@ class WxFullSent
 					unset($fullsent[$key]);
 					continue;
 				}
-				$fullsent['sent_product'] = $fullsentDetail;
+				$fullsent[$key]['sent_product'] = $fullsentDetail;
 			}
 		}
 	    return array_merge($fullsent);

@@ -30,20 +30,20 @@
 	$cartStr = '';
 	$topTitle = '';
 	$bottomDesc = '';
-	$sents = $fullsents[0]; // 满送
+	$fulsent = $fullsents[0]; // 满送
 	$fullminus = $fullsents[1]; // 满减
 	if(!empty($fullminus)){
 		$bottomDesc .= '<span>';
-		foreach ($fullminus as $minus){
-			$bottomDesc .= $sent['title'].';';
+		foreach ($fullminus as $fminus){
+			$bottomDesc .= $fminus['title'].';';
 		}
 		$bottomDesc = rtrim($bottomDesc,';');
 		$bottomDesc .= '</span>';
 	}
-	if(!empty($sents)){
+	if(!empty($fulsent)){
 		$bottomDesc .= '<span>';
-		foreach ($sents as $sent){
-			$bottomDesc .= $sent['title'].';';
+		foreach ($fulsent as $fsent){
+			$bottomDesc .= $fsent['title'].';';
 		}
 		$bottomDesc = rtrim($bottomDesc,';');
 		$bottomDesc .= '</span>';
@@ -248,6 +248,7 @@
 		$bottomDesc = rtrim($bottomDesc,';');
 		$bottomDesc .= '</span>';
 	}
+	
 	foreach ($products as $product){
 		if($product['main_picture']==''){
 			$product['main_picture']=$defaultNavImg;
@@ -277,7 +278,6 @@
 					$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
 				}
 				$productStr .='</p>';
-
 
                 $productStr .='<p class="pr">';
                 if($pProduct['member_price']!= $pProduct['original_price']){

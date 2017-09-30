@@ -39,7 +39,7 @@ ul, li {
     line-height: 30px;
     background: rgba(255, 114, 0,0.5);
     z-index: 9001;
-    display:none;
+    font-size:15px;
 }
 
 footer {
