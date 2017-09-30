@@ -44,6 +44,7 @@ ul, li {
 }
 .scroll-desc span{
 	display:block;
+	position:absolute;
 }
  @-webkit-keyframes anim1{
    0% {top: 30px;opacity: 1}
@@ -59,12 +60,12 @@ ul, li {
    100%{top: -30px;opacity: 1}
  }
  .scroll-desc span:nth-child(1){
-    -webkit-animation:anim1 3s linear infinite;
-    animation:anim1 3s linear infinite;
+    -webkit-animation:anim1 5s linear infinite;
+    animation:anim1 5s linear infinite;
 }
  .scroll-desc span:nth-child(2){
-    -webkit-animation:anim2 3s linear infinite;
-    animation:anim2 3s linear infinite;
+    -webkit-animation:anim2 5s linear infinite;
+    animation:anim2 5s linear infinite;
 }
 footer {
 	width: 100%;
