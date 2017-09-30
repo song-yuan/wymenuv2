@@ -1,4 +1,5 @@
 <?php
+
 class PoscountController extends BackendController
 {
     public function beforeAction($action) {
@@ -20,20 +21,21 @@ class PoscountController extends BackendController
         }else{
             $cdpid = $this->companyId;
         }
-        $pos_count = Yii::app()->request->getParam('pos_count',0);
+        $cdpid = Yii::app()->request->getParam('cdpid',$cdpid);
+        $cname = Yii::app()->request->getParam('cname');
+        $pos_count = Yii::app()->request->getParam('pos_count',2);
         $pos_used = Yii::app()->request->getParam('pos_used',1);
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-        $model = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
+        $company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
         // p($model);
         $models=0;
         $CompanyName=null;
         if($cdpid){
 
-            //获取ajax数据,总公司的dpid-----子公司的comp_dpid
-            //$cdpid = Yii::app()->request->getPost('cdpid');//$_POST['cdpid'];
+            
 
-            $CompanyName = Company::model()->findByPk($cdpid)->company_name;
+            // $CompanyName = Company::model()->findByPk($cdpid)->company_name;
             // p($CompanyName);
             //查询子公司POS机数据
                 $time = $end_time.' 23:59:59';
@@ -53,31 +55,27 @@ class PoscountController extends BackendController
                 }else if($pos_used==0){
                     $use_status=' and pss.use_status=0';
                 }
-                // $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
-                //         .' left join nb_company c on(c.dpid = t.dpid ) '
-                //         .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid '.$use_time.$use_status.$status.') '
-                //         .' left join nb_pad_setting_detail psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid ) '
-                //         .' where t.delete_flag =0 and t.dpid in( '
-                //                 .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0  and type = 1)'
-                //         .' order by c.company_name asc';
+                if ($cname != '') {
+                    $cname = ' and company_name like "%'.$cname.'%"';
+                }
                 $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
                         .' left join nb_company c on(c.dpid = t.dpid ) '
                         .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid '.$use_time.$use_status.$status.') '
                         .' left join (select a.lid,a.content,a.dpid,a.pad_setting_id from nb_pad_setting_detail a where  UNIX_TIMESTAMP(a.create_at) in(select max(UNIX_TIMESTAMP(b.create_at)) from nb_pad_setting_detail b where b.dpid=a.dpid and b.pad_setting_id=a.pad_setting_id)) psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid) '
                         .' where t.delete_flag =0 and t.dpid in( '
-                                .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0  and type = 1)'
+                                .' select dpid from nb_company where comp_dpid ='.$cdpid.$cname.' and delete_flag = 0  and type = 1)'
                         .' order by c.company_name asc';
-                        //echo $sql;exit;
-                        //select psd.content from nb_pad_setting_detail psd where psd.dpid = t.dpid and psd.pad_setting_id = t.lid order by psd.create_at desc limit 1
+                     
                 $models = Yii::app()->db->createCommand($sql)->queryALL();
 
         // p($models);
         }
             $this->render('hqindex',array(
+                    'companys'=>$company,
+                    'cdpid'=>$cdpid,
                     'models'=>$models,
                     'pos_count'=>$pos_count,
                     'pos_used'=>$pos_used,
-                    'hqcompany'=>$model,
                     'begin_time'=>$begin_time,
                     'end_time'=>$end_time,
             ));
@@ -124,12 +122,16 @@ class PoscountController extends BackendController
         }else{
             $cdpid = $this->companyId;
         }
+        $cdpid = Yii::app()->request->getParam('cdpid',$cdpid);
+        $cname = Yii::app()->request->getParam('cname');
         $pos_count = Yii::app()->request->getParam('pos_count',2);
         $pos_used = Yii::app()->request->getParam('pos_used',1);
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-        $model = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
+        $company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
         // p($model);
+        $models=0;
+        $CompanyName=null;
 
         if($cdpid){
 
@@ -156,12 +158,15 @@ class PoscountController extends BackendController
             }else if($pos_used==0){
                 $use_status=' and pss.use_status=0';
             }
+            if ($cname != '') {
+                $cname = ' and company_name like "%'.$cname.'%"';
+            }
                 $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
                         .' left join nb_company c on(c.dpid = t.dpid ) '
                         .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid '.$use_time.$use_status.$status.') '
                         .' left join (select a.lid,a.content,a.dpid,a.pad_setting_id from nb_pad_setting_detail a where  UNIX_TIMESTAMP(a.create_at) in(select max(UNIX_TIMESTAMP(b.create_at)) from nb_pad_setting_detail b where b.dpid=a.dpid and b.pad_setting_id=a.pad_setting_id)) psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid) '
                         .' where t.delete_flag =0 and t.dpid in( '
-                                .' select dpid from nb_company where comp_dpid ='.$cdpid.' and delete_flag = 0  and type = 1)'
+                                .' select dpid from nb_company where comp_dpid ='.$cdpid.$cname.' and delete_flag = 0  and type = 1)'
                         .' order by c.company_name asc';
                         //echo $sql;exit;
             $models = Yii::app()->db->createCommand($sql)->queryALL();
@@ -222,6 +227,11 @@ class PoscountController extends BackendController
                                         ),
                         ),
         );
+        if ($pos_used == 1) {
+            $str4 = '之前已使用未结算';
+        }else{
+            $str4 = '';
+        }
         $objPHPExcel->setActiveSheetIndex(0)
         ->setCellValue('A1',yii::t('app','壹点吃餐饮管理系统对账单'))
         ->setCellValue('A2',yii::t('app','店名'))
@@ -234,10 +244,11 @@ class PoscountController extends BackendController
         ->setCellValue('H2',yii::t('app','收银机开始使用时间'))
         ->setCellValue('I2',yii::t('app','收银机MAC地址'))
         ->setCellValue('J2',yii::t('app','排序'))
-        ->setCellValue('A3',yii::t('app','之前已使用未结算'));
+        ->setCellValue('A3',yii::t('app',$str4));
         $j=4;
         if($models){
-            foreach ($models as $key => $v) {
+            if ($pos_used == 1) {
+                foreach ($models as $key => $v) {
                     if( (strtotime($v['used_at'])<strtotime($begin_time)) && $v['status']==0 && $v['use_status']==1 ){
                         if ($v['content']=='undefined') {
                             $v['content']=='';
@@ -263,10 +274,12 @@ class PoscountController extends BackendController
 
                         $j++;
                     }
+                }
             }
         }
         $aa=$j;
         $jj=$j;
+
         if($pos_count=='0'){
             $str1 = '未结算';
         }else if($pos_count=='1'){
@@ -282,9 +295,11 @@ class PoscountController extends BackendController
             $str2 = '全部)';
         }
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$aa,yii::t('app','查询：(').$str1.$str2);
+
+
         if($models){
             foreach ($models as $key => $v) {
-                    if($pos_count==2&&$pos_used==2){
+                    if($pos_count==2 && $pos_used==2){
                         $ss = true;
                     }else{
                         if((strtotime($v['used_at'])>strtotime($begin_time)) && ( $v['used_at'] < date( "Y-m-d H:i:s", strtotime( $end_time." +1 day")))){
@@ -307,8 +322,9 @@ class PoscountController extends BackendController
                         ->setCellValue('F'.$jj,'('.$v['pad_code'].')')
                         ->setCellValue('G'.$jj,$v['poscreate_at'])
                         ->setCellValue('H'.$jj,$v['used_at'])
-                        ->setCellValue('I'.$jj,$v['content'])
+                        ->setCellValue('I'.$jj,$v['content']=='undefined')
                         ->setCellValue('J'.$jj,$v['pad_no']);
+
                         //细边框引用
 
                         $objPHPExcel->getActiveSheet()->getStyle('A'.$jj.':J'.$jj)->applyFromArray($linestyle);
@@ -325,7 +341,7 @@ class PoscountController extends BackendController
         $objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
         $objPHPExcel->getActiveSheet()->mergeCells('A3:J3');
         //单元格加粗，居中：
-        $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$jj)->applyFromArray($lineBORDER);//大边框格式引用
+        // $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$jj)->applyFromArray($lineBORDER);//大边框格式引用
         // 将A1单元格设置为加粗，居中
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
         $objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($linestyle);
