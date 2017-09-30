@@ -31,6 +31,17 @@ ul, li {
 	list-style: none
 }
 
+.bottom-des{
+    position: fixed;
+    bottom: 50px;
+    height: 30px;
+    width: 100%;
+    line-height: 30px;
+    background: rgba(255, 114, 0,0.8);
+    z-index: 9001;
+    font-size:15px;
+}
+
 footer {
 	width: 100%;
 }
