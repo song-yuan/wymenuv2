@@ -22,7 +22,7 @@
      width: 105px !important;
 }
 .width2{
-    width: 200px;
+    width: 191px;
 }
 </style>
 <div class="page-content">
