@@ -46,6 +46,10 @@ ul, li {
 	display:block;
 	position:absolute;
 }
+.scroll-desc span img{
+    width: 20px;
+    vertical-align: middle;
+}
  @-webkit-keyframes anim1{
    0% {top: 30px;opacity: 1}
    50% {top: -30px;opacity: 1}
@@ -53,7 +57,6 @@ ul, li {
    100%{top:30px;opacity: 0}
  }
  @-webkit-keyframes anim2{
-
    0% {top: -30px;opacity: 0}
    25% {top: 30px;opacity: 0}
    50% {top: 30px;opacity: 1}

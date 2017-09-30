@@ -33,7 +33,7 @@
 	$fulsent = $fullsents[0]; // 满送
 	$fullminus = $fullsents[1]; // 满减
 	if(!empty($fullminus)){
-		$bottomDesc .= '<span>';
+		$bottomDesc .= '<span><img src="'.$baseUrl.'/img/mall/act_04.png">';
 		foreach ($fullminus as $fminus){
 			$bottomDesc .= $fminus['title'].';';
 		}
@@ -41,7 +41,7 @@
 		$bottomDesc .= '</span>';
 	}
 	if(!empty($fulsent)){
-		$bottomDesc .= '<span>';
+		$bottomDesc .= '<span><img src="'.$baseUrl.'/img/mall/act_04.png">';
 		foreach ($fulsent as $fsent){
 			$bottomDesc .= $fsent['title'].';';
 		}
@@ -86,7 +86,7 @@
 	}
 	// 买送活动
 	if(!empty($buySentPromotions)){
-		$bottomDesc .= '<span>';
+		$bottomDesc .= '<span><img src="'.$baseUrl.'/img/mall/act_01.png">';
 		foreach ($buySentPromotions as $key=>$buysent){
 			$bottomDesc .= $buysent[0]['promotion_title'].';';
 			if($buysent[0]['main_picture']==''){
@@ -167,7 +167,7 @@
 		$bottomDesc .= '</span>';
 	}
 	if(!empty($promotions)){
-		$bottomDesc .= '<span>';
+		$bottomDesc .= '<span><img src="'.$baseUrl.'/img/mall/act_03.png">';
 		foreach ($promotions as $key=>$promotion){
 			$bottomDesc .= $promotion[0]['promotion_title'].';';
 			if($promotion[0]['main_picture']==''){
