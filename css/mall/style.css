@@ -31,9 +31,9 @@ ul, li {
 	list-style: none
 }
 
-.bottom-des{
+.top-des{
     position: fixed;
-    bottom: 50px;
+    top: 40px;
     height: 30px;
     width: 100%;
     line-height: 30px;

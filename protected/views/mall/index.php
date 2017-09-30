@@ -429,6 +429,13 @@
 	</marquee>
 </div>
 <?php endif;?>
+<?php if($bottomDesc!=''):?>
+<div class="top-des">
+	<div class="scroll-desc">
+		<?php echo $bottomDesc;?>
+	</div>
+</div>
+<?php endif;?>
 <div class="content">
 	<div class="nav-lf">
 		<ul id="nav">
@@ -443,13 +450,6 @@
 		
 	</div>
 </div>
-<?php if($bottomDesc!=''):?>
-<div class="bottom-des">
-	<div class="scroll-desc">
-		<?php echo $bottomDesc;?>
-	</div>
-</div>
-<?php endif;?>
 <footer>
 	<div class="cart-img"><div><img alt="" src="<?php echo $baseUrl;?>/img/mall/navcart.png"></div></div>
 	<div class="ft-lt">
@@ -594,10 +594,13 @@ $(document).ready(function(){
 	var i = 0;
 	var j = 0;
 	var isScroll = false;
-	var cHeight = $('body').height()-50-40;
+	var headHeight = $('.header').height();
+	var topHeight = $('.top-des').height();
+	var footHeight = $('footer').height();
+	var cHeight = $('body').height()-topHeight-headHeight-footHeight;
 	var navListr = '<?php echo $navLiStr;?>';
 	var productStr = '<?php echo $productStr;?>';
-	$(".content").height(cHeight+'px');
+	$(".content").css({"height" : cHeight+"px","padding-top" : (topHeight+headHeight)+"px"});
 	$('#nav').html(navListr);
 	$('#nav').find('li.current').next().addClass('b-radius-rt');
 	$('#container').append(productStr);
