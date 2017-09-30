@@ -91,9 +91,11 @@ class MallController extends Controller
         		}
         	}
         }
+        
         $promotion = new WxPromotion($this->companyId,$userId,$this->type);
         $promotions = $promotion->promotionProductList;
         $buySentPromotions = $promotion->buySentProductList;
+        $fullSents = $promotion->fullSentList;
         $cache = Yii::app()->cache->get($key);
         if($cache!=false){
         	$products = json_decode($cache,true);
