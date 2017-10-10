@@ -110,8 +110,9 @@
 		                ?>
 		            </td>
 		            <td><?php $orders_total_yue = $orders_total_yue+$m['nums_yue'];
-		                echo $m['nums_yue'];?></td>
-		            <td>
+		                echo $m['nums_yue'];?>
+		            </td>
+		            
 		            <td><?php
 		            $wxcharge = $m['all_wxmember'];
 		            $all_wxcharges = $all_wxcharges + $wxcharge;
@@ -163,18 +164,19 @@ jQuery(document).ready(function(){
      	var text = $('#text').val();
      	var userid = $('#userid').val();
      	var dpname = $('#dpname').val();
-     	location.href="<?php echo $this->createUrl('statements/comPaymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname
+     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname
 
 	});
 
 	$('#excel').click(function excel(){
+		return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();
 		var userid = $('#userid').val();
      	var dpname = $('#dpname').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/comPaymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid+"/dpname/"+dpname;
+			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid+"/dpname/"+dpname;
 		}
 	});
 
