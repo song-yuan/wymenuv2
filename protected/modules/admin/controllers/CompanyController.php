@@ -13,8 +13,9 @@ class CompanyController extends BackendController
 	}
 	public function actionList(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$role = Yii::app()->user->role;
 		
-		$this->render('list');
+		$this->render('list',array('role'=>$role));
 	}
 
 
