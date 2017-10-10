@@ -55,7 +55,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?><?php echo $role.'------' ;echo User::POWER_ADMIN; ?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?></div>
 					<div class="actions">
 					<div class="btn-group">
 						<select id="province" name="province" class="selectedclass">

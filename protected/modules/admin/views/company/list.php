@@ -165,7 +165,7 @@
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','店铺管理');?><?php echo $role.'------' ;echo User::POWER_ADMIN; ?></div>
+					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','店铺管理');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					
