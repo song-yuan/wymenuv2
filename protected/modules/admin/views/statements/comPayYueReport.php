@@ -169,7 +169,7 @@ jQuery(document).ready(function(){
 	});
 
 	$('#excel').click(function excel(){
-		return false;
+		//return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();

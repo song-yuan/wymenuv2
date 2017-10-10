@@ -949,6 +949,195 @@ public function actionPayallReport(){
 				'dpname'=>$dpname,
 		));
 	}
+		public function actionComPayYueExport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
+		$dpname = Yii::app()->request->getParam('dpname','');
+
+		if(empty($begin_time) && Yii::app()->user->role >=11){
+			$begin_time = date('Y-m-d',time());
+		}
+		if(empty($end_time) && Yii::app()->user->role >=11){
+			$end_time = date('Y-m-d',time());
+		}
+		if(!empty($dpname)){
+			$dpnames = ' like "%'.$dpname.'%"';
+			$sql = 'select k.lid from nb_order k left join nb_company c on(k.dpid = c.dpid) where k.order_status in(3,4,8) and c.company_name like "%'.$dpname.'%" and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		}else{
+			$dpnames = ' is not null and t.comp_dpid = '.$this->companyId.' or t.dpid ='.$this->companyId;
+			$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in (select c.dpid from nb_company c where (c.comp_dpid = '.$this->companyId.' or c.dpid = '.$this->companyId.') and c.delete_flag =0 and c.type =1) and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		}
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		$sql = 'select year(o.create_at) as y_all,month(o.create_at) as m_all,day(o.create_at) as d_all, '
+				.' t.dpid,t.company_name,o.create_at,o.all_should, '
+				.' o.all_num,op9.all_cupon,op9.all_nums as nums_cupon,op10.all_wxmember,op10.all_nums as nums_yue '
+				.' from nb_company t '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_reality,count(distinct top.order_id) as all_nums,top.dpid '
+					.' from nb_order_pay top '
+					.' where top.paytype !=11 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by top.dpid'
+				.' ) op on(t.dpid = op.dpid) '
+				.' left join ('
+					.' select sum(top.pay_amount) as all_cupon,count(distinct top.order_id) as all_nums,top.dpid '
+					.' from nb_order_pay top '
+					.' where top.paytype =9 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by top.dpid'
+				.' ) op9 on(t.dpid = op9.dpid) '
+				
+				.' left join ('
+					.' select sum(top.pay_amount) as all_wxmember,count(distinct top.order_id) as all_nums,top.dpid '
+					.' from nb_order_pay top '
+					.' where top.paytype =10 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by top.dpid'
+				.' ) op10 on(t.dpid = op10.dpid) '
+				
+				.' left join ('
+					.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid'
+					.' from nb_order ot '
+					.' where ot.order_status in(3,4,8) and ot.lid in('.$ords.') and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
+					.' group by ot.dpid'
+				.' ) o on(t.dpid = o.dpid)'
+				.' where op.all_reality is not null and t.delete_flag =0 and t.company_name '.$dpnames
+				.' group by t.dpid';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+
+
+        $objPHPExcel = new PHPExcel();
+        //设置第1行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+        //设置第2行的行高
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+        $objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+        //设置字体
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+        $objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+        $styleArray1 = array(
+                        'font' => array(
+                                        'bold' => true,
+                                        'color'=>array(
+                                                        'rgb' => '000000',
+                                        ),
+                                        'size' => '20',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        $styleArray2 = array(
+                        'font' => array(
+                                        'color'=>array(
+                                                        'rgb' => 'ff0000',
+                                        ),
+                                        'size' => '16',
+                        ),
+                        'alignment' => array(
+                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        ),
+        );
+        //大边框样式 边框加粗
+        $lineBORDER = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THICK,
+                                                        'color' => array('argb' => '000000'),
+                                        ),
+                        ),
+        );
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+        //细边框样式
+        $linestyle = array(
+                        'borders' => array(
+                                        'outline' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array('argb' => 'FF000000'),
+                                        ),
+                        ),
+        );
+        if($text==1){
+			$str1 = '年';
+		}elseif($text==2){
+			$str1 = '月';
+		}else{
+			$str1 = '日';
+		}
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1',yii::t('app','壹点吃微信会员信息表'))
+        ->setCellValue('A2',yii::t('app','查询：(').$str1.')'.$begin_time.'~'.$end_time)
+        ->setCellValue('A3',yii::t('app','店铺'))
+        ->setCellValue('B3',yii::t('app','时间'))
+        ->setCellValue('C3',yii::t('app','单数'))
+        ->setCellValue('D3',yii::t('app','系统卷'))
+        ->setCellValue('E3',yii::t('app','单数'))
+        ->setCellValue('F3',yii::t('app','微信储值消费'));
+        $j=4;
+        if($models){
+
+                foreach ($models as $v) {
+                	//日月年
+					if($text==1){
+						$str = $v['y_all'];
+					}elseif($text==2){
+						$str = $v['y_all'].-$v['m_all'];
+					}else{
+						$str = $v['y_all'].-$v['m_all'].-$v['d_all'];
+					}
+
+
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$j,$v['company_name'])
+                    ->setCellValue('B'.$j,$str)
+                    ->setCellValue('C'.$j,$v['nums_cupon'])
+                    ->setCellValue('D'.$j,$v['all_cupon'])
+                    ->setCellValue('E'.$j,$v['nums_yue'])
+                    ->setCellValue('F'.$j,$v['all_wxmember']);
+                    $j++;
+                }
+            }
+
+        //冻结窗格
+        $objPHPExcel->getActiveSheet()->freezePane('A4');
+        //合并单元格
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:R1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:R2');
+        //单元格加粗，居中：
+        $objPHPExcel->getActiveSheet()->getStyle('A1:R'.$j)->applyFromArray($lineBORDER);//大边框格式引用
+        // 将A1单元格设置为加粗，居中
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:G2')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($linestyle);
+        //加粗字体
+        $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getFont()->setBold(true);
+        //设置字体垂直居中
+        $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        //设置字体水平居中
+        $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        //设置每列宽度
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        //输出
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $filename="支付方式(储值)统计表（".date('m-d',time())."）.xls";
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+
+	}
 
 	public function actionComPaymentExport(){
 		$str = Yii::app()->request->getParam('str');
