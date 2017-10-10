@@ -165,7 +165,7 @@
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','店铺管理');?></div>
+					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','店铺管理');?><?php echo $role.'------' ;echo User::POWER_ADMIN; ?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					
@@ -196,7 +196,8 @@
 						</div>
 					</a>
 					<?php endif;?>
-					<?php if(Yii::app()->user->role <= User::ADMIN_AREA):?>
+					<!-- <?php //if(Yii::app()->user->role <= User::ADMIN_AREA):?> -->
+					<?php  if($role <= 5):?>
 					<a href="<?php echo $this->createUrl('poscode/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple syjsz"></div>
@@ -205,12 +206,12 @@
 					</a>
 					<?php endif;?>
 					<?php if(Yii::app()->user->role <1):?>
-					<a href="<?php echo $this->createUrl('poscode/hqindex',array('companyId'=>$this->companyId));?>">
+				<!-- 	<a href="<?php echo $this->createUrl('poscode/hqindex',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov">
 							<div class="ku-item ku-purple syjsz"></div>
 							<div class="ku-item-info">收银机状态</div>
 						</div>
-					</a>
+					</a> -->
 					<?php endif;?>
 					<a href="<?php echo $this->createUrl('doubleScreen/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
@@ -296,15 +297,15 @@
 						</div>
 					</a>
 					
-					<?php endif; ?>
-					<a style="display: none;" href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
+					
+					<!-- <a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple area"></div>
 							<div class="ku-item-info">地区分组</div>
 						</div>
-					</a>
+					</a> -->
 					
-					
+					<?php endif; ?>
 					<?php endif; ?>
 					<!--
 					<a href="#">
