@@ -199,7 +199,7 @@ li{
                         </li>
                         <li class="pull-left">
                             <span><?php echo $card_model->mobile;?></span>
-                            <span>（卡号：<span><?php echo $num;?></span>）</span>     
+                            <span>（卡号：<span><?php echo $card_model->selfcode;?></span>）</span>     
                         </li>
                         <li class="pull-left">
                             <span>生日：<?php echo $card_model->birthday;?></span>
