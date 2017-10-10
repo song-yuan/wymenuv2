@@ -25,7 +25,7 @@ class CompanyController extends BackendController
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
 		$content = Yii::app()->request->getParam('content','');
-		
+		$role = Yii::app()->user->role;
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
 		$criteria = new CDbCriteria;
@@ -90,6 +90,7 @@ class CompanyController extends BackendController
 				'province'=>$provinces,
 				'city'=>$citys,
 				'area'=>$areas,
+				'role'=>$role
 		));
 	}
     public function actionListchidren(){

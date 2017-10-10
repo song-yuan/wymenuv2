@@ -55,7 +55,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?><?php echo $role.'------' ;echo User::POWER_ADMIN; ?></div>
 					<div class="actions">
 					<div class="btn-group">
 						<select id="province" name="province" class="selectedclass">
@@ -72,7 +72,7 @@
 	                	<button type="button" id="serch" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
 	                </div>
                     <?php if(Yii::app()->params->master_slave=='m') : ?>
-					<?php if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role = '5'):?>
+					<?php if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role <= '3'):?>
 						<a href="<?php echo $this->createUrl('company/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
                             <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
