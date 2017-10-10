@@ -1007,7 +1007,7 @@ public function actionPayallReport(){
 				.' left join ('
 					.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid'
 					.' from nb_order ot '
-					.' where ot.order_status in(3,4,8) and ot.lid in('.$ords.') and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
+					.' where ot.order_status in(3,4,8) and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
 					.' group by ot.dpid'
 				.' ) o on(t.dpid = o.dpid)'
 				.' where op.all_reality is not null and t.delete_flag =0 and t.company_name '.$dpnames
