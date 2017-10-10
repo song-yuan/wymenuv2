@@ -22,8 +22,23 @@ class ElemeController extends BackendController
 		$url = urlencode($url);
 		$clientId = ElmConfig::key;
 		$sqUrl = ElmConfig::squrl;
-		$sql = 'select * from nb_eleme_token where dpid='.$companyId.' and delete_flag=0';
-		$token = Yii::app()->db->createCommand($sql)->queryRow();
+		// var_dump($token);exit;
+		$type = Yii::app()->request->getParam('type');
+		// var_dump($type);exit;
+		if(!empty($type)){
+			$sql = "update nb_eleme_token set delete_flag=1 where dpid=".$companyId." and delete_flag=0";
+			Yii::app()->db->createCommand($sql)->execute();
+			$this->render('dpsq',array(
+				'companyId'=>$companyId,
+				'url'=>$url,
+				'clientId'=>$clientId,
+				'sqUrl'=>$sqUrl
+			));
+		}else{
+			$sql = 'select * from nb_eleme_token where dpid='.$companyId.' and delete_flag=0';
+			$token = Yii::app()->db->createCommand($sql)->queryRow();
+		}
+		// var_dump($type);exit;
 		$this->render('dpsq',array(
 				'companyId'=>$companyId,
 				'url'=>$url,
@@ -42,6 +57,7 @@ class ElemeController extends BackendController
 		$category = Elm::getShopCategories($companyId,$shopid);
 		$eleme = Yii::app()->request->getParam('eleme');
 		$itemm =array();
+		$error = '';
 		if($eleme){
 			$phs_code = $eleme['phs_code'];
 			$itemid = $eleme['elemeId'];
@@ -104,7 +120,7 @@ class ElemeController extends BackendController
 					);
 					$res = Yii::app()->db->createCommand()->insert('nb_eleme_cpdy',$inserData);
 				}else{
-					Yii::app()->user->setFlash('error' , $obj->error->message);
+					$error = Yii::app()->user->setFlash('error' , $obj->error->message);
 				}
 			}else{
 				if(empty($description) && empty($attr['name'])){
@@ -122,6 +138,8 @@ class ElemeController extends BackendController
 				if(!empty($obj->result)){
 					$sql = "update nb_eleme_cpdy set phs_code=".$phs_code.",name='".$productname."' where dpid=".$companyId." and elemeID=".$itemid." and delete_flag=0";
 					$res = Yii::app()->db->createCommand($sql)->execute();
+				}else{
+					$error = Yii::app()->user->setFlash('error' , $obj->error->message);
 				}
 			}
 			
@@ -136,7 +154,8 @@ class ElemeController extends BackendController
 			'companyId'=>$companyId,
 			'category_id'=>$category_id,
 			'items'=>$items,
-			'itemm'=>$itemm
+			'itemm'=>$itemm,
+			'error'=>$error
 			));
 	}
 	public function actionDpdy(){
