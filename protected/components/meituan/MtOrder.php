@@ -55,14 +55,14 @@ class MtOrder
 		if(empty($data)){
 			return '200';
 		}
-		$data = urldecode($data);
+		
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
+		$order = urldecode($order);
 		
 		$obj = json_decode($order);
 		$orderId = $obj->orderId;
-		
 		$res = MtUnit::getWmSetting($ePoiId);
 		if(!empty($res)&&$res['is_receive']==1){
 			$mtToken = self::getToken($ePoiId);
