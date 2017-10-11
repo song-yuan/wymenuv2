@@ -51,17 +51,16 @@
                             <option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
                     </select>
                     <div class="btn-group">
-	                    <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-	                         <span class="input-group-addon">~</span>
-	                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+	                    <div class="input-group date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','选择时间');?>" value="<?php echo $begin_time; ?>">  
+	                         <span style="display: none;" class="input-group-addon">~</span>
+	                         <input style="display: none;" type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $begin_time;?>">           
 	                    </div>  
                     </div>	
 					
                     <div class="btn-group">
                                     <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
                                     <button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-                                    <!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
                     </div>			
                 </div>
             </div> 
@@ -317,7 +316,7 @@ jQuery(document).ready(function(){
      $('#btn_time_query').click(function time() {  
 
      	var begin_time = $('#begin_time').val();
-     	var end_time = $('#end_time').val();
+     	var end_time = $('#begin_time').val();
      	var text = $('#text').val();
      	var userid = $('#userid').val();
      	location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
@@ -327,7 +326,7 @@ jQuery(document).ready(function(){
 	$('#excel').click(function excel(){
 
 		var begin_time = $('#begin_time').val();
-		var end_time = $('#end_time').val();
+		var end_time = $('#begin_time').val();
 		var text = $('#text').val();
 		var userid = $('#userid').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){

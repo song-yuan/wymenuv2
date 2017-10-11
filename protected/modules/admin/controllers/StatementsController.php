@@ -1515,7 +1515,7 @@ public function actionPayallReport(){
 
 	}
 	
-			public function actionComPayYueExport(){
+	public function actionComPayYueExport(){
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$begin_time = Yii::app()->request->getParam('begin_time','');
