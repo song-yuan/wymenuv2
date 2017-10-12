@@ -430,7 +430,7 @@
 </div>
 <?php endif;?>
 <?php if($bottomDesc!=''):?>
-<div class="top-des">
+<div class="top-des arrowright">
 	<div class="scroll-desc">
 		<?php echo $bottomDesc;?>
 	</div>
