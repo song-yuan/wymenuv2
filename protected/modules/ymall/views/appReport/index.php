@@ -254,22 +254,22 @@
 		<h4>报表中心</h4>
 	</div>
 	<div style="float: left;margin-top: 20px;margin-left: 30px;">
-			<a name="yysj" href="<?php echo $this->createUrl('shoujiduan/yysj',array('companyId'=>$this->companyId));?>">营业数据</a>
+			<a name="yysj" href="<?php echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId));?>">营业数据</a>
 	</div>
 	<div style="margin-top: 30px;margin-left: 170px;">
-		<a name='sdbb' href="<?php echo $this->createUrl('shoujiduan/sdbb',array('companyId'=>$this->companyId));?>">时段报表</a>
+		<a name='sdbb' href="<?php echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId));?>">时段报表</a>
 	</div>
 	<div style="float: left;margin-top: 20px;margin-left: 30px;">
-		<a name="zffs" href="<?php echo $this->createUrl('shoujiduan/zffs',array('companyId'=>$this->companyId));?>">支付方式</a>
+		<a name="zffs" href="<?php echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId));?>">支付方式</a>
 	</div>
 	<div style="margin-top: 20px;margin-left: 170px;">
-		<a name="dpxs" href="<?php echo $this->createUrl('shoujiduan/dpxs',array('companyId'=>$this->companyId));?>">单品销售</a>
+		<a name="dpxs" href="<?php echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId));?>">单品销售</a>
 	</div>
 	<div style="float: left;margin-top: 20px;margin-left: 30px;">
-		<a name="tcxs" href="<?php echo $this->createUrl('shoujiduan/tcxs',array('companyId'=>$this->companyId));?>">套餐销售</a>
+		<a name="tcxs" href="<?php echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId));?>">套餐销售</a>
 	</div>
 	<div style="margin-left: 170px;margin-top: 20px;padding-bottom: 20px;">
-		<a name="yclxh" href="<?php echo $this->createUrl('shoujiduan/yclxh',array('companyId'=>$this->companyId));?>">原材料消耗</a>
+		<a name="yclxh" href="<?php echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId));?>">原材料消耗</a>
 	</div>
 </div>
 <!--店铺管理-->
@@ -278,7 +278,7 @@
 		<h4>店铺管理</h4>
 	</div>
 	<div style="margin-top: 20px;margin-left: 30px;float: left;">
-		<a name="operator" href="<?php echo $this->createUrl('shoujiduan/operator',array('companyId'=>$this->companyId));?>">操作员管理</a>
+		<a name="operator" href="<?php echo $this->createUrl('appReport/operator',array('companyId'=>$this->companyId));?>">操作员管理</a>
 	</div>
 	<div style="margin-top: 25px;margin-left: 170px;">
 		<a>收银机设置</a>
