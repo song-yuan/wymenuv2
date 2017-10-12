@@ -20,6 +20,7 @@ body {
 	margin: 0;
 	-webkit-user-select: none;
 	background-color: #fff;
+	position:relative;
 }
 
 a:hover, a:link, a:visited, a {
@@ -30,45 +31,33 @@ a:hover, a:link, a:visited, a {
 ul, li {
 	list-style: none
 }
-
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+.arrowright {
+    background-image: url(../../img/mall/arrowright.png);
+    background-size: auto 25px;
+    background-repeat: no-repeat;
+    background-position: right center;
+}
 .top-des{
     position: fixed;
     top: 40px;
     height: 30px;
     width: 100%;
     line-height: 30px;
-    background: rgba(255, 114, 0,0.8);
+    background-color: rgb(255, 114, 0);
     z-index: 9001;
     font-size:15px;
     overflow: hidden;
+    color:white;
 }
-.scroll-desc span{
-	display:block;
-	position:absolute;
-}
-.scroll-desc span img{
+.swiper-slide img{
     width: 20px;
     vertical-align: middle;
-}
- @-webkit-keyframes anim1{
-   0% {top: 30px;opacity: 1}
-   50% {top: -30px;opacity: 1}
-   75% {top: -30px ;opacity: 0}
-   100%{top:30px;opacity: 0}
- }
- @-webkit-keyframes anim2{
-   0% {top: -30px;opacity: 0}
-   25% {top: 30px;opacity: 0}
-   50% {top: 30px;opacity: 1}
-   100%{top: -30px;opacity: 1}
- }
- .scroll-desc span:nth-child(1){
-    -webkit-animation:anim1 5s linear infinite;
-    animation:anim1 5s linear infinite;
-}
- .scroll-desc span:nth-child(2){
-    -webkit-animation:anim2 5s linear infinite;
-    animation:anim2 5s linear infinite;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 footer {
 	width: 100%;
