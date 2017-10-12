@@ -83,7 +83,7 @@
 			?></h3>
 	</div>
 </div>
-<ul class="mui-table-view" style="margin-top: 10px;"> 
+<ul class="mui-table-view"> 
         <li class="mui-table-view-cell mui-collapse">
             <a class="mui-navigate-right" href="#">今日收益</a>
             <div class="mui-collapse-content">

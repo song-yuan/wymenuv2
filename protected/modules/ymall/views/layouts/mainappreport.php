@@ -18,7 +18,7 @@ $basePath = Yii::app()->baseUrl;;
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>壹点管理系统</title>
     <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/mui.min.css"/>
-    <script type="text/javascript" src="<?php echo $basePath;?>/appreport/mui.min.js"></script> 
+    <script type="text/javascript" src="<?php echo $basePath;?>/js/appreport/mui.min.js"></script> 
 </head>
 <body>
     <?php echo $content ?>
