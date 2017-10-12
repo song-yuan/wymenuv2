@@ -79,7 +79,7 @@ class AppReportController extends Controller
 			));
 	}
 	public function actionYysj(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where to_days(create_at) = to_days(now()) and dpid=".$companyId." and order_status in (3,4,8)";
 		$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
 		$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid=".$companyId." and to_days(create_at) = to_days(now())) o where y.dpid=".$companyId." and y.account_no=o.account_no and y.paytype !=11 and to_days(y.create_at) = to_days(now()) group by y.paytype";
@@ -94,7 +94,7 @@ class AppReportController extends Controller
 		$refundsql = "select sum(pay_amount) as pay_amount,count(*) as count from nb_order_pay where to_days(create_at) = to_days(now()) and pay_amount<0 and dpid=".$companyId;
 		$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 		// var_dump($Takeouts);exit();
-		$this->renderPartial('yysj',array(
+		$this->render('yysj',array(
 			'todayProfit'=>$todayProfit,
 			'Recharges'=>$Recharges,
 			'records'=>$records,
@@ -103,7 +103,7 @@ class AppReportController extends Controller
 			));
 	}
 	public function actionSdbb(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$riq = array();
 		$date = Yii::app()->request->getParam('date');
 		if(Yii::app()->request->getParam('date')){
@@ -113,35 +113,35 @@ class AppReportController extends Controller
 			// var_dump($riq);exit();
 		}
 		
-		$this->renderPartial('sdbb',array(
+		$this->render('sdbb',array(
 			'riq'=>$riq,
 			'date'=>$date
 			));
 		// $this->render('list');
 	}
 	public function actionDpxs(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$productsql = "select p.`product_name`,count(1) AS counts,sum(original_price) AS original_price,sum(`price`) as price from nb_order_product p,(select lid,dpid from nb_order where to_days(create_at) = to_days(now()) and dpid=".$companyId." and order_status in (3,4,8)) o where o.lid=p.order_id and p.dpid=o.dpid GROUP BY product_name order by counts desc" ;
 		$products = Yii::app()->db->createCommand($productsql)->queryAll();
 		// var_dump($products);exit;
-		$this->renderPartial('dpxs',array(
+		$this->render('dpxs',array(
 			'products'=>$products
 			));
 		// $this->render('list');
 	}
 	public function actionYclxh(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$sql = "select c.material_name,l.stock_num from nb_product_material c,(select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where to_days(create_at) = to_days(now()) and dpid=".$companyId." GROUP BY material_id) l where c.lid=l.material_id and c.dpid=l.dpid GROUP BY material_name";
 		// echo $sql;exit;
 		$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		// var_dump($materials);exit;
-		$this->renderPartial('yclxh',array(
+		$this->render('yclxh',array(
 			'materials'=>$materials
 			));
 		// $this->render('list');
 	}
 	public function actionTcxs(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$date = Yii::app()->request->getParam('date');
 		// var_dump($date);exit;
 		$orders =array();
@@ -151,13 +151,13 @@ class AppReportController extends Controller
 			$orders = Yii::app()->db->createCommand($sql)->queryAll();
 			// var_dump($orders);exit();
 		}
-		$this->renderPartial('tcxs',array(
+		$this->render('tcxs',array(
 			'orders'=>$orders,
 			'date'=>$date
 			));
 	}
 	public function actionZffs(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$orders = array();
 		$zfs = array();
 		$refunds =array();
@@ -177,7 +177,7 @@ class AppReportController extends Controller
 			// echo $zffssql;exit;
 			// var_dump($zfs);exit();
 		}
-		$this->renderPartial('zffs',array(
+		$this->render('zffs',array(
 			'date'=>$date,
 			'orders'=>$orders,
 			'zfs'=>$zfs,
@@ -185,14 +185,14 @@ class AppReportController extends Controller
 			));
 	}
 	public function actionOperator(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$dpsql = "select company_name from nb_company where dpid=".$companyId;
 		$dp = Yii::app()->db->createCommand($dpsql)->queryRow();
 		// var_dump($dp);exit();
 		$glsql = "select lid,username,staff_no,role from nb_user where dpid=".$companyId." and delete_flag=0 and role>=11";
 		$gl = Yii::app()->db->createCommand($glsql)->queryAll();
 		// var_dump($gl);exit;
-		$this->renderPartial('operator',array(
+		$this->render('operator',array(
 			'dp'=>$dp,
 			'gl'=>$gl
 			));
@@ -200,7 +200,7 @@ class AppReportController extends Controller
 	public function actionTjfwy(){
 		$dpsql = "select dpid,company_name from nb_company where type in (0,1) and delete_flag=0";
 		$dps = Yii::app()->db->createCommand($dpsql)->queryAll();
-		$this->renderPartial('tjfwy',array(
+		$this->render('tjfwy',array(
 			'dps'=>$dps
 			));
 	}
