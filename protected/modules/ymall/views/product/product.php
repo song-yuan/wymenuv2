@@ -1,223 +1,385 @@
-<?php
-/* @var $this ProductController */
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/ui-btn.css');
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/ui-img.css');
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/ui-list.css');
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/ui-base.css');
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/ui-box.css');
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/ui-color.css');
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/pic.css');
-	Yii::app()->clientScript->registerCssFile('../../../../css/product/ui-media.css'); 
-	Yii::app()->clientScript->registerScriptFile('../../../../js/waiter/zepto.js');
-	Yii::app()->clientScript->registerScriptFile('../../../../js/waiter/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile('../../../../js/waiter/pic.js');
-	Yii::app()->clientScript->registerScriptFile('../../../../js/jquery-1.10.2.min.js');
-	Yii::app()->clientScript->registerScriptFile('../../../../js/jquery.fly.min.js');  		 	
-?>
-<div class="y-body">
-   	<div class="y-head">
-   		<div class="icon left">
-   			<div class="self">
-   			<a href="<?php echo $this->createUrl('/ymall/user/index');?>"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/waiter/icon-dpczy.png"/></a>
-   			</div>
-   		</div>
-   		<div class="logo">
-   			<div class="yidianchi">
-   			<a href=""><?php echo '壹点吃';?></a>
-   			</div>
-   		</div>
-   		<div class="icon right">
-   			<div class="search">
-   			<a href="<?php echo $this->createUrl('/ymall/user/index');?>"><img src="<?php echo Yii::app()->request->baseUrl;?>/img/mall/icon_search2.png"/></a>
-   			</div>
-   		</div>
-	</div>
-   	<div class="top">
-		<marquee>滚动条公告</marquee>
-	</div>
+		<style>
+			.mui-scroll-wrapper{margin-bottom: 50px;}
+			.mui-grid-view.mui-grid-9{background-color: white;}
+			input[type=search]{background-color: white;}
+			.search-form{
+				width: 70%;
+				margin-right:5%;
+				float: right;
+			}
+			.color-blue{
+				color:darkblue;
+			}
+			.mui-grid-view.mui-grid-9 .ui-table-view-cell {
+			    margin: 0;
+			    padding: 11px 15px;
+			    vertical-align: top;
+			    border-right: 1px solid #eee;
+			    border-bottom: 1px solid #eee;
+			}
+			.mui-table-view.mui-grid-view .ui-table-view-cell {
+			    font-size: 17px;
+			    display: inline-block;
+			    margin-right: -4px;
+			    padding: 10px 14px;
+			    vertical-align: middle;
+			    background: 0 0;
+			}
+			.mui-ios .ui-table-view-cell {
+			    -webkit-transform-style: preserve-3d;
+			    transform-style: preserve-3d;
+			}
+			.ui-table-view-cell {
+			    position: relative;
+			    overflow: hidden;
+			    padding: 11px 15px;
+			    -webkit-touch-callout: none;
+			}
+			.mui-col-xs-6 {
+			    width: 50%;
+			    height:229px;
+			}
+			.bottom{
+				width: 85%;
+				height: 21px;
+				position:absolute;
+				bottom:8px;
+			}
+			/*.mui-search.mui-active .mui-placeholder {
+			    right: 200px!important;
+			}*/
+			.addicon1{
+				width: 30px!important;
+				height: 30px!important;
+				background-color: red;
+				border-radius: 30px!important;
+				color: #fff;
+				vertical-align: middle;
+				text-align: center;
+				align-items: center;
+				line-height: 30px!important;
+				font-size: 30px!important;
+				font-weight: 600;
+			}
+			.mui-badge{
+				font-size: 12px!important;
+			}
+			.mui-badge1{
+				font-size: 16px!important;
+			}
+			.mui-cell{background-color: #EFEFF4!important;}
+			.processbar{height:1.3em;width: 70%;}
+
+			/**		*/
 
 
+			@import url(http://fonts.googleapis.com/css?family=Expletus+Sans);
+* {
+	margin:0; padding:0;
+	box-sizing: border-box;
+}
 
-	<!--content开始-->
-    <div id="content" class="of-y content">
-		<div id="forum_list" class="contentbox">
-			<div style="width: 100%;height: auto;" id="goods-area">
-			<?php if($mates):?>
-			<?php foreach ($mates as $m):?>
-				<div class="goods-class">
-					<div class="goods-pic"><img src="<?php echo 'http://menu.wymenu.com/'.$m['main_picture']?>"/></div>
-					<div><?php echo $m['goods_name'];?></div>
-					<div>
-						<div class="float-l color-r">￥ <?php echo $m['original_price'];?></div>
-						<div class="float-l "><?php echo $m['goods_unit'];?></div>
-						<div class="float-r mr-50 color-r ">
-							<div class="addicon" >+</div>
+body {
+font-family: "Expletus Sans", sans-serif;
+}
+
+
+h4 {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 9px;
+}
+
+
+progress:not(value) {
+}
+
+progress[value] {
+	appearance: none;
+	border: none;
+	width: 100%; height: 20px;
+	background-color: whiteSmoke;
+	border-radius: 3px;
+	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+	color: royalblue;
+
+	position: relative;
+	margin: 0 0 1.5em;
+}
+progress[value]::-webkit-progress-bar {
+	background-color: whiteSmoke;
+	border-radius: 3px;
+	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+}
+progress[value]::-webkit-progress-value {
+	position: relative;
+	background-size: 35px 20px, 100% 100%, 100% 100%;
+	border-radius:3px;
+	animation: animate-stripes 5s linear infinite;
+}
+@keyframes animate-stripes { 100% { background-position: -100px 0; } }
+progress[value]::-webkit-progress-value:after {
+	content: '';
+	position: absolute;
+	width:5px; height:5px;
+	top:7px; right:7px;
+	background-color: white;
+	border-radius: 100%;
+}
+
+.progress-bar {
+	background-color: whiteSmoke;
+	border-radius: 3px;
+	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+	width: 100%; height:20px;
+}
+
+.progress-bar span {
+	background-color: royalblue;
+	border-radius: 3px;
+	display: block;
+	text-indent: -9999px;
+}
+
+p[data-value] {
+  position: relative;
+}
+
+p[data-value]:after {
+	content: attr(data-value) '件';
+	position: absolute; right:0;
+}
+
+.html5::-webkit-progress-value{
+	/* Gradient background with Stripes */
+	background-image:
+	-webkit-linear-gradient( 135deg,
+							 transparent,
+							 transparent 33%,
+							 rgba(0,0,0,.1) 33%,
+							 rgba(0,0,0,.1) 66%,
+							 transparent 66%),
+    -webkit-linear-gradient( top,
+							rgba(255, 255, 255, .25),
+							rgba(0,0,0,.2)),
+     -webkit-linear-gradient( left, #f44, #ff0);
+}
+
+			/**		*/
+		</style>
+
+		<div class="mui-off-canvas-wrap mui-draggable">
+			<div class="mui-inner-wrap"  id="Main">
+				<header class="mui-bar mui-bar-nav">
+					<!-- <a class="mui-icon mui-icon-left-nav mui-pull-left"></a> -->
+					<a id="mui-popover1" class="mui-icon mui-icon-download mui-pull-right"></a>
+					<!-- <h1 class="mui-title">首页</h1> -->
+					<img src="../../../../../../img/ydclogo2.png" alt="" style="width: 15%;height: 36px;padding: 3px 0 2px 0;">
+					<form action=" <?php echo  $this->createUrl('kind/search',array('companyId'=>$this->companyId)); ?>" class="search-form" method="GET">
+						<div class="mui-input-row mui-search">
+							<input type="search" id="search" class="mui-input-clear" name="content" placeholder="搜索产品">
 						</div>
+					</form>
+				</header>
+
+				<!-- 产品内容开始 -->
+				<div class="mui-content mui-scroll-wrapper" id="product">
+					<div class="mui-scroll">
+						<!-- 滚动条公告 -->
+						<div class="top">
+							<marquee>滚动条公告</marquee>
+						</div>
+						<!-- 活动轮播图 -->
+						<div id="slider" class="mui-slider">
+							<div class="mui-slider-group mui-slider-loop">
+							<!--支持循环，需要重复图片节点   最后一张图-->
+								<div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#">
+										<img src="http://dcloudio.github.io/mui/assets/img/yuantiao.jpg">
+									</a>
+									<p class="mui-slider-title">
+										静静看这世界
+									</p>
+								</div>
+
+								<!-- 主体循环的图片开始 -->
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="http://dcloudio.github.io/mui/assets/img/shuijiao.jpg">
+									</a>
+									<p class="mui-slider-title">
+										幸福就是可以一起睡觉
+									</p>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="http://dcloudio.github.io/mui/assets/img/muwu.jpg">
+									</a>
+									<p class="mui-slider-title">
+										想要一间这样的木屋，静静的喝咖啡
+									</p>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="http://dcloudio.github.io/mui/assets/img/cbd.jpg">
+									</a>
+									<p class="mui-slider-title">
+										Color of SIP CBD
+									</p>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="http://dcloudio.github.io/mui/assets/img/yuantiao.jpg">
+									</a>
+									<p class="mui-slider-title">
+										静静看这世界
+									</p>
+								</div>
+								<!-- 主体循环的图片结束 -->
+
+
+								<!--支持循环，需要重复图片节点     第一张图-->
+								<div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#">
+										<img src="http://dcloudio.github.io/mui/assets/img/shuijiao.jpg">
+									</a>
+									<p class="mui-slider-title">
+										幸福就是可以一起睡觉
+									</p>
+								</div>
+							</div>
+							<div class="mui-slider-indicator mui-text-right">
+								<div class="mui-indicator mui-active"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+							</div>
+						</div>
+						<div >
+							<h4>店铺原料库存</h4>
+							<!-- HTML5 -->
+							<?php if($stocks): ?>
+							<?php foreach ($stocks as $stock): ?>
+						    <p style="width:90%;margin:0;" data-value="100"><?php echo $stock['material_name'] ?></p>
+							<progress max="1000" value="900" class="html5">
+								<div class="progress-bar">
+									<!-- <span style="width: 80%"></span> -->
+								</div>
+							</progress>
+							<?php endforeach; ?>
+							<?php endif; ?>
+						</div>
+						<?php if($materials):?>
+						<?php foreach ($materials as $key => $products):?>
+						<!-- 分类名称 -->
+						<ul class="mui-table-view mui-table-view-chevron">
+							<li class="mui-table-view-cell mui-cell" id="cate<?php echo $key; ?>">
+								<?php echo $products[0]['category_name']; ?>
+							</li>
+						</ul>
+						<!-- 分类内容 -->
+						<ul class="mui-table-view mui-grid-view mui-grid-9">
+
+							<?php foreach ($products as $m):?>
+								<li class="ui-table-view-cell mui-media mui-col-xs-6">
+									<div class="">
+										<div class="goods-pic">
+											<img src="<?php echo 'http://menu.wymenu.com/'.$m['main_picture']?>" style="height: 130px;"/>
+										</div>
+										<div><span class="color-blue">[<?php echo $m['company_name'];?>]</span><?php echo $m['goods_name'];?></div>
+										<div class="bottom">
+											<div class="float-l color-r">￥ <?php echo $m['original_price'];?></div>
+											<div class="float-l "><?php echo $m['goods_unit'];?></div>
+											<div class="float-r  color-r ">
+												<div class="addicon" stock_dpid="<?php echo $m['dpid'];?>" goods_name="<?php echo $m['goods_name'];?>" goods_id="<?php echo $m['glid'];?>"  price="<?php echo $m['original_price'];?>"  goods_code="<?php echo $m['goods_code'];?>" material_code="<?php echo $m['material_code'];?>">+</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							<?php endforeach;?>
+						</ul>
+						<?php endforeach;?>
+						<?php else: ?>
+						<ul class="mui-table-view mui-grid-view mui-grid-9">
+								<li class="ui-table-view-cell mui-media">
+									没有查询到您店铺附近的仓库 , 或者仓库中没有货品 , 请到<我的>点击<联系总部客服> , 向品牌总部咨询 .
+								</li>
+						</ul>
+						<?php endif;?>
 					</div>
-					
 				</div>
-			<?php endforeach;?>
-			<?php endif;?>
-				<div style="clear: both;"></div>
-			</div>
-			
-		</div>
-		<!--列表结束-->
-    </div>
-    <!--content结束-->
-
-</div>
-	<div id="categorydiv" style="" class="catess">
-		<div style="width: 150px;" class="productcate catedaohang zhankai">
-			<div style="" class="catsbox">
-				<div class="cates bg-color-orig"><span>首页</span></div>
-				<?php if($cates):?>
-				<?php foreach ($cates as $m):?>
-				<div class="cates"><span><?php echo $m['category_name'];?></span></div>
-				<?php endforeach;?>
-				<?php endif;?>
-				<div style="height: 15px;"><span><?php echo '';?></span></div>
+				<!-- 产品内容结束 -->
 			</div>
 		</div>
-		<div id="categorycont" class="dhcont yincang">>></div>
-		<div id="categorycont2" class="dhcont "><<</div>
-	</div>
-	
-	<div class="shoping-car">
-		<div class="img"><span id="car_num">0</span></div>
-	</div>
-        <script src="../../../../js/jquery-1.10.2.min.js"></script> 
-        <script src="../../../../js/jquery.fly.min.js"></script> 
-<script type="text/javascript">
-	var cat =<?php echo $child['lid'];?>;
-	
-	window.onload=function(type,catgory,companyId,code)
-	{
-		type = 1;
-		catgory = cat;
-		companyId=<?php echo $this->companyId;?>;
-		
-		
-	}	
-$(document).ready(function(){
+		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/prefixfree.min.js"></script>
+		<script>
+			//采购订单生成对话框
+			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
+				var btnArray = ['是','否'];
+				mui.confirm('自动生成采购单是根据您设置的时间段内的销量 , 通过算法自动生产的符合您店铺的采购订单 ,是否确定生成订单 ？','自动生成采购单',btnArray,function(e){
+					if(e.index==0){
+						//自己的逻辑
+						mui.alert('已经生成采购单 , 请到购物车再次确认采购单是否合适 ! ! !','提示',function(){});
+					}else{
+						alert('点击了- 否');
+					}
+				});
+			});
 
-	var categhCol = window.document.getElementById('categorydiv');
-	var cateconwhCol = window.document.getElementById('categorycont2');
-	var goodsarea = window.document.getElementById('goods-area');
+			//初始化单页的区域滚动
+			mui('.mui-scroll-wrapper').scroll();
 
-	var pinmuHeight = document.body.clientHeight;
-	var pinmuHeight2 = window.screen.availHeight;
-	//alert(pinmuHeight);alert(pinmuHeight2);
+			//获得slider插件对象
+			var gallery = mui('.mui-slider');
+			gallery.slider({
+			  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+			$('.addicon').on('touchstart',function(){
+				$(this).addClass('addicon1');
+				$('.mui-badge').addClass('mui-badge1');
+			});
+			$('.addicon').on('touchend',function(){
+				$(this).removeClass('addicon1');
+				$('.mui-badge').removeClass('mui-badge1');
 
-	var bodyhg = document.body.clientHeight;
-	 
-    var hMainCol =  categhCol .offsetHeight;
-    var wMainCol =  categhCol .offsetWidth;
-    var whCol =  cateconwhCol .offsetWidth;
-
-    var goodsimgwh = goodsarea .offsetWidth;
-    //alert(hMainCol);
-    window.document.getElementById('categorycont').style.height = hMainCol + 'px';
-    window.document.getElementById('categorycont2').style.height = hMainCol + 'px';
-    window.document.getElementById('content').style.height = pinmuHeight2 - 120 + 'px';
-    //window.document.getElementById('categorydiv').style.width = whCol + 'px';
-    $('.goods-pic').css('height',goodsimgwh/2 + 'px');
-	$('.dhcont').on('touchend',function (){
-		//alert(11);
-		if($('.catedaohang').hasClass('zhankai')){
-			$('.catedaohang').removeClass('zhankai');
-			$('.catedaohang').addClass('shouqi');
-			$('#categorycont').removeClass('yincang');
-			$('#categorycont2').addClass('yincang');
-			window.document.getElementById('categorydiv').style.width = whCol + 'px';
-		}else{
-			$('.catedaohang').addClass('zhankai');
-			$('.catedaohang').removeClass('shouqi');
-			$('#categorycont2').removeClass('yincang');
-			$('#categorycont').addClass('yincang');
-			window.document.getElementById('categorydiv').style.width = wMainCol + 'px';
-		}
-	});
-	$('.cates').on('touchend',function(){
-		$('.cates').removeClass('bg-color-orig');
-		$(this).addClass('bg-color-orig');
-	});
-    $('.addicon').on('touchend',function(){
-        var num = $('#car_num').text();
-        //alert(num);
-        var nums = parseInt(num) +1 ;
-
-		//以下为添加物品的动画效果....
-		var src=$("img",$(this)).attr("src");
-        var offset = $("#car_num").offset();
-        var addcar = $(this);
-        var img = $("img",$(this)).attr("src");
-        var flyer = $('<div style="width: 15px;height: 15px;border-radius: 10px; background-color: red;"></div>');
-            
-    	flyer.fly({
-            
-            start: {
-                left: addcar.offset().left,//event.pageX,
-                top: addcar.offset().top,//event.pageY
-            },
-            end: {
-                left: offset.left,
-                top: offset.top,
-                width: 5,
-                height: 5,
-            },
-            speed: 0.1,
-            onEnd: function(){
-            	
-                this.destory();
-            }
-        });
-    	//setTimeout("alert(22);alert(111);",500);
-    	$('#car_num').html(nums);
-    	
-    });
-    $('#forum_list').on('click','.numplus',function(){
-    	var id = $(this).attr('product-id');
- 		var numObj = $(this).siblings('.num');
- 		var numVal = parseInt(numObj.val());
- 		$.ajax({
- 			url:'<?php echo $this->createUrl('/waiter/product/createCart',array('cid'=>$this->companyId,'code'=>$this->seatNum));?>&id='+id,
- 			success:function(msg){
- 				if(msg){
- 					numVal += 1;
- 					numObj.val(numVal); 
- 				}
- 			},
- 		});
-    });
- 	
-     $('#forum_list').on('click','.numminus',function(){
-     	var id = $(this).attr('product-id');
- 		var numObj = $(this).siblings('.num');
- 		var numVal = parseInt(numObj.val());
- 		if(numVal>0){
- 			$.ajax({
- 			url:'<?php echo $this->createUrl('/waiter/product/deleteCartProduct',array('cid'=>$this->companyId,'code'=>$this->seatNum));?>&id='+id,
- 			success:function(msg){
- 				if(msg){
- 					numVal -= 1;
- 					numObj.val(numVal);
- 				}
- 			},
- 		});
- 		}
-     });
- 	$(window).on('touchend',function(e){
- 	 	return false;
-		var a = document.body.scrollHeight;
-		var b = document.documentElement.clientHeight;
-		var c = document.documentElement.scrollTop + document.body.scrollTop;
-		//var c = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-		var totalHeight = c+b+30;
-		if(totalHeight >= a ){
-			$('#nextpage').text('数据加载中……');
-			getMorePic(1,cat);
-		} 
-	})
- });
-</script>
+				
+				var stock_dpid = $(this).attr('stock_dpid'); //仓库的dpid
+				var goods_name = $(this).attr('goods_name'); //产品名称
+				var goods_id = $(this).attr('goods_id'); //产品id
+				var price = $(this).attr('price'); //产品原价
+				var goods_code = $(this).attr('goods_code'); //产品代码
+				var material_code = $(this).attr('material_code'); //原料代码
+				// alert(price);
+				var num = $('#car_num').text();
+				//alert(num);
+				var nums = parseInt(num) +1 ;
+				$('#car_num').html(nums);
+				mui.post('<?php echo $this->createUrl("ymallcart/addymallcart",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
+					   stock_dpid:stock_dpid, // 参数  键 ：值
+					   goods_name:goods_name,
+					   goods_id:goods_id,
+					   price:price,
+					   goods_code:goods_code,
+					   material_code:material_code
+					},
+					function(data){ //data为服务器端返回数据
+						//自己的逻辑
+						console.log(data);
+						if (data != nums) {
+							$('#car_num').html(data);
+						}
+					},'json'
+				);
+			});
+			$('.goods-pic img').on('tap',function(){
+				// $(this).addClass('addicon1');
+				location.href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId'=>$this->companyId))?>" ;
+			});
+			$('.search-form').submit(function(event) {
+				var content = $('#search').val();
+				// alert(content);
+				if (content == '') {
+					event.preventDefault();
+					mui.alert("请填写搜索内容 ! ! !");
+				}
+			});
+		</script>
