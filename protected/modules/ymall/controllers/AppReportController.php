@@ -4,7 +4,7 @@ class AppReportController extends Controller
 	public $companyId;
 	public $company;
 	public $brandUser;
-	public $layout = '../layouts/mainappreport';
+	public $layout = '/layouts/mainappreport';
 	public function init()
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
