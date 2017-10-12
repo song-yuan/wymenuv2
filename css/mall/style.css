@@ -43,10 +43,11 @@ ul, li {
     height: 30px;
     width: 100%;
     line-height: 30px;
-    background-color: rgba(255, 114, 0,0.8);
+    background-color: rgb(255, 114, 0);
     z-index: 9001;
     font-size:15px;
     overflow: hidden;
+    color:white;
 }
 .scroll-desc span{
 	display:block;
@@ -55,26 +56,8 @@ ul, li {
 .scroll-desc span img{
     width: 20px;
     vertical-align: middle;
-}
- @-webkit-keyframes anim1{
-   0% {top: 30px;opacity: 1}
-   50% {top: -30px;opacity: 1}
-   75% {top: -30px ;opacity: 0}
-   100%{top:30px;opacity: 0}
- }
- @-webkit-keyframes anim2{
-   0% {top: -30px;opacity: 0}
-   25% {top: 30px;opacity: 0}
-   50% {top: 30px;opacity: 1}
-   100%{top: -30px;opacity: 1}
- }
- .scroll-desc span:nth-child(1){
-    -webkit-animation:anim1 5s linear infinite;
-    animation:anim1 5s linear infinite;
-}
- .scroll-desc span:nth-child(2){
-    -webkit-animation:anim2 5s linear infinite;
-    animation:anim2 5s linear infinite;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 footer {
 	width: 100%;
