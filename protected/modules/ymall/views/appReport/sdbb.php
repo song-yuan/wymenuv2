@@ -9,7 +9,12 @@ $ris = array();
 foreach($riq as $ri){ 
 	array_push($ris,$ri['pay_amount']);
 }
-$pos=array_search(max($ris),$ris);
+if (!empty($ris)){
+	$pos=array_search(max($ris),$ris);
+}else{
+	$pos = 0;
+}
+
 
 ?>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
