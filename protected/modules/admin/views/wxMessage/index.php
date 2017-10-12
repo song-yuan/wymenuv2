@@ -69,7 +69,7 @@
                                 <td>  
                                     <input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="Ids[]" /> 
                                 </td>
-                                <td><?php echo $model->message_type?'支付成功消息':'代金券领取消息';?></td>
+                                <td><?php echo $model->message_type?'代金券领取消息':'支付成功消息';?></td>
                                 <td><?php echo $model->message_tpl_id;?></td>
                                 <td class="center">
                                     <div class="actions">
