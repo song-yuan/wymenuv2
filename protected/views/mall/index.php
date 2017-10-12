@@ -599,7 +599,8 @@ $(document).ready(function(){
         pagination: false,
         paginationClickable: false,
         direction: 'vertical',
-        autoplay: 2500
+        autoplay: 2500,
+        autoplayDisableOnInteraction: false
     });
 	var i = 0;
 	var j = 0;
