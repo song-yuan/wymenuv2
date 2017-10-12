@@ -129,4 +129,4 @@ $pos=array_search(max($ris),$ris);
 		</div>
     </div>
 <?php endif;?>
-<div style="background-color: #FFFFFF;"><button style="margin-left: 80%;"><a href="<?php echo $this->createUrl('shoujiduan/index',array('companyId'=>$this->companyId));?>#sdbb">返回</a></button></div>
+<div style="background-color: #FFFFFF;"><button style="margin-left: 80%;"><a href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>#sdbb">返回</a></button></div>

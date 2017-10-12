@@ -320,7 +320,7 @@
 				}?></td>
 		</tr>
 		<tr style="text-align: center;">
-			<td colspan="2"><button><a href="<?php echo $this->createUrl('shoujiduan/index',array('companyId'=>$this->companyId));?>#yysj">返回</a></button></td>
+			<td colspan="2"><button><a href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>#yysj">返回</a></button></td>
 		</tr>
 	</table>
 </div>

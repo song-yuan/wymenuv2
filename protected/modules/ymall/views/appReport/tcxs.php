@@ -64,5 +64,5 @@
 			<?php endif;?>
 		</table>
 	</div>
-	<div style="margin-top: 10px;"><button style="margin-left: 80%;"><a href="<?php echo $this->createUrl('shoujiduan/index',array('companyId'=>$this->companyId));?>#tcxs">返回</a></button></div>
+	<div style="margin-top: 10px;"><button style="margin-left: 80%;"><a href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>#tcxs">返回</a></button></div>
 </div>

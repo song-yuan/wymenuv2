@@ -92,5 +92,5 @@
 	</div>
 </div>
 <div style="background-color: #FFFFFF;width: 100%;text-align: right;line-height: 30px;">
-	<button><a href="<?php echo $this->createUrl('shoujiduan/index',array('companyId'=>$this->companyId));?>#yclxh">返回</a></button>
+	<button><a href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>#yclxh">返回</a></button>
 </div>
