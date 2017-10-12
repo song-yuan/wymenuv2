@@ -15,19 +15,19 @@
 	<?php Yii::app()->clientScript->registerCssFile('../plugins/font-awesome/css/font-awesome.min.css');?>
 	<?php Yii::app()->clientScript->registerCssFile('../plugins/bootstrap/css/bootstrap.min.css');?>
 	<?php Yii::app()->clientScript->registerCssFile('../plugins/uniform/css/uniform.default.css');?>
-		
+
 	<!-- END GLOBAL MANDATORY STYLES -->
-	<!-- BEGIN PAGE LEVEL STYLES --> 
+	<!-- BEGIN PAGE LEVEL STYLES -->
 	<?php Yii::app()->clientScript->registerCssFile('../plugins/select2/select2_metro.css');?>
 	<!-- END PAGE LEVEL SCRIPTS -->
-	<!-- BEGIN THEME STYLES --> 
+	<!-- BEGIN THEME STYLES -->
 	<?php Yii::app()->clientScript->registerCssFile('../css/style-metronic.css');?>
 	<?php Yii::app()->clientScript->registerCssFile('../css/style.css');?>
 	<?php Yii::app()->clientScript->registerCssFile('../css/style-responsive.css');?>
 	<?php Yii::app()->clientScript->registerCssFile('../css/themes/default.css');?>
 	<?php Yii::app()->clientScript->registerCssFile('../css/pages/login-soft.css');?>
 	<?php Yii::app()->clientScript->registerCssFile('../css/custom.css');?>
-		<!-- END THEME STYLES -->
+	<!-- END THEME STYLES -->
 	<link rel="shortcut icon" href="favicon.ico" />
 </head>
 <!-- END HEAD -->
@@ -51,7 +51,7 @@
 <!-- 	</div> -->
 	<!-- END COPYRIGHT -->
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-	<!-- BEGIN CORE PLUGINS -->   
+	<!-- BEGIN CORE PLUGINS -->
 	<!-- END CORE PLUGINS -->
 	<!-- END JAVASCRIPTS -->
 	<?php Yii::app()->clientScript->registerCoreScript('jquery');?>
@@ -68,7 +68,7 @@
 	<?php Yii::app()->clientScript->registerScriptFile('../scripts/app.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile('../scripts/login-soft.js');?>
 	<script>
-		jQuery(document).ready(function() {   
+		jQuery(document).ready(function() {
 		  //App.init();
 		  //Login.init();
 		});
