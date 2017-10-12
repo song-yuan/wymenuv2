@@ -31,6 +31,10 @@ a:hover, a:link, a:visited, a {
 ul, li {
 	list-style: none
 }
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
 .arrowright {
     background-image: url(../../img/mall/arrowright.png);
     background-size: auto 25px;
@@ -49,18 +53,11 @@ ul, li {
     overflow: hidden;
     color:white;
 }
-.scroll-desc span{
-	display:block;
-	position:absolute;
-}
-.scroll-desc span img{
+.swiper-slide img{
     width: 20px;
     vertical-align: middle;
     padding-left: 4px;
     padding-right: 4px;
-}
- .scroll-desc span:nth-child(n+2){
-    display:none;
 }
 footer {
 	width: 100%;

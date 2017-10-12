@@ -18,33 +18,6 @@ body {
 .content{
 	position:relative;
 }
-.swiper-container {
-	width: 4rem;
-	height: 0.85rem;
-}
-
-.swiper-wrapper img {
-	width: 4rem;
-	height: 0.85rem;
-}
-
-.swiper-slide {
-	text-align: center;
-	font-size: 18px;
-	background: #fff; /* Center slide text vertically */
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	-webkit-justify-content: center;
-	justify-content: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	-webkit-align-items: center;
-	align-items: center;
-}
 
 .top p span.tp-lf {
 	float: left;
