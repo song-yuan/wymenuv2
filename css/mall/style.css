@@ -47,7 +47,6 @@ ul, li {
     z-index: 9001;
     font-size:15px;
     overflow: hidden;
-    color:white;
 }
 .scroll-desc span{
 	display:block;
@@ -58,6 +57,9 @@ ul, li {
     vertical-align: middle;
     padding-left: 4px;
     padding-right: 4px;
+}
+ .scroll-desc span:nth-child(n+2){
+    display:none;
 }
 footer {
 	width: 100%;
