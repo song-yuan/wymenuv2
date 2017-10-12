@@ -20,6 +20,7 @@ body {
 	margin: 0;
 	-webkit-user-select: none;
 	background-color: #fff;
+	position:relative;
 }
 
 a:hover, a:link, a:visited, a {
