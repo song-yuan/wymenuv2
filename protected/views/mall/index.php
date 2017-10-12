@@ -597,7 +597,8 @@ wx.ready(function(){
 $(document).ready(function(){ 
 	var swiper = new Swiper('.swiper-container', {
         pagination: false,
-        paginationClickable: false,
+        paginationClickable: true,
+        centeredSlides: true,
         direction: 'vertical',
         autoplay: 2500,
         autoplayDisableOnInteraction: false
