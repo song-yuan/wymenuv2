@@ -11,4 +11,8 @@ class  CrontabController extends Controller
 		//生日赠券
 		WxCupon::getOneMonthByBirthday();
 	} 
+	// 生成日结统计数据
+	public function actionRijieStatistics(){
+		$result = WxRiJie::rijieStatistics();
+	}
 }

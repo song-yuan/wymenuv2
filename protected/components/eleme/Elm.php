@@ -320,6 +320,7 @@ class Elm
         return $result;
 	}
 	public static function orderStatus($message,$dpid){
+		$message = Helper::dealString($message);
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
 		$cache = Yii::app()->cache->get($accountNo);
@@ -702,7 +703,7 @@ class Elm
 		if(empty($orderArr['order_product'])){
 			return true;
 		}
-		$me->deliveryPoiAddress = Helper::dealString($me->deliveryPoiAddress);
+		$me->deliveryPoiAddress = $me->deliveryPoiAddress;
 		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$income,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 			
