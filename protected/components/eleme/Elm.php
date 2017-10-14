@@ -278,6 +278,7 @@ class Elm
 		return true;
 	}
 	public static function order($message,$dpid){
+		$message = Helper::dealString($message);
 		$me = json_decode($message);
 		$orderId = $me->id;
 		Yii::app()->cache->set($orderId,$message);
@@ -320,7 +321,6 @@ class Elm
         return $result;
 	}
 	public static function orderStatus($message,$dpid){
-		$message = Helper::dealString($message);
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
 		$cache = Yii::app()->cache->get($accountNo);
@@ -357,6 +357,7 @@ class Elm
 			$orderObj = json_decode($result);
 			$order = $orderObj->result;
 			if($order){
+				$order = Helper::dealString($order);
 				Yii::app()->cache->set($accountNo,json_encode($order));
 				$res = self::dealOrder($order,$dpid,4);
 				if($res){
