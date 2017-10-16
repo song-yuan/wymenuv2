@@ -38,10 +38,10 @@ class AppReportController extends Controller
 				echo 'no access';
 				return false;
 			}
-// 			if($this->company['type']=='0'){
+			if($this->company['type']=='0'){
 				$this->render('adminlist',array('admindpids'=>$this->brandUserAdmin));
 				exit;
-// 			}
+			}
 		}else{
 			//pc 浏览
 			$userId = 2182;
