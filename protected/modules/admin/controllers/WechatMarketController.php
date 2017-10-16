@@ -287,6 +287,11 @@ class WechatMarketController extends BackendController {
 					$cupons = $db->createCommand($sql)->queryRow();
 				//var_dump($buysentprodetail);exit;
 					if(!empty($cupons)&&!empty($plid)){
+						$sql = 'select * from nb_cupon_branduser where cupon_id='.$plid.' and brand_user_lid='.$userarray;
+						$cuponbranduser = $db->createCommand($sql)->queryRow();
+						if($cuponbranduser){
+							continue;
+						}
 						$timetype = $cupons['time_type'];
 						if($timetype=='1'){
 							$validay = $cupons['begin_time'];
