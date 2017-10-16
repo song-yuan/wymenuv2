@@ -283,7 +283,7 @@ class WechatMarketController extends BackendController {
 					$plid = $materials[0];
 					$pcode = $materials[1];
 				//var_dump($plid.'@'.$pcode);exit;
-					$sql = 'select * from nb_brand_user where lid='.$plid.' and dpid='.$this->companyId.' and delete_flag=0';
+					$sql = 'select * from nb_cupon where lid='.$plid.' and dpid='.$this->companyId.' and delete_flag=0';
 					$cupons = $db->createCommand($sql)->queryRow();
 				//var_dump($buysentprodetail);exit;
 					if(!empty($cupons)&&!empty($plid)){

@@ -221,6 +221,7 @@ $(document).ready(function(){
 		}
 	})
 	$('#add_save').on('click', function(){
+		layer.load(2);
 		var plids = '';
 		var users = '<?php echo $users;?>';
 		<?php if($all): ?>
@@ -251,6 +252,7 @@ $(document).ready(function(){
             //async:false,
             dataType: "json",
             success:function(msg){
+            	layer.closeAll('loading');
                 var data=msg;
                 if(data.status){
                     layer.msg("发送成功");
