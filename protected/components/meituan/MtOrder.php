@@ -90,10 +90,10 @@ class MtOrder
 		if(empty($data)){
 			return '200';
 		}
-		$data = urldecode($data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$order = $resArr['order'];
+		$order = urldecode($order);
 		$result = self::dealOrder($order,$ePoiId,2);
 		$reobj = json_decode($result);
 		if($reobj->status){
