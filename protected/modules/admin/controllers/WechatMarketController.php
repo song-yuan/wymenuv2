@@ -243,6 +243,7 @@ class WechatMarketController extends BackendController {
 		public function actionAddprod() {
 			$this->layout = '/layouts/main_picture';
 			$users = Yii::app()->request->getParam('users',0);
+			$all = Yii::app()->request->getParam('all',0);
 
 			$criteria = new CDbCriteria;
 			$criteria->condition =  't.is_available = 0 and t.delete_flag=0 and t.dpid='.$this->companyId;
@@ -251,6 +252,7 @@ class WechatMarketController extends BackendController {
 
 			// p($models);
 			$this->render('addprod' , array(
+				'all' => $all,
 				'models' => $models,
 				'users' => $users,
 				'action' => $this->createUrl('wechatMarket/addprod' , array('companyId'=>$this->companyId))

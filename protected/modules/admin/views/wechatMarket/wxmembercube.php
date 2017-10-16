@@ -224,7 +224,7 @@
 	<div class="portlet-title">
 		<div class="caption"><i class="fa fa-group"></i>会员列表</div>
 		<div class="actions">
-			<a href="javascript:;" class="btn yellow all_save">
+			<a href="javascript:;" class="btn yellow all_save" users="<?php echo $alluserid; ?>">
 				<i class="fa fa-pencil"></i> 全部群发
 			</a>
 			<a href="javascript:;" class="btn red add_save">
@@ -505,7 +505,7 @@ if (jQuery().datepicker) {
 	    if(confirm('确认要群发所有满足该条件的会员吗 ? ')){
 		    //alert(users);
 		    modalconsumetotal=$('#portlet-consume');
-		    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/addprod',array('companyId'=>$this->companyId,'users'=>$alluserid));?>', '', function(){modalconsumetotal.modal();});
+		    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/addprod',array('companyId'=>$this->companyId,'all'=>1));?>', '', function(){modalconsumetotal.modal();});
 	    }
 	});
 

@@ -223,6 +223,10 @@ $(document).ready(function(){
 	$('#add_save').on('click', function(){
 		var plids = '';
 		var users = '<?php echo $users;?>';
+		<?php if($all): ?>
+		users = $('.all_save').attr('users');
+		// alert(users);
+		<?php endif; ?>
 		$('.activechecked').each(function(){
 			var plid = $(this).attr('plid');
 			var pcode = $(this).attr('pcode');
