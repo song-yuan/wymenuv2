@@ -40,7 +40,7 @@ class UserController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2122;
+			$userId = 2182;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
@@ -94,6 +94,8 @@ class UserController extends Controller
         $minus = WxBrandUser::getFullMinus($this->companyId);
 
         $remainMoney =  WxBrandUser::getYue($userId,$user['dpid']);
+        
+        $brandUserAdmin = WxBrandUserAdmin::get($userId, $user['dpid']);
         $this->render('index',array(
                                 'userId'=>$userId,
                                 'companyId'=>$this->companyId,
@@ -104,7 +106,7 @@ class UserController extends Controller
                                 'give'=>$give,
                                 'minus'=>$minus,
                                 'upLev'=>$upLev,
-                             
+                             	'brandUserAdmin'=>$brandUserAdmin
                                 
                 ));
 	

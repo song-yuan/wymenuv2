@@ -4,6 +4,7 @@ class AppReportController extends Controller
 	public $companyId;
 	public $company;
 	public $brandUser;
+	public $brandUserAdmin = array();// 管理员关系的店铺
 	public $layout = '/layouts/mainappreport';
 	public function init()
 	{
@@ -32,6 +33,11 @@ class AppReportController extends Controller
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
 				exit;
 			}
+			$this->brandUserAdmin = WxBrandUserAdmin::get($this->brandUser['lid'],$this->brandUser['dpid']);
+			if(empty($this->brandUserAdmin)){
+				echo 'no access';
+				return false;
+			}
 		}else{
 			//pc 浏览
 			$userId = 2182;
@@ -39,6 +45,12 @@ class AppReportController extends Controller
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
 			Yii::app()->session['userId-'.$userDpid] = $userId;
+			
+			$this->brandUserAdmin = WxBrandUserAdmin::get($this->brandUser['lid'],$this->brandUser['dpid']);
+			if(empty($this->brandUserAdmin)){
+				echo 'no access';
+				return false;
+			}
 		}
 		return true;
 	}
