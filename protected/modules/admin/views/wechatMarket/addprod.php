@@ -240,11 +240,14 @@ $(document).ready(function(){
            	 alert("<?php echo yii::t('app','请至少选择一项！！！');?>");
            	 return false;
         }
-		var url = "<?php echo $this->createUrl('wechatMarket/storsentwxcard',array('companyId'=>$this->companyId));?>/plids/"+plids+"/users/"+users;
+		var url = "<?php echo $this->createUrl('wechatMarket/storsentwxcard',array('companyId'=>$this->companyId));?>";
         $.ajax({
             url:url,
             type:'POST',
-            //data:plids,//CF
+            data:{
+            	'plids':plids,
+            	'users':users,
+            },//CF
             //async:false,
             dataType: "json",
             success:function(msg){
