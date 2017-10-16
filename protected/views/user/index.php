@@ -294,7 +294,7 @@
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('/ymall/appReport/index',array('companyId'=>$this->companyId));?>">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>店铺报表</p>
+                            <p>店铺管理</p>
                         </div>
                         <div class="weui_cell_ft">
                         </div>
