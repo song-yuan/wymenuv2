@@ -10,6 +10,7 @@ class AppReportController extends Controller
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
+		var_dump($this->companyId);exit;
 		$this->company = WxCompany::get($this->companyId);
 	}
 	public function beforeAction($actin){
