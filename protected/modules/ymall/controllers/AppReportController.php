@@ -40,7 +40,7 @@ class AppReportController extends Controller
 			}
 // 			if($this->company['type']=='0'){
 				$this->render('adminlist',array('admindpids'=>$this->brandUserAdmin));
-// 				exit;
+				exit;
 // 			}
 		}else{
 			//pc 浏览
