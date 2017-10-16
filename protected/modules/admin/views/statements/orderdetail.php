@@ -180,16 +180,36 @@
 									if($model->order_type == 4){
 										echo $model->channel->channel_name;
 									}else{
-										switch ($model->order_type){
-											case 0: echo '堂食';break;
-											case 1: echo '微信堂食';break;
-											case 2: echo '微信外卖';break;
-											case 3: echo '堂食';break;
-											case 5: echo '自助点单';break;
-											case 6: echo '微信点单';break;
-											case 7: echo '美团外卖';break;
-											case 8: echo '饿了么外卖';break;
-											default: echo '其他';break;
+										if($model->order_type==0){
+											echo '堂食';
+										}elseif($model->order_type==1){
+											echo '微信堂食';
+										}elseif($model->order_type==2){
+											echo '微信外卖';
+										}elseif($model->order_type==3){
+											echo '微信预约';
+										}elseif($model->order_type==5){
+											echo '自助点单';
+										}elseif($model->order_type==6){
+											if($model->is_sync==0){
+												echo '微信点单(已同步)';
+											}else{
+												echo '微信点单(未同步)';
+											}
+										}elseif($model->order_type==7){
+											if($model->is_sync==0){
+												echo '美团外卖(已同步)('.$model->callno.')';
+											}else{
+												echo '美团外卖(未同步)('.$model->callno.')';
+											}
+										}elseif($model->order_type==8){
+											if($model->is_sync==0){
+												echo '饿了么(已同步)('.$model->callno.')';
+											}else{
+												echo '饿了么(未同步)('.$model->callno.')';
+											}
+										}else{
+											echo '其他';
 										}
 									}
 								?></td>
