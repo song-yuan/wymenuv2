@@ -272,72 +272,65 @@ class WechatMarketController extends BackendController {
 			$userarrays = explode(',',$users);
 			$msg = '';
 			$db = Yii::app()->db;
-		//var_dump($userarrays);exit;
-			$transaction = $db->beginTransaction();
-			try{
-			//var_dump($materialnums);exit;
-				foreach ($userarrays as $userarray){
-					$openId = BrandUser::model()->find('lid=:lid' , array(':lid'=>$userarray));
-
-				//var_dump($userarray);exit;
-					foreach ($materialnums as $materialnum){
-						$materials = array();
-						$materials = explode(',',$materialnum);
-						$plid = $materials[0];
-						$pcode = $materials[1];
-					//var_dump($plid.'@'.$pcode);exit;
-						$cupons = Cupon::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$plid,':companyId'=>$this->companyId));
-					//var_dump($buysentprodetail);exit;
-						if(!empty($cupons)&&!empty($plid)){
-							$timetype = $cupons['time_type'];
-							if($timetype=='1'){
-								$validay = $cupons['begin_time'];
-								$colseday = $cupons['end_time'];
-							}else{
-								$validay = date('Y-m-d H:i:s',strtotime('+'.$cupons['day_begin'].' day'));
-								$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
-							}
-
-							$se = new Sequence("cupon_branduser");
-							$id = $se->nextval();
-						//$code=new Sequence("sole_code");
-						//$sole_code = $code->nextval();
-						//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
-							$data = array(
-								'lid'=>$id,
-								'dpid'=>$dpid,
-								'create_at'=>date('Y-m-d H:i:s',time()),
-								'update_at'=>date('Y-m-d H:i:s',time()),
-								'cupon_id'=>$plid,
-								'cupon_source'=>'2',
-								'source_id'=>'0000000000',
-								'to_group'=>'3',
-								'brand_user_lid'=>$userarray,
-								'valid_day'=>$validay,
-								'close_day'=>$colseday,
-								'is_used'=>'1',
-								'used_time'=>'0000-00-00 00:00:00',
-								'delete_flag'=>'0',
-								'is_sync'=>$is_sync,
-								);
-
-						//$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
-						//var_dump($data);exit;
-							$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
-						//exit;
-							Cupon::sentCupon($dpid, $userarray, $cupons['cupon_money'], $cupons['cupon_abstract'], $colseday, 0, $openId['openid']);
+		
+			foreach ($userarrays as $userarray){
+				$sql = 'select * from nb_brand_user where lid='.$userarray;
+				$openId = $db->createCommand($sql)->queryRow();
+			//var_dump($userarray);exit;
+				foreach ($materialnums as $materialnum){
+					$materials = array();
+					$materials = explode(',',$materialnum);
+					$plid = $materials[0];
+					$pcode = $materials[1];
+				//var_dump($plid.'@'.$pcode);exit;
+					$sql = 'select * from nb_brand_user where lid='.$plid.' and dpid='.$this->companyId.' and delete_flag=0';
+					$cupons = $db->createCommand($sql)->queryRow();
+				//var_dump($buysentprodetail);exit;
+					if(!empty($cupons)&&!empty($plid)){
+						$timetype = $cupons['time_type'];
+						if($timetype=='1'){
+							$validay = $cupons['begin_time'];
+							$colseday = $cupons['end_time'];
+						}else{
+							$validay = date('Y-m-d H:i:s',strtotime('+'.$cupons['day_begin'].' day'));
+							$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
 						}
 
-					}
-				}
-			//Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
-			$transaction->commit(); //提交事务会真正的执行数据库操作
-			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
+						$se = new Sequence("cupon_branduser");
+						$id = $se->nextval();
+					//$code=new Sequence("sole_code");
+					//$sole_code = $code->nextval();
+					//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
+						$data = array(
+							'lid'=>$id,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'cupon_id'=>$plid,
+							'cupon_source'=>'2',
+							'source_id'=>'0000000000',
+							'to_group'=>'3',
+							'brand_user_lid'=>$userarray,
+							'valid_day'=>$validay,
+							'close_day'=>$colseday,
+							'is_used'=>'1',
+							'used_time'=>'0000-00-00 00:00:00',
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
+							);
 
-		} catch (Exception $e) {
-			$transaction->rollback(); //如果操作失败, 数据回滚
-			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'保存失败',)));
-		}
+					//$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
+					//var_dump($data);exit;
+						$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
+					//exit;
+						Cupon::sentCupon($dpid, $userarray, $cupons['cupon_money'], $cupons['cupon_abstract'], $colseday, 0, $openId['openid']);
+					}
+
+				}
+			}
+			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'')));
+
+		
 	}
 
 
