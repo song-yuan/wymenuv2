@@ -18,9 +18,9 @@ class Helper
 	}
 	static function mkdirs($dir, $mode = 0777)
 	{
-		if (is_dir($dir) || @mkdir($dir, $mode)) return TRUE;
+		if (is_dir($dir) || mkdir($dir, $mode)) return TRUE;
 		if (!mkdirs(dirname($dir), $mode)) return FALSE;
-		return @mkdir($dir, $mode);
+		return mkdir($dir, $mode);
 	}
 	static function writeLog($text) {
 		$filePath = Yii::app()->basePath."/data/".date('Ymd',time())."-log.txt";
