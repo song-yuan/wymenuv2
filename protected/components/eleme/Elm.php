@@ -332,41 +332,7 @@ class Elm
 			}
 			return $res;
 		}else{
-			$access_token = self::elemeGetToken($dpid);
-			if(!$access_token){
-				return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-			}
-			$app_key = ElmConfig::key;
-			$secret = ElmConfig::secret;
-			$url = ElmConfig::url;
-			$protocol = array(
-					"nop" => '1.0.0',
-					"id" => ElUnit::create_uuid(),
-					"action" => "eleme.order.getOrder",
-					"token" => $access_token,
-					"metas" => array(
-							"app_key" => $app_key,
-							"timestamp" => time(),
-					),
-					"params" => array(
-							'orderId'=>$accountNo
-					),
-			);
-			$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-			$result = ElUnit::post($url,$protocol);
-			$orderObj = json_decode($result);
-			$order = $orderObj->result;
-			if($order){
-				$order = Helper::dealString($order);
-				Yii::app()->cache->set($accountNo,json_encode($order));
-				$res = self::dealOrder($order,$dpid,4);
-				if($res){
-					Yii::app()->cache->delete($accountNo);
-				}
-				return $res;
-			}else{
-				self::orderStatus($message,$dpid);
-			}
+			return true;
 		}
 	}
 	public static function productUpdate($lid){
