@@ -90,6 +90,7 @@ class WxRiJie
 				if(empty($orders)){
 					$sql = 'update nb_rijie_code set is_rijie = 1 where lid ='.$rj['lid'].' and dpid ='.$dpid;
 					$result = $db->createCommand($sql)->execute();
+					$msg = true;
 					continue;
 				}
 				$ords = join(',', $orders);
