@@ -16,9 +16,18 @@ class Helper
 		}
 		return $data;
 	}
+	static function mkdirs($dir, $mode = 0777)
+	{
+		if (is_dir($dir) || @mkdir($dir, $mode)) return TRUE;
+		if (!mkdirs(dirname($dir), $mode)) return FALSE;
+		return @mkdir($dir, $mode);
+	}
 	static function writeLog($text) {
+		$filePath = Yii::app()->basePath."/data/".date('Ymd',time())."-log.txt";
 		$text = self::characet ( $text );
-		file_put_contents ( Yii::app()->basePath."/data/log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
+		if(self::mkdirs($filePath)){
+			file_put_contents ( $filePath, date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
+		}
 	}
 	// 替换掉换行符等
 	static function dealString($str) {
