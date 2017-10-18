@@ -284,20 +284,27 @@
 						</div>
 					</a>
 					<?php if(Yii::app()->user->role <= 7):?>
-					<a href="<?php echo $this->createUrl('pricegroup/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('pricegroup/index',array('companyId'=>$this->companyId));?>" title="价格体系 可以添加多套价格体系 根据不到区域添加不同的价格体系  不同的店铺设置不同的价格体系">
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple cpfl"></div>
-							<div class="ku-item-info">价格分组</div>
+							<div class="ku-item-info">价格体系</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('companyGroup/index',array('companyId'=>$this->companyId));?>" >
-						<div class="pull-left margin-left-right hov">
+					
+					
+					<a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId,'type'=>2));?>" title="添加店铺的类型,用来区分不同的类型的店铺">
+						<div class="pull-left margin-left-right hov" >
+							<div class="ku-item ku-purple dpgl"></div>
+							<div class="ku-item-info">店铺类型</div>
+						</div>
+					</a>
+					
+					<a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId,'type'=>3));?>" title="管理员在手机中管理的店进行分组显示">
+						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple dpgl"></div>
 							<div class="ku-item-info">店铺分组</div>
 						</div>
 					</a>
-					
-					
 					<!-- <a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple area"></div>

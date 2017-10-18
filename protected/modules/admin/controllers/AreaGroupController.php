@@ -8,11 +8,11 @@ class AreaGroupController extends BackendController
 	 *区域价格分组列表
 	 */
 	public function actionIndex(){
-
+		$type = Yii::app()->request->getParam('type',1);
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->addCondition('dpid=:dpid and type=:type and delete_flag=0');
 		$criteria->order = ' lid desc ';
-		$criteria->params[':dpid']=$this->companyId;
+		$criteria->params = array(':dpid'=>$this->companyId,':type'=>$type);
 
 
 		$pages = new CPagination(AreaGroup::model()->count($criteria));
@@ -21,6 +21,7 @@ class AreaGroupController extends BackendController
 		$models = AreaGroup::model()->findAll($criteria);
 		$this->render('index',array(
 			'models'=>$models,
+			'type'=>$type,
 			'pages'=>$pages,
 		));
 	}
@@ -30,6 +31,7 @@ class AreaGroupController extends BackendController
 	public function actionCreate(){
 		$model = new AreaGroup ;
 		$dpid = Yii::app()->request->getParam('companyId');
+		$type = Yii::app()->request->getParam('type',1);
 		if(Yii::app()->request->isPostRequest) {
 			$formdata = Yii::app()->request->getPost('AreaGroup');
 			$se=new Sequence("area_group");
@@ -40,14 +42,16 @@ class AreaGroupController extends BackendController
             $model->update_at = date('Y-m-d H:i:s');
             $model->group_name = $formdata['group_name'];
             $model->group_desc = $formdata['group_desc'];
+            $model->type = $type;
 			// p($model);
 			if ($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('areaGroup/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('areaGroup/index' , 'companyId' => $this->companyId,'type'=>$type));
 			}
 		}
 		$this->render('create',array(
 			'model' => $model,
+			'type'=>$type
 		));
 	}
 	/*
@@ -56,6 +60,7 @@ class AreaGroupController extends BackendController
 	public function actionUpdate(){
 		$dpid = Yii::app()->request->getParam('companyId');
 		$lid = Yii::app()->request->getParam('lid');
+		$type = Yii::app()->request->getParam('type',1);
 		$models = AreaGroup::model();
 		$model = $models->find('lid=:lid and dpid=:dpid',array(':lid'=>$lid,':dpid'=>$dpid));
 		if(Yii::app()->request->isPostRequest) {
@@ -67,7 +72,7 @@ class AreaGroupController extends BackendController
 			// p($model);
 			if ($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '编辑成功'));
-				$this->redirect(array('areaGroup/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('areaGroup/index' , 'companyId' => $this->companyId,'type'=>$type));
 			}
 		}
 		$this->render('create',array(

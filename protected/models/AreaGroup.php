@@ -64,7 +64,7 @@ class AreaGroup extends CActiveRecord
             'dpid' => '店铺id',
             'create_at' => 'Create At',
             'update_at' => '最近一次更新时间',
-            'group_name' => '地区分组名',
+            'group_name' => '分组名',
             'group_desc' => '组描述',
             'delete_flag' => '0表示存在，1表示删除',
             'is_sync' => '同步标志',

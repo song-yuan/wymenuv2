@@ -58,7 +58,7 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','地區分组设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId)))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','分组设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>yii::app()->request->urlReferrer)));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -77,10 +77,11 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption">
-						<span class="tab tab-active"><?php echo yii::t('app','地區分组列表');?></span>
+						<span class="tab tab-active"><?php echo yii::t('app','分组列表');?></span>
 					</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('areaGroup/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('areaGroupDetail/index',array('companyId'=>$this->companyId,'type'=>$type));?>" class="btn yellow" ><i class="fa fa-search"></i> <?php echo yii::t('app','店铺对应分组');?></a>
+						<a href="<?php echo $this->createUrl('areaGroup/create' , array('companyId' => $this->companyId,'type'=>$type));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                         <a href="javascript:void(0)" class="btn red" id='deleted' ><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
 					</div>
 				</div>
@@ -90,11 +91,13 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','地區分组名称');?></th>
+								<th><?php echo yii::t('app','分组名称');?></th>
 								<th><?php echo yii::t('app','简介');?></th>
 								<th><?php echo yii::t('app','添加时间');?></th>
 								<th><?php echo yii::t('app','组信息编辑');?></th>
+								<?php if($type==1):?>
                                 <th><?php echo yii::t('app','地区店铺编辑');?></th>
+                                <?php endif;?>
 							</tr>
 						</thead>
 						<tbody>
@@ -105,15 +108,17 @@
 								<td><?php echo $model->group_desc;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('areaGroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('areaGroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
+								<?php if($type==1):?>
                                 <td class="center">
 								<a href="<?php echo $this->createUrl('areaGroup/detailIndex',array('areagroupid' => $model->lid, 'companyId' => $model->dpid,'type'=>1));?>"><?php echo yii::t('app','组内管理');?></a>
 								</td>
+								<?php endif;?>
 							</tr>
 						<?php endforeach;?>
 						<?php else: ?>
-							<tr class="odd gradeX"><td>您还没有添加地区分组,请点右上角添加</td></tr>
+							<tr class="odd gradeX"><td>您还没有添加分组,请点右上角添加</td></tr>
 						<?php endif;?>
 						</tbody>
 					</table>

@@ -39,7 +39,11 @@ class AppReportController extends Controller
 				return false;
 			}
 			if($this->company['type']=='0'){
-				$this->render('adminlist',array('admindpids'=>$this->brandUserAdmin));
+				if(count($this->brandUserAdmin) > 1){
+					$this->render('adminlist',array('admindpids'=>$this->brandUserAdmin));
+				}else{
+					$this->redirect(array('appReport/index','companyId'=>$this->brandUserAdmin[0]['dpid']));
+				}
 				exit;
 			}
 		}else{

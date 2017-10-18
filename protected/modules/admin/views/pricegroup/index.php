@@ -80,6 +80,7 @@
 						<span class="tab tab-active"><?php echo yii::t('app','价格分组列表');?></span>
 					</div>
 					<div class="actions">
+						<a href="<?php echo $this->createUrl('companyGroup/index',array('companyId'=>$this->companyId));?>" class="btn yellow" ><i class="fa fa-search"></i> <?php echo yii::t('app','店铺对应价格分组');?></a>
 						<a href="<?php echo $this->createUrl('pricegroup/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                         <a href="javascript:void(0)" class="btn red" id='deleted' ><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
 					</div>
