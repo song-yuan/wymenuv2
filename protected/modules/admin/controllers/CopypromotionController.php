@@ -29,7 +29,7 @@ class CopypromotionController extends BackendController
 		$models = NormalPromotion::model()->findAll($criteria);
 
 		$db = Yii::app()->db;
-		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and dpid!='.$this->companyId.' and t.comp_dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		//var_dump($dpids);exit;
@@ -43,7 +43,25 @@ class CopypromotionController extends BackendController
 		));
 	}
 
-
+	public function actionClearnormalpromotion(){
+		$criteria = new CDbCriteria;
+		$criteria->condition = 't.dpid='.$this->companyId;
+	
+		$criteria->order =  't.lid desc';
+		$models = NormalPromotion::model()->findAll($criteria);
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and dpid!='.$this->companyId.' and t.comp_dpid = '.$this->companyId;
+		$command = $db->createCommand($sql);
+		$dpids = $command->queryAll();
+		//var_dump($dpids);exit;
+		$categories = $this->getCategories();
+		//var_dump($categories);exit;
+		$this->render('clearnormalpromotion',array(
+				'models'=>$models,
+				'dpids'=>$dpids,
+		));
+	}
 
 //下发普通活动
 	public function actionStorProduct(){
@@ -271,7 +289,50 @@ class CopypromotionController extends BackendController
 
 	}
 
-
+	public function actionClearstorProduct(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
+		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$normalcodes = array();
+		$normalcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$dpids = array();
+		$dpids = explode(',',$dpid);//接收店铺的dpid
+		var_dump($dpids,$normalcodes);exit;
+	
+		//****查询公司的产品分类。。。****
+	
+		$db = Yii::app()->db;
+	
+	
+		//var_dump($catep1,$catep2,$products);exit;
+		//Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
+			$transaction = $db->beginTransaction();
+			try{
+				foreach ($dpids as $dpid){//遍历需要下发活动的店铺
+					foreach ($normalcodes as $normalcode){//遍历需要下发的活动
+						//查询店铺是否已经由此活动
+						$sql = 'update nb_normal_promotion set delete_flag=1 where normal_code='.$normalcode;
+						$db->createCommand($sql)->execute();
+						$sql = 'update nb_normal_promotion_detail set delete_flag=1 where normal_code_pa='.$normalcode;
+						$db->createCommand($sql)->execute();
+					}
+				}
+				$transaction->commit();
+				Yii::app()->user->setFlash('success' , yii::t('app','清除成功！！！'));
+				$this->redirect(array('copypromotion/clearnormalpromotion' , 'companyId' => $companyId)) ;
+			}catch (Exception $e){
+				$transaction->rollback();
+				Yii::app()->user->setFlash('error' , yii::t('app','清除失败！！！'));
+				$this->redirect(array('copypromotion/clearnormalpromotion' , 'companyId' => $companyId)) ;
+			}
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
+			$this->redirect(array('copypromotion/clearnormalpromotion' , 'companyId' => $companyId)) ;
+		}
+	
+	}
 
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');

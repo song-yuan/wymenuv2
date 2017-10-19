@@ -5,7 +5,6 @@
 					
 				),
 		)); ?>
-		<div id="login-form-div">
 			<h3 class="form-title"><?php echo yii::t('app','管理员系统')?></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
@@ -13,7 +12,7 @@
 			</div>
 			<div class="form-group <?php if($model->hasErrors('username')) echo 'has-error';?>">
 				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-				<label class="control-label visible-ie8 visible-ie9">Username</label>
+				<label class="control-label visible-ie8 visible-ie9"><?php echo $model->getAttributeLabel('username');?></label>
 				<div class="input-icon">
 					<i class="fa fa-user"></i>
 					<?php echo $form->textField($model, 'username' , array('class' => 'form-control placeholder-no-fix' , 'autocomplete' => 'off' , 'placeholder' => $model->getAttributeLabel('username'))); ?>
@@ -21,7 +20,7 @@
 				<?php echo $form->error($model , 'username'); ?>
 			</div>
 			<div class="form-group  <?php if($model->hasErrors('password')) echo 'has-error';?>">
-				<label class="control-label visible-ie8 visible-ie9">Password</label>
+				<label class="control-label visible-ie8 visible-ie9"><?php echo $model->getAttributeLabel('password');?></label>
 				<div class="input-icon">
 					<i class="fa fa-lock"></i>
 					<?php echo $form->passwordField($model, 'password' , array( 'class' => 'form-control placeholder-no-fix' , 'autocomplete' => 'off' , 'placeholder' => $model->getAttributeLabel('password'))); ?>
@@ -35,23 +34,13 @@
 				<button type="submit" class="btn blue pull-right">
 				<?php echo yii::t('app','登录');?> <i class="m-icon-swapright m-icon-white"></i>
 				</button>                             
-                             
-                            <a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>" id="bindbutton" class="blue" target="_blank" ><?php echo yii::t('app','解除绑定');?></a>
-                            <!--<a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  target="view_frame"  id="bindbutton" class="blue" target="_blank" ><?php echo yii::t('app','解除绑定');?></a>
-                            <a href="http://menu.wymenu.com/wymenuv2/padbind/login"  id="bindbutton" class="blue" ><?php echo yii::t('app','解除绑定');?></a>-->
 			</div>
-			</div>
-                        <!--<iframe style="width:600px;height: 300px;" src="http://www.baidu.com" name="view_frame">
-                            
-                          </iframe>
-			 
+                        
 			<div class="forget-password">
-				<h4>Forgot your password ?</h4>
-				<p>
-					no worries, click <a href="javascript:;"  id="forget-password">here</a>
-					to reset your password.
-				</p>
+				<h4>忘记密码 ?</h4>
+				<p>请联系我们帮忙找回</p>
 			</div>
+			<!--
 			<div class="create-account">
 				<p>
 					Don't have an account yet ?&nbsp; 
