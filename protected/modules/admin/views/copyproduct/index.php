@@ -109,13 +109,11 @@ function fun()
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品列表');?></div>
 					<div class="actions">
+						<a id="su"  class="btn yellow" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','菜单下发');?></a>
+						<a id="clearsu"  class="btn red" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','清除下发');?></a>
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-<!-- 						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>-->
-							<div class="btn-group">
-							<button type="button" id="su"  class="btn red form-control" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','菜单下发');?></button>
- 						</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -289,9 +287,9 @@ function fun()
 	            cancel: function(index){
 	                layer.close(index);
 	                layer_index_printreportlist=0;
-	            }
-	        });
-			$("#printall").on("click",function(){
+	         }
+        });
+		$("#printall").on("click",function(){
 	            //alert("暂无权限！！！");
 	            var dpids =new Array();
 	            var dpids="";
@@ -330,10 +328,10 @@ function fun()
 		        //alert("123");
 		        layer.closeAll();
 		        layer_index_printerportlist = 0;
-		        });
+	        });
 	    }else{
 			return false;
-			}
+		}
 	});
 
 	</script>

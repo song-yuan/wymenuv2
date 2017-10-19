@@ -72,7 +72,8 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','普通优惠活动');?></div>
 					<div class="actions">
 						<?php if(Yii::app()->user->role <11):?>
-						<a href="<?php echo $this->createUrl('copypromotion/copynormalpromotion' , array('companyId' => $this->companyId));?>" class="btn red"><i class="fa fa-pencil"></i> <?php echo yii::t('app','进入下发');?></a>
+						<a href="<?php echo $this->createUrl('copypromotion/copynormalpromotion' , array('companyId' => $this->companyId));?>" class="btn yellow"><i class="fa fa-pencil"></i> <?php echo yii::t('app','进入下发');?></a>
+						<a href="<?php echo $this->createUrl('copypromotion/clearnormalpromotion' , array('companyId' => $this->companyId));?>" class="btn red"><i class="fa fa-pencil"></i> <?php echo yii::t('app','清除下发');?></a>
 						<?php endif;?>
 						<a href="<?php echo $this->createUrl('normalpromotion/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加普通优惠活动');?></a>
 						<div class="btn-group">
