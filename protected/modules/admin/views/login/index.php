@@ -74,29 +74,5 @@
                         }
                      });
                     
-                    function IsPC()  
-                    {  
-                        var userAgentInfo = navigator.userAgent;  
-                        var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");  
-                        var flag = true;  
-                        for (var v = 0; v < Agents.length; v++) {  
-                            if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }  
-                        }  
-                        return flag;  
-                    } 
-                    if(!IsPC()){
-                    $('#LoginForm_username').focus( function(){
-                		$(".logo").css("margin-top","0px");
-                        $(".content").css("margin-top","-100px");
-                    	});
-                    $('#LoginForm_password').focus( function(){
-                		$(".logo").css("margin-top","0px");
-                        $(".content").css("margin-top","-100px");
-                    	});
-                    $('#LoginForm_password').blur( function(){
-                		$(".logo").css("margin-top",null);
-                        $(".content").css("margin-top",null);
-                    	});
-                    };
                 </script>
                 

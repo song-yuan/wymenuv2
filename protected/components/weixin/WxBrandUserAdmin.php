@@ -14,6 +14,9 @@ class WxBrandUserAdmin {
 		$brandUserAdmin = Yii::app()->db->createCommand($sql)->queryAll();
 		return $brandUserAdmin;
 	}
+	public static function getAreagroup($dpid){
+		$sql = 'select t.*,t1.group_name,t1.group_desc from nb_are';
+	}
 }
 
  
