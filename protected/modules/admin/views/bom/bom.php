@@ -216,7 +216,7 @@
 						<?php endif;?>
 					</div>
 				</div>
-				<div class="portlet-body" style="min-height: 450px">
+				<div class="portlet-body clearfix" style="min-height: 450px">
 					<?php if($type==0):?>
 					<a href="<?php echo $this->createUrl('stockSetting/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
