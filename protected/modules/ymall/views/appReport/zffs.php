@@ -1,4 +1,7 @@
-<link rel="stylesheet" type="text/css" href="../../../../css/appReport/app.css">
+<?php 
+	$basePath = yii::app()->baseUrl;
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appReport/app.css">
 <header class="mui-bar mui-bar-nav">
 		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
 		<h1 class="mui-title">支付方式报表</h1>

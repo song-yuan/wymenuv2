@@ -1,3 +1,6 @@
+<?php 
+	$basePath = yii::app()->baseUrl;
+?>
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/app.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/mui.css">
 <!--导航栏-->

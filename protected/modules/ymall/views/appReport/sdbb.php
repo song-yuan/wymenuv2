@@ -3,7 +3,7 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-
+$basePath = yii::app()->baseUrl;
 $ris = array();
 foreach($riq as $ri){ 
 	array_push($ris,$ri['pay_amount']);
