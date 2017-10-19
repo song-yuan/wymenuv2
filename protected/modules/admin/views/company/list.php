@@ -167,7 +167,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','店铺管理');?></div>
 				</div>
-				<div class="portlet-body" style="min-height: 750px">
+				<div class="portlet-body clearfix" style="min-height: 750px">
 					
 					<a href="<?php echo $this->createUrl('company/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">

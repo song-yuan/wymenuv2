@@ -290,7 +290,7 @@
 						<?php endif;?>
 					</div>
 				</div>
-				<div class="portlet-body" style="min-height: 750px">
+				<div class="portlet-body clearfix" style="min-height: 750px">
 					<?php if($type==0):?>
 					<a href="<?php echo $this->createUrl('productCategory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">

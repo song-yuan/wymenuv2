@@ -42,8 +42,11 @@
 <div class="page-content">
     <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>''))));?>
     
-                    <div class="portlet purple box">                      
-                        <div class="portlet-body" >
+                    <div class="portlet purple box"> 
+                    <div class="portlet-title">
+						<div class="caption"><i class=" fa  fa-user"></i>微信会员</div>
+					</div>                     
+                        <div class="portlet-body clearfix" >
                             <div class="panel_body">
                                 <div class="row">
                                     <div class="col-sm-3 col-xs-6">
