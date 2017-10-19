@@ -71,6 +71,9 @@
    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信赠券'),'url'=>''))));?>
  					<?php if($iscom['type'] == "0" || $isrest=="3"):?>
                     <div class="portlet purple box">
+                    <div class="portlet-title">
+						<div class="caption"><i class=" fa  fa-book"></i>微信赠券</div>
+					</div> 
                       <div class="portlet-body" >
                           <div class="panel_body row">
                                 <p>优惠券</p>
