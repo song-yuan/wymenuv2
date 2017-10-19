@@ -84,7 +84,7 @@ span.tab{
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
 				</div>
-				<div class="portlet-body" style="min-height: 750px">
+				<div class="portlet-body clearfix" style="min-height: 750px">
                  <a href="<?php echo $this->createUrl('waimai/Setting',array('companyId'=>$this->companyId));?>">
 					<div class="pull-left margin-left-right">
 						<div class="ku-item ku-purple wmsz"></div>
