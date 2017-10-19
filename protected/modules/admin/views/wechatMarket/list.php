@@ -74,7 +74,7 @@
                     <div class="portlet-title">
 						<div class="caption"><i class=" fa  fa-book"></i>微信赠券</div>
 					</div> 
-                      <div class="portlet-body" >
+                      <div class="portlet-body clearfix" >
                           <div class="panel_body row">
                                 <p>优惠券</p>
                                     

@@ -28,7 +28,7 @@
     	<div class="portlet-title">
 			<div class="caption"><i class=" fa fa-credit-card"></i>实体卡</div>
 		</div>                       
-        <div class="portlet-body">
+        <div class="portlet-body clearfix">
             <div class="panel_body">
                 <div class="row">
                     <div class="col-xs-6  col-sm-3">

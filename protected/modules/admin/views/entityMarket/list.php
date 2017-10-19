@@ -40,7 +40,7 @@ margin-top: 30px;
 					<div class="portlet-title">
 						<div class="caption"><i class=" fa fa-gift"></i>营销活动</div>
 					</div> 
-                    <div class="portlet-body" >
+                    <div class="portlet-body clearfix" >
                         <div class="panel_body">
                              <div class="row">
                                     <div class="col-sm-3 col-xs-6">
