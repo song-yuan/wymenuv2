@@ -1,0 +1,253 @@
+/*
+ *这是单独为hello mui准备的个性化css，可以覆盖标准mui的css定义；
+ * 在实际项目开发时，建议为App单独写一个css文件，从而实现项目的自定义皮肤功能；
+ * 
+ * */
+.mui-plus header.mui-bar{
+	display: none;
+}
+.mui-plus .mui-bar-nav~.mui-content{
+	padding: 0;
+}
+
+/*hm开头的表示仅为 Hello MUI示例定义*/
+.hm-description{
+	margin: .5em 0;
+}
+.hm-description>li {
+	font-size: 14px;
+	color: #8f8f94;
+}
+.time{
+	margin-top: 10px;
+	margin-bottom: 30px;
+}
+.yy{
+	width: 100%;
+	background-color: #fff;
+	background-image: url(../../../../img/shouji/b5.jpg);
+	margin-top: 45px;
+}
+.shou{
+	width: 100%;margin-top: 10px;
+}
+.shou1{
+	display: inline-block;
+	background-color: #00C598;
+	width: 45%;
+	margin-top: 10px;
+	margin-left: 10px;
+	text-align: center;
+	line-height: 135px;
+	padding-bottom: 10px;
+	height: 135px;
+}
+.shou1 h4{
+	color: #FFFFFF;
+}
+.shou1 h3{
+	color: #FFFFFF;margin-top: 20px;
+}
+.shou2{
+	display: inline-block;
+	background-color: #11ACE5;
+	width: 45%;
+	margin-top: 10px;
+	margin-left: 10px;
+	text-align: center;
+	padding-bottom: 10px;
+	height: 135px;
+}
+.shou2 h4{
+	color: #FFFFFF;
+}
+.shou2 h3{
+	color: #FFFFFF;margin-top: 20px;
+}
+.shou3{
+	 display: inline-block;
+	 width: 45.5%;
+	 margin-top: 10px;
+	 margin-left: 10px;
+	 text-align: center;
+	 padding-bottom: 10px;
+	 border-right: 1px solid #999;
+	 height: 135px;
+}
+.shou3 h4{
+	color: #999999;
+}
+.shou3 h3{
+	margin-top: 20px;
+}
+.shou4{
+	display: inline-block;
+	width: 45%;
+	margin-top: 10px;
+	margin-left: 10px;
+	text-align: center;
+	padding-bottom: 10px;
+	height: 135px;
+}
+.shou4 h4{
+	color: #999999;
+}
+.shou4 h3{
+	margin-top: 20px;
+}
+.shou5{
+	width: 91%;margin-left: 10px;
+}
+.shou5 hr{
+	border: 1px solid #999;
+}
+.ys{
+	width: 100%;border: 1px solid #FFFFFF;border-top: none;
+}
+.ys1{
+	border-right: 1px solid #6D6D72;width: 100px;float: left;
+}
+.ys2{
+	float: left;margin-left: 10px;width: 100px;border-right: 1px solid #6D6D72;
+}
+.ys4{
+	margin-left: 220px;padding-top: 1px;margin-top: 30px;
+}
+.ys5{
+	border-right: 1px solid #6D6D72;width: 100px;float: left;margin-top: 30px;
+}
+.ys6{
+	float: left;margin-left: 10px;width: 100px;margin-top: 30px;
+}
+.ys7{
+	margin-left: 190px; 
+	margin-top: 120px;
+}
+.ren{
+	float: left;margin-left: 10px;width: 100px;margin-top: 30px;
+}
+.span{
+	margin-left: 30px;
+}
+.bb{
+	width: 100%;margin-top: 10px;
+}
+.bb1 h4{
+	margin-left: 10px;
+	color: #999;
+}
+.bb2{
+	float: left;margin-top: 20px;margin-left: 30px;
+}
+.bb3{
+	margin-top: 30px;margin-left: 170px;
+}
+.bb4{
+	margin-left: 170px;margin-top: 20px;padding-bottom: 20px;
+}
+.bb5{
+	margin: 10px;margin-left: 170px;margin-top: 20px;padding-bottom: 20px;
+}
+.bb6{
+	margin-left: 170px;margin-top: 25px;padding-bottom: 20px;
+}
+.bb7{
+	margin-top: 20px;margin-left: 170px;padding-bottom: 30px;
+}
+.bb8{
+	margin-top: 20px;margin-left: 170px;
+}
+.bb9{
+	margin-top:20px;margin-left: 210px;padding-bottom: 20px;
+}
+.bb10{
+	margin-top: 20px;margin-left: 30px;padding-bottom: 20px;
+}
+.tr1 h4{
+	color: #000;
+	text-align: center;
+}
+.padding{
+	padding-left: 30px;
+}
+td{
+	line-height: 30px;
+}
+.sd{
+	margin-top: 50px;
+	background-color: #FFFFFF;
+	margin-bottom: 10px;
+	line-height: 30px;
+}
+.sd h4{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: #000;
+	text-align: center;
+/*	letter-spacing:20px;*/
+}
+.sd .tr2{
+	text-align: center;
+}
+.tr2 .tb2{
+	text-align: left;
+	width: 40%;
+	padding-left: 10px;
+}
+.tr2 .tb3{
+	text-align: right;
+	padding-right:10px; 
+}
+input[type=submit]{
+	width: 80%;
+	margin-bottom: 10px;
+}
+.tb3 .span{
+	padding-right: 40px;
+}
+.tb3 .date{
+	margin-top: 13px;
+    height: 33px;
+	width: 165px;
+}
+.td{
+	padding-left: 45px;
+}
+#table{
+	line-height: 30px;
+}
+.dp{
+	width: 100%;
+	margin-top: 50px;
+	background-color: #fff;
+	line-height: 30px;
+}
+.dp1{
+	overflow: auto;height: 465px;
+}
+.h3{
+	font-size: 18px;
+}
+.tr3 .td{
+	padding-left: 10px;
+}
+.td2{
+	padding-left: 20px;
+}
+.td4{
+	text-align: left;
+}
+#ul{
+	padding:0;
+	margin:0;
+}
+#ul li{
+	float: left;
+	list-style-type:none;
+	line-height: 30px;
+	width: 180px;
+}
+.input{
+	padding-top: 260px;
+	margin-left: 40px;
+}
