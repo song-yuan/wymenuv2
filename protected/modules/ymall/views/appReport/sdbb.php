@@ -3,7 +3,6 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-$basePath = Yii::app()->baseUrl;
 
 $ris = array();
 foreach($riq as $ri){ 
@@ -17,8 +16,8 @@ if (!empty($ris)){
 
 
 ?>
-<link rel="stylesheet" type="text/css" href="../../../../css/appReport/app.css">
-<link rel="stylesheet" type="text/css" href="../../../../css/appReport/mui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/app.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/mui.css">
 <script src="<?php echo $basePath;?>/js/mall/jquery-1.9.1.min.js"></script>
 		<style>
 			.chart {
