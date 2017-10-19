@@ -48,6 +48,8 @@
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
+				<div class="dataTables_wrapper form-inline">
+				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
@@ -84,7 +86,8 @@
 						<?php endif;?>
 						</tbody>
 					</table>
-				<?php if($pages->getItemCount()):?>
+					</div>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
@@ -115,6 +118,7 @@
 							</div>
 						</div>
 						<?php endif;?>
+						</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->

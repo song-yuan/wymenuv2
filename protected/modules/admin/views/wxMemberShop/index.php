@@ -153,6 +153,7 @@ input[type='button']{
                 </div>
                 
             </div>
+				<div class="table-responsive">
     <table class="table table-striped table-bordered table-hover" id="sample_1">
                         <thead>
                             <tr>
@@ -222,6 +223,7 @@ input[type='button']{
                         <?php endif;?>
                         </tbody>
                     </table>
+                    </div>
         </div> 
     </div>
         

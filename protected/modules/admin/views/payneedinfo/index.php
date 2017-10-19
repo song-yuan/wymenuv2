@@ -53,6 +53,7 @@
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
+					<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
@@ -83,6 +84,7 @@
                                                             </td>
                                                         </tr>
 					</table>
+					</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->

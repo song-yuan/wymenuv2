@@ -56,6 +56,8 @@
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
+				<div class="dataTables_wrapper form-inline">
+				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
                                                     <tr>
@@ -90,6 +92,7 @@
 						<?php endif;?>
 						</tbody>
 					</table>
+					</div>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -120,7 +123,8 @@
 								</div>
 							</div>
 						</div>
-						<?php endif;?>					
+						<?php endif;?>		
+						</div>			
 							<div class="alert alert-danger">
 								<strong> 注:</strong> 每一等级的最低积分要比前一等级的最高积分大一。<br/>
 								<strong> 例:</strong> 等级一的最低积分为0，最高积分为100；等级二的最低积分就必须设置成101。<br/>

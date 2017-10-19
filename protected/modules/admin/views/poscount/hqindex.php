@@ -106,6 +106,7 @@
                     </div>
                     <div class="portlet-body" id="table-manage">
                     <span style="font-size:1.5em;color:red;"><?php echo yii::t('app','(注意 : 查询时间为收银机开始使用时间 , 即前边的状态默认是已使用 , 若选择"全部"或者"未使用" , 则所选使用时间段不起作用,查询结果为所有时间的结果)');?></span>
+						<div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="sample_1">
                             <?php if($models):?>
                                 <thead>
@@ -252,6 +253,7 @@
                                 <tr><td><?php echo yii::t('app','没有符合条件的子店铺');?></td></tr>
                             <?php endif;?>
                         </table>
+                        </div>
                     </div>
                 </div>
             <!-- END EXAMPLE TABLE PORTLET-->

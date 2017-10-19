@@ -62,6 +62,7 @@ function fun()
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
+					<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
@@ -94,7 +95,7 @@ function fun()
 						<input type="hidden" id="pgroups" name="groups" value="" />
 						</div>
 					</table>
-
+					</div>
 
 				</div>
 			</div>

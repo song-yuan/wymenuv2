@@ -91,6 +91,7 @@
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
+				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
@@ -148,7 +149,7 @@
 						<?php endif;?>
 						</tbody>
 					</table>
-                       
+                    </div>  
 					<div class="form-actions fluid">
 						<div class="col-md-offset-9 col-md-3">
 				<!--        <button type="submit" class="btn blue">确定</button>     -->   

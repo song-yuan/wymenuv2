@@ -51,6 +51,8 @@
                     </div>
                 </div>
                 <div class="portlet-body" id="table-manage">
+                <div class="dataTables_wrapper form-inline">
+					<div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover" id="sample_1">
                         <thead>
                             <tr>
@@ -79,7 +81,7 @@
                             <input type="hidden" id="dpids" name="dpids" value="" />
                         </div>
                     </table>
-                    
+                   </div> 
                 </div>
             </div>
         </div>

@@ -45,52 +45,55 @@
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
-					<table class="table table-striped table-bordered table-hover" id="sample_1">
-						<thead>
-							<tr>
-								<th><?php echo yii::t('app','会员卡号');?></th>
-								<th><?php echo yii::t('app','姓名');?></th>
-								<th><?php echo yii::t('app','性别');?></th>
-								<th><?php echo yii::t('app','生日');?></th>
-								<th><?php echo yii::t('app','联系方式');?></th>
-								<th><?php echo yii::t('app','金额');?></th>
-								<th><?php echo yii::t('app','积分');?></th>
-								<th><?php echo yii::t('app','状态');?></th>
-								<th><?php echo yii::t('app','折扣（生日折扣）');?></th>
-
-								<th>&nbsp;</th>
-							</tr>
-						</thead>
-						<tbody>
-						<?php if($models):?>
-						<?php foreach ($models as $model):?>
-							<tr class="odd gradeX">
-								<td ><?php echo $model->selfcode;?></td>
-								<td ><?php echo $model->name;?></td>
-								<td ><?php if($model->sex=='m') echo '男';else echo '女';?></td>
-								<td ><?php echo $model->birthday;?></td>
-								<td ><?php echo $model->mobile;?></td>
-								<td ><?php echo $model->all_money;?></td>
-								<td ><?php echo $model->all_points;?></td>
-								<td ><?php switch($model->card_status){case 0:echo '正常';break;case 1: echo "挂失";break;case 2: echo '注销';break;default:echo '';break;}?></td>
-								<td ><?php echo sprintf("%.2f",$model->brandUserLevel?$model->brandUserLevel->level_discount:'1').'('.sprintf("%.2f",$model->brandUserLevel?$model->brandUserLevel->birthday_discount:'1').')';?></td>
-
-								<td class="center">
-<!--									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
-									<a href="<?php echo $this->createUrl('member/consumersRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
-									<a href="<?php echo $this->createUrl('member/pointsRecord',array('rfid' => $model->rfid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','积分记录');?></a>&nbsp;-->
-									<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
-									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
-                                    <?php endif;?>
-                                    <!-- <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a> -->
-								</td>
-							</tr>
-						<?php endforeach;?>
-						<?php else:?>
-						<td colspan="10">没有找到数据</td>
-						<?php endif;?>
-						</tbody>
-					</table>
+				<div class="dataTables_wrapper form-inline">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover" id="sample_1">
+							<thead>
+								<tr>
+									<th><?php echo yii::t('app','会员卡号');?></th>
+									<th><?php echo yii::t('app','姓名');?></th>
+									<th><?php echo yii::t('app','性别');?></th>
+									<th><?php echo yii::t('app','生日');?></th>
+									<th><?php echo yii::t('app','联系方式');?></th>
+									<th><?php echo yii::t('app','金额');?></th>
+									<th><?php echo yii::t('app','积分');?></th>
+									<th><?php echo yii::t('app','状态');?></th>
+									<th><?php echo yii::t('app','折扣（生日折扣）');?></th>
+	
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php if($models):?>
+							<?php foreach ($models as $model):?>
+								<tr class="odd gradeX">
+									<td ><?php echo $model->selfcode;?></td>
+									<td ><?php echo $model->name;?></td>
+									<td ><?php if($model->sex=='m') echo '男';else echo '女';?></td>
+									<td ><?php echo $model->birthday;?></td>
+									<td ><?php echo $model->mobile;?></td>
+									<td ><?php echo $model->all_money;?></td>
+									<td ><?php echo $model->all_points;?></td>
+									<td ><?php switch($model->card_status){case 0:echo '正常';break;case 1: echo "挂失";break;case 2: echo '注销';break;default:echo '';break;}?></td>
+									<td ><?php echo sprintf("%.2f",$model->brandUserLevel?$model->brandUserLevel->level_discount:'1').'('.sprintf("%.2f",$model->brandUserLevel?$model->brandUserLevel->birthday_discount:'1').')';?></td>
+	
+									<td class="center">
+	<!--									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
+										<a href="<?php echo $this->createUrl('member/consumersRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
+										<a href="<?php echo $this->createUrl('member/pointsRecord',array('rfid' => $model->rfid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','积分记录');?></a>&nbsp;-->
+										<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
+										<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
+	                                    <?php endif;?>
+	                                    <!-- <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a> -->
+									</td>
+								</tr>
+							<?php endforeach;?>
+							<?php else:?>
+							<td colspan="10">没有找到数据</td>
+							<?php endif;?>
+							</tbody>
+						</table>
+						</div>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -115,14 +118,14 @@
 									'selectedPageCssClass' => 'active',
 									'internalPageCssClass' => '',
 									'hiddenPageCssClass' => 'disabled',
-									'htmlOptions'=>array('class'=>'pagination pull-right')
+									'htmlOptions'=>array('class'=>'pagination')
 								));
 								?>
 								</div>
 							</div>
 						</div>
 						<?php endif;?>
-
+					</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -130,43 +133,43 @@
 	</div>
 	<!-- END PAGE CONTENT-->
 
-<div class="page-content" style="overflow:hidden;">
-	<div id="main2" name="main2" style="min-width: 500px;min-height:300px;display:none;background: white;">
-	<div id="content">
-		<div class="form-body">
-			<?php $form=$this->beginWidget('CActiveForm', array(
-					'id' => 'excel-form',
-					'errorMessageCssClass' => 'help-block',
-					'htmlOptions' => array(
-						'class' => 'form-horizontal',
-						'enctype' => 'multipart/form-data'
-					),
-			)); ?>
-			<div class="form-group ">
-				<div class="col-md-9">
-					<div class="fileupload fileupload-new" data-provides="fileupload">
-						<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 100px; line-height: 20px;"></div>
-						<div>
-							<span class="btn default btn-file">
-							<span class="fileupload-new"><i class="fa fa-paper-clip"></i> 点击选择上传的Excel文件 </span>
-							<span class="fileupload-exists"><i class="fa fa-undo"></i> 更改 </span>
-							<input type="file" accept="application/vnd.ms-excel" name="file" class="default" />
-							</span>
-							<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除 </a>
-						</div>
+<div id="main2" name="main2" style="min-width: 500px;min-height:300px;background: white;display:none;">
+<div id="content">
+	<div class="form-body">
+		<?php $form=$this->beginWidget('CActiveForm', array(
+				'id' => 'excel-form',
+				'errorMessageCssClass' => 'help-block',
+				'htmlOptions' => array(
+					'class' => 'form-horizontal',
+					'enctype' => 'multipart/form-data'
+				),
+		)); ?>
+		<div class="form-group ">
+			<div class="col-md-9">
+				<div class="fileupload fileupload-new" data-provides="fileupload">
+					<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 100px; line-height: 20px;"></div>
+					<div>
+						<span class="btn default btn-file">
+						<span class="fileupload-new"><i class="fa fa-paper-clip"></i> 点击选择上传的Excel文件 </span>
+						<span class="fileupload-exists"><i class="fa fa-undo"></i> 更改 </span>
+						<input type="file" accept="application/vnd.ms-excel" name="file" class="default" />
+						</span>
+						<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除 </a>
 					</div>
-					<span class="label label-danger">注意:</span>
-					<span>大小：建议不超过2M 格式:.xls </span>
 				</div>
+				<span class="label label-danger">注意:</span>
+				<span>大小：建议不超过2M 格式:.xls </span>
 			</div>
-			<div class="form-actions fluid">
-				<div class="col-md-offset-3 col-md-9">
-					<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
-					<button type="button" class="btn layui-layer-close layui-layer-close2" style="margin-left:3em;"><?php echo yii::t('app','关闭');?></button>
-				</div>
+		</div>
+		<div class="form-actions fluid">
+			<div class="col-md-offset-3 col-md-9">
+				<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
+				<button type="button" class="btn layui-layer-close layui-layer-close2" style="margin-left:3em;"><?php echo yii::t('app','关闭');?></button>
 			</div>
-			<?php $this->endWidget(); ?>
+		</div>
+		<?php $this->endWidget(); ?>
 
+		</div>
 	</div>
 </div>
 	<script>

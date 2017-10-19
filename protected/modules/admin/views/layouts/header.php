@@ -3,15 +3,15 @@
 		<!-- BEGIN TOP NAVIGATION BAR -->
 		<div class="header-inner">
 			<!-- BEGIN LOGO -->  
-			<a class="navbar-brand" style="display:inline-block;padding:0;height:42px;" href="<?php echo '#'; //echo $this->createUrl('default/index',array("companyId"=>$this->companyId));?>">
+			<a class="navbar-brand" href="<?php echo '#'; //echo $this->createUrl('default/index',array("companyId"=>$this->companyId));?>">
 			<!-- <span style="display:inline-block;margin-left:20px;font:900 italic 36px '华文新魏';color:orange;height:42px;line-height: 42px;"><?php echo yii::t('app','壹点吃')?></span> -->
 
-            <img src="<?php echo Yii::app()->request->baseUrl;?>/img/ydclogo1.png" alt="一点吃" style="height:36px;margin-top:3px;">
+            <img src="<?php echo Yii::app()->request->baseUrl;?>/img/ydclogo1.png" alt="一点吃" class="img-responsive" style="height:20px;">
 			</a>
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER --> 
 			<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-			<img src="<?php echo Yii::app()->request->baseUrl;?>/img/menu-toggler.png" alt="" style="border-radius:15px;"/>
+			<img src="<?php echo Yii::app()->request->baseUrl;?>/img/menu-toggler.png" alt=""/>
 			</a> 
 			<!-- END RESPONSIVE MENU TOGGLER -->
                         
@@ -157,13 +157,6 @@
 		<!-- END TOP NAVIGATION BAR -->
 	</div>
 	<!-- END HEADER -->
-        <div id="portlet-lockscreen1111" style="margin:10px; display: none;">
-                <DIV style="margin:10px;float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','密码');?><input id="user_input_password" style="width:60%;border:none;" type="password" value="12345"></DIV>
-                <div style="text-align:center;">
-                    <input type="button" class="btn green" id="lock_screen_close" value="<?php echo yii::t('app','确 定');?>">
-                </div>
-        </div>
-        
 	<div class="clearfix"></div>
         <script type="text/javascript">
             var layer_index_lock_screen;

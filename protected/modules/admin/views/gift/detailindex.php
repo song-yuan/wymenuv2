@@ -58,6 +58,8 @@
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
+				<div class="dataTables_wrapper form-inline">
+					<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 					<?php if(!empty($models)):?>
 						<thead>
@@ -87,7 +89,7 @@
 						<tr><td><?php echo yii::t('app','还没有添加详细打印方案');?></td></tr>
 						<?php endif;?>
 					</table>
-		
+					</div>
 					<div class="form-actions fluid">
 						<div class="col-md-offset-3 col-md-9">
 									<!--<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>-->
@@ -125,7 +127,7 @@
 							</div>
 						</div>
 						<?php endif;?>					
-					
+						</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
