@@ -17,97 +17,156 @@ if (!empty($ris)){
 
 
 ?>
-<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/appReport/app.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/appReport/mui.css">
 <script src="<?php echo $basePath;?>/js/mall/jquery-1.9.1.min.js"></script>
-<style type="text/css">
-	body{
-		margin: 0px;
-		padding: 0px;
-		background-color: #CCCCCC;
-		width: 100%;
-	}
-</style>
-
-<div>
-	<div style="background-color: #FFFFFF;margin-bottom: 10px;line-height: 30px;">
-		<h4 style="text-align: center;">时段报表</h4>
-		<form action="" method="post">
+		<style>
+			.chart {
+				height: 200px;
+				margin: 0px;
+				padding: 0px;
+			}
+			h5 {
+				margin-top: 30px;
+				font-weight: bold;
+			}
+			h5:first-child {
+				margin-top: 15px;
+			}
+		</style>
+<script src="../../../../js/appReport/mui.min.js"></script>
+<div class="yy">
+	<header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
+		<h1 class="mui-title">时段报表</h1>
+	</header>
+	<div class="sd">
+		<form method="post">
 			<table cellpadding="0" cellspacing="0" width="100%">
-				<tr style="text-align: center;">
-					<td>门店</td>
-					<td><input type="hidden" name="dpname" value="0000000009" style="width: 50%;border: none;padding-top: 25px;"/>上海斗石</td>
+				<tr class="tr2">
+					<td class="tb2">门店</td>
+					<td class="tb3"><span class="span"><?php echo Helper::getCompanyName($this->companyId);?></span></td>
 				</tr>
-				<tr style="text-align: center;">
-					<td>区域</td>
-					<td>全部</td>
+				<tr class="tr2">
+					<td class="tb2">选择时间</td>
+					<td class="tb3"><input class="date" type="date" name="date" value="<?php echo $date?>"></td>
 				</tr>
-				<tr>
-					<td style="padding-left:20%;">当前时间</td>
-					<td style="padding-left: 10px"><span><?php echo date('Y-m-d');?></span></td>
-				</tr>
-				<tr>
-					<td  style="text-align: center;">时段</td>
-					<td><input type="date" name="date" style="width: 88%;" value="<?php echo $date?>"></td>
-				</tr>
-				<tr style="text-align: center;">
-					<td colspan="2"><input id='ckbb' type="submit" value="查看报表"></td>
+				<tr class="tr2">
+					<td colspan="2"><input type="submit" value="查询"></td>
 				</tr>
 			</table>
 		</form>
 	</div>
-</div>
-<?php if(!empty($riq)):?>
+
+ <?php if(!empty($riq)):?>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <div id="tu" style="background-color: #FFFFFF;">
-    	<div id="main" style="height:400px;width: 100%;margin-right: 10%; "></div>
-    	
-    </div>
+<div id="tu" style="background-color: #FFFFFF;">
+	<div class="mui-content">
+		<div class="mui-content-padded">
+			<div class="chart" id="lineChart"></div>
+		</div>
+	</div>
+</div>
     <!-- ECharts单文件引入 -->
-<script type="text/javascript">
-        // 基于准备好的dom，初始化echarts图表
-           var myChart = echarts.init(document.getElementById('main')); 
-			        var option = {
-					    tooltip : {
-					        trigger: 'axis'
-					    },
-					    legend: {
-					        data:['订单数','营业额']
-					    },
-					    calculable : true,
-					    xAxis : [
-					        {
-					            type: "category",
-				           		splitLine: {show: false},
-					            data : [<?php foreach($riq as $ri){
-				            	$data = $ri['hour'];
-				            	echo "'$data:00'".",";
-				            }?>]
-				        }
-				    ],
-				      yAxis: [
-						     {
-						        max:'<?php echo ceil($ris[$pos]);?>',
-						        min:'0'
-						    }
-				    ],
-				    series : [
-				        {
-				            name:'订单数',
-				            type:'line',
-				            stack: '总量',
-				            data:[<?php foreach($riq as $ri){echo $ri['count'].",";}?>]
-				        },
-				        {
-				            name:'营业额',
-				            type:'line',
-				            stack: '总量',
-				            data:[<?php foreach($riq as $ri){echo $ri['pay_amount'].",";}?>]
-					        }
-					    ]
-					};
-			        // 为echarts对象加载数据 
-			        myChart.setOption(option);
-    </script>
+<script src="../../../../js/appReport/echarts-all.js"></script>
+		<script>
+			var getOption = function(chartType) {
+				var chartOption = chartType == 'pie' ? {
+					calculable: false,
+					series: [{
+						name: '访问来源',
+						type: 'pie',
+						radius: '65%',
+						center: ['50%', '50%'],
+						data: [{
+							value: 335,
+							name: '直接访问'
+						}, {
+							value: 310,
+							name: '邮件营销'
+						}, {
+							value: 234,
+							name: '联盟广告'
+						}, {
+							value: 135,
+							name: '视频广告'
+						}, {
+							value: 1548,
+							name: '搜索引擎'
+						}]
+					}]
+				} : {
+					legend: {
+						data: ['订单数', '营业额']
+					},
+					grid: {
+						x: 35,
+						x2: 10,
+						y: 30,
+						y2: 25
+					},
+					toolbox: {
+						show: false,
+						feature: {
+							mark: {
+								show: true
+							},
+							dataView: {
+								show: true,
+								readOnly: false
+							},
+							magicType: {
+								show: true,
+								type: ['line', 'bar']
+							},
+							restore: {
+								show: true
+							},
+							saveAsImage: {
+								show: true
+							}
+						}
+					},
+					calculable: false,
+					xAxis: [{
+						type: 'category',
+						data: [<?php foreach ($riq as $ri) {
+							$hour = $ri['hour'];
+							echo"'$hour:00',";
+						}?>]
+					}],
+					yAxis: [{
+						type: 'value',
+						splitArea: {
+							show: true
+						}
+					}],
+					series: [{
+						name: '订单数',
+						type: chartType,
+						data: [<?php foreach ($riq as $ri) {
+							 echo $ri['count'].",";
+						}?>]
+					}, {
+						name: '营业额',
+						type: chartType,
+						data: [<?php foreach ($riq as $ri) {
+							 echo $ri['pay_amount'].",";
+						}?>]
+					}]
+				};
+				return chartOption;
+			};
+			var byId = function(id) {
+				return document.getElementById(id);
+			};
+			var lineChart = echarts.init(byId('lineChart'));
+			lineChart.setOption(getOption('line'));
+			byId("echarts").addEventListener('tap',function(){
+				var url = this.getAttribute('data-url');
+				plus.runtime.openURL(url);
+			},false);
+		</script>
 <?php endif;?>
     <?php if(!empty($riq)):?>
     <div id="biao">
@@ -134,4 +193,4 @@ if (!empty($ris)){
 		</div>
     </div>
 <?php endif;?>
-<div style="background-color: #FFFFFF;"><button style="margin-left: 80%;"><a href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>#sdbb">返回</a></button></div>
+</div>

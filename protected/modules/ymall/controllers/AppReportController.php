@@ -62,8 +62,14 @@ class AppReportController extends Controller
 		}
 		return true;
 	}
-	public function actionIndex(){
+public function actionIndex(){
 		$companyId = $this->companyId;
+		$dpsql = "select comp_dpid from nb_company where dpid=".$companyId;
+		$dp = Yii::app()->db->createCommand($dpsql)->queryRow();
+		$comp_dpid = $dp['comp_dpid'];
+		$dpssql = "select dpid,company_name from nb_company where comp_dpid=".$comp_dpid." and type=1";
+		 $dps = Yii::app()->db->createCommand($dpssql)->queryAll();
+		 // var_dump($dps);exit;
 		$ordersql ="select count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid=".$companyId;
 		// echo $ordersql;exit;
 		$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
@@ -95,38 +101,50 @@ class AppReportController extends Controller
 				'Paymentmethod'=>$Paymentmethod,
 				'Recharges'=>$Recharges,
 				'months'=>$months,
-				'refunds'=>$refunds
+				'refunds'=>$refunds,
+				'dps'=>$dps
 			));
 	}
 	public function actionYysj(){
 		$companyId = $this->companyId;
-		$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where to_days(create_at) = to_days(now()) and dpid=".$companyId." and order_status in (3,4,8)";
-		$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
-		$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid=".$companyId." and to_days(create_at) = to_days(now())) o where y.dpid=".$companyId." and y.account_no=o.account_no and y.paytype !=11 and to_days(y.create_at) = to_days(now()) group by y.paytype";
-		// echo $Paymentsql;exit();
-		$Paymentmethod = Yii::app()->db->createCommand($Paymentsql)->queryAll();
-		// var_dump($Paymentmethod);exit();
-		$Rechargesql = "select sum(reality_money) as reality_money,sum(give_money) as give_money from nb_member_recharge where to_days(update_at) = to_days(now()) and dpid=".$companyId;
-		$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
-		$recordsql = "select sum(recharge_money) as recharge_money,sum(cashback_num) as cashback_num from nb_recharge_record where to_days(update_at) = to_days(now()) and dpid=".$companyId;
-		$records = Yii::app()->db->createCommand($recordsql)->queryAll();
-		// var_dump($Takeouts);exit;
-		$refundsql = "select sum(pay_amount) as pay_amount,count(*) as count from nb_order_pay where to_days(create_at) = to_days(now()) and pay_amount<0 and dpid=".$companyId;
-		$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
+		$date = Yii::app()->request->getParam('date');
+		$todayProfit = array();
+		$Recharges = array();
+		$records = array();
+		$refunds = array();
+		$Paymentmethod = array();
+		if(!empty($date)){
+			$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)";
+			$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
+			$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59') o where y.dpid=".$companyId." and y.account_no=o.account_no and y.paytype !=11 and y.create_at >='".$date['start']." 00:00:00' and y.create_at <= '".$date['End']." 23:59:59' group by y.paytype";
+			// echo $Paymentsql;exit();
+			$Paymentmethod = Yii::app()->db->createCommand($Paymentsql)->queryAll();
+			// var_dump($Paymentmethod);exit();
+			$Rechargesql = "select sum(reality_money) as reality_money,sum(give_money) as give_money from nb_member_recharge where update_at >='".$date['start']." 00:00:00' and update_at <= '".$date['End']." 23:59:59' and dpid=".$companyId;
+			$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
+			$recordsql = "select sum(recharge_money) as recharge_money,sum(cashback_num) as cashback_num from nb_recharge_record where update_at >='".$date['start']." 00:00:00' and update_at <= '".$date['End']." 23:59:59' and dpid=".$companyId;
+			$records = Yii::app()->db->createCommand($recordsql)->queryAll();
+			// var_dump($Takeouts);exit;
+			$refundsql = "select sum(pay_amount) as pay_amount,count(*) as count from nb_order_pay where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and pay_amount<0 and dpid=".$companyId;
+			$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
+		}
 		// var_dump($Takeouts);exit();
 		$this->render('yysj',array(
 			'todayProfit'=>$todayProfit,
 			'Recharges'=>$Recharges,
 			'records'=>$records,
 			'refunds'=>$refunds,
-			'Paymentmethod'=>$Paymentmethod
+			'Paymentmethod'=>$Paymentmethod,
+			'date'=>$date
 			));
 	}
 	public function actionSdbb(){
 		$companyId = $this->companyId;
 		$riq = array();
-		$date = Yii::app()->request->getParam('date');
+		// var_dump($date);exit();
+		$date = "";
 		if(Yii::app()->request->getParam('date')){
+			$date = Yii::app()->request->getParam('date');
 			$riqsql = "select hour(create_at) as hour, count(1) as count,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT(create_at,'%Y-%m-%d') = '".$date."' and dpid=".$companyId." group by hour(create_at)";
 			// echo $riqsql;exit();
 			$riq = Yii::app()->db->createCommand($riqsql)->queryAll();
@@ -141,22 +159,26 @@ class AppReportController extends Controller
 	}
 	public function actionDpxs(){
 		$companyId = $this->companyId;
-		$productsql = "select p.`product_name`,count(1) AS counts,sum(original_price) AS original_price,sum(`price`) as price from nb_order_product p,(select lid,dpid from nb_order where to_days(create_at) = to_days(now()) and dpid=".$companyId." and order_status in (3,4,8)) o where o.lid=p.order_id and p.dpid=o.dpid GROUP BY product_name order by counts desc" ;
+		$date = Yii::app()->request->getParam('date');
+		$productsql = "select p.`product_name`,count(1) AS counts,sum(original_price) AS original_price,sum(`price`) as price from nb_order_product p,(select lid,dpid from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)) o where o.lid=p.order_id and p.dpid=o.dpid GROUP BY product_name order by counts desc" ;
 		$products = Yii::app()->db->createCommand($productsql)->queryAll();
 		// var_dump($products);exit;
 		$this->render('dpxs',array(
-			'products'=>$products
+			'products'=>$products,
+			'date'=>$date
 			));
 		// $this->render('list');
 	}
 	public function actionYclxh(){
 		$companyId = $this->companyId;
-		$sql = "select c.material_name,l.stock_num from nb_product_material c,(select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where to_days(create_at) = to_days(now()) and dpid=".$companyId." GROUP BY material_id) l where c.lid=l.material_id and c.dpid=l.dpid GROUP BY material_name";
+		$date = Yii::app()->request->getParam('date');
+		$sql = "select c.material_name,l.stock_num from nb_product_material c,(select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." GROUP BY material_id) l where c.lid=l.material_id and c.dpid=l.dpid GROUP BY material_name";
 		// echo $sql;exit;
 		$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		// var_dump($materials);exit;
 		$this->render('yclxh',array(
-			'materials'=>$materials
+			'materials'=>$materials,
+			'date'=>$date
 			));
 		// $this->render('list');
 	}
@@ -184,6 +206,7 @@ class AppReportController extends Controller
 		$date = Yii::app()->request->getParam('date');
 		// var_dump($date);exit;
 		if(Yii::app()->request->getParam('date')){
+			
 			$ordersql = "select count(*) as count,sum(reality_total) as reality_total from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59'";
 			// echo $ordersql;exit;
 			$orders = Yii::app()->db->createCommand($ordersql)->queryAll();

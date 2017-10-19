@@ -1,64 +1,55 @@
-<script type="text/javascript">
-	mui.init()
-</script>
-<style>
-	body{
-		margin: 0px;
-		padding: 0px;
-		background-color: #CCCCCC;
-		width: 100%;
-		height: 100%;
-	}
-	body div{
-		background-color: #FFFFFF;
-		line-height: 40px;
-	}
-</style>
-
-<div>
-	<table cellpadding="0" cellspacing="0" width="100%" style="text-align: center;">
-		<tr>
-			<td><h4>上海斗石</h4></td>
-			<td><h4><span><?php echo date('Y-m-d H:i:s');?></span></h4></td>
-		</tr>
-		<tr>
-			<td colspan="2"><h4>单品销售报表</h4></td>
-		</tr>
-		<tr>
-			<td>开始时间</td>
-			<td><span><?php echo date('Y-m-d');?></span> 00:00:00</td>
-		</tr>
-		<tr>
-			<td>结束时间</td>
-			<td><span><?php echo date('Y-m-d');?></span> 23:59:59</td>
-		</tr>
-	</table>
-	<table cellpadding="0" cellspacing="0" width="100%" style="text-align: center;">
-		<tr>
-			<td width="30%"><h4>销售数据</h4></td>
-		</tr>
-		<tr>
-			<td width="40%">单品名称</td>
-			<td width="15%">销量</td>
-			<td width="15%">原价</td>
-			<td width="15%">折扣</td>
-			<td width="15%">实收</td>
-		</tr>
-	</table>
-	<div style="overflow: auto;height: 465px;">
+<link rel="stylesheet" type="text/css" href="../../../../css/appReport/app.css">
+<header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
+		<h1 class="mui-title">单品销售报表</h1>
+</header>
+<div class="dp">
+	<div class="sd">
+		<form method="post">
+			<table cellpadding="0" cellspacing="0" width="100%" class="tr2">
+				<tr>
+					<td class="tb2">门店</td>
+					<td class="tb3"><span class="span"><?php echo Helper::getCompanyName($this->companyId);?></span></td>
+				</tr>
+				<tr>
+					<td class="tb2">开始时间</td>
+					<td class="tb3">
+						<input class="date" type="date" value="<?php echo $date['start'];?>" name="date[start]">
+						
+					</td>
+				</tr>
+				<tr>
+					<td class="tb2">结束时间</td>
+					<td class="tb3"><input class="date" type="date" name="date[End]" value="<?php echo $date['End'];?>"></td>
+				</tr>
+				<tr class="tr2">
+					<td colspan="2"><input type="submit" value="查询"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div style="margin-top: 10px;">
+		<table cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td style="padding-left: 10px;" width="40%">单品名称</td>
+				<td width="15%">销量</td>
+				<td width="15%">原价</td>
+				<td width="15%">折扣</td>
+				<td width="15%">实收</td>
+			</tr>
+		</table>
+	</div>
+	<div class="dp1">
 		<table cellpadding="0" cellspacing="0" width="100%">
 			<?php foreach($products as $product):?>
-			<tr>
-				<td width="40%" style="padding-left: 5px"><?php echo $product['product_name'];?></td>
-				<td width="15%" style="text-align: center;"><?php echo $product['counts'];?></td>
-				<td width="15%" style="text-align: center;"><?php echo round($product['original_price'],2);?></td>
-				<td width="15%" style="text-align: center;"><?php echo round($product['original_price']-$product['price'],2);?></td>
-				<td width="15%" style="text-align: center;"><?php echo round($product['price'],2);?></td>
+			<tr class="tr3">
+				<td width="45%" class="td"><?php echo $product['product_name'];?></td>
+				<td width="10%"><?php echo $product['counts'];?></td>
+				<td width="15%"><?php echo round($product['original_price'],2);?></td>
+				<td width="15%"><?php echo round($product['original_price']-$product['price'],2);?></td>
+				<td width="15%"><?php echo round($product['price'],2);?></td>
 			</tr>
 		<?php endforeach;?>
 		</table>
 	</div>
-</div>
-<div style="background-color: #FFFFFF;width: 100%;text-align: right;line-height: 30px;">
-	<button><a href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>#dpxs">返回</a></button>
 </div>

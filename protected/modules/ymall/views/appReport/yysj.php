@@ -1,43 +1,36 @@
-<script type="text/javascript">
-	mui.init()
-</script>
-<style>
-	body{
-		margin: 0px;
-		padding: 0px;
-		background-color: #CCCCCC;
-		width: 100%;
-	}
-	body div{
-		background-color: #FFFFFF;
-		line-height: 30px;
-	}
-	body .padding{
-		padding-left: 20px;
-	}
-</style>
-
-<div>
-	<table cellpadding="0" cellspacing="0" width="100%" >
+<link rel="stylesheet" type="text/css" href="../../../../css/appReport/app.css">
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
+	<h1 class="mui-title">营业数据</h1>
+</header>
+<div class="yy">
+	<div class="sd">
+		<form method="post">
+			<table cellpadding="0" cellspacing="0" width="100%" class="tr2">
+				<tr>
+					<td class="tb2">门店</td>
+					<td class="tb3"><span class="span"><?php echo Helper::getCompanyName($this->companyId);?></span></td>
+				</tr>
+				<tr>
+					<td class="tb2">开始时间</td>
+					<td class="tb3">
+						<input class="date" type="date" value="<?php echo $date['start'];?>" name="date[start]">
+						
+					</td>
+				</tr>
+				<tr>
+					<td class="tb2">结束时间</td>
+					<td class="tb3"><input class="date" type="date" name="date[End]" value="<?php echo $date['End'];?>"></td>
+				</tr>
+				<tr class="tr2">
+					<td colspan="2"><input type="submit" value="查询"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<table cellpadding="0" cellspacing="0" width="100%">
 		<tr>
-			<td class="padding" colspan="2"><h4><span><?php echo date('Y-m-d H:i:s',time());?></span></h4></td>
-		</tr>
-		<tr>
-			<td  class="padding" class="padding" colspan="2"><h4>上海斗石</h4></td>
-		</tr>
-		<tr style="text-align: center;">
-			<td colspan="2"><h4>营业数据</h4></td>
-		</tr>
-		<tr>
-			<td class="padding">开始时间:</td>
-			<td><span><?php echo date('Y-m-d',time());?></span> 00:00:00</td>
-		</tr>
-		<tr>
-			<td class="padding">结束时间:</td>
-			<td><span><?php echo date('Y-m-d',time());?></span> 23:59:59</td>
-		</tr>
-		<tr>
-			<td class="padding" colspan="2"><h4>交易统计</h4></td>
+			<td colspan="2"><h4>交易统计</h4></td>
 		</tr>
 		<tr>
 			<td class="padding">交易数</td>
@@ -88,11 +81,11 @@
 			<td><?php if(!empty($number)){echo round(($sum+$pay_amount)/$number,2);}else{echo "0";} ?></td>
 		</tr>
 		<tr>
-			<td class="padding" colspan="2"><h4>营业数据</h4></td>
+			<td colspan="2"><h4>营业数据</h4></td>
 		</tr>
 		<tr>
 			<td class="padding">营业毛额</td>
-			<td><?php echo $reality_total;?></td>
+			<td><?php if(!empty($reality_total)){echo $reality_total;}else{echo "0";}?></td>
 		</tr>
 		<tr>
 			<td class="padding">优惠/折扣</td>
@@ -108,7 +101,7 @@
 			<td><?php echo $sum;?></td>
 		</tr>
 		<tr>
-			<td class="padding" colspan="2"><h4>收款统计</h4></td>
+			<td colspan="2"><h4>收款统计</h4></td>
 		</tr>
 		<?php foreach($Paymentmethod as $Pay):?>
 			<?php if($Pay['paytype']==0):?>
@@ -213,7 +206,7 @@
 			<td><?php echo $sum;?></td>
 		</tr>
 		<tr>
-			<td class="padding" colspan="2"><h4>充值统计</h4></td>
+			<td colspan="2"><h4>充值统计</h4></td>
 		</tr>
 		<tr>
 			<td class="padding">传统会员</td>
@@ -256,7 +249,7 @@
 				}?></td>
 		</tr>
 		<tr>
-			<td class="padding" colspan="2"><h4>外卖营收</h4></td>
+			<td colspan="2"><h4>外卖营收</h4></td>
 		</tr>
 		<?php foreach($Paymentmethod as $Pay):?>
 			<?php if($Pay['paytype']==13):?>
@@ -299,7 +292,7 @@
 				?>(<?php echo $countssum;?>次)</td>
 		</tr>
 		<tr>
-			<td class="padding" colspan="2"><h4>其他</h4></td>
+			<td colspan="2"><h4>其他</h4></td>
 		</tr>
 		<tr>
 			<td class="padding">退款金额</td>
@@ -318,9 +311,6 @@
 					echo '0';
 				}
 				}?></td>
-		</tr>
-		<tr style="text-align: center;">
-			<td colspan="2"><button><a href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>#yysj">返回</a></button></td>
 		</tr>
 	</table>
 </div>
