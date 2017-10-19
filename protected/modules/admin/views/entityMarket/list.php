@@ -37,7 +37,9 @@ margin-top: 30px;
    
 
                 <div class="portlet purple box">
-
+					<div class="portlet-title">
+						<div class="caption"><i class=" fa fa-gift"></i>营销活动</div>
+					</div> 
                     <div class="portlet-body" >
                         <div class="panel_body">
                              <div class="row">

@@ -24,11 +24,11 @@
 </style>
 <div class="page-content">
 <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','实体卡'),'url'=>''))));?>		
-    <div class="portlet purple box ">                      
-        <div class="portlet-body">
-        <div class="portlet-title">
+    <div class="portlet purple box ">
+    	<div class="portlet-title">
 			<div class="caption"><i class=" fa fa-credit-card"></i>实体卡</div>
-		</div> 
+		</div>                       
+        <div class="portlet-body">
             <div class="panel_body">
                 <div class="row">
                     <div class="col-xs-6  col-sm-3">
