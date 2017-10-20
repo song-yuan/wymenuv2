@@ -166,7 +166,7 @@ li{
                       <?php if($brand_user_model) :?>
                     <ul>
                         <li class="pull-left">
-                            <span><?php echo $brand_user_model->nickname;?></span>
+                            <span><?php echo $brand_user_model->user_name?$brand_user_model->user_name.'|'.$brand_user_model->nickname:$brand_user_model->nickname;?></span>
                             
                         </li>
                         <li class="pull-left">
