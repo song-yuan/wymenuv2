@@ -213,9 +213,9 @@ class WxCupon
 		}
 	}
 	public static function getOneMonthByBirthday(){
-		$monthBegain = date('m-d 00:00:00',strtotime('+1 week'));
+		$monthBegain = date('m-d',strtotime('+1 week'));
 		
-		$sql = 'select * from nb_brand_user where user_birthday like "%-'.$monthBegain.'" and unsubscribe = 0';
+		$sql = 'select * from nb_brand_user where user_birthday like "%-'.$monthBegain.'%" and unsubscribe = 0';
 		$users = Yii::app()->db->createCommand($sql)->queryAll();
 		if(!empty($users)){
 			foreach ($users as $user){
