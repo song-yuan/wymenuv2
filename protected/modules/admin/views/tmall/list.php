@@ -75,7 +75,18 @@
 							<div class="ku-item-info">商品录入</div>
 						</div>
 					</a>
-					
+					<a href="<?php echo $this->createUrl('goodstock/goodsdelivery',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple splr"></div>
+							<div class="ku-item-info">配货单</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('goodsinvoice/goodsinvoice',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple splr"></div>
+							<div class="ku-item-info">发货单</div>
+						</div>
+					</a>
 				</div>
 			</div>
 		</div>
