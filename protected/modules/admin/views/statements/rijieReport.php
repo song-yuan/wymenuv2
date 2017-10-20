@@ -144,8 +144,8 @@
 								echo $m['y_all'].-$m['m_all'].-$m['d_all'];
 							}
 					?></td>
-		            <td><?php $orders_total = $orders_total+$m['all_nums'];
-		                echo $m['all_nums'];?></td>
+		            <td><?php $orders_total = $orders_total+$m['maoli_nums'];
+		                echo $m['maoli_nums'];?></td>
 		            <td><?php
 		            		$reality_all = $m['maoli_money'];
 		             		$grossprofit_total+=$reality_all;
