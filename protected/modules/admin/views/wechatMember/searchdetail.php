@@ -160,13 +160,17 @@ li{
 <div class="row">   
     <div class="col-md-12">
     <div class="portlet purple box">
+    <div class="portlet-title">
+        <div class="caption"><i class="fa fa-user"></i>会员信息</div>
+             <div class="actions"></div>
+        </div>            
         <div class="portlet-body" >
             <div class="info">
                 <div class="person_info">
                       <?php if($brand_user_model) :?>
                     <ul>
                         <li class="pull-left">
-                            <span><?php echo $brand_user_model->nickname;?></span>
+                            <span><?php echo $brand_user_model->user_name?$brand_user_model->user_name.'|'.$brand_user_model->nickname:$brand_user_model->nickname;?></span>
                             
                         </li>
                         <li class="pull-left">
@@ -188,7 +192,7 @@ li{
                         </li>
                         <li class="pull-left">
                             <span>生日：</span>
-                            <span></span>
+                            <span><?php echo $brand_user_model->user_birthday;?></span>
                         </li>
                         <div style="clear:both;"></div> 
                     </ul>

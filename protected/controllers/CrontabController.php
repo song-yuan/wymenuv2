@@ -8,7 +8,7 @@
 class  CrontabController extends Controller
 {   
 	public function actionSentCuponToBirthDay(){
-		//生日赠券
+		//生日赠券 提前一周发券
 		WxCupon::getOneMonthByBirthday();
 	} 
 	// 生成日结统计数据

@@ -234,7 +234,7 @@
                             <?php foreach($models as $model):?>
                                 <tr>
                                     <td><?php echo substr($model['card_id'],5,9);?></td>
-                                    <td><?php echo $model['user_name']?$model['user_name']:$model['nickname'];?></td>
+                                    <td><?php echo $model['user_name']?$model['user_name'].'|'.$model['nickname']:$model['nickname'];?></td>
                                     <td><?php switch ($model['sex']){case 0:echo "未知"; break; case 1:echo "男";break; case 2:echo "女";};?></td>
                                     <td><?php
                                     if($model['mobile_num']){
@@ -253,7 +253,7 @@
                                     <td><?php echo $model['company_name'];?></td>
                                     <td><?php echo $model['all_money'];?></td>
                                     <td class="button-column">
-                                        <a  class='btn default btn-sm blue'  href="<?php echo $this->createUrl('wechatMember/searchdetail',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>"><i class="fa fa-search"></i>详情</a>
+                                        <a class='btn default btn-sm blue' target="_blank"  href="<?php echo $this->createUrl('wechatMember/searchdetail',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>"><i class="fa fa-search"></i>详情</a>
                                         <?php if(Yii::app()->user->role <=5):?>
                                         <a  class='btn default yellow addCash' id="setAppid<?php echo $model['dpid'];?>" userid="<?php echo $model['lid'];?>" dpid="<?php echo $model['dpid'];?>" name="<?php echo $model['user_name'].'|'.$model['nickname'];?>"><i class="fa fa-rmb"></i><?php echo yii::t('app','充值');?></a>
                                         <?php endif;?>
