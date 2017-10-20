@@ -188,7 +188,7 @@ li{
                         </li>
                         <li class="pull-left">
                             <span>生日：</span>
-                            <span></span>
+                            <span><?php echo $brand_user_model->user_birthday;?></span>
                         </li>
                         <div style="clear:both;"></div> 
                     </ul>
