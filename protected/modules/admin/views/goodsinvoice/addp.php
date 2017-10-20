@@ -174,7 +174,7 @@
 									<LABEL class="col-md-3 control-label">选择配送员:</LABEL>
 										<div class="col-md-4">
 											<select id="paymentid" class="form-control stockselect" >
-					                            <?php if($pers):?>
+					                            <?php $phone=''; if($pers):?>
 					                            <?php foreach ($pers as $p):?>
 					                            <?php $phone = $pers[0]['phone_number'];?>
 					                            <option mobile="<?php echo $p['phone_number'];?>" value="<?php echo $p['member_name'];?>"><?php echo $p['member_name'];?></option>
@@ -245,8 +245,9 @@ $(document).ready(function(){
 			var name = $('#wuliu_name').val();
 			var nums = $('#wuliu_nums').val();
 		}
-		layer.msg(name+'@'+nums);
-		if(name == '' || nums == ''){
+// 		layer.msg(name+'@'+nums);
+// 		alert(name);
+		if(name == '' || nums == '' || name == undefined || nums == undefined){
 			layer.msg('请填写相应信息，再保存！');
 			return false;
 		}else{
