@@ -161,7 +161,7 @@ li{
     <div class="col-md-12">
     <div class="portlet purple box">
     <div class="portlet-title">
-        <div class="caption"><i class="fa fa-group"></i>会员信息</div>
+        <div class="caption"><i class="fa fa-user"></i>会员信息</div>
              <div class="actions"></div>
         </div>            
         <div class="portlet-body" >
