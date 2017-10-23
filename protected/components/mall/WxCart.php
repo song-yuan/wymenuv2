@@ -472,7 +472,7 @@ class WxCart
 	// 可使用代金券 产品的 code
 	public static function getCartCanCuponProductCode($cartArrs){
 		$productCodeArr = array();
-		foreach($availables as $cart){
+		foreach($cartArrs as $cart){
 			if($cart['can_cupon'] == 0){
 				array_push($productCodeArr,$cart['pro_code']);
 			}
