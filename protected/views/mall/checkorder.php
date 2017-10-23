@@ -400,7 +400,7 @@
 			</div>
 			<div class="item-bottom">
 				<div class="item-bottom-left">有效期至<?php echo date('Y.m.d',strtotime($coupon['close_day']));?></div>
-				<div class="item-bottom-right">满<?php echo (int)$coupon['min_consumer'];?>可用</div>
+				<div class="item-bottom-right">满<?php echo (int)$coupon['min_consumer'];?>元可用</div>
 				<div class="clear"></div>
 			</div>
 		</div>

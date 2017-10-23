@@ -195,10 +195,7 @@ class MallController extends Controller
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables);// 购物车优惠原价
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		
-		$productCodeArr = array();
-		foreach($availables as $cart){
-			array_push($productCodeArr,$cart['pro_code']);
-		}
+		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
 		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
