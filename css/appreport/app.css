@@ -22,12 +22,6 @@
 	margin-top: 10px;
 	margin-bottom: 30px;
 }
-.yy{
-	width: 100%;
-	background-color: #fff;
-	background-image: url(../../../../img/shouji/b5.jpg);
-	margin-top: 45px;
-}
 .shou{
 	width: 100%;margin-top: 10px;
 }
@@ -167,9 +161,6 @@
 	color: #000;
 	text-align: center;
 }
-.padding{
-	padding-left: 30px;
-}
 td{
 	line-height: 30px;
 }
@@ -218,7 +209,6 @@ input[type=submit]{
 }
 .dp{
 	width: 100%;
-	margin-top: 50px;
 	background-color: #fff;
 	line-height: 30px;
 }

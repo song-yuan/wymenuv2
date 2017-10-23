@@ -1,8 +1,6 @@
-<?php 
-	$basePath = yii::app()->baseUrl;
-?>
+<?php $basePath = Yii::app()->baseUrl;?>
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/app.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/mui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/mui.min.css">
 <!--导航栏-->
 <header class="mui-bar mui-bar-nav">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
@@ -27,7 +25,7 @@
 		</form>
 	</div>
 </div>
-<div class="yy">
+<div class="dp">
 	<!--今日营业收益-->
 	<div class="shou">
 		<div class="shou1">

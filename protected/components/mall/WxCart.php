@@ -469,6 +469,16 @@ class WxCart
 		}
 		return number_format($price,2);
 	}
+	// 可使用代金券 产品的 code
+	public static function getCartCanCuponProductCode($cartArrs){
+		$productCodeArr = array();
+		foreach($cartArrs as $cart){
+			if($cart['can_cupon'] == 0){
+				array_push($productCodeArr,$cart['pro_code']);
+			}
+		}
+		return $productCodeArr;
+	}
 	public static function clearCart($userId,$dpid){
 		$sql = 'delete from nb_cart where dpid='.$dpid.' and user_id='.$userId;
 		$result = Yii::app()->db->createCommand($sql)->execute();

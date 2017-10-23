@@ -1,33 +1,32 @@
-<?php 
-	$basePath = yii::app()->baseUrl;
-?>
-<link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appReport/app.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/appReport/app.css">
 <header class="mui-bar mui-bar-nav">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
 	<h1 class="mui-title">套餐销售报表</h1>
 </header>
+<div class="sd">
+	<form method="post">
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<span>门店</span>
+			<span style="padding-left: 165px;"><?php echo Helper::getCompanyName($this->companyId);?></span>
+		</li>
+		<li class="mui-table-view-cell">
+			<span>开始时间</span>
+			<span id='demo2' style="padding-left: 135px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['start'];}?></span>
+			<input id="date1" type="hidden" name="date[start]">
+		</li>
+		<li class="mui-table-view-cell">
+			<span>结束时间</span>
+			<span id='demo4' style="padding-left: 135px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['End'];}?></span>
+			<input id="date2" type="hidden" name="date[End]">
+		</li>
+		<li>
+			<button type="submit" class="mui-btn mui-btn-primary mui-btn-block">查询</button>
+		</li>
+	</ul>
+	</form>
+</div>
 <div class="dp">
-	<div class="sd">
-		<form method="post">
-			<table cellpadding="0" cellspacing="0" width="100%" style="text-align: center;">
-				<tr class="tr2">
-					<td class="tb2" class="tb">门店</td>
-					<td class="tb3"><span class="span"><?php echo Helper::getCompanyName($this->companyId);?></span></td>
-				</tr>
-				<tr class="tr2">
-					<td class="tb2">开始时间</td>
-					<td class="tb3"><input class="date" type="date" name="date[start]" value="<?php echo $date['start'];?>" style="width: 70%;"></td>
-				</tr>
-				<tr class="tr2">
-					<td class="tb2">结束时间</td>
-					<td class="tb3"><input class="date" type="date" name="date[End]" value="<?php echo $date['End'];?>" style="width: 70%;"></td>
-				</tr>
-				<tr>
-					<td colspan="2"><input type="submit" value="查询"></td>
-				</tr>
-			</table>
-		</form>
-	</div>
 	<table cellpadding="0" cellspacing="10" width="100%" style="text-align: center;">
 		<tr>
 			<td width="30%">套餐名称</td>
