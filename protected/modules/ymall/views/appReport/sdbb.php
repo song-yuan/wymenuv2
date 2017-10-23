@@ -66,7 +66,7 @@ if (!empty($ris)){
 	</div>
 </div>
     <!-- ECharts单文件引入 -->
-<script src="<?php echo $basePath;?>/js/appReport/echarts-all.js"></script>
+<script src="<?php echo $basePath;?>/js/appreport/echarts-all.js"></script>
 		<script>
 			var getOption = function(chartType) {
 				var chartOption = chartType == 'pie' ? {
