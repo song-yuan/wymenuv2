@@ -22,6 +22,13 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 		<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/feedback-page.css" />
 		<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/iconfont.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../../../../css/ymall/ymall.css"/>
+		<style>
+			/*.mui-hbar{background-color: #B22222!important;color:white;}*/
+			.mui-hbar{background-color: #FF8C00!important;color:white;}
+			.mui-a{color:yellow!important;font-weight: 900;}
+			/* .mui-bar-tab .mui-tab-item {color:#FF8C00;} */
+			.mui-bar-tab .mui-tab-item {color:#fff;}
+		</style>
     	<script type="text/javascript" src="../../../../plugins/jquery-1.10.2.min.js"></script>
     	<script type="text/javascript" src="../../../../scripts/flipsnap.js"></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.min.js "></script>
@@ -32,20 +39,20 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 	<body>
 	<?php echo $content; ?>
 
-	<nav class="mui-bar mui-bar-tab">
-			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='product')echo 'mui-active';?> " id="index" href="<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId));?>">
+	<nav class="mui-bar mui-bar-tab mui-hbar ">
+			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='product')echo 'mui-a';?>" id="index" href="<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId));?>">
 				<span class="mui-icon mui-icon-home"></span>
 				<span class="mui-tab-label">首页</span>
 			</a>
-			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='kind'||$cname=='productdetail')echo 'mui-active';?> " id="kind" href="<?php echo $this->createUrl('kind/kind',array('companyId'=>$this->companyId));?>">
+			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='kind'||$cname=='productdetail')echo 'mui-a';?> " id="kind" href="<?php echo $this->createUrl('kind/kind',array('companyId'=>$this->companyId));?>">
 				<span class="mui-icon mui-icon-list"></span>
 				<span class="mui-tab-label">分类</span>
 			</a>
-			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='ymallcart')echo 'mui-active';?> " id="cart" href="<?php echo $this->createUrl('ymallcart/index',array('companyId'=>$this->companyId));?>">
+			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='ymallcart')echo 'mui-a';?> " id="cart" href="<?php echo $this->createUrl('ymallcart/index',array('companyId'=>$this->companyId));?>">
 				<span class="mui-icon iconfont icon-cart"><span class="mui-badge" id="car_num"><?php echo $this->getCartsnum(); ?></span></span>
 				<span class="mui-tab-label">购物车</span>
 			</a>
-			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='myinfo'||$cname=='address')echo 'mui-active';?> " id="my" href="<?php echo $this->createUrl('myinfo/index',array('companyId'=>$this->companyId));?>">
+			<a class="mui-tab-item <?php $cname=Yii::app()->controller->id;if ($cname=='myinfo'||$cname=='address')echo 'mui-a';?> " id="my" href="<?php echo $this->createUrl('myinfo/index',array('companyId'=>$this->companyId));?>">
 				<span class="mui-icon mui-icon-contact"></span>
 				<span class="mui-tab-label">我的</span>
 			</a>
@@ -73,6 +80,10 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 	var button1 = document.getElementById('my');
 	button1.addEventListener('tap',function(){
 	location.href="<?php echo $this->createUrl('myinfo/index',array('companyId'=>$this->companyId));?>";
+	});
+	mui('.mui-bar').on('tap','.mui-tab-item',function(){
+		$('.mui-tab-item').removeClass('mui-a');
+		$(this).addClass('mui-a');
 	});
 
 	</script>

@@ -13,10 +13,10 @@ class YmallcartController extends BaseYmallController
 	public function actionIndex()
 	{
 
-		// p(Yii::app()->user->userId);
-		// Yii::app()->user->userid;
+		// p(substr(Yii::app()->user->userId,0,10));
+		// p(Yii::app()->user->name);
 
-		$user_id = 88888888;
+		$user_id = substr(Yii::app()->user->userId,0,10);
 
 		$db = Yii::app()->db;
 		$sql = 'select gc.*,g.description,g.goods_unit,g.store_number,g.main_picture,g.original_price as now_price,g.member_price as now_mbprice,c.company_name from nb_goods_carts gc '
@@ -66,10 +66,9 @@ class YmallcartController extends BaseYmallController
 		$material_code = Yii::app()->request->getParam('material_code');
 		$num =  Yii::app()->request->getParam('num',1);
 		//查询提交者信息
-		$user_id = 88888888;
-		$user_name = 'admin';
-		// Yii::app()->user->username;
-		// Yii::app()->user->userId;
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
+		// p(Yii::app()->user->userId);
 		if (!$promotion_price) {
 			$promotion_price = $price;
 		}
@@ -129,8 +128,8 @@ class YmallcartController extends BaseYmallController
 		//接收ajax提交的商品信息
 		$goods_num_edit = Yii::app()->request->getParam('goods_num_edit');
 		//查询提交者信息
-		$user_id = 88888888;
-		$user_name = 'admin';
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		// Yii::app()->user->username;
 		// Yii::app()->user->userId;
 		$arr = array();
@@ -162,8 +161,8 @@ class YmallcartController extends BaseYmallController
 		$goods_num_edit = Yii::app()->request->getParam('goods_num_edit');
 		$delete = Yii::app()->request->getParam('delete',0);
 		//查询提交者信息
-		$user_id = 88888888;
-		$user_name = 'admin';
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		// Yii::app()->user->username;
 		// Yii::app()->user->userId;
 		$arr = array();
@@ -193,10 +192,10 @@ class YmallcartController extends BaseYmallController
 		$lids = Yii::app()->request->getParam('lid');
 		// $lids = explode(',',$lid);
 		//生成订单号(账单号) 店铺id.时间戳
-		$account_no = $this->companyId.time();
+		
 
-		$user_id = 88888888;
-		$user_name = 'admin';
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		//查询默认的$goods_address_id
 		$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
 		if (empty($goods_address_id)) {
@@ -223,19 +222,23 @@ class YmallcartController extends BaseYmallController
 				$goods_order = new GoodsOrder();
 				$se=new Sequence("goods_order");
 				$lid = $se->nextval();
+				$ses=new Sequence("goods_codes");
+				$clid = $ses->nextval();
+				$account_no = Common::getCodes($this->companyId,$lid,$clid);
 				$is_sync = DataSync::getInitSync();
 				$goods_order->lid = $lid;
 				$goods_order->dpid = $this->companyId;
 				$goods_order->create_at = date('Y-m-d H:i:s',time());
 				$goods_order->update_at = date('Y-m-d H:i:s',time());
-				$goods_order->account_no = $account_no;
+				$goods_order->account_no =$account_no;
 				$goods_order->user_id = $user_id;
 				$goods_order->username = $user_name;
 				$goods_order->goods_address_id = $goods_address_id;
-				$goods_order->order_status = 0;
+				$goods_order->order_status = 0;//未支付
 				$goods_order->order_type = 1;
 				$goods_order->should_total = $should_total;
 				$goods_order->reality_total = $reality_total;
+				$goods_order->pay_status = 0;//未支付
 				$goods_order->paytype = 0;//不确定
 				$goods_order->pay_time = 0;//不确定
 				$goods_order->delete_flag=0;
@@ -287,8 +290,8 @@ class YmallcartController extends BaseYmallController
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
 
-		$user_id = 88888888;
-		$user_name = 'admin';
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		//查询默认的$goods_address_id
 		$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
 		$goods_address_id = Yii::app()->request->getParam('address_id',$goods_address_id);
@@ -358,5 +361,6 @@ class YmallcartController extends BaseYmallController
 			'reality_total'=>$reality_total['reality_total'],
 		));
 	}
+
 
 }

@@ -1,7 +1,7 @@
 
-		<header class="mui-bar mui-bar-nav">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-		    <h1 class="mui-title">常用设置</h1>
+		<header class="mui-bar mui-bar-nav mui-hbar">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
+		    <h1 class="mui-title" style="color:white;">常用设置</h1>
 		</header>
 		<div class="mui-content">
 		   <ul class="mui-table-view mui-grid-view mui-grid-9">

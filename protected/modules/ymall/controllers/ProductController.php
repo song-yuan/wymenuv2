@@ -8,36 +8,27 @@ class ProductController extends BaseYmallController
 	 */
 	public function actionIndex()
 	{
-		$pid = Yii::app()->request->getParam('pid',0);
-		$categoryId = Yii::app()->request->getParam('category',0);
-
 		$db = Yii::app()->db;
-
-		//查询所有分类的产品,根据店铺的dpid查找该店铺分组的仓库,查询仓库的名字产品
-		$sql = 'select g.goods_code,g.goods_name,g.lid as glid,g.main_picture,g.original_price,g.member_price,g.goods_unit,c.company_name,c.dpid,mc.lid,mc.category_name,gm.material_code from nb_goods g '
-				.' left join nb_company c on(c.dpid=g.dpid) '
-				.' left join nb_material_category mc on (mc.lid=g.category_id )'
-				.' left join nb_goods_material gm on (g.lid=gm.goods_id )'
-				.' where g.dpid in(select ad.depot_id from nb_area_group_depot ad where ad.delete_flag=0 and ad.area_group_id in (select area_group_id from nb_area_group_company where company_id='.$this->companyId.' and delete_flag=0))'
-				.' order by g.category_id';
-		$products = $db->createCommand($sql)->queryAll();
-
-		$materials =array();
-		foreach ($products as $key => $product) {
-			if(!isset($materials[$product['lid']])){
-				$materials[$product['lid']] = array();
-			}
-			array_push($materials[$product['lid']], $product);
+		$sqls = 'SELECT `t`.material_name,SUM(stock.stock) AS stock,safe.safe_stock,safe.max_stock,unit.unit_name FROM `nb_product_material` `t`
+			LEFT JOIN `nb_product_material_stock` `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid AND stock.delete_flag=0)
+			LEFT JOIN (select a.* from nb_product_material_safe a where a.dpid = '.$this->companyId.' AND  UNIX_TIMESTAMP(a.create_at) in(select max(UNIX_TIMESTAMP(b.create_at)) from nb_product_material_safe b where b.dpid=a.dpid and b.material_id=a.material_id) ) `safe` ON (t.lid=safe.material_id and safe.dpid=t.dpid AND safe.delete_flag=0)
+			LEFT JOIN (SELECT u.unit_name,r.sales_unit_id FROM nb_material_unit u LEFT JOIN nb_material_unit_ratio r on(u.lid=r.sales_unit_id AND r.delete_flag=0 ) where u.delete_flag=0) `unit` ON (t.sales_unit_id=unit.sales_unit_id )
+			WHERE (t.delete_flag=0 and t.dpid='.$this->companyId.') GROUP BY t.lid';
+		$stocks = $db->createCommand($sqls)->queryAll();
+		
+		$company_name = Company::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId))->company_name;
+		$x = mb_strlen($company_name);
+		$y=0;
+		if (($x/3)>8) {
+			$y = ($x/3)-8;
 		}
+		$company_name = mb_substr($company_name,$y,$x,'utf-8');
+		// p($company_name);
 
-		$criteria = new CDbCriteria;
-		$criteria->with = array('category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
-		$stocks = ProductMaterial::model()->findAll($criteria);
+
 		$this->render('product',array(
 			'stocks'=>$stocks,
-			'materials'=>$materials,
-			'companyId'=>$this->companyId,
+			'company_name'=>$company_name,
 		));
 	}
 

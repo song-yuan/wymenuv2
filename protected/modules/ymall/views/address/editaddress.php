@@ -44,9 +44,9 @@
 			}
 		</style>
 
-		<header class="mui-bar mui-bar-nav">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-		    <h1 class="mui-title">编辑收货地址</h1>
+		<header class="mui-bar mui-bar-nav mui-hbar">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
+		    <h1 class="mui-title" style="color:white;">编辑收货地址</h1>
 		</header>
 		<div class="mui-content">
 			<form class="mui-input-group margin-top" action="<?php echo $this->createUrl('address/editaddress',array('companyId'=>$this->companyId)) ?>" method="POST">

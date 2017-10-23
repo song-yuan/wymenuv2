@@ -31,72 +31,71 @@
 			}
 		</style>
 
-		<header class="mui-bar mui-bar-nav">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-		    <h1 class="mui-title">管理收货地址</h1>
+		<header class="mui-bar mui-bar-nav mui-hbar">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
+		    <a class="mui-pull-right  edit" style="color:white;" onclick="fn()">添加</a>
+		    <h1 class="mui-title" style="color:white;">管理收货地址</h1>
 		</header>
-		<div class="mui-content">
-			<ul class="mui-table-view ">
-
-				<?php if ($models): ?>
-				<?php foreach ($models as $key => $model): ?>
-				<li class="mui-table-view-divider" >
-					<div class="mui-row padding">
-						<span class="left color-l-gray"><?php echo $model['name'] ?></span>
-						<span class="right padding-right1 color-l-gray"><?php echo $model['mobile'] ?></span>
-					</div>
-					<span class="mui-row  padding-top">
-						<span class=" font-small mui-ellipsis-2 padding-right"><?php echo $model['pcc'].' '.$model['street'] ?></span>
-					</span>
-					<span class="mui-row  padding-top">
-						<span class="left ">
-						  	<input name="addres"  <?php if ($model['default_address']){echo 'checked';} ?> value="<?php echo $model['lid'] ;?>" type="radio" style="zoom:180%;vertical-align: middle;" id="a<?php echo $model['lid'] ;?>">
-						  	<label class="<?php if ($model['default_address']){echo 'color-l-orange';} ?>" style="height: 23px;line-height: 23px;" for="a<?php echo $model['lid'] ;?>"> [ 默认地址 ] </label>
+		<div class="mui-content ">
+				<ul class="mui-table-view " style="padding-bottom: 50px;overflow:scroll;">
+					<?php if ($models): ?>
+					<?php foreach ($models as $key => $model): ?>
+					<li class="mui-table-view-divider" >
+						<div class="mui-row padding">
+							<span class="left color-l-gray"><?php echo $model['name'] ?></span>
+							<span class="right padding-right1 color-l-gray"><?php echo $model['mobile'] ?></span>
+						</div>
+						<span class="mui-row  padding-top">
+							<span class=" font-small mui-ellipsis-2 padding-right"><?php echo $model['pcc'].' '.$model['street'] ?></span>
 						</span>
-						<span class="right padding-right">
-							<a class="color-l-green" href="<?php echo $this->createUrl('address/editaddress',array('companyId'=>$this->companyId,'lid'=>$model['lid']));?>"><span class="mui-icon mui-icon-compose"></span>编辑</a>
-							<a class="color-l-red delete" href="<?php echo $this->createUrl('address/addressdelete',array('companyId'=>$this->companyId,'lid'=>$model['lid']));?>"><span class="mui-icon mui-icon-trash"></span>删除</a>
+						<span class="mui-row  padding-top">
+							<span class="left ">
+								<input name="addres"  <?php if ($model['default_address']){echo 'checked';} ?> value="<?php echo $model['lid'] ;?>" type="radio" style="zoom:180%;vertical-align: middle;" id="a<?php echo $model['lid'] ;?>">
+								<label class="<?php if ($model['default_address']){echo 'color-l-orange';} ?>" style="height: 23px;line-height: 23px;" for="a<?php echo $model['lid'] ;?>"> [ 默认地址 ] </label>
+							</span>
+							<span class="right padding-right">
+								<a class="color-l-green" href="<?php echo $this->createUrl('address/editaddress',array('companyId'=>$this->companyId,'lid'=>$model['lid']));?>"><span class="mui-icon mui-icon-compose"></span>编辑</a>
+								<a class="color-l-red delete" lid="<?php echo $model['lid']; ?>"><span class="mui-icon mui-icon-trash"></span>删除</a>
+							</span>
 						</span>
-					</span>
-				</li>
-				<?php endforeach; ?>
-				<?php else: ?>
-				<li class="mui-table-view-divider">
-					<div class="mui-row padding">
-					还没有添加地址,请点击 [添加收货地址]
-					</div>
-				</li>
-				<?php endif; ?>
-
-			</ul>
-			<nav class="mui-bar mui-bar-tab" id="" style="margin-bottom: 50px;">
-		        <div class="ui-tab-item " style="">
-		            <button type="button" class="mui-btn mui-btn-primary mui-btn-block" onclick="fn()"  style="margin:0;height:50px;top:0;border-radius: 0;">
-		            	<span class="mui-icon mui-icon-plusempty" style="font-weight:900;"></span>添加新地址
-		            </button>
-		        </div>
-		    </nav>
-
-
+					</li>
+					<?php endforeach; ?>
+					<?php else: ?>
+					<li class="mui-table-view-divider">
+						<div class="mui-row padding">
+						还没有添加地址,请点击 [添加收货地址]
+						</div>
+					</li>
+					<?php endif; ?>
+				</ul>
 	    </div>
 
 		<script type="text/javascript">
 			//删除
-			var x = document.getElementsByTagName('li').length;
-			for(i=0;i<x;i++){
-				document.getElementsByClassName('delete')[i].addEventListener('tap', function() {
+			$('.delete').on('tap', function() {
 				var btnArray = ['否', '是'];
+				var lid = $(this).attr('lid');
+				// alert(lid);
+				$(this).parent().parent().parent().attr('id', 'absign');
 				mui.confirm('删除地址，确认？', '提示', btnArray, function(e) {
 					if (e.index == 1) {
-						location.href='';
-						mui.toast('删除成功');
-					} else {
-						location.href='';
-						mui.toast('删除失败');
+						mui.post('<?php echo $this->createUrl("address/deleteaddress",array("companyId"=>$this->companyId)) ?>',{
+								   lid:lid,
+								},
+								function(data){
+									if (data == 1) {
+										$('#absign').fadeOut(1000).remove();
+										mui.toast('删除成功');
+									}else if(data == 0) {
+										mui.toast('因网络原因删除失败 , 请重新删除 ! ! !');
+									}
+								},'json'
+							);
+
+
 					}
 				})
 			});
-			}
 			//添加
 			function fn(){
 				location.href='<?php echo $this->createUrl('address/addaddress',array('companyId'=>$this->companyId));?>';

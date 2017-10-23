@@ -3,9 +3,10 @@
 			.mui-grid-view.mui-grid-9{background-color: white;}
 			input[type=search]{background-color: white;}
 			.search-form{
-				width: 70%;
+				width: 60%;
 				margin-right:5%;
 				float: right;
+				color:#999;
 			}
 			.color-blue{
 				color:darkblue;
@@ -69,111 +70,117 @@
 			}
 			.mui-cell{background-color: #EFEFF4!important;}
 			.processbar{height:1.3em;width: 70%;}
-
+			.mui-content{background-color: white!important;}
 			/**		*/
-
 
 			@import url(http://fonts.googleapis.com/css?family=Expletus+Sans);
-* {
-	margin:0; padding:0;
-	box-sizing: border-box;
-}
-
-body {
-font-family: "Expletus Sans", sans-serif;
-}
-
-
-h4 {
-	border-bottom: 1px solid #ccc;
-	padding-bottom: 9px;
-}
-
-
-progress:not(value) {
-}
-
-progress[value] {
-	appearance: none;
-	border: none;
-	width: 100%; height: 20px;
-	background-color: whiteSmoke;
-	border-radius: 3px;
-	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
-	color: royalblue;
-
-	position: relative;
-	margin: 0 0 1.5em;
-}
-progress[value]::-webkit-progress-bar {
-	background-color: whiteSmoke;
-	border-radius: 3px;
-	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
-}
-progress[value]::-webkit-progress-value {
-	position: relative;
-	background-size: 35px 20px, 100% 100%, 100% 100%;
-	border-radius:3px;
-	animation: animate-stripes 5s linear infinite;
-}
-@keyframes animate-stripes { 100% { background-position: -100px 0; } }
-progress[value]::-webkit-progress-value:after {
-	content: '';
-	position: absolute;
-	width:5px; height:5px;
-	top:7px; right:7px;
-	background-color: white;
-	border-radius: 100%;
-}
-
-.progress-bar {
-	background-color: whiteSmoke;
-	border-radius: 3px;
-	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
-	width: 100%; height:20px;
-}
-
-.progress-bar span {
-	background-color: royalblue;
-	border-radius: 3px;
-	display: block;
-	text-indent: -9999px;
-}
-
-p[data-value] {
-  position: relative;
-}
-
-p[data-value]:after {
-	content: attr(data-value) '件';
-	position: absolute; right:0;
-}
-
-.html5::-webkit-progress-value{
-	/* Gradient background with Stripes */
-	background-image:
-	-webkit-linear-gradient( 135deg,
-							 transparent,
-							 transparent 33%,
-							 rgba(0,0,0,.1) 33%,
-							 rgba(0,0,0,.1) 66%,
-							 transparent 66%),
-    -webkit-linear-gradient( top,
-							rgba(255, 255, 255, .25),
-							rgba(0,0,0,.2)),
-     -webkit-linear-gradient( left, #f44, #ff0);
-}
-
+			* {
+				margin:0; padding:0;
+				box-sizing: border-box;
+			}
+			body {
+			font-family: "Expletus Sans", sans-serif;
+			}
+			h4 {
+				border-bottom: 1px solid #ccc;
+				padding-bottom: 9px;
+			}
+			progress:not(value) {
+			}
+			progress[value] {
+				appearance: none;
+				border: none;
+				width: 100%; height: 20px;
+				background-color: whiteSmoke;
+				border-radius: 3px;
+				box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+				color: royalblue;
+				position: relative;
+				margin: 0 0 0.5em;
+			}
+			progress[value]::-webkit-progress-bar {
+				background-color: whiteSmoke;
+				border-radius: 3px;
+				box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+			}
+			progress[value]::-webkit-progress-value {
+				position: relative;
+				background-size: 35px 20px, 100% 100%, 100% 100%;
+				border-radius:3px;
+				animation: animate-stripes 5s linear infinite;
+			}
+			@keyframes animate-stripes { 100% { background-position: -100px 0; } }
+			progress[value]::-webkit-progress-value:after {
+				content: '';
+				position: absolute;
+				width:5px; height:5px;
+				top:7px; right:7px;
+				background-color: white;
+				border-radius: 100%;
+			}
+			.progress-bar {
+				background-color: whiteSmoke;
+				border-radius: 3px;
+				box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+				width: 100%; height:20px;
+			}
+			.progress-bar span {
+				background-color: royalblue;
+				border-radius: 3px;
+				display: block;
+				text-indent: -9999px;
+			}
+			p[data-value] {
+			  position: relative;
+			}
+			p[data-value]:after {
+				content: attr(data-value) '';
+				position: absolute; right:0;
+			}
+			.html5::-webkit-progress-value{
+				/* Gradient background with Stripes */
+				background-image:
+				-webkit-linear-gradient( 135deg,
+										 transparent,
+										 transparent 33%,
+										 rgba(0,0,0,.1) 33%,
+										 rgba(0,0,0,.1) 66%,
+										 transparent 66%),
+			    -webkit-linear-gradient( top,
+										rgba(255, 255, 255, .25),
+										rgba(0,0,0,.2)),
+			    -webkit-linear-gradient( left, #f44, #ff0);
+			}
 			/**		*/
+			#popover{
+				height: 100px;
+				width:200px;
+			}
 		</style>
-
+		<div id="popover" class="mui-popover">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<div class="mui-input-row mui-radio">
+						<label>北京店铺1</label>
+						<input class="companyId" name="companyId" type="radio" checked value="27">
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-input-row mui-radio">
+						<label>北京店铺2</label>
+						<input class="companyId" name="companyId" type="radio" value="35">
+					</div>
+				</li>
+			</ul>
+		</div>
 		<div class="mui-off-canvas-wrap mui-draggable">
 			<div class="mui-inner-wrap"  id="Main">
-				<header class="mui-bar mui-bar-nav">
-					<!-- <a class="mui-icon mui-icon-left-nav mui-pull-left"></a> -->
-					<a id="mui-popover1" class="mui-icon mui-icon-download mui-pull-right"></a>
-					<!-- <h1 class="mui-title">首页</h1> -->
-					<img src="../../../../../../img/ydclogo2.png" alt="" style="width: 15%;height: 36px;padding: 3px 0 2px 0;">
+				<header class="mui-bar mui-bar-nav mui-hbar">
+					<a id="mui-popover1" class="mui-icon mui-icon-download mui-pull-right" style="color:white;"></a>
+					<a href="popover" style="z-index:1;color:white;width: 25%;height:40px;display:inline-block;">
+						<span class="mui-icon mui-icon-map"></span>
+						<p style="color:white;width:66%;height:40px;float:right;overflow:hidden;font-weight:900;"><?php echo $company_name; ?></p>
+					</a>
 					<form action=" <?php echo  $this->createUrl('kind/search',array('companyId'=>$this->companyId)); ?>" class="search-form" method="GET">
 						<div class="mui-input-row mui-search">
 							<input type="search" id="search" class="mui-input-clear" name="content" placeholder="搜索产品">
@@ -254,57 +261,23 @@ p[data-value]:after {
 								<div class="mui-indicator"></div>
 							</div>
 						</div>
-						<div >
+						<div>
 							<h4>店铺原料库存</h4>
 							<!-- HTML5 -->
-							<?php if($stocks): ?>
-							<?php foreach ($stocks as $stock): ?>
-						    <p style="width:90%;margin:0;" data-value="100"><?php echo $stock['material_name'] ?></p>
-							<progress max="1000" value="900" class="html5">
-								<div class="progress-bar">
-									<!-- <span style="width: 80%"></span> -->
-								</div>
-							</progress>
-							<?php endforeach; ?>
-							<?php endif; ?>
-						</div>
-						<?php if($materials):?>
-						<?php foreach ($materials as $key => $products):?>
-						<!-- 分类名称 -->
-						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell mui-cell" id="cate<?php echo $key; ?>">
-								<?php echo $products[0]['category_name']; ?>
-							</li>
-						</ul>
-						<!-- 分类内容 -->
-						<ul class="mui-table-view mui-grid-view mui-grid-9">
-
-							<?php foreach ($products as $m):?>
-								<li class="ui-table-view-cell mui-media mui-col-xs-6">
-									<div class="">
-										<div class="goods-pic">
-											<img src="<?php echo 'http://menu.wymenu.com/'.$m['main_picture']?>" style="height: 130px;"/>
-										</div>
-										<div><span class="color-blue">[<?php echo $m['company_name'];?>]</span><?php echo $m['goods_name'];?></div>
-										<div class="bottom">
-											<div class="float-l color-r">￥ <?php echo $m['original_price'];?></div>
-											<div class="float-l "><?php echo $m['goods_unit'];?></div>
-											<div class="float-r  color-r ">
-												<div class="addicon" stock_dpid="<?php echo $m['dpid'];?>" goods_name="<?php echo $m['goods_name'];?>" goods_id="<?php echo $m['glid'];?>"  price="<?php echo $m['original_price'];?>"  goods_code="<?php echo $m['goods_code'];?>" material_code="<?php echo $m['material_code'];?>">+</div>
-											</div>
-										</div>
+							<div style="width: 90%;margin:0 auto;">
+								<?php if($stocks): ?>
+								<?php foreach ($stocks as $stock): ?>
+							    <p style="width:100%;margin:0;" data-value="<?php echo '剩余: '.$stock['stock'].' '.$stock['unit_name']; ?>"><?php echo $stock['material_name']; ?></p>
+								<progress max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5">
+									<div class="progress-bar">
+										<!-- <span style="width: 80%"></span> -->
 									</div>
-								</li>
-							<?php endforeach;?>
-						</ul>
-						<?php endforeach;?>
-						<?php else: ?>
-						<ul class="mui-table-view mui-grid-view mui-grid-9">
-								<li class="ui-table-view-cell mui-media">
-									没有查询到您店铺附近的仓库 , 或者仓库中没有货品 , 请到<我的>点击<联系总部客服> , 向品牌总部咨询 .
-								</li>
-						</ul>
-						<?php endif;?>
+								</progress>
+								<?php endforeach; ?>
+								<?php endif; ?>
+							</div>
+						</div>
+
 					</div>
 				</div>
 				<!-- 产品内容结束 -->
@@ -341,7 +314,7 @@ p[data-value]:after {
 				$(this).removeClass('addicon1');
 				$('.mui-badge').removeClass('mui-badge1');
 
-				
+
 				var stock_dpid = $(this).attr('stock_dpid'); //仓库的dpid
 				var goods_name = $(this).attr('goods_name'); //产品名称
 				var goods_id = $(this).attr('goods_id'); //产品id
@@ -381,5 +354,19 @@ p[data-value]:after {
 					event.preventDefault();
 					mui.alert("请填写搜索内容 ! ! !");
 				}
+			});
+
+			$('.companyId').change(function(event) {
+				/* Act on the event */
+				var companyId = $(this).val();
+				var btnArray = ['是','否'];
+				mui.confirm('是否改变当前店铺 ？','提示',btnArray,function(e){
+					if(e.index==0){
+						//自己的逻辑
+						location.href="<?php echo $this->createUrl('product/index'); ?>/companyId/"+companyId;
+					}else{
+						location.reload();
+					}
+				});
 			});
 		</script>
