@@ -21,26 +21,23 @@
 										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 									</div>
 								
-									<div class="form-group  ">
+									<div class="form-group ">
 										<lable style="font-size: 14px;" class="col-md-3 control-label"><?php echo '对应的原料';?></lable>
 										<div id="category_container" class="col-md-4 mater_sel">
 										<?php $this->widget('application.modules.admin.components.widgets.MaterialSelected',array('categoryId'=>$model->category_id,'companyId'=>$compid, 'goodmatecode'=>$goodmatecode)); ?>
-										<span style="color: pink;">可以不选择</span>
+										<span style="color: red;">必选项</span>
 										</div>
 										<input class="form-control" name="Goods_material_id" id="Goods_material_id" type="hidden" value="-1"></input>
 									</div>
-								<?php if($istempp){ echo '<script>
-															$(".category_selecter").each(function(){
-																$(this).attr("disabled",true)
-																//document.querySelector(".category_selecter").setAttribute("disabled",true);
-															});
-															//var btn=document.querySelector(".category_selecter");
-															//for(var i;i<=btn.length;i++){
-																//$("#test").attr("test","aaa")
-															//	}
-															//btn.disabled=true;
-																				</script>';
-									}?>
+									<div class="form-group ">
+										<lable style="font-size: 14px;" class="col-md-3 control-label"><?php echo '对应入库系数';?></lable>
+										<div id="category_container" class="col-md-4 unit_sel">
+										<?php $this->widget('application.modules.admin.components.widgets.UnitSelected',array('companyId'=>$compid, 'goodunitcode'=>$goodunitcode)); ?>
+										<span style="color: red;">必选项</span>
+										</div>
+										<input class="form-control" name="Goods_unit_id" id="Goods_unit_id" type="hidden" value="-1"></input>
+									</div>
+								
 									<div class="form-group <?php if($model->hasErrors('goods_name')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'goods_name',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -140,8 +137,7 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<!-- <a href="<?php echo $this->createUrl('product/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a> -->                              
+											<button type="button" class="btn blue add_save"><?php echo yii::t('app','确定');?></button>
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
@@ -238,11 +234,30 @@
 	   		
 	   });
 
-		   $('.mater_sel').on('change','.materials',function(){
-		   		var id = $(this).val();
-		   		layer.msg(id);
-		   		$('#Goods_material_id').val(id);
-		   });
+		$('.add_save').on('click',function(){
+			var gmid = $('.mater_sel').find('option:selected').val();
+			var guid = $('.unit_sel').find('option:selected').val();
+			$('#Goods_material_id').val(gmid);
+			$('#Goods_unit_id').val(guid);
+			//layer.msg(gmid);
+			if(gmid <=0 || guid <=0){
+				layer.msg('请选择必填项！！');
+				return false;
+				
+			}else{
+				$('#goods-form').submit();
+			}
+		});
+// 		   $('.mater_sel').on('change','.materials',function(){
+// 		   		var id = $(this).val();
+// 		   		//layer.msg(id);
+// 		   		$('#Goods_material_id').val(id);
+// 		   });
+// 		   $('.unit_sel').on('change','.materials',function(){
+// 		   		var id = $(this).val();
+// 		   		//layer.msg(id);
+// 		   		$('#Goods_unit_id').val(id);
+// 		   });
 
 	});
 	</script>
