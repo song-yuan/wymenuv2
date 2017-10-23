@@ -55,6 +55,7 @@
 								<th><?php echo yii::t('app','订单号');?></th>
                                 <th><?php echo yii::t('app','配货单号');?></th>
                                 <th><?php echo yii::t('app','订单总额');?></th>
+                                <th><?php echo yii::t('app','支付状态');?></th>
                                 <th><?php echo yii::t('app','订单状态');?></th>
                                 <th><?php echo yii::t('app','配送人或单位');?></th>
                                 <th><?php echo yii::t('app','联系方式或单号');?></th>
@@ -72,6 +73,12 @@
 								<td><?php switch ($model['pay_status']){
 									case 0 : echo '未支付';break;
 									case 1 : echo '已支付';break;
+									default: echo '未知';break;
+								}?></td>
+								<td><?php switch ($model['status']){
+									case 0 : echo '未出库';break;
+									case 1 : echo '已出库';break;
+									case 2 : echo '已确认收货';break;
 									default: echo '未知';break;
 								}?></td>
 								<td><?php echo $model['sent_personnel'];?></td>
