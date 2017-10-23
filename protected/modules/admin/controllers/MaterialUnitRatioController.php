@@ -57,12 +57,17 @@ class MaterialUnitRatioController extends BackendController
 			
 			if($stockUnitId&&$salesUnitId){
 				$se=new Sequence("material_unit_ratio");
-				$model->lid = $se->nextval();
+				$lid = $se->nextval();
+				$model->lid = $lid;
+				$code = new Sequence('muhs_code');
+				$mrcode = $code->nextval();
+				
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->update_at = date('Y-m-d H:i:s',time());
 				$model->delete_flag = '0';
 				$model->mulhs_code = $stockUnitId;
 		        $model->mushs_code = $salesUnitId;
+		        $model->unit_code = Common::getCode($this->companyId , $lid, $mrcode);
 				//var_dump($model);exit;
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));

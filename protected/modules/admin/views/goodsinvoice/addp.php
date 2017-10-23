@@ -263,7 +263,7 @@ $(document).ready(function(){
 	                if(data.status){
 	                    layer.msg("保存成功");
 	                    document.getElementById("close_modal").click();
-	                     
+	                    history.go(0);
 	                }else{
 	                    alert("保存失败");
 	                }
