@@ -70,7 +70,7 @@ class PricegroupController extends BackendController
 				}
 				$transaction->commit();
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('priceGroup/index' , 'companyId' => $dpid));
+				$this->redirect(array('pricegroup/index' , 'companyId' => $dpid));
 			}catch(Exception $e){
 	                $transaction->rollBack();
 	                Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败,请重试'));
