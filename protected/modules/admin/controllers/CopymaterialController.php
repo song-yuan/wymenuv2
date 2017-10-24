@@ -304,10 +304,10 @@ class CopymaterialController extends BackendController
 	        							'stock_unit_id'=>MaterialUnit::getMaterialUnitLid($dpid,$materialunitratios['mulhs_code']),
 	        							'sales_unit_id'=>MaterialUnit::getMaterialUnitLid($dpid,$materialunitratios['mushs_code']),
 	        							'unit_ratio'=>$materialunitratios['unit_ratio'],
-	        							//'unit_type'=>$materialunitratios['unit_type'],
 	        							//'type'=>$category['type'],
 	        							'mulhs_code'=> $materialunitratios['mulhs_code'],
 	        							'mushs_code'=> $materialunitratios['mushs_code'],
+	        							'unit_code'=>$materialunitratios['unit_code'],
 	        							'delete_flag'=>'0',
 	        							'is_sync'=>$is_sync,
 	        					);
