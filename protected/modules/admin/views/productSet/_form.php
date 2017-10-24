@@ -169,8 +169,7 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" <?php if($b){echo 'disabled';}?> class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<!-- <a href="<?php echo $this->createUrl('productSet/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a> -->
+											<button type="button" <?php if($b){echo 'disabled';}?> class="btn blue add_save"><?php echo yii::t('app','确定');?></button>
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
@@ -243,4 +242,15 @@
 			$("#ProductSet_main_picture").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
+		$('.add_save').on('click',function(){
+			var gmid = $('#ProductSet_category_id').val();
+			//layer.msg(gmid);
+			if(gmid == '' || gmid == undefined|| gmid == 0){
+				layer.msg('请选择套餐分类！！');
+				return false;
+				
+			}else{
+				$('#printer-form').submit();
+			}
+		});
 	</script>

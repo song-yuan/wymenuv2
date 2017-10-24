@@ -305,12 +305,12 @@
 							<div class="ku-item-info">店铺分组</div>
 						</div>
 					</a>
-					<!-- <a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('areaGroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right hov" >
 							<div class="ku-item ku-purple area"></div>
 							<div class="ku-item-info">地区分组</div>
 						</div>
-					</a> -->
+					</a>
 					
 					<?php endif; ?>
 					<?php endif; ?>
