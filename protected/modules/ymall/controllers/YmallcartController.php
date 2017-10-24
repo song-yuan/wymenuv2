@@ -73,7 +73,6 @@ class YmallcartController extends BaseYmallController
 			$promotion_price = $price;
 		}
 
-
 		if(Yii::app()->request->isAjaxRequest){
 			//查询购物车中是否存在该商品, 存在直接数量加1 , 如果不存在则直接插入,
 			$goods_cart = GoodsCarts::model()->find('dpid=:dpid and stock_dpid=:stock_dpid and goods_code=:goods_code and user_id=:user_id and delete_flag=0',array(':dpid'=>$this->companyId,':stock_dpid'=>$stock_dpid,':goods_code'=>$goods_code,':user_id'=>$user_id,));
@@ -192,19 +191,21 @@ class YmallcartController extends BaseYmallController
 		$lids = Yii::app()->request->getParam('lid');
 		// $lids = explode(',',$lid);
 		//生成订单号(账单号) 店铺id.时间戳
-		
+	
 
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
 		//查询默认的$goods_address_id
-		$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
+		$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id));
 		if (empty($goods_address_id)) {
-			$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
+			$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id',array(':dpid'=>$this->companyId,':user_id'=>$user_id));
 			if (empty($goods_address_id)) {
 				$this->redirect(array('address/addaddress' , 'companyId' => $this->companyId,'error'=>3)) ;
 				exit;
 			}
 		}
+		// p($goods_address_id);
+		$goods_address_id = $goods_address_id->lid;
 		$goods_address_id = Yii::app()->request->getParam('goods_address_id',$goods_address_id);
 
 		$db = Yii::app()->db;
