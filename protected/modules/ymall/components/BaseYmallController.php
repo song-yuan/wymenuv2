@@ -53,7 +53,7 @@ class BaseYmallController extends CController
  * @return    [type]         导航购物车计数查询          [description]
  */
 	public function getCartsnum(){
-		$user_id = 88888888;
+		$user_id = substr(Yii::app()->user->userId,0,10);
 		$db = Yii::app()->db;
 		$sql = 'select count(gc.lid) as num from nb_goods_carts gc '
 				.' where gc.dpid='.$this->companyId

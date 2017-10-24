@@ -15,7 +15,9 @@ class AddressController extends BaseYmallController
 	{
 
 		$account_no = Yii::app()->request->getParam('account_no');
-		$user_id = '88888888';
+
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		$sql = 'select * from nb_goods_address  where  delete_flag = 0 and user_id='.$user_id.' and dpid='.$this->companyId.' order by default_address desc';
 		$models=Yii::app()->db->createCommand($sql)->queryAll();
 		// p($models);
@@ -33,7 +35,8 @@ class AddressController extends BaseYmallController
 
 		$success = Yii::app()->request->getParam('success',0);//修改添加的状态,0 正常 ,1 添加成功,2 编辑成功
 
-		$user_id = '88888888';
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		$sql = 'select * from nb_goods_address  where  delete_flag = 0 and user_id='.$user_id.' and dpid='.$this->companyId.' order by default_address desc';
 		$models=Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -55,7 +58,8 @@ class AddressController extends BaseYmallController
 		$error = Yii::app()->request->getParam('error',0);
 
 
-		$user_id = '88888888';
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		if (Yii::app()->request->isPostRequest) {
 			// p($_POST);
 			if ($default_address) {
@@ -98,7 +102,8 @@ class AddressController extends BaseYmallController
 
 	public function actionEditaddress()
 	{
-		$user_id = '88888888';
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
 		$lid = Yii::app()->request->getParam('lid');
 		$model = GoodsAddress::model()->find('lid=:lid and dpid=:dpid and user_id=:user_id and delete_flag=0',array(':lid'=>$lid,':dpid'=>$this->companyId,':user_id'=>$user_id));
 		// p($model);
@@ -145,5 +150,20 @@ class AddressController extends BaseYmallController
 			'model'=>$model,
 			'error'=>$error,
 		));
+	}
+
+		public function actionDeleteaddress()
+	{
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$user_name = Yii::app()->user->name;
+		$lid = Yii::app()->request->getParam('lid');
+		$info = GoodsAddress::model()->find('lid=:lid and dpid=:dpid and user_id=:user_id and delete_flag=0',array(':lid'=>$lid,':dpid'=>$this->companyId,':user_id'=>$user_id));
+		// p($info);
+		if ($info->delete()) {
+			echo json_encode(1);exit;
+		}else{
+			echo json_encode(0);exit;
+		}
+
 	}
 }

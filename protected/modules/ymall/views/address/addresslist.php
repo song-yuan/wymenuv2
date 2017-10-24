@@ -29,12 +29,14 @@
 			}
 		</style>
 
-		<header class="mui-bar mui-bar-nav">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-		    <h1 class="mui-title">选择收货地址</h1>
-			<a class="mui-pull-left edit" id="">管理</a>
+		<header class="mui-bar mui-bar-nav mui-hbar">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
+		    <h1 class="mui-title" style="color:white;">选择收货地址</h1>
+			<a class="mui-pull-left edit" id="" style="color:white;">管理</a>
 		</header>
 		<div class="mui-content">
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll">
 			<ul class="mui-table-view margin-top">
 			<?php if ($models): ?>
 				<?php foreach ($models as $key => $model): ?>
@@ -62,10 +64,13 @@
 			<?php endif; ?>
 			</ul>
 	    </div>
+	    </div>
+	    </div>
 
 
 		<script type="text/javascript">
 			mui.init();
+			mui('.mui-scroll-wrapper').scroll();
 			mui('.mui-table-view').on('tap', '.mui-table-view-divider', function(event) {
 				var btnArray = ['是','否'];
 				var lid = this.attributes["lid"].value;

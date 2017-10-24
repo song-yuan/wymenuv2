@@ -2,14 +2,13 @@
 			.mui-scroll-wrapper{margin-bottom: 50px;}
 			.mui-grid-view.mui-grid-9{background-color: white;}
 			input[type=search]{background-color: white;}
-			/*.search-form{
-				width: 70%;
-				margin-right:5%;
-				float: right;
-			}*/
+			.search-form{
+				height: 34px;
+			}
 			.color-blue{
 				color:darkblue;
 			}
+			.mui-content{background-color: white!important;}
 			.mui-grid-view.mui-grid-9 .ui-table-view-cell {
 			    margin: 0;
 			    padding: 11px 15px;
@@ -71,13 +70,13 @@
 		</style>
 		<div class="mui-off-canvas-wrap mui-draggable">
 			<div class="mui-inner-wrap" id="Main">
-				<header class="mui-bar mui-bar-nav">
+				<header class="mui-bar mui-bar-nav mui-hbar">
 					<!-- <a class="mui-icon mui-icon-left-nav mui-pull-left"></a> -->
 					<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
-					<span class="mui-icon mui-icon-left-nav"></span>
+					<span class="mui-icon mui-icon-left-nav" style="color:white;"></span>
 				</button>
-					<a href="#offCanvas" class="mui-icon mui-icon-bars mui-pull-right"></a>
-					<h1 class="mui-title">分类</h1>
+					<a href="#offCanvas" class="mui-icon mui-icon-bars mui-pull-right" style="color:white;"></a>
+					<h1 class="mui-title" style="color:white;">分类</h1>
 				</header>
 				<!-- 侧滑导航开始 -->
 				<aside id="offCanvas" class="mui-off-canvas-left ">

@@ -14,9 +14,9 @@
 			.big-ul{margin-bottom: 100px;margin-top:2px!important;}
 		</style>
 
-		<header class="mui-bar mui-bar-nav">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-		    <h1 class="mui-title">确认订单</h1>
+		<header class="mui-bar mui-bar-nav mui-hbar">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
+		    <h1 class="mui-title" style="color:white;">确认订单</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-row back-color padding banma" style="">
@@ -83,8 +83,8 @@
 	    <nav class="mui-bar mui-bar-tab nav-on" id="gopay" >
 	        <div class="mui-tab-item " style="width:10%;">
 	        </div>
-	        <div class="mui-tab-item " style="width:55%;">
-	            	实付款:￥<span style="color: red;margin-right: 10px;padding-right: 10px;"><?php echo $reality_total; ?></span>
+	        <div class="mui-tab-item " style="width:55%;color:gray;">
+	            	实付款 : ￥<span style="color: red;margin-right: 10px;padding-right: 10px;"><?php echo $reality_total; ?></span>
 	        </div>
 	        <div class="mui-tab-item " style="width:35%;">
 	            <button type="button" class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</button>

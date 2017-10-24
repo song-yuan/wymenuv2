@@ -49,6 +49,7 @@
 			.ui-table-view-cell{padding:15px 0!important;border-bottom: 1px solid #f0f0e4;}
 			.goods_product{top:34px!important;}
 			.cblack{color:#2F4F4F;}
+			.mui-content{background-color: white!important;}
 		</style>
 
 
@@ -66,80 +67,83 @@
 		<!--单页面开始-->
 		<div id="cart1" class="mui-page">
 			<!--页面标题栏开始-->
-			<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<div class="mui-navbar-inner mui-bar mui-bar-nav mui-hbar">
 				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
-					<span class="mui-icon mui-icon-left-nav"></span>
+					<span class="mui-icon mui-icon-left-nav" style="color:white;"></span>
 				</button>
-				<h1 class="mui-center mui-title">购物车</h1>
-				<a class="mui-pull-right edit" id="edit">编辑</a>
+				<h1 class="mui-center mui-title" style="color:white;">购物车</h1>
+				<a class="mui-pull-right edit" id="edit" style="color:white;">编辑</a>
 			</div>
 			<!--页面标题栏结束-->
 			<!--页面主内容区开始-->
 			<div class="mui-page-content">
-			<ul class="mui-table-view big-ul">
-
-			<?php if (!empty($materials)): ?>
-			    <?php foreach ($materials as $key => $products): ?>
-			    <li class="mui-table-view-cell big-li">
-			    	<div class="mui-row" style="height: 40px;background: #FaFaFa;">
-				    	<div class="mui-col-xs-2 mui-checkbox" style="height: 35px;">
-				    		<input name="checkbox" type="checkbox" class="selectlist">
-				    	</div>
-				    	<div class="mui-col-xs-10 ">
-				    		<a class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></a>
-				    	</div>
-			    	</div>
-			        <ul class="mui-table-view" id="">
-			        	<?php foreach ($products as $product):?>
-					    <li class="mui-row  mui-media ui-table-view-cell">
-					    	<div class="mui-col-xs-2 mui-checkbox">
-					    		<input name="goods_cart_id" value=" <?php echo $product['lid']; ?>" type="checkbox" class="goods_product">
+			<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+			<ul class="mui-table-view big-ul" >
+				<?php if (!empty($materials)): ?>
+				    <?php foreach ($materials as $key => $products): ?>
+				    <li class="mui-table-view-cell big-li">
+				    	<div class="mui-row" style="height: 40px;background: #FaFaFa;">
+					    	<div class="mui-col-xs-2 mui-checkbox" style="height: 35px;">
+					    		<input name="checkbox" type="checkbox" class="selectlist">
 					    	</div>
-					    	<div class="mui-col-xs-10" >
-				    			<a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
-					            	<img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$product['main_picture']; ?>" >
-						        </a>
-					            <div class="mui-media-body">
-					                <a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
-					                	<span class="cblack"><?php echo $product['goods_name']; ?></span>
-					                </a>
-					                <p class='mui-ellipsis'><?php echo $product['description']?$product['description']:'操作员偷懒,没有描述'; ?></p>
-					                <span style="color:darkslategray; display: block;">单价
-					                <span style="color: red;" class="price">
-					                <?php
-					                	//显示goods表的原始价格 , 会员价暂时未考虑
-						                echo $product['now_price'];
-					                ?>
-					                </span>元
-					                <?php if ($product['now_price'] < $product['price']) :
-					                //如果当前价格低于加入购物车时的价格,显示向下的箭头
-					                ?>
-					                <span class="mui-icon mui-icon-pulldown" style="color:greenyellow;"></span>
-					            	<?php endif; ?>
-					                </span>
-					                <div class="mui-numbox mui-right " data-numbox-step='1' data-numbox-min='0' data-numbox-max='<?php echo 10000;//$product['store_number']; ?>'>
-									  <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-									  <input class="mui-numbox-input" type="number" value="<?php echo $product['num']; ?>" readonly = "readonly" />
-									  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
-									</div>
-									<span style="color:darkslategray;"><?php echo $product['goods_unit']; ?></span>
-					            </div>
+					    	<div class="mui-col-xs-10 ">
+					    		<a class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></a>
 					    	</div>
-					    </li>
-						<?php endforeach; ?>
-					</ul>
-			    </li>
-				<?php endforeach; ?>
-			<?php else: ?>
-			    <li class="mui-table-view-cell big-li">
-			    	<div class="mui-row" >
-				    	<div class="mui-col-xs-12 " style="height: 80px;line-height: 80px;text-align: center;">
-				    		<a class="a-store" >您的购物车是空的 ! ! !</a>
 				    	</div>
-			    	</div>
-			    </li>
-			<?php endif; ?>
+				        <ul class="mui-table-view" id="">
+				        	<?php foreach ($products as $product):?>
+						    <li class="mui-row  mui-media ui-table-view-cell">
+						    	<div class="mui-col-xs-2 mui-checkbox">
+						    		<input name="goods_cart_id" value=" <?php echo $product['lid']; ?>" type="checkbox" class="goods_product">
+						    	</div>
+						    	<div class="mui-col-xs-10" >
+					    			<a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
+						            	<img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$product['main_picture']; ?>" >
+							        </a>
+						            <div class="mui-media-body">
+						                <a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
+						                	<span class="cblack"><?php echo $product['goods_name']; ?></span>
+						                </a>
+						                <p class='mui-ellipsis'><?php echo $product['description']?$product['description']:'操作员偷懒,没有描述'; ?></p>
+						                <span style="color:darkslategray; display: block;">单价
+						                <span style="color: red;" class="price">
+						                <?php
+						                	//显示goods表的原始价格 , 会员价暂时未考虑
+							                echo $product['now_price'];
+						                ?>
+						                </span>元
+						                <?php if ($product['now_price'] < $product['price']) :
+						                //如果当前价格低于加入购物车时的价格,显示向下的箭头
+						                ?>
+						                <span class="mui-icon mui-icon-pulldown" style="color:greenyellow;"></span>
+						            	<?php endif; ?>
+						                </span>
+						                <div class="mui-numbox mui-right " data-numbox-step='1' data-numbox-min='0' data-numbox-max='<?php echo 10000;//$product['store_number']; ?>'>
+										  <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+										  <input class="mui-numbox-input" type="number" value="<?php echo $product['num']; ?>" readonly = "readonly" />
+										  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+										</div>
+										<span style="color:darkslategray;"><?php echo $product['goods_unit']; ?></span>
+						            </div>
+						    	</div>
+						    </li>
+							<?php endforeach; ?>
+						</ul>
+				    </li>
+					<?php endforeach; ?>
+				<?php else: ?>
+				    <li class="mui-table-view-cell big-li">
+				    	<div class="mui-row" >
+					    	<div class="mui-col-xs-12 " style="height: 80px;line-height: 80px;text-align: center;background-color: white;">
+					    		<a class="a-store" >您的购物车是空的 ! ! !</a>
+					    	</div>
+				    	</div>
+				    </li>
+				<?php endif; ?>
 			</ul>
+			</div>
+			</div>
 		    <nav class="mui-bar mui-bar-tab nav-on" id="gopay" >
 		        <div class="ui-tab-item " style="width:25%;">
 		            <div class="mui-input-row mui-checkbox mui-left">
@@ -175,11 +179,11 @@
 		<script type="text/javascript">
 			mui('.mui-numbox').numbox();
 			// mui('.mui-page-content').scroll();
-
+			mui('.mui-scroll-wrapper').scroll();
 			$("document").ready(function(){
 				$("input.mui-numbox-input,button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');
 				$("#edit").click(function(){
-//					alert($("#edit").text());
+					//alert($("#edit").text());
 					if($("#edit").text()=='编辑'){
 						$("#gopay").removeClass("nav-on").addClass("nav-none");
 						$("#godelete").removeClass("nav-none").addClass("nav-on");
@@ -200,14 +204,11 @@
 						}
 					}
 				});
-				//编辑时,数量改变自动选中
+					//编辑时,数量改变自动选中
 				$("input[type='number']").change(function(){
 					$(this).parent('.mui-numbox').parent('.mui-media-body').parent('.mui-col-xs-10').prev('.mui-col-xs-2').children('.goods_product').attr('checked','checked');
 					// this.checked=true;
 				});
-
-
-
 				$("#selectall").click(function(){
 					// alert('111');
 				    if(this.checked){
@@ -229,8 +230,6 @@
 				   		// $("input[name='goods_cart_id']").each(function(){this.checked=false;});
 				  	}
 				});
-
-
 				$("#selectall1").click(function(){
 					// alert('222');
 					if(this.checked){

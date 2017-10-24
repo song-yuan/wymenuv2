@@ -13,6 +13,7 @@
 			    border-right: 1px solid #eee;
 			    border-bottom: 1px solid #eee;
 			}
+			.mui-content{background-color: white!important;}
 			.mui-table-view.mui-grid-view .ui-table-view-cell {
 			    font-size: 17px;
 			    display: inline-block;
@@ -63,9 +64,9 @@
 		<div class="mui-off-canvas-wrap mui-draggable">
 			<div class="mui-inner-wrap">
 
-				<header class="mui-bar mui-bar-nav">
-				    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-				    <h1 class="mui-title">搜索 * <?php echo $content; ?> * 的结果</h1>
+				<header class="mui-bar mui-bar-nav mui-hbar">
+				    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
+				    <h1 class="mui-title" style="color:white;">搜索 * <?php echo $content; ?> * 的结果</h1>
 				</header>
 
 				<!-- 产品内容开始 -->
