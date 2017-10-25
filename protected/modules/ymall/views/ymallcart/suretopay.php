@@ -9,7 +9,7 @@
 	$compaychannel = WxCompany::getpaychannel($this->companyId);
 	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 	if($payChannel==1){
-		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/ymall/notify');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('myinfo/index',array('companyId'=>$this->companyId));
 	// p($returnUrl);
 		//①、获取用户openid
@@ -165,7 +165,7 @@
 			mui.init();
 			var button = document.getElementById('suretopay');
 			button.addEventListener('tap',function(){
-				alert('111');
+				callpay();
 		    });
 
 			//状态提示
@@ -221,9 +221,5 @@
 		    jsApiCall();
 		}
 	}
-	$(document).ready(function(){
-		$('#suretopay').click(function(){
-			callpay();
-		});
-	})
+
 		</script>
