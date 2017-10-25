@@ -328,7 +328,7 @@
 							<a class="mui-control-item" href="#item2mobile">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/waitsent.png ">
 									<?php if($materials_pay): ?>
-									<span class="mui-badge daifa" id="nopay" style="background-color: red;color: white;"><?php echo count($materials_pay); ?></span>
+									<span class="mui-badge daifa"  style="background-color: red;color: white;"><?php echo count($materials_pay); ?></span>
 									<?php endif; ?>
 									<span class="mui-label">待发货</span>
 								</a>
@@ -382,7 +382,7 @@
 									</ul>
 									<div style="height:60px;border:1px solid #F2F2F2;padding-top:6px;">
 									<span style="display: inline-block;margin-top: 3px;margin-left: 10px;">总计 : <span style="color:red;"><?php echo $material_nopay[0]['reality_total'] ?></span></span>
-									<button type="button" class="mui-btn mui-btn-success mui-btn-outlined" style="padding: 2px 12px;border-radius: 10px;float:right;margin-left:20px;margin-right:10px;">直接付款</button>
+									<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" style="padding: 2px 12px;border-radius: 10px;float:right;margin-left:20px;margin-right:10px;" account_no="<?php echo $key; ?>">直接付款</button>
 									<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" style="padding: 2px 12px;border-radius: 10px;float:right;" account_no="<?php echo $key; ?>">删除订单</button>
 									</div>
 							    </li>
@@ -454,6 +454,7 @@
 												array_push($material_sends[$material['invoice_accountno']], $material);
 											}
 										}
+										if($material_sends):
 										// p($material_pay);
 									 ?>
 								<li class=" big-li">
@@ -493,6 +494,7 @@
 									<?php endforeach; ?>
 									</ul>
 							    </li>
+								<?php endif; ?>
 								<?php endforeach; ?>
 							<?php endif; ?>
 							</ul>
@@ -594,9 +596,9 @@ document.getElementById('exit').addEventListener('tap', function() {
  	var account_no = $(this).attr('account_no');
  	console.log(account_no);
  	$(this).attr('id', 'aa');
- 	var btnArray = ['是','否'];
+ 	var btnArray = ['否','是'];
 	mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
-		if(e.index==0){
+		if(e.index==1){
 	 	mui.post('<?php echo $this->createUrl("myinfo/delete_nopay",array("companyId"=>$this->companyId)) ?>',{
 			   account_no:account_no,
 			},
@@ -634,7 +636,14 @@ $('.mui-sureo').on('tap',function(){
  	} else{
  		mui.alert('仓库正在配货 , 无法确认收货');
  	}
- 	
+
+});
+
+$('.gotopay').on('tap',function(){
+	var account_no = $(this).attr('account_no');
+	console.log(account_no);
+	location.href = '<?php echo $this->createUrl("ymallcart/orderlist",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no;
+
 });
 
 	$("#nopay").bind('DOMNodeInserted', function (e) {
