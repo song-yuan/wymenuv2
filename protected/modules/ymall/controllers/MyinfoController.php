@@ -71,10 +71,12 @@ class MyinfoController extends BaseYmallController
 		$products_send = $db->createCommand($sql2)->queryAll();
 		$materials_send =array();
 		foreach ($products_send as $product) {
-			if(!isset($materials_send[$product['account_no']])){
-				$materials_send[$product['account_no']] = array();
+			if ($product['status'] !=2) {
+				if(!isset($materials_send[$product['account_no']])){
+					$materials_send[$product['account_no']] = array();
+				}
+				array_push($materials_send[$product['account_no']], $product);
 			}
-			array_push($materials_send[$product['account_no']], $product);
 		}
 		// p($materials_send);
 

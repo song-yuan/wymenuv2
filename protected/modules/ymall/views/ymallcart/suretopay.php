@@ -1,15 +1,16 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
+	$company = WxCompany::get($this->companyId);
 	$this->setPageTitle('支付订单');
 
 	$payPrice = number_format($reality_total,2); // 最终支付价格
 	$orderId = $golid['account_no'].'-'.$this->companyId;
-	
+
 	$canpWxpay = true;
 	$compaychannel = WxCompany::getpaychannel($this->companyId);
 	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 	if($payChannel==1){
-		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/ymall/notify');
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('myinfo/index',array('companyId'=>$this->companyId));
 	// p($returnUrl);
 		//①、获取用户openid
@@ -38,7 +39,7 @@
 					$input->SetOpenid($openId);
 				}
 				$orderInfo = WxPayApi::unifiedOrder($input);
-				
+
 				$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		}catch(Exception $e){
 			$canpWxpay = false;
@@ -113,7 +114,7 @@
 		    	<?php foreach ($materials as $key => $products): ?>
 			    <li class="mui-table-view-cell big-li">
 			    	<div class="mui-row" style="height: 30px;">
-				    		<span class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></span>
+				    	<span class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></span>
 			    	</div>
 			        <ul class="mui-table-view" id="a1">
 			        	<?php foreach ($products as $product):?>
@@ -163,10 +164,7 @@
 
 		<script type="text/javascript">
 			mui.init();
-			var button = document.getElementById('suretopay');
-			button.addEventListener('tap',function(){
-				callpay();
-		    });
+
 
 			//状态提示
 			var status = '<?php echo $success; ?>';
@@ -179,47 +177,54 @@
 			}
 
 				//调用微信JS api 支付
-	function jsApiCall()
-	{
-		<?php if ($payChannel==1):?>
-		<?php if($canpWxpay):?>
-		WeixinJSBridge.invoke(
-			'getBrandWCPayRequest',
-			<?php echo $jsApiParameters; ?>,
-			function(res){
-				 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-				 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-				 	layer.msg('支付成功!');
-				 	location.href = '<?php echo $returnUrl;?>';
-				 }else{
-				 	//支付失败或取消支付
-					 layer.msg('支付失败,请重新支付!');
-				 }     
+			function jsApiCall()
+			{
+				<?php if ($payChannel==1):?>
+				<?php if($canpWxpay):?>
+				WeixinJSBridge.invoke(
+					'getBrandWCPayRequest',
+					<?php echo $jsApiParameters; ?>,
+					function(res){
+						 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+						 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+						 	layer.msg('支付成功!');
+						 	location.href = '<?php echo $returnUrl;?>';
+						 }else{
+						 	//支付失败或取消支付
+							 layer.msg('支付失败,请重新支付!');
+						 }
+					}
+				);
+				<?php endif;?>
+				<?php elseif($payChannel==2):?>
+				location.href = '<?php echo $sqbpayUrl;?>';
+				<?php else:?>
+				layer.msg('无支付信息,请联系客服!');
+				<?php endif;?>
 			}
-		);
-		<?php endif;?>
-		<?php elseif($payChannel==2):?>
-		location.href = '<?php echo $sqbpayUrl;?>';
-		<?php else:?>
-		layer.msg('无支付信息,请联系客服!');
-		<?php endif;?>
-	}
-	function callpay()
-	{
-		<?php if(!$canpWxpay):?>
-		layer.msg('<?php echo $jsApiParameters;?>');
-		return;
-		<?php endif;?>
-		if (typeof WeixinJSBridge == "undefined"){
-		    if( document.addEventListener ){
-		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-		    }else if (document.attachEvent){
-		        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
-		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-		    }
-		}else{
-		    jsApiCall();
-		}
-	}
-
+			function callpay()
+			{
+				<?php if(!$canpWxpay):?>
+				layer.msg('<?php echo $jsApiParameters;?>');
+				return;
+				<?php endif;?>
+				if (typeof WeixinJSBridge == "undefined"){
+				    if( document.addEventListener ){
+				        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+				    }else if (document.attachEvent){
+				        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+				        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+				    }
+				}else{
+				    jsApiCall();
+				}
+			}
+			// var button = document.getElementById('suretopay');
+			// button.addEventListener('tap',function(){
+			// 	callpay();
+		 //    });
+		    $('#suretopay').on('tap',function(){
+		    	// alert(111111);
+		    	callpay();
+		    })
 		</script>
