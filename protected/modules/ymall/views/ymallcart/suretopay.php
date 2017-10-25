@@ -10,7 +10,7 @@
 	$compaychannel = WxCompany::getpaychannel($this->companyId);
 	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 	if($payChannel==1){
-		Helper::writeLog('ZHH:payChannel=1');
+		// Helper::writeLog('ZHH:payChannel=1');
 		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('myinfo/index',array('companyId'=>$this->companyId));
 	// p($returnUrl);
@@ -21,8 +21,8 @@
 				Helper::writeLog('zhh:'.$account['appid'].'zhh2:'.$account['appsecret']);
 			 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
 			 	$userInfo = $baseInfo->getSnsapiBase();
-			 	$openid = $userInfo['openid'];
-Helper::writeLog('zhh3:'.$openid);
+			 	$openId = $userInfo['openid'];
+				// Helper::writeLog('zhh3:'.$openid);
 				// $openId = WxBrandUser::openId($userId,$this->companyId);
 				$account = WxAccount::get($this->companyId);
 				//②、统一下单
@@ -52,7 +52,7 @@ Helper::writeLog('zhh3:'.$openid);
 
 
 	}elseif($payChannel==2){
-		Helper::writeLog('ZHH:payChannel=2');
+		// Helper::writeLog('ZHH:payChannel=2');
 		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
 		$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$this->companyId));
