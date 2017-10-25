@@ -229,6 +229,6 @@
 		 //    });
 		    $('#suretopay').on('tap',function(){
 		    	callpay();
-		    	alert(111111);
+		    	// alert(111111);
 		    })
 		</script>
