@@ -816,16 +816,36 @@ class MemberController extends BackendController
 	
 	public function actionConsumelist(){
 		$db=Yii::app()->db;
-		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
 		$lid = Yii::app()->request->getParam('lid',"0000000000");
+		
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$companyId.' and t.user_id='.$lid.' and order_status in ("3","4","8") and order_type in ("1","2")';
+		$criteria->condition =  ' t.user_id='.$lid.' and order_status in ("3","4","8") and order_type in ("1","2")';
 		$criteria->order = ' t.create_at desc ';
 		$pages = new CPagination(Order::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Order::model()->findAll($criteria);
 		$this->renderPartial('consumelist' , array(
+				'models' => $models,
+				'pages'=>$pages
+		));
+	}
+	public function actionConsumelists(){
+		$db=Yii::app()->db;
+		$lid = Yii::app()->request->getParam('lid',"0000000000");
+	
+		$sql = "select o.dpid,o.user_id,o.should_total,o.account_no,o.create_at,order_type,order_status from nb_order o where o.order_type in(1,2,3,6) and o.order_status in(3,4,8) and o.user_id =".$lid
+		. " union select o.dpid,bu.lid,o.should_total,o.account_no,o.create_at,order_type,order_status from nb_order_pay op left join nb_order o on(o.lid =op.order_id) left join nb_brand_user bu on(op.remark = bu.card_id) where bu.lid = ".$lid." and o.order_type =0 and o.order_status in(3,4,8) "
+				. " and op.paytype in(8,9,10) group by op.order_id,op.remark";
+		
+		$pages = new CPagination($db->createCommand("select count(*) from (".$sql.") a")->queryScalar());
+		$pages -> pageSize = 20;
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata ->queryAll();
+		
+		$this->renderPartial('consumelists' , array(
 				'models' => $models,
 				'pages'=>$pages
 		));

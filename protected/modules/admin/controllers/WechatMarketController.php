@@ -118,16 +118,34 @@ class WechatMarketController extends BackendController {
 		}else{
 			$sqla='';
 		}
-
 		$sql="select t.lid,t.dpid,t.create_at,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group "
-		.",com.province,com.city,com.county_area,com.company_name,t.mobile_num,t.remain_money,ifnull(tct.consumetotal,0) as consumetotal,"
-		. "ifnull(tct.consumetimes,0) as consumetimes". " from nb_brand_user t "
-		. " LEFT JOIN nb_company com on (com.dpid = t.weixin_group )"
-		. " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
-			. " where order_type in ('1','2','6') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
-				. " group by dpid,user_id) tct on (t.weixin_group=tct.dpid and t.lid=tct.user_id) "
-		. " LEFT JOIN nb_brand_user_level tl on tl.dpid=t.dpid and tl.lid=t.user_level_lid and tl.delete_flag=0 and tl.level_type=1 "
-		. " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")".$sqlp.$sqlc.$sqla;
+				.",com.province,com.city,com.county_area,com.company_name,t.mobile_num,t.remain_money,t.remain_back_money,ifnull(tct.consumetotal,0) as consumetotal,"
+				. "ifnull(tct.consumetimes,0) as consumetimes". " from nb_brand_user t "
+				. " LEFT JOIN nb_company com on (com.dpid = t.weixin_group )"
+				. " left join (select dpid,user_id,sum(should_total) as consumetotal,count(*) as consumetimes from "
+					. "(select o.dpid,o.user_id,o.should_total from nb_order o where o.order_type in(1,2,3,6) and o.order_status in(3,4,8) and o.update_at >='$datefrom 00:00:00' and o.update_at <='$dateto 23:59:59' "
+					. " union select o.dpid,bu.lid,o.should_total from nb_order_pay op left join nb_order o on(o.lid =op.order_id) left join nb_brand_user bu on(op.remark = bu.card_id) where o.order_type =0 and o.order_status in(3,4,8) and o.update_at >='$datefrom 00:00:00' and o.update_at <='$dateto 23:59:59' "
+						. " and op.paytype in(8,9,10) group by op.order_id,op.remark) k group by k.user_id"
+				. " ) tct on(t.lid =tct.user_id) "
+				. " LEFT JOIN nb_brand_user_level tl on tl.dpid=t.dpid and tl.lid=t.user_level_lid and tl.delete_flag=0 and tl.level_type=1 "
+				. " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")".$sqlp.$sqlc.$sqla;		
+		
+// 		$sql = "select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from "
+// 					. "(select o.dpid,o.user_id,o.reality_total from nb_order o where o.order_type in(1,2,3,6) and o.order_status in(3,4,8) and o.update_at >='$datefrom 00:00:00' and o.update_at <='$dateto 23:59:59' "
+// 					. " union select o.dpid,bu.lid,o.reality_total from nb_order_pay op left join nb_order o on(o.lid =op.order_id) left join nb_brand_user bu on(op.remark = bu.card_id) where o.order_type =0 and o.order_status in(3,4,8) and o.update_at >='$datefrom 00:00:00' and o.update_at <='$dateto 23:59:59' "
+// 						. " and op.paytype in(8,9,10) group by op.order_id,op.remark) k group by k.user_id";
+// 		$allmodels=$db->createCommand($sql)->queryAll();
+// 		var_dump($allmodels);exit;
+				
+// 		$sql="select t.lid,t.dpid,t.create_at,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group "
+// 		.",com.province,com.city,com.county_area,com.company_name,t.mobile_num,t.remain_money,ifnull(tct.consumetotal,0) as consumetotal,"
+// 		. "ifnull(tct.consumetimes,0) as consumetimes". " from nb_brand_user t "
+// 		. " LEFT JOIN nb_company com on (com.dpid = t.weixin_group )"
+// 		. " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
+// 			. " where order_type in ('1','2','6') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
+// 				. " group by dpid,user_id) tct on (t.weixin_group=tct.dpid and t.lid=tct.user_id) "
+// 		. " LEFT JOIN nb_brand_user_level tl on tl.dpid=t.dpid and tl.lid=t.user_level_lid and tl.delete_flag=0 and tl.level_type=1 "
+// 		. " where t.lid not in(".$users.") and (t.dpid=".$companyId." or t.weixin_group =".$companyId.")".$sqlp.$sqlc.$sqla;
 	        //echo $sql;exit;
 
 		if($finduserlevel!="0000000000")
