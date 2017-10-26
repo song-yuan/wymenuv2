@@ -245,7 +245,7 @@
 					<th width="8%">等级</th>
 					<th width="15%">来源店铺名</th>
 					<th width="10%">手机号</th>
-					<th width="10%">余额</th>
+					<th width="10%">余额(返现)</th>
 					<th width="15%" nowrap><a href="javascript:;" onclick="sort(1,<?php echo $sort?0:1;?>);">消费总额|次数 <i class="fa <?php echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
 					<th width="6%">操作</th>
 				</tr>
