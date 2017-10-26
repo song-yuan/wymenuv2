@@ -18,7 +18,7 @@
 		try{
 				$tools = new JsApiPay();
 				$account = WxAccount::get($companyId);
-				Helper::writeLog('zhh:'.$account['appid'].'zhh2:'.$account['appsecret']);
+				// Helper::writeLog('zhh:'.$account['appid'].'zhh2:'.$account['appsecret']);
 			 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
 			 	$userInfo = $baseInfo->getSnsapiBase();
 			 	$openId = $userInfo['openid'];
@@ -68,7 +68,7 @@
 				'notify_url'=>$notifyUrl,
 				'return_url'=>$returnUrl,
 		);
-		Helper::writeLog('view:'.$orderId);
+		// Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
 	}else{
 		$jsApiParameters = '';
@@ -222,13 +222,10 @@
 				}else{
 				    jsApiCall();
 				}
+				window.event.returnValue = false;
 			}
-			// var button = document.getElementById('suretopay');
-			// button.addEventListener('tap',function(){
-			// 	callpay();
-		 //    });
+
 		    $('#suretopay').on('tap',function(){
 		    	callpay();
-		    	// alert(111111);
 		    })
 		</script>
