@@ -53,7 +53,10 @@
 					
 					<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
+							<?php if($role <=1):?>	
+							<button type="submit" id="excel2"  class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
+							<?php endif;?>			
 					</div>			
 			    </div>
 			 </div> 
@@ -321,6 +324,19 @@ var option2 = {
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/turnOver' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
+			       }
+			      
+			   });
+			  $('#excel2').click(function excel(){
+
+				  
+		    	   var begin_time = $('#begin_time').val();
+				   var end_time = $('#end_time').val();
+				  
+				   //alert(str);
+			       if(confirm('确认导出并且下载Excel文件吗？')){
+
+			    	   location.href="<?php echo $this->createUrl('statements/timedataReportsExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			      
 			   });
