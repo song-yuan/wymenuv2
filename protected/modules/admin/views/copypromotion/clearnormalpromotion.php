@@ -108,7 +108,7 @@ function fun()
 	<!-- 最后确认弹出窗 -->
 	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
 		<div class="modal-header">
-			<h4 class="modal-title">选择需要下发活动的店铺</h4>
+			<h4 class="modal-title">选择需要清除下发活动的店铺</h4>
 		</div>
 
 		<div class="modal-body">
@@ -129,7 +129,7 @@ function fun()
 						    <input style="height:20px;display:inline-block; width:10%;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" id="all" />
 						    <label for="all" style="height:20px;display:inline-block;">全选</label>
 		         	        <div>
-		         		        <button id="printall" type="button" class="btn blue">确认下发</button>
+		         		        <button id="printall" type="button" class="btn blue">确认清除下发</button>
 		         	        </div>
 				        </li>
 			        </ul>

@@ -298,7 +298,7 @@ class CopypromotionController extends BackendController
 		$normalcodes = explode(',',$codes);//接收活动编码,总部唯一
 		$dpids = array();
 		$dpids = explode(',',$dpid);//接收店铺的dpid
-		var_dump($dpids,$normalcodes);exit;
+		//var_dump($dpids,$normalcodes);exit;
 	
 		//****查询公司的产品分类。。。****
 	
