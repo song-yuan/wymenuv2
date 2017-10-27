@@ -7940,9 +7940,10 @@ public function actionPayallReport(){
 			$ords = $ords .','.$order['lid'];
 		}
 
-		$sql = 'select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where order_id in('.$ords.') and paytype != 11 and  dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all';
-		$models = Yii::app()->db->createCommand($sql)->queryAll();
 
+		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where  order_id in('.$ords.') and paytype !=11 and dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
+		$models = $db->createCommand($sql)->queryAll();
+		
 
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -8080,13 +8081,12 @@ public function actionPayallReport(){
 	*/
 	public function actionTimedataReportsExport(){
 		$objPHPExcel = new PHPExcel();
-		//$uid = Yii::app()->user->id;
 		$str = Yii::app()->request->getParam('str',$this->companyId);
 		$text = Yii::app()->request->getParam('text');
 		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-	
+
 		$db = Yii::app()->db;
 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
@@ -8094,10 +8094,11 @@ public function actionPayallReport(){
 		foreach ($orders as $order){
 			$ords = $ords .','.$order['lid'];
 		}
-	
-		$sql = 'select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where order_id in('.$ords.') and paytype != 11 and  dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all';
-		$models = Yii::app()->db->createCommand($sql)->queryAll();
-	var_dump($models);exit;
+
+
+		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where  order_id in('.$ords.') and paytype !=11 and dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
+		$models = $db->createCommand($sql)->queryAll();
+		
 	
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
