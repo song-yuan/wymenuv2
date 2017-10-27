@@ -713,11 +713,11 @@ public function actionAccountDetail(){
 
         $orderid = Yii::app()->request->getParam('orderid',"0");
         $db = Yii::app()->db;
-        if($type == 0){
-                $sql = 'select sum(t.zhiamount*t.amount) as all_amount,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) where t.order_id='.$orderid.' group by t.lid';
-        }else{
-                $sql = 'select sum(t.zhiamount*t.amount) as all_amount,count(t.zhiamount) as all_zhiamount,sum(t2.retreat_amount) as retreat_num,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t.lid = t2.order_detail_id) where and t.order_id='.$orderid.' group by t.lid';
-        }//var_dump($sql);exit;
+        //if($type == 0){
+          //      $sql = 'select sum(t.zhiamount*t.amount) as all_amount,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) where t.order_id='.$orderid.' group by t.lid';
+        //}else{
+                $sql = 'select sum(t.amount) as all_amount,count(t.zhiamount) as all_zhiamount,sum(t2.retreat_amount) as retreat_num,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t.lid = t2.order_detail_id) where t.order_id='.$orderid.' group by t.lid';
+        //}//var_dump($sql);exit;
         $allmoney = Yii::app()->db->createCommand($sql)->queryAll();
         //var_dump($allmoney);exit;
         $sql1 = 'select t.pay_amount from nb_order_pay t where t.paytype =11 and t.order_id ='.$orderid;
