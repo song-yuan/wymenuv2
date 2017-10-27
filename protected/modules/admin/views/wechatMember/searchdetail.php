@@ -417,6 +417,7 @@ li{
     
 $('.accountno').click(function() {
           //alert(111);
+          layer.load();
         $('#orderdetaildiv').remove();
         var orderid = $(this).attr('orderid');
         var accountno = $(this).attr('accountno');
@@ -486,9 +487,9 @@ $('.accountno').click(function() {
                     											}else if(paytype==10){
                     												paytypename = '微信储值';
                     											}else if(paytype==12){
-                    												paytypename = '微点单支付';
+                    												paytypename = '微信支付~';
                     											}else if(paytype==13){
-                    												paytypename = '微外卖支付';
+                    												paytypename = '微信支付·';
                     											}
                     											else if(paytype==14){
                     												paytypename = '美团·外卖';
@@ -527,9 +528,11 @@ $('.accountno').click(function() {
                        }else{
                            
                        }
+                       layer.closeAll('loading')
                    },
                    error: function(msg){
                        layer.msg('网络错误！！！');
+                       layer.closeAll('loading')
                    }
                });
 			   
