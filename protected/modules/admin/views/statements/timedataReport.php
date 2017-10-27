@@ -54,7 +54,7 @@
 					<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
-							<?php if($role <=1):?>	
+							<?php if(Yii::app()->user->role <=1):?>	
 							<button type="submit" id="excel2"  class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
 							<?php endif;?>			
 					</div>			
