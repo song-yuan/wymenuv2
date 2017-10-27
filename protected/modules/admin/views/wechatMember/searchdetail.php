@@ -472,22 +472,32 @@ $('.accountno').click(function() {
 
                                                             }else if(paytype){
                                                                     //alert(paytype);
-                                                                    var paytypename = '';
-                                                                    if (paytype==1){
-                                                                            paytypename = '微信支付';
-                                                                    }else if(paytype==2){
-                                                                            paytypename = '支付宝支付';
-                                                                    }else if(paytype==4){
-                                                                            paytypename = '会员卡支付';
-                                                                    }else if(paytype==5){
-                                                                            paytypename = '银联支付';
-                                                                    }else if(paytype==9){
-                                                                            paytypename = '微信代金券';
-                                                                    }else if(paytype==10){
-                                                                            paytypename = '微信余额支付';
-                                                                    }
-                                                                    var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+paytypename+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
-                                                                    }
+                                                            	var paytypename = '';
+                    											if (paytype==1){
+                    												paytypename = '微信支付';
+                    											}else if(paytype==2){
+                    												paytypename = '支付宝支付';
+                    											}else if(paytype==4){
+                    												paytypename = '会员卡支付';
+                    											}else if(paytype==5){
+                    												paytypename = '银联支付';
+                    											}else if(paytype==9){
+                    												paytypename = '微信代金券';
+                    											}else if(paytype==10){
+                    												paytypename = '微信储值';
+                    											}else if(paytype==12){
+                    												paytypename = '微点单支付';
+                    											}else if(paytype==13){
+                    												paytypename = '微外卖支付';
+                    											}
+                    											else if(paytype==14){
+                    												paytypename = '美团·外卖';
+                    											}
+                    											else if(paytype==15){
+                    												paytypename = '饿了么·外卖';
+                    											}
+                    											var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+paytypename+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
+                    											}
                                                     var proDetailpaymentall = proDetailpaymentall + proDetailpayment;
                                                     }
                                             var proDetailpayAll =  proDetailpayHead + proDetailpaymentall + prodDetailEnd;
