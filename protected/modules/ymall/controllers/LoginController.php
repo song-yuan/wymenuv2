@@ -3,16 +3,11 @@
 class LoginController extends BaseYmallController
 {
 	public $layout = '/layouts/loginLayout';
+	// public $layout = '/layouts/mainymall';
 	public function actionIndex()
 	{
-        $language=Yii::app()->request->getParam('language','0');
-        if($language!='0')
-        {
-            Yii::app()->session['language']=$language;
-            Yii::app()->language=$language;
-        }
-
 		$model = new LoginForm();
+		// p($model);
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{
 			echo CActiveForm::validate($model);
