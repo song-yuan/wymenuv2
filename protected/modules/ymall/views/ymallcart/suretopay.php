@@ -163,7 +163,7 @@
 	            	实付款 : ￥<span style="color: red;margin-right: 10px;padding-right: 10px;"><?php echo $reality_total; ?></span>
 	        </div>
 	        <div class="mui-tab-item " style="width:35%;">
-	            <button type="button" class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</button>
+	            <div class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</div>
 	        </div>
 	    </nav>
 
