@@ -73,6 +73,7 @@
 	}else{
 		$jsApiParameters = '';
 	}
+	var_dump($jsApiParameters);
 ?>
 		<style>
 			.back-color{background-color: #F0F0E1;}
