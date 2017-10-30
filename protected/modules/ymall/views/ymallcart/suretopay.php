@@ -24,7 +24,7 @@
 			 	$openId = $userInfo['openid'];
 				// Helper::writeLog('zhh3:'.$openid);
 				// $openId = WxBrandUser::openId($userId,$this->companyId);
-				$account = WxAccount::get($this->companyId);
+// 				$account = WxAccount::get($this->companyId);
 				//②、统一下单
 				$input = new WxPayUnifiedOrder();
 				$input->SetBody($company['company_name']."-商铺原料订单");
@@ -190,7 +190,6 @@
 					'getBrandWCPayRequest',
 					<?php echo $jsApiParameters; ?>,
 					function(res){
-						console.log(res);
 						 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 						 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
 						 	mui.alert('支付成功!');
