@@ -220,6 +220,7 @@ $(function () {
 });
 $('.accountno').click(function() {
 	  //alert(111);
+	  layer.load();
 	  $('#orderdetaildiv').remove();
 	   var orderid = $(this).attr('orderid');
 	   var accountno = $(this).attr('accountno');
@@ -255,7 +256,7 @@ $('.accountno').click(function() {
 						renum = prodReNums/prodZhiNum;
 						setName = model[i].set_name;
 						var sets = '';
-						if(setName){
+						if(setName !='0'){
 							sets = '('+setName+')';
 							}
 						//alert(prodName);alert(prodNum);
@@ -286,14 +287,24 @@ $('.accountno').click(function() {
 										paytypename = '微信支付';
 									}else if(paytype==2){
 										paytypename = '支付宝支付';
-									}else if(paytype==3){
+									}else if(paytype==4){
 										paytypename = '会员卡支付';
 									}else if(paytype==5){
 										paytypename = '银联支付';
 									}else if(paytype==9){
 										paytypename = '微信代金券';
 									}else if(paytype==10){
-										paytypename = '微信余额支付';
+										paytypename = '微信储值';
+									}else if(paytype==12){
+										paytypename = '微信支付~';
+									}else if(paytype==13){
+										paytypename = '微信支付·';
+									}
+									else if(paytype==14){
+										paytypename = '美团·外卖';
+									}
+									else if(paytype==15){
+										paytypename = '饿了么·外卖';
 									}
 									var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+paytypename+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
 									}
@@ -323,12 +334,12 @@ $('.accountno').click(function() {
 				   backgroundColor: 'rgba(255,255,255,0.2)',
 				 });  
               
-           }else{
-               
            }
+           layer.closeAll('loading')
        },
        error: function(msg){
            layer.msg('网络错误！！！');
+           layer.closeAll('loading')
        }
    });
 	   
