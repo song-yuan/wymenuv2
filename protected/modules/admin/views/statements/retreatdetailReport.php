@@ -219,6 +219,10 @@ $(function () {
 })
 });
 $('.accountno').click(function() {
+	<?php if(Yii::app()->user->role >1):?>
+	layer.msg('升级中...');
+	return false;
+	<?php endif;?>
 	  //alert(111);
 	  layer.load();
 	  $('#orderdetaildiv').remove();
