@@ -248,12 +248,12 @@ $('.accountno').click(function() {
 					var proDetailpayAll = '';
 					for (var i in model){
 						prodName = model[i].product_name;
-						prodNum = model[i].all_amount;
-						allprodZhiNum = model[i].all_zhiamount;
-						prodZhiNum = model[i].zhiamount;
-						prodReNums = model[i].retreat_num;
-						num = prodNum/allprodZhiNum;
-						renum = prodReNums/prodZhiNum;
+						prodNum = parseInt(model[i].all_amount);
+						allprodZhiNum = parseInt(model[i].all_zhiamount);
+						prodZhiNum = parseInt(model[i].zhiamount);
+						prodReNums = parseInt(model[i].retreat_num);
+						num = parseInt(prodNum/allprodZhiNum);
+						renum = parseInt(prodReNums/prodZhiNum);
 						setName = model[i].set_name;
 						var sets = '';
 						if(setName !='0'){
