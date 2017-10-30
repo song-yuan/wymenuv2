@@ -454,11 +454,6 @@
 												}
 												array_push($material_sends[$material['invoice_accountno']], $material);
 										}
-<<<<<<< HEAD
-=======
-										if($material_sends):
-										// p($material_pay);
->>>>>>> acef557775bff07bb9244325302f13339d0bb567
 									 ?>
 								<li class=" big-li">
 							    	<div class="mui-row" style="height: 30px;background-color: #00CED1; color:white;">
@@ -486,7 +481,7 @@
 										<li class="mui-table-view-cell" style="background-color: #FFFFF0">
 											<div >
 											<span style="display:inline-block;margin-top: 3px;margin-left: 10px;"><?php if($material_s[0]['sent_type']!=3){ echo '配送员 : '.$material_s[0]['sent_personnel'];}else{ echo '第三方配送 : '.$material_s[0]['sent_personnel'];} ?><br>
-											<span ><?php if($material_s[0]['sent_type']!=3){echo '联系电话 : '.$material_s[0]['mobile'];}else{ echo '配送单号 : '.$material_s[0]['mobile'];}  ?></span></span>
+											<span ><?php if($material_s[0]['sent_type']!=3){echo '联系电话 : '.$material_s[0]['mobile'];}else{ echo '物流单号 : '.$material_s[0]['mobile'];}  ?></span></span>
 											<?php if($material_s[0]['status']==0):?>
 											<span style="color:red;float:right;margin-right:-50px;margin-top:20px;z-index:1;"><?php echo '(出货中)'; ?></span>
 											<?php elseif($material_s[0]['status']==1):?>
@@ -497,7 +492,6 @@
 									<?php endforeach; ?>
 									</ul>
 							    </li>
-								<?php endif; ?>
 								<?php endforeach; ?>
 							<?php endif; ?>
 							</ul>
@@ -589,40 +583,12 @@
 	//初始化单页的区域滚动
 	mui('.mui-scroll-wrapper').scroll();
 
-<<<<<<< HEAD
  	//退出操作******************
 	document.getElementById('exit').addEventListener('tap', function() {
 	 		var btnArray = ['是','否'];
 			mui.confirm('是否确定退出 ？','提示',btnArray,function(e){
 				if(e.index==0){
 			 	location.href = '<?php echo $this->createUrl("login/logout",array("companyId"=>$this->companyId)) ?>';
-=======
-}, false);
- //************************
- $('.delete_nopay').on('tap',function(){
- 	var account_no = $(this).attr('account_no');
- 	console.log(account_no);
- 	$(this).attr('id', 'aa');
- 	var btnArray = ['否','是'];
-	mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
-		if(e.index==1){
-	 	mui.post('<?php echo $this->createUrl("myinfo/delete_nopay",array("companyId"=>$this->companyId)) ?>',{
-			   account_no:account_no,
-			},
-			function(data){
-				if (data == 1) {
-				 	// var x = $('#aa').parent('div').parent('.big-li').attr('class');
-				 	// alert(x);
-					$('#aa').parent().parent('.big-li').fadeOut(1000).remove();
-					//将图标的数量减去
-					var num = $('#nopay').html();
-					$('#nopay').html(num-1);
-					mui.alert('删除成功 ! ! !');
-				}else if(data == 2) {
-					mui.alert('因网络原因删除失败 , 请重新删除 ! ! !');
-				}else if(data == 3) {
-					mui.alert('未查寻到商品删除失败 ! ! !');
->>>>>>> acef557775bff07bb9244325302f13339d0bb567
 				}
 			});
 	}, false);
@@ -674,38 +640,12 @@
 
 	});
 
-<<<<<<< HEAD
 	$('.gotopay').on('tap',function(){
 		var account_no = $(this).attr('account_no');
 		console.log(account_no);
 		location.href = '<?php echo $this->createUrl("ymallcart/orderlist",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no;
 
 	});
-=======
-$('.mui-sureo').on('tap',function(){
- 	var account_no = $(this).attr('account_no');
- 	var invoice_accountno = $(this).attr('invoice_accountno');
- 	console.log(account_no);
- 	if (invoice_accountno) {
- 	// 	var btnArray = ['是','否'];
-		// mui.confirm('是否确定该配送单收货 ？','提示',btnArray,function(e){
-		// 	if(e.index==0){
-		 	location.href = '<?php echo $this->createUrl("myinfo/sureorder",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no+'/invoice_accountno/'+invoice_accountno;
-			// }
-		// });
- 	} else{
- 		mui.alert('仓库正在配货 , 无法确认收货');
- 	}
-
-});
-
-$('.gotopay').on('tap',function(){
-	var account_no = $(this).attr('account_no');
-	console.log(account_no);
-	location.href = '<?php echo $this->createUrl("ymallcart/orderlist",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no;
-
-});
->>>>>>> acef557775bff07bb9244325302f13339d0bb567
 
 	$("#nopay").bind('DOMNodeInserted', function (e) {
 		var num = $('#nopay').html();
