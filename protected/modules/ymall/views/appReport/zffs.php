@@ -11,7 +11,7 @@
 	<ul class="mui-table-view">
 		<li class="mui-table-view-cell">
 			<span>门店</span>
-			<span style="padding-left: 165px;"><?php echo Helper::getCompanyName($this->companyId);?></span>
+			<span style="padding-left: 165px;"><?php if(empty(Yii::app()->request->getParam('type'))){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];}?></span>
 		</li>
 		<li class="mui-table-view-cell">
 			<span>开始时间</span>
