@@ -245,7 +245,7 @@
 					<th width="8%">等级</th>
 					<th width="15%">来源店铺名</th>
 					<th width="10%">手机号</th>
-					<th width="10%">余额</th>
+					<th width="10%">余额(返现)</th>
 					<th width="15%" nowrap><a href="javascript:;" onclick="sort(1,<?php echo $sort?0:1;?>);">消费总额|次数 <i class="fa <?php echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
 					<th width="6%">操作</th>
 				</tr>
@@ -292,7 +292,7 @@
                     		echo $str;
                     	}?>
                     </td>
-                    <td><?php echo $model['remain_money']; ?></td>
+                    <td><?php echo $model['remain_money'].'('.$model['remain_back_money'].')'; ?><a class="btn default btn-xs blue cashbacklist" title="充值返现列表" data-id="<?php echo $model['lid'];?>"  href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
                     <td><?php echo $model['consumetotal']."|".$model['consumetimes'];//echo $model['consume_total_money'];?><a class="btn default btn-xs blue consumelist" title="消费列表" data-id="<?php echo $model['lid'];?>"  href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
 
                     <td class="button-column">
@@ -435,7 +435,7 @@ if (jQuery().datepicker) {
     $(".consumelist").on("click",function(){
     	var lid=$(this).attr("data-id");
     	modalconsumetotal=$('#portlet-consume');
-    	totalurl='<?php echo $this->createUrl('member/consumelist',array('companyId'=>$this->companyId));?>/lid/'+lid;
+    	totalurl='<?php echo $this->createUrl('member/consumelists',array('companyId'=>$this->companyId));?>/lid/'+lid;
     	modalconsumetotal.find('.modal-content').load(totalurl
     		,'', function(){
     			modalconsumetotal.modal();
@@ -455,7 +455,7 @@ if (jQuery().datepicker) {
     $(".cashbacklist").on("click",function(){
     	var lid=$(this).attr("data-id");
     	modalconsumetotal=$('#portlet-consume');
-    	totalurl='<?php echo $this->createUrl('member/cashbacklist',array('companyId'=>$this->companyId));?>/lid/'+lid;
+    	totalurl='<?php echo $this->createUrl('weixin/cashbacklist',array('companyId'=>$this->companyId));?>/lid/'+lid;
     	modalconsumetotal.find('.modal-content').load(totalurl
     		,'', function(){
     			modalconsumetotal.modal();

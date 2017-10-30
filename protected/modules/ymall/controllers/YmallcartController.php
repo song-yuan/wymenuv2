@@ -73,7 +73,6 @@ class YmallcartController extends BaseYmallController
 			$promotion_price = $price;
 		}
 
-
 		if(Yii::app()->request->isAjaxRequest){
 			//查询购物车中是否存在该商品, 存在直接数量加1 , 如果不存在则直接插入,
 			$goods_cart = GoodsCarts::model()->find('dpid=:dpid and stock_dpid=:stock_dpid and goods_code=:goods_code and user_id=:user_id and delete_flag=0',array(':dpid'=>$this->companyId,':stock_dpid'=>$stock_dpid,':goods_code'=>$goods_code,':user_id'=>$user_id,));
@@ -137,7 +136,7 @@ class YmallcartController extends BaseYmallController
 			$val = explode('_',$value);
 			$arr[$val[0]] = $val[1];
 		}
- // print_r($arr[18]);exit;
+ 		// print_r($arr[18]);exit;
 		if(Yii::app()->request->isAjaxRequest){
 			foreach ($arr as $key => $num) {
 				//查询购物车中是否存在该商品, 存在直接数量加1 , 如果不存在则直接插入,价格不一致直接插入
@@ -192,19 +191,21 @@ class YmallcartController extends BaseYmallController
 		$lids = Yii::app()->request->getParam('lid');
 		// $lids = explode(',',$lid);
 		//生成订单号(账单号) 店铺id.时间戳
-		
+	
 
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
 		//查询默认的$goods_address_id
-		$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
+		$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id));
 		if (empty($goods_address_id)) {
-			$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
+			$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id',array(':dpid'=>$this->companyId,':user_id'=>$user_id));
 			if (empty($goods_address_id)) {
 				$this->redirect(array('address/addaddress' , 'companyId' => $this->companyId,'error'=>3)) ;
 				exit;
 			}
 		}
+		// p($goods_address_id);
+		$goods_address_id = $goods_address_id->lid;
 		$goods_address_id = Yii::app()->request->getParam('goods_address_id',$goods_address_id);
 
 		$db = Yii::app()->db;
@@ -283,9 +284,6 @@ class YmallcartController extends BaseYmallController
 	}
 
 
-
-
-
 	public function actionEditgoodsorder()
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
@@ -310,20 +308,28 @@ class YmallcartController extends BaseYmallController
 	}
 
 
+	// 微信支付
 	public function actionOrderlist()
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
 		$success = Yii::app()->request->getParam('success',0);
 		//收货人地址
-		
+		// $user_id = substr(Yii::app()->user->userId,0,10);
+		// $userId = Yii::app()->user->userId;
 		$db = Yii::app()->db;
 		$sql = 'select go.goods_address_id,ga.* from nb_goods_order go'
 		.' left join nb_goods_address ga on(ga.lid=go.goods_address_id and go.dpid=ga.dpid )'
 		.' where go.dpid='.$this->companyId
 		.' and go.account_no='.$account_no
 		.' and go.delete_flag=0';
-		$address = $db->createCommand($sql)->queryrow();
-		// p($address);
+		$address = $db->createCommand($sql)->queryrow();		
+
+		$sql1 = 'select go.lid,go.account_no from nb_goods_order go'
+		.' where go.dpid='.$this->companyId
+		.' and go.account_no='.$account_no
+		.' and go.delete_flag=0';
+		$golid = $db->createCommand($sql1)->queryrow();
+		// p($golid);
 		//以仓库分类订单详情表
 		
 		$sql2 = 'select god.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name from nb_goods_order_detail god '
@@ -351,9 +357,15 @@ class YmallcartController extends BaseYmallController
 		.' and go.delete_flag=0';
 		$reality_total = $db->createCommand($sql3)->queryRow();
 
-		// p($reality_total);
+
+		$sql4 = 'select comp_dpid from nb_company where dpid='.$this->companyId.' and delete_flag=0';
+		$companyId = $db->createCommand($sql4)->queryrow();
+		// p($companyId);
+
 
 		$this->render('suretopay',array(
+			'companyId'=>$companyId['comp_dpid'],
+			'golid'=>$golid,
 			'success'=>$success,
 			'address'=>$address,
 			'account_no'=>$account_no,

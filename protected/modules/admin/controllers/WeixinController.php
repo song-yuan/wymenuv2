@@ -281,7 +281,7 @@ class WeixinController extends BackendController
         
         public function actionCashbacklist(){
                 $db=Yii::app()->db;
-		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
+		//$companyId = Yii::app()->request->getParam('companyId',"0000000000");
                 $lid = Yii::app()->request->getParam('lid',"0000000000");
                 $sql = 'select k.* from '
                         . ' ((select t1.dpid,t1.update_at,t2.brand_user_lid,t1.reality_total as totalmoney,t2.point_type, t2.cashback_num from'
@@ -289,7 +289,7 @@ class WeixinController extends BackendController
                         . ' union'
                         . ' (select t3.dpid,t3.update_at,t3.brand_user_lid,t3.recharge_money as totalmoney,"1" as point_type,t3.cashback_num from'
                         . ' nb_recharge_record t3 ))'
-                        . ' k where k.dpid='.$companyId.' and k.brand_user_lid='.$lid
+                        . ' k where k.brand_user_lid='.$lid
                         .' order by k.update_at desc';
                 //echo $sql;exit;
                 $count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();

@@ -23,7 +23,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->   
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','分组设置'),'url'=>$this->createUrl('areaGroup/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','添加分组'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('areaGroup/index' , array('companyId'=>$this->companyId)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','分组及标签设置'),'url'=>$this->createUrl('areaGroup/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','添加分组'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('areaGroup/index' , array('companyId'=>$this->companyId,'type'=>$type)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 		<div class="col-md-12">
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><?php echo yii::t('app','添加分组');?></div>
+					<div class="caption"><?php echo yii::t('app','添加分组或标签');?></div>
 				</div>
 				<div class="portlet-body form">
 					<!-- BEGIN FORM-->

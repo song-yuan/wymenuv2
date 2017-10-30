@@ -29,7 +29,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组设置'),'url'=>$this->createUrl('pricegroup/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','价格信息编辑'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroup/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组设置'),'url'=>$this->createUrl('pricegroup/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','价格信息编辑'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroup/index' , array('companyId' => $this->companyId,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->

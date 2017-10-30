@@ -191,11 +191,19 @@
 					function(res){
 						 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 						 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+<<<<<<< HEAD
 						 	mui.alert('支付成功!');
 						 	location.href = '<?php echo $returnUrl;?>';
 						 }else{
 						 	//支付失败或取消支付
 							 mui.alert('支付失败,请重新支付!');
+=======
+						 	layer.msg('支付成功!');
+						 	location.href = '<?php echo $returnUrl;?>';
+						 }else{
+						 	//支付失败或取消支付
+							 layer.msg('支付失败,请重新支付!');
+>>>>>>> acef557775bff07bb9244325302f13339d0bb567
 						 }
 					}
 				);
@@ -203,13 +211,21 @@
 				<?php elseif($payChannel==2):?>
 				location.href = '<?php echo $sqbpayUrl;?>';
 				<?php else:?>
+<<<<<<< HEAD
 				mui.alert('无支付信息,请联系客服!');
+=======
+				layer.msg('无支付信息,请联系客服!');
+>>>>>>> acef557775bff07bb9244325302f13339d0bb567
 				<?php endif;?>
 			}
 			function callpay()
 			{
 				<?php if(!$canpWxpay):?>
+<<<<<<< HEAD
 				mui.alert('<?php echo $jsApiParameters;?>');
+=======
+				layer.msg('<?php echo $jsApiParameters;?>');
+>>>>>>> acef557775bff07bb9244325302f13339d0bb567
 				return;
 				<?php endif;?>
 				if (typeof WeixinJSBridge == "undefined"){
@@ -222,7 +238,11 @@
 				}else{
 				    jsApiCall();
 				}
+<<<<<<< HEAD
 				// window.event.returnValue = false;
+=======
+				window.event.returnValue = false;
+>>>>>>> acef557775bff07bb9244325302f13339d0bb567
 			}
 
 		    $('#suretopay').on('tap',function(){

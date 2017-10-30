@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * 支付通知回调基础类
  * @author widyhu
  *
@@ -22,7 +22,7 @@ class Notify extends WxPayNotify
 		}
 		return false;
 	}
-	
+
 	//重写回调处理函数
 	public function NotifyProcess($data, &$msg)
 	{
@@ -36,13 +36,13 @@ class Notify extends WxPayNotify
 			$msg = "订单查询失败";
 			return false;
 		}
-	
+
 		//记录通知 并更改订单状态
 		$this->checkNotify($data);
-		
+
 		return true;
 	}
-	
+
 	public function checkNotify($data){
 		$sql = 'SELECT (SELECT count(*) FROM nb_notify WHERE transaction_id = "' .$data['transaction_id']. '") + (SELECT count(*) FROM nb_notify WHERE out_trade_no= "' .$data['out_trade_no']. '") as count';
 		$count = Yii::app()->db->createCommand($sql)->queryRow();
@@ -53,9 +53,9 @@ class Notify extends WxPayNotify
 	public function insertNotify($data){
 		$orderIdArr = explode('-',$data["out_trade_no"]);
 		$openId = isset($data['sub_openid'])?$data['sub_openid']:$data['openid'];
-		
+
 		$brandUser = WxBrandUser::getFromOpenId($openId);
-		
+
 		$se = new Sequence("notify");
         $lid = $se->nextval();
 		$notifyData = array(
@@ -70,22 +70,76 @@ class Notify extends WxPayNotify
         	'time_end'=>$data['time_end'],
         	'attach'=>isset($data['attach'])?$data['attach']:'',
         	'is_sync'=>DataSync::getInitSync(),
-			);	
+			);
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		if($data['attach']==1){
 			//充值
 			$recharge = new WxRecharge($orderIdArr[0],$orderIdArr[1],$brandUser['lid']);
 			exit;
+
+		}else if($data['attach']==3){
+			//商铺原料支付
+			$Yorder = GoodsOrder::model()->find('account_no=:account_no and dpid=:dpid',array(':account_no'=>$orderIdArr[0],':dpid'=>$orderIdArr[1]));
+			$Yorder->order_status= 1;
+			$Yorder->paytype = 1;
+			$Yorder->pay_status = 1;
+			$Yorder->pay_time = date('Y-m-d H:i:s',time());
+			$Yorder->update();
+			$se = new Sequence("goods_order_pay");
+			$lid = $se->nextval();
+			$Data = array(
+				'lid'=>$lid,
+				'dpid'=>$orderIdArr[1],
+				'create_at'=>date('Y-m-d H:i:s',time()),
+				'update_at'=>date('Y-m-d H:i:s',time()),
+				'account_no'=>$orderIdArr[0],
+				'order_id'=>$Yorder->lid,
+				'pay_amount'=>$Yorder->reality_total,
+				'paytype'=>1,
+				'paytype_id'=>$data['transaction_id'],
+				'remark'=>'商铺原材料微信支付',
+				'delete_flag'=>0,
+				'is_sync'=>DataSync::getInitSync(),
+				);
+			Yii::app()->db->createCommand()->insert('nb_goods_order_pay', $Data);
+			exit;
+
 		}
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
 		WxOrder::insertOrderPay($order,1);
-		WxOrder::dealOrder($brandUser, $order);
+		//修改订单状态
+		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
+		//修改订单产品状态
+		WxOrder::updateOrderProductStatus($orderIdArr[0],$orderIdArr[1]);
+		//修改座位状态
+		if($order['order_type']==1){
+			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+		}else{
+			WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
+		}
+		//减少库存
+		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
+		foreach($orderProducts as $product){
+			$productTasteArr = array();
+			if(isset($product['taste'])&&!empty($product['taste'])){
+				foreach ($product['taste'] as $taste){
+					array_push($productTasteArr, $taste['taste_id']);
+				}
+			}
+			$productBoms = DataSyncOperation::getBom($orderIdArr[1], $product['product_id'], $productTasteArr);
+			if(!empty($productBoms)){
+				foreach ($productBoms as $bom){
+					$stock = $bom['number']*$product['amount'];
+					DataSyncOperation::updateMaterialStock($orderIdArr[1],$bom['material_id'],$stock);
+				}
+			}
+		}
 		//发送模板消息通知
 		$company = WxCompany::get($orderIdArr[1]);
 		$data = array(
 				'touser'=>$openId,
-				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'],'orderDpid'=>$order['dpid'])),
+				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'])),
 				'first'=>'您好，您已成功支付订单',
 				'keyword1'=>$order['account_no'],
 				'keyword2'=>$order['should_total'].'元',

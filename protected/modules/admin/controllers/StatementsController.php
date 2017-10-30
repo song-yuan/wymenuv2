@@ -2343,9 +2343,18 @@ public function actionPayallReport(){
 		if($type == 0){
 			$sql = 'select sum(t.zhiamount*t.amount) as all_amount,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) where t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.lid';
 		}else{
-			$sql = 'select sum(t.zhiamount*t.amount) as all_amount,count(t.zhiamount) as all_zhiamount,sum(t2.retreat_amount) as retreat_num,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t.lid = t2.order_detail_id) where t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.lid';
+			//$sql = 'select sum(t.zhiamount*t.amount) as all_amount,count(t.zhiamount) as all_zhiamount,sum(t2.retreat_amount) as retreat_num,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t.lid = t2.order_detail_id) where t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.lid';
+			$sql = 'select sum(t.amount) as all_amount,1 as all_zhiamount,sum(ifnull(t2.retreat_amount,t.amount)) as retreat_num, 0 as set_name,t.* '
+					. ' from nb_order_product t '
+					. ' left join nb_order_retreat t2 on(t.dpid = t2.dpid and t.lid = t2.order_detail_id) '
+					. ' where t.set_id = 0 and t.order_id='.$orderid.' group by t.lid '
+					. ' union select sum(t.zhiamount*t.amount) as all_amount,count(t.zhiamount) as all_zhiamount,sum(t2.retreat_amount) as retreat_num,t1.set_name,t.* '
+					. ' from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) '
+					. ' left join nb_order_retreat t2 on(t.dpid =t2.dpid and t.lid = t2.order_detail_id) '
+					. ' where t.set_id >0 and t.order_id='.$orderid.' group by t.lid ';
 		}//var_dump($sql);exit;
 		$allmoney = Yii::app()->db->createCommand($sql)->queryAll();
+		//var_dump($allmoney);exit;
 		$sql1 = 'select t.pay_amount from nb_order_pay t where t.paytype =11 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
 		$model = Yii::app()->db->createCommand($sql1)->queryRow();
 		$change = $model['pay_amount']?$model['pay_amount']:0;
@@ -5871,23 +5880,23 @@ public function actionPayallReport(){
 		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-
+		
 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
 			$ords = $ords .','.$order['lid'];
 		}
-		//var_dump($catId);exit;
+		//echo ($ords);exit;
 		$criteria = new CDbCriteria;
 		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.dpid,t.product_id,t1.lid,t1.product_name,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total from nb_order_product t left join nb_product t1 on(t1.lid = t.product_id and t.dpid = t1.dpid ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=1 group by t.product_id,t.amount,is_retreat,month(t.create_at)';
 		//var_dump($sql);exit;
-		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
+		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.product_name,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,t.product_type,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
 		$criteria->with = array('company','product','order');
-
-		$criteria->condition = 't.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid='.$this->companyId .' and t.set_id '.$setids.' ';
+		
+		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid='.$this->companyId.' and t.set_id '.$setids.' ';
 		if($str){
-			$criteria->condition = 't.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid in('.$str.')';
+			$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid in('.$str.')';
 		}
 		if($ordertype==1){
 			$criteria->addCondition("order.order_type =0");
@@ -5904,18 +5913,19 @@ public function actionPayallReport(){
 		if($ordertype==5){
 			$criteria->addCondition("t.set_id !=0");
 		}
+		//$criteria->addCondition("t.order_id in('.$ords.')");
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		$criteria->addCondition("t.order_id in(".$ords.")");
-
+		
 		if($text==1){
-			$criteria->group ='t.product_id,year(t.create_at)';
+			$criteria->group =' t.product_type,t.product_id,year(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}elseif($text==2){
-			$criteria->group ='t.product_id,month(t.create_at)';
+			$criteria->group =' t.product_type,t.product_id,month(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}else{
-			$criteria->group ='t.product_id,day(t.create_at)';
+			$criteria->group =' t.product_type,t.product_id,day(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}
 		$models = OrderProduct::model()->findAll($criteria);
@@ -5988,13 +5998,14 @@ public function actionPayallReport(){
 		->setCellValue('J3','折后均价');
 		$i=4;
 		foreach($models as $v){
-			//print_r($v);
+			//print_r($v);exit;
+			if($v->product_type !=2) { $name = $v->product_name;}else {$name = '打包费';}
 			if ($text==1){
 
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A'.$i,$v->y_all)
 				->setCellValue('B'.$i,$v->company->company_name)
-				->setCellValue('C'.$i,$v->product->product_name)
+				->setCellValue('C'.$i,$name)
 				->setCellValue('D'.$i,$i-3)
 				->setCellValue('E'.$i,$v->all_total)
 				->setCellValue('F'.$i,$v->all_jiage)
@@ -6006,7 +6017,7 @@ public function actionPayallReport(){
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A'.$i,$v->y_all.'-'.$v->m_all)
 				->setCellValue('B'.$i,$v->company->company_name)
-				->setCellValue('C'.$i,$v->product->product_name)
+				->setCellValue('C'.$i,$name)
 				->setCellValue('D'.$i,$i-3)
 				->setCellValue('E'.$i,$v->all_total)
 				->setCellValue('F'.$i,$v->all_jiage)
@@ -6018,7 +6029,7 @@ public function actionPayallReport(){
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A'.$i,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 				->setCellValue('B'.$i,$v->company->company_name)
-				->setCellValue('C'.$i,$v->product->product_name)
+				->setCellValue('C'.$i,$name)
 				->setCellValue('D'.$i,$i-3)
 				->setCellValue('E'.$i,$v->all_total)
 				->setCellValue('F'.$i,$v->all_jiage)
@@ -7938,9 +7949,10 @@ public function actionPayallReport(){
 			$ords = $ords .','.$order['lid'];
 		}
 
-		$sql = 'select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where order_id in('.$ords.') and paytype != 11 and  dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all';
-		$models = Yii::app()->db->createCommand($sql)->queryAll();
 
+		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where  order_id in('.$ords.') and paytype !=11 and dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
+		$models = $db->createCommand($sql)->queryAll();
+		
 
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -8070,6 +8082,7 @@ public function actionPayallReport(){
 
 
 	}
+
 
 	/*
 	 *

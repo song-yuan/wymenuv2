@@ -1,40 +1,120 @@
+		<style>
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			
+			.mui-input-group {
+				margin-top: 10px;
+			}
+			
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			
+			.mui-input-group label {
+				width: 22%;
+			}
+			
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
+			}
+			
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+			}
+			
+			.link-area {
+				display: block;
+				margin-top: 25px;
+				text-align: center;
+			}
+			
+			.spliter {
+				color: #bbb;
+				padding: 0px 8px;
+			}
+			
+			.oauth-area {
+				position: absolute;
+				bottom: 20px;
+				left: 0px;
+				text-align: center;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			.oauth-area .oauth-btn {
+				display: inline-block;
+				width: 50px;
+				height: 50px;
+				background-size: 30px 30px;
+				background-position: center center;
+				background-repeat: no-repeat;
+				margin: 0px 20px;
+				/*-webkit-filter: grayscale(100%); */
+				border: solid 1px #ddd;
+				border-radius: 25px;
+			}
+			
+			.oauth-area .oauth-btn:active {
+				border: solid 1px #aaa;
+			}
+			
+			.oauth-area .oauth-btn.disabled {
+				background-color: #ddd;
+			}
+			.error{color:red;}
+		</style>
+
+
+		<header class="mui-bar mui-bar-nav mui-hbar">
+			<h1 class="mui-title" style="color:white;font-weight: 900;">商城登陆</h1>
+		</header>
+		<div class="mui-content" style="height: 100%;">
 		<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'login-form',
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
-					
 				),
 		)); ?>
-			<h3 class="form-title">商城登陆</h3>
-			<div class="alert alert-danger display-hide">
-				<button class="close" data-close="alert"></button>
-				<span>输入用户名和密码</span>
-			</div>
-			<div class="form-group <?php if($model->hasErrors('username')) echo 'has-error';?>">
-				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-				<label class="control-label visible-ie8 visible-ie9">Username</label>
-				<div class="input-icon">
-					<i class="fa fa-user"></i>
-					<?php echo $form->textField($model, 'username' , array('class' => 'form-control placeholder-no-fix' , 'autocomplete' => 'off' , 'placeholder' => $model->getAttributeLabel('username'))); ?>
-				</div>
-				<?php echo $form->error($model , 'username'); ?>
-			</div>
-			<div class="form-group  <?php if($model->hasErrors('password')) echo 'has-error';?>">
-				<label class="control-label visible-ie8 visible-ie9">Password</label>
-				<div class="input-icon">
-					<i class="fa fa-lock"></i>
-					<?php echo $form->passwordField($model, 'password' , array( 'class' => 'form-control placeholder-no-fix' , 'autocomplete' => 'off' , 'placeholder' => $model->getAttributeLabel('password'))); ?>
-				</div>
-				<?php echo $form->error($model , 'password'); ?>
-			</div>
-			<div class="form-actions">
-				<label class="checkbox">
-<!-- 				<input type="checkbox" name="remember" value="1"/> 记住用户名 -->
-				</label>
-				<button type="submit" class="btn blue pull-right">
-				登录 <i class="m-icon-swapright m-icon-white"></i>
-				</button>            
-			</div>
+		<div class="mui-input-group">
 
+				<div class="mui-input-row <?php if($model->hasErrors('username')) echo 'has-error';?>">
+					<label>账号</label>
+					<?php echo $form->textField($model, 'username' , array('id'=>'account','class' => 'mui-input-clear mui-input' , 'autocomplete' => 'off' , 'placeholder' =>'请输入账号')); ?>
+				</div>
+
+
+				<div class="mui-input-row  <?php if($model->hasErrors('password')) echo 'has-error';?>">
+					<label>密码</label>
+					<?php echo $form->passwordField($model, 'password' , array('id'=>'password', 'class' => 'mui-input-clear mui-input' , 'autocomplete' => 'off' , 'placeholder' => '请输入密码')); ?>
+				</div>
+		</div>
+			<div class="mui-content-padded">
+				<button id='login' type="submit" class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+				<div class="link-area"><a id='forgetPassword' href="tel:13918912474" >忘记密码</a></div>
+			</div>
+			<div class="mui-content-padded oauth-area">
+
+			</div>
 		<?php $this->endWidget(); ?>
-		<!-- END LOGIN FORM -->        
+		</div>
+		<script>
+		jQuery(document).ready(function() {
+			$('input').change(function(event) {
+				$('.error').removeClass('.error');
+			});
+		});
+		</script>

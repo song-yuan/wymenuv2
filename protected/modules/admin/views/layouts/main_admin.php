@@ -38,6 +38,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/plugins.css');?>
 	<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/themes/default.css');?>
 	<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/custom.css');?>
+	<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/waiter/cf.css');?>
 	<!-- END THEME STYLES -->
 	
 </head>

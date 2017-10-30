@@ -58,7 +58,7 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','分组设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>yii::app()->request->urlReferrer)));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺分组及标签'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -77,7 +77,7 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption">
-						<span class="tab tab-active"><?php echo yii::t('app','分组列表');?></span>
+						<span class="tab tab-active"><?php echo yii::t('app','分组及标签列表');?></span>
 					</div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('areaGroupDetail/index',array('companyId'=>$this->companyId,'type'=>$type));?>" class="btn yellow" ><i class="fa fa-search"></i> <?php echo yii::t('app','店铺对应分组');?></a>

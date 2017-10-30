@@ -42,11 +42,11 @@ class MyinfoController extends BaseYmallController
 		.' left join nb_company c on(c.dpid=god.stock_dpid) '
 		.' left join nb_goods g on (g.lid=god.goods_id and g.goods_code=god.goods_code )'
 		.' where god.dpid='.$this->companyId
-		.' and go.order_status < 4 or go.order_status = 4'
-		.' and go.order_type=1'
-		.' and go.pay_status=1'
+		.' and go.order_type = 1'
+		.' and go.pay_status = 1'
 		.' and go.user_id='.$user_id
 		.' and god.delete_flag=0'
+		.' and go.order_status < 4 or go.order_status = 4'
 		.' order by god.stock_dpid';
 		$products_pay = $db->createCommand($sql1)->queryAll();
 		$materials_pay =array();
@@ -71,10 +71,12 @@ class MyinfoController extends BaseYmallController
 		$products_send = $db->createCommand($sql2)->queryAll();
 		$materials_send =array();
 		foreach ($products_send as $product) {
-			if(!isset($materials_send[$product['account_no']])){
-				$materials_send[$product['account_no']] = array();
+			if ($product['status'] !=2) {
+				if(!isset($materials_send[$product['account_no']])){
+					$materials_send[$product['account_no']] = array();
+				}
+				array_push($materials_send[$product['account_no']], $product);
 			}
-			array_push($materials_send[$product['account_no']], $product);
 		}
 		// p($materials_send);
 
@@ -252,6 +254,7 @@ class MyinfoController extends BaseYmallController
 			LEFT JOIN nb_product_material pm on(pm.mphs_code=gids.material_code and pm.dpid='.$this->companyId.')
 			where gi.invoice_accountno = '.$invoice_accountno.' AND gi.goods_order_accountno='.$account_no;
 			$products = $db->createCommand($sql1)->queryAll();
+			// p($products);
 			$i=0;
 			foreach ($products as $key => $product) {
 				$se=new Sequence("product_material_stock");
