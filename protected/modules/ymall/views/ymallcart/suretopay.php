@@ -1,4 +1,79 @@
+<?php
+	$baseUrl = Yii::app()->baseUrl;
+	$company = WxCompany::get($this->companyId);
+	$this->setPageTitle('支付订单');
 
+	$payPrice = number_format($reality_total,2); // 最终支付价格
+	$orderId = $golid['account_no'].'-'.$this->companyId;
+
+	$canpWxpay = true;
+	$compaychannel = WxCompany::getpaychannel($this->companyId);
+	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
+	if($payChannel==1){
+		// Helper::writeLog('ZHH:payChannel=1');
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('myinfo/index',array('companyId'=>$this->companyId));
+	// p($returnUrl);
+		//①、获取用户openid
+		try{
+				$tools = new JsApiPay();
+				$account = WxAccount::get($companyId);
+				// Helper::writeLog('zhh:'.$account['appid'].'zhh2:'.$account['appsecret']);
+			 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
+			 	$userInfo = $baseInfo->getSnsapiBase();
+			 	$openId = $userInfo['openid'];
+				// Helper::writeLog('zhh3:'.$openid);
+				// $openId = WxBrandUser::openId($userId,$this->companyId);
+				$account = WxAccount::get($this->companyId);
+				//②、统一下单
+				$input = new WxPayUnifiedOrder();
+				$input->SetBody($company['company_name']."-商铺原料订单");
+				$input->SetAttach("3");
+				$input->SetOut_trade_no($orderId);
+				$input->SetTotal_fee($payPrice*100);
+				$input->SetTime_start(date("YmdHis"));
+				$input->SetTime_expire(date("YmdHis", time() + 600));
+				$input->SetGoods_tag($company['company_name']."-商铺原料订单");
+				$input->SetNotify_url($notifyUrl);
+				$input->SetTrade_type("JSAPI");
+				if($account['multi_customer_service_status'] == 1){
+					$input->SetSubOpenid($openId);
+				}else{
+					$input->SetOpenid($openId);
+				}
+				$orderInfo = WxPayApi::unifiedOrder($input);
+
+				$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+		}catch(Exception $e){
+			$canpWxpay = false;
+			$jsApiParameters = $e->getMessage();
+		}
+
+
+
+	}elseif($payChannel==2){
+		// Helper::writeLog('ZHH:payChannel=2');
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
+		$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$this->companyId));
+		$data = array(
+				'companyId'=>$this->companyId,
+				'dpid'=>$this->companyId,
+				'client_sn'=>$orderId,
+				'total_amount'=>$payPrice,
+				'subject'=>$company['company_name']."-商铺原料订单",
+				'payway'=>3,
+				'operator'=>$user['nickname'],
+				'reflect'=>$reflect,
+				'notify_url'=>$notifyUrl,
+				'return_url'=>$returnUrl,
+		);
+		// Helper::writeLog('view:'.$orderId);
+		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
+	}else{
+		$jsApiParameters = '';
+	}
+?>
 		<style>
 			.back-color{background-color: #F0F0E1;}
 			.left{float:left;}
@@ -43,7 +118,7 @@
 		    	<?php foreach ($materials as $key => $products): ?>
 			    <li class="mui-table-view-cell big-li">
 			    	<div class="mui-row" style="height: 30px;">
-				    		<span class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></span>
+				    	<span class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></span>
 			    	</div>
 			        <ul class="mui-table-view" id="a1">
 			        	<?php foreach ($products as $product):?>
@@ -93,10 +168,7 @@
 
 		<script type="text/javascript">
 			mui.init();
-			var button = document.getElementById('suretopay');
-			button.addEventListener('tap',function(){
-				alert('111');
-		    });
+
 
 			//状态提示
 			var status = '<?php echo $success; ?>';
@@ -107,4 +179,53 @@
 			}else if(status == '3'){
 				mui.toast('订单选择有问题 , 修改地址失败');
 			}
+
+				//调用微信JS api 支付
+			function jsApiCall()
+			{
+				<?php if ($payChannel==1):?>
+				<?php if($canpWxpay):?>
+				WeixinJSBridge.invoke(
+					'getBrandWCPayRequest',
+					<?php echo $jsApiParameters; ?>,
+					function(res){
+						 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+						 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+						 	mui.alert('支付成功!');
+						 	location.href = '<?php echo $returnUrl;?>';
+						 }else{
+						 	//支付失败或取消支付
+							 mui.alert('支付失败,请重新支付!');
+						 }
+					}
+				);
+				<?php endif;?>
+				<?php elseif($payChannel==2):?>
+				location.href = '<?php echo $sqbpayUrl;?>';
+				<?php else:?>
+				mui.alert('无支付信息,请联系客服!');
+				<?php endif;?>
+			}
+			function callpay()
+			{
+				<?php if(!$canpWxpay):?>
+				mui.alert('<?php echo $jsApiParameters;?>');
+				return;
+				<?php endif;?>
+				if (typeof WeixinJSBridge == "undefined"){
+				    if( document.addEventListener ){
+				        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+				    }else if (document.attachEvent){
+				        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+				        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+				    }
+				}else{
+				    jsApiCall();
+				}
+				// window.event.returnValue = false;
+			}
+
+		    $('#suretopay').on('tap',function(){
+		    	callpay();
+		    })
 		</script>

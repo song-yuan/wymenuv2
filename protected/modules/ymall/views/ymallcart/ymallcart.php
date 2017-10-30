@@ -95,7 +95,7 @@
 				        	<?php foreach ($products as $product):?>
 						    <li class="mui-row  mui-media ui-table-view-cell">
 						    	<div class="mui-col-xs-2 mui-checkbox">
-						    		<input name="goods_cart_id" value=" <?php echo $product['lid']; ?>" type="checkbox" class="goods_product">
+						    		<input name="goods_cart_id" value="<?php echo $product['lid']; ?>" type="checkbox" class="goods_product">
 						    	</div>
 						    	<div class="mui-col-xs-10" >
 					    			<a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
@@ -119,7 +119,7 @@
 						                <span class="mui-icon mui-icon-pulldown" style="color:greenyellow;"></span>
 						            	<?php endif; ?>
 						                </span>
-						                <div class="mui-numbox mui-right " data-numbox-step='1' data-numbox-min='0' data-numbox-max='<?php echo 10000;//$product['store_number']; ?>'>
+						                <div class="mui-numbox mui-right " data-numbox-step='1' data-numbox-min='1' data-numbox-max='<?php echo 10000;//$product['store_number']; ?>'>
 										  <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
 										  <input class="mui-numbox-input" type="number" value="<?php echo $product['num']; ?>" readonly = "readonly" />
 										  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
@@ -191,6 +191,7 @@
 						$("input.mui-numbox-input").removeAttr('readonly');
 						$("#edit").text('完成');
 						$("input[type='checkbox']").each(function(){this.checked=false;});
+						$('.all_price').html('0.00');
 					}else if($("#edit").text()=='完成'){
 						if ($("input[name='goods_cart_id']:checked").length > 0) {
 							mui.alert('数据已改变 , 请点击保存 ! ! !')
@@ -202,6 +203,7 @@
 							$("#edit").text('编辑');
 							$("input[type='checkbox']").each(function(){this.checked=false;});
 						}
+						$('.all_price').html('0.00');
 					}
 				});
 					//编辑时,数量改变自动选中

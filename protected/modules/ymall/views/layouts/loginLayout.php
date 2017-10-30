@@ -1,59 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
-<!-- BEGIN HEAD -->
+<html style="height: 100%;">
 <head>
     <meta charset="utf-8"/>
     <title>壹点吃商城登陆</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-	<meta content="" name="description" />
-	<meta content="" name="author" />
-	<meta name="MobileOptimized" content="320">
-	<!-- BEGIN GLOBAL MANDATORY STYLES -->
-	<?php Yii::app()->clientScript->registerCssFile('../plugins/font-awesome/css/font-awesome.min.css');?>
-	<?php Yii::app()->clientScript->registerCssFile('../plugins/bootstrap/css/bootstrap.min.css');?>
-	<?php Yii::app()->clientScript->registerCssFile('../plugins/uniform/css/uniform.default.css');?>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-	<!-- END GLOBAL MANDATORY STYLES -->
-	<!-- BEGIN PAGE LEVEL STYLES -->
-	<?php Yii::app()->clientScript->registerCssFile('../plugins/select2/select2_metro.css');?>
-	<!-- END PAGE LEVEL SCRIPTS -->
-	<!-- BEGIN THEME STYLES -->
-	<?php Yii::app()->clientScript->registerCssFile('../css/style-metronic.css');?>
-	<?php Yii::app()->clientScript->registerCssFile('../css/style.css');?>
-	<?php Yii::app()->clientScript->registerCssFile('../css/style-responsive.css');?>
-	<?php Yii::app()->clientScript->registerCssFile('../css/themes/default.css');?>
-	<?php Yii::app()->clientScript->registerCssFile('../css/pages/login-soft.css');?>
-	<?php Yii::app()->clientScript->registerCssFile('../css/custom.css');?>
-	<!-- END THEME STYLES -->
-	<link rel="shortcut icon" href="favicon.ico" />
+
+	<link rel="stylesheet" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.min.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/feedback-page.css" />
+	<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/iconfont.css" rel="stylesheet"/>
+	<link rel="stylesheet" type="text/css" href="../../../../css/ymall/ymall.css"/>
+	<style>
+		.mui-hbar{background-color: #FF8C00!important;color:white;}
+		.mui-a{color:yellow!important;font-weight: 900;}
+		.mui-bar-tab .mui-tab-item {color:#fff;}
+	</style>
+	<script type="text/javascript" src="../../../../plugins/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="../../../../scripts/flipsnap.js"></script>
+	<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.min.js "></script>
+	<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.view.js "></script>
+	<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/app.js"></script>
+	<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/jquery-1.7.1.min.js"></script>
 </head>
-<!-- END HEAD -->
-<!-- BEGIN BODY -->
-<body class="login">
-	<!-- BEGIN LOGO -->
-	<div class="logo">
-		<h1 style="color:white">壹点吃商城</h1>
-	</div>
-	<!-- END LOGO -->
-	<!-- BEGIN LOGIN -->
-	<div class="content">
-		<!-- BEGIN LOGIN FORM -->
-		<?php echo $content ;?>
-		<!-- END REGISTRATION FORM -->
-	</div>
-	<!-- END LOGIN -->
-	<!-- BEGIN COPYRIGHT -->
-<!-- 	<div class="copyright"> -->
-<!-- 		2017 &copy; Metronic - Admin Dashboard Template. -->
-<!-- 	</div> -->
-	<!-- END COPYRIGHT -->
-	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-	<!-- BEGIN CORE PLUGINS -->
-	<!-- END CORE PLUGINS -->
-	<!-- END JAVASCRIPTS -->
+<body>
+
+	<?php echo $content ;?>
+
 	<?php Yii::app()->clientScript->registerCoreScript('jquery');?>
 	<?php Yii::app()->clientScript->registerScriptFile('../plugins/jquery-migrate-1.2.1.min.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile('../plugins/bootstrap/js/bootstrap.min.js');?>
@@ -69,8 +41,6 @@
 	<?php Yii::app()->clientScript->registerScriptFile('../scripts/login-soft.js');?>
 	<script>
 		jQuery(document).ready(function() {
-		  //App.init();
-		  //Login.init();
 		});
 	</script>
 </body>

@@ -40,7 +40,6 @@
 			}
 			.bottom{
 				width: 85%;
-				height: 21px;
 				position:absolute;
 				bottom:8px;
 			}
@@ -48,16 +47,16 @@
 			    right: 200px!important;
 			}*/
 			.addicon1{
-				width: 30px!important;
-				height: 30px!important;
+				width: 25px!important;
+				height: 25px!important;
 				background-color: red;
-				border-radius: 30px!important;
+				border-radius: 25px!important;
 				color: #fff;
 				vertical-align: middle;
 				text-align: center;
 				align-items: center;
-				line-height: 30px!important;
-				font-size: 30px!important;
+				line-height: 25px!important;
+				font-size: 25px!important;
 				font-weight: 600;
 			}
 			.mui-badge{
@@ -118,12 +117,12 @@
 								<li class="ui-table-view-cell mui-media mui-col-xs-6">
 									<div class="">
 										<div class="goods-pic">
-											<img src="<?php echo 'http://menu.wymenu.com/'.$m['main_picture']?>" style="height: 130px;"/>
+											<img src="<?php if($m['main_picture']){ echo 'http://menu.wymenu.com/'.$m['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height: 130px;"/>
 										</div>
 										<div><span class="color-blue">[<?php echo $m['company_name'];?>]</span><?php echo $m['goods_name'];?></div>
 										<div class="bottom">
 											<div class="float-l color-r">￥ <?php echo $m['original_price'];?></div>
-											<div class="float-l "><?php echo $m['goods_unit'];?></div>
+											<div class="float-l " style="margin-left:10px;"> <?php echo $m['goods_unit'];?></div>
 											<div class="float-r  color-r ">
 												<div class="addicon" stock_dpid="<?php echo $m['dpid'];?>" goods_name="<?php echo $m['goods_name'];?>" goods_id="<?php echo $m['glid'];?>"  price="<?php echo $m['original_price'];?>"  goods_code="<?php echo $m['goods_code'];?>" material_code="<?php echo $m['material_code'];?>">+</div>
 											</div>
@@ -162,7 +161,6 @@
 				mui('#kinds').scroll().scrollTo(0,top,300);
 				Main.offCanvas('close');
 			});
-
 
 
 			$('.addicon').on('touchstart',function(){
@@ -204,9 +202,9 @@
 			});
 
 			//查看商品详情
-			$('.goods-pic img').on('tap',function(){
-				location.href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId'=>$this->companyId))?>" ;
-			});
+			// $('.goods-pic img').on('tap',function(){
+			// 	location.href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId'=>$this->companyId))?>" ;
+			// });
 
 			//搜索为空阻止提交
 			$('.search-form').submit(function(event) {
