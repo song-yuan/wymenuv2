@@ -2354,7 +2354,7 @@ public function actionPayallReport(){
 					. ' where t.set_id >0 and t.order_id='.$orderid.' group by t.lid ';
 		}//var_dump($sql);exit;
 		$allmoney = Yii::app()->db->createCommand($sql)->queryAll();
-		var_dump($allmoney);exit;
+		//var_dump($allmoney);exit;
 		$sql1 = 'select t.pay_amount from nb_order_pay t where t.paytype =11 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
 		$model = Yii::app()->db->createCommand($sql1)->queryRow();
 		$change = $model['pay_amount']?$model['pay_amount']:0;

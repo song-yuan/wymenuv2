@@ -219,10 +219,6 @@ $(function () {
 })
 });
 $('.accountno').click(function() {
-	<?php if(Yii::app()->user->role >1):?>
-	layer.msg('升级中...');
-	return false;
-	<?php endif;?>
 	  //alert(111);
 	  layer.load();
 	  $('#orderdetaildiv').remove();
@@ -257,7 +253,7 @@ $('.accountno').click(function() {
 						prodZhiNum = parseInt(model[i].zhiamount);
 						prodReNums = parseInt(model[i].retreat_num);
 						num = parseInt(prodNum/allprodZhiNum);
-						renum = parseInt(prodReNums/prodZhiNum);
+						renum = parseInt(prodReNums/allprodZhiNum);
 						setName = model[i].set_name;
 						var sets = '';
 						if(setName !='0'){
