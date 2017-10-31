@@ -4,35 +4,35 @@
 <!--导航栏-->
 <header class="mui-bar mui-bar-nav">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" href="#topPopover"></a>
-	<h1 class="mui-title"><?php echo Helper::getCompanyName($this->companyId);?></h1>
+<!-- 	<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" href="#topPopover"></a> -->
+	<h1 class="mui-title"><?php if(empty(Yii::app()->request->getParam('type'))){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];} ?></h1>
 </header>
-<div id="topPopover" class="mui-modal">
+<!-- <div id="topPopover" class="mui-modal">
 	<header class="mui-bar mui-bar-nav">
 		<a class="mui-icon mui-icon-close mui-pull-right" href="#topPopover"></a>
 		<h1 class="mui-title">选择店铺</h1>
 	</header>
 	<div class="mui-content" style="height: 100%;margin-top: 10px;margin-left: 10px;">
-		<form action="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>" method="post">
+		<form action="<?php //echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>" method="post">
 		<ul id="ul">
-		<?php foreach($dps as $dp):?>
-			<li><input style="width: 20px;height: 20px;vertical-align: middle;" type="checkbox" name="checkbox[]" value="<?php echo $dp['dpid'];?>"><?php echo $dp['company_name'];?></li>
-			<?php endforeach;?>
+		<?php //foreach($dps as $dp):?>
+			<li><input style="width: 20px;height: 20px;vertical-align: middle;" type="checkbox" name="checkbox[]" value="<?php //echo $dp['dpid'];?>"><?php //echo $dp['company_name'];?></li>
+			<?php //endforeach;?>
 		</ul>
 		<div class="input">
 			<input type="submit" value="确定">
 		</div>
 		</form>
 	</div>
-</div>
+</div> -->
 <div class="yy">
 	<!--今日营业收益-->
 	<div class="shou">
 		<div class="shou1">
 			<h4>今日应收</h4>
-			<h3><?php foreach($todayProfit as $today){
-				if(!empty($today['pay_amount'])){
-					echo $today['pay_amount'];
+			<h3><?php foreach($orders as $order){
+				if(!empty($order['pay_amount'])){
+					echo $order['pay_amount'];
 				}else{
 					echo '0';
 				}
@@ -40,9 +40,9 @@
 		</div>
 		<div class="shou2">
 			<h4>今日实收</h4>
-			<h3><?php foreach($todayProfit as $today){
-				if(!empty($today['pay_amount'])){
-					$pay_amount = $today['pay_amount'];
+			<h3><?php foreach($orders as $order){
+				if(!empty($order['pay_amount'])){
+					$pay_amount = $order['pay_amount'];
 					echo $pay_amount;
 				}else{
 					echo '0';
@@ -64,10 +64,14 @@
 		<div class="shou4">
 			<h4>订单平均价</h4>
 			<h3><?php 
-				if(!empty($counts)){
-					echo round($pay_amount/$counts,2);
-				}else{
-					echo '0';
+				 foreach($orders as $order){
+					$reality_total = $order['reality_total'];
+					$pay_amount = $order['pay_amount'];
+					if(!empty($order['counts'])){
+						echo round($pay_amount/$counts,2);
+					}else{
+						echo '0';
+					}
 				}
 				?></h3>
 		</div>
@@ -97,70 +101,69 @@
 	</div>
 
 	<ul class="mui-table-view"> 
-	        <li class="mui-table-view-cell mui-collapse">
-	            <a class="mui-navigate-right" href="#">今日收益</a>
-	            <div class="mui-collapse-content">
-	            	<div class="time">
-	            		当前时间：<span><?php echo date('Y-m-d');?></span>
-	            	</div> 
-	                <div class="ys">
-						<div class="ys1">
-							<h6>应收</h6>
-							<span><?php if(!empty($pay_amount)){
-								echo $pay_amount;
-							}else{
-								echo '0';
-							}?></span>
+        <li class="mui-table-view-cell mui-collapse">
+            <a class="mui-navigate-right" href="#">今日收益</a>
+            <div class="mui-collapse-content">
+            	<div class="time">
+            		当前时间：<span><?php echo date('Y-m-d');?></span>
+            	</div> 
+                <div class="ys">
+					<div class="ys1">
+						<h6>应收</h6>
+						<span><?php if(!empty($pay_amount)){
+							echo $pay_amount;
+						}else{
+							echo '0';
+						}?></span>
+					</div>
+					<div class="ys2">
+						<h6>折扣</h6>
+						<span><?php 
+				if(!empty($pay_amount)){
+					echo $reality_total-$pay_amount;
+				}else{
+					echo '0';
+				}
+				?></span>
+					</div>
+					<div class="ys4">
+						<h6>人均</h6>
+						<span><?php if(!empty($number)){
+					$round = round($pay_amount/$number,2);
+					echo $round;
+				}else{
+					echo '0';
+				}?></span>
+					</div>
+					<div class="ys5">
+						<h6>订单数</h6>
+						<span><?php foreach($orders as $order){
+				if(!empty($order['counts'])){
+					$counts = $order['counts'];
+					echo $counts;
+				}else{
+					echo '0';
+				}
+				}?></span>
+					</div>
+					<div class="ys6">
+						<h6>总客人</h6>
+						<span><?php foreach($orders as $order){
+				if(!empty($order['number'])){
+					$number = $order['number'];
+					echo $number;
+				}else{
+					echo '0';
+				}
+				}?></span>
+					</div>
+					<div class="ys7">
+								<a href="turnover.html">查看详细营业额>>></a>
 						</div>
-						<div class="ys2">
-							<h6>折扣</h6>
-							<span><?php 
-					if(!empty($pay_amount)){
-						echo $reality_total-$pay_amount;
-					}else{
-						echo '0';
-					}
-					?></span>
-						</div>
-						<div class="ys4">
-							<h6>人均</h6>
-							<span><?php if(!empty($number)){
-						$round = round($pay_amount/$number,2);
-						echo $round;
-					}else{
-						echo '0';
-					}?></span>
-						</div>
-						<div class="ys5">
-							<h6>订单数</h6>
-							<span><?php foreach($orders as $order){
-					$reality_total = $order['reality_total'];
-					if(!empty($order['counts'])){
-						$counts = $order['counts'];
-						echo $counts;
-					}else{
-						echo '0';
-					}
-					}?></span>
-						</div>
-						<div class="ys6">
-							<h6>总客人</h6>
-							<span><?php foreach($orders as $order){
-					if(!empty($order['number'])){
-						$number = $order['number'];
-						echo $number;
-					}else{
-						echo '0';
-					}
-					}?></span>
-						</div>
-						<div class="ys7">
-									<a href="turnover.html">查看详细营业额>>></a>
-							</div>
-						</div>
-		            </div>
-		        </li>
-	    	</ul>
+					</div>
+	            </div>
+	    </li>
+	 </ul>
 			<ul class="mui-table-view" style="margin-top: 10px;"> 
 	        <li class="mui-table-view-cell mui-collapse">
 	            <a class="mui-navigate-right" href="#">本月收益</a>
@@ -171,17 +174,21 @@
 	                <div class="ys">
 							<div class="ys1" style="">
 								<h6>应收</h6>
-								<span><?php echo $Paymentmethod[0];?></span>
+								<span><?php 
+								foreach($months as $month){
+								echo $month['pay_amount'];
+								}?></span>
 							</div>
 							<div class="ys2" style="">
 								<h6>折扣</h6>
 								<span><?php foreach($months as $month){
 									$reality_totals = $month['reality_total'];
+									$pay_amount = $month['pay_amount'];
 									}
 									foreach ($refunds as $refund) {
-										$pay_amount = $refund['pay_amount'];
+										$refund_pay_amount = $refund['pay_amount'];
 									}
-								echo $reality_totals-$Paymentmethod[0]+$pay_amount;
+								echo $reality_totals-$pay_amount+$refund_pay_amount;
 									?></span>
 							</div>
 							<div class="ys3" style="margin-left: 220px;padding-top: 1px;margin-top: 30px;">
@@ -190,7 +197,7 @@
 									if(!empty($month['number'])){
 										$numbers = $month['number'];}}
 									if(!empty($numbers)){
-										echo round($Paymentmethod[0]/$numbers,2);}else{
+										echo round($pay_amount/$numbers,2);}else{
 											echo "0";
 										}
 										?></span>
@@ -218,16 +225,13 @@
 	        <li class="mui-table-view-cell mui-collapse">
 	            <a class="mui-navigate-right" href="#">今日活跃会员<span>
 	            	<?php 
-	            if(!empty($Member)){
-	            	$arrays = array();
-	            	foreach($Member as $paytype){
-	            		 array_push($arrays,$paytype['paytype_id']);
+	            	foreach ($Members as $Member) {
+	            		if(!empty($Member['paytype_id'])){
+	            			echo $Member['paytype_id'];
+	            		 }else{
+				            echo '0';
+				         }
 	            	}
-	            	$array = array_unique($arrays);
-	            	 echo count($array);
-	            }else{
-	            	echo '0';
-	            }
 	            ?>
 	            </span>/人</a>
 
@@ -235,15 +239,22 @@
 	                <div class="ys" style="">
 					<div class="ys1" style="">
 						<h6>今日新增会员</h6>
-						<span class="span"><?php echo count($card);?></span>人
+						<span class="span">
+						<?php foreach($cards as $card){
+								if(!empty($card['rfid'])){
+									echo $card['rfid'];
+								}else{
+									echo "0";
+								}
+							}?></span>人
 					</div>
 					<div class="ys2">
 						<h6>今日老会员</h6>
-						<span class="span"><?php if(!empty($Member)){ echo count($array);}else{ echo '0';}?></span>人
+						<span class="span"><?php if(!empty($Members)){ echo $Member['paytype_id'];}else{ echo '0';}?></span>人
 					</div>
 					<div class="ys4">
 						<h6>今日领卡数</h6>
-						<span class="span"><?php echo count($card);?></span>人
+						<span class="span"><?php echo $card['rfid'];?></span>人
 					</div>
 					<div class="ys5">
 						<h6>今日充值金额</h6>
@@ -270,28 +281,29 @@
 						<h4>报表中心</h4>
 					</div>
 					<div class="bb2">
-						<a name="yysj" href="<?php echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId));?>">营业数据</a>
+						<a name="yysj" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId));}?>">营业数据</a>
 					</div>
 					<div class="bb3">
-						<a name='sdbb' href="<?php echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId));?>">时段报表</a>
+						<a name='sdbb' href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId));}?>">时段报表</a>
 					</div>
 					<div class="bb2">
-						<a name="zffs" href="<?php echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId));?>">支付方式</a>
+						<a name="zffs" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId));}?>">支付方式</a>
 					</div>
 					<div class="bb8">
-						<a name="dpxs" href="<?php echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId));?>">单品销售</a>
+						<a name="dpxs" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId));}?>">单品销售</a>
 					</div>
 					<div class="bb2">
-						<a name="tcxs" href="<?php echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId));?>">套餐销售</a>
+						<a name="tcxs" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId));}?>">套餐销售</a>
 					</div>
 					<div class="bb4">
-						<a name="yclxh" href="<?php echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId));?>">原材料消耗</a>
+						<a name="yclxh" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId));}?>">原材料消耗</a>
 					</div>
 				</div>
 			</li>
 		</ul>
 	</div>
 	<!--店铺管理-->
+<?php if(empty(Yii::app()->request->getParam('type'))):?>
 	<div class="bb">
 		<ul class="mui-table-view">
 			<li class="mui-table-view-cell mui-media">
@@ -420,3 +432,4 @@
 		</ul>
 	</div>
 </div>
+<?php endif;?>	

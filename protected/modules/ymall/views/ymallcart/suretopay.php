@@ -24,7 +24,7 @@
 			 	$openId = $userInfo['openid'];
 				// Helper::writeLog('zhh3:'.$openid);
 				// $openId = WxBrandUser::openId($userId,$this->companyId);
-				$account = WxAccount::get($this->companyId);
+// 				$account = WxAccount::get($this->companyId);
 				//②、统一下单
 				$input = new WxPayUnifiedOrder();
 				$input->SetBody($company['company_name']."-商铺原料订单");
@@ -73,6 +73,7 @@
 	}else{
 		$jsApiParameters = '';
 	}
+	var_dump($jsApiParameters);
 ?>
 		<style>
 			.back-color{background-color: #F0F0E1;}
@@ -162,7 +163,7 @@
 	            	实付款 : ￥<span style="color: red;margin-right: 10px;padding-right: 10px;"><?php echo $reality_total; ?></span>
 	        </div>
 	        <div class="mui-tab-item " style="width:35%;">
-	            <button type="button" class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</button>
+	            <div class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</div>
 	        </div>
 	    </nav>
 
@@ -191,11 +192,11 @@
 					function(res){
 						 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 						 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-						 	layer.msg('支付成功!');
+						 	mui.alert('支付成功!');
 						 	location.href = '<?php echo $returnUrl;?>';
 						 }else{
 						 	//支付失败或取消支付
-							 layer.msg('支付失败,请重新支付!');
+							 mui.alert('支付失败,请重新支付!');
 						 }
 					}
 				);
@@ -203,13 +204,13 @@
 				<?php elseif($payChannel==2):?>
 				location.href = '<?php echo $sqbpayUrl;?>';
 				<?php else:?>
-				layer.msg('无支付信息,请联系客服!');
+				mui.alert('无支付信息,请联系客服!');
 				<?php endif;?>
 			}
 			function callpay()
 			{
 				<?php if(!$canpWxpay):?>
-				layer.msg('<?php echo $jsApiParameters;?>');
+				mui.alert('<?php echo $jsApiParameters;?>');
 				return;
 				<?php endif;?>
 				if (typeof WeixinJSBridge == "undefined"){
@@ -222,7 +223,7 @@
 				}else{
 				    jsApiCall();
 				}
-				window.event.returnValue = false;
+				// window.event.returnValue = false;
 			}
 
 		    $('#suretopay').on('tap',function(){

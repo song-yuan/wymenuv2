@@ -39,7 +39,7 @@
 		<ul class="mui-table-view">
 			<li class="mui-table-view-cell">
 				<span>门店</span>
-				<span style="padding-left: 165px;"><?php echo Helper::getCompanyName($this->companyId);?></span>
+				<span style="padding-left: 165px;"><?php if(empty(Yii::app()->request->getParam('type'))){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];} ?></span>
 			</li>
 			<li class="mui-table-view-cell">
 				<span>开始时间</span>
@@ -77,10 +77,10 @@
 				}
 				$sum = array_sum($array);
 				foreach($refunds as $refund){
-					$pay_amount = $refund['pay_amount'];
+					$repay_amount = $refund['pay_amount'];
 				}
 				if(!empty($counts)){
-					echo round(($sum+$pay_amount)/$counts,2);
+					echo round(($sum+$repay_amount)/$counts,2);
 				}else{
 					echo "0";
 				}
@@ -93,13 +93,13 @@
 					echo '0';
 				}
 				}?></span></li>
-        <li class="mui-table-view-cell">客单价<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($number)){echo round(($sum+$pay_amount)/$number,2);}else{echo "0";} ?></span></li>
+        <li class="mui-table-view-cell">客单价<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($number)){echo round(($sum+$repay_amount)/$number,2);}else{echo "0";} ?></span></li>
     </ul>
     <ul class="mui-table-view">
 	  	<li class="mui-table-view-divider">营业数据</li>
 	  	<li class="mui-table-view-cell">营业毛额<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($reality_total)){echo $reality_total;}else{echo "0";}?></span></li>
 	  	<li class="mui-table-view-cell">优惠/折扣<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($sum)){
-						echo round($reality_total-$sum+$pay_amount,2);
+						echo round($reality_total-$sum+$repay_amount,2);
 					   }else{
 							echo "0";
 					   }?></span></li>
@@ -209,7 +209,7 @@
 	  	<li class="mui-table-view-divider">外卖营收</li>
 	  	<?php foreach($Paymentmethod as $Pay):?>
 			<?php if($Pay['paytype']==13):?>
-	  	<li class="mui-table-view-cell">微外卖<span class="mui-badge mui-badge-inverted" style="font-size: 18px;"><?php echo $Pay['pay_amount']."(".$Pay['counts']."次)";?></span></li>
+	  	<li class="mui-table-view-cell">微外卖<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php echo $Pay['pay_amount']."(".$Pay['counts']."次)";?></span></li>
 	  		<?php endif;?>
 		<?php endforeach;?>
 		<?php foreach($Paymentmethod as $Pay):?>
@@ -238,8 +238,8 @@
 	 </ul>
 	 <ul class="mui-table-view">
 	  	<li class="mui-table-view-divider">其他</li>
-	  	<li class="mui-table-view-cell">退款金额<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($pay_amount)){
-				echo $pay_amount;
+	  	<li class="mui-table-view-cell">退款金额<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($repay_amount)){
+				echo $repay_amount;
 				}else{
 					echo "0";
 					}?></span></li>

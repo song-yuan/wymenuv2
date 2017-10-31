@@ -13,7 +13,10 @@ class MyinfoController extends BaseYmallController
 		$user_info = User::model()->find('lid=:lid and username=:username and delete_flag=0',array(':lid'=>$user_id,':username'=>$user_name));
 		// p($user_info);
 		$db = Yii::app()->db;
-
+		//客服电话
+		$sqll ='select telephone from nb_company where  type= 0 and dpid in(select comp_dpid from nb_company where dpid = '.$this->companyId.') and delete_flag=0';
+		$phone = $db->createCommand($sqll)->queryRow();
+		// p($phone);
 		//查询未支付订单
 		$sql = 'select god.*,go.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name from nb_goods_order_detail god '
 		.' left join nb_goods_order go on(go.account_no=god.account_no) '
@@ -104,6 +107,7 @@ class MyinfoController extends BaseYmallController
 		}
 		// p($materials_get);
 		$this->render('myinfo',array(
+			'phone'=>$phone,
 			'user_info'=>$user_info,
 			'materials_nopay'=>$materials_nopay,
 			'materials_pay'=>$materials_pay,

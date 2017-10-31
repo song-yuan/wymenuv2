@@ -6,6 +6,12 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+
+	$baseUrl = Yii::app()->baseUrl;
+	$weixinServerAccount = WxAccount::get($this->companyId);
+	$jsSdk = new WeixinJsSdk($weixinServerAccount['appid'],$weixinServerAccount['appsecret'],$this->companyId);
+	$signPackage = $jsSdk->GetSignPackage();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,7 +27,7 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 		<link rel="stylesheet" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.min.css">
 		<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/feedback-page.css" />
 		<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/iconfont.css" rel="stylesheet"/>
-		<link rel="stylesheet" type="text/css" href="../../../../css/ymall/ymall.css"/>
+		<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/ymall.css"/>
 		<style>
 			/*.mui-hbar{background-color: #B22222!important;color:white;}*/
 			.mui-hbar{background-color: #FF8C00!important;color:white;}
@@ -29,12 +35,29 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 			/* .mui-bar-tab .mui-tab-item {color:#FF8C00;} */
 			.mui-bar-tab .mui-tab-item {color:#fff;}
 		</style>
-    	<script type="text/javascript" src="../../../../plugins/jquery-1.10.2.min.js"></script>
-    	<script type="text/javascript" src="../../../../scripts/flipsnap.js"></script>
+    	<script type="text/javascript" src="<?php echo  Yii::app()->request->baseUrl; ?>/scripts/flipsnap.js"></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.min.js "></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.view.js "></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/app.js"></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/jquery-1.7.1.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script>
+		wx.config({
+		    debug: false,
+		    appId: '<?php echo $signPackage["appId"];?>',
+		    timestamp: <?php echo $signPackage["timestamp"];?>,
+		    nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+		    signature: '<?php echo $signPackage["signature"];?>',
+		    jsApiList: [
+		      // 所有要调用的 API 都要加到这个列表中
+		      'onMenuShareTimeline',
+		      'onMenuShareAppMessage',
+		      'getLocation',
+		      'openLocation',
+		      'showMenuItems'
+		    ]
+		});
+		</script>
 	</head>
 	<body>
 	<?php echo $content; ?>
@@ -85,7 +108,6 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 		$('.mui-tab-item').removeClass('mui-a');
 		$(this).addClass('mui-a');
 	});
-
 	</script>
 </body>
 </html>

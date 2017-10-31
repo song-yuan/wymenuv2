@@ -1416,6 +1416,7 @@ class DataSyncOperation {
 				'level_id' => $obj->level_id,
 				'name' => $obj->name,
 				'mobile' => $obj->mobile,
+				'email' => $obj->email,
 				'sex' => $obj->sex,
 				'ages' => $obj->ages,
 				'birthday' => $obj->birthday,

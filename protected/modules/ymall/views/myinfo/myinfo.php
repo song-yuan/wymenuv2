@@ -227,6 +227,8 @@
 		transform: scaleY(.5);
 		background-color: #c8c7cc;
 	}
+	.sign-name{font-size:50px;line-height:65px;text-align: center; padding:10px 15px;margin-right:20px;font-weight: 900;}
+	.sign-name div{background: yellow;color:lightblue;border-radius: 50px;width: 60px;height: 60px;}
 </style>
 
 
@@ -259,16 +261,16 @@
 						<div class="mui-slider-cell">
 							<div class="oa-contact-cell mui-table">
 							<?php if ($user_info): ?>
-								<div class="oa-contact-avatar mui-table-cell" style="font-size:50px;line-height:65px;text-align: center; padding:10px 15px;margin-right:20px;font-family: '华文新魏';font-weight: 900;">
-									<div style="background: yellow;color:lightblue;border-radius: 50px;width: 60px;height: 60px;"><?php echo mb_substr($user_info->staff_no,0,1,'utf-8'); ?></div>
+								<div class="oa-contact-avatar mui-table-cell sign-name">
+									<div><?php if($user_info->staff_no){echo mb_substr($user_info->staff_no,0,1,'utf-8');}else{echo '發';} ?></div>
 								</div>
 								<div class="oa-contact-content mui-table-cell" style="padding-left: 20px;">
 									<div class="mui-clearfix">
-										<h4 class="oa-contact-name"><?php echo $user_info->staff_no; ?></h4>
-										<span class="oa-contact-position mui-h6"><?php echo $user_info->mobile; ?></span>
+										<h4 class="oa-contact-name"><?php if($user_info->staff_no){echo $user_info->staff_no;}else{echo '未填写名字';} ?></h4>
+										<span class="oa-contact-position mui-h6"><?php if($user_info->mobile){echo $user_info->mobile;}else{echo '未填写手机号';} ?></span>
 									</div>
 									<p class="oa-contact-email mui-h6">
-										<?php echo $user_info->email; ?>
+										<?php if($user_info->email){echo $user_info->email;}else{echo '未填写email';}?>
 									</p>
 								</div>
 							<?php endif; ?>
@@ -307,7 +309,7 @@
 				</ul>
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" href="tel:10010">联系总部客服</a>
+						<a class="mui-navigate-right" href="tel:<?php echo $phone['telephone']; ?>">客服热线</a>
 					</li>
 				</ul>
 				<ul class="mui-table-view mui-table-view-chevron">
@@ -447,15 +449,11 @@
 									<?php
 										$material_sends =array();
 										foreach ($material_send as $material) {
-											if ($material['status'] !=2) {
 												if(!isset($material_sends[$material['invoice_accountno']])){
 													$material_sends[$material['invoice_accountno']] = array();
 												}
 												array_push($material_sends[$material['invoice_accountno']], $material);
-											}
 										}
-										if($material_sends):
-										// p($material_pay);
 									 ?>
 								<li class=" big-li">
 							    	<div class="mui-row" style="height: 30px;background-color: #00CED1; color:white;">
@@ -483,7 +481,7 @@
 										<li class="mui-table-view-cell" style="background-color: #FFFFF0">
 											<div >
 											<span style="display:inline-block;margin-top: 3px;margin-left: 10px;"><?php if($material_s[0]['sent_type']!=3){ echo '配送员 : '.$material_s[0]['sent_personnel'];}else{ echo '第三方配送 : '.$material_s[0]['sent_personnel'];} ?><br>
-											<span ><?php if($material_s[0]['sent_type']!=3){echo '联系电话 : '.$material_s[0]['mobile'];}else{ echo '配送单号 : '.$material_s[0]['mobile'];}  ?></span></span>
+											<span ><?php if($material_s[0]['sent_type']!=3){echo '联系电话 : '.$material_s[0]['mobile'];}else{ echo '物流单号 : '.$material_s[0]['mobile'];}  ?></span></span>
 											<?php if($material_s[0]['status']==0):?>
 											<span style="color:red;float:right;margin-right:-50px;margin-top:20px;z-index:1;"><?php echo '(出货中)'; ?></span>
 											<?php elseif($material_s[0]['status']==1):?>
@@ -494,7 +492,6 @@
 									<?php endforeach; ?>
 									</ul>
 							    </li>
-								<?php endif; ?>
 								<?php endforeach; ?>
 							<?php endif; ?>
 							</ul>
@@ -512,7 +509,7 @@
 												array_push($material_gets[$material['invoice_accountno']], $material);
 										}
 									?>
-								<li class=" big-li">
+								<li class="ol big-li">
 							    	<div class="mui-row" style="height: 30px;background-color: #DAA520; color:white;">
 								    		<span class="a-store">订单号 : <?php echo $key3; ?></span>
 							    	</div>
@@ -564,7 +561,7 @@
 						<a href="#lock" class="mui-navigate-right">常见问题速览</a>
 					</li>
 				</ul> -->
-				<ul class="mui-table-view" >
+				<ul class="mui-table-view" style="margin-top: 20px!important;margin-bottom: 30px!important;">
 					<li class="mui-table-view-cell" style="text-align: center;">
 						<a id='exit' style="text-align: center;color: #FF3B30;">退出登录</a>
 					</li>
@@ -578,73 +575,77 @@
 
 
 <script>
-mui.init();
- //初始化单页view
-var viewApi = mui('#app').view({
-	defaultPage: '#setting'
-});
- //初始化单页的区域滚动
-mui('.mui-scroll-wrapper').scroll();
- //分享操作
-
- //退出操作******************
-document.getElementById('exit').addEventListener('tap', function() {
-
-}, false);
- //************************
- $('.delete_nopay').on('tap',function(){
- 	var account_no = $(this).attr('account_no');
- 	console.log(account_no);
- 	$(this).attr('id', 'aa');
- 	var btnArray = ['否','是'];
-	mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
-		if(e.index==1){
-	 	mui.post('<?php echo $this->createUrl("myinfo/delete_nopay",array("companyId"=>$this->companyId)) ?>',{
-			   account_no:account_no,
-			},
-			function(data){
-				if (data == 1) {
-				 	// var x = $('#aa').parent('div').parent('.big-li').attr('class');
-				 	// alert(x);
-					$('#aa').parent().parent('.big-li').fadeOut(1000).remove();
-					//将图标的数量减去
-					var num = $('#nopay').html();
-					$('#nopay').html(num-1);
-					mui.alert('删除成功 ! ! !');
-				}else if(data == 2) {
-					mui.alert('因网络原因删除失败 , 请重新删除 ! ! !');
-				}else if(data == 3) {
-					mui.alert('未查寻到商品删除失败 ! ! !');
-				}
-			},'json'
-		);
-	}
+	mui.init();
+	 //初始化单页view
+	var viewApi = mui('#app').view({
+		defaultPage: '#setting'
 	});
-});
+	//初始化单页的区域滚动
+	mui('.mui-scroll-wrapper').scroll();
 
-$('.mui-sureo').on('tap',function(){
- 	var account_no = $(this).attr('account_no');
- 	var invoice_accountno = $(this).attr('invoice_accountno');
- 	console.log(account_no);
- 	if (invoice_accountno) {
- 	// 	var btnArray = ['是','否'];
-		// mui.confirm('是否确定该配送单收货 ？','提示',btnArray,function(e){
-		// 	if(e.index==0){
-		 	location.href = '<?php echo $this->createUrl("myinfo/sureorder",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no+'/invoice_accountno/'+invoice_accountno;
-			// }
-		// });
- 	} else{
- 		mui.alert('仓库正在配货 , 无法确认收货');
- 	}
+ 	//退出操作******************
+	document.getElementById('exit').addEventListener('tap', function() {
+	 		var btnArray = ['是','否'];
+			mui.confirm('是否确定退出 ？','提示',btnArray,function(e){
+				if(e.index==0){
+			 	location.href = '<?php echo $this->createUrl("login/logout",array("companyId"=>$this->companyId)) ?>';
+				}
+			});
+	}, false);
+ 	//************************
+	$('.delete_nopay').on('tap',function(){
+		var account_no = $(this).attr('account_no');
+		console.log(account_no);
+		$(this).attr('id', 'aa');
+		var btnArray = ['否','是'];
+		mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
+			if(e.index==1){
+			mui.post('<?php echo $this->createUrl("myinfo/delete_nopay",array("companyId"=>$this->companyId)) ?>',{
+				   account_no:account_no,
+				},
+				function(data){
+					if (data == 1) {
+					 	// var x = $('#aa').parent('div').parent('.big-li').attr('class');
+					 	// alert(x);
+						$('#aa').parent().parent('.big-li').fadeOut(1000).remove();
+						//将图标的数量减去
+						var num = $('#nopay').html();
+						$('#nopay').html(num-1);
+						mui.alert('删除成功 ! ! !');
+					}else if(data == 2) {
+						mui.alert('因网络原因删除失败 , 请重新删除 ! ! !');
+					}else if(data == 3) {
+						mui.alert('未查寻到商品删除失败 ! ! !');
+					}
+				},'json'
+			);
+		}
+		});
+	});
 
-});
+	$('.mui-sureo').on('tap',function(){
+	 	var account_no = $(this).attr('account_no');
+	 	var invoice_accountno = $(this).attr('invoice_accountno');
+	 	console.log(account_no);
+	 	if (invoice_accountno) {
+	 	// 	var btnArray = ['是','否'];
+			// mui.confirm('是否确定该配送单收货 ？','提示',btnArray,function(e){
+			// 	if(e.index==0){
+			 	location.href = '<?php echo $this->createUrl("myinfo/sureorder",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no+'/invoice_accountno/'+invoice_accountno;
+				// }
+			// });
+	 	} else{
+	 		mui.alert('仓库正在配货 , 无法确认收货');
+	 	}
 
-$('.gotopay').on('tap',function(){
-	var account_no = $(this).attr('account_no');
-	console.log(account_no);
-	location.href = '<?php echo $this->createUrl("ymallcart/orderlist",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no;
+	});
 
-});
+	$('.gotopay').on('tap',function(){
+		var account_no = $(this).attr('account_no');
+		console.log(account_no);
+		location.href = '<?php echo $this->createUrl("ymallcart/orderlist",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no;
+
+	});
 
 	$("#nopay").bind('DOMNodeInserted', function (e) {
 		var num = $('#nopay').html();
