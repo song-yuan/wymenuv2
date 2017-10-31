@@ -275,7 +275,8 @@ class YmallcartController extends BaseYmallController
 				$command=Yii::app()->db->createCommand($sql)->execute(array(':dpid'=>$this->companyId));
 				}
 			$transaction->commit();
-                $this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no'=>$account_no)) ;
+				$url = $this->createUrl('ymallcart/orderlist');
+                $this->redirect($url.'?companyId='.$this->companyId.'&account_no='.$account_no)) ;
             }catch (Exception $e){
                 $transaction->rollback();
                 $this->redirect(array('ymallcart/index' , 'companyId' => $this->companyId,'error'=>1));
