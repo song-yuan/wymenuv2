@@ -54,7 +54,10 @@ class SqbpayController extends Controller
 		if($is_success == 'F'){
 			$error_code = Yii::app()->request->getParam('error_code');
 			$error_message = Yii::app()->request->getParam('error_message');
-			Helper::writeLog('获取参数：'.$error_code.';'.$error_message);
+			$terminal_sn = Yii::app()->request->getParam('terminal_sn');
+			$result_message = Yii::app()->request->getParam('result_message');
+			Helper::writeLog('获取参数：'.$error_code.';'.$error_message.':terminal_sn:'.$terminal_sn.':result_message:'.$result_message);
+			
 			//exit;
 			$this->redirect(array('/user/orderinfo',
 					'orderId'=>$client_sn,
@@ -70,7 +73,7 @@ class SqbpayController extends Controller
 			$result_message = Yii::app()->request->getParam('result_message');
 			$total_amount = Yii::app()->request->getParam('total_amount');
 			
-			$data = '{"收钱吧同步返回参数":"result";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
+			$data = '{"收钱吧同步返回参数":"T";"is_success":"'.$is_success.'";"client_sn":"'.$client_sn.'";"trade_no":"'.$trade_no.'";"status":"'.$status.'";"result_code":"'.$result_code.'";}';
 			Helper::writeLog($data);
 			
 			//接口调用成功,查询订单状态...

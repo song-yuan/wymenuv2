@@ -510,12 +510,15 @@ class SqbPay{
     				'msg'=>'未知状态！');
     		return $result;
     	}
+    	Helper::writeLog("所有参数拼接:".$paramsStrs);
     	if(!empty($paramsStrs)){
     		$paramsStr = rtrim($paramsStrs,"&");
     		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
     		$paramsStr = $paramsStr."&sign=".$sign;
     		//var_dump($paramsStr);
     		Helper::writeLog($client_sn.'&&'.$terminal_sn);
+    		$string = "Location:https://m.wosai.cn/qr/gateway?".$paramsStr;
+    		Helper::writeLog("支付请求链接:".$string);
     		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
     		//exit;
     	}else{
