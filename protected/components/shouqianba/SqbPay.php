@@ -516,6 +516,8 @@ class SqbPay{
     		$paramsStr = $paramsStr."&sign=".$sign;
     		//var_dump($paramsStr);
     		Helper::writeLog($client_sn.'&&'.$terminal_sn);
+    		$string = "Location:https://m.wosai.cn/qr/gateway?".$paramsStr;
+    		Helper::writeLog($string);
     		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
     		//exit;
     	}else{
