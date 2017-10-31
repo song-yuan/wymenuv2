@@ -5,7 +5,7 @@
 <header class="mui-bar mui-bar-nav">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 <!-- 	<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" href="#topPopover"></a> -->
-	<h1 class="mui-title"><?php if(empty(Yii::app()->request->getParam('type'))){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];} ?></h1>
+	<h1 class="mui-title"><?php if(empty($type)){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];} ?></h1>
 </header>
 <!-- <div id="topPopover" class="mui-modal">
 	<header class="mui-bar mui-bar-nav">
@@ -120,7 +120,7 @@
 						<h6>折扣</h6>
 						<span><?php 
 				if(!empty($pay_amount)){
-					echo $reality_total-$pay_amount;
+					echo round($reality_total-$pay_amount,2);
 				}else{
 					echo '0';
 				}
@@ -188,7 +188,7 @@
 									foreach ($refunds as $refund) {
 										$refund_pay_amount = $refund['pay_amount'];
 									}
-								echo $reality_totals-$pay_amount+$refund_pay_amount;
+								echo round($reality_totals-$pay_amount+$refund_pay_amount,2);
 									?></span>
 							</div>
 							<div class="ys3" style="margin-left: 220px;padding-top: 1px;margin-top: 30px;">
@@ -281,29 +281,29 @@
 						<h4>报表中心</h4>
 					</div>
 					<div class="bb2">
-						<a name="yysj" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId));}?>">营业数据</a>
+						<a name="yysj" href="<?php if(!empty($type)){echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/yysj',array('companyId'=>$this->companyId));}?>">营业数据</a>
 					</div>
 					<div class="bb3">
-						<a name='sdbb' href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId));}?>">时段报表</a>
+						<a name='sdbb' href="<?php if(!empty($type)){echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/sdbb',array('companyId'=>$this->companyId));}?>">时段报表</a>
 					</div>
 					<div class="bb2">
-						<a name="zffs" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId));}?>">支付方式</a>
+						<a name="zffs" href="<?php if(!empty($type)){echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/zffs',array('companyId'=>$this->companyId));}?>">支付方式</a>
 					</div>
 					<div class="bb8">
-						<a name="dpxs" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId));}?>">单品销售</a>
+						<a name="dpxs" href="<?php if(!empty($type)){echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/dpxs',array('companyId'=>$this->companyId));}?>">单品销售</a>
 					</div>
 					<div class="bb2">
-						<a name="tcxs" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId));}?>">套餐销售</a>
+						<a name="tcxs" href="<?php if(!empty($type)){echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/tcxs',array('companyId'=>$this->companyId));}?>">套餐销售</a>
 					</div>
 					<div class="bb4">
-						<a name="yclxh" href="<?php if(!empty(Yii::app()->request->getParam('type'))){echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId));}?>">原材料消耗</a>
+						<a name="yclxh" href="<?php if(!empty($type)){echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId,'type'=>$type['lid']));}else{echo $this->createUrl('appReport/yclxh',array('companyId'=>$this->companyId));}?>">原材料消耗</a>
 					</div>
 				</div>
 			</li>
 		</ul>
 	</div>
 	<!--店铺管理-->
-<?php if(empty(Yii::app()->request->getParam('type'))):?>
+<?php if(empty($type)):?>
 	<div class="bb">
 		<ul class="mui-table-view">
 			<li class="mui-table-view-cell mui-media">
@@ -312,7 +312,7 @@
 						<h4>店铺管理</h4>
 					</div>
 					<div class="bb2">
-						<a name="operator" href="<?php echo $this->createUrl('appReport/operator',array('companyId'=>$this->companyId));?>">操作员管理</a>
+						<a name="operator" href="<?php //echo $this->createUrl('appReport/operator',array('companyId'=>$this->companyId));?>">操作员管理</a>
 					</div>
 					<div class="bb6">
 						<a>收银机设置</a>

@@ -42,34 +42,29 @@ class AppReportController extends Controller
 		}
 		return true;
 	}
-	public function type(){
-		if(!empty(Yii::app()->request->getParam('type'))){
-			$type = Yii::app()->request->getParam('type');
-			$fensql = "select lid,group_name from nb_area_group where lid=".$type." and type=3 and delete_flag=0";
-			$fens = Yii::app()->db->createCommand($fensql)->queryRow();
-			return $fens;
-		}else{
-			$fens = "";
-			return $fens;
-		}
+	private function type(){
+		$type = Yii::app()->request->getParam('type',0);
+		$fensql = "select lid,group_name from nb_area_group where lid=".$type." and type=3 and delete_flag=0";
+		$fens = Yii::app()->db->createCommand($fensql)->queryRow();
+		return $fens;
 		
+			
 	}
 	public function actionAdminlist(){
 		$companyId = $this->companyId;
-		$fensql = "select lid,group_name from nb_area_group where type=3 and delete_flag=0";
+		$fensql = "select lid,group_name from (select admin_dpid from nb_brand_user_admin where brand_user_id=841 and delete_flag=0) a left join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.admin_dpid=g.dpid group by lid";
 		$fens = Yii::app()->db->createCommand($fensql)->queryAll();
-		$sql = "select lid,group_name,area_group_id,company_id,dpid,company_name,logo,address from ((select lid,group_name from nb_area_group where type=3 and delete_flag=0) p left join (select area_group_id,company_id from nb_area_group_company where delete_flag=0) c on p.lid=c.area_group_id) left join (select dpid,company_name,logo,address from nb_company where delete_flag=0) y on c.company_id=y.dpid";
-		$admindpids = Yii::app()->db->createCommand($sql)->queryAll();
-		// var_dump($admindpids);exit;
+		// var_dump($fens);exit();
 		$this->render('adminlist',array(
-			'admindpids'=>$admindpids,
 			'fens'=>$fens,
 			'companyId'=>$companyId
 			));
 	}
 	public function actionIndex(){
 		$companyId = $this->companyId;
+		// var_dump($companyId);exit;
 		$type = $this->type();
+		// var_dump($type);exit;
 		if(!empty($type)){
 			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
 			$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
@@ -99,6 +94,8 @@ class AppReportController extends Controller
 			$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid=".$companyId.") o left join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where to_days(create_at) = to_days(now()) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
 			// echo $ordersql;exit;
 			$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
+			$monthsql = "select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and order_status in (3,4,8) and dpid=".$companyId.") o left join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
+			$months = Yii::app()->db->createCommand($monthsql)->queryAll();
 			// var_dump($orders);exit;
 			$Membersql = "select distinct count(paytype_id) as paytype_id from nb_order_pay where to_days(create_at) = to_days(now()) and paytype=4 and dpid=".$companyId;
 			$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
@@ -109,19 +106,17 @@ class AppReportController extends Controller
 			$Rechargesql = "select sum(reality_money) as reality_money,count(*) as count from nb_member_recharge where to_days(create_at) = to_days(now()) and dpid=".$companyId;
 			$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
 			// var_dump($Recharge);exit();
-			$monthsql = "select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and order_status in (3,4,8) and dpid=".$companyId.") o left join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
-			$months = Yii::app()->db->createCommand($monthsql)->queryAll();
 			// var_dump($months);exit;
 			$refundsql = "select sum(pay_amount) as pay_amount from nb_order_pay where dpid=".$companyId." and pay_amount<0 and DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )";
 			$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 		}
 		// var_dump($Paymentmethod);exit;
 		$this->render('index',array(
+				'orders'=>$orders,
+				'months'=>$months,
 				'Members'=>$Members,
 				'cards'=>$cards,
-				'orders'=>$orders,
 				'Recharges'=>$Recharges,
-				'months'=>$months,
 				'refunds'=>$refunds,
 				'type'=>$type
 			));
@@ -225,6 +220,7 @@ class AppReportController extends Controller
 	public function actionDpxs(){
 		$companyId = $this->companyId;
 		$date = Yii::app()->request->getParam('date');
+		// var_dump($date);exit();
 		$type = $this->type();
 		if($type){
 			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
@@ -233,12 +229,14 @@ class AppReportController extends Controller
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
     		$fens = str_replace('"', '', $fens);
-    		$productsql = "select product_name,counts,original_price,price from (select order_id, `product_name`,count(product_name) AS counts,sum(original_price) AS original_price,sum(`price`) as price from nb_order_product where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid in (".$fens.") GROUP BY product_name order by counts desc) p left join (select lid,dpid from nb_order where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid in (".$fens.") and order_status in (3,4,8)) o on o.lid=p.order_id" ;
+    		$productsql = "select product_name,amount,original_price,price from (select order_id,`product_name`,sum(amount) AS amount,sum(original_price*amount) AS original_price,sum(`price`*amount) as price from nb_order_product where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in (".$fens.") GROUP BY product_name order by amount desc) p left join (select lid,dpid from nb_order where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid in (".$fens.") and order_status in (3,4,8)) o on o.lid=p.order_id" ;
     		// echo $productsql;exit;
 			$products = Yii::app()->db->createCommand($productsql)->queryAll();
 		}else{
-			$productsql = "select product_name,counts,original_price,price from (select order_id, `product_name`,count(product_name) AS counts,sum(original_price) AS original_price,sum(`price`) as price from nb_order_product where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid=".$companyId." GROUP BY product_name order by counts desc) p left join (select lid,dpid from nb_order where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)) o on o.lid=p.order_id" ;
+			$productsql = "select product_name,amount,original_price,price from (select order_id, `product_name`,sum(amount) as amount,sum(original_price*amount) AS original_price,sum(`price`*amount) as price from nb_order_product where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." GROUP BY product_name order by amount desc) p left join (select lid,dpid from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)) o on o.lid=p.order_id" ;
+			// echo $productsql;exit;
 			$products = Yii::app()->db->createCommand($productsql)->queryAll();
+
 		}
 		// var_dump($products);exit;
 		$this->render('dpxs',array(
@@ -259,11 +257,11 @@ class AppReportController extends Controller
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
     		$fens = str_replace('"', '', $fens);
-    		$sql = "select material_name,stock_num,unit_name from ((select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid in (".$fens.") GROUP BY material_id) l left join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid) left join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
+    		$sql = "select material_name,stock_num,unit_name from ((select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in (".$fens.") GROUP BY material_id) l left join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid) left join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
 		// echo $sql;exit;
 			$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		}else{
-			$sql = "select material_name,stock_num,unit_name from ((select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid=".$companyId." GROUP BY material_id) l left join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid) left join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
+			$sql = "select material_name,stock_num,unit_name from ((select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." GROUP BY material_id) l left join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid) left join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
 		// echo $sql;exit;
 			$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		}
@@ -289,14 +287,14 @@ class AppReportController extends Controller
     		$fens = str_replace(']', '', $fens);
     		$fens = str_replace('"', '', $fens);
     		if(!empty($date)){
-				$sql ="select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,t.set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >='".$date['start']." 00:00:00' and t.create_at <= '".$date['End']." 23:59:59' and t.dpid in (".$fens.") group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc)c";
+				$sql ="select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,t.set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >='".$date['start']." 00:00:00' and t.create_at <= '".$date['End']." 23:59:59' and t.dpid in (".$fens.") group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc) c";
 				// echo $sql;exit;
 				$orders = Yii::app()->db->createCommand($sql)->queryAll();
 				// var_dump($orders);exit();
 			}
     	}else{
     		if(!empty($date)){
-				$sql ="select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,t.set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >='".$date['start']." 00:00:00' and t.create_at <= '".$date['End']." 23:59:59' and t.dpid=".$companyId." group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc)c";
+				$sql ="select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,t.set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >='".$date['start']." 00:00:00' and t.create_at <= '".$date['End']." 23:59:59' and t.dpid=".$companyId." group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc) c";
 				// echo $sql;exit;
 				$orders = Yii::app()->db->createCommand($sql)->queryAll();
 				// var_dump($orders);exit();

@@ -48,13 +48,9 @@
 
 				$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 
-				echo 'input222222';
-				print_r($input);
 		}catch(Exception $e){
 			$canpWxpay = false;
 			$jsApiParameters = $e->getMessage();
-			echo 'input3333333';
-			print_r($jsApiParameters);
 		}
 
 
@@ -217,8 +213,6 @@
 			}
 			function callpay()
 			{
-				console.log('jsApiParameters11111');
-				console.log('<?php echo $jsApiParameters;?>');
 				<?php if(!$canpWxpay):?>
 				mui.alert('<?php echo $jsApiParameters;?>');
 				return;

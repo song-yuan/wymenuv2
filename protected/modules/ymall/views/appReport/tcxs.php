@@ -10,16 +10,16 @@
 	<ul class="mui-table-view">
 		<li class="mui-table-view-cell">
 			<span>门店</span>
-			<span style="padding-left: 165px;"><?php if(empty(Yii::app()->request->getParam('type'))){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];} ?></span>
+			<span style="padding-left: 135px;"><?php if(empty($type)){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];} ?></span>
 		</li>
 		<li class="mui-table-view-cell">
 			<span>开始时间</span>
-			<span id='demo2' style="padding-left: 135px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['start'];}?></span>
+			<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['start'];}?></span>
 			<input id="date1" type="hidden" name="date[start]">
 		</li>
 		<li class="mui-table-view-cell">
 			<span>结束时间</span>
-			<span id='demo4' style="padding-left: 135px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['End'];}?></span>
+			<span id='demo4' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['End'];}?></span>
 			<input id="date2" type="hidden" name="date[End]">
 		</li>
 		<li>
@@ -29,29 +29,28 @@
 	</form>
 </div>
 <div class="dp">
-	<table cellpadding="0" cellspacing="10" width="100%" style="text-align: center;">
-		<tr>
-			<td width="30%">套餐名称</td>
-			<td width="15%">销量</td>
-			<td width="20%">销售额</td>
-			<td width="15%">折扣</td>
-			<td width="20%">实收</td>
-		</tr>
-	</table>
+	<div style="margin-top: 10px;">
+		<ul class="ul">
+			<li class="li1">套餐名称</li>
+			<li class="li2">销量</li>
+			<li class="li3">原价</li>
+			<li class="li5">实收</li>
+		</ul>
+	</div>
+	<div style="clear: both;"></div>
 	<div class="dp1">
-		<table cellpadding="0" cellspacing="10" width="100%" style="text-align: center;">
-			<?php if(!empty($orders)):?>
+		<ul class="ul">
+		<?php if(!empty($orders)):?>
 			<?php foreach($orders as $order):?>
-			<tr>
-				<td width="30%"><?php echo $order['set_name'];?></td>
-				<td width="20%"><?php echo $order['all_setnum'];?></td>
-				<td><?php echo round($order['all_orisetprice'],2);?></td>
-				<td width="15%"><?php echo round($order['all_orisetprice']-$order['all_setprice'],2);?></td>
-				<td width="20%"><?php echo round($order['all_setprice'],2);?></td>
-			</tr>
-			<?php endforeach;?>
+			<li class="li1"><?php echo $order['set_name'];?></li>
+			<li class="li2"><?php echo $order['all_setnum'];?></li>
+			<li class="li3"><?php echo round($order['all_orisetprice'],2);?></li>
+			<li class="li5"><?php echo round($order['all_setprice'],2);?></li>
+			<div style="clear: both;"></div>
+		<?php endforeach;?>
 			<?php endif;?>
-		</table>
+		</ul>
+	
 	</div>
 </div>
 <script src="<?php echo $basePath;?>/js/appreport/mui.picker.min.js"></script>

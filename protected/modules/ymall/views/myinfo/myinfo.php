@@ -642,7 +642,7 @@
 
 	$('.gotopay').on('tap',function(){
 		var account_no = $(this).attr('account_no');
-		var companyId ='<?php echo $shis->companyId; ?>';
+		var companyId ='<?php echo $this->companyId; ?>';
 		console.log(account_no);
 		location.href = '<?php echo $this->createUrl("ymallcart/orderlist") ?>?companyId='+companyId+'&account_no='+account_no;
 

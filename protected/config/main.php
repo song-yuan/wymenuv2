@@ -89,6 +89,7 @@ return array(
 		
 		'urlManager'=>array(
                 'showScriptName'=>false,
+// 				'appendParams' => false,//设置为false，使提交的search参数以?a=b&c=d的形式显示在url后面
 			'urlFormat'=>'path',
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
