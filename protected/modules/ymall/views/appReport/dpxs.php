@@ -10,16 +10,16 @@
 	<ul class="mui-table-view">
 		<li class="mui-table-view-cell">
 			<span>门店</span>
-			<span style="padding-left: 165px;"><?php if(empty(Yii::app()->request->getParam('type'))){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];}?></span>
+			<span style="padding-left: 135px;"><?php if(empty($type)){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];}?></span>
 		</li>
 		<li class="mui-table-view-cell">
 			<span>开始时间</span>
-			<span id='demo2' style="padding-left: 135px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['start'];}?></span>
+			<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['start'];}?></span>
 			<input id="date1" type="hidden" name="date[start]">
 		</li>
 		<li class="mui-table-view-cell">
 			<span>结束时间</span>
-			<span id='demo4' style="padding-left: 135px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['End'];}?></span>
+			<span id='demo4' style="padding-left: 95px;"  data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['End'];}?></span>
 			<input id="date2" type="hidden" name="date[End]">
 		</li>
 		<li>
@@ -30,28 +30,25 @@
 </div>
 <div class="dp">
 	<div style="margin-top: 10px;">
-		<table cellpadding="0" cellspacing="0" width="100%">
-			<tr>
-				<td style="padding-left: 10px;" width="40%">单品名称</td>
-				<td width="15%">销量</td>
-				<td width="15%">原价</td>
-				<td width="15%">折扣</td>
-				<td width="15%">实收</td>
-			</tr>
-		</table>
+		<ul class="ul">
+			<li class="li1">单品名称</li>
+			<li class="li2">销量</li>
+			<li class="li3">原价</li>
+			<li class="li5">实收</li>
+		</ul>
 	</div>
+	<div style="clear: both;"></div>
 	<div class="dp1">
-		<table cellpadding="0" cellspacing="0" width="100%">
-			<?php foreach($products as $product):?>
-			<tr class="tr3">
-				<td width="45%" class="td"><?php echo $product['product_name'];?></td>
-				<td width="10%"><?php echo $product['counts'];?></td>
-				<td width="15%"><?php echo round($product['original_price'],2);?></td>
-				<td width="15%"><?php echo round($product['original_price']-$product['price'],2);?></td>
-				<td width="15%"><?php echo round($product['price'],2);?></td>
-			</tr>
+		<ul class="ul">
+		<?php foreach($products as $product):?>
+			<li class="li1"><?php echo $product['product_name'];?></li>
+			<li class="li2"><?php echo $product['amount'];?></li>
+			<li class="li3"><?php echo round($product['original_price'],2);?></li>
+			<li class="li5"><?php echo round($product['price'],2);?></li>
+			<div style="clear: both;"></div>
 		<?php endforeach;?>
-		</table>
+		</ul>
+	
 	</div>
 </div>
 <script src="<?php echo $basePath;?>/js/appreport/mui.picker.min.js"></script>

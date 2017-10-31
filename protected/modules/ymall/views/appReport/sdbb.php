@@ -43,11 +43,11 @@ if (!empty($ris)){
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
 					<span>门店</span>
-					<span style="padding-left: 165px;"><?php if(empty(Yii::app()->request->getParam('type'))){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];}?></span>
+					<span style="padding-left: 135px;"><?php if(empty($type)){echo Helper::getCompanyName($this->companyId);}else{echo $type['group_name'];}?></span>
 				</li>
 				<li class="mui-table-view-cell">
 					<span>开始时间</span>
-					<span id='demo2' style="padding-left: 135px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date;}?></span>
+					<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date;}?></span>
 					<input id="date1" type="hidden" name="date">
 				</li>
 				<li>
