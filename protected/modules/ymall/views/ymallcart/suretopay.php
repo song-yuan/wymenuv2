@@ -4,6 +4,9 @@
 	$this->setPageTitle('支付订单');
 
 	$payPrice = number_format($reality_total,2); // 最终支付价格
+
+
+
 	$orderId = $golid['account_no'].'-'.$this->companyId;
 
 	$canpWxpay = true;
@@ -24,7 +27,7 @@
 			 	$openId = $userInfo['openid'];
 				// Helper::writeLog('zhh3:'.$openid);
 				// $openId = WxBrandUser::openId($userId,$this->companyId);
-// 				$account = WxAccount::get($this->companyId);
+				// $account = WxAccount::get($this->companyId);
 				//②、统一下单
 				$input = new WxPayUnifiedOrder();
 				$input->SetBody($company['company_name']."-商铺原料订单");
@@ -73,7 +76,6 @@
 	}else{
 		$jsApiParameters = '';
 	}
-	var_dump($jsApiParameters);
 ?>
 		<style>
 			.back-color{background-color: #F0F0E1;}
@@ -121,7 +123,7 @@
 			    	<div class="mui-row" style="height: 30px;">
 				    	<span class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></span>
 			    	</div>
-			        <ul class="mui-table-view" id="a1">
+			        <ul class="mui-table-view" >
 			        	<?php foreach ($products as $product):?>
 					    <li class="mui-row mui-table-view-cell mui-media">
 				    		<div>
@@ -163,7 +165,7 @@
 	            	实付款 : ￥<span style="color: red;margin-right: 10px;padding-right: 10px;"><?php echo $reality_total; ?></span>
 	        </div>
 	        <div class="mui-tab-item " style="width:35%;">
-	            <div class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</div>
+	            <button type="button" class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</button>
 	        </div>
 	    </nav>
 
@@ -190,6 +192,7 @@
 					'getBrandWCPayRequest',
 					<?php echo $jsApiParameters; ?>,
 					function(res){
+						// console.log(res);
 						 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 						 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
 						 	mui.alert('支付成功!');
@@ -209,6 +212,10 @@
 			}
 			function callpay()
 			{
+				console.log('jsApiParameters11111');
+				console.log('<?php echo $jsApiParameters;?>');
+				console.log('input222222');
+				console.log('<?php echo $input;?>');
 				<?php if(!$canpWxpay):?>
 				mui.alert('<?php echo $jsApiParameters;?>');
 				return;
