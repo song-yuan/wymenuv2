@@ -16,8 +16,9 @@
 			}
 		}
 	}
+	$randNum = Helper::randNum(3);
 	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
-	$orderId = $order['lid'].'-'.$order['dpid'];
+	$orderId = $order['lid'].'-'.$order['dpid'].'-'.$randNum;
 	
 	$canpWxpay = true;
 	$compaychannel = WxCompany::getpaychannel($this->companyId);
