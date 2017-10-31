@@ -16,8 +16,9 @@
 			}
 		}
 	}
+	$randNum = Helper::randNum(3);
 	$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2); // 最终支付价格
-	$orderId = $order['lid'].'-'.$order['dpid'];
+	$orderId = $order['lid'].'-'.$order['dpid'].'-'.$randNum;
 	
 	$canpWxpay = true;
 	$compaychannel = WxCompany::getpaychannel($this->companyId);
@@ -64,7 +65,7 @@
 				'total_amount'=>$payPrice,
 				'subject'=>$company['company_name']."-微信点餐订单",
 				'payway'=>3,
-				'operator'=>$user['nickname'],
+				'operator'=>'微信会员-'.$user['lid'],
 				'reflect'=>$reflect,
 				'notify_url'=>$notifyUrl,
 				'return_url'=>$returnUrl,

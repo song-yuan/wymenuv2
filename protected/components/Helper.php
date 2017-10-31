@@ -170,6 +170,16 @@ class Helper
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
 	/**
+	 * 生成随机数
+	 */
+	public static function randNum($len){
+		$rand = '';
+		for ($i=0;$i<$len;$i++){
+			$rand .= mt_rand(0, 9);
+		}
+		return $rand;
+	}
+	/**
 	 * 判断是不是微信浏览器
 	 */
 	public static function isMicroMessenger() {
