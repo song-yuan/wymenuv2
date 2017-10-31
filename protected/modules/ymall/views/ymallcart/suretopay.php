@@ -47,9 +47,14 @@
 				$orderInfo = WxPayApi::unifiedOrder($input);
 
 				$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+
+				echo 'input222222';
+				print_r($input);
 		}catch(Exception $e){
 			$canpWxpay = false;
 			$jsApiParameters = $e->getMessage();
+			echo 'input3333333';
+			print_r($jsApiParameters);
 		}
 
 
@@ -214,8 +219,6 @@
 			{
 				console.log('jsApiParameters11111');
 				console.log('<?php echo $jsApiParameters;?>');
-				console.log('input222222');
-				console.log('<?php echo $input;?>');
 				<?php if(!$canpWxpay):?>
 				mui.alert('<?php echo $jsApiParameters;?>');
 				return;
