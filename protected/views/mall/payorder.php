@@ -65,7 +65,7 @@
 				'total_amount'=>$payPrice,
 				'subject'=>$company['company_name']."-微信点餐订单",
 				'payway'=>3,
-				'operator'=>$user['nickname'],
+				'operator'=>$user['lid'],
 				'reflect'=>$reflect,
 				'notify_url'=>$notifyUrl,
 				'return_url'=>$returnUrl,
