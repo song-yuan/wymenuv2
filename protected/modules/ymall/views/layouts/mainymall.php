@@ -43,7 +43,7 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		<script>
 		wx.config({
-		    debug: false,
+		    debug: true,
 		    appId: '<?php echo $signPackage["appId"];?>',
 		    timestamp: <?php echo $signPackage["timestamp"];?>,
 		    nonceStr: '<?php echo $signPackage["nonceStr"];?>',
