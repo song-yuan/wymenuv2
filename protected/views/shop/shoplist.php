@@ -141,7 +141,7 @@
 		        },
 		        fail: function (res) {
 		        	layer.closeAll('loading');
-		            layer.msg('用户拒绝授权获取地理位置');
+		            layer.msg('请打开设备的定位服务');
 		        }
 			});
 	    });
