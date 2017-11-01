@@ -276,7 +276,7 @@ class YmallcartController extends BaseYmallController
 				}
 			$transaction->commit();
 				$url = $this->createUrl('ymallcart/orderlist');
-                $this->redirect($url.'?companyId='.$this->companyId.'&account_no='.$account_no)) ;
+                $this->redirect($url.'?companyId='.$this->companyId.'&account_no='.$account_no) ;
             }catch (Exception $e){
                 $transaction->rollback();
                 $this->redirect(array('ymallcart/index' , 'companyId' => $this->companyId,'error'=>1));
