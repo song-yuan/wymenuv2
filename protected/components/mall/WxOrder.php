@@ -372,7 +372,7 @@ class WxOrder
 					}else{
 						$itemPrice = $eachPrice + $ortherPrice;
 					}
-					$itemPrice = number_format($itemPrice,4);
+					$itemPrice = number_format($itemPrice/$detail[2],4);
 						
 					$se = new Sequence("order_product");
 					$orderProductId = $se->nextval();
@@ -388,7 +388,7 @@ class WxOrder
 							'product_pic'=>$detail['main_picture'],
 							'price'=>$itemPrice,
 							'original_price'=>$detail['original_price']+$ortherPrice,
-							'amount'=>$cart['num']*$detail[2],
+							'amount'=>$detail[2],
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>$orderProductStatus,
 							'taste_memo'=>$setName,

@@ -118,7 +118,7 @@ class Notify extends WxPayNotify
 				'keyword1'=>$order['account_no'],
 				'keyword2'=>$order['should_total'].'元',
 				'keyword3'=>$company['company_name'],
-				'keyword4'=>date('Y-m-m H:i:s',time()),
+				'keyword4'=>date('Y-m-d H:i:s',time()),
 				'remark'=>'已收到订单~请耐心等候~'
 		);
 		new WxMessageTpl($order['dpid'],$order['user_id'],0,$data);
