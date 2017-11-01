@@ -191,6 +191,10 @@
 										case 9: echo '微信代金券';break;
 										case 10: echo '微信余额';break;
 										case 11: echo '找零';break;
+										case 12: echo '微信点单';break;
+										case 13: echo '微信外卖';break;
+										case 14: echo '美团·外卖';break;
+										case 15: echo '饿了么·外卖';break;
 								} ;?><?php if($model->pay_amount<0)echo '(退款)';?></td>
 								<td><?php echo sprintf("%.2f",$model->pay_amount);?></td>
 								</tr>

@@ -171,7 +171,7 @@ class MyinfoController extends BaseYmallController
 			LEFT JOIN(
 					SELECT gid.goods_invoice_id,gid.lid as gidlid,gid.price,gid.num,gmu.dpid,gmu.unit_code,gid.goods_id,gid.goods_code,gid.material_code,gmu.unit_ratio FROM nb_goods_invoice_details gid
 							LEFT JOIN (
-								SELECT gm.dpid,gm.unit_code,gm.goods_id,gm.goods_code,gm.material_code,mu.unit_ratio FROM nb_goods_material gm LEFT JOIN nb_material_unit_ratio mu ON( gm.unit_code=mu.unit_code ) WHERE mu.dpid='.$companyId.') gmu ON( gid.goods_code=gmu.goods_code AND gid.goods_id=gmu.goods_id) 
+								SELECT gm.dpid,gm.unit_code,gm.goods_id,gm.goods_code,gm.material_code,mu.unit_ratio FROM nb_goods_material gm LEFT JOIN nb_material_unit_ratio mu ON( gm.unit_code=mu.unit_code ) WHERE mu.dpid='.$companyId.') gmu ON( gid.goods_code=gmu.goods_code AND gid.goods_id=gmu.goods_id)
 
 					) gids ON (gi.lid = gids.goods_invoice_id )
 			LEFT JOIN nb_product_material pm on(pm.mphs_code=gids.material_code and pm.dpid='.$this->companyId.')
@@ -180,66 +180,69 @@ class MyinfoController extends BaseYmallController
 			$i=0;
 			$j=0;
 			$x=0;
-			foreach ($products as $key => $product) {
-				foreach ($infos as $info) {
-					$infod = explode('_', $info);
-					if ($product['gidlid']==$infod[0]) {
-						// p(111);
-						//入库
-						$se=new Sequence("product_material_stock");
-						$lid = $se->nextval();
-						$is_sync = DataSync::getInitSync();
-						$data=array(
-							'lid'=>$lid,
-							'dpid'=>$this->companyId,//公司的dpid
-							'create_at'=>date('Y-m-d H:i:s',time()),
-							'update_at'=>date('Y-m-d H:i:s',time()),
-							'material_id'=>$product['lid'],
-							'mphs_code'=>$product['material_code'],
-							'stock_day'=>30,
-							'batch_stock'=>($product['num']-$infod[1])*$product['unit_ratio'],
-							'stock'=>($product['num']-$infod[1])*$product['unit_ratio'],
-							'free_stock'=>0,
-							'stock_cost'=>($product['num']-$infod[1])*$product['price'],
-							'delete_flag'=>0,
-							'is_sync'=>$is_sync,
-						);
-						$info1 = Yii::app()->db->createCommand()->insert('nb_product_material_stock',$data);
-						//记录该商品损耗
-						if ($infod[1]) {
-							$see=new Sequence("goods_stock_taking");
-							$lidd = $see->nextval();
-							$data1=array(
-								'lid'=>$lidd,
-								'dpid'=>$product['dpid'],//公司的dpid
+			$transaction = $db->beginTransaction();
+			try{
+				foreach ($products as $key => $product) {
+					foreach ($infos as $info) {
+						$infod = explode('_', $info);
+						if ($product['gidlid']==$infod[0]) {
+							// p(111);
+							//入库
+							$se=new Sequence("product_material_stock");
+							$lid = $se->nextval();
+							$is_sync = DataSync::getInitSync();
+							$data=array(
+								'lid'=>$lid,
+								'dpid'=>$this->companyId,//公司的dpid
 								'create_at'=>date('Y-m-d H:i:s',time()),
 								'update_at'=>date('Y-m-d H:i:s',time()),
-								'goods_order_accountno'=>$account_no,
-								'invoice_accountno'=>$invoice_accountno,
-								'goods_id'=>$product['goods_id'],
-								'goods_code'=>$product['goods_code'],
-								'material_code'=>$product['material_code'],
-								'price'=>$product['price'],
-								'num'=>$infod[1],
-								'status'=>0,
+								'material_id'=>$product['lid'],
+								'mphs_code'=>$product['material_code'],
+								'stock_day'=>30,
+								'batch_stock'=>($product['num']-$infod[1])*$product['unit_ratio'],
+								'stock'=>($product['num']-$infod[1])*$product['unit_ratio'],
+								'free_stock'=>0,
+								'stock_cost'=>($product['num']-$infod[1])*$product['price'],
 								'delete_flag'=>0,
 								'is_sync'=>$is_sync,
 							);
-							$info2 = Yii::app()->db->createCommand()->insert('nb_goods_stock_taking',$data1);
-							$x+=1;
-						}
-						if($info1){
-							$i+=1;
-						}
-						if($info2){
-							$j+=1;
+							$info1 = Yii::app()->db->createCommand()->insert('nb_product_material_stock',$data);
+							//记录该商品损耗
+							if ($infod[1]) {
+								$see=new Sequence("goods_stock_taking");
+								$lidd = $see->nextval();
+								$data1=array(
+									'lid'=>$lidd,
+									'dpid'=>$product['dpid'],//公司的dpid
+									'create_at'=>date('Y-m-d H:i:s',time()),
+									'update_at'=>date('Y-m-d H:i:s',time()),
+									'goods_order_accountno'=>$account_no,
+									'invoice_accountno'=>$invoice_accountno,
+									'goods_id'=>$product['goods_id'],
+									'goods_code'=>$product['goods_code'],
+									'material_code'=>$product['material_code'],
+									'price'=>$product['price'],
+									'num'=>$infod[1],
+									'status'=>0,
+									'delete_flag'=>0,
+									'is_sync'=>$is_sync,
+								);
+								$info2 = Yii::app()->db->createCommand()->insert('nb_goods_stock_taking',$data1);
+								$x+=1;
+							}
+							if($info1){
+								$i+=1;
+							}
+							if($info2){
+								$j+=1;
+							}
 						}
 					}
 				}
-			}
-			if ($i==count($products)&&$j==$x) {
+				$transaction->commit();
 				echo json_encode(1);exit;
-			}else{
+			}catch (Exception $e){
+				$transaction->rollback();
 				echo json_encode(0);exit;
 			}
 		}else{
