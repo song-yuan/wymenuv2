@@ -37,7 +37,6 @@ class MallController extends Controller
 			$comdpid = $this->company['comp_dpid'];
 		}
 		$userId = Yii::app()->session['userId-'.$comdpid];
-		var_dump($comdpid);var_dump($userId);exit;
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
