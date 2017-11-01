@@ -108,38 +108,12 @@ class Notify extends WxPayNotify
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
 		WxOrder::insertOrderPay($order,1);
-		//修改订单状态
-		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
-		//修改订单产品状态
-		WxOrder::updateOrderProductStatus($orderIdArr[0],$orderIdArr[1]);
-		//修改座位状态
-		if($order['order_type']==1){
-			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-		}else{
-			WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
-		}
-		//减少库存
-		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
-		foreach($orderProducts as $product){
-			$productTasteArr = array();
-			if(isset($product['taste'])&&!empty($product['taste'])){
-				foreach ($product['taste'] as $taste){
-					array_push($productTasteArr, $taste['taste_id']);
-				}
-			}
-			$productBoms = DataSyncOperation::getBom($orderIdArr[1], $product['product_id'], $productTasteArr);
-			if(!empty($productBoms)){
-				foreach ($productBoms as $bom){
-					$stock = $bom['number']*$product['amount'];
-					DataSyncOperation::updateMaterialStock($orderIdArr[1],$bom['material_id'],$stock);
-				}
-			}
-		}
+		WxOrder::dealOrder($brandUser, $order);
 		//发送模板消息通知
 		$company = WxCompany::get($orderIdArr[1]);
 		$data = array(
 				'touser'=>$openId,
-				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'])),
+				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'],'orderDpid'=>$order['dpid'])),
 				'first'=>'您好，您已成功支付订单',
 				'keyword1'=>$order['account_no'],
 				'keyword2'=>$order['should_total'].'元',
