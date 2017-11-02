@@ -47,7 +47,7 @@
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
 <div class="order-title">确认订单</div>
-<div class="order-time" style="margin:10px 0;font-size: 15px;">
+<div class="order-time" style="margin:10px 0;font-size: 14px;">
 	<p>餐厅名称:<?php echo $this->company['company_name'];?></p>
 	<p>餐厅地址:<?php echo $this->company['address'];?></p>
 </div>
