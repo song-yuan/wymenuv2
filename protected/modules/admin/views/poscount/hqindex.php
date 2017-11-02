@@ -63,9 +63,9 @@
                         <?php if(Yii::app()->user->role < 5):?>
                             <select id="cdpid" class="btn yellow width" >
                                 <option value="" ><?php echo yii::t('app','- 选择总公司 -');?></option>
-                                <?php foreach ($companys as $company):?>
+                                <?php if($companys): foreach ($companys as $company):?>
                                 <option value="<?php echo $company['dpid']; ?>" <?php if ($company['dpid'] == $cdpid){echo "selected";}?> ><?php echo yii::t('app',$company['company_name']);?></option>
-                                <?php endforeach; ?>
+                                <?php endforeach; endif;?>
                             </select>
                         <?php endif; ?>
                             <input type="search" name="cname" id="cname" value="" placeholder="输入店铺名关键字(可选)" class="btn width2">
