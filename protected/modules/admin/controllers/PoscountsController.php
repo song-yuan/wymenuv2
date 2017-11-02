@@ -28,7 +28,7 @@ class PoscountsController extends BackendController
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
         $company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
-        // p($model);
+         //p($model);
         $models=0;
         $CompanyName=null;
         if($cdpid){
