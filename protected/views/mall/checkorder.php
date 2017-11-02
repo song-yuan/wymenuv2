@@ -47,6 +47,10 @@
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
 <div class="order-title">确认订单</div>
+<div class="order-time" style="margin:10px 0;">
+	<p>餐厅名称:<?php echo $this->company['company_name'];?></p>
+	<p>餐厅地址:<?php echo $this->company['address'];?></p>
+</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌台:<?php echo $siteType['name'].$site['serial'];?></div>
