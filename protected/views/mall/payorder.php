@@ -186,8 +186,8 @@
     <div class="ft-lt">
         <p>￥<span id="total" class="total"><?php echo $payPrice;?></span></p>
     </div>
-    <div class="ft-rt">
-        <p><a href="javascript:;" id="payOrder">付款</a></p>
+    <div class="ft-rt" id="payOrder">
+        <p><a href="javascript:;">付款</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -238,6 +238,7 @@
 	}
 	$(document).ready(function(){
 		$('#payOrder').click(function(){
+			layer.load(2);
 			callpay();
 		});
 	})
