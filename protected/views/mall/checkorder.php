@@ -47,6 +47,10 @@
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
 <div class="order-title">确认订单</div>
+<div class="order-time" style="margin:10px 0;font-size: 14px;">
+	<p>餐厅名称:<?php echo $this->company['company_name'];?></p>
+	<p>餐厅地址:<?php echo $this->company['address'];?></p>
+</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌台:<?php echo $siteType['name'].$site['serial'];?></div>
@@ -368,8 +372,8 @@
     <div class="ft-lt">
         <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
-    <div class="ft-rt">
-    	<a id="payorder" href="javascript:;">
+    <div class="ft-rt" id="payorder">
+    	<a href="javascript:;">
         <p>提交订单</p>
         </a>
     </div>
@@ -380,8 +384,8 @@
     <div class="ft-lt">
         <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
-    <div class="ft-rt">
-    	<a id="payorder" href="javascript:;">
+    <div class="ft-rt" id="payorder">
+    	<a href="javascript:;">
         <p>下单</p>
         </a>
     </div>
@@ -463,7 +467,7 @@
          </div>
     </div>
 </div>
-<!--END actionSheet-->			
+<!--END actionSheet-->               			
 <script>
 function emptyCart(){
 	var timestamp=new Date().getTime()
@@ -847,6 +851,7 @@ $(document).ready(function(){
 				$('#dialog1').show();
 				return;
 			}
+			layer.load(2);
 			$('form').submit();
 		<?php elseif($this->type==3):?>
 			var address = $('input[name="address"]').val();
@@ -869,19 +874,23 @@ $(document).ready(function(){
 				$('#dialog1').show();
 				return;
 			}
+			layer.load(2);
 			$('form').submit();
 		<?php elseif($this->type==6):?>
 			if($('input[name="yue"]').is(':checked')){
 				$('#dialog1').show();
 				return;
 			}
+			layer.load(2);
 			$('form').submit();
 		<?php else:?>
+			layer.load(2);
 			$('form').submit();
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
 		$('#dialog').hide();
+		layer.load(2);
 		$('form').submit();
 	});
 	$('#dialog .default').click(function(){
@@ -889,6 +898,7 @@ $(document).ready(function(){
 	});
 	$('#dialog1 .primary').click(function(){
 		$('#dialog1').hide();
+		layer.load(2);
 		$('form').submit();
 	});
 	$('#dialog1 .default').click(function(){

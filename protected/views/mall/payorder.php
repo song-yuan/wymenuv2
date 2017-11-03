@@ -186,8 +186,8 @@
     <div class="ft-lt">
         <p>￥<span id="total" class="total"><?php echo $payPrice;?></span></p>
     </div>
-    <div class="ft-rt">
-        <p><a href="javascript:;" id="payOrder">付款</a></p>
+    <div class="ft-rt" id="payOrder">
+        <p><a href="javascript:;">付款</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -208,6 +208,7 @@
 				 	location.href = '<?php echo $returnUrl;?>';
 				 }else{
 				 	//支付失败或取消支付
+				 	 layer.closeAll('loading');
 					 layer.msg('支付失败,请重新支付!');
 				 }     
 			}
@@ -238,6 +239,7 @@
 	}
 	$(document).ready(function(){
 		$('#payOrder').click(function(){
+			layer.load(2);
 			callpay();
 		});
 	})
