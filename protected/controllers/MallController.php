@@ -64,7 +64,7 @@ class MallController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2182;
+			$userId = 2196;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
