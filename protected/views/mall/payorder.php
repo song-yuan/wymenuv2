@@ -208,6 +208,7 @@
 				 	location.href = '<?php echo $returnUrl;?>';
 				 }else{
 				 	//支付失败或取消支付
+				 	 layer.closeAll('loading');
 					 layer.msg('支付失败,请重新支付!');
 				 }     
 			}
