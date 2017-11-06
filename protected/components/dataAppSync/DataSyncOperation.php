@@ -537,6 +537,17 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
+		$orderKey = 'order-'.(int)$dpid.'-'.$createAt.'-'.$accountNo;
+		$orderCache = Yii::app()->cache->get($orderKey);
+		if($orderCache!=false){
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '生成订单中,等待结果',
+					'orderId' => ''
+			) );
+			return $msg;	
+		}
+		$orderCache = Yii::app()->cache->set($orderKey,true);
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
@@ -817,6 +828,7 @@ class DataSyncOperation {
 				}
 			}
 			$transaction->commit ();
+			Yii::app()->cache->delete($orderKey);
 			$msg = json_encode ( array (
 					'status' => true,
 					'orderId' => $orderId,
@@ -826,6 +838,7 @@ class DataSyncOperation {
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
 			Helper::writeLog($dpid.'---'.$orderData.'---'.$e->getMessage());
+			Yii::app()->cache->delete($orderKey);
 			$msg = json_encode ( array (
 					'status' => false,
 					'msg' => $e->getMessage(),
