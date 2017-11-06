@@ -2954,7 +2954,7 @@ public function actionPayallReport(){
 				$criteria->addSearchCondition('account_no',$accountno);
 			}
 		}
-		$criteria->with = array("company","paymentMethod","channel");
+		$criteria->with = array("orderpay","channel");
 
 		//$connect = Yii::app()->db->createCommand($sql);
 		//$model = $connect->queryAll();
