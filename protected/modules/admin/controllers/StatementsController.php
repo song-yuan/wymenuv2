@@ -8915,7 +8915,7 @@ public function actionPayallReport(){
 			->setCellValue('B'.$j,$v['maoli_nums'])
 			->setCellValue('C'.$j,$reality_all = $v['maoli_money'])
 			->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v['chunli_money']))
-			->setCellValue('E'.$j,$v['chunli_money'])
+			->setCellValue('E'.$j,sprintf("%.2f",$retreats+$v['chunli_money']))
 			->setCellValue('G'.$j,$v['cash_money'])
 			->setCellValue('H'.$j,$v['wx_money'])
 			->setCellValue('I'.$j,$v['wxord_money'])
