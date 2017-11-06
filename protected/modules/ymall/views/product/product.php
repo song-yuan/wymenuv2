@@ -290,6 +290,7 @@
 		</div>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/prefixfree.min.js"></script>
 		<script>
+		
 			//采购订单生成对话框
 			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
 				var btnArray = ['否','是'];
@@ -308,15 +309,18 @@
 									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}else {
 									mui.alert(ss[1]+'为自建原料, 无法总部购买!!!');
-									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
+									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}
 							}else {
 								if (ss[1] == '') {
 									mui.alert(ss[0]+'没有消耗信息需要手动添加');
-									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
+									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}else {
 									mui.alert(ss[0]+'没有消耗信息需要手动添加'+'----'+ss[1]+'为自建原料, 无法总部购买!!!');
-									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
+									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}
 							}
 						},'json'
