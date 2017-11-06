@@ -8910,12 +8910,12 @@ public function actionPayallReport(){
 			}else{
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j);
 			}
-			$retreats = $this->getPaymentRetreat($v['dpid'],$begin_time,$end_time,$text,$v['y_all'],$v['m_all'],$v['d_all'],$userid,$v['username']);
+			$retreats = $this->getRijieRetreat($v['dpid'],$begin_time,$end_time,$text,$v['y_all'],$v['m_all'],$v['d_all'],$userid,$v['username']);
 			$objPHPExcel->setActiveSheetIndex(0)
 			->setCellValue('B'.$j,$v['maoli_nums'])
 			->setCellValue('C'.$j,$reality_all = $v['maoli_money'])
 			->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v['chunli_money']))
-			->setCellValue('E'.$j,$v['chunli_money'])
+			->setCellValue('E'.$j,sprintf("%.2f",$retreats+$v['chunli_money']))
 			->setCellValue('G'.$j,$v['cash_money'])
 			->setCellValue('H'.$j,$v['wx_money'])
 			->setCellValue('I'.$j,$v['wxord_money'])
