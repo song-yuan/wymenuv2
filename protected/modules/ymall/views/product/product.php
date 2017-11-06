@@ -82,6 +82,8 @@
 			font-family: "Expletus Sans", sans-serif;
 			}
 			h4 {
+				color:gray;
+				padding-left: 15px;
 				border-bottom: 1px solid #ccc;
 				padding-bottom: 9px;
 			}
@@ -151,6 +153,7 @@
 										rgba(0,0,0,.2)),
 			    -webkit-linear-gradient( left, #f44, #ff0);
 			}
+
 			/**		*/
 			#popover{
 				height: 100px;
@@ -264,15 +267,17 @@
 						<div>
 							<h4>店铺原料库存</h4>
 							<!-- HTML5 -->
-							<div style="width: 90%;margin:0 auto;">
+							<div style="width: 96%;margin:0 auto;position: relative;">
 								<?php if($stocks): ?>
 								<?php foreach ($stocks as $stock): ?>
 							    <p style="width:100%;margin:0;" data-value="<?php echo '剩余: '.$stock['stock'].' '.$stock['unit_name']; ?>"><?php echo $stock['material_name']; ?></p>
-								<progress max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5">
+								<progress style="width:100%;" max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5">
 									<div class="progress-bar">
 										<!-- <span style="width: 80%"></span> -->
 									</div>
 								</progress>
+								<span style="position:absolute;left:5px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['safe_stock']; ?></span>
+								<span style="position:absolute;right:10px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['max_stock']; ?></span>
 								<?php endforeach; ?>
 								<?php endif; ?>
 							</div>
@@ -287,13 +292,37 @@
 		<script>
 			//采购订单生成对话框
 			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
-				var btnArray = ['是','否'];
-				mui.confirm('自动生成采购单是根据您设置的时间段内的销量 , 通过算法自动生产的符合您店铺的采购订单 ,是否确定生成订单 ？','自动生成采购单',btnArray,function(e){
-					if(e.index==0){
+				var btnArray = ['否','是'];
+				mui.confirm('根据您近一个月内的原料的消耗量来生成您店铺的采购订单 , 是否确定生成订单 ？','自动生成采购单',btnArray,function(e){
+					if(e.index==1){
 						//自己的逻辑
-						mui.alert('已经生成采购单 , 请到购物车再次确认采购单是否合适 ! ! !','提示',function(){});
+						mui.post('<?php echo $this->createUrl("autodownorder/index",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
+							aa:1, // 参数  键 ：值
+						},
+						function(data){ //data为服务器端返回数据
+							//自己的逻辑
+							console.log(data);
+							ss = data.split("-");
+							if (ss[0] == '') {
+								if (ss[1] == '') {
+									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+								}else {
+									mui.alert(ss[1]+'为自建原料, 无法总部购买!!!');
+									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+								}
+							}else {
+								if (ss[1] == '') {
+									mui.alert(ss[0]+'没有消耗信息需要手动添加');
+									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+								}else {
+									mui.alert(ss[0]+'没有消耗信息需要手动添加'+'----'+ss[1]+'为自建原料, 无法总部购买!!!');
+									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+								}
+							}
+						},'json'
+						);
 					}else{
-						alert('点击了- 否');
+						// alert('点击了- 否');
 					}
 				});
 			});
@@ -306,47 +335,7 @@
 			gallery.slider({
 			  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
 			});
-			$('.addicon').on('touchstart',function(){
-				$(this).addClass('addicon1');
-				$('.mui-badge').addClass('mui-badge1');
-			});
-			$('.addicon').on('touchend',function(){
-				$(this).removeClass('addicon1');
-				$('.mui-badge').removeClass('mui-badge1');
 
-
-				var stock_dpid = $(this).attr('stock_dpid'); //仓库的dpid
-				var goods_name = $(this).attr('goods_name'); //产品名称
-				var goods_id = $(this).attr('goods_id'); //产品id
-				var price = $(this).attr('price'); //产品原价
-				var goods_code = $(this).attr('goods_code'); //产品代码
-				var material_code = $(this).attr('material_code'); //原料代码
-				// alert(price);
-				var num = $('#car_num').text();
-				//alert(num);
-				var nums = parseInt(num) +1 ;
-				$('#car_num').html(nums);
-				mui.post('<?php echo $this->createUrl("ymallcart/addymallcart",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
-					   stock_dpid:stock_dpid, // 参数  键 ：值
-					   goods_name:goods_name,
-					   goods_id:goods_id,
-					   price:price,
-					   goods_code:goods_code,
-					   material_code:material_code
-					},
-					function(data){ //data为服务器端返回数据
-						//自己的逻辑
-						console.log(data);
-						if (data != nums) {
-							$('#car_num').html(data);
-						}
-					},'json'
-				);
-			});
-			$('.goods-pic img').on('tap',function(){
-				// $(this).addClass('addicon1');
-				location.href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId'=>$this->companyId))?>" ;
-			});
 			$('.search-form').submit(function(event) {
 				var content = $('#search').val();
 				// alert(content);

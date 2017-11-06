@@ -136,7 +136,7 @@
 								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid ,'istempp' => $model->is_temp_price , 'islock' => $model->is_lock ,'papage' => $pages->getCurrentPage()+1 ));?>"><?php echo yii::t('app','编辑');?></a>
 								
 								<?php if(yii::app()->user->role >=9):?>
-									<?php if(!($model->is_lock)):?>
+									
 										<?php if($model->is_show <=5):?>
 										<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" >自下架</button>
 										<?php elseif($model->is_show ==6):?>
@@ -144,7 +144,7 @@
 										<?php elseif($model->is_show ==7):?>
 										<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" >自上架</button>
 										<?php endif;?>
-									<?php endif;?>
+									
 								<?php else:?>
 									<?php if($model->is_show <=5):?>
 									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7">自下架</button>
