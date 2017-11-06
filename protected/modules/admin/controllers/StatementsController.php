@@ -1924,7 +1924,7 @@ public function actionPayallReport(){
 		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.pay_amount_total) as all_reality,count(*) as all_num, '
 				.' t.dpid,t.create_at,t.paytype,t.payment_id '
 				.' from nb_order_paytype_total t'
-				.' where t.paytype ="3" and t.dpid ='.$dpid
+				.' where t.delete_flag =0 and t.paytype ="3" and t.dpid ='.$dpid
 				.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" '
 				.' and t.payment_id ='.$num
 				.' and '.$usern.' '.$times;
@@ -2314,7 +2314,7 @@ public function actionPayallReport(){
 		}elseif($text==3){
 			$time = ' and year(t.create_at) = "'.$y_all.'" and month(t.create_at) ="'.$m_all.'" and day(t.create_at) ="'.$d_all.'" ';
 		}
-		$sql2 = 'select sum(t.pay_amount_total) as retreat_allprice,sum(t.pay_order_num) as retreat_num from nb_order_paytype_total t where t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" '.$time.$user.' and t.pay_amount_total < 0 and t.dpid='.$dpid;
+		$sql2 = 'select sum(t.pay_amount_total) as retreat_allprice,sum(t.pay_order_num) as retreat_num from nb_order_paytype_total t where t.delete_flag=0 and t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" '.$time.$user.' and t.pay_amount_total < 0 and t.dpid='.$dpid;
 		//var_dump($sql2);exit;
 		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		return $retreat['retreat_allprice'];
