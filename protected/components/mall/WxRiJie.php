@@ -74,7 +74,7 @@ class WxRiJie
 	 */
 	public static function rijieStatistics(){
 		$db = Yii::app()->db;
-		$sql = 'select * from nb_rijie_code where delete_flag =0 and is_rijie =0';
+		$sql = 'select * from nb_rijie_code where rijie_code!="null" and delete_flag =0 and is_rijie =0';
 		$rijies = $db -> createCommand($sql)->queryAll();
 		if(!empty($rijies)){
 			foreach ($rijies as $rj){
