@@ -163,7 +163,7 @@
 				            echo $discount;
 		            ?></td>
 		            <td><?php 
-		                	$gather=$m['chunli_money'];
+		                	$gather=sprintf("%.2f",$m['chunli_money']+$retreat);;
 		                	$gather_total += $gather;
 		                	echo $gather;
 		            ?></td>
