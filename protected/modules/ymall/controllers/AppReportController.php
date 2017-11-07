@@ -57,6 +57,7 @@ class AppReportController extends Controller
 					'fens'=>$fens,
 					'companyId'=>$companyId
 			));
+			exit;
 		}
 		 $type = $this->type();
 		 if(!empty($type)){
