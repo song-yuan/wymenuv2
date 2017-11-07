@@ -30,7 +30,7 @@
             <?php if(!empty($fen['lid'])){?>
             <?php foreach ($admindpids as $dp):?>
                 <?php if($fen['lid']==$dp['area_group_id']):?>
-                <a style="display:block;height: 45px;margin-bottom: 10px;" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$dp['dpid']));?>">
+                <a style="display:block;height: 45px;margin-bottom: 10px;" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$dp['dpid'],'type'=>'1'));?>">
                     <img class="mui-media-object mui-pull-left" src="<?php echo $dp['logo'];?>">
                     <div class="mui-media-body">
                         <?php echo $dp['company_name']?>
