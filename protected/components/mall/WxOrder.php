@@ -388,7 +388,7 @@ class WxOrder
 							'product_pic'=>$detail['main_picture'],
 							'price'=>$itemPrice,
 							'original_price'=>$detail['original_price']+$ortherPrice,
-							'amount'=>$detail[2],
+							'amount'=>$detail[2]*$cart['num'],
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>$orderProductStatus,
 							'taste_memo'=>$setName,
