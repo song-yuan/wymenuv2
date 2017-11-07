@@ -80,7 +80,7 @@
 								
 								<th><?php echo yii::t('app','时间');?></th>
 								<th>
-									<div class="btn-group">
+									<div style="display: none;" class="btn-group">
 										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
 										<button type="button" class="btn blue dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
 										<div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">

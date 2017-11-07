@@ -82,6 +82,7 @@ class CopyproductSetController extends BackendController
 	        					$catep->chs_code = $category['chs_code'];
 	        					$catep->main_picture = $category['main_picture'];
 	        					$catep->order_num = $category['order_num'];
+	        					$catep->show_type = $category['show_type'];
 	        					$rows = $catep->update();
 	        					if (!$rows) {
 	        						$dpidnames .= $dpid.',';
@@ -101,6 +102,7 @@ class CopyproductSetController extends BackendController
 	        							'chs_code'=> $category['chs_code'],
 	        							'main_picture'=>$category['main_picture'],
 	        							'order_num'=>$category['order_num'],
+	        							'show_type'=>$category['show_type'],
 	        							'delete_flag'=>'0',
 	        							'is_sync'=>$is_sync,
 	        					);
