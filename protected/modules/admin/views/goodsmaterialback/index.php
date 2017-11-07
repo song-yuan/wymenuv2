@@ -1,4 +1,6 @@
-
+<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
+<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
+<style>
 <style>
 		span.tab{
 			color: black;
@@ -72,6 +74,21 @@
 						<span class="tab tab-active"><?php echo yii::t('app','运输损耗列表');?></span>
 					</div>
 					<div class="actions">
+						<select id="back_status" class="btn yellow" >
+	                        <option value="2" <?php if ($back_status==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
+	                        <option value="1" <?php if ($back_status==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','已退款');?></option>
+	                        <option value="0" <?php if ($back_status==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','未退款');?></option>
+	                    </select>
+	                    <div class="btn-group">
+	                        <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+	                            <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>"  >
+	                            <span class="input-group-addon">~</span>
+	                            <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>" >
+	                        </div>
+	                    </div>
+	                    <div class="btn-group">
+	                        <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+	                    </div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -127,7 +144,21 @@
 		</div>
 	</div>
 	<script>
+
+    jQuery(document).ready(function(){
+        if (jQuery().datepicker) {
+                $('.date-picker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    language: 'zh-CN',
+                    rtl: App.isRTL(),
+                    autoclose: true
+                });
+                $('body').removeClass("modal-open");
+        }
+	});
+
 	$('.status').click(function() {
+		<?php if(Yii::app()->user->role < 5):?>
 		if (confirm('是否修改损耗产品的退款状态?')) {
 			var lid = $(this).attr('lid');
 			var status = $(this).attr('status');
@@ -161,8 +192,19 @@
 					}
 				},
 			});
-
 		}
+		<?php else: ?>
+		alert('您没有操作权限!!!');
+		<?php endif; ?>
 	});
+
+    $('#btn_time_query').click(function time() {
+
+        var begin_time = $('#begin_time').val();
+        var end_time = $('#end_time').val();
+        var back_status = $('#back_status').val();
+        location.href="<?php echo $this->createUrl('goodsmaterialback/index' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/back_status/"+back_status;
+
+    });
 	</script>
 	<!-- END PAGE CONTENT-->
