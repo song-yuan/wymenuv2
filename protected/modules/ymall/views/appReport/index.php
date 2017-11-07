@@ -31,8 +31,8 @@
 		<div class="shou1">
 			<h4>今日应收</h4>
 			<h3><?php foreach($orders as $order){
-				if(!empty($order['pay_amount'])){
-					echo $order['pay_amount'];
+				if(!empty($order['reality_total'])){
+					echo $order['reality_total'];
 				}else{
 					echo '0';
 				}
@@ -109,7 +109,7 @@
             	</div> 
                 <div class="ys">
 					<div class="ys1">
-						<h6>应收</h6>
+						<h6>实收</h6>
 						<span><?php if(!empty($pay_amount)){
 							echo $pay_amount;
 						}else{
@@ -173,7 +173,7 @@
 	            	</div> 
 	                <div class="ys">
 							<div class="ys1" style="">
-								<h6>应收</h6>
+								<h6>实收</h6>
 								<span><?php 
 								foreach($months as $month){
 								echo $month['pay_amount'];

@@ -15,12 +15,12 @@
 				</li>
 				<li class="mui-table-view-cell">
 					<span>开始时间</span>
-					<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['start'];}?></span>
+					<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?><a>选择日期</a><?php }else{echo $date['start'];}?></span>
 					<input id="date1" type="hidden" name="date[start]">
 				</li>
 				<li class="mui-table-view-cell">
 					<span>结束时间</span>
-					<span id='demo4' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date['End'];}?></span>
+					<span id='demo4' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?><a>选择日期</a><?php }else{echo $date['End'];}?></span>
 					<input id="date2" type="hidden" name="date[End]">
 				</li>
 				<li>

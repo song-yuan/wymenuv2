@@ -34,7 +34,7 @@ class AppReportController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2182;
+			$userId = 2130;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
@@ -46,13 +46,11 @@ class AppReportController extends Controller
 		$type = Yii::app()->request->getParam('type',0);
 		$fensql = "select lid,group_name from nb_area_group where lid=".$type." and type=3 and delete_flag=0";
 		$fens = Yii::app()->db->createCommand($fensql)->queryRow();
-		return $fens;
-		
-			
+		return $fens;	
 	}
 	public function actionAdminlist(){
 		$companyId = $this->companyId;
-		$fensql = "select lid,group_name from (select admin_dpid from nb_brand_user_admin where brand_user_id=841 and delete_flag=0) a left join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.admin_dpid=g.dpid group by lid";
+		$fensql = "select lid,group_name from (select admin_dpid from nb_brand_user_admin where brand_user_id=2130 and delete_flag=0) a left join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.admin_dpid=g.dpid group by lid";
 		$fens = Yii::app()->db->createCommand($fensql)->queryAll();
 		// var_dump($fens);exit();
 		$this->render('adminlist',array(
@@ -139,6 +137,7 @@ class AppReportController extends Controller
     		$fens = str_replace('"', '', $fens);
 	    		if(!empty($date)){
 				$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in(".$fens.") and order_status in (3,4,8)";
+				// echo $Profitsql;exit;
 				$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
 				// var_dump($todayProfit);exit;
 				$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select lid from nb_order where order_status in (3,4,8) and dpid in(".$fens.") and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59') o where y.dpid in(".$fens.") and y.order_id=o.lid and y.paytype !=11 and y.create_at >='".$date['start']." 00:00:00' and y.create_at <= '".$date['End']." 23:59:59' group by y.paytype";
@@ -159,7 +158,8 @@ class AppReportController extends Controller
 	    		if(!empty($date)){
 				$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)";
 				$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
-				$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59') o where y.dpid=".$companyId." and y.account_no=o.account_no and y.paytype !=11 and y.create_at >='".$date['start']." 00:00:00' and y.create_at <= '".$date['End']." 23:59:59' group by y.paytype";
+				// var_dump($todayProfit);exit;
+				$Paymentsql = "select paytype,counts,pay_amount,payment_method_id from (select paytype,count(paytype) as counts,sum(pay_amount) as pay_amount,payment_method_id,order_id from nb_order_pay where dpid=".$companyId." and paytype !=11 and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' group by paytype) y left join (select lid from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at >='2017-10-02 00:00:00' and create_at <= '2017-10-31 23:59:59') o on y.order_id=o.lid";
 				// echo $Paymentsql;exit();
 				$Paymentmethod = Yii::app()->db->createCommand($Paymentsql)->queryAll();
 				// var_dump($Paymentmethod);exit();
@@ -204,7 +204,7 @@ class AppReportController extends Controller
 			}
 		}else{
 			if(!empty($date)){
-				$riqsql = "select hour(create_at) as hour, count(1) as count,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT(create_at,'%Y-%m-%d') = '".$date."' and dpid=".$companyId." group by hour(create_at)";
+				$riqsql = "select hour(create_at) as hour, count(1) as count,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT(create_at,'%Y-%m-%d') = '".$date."' and paytype!=11 and dpid=".$companyId." group by hour(create_at)";
 				// echo $riqsql;exit();
 				$riq = Yii::app()->db->createCommand($riqsql)->queryAll();
 			// var_dump($riq);exit();
