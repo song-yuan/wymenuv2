@@ -107,6 +107,7 @@ class CopycatepController extends BackendController
 		    						$catep->category_name = $category['category_name'];
 		    						$catep->type = $category['type'];
 		    						$catep->cate_type = $category['cate_type'];
+		    						$catep->show_type = $category['show_type'];
 		    						$catep->chs_code = $category['chs_code'];
 		    						$catep->main_picture = $category['main_picture'];
 		    						$catep->order_num = $category['order_num'];
@@ -124,6 +125,7 @@ class CopycatepController extends BackendController
 		    								'pid'=>$cateptree['lid'],
 		    								'type'=>$category['type'],
 		    								'cate_type'=>$category['cate_type'],
+		    								'show_type'=>$category['show_type'],
 		    								'chs_code'=> $category['chs_code'],
 		    								'main_picture'=>$category['main_picture'],
 		    								'order_num'=>$category['order_num'],
