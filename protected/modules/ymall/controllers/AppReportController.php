@@ -60,7 +60,7 @@ class AppReportController extends Controller
 	}
 	public function actionIndex(){
 		$companyId = $this->companyId;
-		if(true){
+		if(empty(Yii::app()->request->getParam('type',null))){
 			$fensql = "select lid,group_name from (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) a left join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.admin_dpid=g.dpid group by lid";
 			$fens = Yii::app()->db->createCommand($fensql)->queryAll();
 			foreach ($fens as $fen) {
@@ -69,9 +69,7 @@ class AppReportController extends Controller
 				}
 			}
 		}
-		 var_dump($companyId);exit;
 		 $type = $this->type();
-		 // var_dump($type);exit;
 		 if(!empty($type)){
 		 	$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
 		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
