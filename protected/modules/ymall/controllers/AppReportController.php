@@ -60,7 +60,16 @@ class AppReportController extends Controller
 	}
 	public function actionIndex(){
 		$companyId = $this->companyId;
-		var_dump($companyId);exit;
+		if(empty(Yii::app()->request->getParam('type'))){
+			$fensql = "select lid,group_name from (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) a left join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.admin_dpid=g.dpid group by lid";
+			$fens = Yii::app()->db->createCommand($fensql)->queryAll();
+			foreach ($fens as $fen) {
+				if(!empty($fen['group_name'])){
+				  $this->redirect(array('appReport/adminlist','companyId'=>$companyId));
+				}
+			}
+		}
+		 var_dump($companyId);exit;
 		
 	}
 	public function actionYysj(){
