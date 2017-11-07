@@ -134,7 +134,7 @@ class ProductSetController extends BackendController
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
-			if(empty($model->chs_code)){
+			if($model->category_id){
 				$cateID = $model->category_id;
 				$db = Yii::app()->db;
 				$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
