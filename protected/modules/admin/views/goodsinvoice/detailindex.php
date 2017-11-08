@@ -42,13 +42,14 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $name ;?> => <?php echo yii::t('app','发货单明细列表');?></div>
 					<div class="actions">
-					
+					<div class="btn-group">
+                        <span class="btn yellow" id="excel" lid="<?php echo $goid; ?>"><?php echo yii::t('app','导出Excel');?></span>
+                    </div>
 					</div>
 				</div>
 				<?php if($model):?>
 				<?php $plid = $model['lid'];$status = $model['status']?>
 				<div style="vertical-align:middle;text-align: center;" <?php echo $plid;?>>
-					
 					<div class="actions" style="font-size: 20px;">
 					<span>发货单号：<?php echo $model['invoice_accountno'];?> </span>
 					<span>&nbsp;</span>
@@ -62,7 +63,6 @@
 				<?php endif;?>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
-					
 						<thead>
 							<tr style="background: lightblue;">
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
@@ -235,5 +235,15 @@
 				});
 			}
 		});
+
+
+	    $('#excel').click(function excel(){
+            var goid = $(this).attr('lid');
+            // alert(goid);
+            if(confirm('确认导出并且下载Excel文件吗？')){
+                location.href="<?php echo $this->createUrl('goodsinvoice/detailindexExport' , array('companyId'=>$this->companyId));?>/goid/"+goid;
+                // location.href="www.baidu.com";
+            }
+	    });
 	});
 	</script>        

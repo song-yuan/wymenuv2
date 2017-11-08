@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $name ;?> => <?php echo yii::t('app','采购单明细列表');?></div>
 					<div class="actions">
-					
+					<span class="btn yellow" id="excel" lid="<?php echo $goid; ?>"><?php echo yii::t('app','导出Excel');?></span>
 					</div>
 				</div>
 				<?php if($model):?>
@@ -246,5 +246,15 @@
 				});
 			}
 		});
+
+		
+		$('#excel').click(function excel(){
+            var goid = $(this).attr('lid');
+            // alert(goid);
+            if(confirm('确认导出并且下载Excel文件吗？')){
+                location.href="<?php echo $this->createUrl('goodsorder/detailindexExport' , array('companyId'=>$this->companyId));?>/goid/"+goid;
+                // location.href="www.baidu.com";
+            }
+	    });
 	});
 	</script>        
