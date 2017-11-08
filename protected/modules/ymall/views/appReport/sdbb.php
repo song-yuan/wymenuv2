@@ -47,7 +47,7 @@ if (!empty($ris)){
 				</li>
 				<li class="mui-table-view-cell">
 					<span>开始时间</span>
-					<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?>选择日期<?php }else{echo $date;}?></span>
+					<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?><a>选择日期</a><?php }else{echo $date;}?></span>
 					<input id="date1" type="hidden" name="date">
 				</li>
 				<li>
@@ -177,7 +177,7 @@ if (!empty($ris)){
 			</tr>
     	</table>
     </div>
-    <div style="width: 102%;overflow: auto;height: 200px;background-color: #FFFFFF;">
+    <div style="width: 100%;overflow: auto;height: 200px;background-color: #FFFFFF;">
     	<table cellpadding="0" cellspacing="0" width="100%" style="text-align: center;">
 
 				<?php foreach($riq as $ri){?>
