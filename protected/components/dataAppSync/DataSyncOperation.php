@@ -1628,6 +1628,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$rfid = $data['rfid'];
 		$userId = $data['user_id'];
+		$paytype = isset($data['pay_type'])?$data['pay_type']:0;
 		$chargeMoney = $data['ch_money'];
 		$giveMoney = $data['give_money'];
 	
