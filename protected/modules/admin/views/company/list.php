@@ -82,13 +82,13 @@
 	                <div class="list col-sm-3 col-xs-12">
 						<a href="<?php echo $this->createUrl('announcement/index',array('companyId'=>$this->companyId));?>">
 		                <div class="list_big"><i class="fa fa-bullhorn"></i> 公告设置</div>
-		                <div class="list_small"></div>
+		                <div class="list_small">设置微信店铺中的公告信息</div>
 		                </a> 
 	                </div>
 	                <div class="list col-sm-3 col-xs-12">
 						<a href="<?php echo $this->createUrl('companySetting/index',array('companyId'=>$this->companyId));?>">
 		                <div class="list_big"><i class="fa fa-star-half-o"></i> 登陆界面</div>
-		                <div class="list_small"></div>
+		                <div class="list_small">设置登录界面底部显示的名称，图标以及标语口号</div>
 		                </a> 
 	                </div>
 	               <?php endif;?>

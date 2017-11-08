@@ -1,5 +1,5 @@
 <div class="page-content">
-	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -23,7 +23,7 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','商城设置'),'url'=>$this->createUrl('tmall/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','发货单列表'),'url'=>$this->createUrl('goodstock/goodsdelivery' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','配货单明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('goodstock/goodsdelivery' , array('companyId' => $this->companyId,'page'=>$papage)))));?>
-	
+
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -42,13 +42,13 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $name ;?> => <?php echo yii::t('app','配货单明细列表');?></div>
 					<div class="actions">
-					
+					<span class="btn yellow" id="excel" lid="<?php echo $goid; ?>"><?php echo yii::t('app','导出Excel');?></span>
 					</div>
 				</div>
 				<?php if($model):?>
 				<?php $plid = $model['lid'];$status = $model['status']?>
 				<div style="vertical-align:middle;text-align: center;" <?php echo $plid;?>>
-					
+
 					<div class="actions" style="font-size: 20px;">
 					<span>配货单号：<?php echo $model['delivery_accountno'];?> </span>
 					<span>&nbsp;</span>
@@ -62,7 +62,7 @@
 				<?php endif;?>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
-					
+
 						<thead>
 							<tr style="background: lightblue;">
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
@@ -96,13 +96,13 @@
 			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 3){?> selected="selected" <?php }?> >3</option>
 			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 4){?> selected="selected" <?php }?> >4</option>
 			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 5){?> selected="selected" <?php }?> >5</option>
-			                            
+
 	                    			</select>
                     			</td>
                     			<?php endif;?>
 								<td></td>
 							</tr>
-							
+
 						<?php endforeach;?>
 							<tr>
 								<input id="changestock" type="hidden" value='0'/>
@@ -117,19 +117,19 @@
 								<input id="new_goods_invoice" type="button" class="btn blue" value="生成出库单" />&nbsp;
 								</td>
 								<?php endif;?>
-								
+
 							</tr>
 						</tbody>
 						<?php else:?>
 						<tr><td><?php echo yii::t('app','还没有添加详细产品');?></td></tr>
 						<?php endif;?>
-						
+
 					</table>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第 ');?><?php echo $pages->getCurrentPage()+1;?><?php echo yii::t('app','页');?> 
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第 ');?><?php echo $pages->getCurrentPage()+1;?><?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">
@@ -155,8 +155,8 @@
 								</div>
 							</div>
 						</div>
-						<?php endif;?>					
-					
+						<?php endif;?>
+
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -179,7 +179,7 @@
 					cs = cs - 1;
 				}
 			}else{
-				$(this).val("1"); 
+				$(this).val("1");
 				layer.msg('请选择具体批次');
 				}
 			$('#changestock').val(cs);
@@ -194,14 +194,14 @@
 				var oldpici = $(this).find("option:selected").attr('oldpici');
 				var newpici = $(this).find("option:selected").val();
 				if(oldpici != newpici){
-					
+
 					str = str + lid +','+ newpici +';';
-					
+
 				}else{
 					strs = 0;
 				}
 			});
-			
+
 			if(str.length >0){
 				str = str.substr(0,str.length-1);
 			}else{
@@ -211,7 +211,7 @@
 // 			layer.msg(str);
 // 			return false;
 			if(confirm('确认调整批次')){
-				
+
 				$.ajax({
 					url:'<?php echo $this->createUrl('goodstock/store',array('companyId'=>$this->companyId));?>',
 					data:{pid:str},
@@ -234,7 +234,7 @@
 			//layer.msg(pid);return false;
 			if(change >0){
 				if(confirm('有商品调整仓库，尚未保存！若不保存，请继续操作！')){
-					
+
 					}else{
 						return false;
 					}
@@ -257,5 +257,15 @@
 				});
 			}
 		});
+
+
+		$('#excel').click(function excel(){
+            var goid = $(this).attr('lid');
+            // alert(goid);
+            if(confirm('确认导出并且下载Excel文件吗？')){
+                location.href="<?php echo $this->createUrl('goodstock/detailindexExport' , array('companyId'=>$this->companyId));?>/goid/"+goid;
+                // location.href="www.baidu.com";
+            }
+	    });
 	});
-	</script>        
+	</script>
