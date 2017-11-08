@@ -11,8 +11,13 @@
         <?php if(isset($key)):?>
             <a class="mui-navigate-right" href="#"><?php echo $key;?></a>
         <?php endif;?>
-        
-            <div class="mui-collapse-content">
+            <div class="mui-collapse-content" style="overflow: auto;height: 200px;">
+            <?php if(count($fens)>1):?>
+                <?php foreach($fens as $fen):?>
+             <div style="height: 20px;"><a style="text-align: right;position:fixed;left: 270px;" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$companyId,'type'=>$fen['lid']));?>">多店统计>></a>
+                </div>
+            <?php break; endforeach;?>
+            <?php endif;?>
             <?php foreach($fens as $fen):?>
                 <a style="display:block;height: 50px;margin-bottom: 10px;" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$fen['dpid']));?>">
                     <img class="mui-media-object mui-pull-left" src="<?php echo $fen['logo'];?>">
@@ -22,8 +27,7 @@
                     </div>
                 </a>
                  <?php endforeach;?>
-                 <div style="height: 20px;"><a style="text-align: right;position:fixed;left: 270px;" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$companyId,'type'=>$fen['lid']));?>">多店统计>></a>
-                </div>
+                
             </div> 
 
              
