@@ -56,25 +56,32 @@ class AppReportController extends Controller
 			$fensql = "select lid,group_name,area_group_id,y.dpid,company_name,logo,address from (select dpid,admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) a inner join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.dpid=g.dpid inner join (select area_group_id,dpid,company_id from nb_area_group_company where delete_flag=0) c on c.area_group_id=g.lid and a.admin_dpid=c.company_id inner join (select dpid,company_name,logo,address from nb_company where type=1 and delete_flag=0) y on a.admin_dpid=y.dpid group by lid,group_name,y.dpid";
 				// echo $fensql;exit;
 				$fens = Yii::app()->db->createCommand($fensql)->queryAll();
-				//重新组成的数组
-				$array = array();
+				if(count($fens)>1){
+					//重新组成的数组
+						$array = array();
 
-				foreach ($fens as  $key=>$value) {
-					if(!isset($array[$value['group_name']])){
-						$array[$value['group_name']] = array();
+						foreach ($fens as  $key=>$value) {
+							if(!isset($array[$value['group_name']])){
+								$array[$value['group_name']] = array();
+							}
+							array_push($array[$value['group_name']], $value);
+
+						}
+						// var_dump($array);exit();
+						if(!empty($fens)){
+								$this->render('adminlist',array(
+									'array'=>$array,
+									'companyId'=>$companyId
+								));
+							exit;
+						}
+					}else{
+						foreach ($fens as $fen) {
+							$dpid = $fen['dpid'];
+						}
+						$this->redirect(array('appReport/index','companyId'=>$dpid));
 					}
-					array_push($array[$value['group_name']], $value);
-
 				}
-				// var_dump($array);exit();
-				if(!empty($fens)){
-						$this->render('adminlist',array(
-							'array'=>$array,
-							'companyId'=>$companyId
-						));
-					exit;
-				}
-			}
 		}
 		 if(!empty($type)){
 		 	$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
