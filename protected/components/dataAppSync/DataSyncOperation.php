@@ -1651,6 +1651,7 @@ class DataSyncOperation {
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
 						'admin_id' => $userId,
 						'member_card_id' => $rfid,
+						'type' => $paytype,
 						'reality_money' => $chargeMoney,
 						'give_money' => $giveMoney,
 						'is_sync' => DataSync::getInitSync() 
