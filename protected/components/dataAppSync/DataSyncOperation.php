@@ -1628,6 +1628,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$rfid = $data['rfid'];
 		$userId = $data['user_id'];
+		$paytype = isset($data['pay_type'])?$data['pay_type']:0;
 		$chargeMoney = $data['ch_money'];
 		$giveMoney = $data['give_money'];
 	
@@ -1650,6 +1651,7 @@ class DataSyncOperation {
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
 						'admin_id' => $userId,
 						'member_card_id' => $rfid,
+						'type' => $paytype,
 						'reality_money' => $chargeMoney,
 						'give_money' => $giveMoney,
 						'is_sync' => DataSync::getInitSync() 
