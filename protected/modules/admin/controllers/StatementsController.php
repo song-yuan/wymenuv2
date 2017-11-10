@@ -5888,7 +5888,7 @@ public function actionPayallReport(){
 		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		
+
 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
@@ -5901,31 +5901,19 @@ public function actionPayallReport(){
 		//var_dump($sql);exit;
 		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.product_name,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,t.product_type,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
 		$criteria->with = array('company','product','order');
-		
+
 		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid='.$this->companyId.' and t.set_id '.$setids.' ';
 		if($str){
 			$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid in('.$str.')';
 		}
-		if($ordertype==1){
-			$criteria->addCondition("order.order_type =0");
-		}
-		if($ordertype==2){
-			$criteria->addCondition("order.order_type =1");
-		}
-		if($ordertype==3){
-			$criteria->addCondition("order.order_type =2");
-		}
-		if($ordertype==4){
-			$criteria->addCondition("order.order_type =3");
-		}
-		if($ordertype==5){
-			$criteria->addCondition("t.set_id !=0");
+		if($ordertype >0){
+			$criteria->addCondition("order.order_type =".$ordertype);
 		}
 		//$criteria->addCondition("t.order_id in('.$ords.')");
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		$criteria->addCondition("t.order_id in(".$ords.")");
-		
+
 		if($text==1){
 			$criteria->group =' t.product_type,t.product_id,year(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
