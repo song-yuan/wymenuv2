@@ -2556,7 +2556,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 
-		if($ordertype >0){
+		if($ordertype >=0){
 			$ordertypes = '='.$ordertype;
 		}else{
 			$ordertypes = '>=0';
@@ -5894,7 +5894,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		if($ordertype >0){
+		if($ordertype >=0){
 			$ordertypes = '='.$ordertype;
 		}else{
 			$ordertypes = '>=0';
