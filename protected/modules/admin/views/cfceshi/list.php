@@ -96,7 +96,8 @@
 							<button type="button" class="btn green" id="stockRefundAli">支付宝退款</button>   
 							<button type="button" class="btn green" id="stockFind">查询</button>    
 							<button type="button" class="btn green" id="stockAddordpay">添加到order_pay</button>   
-							<button type="button" class="btn green" id="rijieOrder">日结</button>  
+							<button type="button" class="btn green" id="rijieOrder">日结</button> 
+							<button type="button" class="btn green" id="rijieOrders">日结2</button>  
 							<button type="button" class="btn green" id="rijieOrderReport">生成日结报表</button>                      
 						</div>
 					</div>
@@ -399,6 +400,38 @@
 	    $.ajax({
 	        type:'get',
 			url:"<?php echo $this->createUrl('../allfunc/selfrj',array('companyId'=>$this->companyId,));?>/dpid/"+dpid+"/btime/"+btime+"/etime/"+etime,
+			async: false,
+			
+	        //cache:false,
+	        dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg)
+	            {            
+		            
+			        layer.msg("成功！");
+			          
+		            //location.reload();
+	            }else{
+		            layer.msg("11");
+		            //location.reload();
+	            }
+			},
+	        error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+	    
+	});
+	$("#rijieOrders").on("click",function(){
+		
+	    var dpid = $("#dpid").val();
+	    var btime = $("#btime").val();
+	    var etime = $("#etime").val();
+	    //alert(dpid);
+	    $.ajax({
+	        type:'get',
+			url:"<?php echo $this->createUrl('cfceshi/selfrjs',array('companyId'=>$this->companyId,));?>/dpid/"+dpid+"/btime/"+btime+"/etime/"+etime,
 			async: false,
 			
 	        //cache:false,

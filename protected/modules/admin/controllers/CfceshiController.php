@@ -225,4 +225,57 @@ class CfceshiController extends BackendController
 		}
 	}
 	
+
+	public function actionSelfrjs(){
+		
+		$btime = '2017-10-11 00:00:00';
+		$etime = '2017-10-12 00:00:00';
+		$db = Yii::app()->db;
+		$sql = 'select * from nb_company where type =1 and delete_flag =0';
+		$coms = $db->createCommand($sql)->queryAll();
+		if($coms){
+			foreach ($coms as $c){
+				$dpid = $c['dpid'];
+				//var_dump($dpid);
+				$sqlor = 'select DATE_FORMAT(t.create_at,"%Y-%m-%d") as times, t.* from nb_order t where t.dpid ='.$dpid.' and t.order_status in(3,4,8) and t.create_at <= "'.$etime.'" and t.create_at >= "'.$btime.'" group by DATE_FORMAT(t.create_at,"%Y-%m-%d")';
+				$orders = $db->createCommand($sqlor)->queryAll();
+	
+				$sqlpos = 'select t.* from nb_pad_setting t where t.dpid ='.$dpid.' and t.delete_flag =0';
+				$pos = $db->createCommand($sqlpos)->queryRow();
+	
+				if($orders && $pos){
+					foreach ($orders as $order){
+						$times = str_replace('-','',$order['times']);
+						$rjcode = substr("0000".$dpid,-4).$times.'01';
+							
+						$rj = $db->createCommand('select * from nb_rijie_code where dpid ='.$dpid.' and begin_time ="2017-10-11 00:00:00"')->queryAll();
+						if(!empty($rj)){
+	
+						}else{
+							$lid = new Sequence("rijie_code");
+							$id = $lid->nextval();
+							$data = array(
+									'lid'=>$id,
+									'dpid'=>$dpid,
+									'create_at'=>$order['times'].' 00:00:00',
+									'update_at'=>date('Y-m-d H:i:s',time()),
+									'pos_code'=>$pos['pad_code'],
+									'begin_time'=>$order['times'].' 00:00:00',
+									'end_time'=>$order['times'].' 23:59:59',
+									'rijie_num'=>1,
+									'rijie_code'=>$rjcode,
+									'is_rijie'=>'0',
+									'delete_flag'=>'0',
+									'is_sync'=>'11111',
+							);
+							$command = $db->createCommand()->insert('nb_rijie_code',$data);
+						}
+					}
+				}
+			}
+			//exit;
+			Yii::app()->end(json_encode(array("status"=>"true",'msg'=>'成功')));
+		}
+	}
+	
 }
