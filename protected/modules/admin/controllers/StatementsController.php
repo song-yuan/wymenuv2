@@ -2573,20 +2573,8 @@ public function actionPayallReport(){
 		if($str){
 			$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid in('.$str.')';
 		}
-		if($ordertype==1){
-			$criteria->addCondition("order.order_type =0");
-		}
-		if($ordertype==2){
-			$criteria->addCondition("order.order_type =1");
-		}
-		if($ordertype==3){
-			$criteria->addCondition("order.order_type =2");
-		}
-		if($ordertype==4){
-			$criteria->addCondition("order.order_type =3");
-		}
-		if($ordertype==5){
-			$criteria->addCondition("t.set_id !=0");
+		if($ordertype >0){
+			$criteria->addCondition("order.order_type =".$ordertype);
 		}
 		//$criteria->addCondition("t.order_id in('.$ords.')");
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
