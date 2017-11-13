@@ -160,6 +160,7 @@
 				width:200px;
 			}
 		</style>
+
 		<div id="popover" class="mui-popover">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
@@ -199,71 +200,52 @@
 							<marquee>滚动条公告</marquee>
 						</div>
 						<!-- 活动轮播图 -->
+						<?php if($ads): $x=count($ads); ?>
 						<div id="slider" class="mui-slider">
 							<div class="mui-slider-group mui-slider-loop">
 							<!--支持循环，需要重复图片节点   最后一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
-										<img src="http://dcloudio.github.io/mui/assets/img/yuantiao.jpg">
+										<img src="<?php echo Yii::app()->request->baseUrl.$ads[0]['main_picture']; ?>">
 									</a>
 									<p class="mui-slider-title">
-										静静看这世界
+										<?php echo $ads[0]['name']; ?>
 									</p>
 								</div>
 
 								<!-- 主体循环的图片开始 -->
+								<?php foreach ($ads as $key => $ad): ?>
 								<div class="mui-slider-item">
 									<a href="#">
-										<img src="http://dcloudio.github.io/mui/assets/img/shuijiao.jpg">
+										<img src="<?php echo Yii::app()->request->baseUrl.$ad['main_picture']; ?>">
 									</a>
 									<p class="mui-slider-title">
-										幸福就是可以一起睡觉
+										<?php echo $ad['name']; ?>
 									</p>
 								</div>
-								<div class="mui-slider-item">
-									<a href="#">
-										<img src="http://dcloudio.github.io/mui/assets/img/muwu.jpg">
-									</a>
-									<p class="mui-slider-title">
-										想要一间这样的木屋，静静的喝咖啡
-									</p>
-								</div>
-								<div class="mui-slider-item">
-									<a href="#">
-										<img src="http://dcloudio.github.io/mui/assets/img/cbd.jpg">
-									</a>
-									<p class="mui-slider-title">
-										Color of SIP CBD
-									</p>
-								</div>
-								<div class="mui-slider-item">
-									<a href="#">
-										<img src="http://dcloudio.github.io/mui/assets/img/yuantiao.jpg">
-									</a>
-									<p class="mui-slider-title">
-										静静看这世界
-									</p>
-								</div>
+								<?php endforeach; ?>
+
 								<!-- 主体循环的图片结束 -->
 
 
 								<!--支持循环，需要重复图片节点     第一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
-										<img src="http://dcloudio.github.io/mui/assets/img/shuijiao.jpg">
+										<img src="<?php echo Yii::app()->request->baseUrl.$ads[$x-1]['main_picture']; ?>">
 									</a>
 									<p class="mui-slider-title">
-										幸福就是可以一起睡觉
+										<?php echo $ads[$x-1]['name']; ?>
 									</p>
 								</div>
 							</div>
 							<div class="mui-slider-indicator mui-text-right">
-								<div class="mui-indicator mui-active"></div>
-								<div class="mui-indicator"></div>
-								<div class="mui-indicator"></div>
-								<div class="mui-indicator"></div>
+							<?php foreach ($ads as $key => $ad): ?>
+								<div class="mui-indicator <?php if($key==0){echo 'mui-active';} ?>"></div>
+							<?php endforeach; ?>
 							</div>
 						</div>
+						<?php endif; ?>
+
 						<div>
 							<h4>店铺原料库存</h4>
 							<!-- HTML5 -->
