@@ -19,6 +19,7 @@ class Pinyin {
      */
     public function py($val)
     {
+    	$val = preg_replace('#[^\x{4e00}-\x{9fa5}]#u','',$val);//提出字符串中的字母、数字、符号等等，只保留汉字
         $db = Yii::app()->db;
         $sql = "SELECT pinyin(:val)";
         $command=$db->createCommand($sql);

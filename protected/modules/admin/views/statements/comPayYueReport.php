@@ -57,7 +57,6 @@
                     <div class="btn-group">
                                     <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
                                     <button type="submit" id="excel"  class="btn blue" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
-                                    <!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
                     </div>
                 </div>
             </div>
@@ -70,6 +69,12 @@
 		                <?php  $grouppay_item = 0;?>
 		               <th><?php echo yii::t('app','店铺');?></th>
 		               <th><?php echo yii::t('app','时间');?></th>
+		               <th><?php echo yii::t('app','总单数');?></th>
+		               <th><?php echo yii::t('app','总营业额');?></th>
+		               <th><?php echo yii::t('app','单数');?></th>
+		               <th><?php echo yii::t('app','微信点单');?></th>
+		               <th><?php echo yii::t('app','单数');?></th>
+		               <th><?php echo yii::t('app','微信外卖');?></th>
 		               <th><?php echo yii::t('app','单数');?></th>
 		               <th><?php echo yii::t('app','系统券');?></th>
 		               <th><?php echo yii::t('app','单数');?></th>
@@ -86,6 +91,12 @@
 		        $orders_total_yue=0;
 		        $all_wxcards = 0;		//系统券
 		        $all_wxcharges = 0;		//微信余额
+		        $orders_total_nums = 0;
+		        $orders_total_wxord = 0;
+		        $orders_total_wxwm = 0;
+		        $all_moneys = 0;
+		        $all_wxords = 0;
+		        $all_wxwms = 0;
 
 				if($prices):?>
 		      <?php foreach ($prices as $m): ?>
@@ -101,8 +112,39 @@
 								echo $m['y_all'].-$m['m_all'].-$m['d_all'];
 							}
 					?></td>
+					<td><?php $orders_total_nums = $orders_total_nums+$m['all_nums'];
+		                echo $m['all_nums'];?>
+		            </td>
+		            <td>
+		            <?php
+		            $all_money = $m['all_reality'];
+		            $all_moneys = $all_moneys + $all_money;
+		                echo $all_money;
+		                ?>
+		            </td>
+		            <td><?php $orders_total_wxord = $orders_total_wxord+$m['nums_wxord'];
+		                echo $m['nums_wxord'];?>
+		            </td>
+		            <td>
+		            <?php
+		            $wxord = $m['all_wxord'];
+		            $all_wxords = $all_wxords + $wxord;
+		                echo $wxord;
+		                ?>
+		            </td>
+		            <td><?php $orders_total_wxwm = $orders_total_wxwm+$m['nums_wxwm'];
+		                echo $m['nums_wxwm'];?>
+		            </td>
+		            <td>
+		            <?php
+		            $wxwm = $m['all_wxwm'];
+		            $all_wxwms = $all_wxwms + $wxwm;
+		                echo $wxwm;
+		                ?>
+		            </td>
 		            <td><?php $orders_total_cupon = $orders_total_cupon+$m['nums_cupon'];
-		                echo $m['nums_cupon'];?></td>
+		                echo $m['nums_cupon'];?>
+		            </td>
 		            <td>
 		            <?php
 		            $wxcard = $m['all_cupon'];
@@ -126,6 +168,12 @@
 		        <tr>
 		        	<td></td>
 		            <td><?php echo "总计";?></td>
+		            <td><?php echo $orders_total_nums; ?></td>
+		            <td><?php echo $all_money; ?></td>
+		            <td><?php echo $orders_total_wxord; ?></td>
+		            <td><?php echo $all_wxords; ?></td>
+		            <td><?php echo $orders_total_wxwm; ?></td>
+		            <td><?php echo $all_wxwms; ?></td>
 		            <td><?php echo $orders_total_cupon; ?></td>
 		            <td><?php echo $all_wxcards;?></td>
 		            <td><?php echo $orders_total_yue; ?></td>

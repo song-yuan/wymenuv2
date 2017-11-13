@@ -210,10 +210,17 @@
 							<!--支持循环，需要重复图片节点   最后一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
+<<<<<<< HEAD
 										<img src="<?php echo $ads[$x-1]['main_picture']; ?>" class="img-lunbo">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ads[$x-1]['name']; ?>
+=======
+										<img src="<?php echo $ads[0]['main_picture']; ?>" class="img-lunbo">
+									</a>
+									<p class="mui-slider-title">
+										<?php echo $ads[0]['name']; ?>
+>>>>>>> b92f78e7a06a0c8df4ef392677dbd3b88c5a8315
 									</p>
 								</div>
 
@@ -235,10 +242,17 @@
 								<!--支持循环，需要重复图片节点     第一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
+<<<<<<< HEAD
 										<img src="<?php echo $ads[0]['main_picture']; ?>" class="img-lunbo">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ads[0]['name']; ?>
+=======
+										<img src="<?php echo $ads[$x-1]['main_picture']; ?>" class="img-lunbo">
+									</a>
+									<p class="mui-slider-title">
+										<?php echo $ads[$x-1]['name']; ?>
+>>>>>>> b92f78e7a06a0c8df4ef392677dbd3b88c5a8315
 									</p>
 								</div>
 							</div>
