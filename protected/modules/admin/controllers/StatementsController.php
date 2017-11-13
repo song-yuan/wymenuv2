@@ -1185,8 +1185,9 @@ public function actionPayallReport(){
 		}
 
 		$sql = 'select year(o.create_at) as y_all,month(o.create_at) as m_all,day(o.create_at) as d_all, '
-				.' t.dpid,t.company_name,o.create_at,o.all_should, '
-				.' o.all_num,op9.all_cupon,op9.all_nums as nums_cupon,op10.all_wxmember,op10.all_nums as nums_yue '
+				.' t.dpid,t.company_name,o.create_at,o.all_should,op.all_reality,op.all_nums, '
+				.' o.all_num,op9.all_cupon,op9.all_nums as nums_cupon,op10.all_wxmember,op10.all_nums as nums_yue, '
+				.' op12.all_wxord,op12.all_nums as nums_wxord,op13.all_wxwm,op13.all_nums as nums_wxwm '
 				.' from nb_company t '
 				.' left join ('
 					.' select sum(top.pay_amount) as all_reality,count(distinct top.order_id) as all_nums,top.dpid '
@@ -1210,6 +1211,22 @@ public function actionPayallReport(){
 					.' where top.paytype =10 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
 					.' group by top.dpid'
 				.' ) op10 on(t.dpid = op10.dpid) '
+						
+				.' left join ('
+					.' select sum(top.pay_amount) as all_wxord,count(distinct top.order_id) as all_nums,top.dpid '
+					.' from nb_order_pay top '
+					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
+					.' where top.paytype =12 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by top.dpid'
+				.' ) op12 on(t.dpid = op12.dpid) '
+						
+				.' left join ('
+					.' select sum(top.pay_amount) as all_wxwm,count(distinct top.order_id) as all_nums,top.dpid '
+					.' from nb_order_pay top '
+					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
+					.' where top.paytype =13 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
+					.' group by top.dpid'
+				.' ) op13 on(t.dpid = op13.dpid) '
 				
 				.' left join ('
 					.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid'
@@ -1585,7 +1602,6 @@ public function actionPayallReport(){
 				.' where op.all_reality is not null and t.delete_flag =0 and t.company_name '.$dpnames
 				.' group by t.dpid';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-
 
         $objPHPExcel = new PHPExcel();
         //设置第1行的行高
