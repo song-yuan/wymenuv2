@@ -159,6 +159,10 @@
 				height: 100px;
 				width:200px;
 			}
+			.img-lunbo{
+				width:100%;
+				height: 250px;
+			}
 		</style>
 
 		<div id="popover" class="mui-popover">
@@ -206,7 +210,7 @@
 							<!--支持循环，需要重复图片节点   最后一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
-										<img src="<?php echo $ads[0]['main_picture']; ?>">
+										<img src="<?php echo $ads[0]['main_picture']; ?>" class="img-lunbo">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ads[0]['name']; ?>
@@ -217,7 +221,7 @@
 								<?php foreach ($ads as $key => $ad): ?>
 								<div class="mui-slider-item">
 									<a href="#">
-										<img src="<?php echo $ad['main_picture']; ?>">
+										<img src="<?php echo $ad['main_picture']; ?>" class="img-lunbo">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ad['name']; ?>
@@ -231,7 +235,7 @@
 								<!--支持循环，需要重复图片节点     第一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
-										<img src="<?php echo $ads[$x-1]['main_picture']; ?>">
+										<img src="<?php echo $ads[$x-1]['main_picture']; ?>" class="img-lunbo">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ads[$x-1]['name']; ?>
