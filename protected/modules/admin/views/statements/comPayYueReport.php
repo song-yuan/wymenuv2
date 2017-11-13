@@ -137,7 +137,7 @@
 		            </td>
 		            <td>
 		            <?php
-		            $wxwm = $m['all_cupon'];
+		            $wxwm = $m['all_wxwm'];
 		            $all_wxwms = $all_wxwms + $wxwm;
 		                echo $wxwm;
 		                ?>
