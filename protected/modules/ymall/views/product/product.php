@@ -206,7 +206,7 @@
 							<!--支持循环，需要重复图片节点   最后一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
-										<img src="<?php echo Yii::app()->request->baseUrl.$ads[0]['main_picture']; ?>">
+										<img src="<?php echo Yii::app()->request->baseUrl.'..'.$ads[0]['main_picture']; ?>">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ads[0]['name']; ?>
