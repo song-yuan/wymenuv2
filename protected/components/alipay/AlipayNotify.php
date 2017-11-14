@@ -170,7 +170,7 @@ class AlipayNotify {
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		
-		WxOrder::insertOrderPay($order,2);
+		WxOrder::insertOrderPay($order,2,'');
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
 		//修改订单产品状态
