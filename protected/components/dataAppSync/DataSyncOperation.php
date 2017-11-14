@@ -1667,7 +1667,7 @@ class DataSyncOperation {
 						'type' => $paytype,
 						'reality_money' => $chargeMoney,
 						'give_money' => $giveMoney,
-						'is_sync' => DataSync::getInitSync() 
+						'is_sync' => '0' 
 				);
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_member_recharge', $insertData );
 				if(!$result){
