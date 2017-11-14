@@ -107,7 +107,7 @@ class Notify extends WxPayNotify
 		}
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
-		WxOrder::insertOrderPay($order,1);
+		WxOrder::insertOrderPay($order,1,$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
 		//发送模板消息通知
 		$company = WxCompany::get($orderIdArr[1]);

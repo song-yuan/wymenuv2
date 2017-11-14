@@ -1082,6 +1082,18 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
+		$orderKey = 'retreat-'.(int)$dpid.'-'.$order['create_at'].'-'.$accountNo;
+		$orderCache = Yii::app()->cache->get($orderKey);
+		if($orderCache!=false){
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg' => '订单退款中,等待结果',
+					'orderId' => ''
+			) );
+			return $msg;
+		}
+		$orderCache = Yii::app()->cache->set($orderKey,true);
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 				foreach ($pruductIds as $productId){
@@ -1258,8 +1270,8 @@ class DataSyncOperation {
 					);
 					Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
 				}
-				
 				$transaction->commit ();
+				Yii::app()->cache->delete($orderKey);
 				$msg = json_encode ( array (
 						'status' => true,
 						'syncLid' => $syncLid,
@@ -1267,6 +1279,7 @@ class DataSyncOperation {
 				) );
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
+			Yii::app()->cache->delete($orderKey);
 			$msg = json_encode ( array (
 					'status' => false,
 					'msg'=>$e->getMessage()
@@ -1654,7 +1667,7 @@ class DataSyncOperation {
 						'type' => $paytype,
 						'reality_money' => $chargeMoney,
 						'give_money' => $giveMoney,
-						'is_sync' => DataSync::getInitSync() 
+						'is_sync' => '0' 
 				);
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_member_recharge', $insertData );
 				if(!$result){

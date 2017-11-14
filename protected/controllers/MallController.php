@@ -287,7 +287,7 @@ class MallController extends Controller
 				if($order['order_status'] < 3){
 					$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 					if($remainMoney > 0){
-						WxOrder::insertOrderPay($order,10);
+						WxOrder::insertOrderPay($order,10,'');
 					}
 				}
 			}
@@ -545,7 +545,7 @@ class MallController extends Controller
 		if($order['order_status'] < 3){
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
-				WxOrder::insertOrderPay($order,10);
+				WxOrder::insertOrderPay($order,10,'');
 				//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
 				//修改订单产品状态

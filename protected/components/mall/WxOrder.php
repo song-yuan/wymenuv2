@@ -865,7 +865,7 @@ class WxOrder
 	 * order——pay表记录支付数据
 	 * 
 	 */
-	 public static function insertOrderPay($order,$paytype = 1){
+	 public static function insertOrderPay($order,$paytype = 1,$out_trade_no = ''){
 	 	$time = time();
 	 	if($paytype==10){
 	 		$user = WxBrandUser::get($order['user_id'],$order['dpid']);
@@ -924,7 +924,7 @@ class WxOrder
 		        	'account_no'=>$order['account_no'],
 		        	'pay_amount'=>$payPrice,
 		        	'paytype'=>$paytype,
-		    		'remark'=>$order['lid'].'-'.$order['dpid'],
+		    		'remark'=>$out_trade_no,
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
