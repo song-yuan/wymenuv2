@@ -653,20 +653,22 @@ class DataSyncOperation {
 				
 				//减库存
 				$productItem = WxProduct::getProduct($product->product_id, $dpid);
-				if($productItem['store_number']>0){
-					if($productItem['store_number'] < $product->amount){
-						$sql = 'update nb_product set store_number = 0,is_sync='.$isSync.' where lid='.$product->product_id.' and dpid='.$dpid.' and delete_flag=0';
-					}else{
-						$sql = 'update nb_product set store_number =  store_number-'.$product->amount.',is_sync='.$isSync.' where lid='.$product->product_id.' and dpid='.$dpid.' and delete_flag=0';
+				if($productItem){
+					if($productItem['store_number']>0){
+						if($productItem['store_number'] < $product->amount){
+							$sql = 'update nb_product set store_number = 0,is_sync='.$isSync.' where lid='.$product->product_id.' and dpid='.$dpid.' and delete_flag=0';
+						}else{
+							$sql = 'update nb_product set store_number =  store_number-'.$product->amount.',is_sync='.$isSync.' where lid='.$product->product_id.' and dpid='.$dpid.' and delete_flag=0';
+						}
+						Yii::app()->db->createCommand($sql)->execute();
 					}
-					Yii::app()->db->createCommand($sql)->execute();
-				}
-				// 消耗原材料库存
-				$productBoms = self::getBom($dpid, $product->product_id, $productTasteArr);
-				if(!empty($productBoms)){
-					foreach ($productBoms as $bom){
-						$stock = $bom['number']*$product->amount;
-						self::updateMaterialStock($dpid,$createAt,$bom['material_id'],$stock,$orderProductId);
+					// 消耗原材料库存
+					$productBoms = self::getBom($dpid, $product->product_id, $productTasteArr);
+					if(!empty($productBoms)){
+						foreach ($productBoms as $bom){
+							$stock = $bom['number']*$product->amount;
+							self::updateMaterialStock($dpid,$createAt,$bom['material_id'],$stock,$orderProductId);
+						}
 					}
 				}
 			}
