@@ -149,17 +149,35 @@ class WxCashBack
 	 * 
 	 * 
 	 */
-	 public static function userCashBack($total,$userId,$dpid,$isAll = 0){
+	 public static function userCashBack($total, $userId, $userDpid, $dpid, $isAll = 0){
+	 	$time = time();
 	 	$is_sync = DataSync::getInitSync();
 	 	if($isAll){
-			$sql = 'update nb_brand_user set remain_back_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+			$sql = 'update nb_brand_user set remain_back_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$userDpid;
 			$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}else{
- 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+ 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$userDpid;
  			$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 	if(!$result){
 	 		throw new Exception('储值支付失败');
+	 	}
+	 	$se = new Sequence("member_consume_record");
+	 	$lid = $se->nextval();
+	 	$consumeArr = array(
+	 			'lid'=>$lid,
+	 			'dpid'=>$dpid,
+	 			'create_at'=>date('Y-m-d H:i:s',$time),
+	 			'update_at'=>date('Y-m-d H:i:s',$time),
+	 			'type'=>2,
+	 			'consume_type'=>2,
+	 			'card_id'=>$userId,
+	 			'consume_amount'=>$total,
+	 			'is_sync'=>$is_sync,
+	 	);
+	 	$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
+	 	if(!$result){
+	 		throw new Exception('插入消费记录表失败');
 	 	}
 	 }
 	 /**
@@ -170,17 +188,35 @@ class WxCashBack
 	  *
 	  *
 	  */
-	 public static function userCashRecharge($total,$userId,$dpid,$isAll = 0){
+	 public static function userCashRecharge($total,$userId,$userDpid, $dpid,$isAll = 0){
+	 	$time = time();
 	 	$is_sync = DataSync::getInitSync();
 	 	if($isAll){
-	 		$sql = 'update nb_brand_user set remain_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+	 		$sql = 'update nb_brand_user set remain_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$userDpid;
 	 		$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}else{
-	 		$sql = 'update nb_brand_user set remain_money = remain_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$dpid;
+	 		$sql = 'update nb_brand_user set remain_money = remain_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$userDpid;
 	 		$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 	if(!$result){
 	 		throw new Exception('储值支付失败');
+	 	}
+	 	$se = new Sequence("member_consume_record");
+	 	$lid = $se->nextval();
+	 	$consumeArr = array(
+	 			'lid'=>$lid,
+	 			'dpid'=>$dpid,
+	 			'create_at'=>date('Y-m-d H:i:s',$time),
+	 			'update_at'=>date('Y-m-d H:i:s',$time),
+	 			'type'=>2,
+	 			'consume_type'=>1,
+	 			'card_id'=>$userId,
+	 			'consume_amount'=>$total,
+	 			'is_sync'=>$is_sync,
+	 	);
+	 	$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
+	 	if(!$result){
+	 		throw new Exception('插入消费记录表失败');
 	 	}
 	 }
 }
