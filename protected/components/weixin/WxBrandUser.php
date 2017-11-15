@@ -254,8 +254,8 @@ class WxBrandUser {
 		}
 		return $payMoney;
 	}
-	public static function dealYue($userId,$dpid,$money){
-		$payMoney = self::reduceYue($userId,$dpid,-$money);
+	public static function dealYue($userId,$userDpid,$dpid,$money){
+		$payMoney = self::reduceYue($userId,$userDpid,$dpid,-$money);
 		return $payMoney;
 	}
 	/**

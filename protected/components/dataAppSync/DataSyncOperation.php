@@ -2024,7 +2024,7 @@ class DataSyncOperation {
 					}
 				}
 				if($yue!=0){
-					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], -$yue);
+					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], $dpid, -$yue);
 					if(!$res){
 						throw new Exception('储值支付失败');
 					}
