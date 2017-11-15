@@ -1157,7 +1157,7 @@ public function actionPayallReport(){
 	}
 	public function actionComPayYueReport(){
 		$str = Yii::app()->request->getParam('str');
-		$text = Yii::app()->request->getParam('text');
+		$typ = Yii::app()->request->getParam('typ');
 		$begin_time = Yii::app()->request->getParam('begin_time','');
 		$end_time = Yii::app()->request->getParam('end_time','');
 		$dpname = Yii::app()->request->getParam('dpname','');
@@ -1246,7 +1246,7 @@ public function actionPayallReport(){
 				'prices'=>$prices,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-				'text'=>$text,
+				'typ'=>$typ,
 				'str'=>$str,
 				'comName'=>$comName,
 				'payments'=>$payments,

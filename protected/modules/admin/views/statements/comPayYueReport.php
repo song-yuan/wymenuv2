@@ -36,10 +36,10 @@
             <div class="portlet-title">
                 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式报表');?></div>
             	<div class="actions">
-                    <select id="text" class="btn yellow" >
-                            <option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
-                            <option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
-                            <option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
+            		<select id="typ" class="btn yellow" style="display: none">
+                            <option value="1" <?php if ($typ==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
+                            <option value="2" <?php if ($typ==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','开通微店');?></option>
+                            <option value="3" <?php if ($typ==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','未开通微店');?></option>
                     </select>
                     <?php if(Yii::app()->user->role <11):?>
                     <div class="btn-group" style="width: 140px;">
@@ -104,13 +104,8 @@
 		        <tr class="odd gradeX">
 		        	<td><?php echo $m['company_name'];?></td>
 		            <td><?php
-		            		if($text==1){
-		            			echo $m['y_all'];
-		            		}elseif($text==2){
-								echo $m['y_all'].-$m['m_all'];
-							}else{
-								echo $m['y_all'].-$m['m_all'].-$m['d_all'];
-							}
+		            		echo $m['y_all'].-$m['m_all'].-$m['d_all'];
+							
 					?></td>
 					<td><?php $orders_total_nums = $orders_total_nums+$m['all_nums'];
 		                echo $m['all_nums'];?>
@@ -211,9 +206,9 @@ jQuery(document).ready(function(){
      	var begin_time = $('#begin_time').val();
      	var end_time = $('#end_time').val();
      	var text = $('#text').val();
-     	var userid = $('#userid').val();
+     	var typ = $('#typ').val();
      	var dpname = $('#dpname').val();
-     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname
+     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname+"/typ/"+typ
 
 	});
 
@@ -222,10 +217,10 @@ jQuery(document).ready(function(){
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();
-		var userid = $('#userid').val();
+		var typ = $('#typ').val();
      	var dpname = $('#dpname').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid+"/dpname/"+dpname;
+			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname+"/typ/"+typ;
 		}
 	});
 
