@@ -244,7 +244,7 @@
 						</div>
 					</a>
 
-					<a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cpxs"></div>
 							<div class="ku-item-info">单品销售</div>
