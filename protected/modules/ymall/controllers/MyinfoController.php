@@ -117,7 +117,41 @@ class MyinfoController extends BaseYmallController
 	}
 	public function actionNormalsetting()
 	{
+
 		$this->render('normalsetting',array(
+		));
+	}
+
+
+
+
+	public function actionStockSetting()
+	{
+		$model = StockSetting::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId));
+		// p($model);
+		if(Yii::app()->request->isAjaxRequest){
+			if (empty($model)) {
+				$model = new StockSetting();
+				$se=new Sequence("stock_setting");
+				$lid = $se->nextval();
+				$model->create_at=date('Y-m-d H:i:s',time());
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->update_at=$lid;
+			}
+			$csales_day = Yii::app()->request->getParam('csales_day');
+			$csafe_min_day = Yii::app()->request->getParam('csafe_min_day');
+			$csafe_max_day = Yii::app()->request->getParam('csafe_max_day');
+			$model->csales_day=$csales_day;
+			$model->csafe_min_day=$csafe_min_day;
+			$model->csafe_max_day=$csafe_max_day;
+			if ($model->save()) {
+				echo json_encode(1111);exit;
+			}else{
+				echo json_encode(2222);exit;
+			}
+		}
+		$this->render('stockSetting',array(
+			'model'=>$model,
 		));
 	}
 
@@ -167,6 +201,8 @@ class MyinfoController extends BaseYmallController
 			$sql = 'update nb_goods_invoice set status=2 where invoice_accountno='.$invoice_accountno.' and goods_order_accountno='.$account_no;
 			$command=$db->createCommand($sql)->execute();
 			$companyId = Company::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId))->comp_dpid;
+
+			//查询总部原料的单位
 			$sql1 = 'SELECT pm.lid,pm.mphs_code,gi.dpid,gids.goods_invoice_id,gids.gidlid,gids.price,gids.num,gids.unit_code,gids.goods_id,gids.goods_code,gids.material_code,gids.unit_ratio FROM nb_goods_invoice gi
 			LEFT JOIN(
 					SELECT gid.goods_invoice_id,gid.lid as gidlid,gid.price,gid.num,gmu.dpid,gmu.unit_code,gid.goods_id,gid.goods_code,gid.material_code,gmu.unit_ratio FROM nb_goods_invoice_details gid
@@ -293,8 +329,6 @@ class MyinfoController extends BaseYmallController
 				echo json_encode(0);exit;
 			}
 		}
-
-
 	}
 
 	public function actionDelete_nopay()
