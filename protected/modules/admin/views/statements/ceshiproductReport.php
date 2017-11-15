@@ -36,6 +36,9 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','单品销售报表');?></div>
 				<div class="actions">
+					<div class="btn-group">
+						<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+					</div>
 					<select id="ordertype" class="btn yellow" >
 					<option value="-1" <?php if ($ordertype==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
 					<option value="0" <?php if ($ordertype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
@@ -84,24 +87,7 @@
 								
 								<th><?php echo yii::t('app','时间');?></th>
 								<th>
-									<div style="display: none;" class="btn-group">
-										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
-										<button type="button" class="btn blue dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
-										<div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">
-											
-											
-											<?php foreach($comName as $key=>$value):?>
-
-											<label><input name="accept" id="cked" class="checkedCN" value="<?php echo $key;?>" type="checkbox"><?php echo $value;?></label>
-											  
-											<?php endforeach;?>
-											
-											 <button type="submit" id="cx" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','确定');?></button> 
-												
-										</div>
-									</div>
 								</th>
-								<!-- <th><div class=""><php echo CHtml::dropdownlist('selectUser',$catId,$comName,array('class'=>'form-control'));?></div></th> -->
                                 <th><?php echo yii::t('app','单品名称');?></th>
                                 <th><?php echo yii::t('app','排名');?></th>
                                 <th><?php echo yii::t('app','销量');?></th>
@@ -197,57 +183,31 @@
 		});
 
 		   $('#btn_time_query').click(function() {
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
 			   var ordertype = $('#ordertype').val();
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
 			   var setid = $('#setid').val();
-			  // var cid = $(this).val();
-			 // alert ($('#text').val());
-			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid;
+			   var cid = $('#selectCategory').val();
+			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid;
 			  
 	        });
-		   $('#selectUser').change(function(){
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			   var text = $('#text').val();
-			   var setid = $('#setid').val();
-			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
-			});
 			$('#cx').click(function(){  
-				   // var obj = document.getElementById('accept');
 				    var obj=$('.checkedCN');
-				    
 				    var str=new Array();
 						obj.each(function(){
 							if($(this).attr("checked")=="checked")
 							{
-								//$(this).parent().parent().remove();
 								str += $(this).val()+","
-								//alert($(this).val());
-								//var cked=$(this).val();
 							}								
 						});
 					str = str.substr(0,str.length-1);//除去最后一个“，”
-					//alert(str);
-						  var begin_time = $('#begin_time').val();
-						   var end_time = $('#end_time').val();
-						   var text = $('#text').val();
-						   var cid = $(this).val();
-						   var setid = $('#setid').val();
-						   
-						 location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
-						  
-					//alert($('#cked').val());
-//	  			    if(obj.checked) {
-//	 			      alert(obj.value);
-//	  			    } else {
-//	  			      alert('未选中');
-//	  			    }
+					  var begin_time = $('#begin_time').val();
+					   var end_time = $('#end_time').val();
+					   var text = $('#text').val();
+					   var cid = $(this).val();
+					   var setid = $('#setid').val();
+					 location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 				  });
 			  $('#excel').click(function excel(){
 
