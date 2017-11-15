@@ -71,16 +71,18 @@
 			.mui-cell{background-color: #EFEFF4!important;}
 			.processbar{height:1.3em;width: 70%;}
 			.mui-content{background-color: white!important;}
+
+
 			/**		*/
 
-			@import url(http://fonts.googleapis.com/css?family=Expletus+Sans);
+			/*@import url(http://fonts.googleapis.com/css?family=Expletus+Sans);*/
 			* {
 				margin:0; padding:0;
 				box-sizing: border-box;
 			}
-			body {
+			/*body {
 			font-family: "Expletus Sans", sans-serif;
-			}
+			}*/
 			h4 {
 				color:gray;
 				padding-left: 15px;
@@ -111,7 +113,7 @@
 				border-radius:3px;
 				animation: animate-stripes 5s linear infinite;
 			}
-			@keyframes animate-stripes { 100% { background-position: -100px 0; } }
+			/*@keyframes animate-stripes { 100% { background-position: -100px 0; } }*/
 			progress[value]::-webkit-progress-value:after {
 				content: '';
 				position: absolute;
@@ -153,8 +155,25 @@
 										rgba(0,0,0,.2)),
 			    -webkit-linear-gradient( left, #f44, #ff0);
 			}
+			.html5::-moz-progress-bar {
+				/* Gradient background with Stripes */
+				background-image:
+				-moz-linear-gradient( 135deg,
+									 transparent,
+									 transparent 33%,
+									 rgba(0,0,0,.1) 33%,
+									 rgba(0,0,0,.1) 66%,
+									 transparent 66%),
+				-moz-linear-gradient( top,
+										rgba(255, 255, 255, .25),
+										rgba(0,0,0,.2)),
+				-moz-linear-gradient( left, #f44, #ff0);
+				}
 
 			/**		*/
+
+
+
 			#popover{
 				height: 100px;
 				width:200px;
@@ -200,9 +219,11 @@
 				<div class="mui-content mui-scroll-wrapper" id="product">
 					<div class="mui-scroll">
 						<!-- 滚动条公告 -->
+						<?php if ($marquee): ?>
 						<div class="top">
 							<marquee>滚动条公告</marquee>
 						</div>
+						<?php endif; ?>
 						<!-- 活动轮播图 -->
 						<?php if($ads): $x=count($ads); ?>
 						<div id="slider" class="mui-slider">
@@ -210,17 +231,10 @@
 							<!--支持循环，需要重复图片节点   最后一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
-<<<<<<< HEAD
 										<img src="<?php echo $ads[$x-1]['main_picture']; ?>" class="img-lunbo">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ads[$x-1]['name']; ?>
-=======
-										<img src="<?php echo $ads[0]['main_picture']; ?>" class="img-lunbo">
-									</a>
-									<p class="mui-slider-title">
-										<?php echo $ads[0]['name']; ?>
->>>>>>> b92f78e7a06a0c8df4ef392677dbd3b88c5a8315
 									</p>
 								</div>
 
@@ -242,17 +256,10 @@
 								<!--支持循环，需要重复图片节点     第一张图-->
 								<div class="mui-slider-item mui-slider-item-duplicate">
 									<a href="#">
-<<<<<<< HEAD
 										<img src="<?php echo $ads[0]['main_picture']; ?>" class="img-lunbo">
 									</a>
 									<p class="mui-slider-title">
 										<?php echo $ads[0]['name']; ?>
-=======
-										<img src="<?php echo $ads[$x-1]['main_picture']; ?>" class="img-lunbo">
-									</a>
-									<p class="mui-slider-title">
-										<?php echo $ads[$x-1]['name']; ?>
->>>>>>> b92f78e7a06a0c8df4ef392677dbd3b88c5a8315
 									</p>
 								</div>
 							</div>
@@ -272,12 +279,12 @@
 								<?php foreach ($stocks as $stock): ?>
 							    <p style="width:100%;margin:0;" data-value="<?php echo '剩余: '.$stock['stock'].' '.$stock['unit_name']; ?>"><?php echo $stock['material_name']; ?></p>
 								<progress style="width:100%;" max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5">
-									<div class="progress-bar">
-										<!-- <span style="width: 80%"></span> -->
-									</div>
+									<!-- <div class="progress-bar">
+										<span style="width: 80%"></span>
+									</div> -->
 								</progress>
-								<span style="position:absolute;left:5px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['safe_stock']; ?></span>
-								<span style="position:absolute;right:10px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['max_stock']; ?></span>
+								<!-- <span style="position:absolute;left:5px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['safe_stock']; ?></span>
+								<span style="position:absolute;right:10px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['max_stock']; ?></span> -->
 								<?php endforeach; ?>
 								<?php endif; ?>
 							</div>

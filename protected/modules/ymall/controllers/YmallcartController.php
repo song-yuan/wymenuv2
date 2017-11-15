@@ -37,7 +37,7 @@ class YmallcartController extends BaseYmallController
 			array_push($materials[$product['stock_dpid']], $product);
 		}
 		// $cart_num = $this->getCartsnum();
-// p($cart_num);
+		// p($cart_num);
 		$this->render('ymallcart',array(
 			'materials'=>$materials,
 			'companyId'=>$this->companyId,
@@ -288,23 +288,37 @@ class YmallcartController extends BaseYmallController
 	public function actionEditgoodsorder()
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
+		$daofu = Yii::app()->request->getParam('daofu',0);
 
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
-		//查询默认的$goods_address_id
-		$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
-		$goods_address_id = Yii::app()->request->getParam('address_id',$goods_address_id);
-
 		$order = GoodsOrder::model()->find('user_id=:user_id and account_no=:account_no and dpid=:dpid and delete_flag=0',array(':user_id'=>$user_id,':account_no'=>$account_no,':dpid'=>$this->companyId));
-		if ($order) {
-			$order->goods_address_id = $goods_address_id;
-			if ($order->update()) {
-				$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no'=>$account_no,'success'=>1));
-			}else{
-				$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no'=>$account_no,'success'=>3));
+		if ($daofu==1) {
+			if ($order) {
+				$order->order_type = 2;
+				if ($order->update()) {
+					$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>1));
+				}else{
+					$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>3));
+				}
+			} else {
+				$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>2));
 			}
-		}else{
-			$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no'=>$account_no,'success'=>2));
+		}else if($daofu==0){
+			//查询默认的$goods_address_id
+			$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
+			$goods_address_id = Yii::app()->request->getParam('address_id',$goods_address_id);
+
+			if ($order) {
+				$order->goods_address_id = $goods_address_id;
+				if ($order->update()) {
+					$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no'=>$account_no,'success'=>1));
+				}else{
+					$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no'=>$account_no,'success'=>3));
+				}
+			} else {
+				$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no'=>$account_no,'success'=>2));
+			}
 		}
 	}
 
@@ -363,9 +377,13 @@ class YmallcartController extends BaseYmallController
 		$companyId = $db->createCommand($sql4)->queryrow();
 		// p($companyId);
 
+		$sql5 = 'select * from nb_company_property where dpid='.$this->companyId.' and delete_flag=0';
+		$company_property = $db->createCommand($sql5)->queryrow();
+		// p($company_property);
 
 		$this->render('suretopay',array(
 			'companyId'=>$companyId['comp_dpid'],
+			'company_property'=>$company_property,
 			'golid'=>$golid,
 			'success'=>$success,
 			'address'=>$address,

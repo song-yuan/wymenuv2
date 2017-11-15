@@ -30,8 +30,10 @@ class ProductController extends BaseYmallController
 		$ads = $db->createCommand($sql1)->queryAll();
 		// p($ads);
 
-
+		//滚动公告
+		$marquee='';
 		$this->render('product',array(
+			'marquee'=>$marquee,
 			'ads'=>$ads,
 			'stocks'=>$stocks,
 			'company_name'=>$company_name,

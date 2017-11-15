@@ -1,14 +1,17 @@
-
+		<style>
+			html{background-color: white!important;}
+			.b-white{background-color: white!important;}
+		</style>
 		<header class="mui-bar mui-bar-nav mui-hbar">
 		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
 		    <h1 class="mui-title" style="color:white;">常用设置</h1>
 		</header>
 		<div class="mui-content">
-		   <ul class="mui-table-view mui-grid-view mui-grid-9">
+		   <ul class="mui-table-view mui-grid-view mui-grid-9 b-white">
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<a href="#">
+					<a href="<?php echo $this->createUrl('myinfo/stockSetting',array('companyId'=>$this->companyId)) ?>">
 						<span class="mui-icon mui-icon-gear"></span>
-						<div class="mui-media-body">自动生成订单设置</div>
+						<div class="mui-media-body">库存参数设置</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
