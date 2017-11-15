@@ -104,8 +104,7 @@
 		        <tr class="odd gradeX">
 		        	<td><?php echo $m['company_name'];?></td>
 		            <td><?php
-		            		echo $m['y_all'].-$m['m_all'].-$m['d_all'];
-							
+		            		echo $begin_time.'-'.$end_time;
 					?></td>
 					<td><?php $orders_total_nums = $orders_total_nums+$m['all_nums'];
 		                echo $m['all_nums'];?>
@@ -164,7 +163,7 @@
 		        	<td></td>
 		            <td><?php echo "总计";?></td>
 		            <td><?php echo $orders_total_nums; ?></td>
-		            <td><?php echo $all_money; ?></td>
+		            <td><?php echo $all_moneys; ?></td>
 		            <td><?php echo $orders_total_wxord; ?></td>
 		            <td><?php echo $all_wxords; ?></td>
 		            <td><?php echo $orders_total_wxwm; ?></td>
@@ -202,13 +201,11 @@ jQuery(document).ready(function(){
 	}
 });
      $('#btn_time_query').click(function time() {
-
      	var begin_time = $('#begin_time').val();
      	var end_time = $('#end_time').val();
-     	var text = $('#text').val();
      	var typ = $('#typ').val();
      	var dpname = $('#dpname').val();
-     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname+"/typ/"+typ
+     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/dpname/"+dpname+"/typ/"+typ
 
 	});
 
@@ -216,11 +213,10 @@ jQuery(document).ready(function(){
 		//return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
-		var text = $('#text').val();
 		var typ = $('#typ').val();
      	var dpname = $('#dpname').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/dpname/"+dpname+"/typ/"+typ;
+			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/dpname/"+dpname+"/typ/"+typ;
 		}
 	});
 
