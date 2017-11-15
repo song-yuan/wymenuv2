@@ -7,10 +7,6 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-	$baseUrl = Yii::app()->baseUrl;
-	$weixinServerAccount = WxAccount::get($this->companyId);
-	$jsSdk = new WeixinJsSdk($weixinServerAccount['appid'],$weixinServerAccount['appsecret'],$this->companyId);
-	$signPackage = $jsSdk->GetSignPackage();
 
 ?>
 <!DOCTYPE html>
@@ -40,24 +36,6 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.view.js "></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/app.js"></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/jquery-1.7.1.min.js"></script>
-		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-		<script>
-		wx.config({
-		    debug: false,
-		    appId: '<?php echo $signPackage["appId"];?>',
-		    timestamp: <?php echo $signPackage["timestamp"];?>,
-		    nonceStr: '<?php echo $signPackage["nonceStr"];?>',
-		    signature: '<?php echo $signPackage["signature"];?>',
-		    jsApiList: [
-		      // 所有要调用的 API 都要加到这个列表中
-		      'onMenuShareTimeline',
-		      'onMenuShareAppMessage',
-		      'getLocation',
-		      'openLocation',
-		      'showMenuItems'
-		    ]
-		});
-		</script>
 	</head>
 	<body>
 	<?php echo $content; ?>

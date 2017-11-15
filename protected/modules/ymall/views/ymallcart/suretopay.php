@@ -1,83 +1,10 @@
-<?php
-	$baseUrl = Yii::app()->baseUrl;
-	$company = WxCompany::get($this->companyId);
-	$this->setPageTitle('支付订单');
+	<?php 
+		$baseUrl = Yii::app()->baseUrl;
+		$weixinServerAccount = WxAccount::get($this->companyId);
+		$jsSdk = new WeixinJsSdk($weixinServerAccount['appid'],$weixinServerAccount['appsecret'],$this->companyId);
+		$signPackage = $jsSdk->GetSignPackage();
 
-	$payPrice = number_format($reality_total,2); // 最终支付价格
-
-
-
-	$orderId = $golid['account_no'].'-'.$this->companyId;
-
-	$canpWxpay = true;
-	$compaychannel = WxCompany::getpaychannel($this->companyId);
-	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
-	if($payChannel==1){
-		// Helper::writeLog('ZHH:payChannel=1');
-		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
-		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('myinfo/index',array('companyId'=>$this->companyId));
-	// p($returnUrl);
-		//①、获取用户openid
-		try{
-				$tools = new JsApiPay();
-				$account = WxAccount::get($companyId);
-				// Helper::writeLog('zhh:'.$account['appid'].'zhh2:'.$account['appsecret']);
-			 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
-			 	$userInfo = $baseInfo->getSnsapiBase();
-			 	$openId = $userInfo['openid'];
-				// Helper::writeLog('zhh3:'.$openid);
-				// $openId = WxBrandUser::openId($userId,$this->companyId);
-				// $account = WxAccount::get($this->companyId);
-				//②、统一下单
-				$input = new WxPayUnifiedOrder();
-				$input->SetBody($company['company_name']."-商铺原料订单");
-				$input->SetAttach("3");
-				$input->SetOut_trade_no($orderId);
-				$input->SetTotal_fee($payPrice*100);
-				$input->SetTime_start(date("YmdHis"));
-				$input->SetTime_expire(date("YmdHis", time() + 600));
-				$input->SetGoods_tag($company['company_name']."-商铺原料订单");
-				$input->SetNotify_url($notifyUrl);
-				$input->SetTrade_type("JSAPI");
-				if($account['multi_customer_service_status'] == 1){
-					$input->SetSubOpenid($openId);
-				}else{
-					$input->SetOpenid($openId);
-				}
-				$orderInfo = WxPayApi::unifiedOrder($input);
-
-				$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
-
-		}catch(Exception $e){
-			$canpWxpay = false;
-			$jsApiParameters = $e->getMessage();
-		}
-
-
-
-	}elseif($payChannel==2){
-		// Helper::writeLog('ZHH:payChannel=2');
-		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
-		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
-		$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$this->companyId));
-		$data = array(
-				'companyId'=>$this->companyId,
-				'dpid'=>$this->companyId,
-				'client_sn'=>$orderId,
-				'total_amount'=>$payPrice,
-				'subject'=>$company['company_name']."-商铺原料订单",
-				'payway'=>3,
-				'operator'=>$user['nickname'],
-				'reflect'=>$reflect,
-				'notify_url'=>$notifyUrl,
-				'return_url'=>$returnUrl,
-		);
-		// Helper::writeLog('view:'.$orderId);
-		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
-	}else{
-		$jsApiParameters = '';
-	}
-?>
+	?>
 		<style>
 			.back-color{background-color: #F0F0E1;}
 			.left{float:left;}
@@ -90,8 +17,100 @@
 			.color-l-gray{color:#323232;}
 			.img-show{width: 98px;height:98px;margin-left: -14px;margin-right: 10px;}
 			.banma{border-bottom:3px dashed red;}
-			.big-ul{margin-bottom: 100px;margin-top:2px!important;}
+			.big-ul{margin-top:2px!important;}
+			.margin-b{margin:0;margin-bottom: 65px;}
+			#suretopay{margin:0;height:50px;top:0;border-radius: 0;}
 		</style>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script>
+		wx.config({
+		    debug: false,
+		    appId: '<?php echo $signPackage["appId"];?>',
+		    timestamp: <?php echo $signPackage["timestamp"];?>,
+		    nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+		    signature: '<?php echo $signPackage["signature"];?>',
+		    jsApiList: [
+		      // 所有要调用的 API 都要加到这个列表中
+		      'onMenuShareTimeline',
+		      'onMenuShareAppMessage',
+		      'getLocation',
+		      'openLocation',
+		      'showMenuItems'
+		    ]
+		});
+		</script>
+		<?php
+			$baseUrl = Yii::app()->baseUrl;
+			$company = WxCompany::get($this->companyId);
+			$this->setPageTitle('支付订单');
+
+			$payPrice = number_format($reality_total,2); // 最终支付价格
+
+
+
+			$orderId = $golid['account_no'].'-'.$this->companyId;
+
+			$canpWxpay = true;
+			$compaychannel = WxCompany::getpaychannel($this->companyId);
+			$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
+			if($payChannel==1){
+				// Helper::writeLog('ZHH:payChannel=1');
+				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
+				$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('myinfo/index',array('companyId'=>$this->companyId));
+			// p($returnUrl);
+				//①、获取用户openid
+				try{
+						$tools = new JsApiPay();
+						$account = WxAccount::get($companyId);
+					 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
+					 	$userInfo = $baseInfo->getSnsapiBase();
+					 	$openId = $userInfo['openid'];
+						//②、统一下单
+						$input = new WxPayUnifiedOrder();
+						$input->SetBody($company['company_name']."-商铺原料订单");
+						$input->SetAttach("3");
+						$input->SetOut_trade_no($orderId);
+						$input->SetTotal_fee($payPrice*100);
+						$input->SetTime_start(date("YmdHis"));
+						$input->SetTime_expire(date("YmdHis", time() + 600));
+						$input->SetGoods_tag($company['company_name']."-商铺原料订单");
+						$input->SetNotify_url($notifyUrl);
+						$input->SetTrade_type("JSAPI");
+						if($account['multi_customer_service_status'] == 1){
+							$input->SetSubOpenid($openId);
+						}else{
+							$input->SetOpenid($openId);
+						}
+						$orderInfo = WxPayApi::unifiedOrder($input);
+
+						$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+
+				}catch(Exception $e){
+					$canpWxpay = false;
+					$jsApiParameters = $e->getMessage();
+				}
+			}//elseif($payChannel==2){
+				// Helper::writeLog('ZHH:payChannel=2');
+			// 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
+			// 	$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
+			// 	$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$this->companyId));
+			// 	$data = array(
+			// 			'companyId'=>$this->companyId,
+			// 			'dpid'=>$this->companyId,
+			// 			'client_sn'=>$orderId,
+			// 			'total_amount'=>$payPrice,
+			// 			'subject'=>$company['company_name']."-商铺原料订单",
+			// 			'payway'=>3,
+			// 			'operator'=>$user['nickname'],
+			// 			'reflect'=>$reflect,
+			// 			'notify_url'=>$notifyUrl,
+			// 			'return_url'=>$returnUrl,
+			// 	);
+			// 	$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
+			// }else{
+			// 	$jsApiParameters = '';
+			// }
+		?>
 
 		<header class="mui-bar mui-bar-nav mui-hbar">
 		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
@@ -158,6 +177,23 @@
 				    </li>
 				<?php endif; ?>
 			</ul>
+			<h5 class="mui-content-padded">支付方式</h5>
+			<div class="mui-card margin-b">
+				<form class="mui-input-group">
+					<?php if ($company_property['material_pay_type']==1): ?>
+					<div class="mui-input-row mui-radio">
+						<label for="daofu"> 货到付款</label>
+						<input name="pay-style" type="radio" value="1" id="daofu">
+					</div>
+					<?php endif; ?>
+
+					<div class="mui-input-row mui-radio">
+						<label for="wxpay"> 微信支付</label>
+						<input name="pay-style" type="radio" value="0" id="wxpay" checked >
+					</div>
+				</form>
+
+			</div>
 	    </div>
 	    <nav class="mui-bar mui-bar-tab nav-on" id="gopay" >
 	        <div class="mui-tab-item " style="width:10%;">
@@ -166,14 +202,12 @@
 	            	实付款 : ￥<span style="color: red;margin-right: 10px;padding-right: 10px;"><?php echo $reality_total; ?></span>
 	        </div>
 	        <div class="mui-tab-item " style="width:35%;">
-	            <button type="button" class="mui-btn mui-btn-red mui-btn-block" style="margin:0;height:50px;top:0;border-radius: 0;" id="suretopay">立即支付</button>
+	            <button type="button" class="mui-btn mui-btn-red mui-btn-block" id="suretopay">立即下单</button>
 	        </div>
 	    </nav>
 
 		<script type="text/javascript">
 			mui.init();
-
-
 			//状态提示
 			var status = '<?php echo $success; ?>';
 			if (status == '1') {
@@ -184,7 +218,7 @@
 				mui.toast('订单选择有问题 , 修改地址失败');
 			}
 
-				//调用微信JS api 支付
+			//调用微信JS api 支付
 			function jsApiCall()
 			{
 				<?php if ($payChannel==1):?>
@@ -231,6 +265,13 @@
 			}
 
 		    $('#suretopay').on('tap',function(){
-		    	callpay();
+		    	var pay_style = $('input[name="pay-style"]:checked').val();
+		    	if (pay_style) {
+		    		//货到付款  1
+		    		location.href='<?php echo $this->createUrl('ymallcart/editgoodsorder',array('companyId'=>$this->companyId,'account_no'=>$account_no)) ?>/daofu/'+pay_style;
+		    	}else{
+		    		//微信支付
+		    		callpay();
+		    	}
 		    })
 		</script>
