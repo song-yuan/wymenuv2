@@ -124,7 +124,9 @@
 		    	}else{
 		    		// alert(pay_style);
 		    		//微信支付
-		    		location.href='<?php echo $this->createUrl('ymallcart/wxPay',array('companyId'=>$this->companyId,'account_no'=>$account_no)) ?>';
+					var account_no ='<?php echo $account_no; ?>';
+					var companyId ='<?php echo $this->companyId; ?>';
+					location.href = '<?php echo $this->createUrl("ymallcart/orderlist") ?>?companyId='+companyId+'&account_no='+account_no;
 		    	}
 		    })
 		</script>

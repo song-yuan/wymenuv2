@@ -418,22 +418,6 @@ class YmallcartController extends BaseYmallController
 		// p($golid);
 		//以仓库分类订单详情表
 
-		$sql2 = 'select god.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name from nb_goods_order_detail god '
-				.' left join nb_company c on(c.dpid=god.stock_dpid) '
-				.' left join nb_goods g on (g.lid=god.goods_id and g.goods_code=god.goods_code )'
-				.' where god.dpid='.$this->companyId
-				.' and god.account_no='.$account_no
-				.' and god.delete_flag=0'
-				.' order by god.stock_dpid';
-		$products = $db->createCommand($sql2)->queryAll();
-
-		$materials =array();
-		foreach ($products as $key => $product) {
-			if(!isset($materials[$product['stock_dpid']])){
-				$materials[$product['stock_dpid']] = array();
-			}
-			array_push($materials[$product['stock_dpid']], $product);
-		}
 
 		// p($materials);
 		//实付款

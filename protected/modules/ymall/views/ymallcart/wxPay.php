@@ -20,6 +20,11 @@
 			.big-ul{margin-top:2px!important;}
 			.margin-b{margin:0;margin-bottom: 65px!important;}
 			#suretopay{margin:0;height:50px;top:0;border-radius: 0;}
+			.title{
+				margin: 20px 15px 7px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
 		</style>
 		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		<script>
@@ -57,7 +62,7 @@
 				// Helper::writeLog('ZHH:payChannel=1');
 				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 				$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('myinfo/index',array('companyId'=>$this->companyId));
-			// p($returnUrl);
+				// p($returnUrl);
 				//①、获取用户openid
 				try{
 						$tools = new JsApiPay();
@@ -117,65 +122,13 @@
 		    <h1 class="mui-title" style="color:white;">微信支付</h1>
 		</header>
 		<div class="mui-content">
-			<div class="mui-row back-color padding banma" style="">
-		    	<div class="mui-col-xs-1" style="height:63px;">
-		    		<span class="mui-icon mui-icon-location" style="margin-top:20px;color:red;font-weight:900;"></span>
-		    	</div>
-		    	<div class="mui-col-xs-11 ">
-		    	<?php if ($address):?>
-		    		<a href="" class="mui-navigate-right">
-						<div class="mui-row back-color">
-							<span class="left color-l-gray">收货人:<?php echo $address['name'];?></span>
-							<span class="right padding-right1 color-l-gray"><?php echo $address['mobile'];?></span>
-						</div>
-						<div class="mui-row back-color ">
-							<span class="left font-small color-l-gray" style="height: 23px;line-height: 23px;">收货地址 : </span>
-							<span class=" font-small mui-ellipsis-2 padding-right"><?php echo $address['pcc'].' '.$address['street'];?></a>
-						</div>
-					</a>
-				<?php endif;?>
-		    	</div>
-		    </div>
-		    <ul class="mui-table-view big-ul">
-		    	<?php if ($materials): ?>
-		    	<?php foreach ($materials as $key => $products): ?>
-			    <li class="mui-table-view-cell big-li">
-			    	<div class="mui-row" style="height: 30px;">
-				    	<span class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></span>
-			    	</div>
-			        <ul class="mui-table-view" >
-			        	<?php foreach ($products as $product):?>
-					    <li class="mui-row mui-table-view-cell mui-media">
-				    		<div>
-					            <img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$product['main_picture']; ?>" >
-					            <div class="mui-media-body" >
-					                <span><?php echo $product['goods_name']; ?></span>
-					                <p class='mui-ellipsis'><?php echo $product['description']?$product['description']:'操作员偷懒,没有描述'; ?></p>
-					                <span>单价 : <span style="color: red;"><?php echo $product['price']; ?></span>元</span>
-					                <span style="color:darkslategray;">共</span>
-					                <span style="color:red;"><?php echo $product['num']; ?></span>
-					                <span style="color:darkslategray;"><?php echo $product['goods_unit']; ?></span>
-					                <div>
-					                	<span >合计 : </span>
-					                	<span style="color:red;"><?php echo $product['num']*$product['price']; ?></span>
-					                	<span style="color:darkslategray;">元</span>
-					                </div>
-					            </div>
-					        </div>
-					    </li>
-						<?php endforeach; ?>
-					</ul>
-			    </li>
-				<?php endforeach; ?>
-				<?php else: ?>
-				    <li class="mui-table-view-cell big-li">
-				    	<div class="mui-row" >
-					    	<div class="mui-col-xs-12 " style="height: 80px;line-height: 80px;text-align: center;">
-					    		<a class="a-store" >您的订单是空的 ! ! !</a>
-					    	</div>
-				    	</div>
-				    </li>
-				<?php endif; ?>
+			<div class="title">
+				订单信息
+			</div>
+			<ul class="mui-table-view">
+		         <li class="mui-table-view-cell">单号 : <span style="color:orange;"><?php echo $account_no; ?></span></li>
+				 <li class="mui-table-view-cell">地址 : <span style="color:black;"><?php echo $address['pcc'].' '.$address['street'] ?></span></li>
+		         <li class="mui-table-view-cell">实付款 : <span style="color:orange;"><?php echo $reality_total; ?></span></li>
 			</ul>
 	    </div>
 	    <nav class="mui-bar mui-bar-tab nav-on" id="gopay" >
@@ -246,9 +199,9 @@
 				}
 				// window.event.returnValue = false;
 			}
-			callpay();
 		    $('#suretopay').on('tap',function(){
 	    		//微信支付
 	    		callpay();
 		    })
+			callpay();
 		</script>
