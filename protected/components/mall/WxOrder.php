@@ -17,7 +17,8 @@ class WxOrder
 	public $siteId;
 	public $type;
 	public $number;
-	public $cartNumber = 0;
+	public $cartNumber = 0;// 购物车产品数量
+	public $cartPrice = 0;// 购物车产品总价
 	public $isTemp = 0;
 	public $seatingFee = 0;
 	public $packingFee = 0;
@@ -130,6 +131,7 @@ class WxOrder
 				$results[$k]['price'] = $results[$k]['member_price'];
 				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
+			$this->cartPrice += $result['member_price']*$result['num'];
 			$this->cartNumber +=$result['num'];
 		}
 		$this->cart = $results;
@@ -957,7 +959,7 @@ class WxOrder
 		}
 		$total = $orderTotal - $payCupon - $payPoints;
 		
-		$payMoney = WxBrandUser::reduceYue($userId, $userDpId, $total);	
+		$payMoney = WxBrandUser::reduceYue($userId, $userDpId, $dpid, $total);	
 		if($payMoney==$total){
 			self::dealOrder($user,$order);
 		} 	

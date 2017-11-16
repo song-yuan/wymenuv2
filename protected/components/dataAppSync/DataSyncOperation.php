@@ -1524,8 +1524,8 @@ class DataSyncOperation {
 					'msg' => '不存在该管理员'
 			) );
 		}
-		$dpid = WxCompany::getDpids($dpid);
-		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
+		$dpids = WxCompany::getDpids($dpid);
+		$sql = 'select * from nb_member_card where dpid in (' . $dpids . ') and rfid="' . $rfid . '" and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $result) {
 			return json_encode ( array (
@@ -1540,19 +1540,39 @@ class DataSyncOperation {
 					'msg' => '余额不足' 
 			) );
 		}
-		
-		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
-		$result = Yii::app ()->db->createCommand ( $sql )->execute ();
-		if ($result) {
-			return json_encode ( array (
-					'status' => true,
-			) );
-		} else {
-			return json_encode ( array (
-					'status' => false,
-					'msg' => '支付失败'
-			) );
+		$time = time();
+		$is_sync = DataSync::getInitSync();
+		$transaction = Yii::app()->db->beginTransaction();
+		try{
+			$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
+			$result = Yii::app ()->db->createCommand ( $sql )->execute ();
+			if(!$result){
+				throw new Exception('会员卡扣减失败');
+			}
+			$se = new Sequence("member_consume_record");
+			$lid = $se->nextval();
+			$consumeArr = array(
+					'lid'=>$lid,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'type'=>1,
+					'consume_type'=>1,
+					'card_id'=>$rfid,
+					'consume_amount'=>$payPrice,
+					'is_sync'=>$is_sync,
+			);
+			$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
+			if(!$result){
+				throw new Exception('插入消费记录表失败');
+			}
+			$transaction->commit();
+            $msg = json_encode ( array ('status' => true,'msg'=>'支付成功') );
+		}catch (Exception $e) {
+			$transaction->rollback();
+			 $msg = json_encode ( array ('status' => false,'msg'=>'支付失败') );
 		}
+		return $msg;
 	}
 	/**
 	 * 
@@ -2024,7 +2044,7 @@ class DataSyncOperation {
 					}
 				}
 				if($yue!=0){
-					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], -$yue);
+					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], $dpid, -$yue);
 					if(!$res){
 						throw new Exception('储值支付失败');
 					}

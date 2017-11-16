@@ -215,7 +215,7 @@ class WxBrandUser {
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
-	public static function reduceYue($userId,$userDpId,$total){
+	public static function reduceYue($userId,$userDpId, $dpid,$total){
 		$yue = WxBrandUser::getYue($userId,$userDpId);//余额
 		$cashRecharge = WxBrandUser::getRechargeYue($userId,$userDpId);//储值余额
 		$cashBack = WxBrandUser::getCashBackYue($userId,$userDpId);//返现余额
@@ -223,17 +223,17 @@ class WxBrandUser {
 			// 储值余额 大于0
 			if($cashRecharge >= $total){
 				//储值余额大于等于支付
-				WxCashBack::userCashRecharge($total,$userId,$userDpId,0);
+				WxCashBack::userCashRecharge($total,$userId,$userDpId,$dpid,0);
 				$payMoney = $total;
 			}else{
-				WxCashBack::userCashRecharge($total,$userId,$userDpId,1);
+				WxCashBack::userCashRecharge($cashRecharge,$userId,$userDpId,$dpid,1);
 				if($yue > $total){//剩余返现大于支付
-					WxCashBack::userCashBack($total - $cashRecharge,$userId,$userDpId,0);
+					WxCashBack::userCashBack($total - $cashRecharge,$userId,$userDpId,$dpid,0);
 					$payMoney = $total;
 				}else{
 					//剩余返现小于等于支付
 					if($cashBack > 0){
-						WxCashBack::userCashBack($total,$userId,$userDpId,1);
+						WxCashBack::userCashBack($cashBack,$userId,$userDpId,$dpid,1);
 					}
 					$payMoney = $yue;
 				}
@@ -242,20 +242,20 @@ class WxBrandUser {
 			// 储值余额 等于=0
 			if($yue > $total){
 				if($cashBack > 0){
-					WxCashBack::userCashBack($total,$userId,$userDpId,0);
+					WxCashBack::userCashBack($total,$userId,$userDpId,$dpid,0);
 				}
 				$payMoney = $total;
 			}else{
 				if($cashBack > 0){
-					WxCashBack::userCashBack($total,$userId,$userDpId,1);
+					WxCashBack::userCashBack($total,$userId,$userDpId,$dpid,1);
 				}
 				$payMoney = $yue;
 			}
 		}
 		return $payMoney;
 	}
-	public static function dealYue($userId,$dpid,$money){
-		$payMoney = self::reduceYue($userId,$dpid,-$money);
+	public static function dealYue($userId,$userDpid,$dpid,$money){
+		$payMoney = self::reduceYue($userId,$userDpid,$dpid,-$money);
 		return $payMoney;
 	}
 	/**
