@@ -443,7 +443,6 @@ class YmallcartController extends BaseYmallController
 			'success'=>$success,
 			'address'=>$address,
 			'account_no'=>$account_no,
-			'materials'=>$materials,
 			'reality_total'=>$reality_total['reality_total'],
 		));
 	}
