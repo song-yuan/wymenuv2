@@ -126,7 +126,7 @@
 		    		//微信支付
 					var account_no ='<?php echo $account_no; ?>';
 					var companyId ='<?php echo $this->companyId; ?>';
-					location.href = '<?php echo $this->createUrl("ymallcart/orderlist") ?>?companyId='+companyId+'&account_no='+account_no;
+					location.href = '<?php echo $this->createUrl("ymallcart/wxPay") ?>?companyId='+companyId+'&account_no='+account_no;
 		    	}
 		    })
 		</script>
