@@ -185,6 +185,27 @@ class Helper
 	public static function isMicroMessenger() {
 		return stripos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ? true : false;
 	}
+	/**
+	 * 
+	 * @param unknown $companyId
+	 * @param number $pid
+	 * 计算折扣后产品价格
+	 * $price 产品价格 $total 产品价格总和  $pay 收入总价
+	 * 
+	 */
+	public static function dealProductPrice($price,$total,$pay) {
+		if($total == 0){
+			$result = 0;
+		}else{
+			if($total > $pay){
+				$discount = $total - $pay;
+				$result = number_format($price/$total*$discount,4);
+			}else{
+				$result = $price;
+			}
+		}
+		return $result;
+	}
 	static public function getCategories($companyId,$pid=0){
 		$command = Yii::app()->db->createCommand('select * from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0 and cate_type!=2');
 		$command->bindValue(':companyId',$companyId);
