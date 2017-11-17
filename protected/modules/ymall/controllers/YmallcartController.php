@@ -191,7 +191,7 @@ class YmallcartController extends BaseYmallController
 		$lids = Yii::app()->request->getParam('lid');
 		// $lids = explode(',',$lid);
 		//生成订单号(账单号) 店铺id.时间戳
-	
+
 
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
@@ -240,7 +240,7 @@ class YmallcartController extends BaseYmallController
 				$goods_order->should_total = $should_total;
 				$goods_order->reality_total = $reality_total;
 				$goods_order->pay_status = 0;//未支付
-				$goods_order->paytype = 0;//不确定
+				$goods_order->paytype = 1;//不确定
 				$goods_order->pay_time = 0;//不确定
 				$goods_order->delete_flag=0;
 				$goods_order->is_sync = $is_sync;
@@ -295,7 +295,7 @@ class YmallcartController extends BaseYmallController
 		$order = GoodsOrder::model()->find('user_id=:user_id and account_no=:account_no and dpid=:dpid and delete_flag=0',array(':user_id'=>$user_id,':account_no'=>$account_no,':dpid'=>$this->companyId));
 		if ($daofu==1) {
 			if ($order) {
-				$order->order_type = 2;
+				$order->paytype = 2;
 				if ($order->update()) {
 					$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>1));
 				}else{
@@ -304,7 +304,7 @@ class YmallcartController extends BaseYmallController
 			} else {
 				$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>2));
 			}
-		}else if($daofu==0){
+		}else if($daofu==0){//修改地址
 			//查询默认的$goods_address_id
 			$goods_address_id = GoodsAddress::model()->find('dpid=:dpid and user_id=:user_id and default_address = 1',array(':dpid'=>$this->companyId,':user_id'=>$user_id))->lid;
 			$goods_address_id = Yii::app()->request->getParam('address_id',$goods_address_id);
@@ -323,7 +323,7 @@ class YmallcartController extends BaseYmallController
 	}
 
 
-	// 微信支付
+
 	public function actionOrderlist()
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
@@ -337,7 +337,7 @@ class YmallcartController extends BaseYmallController
 		.' where go.dpid='.$this->companyId
 		.' and go.account_no='.$account_no
 		.' and go.delete_flag=0';
-		$address = $db->createCommand($sql)->queryrow();		
+		$address = $db->createCommand($sql)->queryrow();
 
 		$sql1 = 'select go.lid,go.account_no from nb_goods_order go'
 		.' where go.dpid='.$this->companyId
@@ -346,7 +346,7 @@ class YmallcartController extends BaseYmallController
 		$golid = $db->createCommand($sql1)->queryrow();
 		// p($golid);
 		//以仓库分类订单详情表
-		
+
 		$sql2 = 'select god.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name from nb_goods_order_detail god '
 				.' left join nb_company c on(c.dpid=god.stock_dpid) '
 				.' left join nb_goods g on (g.lid=god.goods_id and g.goods_code=god.goods_code )'
@@ -393,5 +393,58 @@ class YmallcartController extends BaseYmallController
 		));
 	}
 
+	// 微信支付
+	public function actionWxPay()
+	{
+		$account_no = Yii::app()->request->getParam('account_no');
+		$success = Yii::app()->request->getParam('success',0);
+		// p($account_no);
+		//收货人地址
+		// $user_id = substr(Yii::app()->user->userId,0,10);
+		// $userId = Yii::app()->user->userId;
+		$db = Yii::app()->db;
+		$sql = 'select go.goods_address_id,ga.* from nb_goods_order go'
+		.' left join nb_goods_address ga on(ga.lid=go.goods_address_id and go.dpid=ga.dpid )'
+		.' where go.dpid='.$this->companyId
+		.' and go.account_no='.$account_no
+		.' and go.delete_flag=0';
+		$address = $db->createCommand($sql)->queryrow();
+
+		$sql1 = 'select go.lid,go.account_no from nb_goods_order go'
+		.' where go.dpid='.$this->companyId
+		.' and go.account_no='.$account_no
+		.' and go.delete_flag=0';
+		$golid = $db->createCommand($sql1)->queryrow();
+		// p($golid);
+		//以仓库分类订单详情表
+
+
+		// p($materials);
+		//实付款
+		$sql3 = 'select go.reality_total from nb_goods_order go'
+		.' where go.dpid='.$this->companyId
+		.' and go.account_no='.$account_no
+		.' and go.delete_flag=0';
+		$reality_total = $db->createCommand($sql3)->queryRow();
+
+
+		$sql4 = 'select comp_dpid from nb_company where dpid='.$this->companyId.' and delete_flag=0';
+		$companyId = $db->createCommand($sql4)->queryrow();
+		// p($companyId);
+
+		$sql5 = 'select * from nb_company_property where dpid='.$this->companyId.' and delete_flag=0';
+		$company_property = $db->createCommand($sql5)->queryrow();
+		// p($company_property);
+
+		$this->render('wxPay',array(
+			'companyId'=>$companyId['comp_dpid'],
+			'company_property'=>$company_property,
+			'golid'=>$golid,
+			'success'=>$success,
+			'address'=>$address,
+			'account_no'=>$account_no,
+			'reality_total'=>$reality_total['reality_total'],
+		));
+	}
 
 }
