@@ -260,7 +260,7 @@ class MtOrder
 					$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
 					
 					foreach ($productDetails as $i=>$detail){
-						$pSetPrice = dealProductPrice($detail['original_price'],$totalProductPrice,$pPrice);
+						$pSetPrice = Helper::dealProductPrice($detail['original_price'],$totalProductPrice,$pPrice);
 						$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$detail['original_price'],'price'=>$pSetPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 						array_push($orderArr['order_product'], $orderProduct);
 					}
