@@ -240,7 +240,7 @@ class YmallcartController extends BaseYmallController
 				$goods_order->should_total = $should_total;
 				$goods_order->reality_total = $reality_total;
 				$goods_order->pay_status = 0;//未支付
-				$goods_order->paytype = 0;//不确定
+				$goods_order->paytype = 1;//不确定
 				$goods_order->pay_time = 0;//不确定
 				$goods_order->delete_flag=0;
 				$goods_order->is_sync = $is_sync;
