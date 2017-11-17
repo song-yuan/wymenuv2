@@ -6,6 +6,7 @@ class MyinfoController extends BaseYmallController
 	//我的信息  订单的四大类型
 	public function actionIndex()
 	{
+		$success = Yii::app()->request->getParam('success');
 		//查询提交者信息
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
@@ -24,7 +25,8 @@ class MyinfoController extends BaseYmallController
 		.' left join nb_goods g on (g.lid=god.goods_id and g.goods_code=god.goods_code )'
 		.' where god.dpid='.$this->companyId
 		.' and go.order_status=0'
-		.' and go.order_type=1'
+		.' and go.pay_status=0'
+		.' and go.paytype=1'
 		.' and go.user_id='.$user_id
 		.' and god.delete_flag=0'
 		.' order by god.stock_dpid';
@@ -41,14 +43,11 @@ class MyinfoController extends BaseYmallController
 		//查询已支付待发货订单
 
 		$sql1 = 'select god.*,go.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name from nb_goods_order_detail god '
-		.' left join nb_goods_order go on(go.account_no=god.account_no) '
-		.' left join nb_company c on(c.dpid=god.stock_dpid) '
+		.' left join nb_goods_order go on(go.account_no=god.account_no)'
+		.' left join nb_company c on(c.dpid=god.stock_dpid)'
 		.' left join nb_goods g on (g.lid=god.goods_id and g.goods_code=god.goods_code )'
-		.' where god.dpid='.$this->companyId
-		.' and go.order_type = 1'
-		.' and go.pay_status = 1'
-		.' and go.user_id='.$user_id
-		.' and god.delete_flag=0'
+		.' where god.dpid= '.$this->companyId.' and go.user_id='.$user_id.' and god.delete_flag=0'
+		.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
 		.' and go.order_status < 4 or go.order_status = 4'
 		.' order by god.stock_dpid';
 		$products_pay = $db->createCommand($sql1)->queryAll();
@@ -61,6 +60,7 @@ class MyinfoController extends BaseYmallController
 		}
 		// p($materials_pay);
 
+
 		//查询已发货
 		$sql2 = 'select god.*,go.goods_address_id,go.user_id,go.username,go.order_status,go.order_type,go.should_total,go.reality_total,go.paytype,go.pay_status,go.pay_time,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name,gis.dpid,gis.compid,gis.goods_delivery_id,gis.goods_order_id,gis.goods_address_id,gis.goods_order_accountno,gis.invoice_accountno,gis.auditor,gis.operators,gis.sent_type,gis.sent_personnel,gis.mobile,gis.status,gis.invoice_amount,gis.remark,gis.gidremark from nb_goods_order_detail god'
 		.' left join nb_goods_order go on(go.account_no=god.account_no)'
@@ -69,7 +69,12 @@ class MyinfoController extends BaseYmallController
 		.' left join (
 		 		SELECT gi.dpid,gi.create_at as time,gi.compid,gi.sent_type,gi.goods_delivery_id,gi.goods_order_id,gi.goods_address_id,gi.goods_order_accountno,gi.invoice_accountno,gi.auditor,gi.operators,gi.sent_personnel,gi.mobile,gi.status,gi.invoice_amount,gi.pay_status,gi.remark,gid.goods_id,gid.goods_code,gid.material_code,gid.price,gid.num,gid.remark as gidremark FROM nb_goods_invoice gi LEFT JOIN nb_goods_invoice_details gid ON (gi.lid = gid.goods_invoice_id )
 		 				) gis on ( gis.goods_order_accountno=go.account_no and gis.dpid=god.stock_dpid and gis.goods_id=god.goods_id)'
-		.' where god.dpid='.$this->companyId.' and go.order_status=5 and go.order_type=1 and go.pay_status=1 and go.user_id='.$user_id.'  and god.delete_flag=0 order by gis.time';
+		.' where god.dpid='.$this->companyId
+			.' and go.order_status=5'
+			.' and go.user_id='.$user_id
+			.' and god.delete_flag=0'
+			.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+			.' order by gis.time';
 
 		$products_send = $db->createCommand($sql2)->queryAll();
 		$materials_send =array();
@@ -93,7 +98,11 @@ class MyinfoController extends BaseYmallController
 		.' left join (
 		 		SELECT gi.dpid,gi.compid,gi.sent_type,gi.goods_delivery_id,gi.goods_order_id,gi.goods_address_id,gi.goods_order_accountno,gi.invoice_accountno,gi.auditor,gi.operators,gi.sent_personnel,gi.mobile,gi.status,gi.invoice_amount,gi.pay_status,gi.remark,gid.goods_id,gid.goods_code,gid.material_code,gid.price,gid.num,gid.remark as gidremark FROM nb_goods_invoice gi LEFT JOIN nb_goods_invoice_details gid ON (gi.lid = gid.goods_invoice_id and gi.status = 2)
 		 				) gis on ( gis.goods_order_accountno=go.account_no and gis.dpid=god.stock_dpid and gis.goods_id=god.goods_id)'
-		.' where god.dpid='.$this->companyId.' and go.order_status=5 and go.order_type=1 and go.pay_status=1 and go.user_id='.$user_id.'  and god.delete_flag=0 order by god.stock_dpid';
+		.' where god.dpid='.$this->companyId
+		.' and go.user_id='.$user_id
+		.' and god.delete_flag=0'
+		.' and ((go.order_status=5 and go.pay_status=1  and go.paytype=1) or (go.order_status=5 and go.pay_status=0 and go.paytype=2))'
+		.' order by god.stock_dpid';
 
 		$products_getted = $db->createCommand($sql3)->queryAll();
 		$materials_get =array();
