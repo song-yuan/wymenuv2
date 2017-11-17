@@ -365,7 +365,7 @@
 							        	<?php foreach ($material_nopay as $nopay): ?>
 									    <li class="mui-row mui-table-view-cell mui-media" style="padding-right: 10px;">
 								    		<div>
-									            <img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$nopay['main_picture']; ?>" >
+									            <img class=" mui-pull-left img-show" src="<?php if($nopay['main_picture']){ echo $nopay['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
 									            <div class="mui-media-body" >
 									                <span class="color-blue">[<?php echo $nopay['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $nopay['goods_name']; ?></span><br>
 									                <span>单价 : <span style="color: red;"><?php echo $nopay['price']; ?></span>元</span>
@@ -417,7 +417,7 @@
 											<div class="mui-collapse-content">
 												<?php foreach ($material_p as  $material_pp): ?>
 												<div style="height:100px;">
-										            <img class=" mui-pull-left img-show" src="<?php echo 'http://menu.wymenu.com/'.$material_pp['main_picture']; ?>" >
+										            <img class=" mui-pull-left img-show" src="<?php if($material_pp['main_picture']){ echo $material_pp['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
 										            <div class="mui-media-body" >
 										                <span class="color-blue">[<?php echo $material_pp['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $material_pp['goods_name']; ?></span><br>
 										                <span>单价 : <span style="color: red;"><?php echo $material_pp['price']; ?></span>元</span>
@@ -466,7 +466,7 @@
 											<div class="mui-collapse-content">
 												<?php foreach ($material_s as  $material_ss): ?>
 												<div style="height:100px;">
-										            <img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$material_ss['main_picture']; ?>" >
+										            <img class=" mui-pull-left img-show" src="<?php if($material_ss['main_picture']){ echo $material_ss['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
 										            <div class="mui-media-body" >
 										                <span class="color-blue">[<?php echo $material_ss['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $material_ss['goods_name']; ?></span><br>
 										                <span>单价 : <span style="color: red;"><?php echo $material_ss['price']; ?></span>元</span>
@@ -520,7 +520,7 @@
 											<div class="mui-collapse-content">
 												<?php foreach ($material_g as  $material_gg): ?>
 												<div style="height:100px;">
-										            <img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$material_gg['main_picture']; ?>" >
+										            <img class=" mui-pull-left img-show" src="<?php if($material_gg['main_picture']){ echo $material_gg['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
 										            <div class="mui-media-body" >
 										                <span class="color-blue">[<?php echo $material_gg['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $material_gg['goods_name']; ?></span><br>
 										                <span>单价 : <span style="color: red;"><?php echo $material_gg['price']; ?></span>元</span>
@@ -637,7 +637,6 @@
 	 	} else{
 	 		mui.alert('仓库正在配货 , 无法确认收货');
 	 	}
-
 	});
 
 	$('.gotopay').on('tap',function(){
@@ -645,7 +644,6 @@
 		var companyId ='<?php echo $this->companyId; ?>';
 		console.log(account_no);
 		location.href = '<?php echo $this->createUrl("ymallcart/orderlist") ?>?companyId='+companyId+'&account_no='+account_no;
-
 	});
 
 	$("#nopay").bind('DOMNodeInserted', function (e) {
