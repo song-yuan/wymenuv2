@@ -224,13 +224,7 @@
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					<?php if($type==0):?>
-					<!-- <a href="<?php// echo $this->createUrl('statements/payallReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">收款统计</div>
-						</div>
-					</a>
-					 -->
+
 					<a href="<?php echo $this->createUrl('statements/incomeReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey yysr"></div>
@@ -260,6 +254,12 @@
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey zdxq"></div>
 							<div class="ku-item-info">账单详情</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('statements/orderproductsReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey cpxs"></div>
+							<div class="ku-item-info">品项明细表</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('statements/takeaway',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
