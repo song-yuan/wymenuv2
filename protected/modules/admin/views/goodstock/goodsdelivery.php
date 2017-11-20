@@ -68,13 +68,13 @@
 								<td><?php echo $model['delivery_accountno'];?></td>
 								<td><?php echo $model['delivery_amount'];?></td>
 								<td><?php switch ($model['pay_status']){
-									case 0 : echo '未支付';break;
-									case 1 : echo '已支付';break;
+									case 0 : echo '<span style="color:red">未支付</span>';break;
+									case 1 : echo '<span style="color:green">已支付</span>';break;
 									default: echo '未知';break;
 								}?></td>
 								<td><?php switch ($model['status']){
-									case 0 : echo '未出库';break;
-									case 1 : echo '已生成出库单';break;
+									case 0 : echo '<span style="color:red">未出库</span>';break;
+									case 1 : echo '<span style="color:green">已生成出库单</span>';break;
 									default: echo '未知';break;
 								}?></td>
                                 <td class="center">

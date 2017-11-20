@@ -21,7 +21,7 @@ class GoodstockController extends BackendController
 	}
 	public function actionGoodsdelivery(){
 		$db = Yii::app()->db;
-		$sql = 'select k.* from (select c.company_name,t.* from nb_goods_delivery t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.') k';
+		$sql = 'select k.* from (select c.company_name,t.* from nb_goods_delivery t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.') k order by status asc';
 		//$models = $db->createCommand($sql)->queryAll();
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -31,7 +31,7 @@ class GoodstockController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-
+		// p($models);
 		$this->render('goodsdelivery',array(
 				'models'=>$models,
 				'pages'=>$pages,
