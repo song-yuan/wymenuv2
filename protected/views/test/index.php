@@ -2,8 +2,8 @@
 $dpid = Yii::app()->request->getParam('companyId');
 $orderId = Yii::app()->request->getParam('orderId');
 ?>
-<img src="javascript:;"/>
-<a href="">生成二维码</a>
+<img src=""/>
+<a href="javascript:;">生成二维码</a>
 <script type="text/javascript">
 $('a').click(function(){
 	$.ajax({
