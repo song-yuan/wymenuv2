@@ -38,6 +38,26 @@ class SqbpayController extends Controller
 			echo 'error';
 		}
 	}
+	// 预下单
+	public function actionPrecreate(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		$orderId = Yii::app()->request->getParam('orderId');
+		$openId = 'oIj93t9Fd5blvCLdQ6qq_iK1Api8';
+		$order = WxOrder::getOrder($orderId, $dpid);
+		$data = array(
+				'dpid'=>$dpid,
+				'account_no'=>$order['account_no'],
+				'should_total'=>$order['should_total']*100,
+				'pay_way'=>3,
+				'sub_pay_type'=>3,
+				'open_id'=>$openId,
+				'abstract'=>'微信点单',
+				'operator'=>'001',
+				'notify_url'=>''
+		);
+		$result = SqbPay::precreate($data);
+		echo $result;exit;
+	}
 	public function actionWappayreturn(){
 		$is_success = Yii::app()->request->getParam('is_success');
 		$status = Yii::app()->request->getParam('status');
