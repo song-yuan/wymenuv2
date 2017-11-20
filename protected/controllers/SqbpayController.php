@@ -52,7 +52,7 @@ class SqbpayController extends Controller
 				'pay_way'=>'3',
 				'sub_pay_way'=>'2',
 				'open_id'=>$openId,
-				'abstract'=>'001',
+				'abstract'=>'壹点吃微信点单',
 				'operator'=>'001',
 				'notify_url'=>''
 		);
