@@ -47,11 +47,11 @@ class SqbpayController extends Controller
 		$data = array(
 				'dpid'=>$dpid,
 				'account_no'=>$order['account_no'],
-				'should_total'=>$order['should_total']*100,
+				'should_total'=>(int)($order['should_total']*100),
 				'pay_way'=>3,
-				'sub_pay_type'=>2,
+				'sub_pay_way'=>2,
 				'open_id'=>$openId,
-				'abstract'=>'微信点单',
+				'abstract'=>'001',
 				'operator'=>'001',
 				'notify_url'=>''
 		);

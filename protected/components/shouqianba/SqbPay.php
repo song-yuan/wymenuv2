@@ -269,10 +269,10 @@ class SqbPay{
     	$dpid = $data['dpid'];
     	$clientSn = $data['account_no'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
-    	$total_amount = ''.$data['should_total']*100;
+    	$total_amount = $data['should_total'];
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
     	$payway = $data['pay_way'];
-    	$subpayway = $data['sub_pay_type'];
+    	$subpayway = $data['sub_pay_way'];
     	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
     	$payer_uid = $data['open_id'];
     	/*消费者在支付通道的唯一id,微信WAP支付必须传open_id*/
@@ -303,6 +303,7 @@ class SqbPay{
     				'operator'=>$operator,
     				'notify_url'=>$notify_url,
     	);
+//     	var_dump($data);exit;
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	return array('status'=>true, 'result'=>$result);
