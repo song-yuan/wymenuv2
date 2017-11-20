@@ -162,20 +162,15 @@
 			   var ordertype = $('#ordertype').val();
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   var text = $('#text').val();
-			   var setid = $('#setid').val();
-			   var cid = $('#selectCategory').val();
-			   location.href="<?php echo $this->createUrl('statements/orderproductsReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid;
+			   location.href="<?php echo $this->createUrl('statements/orderproductsReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/ordertype/"+ordertype;
 			  
 	        });
 			  $('#excel').click(function excel(){
 				   var ordertype = $('#ordertype').val();
 				   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
-				   var text = $('#text').val();
-				   var setid = $('#setid').val();
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-			    	   location.href="<?php echo $this->createUrl('statements/orderproductsReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid;
+			    	   location.href="<?php echo $this->createUrl('statements/orderproductsReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/ordertype/"+ordertype;
 			       }
 			   });
 
