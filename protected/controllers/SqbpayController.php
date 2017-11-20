@@ -49,7 +49,7 @@ class SqbpayController extends Controller
 				'account_no'=>$order['account_no'],
 				'should_total'=>$order['should_total']*100,
 				'pay_way'=>3,
-				'sub_pay_type'=>3,
+				'sub_pay_type'=>2,
 				'open_id'=>$openId,
 				'abstract'=>'微信点单',
 				'operator'=>'001',
