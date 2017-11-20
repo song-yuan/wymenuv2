@@ -56,7 +56,7 @@ class SqbpayController extends Controller
 				'notify_url'=>''
 		);
 		$result = SqbPay::precreate($data);
-		echo $result;exit;
+		echo json_encode($result);exit;
 	}
 	public function actionWappayreturn(){
 		$is_success = Yii::app()->request->getParam('is_success');
