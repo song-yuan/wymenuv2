@@ -303,10 +303,13 @@ class SqbPay{
     				'operator'=>$operator,
     				'notify_url'=>$notify_url,
     	);
-//     	var_dump($data);exit;
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
-    	return array('status'=>true, 'result'=>$result);
+    	if($result->result_code=='200' && $result->biz_response->result_code=="PRECREATE_SUCCESS"){
+    		return array('status'=>true, 'result'=>json_decode($result->biz_response->data,true));
+    	}else{
+    		return array('status'=>false, 'result'=>false);
+    	}
     
     }
     public static function refund($data){

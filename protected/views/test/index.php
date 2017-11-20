@@ -10,7 +10,7 @@ $('a').click(function(){
 			url:'<?php echo $this->createUrl('sqbpay/precreate',array('companyId'=>$dpid,'orderId'=>$orderId));?>',
 			success:function(data){
 				if(data.status){
-					var qrcodeUrl = data.result.biz_response.data.qr_code_image_url;
+					var qrcodeUrl = data.result.qr_code_image_url;
 					$('img').attr('src',qrcodeUrl);
 				}
 			},
