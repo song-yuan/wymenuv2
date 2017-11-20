@@ -305,9 +305,9 @@ class SqbPay{
     	);
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
-    	var_dump($result);exit;
-    	if($result->result_code=='200' && $result->biz_response->result_code=="PRECREATE_SUCCESS"){
-    		return array('status'=>true, 'result'=>json_decode($result->biz_response->data,true));
+    	$obj = json_decode($result);
+    	if($obj->result_code=='200' && $obj->biz_response->result_code=="PRECREATE_SUCCESS"){
+    		return array('status'=>true, 'result'=>json_decode($obj->biz_response->data,true));
     	}else{
     		return array('status'=>false, 'result'=>false);
     	}
