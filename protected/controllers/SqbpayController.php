@@ -47,9 +47,9 @@ class SqbpayController extends Controller
 		$data = array(
 				'dpid'=>$dpid,
 				'account_no'=>$order['account_no'],
-				'should_total'=>(int)($order['should_total']*100),
-				'pay_way'=>3,
-				'sub_pay_way'=>2,
+				'should_total'=>(string)($order['should_total']*100),
+				'pay_way'=>'3',
+				'sub_pay_way'=>'2',
 				'open_id'=>$openId,
 				'abstract'=>'001',
 				'operator'=>'001',
