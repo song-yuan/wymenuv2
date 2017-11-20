@@ -587,15 +587,6 @@ class WxOrder
 		}
 	    return $order;
 	}
-	public static function isUserOrder($userId){
-		$sql = 'select * from nb_order where user_id='.$userId.' and order_type in(1,2,3,6) and order_status in(3,4,8)';
-		$order = Yii::app()->db->createCommand($sql)->queryRow();
-		if($order){
-			return true;
-		}else{
-			return false;
-		}
-	}
 	/**
 	 * 
 	 * 获取未付款的 订单产品
@@ -974,13 +965,7 @@ class WxOrder
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
 	 	
-	 	$userId = $user['lid'];
-	 	$userOrder = self::isUserOrder($userId);
-	 	if(!$userOrder){
-	 		$openId = $user['openid'];
-	 		$param = array('openid'=>$openId,'group'=>$dpid);
-	 		WxBrandUser::updateByOpenid($param);
-	 	}
+	 	WxBrandUser::isUserFirstOrder($user);
 	 	//修改订单状态
 	 	WxOrder::updateOrderStatus($orderId,$dpid);
 	 	//修改订单产品状态
