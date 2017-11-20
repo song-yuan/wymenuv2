@@ -185,7 +185,7 @@ class WxBrandUser {
 		return $points['total']?$points['total']:0;
 	}
 	// 判断会员是否再该店第一次下单
-	public static function isUserFirstOrder($user){
+	public static function isUserFirstOrder($user,$dpid){
 		if($user['dpid']==$user['weixin_group']){
 			$userId = $user['lid'];
 			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in(1,2,3,6) and order_status in(3,4,8)';

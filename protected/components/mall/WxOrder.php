@@ -965,7 +965,7 @@ class WxOrder
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
 	 	
-	 	WxBrandUser::isUserFirstOrder($user);
+	 	WxBrandUser::isUserFirstOrder($user,$dpid);
 	 	//修改订单状态
 	 	WxOrder::updateOrderStatus($orderId,$dpid);
 	 	//修改订单产品状态
