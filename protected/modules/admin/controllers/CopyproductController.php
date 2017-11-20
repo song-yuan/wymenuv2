@@ -329,7 +329,7 @@ class CopyproductController extends BackendController
         					$producto->favourite_number = $product['favourite_number'];
         					$producto->is_show = $product['is_show'];
         					$producto->is_show_wx = $product['is_show_wx'];
-        					$producto->is_lock = $product['is_lock'];
+        					//$producto->is_lock = $product['is_lock'];
         					$producto->delete_flag = '0';
         					$producto->is_sync = $is_sync;
         					$rows = $producto->save();
