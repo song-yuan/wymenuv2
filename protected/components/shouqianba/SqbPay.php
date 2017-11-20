@@ -267,7 +267,7 @@ class SqbPay{
     public static function precreate($data){
     	
     	$dpid = $data['dpid'];
-    	$clientSn = $data['account_no'];
+    	$clientSn = $data['out_trade_no'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
     	$total_amount = $data['should_total'];
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/

@@ -44,9 +44,10 @@ class SqbpayController extends Controller
 		$orderId = Yii::app()->request->getParam('orderId');
 		$openId = 'oIj93t9Fd5blvCLdQ6qq_iK1Api8';
 		$order = WxOrder::getOrder($orderId, $dpid);
+		$randNum = Helper::randNum(3);
 		$data = array(
 				'dpid'=>$dpid,
-				'account_no'=>$order['account_no'],
+				'out_trade_no'=>$order['lid'].'-'.$order['dpid'].'-'.$randNum,
 				'should_total'=>(string)($order['should_total']*100),
 				'pay_way'=>'3',
 				'sub_pay_way'=>'2',
