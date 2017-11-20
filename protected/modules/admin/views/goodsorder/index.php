@@ -52,9 +52,11 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','订单来源');?></th>
-                                <th><?php echo yii::t('app','订单号');?></th>
-                                <th><?php echo yii::t('app','订单总额');?></th>
-                                <th><?php echo yii::t('app','订单状态');?></th>
+								<th><?php echo yii::t('app','订单号');?></th>
+								<th><?php echo yii::t('app','订单总额');?></th>
+								<th><?php echo yii::t('app','支付方式');?></th>
+								<th><?php echo yii::t('app','订单状态');?></th>
+								<th><?php echo yii::t('app','处理状态');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -66,11 +68,25 @@
 								<td><?php echo $model['company_name'];?></td>
 								<td><?php echo $model['account_no'];?></td>
 								<td><?php echo $model['reality_total'];?></td>
-								<td><?php switch ($model['pay_status']){
-									case 0 : echo '未支付';break;
-									case 1 : echo '已支付';break;
+								<td><?php switch ($model['paytype']){
+									case 1 : echo '<span style="color:green">线上支付</span>';break;
+									case 2 : echo '<span style="color:red">货到付款</span>';break;
 									default: echo '未知';break;
 								}?></td>
+								<td><?php switch ($model['pay_status']){
+									case 0 : echo '<span style="color:red">未支付</span>';break;
+									case 1 : echo '<span style="color:green">已支付</span>';break;
+									default: echo '未知';break;
+								}?></td>
+								<td>
+								<?php 
+									if ($model['goods_order_accountno']=='') {
+										echo '<span style="color:red">待处理</span>';
+									}else{
+										echo '<span style="color:green">已处理</span>';
+									}
+								?>
+								</td>
                                 <td class="center">
 									<a href="<?php echo $this->createUrl('goodsorder/detailindex',array('lid' => $model['lid'] ,'companyId' => $this->companyId, 'dpid' => $model['dpid'],'name' =>$model['company_name'], 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','查看明细');?></a>
 								</td>

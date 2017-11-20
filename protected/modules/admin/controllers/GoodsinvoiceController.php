@@ -22,11 +22,12 @@ class GoodsinvoiceController extends BackendController
 	}
 	public function actionGoodsinvoice(){
 		$gdid = Yii::app()->request->getParam('gdid');
+		// p($gdid);
 		$db = Yii::app()->db;
 		if($gdid){
 			$sql = 'select k.* from (select c.company_name,t.* from nb_goods_invoice t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.' and t.goods_delivery_id = '.$gdid.') k';
 		}else{
-			$sql = 'select k.* from (select c.company_name,t.* from nb_goods_invoice t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.') k';
+			$sql = 'select k.* from (select c.company_name,t.* from nb_goods_invoice t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.') k order by status asc';
 		}
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;

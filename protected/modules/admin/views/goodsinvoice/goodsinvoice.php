@@ -76,9 +76,9 @@
 									default: echo '未知';break;
 								}?></td>
 								<td><?php switch ($model['status']){
-									case 0 : echo '未出库';break;
-									case 1 : echo '已出库';break;
-									case 2 : echo '已确认收货';break;
+									case 0 : echo '<span style="color:red;">未出库</span>';break;
+									case 1 : echo '<span style="color:green;">已出库</span>';break;
+									case 2 : echo '<span style="color:blue;">已确认收货</span>';break;
 									default: echo '未知';break;
 								}?></td>
 								<td><?php echo $model['sent_personnel'];?></td>

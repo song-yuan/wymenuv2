@@ -1,4 +1,5 @@
 <?php
+
 class GoodsorderController extends BackendController
 {
 	public function actions() {
@@ -21,9 +22,9 @@ class GoodsorderController extends BackendController
 	}
 	public function actionIndex(){
 		$db = Yii::app()->db;
-		$sql = 'select k.* from (select c.company_name,t.* from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.')) k';
+		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.')) k order by goods_order_accountno asc';
 		//$models = $db->createCommand($sql)->queryAll();
-		
+
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
@@ -31,30 +32,30 @@ class GoodsorderController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		
-	
+		// p($models);
+
 			$this->render('index',array(
 					'models'=>$models,
 					'pages'=>$pages,
 			));
-		
+
 	}
 	public function actionDetailindex(){
 		$goid = Yii::app()->request->getParam('lid');
 		$name = Yii::app()->request->getParam('name');
 		$papage = Yii::app()->request->getParam('papage');
-		
+
 		$db = Yii::app()->db;
-		
+
 		$sqls = 'select c.company_name,t.* from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
-		
+
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
-		
+
 		$sql = 'select k.* from (select co.company_name as stock_name,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
 		//;
-	
+
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
@@ -63,7 +64,7 @@ class GoodsorderController extends BackendController
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
 		//var_dump($models);exit;
-	
+
 		$this->render('detailindex',array(
 				'models'=>$models,
 				'model'=>$model,
@@ -73,9 +74,8 @@ class GoodsorderController extends BackendController
 				'name'=>$name,
 				'goid'=>$goid,
 		));
-	
-	}
 
+	}
 
 
 
@@ -93,10 +93,10 @@ class GoodsorderController extends BackendController
 				.' left join nb_goods_address ga on(t.goods_address_id=ga.lid)'
 				.' where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
-		
+
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
-		
+
 		$sql = 'select k.* from (select co.company_name as stock_name,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
 		$models = $db->createCommand($sql)->queryAll();
 		// var_dump($models);exit;
@@ -242,7 +242,7 @@ class GoodsorderController extends BackendController
 				//var_dump($lid);var_dump($stockid);
 				$db->createCommand('update nb_goods_order_detail set stock_dpid = '.$stockid.',update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$lid)
 				->execute();
-				
+
 			}
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
@@ -261,18 +261,18 @@ class GoodsorderController extends BackendController
 		try
 		{
 			$gdmoneys = '0.00';
-			
+
 			$is_sync = DataSync::getInitSync();
-			
+
 			$sql ='select go.goods_address_id,go.pay_status,t.* from nb_goods_order_detail t left join nb_goods_order go on(t.goods_order_id = go.lid) where t.goods_order_id ='.$pid.' and t.delete_flag =0 group by t.stock_dpid';
 			$modelstocks = $db->createCommand($sql)->queryAll();
 			$sql ='select t.reality_total,godp.reality_money from nb_goods_order t left join (select sum(god.price*god.num) as reality_money,god.goods_order_id from nb_goods_order_detail god where god.goods_order_id = '.$pid.') godp on(godp.goods_order_id = t.lid) where t.lid ='.$pid.' and t.delete_flag =0 ';
 			$goprices = $db->createCommand($sql)->queryRow();
-			
+
 			if((!empty($modelstocks))&&(!empty($goprices))){
 				$goprice = $goprices['reality_total'];
 				$gomeney = $goprices['reality_money'];
-				
+
 				foreach ($modelstocks as $ms){
 					$moneys = '';
 					$gdmoneys = '0.00';
@@ -306,12 +306,12 @@ class GoodsorderController extends BackendController
 						$sql ='select t.* from nb_goods_order_detail t where t.goods_order_id ='.$pid.' and t.delete_flag =0 and t.stock_dpid ='.$ms['stock_dpid'];
 						$models = $db->createCommand($sql)->queryAll();
 						foreach ($models as $m){
-							
+
 							$gdmoneys = $gdmoneys + $m['price']*$m['num'];
 							//生成仓库发货单详情
 							$se = new Sequence("goods_delivery_details");
 							$gddlid = $se->nextval();
-							
+
 							$datagdd = array(
 									'lid'=>$gddlid,
 									'dpid'=>$ms['stock_dpid'],
@@ -336,11 +336,11 @@ class GoodsorderController extends BackendController
 					$db->createCommand('update nb_goods_delivery set delivery_amount = '.$moneys.',update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$gdlid)
 					->execute();
 				}
-				
+
 			}
 			$db->createCommand('update nb_goods_order set order_status = "4",update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$pid)
 			->execute();
-			
+
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 		}catch (Exception $e) {
@@ -349,5 +349,5 @@ class GoodsorderController extends BackendController
 			return false;
 		}
 	}
-	
+
 }

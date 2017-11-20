@@ -2402,7 +2402,7 @@ class StatementsController extends BackendController
 		$criteria->addCondition("t.order_id in(".$ords.")");
 	
 		$criteria->group =' t.lid';
-		$criteria->order = 't.create_at asc';
+		$criteria->order = 'order.create_at asc';
 		//$criteria->order = 't.create_at asc,t.dpid asc';
 	
 		$pages = new CPagination(OrderProduct::model()->count($criteria));
