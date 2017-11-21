@@ -51,6 +51,7 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('price')));?>
 											<?php echo $form->error($model, 'price' )?>
+											<span style="color:red" class="control-label">单个菜品的差额（注：若数量为2，则套餐总价会加上差额乘以2）</span>
 										</div>
 									</div>
 									<div class="form-group">
