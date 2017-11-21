@@ -188,7 +188,8 @@ class WxBrandUser {
 	public static function isUserFirstOrder($user,$dpid){
 		if($user['dpid']==$user['weixin_group']){
 			$userId = $user['lid'];
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in(1,2,3,6) and order_status in(3,4,8)';
+			$sql = 'select dpid from nb_order where user_id='.$userId.' and order_type in(1,2,3,6) and order_status in(3,4,8)'
+				  .' union select t.dpid from nb_order_pay t,nb_order t1 where t.order_id=t1.lid and t.dpid=t1.dpid and paytype=10 and remark="'.$user['remark'].'"';
 			$order = Yii::app()->db->createCommand($sql)->queryRow();
 			if(!$order){
 				$openId = $user['openid'];
