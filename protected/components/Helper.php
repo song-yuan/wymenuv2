@@ -201,7 +201,7 @@ class Helper
 		}else{
 			if($total > $pay){
 				$discount = $total - $pay;
-				$result = number_format($price/$total*$discount,4);
+				$result = number_format(($price - $price/$total*$discount),4);
 			}else{
 				$result = $price;
 			}
