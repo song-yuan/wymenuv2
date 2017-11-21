@@ -192,6 +192,8 @@ class Helper
 	 * 计算折扣后产品价格
 	 * $price 产品价格 $total 产品价格总和  $pay 收入总价
 	 * 
+	 * 如果套餐  $price 套餐内单品价格  $total 套餐内计算原价 $pay 套餐价格
+	 * 
 	 */
 	public static function dealProductPrice($price,$total,$pay) {
 		if($total == 0){

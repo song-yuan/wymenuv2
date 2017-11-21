@@ -354,7 +354,7 @@ class WxOrder
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			if($cart['is_set'] > 0){
-				$hasPrice = 0;
+				$setPrice = $cart['price'];
 				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(set_id,product_id,num,price); price 套餐内加价
 				$setName = $this->productSetDetail[$cart['product_id']]['set_name'];
 				$totalProductPrice = $this->productSetDetail[$cart['product_id']]['total_original_price'];
@@ -362,19 +362,7 @@ class WxOrder
 				unset($this->productSetDetail[$cart['product_id']]['total_original_price']);
 				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
 					$ortherPrice = $detail[3];
-					$eachPrice = $detail['original_price']*$detail[2]/$totalProductPrice*$cart['price'];
-					$hasPrice += $eachPrice;
-					if($i+1 == count($detail)){
-						$leavePrice = $hasPrice - $cart['price'];
-						if($leavePrice > 0){
-							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
-						}else{
-							$itemPrice =  $eachPrice - $leavePrice + $ortherPrice;
-						}
-					}else{
-						$itemPrice = $eachPrice + $ortherPrice;
-					}
-					$itemPrice = number_format($itemPrice/$detail[2],4);
+					$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $setPrice);
 						
 					$se = new Sequence("order_product");
 					$orderProductId = $se->nextval();
