@@ -267,17 +267,18 @@ class SqbPay{
     public static function precreate($data){
     	
     	$dpid = $data['dpid'];
-    	$clientSn = $data['account_no'];
+    	$clientSn = $data['out_trade_no'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
-    	$total_amount = ''.$data['should_total']*100;
+    	$total_amount = $data['should_total'];
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
-    	$payway = $data['payType'];
+    	$payway = $data['pay_way'];
+    	$subpayway = $data['sub_pay_way'];
     	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
     	$payer_uid = $data['open_id'];
     	/*消费者在支付通道的唯一id,微信WAP支付必须传open_id*/
     	$subject = $data['abstract'];
     	/*本次交易的简要介绍*/
-    	$operator = $data['userName'];
+    	$operator = $data['operator'];
     	/*发起本次交易的操作员*/
     	$notify_url = $data['notify_url'];
     	
@@ -286,7 +287,7 @@ class SqbPay{
     		$terminal_sn = $devicemodel['terminal_sn'];
     		$terminal_key = $devicemodel['terminal_key'];
     	}else{
-    		$result = array('status'=>false, 'result'=>false,);
+    		$result = array('status'=>false, 'result'=>false);
     		return $result;
     	}
     	
@@ -296,7 +297,7 @@ class SqbPay{
     				'client_sn'=>$clientSn,
     				'total_amount'=>$total_amount,
     				'payway'=>$payway,
-    				'sub_payway'=>'3',
+    				'sub_payway'=>$subpayway,
     				'payer_uid'=>$payer_uid,
     				'subject'=>$subject,
     				'operator'=>$operator,
@@ -304,7 +305,12 @@ class SqbPay{
     	);
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
-    	return $result;
+    	$obj = json_decode($result);
+    	if($obj->result_code=='200' && $obj->biz_response->result_code=="PRECREATE_SUCCESS"){
+    		return array('status'=>true, 'result'=>$obj->biz_response->data);
+    	}else{
+    		return array('status'=>false, 'result'=>false);
+    	}
     
     }
     public static function refund($data){

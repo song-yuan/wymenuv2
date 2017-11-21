@@ -245,7 +245,7 @@ class DataSyncOperation {
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
 		//订单数据
-		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status=3 or order_status=4) and is_sync<>0 limit 5';
+		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status=3 or order_status=4) and is_sync<>0 limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
@@ -1544,7 +1544,7 @@ class DataSyncOperation {
 		$is_sync = DataSync::getInitSync();
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
-			$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
+			$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpids . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
 			$result = Yii::app ()->db->createCommand ( $sql )->execute ();
 			if(!$result){
 				throw new Exception('会员卡扣减失败');
@@ -2045,6 +2045,7 @@ class DataSyncOperation {
 				}
 				if($yue!=0){
 					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], $dpid, -$yue);
+					WxBrandUser::isUserFirstOrder($user,$dpid);
 					if(!$res){
 						throw new Exception('储值支付失败');
 					}

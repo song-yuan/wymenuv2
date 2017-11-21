@@ -1,8 +1,22 @@
 <?php
-$dpid = 6;
-$data = '{"id":"3015307647221811259","orderId":"3015307647221811259","address":"it girl人民中路198号 芯缘网咖19号机","createdAt":"2017-11-14T17:05:33","activeAt":"2017-11-14T17:05:33","deliverFee":4.0,"deliverTime":null,"description":"","groups":[{"name":"1号篮子","type":"normal","items":[{"id":706904817,"skuId":324230532335,"name":"单人C餐","categoryId":1,"price":21.0,"quantity":1,"total":21.0,"additions":[],"newSpecs":[],"attributes":[],"extendCode":"","barCode":"","weight":1.0,"userPrice":0.0,"shopPrice":0.0,"vfoodId":678526263},{"id":1258454251,"skuId":200000059857153263,"name":"芙蓉汤","categoryId":1,"price":5.0,"quantity":1,"total":5.0,"additions":[],"newSpecs":[],"attributes":[],"extendCode":"075695001196","barCode":"075695001196","weight":1.0,"userPrice":0.0,"shopPrice":0.0,"vfoodId":1254831028}]},{"name":"其它费用","type":"extra","items":[{"id":-70000,"skuId":-1,"name":"餐盒","categoryId":102,"price":2.0,"quantity":1,"total":2.0,"additions":[],"newSpecs":null,"attributes":null,"extendCode":"","barCode":"","weight":null,"userPrice":0.0,"shopPrice":0.0,"vfoodId":0}]}],"invoice":null,"book":false,"onlinePaid":true,"railwayAddress":null,"phoneList":["18768122158"],"shopId":157237024,"shopName":"麦嘉基（艮塔东路店）","daySn":7,"status":"unprocessed","refundStatus":"noRefund","userId":20043359,"totalPrice":26.0,"originalPrice":32.0,"consignee":"楼成珂(先生)","deliveryGeo":"120.23495017,29.71510998","deliveryPoiAddress":"it girl人民中路198号 芯缘网咖19号机","invoiced":false,"income":16.96,"serviceRate":0.18,"serviceFee":-5.04,"hongbao":0.0,"packageFee":2.0,"activityTotal":-6.0,"shopPart":-6.0,"elemePart":-0.0,"downgraded":false,"vipDeliveryFeeDiscount":0.0,"openId":"0000000272","secretPhoneExpireTime":null,"orderActivities":[{"categoryId":11,"name":"套餐特惠","amount":-6.0,"elemePart":0.0,"restaurantPart":0.0,"id":153044730}],"invoiceType":null,"taxpayerId":"","coldBoxFee":0.0}';
-$order = json_decode($data);
-$res = Elm::dealOrder($order,$dpid,4);
-var_dump($res);
+$dpid = Yii::app()->request->getParam('companyId');
+$orderId = Yii::app()->request->getParam('orderId');
 ?>
+<img src="" style="width:80%"/>
+<br/>
+<a href="javascript:;">生成二维码</a>
+<script type="text/javascript">
+$('a').click(function(){
+	$.ajax({
+			url:'<?php echo $this->createUrl('sqbpay/precreate',array('companyId'=>$dpid,'orderId'=>$orderId));?>',
+			success:function(data){
+				if(data.status){
+					var qrcodeUrl = data.result.qr_code_image_url;
+					$('img').attr('src',qrcodeUrl);
+				}
+			},
+			dataType:'json'
+		});
+});
+</script>
 

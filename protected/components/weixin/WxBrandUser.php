@@ -184,6 +184,24 @@ class WxBrandUser {
 		$points = Yii::app()->db->createCommand($sql)->queryRow();
 		return $points['total']?$points['total']:0;
 	}
+	// 判断会员是否再该店第一次下单
+	public static function isUserFirstOrder($user,$dpid){
+		if($user['dpid']==$user['weixin_group']){
+			$userId = $user['lid'];
+			$sql = 'select dpid from nb_order where user_id='.$userId.' and order_type in(1,2,3,6) and order_status in(3,4,8)'
+				  .' union select t.dpid from nb_order_pay t,nb_order t1 where t.order_id=t1.lid and t.dpid=t1.dpid and paytype=10 and remark="'.$user['remark'].'"';
+			$order = Yii::app()->db->createCommand($sql)->queryRow();
+			if(!$order){
+				$openId = $user['openid'];
+		 		$param = array('openid'=>$openId,'group'=>$dpid);
+		 		self::updateByOpenid($param);
+			}else{
+				$openId = $user['openid'];
+				$param = array('openid'=>$openId,'group'=>$order['dpid']);
+				self::updateByOpenid($param);
+			}
+		}
+	}
 	/**
 	 * 
 	 * 保存会员资料
