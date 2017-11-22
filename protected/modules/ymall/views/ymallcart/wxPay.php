@@ -178,8 +178,8 @@
 					}
 				);
 				<?php endif;?>
-				<?php elseif($payChannel==2):?>
-				location.href = '<?php echo $sqbpayUrl;?>';
+				<?php //elseif($payChannel==2):?>
+				//location.href = '<?php echo $sqbpayUrl;?>';
 				<?php else:?>
 				mui.alert('无支付信息,请联系客服!');
 				<?php endif;?>
