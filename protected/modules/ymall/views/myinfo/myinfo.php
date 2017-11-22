@@ -278,25 +278,7 @@
 						</div>
 					</li>
 				</ul>
-				<ul class="mui-table-view mui-table-view-chevron">
-				<!-- <li class="mui-table-view-cell mui-collapse" style="background-color: white;">
-			            <a class="mui-navigate-right" href="#">设置当前店铺</a>
-			            <div class="mui-collapse-content" style="width:125%;padding:0;">
-			                <div class="mui-card">
-								<form class="mui-input-group">
-									<div class="mui-input-row mui-radio">
-										<label>北京店铺1</label>
-										<input name="style" type="radio" checked value="">
-									</div>
-									<div class="mui-input-row mui-radio">
-										<label>北京店铺2</label>
-										<input name="style" type="radio" value="inverted">
-									</div>
-								</form>
-							</div>
-			            </div>
-			        </li> -->
-				</ul>
+
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right" href="<?php echo $this->createUrl('address/addressmanage',array('companyId'=>$this->companyId));?>">收货地址管理</a>
@@ -314,7 +296,12 @@
 				</ul>
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" >我的订单</a>
+						<a class="mui-navigate-right" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId));?>">运输损耗</a>
+					</li>
+				</ul>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId));?>">全部订单</a>
 					</li>
 				</ul>
 				<ul class="mui-table-view mui-table-view-chevron">

@@ -1,6 +1,9 @@
 	<?php 
 		$baseUrl = Yii::app()->baseUrl;
 		$weixinServerAccount = WxAccount::get($this->companyId);
+		if($weixinServerAccount['appid'] == ''){
+			$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no' => $golid['account_no'],'success'=>3));
+		}
 		$jsSdk = new WeixinJsSdk($weixinServerAccount['appid'],$weixinServerAccount['appsecret'],$this->companyId);
 		$signPackage = $jsSdk->GetSignPackage();
 
