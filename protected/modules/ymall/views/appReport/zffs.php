@@ -7,7 +7,7 @@
 </header>
 
 <div class="sd">
-	<form method="post">
+	<form method="post" onsubmit="return toVaild()">
 	<ul class="mui-table-view">
 		<li class="mui-table-view-cell">
 			<span>门店</span>
@@ -16,12 +16,12 @@
 		<li class="mui-table-view-cell">
 			<span>开始时间</span>
 			<span id='demo2' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?><a>选择日期</a><?php }else{echo $date['start'];}?></span>
-			<input id="date1" type="hidden" name="date[start]">
+			<input id="date1" type="hidden" name="date[start]" value="<?php echo $date['start'];?>">
 		</li>
 		<li class="mui-table-view-cell">
 			<span>结束时间</span>
 			<span id='demo4' style="padding-left: 95px;" data-options='{"type":"date"}' class="btn mui-navigate-right"><?php if(empty($date)){?><a>选择日期</a><?php }else{echo $date['End'];}?></span>
-			<input id="date2" type="hidden" name="date[End]">
+			<input id="date2" type="hidden" name="date[End]" value="<?php echo $date['End'];?>">
 		</li>
 		<li>
 			<button type="submit" class="mui-btn mui-btn-primary mui-btn-block">查询</button>
@@ -52,124 +52,140 @@
 				}
 				$array = array();
 				foreach ($zfs as $zf) {
-					
-						array_push($array,$zf['pay_amount']);	
+					array_push($array,$zf['pay_amount']);	
 				}
 				$sum = array_sum($array);
+				$zfarray = array();
+				foreach ($zfs as $zf){
+					array_push($zfarray, $zf['paytype']);
+				}
 				if($orders && $zfs){
 					echo $reality_total-$sum+$pay_amount;
 				}
 			?></span></li>
 		<li class="mui-table-view-cell">实收款<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($array)){ echo $sum;}?></span></li>
 		<li class="mui-table-view-cell">现金<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php
-				foreach ($zfs as $zf) {
-					if($zf['paytype']==0){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+				if(in_array("0",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==0){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}
 				?></span></li>
 		<li class="mui-table-view-cell">微信<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php
-				foreach ($zfs as $zf) {
-					if($zf['paytype']==1){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+				if(in_array("1",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==1){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}
 				?></span></li>
-		<li class="mui-table-view-cell">微信点单<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==12){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">微信点单<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("12",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==12){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
 		<li class="mui-table-view-cell">微信外卖<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php 
-		foreach ($zfs as $zf) {
-					if($zf['paytype']==13){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		if(in_array("13",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==13){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
 		<li class="mui-table-view-cell">美团外卖<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php 
-		foreach ($zfs as $zf) {
-					if($zf['paytype']==14){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		if(in_array("14",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==14){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">饿了么外卖<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==15){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">饿了么外卖<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("15",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==15){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">支付宝<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==2){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">支付宝<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("2",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==2){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">银联<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==5){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">银联<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("5",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==5){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">会员卡<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==4){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">会员卡<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("4",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==4){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">后台支付<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==3){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">后台支付<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("3",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==3){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">系统劵<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==9){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">系统劵<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("9",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==9){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">积分<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==8){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">积分<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("8",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==8){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
-		<li class="mui-table-view-cell">微信储值<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php foreach ($zfs as $zf) {
-					if($zf['paytype']==10){
-						echo $zf['pay_amount'];
-					}else{
-						echo "0";
-						break;
+		<li class="mui-table-view-cell">微信储值<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("10",$zfarray)){
+					foreach ($zfs as $zf) {
+						if($zf['paytype']==10){
+							echo $zf['pay_amount'];
+						}
 					}
+				}else{
+					echo "0";
 				}?></span></li>
 		<li class="mui-table-view-cell">退款<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(!empty($pay_amount)){ echo $pay_amount;}else{echo "0";}?></span></li>	
 	</ul>
@@ -227,4 +243,17 @@
 		});
 
 	})(mui);
+	function toVaild(){
+	     var val = document.getElementById("date1").value;
+	     var val1 = document.getElementById("date2").value;
+	     // alert(val1);
+	     var r = new RegExp("^[1-2]\\d{3}-(0?[1-9]||1[0-2])-(0?[1-9]||[1-2][1-9]||3[0-1])$");
+	     if(r.test(val) && r.test(val1)){
+	         // alert("校验成功，之后进行提交");
+	         return true;
+	     }else{
+	         alert("开始时间或结束时间没有选择");
+	         return false;
+	     }
+	 }
 </script>

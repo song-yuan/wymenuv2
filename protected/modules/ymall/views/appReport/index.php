@@ -157,9 +157,9 @@
 				}
 				}?></span>
 					</div>
-					<div class="ys7">
+					<!-- <div class="ys7">
 								<a href="turnover.html">查看详细营业额>>></a>
-						</div>
+						</div> -->
 					</div>
 	            </div>
 	    </li>
@@ -265,9 +265,9 @@
 						<span class="span"><?php foreach($Recharges as $Recharge){if(!empty($Recharge['count'])){echo $Recharge['count'];}else{ echo '0';}}?></span>次
 					</div>
 					<div style="float: none;"></div>
-					<div class="ys7">
+					<!-- <div class="ys7">
 								<a>查看会员信息汇总</a>
-							</div>
+							</div> -->
 						</div>
 		            </div>
 		        </li>
