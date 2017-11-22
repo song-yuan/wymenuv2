@@ -46,6 +46,7 @@ class AppReportController extends Controller
 		$type = Yii::app()->request->getParam('type',0);
 		$fensql = "select lid,group_name from nb_area_group where lid=".$type." and type=3 and delete_flag=0";
 		$fens = Yii::app()->db->createCommand($fensql)->queryRow();
+		// var_dump($fens);exit;
 		return $fens;	
 	}
 	public function actionIndex(){
@@ -84,22 +85,23 @@ class AppReportController extends Controller
 				}
 		}
 		 if(!empty($type)){
-		 	$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
+		 	$fenssql = "select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0";
 		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
+		 	// var_dump($fens);exit;
 		 	$fens = json_encode($fens);
 		 	$fens = str_replace('[', '', $fens);
 		 	$fens = str_replace(']', '', $fens);
 		 	$fens = str_replace('"', '', $fens);
-		 	$ordersql ="select counts,number,reality_total,pay_amount from (select lid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid in (".$fens.")) o left join (select order_id,sum(pay_amount) as pay_amount from nb_order_pay where to_days(create_at) = to_days(now()) and dpid in (".$fens.") and paytype!=11) y on o.lid=y.order_id";
+		 	$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid in (".$fens.")) o inner join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where to_days(create_at) = to_days(now()) and dpid in (".$fens.") and paytype!=11) y on o.dpid=y.dpid";
 		 	// echo $ordersql;exit;
 		 	$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
-		 	$Membersql = "select distinct count(paytype_id) as paytype_id from nb_order_pay where to_days(create_at) = to_days(now()) and paytype=4 and dpid=".$companyId;
+		 	$Membersql = "select distinct count(paytype_id) as paytype_id from nb_order_pay where to_days(create_at) = to_days(now()) and paytype=4 and dpid in (".$fens.")";
 		 	$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
 		 	// var_dump($Members);exit;
-		 	$cardsql = "select count(rfid) as rfid from nb_member_card where to_days(create_at) = to_days(now()) and dpid=".$companyId;
+		 	$cardsql = "select count(rfid) as rfid from nb_member_card where to_days(create_at) = to_days(now()) and dpid in(".$fens.")";
 		 	$cards = Yii::app()->db->createCommand($cardsql)->queryAll();
 		 	// var_dump($cards);exit;
-		 	$Rechargesql = "select sum(reality_money) as reality_money,count(*) as count from nb_member_recharge where to_days(create_at) = to_days(now()) and dpid=".$companyId;
+		 	$Rechargesql = "select sum(reality_money) as reality_money,count(*) as count from nb_member_recharge where to_days(create_at) = to_days(now()) and dpid in(".$fens.")";
 		 	$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
 		 	// var_dump($Recharge);exit();
 		 	$monthsql = "select counts,number,reality_total,pay_amount from (select lid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and order_status in (3,4,8) and dpid in (".$fens.")) o left join (select order_id,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and dpid in (".$fens.") and paytype!=11) y on o.lid=y.order_id";
@@ -109,7 +111,7 @@ class AppReportController extends Controller
 		 	$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 		 }else{
 		 	// var_dump($dps);exit;
-		 	$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid=".$companyId.") o left join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where to_days(create_at) = to_days(now()) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
+		 	$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid=".$companyId.") o inner join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where to_days(create_at) = to_days(now()) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
 		 	// echo $ordersql;exit;
 		 	$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
 		 	$monthsql = "select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and order_status in (3,4,8) and dpid=".$companyId.") o left join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
@@ -149,8 +151,8 @@ class AppReportController extends Controller
 		$refunds = array();
 		$Paymentmethod = array();
 		if(!empty($type)){
-			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
-			$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
+			$fenssql = "select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0";
+		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
 			$fens = json_encode($fens);
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
@@ -179,7 +181,7 @@ class AppReportController extends Controller
 				$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)";
 				$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
 				// var_dump($todayProfit);exit;
-				$Paymentsql = "select paytype,counts,pay_amount,payment_method_id from (select paytype,count(paytype) as counts,sum(pay_amount) as pay_amount,payment_method_id,order_id from nb_order_pay where dpid=".$companyId." and paytype !=11 and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' group by paytype) y left join (select lid from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at >='2017-10-02 00:00:00' and create_at <= '2017-10-31 23:59:59') o on y.order_id=o.lid";
+				$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select lid from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59') o where y.dpid=".$companyId." and y.order_id=o.lid and y.paytype !=11 and y.create_at >='".$date['start']." 00:00:00' and y.create_at <= '".$date['End']." 23:59:59' group by y.paytype";
 				// echo $Paymentsql;exit();
 				$Paymentmethod = Yii::app()->db->createCommand($Paymentsql)->queryAll();
 				// var_dump($Paymentmethod);exit();
@@ -210,8 +212,8 @@ class AppReportController extends Controller
 		$date = Yii::app()->request->getParam('date');
 		$type = $this->type();
 		if(!empty($type)){
-			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
-			$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
+			$fenssql = "select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0";
+		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
 			$fens = json_encode($fens);
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
@@ -243,8 +245,8 @@ class AppReportController extends Controller
 		// var_dump($date);exit();
 		$type = $this->type();
 		if($type){
-			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
-			$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
+			$fenssql = "select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0";
+		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
 			$fens = json_encode($fens);
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
@@ -271,13 +273,13 @@ class AppReportController extends Controller
 		$date = Yii::app()->request->getParam('date');
 		$type = $this->type();
 		if($type){
-			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
-			$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
+			$fenssql = "select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0";
+		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
 			$fens = json_encode($fens);
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
     		$fens = str_replace('"', '', $fens);
-    		$sql = "select material_name,stock_num,unit_name from ((select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in (".$fens.") GROUP BY material_id) l left join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid) left join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
+    		$sql = "select material_name,stock_num,unit_name from (select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in (".$fens.") GROUP BY material_id) l inner join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid inner join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
 		// echo $sql;exit;
 			$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		}else{
@@ -300,8 +302,8 @@ class AppReportController extends Controller
 		$orders =array();
 		$type = $this->type();
 		if($type){
-			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
-			$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
+			$fenssql = "select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0";
+		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
 			$fens = json_encode($fens);
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
@@ -334,8 +336,8 @@ class AppReportController extends Controller
 		$date = Yii::app()->request->getParam('date');
 		$type = $this->type();
 		if(!empty($type)){
-			$fenssql = "select company_id from nb_area_group_company where area_group_id=".$type['lid']." and delete_flag=0";
-			$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
+			$fenssql = "select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0";
+		 	$fens = Yii::app()->db->createCommand($fenssql)->queryColumn();
 			$fens = json_encode($fens);
 			$fens = str_replace('[', '', $fens);
     		$fens = str_replace(']', '', $fens);
@@ -345,7 +347,7 @@ class AppReportController extends Controller
 				// echo $ordersql;exit;
 				$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
 				// var_dump($orders);exit;
-				$zfsql = "select y.paytype,sum(y.pay_amount) as pay_amount from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59') o where y.dpid in (".$fens.") and y.account_no=o.account_no and y.paytype !=11 and y.create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59' group by y.paytype";
+				$zfsql = "select y.paytype,sum(y.pay_amount) as pay_amount from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid in(".$fens.") and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59') o where y.dpid in (".$fens.") and y.account_no=o.account_no and y.paytype !=11 and y.create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59' group by y.paytype";
 				// echo $zfsql;exit();
 				$zfs = Yii::app()->db->createCommand($zfsql)->queryAll();
 				// var_dump($zfs);exit;
