@@ -203,7 +203,7 @@
 </footer>
 <div id="zf-qrcode" class="pre-order">
 	<div class="pre-step">第一步:长按下方二维码</div>
-	<div class="pre-step">第二步:点击识别二维码进行支付</div>
+	<div class="pre-step">第二步:点击“识别图中二维码”按钮</div>
 	<div><img id="qrcode-url" src=""/></div>
 	<div class="pre-step">有效时间4分钟</div>
 </div>
@@ -219,15 +219,10 @@
 					$('#qrcode-url').attr('src',qrcodeUrl);
 					layer.open({
 						  type: 1
-						  ,title: ['按照下面步骤支付', 'text-align:center;']
+						  ,title: ['按照下面步骤支付', 'text-align:center;font-szie:20px;']
 						  ,area: ['100%','100%'] //具体配置参考：offset参数项
 						  ,content: $('#zf-qrcode')
-						  ,btn: '关闭'
-						  ,btnAlign: 'c' //按钮居中
 						  ,shade: 0 //不显示遮罩
-						  ,yes: function(){
-						    layer.closeAll();
-						  }
 					});
 				}
 			},
@@ -284,7 +279,7 @@
 	}
 	$(document).ready(function(){
 		$('#payOrder').click(function(){
-			//layer.load(2);
+			layer.load(2);
 			callpay();
 		});
 	})
