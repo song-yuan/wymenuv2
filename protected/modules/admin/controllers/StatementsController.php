@@ -4532,7 +4532,20 @@ class StatementsController extends BackendController
 		}else{
 			$ordertypes = '>=0';
 		}
-		
+		$typesname = '';
+		switch($ordertype){
+			case -1: $typesname = '全部';break;
+			case 0: $typesname = '堂食';break;
+			case 1: $typesname = '微信堂食';break;
+			case 2: $typesname = '微信外卖';break;
+			case 3: $typesname = '微信预约';break;
+			case 4: $typesname = '后台外卖';break;
+			case 5: $typesname = '自助';break;
+			case 6: $typesname = '微信点单';break;
+			case 7: $typesname = '美团·';break;
+			case 8: $typesname = '饿了么·';break;
+			default: $typesname = '';break;
+		}
 		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
@@ -4625,7 +4638,7 @@ class StatementsController extends BackendController
 		);
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1','产品销售报表')
-		->setCellValue('A2',yii::t('app','查询条件：').$setname.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
+		->setCellValue('A2',yii::t('app','查询条件：').$typesname.';'.$setname.';'.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
 		->setCellValue('A3','时间')
 		->setCellValue('B3','店铺名称')
 		->setCellValue('C3','单品名称')
@@ -4945,7 +4958,20 @@ class StatementsController extends BackendController
 		}else{
 			$ordertypes = '>=0';
 		}
-		
+		$typesname = '';
+		switch($ordertype){
+			case -1: $typesname = '全部';break;
+			case 0: $typesname = '堂食';break;
+			case 1: $typesname = '微信堂食';break;
+			case 2: $typesname = '微信外卖';break;
+			case 3: $typesname = '微信预约';break;
+			case 4: $typesname = '后台外卖';break;
+			case 5: $typesname = '自助';break;
+			case 6: $typesname = '微信点单';break;
+			case 7: $typesname = '美团·';break;
+			case 8: $typesname = '饿了么·';break;
+			default: $typesname = '';break;
+		}
 		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
@@ -5034,7 +5060,7 @@ class StatementsController extends BackendController
 		);
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1','套餐销售报表')
-		->setCellValue('A2',yii::t('app','查询条件：').yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d H:i',time()))
+		->setCellValue('A2',yii::t('app','查询条件：').$typesname.';'.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d H:i',time()))
 		->setCellValue('A3','时间')
 		->setCellValue('B3','店铺名称')
 		->setCellValue('C3','套餐名称')
