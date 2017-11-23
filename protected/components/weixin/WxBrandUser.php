@@ -340,7 +340,7 @@ class WxBrandUser {
 				'type'=>2,
 				'consume_type'=>3,
 				'card_id'=>$userId,
-				'consume_amount'=>$amount,
+				'consume_amount'=>-$amount,
 				'is_sync'=>DataSync::getInitSync(),
 		);
 		$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
