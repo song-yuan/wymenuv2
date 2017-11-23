@@ -128,5 +128,9 @@
 					var companyId ='<?php echo $this->companyId; ?>';
 					location.href = '<?php echo $this->createUrl("ymallcart/wxPay") ?>?companyId='+companyId+'&account_no='+account_no;
 		    	}
-		    })
+		    });
+
+		    <?php if ($success==3): ?>
+		    	mui.toast('商户没有开通微信商户的支付功能,请选择到付!!!');
+		    <?php endif; ?>
 		</script>

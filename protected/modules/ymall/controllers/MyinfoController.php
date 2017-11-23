@@ -124,13 +124,76 @@ class MyinfoController extends BaseYmallController
 			'materials_get'=>$materials_get,
 		));
 	}
+
 	public function actionNormalsetting()
 	{
 
 		$this->render('normalsetting',array(
 		));
+	}	
+
+
+	public function actionGoodsRejected()
+	{
+		$db = Yii::app()->db;
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$sql = 'select g.goods_name,g.main_picture,gst.* from nb_goods_stock_taking gst 
+				left join nb_goods_order go  on(go.account_no=gst.goods_order_accountno) 
+				left join nb_goods g on(g.lid=gst.goods_id) 
+				where go.dpid='.$this->companyId.' and go.user_id='.$user_id.'
+				order by gst.create_at desc';
+		$goods = $db->createCommand($sql)->queryAll();
+		$goods_rejecteds =array();
+		foreach ($goods as $key => $good) {
+			if(!isset($goods_rejecteds[$good['goods_order_accountno']])){
+				$goods_rejecteds[$good['goods_order_accountno']] = array();
+			}
+			array_push($goods_rejecteds[$good['goods_order_accountno']], $good);
+		}
+		// p($goods_rejecteds);
+		$this->render('goodsRejected',array(
+			'goods_rejecteds'=>$goods_rejecteds,
+		));
 	}
 
+
+	public function actionGoodsOrderAll()
+	{
+		$db = Yii::app()->db;
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$sql = 'select go.* from nb_goods_order go where go.dpid='.$this->companyId.' and go.user_id='.$user_id.' order by go.create_at desc';
+		$goods_orders = $db->createCommand($sql)->queryAll();
+		// p($goods_orders);
+
+		$this->render('goodsOrderAll',array(
+			'goods_orders'=>$goods_orders,
+		));
+	}
+
+	public function actionOrderDetail()
+	{
+		// p($account_no);
+		$db = Yii::app()->db;
+		$account_no = Yii::app()->request->getParam('account_no');
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$sql = 'select gorder.*,gdel.*,gin.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,g.main_picture,c.company_name '
+		.' from (select go.dpid,go.create_at,go.account_no,go.goods_address_id,go.username,go.user_id,go.order_status,go.reality_total,go.paytype,go.pay_status,god.stock_dpid,god.goods_name,god.goods_id,god.goods_code,god.material_code,god.price,god.num from nb_goods_order go left join nb_goods_order_detail god on ( go.account_no=god.account_no) ) gorder '
+		.' left join (select gd.create_at as create_atd,gd.goods_order_accountno as dgoods_order_accountno,gd.auditor as dauditor,gd.operators as doperators,gd.delivery_accountno,gd.status as dstatus,gd.delivery_amount,gd.pay_status as dpay_status,gdd.dpid as stock_dpidd,gdd.goods_id as dgoods_id,gdd.goods_code as dgoods_code,gdd.material_code as dmaterial_code,gdd.price as dprice,gdd.num as dnum,gdd.pici from nb_goods_delivery gd left join nb_goods_delivery_details gdd on ( gd.lid=gdd.goods_delivery_id) 
+			) gdel on ( gorder.account_no=gdel.dgoods_order_accountno)'
+		.' left join (select gi.create_at as create_ati,gi.auditor as iauditor,gi.goods_order_accountno as igoods_order_accountno,gi.operators as operators,gi.invoice_accountno,gi.sent_type,gi.sent_personnel,gi.mobile,gi.status as istatus,gi.invoice_amount,gi.pay_status as ipay_status,gid.dpid as stock_dpidi,gid.goods_id as igoods_id,gid.goods_code as igoods_code,gid.material_code as imaterial_code,gid.price as iprice,
+		gid.num as inum from nb_goods_invoice gi left join nb_goods_invoice_details gid on ( gi.lid=gid.goods_invoice_id)
+		) gin on (gorder.account_no=gin.igoods_order_accountno)'
+		.' left join nb_goods_address ga on(gorder.goods_address_id=ga.lid)'
+		.' left join nb_goods g on(gorder.goods_id=g.lid)'
+		.' left join nb_company c on(gorder.stock_dpid=c.dpid)'
+		.' where gorder.dpid='.$this->companyId.' and gorder.user_id='.$user_id.' and gorder.account_no='.$account_no
+		.' group by goods_id';
+		$goods_orders = $db->createCommand($sql)->queryAll();
+// p($goods_orders);
+		$this->render('orderDetail',array(
+			'goods_orders'=>$goods_orders,
+		));
+	}
 
 
 
@@ -178,9 +241,10 @@ class MyinfoController extends BaseYmallController
 		.' left join (
 		 		SELECT gi.dpid,gi.compid,gi.goods_delivery_id,gi.goods_order_id,gi.goods_address_id,gi.goods_order_accountno,gi.invoice_accountno,gi.auditor,gi.operators,gi.sent_personnel,gi.mobile,gi.status,gi.invoice_amount,gi.pay_status,gi.remark,gid.lid as gidlid,gid.goods_id,gid.goods_code,gid.material_code,gid.price,gid.num,gid.remark as gidremark FROM nb_goods_invoice gi LEFT JOIN nb_goods_invoice_details gid ON (gi.lid = gid.goods_invoice_id and gi.status = 1) where gi.invoice_accountno = '.$invoice_accountno.'
 		 				) gis on ( gis.goods_order_accountno=go.account_no and gis.dpid=god.stock_dpid and gis.goods_id=god.goods_id)'
-		.' where god.dpid='.$this->companyId.' and god.account_no='.$account_no.' and go.order_status=5 and go.order_type=1 and go.pay_status=1 and go.user_id='.$user_id.'  and god.delete_flag=0 order by god.stock_dpid';
+		.' where god.dpid='.$this->companyId.' and god.account_no='.$account_no.' and go.user_id='.$user_id.'  and god.delete_flag=0 order by god.stock_dpid';
 
 		$products_getted = $db->createCommand($sql)->queryAll();
+		// p($products_getted);
 		$materials_get =array();
 		foreach ($products_getted as $key => $product) {
 			if ($product['invoice_accountno']) {
