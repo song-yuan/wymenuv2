@@ -203,9 +203,9 @@
 </footer>
 <div id="zf-qrcode" class="pre-order">
 	<div class="pre-step">第一步:长按下方二维码</div>
-	<div class="pre-step">第二步:点击“识别图中二维码”按钮</div>
+	<div class="pre-step">第二步:点击 <span class="cl-red">识别图中二维码</span>按钮</div>
 	<div><img id="qrcode-url" src=""/></div>
-	<div class="pre-step">有效时间4分钟</div>
+	<div class="pre-step tx-center">有效时间4分钟</div>
 </div>
 <script type="text/javascript">
 	function pre_create(){
@@ -219,7 +219,7 @@
 					$('#qrcode-url').attr('src',qrcodeUrl);
 					layer.open({
 						  type: 1
-						  ,title: ['按照下面步骤支付', 'text-align:center;font-szie:20px;']
+						  ,title: ['按照下面步骤支付', 'text-align:center;font-size:20px;padding:5px 0;']
 						  ,area: ['100%','100%'] //具体配置参考：offset参数项
 						  ,content: $('#zf-qrcode')
 						  ,shade: 0 //不显示遮罩
