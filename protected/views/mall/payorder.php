@@ -202,7 +202,7 @@
     <div class="clear"></div>
 </footer>
 <div id="zf-qrcode" class="pre-order">
-	<div class="pre-step">第一步:长按下方二维码</div>
+	<div class="pre-step">第一步:长按下方二维码↓↓↓</div>
 	<div class="pre-step">第二步:点击 <span class="cl-red">识别图中二维码</span>按钮</div>
 	<div><img id="qrcode-url" src=""/></div>
 	<div class="pre-step tx-center">有效时间4分钟</div>
