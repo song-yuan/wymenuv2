@@ -325,7 +325,7 @@ class WxBrandUser {
 		$time = time();
 		$userId = $user['lid'];
 		$userDpid = $user['dpid'];
-		$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$amount.' where lid='.$userId.' and did='.$userDpid;
+		$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$amount.' where lid='.$userId.' and dpid='.$userDpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		if(!$result){
 			throw new Exception('储值退回失败!');
