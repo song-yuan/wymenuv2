@@ -212,7 +212,7 @@ class MtOrder
 			$phsCode =  $value['sku_id'];
 			$price = $value['price'];
 			$amount = $value['quantity'];
-			$sql = 'select 0 as is_set,lid,product_name as name from nb_product where dpid='.$dpid.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name from nb_product_set where dpid='.$dpid.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
+			$sql = 'select 0 as is_set,lid,product_name as name,original_price from nb_product where dpid='.$dpid.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name,set_price as original_price from nb_product_set where dpid='.$dpid.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			
 			if(!$res){
@@ -234,7 +234,7 @@ class MtOrder
 							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$val));
 						}
 					}
-					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
+					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$res['original_price'],'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
 				}else{
 					$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
@@ -243,8 +243,8 @@ class MtOrder
 					$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 					$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
 					
-					foreach ($productDetails as $i=>$detail){
-						$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $itemprice);
+					foreach ($productDetails as $detail){
+						$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $price);
 						
 						$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 						array_push($orderArr['order_product'], $orderProduct);
