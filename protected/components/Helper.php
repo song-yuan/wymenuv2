@@ -203,7 +203,8 @@ class Helper
 				$discount = $total - $pay;
 				$result = number_format(($price - $price/$total*$discount),4);
 			}else{
-				$result = $price;
+				$over = $pay - $total ;
+				$result = number_format(($price + $price/$total*$over),4);
 			}
 		}
 		return $result;
