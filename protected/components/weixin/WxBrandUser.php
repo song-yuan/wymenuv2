@@ -318,11 +318,34 @@ class WxBrandUser {
 	 * 会员退储值余额
 	 *
 	 */
-	public static function refundYue($amount,$cardId) {
-		$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$amount.' where card_id="'.$cardId.'"';
+	public static function refundYue($amount,$user,$dpid) {
+		if($amount < 0){
+			throw new Exception('储值退款不能小于0!');
+		}
+		$time = time();
+		$userId = $user['lid'];
+		$userDpid = $user['dpid'];
+		$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$amount.' where lid='.$userId.' and dpid='.$userDpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		if(!$result){
 			throw new Exception('储值退回失败!');
+		}
+		$se = new Sequence("member_consume_record");
+		$lid = $se->nextval();
+		$consumeArr = array(
+				'lid'=>$lid,
+				'dpid'=>$dpid,
+				'create_at'=>date('Y-m-d H:i:s',$time),
+				'update_at'=>date('Y-m-d H:i:s',$time),
+				'type'=>2,
+				'consume_type'=>3,
+				'card_id'=>$userId,
+				'consume_amount'=>-$amount,
+				'is_sync'=>DataSync::getInitSync(),
+		);
+		$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
+		if(!$result){
+			throw new Exception('插入消费记录表失败');
 		}
 	}
 }

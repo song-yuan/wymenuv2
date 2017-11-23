@@ -150,6 +150,9 @@ class WxCashBack
 	 * 
 	 */
 	 public static function userCashBack($total, $userId, $userDpid, $dpid, $isAll = 0){
+	 	if($total < 0){
+	 		throw new Exception('储值支付金额不能小于0');
+	 	}
 	 	$time = time();
 	 	$is_sync = DataSync::getInitSync();
 	 	if($isAll){
@@ -189,6 +192,9 @@ class WxCashBack
 	  *
 	  */
 	 public static function userCashRecharge($total,$userId,$userDpid, $dpid,$isAll = 0){
+	 	if($total < 0){
+	 		throw new Exception('储值支付金额不能小于0');
+	 	}
 	 	$time = time();
 	 	$is_sync = DataSync::getInitSync();
 	 	if($isAll){

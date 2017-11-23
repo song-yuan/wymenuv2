@@ -1244,15 +1244,16 @@ class DataSyncOperation {
 					}elseif ($pay['paytype']==10){
 						if($order['order_type'] > 0){
 							if($pay['remark']!='全款支付'){
-								$remark = $pay['remark'];
+								$cardId = $pay['remark'];
+								$user = WxBrandUser::getFromCardId($dpid, $cardId);
 							}else{
 								$user = WxBrandUser::get($order['user_id'],$dpid);
-								$remark = $user['card_id'];
 							}
 						}else{
-							$remark = $pay['remark'];
+							$cardId = $pay['remark'];
+							$user = WxBrandUser::getFromCardId($dpid, $cardId);
 						}
-						WxBrandUser::refundYue($refund_fee, $remark);
+						WxBrandUser::refundYue($refund_fee, $user, $dpid);
 					}
 					$se = new Sequence ( "order_pay" );
 					$orderPayId = $se->nextval ();
