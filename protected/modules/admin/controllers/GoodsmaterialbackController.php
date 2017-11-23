@@ -46,9 +46,17 @@ class GoodsmaterialbackController extends BackendController
 					.' order by gst.create_at desc';
 			$models = $db->createCommand($sql)->queryAll();
 		}
-			// p($models);
+		$models_back=array();
+		foreach ($models as $key => $model) {
+			if (!isset($models_back[$model['goods_order_accountno']])) {
+				$models_back[$model['goods_order_accountno']]= array();
+			}
+			array_push($models_back[$model['goods_order_accountno']], $model);
+		}
+		// p($models_back);
+
 		$this->render('index',array(
-			'models'=>$models,
+			'models'=>$models_back,
 			'back_status'=>$back_status,
 			'begin_time'=>$begin_time,
 			'end_time'=>$end_time,
@@ -58,7 +66,7 @@ class GoodsmaterialbackController extends BackendController
 
 	public function actionChangestatus()
 	{
-		$lid = Yii::app()->request->getParam('lid');
+		$account_no = Yii::app()->request->getParam('account_no');
 		$status = Yii::app()->request->getParam('status');
 		$db = Yii::app()->db;
 		if(Yii::app()->request->isAjaxRequest) {
@@ -67,7 +75,7 @@ class GoodsmaterialbackController extends BackendController
 			}else{
 				$status = 1;
 			}
-			$sql = 'update nb_goods_stock_taking set status ='.$status.' where lid ='.$lid;
+			$sql = 'update nb_goods_stock_taking set status ='.$status.' where goods_order_accountno ='.$account_no;
 			$command=$db->createCommand($sql)->execute();
 
 			if($command){
