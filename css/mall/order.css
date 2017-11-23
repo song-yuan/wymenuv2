@@ -112,3 +112,16 @@ body{ background-color:#E5E5E5;}
     margin-right: 10px;
     vertical-align: middle;
 }
+.pre-order{
+	display:none;
+	font-size:20px
+}
+.pre-order .pre-step{
+	padding:10px;
+}
+.pre-order img{
+	width:100%;
+}
+.tx-center{
+	text-align:center;
+}
