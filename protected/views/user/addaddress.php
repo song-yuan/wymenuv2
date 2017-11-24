@@ -75,7 +75,8 @@
   function validate() {
         if($('#name').val() == ''){
             alert('请填写收货人名字！');
-            return false;}
+            return false;
+        }
         if($('#mobile').val() == ''){
             alert('请填写收货人手机！');
             return false;}
@@ -84,7 +85,8 @@
             return false;}
         if($('#street').val() == ''){
             alert('请填写详细地址！');
-        return false;}
+        	return false;
+        }
     }
     $(document).ready(function(){
         init();

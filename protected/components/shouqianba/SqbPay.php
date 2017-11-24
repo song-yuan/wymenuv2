@@ -521,6 +521,7 @@ class SqbPay{
     		//var_dump($paramsStr);
     		Helper::writeLog($client_sn.'&&'.$terminal_sn);
     		$string = "Location:https://m.wosai.cn/qr/gateway?".$paramsStr;
+    		echo $string;exit;
     		Helper::writeLog("支付请求链接:".$string);
     		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
     		//exit;
