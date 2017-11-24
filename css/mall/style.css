@@ -141,3 +141,11 @@ input[type="submit"], input[type="reset"], input[type="button"], button
 	{
 	-webkit-appearance: none;
 }
+
+.tx-center{
+	text-align:center;
+}
+
+.cl-red{
+	color:red;
+}

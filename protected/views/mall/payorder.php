@@ -23,6 +23,7 @@
 	$canpWxpay = true;
 	$compaychannel = WxCompany::getpaychannel($this->companyId);
 	$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
+	$jsApiParameters = '';
 	if($payChannel==1){
 		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
@@ -72,8 +73,17 @@
 		);
 		Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
-	}else{
-		$jsApiParameters = '';
+	}elseif($payChannel==3){
+		$predata = array(
+				'dpid'=>$this->companyId,
+				'out_trade_no'=>$orderId,
+				'should_total'=>(string)($payPrice*100),
+				'pay_way'=>'3',
+				'sub_pay_way'=>'2',
+				'abstract'=>$this->company['company_name'].'微信点单',
+				'operator'=>'001',
+				'notify_url'=>'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult')
+		);
 	}
 ?>
 
@@ -191,13 +201,38 @@
     </div>
     <div class="clear"></div>
 </footer>
-
+<div id="zf-qrcode" class="pre-order">
+	<div class="pre-step">第一步:长按下方二维码↓↓↓</div>
+	<div class="pre-step">第二步:点击 <span class="cl-red">识别图中二维码</span>按钮</div>
+	<div><img id="qrcode-url" src=""/></div>
+	<div class="pre-step tx-center">有效时间4分钟</div>
+</div>
 <script type="text/javascript">
+	function pre_create(){
+		$.ajax({
+			url:'<?php echo $this->createUrl('/sqbpay/precreate');?>',
+			data:{data:<?php echo json_encode($predata);?>},
+			type:'POST',
+			success:function(data){
+				if(data.status){
+					var qrcodeUrl = data.result.qr_code_image_url;
+					$('#qrcode-url').attr('src',qrcodeUrl);
+					layer.open({
+						  type: 1
+						  ,title: ['按照下面步骤支付', 'text-align:center;font-size:20px;padding:5px 0;']
+						  ,area: ['100%','100%'] //具体配置参考：offset参数项
+						  ,content: $('#zf-qrcode')
+						  ,shade: 0 //不显示遮罩
+					});
+				}
+			},
+			dataType:'json'
+			});
+	}
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
-		<?php if ($payChannel==1):?>
-		<?php if($canpWxpay):?>
+		<?php if($canpWxpay&&$payChannel==1):?>
 		WeixinJSBridge.invoke(
 			'getBrandWCPayRequest',
 			<?php echo $jsApiParameters; ?>,
@@ -214,11 +249,6 @@
 			}
 		);
 		<?php endif;?>
-		<?php elseif($payChannel==2):?>
-		location.href = '<?php echo $sqbpayUrl;?>';
-		<?php else:?>
-		layer.msg('无支付信息,请联系客服!');
-		<?php endif;?>
 	}
 	function callpay()
 	{
@@ -226,6 +256,7 @@
 		layer.msg('<?php echo $jsApiParameters;?>');
 		return;
 		<?php endif;?>
+		<?php if ($payChannel==1):?>
 		if (typeof WeixinJSBridge == "undefined"){
 		    if( document.addEventListener ){
 		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -236,6 +267,15 @@
 		}else{
 		    jsApiCall();
 		}
+		<?php elseif($payChannel==2):?>
+		// 收钱吧线上支付
+		location.href = '<?php echo $sqbpayUrl;?>';
+		<?php elseif($payChannel==3):?>
+		// 收钱吧扫二维码支付
+		pre_create();
+		<?php else:?>
+		layer.msg('无支付信息,请联系客服!');
+		<?php endif;?>
 	}
 	$(document).ready(function(){
 		$('#payOrder').click(function(){

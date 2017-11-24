@@ -40,22 +40,7 @@ class SqbpayController extends Controller
 	}
 	// 预下单
 	public function actionPrecreate(){
-		$dpid = Yii::app()->request->getParam('companyId');
-		$orderId = Yii::app()->request->getParam('orderId');
-		$openId = 'oIj93t9Fd5blvCLdQ6qq_iK1Api8';
-		$order = WxOrder::getOrder($orderId, $dpid);
-		$randNum = Helper::randNum(3);
-		$data = array(
-				'dpid'=>$dpid,
-				'out_trade_no'=>$order['lid'].'-'.$order['dpid'].'-'.$randNum,
-				'should_total'=>(string)($order['should_total']*100),
-				'pay_way'=>'3',
-				'sub_pay_way'=>'2',
-				'open_id'=>$openId,
-				'abstract'=>'壹点吃微信点单',
-				'operator'=>'001',
-				'notify_url'=>''
-		);
+		$data = Yii::app()->request->getPost('data');
 		$result = SqbPay::precreate($data);
 		echo json_encode($result);exit;
 	}

@@ -274,8 +274,6 @@ class SqbPay{
     	$payway = $data['pay_way'];
     	$subpayway = $data['sub_pay_way'];
     	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
-    	$payer_uid = $data['open_id'];
-    	/*消费者在支付通道的唯一id,微信WAP支付必须传open_id*/
     	$subject = $data['abstract'];
     	/*本次交易的简要介绍*/
     	$operator = $data['operator'];
@@ -298,7 +296,6 @@ class SqbPay{
     				'total_amount'=>$total_amount,
     				'payway'=>$payway,
     				'sub_payway'=>$subpayway,
-    				'payer_uid'=>$payer_uid,
     				'subject'=>$subject,
     				'operator'=>$operator,
     				'notify_url'=>$notify_url,
