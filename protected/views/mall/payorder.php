@@ -82,7 +82,7 @@
 				'sub_pay_way'=>'2',
 				'abstract'=>$this->company['company_name'].'微信点单',
 				'operator'=>'001',
-				'notify_url'=>'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult')
+				'notify_url'=>$this->createAbsoluteUrl('/sqbpay/precreate')
 		);
 	}
 ?>
