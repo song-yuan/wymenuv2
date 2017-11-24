@@ -322,6 +322,8 @@ class SqbpayController extends Controller
 	 * 
 	 */
 	public function actionPreNotice(){
-		
+		$notify = new SqbNotify();
+		$notify->Handle('pre-create');
+		exit;
 	}
 }
