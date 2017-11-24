@@ -209,6 +209,7 @@
 </div>
 <script type="text/javascript">
 	function pre_create(){
+		<?php if($canpWxpay&&$payChannel==3):?>
 		$.ajax({
 			url:'<?php echo $this->createUrl('/sqbpay/precreate');?>',
 			data:{data:<?php echo json_encode($predata);?>},
@@ -227,7 +228,8 @@
 				}
 			},
 			dataType:'json'
-			});
+		});
+		<?php endif;?>
 	}
 	//调用微信JS api 支付
 	function jsApiCall()
