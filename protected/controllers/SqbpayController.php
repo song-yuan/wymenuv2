@@ -317,4 +317,11 @@ class SqbpayController extends Controller
 			//Helper::writeLog('第一次2:['.$result.']');
 		}
 	}
+	/**
+	 * 预订单通知地址
+	 * 
+	 */
+	public function actionPreNotice(){
+		
+	}
 }
