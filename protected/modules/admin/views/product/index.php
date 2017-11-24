@@ -11,9 +11,10 @@
 		font-weight:600;
 		border-radius: 5px;
 	}
+	.fileupload-preview.fileupload-exists.thumbnail{max-width:200px; max-height:100px; height:20px;}
 </style>
 <div class="page-content">
-	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -57,15 +58,20 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
-							<input type="text" class="form-control" name="pname" id="pname" placeholder='<?php echo $pname;?>'>
+							<input type="text" class="form-control" name="pname" id="pname" placeholder='<?php if ($pname) {echo $pname;}else{echo '请输入名称关键字';} ?>'>
 						</div>
 						<div class="btn-group">
-							<input type="button" value="查询" class="btn blue" id="pnamebtn">
+							<span  class="btn blue" id="pnamebtn"><i class="glyphicon glyphicon-search"></i> <?php echo yii::t('app','查询');?></span>
 						</div>
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+
+
+						<span class="btn yellow" id="inExcel"><i class="glyphicon glyphicon-save"></i> <?php echo yii::t('app','导入Excel文件');?></span>
+
+						<a href="<?php echo $this->createUrl('product/indexExport' , array('companyId' => $this->companyId));?>" class="btn green"><i class="glyphicon glyphicon-open"></i> <?php echo yii::t('app','导出Excel模版');?></a>
 						<div class="btn-group">
 							<button type="button" id="deleteprod"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
@@ -194,6 +200,46 @@
 		<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+
+	<div class="page-content" style="overflow:hidden;">
+	<div id="main2" name="main2" style="min-width: 500px;min-height:300px;display:none;background: white;">
+	<div id="content">
+		<div class="form-body">
+			<?php $form=$this->beginWidget('CActiveForm', array(
+					'id' => 'excel-form',
+					'errorMessageCssClass' => 'help-block',
+					'htmlOptions' => array(
+						'class' => 'form-horizontal',
+						'enctype' => 'multipart/form-data'
+					),
+			)); ?>
+			<div class="form-group ">
+				<div class="col-md-9">
+					<div class="fileupload fileupload-new" data-provides="fileupload">
+						<div class="fileupload-preview fileupload-exists thumbnail"></div>
+						<div>
+							<span class="btn default btn-file">
+							<span class="fileupload-new"><i class="fa fa-paper-clip"></i> 点击选择上传的Excel文件 </span>
+							<span class="fileupload-exists"><i class="fa fa-undo"></i> 更改 </span>
+							<input type="file" accept="application/vnd.ms-excel" name="file" class="default" />
+							</span>
+							<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除 </a>
+						</div>
+					</div>
+					<span class="label label-danger">注意:</span>
+					<span>大小：建议不超过2M 格式:.xls </span>
+				</div>
+			</div>
+			<div class="form-actions fluid">
+				<div class="col-md-offset-3 col-md-9">
+					<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
+					<button type="button" class="btn layui-layer-close layui-layer-close2" style="margin-left:3em;"><?php echo yii::t('app','关闭');?></button>
+				</div>
+			</div>
+			<?php $this->endWidget(); ?>
+
+	</div>
+</div>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$(document).keydown(function(event){
@@ -208,7 +254,9 @@
 			}
 			return true;
 		});
-		
+		$("#su").on('click',function(){
+			$("#excel-form").submit();
+		});
 		$('#pnamebtn').click(function(event) {
 			var pname = $('#pname').val();
 			// alert(pname);
@@ -313,5 +361,40 @@
 			if(window.confirm("确认删除勾选菜品?")){
 				$('#product-form').submit();}
 		})
+
+
+
+		$('#inExcel').on('click',function(){
+			$('#excel-form').attr({
+				action:"<?php echo $this->createUrl('product/indexInput',array('companyId'=>$this->companyId));?>"
+			});
+			var heightP =($(window).outerHeight()/3)+'px';
+			var widthP =($(window).outerWidth()/3)+'px';
+			// alert(heightP);
+			// alert(widthP);
+			layer_zhexiantu=layer.open({
+			     type: 1,
+			     shade: [0.5,'#fff'],
+			     moveOut:true,
+			     offset:[heightP,widthP],
+			     shade: false,
+			     title: false, //不显示标题
+			     area: ['auto', 'auto'],
+			     content: $('#main2'), //捕获的元素
+			     cancel: function(index){
+			         layer.close(index);
+			         layer_zhexiantu=0;
+			     }
+			 });
+		
+
+			layer.style(layer_zhexiantu, {
+				backgroundColor: 'rgba(255,255,255,0.2)',
+			});
+			function swfupload_callback(name,path,oldname)  {
+				$("#Product_main_picture").val(name);
+				$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
+			}
+		});
 	});
 	</script>	
