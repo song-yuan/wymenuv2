@@ -520,9 +520,9 @@ class SqbPay{
     		$paramsStr = $paramsStr."&sign=".$sign;
     		//var_dump($paramsStr);
     		Helper::writeLog($client_sn.'&&'.$terminal_sn);
-    		$string = "Location:https://m.wosai.cn/qr/gateway?".$paramsStr;
+    		$string = "Location:https://qr.shouqianba.com/gateway?".$paramsStr;
     		Helper::writeLog("支付请求链接:".$string);
-    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
+    		header("Location:https://qr.shouqianba.com/gateway?".$paramsStr);
     		//exit;
     	}else{
     		$result = array(
