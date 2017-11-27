@@ -218,29 +218,6 @@
 	<div class="pre-step tx-center">有效时间4分钟</div>
 </div>
 <script type="text/javascript">
-	function pre_create(){
-		<?php if($canpWxpay&&$payChannel==3):?>
-		$.ajax({
-			url:'<?php echo $this->createUrl('/sqbpay/precreate');?>',
-			data:{data:<?php echo json_encode($predata);?>},
-			type:'POST',
-			success:function(data){
-				if(data.status){
-					var qrcodeUrl = data.result.qr_code_image_url;
-					$('#qrcode-url').attr('src',qrcodeUrl);
-					layer.open({
-						  type: 1
-						  ,title: ['按照下面步骤支付', 'text-align:center;font-size:20px;padding:5px 0;']
-						  ,area: ['100%','100%'] //具体配置参考：offset参数项
-						  ,content: $('#zf-qrcode')
-						  ,shade: 0 //不显示遮罩
-					});
-				}
-			},
-			dataType:'json'
-		});
-		<?php endif;?>
-	}
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
@@ -279,12 +256,9 @@
 		}else{
 		    jsApiCall();
 		}
-		<?php elseif($payChannel==2):?>
+		<?php elseif($payChannel==2||$payChannel==3):?>
 		// 收钱吧线上支付
 		location.href = '<?php echo $sqbpayUrl;?>';
-		<?php elseif($payChannel==3):?>
-		// 收钱吧扫二维码支付
-		pre_create();
 		<?php else:?>
 		layer.msg('无支付信息,请联系客服!');
 		<?php endif;?>
