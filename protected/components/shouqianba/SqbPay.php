@@ -455,12 +455,13 @@ class SqbPay{
     	return $result;
     
     }
-    
+    // 线上web api
     public static function preOrder($data){
     	 
     	$dpid = $data['dpid'];
     	$client_sn = $data['client_sn'];
-    	
+    	// 壹点吃后台 支付方式
+    	$payChannel = $data['pay_channel'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
     	$total_amount = ''.$data['total_amount']*100;
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
@@ -518,11 +519,18 @@ class SqbPay{
     		$paramsStr = rtrim($paramsStrs,"&");
     		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
     		$paramsStr = $paramsStr."&sign=".$sign;
-    		//var_dump($paramsStr);
-    		Helper::writeLog($client_sn.'&&'.$terminal_sn);
-    		$string = "Location:https://qr.shouqianba.com/gateway?".$paramsStr;
-    		Helper::writeLog("支付请求链接:".$string);
-    		header("Location:https://qr.shouqianba.com/gateway?".$paramsStr);
+    		
+    		if($payChannel==2){
+    			Helper::writeLog($client_sn.'&&'.$terminal_sn);
+	    		$string = "Location:https://m.wosai.cn/qr/gateway?".$paramsStr;
+	    		Helper::writeLog("支付请求链接:".$string);
+	    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
+    		}else{
+    			Helper::writeLog($client_sn.'&&'.$terminal_sn);
+    			$string = "Location:https://qr.shouqianba.com/gateway?".$paramsStr;
+    			Helper::writeLog("支付请求链接:".$string);
+    			header("Location:https://qr.shouqianba.com/gateway?".$paramsStr);
+    		}
     		//exit;
     	}else{
     		$result = array(

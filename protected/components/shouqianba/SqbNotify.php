@@ -69,6 +69,7 @@ class SqbNotify{
 	}
 	public function insertNotify($data){
 		Helper::writeLog('notify insert');
+		// 预订单下单通知
 	}
 	private function callUserFunc($callback){
 		$data = file_get_contents('php://input');
