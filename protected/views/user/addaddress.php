@@ -87,6 +87,10 @@
             alert('请填写详细地址！');
         	return false;
         }
+        if($('input[name="address[lng]"]').val() == '0'||$('input[name="address[lat]"]').val() == '0'){
+            alert('请点击页面空白处,已获取地址坐标！');
+        	return false;
+        }
     }
     $(document).ready(function(){
         init();
