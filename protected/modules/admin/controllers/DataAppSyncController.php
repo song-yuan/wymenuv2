@@ -345,7 +345,7 @@ class DataAppSyncController extends Controller
 		$yesterDateEnd = date('Y-m-d 23:59:59',strtotime("-1 day"));
 		$platforms = ThirdPlatform::getXstInfo();
 		foreach ($platforms as $platform){
-			$sql = 'Select lid,dpid,create_at,should_total from nb_order where dpid='.$platform['dpid'].' and order_status in (3,4,8)';
+			$sql = 'Select lid,dpid,create_at,should_total from nb_order where dpid='.$platform['dpid'].' and create_at >= "'.$yesterDateBegain.'" and create_at <= "'.$yesterDateEnd.'" and order_status in (3,4,8)';
 			$orders = Yii::app()->db->createCommand($sql)->queryAll();
 			foreach ($orders as $order){
 				if($order['order_type']==0){
