@@ -322,26 +322,6 @@ class CfceshiController extends BackendController
 		//$arr = $soap->ServiceMethod($ParamData);
 		var_dump($result) ;
 		exit;
-		//$ServiceRestCallByHippotigris = $soap->VaicationResult($ParamData);
-		if (empty($ServiceRestCallByHippotigris)) {
-			echo '用户信息同步异常, 错误码: 404';
-			exit();
-		}else {
-			$lists = json_decode($ServiceRestCallByHippotigris->VaicationResultResult, true);//获取到的是JSON格式，所以要json_decode()
-			$ClickDataByHippotigris = $lists['ResponseData'][0];
-		}
-		//$result = Xst::savewsdl('1111111111',23,'2017-11-27 15:08:43','现金','销售','POS机');
-		//$result = SqbPay::refund($_POST);
-		//var_dump($result);
-		exit;
-		$obj = json_decode($result,true);
-		$result_code = $obj['biz_response']['result_code'];
-		if($result_code == 'REFUND_SUCCESS'){
-			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'退款成功！')));
-		}else{
-			Yii::app()->end(json_encode(array("status"=>"eror",'msg'=>'退款失败,原因：'.$obj['biz_response']['error_message'])));
-		}
-		exit;
 	}
 	
 }
