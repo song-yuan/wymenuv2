@@ -335,4 +335,34 @@ class DataAppSyncController extends Controller
 		$result = SiteClass::closeSite($dpid,'0',$siteId);
 		echo json_encode($result);exit;
 	}
+	/**
+	 *
+	 * 新上铁接口
+	 *
+	 */
+	public function actionOrderToXst(){
+		$yesterDateBegain = date('Y-m-d 00:00:00',strtotime("-1 day"));
+		$yesterDateEnd = date('Y-m-d 23:59:59',strtotime("-1 day"));
+		$platforms = ThirdPlatform::getXstInfo();
+		foreach ($platforms as $platform){
+			$sql = 'Select lid,dpid,create_at,should_total from nb_order where dpid='.$platform['dpid'].' and order_status in (3,4,8)';
+			$orders = Yii::app()->db->createCommand($sql)->queryAll();
+			foreach ($orders as $order){
+				if($order['order_type']==0){
+					$sourcetype = 'POS机';
+				}else{
+					$sourcetype = '网络配餐';
+				}
+				$order = array(
+						'lid'=>$order['lid'],
+						'create_at'=>$order['create_at'],
+						'total'=>$order['should_total'],
+						'payment'=>'现金',
+						'transtype'=>'销售',
+						'sourcetype'=>$sourcetype,
+				);
+				ThirdPlatform::xst($order,$platform);
+			}
+		}
+	}
 }
