@@ -278,4 +278,70 @@ class CfceshiController extends BackendController
 		}
 	}
 	
+	public function actionCeshijk(){
+		$soap=new SoapClient('http://58.213.118.119:8127/Ajax/TradeChange.asmx?wsdl');
+		$soap->soap_defencoding = 'utf-8';
+		$soap->decode_utf8 = false;
+		$soap->xml_encoding = 'utf-8';
+		
+		$valiKEY = '6EA576539AEB4E878946911DA4E0C6BD';
+		$stationname = '合肥南';
+		$stationid = '5933e969-2773-42dc-a17e-725e1ad386fd';
+		$branch = '合肥分公司';
+		$shopname = "巴百克牛肉堡";
+		$shopid = "e61b636e-245c-4bd9-b235-85e7bef376c5";
+		
+		$ParamData = array(
+				'STATIONNAME'=>$stationname,
+		    	'STATIONID'=>$stationid,
+		    	'SHOPNAME'=>$shopname,
+		    	'SHOPNO'=>$shopid,
+		    	'BILLTYPE'=>"",
+		    	'BILLNO'=>'12345678765432',
+		    	'BILLALLPRICES'=>'1.22',
+		    	'BILLTIME'=>'2017-11-28 10:35:10',
+		    	'PAYMENT'=>'xj',
+		    	'TRANSTYPE'=>'xs',
+		    	'SOURCETYPE'=>'pos',
+		    	'SOURCENO'=>"",
+		    	'BRANCH'=>$branch
+		);
+		$data = array(
+				'tradeChange'=>$ParamData,
+				'valiKEY'=>$valiKEY
+		);
+		$param["tradeChange"]='[{"STATIONNAME":"上海站","STATIONID":"6464ef51-b72c-4aeb-ac28-320fc904703e","SHOPNAME":"老城隍庙","SHOPNO":"a6db5488-7273-40f0-be57-04ff95b6641b","BILLTYPE":"","BILLNO":"10120161017224622","BARCODE":"","BILLALLPRICES":6.0,"BILLTIME":"2017-10-18 09:12:00","TRANSTYPE":"销售","PAYMENT":"xj","SOURCETYPE":"POS机","SOURCENO":"101","BRANCH":"hf"}]';
+		$param["valiKey"]=$valiKEY;
+		
+		
+		print_r($soap->__getFunctions());
+		var_dump($soap->__getTypes());
+		//exit;
+		$result = $soap->__Call('Save',array($param));
+		//$arr = $soap->Save();
+		//$arr = $soap->ServiceMethod($ParamData);
+		var_dump($result) ;
+		exit;
+		//$ServiceRestCallByHippotigris = $soap->VaicationResult($ParamData);
+		if (empty($ServiceRestCallByHippotigris)) {
+			echo '用户信息同步异常, 错误码: 404';
+			exit();
+		}else {
+			$lists = json_decode($ServiceRestCallByHippotigris->VaicationResultResult, true);//获取到的是JSON格式，所以要json_decode()
+			$ClickDataByHippotigris = $lists['ResponseData'][0];
+		}
+		//$result = Xst::savewsdl('1111111111',23,'2017-11-27 15:08:43','现金','销售','POS机');
+		//$result = SqbPay::refund($_POST);
+		//var_dump($result);
+		exit;
+		$obj = json_decode($result,true);
+		$result_code = $obj['biz_response']['result_code'];
+		if($result_code == 'REFUND_SUCCESS'){
+			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'退款成功！')));
+		}else{
+			Yii::app()->end(json_encode(array("status"=>"eror",'msg'=>'退款失败,原因：'.$obj['biz_response']['error_message'])));
+		}
+		exit;
+	}
+	
 }
