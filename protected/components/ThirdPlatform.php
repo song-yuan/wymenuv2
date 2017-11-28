@@ -5,7 +5,7 @@
     */
     class ThirdPlatform 
     {
-    	public static function getXstInfos(){
+    	public static function getXstInfo(){
     		$sql = "select * from nb_web_service where is_avalible = 1 and delete_flag = 0";
     		$models = Yii::app()->db->createCommand($sql)->queryAll();
     		return $models;
