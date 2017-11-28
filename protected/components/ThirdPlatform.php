@@ -32,9 +32,9 @@
 			));
 			$ParamData = json_encode($ParamData,JSON_UNESCAPED_UNICODE);
 			$param["tradeChange"] = $ParamData;
-			$param["valiKey"] = $valiKEY;
+			$param["valiKey"] = $info['valikey'];
 			$result = $soap->__Call('Save',array($param));
-			Helper::writeLog($ParamData.'--'.$result);
+			Helper::writeLog($ParamData.'--'.$result->SaveResult);
 		}
     }
 ?>
