@@ -264,6 +264,9 @@
 		if($product['cate_type']!='2'){
 			$productStr .='<div class="section" id="st'.$product['lid'].'" type="normal"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach ($productLists as $pProduct){
+				if($this->type==2){
+					$pProduct['member_price'] = $pProduct['original_price'];
+				}
 				if($pProduct['main_picture']==''){
 					$pProduct['main_picture'] = $defaultImg;
 				}
@@ -326,6 +329,9 @@
 			// 套餐
 			$productStr .='<div class="section" id="st'.$product['lid'].'" type="normal"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach($productLists as $pProductSet){
+				if($this->type==2){
+					$pProductSet['member_price'] = $pProductSet['set_price'];
+				}
 				$pDetail = $pProductSet['detail'];
 				if($pProductSet['main_picture']==''){
 					$pProductSet['main_picture'] = $defaultImg;

@@ -64,7 +64,7 @@ class MallController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2200;
+			$userId = 2146;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
@@ -104,7 +104,6 @@ class MallController extends Controller
         	$products = $product->categoryProductLists;
         	Yii::app()->cache->set($key,json_encode($products),$expire);
         }
-        
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
         $disables = $carts['disable'];

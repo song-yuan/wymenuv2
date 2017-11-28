@@ -195,10 +195,10 @@ class WechatMemberController extends BackendController {
 
         //关注时间数据处理
         if($foucsfrom){
-            $sql .= " and t.create_at >='".$foucsfrom."'";
+            $sql .= " and t.create_at >='".$foucsfrom." 00:00:00'";
         }
         if($foucsto){
-            $sql .= " and t.create_at <='".$foucsto."'";
+            $sql .= " and t.create_at <='".$foucsto." 23:59:59'";
         }
 
 

@@ -66,6 +66,7 @@
 				'total_amount'=>$payPrice,
 				'subject'=>$company['company_name']."-微信点餐订单",
 				'payway'=>3,
+				'pay_channel'=>$payChannel,
 				'operator'=>'微信会员-'.$user['lid'],
 				'reflect'=>$reflect,
 				'notify_url'=>$notifyUrl,
@@ -74,16 +75,25 @@
 		Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
 	}elseif($payChannel==3){
-		$predata = array(
-				'dpid'=>$this->companyId,
-				'out_trade_no'=>$orderId,
-				'should_total'=>(string)($payPrice*100),
-				'pay_way'=>'3',
-				'sub_pay_way'=>'2',
-				'abstract'=>$this->company['company_name'].'微信点单',
-				'operator'=>'001',
-				'notify_url'=>'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult')
+		// 线上支付 新接口
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
+		$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
+		$data = array(
+				'companyId'=>$this->companyId,
+				'dpid'=>$order['dpid'],
+				'client_sn'=>$orderId,
+				'total_amount'=>$payPrice,
+				'subject'=>$company['company_name']."-微信点餐订单",
+				'payway'=>3,
+				'pay_channel'=>$payChannel,
+				'operator'=>'微信会员-'.$user['lid'],
+				'reflect'=>$reflect,
+				'notify_url'=>$notifyUrl,
+				'return_url'=>$returnUrl,
 		);
+		Helper::writeLog('view:'.$orderId);
+		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
 	}
 ?>
 
@@ -208,27 +218,6 @@
 	<div class="pre-step tx-center">有效时间4分钟</div>
 </div>
 <script type="text/javascript">
-	function pre_create(){
-		$.ajax({
-			url:'<?php echo $this->createUrl('/sqbpay/precreate');?>',
-			data:{data:<?php echo json_encode($predata);?>},
-			type:'POST',
-			success:function(data){
-				if(data.status){
-					var qrcodeUrl = data.result.qr_code_image_url;
-					$('#qrcode-url').attr('src',qrcodeUrl);
-					layer.open({
-						  type: 1
-						  ,title: ['按照下面步骤支付', 'text-align:center;font-size:20px;padding:5px 0;']
-						  ,area: ['100%','100%'] //具体配置参考：offset参数项
-						  ,content: $('#zf-qrcode')
-						  ,shade: 0 //不显示遮罩
-					});
-				}
-			},
-			dataType:'json'
-			});
-	}
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
@@ -267,12 +256,9 @@
 		}else{
 		    jsApiCall();
 		}
-		<?php elseif($payChannel==2):?>
+		<?php elseif($payChannel==2||$payChannel==3):?>
 		// 收钱吧线上支付
 		location.href = '<?php echo $sqbpayUrl;?>';
-		<?php elseif($payChannel==3):?>
-		// 收钱吧扫二维码支付
-		pre_create();
 		<?php else:?>
 		layer.msg('无支付信息,请联系客服!');
 		<?php endif;?>

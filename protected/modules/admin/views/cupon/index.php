@@ -48,7 +48,7 @@
     color: red;
 }
 .edit_del{
-    margin-top:10px;display: none;
+    margin-top:1px;display: none;
 }
 .edit_del .edit{
     margin-right:10px;

@@ -26,7 +26,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 		echo json_encode($msg);
 		exit;
 	}
-	if($compaychannel['pay_channel']=='2'){
+	if($compaychannel['pay_channel']=='2'||$compaychannel['pay_channel']=='3'){
 		$result = SqbPay::pay(array(
 				'type'=>'3',
 				'device_id'=>$poscode,
