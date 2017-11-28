@@ -15,7 +15,7 @@ class TestController extends Controller
 		exit;
 	}
 	public function actionQrcode(){
-		$url = 'http://www.baidu.com';
+		$url = 'https://m.wosai.cn/qr/gateway?client_sn=0000033658-0000000027-087&notify_url=http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult&operator=微信会员-0000002200&payway=3&reflect={"companyId":"0000000027","dpid":"0000000027"}&return_url=http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn&subject=壹点吃演示店-微信点餐订单&terminal_sn=100000930002128676&total_amount=700&sign=39601E5E603C0927890424DFF8254717';
 		$code=new QRCode($url);
 		$code->create();exit;
 	}
