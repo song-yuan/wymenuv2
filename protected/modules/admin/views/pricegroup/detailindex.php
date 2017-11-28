@@ -1,8 +1,14 @@
 
 <style>
 .radio-inline div{padding-top:0!important;}
+.form-horizontal .form-group {
+    margin-right: -15px;
+    margin-left: 0px;
+}
+.width2{
+    width: 200px;
+}
 </style>
-
 
 
 <div class="page-content">
@@ -51,8 +57,23 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','价格分组详细设置');?></div>
 					<div class="actions">
-
-						<div class="btn-group" style="left:3%;">
+						<div class="btn-group">
+							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+						</div>
+						<div class="btn-group">
+							<select id="istaocan" class="btn yellow width" >
+							    <option value="2" <?php if ($istaocan==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
+							    <option value="1" <?php if ($istaocan==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
+							    <option value="0" <?php if ($istaocan==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','单品');?></option>
+							</select>
+						</div>
+						<div class="btn-group">
+							<input type="search" name="pname" id="pname" value="" placeholder="输入产品名关键字" class="btn width2">
+						</div>
+						<div class="btn-group">
+						    <span id="search" class="btn blue" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></span>
+						</div>
+						<div class="btn-group">
 							<input type="submit"  class="btn yellow" value=<?php echo yii::t('app','批量保存');?> >
 						</div>
 					</div>
@@ -116,11 +137,11 @@
 									<div class="form-group">
 										<div class="row" style="padding-left:10px;">
 											<?php if($model['is_set']==1) :?>
-											<span style="color:red;font-size:1.2em;margin-left:40%; " >
+											<span style="color:red;font-size:1.2em; " >
 											<?php echo yii::t('app','套餐');?>
 											</span>
 											<?php elseif($model['is_set']==0):?>
-											<span style="color:yellowgreen;font-size:1.2em;margin-left:40%;text-align: middle; " >
+											<span style="color:yellowgreen;font-size:1.2em;text-align: middle; " >
 											<?php echo yii::t('app','单品');?>
 											</span>
 											<?php endif; ?>
@@ -130,7 +151,6 @@
 								<td>
 									<div class="row" style="padding-left:10px;">
 	                                    <input type="button" class="btn green saved" num="<?php echo $i;?>" lid="<?php echo $model['lid'];?>"  value="<?php echo yii::t('app','保存');?>">
-	                                    <!-- <a href="<?php //echo $this->createUrl('priceGroup/detailindex' , array('companyId' => $this->companyId ,'lid'=>$model['lid'],'pricegroupid'=>$pricegroupid,'is_set'=>$model['is_set'],'is_post'=>0));?>" class="btn green" ><?php //echo yii::t('app','保存');?></a>  -->
 									</div>
 								</td>
 							</tr>
@@ -193,3 +213,39 @@
 		<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+<script>
+	$('#istaocan').change(function(){
+		changeselect();
+	});
+	function changeselect(){
+		var istaocan = $('#istaocan').children('option:selected').val();
+		var pricegroupid ="<?php echo $pricegroupid; ?>";
+		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan;
+	 }
+	$('#selectCategory').change(function(){
+		var cid = $(this).val();
+		var pricegroupid ="<?php echo $pricegroupid; ?>";
+		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/cid/"+cid;
+	});
+
+	$('#search').click(function(event) {
+		/* Act on the event */
+		var istaocan = $('#istaocan').children('option:selected').val();
+		var pricegroupid ="<?php echo $pricegroupid; ?>";
+		var pname = $('#pname').val();
+		var cid = $('#selectCategory').val();
+		// alert(pname);
+		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan+"/pname/"+pname+"/cid/"+cid;
+	});
+
+	document.onkeydown=function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==13){ // enter 键
+        //要做的事情
+		var istaocan = $('#istaocan').children('option:selected').val();
+		var pricegroupid ="<?php echo $pricegroupid; ?>";
+		var pname = $('#pname').val();
+		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan+"/pname/"+pname;
+        }
+    };
+</script>

@@ -13,8 +13,6 @@ class PricegroupController extends BackendController
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
 		$criteria->order = ' lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
-
-		
 		$pages = new CPagination(PriceGroup::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -143,21 +141,46 @@ class PricegroupController extends BackendController
 		}
 	}
 	public function actionDetailIndex(){
+		$istaocan = Yii::app()->request->getParam('istaocan',2);
+		$pname = Yii::app()->request->getParam('pname',null);
 		$dpid = Yii::app()->request->getParam('companyId');
 		$page = Yii::app()->request->getParam('page');
 		$pricegroupid = Yii::app()->request->getParam('pricegroupid');
+		$categoryId = Yii::app()->request->getParam('cid',0);
 		$groupname = PriceGroup::model()->find('lid=:lid and dpid=:companyId' , array(':lid' => $pricegroupid , ':companyId' => $dpid))->group_name ;
-		// p($groupname);
 		$db = Yii::app()->db;
 		if(!Yii::app()->request->isPostRequest) {
-			$sql='select  d.lid,s.lid as plid,s.member_price,s.set_name as name,s.main_picture,1 as is_set ,s.set_price as yuanjia,d.price,d.mb_price from nb_product_set s left JOIN nb_price_group_detail d on (s.lid=d.product_id and s.dpid=d.dpid and d.is_set=1 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.')  where s.delete_flag=0 and s.dpid='.$dpid
-				. ' union ' .
-				' select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.' )  where t.delete_flag=0 and t.dpid='.$dpid;
+			if($pname==null) {
+				$psname='';
+				$pdname='';
+			}else{
+				$psname =' and s.set_name like "%'.$pname.'%"';
+				$pdname =' and t.product_name like "%'.$pname.'%"';
+			}
+			if($categoryId==0) {
+				$scid='';
+				$dcid='';
+			}else{
+				$scid =' and s.category_id='.$categoryId;
+				$dcid =' and t.category_id='.$categoryId;
+			}
+			// p($psname);
+			if ($istaocan==2) {
+				//全部
+				$sql='select  d.lid,s.lid as plid,s.member_price,s.set_name as name,s.main_picture,1 as is_set ,s.set_price as yuanjia,d.price,d.mb_price from nb_product_set s left JOIN nb_price_group_detail d on (s.lid=d.product_id and s.dpid=d.dpid and d.is_set=1 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.')  where s.delete_flag=0 and s.dpid='.$dpid.$psname.$scid
+					. ' union ' .
+					' select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.' )  where t.delete_flag=0 and t.dpid='.$dpid.$pdname.$dcid;
+			}else if($istaocan==1){
+				//套餐
+				$sql='select  d.lid,s.lid as plid,s.member_price,s.set_name as name,s.main_picture,1 as is_set ,s.set_price as yuanjia,d.price,d.mb_price from nb_product_set s left JOIN nb_price_group_detail d on (s.lid=d.product_id and s.dpid=d.dpid and d.is_set=1 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.')  where s.delete_flag=0 and s.dpid='.$dpid.$psname.$scid;
+			}else if($istaocan==0){
+				//单品
+				$sql='select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.' )  where t.delete_flag=0 and t.dpid='.$dpid.pdname.$dcid;
+			}
 			$models = Yii::app()->db->createCommand($sql)->queryALL();
 			// p($models);
 
 			$count = count($models);
-			//var_dump($count);exit;
 			$pages = new CPagination($count);
 			$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 			$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
@@ -221,8 +244,6 @@ class PricegroupController extends BackendController
 					}
 				}
 			}
-
-
 			//执行事务
             $transaction->commit();
 			Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
@@ -234,10 +255,13 @@ class PricegroupController extends BackendController
                 $this->redirect(array('pricegroup/detailIndex','companyId' => $this->companyId));
             }
 		}
-
+		$categories = $this->getCategories();
 		$this->render('detailindex',array(
 			'models'=> $models,
+			'istaocan'=> $istaocan,
 			'groupname'=> $groupname,
+			'categories'=>$categories,
+			'categoryId'=>$categoryId,
 			'pricegroupid'=> $pricegroupid,
 			'pages'=>$pages,
 		));
@@ -289,7 +313,34 @@ class PricegroupController extends BackendController
 			}
 		}
 	}
+	private function getCategories(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
 
+		$models = ProductCategory::model()->findAll($criteria);
+
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+                        //var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+                    //var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
+	}
 
 
 	/*

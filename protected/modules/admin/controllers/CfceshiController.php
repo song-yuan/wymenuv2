@@ -278,4 +278,50 @@ class CfceshiController extends BackendController
 		}
 	}
 	
+	public function actionCeshijk(){
+		$soap=new SoapClient('http://58.213.118.119:8127/Ajax/TradeChange.asmx?wsdl');
+		$soap->soap_defencoding = 'utf-8';
+		$soap->decode_utf8 = false;
+		$soap->xml_encoding = 'utf-8';
+		
+		$valiKEY = '6EA576539AEB4E878946911DA4E0C6BD';
+		$stationname = '合肥南';
+		$stationid = '5933e969-2773-42dc-a17e-725e1ad386fd';
+		$branch = '合肥分公司';
+		$shopname = "巴百克牛肉堡";
+		$shopid = "e61b636e-245c-4bd9-b235-85e7bef376c5";
+		
+		$ParamData = array(
+				'STATIONNAME'=>$stationname,
+		    	'STATIONID'=>$stationid,
+		    	'SHOPNAME'=>$shopname,
+		    	'SHOPNO'=>$shopid,
+		    	'BILLTYPE'=>"",
+		    	'BILLNO'=>'12345678765432',
+		    	'BILLALLPRICES'=>'1.22',
+		    	'BILLTIME'=>'2017-11-28 10:35:10',
+		    	'PAYMENT'=>'xj',
+		    	'TRANSTYPE'=>'xs',
+		    	'SOURCETYPE'=>'pos',
+		    	'SOURCENO'=>"",
+		    	'BRANCH'=>$branch
+		);
+		$data = array(
+				'tradeChange'=>$ParamData,
+				'valiKEY'=>$valiKEY
+		);
+		$param["tradeChange"]='[{"STATIONNAME":"上海站","STATIONID":"6464ef51-b72c-4aeb-ac28-320fc904703e","SHOPNAME":"老城隍庙","SHOPNO":"a6db5488-7273-40f0-be57-04ff95b6641b","BILLTYPE":"","BILLNO":"10120161017224622","BARCODE":"","BILLALLPRICES":6.0,"BILLTIME":"2017-10-18 09:12:00","TRANSTYPE":"销售","PAYMENT":"xj","SOURCETYPE":"POS机","SOURCENO":"101","BRANCH":"hf"}]';
+		$param["valiKey"]=$valiKEY;
+		
+		
+		print_r($soap->__getFunctions());
+		var_dump($soap->__getTypes());
+		//exit;
+		$result = $soap->__Call('Save',array($param));
+		//$arr = $soap->Save();
+		//$arr = $soap->ServiceMethod($ParamData);
+		var_dump($result) ;
+		exit;
+	}
+	
 }

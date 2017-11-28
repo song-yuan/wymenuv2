@@ -98,7 +98,8 @@
 							<button type="button" class="btn green" id="stockAddordpay">添加到order_pay</button>   
 							<button type="button" class="btn green" id="rijieOrder">日结</button> 
 							<button type="button" class="btn green" id="rijieOrders">日结2</button>  
-							<button type="button" class="btn green" id="rijieOrderReport">生成日结报表</button>                      
+							<button type="button" class="btn green" id="rijieOrderReport">生成日结报表</button>  
+							<button type="button" class="btn green" id="ceshigg">测试光光接口</button>                     
 						</div>
 					</div>
 			</div>
@@ -486,5 +487,33 @@
 			},
 		});
 	    
+	});
+	$("#ceshigg").on("click",function(){
+		//var device_id = $("#device_id").val();
+    $.ajax({
+        type:'POST',
+		url:"<?php echo $this->createUrl('cfceshi/ceshijk');?>",
+		async: false,
+		//data: {device_id:device_id},
+        cache:false,
+        dataType:'json',
+		success:function(msg){
+            //alert(msg.status);
+            if(msg.status=="success")
+            {            
+	            
+		        layer.msg("成功！");
+		          
+	            location.reload();
+            }else{
+	            layer.mag("11");
+	            location.reload();
+            }
+		},
+        error:function(){
+			layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+		},
+	});
+    
 	});
 	</script>

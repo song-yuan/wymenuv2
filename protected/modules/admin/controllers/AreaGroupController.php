@@ -2,6 +2,7 @@
 /**
 * 区域价格分组
 */
+
 class AreaGroupController extends BackendController
 {
 	/*
@@ -65,7 +66,7 @@ class AreaGroupController extends BackendController
 		$model = $models->find('lid=:lid and dpid=:dpid',array(':lid'=>$lid,':dpid'=>$dpid));
 		if(Yii::app()->request->isPostRequest) {
 			$formdata = Yii::app()->request->getPost('AreaGroup');
-		// p($formdata);
+			// p($formdata);
             $model->update_at = date('Y-m-d H:i:s');
             $model->group_name = $formdata['group_name'];
             $model->group_desc = $formdata['group_desc'];
@@ -77,8 +78,10 @@ class AreaGroupController extends BackendController
 		}
 		$this->render('create',array(
 			'model' => $model,
+			'type'=>$type
 		));
 	}
+
 	/*
 	* 区域分组名删除,并且删除分组的详情
 	*
@@ -163,10 +166,44 @@ class AreaGroupController extends BackendController
 	*店铺或者仓库分组添加店铺或者仓库
 	*/
 	public function actionAdd(){
+		$provinces = Yii::app()->request->getParam('province',0);
+        $citys = Yii::app()->request->getParam('city',0);
+        $areas = Yii::app()->request->getParam('area',0);
+        $cname = Yii::app()->request->getParam('cname','');
 		$dpid = Yii::app()->request->getParam('companyId');
 		$type = Yii::app()->request->getParam('type');
 		$areagroupid = Yii::app()->request->getParam('areagroupid');
-		$models = Company::model()->findAll('comp_dpid=:dpid and delete_flag=0 and type=:type',array(':dpid'=>$dpid,':type'=>$type));
+
+		$provinced = '';
+        $cityd = '';
+        $aread = '';
+        if($citys == '请选择..'){
+            $citys = '';
+        }else{
+            $cityd =' and city like "'.$citys.'"';
+        }
+        if($areas == '请选择..'){
+            $areas = '';
+        }else{
+            $aread = ' and county_area like "'.$areas.'"';
+        }
+        if ($provinces == '请选择..') {
+            $provinces = '';
+        }else{
+            $provinced = ' and province like "'.$provinces.'"';
+        }
+        if ($cname) {
+            if (is_numeric($cname)) {
+                $cnamed = ' and mobile like "%'.$cname.'%"';
+            }else{
+                $cnamed = ' and (contact_name like "%'.$cname.'%" or company_name like "%'.$cname.'%")';
+            }
+        }else{
+            $cnamed = '';
+        }
+        $db = Yii::app()->db;
+        $sql='select * from nb_company where comp_dpid='.$dpid.' and delete_flag=0 and type='.$type.$provinced.$cityd.$aread.$cnamed;
+        $models = Yii::app()->db->createCommand($sql)->queryALL();
 		if (Yii::app()->request->isPostRequest) {
 			// p($_POST);
 			if ($type==1) {
@@ -227,6 +264,10 @@ class AreaGroupController extends BackendController
 			'models'=> $models,
 			'type'=> $type,
 			'areagroupid'=> $areagroupid,
+			'province'=>$provinces,
+            'city'=>$citys,
+            'area'=>$areas,
+            'cname'=>$cname,
 		));
 	}
 
