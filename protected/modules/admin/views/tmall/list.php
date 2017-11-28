@@ -87,6 +87,12 @@
 							<div class="ku-item-info">发货单</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId,'types'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple splr"></div>
+							<div class="ku-item-info">添加配送员</div>
+						</div>
+					</a>
 				</div>
 			</div>
 		</div>
