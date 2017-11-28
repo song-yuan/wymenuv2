@@ -58,7 +58,7 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','价格分组设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId)))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','价格体系组设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -97,7 +97,7 @@
 								<th><?php echo yii::t('app','简介');?></th>
 								<th><?php echo yii::t('app','添加时间');?></th>
 								<th><?php echo yii::t('app','组信息编辑');?></th>
-                                <th><?php echo yii::t('app','价格信息编辑');?></th>
+                                <th><?php echo yii::t('app','组内产品价格编辑');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -108,10 +108,10 @@
 								<td><?php echo $model->group_desc;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('pricegroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('pricegroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑组信息');?></a>
 								</td>
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('pricegroup/detailIndex',array('pricegroupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
+								<a href="<?php echo $this->createUrl('pricegroup/detailIndex',array('pricegroupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑产品价格明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
