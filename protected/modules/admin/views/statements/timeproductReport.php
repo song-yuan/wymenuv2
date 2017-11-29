@@ -205,16 +205,7 @@
 			            	<?php foreach($dpids as $dpid):?>
 								<option value="<?php echo $dpid['dpid'];?>"><?php echo $dpid['dpid']%1000;?><?php echo $dpid['company_name']?></option>
 							<?php endforeach;?>
-					    	<?php endif;?>	
-								<option value="AL">上海西乡店</option>
-								<option value="DZ">明航点</option>
-								<option value="AS">上海闵行店</option>
-								<option value="BS">壹点吃嘉定店</option>
-								<option value="BH">Bahrain</option>
-								<option value="EH">Western Sahara</option>
-								<option value="YE">Yemen</option>
-								<option value="ZM">Zambia</option>
-								<option value="ZW">Zimbabwe</option>
+					    	<?php endif;?>
 							</select>
 						</div>
 					</div>
