@@ -40,6 +40,19 @@
 		</div>
 	</div>
 	<?php endforeach;?>
+	<?php else: ?>
+		<div class="mui-card">
+			<div class="mui-card-header mui-card-media" style="height:85vw;background-image:url(http://menu.wymenu.com/wymenuv2/img/product_default.png)"></div>
+				<div class="mui-card-content">
+					<div class="mui-card-content-inner">
+						<p style="color: #333;">温馨提示 : 该订单暂时没有损耗信息 ! ! !</p>
+						<p>订单号 : <?php echo $account_no; ?></p>
+					</div>
+				</div>
+				<div class="mui-card-footer">
+					<a class="mui-pull-right">壹点吃</a>
+				</div>
+		</div>
 	<?php endif;?>
 	</div>
 </div>

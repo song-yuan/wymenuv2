@@ -4661,7 +4661,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				} else {
 					self._setCaption(self.options.up.contentdown);
 					//					setTimeout(function() {
-					self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+					//self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
 					//					}, 300);
 				}
 			}
