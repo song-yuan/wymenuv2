@@ -39,7 +39,9 @@
 	<div class="col-md-12">
 	<div style="border: 1px solid silver;padding: 10px;margin-bottom: 25px;">
 		<div class="actions ">
+			<?php if(Yii::app()->user->role <=5):?>
 			<div id="dpidchoose" class="btn-group "><input class="btn blue" value="选择店铺"/></div>
+			<?php endif;?>
 			<input type="hidden" id="dpids" name="dpids" value="<?php if($str)echo $str;?>" />
 			<div class="btn-group">
 				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
