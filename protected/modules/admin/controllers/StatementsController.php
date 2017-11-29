@@ -2816,12 +2816,13 @@ class StatementsController extends BackendController
 			$ords = $ords .','.$order['lid'];
 		}
 		$sql = 'select k.* from( select year(op.create_at) as y_all,month(op.create_at) as m_all,day(op.create_at) as d_all,date_format(op.create_at,"%H") as h_all, '
-					.' op.product_name,p.product_name as new_name,op.create_at,op.dpid,op.product_id,op.product_type,c.company_name, '
+					.' op.product_name,p.product_name as new_name,pc.category_name,op.create_at,op.dpid,op.product_id,op.product_type,c.company_name, '
 					.' sum(op.price) as all_money,sum(op.amount) as all_total,sum(op.price*op.amount) as all_price,sum(op.original_price*op.amount) as all_jiage '
 					.' from nb_order_product op '
 					.' left join nb_order ord on(ord.lid = op.order_id and ord.dpid = op.dpid) '
 					.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
 					.' left join nb_company c on(c.dpid = op.dpid) '
+					.' left join nb_product_category pc on(p.category_id = pc.lid)'
 					.' where op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
 					.' group by '.$group.' order by '.$orderby
 				.' )k';

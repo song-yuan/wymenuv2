@@ -113,6 +113,7 @@
 								<th><?php echo yii::t('app','时段');?></th>
 								<th>
 								</th>
+								<th><?php echo yii::t('app','类别');?></th>
                                 <th><?php echo yii::t('app','单品名称');?></th>
                                 <th><?php echo yii::t('app','排名');?></th>
                                 <th><?php echo yii::t('app','销量');?></th>
@@ -135,6 +136,7 @@
 								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
 								<td><?php echo $model['h_all'];?></td>
 								<td><?php echo $model['company_name'];?></td>
+								<td><?php if($model['category_name']) echo $model['category_name'];else '其他';?></td>
 								<td><?php if($model['product_type'] !=2) echo $model['product_name'];else echo '打包费';?></td>
 								<td><?php echo $a+$pages->getCurrentPage()*10;?></td>
 								<td><?php echo $model['all_total'];?></td>
