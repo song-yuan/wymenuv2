@@ -131,6 +131,10 @@ class WxOrder
 				$results[$k]['price'] = $results[$k]['member_price'];
 				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
+			if($this->type==2){
+				$result['member_price'] = $result['original_price'];
+				$results[$k]['member_price'] = $results[$k]['original_price'];
+			}
 			$this->cartPrice += $result['member_price']*$result['num'];
 			$this->cartNumber +=$result['num'];
 		}
