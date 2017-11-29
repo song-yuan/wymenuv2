@@ -23,6 +23,7 @@
 		</header>
 		<div class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
+
 				<div class="mui-row back-color padding banma" style="">
 			    	<div class="mui-col-xs-1" style="height:50px;">
 			    		<span class="mui-icon mui-icon-location" style="margin-top:5px;color:red;font-weight:900;"></span>
@@ -43,7 +44,7 @@
 			    	</div>
 			    </div>
 			    	<?php if ($goods_orders): ?>
-					<div class="mui-card" style="margin:0;">
+					<div class="mui-card" style="margin-top:0px;margin-right:0px;margin-left: 0px;margin-bottom: 60px;">
 						<div class="mui-card-header mui-card-media">
 							<img src="<?php echo  Yii::app()->request->baseUrl; ?>/img/order_list.png" />
 							<div class="mui-media-body">
@@ -55,7 +56,6 @@
 						<ul class="mui-table-view">
 							<?php foreach ($goods_orders as $key => $value):?>
 							<li class="mui-table-view-cell mui-media">
-								
 								<img class="mui-media-object mui-pull-left" src="<?php if($value['main_picture']){ echo $value['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';}?>">
 								<div class="mui-media-body">
 								<?php echo $value['goods_name'];?>
@@ -74,7 +74,8 @@
 											<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?> </span>
 										<?php endif; ?>
 									<?php else: ?>
-									<span class="mui-pull-left">仓库 : <?php echo $value['company_name'];?></span><br>
+									<span class="mui-pull-left">仓库 : <?php echo $value['company_name'];?></span>
+									<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?></span>
 									<?php endif; ?>
 								</p>
 								</div>
@@ -85,11 +86,12 @@
 						</div>
 						<div class="mui-card-footer">
 							<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
-							<a class="mui-card-link"></a>
+							<?php if ($goods_orders[0]['reality_total']): ?>
+							<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
+							<?php endif; ?>
 						</div>
 					</div>
 					<?php endif; ?>
-
 
 			</div>
 	    </div>

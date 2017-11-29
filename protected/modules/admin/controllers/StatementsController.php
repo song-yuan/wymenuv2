@@ -2745,6 +2745,138 @@ class StatementsController extends BackendController
 				'paytype'=>$paytype,
 		));
 	}
+	/**
+	 * 时段产品销售报表
+	 *
+	 **/
+	public function actionTimeproductReport(){
+		//$uid = Yii::app()->user->id;
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$cks = Yii::app()->request->getParam('cks');
+		//var_dump($str);exit();
+		$text = Yii::app()->request->getParam('text');
+		$setid = Yii::app()->request->getParam('setid');
+		$categoryId = Yii::app()->request->getParam('cid',0);
+		if($setid == 0){
+			$setids = '=0';
+		}elseif ($setid == 2){
+			$setids = '>0';
+		}else{
+			$setids = '>=0';
+		}
+		$ordertype = Yii::app()->request->getParam('ordertype');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+
+		$day_begin = Yii::app()->request->getParam('day_begin','00:00');
+		$day_end = Yii::app()->request->getParam('day_end','23:59');
+		$pdname = Yii::app()->request->getParam('pdname');
+		
+		$cks = Yii::app()->request->getParam('cks');
+	
+		if($cks){
+			$day_begins = ' '.$day_begin.'00';
+			$day_ends = ' '.$day_end.'59';
+		}else{
+			$day_begins = ' 00:00:00';
+			$day_ends = ' 23:59:59';
+		}
+		if($ordertype >=0){
+			$ordertypes = '='.$ordertype;
+		}else{
+			$ordertypes = '>=0';
+		}
+		if($categoryId >0){
+			$cats = ' and p.category_id ='.$categoryId;
+		}else{
+			$cats = '';
+		}
+		if($pdname){
+			$pns = " and p.product_name like'%".$pdname."%'";
+		}else{
+			$pns = '';
+		}
+		
+		if($text==1){
+			$group =' year(op.create_at),op.dpid,op.product_type,op.product_id';
+			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}elseif($text==2){
+			$group =' month(op.create_at),op.dpid,op.product_type,op.product_id';
+			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}else{
+			$group =' day(op.create_at),op.dpid,op.product_type,op.product_id';
+			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,day(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}
+		$db = Yii::app()->db;
+		
+		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid in('.$str.') and k.create_at >="'.$begin_time.$day_begins.'" and k.create_at <="'.$end_time.$day_ends.'" group by k.user_id,k.account_no,k.create_at';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		$sql = 'select k.* from( select year(op.create_at) as y_all,month(op.create_at) as m_all,day(op.create_at) as d_all,date_format(op.create_at,"%H") as h_all, '
+					.' op.product_name,p.product_name as new_name,pc.category_name,op.create_at,op.dpid,op.product_id,op.product_type,c.company_name, '
+					.' sum(op.price) as all_money,sum(op.amount) as all_total,sum(op.price*op.amount) as all_price,sum(op.original_price*op.amount) as all_jiage '
+					.' from nb_order_product op '
+					.' left join nb_order ord on(ord.lid = op.order_id and ord.dpid = op.dpid) '
+					.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
+					.' left join nb_company c on(c.dpid = op.dpid) '
+					.' left join nb_product_category pc on(p.category_id = pc.lid)'
+					.' where op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
+					.' group by '.$group.' order by '.$orderby
+				.' )k';
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		//var_dump($models);exit;
+	
+		$comName = $this->getComName();
+		$categories = $this->getCategories();
+		$dpids = $this->getDpids($this->companyId,'');
+		
+		$this->render('timeproductReport',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'day_begin'=>$day_begin,
+				'end_time'=>$end_time,
+				'day_end'=>$day_end,
+				'text'=>$text,
+				'str'=>$str,
+				'setid'=>$setid,
+				'comName'=>$comName,
+				'ordertype'=>$ordertype,
+				'categories'=>$categories,
+				'categoryId'=>$categoryId,
+				'dpids'=>$dpids,
+				'cks'=>$cks,
+				'pdname'=>$pdname
+		));
+	}
+	
+	public function getDpids($dpid,$names){
+		if($names){
+
+			$db = Yii::app()->db;
+			$sql = 'select t.dpid,t.company_name from nb_company t where t.company_name like "%'.$names.'%" and t.type =1 and t.delete_flag = 0 and dpid!='.$this->companyId.' and t.comp_dpid = '.$this->companyId;
+			$command = $db->createCommand($sql);
+			$dpids = $command->queryAll();
+		}else{
+
+			$db = Yii::app()->db;
+			$sql = 'select t.dpid,t.company_name from nb_company t where t.type =1 and t.delete_flag = 0 and dpid!='.$this->companyId.' and t.comp_dpid = '.$this->companyId;
+			$command = $db->createCommand($sql);
+			$dpids = $command->queryAll();
+		}
+		
+		
+		return $dpids;
+	}
 	//获取店铺的支付方式....
 	public function getPayments($dpid){
 		$model =  '';

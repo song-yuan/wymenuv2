@@ -31,11 +31,20 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
 			/* .mui-bar-tab .mui-tab-item {color:#FF8C00;} */
 			.mui-bar-tab .mui-tab-item {color:#fff;}
 		</style>
+		<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/app.css" />
+		<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.picker.css" rel="stylesheet" />
+		<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.picker.min.css" rel="stylesheet" />
+		<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.poppicker.css" rel="stylesheet" />
     	<script type="text/javascript" src="<?php echo  Yii::app()->request->baseUrl; ?>/scripts/flipsnap.js"></script>
-		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.min.js "></script>
+		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.js "></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.view.js "></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/app.js"></script>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/jquery-1.7.1.min.js"></script>
+		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.picker.js"></script>
+		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.poppicker.js"></script>
+		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.picker.min.js"></script>
+		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/city.data.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/city.data-3.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 	<?php echo $content; ?>
