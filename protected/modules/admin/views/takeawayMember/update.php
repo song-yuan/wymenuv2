@@ -22,8 +22,12 @@
 			</div>
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- BEGIN PAGE HEADER-->   
+			<!-- BEGIN PAGE HEADER--> 
+			<?php if($types):?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','仓库设置'),'url'=>$this->createUrl('tmall/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','配货员设置'),'url'=>$this->createUrl('takeawayMember/index' , array('companyId'=>$this->companyId,'types'=>$types))),array('word'=>yii::t('app','修改配送员'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('takeawayMember/index' , array('companyId' => $this->companyId,'types'=>$types)))));?>
+			<?php else:?>
 			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','送餐员设置'),'url'=>$this->createUrl('takeawayMember/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改送餐员'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('takeawayMember/index' , array('companyId' => $this->companyId,)))));?>
+			<?php endif;?>  
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,14 +35,14 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改送餐员');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php if($types) echo yii::t('app','修改配送员');else echo yii::t('app','修改送餐员');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'types'=>$types)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

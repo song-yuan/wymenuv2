@@ -11,6 +11,7 @@ class TakeawayMemberController extends BackendController {
 	
 	public function actionIndex() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$types = Yii::app()->request->getParam('types');
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'company' ;
 		//$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->companyId ;
@@ -22,13 +23,14 @@ class TakeawayMemberController extends BackendController {
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
-				'companyId' => $companyId
+				'companyId' => $companyId,
+				'types'=>$types,
 		));
 		
 	}
 	public function actionCreate(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		
+		$types = Yii::app()->request->getParam('types');
 		$model = new TakeawayMember() ;
 		$model->dpid = $companyId ;
 		if(Yii::app()->request->isPostRequest) {
@@ -40,15 +42,16 @@ class TakeawayMemberController extends BackendController {
 //			var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
-				$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId));
+				$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId,'types'=>$types));
 			}
 		}
-		$this->render('create' , array('model' => $model));
+		$this->render('create' , array('model' => $model,'types'=>$types));
 	}
 	public function actionUpdate(){
+		$types = Yii::app()->request->getParam('types');
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-			$this->redirect(array('takeawayMember/index' , 'companyId' => $this->companyId)) ;
+			$this->redirect(array('takeawayMember/index' , 'companyId' => $this->companyId,'types'=>$types)) ;
 		}
 		$id = Yii::app()->request->getParam('id');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
@@ -59,15 +62,16 @@ class TakeawayMemberController extends BackendController {
                         $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-				$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId));
+				$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId,'types'=>$types));
 			}
 		}
-		$this->render('update' , array('model' => $model ));
+		$this->render('update' , array('model' => $model,'types'=>$types ));
 	}
 	public function actionDelete(){
+		$types = Yii::app()->request->getParam('types');
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-			$this->redirect(array('takeawayMember/index' , 'companyId' => $this->companyId)) ;
+			$this->redirect(array('takeawayMember/index' , 'companyId' => $this->companyId,'types'=>$types)) ;
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
@@ -79,10 +83,10 @@ class TakeawayMemberController extends BackendController {
 						$model->delete();
 					}
 				}
-				$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId)) ;
+				$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId,'types'=>$types)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('takeawayMember/index' , 'companyId' => $companyId,'types'=>$types)) ;
 		}
 	}
 }

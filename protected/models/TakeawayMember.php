@@ -68,9 +68,9 @@ class TakeawayMember extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'type' => '0表示外卖送餐员，',
-			'cardId' => '送餐员编号',
-			'member_name' => '送餐员名称',
-				'phone_number' => '送餐员手机号',
+			'cardId' => '编号',
+			'member_name' => '名称',
+				'phone_number' => '手机号',
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => 'Is Sync',
 		);
