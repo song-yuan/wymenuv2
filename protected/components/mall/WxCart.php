@@ -236,7 +236,11 @@ class WxCart
 					$result['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 				}
 			}else{
-				$result['price'] = $result['member_price'];
+				if($this->type==2){
+					$result['price'] = $result['original_price'];
+				}else{
+					$result['price'] = $result['member_price'];
+				}
 				$result['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
 			array_push($cartListArr['available'],$result);
