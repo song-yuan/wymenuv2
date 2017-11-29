@@ -2809,7 +2809,7 @@ class StatementsController extends BackendController
 		}
 		$db = Yii::app()->db;
 		
-		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid in('.$str.') and k.create_at >="'.$begin_time.$day_begins.'" and k.create_at <="'.$end_time.$day_ends.'" group by k.user_id,k.account_no,k.create_at';
+		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid in('.$str.') and k.create_at >="'.$begin_time.$day_begins.'" and k.create_at <="'.$end_time.$day_ends.'" and date_format(k.create_at,"%H:%i:%s") >="'.$day_begin.'" and date_format(k.create_at,"%H:%i:%s") <="'.$day_end.'" group by k.user_id,k.account_no,k.create_at';
 		$orders = $db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
