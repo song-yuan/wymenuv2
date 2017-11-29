@@ -118,7 +118,8 @@
       selectableLi
         .data('ms-value', value)
         .addClass('ms-elem-selectable')
-        .attr('id', elementId+'-selectable');
+        .attr('id', elementId+'-selectable')
+      	.attr('value', elementId);
 
       selectedLi
         .data('ms-value', value)
