@@ -2799,7 +2799,7 @@ class StatementsController extends BackendController
 		
 		if($text==1){
 			$group =' year(op.create_at),op.dpid,op.product_type,op.product_id';
-			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,sum(op.amount) desc,sum(op.original_price*t.amount) desc,op.dpid asc';
+			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
 		}elseif($text==2){
 			$group =' month(op.create_at),op.dpid,op.product_type,op.product_id';
 			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
