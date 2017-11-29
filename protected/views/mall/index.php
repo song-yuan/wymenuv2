@@ -969,9 +969,9 @@ $(document).ready(function(){
              });
         }
     });
-//     $('#container').on('click','.lt-lt img',function(){
-// 		var src = $(this).attr('src');
-// 		var str = '<img src="'+src+'"/>';
+    $('#container').on('click','.lt-lt img',function(){
+		var src = $(this).attr('src');
+		var str = '<img src="'+src+'"/>';
 //     	layer.open({
 // 		    type: 1,
 // 		    title: false,
@@ -982,6 +982,6 @@ $(document).ready(function(){
 // 		    content: str
 // 		});
 // 		$('.layui-layer-content').css('overflow','hidden');
-//     });
+    });
 });
 </script>
