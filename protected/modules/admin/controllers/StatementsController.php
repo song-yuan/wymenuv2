@@ -4210,356 +4210,43 @@ class StatementsController extends BackendController
 			$j=4;
 			foreach($model as $v){
 				//print_r($v);
-				if ($text==1){
-					switch($v->paytype) {
-					case 0:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','现金支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 1:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 2:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','支付宝支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 3:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,$v->paymentMethod->name)
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 4:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 5:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 6:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 7:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 8:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 9:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信代金券'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 10:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					default :
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',""))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-
-				}}elseif ($text==2){
-					switch($v->paytype) {
-					case 0:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','现金支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 1:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 2:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','支付宝支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 3:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,$v->paymentMethod->name)
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 4:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 5:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 6:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 7:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 8:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 9:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信代金券'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 10:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					default :
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',""))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-				}}elseif ($text==3){
-					switch($v->paytype) {
-					case 0:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','现金支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 1:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 2:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','支付宝支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 3:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,$v->paymentMethod->name)
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 4:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
-						->setCellValue('D'.$j,$v->all_num)
-					->setCellValue('E'.$j,$v->all_reality)
-					->setCellValue('F'.$j);
-					break;
-					case 5:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-					break;
-					case 6:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 7:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 8:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',''))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 9:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信代金券'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					case 10:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
-					default :
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app',""))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
+				if($text ==1){
+					$t = $v['y_all'];
+				}elseif($text ==2){
+					$t = $v['y_all'].'-'.$v['m_all'];
+				}elseif($text ==3){
+					$t = $v['y_all'].'-'.$v['m_all'].'-'.$v['d_all'];
 				}
+				switch ($v->paytype){
+					case 0: $payname = yii::t('app','现金支付');break;
+					case 1: $payname = yii::t('app','微信支付');break;
+					case 2: $payname = yii::t('app','支付宝支付');break;
+					case 3: $payname = yii::t('app','后台支付');break;
+					case 4: $payname = yii::t('app','会员卡');break;
+					case 5: $payname = yii::t('app','银联');break;
+					case 8: $payname = yii::t('app','积分');break;
+					case 9: $payname = yii::t('app','现金券');break;
+					case 10: $payname = yii::t('app','微信余额');break;
+					case 12: $payname = yii::t('app','微点单');break;
+					case 13: $payname = yii::t('app','微外卖');break;
+					case 14: $payname = yii::t('app','美团·');break;
+					case 15: $payname = yii::t('app','饿了么·');break;
+					default : $payname = '';break;
 				}
+		
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$j,$v->y_all)
+				->setCellValue('B'.$j,$v->company->company_name)
+				->setCellValue('C'.$j,yii::t('app','现金支付'))
+				->setCellValue('D'.$j,$v->all_num)
+				->setCellValue('E'.$j,$v->all_reality)
+				->setCellValue('F'.$j);
+			
 				//细边框引用
 				$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($linestyle);
 				$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($linestyle);
 				$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->applyFromArray($linestyle);
 				//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
-				//单元格高度自适应
-				//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
-				//单元格换行
-				//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
-				//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-				//长度不够显示的时候换行
-				//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
-				//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
-				//使用数组定义L列的样式
-				//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
-				//设置字体垂直居中
-				//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-				//设置字体水平居中
-				//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				//$objPHPExcel->getActiveSheet()->getStyle('J'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 				//设置填充颜色
 				$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 				$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
@@ -4621,6 +4308,265 @@ class StatementsController extends BackendController
 		header('Cache-Control: max-age=0');
 		$objWriter->save('php://output');
 
+	}
+	/*
+	 *
+	* 产品时段销售报表
+	*
+	*/
+	
+	public function actionTimeproductReportExport(){
+		$objPHPExcel = new PHPExcel();
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$cks = Yii::app()->request->getParam('cks');
+		//var_dump($str);exit();
+		$text = Yii::app()->request->getParam('text');
+		$setid = Yii::app()->request->getParam('setid');
+		$categoryId = Yii::app()->request->getParam('cid',0);
+		if($setid == 0){
+			$setids = '=0';
+			$setname = '单品、';
+		}elseif ($setid == 2){
+			$setids = '>0';
+			$setname = '套餐单品、';
+		}else{
+			$setids = '>=0';
+			$setname = '综合、';
+		}
+		$ordertype = Yii::app()->request->getParam('ordertype');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+
+		$day_begin = Yii::app()->request->getParam('day_begin','00:00');
+		$day_end = Yii::app()->request->getParam('day_end','23:59');
+		$pdname = Yii::app()->request->getParam('pdname');
+		
+		$cks = Yii::app()->request->getParam('cks');
+	
+		if($cks){
+			$day_begins = ' '.$day_begin.'00';
+			$day_ends = ' '.$day_end.'59';
+		}else{
+			$day_begins = ' 00:00:00';
+			$day_ends = ' 23:59:59';
+		}
+		if($ordertype >=0){
+			$ordertypes = '='.$ordertype;
+		}else{
+			$ordertypes = '>=0';
+		}
+		if($categoryId >0){
+			$cats = ' and p.category_id ='.$categoryId;
+		}else{
+			$cats = '';
+		}
+		if($pdname){
+			$pns = " and p.product_name like'%".$pdname."%'";
+		}else{
+			$pns = '';
+		}
+		$typesname = '';
+		switch($ordertype){
+			case -1: $typesname = '全部';break;
+			case 0: $typesname = '堂食';break;
+			case 1: $typesname = '微信堂食';break;
+			case 2: $typesname = '微信外卖';break;
+			case 3: $typesname = '微信预约';break;
+			case 4: $typesname = '后台外卖';break;
+			case 5: $typesname = '自助';break;
+			case 6: $typesname = '微信点单';break;
+			case 7: $typesname = '美团·';break;
+			case 8: $typesname = '饿了么·';break;
+			default: $typesname = '';break;
+		}
+		if($text==1){
+			$group =' year(op.create_at),op.dpid,op.product_type,op.product_id';
+			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}elseif($text==2){
+			$group =' month(op.create_at),op.dpid,op.product_type,op.product_id';
+			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}else{
+			$group =' day(op.create_at),op.dpid,op.product_type,op.product_id';
+			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,day(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}
+		$db = Yii::app()->db;
+		
+		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid in('.$str.') and k.create_at >="'.$begin_time.$day_begins.'" and k.create_at <="'.$end_time.$day_ends.'" and date_format(k.create_at,"%H:%i:%s") >="'.$day_begin.'" and date_format(k.create_at,"%H:%i:%s") <="'.$day_end.'" group by k.user_id,k.account_no,k.create_at';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		$sql = 'select k.* from( select year(op.create_at) as y_all,month(op.create_at) as m_all,day(op.create_at) as d_all,date_format(op.create_at,"%H") as h_all, '
+					.' op.product_name,p.product_name as new_name,pc.category_name,op.create_at,op.dpid,op.product_id,op.product_type,c.company_name, '
+					.' sum(op.price) as all_money,sum(op.amount) as all_total,sum(op.price*op.amount) as all_price,sum(op.original_price*op.amount) as all_jiage '
+					.' from nb_order_product op '
+					.' left join nb_order ord on(ord.lid = op.order_id and ord.dpid = op.dpid) '
+					.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
+					.' left join nb_company c on(c.dpid = op.dpid) '
+					.' left join nb_product_category pc on(p.category_id = pc.lid)'
+					.' where op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
+					.' group by '.$group.' order by '.$orderby
+				.' )k';
+		$models = $db->createCommand($sql)->queryAll();
+		//var_dump($models);exit();
+	
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1','产品销售报表')
+		->setCellValue('A2',yii::t('app','查询条件：').$typesname.';'.$setname.';'.yii::t('app','时间段：').$begin_time.yii::t('app',' 至 ').$end_time."".yii::t('app',';时段：').$day_begin.'~'.$day_end.yii::t('app',';生成时间：').date('m-d h:i',time()))
+		->setCellValue('A3','时间')
+		->setCellValue('B3','时段')
+		->setCellValue('C3','店铺名称')
+		->setCellValue('D3','分类')
+		->setCellValue('E3','单品名称')
+		->setCellValue('F3','排名')
+		->setCellValue('G3','销量')
+		->setCellValue('H3','销售金额')
+		->setCellValue('I3','折扣金额')
+		->setCellValue('J3','实收金额')
+		->setCellValue('K3','原始均价')
+		->setCellValue('L3','折后均价');
+		$i=4;
+		
+		foreach($models as $v){
+			//print_r($v);exit;
+			if($v['product_type'] !=2) { $name = $v['product_name'];}else {$name = '打包费';}
+			if($v['category_name']){$catname = $v['category_name'];}else{$catename = '其他';}
+			if($text ==1){
+				$t = $v['y_all'];
+			}elseif($text ==2){
+				$t = $v['y_all'].'-'.$v['m_all'];
+			}elseif($text ==3){
+				$t = $v['y_all'].'-'.$v['m_all'].'-'.$v['d_all'];
+			}
+		
+
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A'.$i,$t)
+			->setCellValue('B'.$i,$v['h_all'])
+			->setCellValue('C'.$i,$v['company_name'])
+			->setCellValue('D'.$i,$catname)
+			->setCellValue('E'.$i,$name)
+			->setCellValue('F'.$i,$i-3)
+			->setCellValue('G'.$i,$v['all_total'])
+			->setCellValue('H'.$i,$v['all_jiage'])
+			->setCellValue('I'.$i,$v['all_jiage']-$v['all_price'])
+			->setCellValue('J'.$i,$v['all_price'])
+			->setCellValue('K'.$i,$v['all_jiage']/$v['all_total'])
+			->setCellValue('L'.$i,$v['all_price']/$v['all_total']);
+		
+			$objPHPExcel->getActiveSheet()->getStyle('A2:L2')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':L'.$i)->applyFromArray($linestyle);
+			//设置填充颜色
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
+			//设置字体靠左
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objPHPExcel->getActiveSheet()->getStyle('N'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objPHPExcel->getActiveSheet()->getStyle('H'.$i.':L'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			$i++;
+		}
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:L2');
+		//单元格加粗，居中：
+		$objPHPExcel->getActiveSheet()->getStyle('A1:L'.$i)->applyFromArray($lineBORDER);//大边框格式引用
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+	
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(5);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(18);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(6);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(6);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+	
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="产品时段销售报表（".date('m-d h:i',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
 	}
 	/*
 	 *
@@ -4775,45 +4721,26 @@ class StatementsController extends BackendController
 		foreach($models as $v){
 			//print_r($v);exit;
 			if($v->product_type !=2) { $name = $v->product_name;}else {$name = '打包费';}
-			if ($text==1){
-
-				$objPHPExcel->setActiveSheetIndex(0)
-				->setCellValue('A'.$i,$v->y_all)
-				->setCellValue('B'.$i,$v->company->company_name)
-				->setCellValue('C'.$i,$name)
-				->setCellValue('D'.$i,$i-3)
-				->setCellValue('E'.$i,$v->all_total)
-				->setCellValue('F'.$i,$v->all_jiage)
-				->setCellValue('G'.$i,$v->all_jiage-$v->all_price)
-				->setCellValue('H'.$i,$v->all_price)
-				->setCellValue('I'.$i,$v->all_jiage/$v->all_total)
-				->setCellValue('J'.$i,$v->all_price/$v->all_total);
-			}elseif ($text==2){
-				$objPHPExcel->setActiveSheetIndex(0)
-				->setCellValue('A'.$i,$v->y_all.'-'.$v->m_all)
-				->setCellValue('B'.$i,$v->company->company_name)
-				->setCellValue('C'.$i,$name)
-				->setCellValue('D'.$i,$i-3)
-				->setCellValue('E'.$i,$v->all_total)
-				->setCellValue('F'.$i,$v->all_jiage)
-				->setCellValue('G'.$i,$v->all_jiage-$v->all_price)
-				->setCellValue('H'.$i,$v->all_price)
-				->setCellValue('I'.$i,$v->all_jiage/$v->all_total)
-				->setCellValue('J'.$i,$v->all_price/$v->all_total);
-			}elseif ($text==3){
-				$objPHPExcel->setActiveSheetIndex(0)
-				->setCellValue('A'.$i,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-				->setCellValue('B'.$i,$v->company->company_name)
-				->setCellValue('C'.$i,$name)
-				->setCellValue('D'.$i,$i-3)
-				->setCellValue('E'.$i,$v->all_total)
-				->setCellValue('F'.$i,$v->all_jiage)
-				->setCellValue('G'.$i,$v->all_jiage-$v->all_price)
-				->setCellValue('H'.$i,$v->all_price)
-				->setCellValue('I'.$i,$v->all_jiage/$v->all_total)
-				->setCellValue('J'.$i,$v->all_price/$v->all_total);
-
+			if($text ==1){
+				$t = $v->y_all;
+			}elseif($text ==2){
+				$t = $v->y_all.'-'.$v->m_all;
+			}elseif($text ==3){
+				$t = $v->y_all.'-'.$v->m_all.'-'.$v->d_all;
 			}
+
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A'.$i,$t)
+			->setCellValue('B'.$i,$v->company->company_name)
+			->setCellValue('C'.$i,$name)
+			->setCellValue('D'.$i,$i-3)
+			->setCellValue('E'.$i,$v->all_total)
+			->setCellValue('F'.$i,$v->all_jiage)
+			->setCellValue('G'.$i,$v->all_jiage-$v->all_price)
+			->setCellValue('H'.$i,$v->all_price)
+			->setCellValue('I'.$i,$v->all_jiage/$v->all_total)
+			->setCellValue('J'.$i,$v->all_price/$v->all_total);
+		
 			$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($linestyle);
 			$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($linestyle);
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($linestyle);
