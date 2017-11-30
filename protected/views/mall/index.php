@@ -969,19 +969,19 @@ $(document).ready(function(){
              });
         }
     });
-    $('#container').on('click','.lt-lt img',function(){
-		var src = $(this).attr('src');
-		var str = '<img src="'+src+'"/>';
-    	layer.open({
-		    type: 1,
-		    title: false,
-		    closeBtn: true,
-		    area: ['100%', 'auto'],
-		    skin: 'layui-layer-nobg', //没有背景色
-		    shadeClose: false,
-		    content: str
-		});
-		$('.layui-layer-content').css('overflow','hidden');
-    });
+//     $('#container').on('click','.lt-lt img',function(){
+// 		var src = $(this).attr('src');
+// 		var str = '<img src="'+src+'"/>';
+//     	layer.open({
+// 		    type: 1,
+// 		    title: false,
+// 		    closeBtn: true,
+// 		    area: ['100%', 'auto'],
+// 		    skin: 'layui-layer-nobg', //没有背景色
+// 		    shadeClose: false,
+// 		    content: str
+// 		});
+// 		$('.layui-layer-content').css('overflow','hidden');
+//     });
 });
 </script>
