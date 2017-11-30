@@ -105,20 +105,20 @@ var FormComponents = function () {
         }
     }
 
-    var handleTimePickers = function () {
-
-        if (jQuery().timepicker) {
-            $('.timepicker-default').timepicker({
-                autoclose: true
-            });
-            $('.timepicker-24').timepicker({
-                autoclose: true,
-                minuteStep: 1,
-                showSeconds: true,
-                showMeridian: false
-            });
-        }
-    }
+//    var handleTimePickers = function () {
+//
+//        if (jQuery().timepicker) {
+//            $('.timepicker-default').timepicker({
+//                autoclose: true
+//            });
+//            $('.timepicker-24').timepicker({
+//                autoclose: true,
+//                minuteStep: 1,
+//                showSeconds: true,
+//                showMeridian: false
+//            });
+//        }
+//    }
 
     var handleDateRangePickers = function () {
         if (!jQuery().daterangepicker) {
@@ -186,36 +186,36 @@ var FormComponents = function () {
         $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
     }
 
-    var handleDatetimePicker = function () {
-
-        $(".form_datetime").datetimepicker({
-            autoclose: true,
-            isRTL: App.isRTL(),
-            format: "dd MM yyyy - hh:ii",
-            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left")
-        });
-
-        $(".form_advance_datetime").datetimepicker({
-            isRTL: App.isRTL(),
-            format: "dd MM yyyy - hh:ii",
-            autoclose: true,
-            todayBtn: true,
-            startDate: "2013-02-14 10:00",
-            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
-            minuteStep: 10
-        });
-
-        $(".form_meridian_datetime").datetimepicker({
-            isRTL: App.isRTL(),
-            format: "dd MM yyyy - HH:ii P",
-            showMeridian: true,
-            autoclose: true,
-            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
-            todayBtn: true
-        });
-
-        $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-    }
+//    var handleDatetimePicker = function () {
+//
+//        $(".form_datetime").datetimepicker({
+//            autoclose: true,
+//            isRTL: App.isRTL(),
+//            format: "dd MM yyyy - hh:ii",
+//            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left")
+//        });
+//
+//        $(".form_advance_datetime").datetimepicker({
+//            isRTL: App.isRTL(),
+//            format: "dd MM yyyy - hh:ii",
+//            autoclose: true,
+//            todayBtn: true,
+//            startDate: "2013-02-14 10:00",
+//            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+//            minuteStep: 10
+//        });
+//
+//        $(".form_meridian_datetime").datetimepicker({
+//            isRTL: App.isRTL(),
+//            format: "dd MM yyyy - HH:ii P",
+//            showMeridian: true,
+//            autoclose: true,
+//            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+//            todayBtn: true
+//        });
+//
+//        $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+//    }
 
     var handleClockfaceTimePickers = function () {
 
@@ -742,8 +742,8 @@ var FormComponents = function () {
             handleWysihtml5();
             handleTagsInput();
             handleDatePickers();
-            handleTimePickers();
-            handleDatetimePicker();
+            //handleTimePickers();
+            //handleDatetimePicker();
             handleDateRangePickers();
             handleClockfaceTimePickers();
             handleColorPicker();
