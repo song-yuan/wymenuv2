@@ -53,8 +53,7 @@ class WxRiJie
 				'is_sync'=>'11111',
 		);
 		$result = Yii::app()->db->createCommand()->insert('nb_rijie_code',$data);
-		$sql = 'update nb_order set order_status = 8 where dpid ='.$dpid.' and order_status in(3,4)';
-		$rjResult = Yii::app()->db->createCommand($sql)->execute(); 
+		 
 		if($result){
 			return json_encode ( array (
 					'status' => true,
@@ -199,7 +198,6 @@ class WxRiJie
 								);
 								$command = $db->createCommand()->insert('nb_order_paytype_total',$data);
 								if(!$command){
-									Helper::writeLog('nb_order_pay付款方式插入失败 日结编码:'.$rjcode);
 									throw new Exception('付款方式插入失败');
 								}
 							}
@@ -231,7 +229,6 @@ class WxRiJie
 								);
 								$command = $db->createCommand()->insert('nb_order_paytype_total',$data);
 								if(!$command){
-									Helper::writeLog('nb_order付款方式插入失败 日结编码:'.$rjcode);
 									throw new Exception('付款方式插入失败');
 								}
 							}
@@ -264,22 +261,27 @@ class WxRiJie
 								//var_dump($data);exit;
 								$command = $db->createCommand()->insert('nb_order_paytype_total',$data);
 								if(!$command){
-									Helper::writeLog('nb_order_pay1付款方式插入失败 日结编码:'.$rjcode);
 									throw new Exception('付款方式插入失败');
 								}
 							}
 						}
 					}
+					$sql = 'update nb_order set order_status = 8 where dpid ='.$dpid.' and order_status in(3,4)';
+					$rjResult = Yii::app()->db->createCommand($sql)->execute();
+					if(!$rjResult){
+						throw new Exception('修改订单状态');
+					}
 					$sql = 'update nb_rijie_code set is_rijie = 1 where lid ='.$rj['lid'].' and dpid ='.$dpid;
 					$result = $db->createCommand($sql)->execute();
 					if(!$result){
-						Helper::writeLog('nb_rijie_code更新日结编码失败 日结编码:'.$rjcode);
 						throw new Exception('更新日结编码失败');
 					}
 					$transaction->commit();
 					$msg = true;
 				}catch (Exception $e) {
 					$transaction->rollback();
+					$message = $e->getMessage();
+					Helper::writeLog('日结失败:'.$dpid.' 日结编码:'.$rjcode.' 错误信息:'.$message);
 					$msg = false;
 				}
 			}
