@@ -361,10 +361,12 @@ class PoscodeController extends BackendController
             $devicemodel = SqbPossetting::model()->find('device_id=:deviceid and dpid=:dpid',array(':dpid'=>$this->companyId,':deviceid'=>$device_id));
             //var_dump($obj);exit;
             if($obj['result_code']=='400'){
+            	Helper::writeLog('激活失败：'.$this->companyId.':'.$obj['error_message']);
                     Yii::app()->end(json_encode(array("status"=>"error",'msg'=>'激活失败！！！')));
             }else{
+            	Helper::writeLog('激活成功：'.$this->companyId.';key:'.$obj['biz_response']['terminal_key']);
                     if(!empty($devicemodel)){
-                            Yii::app()->db->createCommand('update nb_sqb_posseting set terminal_key='.$obj['biz_response']['terminal_key'].' where device_id ='.$device_id.' and dpid ='.$this->companyId)
+                            Yii::app()->db->createCommand('update nb_sqb_possetting set terminal_key='.$obj['biz_response']['terminal_key'].' where device_id ='.$device_id.' and dpid ='.$this->companyId)
                             ->execute();
                     }else{
 

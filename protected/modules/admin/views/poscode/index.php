@@ -188,7 +188,7 @@
                                     layer.msg("激活成功！");
                                 location.reload();
                         }else{
-                                layer.msg("不能重复激活！！！");
+                                layer.msg(msg.msg);
                                 location.reload();
                         }
                     },
