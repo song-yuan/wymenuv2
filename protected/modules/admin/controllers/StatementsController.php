@@ -1429,7 +1429,7 @@ class StatementsController extends BackendController
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
         //输出
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename="支付方式(储值)统计表（".date('m-d',time())."）.xls";
+        $filename="支付方式(储值)统计表（".date('m-d H:i',time())."）.xls";
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
@@ -2798,13 +2798,13 @@ class StatementsController extends BackendController
 		}
 		
 		if($text==1){
-			$group =' year(op.create_at),op.dpid,op.product_type,op.product_id';
+			$group =' year(op.create_at),date_format(op.create_at,"%H"),op.dpid,op.product_type,op.product_id';
 			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
 		}elseif($text==2){
-			$group =' month(op.create_at),op.dpid,op.product_type,op.product_id';
+			$group =' year(op.create_at),month(op.create_at),date_format(op.create_at,"%H"),op.dpid,op.product_type,op.product_id';
 			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
 		}else{
-			$group =' day(op.create_at),op.dpid,op.product_type,op.product_id';
+			$group =' year(op.create_at),month(op.create_at),day(op.create_at),date_format(op.create_at,"%H"),op.dpid,op.product_type,op.product_id';
 			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,day(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
 		}
 		$db = Yii::app()->db;
@@ -2823,7 +2823,7 @@ class StatementsController extends BackendController
 					.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
 					.' left join nb_company c on(c.dpid = op.dpid) '
 					.' left join nb_product_category pc on(p.category_id = pc.lid)'
-					.' where op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
+					.' where op.is_retreat=0 and op.product_order_status in(1,2,8,9) and op.delete_flag=0 and op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
 					.' group by '.$group.' order by '.$orderby
 				.' )k';
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -4380,13 +4380,13 @@ class StatementsController extends BackendController
 			default: $typesname = '';break;
 		}
 		if($text==1){
-			$group =' year(op.create_at),op.dpid,op.product_type,op.product_id';
+			$group =' year(op.create_at),date_format(op.create_at,"%H"),op.dpid,op.product_type,op.product_id';
 			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
 		}elseif($text==2){
-			$group =' month(op.create_at),op.dpid,op.product_type,op.product_id';
+			$group =' year(op.create_at),month(op.create_at),date_format(op.create_at,"%H"),op.dpid,op.product_type,op.product_id';
 			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
 		}else{
-			$group =' day(op.create_at),op.dpid,op.product_type,op.product_id';
+			$group =' year(op.create_at),month(op.create_at),day(op.create_at),date_format(op.create_at,"%H"),op.dpid,op.product_type,op.product_id';
 			$orderby = 'year(op.create_at) asc,date_format(op.create_at,"%H") asc,month(op.create_at) asc,day(op.create_at) asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
 		}
 		$db = Yii::app()->db;
@@ -4405,7 +4405,7 @@ class StatementsController extends BackendController
 					.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
 					.' left join nb_company c on(c.dpid = op.dpid) '
 					.' left join nb_product_category pc on(p.category_id = pc.lid)'
-					.' where op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
+					.' where op.is_retreat=0 and op.product_order_status in(1,2,8,9) and op.delete_flag=0 and op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
 					.' group by '.$group.' order by '.$orderby
 				.' )k';
 		$models = $db->createCommand($sql)->queryAll();
@@ -4561,7 +4561,7 @@ class StatementsController extends BackendController
 	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$filename="产品时段销售报表（".date('m-d h:i',time())."）.xls";
+		$filename="产品时段销售报表（".date('m-d H:i',time())."）.xls";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
