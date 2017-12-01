@@ -25,11 +25,11 @@
 
 	<div style="padding: 10px 10px;">
 		<div id="segmentedControl" class="mui-segmented-control">
-			<a class="mui-control-item mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId));?>">全部</a>
+			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId));?>">全部</a>
 			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>">待付款</a>
 			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">待发货</a>
 			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId));?>">待收货</a>
-			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId));?>">已收货</a>
+			<a class="mui-control-item  mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId));?>">已收货</a>
 		</div>
 	</div>
 
@@ -56,7 +56,7 @@
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_order['reality_total']; ?></a>
 					<a class="mui-card-link"><?php if($goods_order['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_order['paytype']==2){echo '<span style="color:red">货到付款</span>';} ?></a>
 					<a class="mui-card-link"><?php if($goods_order['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_order['pay_status']==0){echo '<span style="color:red">未付款</span>';} ?></a>
-					<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId,'account_no'=>$goods_order['account_no'],'type'=>0));?>">查看详情</a>
+					<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId,'account_no'=>$goods_order['account_no'],'type'=>4));?>">查看详情</a>
 				</div>
 			</div>
 			<?php endforeach;?>
@@ -94,7 +94,7 @@ function upFn() {
 	if (list_length<10) {
 		mui('.mui-scroll-wrapper').pullRefresh().endPullupToRefresh(true);
 	}else{
-	    mui.ajax("<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId)); ?>",{
+	    mui.ajax("<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId)); ?>",{
 			data:{up:y++,date:date},
 			dataType:'json',//服务器返回json格式数据
 			type:'post',//HTTP请求类型
@@ -173,7 +173,7 @@ function upFn() {
 					 */
 					// result.innerText = '选择结果2: ' + rs.text;
 					// result.value = rs.text;
-					location.href='<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId)); ?>/date/'+rs.text;
+					location.href='<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId)); ?>/date/'+rs.text;
 					/* 
 					 * 返回 false 可以阻止选择框的关闭
 					 * return false;
