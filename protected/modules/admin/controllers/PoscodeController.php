@@ -366,7 +366,7 @@ class PoscodeController extends BackendController
             }else{
             	Helper::writeLog('激活成功：'.$this->companyId.';key:'.$obj['biz_response']['terminal_key']);
                     if(!empty($devicemodel)){
-                            Yii::app()->db->createCommand('update nb_sqb_possetting set terminal_key='.$obj['biz_response']['terminal_key'].' where device_id ='.$device_id.' and dpid ='.$this->companyId)
+                            Yii::app()->db->createCommand('update nb_sqb_possetting set terminal_sn="'.$obj['biz_response']['terminal_sn'].'",terminal_key="'.$obj['biz_response']['terminal_key'].'" where device_id ='.$device_id.' and dpid ='.$this->companyId)
                             ->execute();
                     }else{
 
