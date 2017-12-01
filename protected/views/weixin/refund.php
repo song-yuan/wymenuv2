@@ -16,7 +16,7 @@ if(isset($admin_id) && $admin_id != "" ){
 }
 if(isset($out_trade_no) && $out_trade_no!="" && $out_trade_no!=0){
 	$compaychannel = WxCompany::getpaychannel($dpid);
-	if($compaychannel['pay_channel']=='2'){
+	if($compaychannel['pay_channel']=='2'||$compaychannel['pay_channel']=='3'){
 		$result = SqbPay::refund(array(
 				'device_id'=>$poscode,
 				'refund_amount'=>''.$refund_fee*100,
