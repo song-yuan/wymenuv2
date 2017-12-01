@@ -35,7 +35,14 @@ class WxRiJie
 					'msg' => ''
 			) );
 		}
-		
+		$sql = 'select * from nb_rijie_code where dpid='.$dpid.' and pos_code!="'.$poscode.'" and rijie_code="'.$rjcode.'" and delete_flag=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if($result){
+			return json_encode ( array (
+					'status' => true,
+					'msg' => ''
+			) );
+		}
 		$lid = new Sequence("rijie_code");
 		$id = $lid->nextval();
 		$data = array(
