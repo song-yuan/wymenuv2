@@ -2071,7 +2071,7 @@ class DataSyncOperation {
 		return json_encode($msg);
 	}
 	public static function refundWxHykPay($data) {
-		$dpid = $data['dpid'];
+		$dpid = $data['companyId'];
 		$adminId = $data['admin_id'];
 		$sql = 'select * from nb_user where lid='.$adminId.' and dpid='.$dpid;
 		$admin = Yii::app ()->db->createCommand ( $sql )->queryRow ();
