@@ -298,6 +298,15 @@ class DataAppSyncController extends Controller
 	}
 	/**
 	 *
+	 * 微信会员卡退款
+	 *
+	 */
+	public function actionRefundWxHykPay(){
+		$result = DataSyncOperation::refundWxHykPay($_GET);
+		echo $result;exit;
+	}
+	/**
+	 *
 	 * 原材料 消耗
 	 *
 	 */
