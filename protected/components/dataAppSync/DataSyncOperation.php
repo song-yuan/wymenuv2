@@ -2070,6 +2070,32 @@ class DataSyncOperation {
 		}
 		return json_encode($msg);
 	}
+	public static function refundWxHykPay($data) {
+		$dpid = $data['dpid'];
+		$adminId = $data['admin_id'];
+		$sql = 'select * from nb_user where lid='.$adminId.' and dpid='.$dpid;
+		$admin = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if(!$admin){
+			return json_encode(array('status'=>false,'msg'=>'管理员不存在'));
+		}
+		$cardId = $data['card_id'];
+		$refund_fee = $data['refund_fee'];
+		$user = WxBrandUser::getFromCardId($dpid, $cardId);
+		if(!$user){
+			return json_encode(array('status'=>false,'msg'=>'该会员不存在'));
+		}
+		$transaction=Yii::app()->db->beginTransaction();
+		try{
+			WxBrandUser::refundYue($refund_fee, $user, $dpid);
+			$transaction->commit();
+			$msg = array('status'=>true);
+		}catch (Exception $e) {
+			$message = $e->getMessage();
+			$transaction->rollback();
+			$msg = array('status'=>false,'msg'=>$message);
+		}
+		return json_encode($msg);
+	}
 	/**
 	 * 
 	 * 获取原材料消耗

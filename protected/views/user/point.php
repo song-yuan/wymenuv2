@@ -44,7 +44,7 @@
                         <span class="weui_cell_hd "></span>
                        
                             <div class="weui_cell_bd weui_cell_primary">
-                                <p>积分换礼</p>
+                                <p>积分换礼(敬请期待)</p>
                             </div>
                             <div class="weui_cell_ft">
                             </div> 
