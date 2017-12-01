@@ -24,7 +24,6 @@ if(isset($out_trade_no) && $out_trade_no != ""){
 				'dpid'=>$dpid,
 				'operator'=>$admin_id,
 		));
-		Helper::writeLog(json_encode($result));
 		if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
 			$msg = array('status'=>true, 'trade_no'=>$out_trade_no);
 		}else{

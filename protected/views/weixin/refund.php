@@ -33,7 +33,6 @@ if(isset($out_trade_no) && $out_trade_no!="" && $out_trade_no!=0){
 	   
 		$result = WxPayApi::refund($input);
 	}
-	Helper::writeLog(json_encode($result));
 	//var_dump($result);exit;
 	if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
 		$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
