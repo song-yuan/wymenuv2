@@ -1,5 +1,14 @@
-     <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/mobiscroll.min.css');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/jquery-1.10.2.min.js');?>
+
+	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/wechat_css/mobiscroll.min.css');?>
     <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/wechat_js/mobiscroll.min.js');?>
+    
+    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>
+	
+	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');?>
+    
     <!-- BEGIN PAGE -->
     <style>
     .modal-seach{vertical-align: middle;text-align: center;padding: 10px 10px;}
@@ -309,36 +318,28 @@
 	        	layer.closeAll();
 	        	//alert(dpids);
 		        });
-			$('#cx').click(function(){  
-				    var obj=$('.checkedCN');
-				    var str=new Array();
-						obj.each(function(){
-							if($(this).attr("checked")=="checked")
-							{
-								str += $(this).val()+","
-							}								
-						});
-					str = str.substr(0,str.length-1);//除去最后一个“，”
-					  var begin_time = $('#begin_time').val();
-					   var end_time = $('#end_time').val();
-					   var text = $('#text').val();
-					   var cid = $(this).val();
-					   var setid = $('#setid').val();
-					 location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
-				  });
+			
 			  $('#excel').click(function excel(){
-					layer.msg('Non permissions operation！');return false;
-				   var ordertype = $('#ordertype').val();
+				  var ordertype = $('#ordertype').val();
 				   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
+				   var day_begin = $('#day_begin').val();
+				   var day_end = $('#day_end').val();
 				   var text = $('#text').val();
 				   var setid = $('#setid').val();
-				   //alert(str);
+				   var cid = $('#selectCategory').val();
+				   var pdname = $('#productname').val();
+				   var str = $('#dpids').val();
+				   if($('#checktime').attr('checked')){
+					   var cks = 1;
+					   }else{var cks =0;
+					   }
+				   
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 							//alert("<?php echo "然而你并没有权限！！！";?>");
 							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid;
-			       }
+			    	   location.href="<?php echo $this->createUrl('statements/timeproductReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/day_begin/"+day_begin+"/day_end/"+day_end+"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid+"/pdname/"+pdname+"/str/"+str+"/cks/"+cks;
+						   }
 			      
 			   });
 

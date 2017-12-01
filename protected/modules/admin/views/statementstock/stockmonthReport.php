@@ -1,12 +1,14 @@
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_002.css');?>
+     <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_002.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll.css');?>
 <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_003.css');?>
+     
+     <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_002.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mall/date/mobiscroll_004.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/waiter/mobiscroll_003.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mall/date/mobiscroll_005.js');?> 
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mall/date/mobiscroll_005.js');?>
     <!-- BEGIN PAGE -->
     <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
