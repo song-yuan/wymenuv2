@@ -22,7 +22,7 @@ class GoodsorderController extends BackendController
 	}
 	public function actionIndex(){
 		$db = Yii::app()->db;
-		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.')) k order by goods_order_accountno asc';
+		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) right join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') group by d.goods_order_accountno) k order by lid asc';
 		//$models = $db->createCommand($sql)->queryAll();
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -32,7 +32,7 @@ class GoodsorderController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		// p($models);
+		// var_dump($models);exit;
 
 			$this->render('index',array(
 					'models'=>$models,
@@ -300,7 +300,7 @@ class GoodsorderController extends BackendController
 							'delete_flag'=>'0',
 							'is_sync'=>$is_sync,
 					);
-					//var_dump($datagd);//exit;
+					//var_dump($datagd);exit;
 					$command = $db->createCommand()->insert('nb_goods_delivery',$datagd);
 					if($command){
 						$sql ='select t.* from nb_goods_order_detail t where t.goods_order_id ='.$pid.' and t.delete_flag =0 and t.stock_dpid ='.$ms['stock_dpid'];
@@ -331,8 +331,12 @@ class GoodsorderController extends BackendController
 							//var_dump($datagdd);
 						}
 					}
-					$moneys = $gdmoneys/$gomeney*$goprice;
-					$moneys = number_format($moneys,2);
+					$prices = $gomeney*$goprice;
+					if(!$prices){
+						$prices = 1;
+					}
+					$moneys = $gdmoneys/$prices;
+					$moneys = sprintf("%.2f",$moneys);
 					$db->createCommand('update nb_goods_delivery set delivery_amount = '.$moneys.',update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$gdlid)
 					->execute();
 				}
