@@ -10,10 +10,12 @@ class MyinfoController extends BaseYmallController
 		//查询提交者信息
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
-		//查询用户登录信息
-		$user_info = User::model()->find('lid=:lid and username=:username and delete_flag=0',array(':lid'=>$user_id,':username'=>$user_name));
-		// p($user_info);
 		$db = Yii::app()->db;
+		//查询用户登录信息
+		$sql0 ='select t.*,c.*,c.mobile as cmobile,c.email as cemail from nb_user t left join nb_company c on(t.dpid=c.dpid) where t.lid='.$user_id.' and t.username="'.$user_name.'"';
+		// $user_info = User::model()->find('lid=:lid and username=:username and delete_flag=0',array(':lid'=>$user_id,':username'=>$user_name));
+		$user_info = $db->createCommand($sql0)->queryRow();
+		// p($user_info);
 		//客服电话
 		$sqll ='select telephone from nb_company where  type= 0 and dpid in(select comp_dpid from nb_company where dpid = '.$this->companyId.') and delete_flag=0';
 		$phone = $db->createCommand($sqll)->queryRow();
@@ -40,7 +42,7 @@ class MyinfoController extends BaseYmallController
 		}
 		// p($materials_nopay);
 
-		//查询已支付待发货订单
+		//查询待发货订单
 
 		$sql1 = 'select god.*,go.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name from nb_goods_order_detail god '
 		.' left join nb_goods_order go on(go.account_no=god.account_no)'
@@ -101,7 +103,7 @@ class MyinfoController extends BaseYmallController
 		.' where god.dpid='.$this->companyId
 		.' and go.user_id='.$user_id
 		.' and god.delete_flag=0'
-		.' and UNIX_TIMESTAMP(go.create_at)>UNIX_TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))'//查询最近一个月的订单
+		// .' and UNIX_TIMESTAMP(go.create_at)>UNIX_TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))'//查询最近一个月的订单
 		.' and ((go.order_status=5 and go.pay_status=1  and go.paytype=1) or (go.order_status=5 and go.pay_status=0 and go.paytype=2))'
 		.' order by god.stock_dpid';
 
@@ -115,7 +117,7 @@ class MyinfoController extends BaseYmallController
 				array_push($materials_get[$product['account_no']], $product);
 			}
 		}
-		// p($materials_get);
+		// p($products_getted);
 		$this->render('myinfo',array(
 			'phone'=>$phone,
 			'user_info'=>$user_info,
@@ -165,7 +167,7 @@ class MyinfoController extends BaseYmallController
 		));
 	}
 
-
+	//查看全部订单
 	public function actionGoodsOrderAll()
 	{
 		$db = Yii::app()->db;
@@ -204,11 +206,198 @@ class MyinfoController extends BaseYmallController
 		));
 	}
 
+	//查看待支付订单
+	public function actionGoodsOrderNopay()
+	{
+		$db = Yii::app()->db;
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$up = Yii::app()->request->getParam('up');
+		$date = Yii::app()->request->getParam('date',0);
+		if($date){
+			$b_time = ' and UNIX_TIMESTAMP(go.create_at)>UNIX_TIMESTAMP("'.$date.' 00:00:00")';
+			$e_time = ' and UNIX_TIMESTAMP(go.create_at)<UNIX_TIMESTAMP("'.$date.' 23:59:59")';
+		}else{
+			$b_time = '';
+			$e_time = '';
+		}
+		if(Yii::app()->request->isAjaxRequest){
+			$offset = $up*10;
+			$sql = 'select go.* from nb_goods_order go where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' order by go.create_at desc limit '.$offset.',10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+			echo json_encode($goods_orders);exit;
+		}else{
+			$sql = 'select go.* from nb_goods_order go where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' order by go.create_at desc limit 0,10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+		}
+		// p($goods_orders);
+
+		$this->render('goodsOrderNopay',array(
+			'goods_orders'=>$goods_orders,
+			'date'=>$date,
+		));
+	}
+
+	//查看待发货订单
+	public function actionGoodsOrderNosent()
+	{
+		$db = Yii::app()->db;
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$up = Yii::app()->request->getParam('up');
+		$date = Yii::app()->request->getParam('date',0);
+		if($date){
+			$b_time =' and UNIX_TIMESTAMP(go.create_at)>UNIX_TIMESTAMP("'.$date.' 00:00:00")';
+			$e_time =' and UNIX_TIMESTAMP(go.create_at)<UNIX_TIMESTAMP("'.$date.' 23:59:59")';
+		}else{
+			$b_time = '';
+			$e_time = '';
+		}
+		if(Yii::app()->request->isAjaxRequest){
+			$offset = $up*10;
+			$sql = 'select go.* from nb_goods_order go'
+			.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+				.' and go.order_status < 4 or go.order_status = 4'
+				.' order by go.create_at desc limit '.$offset.',10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+			echo json_encode($goods_orders);exit;
+		}else{
+			$sql = 'select go.* from nb_goods_order go'
+			.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+				.' and go.order_status < 4 or go.order_status = 4'
+				.' order by go.create_at desc limit 0,10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+		}
+		// p($goods_orders);
+
+		$this->render('goodsOrderNosent',array(
+			'goods_orders'=>$goods_orders,
+			'date'=>$date,
+		));
+	}
+
+	//查看待接收订单
+	public function actionGoodsOrderNoget()
+	{
+		$db = Yii::app()->db;
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$up = Yii::app()->request->getParam('up');
+		$date = Yii::app()->request->getParam('date',0);
+		if($date){
+			$b_time =' and UNIX_TIMESTAMP(go.create_at)>UNIX_TIMESTAMP("'.$date.' 00:00:00")';
+			$e_time =' and UNIX_TIMESTAMP(go.create_at)<UNIX_TIMESTAMP("'.$date.' 23:59:59")';
+		}else{
+			$b_time = '';
+			$e_time = '';
+		}
+		if(Yii::app()->request->isAjaxRequest){
+			$offset = $up*10;
+			$sql = 'select go.*,gd.*,gi.*,gi.status as gi_status from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and (gi.status=0 or gi.status=1)'
+				.' group by go.account_no order by go.create_at desc limit '.$offset.',10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+			echo json_encode($goods_orders);exit;
+		}else{
+			$sql = 'select go.*,gd.*,gi.*,gi.status as gi_status from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and (gi.status=0 or gi.status=1)'
+				.' group by go.account_no order by go.create_at desc limit 0,10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+		}
+		// p($goods_orders);
+
+		$this->render('goodsOrderNoget',array(
+			'goods_orders'=>$goods_orders,
+			'date'=>$date,
+		));
+	}
+
+	//查看已签收订单
+	public function actionGoodsOrderGetted()
+	{
+		$db = Yii::app()->db;
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$up = Yii::app()->request->getParam('up');
+		$date = Yii::app()->request->getParam('date',0);
+		if($date){
+			$b_time =' and UNIX_TIMESTAMP(go.create_at)>UNIX_TIMESTAMP("'.$date.' 00:00:00")';
+			$e_time =' and UNIX_TIMESTAMP(go.create_at)<UNIX_TIMESTAMP("'.$date.' 23:59:59")';
+		}else{
+			$b_time = '';
+			$e_time = '';
+		}
+		if(Yii::app()->request->isAjaxRequest){
+			$offset = $up*10;
+			$sql = 'select go.*,gd.*,gi.*,gi.status as gi_status from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and gi.status=2'
+				.' group by go.account_no order by go.create_at desc limit '.$offset.',10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+			echo json_encode($goods_orders);exit;
+		}else{
+			$sql = 'select go.*,gd.*,gi.*,gi.status as gi_status from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.$b_time
+				.$e_time
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and gi.status=2'
+				.' group by go.account_no order by go.create_at desc limit 0,10';
+			$goods_orders = $db->createCommand($sql)->queryAll();
+		}
+		// p($goods_orders);
+
+		$this->render('goodsOrderGetted',array(
+			'goods_orders'=>$goods_orders,
+			'date'=>$date,
+		));
+	}
+
 	public function actionOrderDetail()
 	{
 		// p($account_no);
 		$db = Yii::app()->db;
 		$account_no = Yii::app()->request->getParam('account_no');
+		$type = Yii::app()->request->getParam('type',0);
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$sql = 'select gorder.*,gdel.*,gin.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,g.main_picture,c.company_name '
 		.' from (select go.dpid,go.create_at,go.account_no,go.goods_address_id,go.username,go.user_id,go.order_status,go.reality_total,go.paytype,go.pay_status,god.stock_dpid,god.goods_name,god.goods_id,god.goods_code,god.material_code,god.price,god.num from nb_goods_order go left join nb_goods_order_detail god on ( go.account_no=god.account_no) ) gorder '
@@ -226,6 +415,7 @@ class MyinfoController extends BaseYmallController
 		// p($goods_orders);
 		$this->render('orderDetail',array(
 			'goods_orders'=>$goods_orders,
+			'type'=>$type,
 		));
 	}
 

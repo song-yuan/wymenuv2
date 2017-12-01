@@ -14,6 +14,9 @@
 			.big-ul{margin-top:2px!important;}
 			.margin-b{margin:0;margin-bottom: 120px!important;}
 			#suretopay{margin:0;height:50px;top:0;border-radius: 0;}
+			.gotopay{padding: 2px 12px;float:right;margin-left:20px;margin-right:10px;}
+			.delete_nopay{padding: 2px 12px;float:right;}
+			.mcard{margin-top:0px;margin-right:0px;margin-left: 0px;margin-bottom: 60px;}
 		</style>
 
 
@@ -44,7 +47,7 @@
 			    	</div>
 			    </div>
 			    	<?php if ($goods_orders): ?>
-					<div class="mui-card" style="margin-top:0px;margin-right:0px;margin-left: 0px;margin-bottom: 60px;">
+					<div class="mui-card mcard">
 						<div class="mui-card-header mui-card-media">
 							<img src="<?php echo  Yii::app()->request->baseUrl; ?>/img/order_list.png" />
 							<div class="mui-media-body">
@@ -53,18 +56,76 @@
 							</div>
 						</div>
 						<div class="mui-card-content" >
-						<ul class="mui-table-view">
-							<?php foreach ($goods_orders as $key => $value):?>
-							<li class="mui-table-view-cell mui-media">
-								<img class="mui-media-object mui-pull-left" src="<?php if($value['main_picture']){ echo $value['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';}?>">
-								<div class="mui-media-body">
-								<?php echo $value['goods_name'];?>
-								<p class='mui-ellipsis'>
-									<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-									<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
-								</p>
-								<p class='mui-ellipsis'>
+						<?php if ($type==0 || $type==1)://全部 线上支付待付款 ?>
+							<ul class="mui-table-view">
+								<?php foreach ($goods_orders as $key => $value):?>
+								<li class="mui-table-view-cell mui-media">
+									<img class="mui-media-object mui-pull-left" src="<?php if($value['main_picture']){ echo $value['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';}?>">
+									<div class="mui-media-body">
+									<?php echo $value['goods_name'];?>
+									<p class='mui-ellipsis'>
+										<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
+										<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+									</p>
+									<p class='mui-ellipsis'>
+									<?php if($value['paytype']==2 || ($value['paytype']==1 && $value['pay_status']==1)): ?>
+										<?php if($value['invoice_accountno']): ?>
+										<span class="mui-pull-left">配送单号 : <?php echo $value['invoice_accountno'];?> </span>
+											<?php if($value['istatus']==2): ?>
+												<span class="mui-pull-right" style="color:green;"><?php echo '已签收';?> </span>
+											<?php elseif($value['istatus']==1): ?>
+												<span class="mui-pull-right" style="color:red;"><?php echo '运输中';?> </span>
+											<?php elseif($value['istatus']==0): ?>
+												<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?> </span>
+											<?php endif; ?>
+										<?php else: ?>
+										<span class="mui-pull-left">仓库 : <?php echo $value['company_name'];?></span>
+										<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?></span>
+										<?php endif; ?>
+									<?php endif; ?>
+									</p>
+									</div>
+								</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php elseif($type==2)://待发货 ?>
+							<?php
+								$nosents =array();
+								foreach ($goods_orders as $key1 => $goods_order) {
+									if(!isset($nosents[$goods_order['stock_dpid']])){
+										$nosents[$goods_order['stock_dpid']] = array();
+									}
+									array_push($nosents[$goods_order['stock_dpid']], $goods_order);
+								}
+								foreach ($nosents as $key2 => $nosent):
+							?>
+							<div class="mui-card">
+								<div class="mui-card-header mui-card-media">
+									<img src="<?php echo  Yii::app()->request->baseUrl; ?>/img/cangku.png" />
+									<div class="mui-media-body">
+										[ <span style="color:darkblue;">仓库</span> ]
+										<p><?php echo $nosent[0]['company_name'] ?></p>
+									</div>
+								</div>
+								<div class="mui-card-content" >
+									<ul class="mui-table-view">
+										<?php foreach ($nosent as $key3 => $value):?>
+										<li class="mui-table-view-cell mui-media">
+											<img class="mui-media-object mui-pull-left" src="<?php if($value['main_picture']){ echo $value['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';}?>">
+											<div class="mui-media-body">
+											<?php echo $value['goods_name'];?>
+											<p class='mui-ellipsis'>
+												<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
+												<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+											</p>
+											</div>
+										</li>
+										<?php endforeach; ?>
+									</ul>
+								</div>
+								<div class="mui-card-footer">
 									<?php if($value['invoice_accountno']): ?>
+									<a class="mui-card-link">
 									<span class="mui-pull-left">配送单号 : <?php echo $value['invoice_accountno'];?> </span>
 										<?php if($value['istatus']==2): ?>
 											<span class="mui-pull-right" style="color:green;"><?php echo '已签收';?> </span>
@@ -73,22 +134,34 @@
 										<?php elseif($value['istatus']==0): ?>
 											<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?> </span>
 										<?php endif; ?>
+									</a>
 									<?php else: ?>
-									<span class="mui-pull-left">仓库 : <?php echo $value['company_name'];?></span>
+									<a class="mui-card-link"></a>
+									<a class="mui-card-link">
 									<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?></span>
+									</a>
 									<?php endif; ?>
-								</p>
 								</div>
-							</li>
+							</div>
 							<?php endforeach; ?>
-
-						</ul>
+						<?php elseif($type==3)://待收货 ?>
+						<?php elseif($type==4)://已收货 ?>
+						<?php endif; ?>
 						</div>
 						<div class="mui-card-footer">
-							<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
+						<?php if($type==0)://全部 ?>
 							<?php if ($goods_orders[0]['reality_total']): ?>
-							<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
+							<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
 							<?php endif; ?>
+							<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
+						<?php elseif($type==1)://待付款 ?>
+							<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
+							<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">直接付款</button>
+							<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
+						<?php elseif($type==2)://待发货 ?>
+						<?php elseif($type==3)://待收货 ?>
+						<?php elseif($type==4)://已收货 ?>
+						<?php endif; ?>
 						</div>
 					</div>
 					<?php endif; ?>
@@ -99,4 +172,39 @@
 		<script type="text/javascript">
 			mui.init();
 			mui('.mui-scroll-wrapper').scroll();
+			$('.gotopay').on('tap',function(){
+				var account_no = $(this).attr('account_no');
+				var companyId ='<?php echo $this->companyId; ?>';
+				console.log(account_no);
+				location.href = '<?php echo $this->createUrl("ymallcart/orderlist") ?>?companyId='+companyId+'&account_no='+account_no;
+			});
+			$('.delete_nopay').on('tap',function(){
+				var account_no = $(this).attr('account_no');
+				console.log(account_no);
+				$(this).attr('id', 'aa');
+				var btnArray = ['否','是'];
+				mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
+					if(e.index==1){
+					mui.post('<?php echo $this->createUrl("myinfo/delete_nopay",array("companyId"=>$this->companyId)) ?>',{
+						   account_no:account_no,
+						},
+						function(data){
+							if (data == 1) {
+							 	// var x = $('#aa').parent('div').parent('.big-li').attr('class');
+							 	// alert(x);
+								$('#aa').parent().parent('.big-li').fadeOut(1000).remove();
+								//将图标的数量减去
+								var num = $('#nopay').html();
+								$('#nopay').html(num-1);
+								mui.alert('删除成功 ! ! !');
+							}else if(data == 2) {
+								mui.alert('因网络原因删除失败 , 请重新删除 ! ! !');
+							}else if(data == 3) {
+								mui.alert('未查寻到商品删除失败 ! ! !');
+							}
+						},'json'
+					);
+				}
+				});
+			});
 		</script>

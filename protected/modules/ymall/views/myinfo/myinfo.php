@@ -129,10 +129,10 @@
 		color: #6d6d72;
 		font-size: 15px;
 	}
-	.oa-contact-cell.mui-table .mui-table-cell {
+/*	.oa-contact-cell.mui-table .mui-table-cell {
 		padding: 11px 0;
 		vertical-align: middle;
-	}
+	}*/
 	.oa-contact-cell {
 		position: relative;
 		margin: -11px 0;
@@ -145,6 +145,7 @@
 	}
 	.oa-contact-content {
 		width: 100%;
+		padding:10px;
 	}
 	.oa-contact-name {
 		margin-right: 20px;
@@ -227,8 +228,10 @@
 		transform: scaleY(.5);
 		background-color: #c8c7cc;
 	}
-	.sign-name{font-size:50px;line-height:65px;text-align: center; padding:10px 15px;margin-right:20px;font-weight: 900;}
-	.sign-name div{background: yellow;color:lightblue;border-radius: 50px;width: 60px;height: 60px;}
+	.mui-table-view .mui-media-object{max-width: 60px;}
+	.sign-name{padding:10px 15px;margin-right:20px;}
+	.sign-name img{border-radius: 50px;width: 60px!important;height: 60px!important;}
+	.hidden{display: none;}
 </style>
 
 
@@ -262,15 +265,15 @@
 							<div class="oa-contact-cell mui-table">
 							<?php if ($user_info): ?>
 								<div class="oa-contact-avatar mui-table-cell sign-name">
-									<div><?php if($user_info->staff_no){echo mb_substr($user_info->staff_no,0,1,'utf-8');}else{echo '發';} ?></div>
+									<img class="mui-media-object mui-pull-left head-img" id="head-img" src="<?php if(0){echo $user_info['logo'];}else{echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>">
 								</div>
-								<div class="oa-contact-content mui-table-cell" style="padding-left: 20px;">
+								<div class="oa-contact-content mui-table-cell" >
 									<div class="mui-clearfix">
-										<h4 class="oa-contact-name"><?php if($user_info->staff_no){echo $user_info->staff_no;}else{echo '未填写名字';} ?></h4>
-										<span class="oa-contact-position mui-h6"><?php if($user_info->mobile){echo $user_info->mobile;}else{echo '未填写手机号';} ?></span>
+										<h4 class="oa-contact-name"><?php if($user_info['staff_no']){echo $user_info['staff_no'];}else{echo $user_info['username'];} ?></h4>
+										<span class="oa-contact-position mui-h6" style="color:darkblue;">[<?php echo $user_info['company_name']; ?>]</span>
 									</div>
 									<p class="oa-contact-email mui-h6">
-										<?php if($user_info->email){echo $user_info->email;}else{echo '未填写email';}?>
+										<span class="mui-pull-left"><?php if($user_info['mobile']){echo $user_info['mobile'];}else{echo $user_info['cmobile'];} ?></span>
 									</p>
 								</div>
 							<?php endif; ?>
@@ -307,28 +310,28 @@
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="li-cell ">
 						<div id="segmentedControl" class="mui-segmented-control">
-							<a class="mui-control-item mui-active" href="#item1mobile">
+							<a class="mui-control-item mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/wallet.jpg ">
 									<?php if($materials_nopay): ?>
 									<span class="mui-badge daifa" id="nopay" style="background-color: red;color: white;"><?php echo count($materials_nopay); ?></span>
 									<?php endif; ?>
 									<span class="mui-label">待付款</span>
 								</a>
-							<a class="mui-control-item" href="#item2mobile">
+							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/waitsent.png ">
 									<?php if($materials_pay): ?>
 									<span class="mui-badge daifa"  style="background-color: red;color: white;"><?php echo count($materials_pay); ?></span>
 									<?php endif; ?>
 									<span class="mui-label">待发货</span>
 								</a>
-							<a class="mui-control-item" href="#item3mobile">
+							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/senting.png ">
 									<?php if($materials_send): ?>
 									<span class="mui-badge daifa" style="background-color: red;color: white;"><?php echo count($materials_send); ?></span>
 									<?php endif; ?>
 									<span class="mui-label">待收货</span>
 								</a>
-							<a class="mui-control-item" href="#item4mobile">
+							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/sented.jpg ">
 									<?php if($materials_get): ?>
 									<span class="mui-badge daifa" style="background-color: red;color: white;"><?php echo count($materials_get); ?></span>
@@ -338,7 +341,7 @@
 						</div>
 					</li>
 
-					<li class="">
+					<li class="hidden">
 						<div class="mui-content-padded">
 						<div id="item1mobile" class="mui-control-content mui-active">
 							<ul class="mui-table-view big-ul">
@@ -640,6 +643,6 @@
 		}
 	});
 
-
+mui('body').on('tap','a',function(){document.location.href=this.href;});
 </script>
 
