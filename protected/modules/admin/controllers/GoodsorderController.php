@@ -22,7 +22,7 @@ class GoodsorderController extends BackendController
 	}
 	public function actionIndex(){
 		$db = Yii::app()->db;
-		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) right join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') group by d.goods_order_accountno) k order by lid asc';
+		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') group by d.goods_order_accountno) k order by lid desc';
 		//$models = $db->createCommand($sql)->queryAll();
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -268,7 +268,7 @@ class GoodsorderController extends BackendController
 			$modelstocks = $db->createCommand($sql)->queryAll();
 			$sql ='select t.reality_total,godp.reality_money from nb_goods_order t left join (select sum(god.price*god.num) as reality_money,god.goods_order_id from nb_goods_order_detail god where god.goods_order_id = '.$pid.') godp on(godp.goods_order_id = t.lid) where t.lid ='.$pid.' and t.delete_flag =0 ';
 			$goprices = $db->createCommand($sql)->queryRow();
-
+			//var_dump($goprices);exit;
 			if((!empty($modelstocks))&&(!empty($goprices))){
 				$goprice = $goprices['reality_total'];
 				$gomeney = $goprices['reality_money'];
@@ -331,11 +331,11 @@ class GoodsorderController extends BackendController
 							//var_dump($datagdd);
 						}
 					}
-					$prices = $gomeney*$goprice;
+					$prices = $gomeney;
 					if(!$prices){
 						$prices = 1;
 					}
-					$moneys = $gdmoneys/$prices;
+					$moneys = $gdmoneys*$goprice/$prices;
 					$moneys = sprintf("%.2f",$moneys);
 					$db->createCommand('update nb_goods_delivery set delivery_amount = '.$moneys.',update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$gdlid)
 					->execute();
