@@ -46,7 +46,7 @@ class WxRiJie
 			}
 			if($result['end_time'] < $etime){
 				$sql = 'update nb_rijie_code set end_time="'.$etime.'" where lid='.$result['lid'].' and dpid='.$result['dpid'];
-				$result = Yii::app()->db->createCommand()->execute();
+				$result = Yii::app()->db->createCommand($sql)->execute();
 				if($result){
 					return json_encode ( array (
 							'status' => true,
