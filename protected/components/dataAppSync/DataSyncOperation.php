@@ -250,7 +250,7 @@ class DataSyncOperation {
 		foreach ( $results as $result ) {
 			$order = array ();
 			if($result['remark']!=''){
-				$result['remark'] = Helper::dealString($result['remark']);
+				$result['remark'] = str_replace(array( "\\"), '', $result['remark']);
 			}
 			$order ['nb_order'] = $result;
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
@@ -271,11 +271,12 @@ class DataSyncOperation {
 					$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					if(!empty($productSet)){
 						$orderProduct[$k]['amount'] = $product['zhiamount'];
-						$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
+						$orderProduct[$k]['set_name'] = str_replace(array( "\\"), '', $productSet[0]['set_name']);
 						$orderProduct[$k]['set_price'] = $product['set_price'];
 						$orderProduct[$k]['set_detail'] = $productSet;
 					}
 				}
+				$orderProduct[$k]['product_name'] = str_replace(array( "\\"), '', $orderProduct[$k]['product_name']);
 			}
 			$order ['nb_order_product'] = $orderProduct;
 			$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
@@ -287,7 +288,7 @@ class DataSyncOperation {
 			$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
 			$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			if($orderAddress){
-				$orderAddress[0]['street'] = Helper::dealString($orderAddress[0]['street']);
+				$orderAddress[0]['street'] = str_replace(array( "\\"), '', $orderAddress[0]['street']);
 			}
 			$order ['nb_order_address'] = $orderAddress;
 			$sql = 'select * from nb_order_account_discount where dpid='.$dpid.' and order_id='.$result ['lid'].' and delete_flag=0';
