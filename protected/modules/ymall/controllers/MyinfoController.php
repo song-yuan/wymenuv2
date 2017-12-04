@@ -518,59 +518,59 @@ class MyinfoController extends BaseYmallController
 				$transaction->rollback();
 				echo json_encode(0);exit;
 			}
-		 }//else{
-		// 	//无运输损耗  更新invoice表状态  商品入库
+		 }else{
+			//无运输损耗  更新invoice表状态  商品入库
 
-		// 	$sql = 'update nb_goods_invoice set status=2 where invoice_accountno='.$invoice_accountno.' and goods_order_accountno='.$account_no;
-		// 	$command=$db->createCommand($sql)->execute();
+			$sql = 'update nb_goods_invoice set status=2 where invoice_accountno='.$invoice_accountno.' and goods_order_accountno='.$account_no;
+			$command=$db->createCommand($sql)->execute();
 
 
-		// 	$sql0 = 'update nb_goods_invoice set status=2 where invoice_accountno='.$invoice_accountno.' and goods_order_accountno='.$account_no;
-		// 	$command=$db->createCommand($sql0)->execute();
-		// 	// echo $command;exit;
-		// 	$companyId = Company::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId))->comp_dpid;
-		// 	$sql1 = 'select pm.lid,pm.mphs_code,gi.dpid,gids.goods_invoice_id,gids.price,gids.num,gids.unit_code,gids.goods_id,gids.goods_code,gids.material_code,gids.unit_ratio FROM nb_goods_invoice gi
-		// 	LEFT JOIN(
-		// 			SELECT gid.goods_invoice_id,gid.price,gid.num,gmu.dpid,gmu.unit_code,gid.goods_id,gid.goods_code,gid.material_code,gmu.unit_ratio FROM nb_goods_invoice_details gid
-		// 					LEFT JOIN (
-		// 						SELECT gm.dpid,gm.unit_code,gm.goods_id,gm.goods_code,gm.material_code,mu.unit_ratio FROM nb_goods_material gm LEFT JOIN nb_material_unit_ratio mu ON( gm.unit_code=mu.unit_code ) WHERE mu.dpid='.$companyId.') gmu ON( gid.goods_code=gmu.goods_code AND gid.goods_id=gmu.goods_id)
+			$sql0 = 'update nb_goods_invoice set status=2 where invoice_accountno='.$invoice_accountno.' and goods_order_accountno='.$account_no;
+			$command=$db->createCommand($sql0)->execute();
+			// echo $command;exit;
+			$companyId = Company::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId))->comp_dpid;
+			$sql1 = 'select pm.lid,pm.mphs_code,gi.dpid,gids.goods_invoice_id,gids.price,gids.num,gids.unit_code,gids.goods_id,gids.goods_code,gids.material_code,gids.unit_ratio FROM nb_goods_invoice gi
+			LEFT JOIN(
+					SELECT gid.goods_invoice_id,gid.price,gid.num,gmu.dpid,gmu.unit_code,gid.goods_id,gid.goods_code,gid.material_code,gmu.unit_ratio FROM nb_goods_invoice_details gid
+							LEFT JOIN (
+								SELECT gm.dpid,gm.unit_code,gm.goods_id,gm.goods_code,gm.material_code,mu.unit_ratio FROM nb_goods_material gm LEFT JOIN nb_material_unit_ratio mu ON( gm.unit_code=mu.unit_code ) WHERE mu.dpid='.$companyId.') gmu ON( gid.goods_code=gmu.goods_code AND gid.goods_id=gmu.goods_id)
 
-		// 			) gids ON (gi.lid = gids.goods_invoice_id )
-		// 	LEFT JOIN nb_product_material pm on(pm.mphs_code=gids.material_code and pm.dpid='.$this->companyId.')
-		// 	where gi.invoice_accountno = '.$invoice_accountno.' AND gi.goods_order_accountno='.$account_no;
-		// 	$products = $db->createCommand($sql1)->queryAll();
-		// 	// p($products);
-		// 	$i=0;
-		// 	foreach ($products as $key => $product) {
-		// 		$se=new Sequence("product_material_stock");
-		// 		$lid = $se->nextval();
-		// 		$is_sync = DataSync::getInitSync();
-		// 		$data=array(
-		// 			'lid'=>$lid,
-		// 			'dpid'=>$this->companyId,//公司的dpid
-		// 			'create_at'=>date('Y-m-d H:i:s',time()),
-		// 			'update_at'=>date('Y-m-d H:i:s',time()),
-		// 			'material_id'=>$product['lid'],
-		// 			'mphs_code'=>$product['material_code'],
-		// 			'stock_day'=>30,
-		// 			'batch_stock'=>$product['num']*$product['unit_ratio'],
-		// 			'stock'=>$product['num']*$product['unit_ratio'],
-		// 			'free_stock'=>0,
-		// 			'stock_cost'=>$product['num']*$product['price'],
-		// 			'delete_flag'=>0,
-		// 			'is_sync'=>$is_sync,
-		// 		);
-		// 		$info = Yii::app()->db->createCommand()->insert('nb_product_material_stock',$data);
-		// 		if($info){
-		// 		$i+=1;
-		// 		}
-		// 	}
-		// 	if ($i==count($products)) {
-		// 		echo json_encode(1);exit;
-		// 	}else{
-		// 		echo json_encode(0);exit;
-		// 	}
-		// }
+					) gids ON (gi.lid = gids.goods_invoice_id )
+			LEFT JOIN nb_product_material pm on(pm.mphs_code=gids.material_code and pm.dpid='.$this->companyId.')
+			where gi.invoice_accountno = '.$invoice_accountno.' AND gi.goods_order_accountno='.$account_no;
+			$products = $db->createCommand($sql1)->queryAll();
+			// p($products);
+			$i=0;
+			foreach ($products as $key => $product) {
+				$se=new Sequence("product_material_stock");
+				$lid = $se->nextval();
+				$is_sync = DataSync::getInitSync();
+				$data=array(
+					'lid'=>$lid,
+					'dpid'=>$this->companyId,//公司的dpid
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'material_id'=>$product['lid'],
+					'mphs_code'=>$product['material_code'],
+					'stock_day'=>30,
+					'batch_stock'=>$product['num']*$product['unit_ratio'],
+					'stock'=>$product['num']*$product['unit_ratio'],
+					'free_stock'=>0,
+					'stock_cost'=>$product['num']*$product['price'],
+					'delete_flag'=>0,
+					'is_sync'=>$is_sync,
+				);
+				$info = Yii::app()->db->createCommand()->insert('nb_product_material_stock',$data);
+				if($info){
+				$i+=1;
+				}
+			}
+			if ($i==count($products)) {
+				echo json_encode(1);exit;
+			}else{
+				echo json_encode(0);exit;
+			}
+		}
 	}
 	//删除未支付订单
 	public function actionDelete_nopay()
