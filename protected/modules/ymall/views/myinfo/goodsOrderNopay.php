@@ -192,5 +192,10 @@ function upFn() {
 		}, false);
 	});
 })(mui);
+<?php if ($success==2): ?>
+mui.toast('下单失败 , 请重新下单 ! ! !');
+<?php elseif ($success==3): ?>
+mui.toast('下单失败 , 订单异常 , 请删除后重新下单 ! ! !');
+<?php endif; ?>
 
 </script>
