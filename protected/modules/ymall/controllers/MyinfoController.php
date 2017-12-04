@@ -357,7 +357,7 @@ class MyinfoController extends BaseYmallController
 		$account_no = Yii::app()->request->getParam('account_no');
 		$type = Yii::app()->request->getParam('type',0);
 		$user_id = substr(Yii::app()->user->userId,0,10);
-		$sql = 'select gorder.*,gdel.*,gin.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,g.main_picture,c.company_name '
+		$sql = 'select gorder.*,gdel.*,gin.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,g.main_picture,g.goods_unit,c.company_name '
 		.' from (select go.dpid,go.create_at,go.account_no,go.goods_address_id,go.username,go.user_id,go.order_status,go.order_type,go.reality_total,go.paytype,go.pay_status,god.stock_dpid,god.goods_name,god.goods_id,god.goods_code,god.material_code,god.price,god.num from nb_goods_order go left join nb_goods_order_detail god on ( go.account_no=god.account_no) ) gorder '
 		.' left join (select gd.create_at as create_atd,gd.goods_order_accountno as dgoods_order_accountno,gd.auditor as dauditor,gd.operators as doperators,gd.delivery_accountno,gd.status as dstatus,gd.delivery_amount,gd.pay_status as dpay_status,gdd.dpid as stock_dpidd,gdd.goods_id as dgoods_id,gdd.goods_code as dgoods_code,gdd.material_code as dmaterial_code,gdd.price as dprice,gdd.num as dnum,gdd.pici from nb_goods_delivery gd left join nb_goods_delivery_details gdd on ( gd.lid=gdd.goods_delivery_id) 
 			) gdel on ( gorder.account_no=gdel.dgoods_order_accountno and gorder.goods_id=gdel.dgoods_id)'
@@ -414,7 +414,7 @@ class MyinfoController extends BaseYmallController
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$db = Yii::app()->db;
 
-		$sql = 'select god.*,go.goods_address_id,go.user_id,go.username,go.order_status,go.order_type,go.should_total,go.reality_total,go.paytype,go.pay_status,go.pay_time,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name,gis.dpid,gis.gidlid,gis.compid,gis.goods_delivery_id,gis.goods_order_id,gis.goods_address_id,gis.goods_order_accountno,gis.invoice_accountno,gis.auditor,gis.operators,gis.sent_personnel,gis.mobile,gis.status,gis.invoice_amount,gis.remark,gis.gidremark from nb_goods_order_detail god'
+		$sql = 'select god.*,go.goods_address_id,go.create_at as go_create_at,go.user_id,go.username,go.order_status,go.order_type,go.should_total,go.reality_total,go.paytype,go.pay_status,go.pay_time,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name,gis.dpid,gis.gidlid,gis.compid,gis.goods_delivery_id,gis.goods_order_id,gis.goods_address_id,gis.goods_order_accountno,gis.invoice_accountno,gis.auditor,gis.operators,gis.sent_personnel,gis.mobile,gis.status,gis.invoice_amount,gis.remark,gis.gidremark from nb_goods_order_detail god'
 		.' left join nb_goods_order go on(go.account_no=god.account_no)'
 		.' left join nb_company c on(c.dpid=god.stock_dpid)'
 		.' left join nb_goods g on (g.lid=god.goods_id and g.goods_code=god.goods_code )'
@@ -425,19 +425,11 @@ class MyinfoController extends BaseYmallController
 
 		$products_getted = $db->createCommand($sql)->queryAll();
 		// p($products_getted);
-		$materials_get =array();
-		foreach ($products_getted as $key => $product) {
-			if ($product['invoice_accountno']) {
-				if(!isset($materials_get[$product['invoice_accountno']])){
-					$materials_get[$product['invoice_accountno']] = array();
-				}
-				array_push($materials_get[$product['invoice_accountno']], $product);
-			}
-		}
+
 		// p($materials_get);
 		$this->render('sureorder',array(
 			'account_no'=>$account_no,
-			'materials_get'=>$materials_get,
+			'products_getted'=>$products_getted,
 		));
 	}
 	//确认订单入库
@@ -453,6 +445,7 @@ class MyinfoController extends BaseYmallController
 			//有运输损耗  更新invoice表状态  损耗记录  去损商品入库
 			$sql = 'update nb_goods_invoice set status=2 where invoice_accountno='.$invoice_accountno.' and goods_order_accountno='.$account_no;
 			$command=$db->createCommand($sql)->execute();
+			// p($command);
 			$companyId = Company::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId))->comp_dpid;
 
 			//查询总部原料的单位
@@ -466,9 +459,7 @@ class MyinfoController extends BaseYmallController
 			LEFT JOIN nb_product_material pm on(pm.mphs_code=gids.material_code and pm.dpid='.$this->companyId.')
 			where gi.invoice_accountno = '.$invoice_accountno.' AND gi.goods_order_accountno='.$account_no;
 			$products = $db->createCommand($sql1)->queryAll();
-			$i=0;
-			$j=0;
-			$x=0;
+
 			$transaction = $db->beginTransaction();
 			try{
 				foreach ($products as $key => $product) {
@@ -517,13 +508,6 @@ class MyinfoController extends BaseYmallController
 									'is_sync'=>$is_sync,
 								);
 								$info2 = Yii::app()->db->createCommand()->insert('nb_goods_stock_taking',$data1);
-								$x+=1;
-							}
-							if($info1){
-								$i+=1;
-							}
-							if($info2){
-								$j+=1;
 							}
 						}
 					}
@@ -534,7 +518,7 @@ class MyinfoController extends BaseYmallController
 				$transaction->rollback();
 				echo json_encode(0);exit;
 			}
-		}else{
+		 }else{
 			//无运输损耗  更新invoice表状态  商品入库
 
 			$sql = 'update nb_goods_invoice set status=2 where invoice_accountno='.$invoice_accountno.' and goods_order_accountno='.$account_no;

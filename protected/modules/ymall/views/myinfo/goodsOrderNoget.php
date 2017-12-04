@@ -95,7 +95,7 @@ function upFn() {
 		mui('.mui-scroll-wrapper').pullRefresh().endPullupToRefresh(true);
 	}else{
 	    mui.ajax("<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId)); ?>",{
-			data:{up:y++,date:date},
+			data:{up:++y,date:date},
 			dataType:'json',//服务器返回json格式数据
 			type:'post',//HTTP请求类型
 			timeout:10000,//超时时间设置为10秒；

@@ -258,11 +258,12 @@ class GoodstockController extends BackendController
 		$transaction = $db->beginTransaction();
 		try
 		{
+			$gdmoneys = '0.00';
+			
 			$is_sync = DataSync::getInitSync();
 
 			$sql ='select gd.compid,gd.dpid as dpids,gd.goods_order_id,gd.goods_address_id,gd.goods_order_accountno,gd.pay_status,t.* from nb_goods_delivery_details t left join nb_goods_delivery gd on(gd.dpid=t.dpid and gd.lid = t.goods_delivery_id) where t.goods_delivery_id ='.$pid.' and t.delete_flag =0 group by t.pici';
 			$modelstocks = $db->createCommand($sql)->queryAll();
-
 			$sql ='select t.delivery_amount,gddp.reality_money from nb_goods_delivery t left join (select sum(gdd.price*gdd.num) as reality_money,gdd.goods_delivery_id from nb_goods_delivery_details gdd where gdd.goods_delivery_id = '.$pid.') gddp on(gddp.goods_delivery_id = t.lid) where t.lid ='.$pid.' and t.delete_flag =0 ';
 			$gdprices = $db->createCommand($sql)->queryRow();
 			//var_dump($modelstocks);exit;
@@ -273,7 +274,6 @@ class GoodstockController extends BackendController
 				foreach ($modelstocks as $ms){
 					$moneys = '';
 					$gimoneys = '0.00';
-
 					$gdoid = $ms['goods_order_id'];
 					//按照仓库id生成发货单
 					$se = new Sequence("goods_invoice");
@@ -334,8 +334,12 @@ class GoodstockController extends BackendController
 						}
 
 					}
-					$moneys = $gimoneys/$gdmeney*$gdprice;
-					$moneys = number_format($moneys,2);
+					$prices = $gdmeney;
+					if(!$prices){
+						$prices = 1;
+					}
+					$moneys = $gimoneys*$gdprice/$prices;
+					$moneys = sprintf("%.2f",$moneys);
 					$db->createCommand('update nb_goods_invoice set invoice_amount = '.$moneys.',update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$gdlid)
 					->execute();
 

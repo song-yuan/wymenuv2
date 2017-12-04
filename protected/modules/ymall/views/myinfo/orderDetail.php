@@ -68,7 +68,7 @@
 								<?php echo $value['goods_name'];?>
 								<p class='mui-ellipsis'>
 									<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-									<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+									<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 								</p>
 								<p class='mui-ellipsis'>
 								<?php if($value['paytype']==2 || ($value['paytype']==1 && $value['pay_status']==1)): ?>
@@ -126,7 +126,7 @@
 										<?php echo $value['goods_name'];?>
 										<p class='mui-ellipsis'>
 											<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-											<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+											<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 										</p>
 										</div>
 									</li>
@@ -196,7 +196,7 @@
 										<?php echo $value['goods_name'];?>
 										<p class='mui-ellipsis'>
 											<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-											<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+											<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?> </span>
 										</p>
 										</div>
 									</li>
@@ -280,7 +280,7 @@
 										<?php echo $value['goods_name'];?>
 										<p class='mui-ellipsis'>
 											<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-											<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+											<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 										</p>
 										</div>
 									</li>
@@ -335,7 +335,7 @@
 							<?php echo $value['goods_name'];?>
 							<p class='mui-ellipsis'>
 								<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-								<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+								<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 							</p>
 							<p class='mui-ellipsis'>
 							<?php if($value['paytype']==2 || ($value['paytype']==1 && $value['pay_status']==1)): ?>
@@ -393,7 +393,7 @@
 									<?php echo $value['goods_name'];?>
 									<p class='mui-ellipsis'>
 										<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-										<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+										<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 									</p>
 									</div>
 								</li>
@@ -463,7 +463,7 @@
 									<?php echo $value['goods_name'];?>
 									<p class='mui-ellipsis'>
 										<span class="mui-pull-left">单价 : ¥<?php echo $value['price'];?></span>
-										<span class="mui-pull-right">x <?php echo $value['num'];?> </span>
+										<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 									</p>
 									</div>
 								</li>

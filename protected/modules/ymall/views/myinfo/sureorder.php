@@ -227,8 +227,10 @@
 		background-color: #c8c7cc;
 	}
 	.mui-numbox{width: 140px!important;}
+	.abc{
+		padding:0!important;
+	}
 </style>
-
 
 		<header class="mui-bar mui-bar-nav mui-hbar">
 		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"  style="color:white;"></a>
@@ -239,9 +241,13 @@
 			<div class="mui-scroll" style="padding-bottom: 50px;">
 				<ul class="mui-table-view mui-table-view-radio">
 					<li>
-						<div class="mui-row" style="height: 30px;background-color: #00CED1; color:white;">
-					    	<span class="a-store" account_no="<?php echo $account_no; ?>">订单号 : <?php echo $account_no; ?></span>
-				    	</div>
+						<div class="mui-card-header mui-card-media">
+							<img src="<?php echo  Yii::app()->request->baseUrl; ?>/img/order_list.png" />
+							<div class="mui-media-body">
+								订单号:<?php echo $account_no;?>
+								<p>下单日期: <?php echo $products_getted[0]['go_create_at'];?></p>
+							</div>
+						</div>
 					</li>
 					<li class="mui-table-view-cell mui-cc mui-selected" value="0">
 						<a class="mui-navigate-right">
@@ -255,18 +261,41 @@
 					</li>
 				</ul>
 				<ul class="mui-table-view mui-bb mui-hidden">
+					<?php
+						$materials_get =array();
+						foreach ($products_getted as $key => $product) {
+							if ($product['invoice_accountno']) {
+								if(!isset($materials_get[$product['invoice_accountno']])){
+									$materials_get[$product['invoice_accountno']] = array();
+								}
+								array_push($materials_get[$product['invoice_accountno']], $product);
+							}
+						}
+					?>
 					<?php if($materials_get): ?>
 						<li class=" big-li">
 					        <ul class="mui-table-view" id="">
 					        <?php foreach ($materials_get as $key1 => $material_s): ?>
 								<li class="mui-table-view-cell mui-collapse mui-active" style="background-color: white;">
-									<a class="mui-navigate-right" href="#" style="height: 40px;padding-top:5px;background-color: #F5F5F5; color:#6600CC;"><span class="ivac" invoice_accountno="<?php echo $key1; ?>"><?php echo '配送单号 : '.$key1; ?></span></a>
+									<a class="mui-navigate-right" href="#" style="height: 40px;padding-top:5px;background-color: #F5F5F5; color:#6600CC;">
+										<!-- <span class="ivac" invoice_accountno="<?php echo $key1; ?>"><?php echo '配送单号 : '.$key1; ?></span> -->
+							<div class="mui-card-header mui-card-media card-head abc">
+								<img src="<?php echo  Yii::app()->request->baseUrl; ?>/img/cangku.png" />
+								<div class="mui-media-body">
+									[ <span style="color:darkblue;">仓库</span> ]<?php echo $material_s[0]['company_name'] ?>
+									<p>
+									<span class="mui-pull-left ivac" invoice_accountno="<?php echo $key1; ?>">出库单号 : <?php echo $key1;?> </span>
+									<br>
+								</p>
+								</div>
+							</div>
+									</a>
 									<div class="mui-collapse-content">
 										<?php foreach ($material_s as $material_ss): ?>
 										<div style="height:120px;">
 								            <img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$material_ss['main_picture']; ?>" >
 								            <div class="mui-media-body" >
-								                <span class="color-blue">[<?php echo $material_ss['company_name']; ?>]</span><br> <span class="color-black l-h"><?php echo $material_ss['goods_name']; ?></span><br>
+								                <span class="color-black l-h"><?php echo $material_ss['goods_name']; ?></span><br>
 								                <span>单价 : <span style="color: red;"><?php echo $material_ss['price']; ?></span>元</span>
 								                <span style="color:darkslategray;">共</span>
 								                <span style="color:red;"><?php echo $material_ss['num']; ?></span>
@@ -276,7 +305,7 @@
 													<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
 													<input class="mui-numbox-input" type="number" value="0" gidlid="<?php echo $material_ss['gidlid'];  ?>" />
 													<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
-												</div><span style="color:darkslategray;"> <?php echo $material_ss['goods_unit']; ?></span>
+												</div><span style="color:darkslategray;"> / <?php echo $material_ss['goods_unit']; ?></span>
 								            </div>
 							        	</div>
 							        	<?php endforeach; ?>
@@ -318,7 +347,7 @@
 	$('.sureorder').on('tap',function(){
 		var value = $('.mui-selected').attr('value');
 		var invoice_accountno = $('.ivac').attr('invoice_accountno');
-		var account_no = $('.a-store').attr('account_no');
+		var account_no = $(this).attr('account_no');
 		// alert(value);
 		// alert(invoice_accountno);
 		// alert(account_no);
@@ -345,7 +374,7 @@
 						function(data){
 							if (data == 1) {
 								mui.alert('收货成功 ! ! !');
-								location.href='<?php echo $this->createUrl('myinfo/index',array('companyId'=>$this->companyId)) ?>';
+								location.href='<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId)) ?>/account_no/'+account_no+'/type/3';
 							}else if(data == 0) {
 								mui.alert('因网络原因确认收货失败 , 请重新确认 ! ! !');
 							}
@@ -361,7 +390,7 @@
 						function(data){
 							if (data == 1) {
 								mui.alert('收货成功 ! ! !');
-								location.href='<?php echo $this->createUrl('myinfo/index',array('companyId'=>$this->companyId)) ?>';
+								location.href='<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId)) ?>/account_no/'+account_no+'/type/3';
 							}else if(data == 0) {
 								mui.alert('因网络原因确认收货失败 , 请重新确认 ! ! !');
 							}
