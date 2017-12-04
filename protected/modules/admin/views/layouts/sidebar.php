@@ -17,10 +17,16 @@
             -->
    <?php if($this->comptype != 2 && Yii::app()->user->role <= '15' && Yii::app()->user->role !='4'): ?>
         <?php if(Yii::app()->user->role != '8'): ?>
-            <li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWx', 'user' ,'synchronous','poscode','postable','connectUs','uploadApk','announcement','pricegroup','companyGroup','doubleScreen','copyScreen','companySetting' ))) echo 'active';?>">
-                    <a href="<?php echo $this->createUrl('company/list',array('companyId' => $this->companyId));?>">
+        	<li class="<?php if(in_array(Yii::app()->controller->id , array('company'))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('company/index',array('companyId'=>$this->companyId));?>">
                         <i class="fa fa-home"></i> 
                         <span class="title"><?php echo yii::t('app','店铺管理');?></span>					
+                    </a>
+            </li>
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('companyset', 'companyWx', 'user' ,'synchronous','poscode','postable','connectUs','uploadApk','announcement','pricegroup','companyGroup','doubleScreen','copyScreen','companySetting' ))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('companyset/list',array('companyId' => $this->companyId));?>">
+                        <i class="fa fa-home"></i> 
+                        <span class="title"><?php echo yii::t('app','店铺设置');?></span>					
                     </a>
             </li>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('product' ,'payMethod', 'basicFee' ,'productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice', 'copyproduct', 'floor', 'site', 'siteType', 'sitePersons', 'siteChannel', 'pad', 'printer', 'printerWay', 'taste', 'productTaste', 'takeawayMember','muchupdateProd','muchprinterProd','materialCategory','materialUnit','productMaterial','materialUnitRatio','productBom','copyproductSet','copytaste','productLabel','copyPrinter'))) echo 'active';?>">

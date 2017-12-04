@@ -225,13 +225,13 @@
 				<div class="portlet-body" style="min-height: 750px">
 					<?php if($type==0):?>
 
-					<a href="<?php echo $this->createUrl('statements/incomeReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<a style="display: none;" href="<?php echo $this->createUrl('statements/incomeReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey yysr"></div>
 							<div class="ku-item-info">营业收入</div>
 						</div>
 					</a>
-					<a style="display: none;" href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
+					<a href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey yysj"></div>
 							<div class="ku-item-info">营业数据</div>
