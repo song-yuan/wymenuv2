@@ -192,5 +192,8 @@ function upFn() {
 		}, false);
 	});
 })(mui);
+<?php if ($success==1): ?>
+mui.toast('下单成功 , 仓库正在加紧备货 ! ! !');
+<?php endif; ?>
 
 </script>

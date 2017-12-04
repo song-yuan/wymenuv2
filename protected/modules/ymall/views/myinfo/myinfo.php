@@ -231,7 +231,6 @@
 	.mui-table-view .mui-media-object{max-width: 60px;}
 	.sign-name{padding:10px 15px;margin-right:20px;}
 	.sign-name img{border-radius: 50px;width: 60px!important;height: 60px!important;}
-	.hidden{display: none;}
 </style>
 
 
@@ -297,11 +296,11 @@
 						<a class="mui-navigate-right" href="tel:<?php echo $phone['telephone']; ?>">客服热线</a>
 					</li>
 				</ul>
-				<ul class="mui-table-view mui-table-view-chevron">
+<!-- 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId));?>">运输损耗</a>
 					</li>
-				</ul>
+				</ul> -->
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right" href="<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId));?>">全部订单</a>
@@ -312,245 +311,37 @@
 						<div id="segmentedControl" class="mui-segmented-control">
 							<a class="mui-control-item mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/wallet.jpg ">
-									<?php if($materials_nopay): ?>
-									<span class="mui-badge daifa" id="nopay" style="background-color: red;color: white;"><?php echo count($materials_nopay); ?></span>
+									<?php if($nopay_no): ?>
+									<span class="mui-badge daifa" id="nopay" style="background-color: red;color: white;"><?php echo $nopay_no; ?></span>
 									<?php endif; ?>
 									<span class="mui-label">待付款</span>
 								</a>
 							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/waitsent.png ">
-									<?php if($materials_pay): ?>
-									<span class="mui-badge daifa"  style="background-color: red;color: white;"><?php echo count($materials_pay); ?></span>
+									<?php if($nosent_no): ?>
+									<span class="mui-badge daifa"  style="background-color: red;color: white;"><?php echo $nosent_no; ?></span>
 									<?php endif; ?>
 									<span class="mui-label">待发货</span>
 								</a>
 							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/senting.png ">
-									<?php if($materials_send): ?>
-									<span class="mui-badge daifa" style="background-color: red;color: white;"><?php echo count($materials_send); ?></span>
+									<?php if($noget_no): ?>
+									<span class="mui-badge daifa" style="background-color: red;color: white;"><?php echo $noget_no; ?></span>
 									<?php endif; ?>
 									<span class="mui-label">待收货</span>
 								</a>
 							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/sented.jpg ">
-									<?php if($materials_get): ?>
-									<span class="mui-badge daifa" style="background-color: red;color: white;"><?php echo count($materials_get); ?></span>
+									<?php if($getted_no): ?>
+									<span class="mui-badge daifa" style="background-color: red;color: white;"><?php echo $getted_no; ?></span>
 									<?php endif; ?>
 									<span class="mui-label">已收货</span>
 								</a>
 						</div>
 					</li>
 
-					<li class="hidden">
-						<div class="mui-content-padded">
-						<div id="item1mobile" class="mui-control-content mui-active">
-							<ul class="mui-table-view big-ul">
-							<?php if($materials_nopay): ?>
-								<?php foreach ($materials_nopay as $key => $material_nopay): ?>
-							    <li class=" big-li">
-							    	<div class="mui-row" style="height: 30px;background-color: #E0FFFF; ">
-								    		<span class="a-store">订单号 : <?php echo $key; ?></span>
-							    	</div>
-							        <ul class="mui-table-view" id="">
-							        	<?php foreach ($material_nopay as $nopay): ?>
-									    <li class="mui-row mui-table-view-cell mui-media" style="padding-right: 10px;">
-								    		<div>
-									            <img class=" mui-pull-left img-show" src="<?php if($nopay['main_picture']){ echo $nopay['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
-									            <div class="mui-media-body" >
-									                <span class="color-blue">[<?php echo $nopay['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $nopay['goods_name']; ?></span><br>
-									                <span>单价 : <span style="color: red;"><?php echo $nopay['price']; ?></span>元</span>
-									                <span style="color:darkslategray;">共</span>
-									                <span style="color:red;"><?php echo $nopay['num']; ?></span>
-									                <span style="color:darkslategray;"><?php echo $nopay['goods_unit']; ?></span>
-									                <div>
-									                	<span >合计 : </span>
-									                	<span style="color:red;"><?php echo round($nopay['num']*$nopay['price'],2); ?></span>
-									                	<span style="color:darkslategray;">元</span>
-									                </div>
-									            </div>
-									        </div>
-									    </li>
-										<?php endforeach; ?>
-									</ul>
-									<div style="height:60px;border:1px solid #F2F2F2;padding-top:6px;">
-									<span style="display: inline-block;margin-top: 3px;margin-left: 10px;">总计 : <span style="color:red;"><?php echo $material_nopay[0]['reality_total'] ?></span></span>
-									<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" style="padding: 2px 12px;border-radius: 10px;float:right;margin-left:20px;margin-right:10px;" account_no="<?php echo $key; ?>">直接付款</button>
-									<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" style="padding: 2px 12px;border-radius: 10px;float:right;" account_no="<?php echo $key; ?>">删除订单</button>
-									</div>
-							    </li>
-								<?php endforeach; ?>
-							<?php endif; ?>
-							</ul>
-						</div>
-						<div id="item2mobile" class="mui-control-content">
-							<ul class="mui-table-view">
-							<?php if($materials_pay): ?>
-								<?php foreach ($materials_pay as $key => $material_pay): ?>
-									<?php
-										$material_pays =array();
-										foreach ($material_pay as $material) {
-											if(!isset($material_pays[$material['stock_dpid']])){
-												$material_pays[$material['stock_dpid']] = array();
-											}
-											array_push($material_pays[$material['stock_dpid']], $material);
-										}
-										// p($material_pay);
-									 ?>
-								<li class=" big-li">
-							    	<div class="mui-row" style="height: 30px;background-color: #FFA500; color:white;">
-								    		<span class="a-store">订单号 : <?php echo $key; ?></span>
-							    	</div>
-							        <ul class="mui-table-view" id="">
-							        <?php foreach ($material_pays as  $material_p): ?>
-										<li class="mui-table-view-cell mui-collapse" style="background-color: white;">
-											<a class="mui-navigate-right" href="#" style="height: 40px;padding-top:5px;background-color: #F0F8FF; "><span class="a-store"><?php echo $material_p[0]['company_name']; ?></span></a>
-											<div class="mui-collapse-content">
-												<?php foreach ($material_p as  $material_pp): ?>
-												<div style="height:100px;">
-										            <img class=" mui-pull-left img-show" src="<?php if($material_pp['main_picture']){ echo $material_pp['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
-										            <div class="mui-media-body" >
-										                <span class="color-blue">[<?php echo $material_pp['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $material_pp['goods_name']; ?></span><br>
-										                <span>单价 : <span style="color: red;"><?php echo $material_pp['price']; ?></span>元</span>
-										                <span style="color:darkslategray;">共</span>
-										                <span style="color:red;"><?php echo $material_pp['num']; ?></span>
-										                <span style="color:darkslategray;"><?php echo $material_pp['goods_unit']; ?></span>
-										                <div>
-										                	<span >合计 : </span>
-										                	<span style="color:red;"><?php echo round($material_pp['num']*$material_pp['price'],2); ?></span>
-										                	<span style="color:darkslategray;">元</span>
-										                </div>
-										            </div>
-									        	</div>
-									        	<?php endforeach; ?>
-											</div>
-											<div style="margin-top:20px;color:pink;font-weight: 900;"><span style="float: right;margin-right: -35px;">等待商家确认</span></div>
-										</li>
-									<?php endforeach; ?>
-									</ul>
-							    </li>
-								<?php endforeach; ?>
-							<?php endif; ?>
-							</ul>
-						</div>
-						<div id="item3mobile" class="mui-control-content">
-							<ul class="mui-table-view">
-							<?php if($materials_send): ?>
-								<?php foreach ($materials_send as $key => $material_send): ?>
-									<?php
-										$material_sends =array();
-										foreach ($material_send as $material) {
-												if(!isset($material_sends[$material['invoice_accountno']])){
-													$material_sends[$material['invoice_accountno']] = array();
-												}
-												array_push($material_sends[$material['invoice_accountno']], $material);
-										}
-									 ?>
-								<li class=" big-li">
-							    	<div class="mui-row" style="height: 30px;background-color: #00CED1; color:white;">
-								    		<span class="a-store">订单号 : <?php echo $key; ?></span>
-							    	</div>
-							        <ul class="mui-table-view" id="">
-							        <?php foreach ($material_sends as $key1 => $material_s): ?>
-										<li class="mui-table-view-cell mui-collapse" style="background-color: white;">
-											<a class="mui-navigate-right" href="#" style="height: 40px;padding-top:5px;background-color: #F5F5F5; color:#6600CC;"><span><?php if($key1){echo '配送单号 : '.$key1;}else{echo '仓库备货中';} ?></span></a>
-											<div class="mui-collapse-content">
-												<?php foreach ($material_s as  $material_ss): ?>
-												<div style="height:100px;">
-										            <img class=" mui-pull-left img-show" src="<?php if($material_ss['main_picture']){ echo $material_ss['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
-										            <div class="mui-media-body" >
-										                <span class="color-blue">[<?php echo $material_ss['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $material_ss['goods_name']; ?></span><br>
-										                <span>单价 : <span style="color: red;"><?php echo $material_ss['price']; ?></span>元</span>
-										                <span style="color:darkslategray;">共</span>
-										                <span style="color:red;"><?php echo $material_ss['num']; ?></span>
-										                <span style="color:darkslategray;"><?php echo $material_ss['goods_unit']; ?></span>
-										            </div>
-									        	</div>
-									        	<?php endforeach; ?>
-											</div>
-										</li>
-										<li class="mui-table-view-cell" style="background-color: #FFFFF0">
-											<div >
-											<span style="display:inline-block;margin-top: 3px;margin-left: 10px;"><?php if($material_s[0]['sent_type']!=3){ echo '配送员 : '.$material_s[0]['sent_personnel'];}else{ echo '第三方配送 : '.$material_s[0]['sent_personnel'];} ?><br>
-											<span ><?php if($material_s[0]['sent_type']!=3){echo '联系电话 : '.$material_s[0]['mobile'];}else{ echo '物流单号 : '.$material_s[0]['mobile'];}  ?></span></span>
-											<?php if($material_s[0]['status']==0):?>
-											<span style="color:red;float:right;margin-right:-50px;margin-top:20px;z-index:1;"><?php echo '(出货中)'; ?></span>
-											<?php elseif($material_s[0]['status']==1):?>
-											<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined mui-sureo" style="padding: 2px 12px;border-radius: 10px;float:right;margin-right:-50px;margin-top:20px;z-index:1;" invoice_accountno="<?php echo $key1; ?>" account_no="<?php echo $key; ?>">确认收货</button>
-											<?php endif; ?>
-											</div>
-										</li>
-									<?php endforeach; ?>
-									</ul>
-							    </li>
-								<?php endforeach; ?>
-							<?php endif; ?>
-							</ul>
-						</div>
-						<div id="item4mobile" class="mui-control-content">
-							<ul class="mui-table-view">
-							<?php if($materials_get): ?>
-								<?php foreach ($materials_get as $key3 => $material_get): ?>
-									<?php
-										$material_gets =array();
-										foreach ($material_get as $material) {
-												if(!isset($material_gets[$material['invoice_accountno']])){
-													$material_gets[$material['invoice_accountno']] = array();
-												}
-												array_push($material_gets[$material['invoice_accountno']], $material);
-										}
-									?>
-								<li class="ol big-li">
-							    	<div class="mui-row" style="height: 30px;background-color: #DAA520; color:white;">
-								    		<span class="a-store">订单号 : <?php echo $key3; ?></span>
-							    	</div>
-							        <ul class="mui-table-view" id="">
-							        <?php foreach ($material_gets as $key4 => $material_g): ?>
-										<li class="mui-table-view-cell mui-collapse" style="background-color: white;">
-											<a class="mui-navigate-right" href="#" style="height: 40px;padding-top:5px;background-color: #F5F5DC; color:#00BFFF;"><span><?php if($key4):echo '配送单号 : '.$key4;else:echo '仓库备货中';endif; ?></span></a>
-											<div class="mui-collapse-content">
-												<?php foreach ($material_g as  $material_gg): ?>
-												<div style="height:100px;">
-										            <img class=" mui-pull-left img-show" src="<?php if($material_gg['main_picture']){ echo $material_gg['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
-										            <div class="mui-media-body" >
-										                <span class="color-blue">[<?php echo $material_gg['company_name']; ?>]</span> <span class="color-black l-h"><?php echo $material_gg['goods_name']; ?></span><br>
-										                <span>单价 : <span style="color: red;"><?php echo $material_gg['price']; ?></span>元</span>
-										                <span style="color:darkslategray;">共</span>
-										                <span style="color:red;"><?php echo $material_gg['num']; ?></span>
-										                <span style="color:darkslategray;"><?php echo $material_gg['goods_unit']; ?></span>
-										                <!-- <div>
-										                	<span >合计 : </span>
-										                	<span style="color:red;"><?php echo round($material_gg['num']*$material_gg['price'],2); ?></span>
-										                	<span style="color:darkslategray;">元</span>
-										                </div> -->
-										            </div>
-									        	</div>
-									        	<?php endforeach; ?>
-											</div>
-										</li>
-										<li class="mui-table-view-cell" style="background-color: #FFFFF0">
-											<div >
-											<span style="display:inline-block;margin-top: 3px;margin-left: 10px;"><?php  if($material_g[0]['sent_type']!=3){ echo '配送员 : '.$material_g[0]['sent_personnel'];}else{ echo '第三方配送 : '.$material_g[0]['sent_personnel'];} ?><br>
-											<span ><?php if($material_g[0]['sent_type']!=3){echo '联系电话 : '.$material_g[0]['mobile'];}else{ echo '配送单号 : '.$material_g[0]['mobile'];}   ?></span></span>
-											<span type="button" style="padding: 2px 12px;border-radius: 10px;float:right;margin-right:-50px;margin-top:20px;z-index:1; color:red;" account_no="<?php echo $key4; ?>">已收货</span>
-											</div>
-										</li>
-									<?php endforeach; ?>
-									</ul>
-							    </li>
-								<?php endforeach; ?>
-							<?php endif; ?>
-							</ul>
-						</div>
-					</div>
-
-					</li>
 
 				</ul>
-				<!-- <ul class="mui-table-view mui-table-view-chevron">
-					<li class="mui-table-view-cell">
-						<a href="#lock" class="mui-navigate-right">常见问题速览</a>
-					</li>
-				</ul> -->
 				<ul class="mui-table-view" style="margin-top: 20px!important;margin-bottom: 30px!important;">
 					<li class="mui-table-view-cell" style="text-align: center;">
 						<a id='exit' style="text-align: center;color: #FF3B30;">退出登录</a>
@@ -583,66 +374,8 @@
 			});
 	}, false);
  	//************************
-	$('.delete_nopay').on('tap',function(){
-		var account_no = $(this).attr('account_no');
-		console.log(account_no);
-		$(this).attr('id', 'aa');
-		var btnArray = ['否','是'];
-		mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
-			if(e.index==1){
-			mui.post('<?php echo $this->createUrl("myinfo/delete_nopay",array("companyId"=>$this->companyId)) ?>',{
-				   account_no:account_no,
-				},
-				function(data){
-					if (data == 1) {
-					 	// var x = $('#aa').parent('div').parent('.big-li').attr('class');
-					 	// alert(x);
-						$('#aa').parent().parent('.big-li').fadeOut(1000).remove();
-						//将图标的数量减去
-						var num = $('#nopay').html();
-						$('#nopay').html(num-1);
-						mui.alert('删除成功 ! ! !');
-					}else if(data == 2) {
-						mui.alert('因网络原因删除失败 , 请重新删除 ! ! !');
-					}else if(data == 3) {
-						mui.alert('未查寻到商品删除失败 ! ! !');
-					}
-				},'json'
-			);
-		}
-		});
-	});
+	mui('body').on('tap','a',function(){document.location.href=this.href;});
 
-	$('.mui-sureo').on('tap',function(){
-	 	var account_no = $(this).attr('account_no');
-	 	var invoice_accountno = $(this).attr('invoice_accountno');
-	 	console.log(account_no);
-	 	if (invoice_accountno) {
-	 	// 	var btnArray = ['是','否'];
-			// mui.confirm('是否确定该配送单收货 ？','提示',btnArray,function(e){
-			// 	if(e.index==0){
-			 	location.href = '<?php echo $this->createUrl("myinfo/sureorder",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no+'/invoice_accountno/'+invoice_accountno;
-				// }
-			// });
-	 	} else{
-	 		mui.alert('仓库正在配货 , 无法确认收货');
-	 	}
-	});
 
-	$('.gotopay').on('tap',function(){
-		var account_no = $(this).attr('account_no');
-		var companyId ='<?php echo $this->companyId; ?>';
-		console.log(account_no);
-		location.href = '<?php echo $this->createUrl("ymallcart/orderlist") ?>?companyId='+companyId+'&account_no='+account_no;
-	});
-
-	$("#nopay").bind('DOMNodeInserted', function (e) {
-		var num = $('#nopay').html();
-	　　if(num == '0'){
-			$(this).fadeOut(100).remove();
-		}
-	});
-
-mui('body').on('tap','a',function(){document.location.href=this.href;});
 </script>
 
