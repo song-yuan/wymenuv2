@@ -111,7 +111,7 @@ class WxRiJie
 		if(!empty($rijies)){
 			foreach ($rijies as $rj){
 				$dpid = $rj['dpid'];
-				$create = $rj['create_at'];
+				$create = $rj['rijie_code'];
 				$poscode = $rj['pos_code'];
 				$begin_time = $rj['begin_time'];
 				$end_time = $rj['end_time'];
