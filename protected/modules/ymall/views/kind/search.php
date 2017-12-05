@@ -41,18 +41,27 @@
 				position:absolute;
 				bottom:8px;
 			}
+			.addicon{
+				position:absolute;
+				right:2px;
+				bottom:9px;
+				width: 64px;
+				height: 20px;
+				line-height: 20px;
+				font-size: 12px;
+				border-radius: 5px;
+			    background-color: red;
+			    color: #fff;
+			    vertical-align: middle;
+			    text-align: center;
+			    align-items: center;
+			    font-weight: 600;
+			}
 			.addicon1{
-				width: 25px!important;
-				height: 25px!important;
-				background-color: red;
-				border-radius: 25px!important;
-				color: #fff;
-				vertical-align: middle;
-				text-align: center;
-				align-items: center;
-				line-height: 25px!important;
-				font-size: 25px!important;
-				font-weight: 600;
+				background-color: darkred!important;
+				/*
+			    border:1px solid red;
+			    color: red;*/
 			}
 			.mui-badge{
 				font-size: 12px!important;
@@ -84,13 +93,11 @@
 									</div>
 									<div><span class="color-blue">[<?php echo $product['company_name'];?>]</span><?php echo $product['goods_name'];?></div>
 									<div  class="bottom">
-										<div class="float-l color-r">￥ <?php echo $product['original_price'];?></div>
-										<div class="float-l " style="margin-left:10px;"><?php echo $product['goods_unit'];?></div>
-										<div class="float-r  color-r ">
-												<div class="addicon" stock_dpid="<?php echo $product['dpid'];?>" goods_name="<?php echo $product['goods_name'];?>" goods_id="<?php echo $product['glid'];?>"  price="<?php echo $product['original_price'];?>"  goods_code="<?php echo $product['goods_code'];?>" material_code="<?php echo $product['material_code'];?>">+</div>
-										</div>
+										<div class="float-l color-r">¥ <?php echo $product['original_price'];?></div>
+										<div class="float-l " style="margin-left:10px;"> / <?php echo $product['goods_unit'];?></div>
 									</div>
 								</div>
+								<div class="addicon" stock_dpid="<?php echo $product['dpid'];?>" goods_name="<?php echo $product['goods_name'];?>" goods_id="<?php echo $product['glid'];?>"  price="<?php echo $product['original_price'];?>"  goods_code="<?php echo $product['goods_code'];?>" material_code="<?php echo $product['material_code'];?>">加入购物车</div>
 							</li>
 							<?php endforeach; ?>
 							<?php endif; ?>

@@ -1,9 +1,10 @@
 		<style>
-			.mui-scroll-wrapper{margin-bottom: 50px;}
+			.wrapper{margin-bottom: 50px;margin-top:79px;}
 			.mui-grid-view.mui-grid-9{background-color: white;}
 			input[type=search]{background-color: white;}
 			.search-form{
 				height: 34px;
+				/*margin:5px 0px;*/
 			}
 			.color-blue{
 				color:darkblue;
@@ -46,18 +47,27 @@
 			/*.mui-search.mui-active .mui-placeholder {
 			    right: 200px!important;
 			}*/
+			.addicon{
+				position:absolute;
+				right:2px;
+				bottom:9px;
+				width: 64px;
+				height: 20px;
+				line-height: 20px;
+				font-size: 12px;
+				border-radius: 5px;
+			    background-color: red;
+			    color: #fff;
+			    vertical-align: middle;
+			    text-align: center;
+			    align-items: center;
+			    font-weight: 600;
+			}
 			.addicon1{
-				width: 25px!important;
-				height: 25px!important;
-				background-color: red;
-				border-radius: 25px!important;
-				color: #fff;
-				vertical-align: middle;
-				text-align: center;
-				align-items: center;
-				line-height: 25px!important;
-				font-size: 25px!important;
-				font-weight: 600;
+				background-color: darkred!important;
+				/*
+			    border:1px solid red;
+			    color: red;*/
 			}
 			.mui-badge{
 				font-size: 12px!important;
@@ -66,6 +76,15 @@
 				font-size: 16px!important;
 			}
 			.mui-cell{background-color: #EFEFF4!important;}
+			.ui-table-view-cell {
+				position: relative;
+				overflow: hidden;
+				padding: 6px 15px;
+				-webkit-touch-callout: none;
+			}
+			.mui-off-canvas-left, .mui-off-canvas-right {
+			    width: 55%;
+			}
 		</style>
 		<div class="mui-off-canvas-wrap mui-draggable">
 			<div class="mui-inner-wrap" id="Main">
@@ -95,19 +114,20 @@
 				</aside>
 				<!-- 侧滑导航结束 -->
 				<!-- 产品内容开始 -->
-				<div class="mui-content mui-scroll-wrapper" id="kinds">
-					<div class="mui-scroll">
+				<div class="mui-content " >
 					<form action=" <?php echo  $this->createUrl('kind/search',array('companyId'=>$this->companyId)); ?>" class="search-form" method="POST">
 						<div class="mui-input-row mui-search">
 							<input type="search" id="search" class="mui-input-clear" name="content" placeholder="搜索产品">
 						</div>
 					</form>
+				<div class="mui-scroll-wrapper wrapper" id="kinds">
+					<div class="mui-scroll">
 						<?php if($materials):?>
 						<?php foreach ($materials as $key => $products):?>
 						<!-- 分类名称 -->
 						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell mui-cell" id="cate<?php echo $key; ?>">
-								<?php echo $products[0]['category_name']; ?>
+							<li class="ui-table-view-cell mui-cell" id="cate<?php echo $key; ?>">
+								<span><?php echo $products[0]['category_name']; ?></span>
 							</li>
 						</ul>
 						<!-- 分类内容 -->
@@ -117,17 +137,18 @@
 								<li class="ui-table-view-cell mui-media mui-col-xs-6">
 									<div class="">
 										<div class="goods-pic">
-											<img src="<?php if($m['main_picture']){ echo 'http://menu.wymenu.com/'.$m['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height: 130px;"/>
+											<img src="<?php if($m['main_picture']){ echo $m['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height: 130px;"/>
 										</div>
-										<div><span class="color-blue">[<?php echo $m['company_name'];?>]</span><?php echo $m['goods_name'];?></div>
+										<div>
+											<span class="color-blue">[<?php echo $m['company_name'];?>]</span>
+											<?php echo $m['goods_name'];?>
+										</div>
 										<div class="bottom">
 											<div class="float-l color-r">￥ <?php echo $m['original_price'];?></div>
-											<div class="float-l " style="margin-left:10px;"> <?php echo $m['goods_unit'];?></div>
-											<div class="float-r  color-r ">
-												<div class="addicon" stock_dpid="<?php echo $m['dpid'];?>" goods_name="<?php echo $m['goods_name'];?>" goods_id="<?php echo $m['glid'];?>"  price="<?php echo $m['original_price'];?>"  goods_code="<?php echo $m['goods_code'];?>" material_code="<?php echo $m['material_code'];?>">+</div>
-											</div>
+											<div class="float-l " style="margin-left:10px;"> / <?php echo $m['goods_unit'];?></div>
 										</div>
 									</div>
+									<div class="addicon" stock_dpid="<?php echo $m['dpid'];?>" goods_name="<?php echo $m['goods_name'];?>" goods_id="<?php echo $m['glid'];?>"  price="<?php echo $m['original_price'];?>"  goods_code="<?php echo $m['goods_code'];?>" material_code="<?php echo $m['material_code'];?>">加入购物车</div>
 								</li>
 							<?php endforeach;?>
 						</ul>
@@ -140,6 +161,7 @@
 						</ul>
 						<?php endif;?>
 					</div>
+				</div>
 				</div>
 				<!-- 产品内容结束 -->
 				<!-- off-canvas backdrop -->
@@ -154,8 +176,8 @@
 			mui('#offCanvas .mui-scroll-wrapper .mui-table-view').on('tap','li.mui-cell1',function(){
 				var Main = mui('#Main');//侧滑容器父节点
 				var href1 = $(this).attr('href1');
-				// alert(href1);
-				var top = $(href1).offset().top - 44;
+				var top = $(href1).offset().top - 44 - 34;
+				// alert(top);
 				var current_top = mui('#kinds').scroll().y;
 				top = current_top - top;
 				mui('#kinds').scroll().scrollTo(0,top,300);

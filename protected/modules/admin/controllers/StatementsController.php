@@ -3437,20 +3437,32 @@ class StatementsController extends BackendController
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$userid = Yii::app()->request->getParam('userid');
-		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
-		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
+		$dpname = Yii::app()->request->getParam('dpname','');
+
+		if(empty($begin_time) && Yii::app()->user->role >=11){
+			$begin_time = date('Y-m-d',time());
+		}
+		if(empty($end_time) && Yii::app()->user->role >=11){
+			$end_time = date('Y-m-d',time());
+		}
 
 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
 			$ords = $ords .','.$order['lid'];
 		}
 		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(*) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(distinct t.account_no) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
 		$criteria->with = array('company','orderpay');
-		$criteria->condition = 'orderpay.paytype != "11" and t.dpid='.$this->companyId.' and t.order_status in (3,4,8)' ;
+		$criteria->condition = 'orderpay.paytype != "11" and t.order_status in (3,4,8)' ;
 		$criteria->addCondition('t.lid in('.$ords.')');
+		$criteria->addCondition('t.dpid ='.$this->companyId);
+
+
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
@@ -3484,6 +3496,7 @@ class StatementsController extends BackendController
 				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
 			}
 		}
+		$criteria->distinct = TRUE;
 		$model = Order::model()->findAll($criteria);
 	   	//var_dump($model);exit;
 	   	$payments = $this->getPayment($this->companyId);
@@ -3560,8 +3573,10 @@ class StatementsController extends BackendController
 		->setCellValue('M3',yii::t('app','微外卖'))
 		->setCellValue('N3',yii::t('app','系统券'))
 		->setCellValue('O3',yii::t('app','积分'))
-		->setCellValue('P3',yii::t('app','微信余额'));
-		$letternext= 'Q';
+		->setCellValue('P3',yii::t('app','微信余额'))
+		->setCellValue('Q3',yii::t('app','美团·'))
+		->setCellValue('R3',yii::t('app','饿了么·'));
+		$letternext= 'S';
 		if($payments){
 			$let = '0';
 			$letter='';
@@ -3570,15 +3585,13 @@ class StatementsController extends BackendController
 				$paymentname = $payment['name'];
 				$let++;
 				switch ($let){
-					case 1: $letter = 'Q3';$letternext = 'R';break;
-					case 2: $letter = 'R3';$letternext = 'S';break;
-					case 3: $letter = 'S3';$letternext = 'T';break;
-					case 4: $letter = 'T3';$letternext = 'U';break;
-					case 5: $letter = 'U3';$letternext = 'V';break;
-					case 6: $letter = 'V3';$letternext = 'W';break;
-					case 7: $letter = 'W3';$letternext = 'X';break;
-					case 8: $letter = 'X3';$letternext = 'Y';break;
-					case 9: $letter = 'Y3';$letternext = 'Z';break;
+					case 1: $letter = 'S3';$letternext = 'T';break;
+					case 2: $letter = 'T3';$letternext = 'U';break;
+					case 3: $letter = 'U3';$letternext = 'V';break;
+					case 4: $letter = 'V3';$letternext = 'W';break;
+					case 5: $letter = 'W3';$letternext = 'X';break;
+					case 6: $letter = 'X3';$letternext = 'Y';break;
+					case 7: $letter = 'Y3';$letternext = 'Z';break;
 					default:break;
 				}
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
@@ -3616,9 +3629,11 @@ class StatementsController extends BackendController
 				->setCellValue('M'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,13,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('N'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,9,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
 				->setCellValue('O'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,8,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
-				->setCellValue('P'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,10,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
+				->setCellValue('P'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,10,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('Q'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,14,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username))
+				->setCellValue('R'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,15,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
 				$letters='';
-				$letternexts= 'Q';
+				$letternexts= 'S';
 				if($payments){
 					$let = '0';
 
@@ -3627,15 +3642,13 @@ class StatementsController extends BackendController
 						$paymentname = $payment['name'];
 						$let++;
 						switch ($let){
-							case 1: $letters = 'Q';$letternexts = 'R';break;
-							case 2: $letters = 'R';$letternexts = 'S';break;
-							case 3: $letters = 'S';$letternexts = 'T';break;
-							case 4: $letters = 'T';$letternexts = 'U';break;
-							case 5: $letters = 'U';$letternexts = 'V';break;
-							case 6: $letters = 'V';$letternexts = 'W';break;
-							case 7: $letters = 'W';$letternexts = 'X';break;
-							case 8: $letters = 'X';$letternexts = 'Y';break;
-							case 9: $letters = 'Y';$letternexts = 'Z';break;
+							case 1: $letters = 'S';$letternexts = 'T';break;
+							case 2: $letters = 'T';$letternexts = 'U';break;
+							case 3: $letters = 'U';$letternexts = 'V';break;
+							case 4: $letters = 'V';$letternexts = 'W';break;
+							case 5: $letters = 'W';$letternexts = 'X';break;
+							case 6: $letters = 'X';$letternexts = 'Y';break;
+							case 7: $letters = 'Y';$letternexts = 'Z';break;
 							default:break;
 						}
 						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->username));
