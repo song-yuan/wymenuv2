@@ -37,39 +37,10 @@ class WxRiJie
 						'msg' => ''
 				) );
 			}
-			if($result['begin_time'] < $btime && $result['end_time'] < $etime){
+			
+			if($result['end_time'] < $etime){
 				// 开始时间 小于传过来开始时间
 				$sql = 'update nb_rijie_code set end_time="'.$etime.'" where lid='.$result['lid'].' and dpid='.$result['dpid'];
-				$result = Yii::app()->db->createCommand($sql)->execute();
-				if($result){
-					return json_encode ( array (
-							'status' => true,
-							'msg' => ''
-					) );
-				}else{
-					return json_encode ( array (
-							'status' => false,
-							'msg' => ''
-					) );
-				}
-			}else if($result['begin_time'] > $btime && $result['end_time'] > $etime){
-				// 开始时间 大于于传过来开始时间
-				$sql = 'update nb_rijie_code set begin_time="'.$btime.'" where lid='.$result['lid'].' and dpid='.$result['dpid'];
-				$result = Yii::app()->db->createCommand($sql)->execute();
-				if($result){
-					return json_encode ( array (
-							'status' => true,
-							'msg' => ''
-					) );
-				}else{
-					return json_encode ( array (
-							'status' => false,
-							'msg' => ''
-					) );
-				}
-			}elseif($result['begin_time'] > $btime && $result['end_time'] < $etime){
-				// 开始时间 大于于传过来开始时间
-				$sql = 'update nb_rijie_code set begin_time="'.$btime.'",end_time="'.$etime.'" where lid='.$result['lid'].' and dpid='.$result['dpid'];
 				$result = Yii::app()->db->createCommand($sql)->execute();
 				if($result){
 					return json_encode ( array (
@@ -89,6 +60,11 @@ class WxRiJie
 				) );
 			}
 		}else{
+			$sql = 'select * from nb_rijie_code where dpid='.$dpid.' and rijie_code!="'.$rjcode.'" and delete_flag=0 order by lid desc limit 1';
+			$rijie = Yii::app()->db->createCommand($sql)->queryRow();
+			if($rijie){
+				$btime = $rijie['end_time'];
+			}
 			$lid = new Sequence("rijie_code");
 			$id = $lid->nextval();
 			$data = array(
