@@ -1,10 +1,8 @@
 <?php
 class KindController extends BaseYmallController
 {
-
 	public function actionKind()
 	{
-
 
 		$db = Yii::app()->db;
 		$sql = 'select g.goods_code,g.goods_name,g.lid as glid,g.main_picture,g.original_price,g.member_price,g.goods_unit,c.company_name,c.dpid,mc.lid,mc.category_name,gm.material_code from nb_goods g '
