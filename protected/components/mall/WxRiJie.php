@@ -299,7 +299,7 @@ class WxRiJie
 							}
 						}
 					}
-					$sql = 'update nb_order set order_status = 8 where dpid ='.$dpid.' and order_status in(3,4)';
+					$sql = 'update nb_order set order_status = 8 where lid in('.$ords.') and dpid ='.$dpid.' and order_status in(3,4)';
 					$rjResult = Yii::app()->db->createCommand($sql)->execute();
 					if(!$rjResult){
 						throw new Exception('修改订单状态');

@@ -43,7 +43,7 @@ class  CrontabController extends Controller
 				}else{
 					$transtype = '退货';
 				}
-				$order = array(
+				$xstData = array(
 						'lid'=>$order['lid'],
 						'create_at'=>$order['create_at'],
 						'total'=>$order['should_total'],
@@ -51,7 +51,7 @@ class  CrontabController extends Controller
 						'transtype'=>$transtype,
 						'sourcetype'=>$sourcetype,
 				);
-				ThirdPlatform::xst($order,$platform);
+				ThirdPlatform::xst($xstData,$platform);
 			}
 		}
 	}
