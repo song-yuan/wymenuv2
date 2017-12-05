@@ -43,7 +43,12 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','发货单列表');?></div>
 					<div class="actions">
-						
+						<div class="btn-group">
+							<input type="number" class="form-control" name="content" id="content" placeholder='<?php if ($content) {echo $content;}else{echo '请输入订单号';} ?>' style="width: 250px;">
+						</div>
+						<div class="btn-group">
+							<span class="btn blue" id="pnamebtn"><i class="glyphicon glyphicon-search"></i> <?php echo yii::t('app','查询');?></span>
+						</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -53,7 +58,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','订单号');?></th>
-                                <th><?php echo yii::t('app','配货单号');?></th>
+                                <th><?php echo yii::t('app','出库单号');?></th>
                                 <th><?php echo yii::t('app','订单总额');?></th>
                                 <th><?php echo yii::t('app','支付状态');?></th>
                                 <th><?php echo yii::t('app','订单状态');?></th>
@@ -144,4 +149,21 @@
         });
     });
 });
+		$('#pnamebtn').click(function(event) {
+			var pname = $('#content').val();
+				location.href='<?php echo $this->createUrl('goodsinvoice/goodsinvoice',array('companyId'=>$this->companyId))?>/content/'+pname;
+
+		});
+		document.onkeydown=function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+
+            if(e && e.keyCode==13){ // enter 键
+                 //要做的事情
+			var pname = $('#content').val();
+			// alert(pname);
+
+				location.href='<?php echo $this->createUrl('goodsinvoice/goodsinvoice',array('companyId'=>$this->companyId))?>/content/'+pname;
+
+            }
+        };
 	</SCRIPT>

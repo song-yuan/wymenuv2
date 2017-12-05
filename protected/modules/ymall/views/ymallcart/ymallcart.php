@@ -99,7 +99,7 @@
 						    	</div>
 						    	<div class="mui-col-xs-10" >
 					    			<a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
-						            	<img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$product['main_picture']; ?>" >
+						            	<img class=" mui-pull-left img-show" src="<?php if($product['main_picture']){ echo $product['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
 							        </a>
 						            <div class="mui-media-body">
 						                <a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
@@ -176,9 +176,9 @@
 		</div>
 		</div>
 
+
 		<script type="text/javascript">
 			mui('.mui-numbox').numbox();
-			// mui('.mui-page-content').scroll();
 			mui('.mui-scroll-wrapper').scroll();
 			$("document").ready(function(){
 				$("input.mui-numbox-input,button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');

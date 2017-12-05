@@ -2787,7 +2787,7 @@ class StatementsController extends BackendController
 			$ordertypes = '>=0';
 		}
 		if($categoryId >0){
-			$cats = ' and p.category_id ='.$categoryId;
+			$cats = ' and p.chs_code ='.$categoryId;
 		}else{
 			$cats = '';
 		}
@@ -2836,7 +2836,7 @@ class StatementsController extends BackendController
 		//var_dump($models);exit;
 	
 		$comName = $this->getComName();
-		$categories = $this->getCategories();
+		$categories = $this->getComCategories();
 		$dpids = $this->getDpids($this->companyId,'');
 		
 		$this->render('timeproductReport',array(
@@ -7963,5 +7963,32 @@ class StatementsController extends BackendController
 		}
 		return $optionsReturn;
 	}
-
+	private function getComCategories(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
+	
+		$models = ProductCategory::model()->findAll($criteria);
+	
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->chs_code] = $model->category_name;
+				}
+			}
+			//var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+			//var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
+	}
 }

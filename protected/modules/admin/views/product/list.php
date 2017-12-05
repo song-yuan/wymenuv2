@@ -397,7 +397,7 @@
 						</div>
 						<?php if(Yii::app()->user->role <= User::SHOPKEEPER_VICE):?>
 						<div class="list col-sm-3 col-xs-12">
-			                <a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
+			                <a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
 			                	<div class="margin-left-right">
 			                	<div class="list_big"><i class="fa fa-home"></i>产品配方</div>
 			                	<div class="list_small">为不同的菜品添加设置好的配方</div>

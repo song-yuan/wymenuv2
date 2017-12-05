@@ -1,5 +1,4 @@
 <?php
-
 class GoodsinvoiceController extends BackendController
 {
 	public function actions() {
@@ -21,13 +20,23 @@ class GoodsinvoiceController extends BackendController
 		return true;
 	}
 	public function actionGoodsinvoice(){
+		$content = Yii::app()->request->getParam('content',0);
+		if (is_numeric($content)) {
+			if ($content) {
+				$str =' and t.goods_order_accountno = '.$content;
+			} else {
+				$str = '';
+			}
+		}else{
+			$str = '';
+		}
 		$gdid = Yii::app()->request->getParam('gdid');
 		// p($gdid);
 		$db = Yii::app()->db;
 		if($gdid){
 			$sql = 'select k.* from (select c.company_name,t.* from nb_goods_invoice t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.' and t.goods_delivery_id = '.$gdid.') k';
 		}else{
-			$sql = 'select k.* from (select c.company_name,t.* from nb_goods_invoice t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.') k order by status asc';
+			$sql = 'select k.* from (select c.company_name,t.* from nb_goods_invoice t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.$str.') k order by status asc';
 		}
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -40,6 +49,7 @@ class GoodsinvoiceController extends BackendController
 		$this->render('goodsinvoice',array(
 				'models'=>$models,
 				'pages'=>$pages,
+				'content'=>$content,
 		));
 
 	}

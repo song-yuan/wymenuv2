@@ -1,5 +1,4 @@
 <?php
-
 class GoodsorderController extends BackendController
 {
 	public function actions() {
@@ -21,9 +20,19 @@ class GoodsorderController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
+		$content = Yii::app()->request->getParam('content',0);
+		if (is_numeric($content)) {
+			if ($content) {
+				$str =' and t.account_no = '.$content;
+			} else {
+				$str = '';
+			}
+		}else{
+			$str = '';
+		}
 		$db = Yii::app()->db;
-		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') group by d.goods_order_accountno) k order by lid desc';
-		//$models = $db->createCommand($sql)->queryAll();
+		//只显示货到付款和线上支付已支付的订单
+		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') '.$str.'and ((t.paytype=1 and t.pay_status=1) or t.paytype=2) group by d.goods_order_accountno) k order by lid desc';
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -37,6 +46,7 @@ class GoodsorderController extends BackendController
 			$this->render('index',array(
 					'models'=>$models,
 					'pages'=>$pages,
+					'content'=>$content,
 			));
 
 	}
