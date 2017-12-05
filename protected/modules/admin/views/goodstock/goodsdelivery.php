@@ -1,3 +1,4 @@
+
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -42,7 +43,12 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','配货单列表');?></div>
 					<div class="actions">
-						
+						<div class="btn-group">
+							<input type="number" class="form-control" name="content" id="content" placeholder='<?php if ($content) {echo $content;}else{echo '请输入订单号';} ?>' style="width: 250px;">
+						</div>
+						<div class="btn-group">
+							<span  class="btn blue" id="pnamebtn"><i class="glyphicon glyphicon-search"></i> <?php echo yii::t('app','查询');?></span>
+						</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -126,3 +132,22 @@
             <?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+	<script>
+		$('#pnamebtn').click(function(event) {
+			var pname = $('#content').val();
+				location.href='<?php echo $this->createUrl('goodstock/goodsdelivery',array('companyId'=>$this->companyId))?>/content/'+pname;
+
+		});
+		document.onkeydown=function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+
+            if(e && e.keyCode==13){ // enter 键
+                 //要做的事情
+			var pname = $('#content').val();
+			// alert(pname);
+
+				location.href='<?php echo $this->createUrl('goodstock/goodsdelivery',array('companyId'=>$this->companyId))?>/content/'+pname;
+
+            }
+        };
+	</script>

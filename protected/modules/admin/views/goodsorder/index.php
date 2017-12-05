@@ -1,5 +1,5 @@
 <div class="page-content">
-	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -23,7 +23,7 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','采购单列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId' => $this->companyId,'type' => 0)))));?>
-	
+
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -42,7 +42,12 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购单列表');?></div>
 					<div class="actions">
-						
+						<div class="btn-group">
+							<input type="number" class="form-control" name="content" id="content" placeholder='<?php if ($content) {echo $content;}else{echo '请输入订单号';} ?>' style="width: 250px;">
+						</div>
+						<div class="btn-group">
+							<span  class="btn blue" id="pnamebtn"><i class="glyphicon glyphicon-search"></i> <?php echo yii::t('app','查询');?></span>
+						</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -53,6 +58,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','订单来源');?></th>
 								<th><?php echo yii::t('app','订单号');?></th>
+								<th><?php echo yii::t('app','下单时间');?></th>
 								<th><?php echo yii::t('app','订单总额');?></th>
 								<th><?php echo yii::t('app','支付方式');?></th>
 								<th><?php echo yii::t('app','订单状态');?></th>
@@ -61,12 +67,13 @@
 							</tr>
 						</thead>
 						<tbody>
-						
+
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php echo $model['lid']/1;?></td>
 								<td><?php echo $model['company_name'];?></td>
-								<td><?php echo $model['account_no'];?></td>
+								<td><b><?php echo $model['account_no'];?></b></td>
+								<td><?php echo $model['create_at'];?></td>
 								<td><?php echo $model['reality_total'];?></td>
 								<td><?php switch ($model['paytype']){
 									case 1 : echo '<span style="color:green">线上支付</span>';break;
@@ -79,7 +86,7 @@
 									default: echo '未知';break;
 								}?></td>
 								<td>
-								<?php 
+								<?php
 									if ($model['goods_order_accountno']=='') {
 										echo '<span style="color:red">待处理</span>';
 									}else{
@@ -101,7 +108,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									<?php echo yii::t('app','共 ');?><?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?><?php echo yii::t('app','页');?> 
+									<?php echo yii::t('app','共 ');?><?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?><?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">
@@ -127,8 +134,8 @@
 								</div>
 							</div>
 						</div>
-						<?php endif;?>					
-					
+						<?php endif;?>
+
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -136,3 +143,22 @@
             <?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+	<script>
+		$('#pnamebtn').click(function(event) {
+			var pname = $('#content').val();
+				location.href='<?php echo $this->createUrl('goodsorder/index',array('companyId'=>$this->companyId))?>/content/'+pname;
+
+		});
+		document.onkeydown=function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+
+            if(e && e.keyCode==13){ // enter 键
+                 //要做的事情
+			var pname = $('#content').val();
+			// alert(pname);
+
+				location.href='<?php echo $this->createUrl('goodsorder/index',array('companyId'=>$this->companyId))?>/content/'+pname;
+
+            }
+        };
+	</script>
