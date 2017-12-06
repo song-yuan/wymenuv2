@@ -54,7 +54,7 @@
 	                    <div class="input-group input-large date-picker input-daterange" data-date="<?php echo date('d/m/Y',strtotime('-1 months'));?>" data-date-format="mm/dd/yyyy">
 	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','开始时间');?>" value="<?php echo $begin_time; ?>">  
 	                         <span class="input-group-addon">~</span>
-	                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $begin_time;?>">           
+	                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
 	                    </div>  
                     </div>	
 					

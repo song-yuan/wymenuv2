@@ -85,9 +85,10 @@
 			}*/
 			h4 {
 				color:gray;
-				padding-left: 15px;
 				border-bottom: 1px solid #ccc;
-				padding-bottom: 9px;
+				padding: 9px;
+				background-color: honeydew;
+				margin:0;
 			}
 			progress:not(value) {
 			}
@@ -136,10 +137,12 @@
 			}
 			p[data-value] {
 			  position: relative;
+			  color:purple;
 			}
 			p[data-value]:after {
 				content: attr(data-value) '';
 				position: absolute; right:0;
+				color:#f44;
 			}
 			.html5::-webkit-progress-value{
 				/* Gradient background with Stripes */
@@ -153,7 +156,7 @@
 			    -webkit-linear-gradient( top,
 										rgba(255, 255, 255, .25),
 										rgba(0,0,0,.2)),
-			    -webkit-linear-gradient( left, #f44, #ff0);
+			    -webkit-linear-gradient( left, #09C, #ff0);
 			}
 			.html5::-moz-progress-bar {
 				/* Gradient background with Stripes */
@@ -167,7 +170,7 @@
 				-moz-linear-gradient( top,
 										rgba(255, 255, 255, .25),
 										rgba(0,0,0,.2)),
-				-moz-linear-gradient( left, #f44, #ff0);
+				-moz-linear-gradient( left, #09C, #ff0);
 				}
 
 			/**		*/
@@ -275,18 +278,27 @@
 							<h4>店铺原料库存</h4>
 							<!-- HTML5 -->
 							<div style="width: 96%;margin:0 auto;position: relative;">
-								<?php if($stocks): ?>
-								<?php foreach ($stocks as $stock): ?>
-							    <p style="width:100%;margin:0;" data-value="<?php echo '剩余: '.$stock['stock'].' '.$stock['unit_name']; ?>"><?php echo $stock['material_name']; ?></p>
-								<progress style="width:100%;" max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5">
-									<!-- <div class="progress-bar">
-										<span style="width: 80%"></span>
-									</div> -->
-								</progress>
-								<!-- <span style="position:absolute;left:5px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['safe_stock']; ?></span>
-								<span style="position:absolute;right:10px;font-size:14px;margin-top: -32px;color:gray;"><?php echo $stock['max_stock']; ?></span> -->
+								<?php if($stocks): 
+									$arr = array();
+									foreach ($stocks as $key => $value) {
+										if(!isset($arr[$value['category_id']])){
+											$arr[$value['category_id']] = array();
+										}
+										array_push($arr[$value['category_id']], $value);
+									}
+									// p($arr);
+								?>
+								<?php foreach ($arr as $ar): ?>
+								<fieldset>
+									<legend><?php echo $ar[0]['category_name']; ?></legend>
+									<?php foreach ($ar as  $stock): ?>
+							    	<p style="width:100%;margin:0;" data-value="<?php if ($stock['stock']<1 || $stock['stock']<$stock['safe_stock']) {echo '危险库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} elseif ( $stock['stock']>$stock['max_stock']) {echo '充足库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} else {echo '安全库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} ?>"><?php echo $stock['material_name']; ?></p>
+									<progress style="width:100%;" max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5"></progress>
+									<?php endforeach; ?>
+								</fieldset>
 								<?php endforeach; ?>
 								<?php endif; ?>
+								
 							</div>
 						</div>
 
