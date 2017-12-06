@@ -2792,7 +2792,7 @@ class StatementsController extends BackendController
 			$cats = '';
 		}
 		if($pdname){
-			$pns = " and p.product_name like'%".$pdname."%'";
+			$pns = " and p.phs_code like'%".$pdname."%'";
 		}else{
 			$pns = '';
 		}
@@ -2837,6 +2837,7 @@ class StatementsController extends BackendController
 	
 		$comName = $this->getComName();
 		$categories = $this->getComCategories();
+		$products = $this->getComProducts();
 		$dpids = $this->getDpids($this->companyId,'');
 		
 		$this->render('timeproductReport',array(
@@ -2852,6 +2853,7 @@ class StatementsController extends BackendController
 				'comName'=>$comName,
 				'ordertype'=>$ordertype,
 				'categories'=>$categories,
+				'products'=>$products,
 				'categoryId'=>$categoryId,
 				'dpids'=>$dpids,
 				'cks'=>$cks,
@@ -7990,5 +7992,21 @@ class StatementsController extends BackendController
 			$optionsReturn[$model->category_name] = $v;
 		}
 		return $optionsReturn;
+	}
+	private function getComProducts(){
+		$criteria = new CDbCriteria;
+		//$criteria->with = 'category';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = 't.lid asc ';
+		$models = Product::model()->findAll($criteria);
+		//$options = array(yii::t('app','--请选择单品--'));
+		//var_dump($models);exit;
+// 		if($models) {
+// 			foreach ($models as $model) {
+// 				$options[$model->chs_code][$model->phs_code] = $model->product_name;
+// 			}
+// 		}
+		//var_dump($options);exit;
+		return $models;
 	}
 }
