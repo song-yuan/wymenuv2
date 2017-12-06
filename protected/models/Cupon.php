@@ -118,6 +118,7 @@ class Cupon extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('type',$this->type,true);
 		$criteria->compare('cupon_title',$this->cupon_title,true);
 		$criteria->compare('main_picture',$this->main_picture,true);
 		$criteria->compare('cupon_abstract',$this->cupon_abstract,true);
