@@ -7968,7 +7968,7 @@ class StatementsController extends BackendController
 	private function getComCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->condition =  't.cate_type in(0,1) and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
 	
 		$models = ProductCategory::model()->findAll($criteria);
