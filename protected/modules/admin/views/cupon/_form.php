@@ -108,7 +108,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, yii::t('app','可用对象'),array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->checkBoxList($model, 'type', array( '0' => yii::t('app','所有可用'), '1' => yii::t('app','仅POS机端可用'), '2' => yii::t('app','仅微信端可用'), '3' => yii::t('app','仅微信堂食可用'), '4' => yii::t('app','仅微信外卖可用')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
+					<?php echo $form->checkBoxList($model, 'type', array( '1' => yii::t('app','POS机端'), '2' => yii::t('app','微信端堂食'), '3' => yii::t('app','微信端外卖')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
 					<?php echo $form->error($model, 'type' )?>
 				</div>
 			</div>
@@ -260,15 +260,5 @@
 			$("#Cupon_main_picture").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />");
 		}
-		$('#Cupon_type_0').change(function(event) {
-			/* Act on the event */
-			$('#Cupon_type_1,#Cupon_type_2,#Cupon_type_3,#Cupon_type_4').removeAttr('checked');
-			$('#Cupon_type_1,#Cupon_type_2,#Cupon_type_3,#Cupon_type_4').parent().removeClass('checked');
-		});
-		$('#Cupon_type_1,#Cupon_type_2,#Cupon_type_3,#Cupon_type_4').change(function(event) {
-			/* Act on the event */
-			$('#Cupon_type_0').removeAttr('checked');
-			$('#Cupon_type_0').parent().removeClass('checked');
-		});
 
 	</script>
