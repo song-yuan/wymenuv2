@@ -207,7 +207,7 @@ class SiteClass
         }
         public static function closeSite($companyId=0, $istemp, $sid){
         	$sqlsiteno = "update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2')";
-        	$commandsiteno = $db->createCommand($sqlsiteno);
+        	$commandsiteno = Yii::app()->db->createCommand($sqlsiteno);
         	$commandsiteno->bindValue(":sid" , $sid);
         	$commandsiteno->bindValue(":istemp" , $istemp);
         	$commandsiteno->bindValue(":companyId" , $companyId);
