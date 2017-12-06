@@ -55,8 +55,15 @@
 			<div class="btn-group">
 				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 			</div>
-			<div class="btn-group" style="width: 140px;">
-				<input type="text" class="form-control" name="dpname" id="productname" placeholder="<?php if($pdname)echo $pdname;else echo yii::t('app','产品名称');?>" value="" >
+			<div class="btn-group" >
+				<select class="form-control" id="pdname">
+				<option cate = "0" value="0"><?php echo '--请选择单品--';?></option>
+				<?php if($products):?>
+				<?php foreach ($products as $m):?>
+				<option class="proname <?php if($categoryId){if($categoryId!=$m->chs_code){echo 'hide';}}?>" cate = "<?php echo $m->chs_code;?>" value="<?php echo $m->phs_code;?>"<?php if($pdname == $m->phs_code) echo 'selected';?> ><?php echo $m->product_name;?></option>
+				<?php endforeach;endif;?>
+				<?php ?>
+				</select>
 			</div>
 			<select id="ordertype" class="btn yellow" >
 				<option value="-1" <?php if ($ordertype==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
@@ -282,8 +289,17 @@
 				}else{
 					$('.times').addClass('hide');
 					}
-			
-		})
+		});
+		$('#selectCategory').on('change',function(){
+			var cate = $('#selectCategory').val();
+			//layer.msg(cate);
+			$(".proname").addClass('hide');
+			var s = "#pdname option[cate='"+cate+"']";
+			$(s).removeClass('hide');
+			if(cate == 0){
+				$(".proname").removeClass('hide');
+				}
+		});
 		   $('#btn_time_query').click(function() {
 			   var ordertype = $('#ordertype').val();
 			   var begin_time = $('#begin_time').val();
@@ -293,7 +309,7 @@
 			   var text = $('#text').val();
 			   var setid = $('#setid').val();
 			   var cid = $('#selectCategory').val();
-			   var pdname = $('#productname').val();
+			   var pdname = $('#pdname').val();
 			   var str = $('#dpids').val();
 			   if($('#checktime').attr('checked')){
 				   var cks = 1;
@@ -328,7 +344,7 @@
 				   var text = $('#text').val();
 				   var setid = $('#setid').val();
 				   var cid = $('#selectCategory').val();
-				   var pdname = $('#productname').val();
+				   var pdname = $('#pdname').val();
 				   var str = $('#dpids').val();
 				   if($('#checktime').attr('checked')){
 					   var cks = 1;
