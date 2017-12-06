@@ -292,7 +292,7 @@
 		});
 		$('#selectCategory').on('change',function(){
 			var cate = $('#selectCategory').val();
-			layer.msg(cate);
+			//layer.msg(cate);
 			$(".proname").addClass('hide');
 			var s = "#pdname option[cate='"+cate+"']";
 			$(s).removeClass('hide');
