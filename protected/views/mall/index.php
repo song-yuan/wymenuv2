@@ -162,8 +162,8 @@
 						}
 					}
 					$productStr .='</div></div>';
+					$productStr .='</div>';
 				}
-				$productStr .='</div>';
 			}
 		}
 		$bottomDesc = rtrim($bottomDesc,';');
@@ -248,8 +248,8 @@
 						}
 					}
 					$productStr .='</div></div>';
+					$productStr .='</div>';
 				}
-				$productStr .='</div>';
 			}
 		}
 		$bottomDesc = rtrim($bottomDesc,';');
