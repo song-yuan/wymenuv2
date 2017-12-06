@@ -375,7 +375,7 @@ class BuysentpromotionController extends BackendController
 				$sentcode = $materials[4];
 				$sentnum = $materials[5];
 				$prodmaterials = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$mateid,':companyId'=>$this->companyId));
-				$buysentprodetail = BuysentPromotionDetail::model()->find('product_id =:prodid and dpid=:companyId and delete_flag=0', array(':prodid'=>$mateid, ':companyId'=>$this->companyId));
+				$buysentprodetail = BuysentPromotionDetail::model()->find('buysent_pro_id =:bpid and product_id =:prodid and dpid=:companyId and delete_flag=0', array(':bpid'=>$prodid, ':prodid'=>$mateid, ':companyId'=>$this->companyId));
 				//var_dump($buysentprodetail);exit;
 				if(!empty($prodmaterials)&&!empty($mateid)&&empty($buysentprodetail)){
 					$se = new Sequence("buysent_promotion_detail");
