@@ -54,7 +54,6 @@ class WxPromotion
 					}
 					$product['original_price'] = $product['set_price'];
 					$product['product_name'] = $product['set_name'];
-					$results[$k]['product'] = $product;
 				}else{
 					unset($results[$k]);
 					continue;
@@ -69,18 +68,34 @@ class WxPromotion
 					}else{
 						$product['price'] = ($product['original_price']*$result['promotion_discount']) > 0 ? number_format($product['original_price']*$result['promotion_discount'],2) : number_format(0,2);
 					}
-					$results[$k]['product'] = $product;
 				}else{
 					unset($results[$k]);
 					continue;
 				}
 			}
-			if(!isset($promotionArr['lid'.$result['normal_promotion_id']])){
-				$promotionArr['lid'.$result['normal_promotion_id']] = array();
+			$promotionkey = 'lid'.$result['normal_promotion_id'];
+			if(!isset($promotionArr[$promotionkey])){
+				$promotionArr[$promotionkey] = array();
+				$promotionArr[$promotionkey]['promotion_title'] = $result['promotion_title'];
+				$promotionArr[$promotionkey]['promotion_abstract'] = $result['promotion_abstract'];
+				$promotionArr[$promotionkey]['main_picture'] = $result['main_picture'];
+				$promotionArr[$promotionkey]['to_group'] = $result['to_group'];
+				$promotionArr[$promotionkey]['can_cupon'] = $result['can_cupon'];
+				$promotionArr[$promotionkey]['group_id'] = $result['group_id'];
+				$promotionArr[$promotionkey]['begin_time'] = $result['begin_time'];
+				$promotionArr[$promotionkey]['end_time'] = $result['end_time'];
+				$promotionArr[$promotionkey]['weekday'] = $result['weekday'];
+				$promotionArr[$promotionkey]['day_begin'] = $result['day_begin'];
+				$promotionArr[$promotionkey]['day_end'] = $result['day_end'];
+				$promotionArr[$promotionkey]['all_order_num'] = $result['all_order_num'];
 			}
-			array_push($promotionArr['lid'.$result['normal_promotion_id']],$results[$k]);
+			$procatekey = $result['is_set'].'-'.$product['category_id'];
+			if(!isset($promotionArr[$promotionkey]['product'][$procatekey])){
+				$promotionArr[$promotionkey]['product'][$procatekey] = array();
+			}
+			$result['product'] = $product;
+			array_push($promotionArr[$promotionkey]['product'][$procatekey],$result);
 		}
-		var_dump($promotionArr);exit;
 		$this->promotionProductList = $promotionArr;
 	}
 	public function getBuySentDetail(){
@@ -111,7 +126,6 @@ class WxPromotion
 					$product['original_price'] = $product['set_price'];
 					$product['product_name'] = $product['set_name'];
 					$product['price'] = $product['set_price'];
-					$results[$k]['product'] = $product;
 				}else{
 					unset($results[$k]);
 					continue;
@@ -122,16 +136,33 @@ class WxPromotion
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
 					$product['price'] = $product['original_price'];
-					$results[$k]['product'] = $product;
 				}else{
 					unset($results[$k]);
 					continue;
 				}
 			}
-			if(!isset($promotionArr['lid'.$result['buysent_pro_id']])){
-				$promotionArr['lid'.$result['buysent_pro_id']] = array();
+			$promotionkey = 'lid'.$result['buysent_pro_id'];
+			if(!isset($promotionArr[$promotionkey])){
+				$promotionArr[$promotionkey] = array();
+				$promotionArr[$promotionkey]['promotion_title'] = $result['promotion_title'];
+				$promotionArr[$promotionkey]['promotion_abstract'] = $result['promotion_abstract'];
+				$promotionArr[$promotionkey]['main_picture'] = $result['main_picture'];
+				$promotionArr[$promotionkey]['to_group'] = $result['to_group'];
+				$promotionArr[$promotionkey]['can_cupon'] = $result['can_cupon'];
+				$promotionArr[$promotionkey]['group_id'] = $result['group_id'];
+				$promotionArr[$promotionkey]['begin_time'] = $result['begin_time'];
+				$promotionArr[$promotionkey]['end_time'] = $result['end_time'];
+				$promotionArr[$promotionkey]['weekday'] = $result['weekday'];
+				$promotionArr[$promotionkey]['day_begin'] = $result['day_begin'];
+				$promotionArr[$promotionkey]['day_end'] = $result['day_end'];
+				$promotionArr[$promotionkey]['all_order_num'] = $result['all_order_num'];
 			}
-			array_push($promotionArr['lid'.$result['buysent_pro_id']],$results[$k]);
+			$procatekey = $result['is_set'].'-'.$product['category_id'];
+			if(!isset($promotionArr[$promotionkey]['product'][$procatekey])){
+				$promotionArr[$promotionkey]['product'][$procatekey] = array();
+			}
+			$result['product'] = $product;
+			array_push($promotionArr[$promotionkey]['product'][$procatekey],$result);
 		}
 		$this->buySentProductList = $promotionArr;
 	}
