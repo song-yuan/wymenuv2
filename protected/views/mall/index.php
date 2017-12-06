@@ -101,68 +101,70 @@
 			}
 			$productStr .= '<div class="section" id="st-buysent'.$key.'" type="buysent"><div class="prt-title">'.$buysent['promotion_title'].'</div>';
 			$buyproCateArr = $buysent['product'];
-			foreach ($buyproCateArr as $sent){
-				$isSet = $sent['is_set'];
-				$sentProduct = $sent['product'];
-				if($sentProduct['main_picture']==''){
-					$sentProduct['main_picture'] = $defaultImg;
-				}
-				$productStr .= '<div class="prt-lt"><div class="lt-lt"><img src="'.$sentProduct['main_picture'].'"></div>';
-				$productStr .= '<div class="lt-ct"><p><span class="name">'.$sentProduct['product_name'].'</span>';
-				if($isSet==0){
-					$spicy = $sentProduct['spicy'];
-					if($spicy==1){
-						$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
-					}else if($spicy==2){
-						$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
-					}else if($spicy==3){
-						$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
+			foreach ($buyproCateArr as $cateArr){
+				foreach ($cateArr as $sent){
+					$isSet = $sent['is_set'];
+					$sentProduct = $sent['product'];
+					if($sentProduct['main_picture']==''){
+						$sentProduct['main_picture'] = $defaultImg;
 					}
-				}
-				$productStr .='</p>';
-					
-				$productStr .='<p class="pr">';
-				if($sentProduct['price'] != $sentProduct['original_price']){
-					$productStr .='<span class="oprice"><strike>¥'.$sentProduct['original_price'].'</strike></span>';
-				}
-				$productStr .= ' ¥<span class="price">'.$sentProduct['price'].'</span>';
-				$productStr .='</p>';
-					
-				if(!$closeShop){
-					$productId = (int)$sentProduct['lid'];
-					$promotionId = (int)$sent['buysent_pro_id'];
-					$toGroup = $sent['to_group'];
-					$canCupon = $sent['can_cupon'];
-					$cartKey = 'buysent-'.$productId.'-'.$isSet.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
-					if(isset($cartList[$cartKey])){
-						$cartItem = $cartList[$cartKey];
-						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$sentProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
-						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
-							
-						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
-						$cartStr .='<div class="cart-dtl-item-inner">';
-						$cartStr .='<i class="cart-dtl-dot"></i>';
-						$cartStr .='<p class="cart-goods-name">'.$sentProduct['product_name'].'</p>';
-						$cartStr .='<div class="j-item-console cart-dtl-oprt">';
-						$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-						$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
-						$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
-						$cartStr .='</div>';
-						$cartStr .='<span class="cart-dtl-price">¥'.$sentProduct['price'].'</span>';
-						$cartStr .='</div></div>';
-					}else{
-						if($sentProduct['store_number']!=0){
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$sentProduct['store_number'].'" disabled="disabled" value="0">';
-							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
-						}else{
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$sentProduct['store_number'].'" disabled="disabled" value="0">';
-							$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+					$productStr .= '<div class="prt-lt"><div class="lt-lt"><img src="'.$sentProduct['main_picture'].'"></div>';
+					$productStr .= '<div class="lt-ct"><p><span class="name">'.$sentProduct['product_name'].'</span>';
+					if($isSet==0){
+						$spicy = $sentProduct['spicy'];
+						if($spicy==1){
+							$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/></span>';
+						}else if($spicy==2){
+							$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/></span>';
+						}else if($spicy==3){
+							$productStr .='<span><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span>';
 						}
 					}
+					$productStr .='</p>';
+						
+					$productStr .='<p class="pr">';
+					if($sentProduct['price'] != $sentProduct['original_price']){
+						$productStr .='<span class="oprice"><strike>¥'.$sentProduct['original_price'].'</strike></span>';
+					}
+					$productStr .= ' ¥<span class="price">'.$sentProduct['price'].'</span>';
+					$productStr .='</p>';
+						
+					if(!$closeShop){
+						$productId = (int)$sentProduct['lid'];
+						$promotionId = (int)$sent['buysent_pro_id'];
+						$toGroup = $sent['to_group'];
+						$canCupon = $sent['can_cupon'];
+						$cartKey = 'buysent-'.$productId.'-'.$isSet.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
+						if(isset($cartList[$cartKey])){
+							$cartItem = $cartList[$cartKey];
+							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$sentProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
+							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
+								
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+							$cartStr .='<div class="cart-dtl-item-inner">';
+							$cartStr .='<i class="cart-dtl-dot"></i>';
+							$cartStr .='<p class="cart-goods-name">'.$sentProduct['product_name'].'</p>';
+							$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+							$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+							$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
+							$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+							$cartStr .='</div>';
+							$cartStr .='<span class="cart-dtl-price">¥'.$sentProduct['price'].'</span>';
+							$cartStr .='</div></div>';
+						}else{
+							if($sentProduct['store_number']!=0){
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$sentProduct['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
+							}else{
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$sentProduct['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+							}
+						}
+					}
+					$productStr .='</div></div>';
 				}
-				$productStr .='</div></div>';
+				$productStr .='</div>';
 			}
-			$productStr .='</div>';
 		}
 		$bottomDesc = rtrim($bottomDesc,';');
 		$bottomDesc .= '</div>';
