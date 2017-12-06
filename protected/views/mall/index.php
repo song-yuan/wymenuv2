@@ -162,9 +162,9 @@
 						}
 					}
 					$productStr .='</div></div>';
-					$productStr .='</div>';
 				}
 			}
+			$productStr .='</div>';
 		}
 		$bottomDesc = rtrim($bottomDesc,';');
 		$bottomDesc .= '</div>';
@@ -248,9 +248,9 @@
 						}
 					}
 					$productStr .='</div></div>';
-					$productStr .='</div>';
 				}
 			}
+			$productStr .='</div>';
 		}
 		$bottomDesc = rtrim($bottomDesc,';');
 		$bottomDesc .= '</div>';
