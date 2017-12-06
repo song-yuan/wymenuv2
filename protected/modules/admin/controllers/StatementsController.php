@@ -4371,12 +4371,12 @@ class StatementsController extends BackendController
 			$ordertypes = '>=0';
 		}
 		if($categoryId >0){
-			$cats = ' and p.category_id ='.$categoryId;
+			$cats = ' and p.chs_code ='.$categoryId;
 		}else{
 			$cats = '';
 		}
 		if($pdname){
-			$pns = " and p.product_name like'%".$pdname."%'";
+			$pns = " and p.phs_code like'%".$pdname."%'";
 		}else{
 			$pns = '';
 		}

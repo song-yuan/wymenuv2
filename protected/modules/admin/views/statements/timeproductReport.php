@@ -310,8 +310,6 @@
 			   var setid = $('#setid').val();
 			   var cid = $('#selectCategory').val();
 			   var pdname = $('#pdname').val();
-
-			   //layer.msg(pdname);return false;
 			   var str = $('#dpids').val();
 			   if($('#checktime').attr('checked')){
 				   var cks = 1;
@@ -346,7 +344,7 @@
 				   var text = $('#text').val();
 				   var setid = $('#setid').val();
 				   var cid = $('#selectCategory').val();
-				   var pdname = $('#productname').val();
+				   var pdname = $('#pdname').val();
 				   var str = $('#dpids').val();
 				   if($('#checktime').attr('checked')){
 					   var cks = 1;
