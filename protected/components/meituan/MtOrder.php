@@ -12,10 +12,10 @@ class MtOrder
 		return $res;
 	}
 	public static function token($data){
+		Helper::writeLog('bd:'.$data);
 		if(empty($data)){
 			return '200';
 		}
-		Helper::writeLog('bd:'.$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];

@@ -32,6 +32,7 @@ class WxPromotion
 		}
 		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':now',$now)->queryAll();
 		$promotionArr = array();
+		$proproArr = array();
 		foreach($results as $k=>$result){
 			if($result['to_group']==2){
 				// 会员等级活动
@@ -79,6 +80,7 @@ class WxPromotion
 			}
 			array_push($promotionArr['lid'.$result['normal_promotion_id']],$results[$k]);
 		}
+		var_dump($promotionArr);exit;
 		$this->promotionProductList = $promotionArr;
 	}
 	public function getBuySentDetail(){
