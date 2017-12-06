@@ -12,10 +12,10 @@ class MtOrder
 		return $res;
 	}
 	public static function token($data){
+		Helper::writeLog('bd:'.$data);
 		if(empty($data)){
 			return '200';
 		}
-		Helper::writeLog('bd:'.$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
@@ -117,10 +117,10 @@ class MtOrder
 		return '{ "data": "ERROR"}';
 	}
 	public static function Jcbd($data){
+		Helper::writeLog('jcbd:'.$data);
 		if(empty($data)){
 			return '200';
 		}
-		Helper::writeLog('jcbd:'.$data);
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
 		$timestamp = $resArr['timestamp'];

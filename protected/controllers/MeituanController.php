@@ -34,7 +34,7 @@ class MeituanController extends Controller
 		echo '{"data":"OK"}';
 		exit();
 	}
-	public function actionShop(){
+	public function actionUnbind(){
 		$data = file_get_contents('php://input');
 		$remt = MtOrder::Jcbd($data);
 		echo $remt;
