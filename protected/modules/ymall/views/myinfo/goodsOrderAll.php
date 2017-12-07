@@ -26,9 +26,9 @@
 	<div style="padding: 10px 10px;">
 		<div id="segmentedControl" class="mui-segmented-control">
 			<a class="mui-control-item mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId));?>">全部</a>
-			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>">待付款</a>
-			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">待发货</a>
-			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId));?>">待收货</a>
+			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>">待付款<?php if ($nopay_no) {echo '('.$nopay_no.')';}?></a>
+			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">待发货<?php if ($nosent_no) {echo '('.$nosent_no.')';}  ?></a>
+			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId));?>">待收货<?php if ($noget_no) {echo '('.$noget_no.')';}  ?></a>
 			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId));?>">已收货</a>
 		</div>
 	</div>
