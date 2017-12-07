@@ -45,10 +45,10 @@ class Cupon extends CActiveRecord
 			array('lid, dpid', 'required'),
 			array('change_point', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, cupon_money, min_consumer', 'length', 'max'=>10),
-			array('sole_code', 'length', 'max'=>20),
+			array('type, sole_code', 'length', 'max'=>20),
 			array('cupon_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, cupon_abstract', 'length', 'max'=>255),
-			array('type, type_dpid, type_prod, is_available, delete_flag, to_group, time_type, day_begin', 'length', 'max'=>2),
+			array('type_dpid, type_prod, is_available, delete_flag, to_group, time_type, day_begin', 'length', 'max'=>2),
 			array('create_at, begin_time, end_time, cupon_memo, day', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -118,6 +118,7 @@ class Cupon extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('type',$this->type,true);
 		$criteria->compare('cupon_title',$this->cupon_title,true);
 		$criteria->compare('main_picture',$this->main_picture,true);
 		$criteria->compare('cupon_abstract',$this->cupon_abstract,true);
