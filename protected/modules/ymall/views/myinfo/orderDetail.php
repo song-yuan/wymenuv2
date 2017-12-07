@@ -516,14 +516,14 @@
 						<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">直接付款</button>
 						<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
 					<?php elseif((($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0) || $goods_orders[0]['pay_status']==1) && $goods_orders[0]['order_status']<5)://待发货 ?>
-						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">货到付款</span>';}  ?></a>
+						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
 						<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
 					<?php elseif($goods_orders[0]['order_status']==5 && ($goods_orders[0]['istatus']==0 || $goods_orders[0]['istatus']==1) && (($goods_orders[0]['order_type']==1 && $goods_orders[0]['pay_status']==1) || ($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0)))://待收货 ?>
-						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">货到付款</span>';}  ?></a>
+						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
 						<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
 						<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
 					<?php elseif($goods_orders[0]['order_status']==5 && $goods_orders[0]['istatus']==2  && (($goods_orders[0]['order_type']==1 && $goods_orders[0]['pay_status']==1) || ($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0)))://已签收 ?>
-						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">货到付款</span>';}  ?></a>
+						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
 						<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
 						<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
 					<?php endif; ?>
@@ -533,11 +533,11 @@
 					<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
 				<?php elseif($type==2)://待发货 ?>
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
-					<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">货到付款</span>';}  ?></a>
+					<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
 					<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
 				<?php elseif($type==3||$type==4)://待收货 ?>
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
-					<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">货到付款</span>';}  ?></a>
+					<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
 					<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
 					<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
 				<?php endif; ?>

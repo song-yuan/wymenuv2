@@ -151,10 +151,45 @@ class MyinfoController extends BaseYmallController
 			$goods_orders = $db->createCommand($sql)->queryAll();
 		}
 		// p($goods_orders);
+		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' order by go.create_at desc) t';
+		$nopay_no = $db->createCommand($sql0)->queryRow();
+		// p($nopay_no);
+
+		//查询待发货订单
+
+		$sql1 = 'select count(*) from (select go.* from nb_goods_order go'
+			.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+				.' and go.order_status < 5'
+				.' order by go.create_at desc ) t';
+		$nosent_no = $db->createCommand($sql1)->queryRow();
+
+		// p($materials_pay);
+
+
+		//查询待收货
+		$sql2 = 'select count(*) from (select go.* from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and (gi.status=0 or gi.status=1)'
+				.' group by go.account_no order by go.create_at desc ) t';
+
+		$noget_no = $db->createCommand($sql2)->queryRow();
+		// p($noget_no);
 
 		$this->render('goodsOrderAll',array(
 			'goods_orders'=>$goods_orders,
 			'date'=>$date,
+			'nopay_no'=>$nopay_no['count(*)'],
+			'nosent_no'=>$nosent_no['count(*)'],
+			'noget_no'=>$noget_no['count(*)'],
 		));
 	}
 
@@ -191,11 +226,45 @@ class MyinfoController extends BaseYmallController
 			$goods_orders = $db->createCommand($sql)->queryAll();
 		}
 		// p($goods_orders);
+		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' order by go.create_at desc) t';
+		$nopay_no = $db->createCommand($sql0)->queryRow();
+		// p($nopay_no);
 
+		//查询待发货订单
+
+		$sql1 = 'select count(*) from (select go.* from nb_goods_order go'
+			.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+				.' and go.order_status < 5'
+				.' order by go.create_at desc ) t';
+		$nosent_no = $db->createCommand($sql1)->queryRow();
+
+		// p($materials_pay);
+
+
+		//查询待收货
+		$sql2 = 'select count(*) from (select go.* from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and (gi.status=0 or gi.status=1)'
+				.' group by go.account_no order by go.create_at desc ) t';
+
+		$noget_no = $db->createCommand($sql2)->queryRow();
+		// p($noget_no);
 		$this->render('goodsOrderNopay',array(
 			'goods_orders'=>$goods_orders,
 			'date'=>$date,
 			'success'=>$success,
+			'nopay_no'=>$nopay_no['count(*)'],
+			'nosent_no'=>$nosent_no['count(*)'],
+			'noget_no'=>$noget_no['count(*)'],
 		));
 	}
 
@@ -238,11 +307,45 @@ class MyinfoController extends BaseYmallController
 			$goods_orders = $db->createCommand($sql)->queryAll();
 		}
 		// p($goods_orders);
+		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' order by go.create_at desc) t';
+		$nopay_no = $db->createCommand($sql0)->queryRow();
+		// p($nopay_no);
 
+		//查询待发货订单
+
+		$sql1 = 'select count(*) from (select go.* from nb_goods_order go'
+			.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+				.' and go.order_status < 5'
+				.' order by go.create_at desc ) t';
+		$nosent_no = $db->createCommand($sql1)->queryRow();
+
+		// p($materials_pay);
+
+
+		//查询待收货
+		$sql2 = 'select count(*) from (select go.* from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and (gi.status=0 or gi.status=1)'
+				.' group by go.account_no order by go.create_at desc ) t';
+
+		$noget_no = $db->createCommand($sql2)->queryRow();
+		// p($noget_no);
 		$this->render('goodsOrderNosent',array(
 			'goods_orders'=>$goods_orders,
 			'date'=>$date,
 			'success'=>$success,
+			'nopay_no'=>$nopay_no['count(*)'],
+			'nosent_no'=>$nosent_no['count(*)'],
+			'noget_no'=>$noget_no['count(*)'],
 		));
 	}
 
@@ -291,10 +394,44 @@ class MyinfoController extends BaseYmallController
 			$goods_orders = $db->createCommand($sql)->queryAll();
 		}
 		// p($goods_orders);
+		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' order by go.create_at desc) t';
+		$nopay_no = $db->createCommand($sql0)->queryRow();
+		// p($nopay_no);
 
+		//查询待发货订单
+
+		$sql1 = 'select count(*) from (select go.* from nb_goods_order go'
+			.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+				.' and go.order_status < 5'
+				.' order by go.create_at desc ) t';
+		$nosent_no = $db->createCommand($sql1)->queryRow();
+
+		// p($materials_pay);
+
+
+		//查询待收货
+		$sql2 = 'select count(*) from (select go.* from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and (gi.status=0 or gi.status=1)'
+				.' group by go.account_no order by go.create_at desc ) t';
+
+		$noget_no = $db->createCommand($sql2)->queryRow();
+		// p($noget_no);
 		$this->render('goodsOrderNoget',array(
 			'goods_orders'=>$goods_orders,
 			'date'=>$date,
+			'nopay_no'=>$nopay_no['count(*)'],
+			'nosent_no'=>$nosent_no['count(*)'],
+			'noget_no'=>$noget_no['count(*)'],
 		));
 	}
 
@@ -343,10 +480,44 @@ class MyinfoController extends BaseYmallController
 			$goods_orders = $db->createCommand($sql)->queryAll();
 		}
 		// p($goods_orders);
+		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' order by go.create_at desc) t';
+		$nopay_no = $db->createCommand($sql0)->queryRow();
+		// p($nopay_no);
 
+		//查询待发货订单
+
+		$sql1 = 'select count(*) from (select go.* from nb_goods_order go'
+			.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+				.' and go.order_status < 5'
+				.' order by go.create_at desc ) t';
+		$nosent_no = $db->createCommand($sql1)->queryRow();
+
+		// p($materials_pay);
+
+
+		//查询待收货
+		$sql2 = 'select count(*) from (select go.* from nb_goods_order go'
+				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+				.' where go.dpid='.$this->companyId
+				.' and go.delete_flag=0 and go.user_id='.$user_id
+				.' and go.order_status=5'
+				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+				.' and (gi.status=0 or gi.status=1)'
+				.' group by go.account_no order by go.create_at desc ) t';
+
+		$noget_no = $db->createCommand($sql2)->queryRow();
+		// p($noget_no);
 		$this->render('goodsOrderGetted',array(
 			'goods_orders'=>$goods_orders,
 			'date'=>$date,
+			'nopay_no'=>$nopay_no['count(*)'],
+			'nosent_no'=>$nosent_no['count(*)'],
+			'noget_no'=>$noget_no['count(*)'],
 		));
 	}
 	//查看订单详情
