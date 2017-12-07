@@ -164,6 +164,8 @@ class CuponController extends BackendController
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
 			}
 			$model->attributes = Yii::app()->request->getPost('Cupon');
+            $cupon = Yii::app()->request->getPost('Cupon');
+            $model->type = implode(",",$cupon['type']);
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$beginday = Yii::app()->request->getParam('cupon_begin_day');
 			$day = Yii::app()->request->getParam('cupon_day');

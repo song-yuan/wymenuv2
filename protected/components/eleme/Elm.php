@@ -81,7 +81,7 @@ class Elm
 					$access_token = $obj->access_token;
 					$expires_in =time() + $obj->expires_in;
 					$refresh_token = $obj->refresh_token;
-					$sql1 = "update nb_eleme_token set access_token='$access_token',expires_in=$expires_in,refresh_token='$refresh_token' where dpid=$dpid and delete_flag=0";
+					$sql1 = 'update nb_eleme_token set access_token="'.$access_token.'",expires_in='.$expires_in.',refresh_token="'.$refresh_token.'" where dpid=$dpid and delete_flag=0';
 					$res1 = Yii::app()->db->createCommand($sql1)->execute();
 					return $access_token;
 				}
