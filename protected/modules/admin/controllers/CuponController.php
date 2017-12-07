@@ -163,8 +163,8 @@ class CuponController extends BackendController
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId)) ;
 			}
-			$model->attributes = Yii::app()->request->getPost('Cupon');
             $cupon = Yii::app()->request->getPost('Cupon');
+            $model->attributes = $cupon;
             $model->type = implode(",",$cupon['type']);
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$beginday = Yii::app()->request->getParam('cupon_begin_day');
