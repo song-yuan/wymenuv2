@@ -54,7 +54,7 @@
 				</div>
 				<div class="mui-card-footer">
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_order['reality_total']; ?></a>
-					<a class="mui-card-link"><?php if($goods_order['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_order['paytype']==2){echo '<span style="color:red">货到付款</span>';} ?></a>
+					<a class="mui-card-link"><?php if($goods_order['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_order['paytype']==2){echo '<span style="color:red">线下支付</span>';} ?></a>
 					<a class="mui-card-link"><?php if($goods_order['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_order['pay_status']==0){echo '<span style="color:red">未付款</span>';} ?></a>
 					<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId,'account_no'=>$goods_order['account_no'],'type'=>2));?>">查看详情</a>
 				</div>
@@ -110,7 +110,7 @@ function upFn() {
 					if(data[i].paytype==1){
 						var paytype_str = '<span style="color:green">线上支付</span>';
 					}else if(data[i].paytype==2){
-						var paytype_str = '<span style="color:red">货到付款</span>';
+						var paytype_str = '<span style="color:red">线下支付</span>';
 					}
 					if(data[i].pay_status==1){
 						var pay_status_str = '<span style="color:green">已付款</span>';

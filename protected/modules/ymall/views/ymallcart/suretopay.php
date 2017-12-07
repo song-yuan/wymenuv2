@@ -88,7 +88,7 @@
 					<form class="mui-input-group">
 						<?php if ($company_property['material_pay_type']==1): ?>
 						<div class="mui-input-row mui-radio">
-							<label for="daofu"> 货到付款</label>
+							<label for="daofu"> 线下支付</label>
 							<input name="pay-style" type="radio" value="1" id="daofu">
 						</div>
 						<?php endif; ?>
@@ -118,7 +118,7 @@
 		    $('#suretopay').on('tap',function(){
 		    	var pay_style = $('input[name="pay-style"]:checked').val();
 		    	if (pay_style==1) {
-		    		//货到付款  1
+		    		//线下支付  1
 		    		// alert(pay_style);
 		    		location.href='<?php echo $this->createUrl('ymallcart/editgoodsorder',array('companyId'=>$this->companyId,'account_no'=>$account_no)) ?>/daofu/'+pay_style;
 		    	}else{
