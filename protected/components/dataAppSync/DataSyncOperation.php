@@ -2084,7 +2084,7 @@ class DataSyncOperation {
 		if(!$user){
 			return json_encode(array('status'=>false,'msg'=>'该会员不存在'));
 		}
-		$cupons = json_decode($data['cupon']);
+		$cupons = json_decode($data['cupon'],true);
 		$yue = $data['yue'];
 		$points = $data['points'];
 		$transaction=Yii::app()->db->beginTransaction();
