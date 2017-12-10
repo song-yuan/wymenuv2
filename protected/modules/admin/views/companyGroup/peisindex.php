@@ -39,14 +39,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺价格体系设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroup/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺价格体系设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('peisonggroup/index' , array('companyId' => $this->companyId,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'price-group-id-form',
-				'action' => $this->createUrl('companyGroup/index' , array('companyId' => $this->companyId)),
+				//'action' => $this->createUrl('companyGroup/index' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -155,7 +155,7 @@
 			var province = $('#province').children('option:selected').val();
 			var city = $('#city').children('option:selected').val();
 			var area = $('#area').children('option:selected').val();
-			location.href="<?php echo $this->createUrl('companyGroup/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+			location.href="<?php echo $this->createUrl('companyGroup/peisindex' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 		}
 		$('.saved').on('click',function(){
 			var dpid =$(this).attr('valued');
@@ -180,14 +180,14 @@
 		$('#search').click(function(event) {
 			/* Act on the event */
 			var cname = $('#cname').val();
-			location.href="<?php echo $this->createUrl('companyGroup/index' , array('companyId'=>$this->companyId));?>/cname/"+cname;
+			location.href="<?php echo $this->createUrl('companyGroup/peisindex' , array('companyId'=>$this->companyId));?>/cname/"+cname;
 		});
 		document.onkeydown=function(event){
 	        var e = event || window.event || arguments.callee.caller.arguments[0];
 	        if(e && e.keyCode==13){ // enter键
 	        //要做的事情
 			var cname = $('#cname').val();
-			location.href="<?php echo $this->createUrl('companyGroup/index' , array('companyId'=>$this->companyId));?>/cname/"+cname;
+			location.href="<?php echo $this->createUrl('companyGroup/peisindex' , array('companyId'=>$this->companyId));?>/cname/"+cname;
 	        }
 	    };
 	</script>
