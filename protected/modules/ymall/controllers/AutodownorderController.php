@@ -33,7 +33,7 @@ class AutodownorderController extends BaseYmallController
 		// 	LEFT JOIN (SELECT u.unit_name,r.sales_unit_id FROM nb_material_unit u LEFT JOIN nb_material_unit_ratio r on(u.lid=r.sales_unit_id AND r.delete_flag=0 ) where u.delete_flag=0) `unit` ON (t.sales_unit_id=unit.sales_unit_id )
 		// 	WHERE (t.delete_flag=0 and t.dpid='.$this->companyId.') GROUP BY t.lid';
 
-		$sql = 'select t.lid,t.mphs_code,DISTINCT(`t`.material_name),stock.stock,safe.safe_stock,safe.max_stock,unit.unit_name,mc.category_name,t.category_id FROM `nb_product_material` `t`
+		$sql = 'select DISTINCT(`t`.material_name),`t`.lid,`t`.mphs_code,stock.stock,safe.safe_stock,safe.max_stock,unit.unit_name,mc.category_name,t.category_id FROM `nb_product_material` `t`
 			LEFT JOIN ( select material_id,dpid,SUM(stock) AS stock from `nb_product_material_stock` where dpid ='.$this->companyId.' and delete_flag=0 GROUP BY material_id) `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid )
 			LEFT JOIN (select a.* from nb_product_material_safe a where a.dpid = '.$this->companyId.' AND  UNIX_TIMESTAMP(a.create_at) in(select max(UNIX_TIMESTAMP(b.create_at)) from nb_product_material_safe b where b.dpid=a.dpid and b.material_id=a.material_id) ) `safe` ON (t.lid=safe.material_id and safe.dpid=t.dpid AND safe.delete_flag=0)
 			LEFT JOIN (SELECT u.unit_name,r.sales_unit_id FROM nb_material_unit u LEFT JOIN nb_material_unit_ratio r on(u.lid=r.sales_unit_id AND r.delete_flag=0 ) where u.delete_flag=0) `unit` ON (t.sales_unit_id=unit.sales_unit_id )'
@@ -54,15 +54,16 @@ class AutodownorderController extends BaseYmallController
 				// 		不为0 不进行任何操作
 				if($stock['max_stock']){
 					//如果原料库存少于最大库存的一半就将该产品列入添加队列
-					if ($stock['stock'] < ($stock['max_stock']/2)) {
+					if (($stock['max_stock']*2/3) > $stock['stock']  ) {
 						//按照总部指定仓库查询原料 , 没有则为自采购原料
 						$sql1 = 'select g.goods_code,g.goods_name,g.lid as glid,g.main_picture,g.original_price,g.member_price,g.goods_unit,c.company_name,c.dpid,mc.lid,mc.category_name,gm.material_code,mu.unit_ratio from nb_goods g '
 								.' left join nb_company c on(c.dpid=g.dpid) '
 								.' left join nb_material_category mc on (mc.lid=g.category_id )'
 								.' left join nb_goods_material gm on (g.lid=gm.goods_id )'
 								.' left join nb_material_unit_ratio mu ON( gm.unit_code=mu.unit_code and mu.dpid='.$companyId.' )'
-								.' where g.dpid in(select psgd.stock_dpid from nb_peisong_group_detail psgd where psgd.peisong_group_id=(select peisong_id from nb_company_property where dpid='.$this->companyId.') and psgd.mphs_code='.$stock['mphs_code'].')';
+								.' where gm.material_code = '.$stock['mphs_code'].' and g.dpid in(select psgd.stock_dpid from nb_peisong_group_detail psgd where psgd.peisong_group_id=(select peisong_id from nb_company_property where dpid='.$this->companyId.') and psgd.mphs_code='.$stock['mphs_code'].')';
 						$product = $db->createCommand($sql1)->queryRow();
+						// p($product);
 						if ($product) {
 							$num = ceil(($stock['max_stock']-$stock['safe_stock'])/$product['unit_ratio']);
 							$goods_cart = new GoodsCarts();
