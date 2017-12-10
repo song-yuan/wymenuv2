@@ -93,8 +93,14 @@ class MaterialUnitRatioController extends BackendController
 		$papage = Yii::app()->request->getParam('papage');
 		$model = MaterialUnitRatio::model()->find('lid=:unitId and dpid=:dpid' , array(':unitId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
+		//var_dump($model->unit_code);exit;
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
+			if($model->unit_code==''||$model->unit_code==null){
+				$code = new Sequence('muhs_code');
+				$mrcode = $code->nextval();
+				$model->unit_code = Common::getCode($this->companyId , $id, $mrcode);
+			}
 			$model->attributes = Yii::app()->request->getPost('MaterialUnitRatio');
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){

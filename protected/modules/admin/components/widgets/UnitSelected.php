@@ -21,7 +21,7 @@ class UnitSelected extends CWidget {
 			//$units = Yii::app()->db->createCommand($sql)->queryAll();
 		//var_dump($mates);exit;
 		//}else{
-			$sql = 'select mus.unit_name,mus.unit_specifications,mul.unit_name,mul.unit_specifications,t.* from nb_material_unit_ratio t left join nb_material_unit mul on(mul.muhs_code = t.mulhs_code) left join nb_material_unit mus on(mus.muhs_code = t.mushs_code) where t.delete_flag=0 and t.dpid ='.$this->companyId;
+			$sql = 'select mus.unit_name,mus.unit_specifications,mul.unit_name,mul.unit_specifications,t.* from nb_material_unit_ratio t left join nb_material_unit mul on(mul.muhs_code = t.mulhs_code) left join nb_material_unit mus on(mus.muhs_code = t.mushs_code) where t.delete_flag=0 and t.dpid ='.$this->companyId.' group by t.lid';
 			$unitso = Yii::app()->db->createCommand($sql)->queryAll();
 		//}
 		$selecter = '<select class="form-control materials" tabindex="-1" name="material_id_selecter" >';
