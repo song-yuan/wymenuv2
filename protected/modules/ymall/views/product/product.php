@@ -313,7 +313,7 @@
 			//采购订单生成对话框
 			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
 				var btnArray = ['否','是'];
-				mui.confirm('根据您库存参数设置的数据来统计原料的消耗量, 据此消耗量来计算生成您店铺的采购订单 , 是否确定生成订单 ？','自动生成采购单',btnArray,function(e){
+				mui.confirm('是否确定自动加入购物车 ？','自动生成采购单',btnArray,function(e){
 					if(e.index==1){
 						//自己的逻辑
 						mui.post('<?php echo $this->createUrl("autodownorder/index",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
@@ -327,19 +327,16 @@
 								if (ss[1] == '') {
 									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}else {
-									mui.alert(ss[1]+'为自建原料, 无法总部购买!!!');
+									mui.alert(ss[1]+'为自建原料,或者总部无货, 无法总部购买!!!');
 									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
-									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}
 							}else {
 								if (ss[1] == '') {
 									mui.alert(ss[0]+'没有消耗信息需要手动添加');
 									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
-									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}else {
-									mui.alert(ss[0]+'没有消耗信息需要手动添加'+'----'+ss[1]+'为自建原料, 无法总部购买!!!');
+									mui.alert(ss[0]+'没有消耗信息需要手动添加'+'----'+ss[1]+'为自建原料,或者总部无货, 无法总部购买!!!');
 									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
-									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}
 							}
 						},'json'
