@@ -2080,14 +2080,30 @@ class DataSyncOperation {
 			return json_encode(array('status'=>false,'msg'=>'管理员不存在'));
 		}
 		$cardId = $data['card_id'];
-		$refund_fee = $data['refund_fee'];
 		$user = WxBrandUser::getFromCardId($dpid, $cardId);
 		if(!$user){
 			return json_encode(array('status'=>false,'msg'=>'该会员不存在'));
 		}
+		$cupons = json_decode($data['cupon'],true);
+		$yue = $data['yue'];
+		$points = $data['points'];
 		$transaction=Yii::app()->db->beginTransaction();
 		try{
-			WxBrandUser::refundYue($refund_fee, $user, $dpid);
+			if(!empty($cupons)){
+				foreach ($cupons as $cupon){
+					WxCupon::refundCupon($cupon['cupon_id'], $user['lid']);
+				}
+			}
+			if($yue!=0){
+				WxBrandUser::refundYue($yue, $user, $dpid);
+			}
+			if($points!='0-0'){
+				$pointArr = split('-', $points);
+				$res = WxPoints::refundPoints($user['lid'], $user['dpid'],$pointArr[1]);
+				if(!$res){
+					throw new Exception('积分退回失败');
+				}
+			}
 			$transaction->commit();
 			$msg = array('status'=>true);
 		}catch (Exception $e) {

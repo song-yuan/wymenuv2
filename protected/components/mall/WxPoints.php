@@ -62,4 +62,16 @@ class WxPoints
 		}
 		return $res;
 	}
+	public static function refundPoints($userId,$dpid,$point){
+		$total = 0;
+		$date = date('Y-m-d H:i:s',time());
+		$sql = 'select * from nb_member_points where card_type=1 and card_id=:userId and dpid=:dpid and end_time >= "'.$date.'" and delete_flag=0 order by end_time asc';
+		$pObj = Yii::app()->db->createCommand($sql)
+				->bindValue(':userId',$userId)
+				->bindValue(':dpid',$dpid)
+				->queryRow();
+		$sql = 'update nb_member_points set remain_points=remain_points+'.$point.' where lid='.$pObj['lid'].' and dpid='.$pObj['dpid'];
+		$res = Yii::app()->db->createCommand($sql)->execute();
+		return $res;
+	}
 }
