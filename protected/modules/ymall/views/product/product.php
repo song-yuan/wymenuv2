@@ -278,27 +278,37 @@
 							<h4>店铺原料库存</h4>
 							<!-- HTML5 -->
 							<div style="width: 96%;margin:0 auto;position: relative;">
-								<?php if($stocks): 
+								<?php if($stocks):
 									$arr = array();
 									foreach ($stocks as $key => $value) {
 										if(!isset($arr[$value['category_id']])){
 											$arr[$value['category_id']] = array();
 										}
+										if(isset($stocks_arr['lid'.$value['lid']])){
+											// p($stocks_arr['lid'.$value['lid']]);
+											$value['safe_stock'] = $stocks_arr['lid'.$value['lid']]['safe_stock'];
+											$value['max_stock'] = $stocks_arr['lid'.$value['lid']]['max_stock'];
+										}else{
+											$value['safe_stock'] = $value['stock'];
+											$value['max_stock'] = $value['stock'];
+										}
 										array_push($arr[$value['category_id']], $value);
 									}
-									// p($arr);
 								?>
-								<?php foreach ($arr as $ar): ?>
+								<?php
+								foreach ($arr as $ar):
+
+								?>
 								<fieldset>
 									<legend><?php echo $ar[0]['category_name']; ?></legend>
 									<?php foreach ($ar as  $stock): ?>
-							    	<p style="width:100%;margin:0;" data-value="<?php if ($stock['stock']<1 || $stock['stock']<$stock['safe_stock']) {echo '危险库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} elseif ( $stock['stock']>$stock['max_stock']) {echo '充足库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} else {echo '安全库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} ?>"><?php echo $stock['material_name']; ?></p>
+							    	<p style="width:100%;margin:0;" data-value="<?php if ($stock['stock']<1 ||$stock['stock']<$stock['safe_stock']) {echo '危险库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} elseif ( $stock['stock']>$stock['max_stock']) {echo '充足库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} else {echo '安全库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} ?>"><?php echo $stock['material_name']; ?></p>
 									<progress style="width:100%;" max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5"></progress>
 									<?php endforeach; ?>
 								</fieldset>
 								<?php endforeach; ?>
 								<?php endif; ?>
-								
+
 							</div>
 						</div>
 
@@ -309,11 +319,11 @@
 		</div>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/prefixfree.min.js"></script>
 		<script>
-		
+
 			//采购订单生成对话框
 			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
 				var btnArray = ['否','是'];
-				mui.confirm('根据您近一个月内的原料的消耗量来生成您店铺的采购订单 , 是否确定生成订单 ？','自动生成采购单',btnArray,function(e){
+				mui.confirm('是否确定自动加入购物车 ？','自动生成采购单',btnArray,function(e){
 					if(e.index==1){
 						//自己的逻辑
 						mui.post('<?php echo $this->createUrl("autodownorder/index",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
@@ -327,19 +337,16 @@
 								if (ss[1] == '') {
 									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}else {
-									mui.alert(ss[1]+'为自建原料, 无法总部购买!!!');
+									mui.alert(ss[1]+'为自建原料,或者总部无货, 无法总部购买!!!');
 									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
-									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}
 							}else {
 								if (ss[1] == '') {
 									mui.alert(ss[0]+'没有消耗信息需要手动添加');
 									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
-									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}else {
-									mui.alert(ss[0]+'没有消耗信息需要手动添加'+'----'+ss[1]+'为自建原料, 无法总部购买!!!');
+									mui.alert(ss[0]+'没有消耗信息需要手动添加'+'----'+ss[1]+'为自建原料,或者总部无货, 无法总部购买!!!');
 									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
-									// location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
 								}
 							}
 						},'json'
