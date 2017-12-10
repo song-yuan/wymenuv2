@@ -39,7 +39,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺价格体系设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('peisonggroup/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺配送体系设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('peisonggroup/index' , array('companyId' => $this->companyId,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -59,7 +59,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺价格体系设置');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺配送体系设置');?></div>
 					<div class="actions">
 						<div class="btn-group">
 							<select id="province" name="province" class="selectedclass">
@@ -90,7 +90,8 @@
 								<th><?php echo yii::t('app','店铺名称');?></th>
 								<th><?php echo yii::t('app','联系人');?></th>
 								<th><?php echo yii::t('app','地址');?></th>
-								<th><?php echo yii::t('app','价格分组设置');?></th>
+								<th><?php echo yii::t('app','配送体系设置');?></th>
+								<th><?php echo yii::t('app','支付类型设置');?></th>
 								<th><?php echo yii::t('app','操作');?></th>
 							</tr>
 						</thead>
@@ -105,13 +106,19 @@
 								<td>
 									<select name="<?php echo $model['dpid']; ?>" id="aa<?php echo $model['dpid']; ?>" class="btn" style="border:1px solid gray;padding:2px 3px;">
 										<?php if (!$groups):?>
-											<option value="">亲 , 您还没有添加价格分组,默认总部价格</option>
+											<option value="">亲 , 您还没有添加配送体系</option>
 										<?php else:?>
-											<option value="0" <?php if ($model['price_group_id']==0) {echo 'selected';} ?>>-默认(总部)-</option>
+											<option value="0" <?php if ($model['peisong_id']==0) {echo 'selected';} ?>>-默认(总部)-</option>
 											<?php foreach($groups as $group ): ?>
-												<option value="<?php echo $group['lid']; ?>" <?php if ($group['lid']==$model['price_group_id']) {echo 'selected';} ?>>-<?php echo $group['group_name']; ?>-</option>
+												<option value="<?php echo $group['lid']; ?>" <?php if ($group['lid']==$model['peisong_id']) {echo 'selected';} ?>>-<?php echo $group['group_name']; ?>-</option>
 											<?php endforeach; ?>
 										<?php endif;?>
+									</select>
+								</td>
+								<td>
+									<select name="<?php echo $model['dpid']; ?>" id="pay<?php echo $model['dpid']; ?>" class="btn" style="border:1px solid gray;padding:2px 3px;">
+											<option value="1" <?php if ($model['stock_paytype']==1) {echo 'selected';} ?>>线上支付</option>
+											<option value="2" <?php if ($model['stock_paytype']==2) {echo 'selected';} ?>>线下支付</option>
 									</select>
 								</td>
 								<td>

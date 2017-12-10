@@ -120,7 +120,7 @@ class CompanyGroupController extends BackendController
     		$cnamed = '';
     	}
     
-    	$sql = 'select t.*,t2.price_group_id,t2.lid FROM nb_company t'
+    	$sql = 'select t.*,t2.peisong_id,t2.lid,t2.stock_paytype FROM nb_company t'
     			.' left join nb_company_property t2 on(t.dpid=t2.dpid)'
     			.' WHERE t.dpid in(select dpid from nb_company where delete_flag=0 and comp_dpid='.$dpid .' and type=1 '.$provinced.$cityd.$aread.$cnamed.') and t.delete_flag=0';
     	// p($sql);
