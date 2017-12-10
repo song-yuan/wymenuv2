@@ -72,7 +72,7 @@ class ProductCategoryController extends BackendController
 				}else{
 					$msg = $up->getErrorMsg();
 				}
-				//echo $msg;exit;
+				echo $msg;exit;
 			}
 		}
 		if(Yii::app()->request->isPostRequest) {

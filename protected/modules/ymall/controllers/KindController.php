@@ -5,12 +5,20 @@ class KindController extends BaseYmallController
 	{
 
 		$db = Yii::app()->db;
-		$sql = 'select g.goods_code,g.goods_name,g.lid as glid,g.main_picture,g.original_price,g.member_price,g.goods_unit,c.company_name,c.dpid,mc.lid,mc.category_name,gm.material_code from nb_goods g '
-				.' left join nb_company c on(c.dpid=g.dpid) '
-				.' left join nb_material_category mc on (mc.lid=g.category_id )'
-				.' left join nb_goods_material gm on (g.lid=gm.goods_id )'
-				.' where g.dpid in(select ad.depot_id from nb_area_group_depot ad where ad.delete_flag=0 and ad.area_group_id in (select area_group_id from nb_area_group_company where company_id='.$this->companyId.' and delete_flag=0)) and g.delete_flag=0'
-				.' order by g.category_id';
+		// $sql = 'select g.goods_code,g.goods_name,g.lid as glid,g.main_picture,g.original_price,g.member_price,g.goods_unit,c.company_name,c.dpid,mc.lid,mc.category_name,gm.material_code from nb_goods g '
+		// 		.' left join nb_company c on(c.dpid=g.dpid) '
+		// 		.' left join nb_material_category mc on (mc.lid=g.category_id )'
+		// 		.' left join nb_goods_material gm on (g.lid=gm.goods_id )'
+		// 		.' where g.dpid in(select ad.depot_id from nb_area_group_depot ad where ad.delete_flag=0 and ad.area_group_id in (select area_group_id from nb_area_group_company where company_id='.$this->companyId.' and delete_flag=0)) and g.delete_flag=0'
+		// 		.' order by g.category_id';
+
+		$sql = 'select ggm.material_code,ggm.goods_code,ggm.goods_name,ggm.lid as glid,ggm.main_picture,ggm.original_price,ggm.member_price,ggm.goods_unit,c.company_name,c.dpid,mc.lid,mc.category_name 
+		from ( select psgd.* from nb_peisong_group_detail psgd left join nb_peisong_group psg on(psgd.peisong_group_id=psg.lid) where psg.lid=(select peisong_id from nb_company_property where dpid='.$this->companyId.')) psgs
+		left join (select g.*,gm.material_code from nb_goods g left join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(ggm.dpid=psgs.stock_dpid and ggm.material_code=psgs.mphs_code)
+		left join nb_material_category mc on (mc.lid=ggm.category_id )
+		left join nb_company c on(c.dpid=ggm.dpid) 
+		where  ggm.delete_flag=0
+		order by ggm.category_id;';
 		$products = $db->createCommand($sql)->queryAll();
 
 		

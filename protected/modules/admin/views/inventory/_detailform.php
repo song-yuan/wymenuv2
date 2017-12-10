@@ -24,7 +24,7 @@
 		<div class="form-group <?php if($model->hasErrors('inventory_stock')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'inventory_stock',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'inventory_stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('inventory_stock')));?>
+				<?php echo $form->textField($model, 'inventory_stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('inventory_stock').'(盘损为零售单位)'));?>
 				<?php echo $form->error($model, 'inventory_stock' )?>
 			</div>
 		</div>
