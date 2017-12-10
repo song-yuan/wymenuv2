@@ -78,7 +78,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 							
-								<th><?php echo yii::t('app','组织名称');?></th>
+								<th><?php echo yii::t('app','操作员');?></th>
 								<th><?php echo yii::t('app','盘损单号');?></th>
 								<th><?php echo yii::t('app','盘损日期');?></th>
 								
@@ -93,7 +93,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo Helper::getCompanyName($model->organization_id);?></td>
+								<td ><?php echo $model->opretion_id;?></td>
 								<td><?php echo $model->inventory_account_no;?></td>
 								<td><?php echo $model->create_at;?></td>
 								

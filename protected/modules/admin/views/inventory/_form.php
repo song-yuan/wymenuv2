@@ -17,11 +17,11 @@
 	</style>
 	<div class="form-body">
 		
-		<div class="form-group <?php if($model->hasErrors('organization_id')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'organization_id',array('class' => 'col-md-3 control-label'));?>
+		<div class="form-group <?php if($model->hasErrors('opretion_id')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'opretion_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'organization_id', CHtml::listData(Helper::genOrgCompany($this->companyId), 'dpid', 'company_name'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>
-				<?php echo $form->error($model, 'organization_id' )?>
+				<?php echo $form->dropDownList($model, 'opretion_id',Helper::genUsername($this->companyId,1),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('opretion_id')));?>
+				<?php echo $form->error($model, 'opretion_id' )?>
 			</div>
 		</div>
        

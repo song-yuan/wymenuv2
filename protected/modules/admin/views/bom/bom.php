@@ -350,13 +350,13 @@
 							<div class="ku-item ku-purple pc"></div>
 							<div class="ku-item-info">盘存</div>
 						</div>
-					</a>
+					</a> -->
 					<a href="<?php echo $this->createUrl('inventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损</div>
 						</div>
-					</a> -->
+					</a>
 					<a href="<?php echo $this->createUrl('nowmaterialstock/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sskc"></div>

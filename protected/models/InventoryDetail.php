@@ -11,6 +11,7 @@
  * @property string $inventory_id
  * @property string $material_id
  * @property string $inventory_stock
+ * @property string $retreat_id
  * @property string $delete_flag
  * @property string $is_sync
  */
@@ -33,13 +34,13 @@ class InventoryDetail extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, dpid, update_at, inventory_stock, remark', 'required'),
-			array('lid, dpid, inventory_id, material_id, inventory_stock', 'length', 'max'=>10),
+			array('lid, dpid, inventory_id, material_id, inventory_stock,retreat_id', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, inventory_id, material_id, inventory_stock, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, inventory_id, material_id, inventory_stock,retreat_id, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +68,7 @@ class InventoryDetail extends CActiveRecord
 			'inventory_id' => '盘损id',
 			'material_id' => '品项id',
 			'inventory_stock' => '盘损库存',
+			'retreat_id' => '盘损原因',
 			'remark' => '原因备注',
 			'delete_flag' => '1表示删除',
 			'is_sync' => '同步标志',
@@ -98,6 +100,7 @@ class InventoryDetail extends CActiveRecord
 		$criteria->compare('inventory_id',$this->inventory_id,true);
 		$criteria->compare('material_id',$this->material_id,true);
 		$criteria->compare('inventory_stock',$this->inventory_stock,true);
+		$criteria->compare('retreat_id',$this->retreat_id,true);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);

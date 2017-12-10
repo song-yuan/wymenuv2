@@ -56,10 +56,10 @@ class InventoryController extends BackendController
 						//var_dump($malides);
 					}
 					$malides = substr($malides, 0,strlen($malides)-1);
-					$criteria->addCondition('organization_id in ('.$malides.')');
+					$criteria->addCondition('opertion_id in ('.$malides.')');
 					//var_dump($criteria);exit;
 				}else{
-					$criteria->addSearchCondition('organization_id',$oid);
+					$criteria->addSearchCondition('opertion_id',$oid);
 				}
 				//$criteria->addSearchCondition('organization_id',$ogname->dpid);
 			}
@@ -183,29 +183,39 @@ class InventoryController extends BackendController
 	}
 	public function actionDetailCreate(){
 		$model = new InventoryDetail();
+		//var_dump($model);exit;
 		$model->dpid = $this->companyId ;
 		$rlid = Yii::app()->request->getParam('lid');//var_dump($polid);exit;
 		$model->inventory_id=$rlid;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('InventoryDetail');
+			$retreatId = Yii::app()->request->getParam('InventoryDetail_retreat_id');
 			$se=new Sequence("inventory_detail");
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->retreat_id = $retreatId;
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId, 'lid'=>$model->inventory_id ));
 			}
 		}
 		$categories = $this->getCategories();
+		$retreats = $this->getretreats();
 		$categoryId=0;
+		$retreatId=0;
 		$materials = $this->getMaterials($categoryId);
 		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
+		$retreats = $this->getretreats();
+		$retreatslist=CHtml::listData($retreats, 'lid', 'name');
 		$this->render('detailcreate' , array(
 				'model' => $model ,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId,
-				'materials'=>$materialslist
+				'materials'=>$materialslist,
+				'retreats'=>$retreats,
+				'retreatId'=>$retreatId
 		));
 	}
 
@@ -216,8 +226,10 @@ class InventoryController extends BackendController
 		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('InventoryDetail');
+			$retreatId = Yii::app()->request->getParam('InventoryDetail_retreat_id');
 			//var_dump($model);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
+			$model->retreat_id = $retreatId;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
 				$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId, 'lid'=>$model->inventory_id));
@@ -225,15 +237,21 @@ class InventoryController extends BackendController
 		}
 		
 		$categories = $this->getCategories();
+		$retreats = $this->getretreats();
 		$categoryId=  $this->getCategoryId($lid);
+		$retreatId=  $this->getRetreatId($lid);
 		$materials = $this->getMaterials($categoryId);
 		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
+		
+		//$retreatslist=CHtml::listData($retreats, 'lid', 'name');
 		//var_dump($model);var_dump($categoryId);var_dump($materials);exit;
 		$this->render('detailupdate' , array(
 				'model' => $model ,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId,
-				'materials'=>$materialslist
+				'materials'=>$materialslist,
+				'retreats'=>$retreats,
+				'retreatId'=>$retreatId
 		));
 	}
 	public function actionDetailDelete(){
@@ -318,20 +336,36 @@ class InventoryController extends BackendController
 		}
 		return $optionsReturn;
 	}
+	private function getRetreats(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.type=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = Retreat::model()->findAll($criteria);
+		//var_dump($models);exit;
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择原因--'));
+		if($models) {
+			foreach ($models as $model) {
+				$optionsReturn[$model->lid] = $model->name;
+			}
+		}
+		//var_dump($optionsReturn);exit;
+		return $optionsReturn;
+	}
 	private function getMaterials($categoryId){
 		if($categoryId==0)
 		{
-			//var_dump ('2',$categoryId);exit;
 			$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
 		}else{
-			//var_dump ('3',$categoryId);exit;
 			$materials = ProductMaterial::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
-			//var_dump($materials);exit;
 		}
 		$materials = $materials ? $materials : array();
-		//var_dump($materials);exit;
 		return $materials;
-		//return CHtml::listData($products, 'lid', 'product_name');
+	}
+	private function getRetreatss($dpid){
+		$materials = Retreat::model()->findAll('type =2 and dpid=:companyId and delete_flag=0' , array(':companyId' => $dpid)) ;
+		$materials = $materials ? $materials : array();
+		return $materials;
 	}
 
 	public function actionGetChildren(){
@@ -356,6 +390,14 @@ class InventoryController extends BackendController
 		$sql = "SELECT category_id from nb_inventory_detail so,nb_product_material pm where so.dpid=pm.dpid and so.material_id=pm.lid and so.lid=:lid";
 		$command=$db->createCommand($sql);
 		$command->bindValue(":lid" , $lid);
+		return $command->queryScalar();
+	}
+	private function getRetreatId($lid){
+		$db = Yii::app()->db;
+		$sql = "SELECT retreat_id from nb_inventory_detail where lid=:lid";
+		$command=$db->createCommand($sql);
+		$command->bindValue(":lid" , $lid);
+		//var_dump($command->queryScalar());exit;
 		return $command->queryScalar();
 	}
 	public function actionStorageVerify(){
