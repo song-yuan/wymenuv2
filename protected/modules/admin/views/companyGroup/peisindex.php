@@ -46,7 +46,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'price-group-id-form',
-				//'action' => $this->createUrl('companyGroup/index' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('companyGroup/peisindex' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -75,7 +75,7 @@
 						<div class="btn-group">
 						    <span id="search" class="btn blue" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></span>
 						</div>
-						<div class="btn-group">
+						<div class="btn-group hide">
 							<input type="submit"  class="btn yellow" value=<?php echo yii::t('app','批量保存');?> >
 						</div>
 					</div>
@@ -108,7 +108,7 @@
 										<?php if (!$groups):?>
 											<option value="">亲 , 您还没有添加配送体系</option>
 										<?php else:?>
-											<option value="0" <?php if ($model['peisong_id']==0) {echo 'selected';} ?>>-默认(总部)-</option>
+											<option value="0" <?php if ($model['peisong_id']==0) {echo 'selected';} ?>>-请添加配送体系-</option>
 											<?php foreach($groups as $group ): ?>
 												<option value="<?php echo $group['lid']; ?>" <?php if ($group['lid']==$model['peisong_id']) {echo 'selected';} ?>>-<?php echo $group['group_name']; ?>-</option>
 											<?php endforeach; ?>
@@ -167,9 +167,10 @@
 		$('.saved').on('click',function(){
 			var dpid =$(this).attr('valued');
 			var ss = $('#aa'+dpid ).find('option:selected').attr('value');
+			var pay = $('#pay'+dpid ).find('option:selected').attr('value');
 			var arr = new Array;
 			arr[dpid] = ss;
-			var arrs = dpid+':'+ss;
+			var arrs = dpid+':'+ss+':'+pay;
 			$.ajax({
 	            type:'get',
 				url:"<?php echo $this->createUrl('companyGroup/peistore',array('companyId'=>$this->companyId,));?>/arr/"+arrs,

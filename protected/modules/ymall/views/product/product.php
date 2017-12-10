@@ -313,7 +313,7 @@
 			//采购订单生成对话框
 			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
 				var btnArray = ['否','是'];
-				mui.confirm('根据您近一个月内的原料的消耗量来生成您店铺的采购订单 , 是否确定生成订单 ？','自动生成采购单',btnArray,function(e){
+				mui.confirm('根据您库存参数设置的数据来统计原料的消耗量, 据此消耗量来计算生成您店铺的采购订单 , 是否确定生成订单 ？','自动生成采购单',btnArray,function(e){
 					if(e.index==1){
 						//自己的逻辑
 						mui.post('<?php echo $this->createUrl("autodownorder/index",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址

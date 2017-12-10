@@ -89,8 +89,8 @@ class CompanyGroupController extends BackendController
     	$areas = Yii::app()->request->getParam('area',0);
     	$dpid = Yii::app()->request->getParam('companyId');
     	$cname = Yii::app()->request->getParam('cname','');
-    	$price_group_id = $_POST;
-    	//var_dump($price_group_id);exit;
+    	$peisong_id = $_POST;
+    	//var_dump($peisong_id);exit;
     	$db = Yii::app()->db;
     	$provinced = '';
     	$cityd = '';
@@ -121,7 +121,7 @@ class CompanyGroupController extends BackendController
     	}
     
     	$sql = 'select t.*,t2.peisong_id,t2.lid,t2.stock_paytype FROM nb_company t'
-    			.' left join nb_company_property t2 on(t.dpid=t2.dpid)'
+    			.' left join nb_company_property t2 on(t.dpid=t2.dpid and t2.delete_flag=0)'
     			.' WHERE t.dpid in(select dpid from nb_company where delete_flag=0 and comp_dpid='.$dpid .' and type=1 '.$provinced.$cityd.$aread.$cnamed.') and t.delete_flag=0';
     	// p($sql);
     	$models = Yii::app()->db->createCommand($sql)->queryALL();
@@ -130,11 +130,11 @@ class CompanyGroupController extends BackendController
     	$groups = Yii::app()->db->createCommand($sql2)->queryALL();
     
     	if(Yii::app()->request->isPostRequest) {
-    		foreach($price_group_id as $did =>$price_group_idd){
+    		foreach($peisong_id as $did =>$peisong_idd){
     			$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$did));
     			// p($model);
     			if ($model) {
-    				$model->saveAttributes(array('price_group_id'=>$price_group_idd,'update_at'=>date('Y-m-d H:i:s',time())));
+    				$model->saveAttributes(array('peisong_id'=>$peisong_idd,'update_at'=>date('Y-m-d H:i:s',time())));
     			}else{
     				$se=new Sequence("company_property");
     				$lid = $se->nextval();
@@ -143,7 +143,7 @@ class CompanyGroupController extends BackendController
     						'lid'=>$lid,
     						'dpid'=>$did,
     						'update_at'=>date('Y-m-d H:i:s',time()),
-    						'price_group_id'=>$price_group_idd,
+    						'peisong_id'=>$peisong_idd,
     						'delete_flag'=>'0',
     				);
     				$command = $db->createCommand()->insert('nb_company_property',$data);
@@ -194,13 +194,13 @@ class CompanyGroupController extends BackendController
     {
     	$pcode = Yii::app()->request->getParam('arr');
     	$arr = explode(':',$pcode);
-    	// var_dump($arr);exit;
+    	//var_dump($arr);exit;
     
     
     	$model = CompanyProperty::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$arr[0]));
     	// p($model);
     	if ($model) {
-    		$model->saveAttributes(array('peisong_id'=>$arr[1],'update_at'=>date('Y-m-d H:i:s',time())));
+    		$model->saveAttributes(array('peisong_id'=>$arr[1],'stock_paytype'=>$arr[2],'update_at'=>date('Y-m-d H:i:s',time())));
     	}else{
     		$se=new Sequence("company_property");
     		$lid = $se->nextval();
@@ -210,6 +210,7 @@ class CompanyGroupController extends BackendController
     				'dpid'=>$arr[0],
     				'update_at'=>date('Y-m-d H:i:s',time()),
     				'peisong_id'=>$arr[1],
+    				'stock_paytype'=>$arr[2],
     				'delete_flag'=>'0',
     		);
     		$command = $db->createCommand()->insert('nb_company_property',$data);
