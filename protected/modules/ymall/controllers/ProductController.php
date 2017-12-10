@@ -15,8 +15,8 @@ class ProductController extends BaseYmallController
 		// 	LEFT JOIN (SELECT u.unit_name,r.sales_unit_id FROM nb_material_unit u LEFT JOIN nb_material_unit_ratio r on(u.lid=r.sales_unit_id AND r.delete_flag=0 ) where u.delete_flag=0) `unit` ON (t.sales_unit_id=unit.sales_unit_id )'
 		// 	.' left join nb_material_category mc on (mc.lid=t.category_id and mc.delete_flag=0)'
 		// 	.' WHERE (t.delete_flag=0 and t.dpid='.$this->companyId.')';
-		$sqls = 'select `t`.lid,`t`.material_name,stock.stock,u.unit_name,mc.category_name,t.category_id FROM `nb_product_material` `t` inner JOIN  nb_material_unit u  ON (t.sales_unit_id=u.lid and t.dpid) 
-inner join nb_material_category mc on (mc.lid=t.category_id ) inner JOIN ( select material_id,dpid,SUM(stock) AS stock from `nb_product_material_stock` where stock!=0 and dpid ='.$this->companyId.' and delete_flag=0 GROUP BY material_id) `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid ) WHERE t.delete_flag=0 and t.dpid='.$this->companyId;
+		$sqls = 'select `t`.lid,`t`.material_name,stock.stock,u.unit_name,mc.category_name,t.category_id FROM `nb_product_material` `t` left JOIN  nb_material_unit u  ON (t.sales_unit_id=u.lid and t.dpid) 
+left join nb_material_category mc on (mc.lid=t.category_id ) left JOIN ( select material_id,dpid,SUM(stock) AS stock from `nb_product_material_stock` where stock!=0 and dpid ='.$this->companyId.' and delete_flag=0 GROUP BY material_id) `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid ) WHERE t.delete_flag=0 and t.dpid='.$this->companyId;
 		$stocks = $db->createCommand($sqls)->queryAll();
 
 		$sqld='select k.* FROM ( select a.* from nb_product_material_safe a where a.dpid = '.$this->companyId.'   order by a.create_at desc) k group by k.material_id';
