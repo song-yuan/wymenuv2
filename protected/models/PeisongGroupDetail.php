@@ -1,28 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "nb_inventory_detail".
+ * This is the model class for table "nb_peisong_group_detail".
  *
- * The followings are the available columns in table 'nb_inventory_detail':
+ * The followings are the available columns in table 'nb_peisong_group_detail':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $inventory_id
+ * @property string $peisong_group_id
+ * @property string $stock_dpid
  * @property string $material_id
- * @property string $inventory_stock
- * @property string $retreat_id
+ * @property string $mphs_code
  * @property string $delete_flag
  * @property string $is_sync
  */
-class InventoryDetail extends CActiveRecord
+class PeisongGroupDetail extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_inventory_detail';
+		return 'nb_peisong_group_detail';
 	}
 
 	/**
@@ -33,14 +33,15 @@ class InventoryDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, update_at, inventory_stock, remark', 'required'),
-			array('lid, dpid, inventory_id, material_id, inventory_stock,retreat_id', 'length', 'max'=>10),
+			array('lid, update_at, peisong_group_id, stock_dpid, material_id, mphs_code', 'required'),
+			array('lid, dpid, peisong_group_id, stock_dpid, material_id', 'length', 'max'=>10),
+			array('mphs_code', 'length', 'max'=>12),
 			array('delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, inventory_id, material_id, inventory_stock,retreat_id, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, peisong_group_id, stock_dpid, material_id, mphs_code, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,15 +63,14 @@ class InventoryDetail extends CActiveRecord
 	{
 		return array(
 			'lid' => 'Lid',
-			'dpid' => 'Dpid',
+			'dpid' => '总部id',
 			'create_at' => 'Create At',
-			'update_at' => 'Update At',
-			'inventory_id' => '盘损id',
-			'material_id' => '品项id',
-			'inventory_stock' => '盘损库存',
-			'retreat_id' => '盘损原因',
-			'remark' => '原因备注',
-			'delete_flag' => '1表示删除',
+			'update_at' => '最近一次更新时间',
+			'peisong_group_id' => '配送分组表的lid',
+			'stock_dpid' => '配送组内原料的指定仓库的lid',
+			'material_id' => '产品原料表的lid',
+			'mphs_code' => '品项编码',
+			'delete_flag' => '0表示存在，1表示删除',
 			'is_sync' => '同步标志',
 		);
 	}
@@ -97,11 +97,10 @@ class InventoryDetail extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('inventory_id',$this->inventory_id,true);
+		$criteria->compare('peisong_group_id',$this->peisong_group_id,true);
+		$criteria->compare('stock_dpid',$this->stock_dpid,true);
 		$criteria->compare('material_id',$this->material_id,true);
-		$criteria->compare('inventory_stock',$this->inventory_stock,true);
-		$criteria->compare('retreat_id',$this->retreat_id,true);
-		$criteria->compare('remark',$this->remark,true);
+		$criteria->compare('mphs_code',$this->mphs_code,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
@@ -114,7 +113,7 @@ class InventoryDetail extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return InventoryDetail the static model class
+	 * @return PeisongGroupDetail the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

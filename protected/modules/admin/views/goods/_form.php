@@ -203,7 +203,7 @@
 
 		$('#category_container').on('change','.material_select',function (){
 	   		var id = $('.material_select').val();
-	   		layer.msg(id);
+	   		//layer.msg(id);
 	   		var $parent = $('.mater_sel');
             var sid ='0000000000';
                       

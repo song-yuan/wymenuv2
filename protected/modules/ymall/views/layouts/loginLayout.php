@@ -9,14 +9,14 @@
 	<link rel="stylesheet" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/feedback-page.css" />
 	<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/iconfont.css" rel="stylesheet"/>
-	<link rel="stylesheet" type="text/css" href="../../../../css/ymall/ymall.css"/>
+	<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/ymall.css"/>
 	<style>
 		.mui-hbar{background-color: #FF8C00!important;color:white;}
 		.mui-a{color:yellow!important;font-weight: 900;}
 		.mui-bar-tab .mui-tab-item {color:#fff;}
 	</style>
-	<script type="text/javascript" src="../../../../plugins/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript" src="../../../../scripts/flipsnap.js"></script>
+	<script type="text/javascript" src="<?php echo  Yii::app()->request->baseUrl; ?>/plugins/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="<?php echo  Yii::app()->request->baseUrl; ?>/scripts/flipsnap.js"></script>
 	<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.min.js "></script>
 	<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.view.js "></script>
 	<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/app.js"></script>

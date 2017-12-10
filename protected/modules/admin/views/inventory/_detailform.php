@@ -6,9 +6,6 @@
 			'enctype' => 'multipart/form-data'
 		),
 )); ?>
-	<style>
-	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
-	</style>
 	<div class="form-body">
 		<div class="form-group">
 			<?php echo $form->label($model, '品项分类',array('class' => 'col-md-3 control-label'));?>
@@ -27,11 +24,18 @@
 		<div class="form-group <?php if($model->hasErrors('inventory_stock')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'inventory_stock',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'inventory_stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('inventory_stock')));?>
+				<?php echo $form->textField($model, 'inventory_stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('inventory_stock').'(盘损为零售单位)'));?>
 				<?php echo $form->error($model, 'inventory_stock' )?>
 			</div>
 		</div>
-		
+		<div class="form-group <?php if($model->hasErrors('retreat_id')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'retreat_id',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo CHtml::dropdownlist('retreat_id' ,$retreatId,$retreats ,array('class' => 'form-control', ));?>
+				<?php echo $form->error($model, 'retreat_id' )?>
+				<input class="form-control" name="InventoryDetail_retreat_id" id="InventoryDetail_retreat_id" type="hidden" value="<?php echo $model->retreat_id;?>"></input>
+			</div>
+		</div>
 		
 		<div class="form-group" <?php if($model->hasErrors('remark')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
@@ -42,8 +46,7 @@
 		</div>
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
-				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-				<a href="<?php echo $this->createUrl('inventory/detailindex' , array('companyId' => $model->dpid,'lid'=>$model->inventory_id, ));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
+				<button type=submit class="btn blue add_save"><?php echo yii::t('app','确定');?></button>
 			</div>
 		</div>
 <?php $this->endWidget(); ?>
@@ -62,17 +65,10 @@
 )); ?>
 						
 <script>
-	   $('#category_container').on('change','.category_selecter',function(){
-	   		var id = $(this).val();
-	   		var $parent = $(this).parent();
-                        var sid ='0000000000';
-                        var len=$('.category_selecter').eq(1).length;
-                        if(len > 0)
-                        {
-                            sid=$('.category_selecter').eq(1).val();
-                            //alert(sid);
-                        }
-	   });
+		$('#retreat_id').change(function(){
+			var rid = $(this).val();
+			$('#InventoryDetail_retreat_id').val(rid);
+		});
 	   $('#selectCategory').change(function(){
 		   var cid = $(this).val();
 		   //alert($('#ProductSetDetail_product_id').html());

@@ -86,17 +86,18 @@
 				<h5 class="mui-content-padded">支付方式</h5>
 				<div class="mui-card margin-b">
 					<form class="mui-input-group">
-						<?php if ($company_property['material_pay_type']==1): ?>
+						<?php if ($company_property['stock_paytype']==2): ?>
 						<div class="mui-input-row mui-radio">
 							<label for="daofu"> 线下支付</label>
 							<input name="pay-style" type="radio" value="1" id="daofu">
 						</div>
-						<?php endif; ?>
 
+						<?php elseif ($company_property['stock_paytype']==1): ?>
 						<div class="mui-input-row mui-radio">
 							<label for="wxpay"> 微信支付</label>
 							<input name="pay-style" type="radio" value="0" id="wxpay" checked >
 						</div>
+						<?php endif; ?>
 					</form>
 				</div>
 			</div>

@@ -26,163 +26,6 @@
 			color:black;
 			text-align:center;
 		}
-		.ku-purple{
-
-		}
-		.ku-grey{
-			/*background-color:#DB7093;*/
-		}
-		.ku-item.dpgl{
-			background-image:url(../../../../../../img/waiter/icon-dpjcsz.png);
-			background-position: 15px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.cgzh{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: 15px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.cszh{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -135px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.csls{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -285px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.kczh{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -440px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.sdbb{
-			background-image:url(../../../../../../img/waiter/icon-sdbb.png);
-			background-position: 13px 15px;
-    		background-repeat: no-repeat;
-			background-size: 80%;
-		}
-		.ku-item.bkjl{
-			background-image:url(../../../../../../img/waiter/icon-bkjl.png);
-			background-position: 12px 13px;
-    		background-repeat: no-repeat;
-			background-size: 80%;
-		}
-		.ku-item.sskc{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -590px 15px;
-    		background-repeat: no-repeat;
-		}
-
-		.ku-item.sktj{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: 8px 16px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.yysr{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -140px 16px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.czjl{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -295px 16px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.cpxs{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -443px 16px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.tcxs{
-			background-image:url(../../../../../../img/waiter/icon-tcxs.png);
-			background-position: 15px 16px;
-			background-size: 70%;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.zdxq{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -600px 16px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.yysj{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -750px 16px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.qdzb{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: 14px -155px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.tzqy{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -140px -155px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.tcmx{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -290px -155px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.tcyy{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -443px -155px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.djqsy{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -600px -155px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.jcrs{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: -750px -155px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.ygyye{
-			background-image:url(../../../../../../img/waiter/icon-yysj.png);
-			background-position: 14px -335px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.scyyj{
-			background-image:url(../../../../../../img/waiter/icon-scyyj.png);
-			background-position: 14px 10px;
-			background-size: 80%;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.zdzffs{
-			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
-			background-position: 14px 20px;
-			background-size: 70%;
-    		background-repeat: no-repeat;
-		}
-        .ku-item.syjtj{
-			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
-			background-position: 14px 20px;
-			background-size: 70%;
-    		background-repeat: no-repeat;
-		}
-        .ku-item.syjpx{
-			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
-			background-position: 14px 20px;
-			background-size: 70%;
-    		background-repeat: no-repeat;
-		}
-        .ku-item.hykxf{
-			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
-			background-position: 14px 20px;
-			background-size: 70%;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.syjsz{
-			background-image:url(../../../../../../img/waiter/icon-syjsz.png);
-			background-position: 13px 13px;
-    		background-repeat: no-repeat;
-			background-size: 80%;
-		}
-
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -193,12 +36,8 @@
 		}
         .portlet-body a{
             display: inline-block;
-        	height: 194px;
+        	height: 80px;
         	border: 1px solid white;
-        	border-bottom: 1px solid gray;
-        }
-        .portlet-body a:hover{
-        	border: 1px solid orange;
         }
 	</style>
 <div class="page-content">
@@ -222,216 +61,197 @@
 					<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-group">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
 					<div class="caption"><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-warning ">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app','清除数据');?></span></a></div>
 				</div>
-				<div class="portlet-body" style="min-height: 750px">
-					<?php if($type==0):?>
-
-					<a style="display: none;" href="<?php echo $this->createUrl('statements/incomeReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey yysr"></div>
-							<div class="ku-item-info">营业收入</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey yysj"></div>
-							<div class="ku-item-info">营业数据</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/timeproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sdbb"></div>
-							<div class="ku-item-info">时段单品报表</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey cpxs"></div>
-							<div class="ku-item-info">单品销售</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/ceshiproductsetReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey tcxs"></div>
-							<div class="ku-item-info">套餐销售</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/orderdetail',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey zdxq"></div>
-							<div class="ku-item-info">账单详情</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/orderproductsReport',array('companyId' => $this->companyId,'ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey cpxs"></div>
-							<div class="ku-item-info">品项明细表</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/takeaway',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey scyyj"></div>
-							<div class="ku-item-info">送餐员业绩</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/timedataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sdbb"></div>
-							<div class="ku-item-info">时段报表</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/recharge',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey czjl"></div>
-							<div class="ku-item-info">充值记录</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/membercard',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey bkjl"></div>
-							<div class="ku-item-info">办卡记录</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/channelsproportion',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey qdzb"></div>
-							<div class="ku-item-info">渠道占比</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/tableareaReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey tzqy"></div>
-							<div class="ku-item-info">台桌区域</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/retreatdetailReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey tcmx"></div>
-							<div class="ku-item-info">退菜明细</div>
-					</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/retreatreasonReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey tcyy"></div>
-							<div class="ku-item-info">退菜原因</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/cuponReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey djqsy"></div>
-							<div class="ku-item-info">代金券使用</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/diningNum',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey jcrs"></div>
-							<div class="ku-item-info">聚餐人数</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/rijieReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">日结统计(优化)</div>
-						</div>
-					</a>
-					<?php if(Yii::app()->user->role <=5):?>
-					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式(员工业绩)</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/comPayYueReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式(储值)</div>
-						</div>
-					</a>
-					
-					
-					<?php endif;if(Yii::app()->user->role >=11||Yii::app()->user->role <5):?>
-					<a href="<?php echo $this->createUrl('statements/paymentReportSql',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式(优化)</div>
-						</div>
-					</a>
-					<?php endif;if(Yii::app()->user->role <5):?>
-					<a href="<?php echo $this->createUrl('statements/comPaymentReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式</div>
-						</div>
-					</a>
-					<a style="display: none;" href="<?php echo $this->createUrl('statements/rijie',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">日结统计</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statements/rijieReportSp',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">日结统计(存储过程)</div>
-						</div>
-					</a>
-					<?php endif;?>
-					
-					
-					<a href="<?php echo $this->createUrl('statements/orderpaytype',array('companyId' => $this->companyId,'text'=>'3','paymentid'=>'0','paytype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey zdzffs"></div>
-							<div class="ku-item-info">账单支付方式</div>
-						</div>
-					</a>
-                    <a href="<?php echo $this->createUrl('statements/memberconsume',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time())));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey hykxf"></div>
-							<div class="ku-item-info">会员卡消费</div>
-						</div>
-					</a>
-                    <?php if(Yii::app()->user->role < '1'):?>
-                    <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey syjtj"></div>
-							<div class="ku-item-info">收银机统计</div>
-						</div>
-					</a>
-                    <a href="<?php echo $this->createUrl('poscount/used',array('companyId' => $this->companyId,'pos_type'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey syjpx"></div>
-							<div class="ku-item-info">收银机排序</div>
-						</div>
-					</a>
-					<?php endif;?>
-					<?php if(Yii::app()->user->role <= '5'):?>
-					<a href="<?php echo $this->createUrl('poscount/hqindex',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right hov">
-							<div class="ku-item ku-purple syjsz"></div>
-							<div class="ku-item-info">收银机排序</div>
-						</div>
-					</a>
-                    <?php endif;?>
-
-					<!--
-					<a href="<?php //echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey ygyye"></div>
-							<div class="ku-item-info">员工营业额</div>
-						</div>
-					</a>
-
-					<a href="<?php// echo $this->createUrl('orderManagement/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey dpgl"></div>
-							<div class="ku-item-info">订单报表</div>
-						</div>
-					</a>
-					 -->
-
-					<?php elseif($type==1):?>
-
-					<?php endif;?>
-				</div>
+				<div class="portlet-body clearfix" >
+        		<?php if($type==0):?>
+                    <div class="panel_body row">
+                        <p>基础营业报表</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/incomeReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big"> 营业收入</div>
+                                <div class="list_small">查询商品的销量、实收款和退款数据等</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
+                                <div class="list_big"> 营业数据</div>
+                                <div class="list_small">按年月日查询营业额的基础信息等</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/orderdetail',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big"> 账单详情</div>
+                                <div class="list_small">查询所有订单的账单明细，不作统计</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/timedataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big"> 时段报表</div>
+                                <div class="list_small">按所要查询的时间段查看销售金额及菜品单数</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/memberconsume',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time())));?>">
+                                <div class="list_big">会员卡消费</div>
+                                <div class="list_small">查询所有会员卡的消费记录</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/channelsproportion',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">渠道占比</div>
+                                <div class="list_small">查询所有账单渠道在总账单渠道中占的百分比信息等</div>
+                            </a> 
+                        </div>
+                    </div>
+                    <div class= "panel_body row">
+                        <p>菜品明细报表</p>
+        			     <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/timeproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">时段单品报表</div>
+                                <div class="list_small">查询不同店铺、不同时间段、不同类别单品的销售数据</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">单品销售</div>
+                                <div class="list_small">查询不同时间段的单品以及套餐内单品的销售数据</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/ceshiproductsetReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">套餐销售</div>
+                                <div class="list_small">查询不同时间段的套餐销售数据</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/retreatdetailReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
+                                <div class="list_big">退菜明细</div>
+                                <div class="list_small">查询所退菜品的信息记录</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/retreatreasonReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">退菜原因</div>
+                                <div class="list_small">记录所退菜品的原因明细</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/orderproductsReport',array('companyId' => $this->companyId,'ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">品项明细</div>
+                                <div class="list_small">查询品项的名称、账单号以及销售金额等</div>
+                            </a> 
+                        </div>
+                    </div>
+                    <div class= "panel_body row">
+                        <p>支付统计报表</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/rijieReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+                                <div class="list_big">日结统计(优化)</div>
+                                <div class="list_small">查询门店日结详情数据，日结完成后方可显示数据</div>
+                            </a> 
+                        </div>
+                        <?php if(Yii::app()->user->role <=5):?>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+                                <div class="list_big">支付方式(员工业绩)</div>
+                                <div class="list_small">查询不同服务员的销售数据</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/comPayYueReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
+                                <div class="list_big">支付方式(储值)</div>
+                                <div class="list_small">查询门店账单总营业额和总单数及微信端的账单数据和金额数据</div>
+                            </a> 
+                        </div>
+                        <?php endif;if(Yii::app()->user->role >=11||Yii::app()->user->role <5):?>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/paymentReportSql',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+                                <div class="list_big">支付方式(优化)</div>
+                                <div class="list_small">查看所有不同支付方式的账单数据以及总单数</div>
+                            </a> 
+                        </div>
+                        <?php endif;if(Yii::app()->user->role <5):?>
+        				<div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/comPaymentReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
+                                <div class="list_big">支付方式</div>
+                                <div class="list_small">查看所有不同支付方式的账单数据以及总单数</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/rijie',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+                                <div class="list_big">日结统计</div>
+                                <div class="list_small">查询门店日结详情数据，日结完成后方可显示数据</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/rijieReportSp',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+                                <div class="list_big">日结统计(存储过程)</div>
+                                <div class="list_small">查询门店日结详情数据，日结完成后方可显示数据</div>
+                            </a> 
+                        </div>
+                        <?php endif;?>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/orderpaytype',array('companyId' => $this->companyId,'text'=>'3','paymentid'=>'0','paytype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">账单支付方式</div>
+                                <div class="list_small">查询账单的账单号、下单时间、金额和支付方式</div>
+                            </a> 
+                        </div>
+                    </div>
+                    <div class= "panel_body row">
+                        <p>营销活动统计报表</p>
+        					<div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/cuponReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">代金券使用</div>
+                                <div class="list_small">查询所有发出的代金券使用情况</div>
+                            </a> 
+                        </div>
+                    </div>
+                   
+                    <div class= "panel_body row">
+                        <p>其他</p>
+        				<div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/takeaway',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">送餐员业绩</div>
+                                <div class="list_small">查询外卖送餐员的送餐单数和营业额等</div>
+                            </a> 
+                        </div>
+                        <?php if(Yii::app()->user->role < '1'):?>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('pos/index',array('companyId' => $this->companyId,'pos_type'=>'0','status'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+                                <div class="list_big">收银机统计</div>
+                                <div class="list_small"></div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('poscount/used',array('companyId' => $this->companyId,'pos_type'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),));?>">
+                                <div class="list_big">收银机排序</div>
+                                <div class="list_small">用于总部查询和记录门店收银有无结算的信息等</div>
+                            </a> 
+                        </div>
+                        <?php endif;?>
+                        <?php if(Yii::app()->user->role <= '5'):?>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('poscount/hqindex',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">收银机排序</div>
+                                <div class="list_small">用于总部查询和记录门店收银有无结算的信息等</div>
+                            </a> 
+                        </div>
+                        <?php endif;?>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/diningNum',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">     
+                                <div class="list_big">聚餐人数</div>
+                                <div class="list_small">查询不同时间段的聚餐人数</div>           
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/tableareaReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">     
+                                <div class="list_big">台桌区域</div>
+                                <div class="list_small">查询桌台的客流、单数、金额统计和占比等</div>
+                            </a> 
+                        </div>
+                    </div>  
+                <?php endif;?>
+                </div> 
+				
 			</div>
 		</div>
 	</div>

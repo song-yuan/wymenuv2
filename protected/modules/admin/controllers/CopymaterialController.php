@@ -289,11 +289,15 @@ class CopymaterialController extends BackendController
         				if($materialunitratios['mulhs_code']&&$materialunitratios['mushs_code']){
 	        				$unit = MaterialUnitRatio::model()->find('mulhs_code=:mulcode and mushs_code=:muscode and dpid=:companyId and delete_flag =0' , array(':mulcode'=>$materialunitratios['mulhs_code'],':muscode'=>$materialunitratios['mushs_code'],':companyId'=>$dpid));
 	        				if($unit){
-	        					//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-	        					// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
+	        					$unit->update_at = date('Y-m-d H:i:s',time());
+	        					$unit->unit_ratio = $materialunitratios['unit_ratio'];
+	        					$unit->mulhs_code = $materialunitratios['mulhs_code'];
+	        					$unit->mushs_code = $materialunitratios['mushs_code'];
+	        					$unit->unit_code = $materialunitratios['unit_code'];
+	        					$unit->stock_unit_id = MaterialUnit::getMaterialUnitLid($dpid,$materialunitratios['mulhs_code']);
+	        					$unit->sales_unit_id = MaterialUnit::getMaterialUnitLid($dpid,$materialunitratios['mushs_code']);
+	        					$res = $unit->update();
 	        				}else{//var_dump($catep);exit;
-	        					//$unitlid = MaterialUnit::model()->find('muhs_code=:mulcode and dpid=:companyId and delete_flag =0' , array(':mulcode'=>$materialunitratios['mulhs_code'],':companyId'=>$dpid));
-	        					//$unitlid = MaterialUnit::model()->find('muhs_code=:muscode and dpid=:companyId and delete_flag =0' , array(':mulcode'=>$materialunitratios['mushs_code'],':companyId'=>$dpid));
 	        					$se = new Sequence("material_unit_ratio");
 	        					$id = $se->nextval();
 	        					$data = array(

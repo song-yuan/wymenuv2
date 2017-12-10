@@ -148,12 +148,20 @@ class Helper
 		}
 		
 	}
-	static public function genUsername($companyId) {//管理员
-		$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId.' and status=1 and role >='.Yii::app()->user->role) ;
-		// var_dump($companies);exit;
+	static public function genUsername($companyId,$s=0) {//管理员
+		if($s){
+			$companies = User::model()->findAll('delete_flag=0 and username = "'.yii::app()->user->username.'" and status=1 and role >='.Yii::app()->user->role) ;
+		}else{
+			$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId.' and status=1 and role >='.Yii::app()->user->role) ;
+		}// var_dump($companies);exit;
 		return CHtml::listData($companies, 'lid', 'username');
 	}
-	
+	static public function genRetreats($dpid) {//盘损原因
+		
+		$companies = Retreat::model()->findAll('delete_flag=0 and dpid='.$dpid.' and type=2 ') ;
+		
+		return CHtml::listData($companies, 'lid', 'name');
+	}
 	// 品项分类
 	static public function getCategory($companyId,$pid=0){
 		$command = Yii::app()->db->createCommand('select * from nb_material_category where dpid=:companyId and pid=:pid and delete_flag=0');

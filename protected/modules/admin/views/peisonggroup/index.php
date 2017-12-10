@@ -58,14 +58,14 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('companyset/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','价格体系组设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('companyset/list' , array('companyId' => $this->companyId)))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','配送体系组设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'price-group-create-form',
-				'action' => $this->createUrl('pricegroup/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('peisonggroup/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -80,7 +80,7 @@
 						<span class="tab tab-active"><?php echo yii::t('app','配送分组列表');?></span>
 					</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('companyGroup/index',array('companyId'=>$this->companyId));?>" class="btn yellow" ><i class="fa fa-search"></i> <?php echo yii::t('app','店铺对应价格分组');?></a>
+						<a href="<?php echo $this->createUrl('companyGroup/peisindex',array('companyId'=>$this->companyId));?>" class="btn yellow" ><i class="fa fa-search"></i> <?php echo yii::t('app','店铺对应配送体系');?></a>
 						<a href="<?php echo $this->createUrl('peisonggroup/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                         <a href="javascript:void(0)" class="btn red" id='deleted' ><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
 					</div>
