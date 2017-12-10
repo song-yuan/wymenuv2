@@ -173,9 +173,21 @@
             $(this).parent().remove();
         });
       });
-	  $('input[name="file"]').change(function(){
-		  	$('form').ajaxSubmit(function(msg){
-				$('#Product_main_picture').val(msg);
-			});
-	   });
+	$('input[name="file"]').change(function(){
+        $('form').ajaxSubmit(function(msg){
+            var str = msg.substr(0,1);
+            // alert(str);
+            if (str=='/') {
+                $('#ProductCategory_main_picture').val(msg);
+                layer.msg('图片选择成功!!!');
+            }else{
+                layer.msg(msg);
+                $('#img1 img').attr({
+                    src: '',
+                    width: '2px',
+                    height: '2px',
+                });
+            }
+        });
+   });
 </script>

@@ -56,7 +56,6 @@ class ProductCategoryController extends BackendController
 
 		if(Yii::app()->request->isAjaxRequest){
 			$hidden = Yii::app()->request->getParam('hidden');
-
 				//echo $hidden;exit;
 			if ($hidden==1) {
 				$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
