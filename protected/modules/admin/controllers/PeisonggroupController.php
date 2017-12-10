@@ -105,7 +105,7 @@ class PeisonggroupController extends BackendController
 					if(!empty($model)) {
 						$command = $model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 						if (!empty($command)) {
-							$modell = PeisongGroupDetail::model()->findAll('price_group_id=:lid and dpid=:companyId' , array(':lid' => $lid , ':companyId' => $dpid)) ;
+							$modell = PeisongGroupDetail::model()->findAll('peisong_group_id=:lid and dpid=:companyId' , array(':lid' => $lid , ':companyId' => $dpid)) ;
 							foreach ($modell as $modells) {
 								$commandl = $modells->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 							}
@@ -144,14 +144,12 @@ class PeisonggroupController extends BackendController
 			if($pname==null) {
 				$psname='';
 			}else{
-				$psname =' and s.material_name like "%'.$pname.'%"';
+				$psname =' and pm.material_name like "%'.$pname.'%"';
 			}
-			$sql='select pm.*,psgd.* from nb_product_material pm left join nb_peisong_group_detail psgd on(psgd.mphs_code=pm.mphs_code and psgd.peisong_group_id='.$peisonggroupid.') where  pm.delete_flag=0 and pm.dpid='.$dpid.$psname;
-			
+			$sql='select pm.mphs_code,pm.lid as pm_material_id,pm.material_name,psgd.material_id,psgd.lid,psgd.stock_dpid,psgd.peisong_group_id from nb_product_material pm left join nb_peisong_group_detail psgd on(psgd.mphs_code=pm.mphs_code and psgd.peisong_group_id='.$peisonggroupid.') where  pm.delete_flag=0 and pm.dpid='.$dpid.$psname;
 			$models = Yii::app()->db->createCommand($sql)->queryALL();
 			// p($models);
 			$sql1='select t.dpid,t.company_name from nb_company t where t.type=2 and t.delete_flag=0 and t.comp_dpid='.$dpid;
-			
 			$stock_dpids = Yii::app()->db->createCommand($sql1)->queryALL();
 			// p($stock_dpids);
 
@@ -161,74 +159,6 @@ class PeisonggroupController extends BackendController
 			$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 			$models = $pdata->queryAll();
-		}else{
-			$formdata = $_POST;
-			// p($formdata);
-			/*
-				批量插入新的产品价格
-			*/
-			$transaction = $db->beginTransaction();
-			try{
-			/*
-				批量插入分组产品价格详情
-			*/
-			if (!empty($_POST['price'])) {
-				foreach ($_POST['price'] as $lidp => $price) {
-					foreach ($_POST['is_set'] as $lidi => $is_set) {
-						foreach ($_POST['mb_price'] as $midl => $mb_price) {
-							foreach ($_POST['plid'] as $lidl => $plid) {
-								if ($lidp==$lidi&&$lidp==$lidl&&$lidp==$midl) {
-									$se=new Sequence("price_group_detail");
-									$lid = $se->nextval();
-									// p($lid);
-									$data = array(
-											'lid'=>$lid,
-											'dpid'=>$dpid,
-											'create_at'=>date('Y-m-d H:i:s',time()),
-											'update_at'=>date('Y-m-d H:i:s',time()),
-											'price_group_id'=>$pricegroupid,
-											'is_set'=>$is_set,
-											'price'=>$price,
-											'mb_price'=>$mb_price,
-											'product_id'=>$plid,
-											'delete_flag'=>'0',
-									);
-									$command = $db->createCommand()->insert('nb_price_group_detail',$data);
-								}
-							}
-						}
-					}
-				}
-			}
-			/*
-				批量修改分组产品价格详情
-			*/
-			$data = PriceGroupDetail::model();
-			if (!empty($_POST['priced'])) {
-				foreach ($_POST['priced'] as $lidp => $price) {
-					foreach ($_POST['mb_priced'] as $mdip => $mb_price) {
-						foreach ($_POST['is_seted'] as $lidi => $is_set) {
-							if ($lidp==$lidi&&$mdip==$lidi) {
-								$info = $data->find('lid=:lid',array(':lid'=>$lidp));
-								// p($info);
-								if($info) {
-									$info->saveAttributes(array('price'=>$price,'mb_price'=>$mb_price,'update_at'=>date('Y-m-d H:i:s',time())));
-								}
-							}
-						}
-					}
-				}
-			}
-			//执行事务
-            $transaction->commit();
-			Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-			$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'peisonggroupid'=>$peisonggroupid,'page'=>$page));
-			// p($formdata);
-			}catch(Exception $e){
-                $transaction->rollBack();
-                Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-                $this->redirect(array('pricegroup/detailIndex','companyId' => $this->companyId));
-            }
 		}
 		$this->render('detailindex',array(
 			'models'=> $models,
@@ -240,49 +170,44 @@ class PeisonggroupController extends BackendController
 		));
 	}
 	public function actionSaved(){
-		$lid = Yii::app()->request->getParam('lid');
-		$price = Yii::app()->request->getParam('price');
-		$mb_price = Yii::app()->request->getParam('mb_price');
-		$ist = Yii::app()->request->getParam('ist');
-		$pid = Yii::app()->request->getParam('pid');
-		$pricegroupid = Yii::app()->request->getParam('pricegroupid');
+		$lid = Yii::app()->request->getParam('lid');//配送详情表的id
+		$peisonggroupid = Yii::app()->request->getParam('peisonggroupid');
+		$stock_dpid = Yii::app()->request->getParam('stock_dpid');
+		$material_id = Yii::app()->request->getParam('material_id');
+		$mphs_code = Yii::app()->request->getParam('mphs_code');
+		// p($lid);
 		$dpid = Yii::app()->request->getParam('companyId');
 		$db = Yii::app()->db;
 		if (!empty($lid)) {
-			$data = PriceGroupDetail::model();
+			$data = PeisongGroupDetail::model();
 			$info = $data->find('lid=:lid',array(':lid'=>$lid));
 			if($info) {
-				$command = $info->saveAttributes(array('price'=>$price,'mb_price'=>$mb_price,'update_at'=>date('Y-m-d H:i:s',time())));
-				if($command){
-					Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-					$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+				$command = $info->saveAttributes(array('stock_dpid'=>$stock_dpid,'update_at'=>date('Y-m-d H:i:s',time())));
+				if(!empty($command)){
+					echo json_encode(array(1,$lid));exit;
 				}else{
-					Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-					$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+					echo json_encode(array(0));exit;
 				}
 			}
 		}else{
-			$se=new Sequence("price_group_detail");
+			$se=new Sequence("peisong_group_detail");
 			$lids = $se->nextval();
 			$data = array(
 					'lid'=>$lids,
 					'dpid'=>$dpid,
 					'create_at'=>date('Y-m-d H:i:s',time()),
 					'update_at'=>date('Y-m-d H:i:s',time()),
-					'price_group_id'=>$pricegroupid,
-					'is_set'=>$ist,
-					'price'=>$price,
-					'mb_price'=>$mb_price,
-					'product_id'=>$pid,
+					'peisong_group_id'=>$peisonggroupid,
+					'stock_dpid'=>$stock_dpid,
+					'material_id'=>$material_id,
+					'mphs_code'=>$mphs_code,
 					'delete_flag'=>'0',
 			);
-			$command = $db->createCommand()->insert('nb_price_group_detail',$data);
+			$command = $db->createCommand()->insert('nb_peisong_group_detail',$data);
 			if(!empty($command)){
-				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+				echo json_encode(array(1,$lids));exit;
 			}else{
-				Yii::app()->user->setFlash('error' ,yii::t('app', '修改失败'));
-				$this->redirect(array('pricegroup/detailIndex' , 'companyId' => $dpid,'pricegroupid'=>$pricegroupid));
+				echo json_encode(array(0));exit;
 			}
 		}
 	}

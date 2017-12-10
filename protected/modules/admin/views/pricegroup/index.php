@@ -77,11 +77,11 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption">
-						<span class="tab tab-active"><?php echo yii::t('app','价格分组列表');?></span>
+						<span class="tab tab-active"><?php echo yii::t('app','配送分组列表');?></span>
 					</div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('companyGroup/index',array('companyId'=>$this->companyId));?>" class="btn yellow" ><i class="fa fa-search"></i> <?php echo yii::t('app','店铺对应价格分组');?></a>
-						<a href="<?php echo $this->createUrl('pricegroup/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('peisonggroup/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                         <a href="javascript:void(0)" class="btn red" id='deleted' ><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
 					</div>
 				</div>
@@ -93,11 +93,11 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','价格分组名称');?></th>
+								<th><?php echo yii::t('app','配送分组名称');?></th>
 								<th><?php echo yii::t('app','简介');?></th>
 								<th><?php echo yii::t('app','添加时间');?></th>
 								<th><?php echo yii::t('app','组信息编辑');?></th>
-                                <th><?php echo yii::t('app','组内产品价格编辑');?></th>
+								<th><?php echo yii::t('app','组内原料编辑');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -108,15 +108,15 @@
 								<td><?php echo $model->group_desc;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('pricegroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑组信息');?></a>
+								<a href="<?php echo $this->createUrl('peisonggroup/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑组信息');?></a>
 								</td>
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('pricegroup/detailIndex',array('pricegroupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑产品价格明细');?></a>
+								<a href="<?php echo $this->createUrl('peisonggroup/detailIndex',array('peisonggroupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑组内原料明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
 						<?php else: ?>
-							<tr class="odd gradeX"><td>您还没有添加价格分组,请点右上角添加</td></tr>
+							<tr class="odd gradeX"><td>您还没有添加配送分组,或者,<span style="color:red;">当前选中的不是总部</span>,请点右上角添加</td></tr>
 						<?php endif;?>
 						</tbody>
 					</table>
@@ -161,7 +161,7 @@
 	</div>
 	<script>
 	$('#deleted').click(function() {
-		if (confirm('删除分组会影响已设置该分组的店铺的价格下发,如果确定删除,请之后去重新设置这些店铺的分组!!!')) {
+		if (confirm('删除分组会影响已设置该分组的店铺的原料采购,如果确定删除,请之后去重新设置这些店铺的分组!!!')) {
 			document.getElementById('price-group-create-form').submit();
 		}
 	});
