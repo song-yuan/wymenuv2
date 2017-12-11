@@ -67,7 +67,7 @@ class StocktakinglogController extends BackendController
 		$stocktakinglog = StockTakingDetail::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$detaillid,':dpid'=>$this->companyId,));
 		if($stocktakinglog){
 			$stocktakinglog->update_at = date('Y-m-d H:i:s',time());
-			$stocktakinglog->reasion = $reason;
+			$stocktakinglog->reasion = $stocktakinglog->reasion.'(新加)'.$reason;
 			if($stocktakinglog->update()){
 				Yii::app()->end(json_encode(array("status"=>true)));
 			}
