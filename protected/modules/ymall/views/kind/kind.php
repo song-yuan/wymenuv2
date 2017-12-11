@@ -43,6 +43,7 @@
 				width: 85%;
 				position:absolute;
 				bottom:8px;
+				font-size:0.9em;
 			}
 			/*.mui-search.mui-active .mui-placeholder {
 			    right: 200px!important;

@@ -7,7 +7,7 @@
 			padding-right:10px;
 			display:inline-block;
 		}
-        span.tab-active{
+                span.tab-active{
 			color:white;
 		}
 		.ku-item{
@@ -27,56 +27,6 @@
 			color:black;
 			text-align:center;
 		}
-		.ku-purple{
-			
-		}
-		.ku-grey{
-			/*background-color:#DB7093;*/
-		}
-		.ku-item.dpgl{
-			background-image:url(../../../../../../img/waiter/icon-dpjcsz.png);
-			background-position: 15px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.cgzh{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: 15px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.cszh{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -135px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.csls{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -285px 15px;
-    		background-repeat: no-repeat;
-		}
-		.ku-item.kczh{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -440px 15px;
-    		background-repeat: no-repeat;
-		}	
-		.ku-item.sdbb{
-			background-image:url(../../../../../../img/waiter/icon-sdbb.png);
-			background-position: 13px 15px;
-    		background-repeat: no-repeat;
-			background-size: 80%;
-		}
-		.ku-item.bkjl{
-			background-image:url(../../../../../../img/waiter/icon-bkjl.png);
-			background-position: 12px 13px;
-    		background-repeat: no-repeat;
-			background-size: 80%;
-		}	
-		.ku-item.sskc{
-			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
-			background-position: -590px 15px;
-    		background-repeat: no-repeat;
-		}	
-			
-				
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -84,7 +34,12 @@
 		.cf-black{
 			color: #000 !important;
 			
-		}		
+		}
+		.portlet-body a{
+            display: inline-block;
+        	height: 80px;
+        	border: 1px solid white;
+        }		
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -94,7 +49,9 @@
 	
 	<!-- BEGIN PAGE CONTENT-->
 	<?php if($type==1):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存数据'),'url'=>''))));?>
+		 <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存数据'),'url'=>''))));?>
+	<?php elseif($type==2):?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','会员数据'),'url'=>''))));?>
 	<?php endif;?>
 	<div class="row">
 		<div class="col-md-12">
@@ -105,50 +62,55 @@
 				<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-group">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
 				<div class="caption"><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-warning ">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app','清除数据');?></span></a></div>
 			</div>
-				<div class="portlet-body" style="min-height: 750px">
-					
-					<?php if($type==1):?>
-					<a href="<?php echo $this->createUrl('statementstock/stockReport',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey cgzh"></div>
-							<div class="ku-item-info">进销存日报</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statementstock/stockmonthReport',array('companyId'=>$this->companyId,'text'=>2));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey cszh"></div>
-							<div class="ku-item-info">进销存月报</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statementstock/stockallReport',array('companyId'=>$this->companyId,'text'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey csls"></div>
-							<div class="ku-item-info">进销存汇总</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statementstock/stockdifferReport',array('companyId'=>$this->companyId,'text'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey kczh"></div>
-							<div class="ku-item-info">库存差异报</div>
-						</div>
-					</a>
-					<a style="display: none;" href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sskc"></div>
-							<div class="ku-item-info">实时库存</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statementstock/stocksalesReport',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sskc"></div>
-							<div class="ku-item-info">库存消耗</div>
-						</div>
-					</a>
-					<?php endif;?>
-				</div>
+			<div class="portlet-body clearfix" >
+			<?php if($type==1):?>
+				<div class= "panel_body row">
+                <p>进销存数据</p>
+					<div class="list col-sm-3 col-xs-12">
+	                   <a href="<?php echo $this->createUrl('statementstock/stockReport',array('companyId'=>$this->companyId,'type'=>1));?>">
+	                        <div class="list_big">进销存日报</div>
+	                        <div class="list_small">统计今日进销存的消耗信息</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                   <a href="<?php echo $this->createUrl('statementstock/stockmonthReport',array('companyId'=>$this->companyId,'text'=>2));?>">
+	                        <div class="list_big">进销存月报</div>
+	                        <div class="list_small">统计一个月量的进销存的消耗信息</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                   <a href="<?php echo $this->createUrl('statementstock/stockallReport',array('companyId'=>$this->companyId,'text'=>1));?>">
+	                        <div class="list_big">进销存汇总</div>
+	                        <div class="list_small">统计进销存总量的消耗信息</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                   <a href="<?php echo $this->createUrl('statementstock/stockdifferReport',array('companyId'=>$this->companyId,'text'=>1));?>">
+	                        <div class="list_big">库存差异报</div>
+	                        <div class="list_small">统计库存的销售总成本和差异总成本信息等</div>
+	                    </a> 
+	                </div>
+	                <?php if(yii::app()->user->role < 1):?>
+	                <div class="list col-sm-3 col-xs-12">
+	                   <a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>">
+	                        <div class="list_big">实时库存</div>
+	                        <div class="list_small">查询</div>
+	                    </a> 
+	                </div>
+	            	<?php endif;?>
+	                <div class="list col-sm-3 col-xs-12">
+	                   <a href="<?php echo $this->createUrl('statementstock/stocksalesReport',array('companyId'=>$this->companyId,'type'=>1));?>">
+	                        <div class="list_big">库存消耗</div>
+	                        <div class="list_small">查询实时的库存消耗量</div>
+	                    </a> 
+	                </div>
+	            </div>
+	        <?php endif;?>
+			</div>
 			</div>
 		</div>
 	</div>
+</div>
 	<!-- END PAGE CONTENT-->
 	<script>
         $(document).ready(function() {
@@ -156,4 +118,4 @@
                 $('.modal').modal();
            });
         });
-	</script>
+	</script> 	
