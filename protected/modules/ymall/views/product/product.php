@@ -278,27 +278,37 @@
 							<h4>店铺原料库存</h4>
 							<!-- HTML5 -->
 							<div style="width: 96%;margin:0 auto;position: relative;">
-								<?php if($stocks): 
+								<?php if($stocks):
 									$arr = array();
 									foreach ($stocks as $key => $value) {
 										if(!isset($arr[$value['category_id']])){
 											$arr[$value['category_id']] = array();
 										}
+										if(isset($stocks_arr['lid'.$value['lid']])){
+											// p($stocks_arr['lid'.$value['lid']]);
+											$value['safe_stock'] = $stocks_arr['lid'.$value['lid']]['safe_stock'];
+											$value['max_stock'] = $stocks_arr['lid'.$value['lid']]['max_stock'];
+										}else{
+											$value['safe_stock'] = $value['stock'];
+											$value['max_stock'] = $value['stock'];
+										}
 										array_push($arr[$value['category_id']], $value);
 									}
-									// p($arr);
 								?>
-								<?php foreach ($arr as $ar): ?>
+								<?php
+								foreach ($arr as $ar):
+
+								?>
 								<fieldset>
 									<legend><?php echo $ar[0]['category_name']; ?></legend>
 									<?php foreach ($ar as  $stock): ?>
-							    	<p style="width:100%;margin:0;" data-value="<?php if ($stock['stock']<1 || $stock['stock']<$stock['safe_stock']) {echo '危险库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} elseif ( $stock['stock']>$stock['max_stock']) {echo '充足库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} else {echo '安全库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} ?>"><?php echo $stock['material_name']; ?></p>
+							    	<p style="width:100%;margin:0;" data-value="<?php if ($stock['stock']<1 ||$stock['stock']<$stock['safe_stock']) {echo '危险库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} elseif ( $stock['stock']>$stock['max_stock']) {echo '充足库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} else {echo '安全库存 ! 剩余: '.$stock['stock'].' '.$stock['unit_name'];} ?>"><?php echo $stock['material_name']; ?></p>
 									<progress style="width:100%;" max="<?php echo $stock['max_stock']; ?>" value="<?php echo $stock['stock']; ?>" class="html5"></progress>
 									<?php endforeach; ?>
 								</fieldset>
 								<?php endforeach; ?>
 								<?php endif; ?>
-								
+
 							</div>
 						</div>
 
@@ -309,7 +319,7 @@
 		</div>
 		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/prefixfree.min.js"></script>
 		<script>
-		
+
 			//采购订单生成对话框
 			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
 				var btnArray = ['否','是'];
