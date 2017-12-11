@@ -422,35 +422,32 @@ class InventoryController extends BackendController
 
 
 	public function actionAllStore(){
-	
+		$pid = Yii::app()->request->getParam('pid');
 		$username = Yii::app()->user->username;
-		$optvals = Yii::app()->request->getParam('optval');
-		$categoryId = Yii::app()->request->getParam('cid',0);
-		$sttype = Yii::app()->request->getParam('sttype',1);
-		$optval = array();
-		$optval = explode(';',$optvals);
-		//var_dump($optval);
 		$dpid = $this->companyId;
 		$db = Yii::app()->db;
 		$nostockmsg = '';
-		$transaction = $db->beginTransaction();
-		try
-		{
-			$is_sync = DataSync::getInitSync();
-			//盘点日志
-			$stocktaking = new StockTaking();
-			$se=new Sequence("stock_taking");
-			$logid = $stocktaking->lid = $se->nextval();
-			$stocktaking->dpid = $dpid;
-			$stocktaking->create_at = date('Y-m-d H:i:s',time());
-			$stocktaking->update_at = date('Y-m-d H:i:s',time());
-			$stocktaking->username = $username ;
-			$stocktaking->title =''.date('m月d日 H时i分',time()).' 盘点操作记录';
-			$stocktaking->status = 0;
-			$stocktaking->is_sync = $is_sync;
-			$stocktaking->save();
-				
-			foreach ($optval as $opts){
+// 		$transaction = $db->beginTransaction();
+// 		try
+// 		{
+// 			$is_sync = DataSync::getInitSync();
+// 			//盘点日志
+// 			$stocktaking = new StockTaking();
+// 			$se=new Sequence("stock_taking");
+// 			$logid = $stocktaking->lid = $se->nextval();
+// 			$stocktaking->dpid = $dpid;
+// 			$stocktaking->create_at = date('Y-m-d H:i:s',time());
+// 			$stocktaking->update_at = date('Y-m-d H:i:s',time());
+// 			$stocktaking->username = $username ;
+// 			$stocktaking->title =''.date('m月d日 H时i分',time()).' 盘点操作记录';
+// 			$stocktaking->status = 0;
+// 			$stocktaking->is_sync = $is_sync;
+// 			$stocktaking->save();
+
+			$sql = 'select * from nb_inventory_detail where delete_flag = 0 and dpid ='.$dpid.' and inventory_id ='.$pid;
+			$invends = $db->createCommand($sql)->queryAll();
+			var_dump($invends);exit;
+			foreach ($invends as $in){
 				$opt = array();
 				$opt = explode(',',$opts);
 				$id = $opt[0];
@@ -708,16 +705,16 @@ class InventoryController extends BackendController
 					$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
 				}
 			}
-			$transaction->commit();
-			Yii::app()->end(json_encode(array("status"=>"success","msg"=>$nostockmsg,"logid"=>$logid)));
+// 			$transaction->commit();
+// 			Yii::app()->end(json_encode(array("status"=>"success","msg"=>$nostockmsg,"logid"=>$logid)));
 	
-			return true;
-		}catch (Exception $e) {
-			$transaction->rollback(); //如果操作失败, 数据回滚
-			exit;
-			Yii::app()->end(json_encode(array("status"=>"fail")));
-			return false;
-		}
+// 			return true;
+// 		}catch (Exception $e) {
+// 			$transaction->rollback(); //如果操作失败, 数据回滚
+// 			exit;
+// 			Yii::app()->end(json_encode(array("status"=>"fail")));
+// 			return false;
+// 		}
 	}
 	
 	
