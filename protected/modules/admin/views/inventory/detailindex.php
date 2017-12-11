@@ -167,13 +167,13 @@
 					data:{pid:pid},
 					success:function(msg){
 						//alert(msg);
-						if(msg=='true'){
-							alert('盘损成功');
+						if(msg.status=='success'){
+							layer.msg('盘损成功');
 						}else{
-							alert('盘损失败');
+							layer.msg('盘损失败');
 						}
 						//history.go(0);
-						//location.href="<?php echo $this->createUrl('inventory/index' , array('companyId'=>$this->companyId,));?>";
+						location.href="<?php echo $this->createUrl('inventory/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
 			}
