@@ -175,7 +175,7 @@ class PricegroupController extends BackendController
 				$sql='select  d.lid,s.lid as plid,s.member_price,s.set_name as name,s.main_picture,1 as is_set ,s.set_price as yuanjia,d.price,d.mb_price from nb_product_set s left JOIN nb_price_group_detail d on (s.lid=d.product_id and s.dpid=d.dpid and d.is_set=1 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.')  where s.delete_flag=0 and s.dpid='.$dpid.$psname.$scid;
 			}else if($istaocan==0){
 				//单品
-				$sql='select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.' )  where t.delete_flag=0 and t.dpid='.$dpid.pdname.$dcid;
+				$sql='select  d.lid,t.lid as plid,t.member_price,t.product_name as name,t.main_picture,0 as is_set,t.original_price as yuanjia,d.price,d.mb_price from nb_product t left JOIN nb_price_group_detail d on (t.lid=d.product_id and t.dpid=d.dpid and d.is_set=0 and d.delete_flag=0 and d.price_group_id='.$pricegroupid.' )  where t.delete_flag=0 and t.dpid='.$dpid.$pdname.$dcid;
 			}
 			$models = Yii::app()->db->createCommand($sql)->queryALL();
 			// p($models);
