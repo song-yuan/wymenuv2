@@ -13,8 +13,8 @@ class KindController extends BaseYmallController
 		// 		.' order by g.category_id';
 
 		$sql = 'select ggm.material_code,ggm.goods_code,ggm.goods_name,ggm.lid as glid,ggm.main_picture,ggm.original_price,ggm.member_price,ggm.goods_unit,c.company_name,c.dpid,mc.lid,mc.category_name 
-		from ( select psgd.* from nb_peisong_group_detail psgd left join nb_peisong_group psg on(psgd.peisong_group_id=psg.lid) where psg.lid=(select peisong_id from nb_company_property where dpid='.$this->companyId.')) psgs
-		inner join (select g.*,gm.material_code from nb_goods g left join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(ggm.dpid=psgs.stock_dpid and ggm.material_code=psgs.mphs_code)
+		from ( select psgd.* from nb_peisong_group_detail psgd inner join nb_peisong_group psg on(psgd.peisong_group_id=psg.lid) where psg.lid=(select peisong_id from nb_company_property where dpid='.$this->companyId.')) psgs
+		inner join (select g.*,gm.material_code from nb_goods g inner join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(ggm.dpid=psgs.stock_dpid and ggm.material_code=psgs.mphs_code)
 		inner join nb_material_category mc on (mc.lid=ggm.category_id and mc.delete_flag=0)
 		inner join nb_company c on(c.dpid=ggm.dpid) 
 		where  ggm.delete_flag=0
