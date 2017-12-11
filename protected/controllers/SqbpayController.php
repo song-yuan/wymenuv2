@@ -97,7 +97,7 @@ class SqbpayController extends Controller
 				$orders = Yii::app()->db->createCommand($sql)
 				->queryRow();
 				if(!empty($orders)){
-					if($orders['order_status'] == '4' || $orders['order_status'] == '8' ){
+					if(in_array($orders['order_status'],array(3,4,8))){
 						
 						
 						$orderstatus = false;
