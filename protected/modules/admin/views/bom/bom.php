@@ -33,7 +33,7 @@
 		.ku-grey{
 			/*background-color:#DB7093;*/
 		}
-		.ku-item.kusz{
+		/*.ku-item.kusz{
 			background-image:url(../../../../../../img/waiter/icon-kcsz.png);
 			background-position: center center;
     		background-size: 80%;
@@ -129,12 +129,12 @@
 			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
 			background-position: -135px -150px;
     		background-repeat: no-repeat;
-		}
+		}*/
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
 		}
-		.ku-item.sskc{
+/*		.ku-item.sskc{
 			background-image:url(../../../../../../img/waiter/icon-sskc.png);
 			background-position: 22px 20px;
 			background-size: 60% ;
@@ -145,7 +145,7 @@
 			background-position: 22px 20px;
 			background-size: 60% ;
     		background-repeat: no-repeat;
-		}
+		}*/
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -216,14 +216,24 @@
 						<?php endif;?>
 					</div>
 				</div>
+
 				<div class="portlet-body clearfix" style="min-height: 450px">
 					<?php if($type==0):?>
-					<a href="<?php echo $this->createUrl('stockSetting/index',array('companyId'=>$this->companyId));?>">
+						<div class="panel_body row">
+	                        <p>库存设置</p>
+	                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                            <a href="<?php echo $this->createUrl('stockSetting/index',array('companyId'=>$this->companyId));?>">
+	                                <div class="list_big">库存设置</div>
+	                                <div class="list_small">设置原材料的而安全库存</div>
+	                            </a> 
+	                        </div>
+	                    </div>
+					<!-- <a href="<?php echo $this->createUrl('stockSetting/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple kusz"></div>
 							<div class="ku-item-info">库存设置</div>
 						</div>
-					</a>
+					</a> -->
 					<?php elseif($type==1):?>
 					<a href="<?php echo $this->createUrl('materialCategory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
@@ -287,7 +297,107 @@
 					</a>
 					
 					<?php elseif($type==2):?>
-					<a href="<?php echo $this->createUrl('mfrClassification/index',array('companyId'=>$this->companyId));?>">
+					<div class="panel_body row">
+	                    <p>厂商信息设置</p>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('mfrClassification/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">厂商分类</div>
+	                            <div class="list_small">设置厂商代表的原材料分类</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('mfrInformation/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">厂商信息</div>
+	                            <div class="list_small">设置厂商的信息</div>
+	                        </a> 
+	                    </div>
+	                </div>
+	                <div class="panel_body row">
+	                    <p>采购与入库</p>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('purchaseOrder/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">采购订单</div>
+	                            <div class="list_small">设置从哪家原材料厂商采购</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('storageOrder/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">入库订单</div>
+	                            <div class="list_small">设置入库原材料信息</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('nowmaterialstock/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">实时库存</div>
+	                            <div class="list_small">查询原材料的实时数量</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('refundOrder/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">退货订单</div>
+	                            <div class="list_small">设置原材料的退货信息</div>
+	                        </a> 
+	                    </div>
+	                    <?php $companyType = Helper::getcompanyType($this->companyId);
+						if(in_array($companyType,array(0,2))): 
+					?>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('commit/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">调拨</div>
+	                            <div class="list_small">设置原材料的退货信息</div>
+	                        </a> 
+	                    </div>
+	                    <?php endif;?>
+	                </div>
+	                <div class="panel_body row">
+	                    <p>库存的盘点与盘损</p>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">盘点</div>
+	                            <div class="list_small">设置店铺原材料的库存</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('stockTaking/damagereason',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">盘损原因</div>
+	                            <div class="list_small">设置原材料的损耗的原因</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('stockTaking/damageindex',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">盘损</div>
+	                            <div class="list_small">设置原材料的损耗</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('inventory/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">盘损</div>
+	                            <div class="list_small">设置原材料的损耗</div>
+	                        </a> 
+	                    </div>
+	                </div>
+	                <div class="panel_body row">
+	                    <p>盘点与盘损记录</p>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>0));?>">
+	                            <div class="list_big">盘点日志</div>
+	                            <div class="list_small">查询盘点的详细信息</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>1));?>">
+	                            <div class="list_big">盘损日志</div>
+	                            <div class="list_small">查询盘损的详细信息</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+	                            <div class="list_big">库存日志</div>
+	                            <div class="list_small">查询日常原材料消耗的明细</div>
+	                        </a> 
+	                    </div>
+	                </div>
+					<!-- <a href="<?php echo $this->createUrl('mfrClassification/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple csfl"></div>
 							<div class="ku-item-info">厂商分类</div>
@@ -298,89 +408,89 @@
 							<div class="ku-item ku-purple csxx"></div>
 							<div class="ku-item-info">厂商信息</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('purchaseOrder/index',array('companyId'=>$this->companyId));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('purchaseOrder/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cgdd"></div>
 							<div class="ku-item-info">采购订单</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('storageOrder/index',array('companyId'=>$this->companyId));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('storageOrder/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple rkdd"></div>
 							<div class="ku-item-info">入库订单</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('refundOrder/index',array('companyId'=>$this->companyId));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('refundOrder/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple thdd"></div>
 							<div class="ku-item-info">退货订单</div>
 						</div>
-					</a>
+					</a> -->
 					<?php $companyType = Helper::getcompanyType($this->companyId);
 						if(in_array($companyType,array(0,2))): 
 					?>
-					<a href="<?php echo $this->createUrl('commit/index',array('companyId'=>$this->companyId));?>">
+					<!-- <a href="<?php echo $this->createUrl('commit/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple db"></div>
 							<div class="ku-item-info">调拨</div>
 						</div>
-					</a>
+					</a> -->
 					 <?php endif;?>
-					 <a href="<?php echo $this->createUrl('stockTaking/damagereason',array('companyId'=>$this->companyId));?>">
+					 <!-- <a href="<?php echo $this->createUrl('stockTaking/damagereason',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损原因</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('stockTaking/damageindex',array('companyId'=>$this->companyId));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('stockTaking/damageindex',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损</div>
 						</div>
-					</a>
-					 <a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
+					</a> -->
+					<!--  <a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>
 							<div class="ku-item-info">盘点</div>
 						</div>
-					</a>
+					</a> -->
 					<!-- <a href="<?php echo $this->createUrl('stockInventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>
 							<div class="ku-item-info">盘存</div>
 						</div>
 					</a> -->
-					<a href="<?php echo $this->createUrl('inventory/index',array('companyId'=>$this->companyId));?>">
+					<!-- <a href="<?php echo $this->createUrl('inventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('nowmaterialstock/index',array('companyId'=>$this->companyId));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('nowmaterialstock/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sskc"></div>
 							<div class="ku-item-info">实时库存</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>0));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>0));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey pdrz"></div>
 							<div class="ku-item-info">盘点日志</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>1));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey pdrz"></div>
 							<div class="ku-item-info">盘损日志</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey kcrz"></div>
 							<div class="ku-item-info">库存日志</div>
 						</div>
-					</a>
+					</a> -->
 					<?php endif;?>
 				</div>
 			</div>
