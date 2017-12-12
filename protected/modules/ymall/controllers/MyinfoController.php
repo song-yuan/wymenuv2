@@ -82,7 +82,6 @@ class MyinfoController extends BaseYmallController
 
 	public function actionNormalsetting()
 	{
-
 		$this->render('normalsetting',array(
 		));
 	}
@@ -644,7 +643,7 @@ class MyinfoController extends BaseYmallController
 							$is_sync = DataSync::getInitSync();
 							$data=array(
 								'lid'=>$lid,
-								'dpid'=>$this->companyId,//公司的dpid
+								'dpid'=>$this->companyId,
 								'create_at'=>date('Y-m-d H:i:s',time()),
 								'update_at'=>date('Y-m-d H:i:s',time()),
 								'material_id'=>$product['lid'],
@@ -658,6 +657,10 @@ class MyinfoController extends BaseYmallController
 								'is_sync'=>$is_sync,
 							);
 							$info1 = Yii::app()->db->createCommand()->insert('nb_product_material_stock',$data);
+
+							$sql = 'update nb_product_material_stock set stock=0 where stock<0 and delete_flag=0 and mphs_code='.$product['material_code'].' and dpid='.$this->companyId;
+							$command=$db->createCommand($sql)->execute();
+
 							//记录该商品损耗
 							if ($infod[1]) {
 								$see=new Sequence("goods_stock_taking");
@@ -718,7 +721,7 @@ class MyinfoController extends BaseYmallController
 				$is_sync = DataSync::getInitSync();
 				$data=array(
 					'lid'=>$lid,
-					'dpid'=>$this->companyId,//公司的dpid
+					'dpid'=>$this->companyId,
 					'create_at'=>date('Y-m-d H:i:s',time()),
 					'update_at'=>date('Y-m-d H:i:s',time()),
 					'material_id'=>$product['lid'],
@@ -732,6 +735,8 @@ class MyinfoController extends BaseYmallController
 					'is_sync'=>$is_sync,
 				);
 				$info = Yii::app()->db->createCommand()->insert('nb_product_material_stock',$data);
+				$sql = 'update nb_product_material_stock set stock=0 where stock<0 and delete_flag=0 and mphs_code='.$product['material_code'].' and dpid='.$this->companyId;
+				$command=$db->createCommand($sql)->execute();
 				if($info){
 				$i+=1;
 				}
