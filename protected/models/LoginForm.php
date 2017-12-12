@@ -25,7 +25,6 @@ class LoginForm extends CFormModel
 			array('username, password', 'required'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
-				array('is_sync','length','max'=>50),
 			// password needs to be authenticated
 			array('password', 'authenticate'),
 		);
@@ -37,7 +36,9 @@ class LoginForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'rememberMe'=>'Remember me next time',
+			'username' => yii::t('app','用户名'),
+			'password' => yii::t('app','密码'),
+			'rememberMe'=>yii::t('app','记住用户名'),
 		);
 	}
 
@@ -50,8 +51,10 @@ class LoginForm extends CFormModel
 		if(!$this->hasErrors())
 		{
 			$this->_identity=new UserIdentity($this->username,$this->password);
-			if(!$this->_identity->authenticate())
-				$this->addError('password','Incorrect username or password.');
+			$valid = $this->_identity->authenticate();
+			if($valid['status']) {
+				$this->addError($valid['field'] , $valid['status'] == 1 ? yii::t('app','用户不存在'): yii::t('app',' 密码错误'));
+			}
 		}
 	}
 
@@ -62,15 +65,22 @@ class LoginForm extends CFormModel
 	public function login()
 	{
 		if($this->_identity===null)
-		{	//var_dump($_identity);exit;
+		{
 			$this->_identity=new UserIdentity($this->username,$this->password);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
-		{	
+		{ 
 			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
-			Yii::app()->user->login($this->_identity,$duration);
-			return true;
+			//echo Yii::app()->user->login($this->_identity,$duration);exit;
+			if(Yii::app()->user->login($this->_identity,$duration)) {
+				//echo Yii::app()->user->login($this->_identity,$duration);
+				//exit;
+				return true;
+			} else {//var_dump($this->_identity);exit;
+				Yii::app()->user->setFlash('error' ,yii::t('app', '对不起，你没有权限登陆'));
+				return false ;
+			}
 		}
 		else
 			return false;
