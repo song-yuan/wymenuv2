@@ -220,12 +220,12 @@
 	function changeselect(){
 		var istaocan = $('#istaocan').children('option:selected').val();
 		var pricegroupid ="<?php echo $pricegroupid; ?>";
-		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan;
+		location.href="<?php echo $this->createUrl('pricegroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan;
 	 }
 	$('#selectCategory').change(function(){
 		var cid = $(this).val();
 		var pricegroupid ="<?php echo $pricegroupid; ?>";
-		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/cid/"+cid;
+		location.href="<?php echo $this->createUrl('pricegroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/cid/"+cid;
 	});
 
 	$('#search').click(function(event) {
@@ -235,7 +235,7 @@
 		var pname = $('#pname').val();
 		var cid = $('#selectCategory').val();
 		// alert(pname);
-		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan+"/pname/"+pname+"/cid/"+cid;
+		location.href="<?php echo $this->createUrl('pricegroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan+"/pname/"+pname+"/cid/"+cid;
 	});
 
 	document.onkeydown=function(event){
@@ -245,7 +245,7 @@
 		var istaocan = $('#istaocan').children('option:selected').val();
 		var pricegroupid ="<?php echo $pricegroupid; ?>";
 		var pname = $('#pname').val();
-		location.href="<?php echo $this->createUrl('priceGroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan+"/pname/"+pname;
+		location.href="<?php echo $this->createUrl('pricegroup/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/istaocan/"+istaocan+"/pname/"+pname;
         }
     };
 </script>

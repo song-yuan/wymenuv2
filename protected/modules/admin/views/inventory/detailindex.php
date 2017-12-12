@@ -87,6 +87,7 @@
 								<td colspan="6" style="text-align: right;">
 								<?php if($storage->status==1):?><span style="color:red">已确认盘损</span>
 								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<13):?><input id="status-0" type="button" class="btn blue" value="确认盘损" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
+								<?php elseif($storage->status ==2):?><span style="color:green">盘损单已失效</span>
 								<?php endif;?>
 								</td>
 							</tr>
@@ -157,20 +158,20 @@
 				}
 		});
 		$('#status-0').click(function(){
-			var pid = $(this).attr('storage-id');
+			var pid = '<?php echo $slid;?>';
 			var storagedetail = $('#storagedetail').attr('val');
 			//alert(pid);
 			if(storagedetail == 1){
 			if(confirm('确认盘损')){
 				$.ajax({
-					url:'<?php echo $this->createUrl('inventory/storageVerify',array('companyId'=>$this->companyId));?>',
-					data:{type:1,pid:pid},
+					url:'<?php echo $this->createUrl('inventory/allStore',array('companyId'=>$this->companyId));?>',
+					data:{pid:pid},
 					success:function(msg){
 						//alert(msg);
-						if(msg=='true'){
-							alert('盘损成功');
+						if(msg.status=='success'){
+							layer.msg('盘损成功');
 						}else{
-							alert('盘损失败');
+							layer.msg('盘损失败');
 						}
 						//history.go(0);
 						location.href="<?php echo $this->createUrl('inventory/index' , array('companyId'=>$this->companyId,));?>";
@@ -181,75 +182,5 @@
 				alert('请添加需盘损的详细品项');
 				}
 		});
-		$('#status-1').click(function(){
-			var pid = $(this).attr('storage-id');
-			var storagedetail = $('#storagedetail').attr('val');
-			
-			if(storagedetail == 1){
-			if(confirm('确认驳回该入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
-					data:{type:2,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('驳回成功');
-						}else{
-							alert('驳回失败');
-						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			}else{
-				alert('请添加需要入库的详细品项');
-				}
-		});
-		$('#status-2').click(function(){
-			var pid = $(this).attr('storage-id');
-			var storagedetail = $('#storagedetail').attr('val');
-			
-			if(storagedetail == 1){
-			if(confirm('确认重新送审该入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
-					data:{type:4,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('重新审核成功');
-						}else{
-							alert('重新审核失败');
-						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			}else{
-				alert('请添加需要入库的详细品项');
-				}
-		});
-		$('#status-4').click(function(){
-			var pid = $(this).attr('storage-id');
-			
-			if(confirm('确认审核入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
-					data:{type:1,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('审核成功');
-						}else{
-							alert('审核失败');
-						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			
-		});
-
-		
 	});
 	</script>	

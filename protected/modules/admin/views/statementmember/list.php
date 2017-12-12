@@ -64,7 +64,12 @@
 		.cf-black{
 			color: #000 !important;
 			
-		}		
+		}
+		.portlet-body a{
+            display: inline-block;
+        	height: 80px;
+        	border: 1px solid white;
+        }		
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -87,50 +92,67 @@
 				<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-group">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
 				<div class="caption"><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-warning ">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app','清除数据');?></span></a></div>
 			</div>
-				<div class="portlet-body" style="min-height: 750px">
-					
-					
-					<?php if($type==2):?>
-					<a href="<?php echo $this->createUrl('statementmember/wxmemberReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey yysj"></div>
-							<div class="ku-item-info">微信会员</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('statementmember/cardmemberReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sdbb"></div>
-							<div class="ku-item-info">实卡会员</div>
-						</div>
-					</a>
-					<?php if(yii::app()->user->role <=5):?>
-					<a href="<?php echo $this->createUrl('statementmember/wxRecharge',array('companyId' => $this->companyId,'text'=>'2','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey czjl"></div>
-							<div class="ku-item-info">充值统计</div>
-						</div>
-					</a>
-					<?php endif;?>
-					<?php if(yii::app()->user->role <=5):?>
-					<a href="<?php echo $this->createUrl('statementmember/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式</div>
-						</div>
-					</a>
-					<?php endif;?>
-					<?php elseif($type==3):?>
-					<a href="<?php echo $this->createUrl('statementmember/clearTestdata',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey qcsj"></div>
-							<div class="ku-item-info">数据清除</div>
-						</div>
-					</a>
-					<?php endif;?>
-				</div>
-			</div>
+		<?php if($type==2):?>
+			<div class="portlet-body clearfix" >
+				<div class= "panel_body row">
+	                <p>会员记录报表</p>
+	                <div class="list col-sm-3 col-xs-12">
+	                    <a href="<?php echo $this->createUrl('statements/recharge',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+	                        <div class="list_big">充值记录</div>
+	                        <div class="list_small">查询实体卡和微会员的所有充值记录</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                    <a href="<?php echo $this->createUrl('statements/membercard',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+	                        <div class="list_big">办卡记录</div>
+	                        <div class="list_small">查询所有实体卡和微信会员的生成记录</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                    <a href="<?php echo $this->createUrl('statementmember/wxmemberReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+	                        <div class="list_big">微信会员</div>
+	                        <div class="list_small">按条件查询微信会员的基础信息</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                    <a href="<?php echo $this->createUrl('statementmember/cardmemberReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+	                        <div class="list_big">实卡会员</div>
+	                        <div class="list_small">按条件查询实体卡会员的基础信息</div>
+	                    </a> 
+	                </div>
+	                <?php if(yii::app()->user->role <=5):?>
+	                <div class="list col-sm-3 col-xs-12">
+	                    <a href="<?php echo $this->createUrl('statementmember/wxRecharge',array('companyId' => $this->companyId,'text'=>'2','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+	                        <div class="list_big">充值统计</div>
+	                        <div class="list_small">查询微信会员的总充值及总消费信息等</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                    <a href="<?php echo $this->createUrl('statementmember/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+	                        <div class="list_big">会员支付方式</div>
+	                        <div class="list_small">查询所有会员的在店铺的消费信息及支付方式</div>
+	                    </a> 
+	                </div>
+	            	<?php endif;?>
+	            </div>
+	        </div>
+	    	<?php elseif($type==3):?>
+			<div class="portlet-body clearfix" >
+				<div class= "panel_body row">
+	                <p>数据清除</p>
+					<div class="list col-sm-3 col-xs-12">
+                    	<a href="<?php echo $this->createUrl('statementmember/clearTestdata',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">     
+                        	<div class="list_big">数据清除</div>
+                        	<div class="list_small"></div>
+                    	</a> 
+                	</div>
+                </div>
+            </div>
+            <?php endif;?>
+		</div>
 		</div>
 	</div>
+</div>
 	<!-- END PAGE CONTENT-->
 	<script>
         $(document).ready(function() {

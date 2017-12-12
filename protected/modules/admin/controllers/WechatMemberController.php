@@ -285,17 +285,13 @@ class WechatMemberController extends BackendController {
         $source = Yii::app()->request->getPost('source',"");//来源
         $foucsfrom = Yii::app()->request->getPost('foucsfrom',"");//关注开始时间
         $foucsto = Yii::app()->request->getPost('foucsto',"");//关注结束时间时间
-        // p($_POST);
+
         if($pointfrom==0)
         {
             $pointfrom=-999999;
         }
         $pointto = Yii::app()->request->getPost('pointto',"9999999999");
         $remainfrom = Yii::app()->request->getPost('remainfrom',"0");
-        // if($remainfrom==0)
-        // {
-        //  $remainfrom=-999999;
-        // }
         $remainto = Yii::app()->request->getPost('remainto',"9999999999");
 
         //时间范围
@@ -304,10 +300,6 @@ class WechatMemberController extends BackendController {
 
         //总消费额范围
         $consumetotalfrom = Yii::app()->request->getPost('consumetotalfrom',"0");
-        // if($consumetotalfrom==0)
-        // {
-        //  $consumetotalfrom=-999999;
-        // }
         $consumetotalto = Yii::app()->request->getPost('consumetotalto',"9999999999");
 
         //消费次数
@@ -334,9 +326,6 @@ class WechatMemberController extends BackendController {
             $users = '0000000000';
         }
         $criteria = new CDbCriteria;
-        //var_dump($sql);exit;
-        //用sql语句查询出所有会员及消费总额、历史积分、余额、
-
         //来源店铺条件 省 市 地区
         if($findprovince!="请选择..")
         {
@@ -390,30 +379,21 @@ class WechatMemberController extends BackendController {
 
         //关注时间数据处理
         if($foucsfrom){
-            $sql .= " and t.create_at >='".$foucsfrom."'";
+            $sql .= " and t.create_at >='".$foucsfrom." 00:00:00'";
         }
         if($foucsto){
-            $sql .= " and t.create_at <='".$foucsto."'";
+            $sql .= " and t.create_at <='".$foucsto." 23:59:59'";
         }
-
 
         $yearnow=date('Y',time());
         $yearbegin=$yearnow-$ageto;
         $yearend=$yearnow-$agefrom;
         $sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) <= '".$yearend."'";
         $sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) <= '".$birthto."'";
-        //$sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
-        //$sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) >= "
-        //  .$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) <=".$remainto;
         $sql.=" and ifnull(tct.consumetotal,0) >= ".$consumetotalfrom." and ifnull(tct.consumetotal,0)<=".$consumetotalto;
         $sql.=" and ifnull(tct.consumetimes,0) >= ".$timesfrom." and ifnull(tct.consumetimes,0)<=".$timesto;
         $sql = 'select cf.* from ('.$sql.') cf';
         $models = $db->createCommand($sql)->queryAll();
-
-
-// p($models);
-
-
 
         $objPHPExcel = new PHPExcel();
         //设置第1行的行高

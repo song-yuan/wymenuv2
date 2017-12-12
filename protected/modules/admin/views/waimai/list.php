@@ -32,24 +32,24 @@ span.tab{
 		.ku-grey{
 			background-color:rgb(68,111,120);
 		}
-		.ku-item.mtwm{
+		/*.ku-item.mtwm{
 			background-image:url(../../../../../../img/waiter/icon-mtwm.png);
-			background-position: 0px 0px;
+			background-position: -5px -20px;
             background-repeat: no-repeat;
-            background-size: 100px;
+            background-size: 115px 180px;
 		}
 		.ku-item.eleme{
 			background-image:url(../../../../../../img/waiter/icon-eleme.png);
-			background-position: 0px 20px;
+			background-position: 0px 15px;
             background-repeat: no-repeat;
-            background-size: 100px;
+            background-size: 115px 120px;
 		}
 		.ku-item.wmsz{
 			background-image:url(../../../../../../img/waiter/icon-wmsz.png);
-			background-position: 0px 20px;
+			background-position: 0px 0px;
             background-repeat: no-repeat;
             background-size: 100px;
-		}
+		}*/
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -57,52 +57,55 @@ span.tab{
 	
 </style>	
 	<div class="page-content">
-		<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
-		<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-						<h4 class="modal-title">关系图</h4>
-					</div>
-					<div class="modal-body">
-						<img alt="" src="">
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn default" data-dismiss="modal">确定</button>
-					</div>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
+		<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE CONTENT-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖管理'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖管理'),'url'=>$this->createUrl('waimai/list' , array('companyId'=>$this->companyId,'type'=>0,))))));?>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
 				</div>
-				<div class="portlet-body clearfix" style="min-height: 750px">
-                 <a href="<?php echo $this->createUrl('waimai/Setting',array('companyId'=>$this->companyId));?>">
+				<div class="portlet-body clearfix">
+					<div class="panel_body row">
+                        <p>外卖设置</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('waimai/Setting',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">设置是否自动接单</div>
+                                <div class="list_small">设置美团和饿了么是否自动接单</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('waimai/index',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">美团外卖</div>
+                                <div class="list_small">设置绑定美团外卖，菜品映射和解除绑定</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('eleme/index',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">饿了么外卖</div>
+                                <div class="list_small">设置绑定饿了么外卖，店铺对应和菜品对应</div>
+                            </a> 
+                        </div>
+                    </div>
+                 <!-- <a href="<?php echo $this->createUrl('waimai/Setting',array('companyId'=>$this->companyId));?>">
 					<div class="pull-left margin-left-right">
 						<div class="ku-item ku-purple wmsz"></div>
 						<div class="ku-item-info">外卖设置</div>
 					</div>
-				</a>
-                 <a href="<?php echo $this->createUrl('waimai/index',array('companyId'=>$this->companyId));?>">
+				</a> -->
+                <!--  <a href="<?php echo $this->createUrl('waimai/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple mtwm"></div>
 							<div class="ku-item-info">美团外卖</div>
 						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('eleme/index',array('companyId'=>$this->companyId));?>">
+					</a> -->
+					<!-- <a href="<?php echo $this->createUrl('eleme/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple eleme"></div>
 							<div class="ku-item-info">饿了么外卖</div>
 						</div>
-					</a>
+					</a> -->
 				</div>
 			</div>
 		</div>
