@@ -37,7 +37,6 @@
 	<div class="find">
 		<form action="" method="post">
 			<input type="text" name="storage" class="form-control" placeholder="盘损单号" value="<?php echo isset($storage) && $storage ?$storage:'';?>" />
-			<input type="text" name="oid" class="form-control" placeholder="组织名称" value="<?php echo isset($oid) && $oid ?$oid:'';?>" /> 
 			<input type="text" name="begintime" class="ui_timepicker form-control" placeholder="起始日期" value="<?php echo isset($begintime) && $begintime ?$begintime:'';?>" />
 			<input type="text" name="endtime" class="ui_timepicker form-control" placeholder="结束日期" value="<?php echo isset($endtime) && $endtime ?$endtime:'';?>" />
 			<button type="submit" class="btn green">

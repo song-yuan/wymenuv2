@@ -27,19 +27,34 @@ class AutodownorderController extends BaseYmallController
 		if (!$companyId) {
 			$companyId=$this->companyId;
 		}
-		// $sql = 'SELECT t.lid,t.mphs_code,t.material_name,SUM(stock.stock) AS stock,safe.safe_stock,safe.max_stock,unit.unit_name FROM nb_product_material t
-		// 	LEFT JOIN nb_product_material_stock stock ON (t.lid=stock.material_id and stock.dpid=t.dpid AND stock.delete_flag=0)
-		// 	LEFT JOIN (select a.* from nb_product_material_safe a where a.dpid = '.$this->companyId.' AND  UNIX_TIMESTAMP(a.create_at) in(select max(UNIX_TIMESTAMP(b.create_at)) from nb_product_material_safe b where b.dpid=a.dpid and b.material_id=a.material_id) ) `safe` ON (t.lid=safe.material_id and safe.dpid=t.dpid AND safe.delete_flag=0)
-		// 	LEFT JOIN (SELECT u.unit_name,r.sales_unit_id FROM nb_material_unit u LEFT JOIN nb_material_unit_ratio r on(u.lid=r.sales_unit_id AND r.delete_flag=0 ) where u.delete_flag=0) `unit` ON (t.sales_unit_id=unit.sales_unit_id )
-		// 	WHERE (t.delete_flag=0 and t.dpid='.$this->companyId.') GROUP BY t.lid';
 
-		$sql = 'select DISTINCT(`t`.material_name),`t`.lid,`t`.mphs_code,stock.stock,safe.safe_stock,safe.max_stock,unit.unit_name,mc.category_name,t.category_id FROM `nb_product_material` `t`
-			LEFT JOIN ( select material_id,dpid,SUM(stock) AS stock from `nb_product_material_stock` where dpid ='.$this->companyId.' and delete_flag=0 GROUP BY material_id) `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid )
-			LEFT JOIN (select a.* from nb_product_material_safe a where a.dpid = '.$this->companyId.' AND  UNIX_TIMESTAMP(a.create_at) in(select max(UNIX_TIMESTAMP(b.create_at)) from nb_product_material_safe b where b.dpid=a.dpid and b.material_id=a.material_id) ) `safe` ON (t.lid=safe.material_id and safe.dpid=t.dpid AND safe.delete_flag=0)
-			LEFT JOIN (SELECT u.unit_name,r.sales_unit_id FROM nb_material_unit u LEFT JOIN nb_material_unit_ratio r on(u.lid=r.sales_unit_id AND r.delete_flag=0 ) where u.delete_flag=0) `unit` ON (t.sales_unit_id=unit.sales_unit_id )'
-			.' left join nb_material_category mc on (mc.lid=t.category_id and mc.delete_flag=0)'
-			.' WHERE (t.delete_flag=0 and t.dpid='.$this->companyId.')';
-		$stocks = $db->createCommand($sql)->queryAll();
+		$sqls = 'select `t`.lid,`t`.material_name,`t`.mphs_code,ifnull(stock.stock,0) as stock,u.unit_name,mc.category_name,t.category_id FROM `nb_product_material` `t`'
+		.' left join nb_material_unit u  ON (t.sales_unit_id=u.lid and t.dpid) '
+		.' left join nb_material_category mc on (mc.lid=t.category_id )'
+		.' left JOIN ( select material_id,dpid,SUM(stock) AS stock from `nb_product_material_stock` where stock!=0 and dpid ='.$this->companyId.' and delete_flag=0 GROUP BY material_id) `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid )'
+		.' WHERE t.delete_flag=0 and t.dpid='.$this->companyId;
+		$stocks_goods = $db->createCommand($sqls)->queryAll();
+
+		$sqld='select k.max_stock,k.safe_stock,k.material_id FROM ( select a.* from nb_product_material_safe a where a.dpid = '.$this->companyId
+		.' order by a.create_at desc) k group by k.material_id';
+		$stock_s = $db->createCommand($sqld)->queryAll();
+		$stocks_arr=array();
+		foreach ($stock_s as $key => $value) {
+			$stocks_arr['lid'.$value['material_id']]=$value;
+		}
+		$stocks = array();
+		foreach ($stocks_goods as $key => $val) {
+			$stocks['lid'.$val['lid']]=$val;
+			if (isset($stocks_arr['lid'.$val['lid']])) {
+				$stocks['lid'.$val['lid']]['max_stock']=$stocks_arr['lid'.$val['lid']]['max_stock'];
+				$stocks['lid'.$val['lid']]['safe_stock']=$stocks_arr['lid'.$val['lid']]['safe_stock'];
+			} else{
+				$stocks['lid'.$val['lid']]['max_stock']='';
+				$stocks['lid'.$val['lid']]['safe_stock']='';
+			}
+		}
+		// p($stocks);
+
 		$product_name = '';
 		$product_lost = '';
 		if($stocks){

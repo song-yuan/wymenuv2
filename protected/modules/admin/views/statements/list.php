@@ -34,11 +34,11 @@
 			color: #000 !important;
 
 		}
-        .portlet-body a{
+/*        .portlet-body a{
             display: inline-block;
         	height: 80px;
         	border: 1px solid white;
-        }
+        }*/
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
