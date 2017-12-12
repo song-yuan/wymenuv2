@@ -18,25 +18,25 @@
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="<?php echo $this->createUrl('wxCardStyle/index',array('companyId' => $this->companyId))?>">
                                         <div class="list_big">会员卡样式</div>
-                                        <div class="list_small">设置微信会员卡的样式</div>
+                                        <div class="list_small">设置相应的会员卡样式</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="<?php echo $this->createUrl('weixin/menu',array('companyId' => $this->companyId))?>">
                                         <div class="list_big">自定义菜单</div>
-                                        <div class="list_small">设置微信服务号的首页的选项</div>
+                                        <div class="list_small">为微店设置引导点餐的方式和会员操作名称以及活动名称等</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="<?php echo $this->createUrl('wechatMember/vip',array('companyId' => $this->companyId))?>">
                                         <div class="list_big">VIP会员</div>
-                                        <div class="list_small">设置微信会员的等级</div>
+                                        <div class="list_small">为VIP会员设置专享等级折扣和样式等</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="">
                                         <div class="list_big">会员渠道</div>
-                                        <div class="list_small"></div>
+                                        <div class="list_small">查询会员来自哪里，通过什么渠道办理等</div>
                                     </a> 
                                 </div>
                             </div>
@@ -45,25 +45,25 @@
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="<?php echo $this->createUrl('wechatMember/search',array('companyId' => $this->companyId))?>">
                                         <div class="list_big">会员查询</div>
-                                        <div class="list_small">查询微信会员的基本信息</div>
+                                        <div class="list_small">按条件查询微信会员的基础信息</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="<?php echo $this->createUrl('wxrecharge/index',array('companyId' => $this->companyId))?>">
                                         <div class="list_big">储值</div>
-                                        <div class="list_small">设置微会员充值模板</div>
+                                        <div class="list_small">设置微会员充值时选择充值多少的模板</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="">
                                         <div class="list_big">积分</div>
-                                        <div class="list_small"></div>
+                                        <div class="list_small">查询会员的积分状况</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="">
                                         <div class="list_big">会员商城</div>
-                                        <div class="list_small"></div>
+                                        <div class="list_small">会员可以用积分在商城换购商品</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
@@ -75,13 +75,13 @@
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="<?php echo $this->createUrl('wxMessage/index',array('companyId' => $this->companyId))?>">
                                         <div class="list_big">模板消息</div>
-                                        <div class="list_small">设置微信的消息模板</div>
+                                        <div class="list_small">添加想要发送的消息模板</div>
                                     </a> 
                                 </div>
                                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                                     <a href="<?php echo $this->createUrl('mobileMessage/index',array('companyId' => $this->companyId))?>">
                                         <div class="list_big">短信</div>
-                                        <div class="list_small">查询短信消息提示是否成功</div>
+                                        <div class="list_small">查询所发送的短信状态等</div>
                                     </a> 
                                 </div>
                             </div>

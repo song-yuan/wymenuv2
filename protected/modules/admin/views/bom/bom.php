@@ -302,13 +302,13 @@
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('mfrClassification/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">厂商分类</div>
-	                            <div class="list_small">设置厂商代表的原材料分类</div>
+	                            <div class="list_small">将不同的厂商根据需要类型建立一个分类</div>
 	                        </a> 
 	                    </div>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('mfrInformation/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">厂商信息</div>
-	                            <div class="list_small">设置厂商的信息</div>
+	                            <div class="list_small">添加新的厂商以及填写相应的厂商信息</div>
 	                        </a> 
 	                    </div>
 	                </div>
@@ -317,25 +317,25 @@
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('purchaseOrder/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">采购订单</div>
-	                            <div class="list_small">设置从哪家原材料厂商采购</div>
+	                            <div class="list_small">添加和查询新的采购订单信息</div>
 	                        </a> 
 	                    </div>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('storageOrder/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">入库订单</div>
-	                            <div class="list_small">设置入库原材料信息</div>
+	                            <div class="list_small">查询入库单的单号、日期以及状态等</div>
 	                        </a> 
 	                    </div>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('nowmaterialstock/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">实时库存</div>
-	                            <div class="list_small">查询原材料的实时数量</div>
+	                            <div class="list_small">查询现有的原料库存储量</div>
 	                        </a> 
 	                    </div>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('refundOrder/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">退货订单</div>
-	                            <div class="list_small">设置原材料的退货信息</div>
+	                            <div class="list_small">查询和处理退货的订单信息</div>
 	                        </a> 
 	                    </div>
 	                    <?php $companyType = Helper::getcompanyType($this->companyId);
@@ -344,35 +344,37 @@
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('commit/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">调拨</div>
-	                            <div class="list_small">设置原材料的退货信息</div>
+	                            <div class="list_small">设置分配到其他店铺的原材料信息</div>
 	                        </a> 
 	                    </div>
 	                    <?php endif;?>
 	                </div>
 	                <div class="panel_body row">
 	                    <p>库存的盘点与盘损</p>
-	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-	                    	<a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
-	                            <div class="list_big">盘点</div>
-	                            <div class="list_small">设置店铺原材料的库存</div>
-	                        </a> 
-	                    </div>
-	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                     <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('stockTaking/damagereason',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">盘损原因</div>
-	                            <div class="list_small">设置原材料的损耗的原因</div>
+	                            <div class="list_small">设置添加损耗商品的损耗原因</div>
 	                        </a> 
 	                    </div>
-	                    <div style="display: none;" class="list col-sm-3 col-xs-12">
+	                    <?php if(Yii::app()->user->role <1):?>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('stockTaking/damageindex',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">盘损</div>
-	                            <div class="list_small">设置原材料的损耗</div>
+	                            <div class="list_small">查询所损耗的品项信息和损耗库存以及添加盘损原因</div>
 	                        </a> 
 	                    </div>
+	                	<?php endif;?>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('inventory/index',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">盘损</div>
-	                            <div class="list_small">设置原材料的损耗</div>
+	                            <div class="list_small">查询所损耗的品项信息和损耗库存以及添加盘损原因</div>
+	                        </a> 
+	                    </div>
+	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    	<a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
+	                            <div class="list_big">盘点</div>
+	                            <div class="list_small">按月周日查询品项相对应的库存信息</div>
 	                        </a> 
 	                    </div>
 	                </div>
@@ -381,19 +383,19 @@
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>0));?>">
 	                            <div class="list_big">盘点日志</div>
-	                            <div class="list_small">查询盘点的详细信息</div>
+	                            <div class="list_small">记录盘点的日期、负责人和盘点备注等</div>
 	                        </a> 
 	                    </div>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1,'status'=>1));?>">
 	                            <div class="list_big">盘损日志</div>
-	                            <div class="list_small">查询盘损的详细信息</div>
+	                            <div class="list_small">记录盘损的日期、负责人和损耗原因等</div>
 	                        </a> 
 	                    </div>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 	                            <div class="list_big">库存日志</div>
-	                            <div class="list_small">查询日常原材料消耗的明细</div>
+	                            <div class="list_small">查询日常库存的调整类型、调整时间以及状态等</div>
 	                        </a> 
 	                    </div>
 	                </div>

@@ -34,39 +34,39 @@
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('memberWxlevel/index',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">卡等级</div>
-                        <div class="list_small">设置实体卡的折扣等级</div>
+                        <div class="list_small">设置实体会员卡的等级和折扣</div>
                     </a> 
                 </div>
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('member/index',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">添加会员</div>
-                        <div class="list_small">添加实体卡会员</div>
+                        <div class="list_small">添加新的会员用户</div>
                     </a> 
                 </div>
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('entityCard/cardsearch',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">卡查询</div>
-                        <div class="list_small">查询实体卡会员的基础信息与余额</div>
+                        <div class="list_small">按条件查询实体会员卡的基础信息</div>
                     </a> 
                 </div>
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('entityCard/recharge',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">充值</div>
-                        <div class="list_small">给实体卡会员充值</div>
+                        <div class="list_small">为新老会员充值卡内金额</div>
                     </a> 
                 </div>
                 <?php if(Yii::app()->user->role <= User::ADMIN_VICE):?>
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('StaffRecharge/index',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">员工充值</div>
-                        <div class="list_small">给店内员工的实体卡充值</div>
+                        <div class="list_small">按等级查询会员信息和批量充值卡内金额</div>
                     </a> 
                 </div>
                 <?php endif;?>
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('entityCard/zero',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">清零</div>
-                        <div class="list_small">把实体卡的余额清零</div>
+                        <div class="list_small">将不需要的会员信息注销</div>
                     </a> 
                 </div>
             </div>
@@ -75,13 +75,13 @@
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="">
                         <div class="list_big">生日关怀</div>
-                        <div class="list_small"></div>
+                        <div class="list_small">为今天生日的会员用户送上一份生日折扣</div>
                     </a> 
                 </div>
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="">
                         <div class="list_big">卡魔方</div>
-                        <div class="list_small"></div>
+                        <div class="list_small">按不同的条件查询会员信息</div>
                     </a> 
                 </div>
             </div>
@@ -90,13 +90,13 @@
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('entityCard/active',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">活跃会员</div>
-                        <div class="list_small">查询活跃度高的会员</div>
+                        <div class="list_small">查询常客会员的消费记录</div>
                     </a> 
                 </div>
                 <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                     <a href="<?php echo $this->createUrl('entityCard/unActive',array('companyId'=>$this->companyId));?>">
                         <div class="list_big">不活跃会员</div>
-                        <div class="list_small">查询活跃度不高的会员</div>
+                        <div class="list_small">查询偶尔消费的会员记录</div>
                     </a> 
                 </div>
             </div>
