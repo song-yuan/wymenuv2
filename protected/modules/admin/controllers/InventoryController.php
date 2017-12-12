@@ -22,47 +22,9 @@ class InventoryController extends BackendController
 		$storage=0;
 		$purchase=0;
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->addCondition('dpid=:dpid and delete_flag=0 and type =1');
 		if(Yii::app()->request->isPostRequest){
-			$mid = Yii::app()->request->getPost('mid',0);
-			if($mid){
-				$maname = ManufacturerInformation::model()->findAll('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
-				//var_dump($maname);exit;
-				if($maname){
-					$malides = '';
-					foreach ($maname as $manames){
-						$malid = $manames->lid;
-						$malides = $malid .','. $malides; 
-						//var_dump($malides);
-					}
-					$malides = substr($malides, 0,strlen($malides)-1);
-					$criteria->addCondition('manufacturer_id in ('.$malides.')');
-					//var_dump($criteria);exit;
-				}else{
-					$criteria->addSearchCondition('manufacturer_id',$mid);
-				}
-			}
-			//var_dump($criteria);exit;
-			$oid = Yii::app()->request->getPost('oid',0);
-			if($oid){
-				//echo($oid);
-				$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
-				//var_dump($ogname);exit;
-				if($ogname){
-					$malides = '';
-					foreach ($ogname as $manames){
-						$malid = $manames->lid;
-						$malides = $malid .','. $malides;
-						//var_dump($malides);
-					}
-					$malides = substr($malides, 0,strlen($malides)-1);
-					$criteria->addCondition('opertion_id in ('.$malides.')');
-					//var_dump($criteria);exit;
-				}else{
-					$criteria->addSearchCondition('opertion_id',$oid);
-				}
-				//$criteria->addSearchCondition('organization_id',$ogname->dpid);
-			}
+			
 			$storage = Yii::app()->request->getPost('storage',0);
 			if($storage){
 				//echo($oid);
@@ -95,7 +57,6 @@ class InventoryController extends BackendController
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
-				'mid'=>$mid,
 				'oid'=>$oid,
 				'begintime'=>$begintime,
 				'endtime'=>$endtime,
