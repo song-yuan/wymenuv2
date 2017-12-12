@@ -27,7 +27,7 @@
 			color:black;
 			text-align:center;
 		}
-		.ku-purple{
+/*		.ku-purple{
 			
 		}
 		.ku-item.sdbb{
@@ -56,7 +56,7 @@
 			background-image:url(../../../../../../img/waiter/icon-yysj.png);
 			background-position: 8px 16px;
     		background-repeat: no-repeat;
-		}
+		}*/
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -65,11 +65,11 @@
 			color: #000 !important;
 			
 		}
-		.portlet-body a{
+/*		.portlet-body a{
             display: inline-block;
         	height: 80px;
         	border: 1px solid white;
-        }		
+        }*/		
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               

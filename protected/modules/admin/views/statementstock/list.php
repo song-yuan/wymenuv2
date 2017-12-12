@@ -27,6 +27,36 @@
 			color:black;
 			text-align:center;
 		}
+		/*.ku-purple{
+			
+		}
+		.ku-item.sdbb{
+			background-image:url(../../../../../../img/waiter/icon-sdbb.png);
+			background-position: 13px 15px;
+    		background-repeat: no-repeat;
+			background-size: 80%;
+		}	
+		.ku-item.yysj{
+			background-image:url(../../../../../../img/waiter/icon-yysj.png);
+			background-position: -750px 16px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.qcsj{
+			background-image:url(../../../../../../img/deletedata.jpg);
+			background-position: 10px 10px;
+    		background-repeat: no-repeat;
+    		background-size: 88%;
+		}
+		.ku-item.czjl{
+			background-image:url(../../../../../../img/waiter/icon-yysj.png);
+			background-position: -295px 16px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.sktj{
+			background-image:url(../../../../../../img/waiter/icon-yysj.png);
+			background-position: 8px 16px;
+    		background-repeat: no-repeat;
+		}*/
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -35,11 +65,11 @@
 			color: #000 !important;
 			
 		}
-		.portlet-body a{
+/*		.portlet-body a{
             display: inline-block;
         	height: 80px;
         	border: 1px solid white;
-        }		
+        }*/		
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -118,4 +148,4 @@
                 $('.modal').modal();
            });
         });
-	</script> 	
+	</script>
