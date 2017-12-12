@@ -88,7 +88,10 @@
 						</div>
 						<div class="btn-group">
 							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-					</div>
+						</div>
+						<div class="btn-group">
+							<button type="button" id="save"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','暂时保存');?></button>				
+						</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
