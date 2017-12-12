@@ -363,7 +363,7 @@
 	                            <div class="list_small">设置原材料的损耗的原因</div>
 	                        </a> 
 	                    </div>
-	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+	                    <div style="display: none;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('stockTaking/damageindex',array('companyId'=>$this->companyId));?>">
 	                            <div class="list_big">盘损</div>
 	                            <div class="list_small">设置原材料的损耗</div>
