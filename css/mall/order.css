@@ -42,7 +42,7 @@ body{ background-color:#E5E5E5;}
 .order-remark{padding:10px;font-size:18px;margin-top:10px;background:rgb(255,255,255);}
 .order-remark textarea{border:none;width:100%;height:30px;color:#999999}
 .order-paytype{font-size:16px;}
-.user-cupon {width:100%;height:100%;font-size: 14px;background: #E5E5E5;display: none;}
+.user-cupon {width:100%;height:100%;overflow: auto;font-size: 14px;background: #E5E5E5;display: none;}
 .user-cupon .cupon-container{padding:20px;overflow:auto;}
 .user-cupon .item{
 	padding: 15px 30px 15px 15px;
