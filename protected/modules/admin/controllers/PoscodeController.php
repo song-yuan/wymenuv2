@@ -364,9 +364,11 @@ class PoscodeController extends BackendController
             	Helper::writeLog('激活失败：'.$this->companyId.':'.$obj['error_message']);
                     Yii::app()->end(json_encode(array("status"=>"error",'msg'=>'激活失败！！！')));
             }else{
-            	Helper::writeLog('激活成功：'.$this->companyId.';key:'.$obj['biz_response']['terminal_key']);
+            	Helper::writeLog('激活成功：'.$this->companyId.';sn:'.$obj['biz_response']['terminal_sn'].';key:'.$obj['biz_response']['terminal_key']);
                     if(!empty($devicemodel)){
                             Yii::app()->db->createCommand('update nb_sqb_possetting set terminal_sn="'.$obj['biz_response']['terminal_sn'].'",terminal_key="'.$obj['biz_response']['terminal_key'].'" where device_id ='.$device_id.' and dpid ='.$this->companyId)
+                            ->execute();
+                            Yii::app()->db->createCommand('update nb_pad_setting set pay_activate=2 where pad_code ='.$device_id.' and dpid ='.$this->companyId)
                             ->execute();
                     }else{
 
