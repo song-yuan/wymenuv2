@@ -124,7 +124,7 @@ class WxOrder
 					$results[$k]['price'] = '0.00';
 					$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 				}else{
-					$results[$k]['price'] = $results[$k]['member_price'];
+					$results[$k]['price'] = $results[$k]['original_price'];
 					$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 				}
 			}else{

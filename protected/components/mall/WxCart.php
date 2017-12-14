@@ -4,6 +4,7 @@
  * 
  * 微信端购物车类
  * 堂吃必须有siteId
+ * $haspormotion 购物车中是否有普通优惠
  * $pormotionYue 是否有储值支付活动
  * productArr = array('product_id'=>1,'num'=>1,'promotion_id'=>-1)
  * 
@@ -14,6 +15,7 @@ class WxCart
 	public $userId;
 	public $siteId;
 	public $type;
+	public $haspormotion = false;
 	public $pormotionYue = false;
 	public $productArr = array();
 	public $cart = array();
@@ -232,9 +234,10 @@ class WxCart
 					$result['price'] = '0.00';
 					$result['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 				}else{
-					$result['price'] = $result['member_price'];
+					$result['price'] = $result['original_price'];
 					$result['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 				}
+				$this->haspormotion = true;
 			}else{
 				if($this->type==2){
 					$result['price'] = $result['original_price'];
