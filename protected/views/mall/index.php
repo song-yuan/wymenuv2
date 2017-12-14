@@ -29,25 +29,6 @@
 	$productStr = '';
 	$cartStr = '';
 	$topTitle = '';
-	$bottomDesc = '';
-	$fulsent = $fullsents[0]; // 满送
-	$fullminus = $fullsents[1]; // 满减
-	if(!empty($fullminus)){
-		$bottomDesc .= '<div class="swiper-slide"><img src="'.$baseUrl.'/img/mall/act_04.png">';
-		foreach ($fullminus as $fminus){
-			$bottomDesc .= $fminus['title'].';';
-		}
-		$bottomDesc = rtrim($bottomDesc,';');
-		$bottomDesc .= '</div>';
-	}
-	if(!empty($fulsent)){
-		$bottomDesc .= '<div class="swiper-slide"><img src="'.$baseUrl.'/img/mall/act_04.png">';
-		foreach ($fulsent as $fsent){
-			$bottomDesc .= $fsent['title'].';';
-		}
-		$bottomDesc = rtrim($bottomDesc,';');
-		$bottomDesc .= '</div>';
-	}
 	if(!empty($disables)){
 		foreach ($disables as $disable){
 			$productId = (int)$disable['product_id'];
@@ -86,9 +67,7 @@
 	}
 	// 买送活动
 	if(!empty($buySentPromotions)){
-		$bottomDesc .= '<div class="swiper-slide"><img src="'.$baseUrl.'/img/mall/act_01.png">';
 		foreach ($buySentPromotions as $key=>$buysent){
-			$bottomDesc .= $buysent['promotion_title'].';';
 			if($buysent['main_picture']==''){
 				$buysent['main_picture'] = $defaultNavImg;
 			}
@@ -166,14 +145,10 @@
 			}
 			$productStr .='</div>';
 		}
-		$bottomDesc = rtrim($bottomDesc,';');
-		$bottomDesc .= '</div>';
 	}
 	
 	if(!empty($promotions)){
-		$bottomDesc .= '<div class="swiper-slide"><img src="'.$baseUrl.'/img/mall/act_03.png">';
 		foreach ($promotions as $key=>$promotion){
-			$bottomDesc .= $promotion['promotion_title'].';';
 			if($promotion['main_picture']==''){
 				$promotion['main_picture']=$defaultNavImg;
 			}
@@ -252,8 +227,6 @@
 			}
 			$productStr .='</div>';
 		}
-		$bottomDesc = rtrim($bottomDesc,';');
-		$bottomDesc .= '</div>';
 	}
 	
 	foreach ($products as $product){
@@ -400,9 +373,8 @@
 		}
 	}
 ?>
-<link rel="stylesheet" href="<?php echo $baseUrl;?>/css/swiper.min.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201705091424">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201705091424">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201712121424">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201712121424">
 <style type="text/css">
 .layui-layer-content img {
 	width: 100%;
@@ -427,7 +399,6 @@
 	display: none;
 }
 </style>
-<script src="<?php echo $baseUrl;?>/js/swiper.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
 <?php if(empty($notices)):?>
@@ -442,15 +413,6 @@
 	echo rtrim($noticeInfo,';');
 	?>
 	</marquee>
-</div>
-<?php endif;?>
-<?php if($bottomDesc!=''):?>
-<div class="top-des arrowright">
-	<div class="swiper-container">
-		<div class="swiper-wrapper">
-			<?php echo $bottomDesc;?>
-		</div>
-	</div>
 </div>
 <?php endif;?>
 <div class="content">
@@ -608,14 +570,6 @@ wx.ready(function(){
 	});
 });
 $(document).ready(function(){ 
-	var swiper = new Swiper('.swiper-container', {
-        pagination: false,
-        paginationClickable: false,
-        centeredSlides: true,
-        direction: 'vertical',
-        autoplay: 2500,
-        autoplayDisableOnInteraction: false
-    });
 	var i = 0;
 	var j = 0;
 	var isScroll = false;
