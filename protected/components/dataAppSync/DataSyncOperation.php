@@ -917,7 +917,7 @@ class DataSyncOperation {
 				$msg = array('status'=>false,'msg'=>$result);
 			}
 		}else{
-			$msg = array('status'=>false,'msg'=>'退款订单号不存在');
+			$msg = array('status'=>true,'msg'=>'手动确认错误,退款订单号不存在,直接退款');
 		}
 		return  json_encode($msg);
 	}
