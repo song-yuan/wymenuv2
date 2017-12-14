@@ -219,6 +219,10 @@
                     alert("请填写代金券面值");
                     return false;
                 }
+                if(!$('input[name="Cupon[type][]"]').is(':checked')){
+                	alert("请选择代金券可用对象");
+                    return false; 
+                }
 
 	         var p1 = $('#Cupon_to_group').children('option:selected').val();
 	         var aa = document.getElementsByName("chk");
