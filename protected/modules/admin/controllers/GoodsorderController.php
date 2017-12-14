@@ -32,7 +32,7 @@ class GoodsorderController extends BackendController
 		}
 		$db = Yii::app()->db;
 		//只显示货到付款和线上支付已支付的订单
-		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') '.$str.' and ((t.paytype=1 and t.pay_status=1) or t.paytype=2 ) group by d.goods_order_accountno) k order by lid desc';
+		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') '.$str.' and ((t.paytype=1 and t.pay_status=1) or t.paytype=2 ) group by t.account_no) k order by lid desc';
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
