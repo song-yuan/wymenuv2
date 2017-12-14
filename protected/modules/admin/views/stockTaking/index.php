@@ -90,7 +90,7 @@
 							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
 						</div>
 						<div class="btn-group">
-							<button type="button" id="save"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','暂时保存');?></button>				
+							<button type="button" id="save"  class="btn yellow" ><i class="fa fa-pencial"></i><?php echo yii::t('app','暂时保存');?></button>				
 						</div>
 					</div>
 				</div>
