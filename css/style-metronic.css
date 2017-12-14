@@ -209,7 +209,7 @@ Buttons & Dropdown Buttons
 .btn.yellow.active, 
 .btn.yellow.disabled,
 .btn.yellow[disabled] { 
-  background-color: #eca22e !important;
+  background-color: #ffd504 !important;
   color: #fff !important;
   outline: none !important;
 }
@@ -223,7 +223,7 @@ Buttons & Dropdown Buttons
 .btn-group .btn.yellow.active, 
 .btn-group .btn.yellow.disabled,
 .btn-group .btn.yellow[disabled] { 
-  background-color: #eca22e !important;
+  background-color: #ffd504 !important;
   color: #fff !important;
   outline: none !important;
 }
