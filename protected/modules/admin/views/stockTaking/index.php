@@ -125,9 +125,8 @@
 								<td ><?php echo $model['unit_name'];?></td>
 								                               
                                 <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['stock_all'];?>" name="idss[]" />
-								<input class="kucundiv" type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
-								<!-- <input type="button"   onclick ="demo(this)" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
-								 --></td>
+								<input class="kucundiv" type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_stock'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+								</td>
 								<td class="center">
 								<?php if(Yii::app()->user->role <5):?>
 								<?php echo $model['stock_all'];?>
@@ -173,9 +172,13 @@
        // var chx=document.getElementById("optionsCheck"+vid);
         var optid;
         var optval = '';
-       // var checkvalue = '0';
-        //var cid = $(this).val();
-        //alert(cid);
+        
+        if(confirm('确认盘点，则在此时间前保存的盘损，盘点记录将实效。')){
+            
+            }else{
+                layer.closeAll('loading');
+                return false;
+                }
         for(var i=0;i<arr.length;i++)
         {
             var vid = $(arr[i]).attr("id").substr(11,10);  
@@ -233,41 +236,58 @@
 		});
         
 		});
-    
-    $(".clear_btn").on("click",function(){
-        var vid = $(this).attr("id").substr(12,10);
-        var nownum = $("#idleftnum0"+vid).val();
-        var originalnum = $("#originalnum"+vid).val();
-       // var chx=document.getElementById("optionsCheck"+vid);
+
+	$("#save").on("click",function(){
+		var loading = layer.load();
+		//alert("123");
+		var sttype = $('#sttype').val();
+        var arr=document.getElementsByName("idss[]");
         var optid;
-        var optvalue;
-        //alert(nownum);alert(originalnum);
-		var difference = parseFloat(nownum) - parseFloat(originalnum);
-			difference = difference.toFixed(2);
+        var optval = '';
+        for(var i=0;i<arr.length;i++)
+        {
+            var vid = $(arr[i]).attr("id").substr(11,10);  
+            var nownum = $("#idleftnum0"+vid).val(); 
+            var stockid = $("#idleftnum0"+vid).attr('stockid');
+            if(nownum != ''){
+                optval = vid +','+ nownum +','+ stockid +';'+ optval;
+                } 
+        }
+        if(optval.length >0){
+        	optval = optval.substr(0,optval.length-1);//除去最后一个“，”
+        	//alert(optval);
+        }else{
+            alert('请至少盘点一项');
+            layer.closeAll('loading');
+            return false;
+            }
+        //
 		var categoryId = '<?php echo $categoryId;?>';
         $.ajax({
             type:'GET',
-			url:"<?php echo $this->createUrl('stockTaking/store',array('companyId'=>$this->companyId,));?>/id/"+vid+"/cid/"+categoryId+"/nowNum/"+nownum+"/originalNum/"+originalnum+"/difference/"+difference,
+			url:"<?php echo $this->createUrl('stockTaking/savestore',array('companyId'=>$this->companyId,));?>/optval/"+optval+"/cid/"+categoryId+"/sttype/"+sttype,
 			async: false,
 			//data:"companyId="+company_id+'&padId='+pad_id,
             cache:false,
             dataType:'json',
 			success:function(msg){
-	            //alert(msg.status);
 	            if(msg.status=="success")
 	            {            
-		            alert("<?php echo yii::t('app','成功'); ?>");               
+			        layer.msg("保存成功！");
 		            location.reload();
+		            layer.closeAll('loading');
 	            }else{
 		            alert("<?php echo yii::t('app','失败'); ?>"+"1");
-		            location.reload();
+		            layer.closeAll('loading');
 	            }
 			},
             error:function(){
-				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+				alert("<?php echo yii::t('app','失败'); ?>"+"2");  
+				layer.closeAll('loading');                              
 			},
 		});
-    });
+        
+		});
 	$('#excel').click(function excel(){
 		var cid = '<?php echo $categoryId;?>';
        if(confirm('确认导出并且下载Excel文件吗？')){
