@@ -35,7 +35,7 @@ class AutodownorderController extends BaseYmallController
 		.' WHERE t.delete_flag=0 and t.dpid='.$this->companyId;
 		$stocks_goods = $db->createCommand($sqls)->queryAll();
 
-		$sqld='select k.max_stock,k.safe_stock,k.material_id FROM ( select a.* from nb_product_material_safe a where a.dpid = '.$this->companyId
+		$sqld='select k.max_stock,k.safe_stock,k.material_id FROM ( select a.* from nb_product_material_safe a where a.create_at>DATE_SUB(NOW(), INTERVAL 2 DAY) and a.dpid = '.$this->companyId
 		.' order by a.create_at desc) k group by k.material_id';
 		$stock_s = $db->createCommand($sqld)->queryAll();
 		$stocks_arr=array();
@@ -117,8 +117,6 @@ class AutodownorderController extends BaseYmallController
 			}
 		}
 		echo json_encode($product_name.'-'.$product_lost);exit;
-
-
 	}
 
 }
