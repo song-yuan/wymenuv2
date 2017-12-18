@@ -61,6 +61,14 @@
 }
 .list_small{
      font-size: 14px;
-     color:#000;
-    
+     color:#000; 
+}
+.flo-l{
+	float: left;
+}
+.wid-50{
+	width: 50%;
+}
+.text-c{
+	text-align: center;
 }
