@@ -1937,7 +1937,7 @@ class DataSyncOperation {
 				}
 			}
 		}else{
-			// 总库存小于
+			// 总库存小于0
 			$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and delete_flag=0 order by lid desc limit 1';
 			$materialStock = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($materialStock){
