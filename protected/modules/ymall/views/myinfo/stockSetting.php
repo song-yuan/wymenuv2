@@ -89,11 +89,9 @@
 					//自己的逻辑
 					console.log(data);
 					if (data=='1111') {
-						mui.toast('保存成功!!!');
+						mui.toast('保存成功,两天后生效!!!');
 					}else if(data=='2222'){
 						mui.toast('保存失败!!!');
-					}else if(data=='3333'){
-						mui.toast('两天后生效!!!');
 					}
 
 				},'json'
