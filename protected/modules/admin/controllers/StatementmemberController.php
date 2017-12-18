@@ -1050,9 +1050,11 @@ class StatementmemberController extends BackendController
 	
 	public function actionClearTestdata() {
 		$type = Yii::app()->request->getParam('type');
+		$randnum = rand(1000,9999);
 		$this->render('clearTestdata',array(
 				'companyId' => $this->companyId,
 				'type'=>$type,
+				'randnum'=>$randnum
 		));
 	}
 	public function actionClearOrderdata(){
