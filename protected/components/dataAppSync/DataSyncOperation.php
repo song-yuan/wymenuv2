@@ -1939,9 +1939,11 @@ class DataSyncOperation {
 		}else{
 			// 总库存小于0
 			$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and delete_flag=0 order by lid desc limit 1';
+			Helper::writeLog($sql);
 			$materialStock = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($materialStock){
 				$sql = 'update nb_product_material_stock set stock= stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+				Helper::writeLog($sql);
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 				
 				$se = new Sequence ( "material_stock_log" );
