@@ -42,6 +42,13 @@
 						<input id="end_time" class="form-control ui_timepicker" value="<?php echo date('Y-m-d H:i:s',time());?>">
 					</div>
 				</div>
+				<div style="min-height: 30px;" class="form-group">
+	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">随机码:</lable>
+					<div style="margin-top: 5px;" class="col-md-4">
+						<input id="randnum" class="form-control flo-l wid-50 text-c" value="" placeholder="请填写后面的随机码-->">
+						<input id="randnums"class="form-control flo-l wid-50 text-c" disabled value="<?php echo $randnum;?>">
+					</div>
+				</div>
 				<div style="min-height: 30px;display: none;" class="form-group">
 	                <lable style="font-size: 16px;margin-top: 10px;text-align: right; " class="col-md-3 control-label">是否恢复原料库存:</lable>
 					<div style="margin-top: 5px;" class="col-md-4">
@@ -82,30 +89,35 @@
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var cleartype = $(this).attr('cleartype');
+		var num1 = $('#randnum').val();
+		var num2 = $('#randnums').val();
+		if(num1 != num2){
+			layer.msg('随机码不一致！请重新填写！');
+		}else{
 		
-	    if(window.confirm("数据清除之后无法找回！！确认清除数据？？？")){
-		    $.ajax({
-		        type:'POST',
-				url:"<?php echo $this->createUrl('statementmember/clearOrderdata',array('companyId'=>$this->companyId,));?>/cleartype/"+cleartype+"/begin_time/"+begin_time+"/end_time/"+end_time,
-				async: false,
-		        cache:false,
-		        dataType:'json',
-				success:function(msg){
-		            if(msg.status=="success")
-		            {            
-				        layer.msg("清除成功！");
-			            location.reload();
-		            }else{
-			            layer.msg(msg.msg);
-			            location.reload();
-		            }
-				},
-		        error:function(){
-					layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
-				},
-			});
-	    }
-	    
+		    if(window.confirm("数据清除之后无法找回！！确认清除数据？？？")){
+			    $.ajax({
+			        type:'POST',
+					url:"<?php echo $this->createUrl('statementmember/clearOrderdata',array('companyId'=>$this->companyId,));?>/cleartype/"+cleartype+"/begin_time/"+begin_time+"/end_time/"+end_time,
+					async: false,
+			        cache:false,
+			        dataType:'json',
+					success:function(msg){
+			            if(msg.status=="success")
+			            {            
+					        layer.msg("清除成功！");
+				            location.reload();
+			            }else{
+				            layer.msg(msg.msg);
+				            location.reload();
+			            }
+					},
+			        error:function(){
+						layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+					},
+				});
+		    }
+		}
 	});
 
 	</script>
