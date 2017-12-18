@@ -292,36 +292,43 @@ class ProductController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
 
-			$cateID = $model->category_id;
-			if(!empty($cateID)){
-				$db = Yii::app()->db;
-				$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
-				$command = $db->createCommand($sql);
-				$categoryId = $command->queryRow();
-				//var_dump($categoryId['chs_code']);exit;
-				if(empty($model->member_price)){
-					$model->member_price = $model->original_price;
-				}
-				$se=new Sequence("product");
-				$lid = $se->nextval();
-				$model->lid = $lid;
-				$code=new Sequence("phs_code");
-				$phs_code = $code->nextval();
-
-				$model->create_at = date('Y-m-d H:i:s',time());
-				$model->update_at = date('Y-m-d H:i:s',time());
-				$model->chs_code = $categoryId['chs_code'];
-				$model->phs_code = ProductCategory::getChscode($this->companyId, $lid, $phs_code);
-				$model->delete_flag = '0';
-				$py=new Pinyin();
-				$model->simple_code = $py->py($model->product_name);
-				//var_dump($model);exit;
-				if($model->save()){
-					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-					$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
-				}
+			$name = $model->product_name;
+			$sql = 'select lid from nb_product where dpid ='.$this->companyId.' and product_name ="'.$name.'" and delete_flag =0';
+			$res = Yii::app()->db->createCommand($sql)->queryAll();
+			if(!empty($res)){
+				$model->addError('product_name','已存在该商品,请重新填写名称');
 			}else{
-				 $model->addError('category_id','必须添加二级分类');
+				$cateID = $model->category_id;
+				if(!empty($cateID)){
+					$db = Yii::app()->db;
+					$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
+					$command = $db->createCommand($sql);
+					$categoryId = $command->queryRow();
+					//var_dump($categoryId['chs_code']);exit;
+					if(empty($model->member_price)){
+						$model->member_price = $model->original_price;
+					}
+					$se=new Sequence("product");
+					$lid = $se->nextval();
+					$model->lid = $lid;
+					$code=new Sequence("phs_code");
+					$phs_code = $code->nextval();
+	
+					$model->create_at = date('Y-m-d H:i:s',time());
+					$model->update_at = date('Y-m-d H:i:s',time());
+					$model->chs_code = $categoryId['chs_code'];
+					$model->phs_code = ProductCategory::getChscode($this->companyId, $lid, $phs_code);
+					$model->delete_flag = '0';
+					$py=new Pinyin();
+					$model->simple_code = $py->py($model->product_name);
+					//var_dump($model);exit;
+					if($model->save()){
+						Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+						$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
+					}
+				}else{
+					 $model->addError('category_id','必须添加二级分类');
+				}
 			}
 
 		}
@@ -367,18 +374,25 @@ class ProductController extends BackendController
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
-			if($model->category_id){
-				$categoryId = ProductCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
-				$model->chs_code = $categoryId['chs_code'];
-			}
-                $py=new Pinyin();
-                $model->simple_code = $py->py($model->product_name);
-			$model->update_at=date('Y-m-d H:i:s',time());
-			//$model->is_lock = '0';
-			//var_dump($model);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'.$msg));
-				$this->redirect(array('product/index' , 'companyId' => $this->companyId ,'page' => $papage));
+			$name = $model->product_name;
+			$sql = 'select lid from nb_product where dpid ='.$this->companyId.' and product_name ="'.$name.'" and delete_flag =0 and lid !='.$id;
+			$res = Yii::app()->db->createCommand($sql)->queryAll();
+			if(!empty($res)){
+				$model->addError('product_name','已存在该商品,请重新填写名称');
+			}else{
+				if($model->category_id){
+					$categoryId = ProductCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
+					$model->chs_code = $categoryId['chs_code'];
+				}
+	                $py=new Pinyin();
+	                $model->simple_code = $py->py($model->product_name);
+				$model->update_at=date('Y-m-d H:i:s',time());
+				//$model->is_lock = '0';
+				//var_dump($model);exit;
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','修改成功！'.$msg));
+					$this->redirect(array('product/index' , 'companyId' => $this->companyId ,'page' => $papage));
+				}
 			}
 		}
 		$categories = $this->getCategoryList();

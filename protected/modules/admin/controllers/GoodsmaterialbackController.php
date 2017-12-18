@@ -47,11 +47,13 @@ class GoodsmaterialbackController extends BackendController
 			$models = $db->createCommand($sql)->queryAll();
 		}
 		$models_back=array();
-		foreach ($models as $key => $model) {
-			if (!isset($models_back[$model['goods_order_accountno']])) {
-				$models_back[$model['goods_order_accountno']]= array();
+		if(!empty($models)){
+			foreach ($models as $key => $model) {
+				if (!isset($models_back[$model['goods_order_accountno']])) {
+					$models_back[$model['goods_order_accountno']]= array();
+				}
+				array_push($models_back[$model['goods_order_accountno']], $model);
 			}
-			array_push($models_back[$model['goods_order_accountno']], $model);
 		}
 		// p($models_back);
 
