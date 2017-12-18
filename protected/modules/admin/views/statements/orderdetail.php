@@ -174,13 +174,11 @@
 								<td class="accountno" accountno="<?php echo $model->account_no;?>" orderid="<?php echo $model->lid?>" originalp="<?php echo sprintf("%.2f",$model->reality_total);?>" shouldp="<?php echo sprintf("%.2f",$model->should_total);?>" youhuip="<?php echo sprintf("%.2f",$model->reality_total-$model->should_total);?>"><?php echo $model->account_no; ?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td><?php echo $model->all_number;?></td>
-								<!-- <td><?php echo $model->update_at;?></td>
-								<td><?php if($model->is_temp=='1') echo yii::t('app','临时坐').$model->site_id%1000; else echo $this->getSiteName($model->lid);?></td>
-								<td><?php switch($model->order_status) {case 1: echo yii::t('app','未下单'); break; case 2: echo yii::t('app','已下单未支付') ; break; case 3: echo yii::t('app','已支付'); break; case 4: echo yii::t('app','已结单'); break; case 5: echo yii::t('app','被并台'); break; case 6: echo yii::t('app','被换台'); break; case 7: echo yii::t('app','被撤台'); break; case 8: echo yii::t('app','日结'); break;default :echo '';}?></td>
-								 -->
 								<td><?php
 									if($model->order_type == 4){
-										echo $model->channel->channel_name;
+										if($model->channel){
+											echo $model->channel->channel_name;
+										}
 									}else{
 										if($model->order_type==0){
 											echo '堂食';

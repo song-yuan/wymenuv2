@@ -361,11 +361,14 @@ class StorageOrderController extends BackendController
 					//ProductMaterialStock::updateStock($storage->organization_id, $detail['material_id'], $stock, $stockCost);
 					//入库批次记录.
 					if(!empty($unitratio)){
+						$sql = 'update nb_product_material_stock set stock=0 where stock<0 and delete_flag=0 and material_id='.$detail['material_id'].' and dpid='.$this->companyId;
+						Yii::app()->db->createCommand($sql)->execute();
+						
 						$num = $detail['stock'] * $unitratio->unit_ratio;
 						$model = new ProductMaterialStock();
 						$pms = new Sequence("product_material_stock");
 						$model->lid = $pms->nextval(); 
-						$model->dpid = $storage->organization_id;
+						$model->dpid = $this->companyId;
 						$model->create_at = date('Y-m-d H:i:s',time());
 						$model->update_at = date('Y-m-d H:i:s',time());
 						$model->material_id = $detail['material_id'];
@@ -380,7 +383,7 @@ class StorageOrderController extends BackendController
 						$materialStockLog = new MaterialStockLog();
 						$se=new Sequence("material_stock_log");
 						$materialStockLog->lid = $se->nextval();
-						$materialStockLog->dpid = $storage->organization_id;
+						$materialStockLog->dpid = $this->companyId;
 						$materialStockLog->create_at = date('Y-m-d H:i:s',time());
 						$materialStockLog->update_at = date('Y-m-d H:i:s',time());
 						$materialStockLog->material_id = $detail['material_id'];
