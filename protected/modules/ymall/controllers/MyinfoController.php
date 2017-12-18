@@ -572,7 +572,7 @@ class MyinfoController extends BaseYmallController
 				.' WHERE msl.create_at >DATE_SUB(NOW(), INTERVAL (SELECT st.csales_day FROM nb_stock_setting st WHERE st.dpid=msl.dpid) DAY) and msl.type=1'
 				.' and msl.dpid='.$this->companyId
 				.' GROUP BY msl.dpid,msl.material_id';
-				$command=$db->createCommand($sql)->execute();
+				$command=Yii::app()->db->createCommand($sql)->execute();
 				if ($command) {
 					echo json_encode(1111);exit;
 				}else{
