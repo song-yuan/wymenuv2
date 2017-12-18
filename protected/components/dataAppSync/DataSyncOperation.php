@@ -1844,7 +1844,9 @@ class DataSyncOperation {
 		$temStock = $stock;
 		$time = time ();
 		$sql = 'select sum(stock) as stock from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock <> 0 and delete_flag=0';
+		Helper::writeLog($sql);
 		$summaterialStock = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		Helper::writeLog($summaterialStock['stock']);
 		if($summaterialStock['stock'] > 0){
 			// 总库存大于0
 			$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock <> 0 and delete_flag=0 order by create_at asc';
