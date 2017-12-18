@@ -546,6 +546,7 @@ class MyinfoController extends BaseYmallController
 			'type'=>$type,
 		));
 	}
+
 	//仓库默认设置
 	public function actionStockSetting()
 	{
@@ -567,7 +568,16 @@ class MyinfoController extends BaseYmallController
 			$model->csafe_min_day=$csafe_min_day;
 			$model->csafe_max_day=$csafe_max_day;
 			if ($model->save()) {
-				echo json_encode(1111);exit;
+				$sql = 'INSERT INTO nb_product_material_safe SELECT null AS lid,msl.dpid,NOW() AS create_at,NOW() AS update_at,msl.material_id,(SELECT pm.mphs_code FROM nb_product_material pm WHERE pm.dpid=msl.dpid AND pm.lid=msl.material_id) as mphs_code,(SUM(msl.stock_num)/(SELECT COUNT(*) FROM (SELECT COUNT(msl.dpid) FROM nb_material_stock_log msl WHERE msl.create_at >DATE_SUB(NOW(), INTERVAL (SELECT st.csales_day FROM nb_stock_setting st WHERE st.dpid=msl.dpid) DAY) GROUP BY msl.dpid,DATE_FORMAT(msl.create_at,"%Y-%m-%d")) a)) AS avg_sales,SUM(msl.stock_num) AS all_sales,(SUM(msl.stock_num)/(SELECT COUNT(*) FROM (SELECT COUNT(msl.dpid) FROM nb_material_stock_log msl WHERE msl.create_at >DATE_SUB(NOW(), INTERVAL (SELECT st.csales_day FROM nb_stock_setting st WHERE st.dpid=msl.dpid) DAY) GROUP BY msl.dpid,DATE_FORMAT(msl.create_at,"%Y-%m-%d")) b))*(SELECT st.csafe_min_day FROM nb_stock_setting st WHERE st.dpid=msl.dpid) AS safe_stock,(SUM(msl.stock_num)/(SELECT COUNT(*) FROM (SELECT COUNT(msl.dpid) FROM nb_material_stock_log msl WHERE msl.create_at >DATE_SUB(NOW(), INTERVAL (SELECT st.csales_day FROM nb_stock_setting st WHERE st.dpid=msl.dpid) DAY) GROUP BY msl.dpid,DATE_FORMAT(msl.create_at,"%Y-%m-%d")) c))*(SELECT st.csafe_max_day FROM nb_stock_setting st WHERE st.dpid=msl.dpid) AS max_stock,0 AS delete_flag,11111 as is_sync FROM nb_material_stock_log msl '
+				.' WHERE msl.create_at >DATE_SUB(NOW(), INTERVAL (SELECT st.csales_day FROM nb_stock_setting st WHERE st.dpid=msl.dpid) DAY) and msl.type=1'
+				.' and msl.dpid='.$this->companyId
+				.' GROUP BY msl.dpid,msl.material_id';
+				$command=Yii::app()->db->createCommand($sql)->execute();
+				if ($command) {
+					echo json_encode(1111);exit;
+				}else{
+					echo json_encode(3333);exit;
+				}
 			}else{
 				echo json_encode(2222);exit;
 			}
@@ -576,6 +586,7 @@ class MyinfoController extends BaseYmallController
 			'model'=>$model,
 		));
 	}
+
 	//确认签收页面
 	public function actionSureorder()
 	{
@@ -735,6 +746,7 @@ class MyinfoController extends BaseYmallController
 					'is_sync'=>$is_sync,
 				);
 				$info = Yii::app()->db->createCommand()->insert('nb_product_material_stock',$data);
+
 				$sql = 'update nb_product_material_stock set stock=0 where stock<0 and delete_flag=0 and mphs_code='.$product['material_code'].' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql)->execute();
 				if($info){

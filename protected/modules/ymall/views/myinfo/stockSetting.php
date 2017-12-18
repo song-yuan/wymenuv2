@@ -74,7 +74,6 @@
 
 
 	    mui('.mui-content-padded').on('tap', '#sure', function() {
-
 			var csales_day = $('#inline-range').val();
 			var csafe_min_day = $('#inline-range1').val();
 			var csafe_max_day = $('#inline-range2').val();
@@ -91,8 +90,10 @@
 					console.log(data);
 					if (data=='1111') {
 						mui.toast('保存成功!!!');
-					}else{
+					}else if(data=='2222'){
 						mui.toast('保存失败!!!');
+					}else if(data=='3333'){
+						mui.toast('两天后生效!!!');
 					}
 
 				},'json'

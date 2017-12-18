@@ -282,7 +282,9 @@ class GoodsorderController extends BackendController
 			if((!empty($modelstocks))&&(!empty($goprices))){
 				$goprice = $goprices['reality_total'];
 				$gomeney = $goprices['reality_money'];
-
+				if($gomeney == "0.00"){
+					$gomeney = 1;
+				}
 				foreach ($modelstocks as $ms){
 					$moneys = '';
 					$gdmoneys = '0.00';
