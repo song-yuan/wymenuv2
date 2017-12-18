@@ -1941,7 +1941,7 @@ class DataSyncOperation {
 			$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and delete_flag=0 order by lid desc limit 1';
 			$materialStock = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($materialStock){
-				$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+				$sql = 'update nb_product_material_stock set stock= stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 				
 				$se = new Sequence ( "material_stock_log" );
@@ -1955,7 +1955,7 @@ class DataSyncOperation {
 						'order_product_id'=>$orderProductId,
 						'material_id' => $materialId,
 						'type' => 1,
-						'stock_num' => $realityStock,
+						'stock_num' => $temStock,
 						'original_num'=>$materialStock['batch_stock'],
 						'unit_price'=>$stockPrice,
 						'resean' => '正常消耗',
