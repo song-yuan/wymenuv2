@@ -1,7 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('确认订单');
-// 	var_dump($cupons);exit;
 	$isCupon = false;
 	if(!empty($cupons)){
 		$isCupon = true;
@@ -340,7 +339,7 @@
 <?php endif;?>
 
 <div class="order-remark">
-	<textarea name="taste_memo" placeholder="备注"></textarea>
+	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
