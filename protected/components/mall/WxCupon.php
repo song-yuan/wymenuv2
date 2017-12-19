@@ -61,7 +61,7 @@ class WxCupon
 	public static function getUserNotUseCupon($userId,$dpid){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select m.lid,m.dpid,m.is_used,m.valid_day,m.close_day,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from nb_cupon_branduser m ,nb_cupon n' .
-			   ' where m.cupon_id=n.lid and m.dpid=n.dpid and m.to_group=3 and m.brand_user_lid=:userId and m.is_used=1 and m.delete_flag=0 and n.delete_flag=0 and m.valid_day <=:now and :now <= m.close_day';
+			   ' where m.cupon_id=n.lid and m.dpid=n.dpid and m.to_group=3 and m.brand_user_lid=:userId and m.is_used=1 and m.delete_flag=0 and n.delete_flag=0 and :now <= m.close_day';
 		
         $cupon = Yii::app()->db->createCommand($sql)
 				  	->bindValue(':userId',$userId)
