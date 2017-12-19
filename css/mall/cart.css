@@ -1,5 +1,6 @@
 body{ background-color:#E5E5E5;}
 .section{width: 100%;margin:0 auto; padding: 10px 0; border-bottom: 1px dashed #FF5151;font-size: 15px;}
+.section:last-child{border-bottom: none;}
 .section.disable{color:gainsboro;border-bottom: 1px dashed gainsboro;}
 .section.disable span.price{color:gainsboro;}
 .section.disable span.cart-delete{color:red;float:right;}
@@ -70,12 +71,13 @@ input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-
 .item-group .item{padding:5px 10px;float:left;margin-left:10px;border:1px solid #E5E5E5;border-radius:10px;margin:2px 0 2px 10px;}
 .item-group .group{border:none;}
 .item-group .item.on{border:1px solid #FF5151;}
-
+.activity-info {padding:10px;font-size: 16px;background: rgb(255,255,255);}
 .detail{background: white;width:100px;height:20px;line-height:20px;text-align:center;border-radius:10px;color:#FF5151;font-size:1.0em;border:1px solid #A09C9C;}
 .detail-desc{line-height:20px;padding:5px 0;font-size:12px;}
 .detail-desc span{margin-left:5px;}
 .detail-items{display:none;font-size: 15px;}
 .detail-items .item-group{margin:10px;}
+
 
 .points {
     height: 28px;

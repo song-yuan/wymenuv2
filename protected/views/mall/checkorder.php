@@ -318,25 +318,26 @@
 		</div>
 		<!-- end餐位费 -->
 	<?php endif;?>
+</div>
+<div class="activity-info">
+	<!-- 如果是餐座 则显示下单 不需要支付  -->
+	<?php if($this->type!=1):?>
+	<!-- 完善资料才能使用代金券  -->
+	<?php if($user['mobile_num']&&$user['user_birthday']):?>
+		<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
+			<div class="copun-lt">代金券</div>
+			<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
+			<div class="clear"></div>
+		</div>
+	<?php else:?>
+		<div class="order-copun arrowright disabled">
+			<div class="copun-lt">代金券</div>
+			<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId,'type'=>$this->type,'back'=>1));?>">去完善资料</a></div>
+			<div class="clear"></div>
+		</div>
+	<?php endif;?>
 	<div class="totalinfo" style="padding-top:10px"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 </div>
-
-<!-- 如果是餐座 则显示下单 不需要支付  -->
-<?php if($this->type!=1):?>
-<!-- 完善资料才能使用代金券  -->
-<?php if($user['mobile_num']&&$user['user_birthday']):?>
-	<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
-		<div class="copun-lt">代金券</div>
-		<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
-		<div class="clear"></div>
-	</div>
-<?php else:?>
-	<div class="order-copun arrowright disabled">
-		<div class="copun-lt">代金券</div>
-		<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId,'type'=>$this->type,'back'=>1));?>">去完善资料</a></div>
-		<div class="clear"></div>
-	</div>
-<?php endif;?>
 
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
