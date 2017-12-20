@@ -320,6 +320,13 @@
 	<?php endif;?>
 </div>
 <div class="activity-info">
+	<?php if($original!=$price):?>
+	<div class="order-copun arrowright disabled">
+		<div class="copun-lt">会员折扣优惠</div>
+		<div class="copun-rt"><?php echo '-￥'.number_format($original-$price,2);?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
 	<!-- 如果是餐座 则显示下单 不需要支付  -->
 	<?php if($this->type!=1):?>
 	<!-- 完善资料才能使用代金券  -->
@@ -336,8 +343,8 @@
 			<div class="clear"></div>
 		</div>
 	<?php endif;?>
-	<div class="totalinfo" style="padding-top:10px"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 </div>
+<div class="totalinfo"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
@@ -786,7 +793,7 @@ $(document).ready(function(){
 		money = money.toFixed(2);
 		$('#total').html(money);
 		$('#total').attr('total',money);
-		$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
+		$('.cupon').find('.copun-rt').html('-￥'+cuponMoney);
 		layer.close(cupon_layer);
 	});
 	$('.user-cupon .item.noCupon').click(function(){
