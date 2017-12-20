@@ -321,7 +321,7 @@
 </div>
 <div class="activity-info">
 	<?php if($original!=$price):?>
-	<div class="order-copun arrowright disabled">
+	<div class="order-copun disabled">
 		<div class="copun-lt">会员折扣优惠</div>
 		<div class="copun-rt"><?php echo '-￥'.number_format($original-$price,2);?></div>
 		<div class="clear"></div>
@@ -344,7 +344,7 @@
 		</div>
 	<?php endif;?>
 </div>
-<div class="totalinfo"><span class="font_l" style="margin-right:20px;">总计￥<?php echo $original;?></span><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">会员优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
+<div class="totalinfo"><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
