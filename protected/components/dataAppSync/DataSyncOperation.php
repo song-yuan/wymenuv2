@@ -1198,6 +1198,11 @@ class DataSyncOperation {
 						$refund_fee = -$retreatprice;
 					}
 					$remark = $pay['remark'];
+					$sql = 'select * from nb_order_pay where dpid='.$dpid.' and create_at="'.$retreatTime.'" and order_id='.$orderId.' and account_no="'.$accountNo.'" paytype='.$pay['paytype'].' and payment_method_id='.$pay['payment_method_id'].' and paytype_id='.$pay['paytype_id'];
+					$orderpay = Yii::app ()->db->createCommand ($sql)->queryRow();
+					if($orderpay){
+						continue;
+					}
 					if($pay['paytype']==1||$pay['paytype']==12||$pay['paytype']==13){
 						// 微信支付
 						$rData = array('dpid'=>$dpid,'poscode'=>$poscode,'admin_id'=>$adminId,'paytype'=>$pay['paytype'],'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
