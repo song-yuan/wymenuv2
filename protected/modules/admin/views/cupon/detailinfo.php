@@ -4,7 +4,18 @@
 	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>"></script>
 	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>"></script>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>"></script>
-
+<script type="text/javascript">
+	function toVaild(){
+	    var role = $('input[name="product_id[]"]:checked').val();
+	    if(role==null || role=='0'){
+	        layer.msg('请至少选择一项！',{icon: 6});
+	        return false;
+	         
+	    }else{
+	     	return true;
+	    }
+	}
+</script>
 <style>
 	.modal-dialog{
 		width: 80%;
@@ -57,14 +68,6 @@
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 		<div class="row">
-		<?php $form=$this->beginWidget('CActiveForm', array(
-									'id' => 'sentwxcardpromotion-form',
-									'errorMessageCssClass' => 'help-block',
-									'htmlOptions' => array(
-										'class' => 'form-horizontal',
-										'enctype' => 'multipart/form-data'
-									),
-							)); ?>
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
 			
@@ -75,6 +78,14 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','现金券限定');?></div>
 				</div>
+				<?php $form=$this->beginWidget('CActiveForm', array(
+									'id' => 'sentwxcardpromotion-form',
+									'errorMessageCssClass' => 'help-block',
+									'htmlOptions' => array(
+										'class' => 'form-horizontal',
+										'enctype' => 'multipart/form-data'
+									),
+							)); ?>
 				<?php if(Yii::app()->user->role<11):?>		
 				<div id="printRsultListdetail" style="margin:0;padding:0;width:96%;height:96%;">		                
 			         <div class="modal-header">
@@ -115,8 +126,7 @@
 								         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
 								         	全选
 								         </div>
-								         
-							         </li>                                                                       
+							         </li>
 						         </ul>
 					         </div>
 				         </div>
@@ -126,6 +136,7 @@
 					 </div>
 							                	
 				</div>
+				<?php $this->endWidget(); ?>
 				<div style="width: 100%;border-top: 1px dashed silver;"></div>
 			<?php endif;?>
 				<div id="printRsultListdetail" style="margin:0;padding:0;width:96%;height:96%;">		                
@@ -146,7 +157,8 @@
 						<?php endforeach;?>
 						<?php endif;?>
 						<div class="clear"></div>
-						</div> 
+						
+						</div>
 				         <div id="reportlistdiv" style="display:inline-block;width:50%;font-size:1.5em;float: left;">
 					         <div class="form-group">
 					        	<span class="col-md-5 control-label">选择二级分类</span>
@@ -154,16 +166,42 @@
 									<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control',));?>
 		                       	</div>
 		                      </div>
+		                      <form action="<?php echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId));?>/cuid/<?php echo $cuponid;?>/cucode/<?php echo $cuponcode;?>" method = 'post' onsubmit="return toVaild()"> 
 		                      	<div class="form-group">
 									<span class="col-md-5 control-label">选择单品</span>
-									<div class="col-md-4">											
-		                            <?php echo CHtml::dropDownList('phs_code', '' , array('0' => yii::t('app','-- 请选择 --'))+$products ,array('class' => 'form-control','placeholder'=>'选择单品'));?>
-									</div>
+									<div style="display:inline-block;width:80%;">
+						         
+						         <?php if($products):?>
+						         <?php foreach($products as $key=>$product):?>
+						         	<ul id="<?php echo $key;?>" style="margin:0;padding:0;list-style:none;display: none;">
+						         	<?php foreach($product as $key=>$product_name):?>
+								         <li style="width:50%;float:left;">
+									         <div style="width:85%;float:left;"><?php echo $product_name;?></div>
+									         <div style="width:10%;float:left;">
+									         	<input style="height:20px;" type="checkbox" class="check" value="<?php echo $key;?>"/>
+									         </div>
+								         </li>
+								         <?php endforeach;?>
+								          <li style="width:100%;">
+								         <div style="width:10%;float:left;"></div>
+								         <div style="width:60%;float:left;"></div>
+								         <div style="width:20%;float:right;">
+								         	<input style="height:20px;" type="checkbox" class="group-checkable" />
+								         	全选
+								         </div>
+								         
+							         </li>        
+							        </ul>
+							     <?php endforeach;?>
+							     <?php endif;?>   
+						        
+					         </div>
 								</div>
 								<div class="button-style">
-							         <button id="addprod" type="button" class="btn blue">确认</button>
+							         <button id="addprod" type="submit" class="btn blue">确认</button>
 						         </div>
 				         </div>
+				         </form>
 				         <div class="clear"></div>
 			         </div>
 			         
@@ -177,7 +215,7 @@
 		</div>
 		</div>
         </div>
-		<?php $this->endWidget(); ?>
+		
 		<?php $this->widget('ext.kindeditor.KindEditorWidget',array(
 								'id'=>'SentwxcardPromotion_promotion_memo',	//Textarea id
 								'language'=>'zh_CN',
@@ -197,53 +235,66 @@
 				
  <script type="text/javascript">
 	$(document).ready(function(){
+		$(".group-checkable").click(function () {
+            if($(this).attr("checked")) { // 全选 
+                $("input[name='product_id[]']").each(function () {
+                    $(this).attr("checked", true);
+                });
+            }else { // 取消全选 
+                $("input[name='product_id[]']").each(function () {
+                    $(this).attr("checked", false);
+                });
+            }
+        });
 
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			$.ajax({
-				url:'<?php echo $this->createUrl('cupon/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
-				type:'GET',
-				dataType:'json',
-				success:function(result){
-					//alert(result.data);
-					var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';                                                                                            
-					if(result.data.length){
-					//alert(1);
-						$.each(result.data,function(index,value){
-							str = str + '<option value="'+value.id+'">'+value.name+'</option>';
-						});                                                                                                                                                                                                       
-					}
-					$('#phs_code').html(str); 
+			<?php foreach ($products as $key => $product):?>
+			if(cid=='<?php echo $key;?>'){
+				$('#'+cid).show();
+				$('#<?php echo $key;?> .check').attr('name','product_id[]');
+			}else{
+				if(cid!='<?php echo $key;?>'){
+					$('#<?php echo $key;?>').hide();
+					$('#<?php echo $key;?> .check').attr('name','product');
 				}
-			});
+				
+			}
+			<?php endforeach;?>
+			
 		});
 
-		$('#addprod').on('click',function(){
-			var prodcode = $('#phs_code').val();
-			if(prodcode == '0' || prodcode == null){
-				layer.msg('请选择一项单品！',{icon: 6});
-				return false;
-				}
-			var cuid = '<?php echo $cuponid;?>';
-			var cucode = '<?php echo $cuponcode;?>';
-			//return false;
-			$.ajax({
-				url:'<?php echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId,));?>/prodcode/'+prodcode+"/cuid/"+cuid+"/cucode/"+cucode,
-				type:'GET',
-				dataType:'json',
-				success:function(msg){
-					if(msg.status){
-						 layer.msg('成功！',{icon: 6});
-						 location.reload();
-					}else{
-						 layer.msg('失败！',{icon: 5});
-					}
-				},
-				error:function(){
-					layer.msg('网络错误！',{icon: 5});
-					}
-			});
-		});
+		// $('#addprod').on('click',function(){
+		// 	var id_array=new Array();  
+		// 	$('input[name="product_id[]"]:checked').each(function(){  
+		// 	    id_array.push($(this).val());//向数组中添加元素  
+		// 	});  
+		// 	var idstr=id_array.join(',');//将数组元素连接起来以构建一个字符串  
+		// 	alert(idstr);  
+		// 	if(prodcode == '0' || prodcode == null){
+		// 		layer.msg('请选择一项单品！',{icon: 6});
+		// 		return false;
+		// 		}
+		// 	var cuid = '<?php //echo $cuponid;?>';
+		// 	var cucode = '<?php //echo $cuponcode;?>';
+		// 	//return false;
+		// 	$.ajax({
+		// 		url:'<?php //echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId,));?>/idstr/'+idstr+"/cuid/"+cuid+"/cucode/"+cucode,
+		// 		type:'GET',
+		// 		dataType:'json',
+		// 		success:function(msg){
+		// 			if(msg.status){
+		// 				 layer.msg('成功！',{icon: 6});
+		// 				 location.reload();
+		// 			}else{
+		// 				 layer.msg('失败！',{icon: 5});
+		// 			}
+		// 		},
+		// 		error:function(){
+		// 			layer.msg('网络错误！',{icon: 5});
+		// 			}
+		// 	});
+		// });
 		$('.delete-prod').on('click',function(){
 			
 			var prodcode = $(this).attr('prod_code');
