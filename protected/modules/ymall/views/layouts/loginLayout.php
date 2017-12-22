@@ -11,8 +11,11 @@
 	<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/iconfont.css" rel="stylesheet"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/ymall.css"/>
 	<style>
-		.mui-hbar{background-color: #FF8C00!important;color:white;}
+		.mui-hbar{background-color: #B22222!important;color:white;}
 		.mui-a{color:yellow!important;font-weight: 900;}
+		/*.mui-hbar{background-color: #FF8C00!important;color:white;}
+		.mui-a{color:#3ff!important;font-weight: 900;}*/
+		/* .mui-bar-tab .mui-tab-item {color:#FF8C00;} */
 		.mui-bar-tab .mui-tab-item {color:#fff;}
 	</style>
 	<script type="text/javascript" src="<?php echo  Yii::app()->request->baseUrl; ?>/plugins/jquery-1.10.2.min.js"></script>

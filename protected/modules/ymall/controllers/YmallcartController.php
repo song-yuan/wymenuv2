@@ -19,9 +19,11 @@ class YmallcartController extends BaseYmallController
 		$user_id = substr(Yii::app()->user->userId,0,10);
 
 		$db = Yii::app()->db;
-		$sql = 'select gc.*,g.description,g.goods_unit,g.store_number,g.main_picture,g.original_price as now_price,g.member_price as now_mbprice,c.company_name from nb_goods_carts gc '
+		$sql = 'select gc.*,g.description,g.goods_unit,g.store_number,g.main_picture,g.price as now_price,g.price as now_mbprice,c.company_name,mu.unit_name from nb_goods_carts gc '
 				.' left join nb_company c on(c.dpid=gc.stock_dpid) '
 				.' left join nb_goods g on (g.lid=gc.goods_id and g.goods_code=gc.goods_code )'
+				.' left join nb_goods_material gm on (g.lid=gm.goods_id and g.goods_code=gm.goods_code )'
+				.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=gm.unit_code)'
 				.' where gc.dpid='.$this->companyId
 				.' and gc.user_id='.$user_id
 				.' and gc.delete_flag=0'
@@ -154,6 +156,7 @@ class YmallcartController extends BaseYmallController
 			}
 		}
 	}
+
 	public function actionDelete()
 	{
 		//接收ajax提交的商品信息
@@ -209,7 +212,7 @@ class YmallcartController extends BaseYmallController
 		$goods_address_id = Yii::app()->request->getParam('goods_address_id',$goods_address_id);
 
 		$db = Yii::app()->db;
-		$sql = 'select gc.dpid,gc.stock_dpid,gc.goods_name,gc.goods_id,gc.goods_code,gc.material_code,gc.promotion_price,gc.price,g.original_price as new_price,gc.num,gc.end_time from nb_goods_carts gc left join nb_goods g on(g.lid=gc.goods_id and g.goods_code=gc.goods_code ) where gc.lid in('.$lids.') and gc.delete_flag=0';
+		$sql = 'select gc.dpid,gc.stock_dpid,gc.goods_name,gc.goods_id,gc.goods_code,gc.material_code,gc.promotion_price,gc.price,g.price as new_price,gc.num,gc.end_time from nb_goods_carts gc left join nb_goods g on(g.lid=gc.goods_id and g.goods_code=gc.goods_code ) where gc.lid in('.$lids.') and gc.delete_flag=0';
 		$products = $db->createCommand($sql)->queryAll();
 		$should_total = 0;
 		$reality_total = 0;
@@ -297,12 +300,12 @@ class YmallcartController extends BaseYmallController
 			if ($order) {
 				$order->paytype = 2;
 				if ($order->update()) {
-					$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>1));
+					$this->redirect(array('myinfo/goodsOrderNosent' , 'companyId' => $this->companyId,'success'=>1));
 				}else{
-					$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>3));
+					$this->redirect(array('myinfo/goodsOrderNopay' , 'companyId' => $this->companyId,'success'=>3));
 				}
 			} else {
-				$this->redirect(array('myinfo/index' , 'companyId' => $this->companyId,'success'=>2));
+				$this->redirect(array('myinfo/goodsOrderNopay' , 'companyId' => $this->companyId,'success'=>2));
 			}
 		}else if($daofu==0){//修改地址
 			//查询默认的$goods_address_id
@@ -347,9 +350,11 @@ class YmallcartController extends BaseYmallController
 		// p($golid);
 		//以仓库分类订单详情表
 
-		$sql2 = 'select god.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name from nb_goods_order_detail god '
+		$sql2 = 'select god.*,g.description,g.goods_unit,g.store_number,g.main_picture,c.company_name,mu.unit_name from nb_goods_order_detail god '
 				.' left join nb_company c on(c.dpid=god.stock_dpid) '
 				.' left join nb_goods g on (g.lid=god.goods_id and g.goods_code=god.goods_code )'
+				.' left join nb_goods_material gm on (g.lid=gm.goods_id and g.goods_code=gm.goods_code )'
+				.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=gm.unit_code)'
 				.' where god.dpid='.$this->companyId
 				.' and god.account_no='.$account_no
 				.' and god.delete_flag=0'

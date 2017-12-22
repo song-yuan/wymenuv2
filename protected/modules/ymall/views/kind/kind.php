@@ -37,10 +37,10 @@
 			}
 			.mui-col-xs-6 {
 			    width: 50%;
-			    height:229px;
+			    height:212px;
 			}
 			.bottom{
-				width: 85%;
+				
 				position:absolute;
 				bottom:8px;
 				font-size:0.9em;
@@ -50,7 +50,7 @@
 			}*/
 			.addicon{
 				position:absolute;
-				right:2px;
+				right:6px;
 				bottom:9px;
 				width: 64px;
 				height: 20px;
@@ -86,6 +86,8 @@
 			.mui-off-canvas-left, .mui-off-canvas-right {
 			    width: 55%;
 			}
+			.mui-toast-container{bottom: 50%!important;}
+			.cent_footer{background-color: #FBF3F6; height: 60px;width: 120%;margin-left:-14px;}
 		</style>
 		<div class="mui-off-canvas-wrap mui-draggable">
 			<div class="mui-inner-wrap" id="Main">
@@ -138,18 +140,29 @@
 								<li class="ui-table-view-cell mui-media mui-col-xs-6">
 									<div class="">
 										<div class="goods-pic">
-											<img src="<?php if($m['main_picture']){ echo $m['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height: 130px;"/>
+											<img src="<?php if($m['main_picture']){ echo $m['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height:110px; "/>
 										</div>
-										<div>
-											<span class="color-blue">[<?php echo $m['company_name'];?>]</span>
-											<?php echo $m['goods_name'];?>
+										<div style="text-align: center;">
+											<span style="font-size: 16px;line-height: 16px;color:black;margin-left: 10px;">
+												<?php echo $m['goods_name'];?>
+											</span>
 										</div>
-										<div class="bottom">
-											<div class="float-l color-r">￥ <?php echo $m['original_price'];?></div>
-											<div class="float-l " style="margin-left:10px;"> / <?php echo $m['goods_unit'];?></div>
+										<div class="cent_footer">
+											<div style="text-align: center;">
+												<span class="color-blue" style="font-size: 14px;line-height: 14px;">
+													[<?php echo $m['company_name'];?>]
+												</span>
+												<span style="font-size: 14px;line-height: 14px;color:#666;">
+													<?php echo $m['unit_name'];?>
+												</span>
+											</div>
+											<div class="bottom" >
+												<div class="float-l color-r" style="margin-left: 14px;">￥<?php echo $m['price'];?></div>
+												<div class="float-l " style="">/ <?php echo $m['goods_unit'];?></div>
+											</div>
 										</div>
 									</div>
-									<div class="addicon" stock_dpid="<?php echo $m['dpid'];?>" goods_name="<?php echo $m['goods_name'];?>" goods_id="<?php echo $m['glid'];?>"  price="<?php echo $m['original_price'];?>"  goods_code="<?php echo $m['goods_code'];?>" material_code="<?php echo $m['material_code'];?>">加入购物车</div>
+									<div class="addicon" stock_dpid="<?php echo $m['dpid'];?>" goods_name="<?php echo $m['goods_name'];?>" goods_id="<?php echo $m['glid'];?>"  price="<?php echo $m['price'];?>"  goods_code="<?php echo $m['goods_code'];?>" material_code="<?php echo $m['material_code'];?>">加入购物车</div>
 								</li>
 							<?php endforeach;?>
 						</ul>
@@ -232,10 +245,9 @@
 			//搜索为空阻止提交
 			$('.search-form').submit(function(event) {
 				var content = $('#search').val();
-				// alert(content);
 				if (content == '') {
 					event.preventDefault();
-					mui.alert("请填写搜索内容 ! ! !");
+					mui.toast("请填写搜索内容 ! ! !",{ duration:'long', type:'div' });
 				}
 			});
 

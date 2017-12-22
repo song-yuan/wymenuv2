@@ -76,14 +76,14 @@
 			/**		*/
 
 			/*@import url(http://fonts.googleapis.com/css?family=Expletus+Sans);*/
-			* {
+			*{
 				margin:0; padding:0;
 				box-sizing: border-box;
 			}
 			/*body {
 			font-family: "Expletus Sans", sans-serif;
 			}*/
-			h4 {
+			.m-title {
 				color:gray;
 				border-bottom: 1px solid #ccc;
 				padding: 9px;
@@ -185,6 +185,31 @@
 				width:100%;
 				height: 250px;
 			}
+			.mui-toast-container{bottom: 50%!important;}
+			.buy1{
+				display: inline-block;
+				height: 40.8px;
+				width: 40px;
+				background-image: url('../../../../../../img/ymall/buy1.png');
+	    		background-size: 102%;
+			}
+			.buy2{
+				display: inline-block;
+				height: 40.8px;
+				width: 40px;
+				background-image: url('../../../../../../img/ymall/buy2.png');
+	    		background-size: 102%;
+			}
+			.buy3{
+				display: inline-block;
+				height: 40.8px;
+				width: 40px;
+				background-image: url('../../../../../../img/ymall/buy3.png');
+	    		background-size: 102%;
+			}
+			.mui-media-body{
+				color: orange!important;
+			}
 		</style>
 
 		<div id="popover" class="mui-popover">
@@ -206,7 +231,7 @@
 		<div class="mui-off-canvas-wrap mui-draggable">
 			<div class="mui-inner-wrap"  id="Main">
 				<header class="mui-bar mui-bar-nav mui-hbar">
-					<a id="mui-popover1" class="mui-icon mui-icon-download mui-pull-right" style="color:white;"></a>
+					<a iid="mui-popover1" class="mui-icon mui-icon-download mui-pull-right" style="color:white;"></a>
 					<a href="popover" style="z-index:1;color:white;width: 25%;height:40px;display:inline-block;">
 						<span class="mui-icon mui-icon-map"></span>
 						<p style="color:white;width:66%;height:40px;float:right;overflow:hidden;font-weight:900;"><?php echo $company_name; ?></p>
@@ -274,8 +299,35 @@
 						</div>
 						<?php endif; ?>
 
+						<ul class="mui-table-view mui-grid-view mui-grid-9">
+							<li class="mui-table-view-cell mui-col-xs-12" style="padding:0;">
+								<h4  class=" m-title" style="text-align: left;padding:7px;">常用功能</h4>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4" style="color:red;" id="buy3">
+								<a href="#">
+									<span class="buy3"></span>
+									<div class="mui-media-body">按天采购</div>
+								</a>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4" style="color:red;" id="buy2">
+								<a href="#">
+									<span class="buy2"></span>
+									<div class="mui-media-body">安全库存采购</div>
+								</a>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4" style="color:red;" id="buy1">
+								<a href="#">
+									<span class="buy1"></span>
+									<div class="mui-media-body">预估额采购</div>
+								</a>
+							</li>
+
+						</ul>
+
+
+
 						<div>
-							<h4>店铺原料库存</h4>
+							<h4 class="m-title">现有原料库存</h4>
 							<!-- HTML5 -->
 							<div style="width: 96%;margin:0 auto;position: relative;">
 								<?php if($stocks):
@@ -294,6 +346,7 @@
 										}
 										array_push($arr[$value['category_id']], $value);
 									}
+									// p($arr);
 								?>
 								<?php
 								foreach ($arr as $ar):
@@ -321,9 +374,9 @@
 		<script>
 
 			//采购订单生成对话框
-			mui('#Main .mui-bar').on('tap','#mui-popover1',function(){
+			mui('.mui-grid-9').on('tap','#buy2',function(){
 				var btnArray = ['否','是'];
-				mui.confirm('是否确定自动加入购物车 ？','自动生成采购单',btnArray,function(e){
+				mui.confirm('是否确定按照安全库存模式生成购物车清单 ？','安全库存采购',btnArray,function(e){
 					if(e.index==1){
 						//自己的逻辑
 						mui.post('<?php echo $this->createUrl("autodownorder/index",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
@@ -357,6 +410,47 @@
 				});
 			});
 
+			//采购订单生成对话框
+			mui('.mui-grid-9').on('tap','#buy3',function(){
+
+				// e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
+				var btnArray = ['取消', '确定'];
+				mui.prompt('是否确定按照预估天数生成购物车清单 ？', '7', '按天采购', btnArray, function(e) {
+					if(e.index==1){
+						//自己的逻辑
+						mui.post('<?php echo $this->createUrl("autodownorder/index2",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
+							aa:1, // 参数  键 ：值
+							day_nums:e.value, // 参数  键 ：值
+						},
+						function(data){ //data为服务器端返回数据
+							//自己的逻辑
+							console.log(data);
+							ss = data.split("-");
+							if (ss[0] == '') {
+								if (ss[1] == '') {
+									location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>';
+								}else {
+									mui.alert(ss[1]+'为自建原料,或者总部无货, 无法总部购买!!!');
+									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
+								}
+							}else {
+								if (ss[1] == '') {
+									mui.alert(ss[0]+'没有消耗信息需要手动添加');
+									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
+								}else {
+									mui.alert(ss[0]+'没有消耗信息需要手动添加'+'----'+ss[1]+'为自建原料,或者总部无货, 无法总部购买!!!');
+									setTimeout("location.href='<?php echo $this->createUrl("ymallcart/index",array("companyId"=>$this->companyId)) ?>'",2500);
+								}
+							}
+						},'json'
+						);
+					}else{
+						// alert('点击了- 否');
+					}
+					document.querySelector('.mui-popup-input input').type='number';
+				});
+			});
+
 			//初始化单页的区域滚动
 			mui('.mui-scroll-wrapper').scroll();
 
@@ -371,21 +465,21 @@
 				// alert(content);
 				if (content == '') {
 					event.preventDefault();
-					mui.alert("请填写搜索内容 ! ! !");
+					mui.toast("请填写搜索内容 ! ! !",{ duration:'long', type:'div' });
 				}
 			});
 
-			$('.companyId').change(function(event) {
-				/* Act on the event */
-				var companyId = $(this).val();
-				var btnArray = ['是','否'];
-				mui.confirm('是否改变当前店铺 ？','提示',btnArray,function(e){
-					if(e.index==0){
-						//自己的逻辑
-						location.href="<?php echo $this->createUrl('product/index'); ?>/companyId/"+companyId;
-					}else{
-						location.reload();
-					}
-				});
-			});
+			// $('.companyId').change(function(event) {
+			// 	/* Act on the event */
+			// 	var companyId = $(this).val();
+			// 	var btnArray = ['是','否'];
+			// 	mui.confirm('是否改变当前店铺 ？','提示',btnArray,function(e){
+			// 		if(e.index==0){
+			// 			//自己的逻辑
+			// 			location.href="<?php echo $this->createUrl('product/index'); ?>/companyId/"+companyId;
+			// 		}else{
+			// 			location.reload();
+			// 		}
+			// 	});
+			// });
 		</script>

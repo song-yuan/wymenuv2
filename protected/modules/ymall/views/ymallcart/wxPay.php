@@ -2,7 +2,7 @@
 		$baseUrl = Yii::app()->baseUrl;
 		$weixinServerAccount = WxAccount::get($this->companyId);
 		if($weixinServerAccount['appid'] == ''){
-			$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no' => $golid['account_no'],'success'=>3));
+			$this->redirect(array('ymallcart/orderlist' , 'companyId' => $this->companyId,'account_no' => $golid['account_no'],'success'=>3));exit;
 		}
 		$jsSdk = new WeixinJsSdk($weixinServerAccount['appid'],$weixinServerAccount['appsecret'],$this->companyId);
 		$signPackage = $jsSdk->GetSignPackage();
@@ -28,6 +28,7 @@
 				color: #6d6d72;
 				font-size: 15px;
 			}
+			.mui-toast-container{bottom: 50%!important;}
 		</style>
 		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		<script>
@@ -150,11 +151,11 @@
 			//状态提示
 			var status = '<?php echo $success; ?>';
 			if (status == '1') {
-				mui.toast('修改地址成功');
+				mui.toast('修改地址成功',{ duration:'long', type:'div' });
 			}else if(status == '2'){
-				mui.toast('修改地址失败');
+				mui.toast('修改地址失败',{ duration:'long', type:'div' });
 			}else if(status == '3'){
-				mui.toast('订单选择有问题 , 修改地址失败');
+				mui.toast('订单选择有问题 , 修改地址失败',{ duration:'long', type:'div' });
 			}
 
 			//调用微信JS api 支付

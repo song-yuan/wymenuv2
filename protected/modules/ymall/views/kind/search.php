@@ -34,7 +34,7 @@
 			}
 			.mui-col-xs-6 {
 			    width: 50%;
-			    height:229px;
+			    height:212px;
 			}
 			.bottom{
 				width: 85%;
@@ -43,7 +43,7 @@
 			}
 			.addicon{
 				position:absolute;
-				right:2px;
+				right:6px;
 				bottom:9px;
 				width: 64px;
 				height: 20px;
@@ -89,15 +89,27 @@
 							<li class="ui-table-view-cell mui-media mui-col-xs-6">
 								<div class="">
 									<div class="goods-pic">
-										<img src="<?php if($product['main_picture']){ echo 'http://menu.wymenu.com/'.$product['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height: 130px;"/>
+										<img src="<?php if($product['main_picture']){ echo 'http://menu.wymenu.com/'.$product['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height: 110px;"/>
 									</div>
-									<div><span class="color-blue">[<?php echo $product['company_name'];?>]</span><?php echo $product['goods_name'];?></div>
+									<div style="text-align: center;">
+										<span style="font-size: 16px;line-height: 16px;color:black;margin-left: 10px;">
+											<?php echo $product['goods_name'];?>
+										</span>
+									</div>
+									<div style="text-align: center;">
+										<span class="color-blue" style="font-size: 14px;line-height: 14px;">
+											[<?php echo $product['company_name'];?>]
+										</span>
+										<span style="font-size: 14px;line-height: 14px;color:#666;">
+											<?php echo $product['unit_name'];?>
+										</span>
+									</div>
 									<div  class="bottom">
-										<div class="float-l color-r">¥ <?php echo $product['original_price'];?></div>
-										<div class="float-l " style="margin-left:10px;"> / <?php echo $product['goods_unit'];?></div>
+										<div class="float-l color-r">¥ <?php echo $product['price'];?></div>
+										<div class="float-l " style="margin-left:10px;">/ <?php echo $product['goods_unit'];?></div>
 									</div>
 								</div>
-								<div class="addicon" stock_dpid="<?php echo $product['dpid'];?>" goods_name="<?php echo $product['goods_name'];?>" goods_id="<?php echo $product['glid'];?>"  price="<?php echo $product['original_price'];?>"  goods_code="<?php echo $product['goods_code'];?>" material_code="<?php echo $product['material_code'];?>">加入购物车</div>
+								<div class="addicon" stock_dpid="<?php echo $product['dpid'];?>" goods_name="<?php echo $product['goods_name'];?>" goods_id="<?php echo $product['glid'];?>"  price="<?php echo $product['price'];?>"  goods_code="<?php echo $product['goods_code'];?>" material_code="<?php echo $product['material_code'];?>">加入购物车</div>
 							</li>
 							<?php endforeach; ?>
 							<?php endif; ?>
