@@ -375,8 +375,8 @@
 
 			//采购订单生成对话框
 			mui('.mui-grid-9').on('tap','#buy2',function(){
-				var btnArray = ['否','是'];
-				mui.confirm('是否确定按照安全库存模式生成购物车清单 ？','安全库存采购',btnArray,function(e){
+				var btnArray = ['取消', '确定'];
+				mui.confirm('按照安全库存模式生成购物车清单 ？','安全库存采购',btnArray,function(e){
 					if(e.index==1){
 						//自己的逻辑
 						mui.post('<?php echo $this->createUrl("autodownorder/index",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
@@ -415,7 +415,7 @@
 
 				// e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
 				var btnArray = ['取消', '确定'];
-				mui.prompt('是否确定按照预估天数生成购物车清单 ？', '7', '按天采购', btnArray, function(e) {
+				mui.prompt('按照预估天数生成购物车清单 ？', '7', '按天采购', btnArray, function(e) {
 					if(e.index==1){
 						//自己的逻辑
 						mui.post('<?php echo $this->createUrl("autodownorder/index2",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
@@ -447,8 +447,9 @@
 					}else{
 						// alert('点击了- 否');
 					}
-					document.querySelector('.mui-popup-input input').type='number';
+					
 				});
+				document.querySelector('.mui-popup-input input').type='number';
 			});
 
 			//初始化单页的区域滚动
