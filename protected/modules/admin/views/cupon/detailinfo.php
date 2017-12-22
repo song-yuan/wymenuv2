@@ -169,15 +169,24 @@
 		                      </div> 
 		                      	<div class="form-group">
 									<span style="margin-left: 100px;" class="col-md-5 control-label">选择单品</span>
+		                      </div>
+		                      <form action="<?php echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId));?>/cuid/<?php echo $cuponid;?>/cucode/<?php echo $cuponcode;?>" method = 'post' onsubmit="return toVaild()"> 
+		                      	<div class="form-group">
+									<span class="col-md-5 control-label">选择单品</span>
 									<div style="display:inline-block;width:80%;">
 						         
 						         <?php if($products):?>
 						         <?php foreach($products as $key=>$product):?>
+
 						         	<ul id="<?php echo $key;?>" style="margin:0;padding:0;list-style:none;">
+
+						         	<ul id="<?php echo $key;?>" style="margin:0;padding:0;list-style:none;display: none;">
+
 						         	<?php foreach($product as $key=>$product_name):?>
 								         <li style="width:50%;float:left;">
 									         <div style="width:85%;float:left;"><?php echo $product_name;?></div>
 									         <div style="width:10%;float:left;">
+
 									         	<input style="height:20px;" type="checkbox" class="check" value="<?php echo $key;?>" name="product_id[]"/>
 									         </div>
 								         </li>
@@ -188,6 +197,11 @@
 							     <?php endif;?>   
 						        <ul style="margin:0;padding:0;list-style:none;">
 						        	 <li style="width:100%;">
+
+									         	<input style="height:20px;" type="checkbox" class="check" value="<?php echo $key;?>"/>
+									         </div>
+								         </li>
+								          <li style="width:100%;">
 								         <div style="width:10%;float:left;"></div>
 								         <div style="width:60%;float:left;"></div>
 								         <div style="width:20%;float:right;">
@@ -197,6 +211,8 @@
 								         
 							         </li>        
 						        </ul>
+							        </ul>
+						        
 					         </div>
 								</div>
 								<div class="button-style">
@@ -269,40 +285,23 @@
 				<?php endforeach;?>
 			}
 			
+
+		$('#selectCategory').change(function(){
+			var cid = $(this).val();
+			<?php foreach ($products as $key => $product):?>
+			if(cid=='<?php echo $key;?>'){
+				$('#'+cid).show();
+				$('#<?php echo $key;?> .check').attr('name','product_id[]');
+			}else{
+				if(cid!='<?php echo $key;?>'){
+					$('#<?php echo $key;?>').hide();
+					$('#<?php echo $key;?> .check').attr('name','product');
+				}
+				
+			}
+			<?php endforeach;?>
 			
 		});
-
-		// $('#addprod').on('click',function(){
-		// 	var id_array=new Array();  
-		// 	$('input[name="product_id[]"]:checked').each(function(){  
-		// 	    id_array.push($(this).val());//向数组中添加元素  
-		// 	});  
-		// 	var idstr=id_array.join(',');//将数组元素连接起来以构建一个字符串  
-		// 	alert(idstr);  
-		// 	if(prodcode == '0' || prodcode == null){
-		// 		layer.msg('请选择一项单品！',{icon: 6});
-		// 		return false;
-		// 		}
-		// 	var cuid = '<?php //echo $cuponid;?>';
-		// 	var cucode = '<?php //echo $cuponcode;?>';
-		// 	//return false;
-		// 	$.ajax({
-		// 		url:'<?php //echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId,));?>/idstr/'+idstr+"/cuid/"+cuid+"/cucode/"+cucode,
-		// 		type:'GET',
-		// 		dataType:'json',
-		// 		success:function(msg){
-		// 			if(msg.status){
-		// 				 layer.msg('成功！',{icon: 6});
-		// 				 location.reload();
-		// 			}else{
-		// 				 layer.msg('失败！',{icon: 5});
-		// 			}
-		// 		},
-		// 		error:function(){
-		// 			layer.msg('网络错误！',{icon: 5});
-		// 			}
-		// 	});
-		// });
 		$('.delete-prod').on('click',function(){
 			
 			var prodcode = $(this).attr('prod_code');

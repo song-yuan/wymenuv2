@@ -307,6 +307,7 @@ class CuponController extends BackendController
 					);
 					//var_dump($data);exit;
 					$command = $db->createCommand()->insert('nb_cupon_product',$data);
+
 					if($command){
 						$sql = 'update nb_cupon set type_prod = 1 where dpid ='.$this->companyId.' and lid ='.$cuid;
 						$result = $db->createCommand($sql)->execute();
@@ -320,6 +321,12 @@ class CuponController extends BackendController
 			}
 			
 			
+
+				
+			
+
+			
+
 	}
 
 
