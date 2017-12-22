@@ -190,21 +190,21 @@
 				display: inline-block;
 				height: 40.8px;
 				width: 40px;
-				background-image: url('../../../../../../img/ymall/buy1.png');
+				background-image: url('../../../../img/ymall/buy1.png');
 	    		background-size: 102%;
 			}
 			.buy2{
 				display: inline-block;
 				height: 40.8px;
 				width: 40px;
-				background-image: url('../../../../../../img/ymall/buy2.png');
+				background-image: url('../../../../img/ymall/buy2.png');
 	    		background-size: 102%;
 			}
 			.buy3{
 				display: inline-block;
 				height: 40.8px;
 				width: 40px;
-				background-image: url('../../../../../../img/ymall/buy3.png');
+				background-image: url('../../../../img/ymall/buy3.png');
 	    		background-size: 102%;
 			}
 			.mui-media-body{
