@@ -25,18 +25,12 @@ class InventoryController extends BackendController
 		$criteria->addCondition('dpid=:dpid and delete_flag=0 and type =1');
 		if(Yii::app()->request->isPostRequest){
 			
-			$storage = Yii::app()->request->getPost('storage',0);
+			$storage = Yii::app()->request->getPost('reasonid',0);
 			if($storage){
-				//echo($oid);
-				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
-				//var_dump($ogname);exit;
-				$criteria->addSearchCondition('inventory_account_no',$storage);
+				$criteria->addCondition('reason_id ='.$storage);
 			}
 			$purchase = Yii::app()->request->getPost('purchase',0);
 			if($purchase){
-				//echo($oid);
-				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
-				//var_dump($ogname);exit;
 				$criteria->addSearchCondition('purchase_account_no',$purchase);
 			}
 			$begintime = Yii::app()->request->getPost('begintime',0);
@@ -54,6 +48,8 @@ class InventoryController extends BackendController
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Inventory::model()->findAll($criteria);
+		
+		$retreats = $this->getRets();
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -62,6 +58,7 @@ class InventoryController extends BackendController
 				'endtime'=>$endtime,
 				'storage'=>$storage,
 				'purchase'=>$purchase,
+				'retreats'=>$retreats,
 		));
 	}
 	public function actionSetMealList() {
@@ -178,8 +175,6 @@ class InventoryController extends BackendController
 		$retreats = $this->getretreats();
 		$retreatId=0;
 		$materials = $this->getMaterials();
-		$retreats = $this->getretreats();
-		$retreatslist=CHtml::listData($retreats, 'lid', 'name');
 		$this->render('detailcreate' , array(
 				'categories'=>$categories,
 				'materials'=>$materials,
@@ -314,6 +309,13 @@ class InventoryController extends BackendController
 		}
 		//var_dump($optionsReturn);exit;
 		return $optionsReturn;
+	}
+	private function getRets(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.type=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = Retreat::model()->findAll($criteria);
+		return $models;
 	}
 	private function getMaterials(){
 		$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));

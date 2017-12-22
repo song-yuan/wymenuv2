@@ -33,10 +33,19 @@
 	<!-- END PAGE HEADER-->
 	<style>
 		.find form input{display: inline;width:180px;}
+		.find form select{display: inline;width:180px;}
 	</style>
 	<div class="find">
 		<form action="" method="post">
-			<input type="text" name="storage" class="form-control" placeholder="盘损单号" value="<?php echo isset($storage) && $storage ?$storage:'';?>" />
+			<select class="form-control" id="pdname">
+				<option cate = "0" value="0"><?php echo '--请选择原因--';?></option>
+				<?php if($retreats):?>
+				<?php foreach ($retreats as $m):?>
+				<option class="proname " value="<?php echo $m['lid'];?>"><?php echo $m['name'];?></option>
+				<?php endforeach;endif;?>
+				<?php ?>
+			</select>
+			<input type="hidden" name="reasonid" id="reasonid" class="form-control" value="" />
 			<input type="text" name="begintime" class="ui_timepicker form-control" placeholder="起始日期" value="<?php echo isset($begintime) && $begintime ?$begintime:'';?>" />
 			<input type="text" name="endtime" class="ui_timepicker form-control" placeholder="结束日期" value="<?php echo isset($endtime) && $endtime ?$endtime:'';?>" />
 			<button type="submit" class="btn green">
@@ -160,17 +169,9 @@
 			}
 			return true;
 		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('storageOrder/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('storageOrder/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+		$('#pdname').change(function () {
+			var pid = $(this).val();
+			$('#reasonid').val(pid);
 		});
 	});
 	$(function () {
