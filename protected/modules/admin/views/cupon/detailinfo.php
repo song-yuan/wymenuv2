@@ -266,6 +266,7 @@
 			}else{
 				<?php foreach ($products as $key => $product):?>
 				$('#<?php echo $key;?>').show();
+				$('#<?php echo $key;?> .check').attr('name','product_id[]');
 				<?php endforeach;?>
 			}
 			
