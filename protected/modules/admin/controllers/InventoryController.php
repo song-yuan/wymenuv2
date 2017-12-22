@@ -14,36 +14,34 @@ class InventoryController extends BackendController
 
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
+		$criteria->with = 'retreat';
 		$mid=0;
 		$oid=0;
 		$begintime=0;
 		$endtime=0;
 		$storage=0;
 		$purchase=0;
-		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0 and type =1');
+		$criteria->addCondition('t.dpid='.$this->companyId.' and t.delete_flag=0 and t.type =1');
 		if(Yii::app()->request->isPostRequest){
 			
 			$storage = Yii::app()->request->getPost('reasonid',0);
 			if($storage){
-				$criteria->addCondition('reason_id ='.$storage);
+				$criteria->addCondition('t.reason_id ='.$storage);
 			}
 			$purchase = Yii::app()->request->getPost('purchase',0);
 			if($purchase){
-				$criteria->addSearchCondition('purchase_account_no',$purchase);
+				$criteria->addSearchCondition('t.purchase_account_no',$purchase);
 			}
 			$begintime = Yii::app()->request->getPost('begintime',0);
 			if($begintime){
-				$criteria->addCondition('storage_date >= "'.$begintime.'" ');
+				$criteria->addCondition('t.storage_date >= "'.$begintime.'" ');
 			}
 			$endtime = Yii::app()->request->getPost('endtime',0);
 			if($endtime){
-				$criteria->addCondition('storage_date <= "'.$endtime.'" ');
+				$criteria->addCondition('t.storage_date <= "'.$endtime.'" ');
 			}
 		}
-		$criteria->order = ' lid desc ';
-		$criteria->params[':dpid']=$this->companyId;
+		$criteria->order = ' t.lid desc ';
 		$pages = new CPagination(Inventory::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);

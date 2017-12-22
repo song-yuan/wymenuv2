@@ -55,6 +55,7 @@ class Inventory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'retreat'=>array(self::BELONGS_TO , 'Retreat' , '','on'=>'t.dpid=retreat.dpid and t.reason_id=retreat.lid '),
 		);
 	}
 

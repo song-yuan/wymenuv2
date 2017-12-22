@@ -87,7 +87,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 							
 								<th><?php echo yii::t('app','操作员');?></th>
-								<th><?php echo yii::t('app','盘损单号');?></th>
+								<th><?php echo yii::t('app','盘损原因');?></th>
 								<th><?php echo yii::t('app','盘损日期');?></th>
 								
 								<th><?php echo yii::t('app','状态');?></th>
@@ -102,7 +102,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->opretion_id;?></td>
-								<td><?php echo $model->inventory_account_no;?></td>
+								<td><?php if($model->retreat)echo $model->retreat->name;?></td>
 								<td><?php echo $model->create_at;?></td>
 								
 								<td><span style="color: red;"><?php if($model->status==1){ echo '确认盘损';}elseif($model->status==0){ echo '正在编辑';}else{echo '已失效';}?></span></td>
