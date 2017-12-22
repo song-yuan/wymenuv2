@@ -112,7 +112,7 @@
         if(dpids!=''){
         	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
         }
-        layer.msg(dpids);
+        //layer.msg(dpids);
         $('#ms').val(dpids);
         $('#material-form').submit();
         })
