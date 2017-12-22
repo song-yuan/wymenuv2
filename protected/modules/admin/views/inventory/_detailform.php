@@ -28,22 +28,6 @@
 				<?php echo $form->error($model, 'inventory_stock' )?>
 			</div>
 		</div>
-		<div class="form-group <?php if($model->hasErrors('retreat_id')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'retreat_id',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo CHtml::dropdownlist('retreat_id' ,$retreatId,$retreats ,array('class' => 'form-control', ));?>
-				<?php echo $form->error($model, 'retreat_id' )?>
-				<input class="form-control" name="InventoryDetail_retreat_id" id="InventoryDetail_retreat_id" type="hidden" value="<?php echo $model->retreat_id;?>"></input>
-			</div>
-		</div>
-		
-		<div class="form-group" <?php if($model->hasErrors('remark')) echo 'has-error';?>>
-			<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-5">
-				<?php echo $form->textArea($model, 'remark', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('remark')));?>
-				<?php echo $form->error($model, 'remark' )?>
-			</div>
-		</div>
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type=submit class="btn blue add_save"><?php echo yii::t('app','确定');?></button>
@@ -65,10 +49,7 @@
 )); ?>
 						
 <script>
-		$('#retreat_id').change(function(){
-			var rid = $(this).val();
-			$('#InventoryDetail_retreat_id').val(rid);
-		});
+
 	   $('#selectCategory').change(function(){
 		   var cid = $(this).val();
 		   //alert($('#ProductSetDetail_product_id').html());

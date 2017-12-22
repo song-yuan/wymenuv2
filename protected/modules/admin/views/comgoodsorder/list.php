@@ -50,7 +50,13 @@
 					<div class="caption"><i class="fa fa-shopping-cart"></i><?php echo yii::t('app','进销存');?></div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
-				<a href="<?php echo $this->createUrl('peisonggroup/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('goods/indexComp',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple splr"></div>
+							<div class="ku-item-info">原料商品列表</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('peisonggroup/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple splr"></div>
 							<div class="ku-item-info">配送体系及对应</div>

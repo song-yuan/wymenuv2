@@ -48,7 +48,6 @@
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 						<?php endif;?>
-						<a href="<?php echo $this->createUrl('inventory/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -60,7 +59,6 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
 								<th><?php echo yii::t('app','盘损库存');?></th>
-								<th><?php echo yii::t('app','原因备注');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -70,9 +68,10 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
-								<td ><?php echo $model->inventory_stock;?></td>
-								<td ><?php echo $model->remark;?></td>
+								<td style="width:16%"><?php if($model->material)echo $model->material->material_name;?></td>
+								<td ><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['inventory_stock'];?>" name="idss[]" />
+								<input class="kucundiv" type="text" <?php if($status != 0)echo 'disabled';?>  style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_stock'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+								</td>
 								<td class="center">
 								<?php if($status == 0):?>
 									<a href="<?php echo $this->createUrl('inventory/detailupdate',array('lid' => $model->lid , 'slid'=>$model->inventory_id,  'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
@@ -86,7 +85,12 @@
 							<tr>
 								<td colspan="6" style="text-align: right;">
 								<?php if($storage->status==1):?><span style="color:red">已确认盘损</span>
-								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<13):?><input id="status-0" type="button" class="btn blue" value="确认盘损" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
+								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<13):?>
+								<span style="color: red;">若修改了盘损量，请先保存再进行盘损！</span>
+								<button type="button" id="save"  class="btn yellow" ><i class="fa fa-pencial"></i><?php echo yii::t('app','暂时保存');?></button>				
+								<input id="status-0" type="button" class="btn blue" value="确认盘损" storage-id="<?php echo $storage->lid;?>" />
+								<?php else:?><span style="color:red">正在编辑</span>
+								<?php endif;?>
 								<?php elseif($storage->status ==2):?><span style="color:green">盘损单已失效</span>
 								<?php endif;?>
 								</td>
@@ -135,28 +139,6 @@
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$('#storage-in').click(function(){
-			var id = $(this).attr('storage-id');
-			var storagedetail = $('#storagedetail').attr('val');
-			
-			if(storagedetail == 1){
-			$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageIn' , array('companyId'=>$this->companyId));?>',
-					data:{sid:id},
-					success:function(msg){
-						if(msg=='true'){
-						   alert('入库成功!');		
-						}else{
-							alert('入库失败!');
-						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-					},
-				});
-			}else{
-					alert('请添加需要入库的品项');
-				}
-		});
 		$('#status-0').click(function(){
 			var pid = '<?php echo $slid;?>';
 			var storagedetail = $('#storagedetail').attr('val');
@@ -167,8 +149,7 @@
 					url:'<?php echo $this->createUrl('inventory/allStore',array('companyId'=>$this->companyId));?>',
 					data:{pid:pid},
 					success:function(msg){
-						//alert(msg);
-						if(msg.status=='success'){
+						if(msg){
 							layer.msg('盘损成功');
 						}else{
 							layer.msg('盘损失败');
@@ -182,5 +163,55 @@
 				alert('请添加需盘损的详细品项');
 				}
 		});
+
+		$("#save").on("click",function(){
+			var loading = layer.load();
+			//alert("123");
+			var pid = '<?php echo $slid;?>';
+	        var arr=document.getElementsByName("idss[]");
+	        var optid;
+	        var optval = '';
+	        for(var i=0;i<arr.length;i++)
+	        {
+	            var vid = $(arr[i]).attr("id").substr(11,10);  
+	            var nownum = $("#idleftnum0"+vid).val(); 
+	            if(nownum != ''){
+	                optval = vid +','+ nownum +';'+ optval;
+	                } 
+	        }
+	        if(optval.length >0){
+	        	optval = optval.substr(0,optval.length-1);//除去最后一个“，”
+	        	//alert(optval);
+	        }else{
+	            alert('请先添加盘损项');
+	            layer.closeAll('loading');
+	            return false;
+	            }
+            //layer.msg(optval);return false;
+	        $.ajax({
+	            type:'GET',
+				url:"<?php echo $this->createUrl('inventory/savestore',array('companyId'=>$this->companyId,));?>/optval/"+optval+"/pid/"+pid,
+				async: false,
+				//data:"companyId="+company_id+'&padId='+pad_id,
+	            cache:false,
+	            dataType:'json',
+				success:function(msg){
+		            if(msg.status=="success")
+		            {            
+				        layer.msg("保存成功！");
+			            location.reload();
+			            layer.closeAll('loading');
+		            }else{
+			            alert("<?php echo yii::t('app','失败'); ?>"+"1");
+			            layer.closeAll('loading');
+		            }
+				},
+	            error:function(){
+					alert("<?php echo yii::t('app','失败'); ?>"+"2");  
+					layer.closeAll('loading');                              
+				},
+			});
+	        
+			});
 	});
 	</script>	

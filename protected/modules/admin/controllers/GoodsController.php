@@ -29,7 +29,7 @@ class GoodsController extends BackendController
 		}
 		$db = Yii::app()->db;
 		$sql = 'select k.* from (select mc.category_name, t.* from nb_goods t left join nb_material_category mc on(t.category_id = mc.lid and mc.delete_flag =0 ) where t.dpid ='.$this->companyId.' and t.delete_flag =0 '.$cates.') k';
-		
+
 		//$models = $db->createCommand($sql)->queryAll();
 		//var_dump($sql);exit;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -50,6 +50,72 @@ class GoodsController extends BackendController
 		));
 	}
 
+	public function actionIndexComp(){
+		$categoryId = Yii::app()->request->getParam('cid',0);
+		$str = Yii::app()->request->getParam('str');
+		$db = Yii::app()->db;
+		if ($str) {
+			// p($str);
+			$arr = explode(",",$str);
+			$transaction = $db->beginTransaction();
+            try{
+				foreach ($arr as $key => $value) {
+					$info_arr = explode("_",$value);
+					$sql ='update nb_goods set price='.$info_arr[1].',update_at="'.date('Y-m-d H:i:s',time()).'" where delete_flag=0 and lid='.$info_arr[0];
+					$i =Yii::app()->db->createCommand($sql)->execute();
+				}
+				$transaction->commit();
+				echo json_encode(1);exit;
+            }catch (Exception $e){
+                $transaction->rollback();
+				echo json_encode(0);exit;
+            }
+		}
+		if($categoryId){
+			$cates = ' and category_id ='.$categoryId;
+		}else{
+			$cates = '';
+		}
+		$dpid = Yii::app()->request->getParam('dpid',$this->companyId);
+		if ($dpid=='') {
+			$dpid = $this->companyId;
+		}
+		$info = Company::model()->find('dpid=:dpid and delete_flag=0 and type=0',array(':dpid'=>$dpid));
+		$dpids = Company::model()->findAll('comp_dpid=:dpid and delete_flag=0 and type=2',array(':dpid'=>$this->companyId));
+		if ($info) {
+			// p($dpids);
+			$dpidstr = '';
+			foreach ($dpids as $key => $dp_id) {
+				$dpidstr .= $dp_id->dpid.',';
+			}
+			$dpidstr = substr($dpidstr,0,strlen($dpidstr)-1);
+		}else{
+			$dpidstr = $dpid;
+		}
+		$sql = 'select k.* from (select mc.category_name, t.* from nb_goods t left join nb_material_category mc on(t.category_id = mc.lid and mc.delete_flag =0 ) where t.dpid in('.$dpidstr.') and t.delete_flag =0 '.$cates.') k';
+
+		//$models = $db->createCommand($sql)->queryAll();
+		//var_dump($sql);exit;
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		$categories = $this->getCategories();
+//                var_dump($categories);exit;
+		$this->render('indexComp',array(
+				'dpid'=>$dpid,
+				'dpids'=>$dpids,
+				'models'=>$models,
+				'pages'=>$pages,
+				'categories'=>$categories,
+				'categoryId'=>$categoryId,
+				//'comtype'=>$comtype,
+		));
+	}
+
 	public function actionCreate(){
 		$msg = '';
 		$model = new Goods();
@@ -58,7 +124,7 @@ class GoodsController extends BackendController
 		$goodmatecode = '0';
 		$goodunitcode = '0';
 		$model->dpid = $this->companyId ;
-		
+
 		$comps = Yii::app()->db->createCommand('select comp_dpid from nb_company where delete_flag = 0 and dpid ='.$this->companyId)->queryRow();
 		//var_dump($compid);exit;
 		if(!empty($comps)){
@@ -72,7 +138,7 @@ class GoodsController extends BackendController
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('goods/index' , 'companyId' => $this->companyId)) ;
 		}
-		
+
 		if(Yii::app()->request->isAjaxRequest){
 			$path = Yii::app()->basePath.'/../uploads/goodscompany_'.$this->companyId;
 			$up = new CFileUpload();
@@ -80,7 +146,7 @@ class GoodsController extends BackendController
 			$up -> set("path", $path);
 			$up -> set("maxsize", 2*1024*1024);
 			$up -> set("allowtype", array("png", "jpg","jpeg"));
-		
+
 			if($up -> upload("file")) {
 				$msg = '/wymenuv2/./uploads/goodscompany_'.$this->companyId.'/'.$up->getFileName();
 			}else{
@@ -121,7 +187,7 @@ class GoodsController extends BackendController
 				$model->lid = $lid;
 				$code=new Sequence("goods_code");
 				$phs_code = $code->nextval();
-				
+
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->update_at = date('Y-m-d H:i:s',time());
 				$model->cate_code = $categoryId['mchs_code'];
@@ -148,7 +214,7 @@ class GoodsController extends BackendController
 							'is_sync'=>'11111',
 					);
 					Yii::app()->db->createCommand()->insert('nb_goods_material',$data);
-						
+
 				}
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
@@ -157,7 +223,7 @@ class GoodsController extends BackendController
 			}else{
 				 $model->addError('category_id','必须添加二级分类');
 			}
-			
+
 		}
 		//$categories = $this->getCategoryList();
 		//$departments = $this->getDepartments();
@@ -171,14 +237,14 @@ class GoodsController extends BackendController
 			'goodunitcode' => $goodunitcode,
 		));
 	}
-	
+
 	public function actionUpdate(){
 		$msg = '';
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('goods/index' , 'companyId' => $this->companyId)) ;
 		}
-		
+
 		$comps = Yii::app()->db->createCommand('select comp_dpid from nb_company where delete_flag = 0 and dpid ='.$this->companyId)->queryRow();
 		//var_dump($compid);exit;
 		if(!empty($comps)){
@@ -194,7 +260,7 @@ class GoodsController extends BackendController
 			$up -> set("path", $path);
 			$up -> set("maxsize", 2*1024*1024);
 			$up -> set("allowtype", array("png", "jpg","jpeg"));
-		
+
 			if($up -> upload("file")) {
 				$msg = '/wymenuv2/./uploads/goodscompany_'.$this->companyId.'/'.$up->getFileName();
 			}else{
@@ -250,7 +316,7 @@ class GoodsController extends BackendController
 					);
 					//var_dump($data);exit;
 					Yii::app()->db->createCommand()->insert('nb_goods_material',$data);
-				
+
 				}elseif ((!empty($mats)) && (!empty($goodmats))){
 					//var_dump($mats);exit;
 					Yii::app()->db->createCommand('update nb_goods_material set update_at ="'.date('Y-m-d H:i:s',time()).'",material_code ="'.$mats['mphs_code'].'",unit_code ="'.$goodunit.'" where delete_flag = 0 and goods_id ='.$model->lid.' and dpid ='.$this->companyId)->execute();
@@ -269,7 +335,7 @@ class GoodsController extends BackendController
 		}
 		$categories = $this->getCategoryList();
 		//$departments = $this->getDepartments();
-		
+
 		$this->render('update' , array(
 				'model' => $model ,
 				'compid' => $compid,
@@ -292,7 +358,7 @@ class GoodsController extends BackendController
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_goods set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			
+
 			$deleteids = implode(',' , $ids);
 			$se=new Sequence("b_login");
 			$lid = $se->nextval();
@@ -308,7 +374,7 @@ class GoodsController extends BackendController
 					'out_time'=>"0000-00-00 00:00:00"
 			);
 			Yii::app()->db->createCommand()->insert('nb_b_login',$data);
-			
+
 			Yii::app()->user->setFlash('success' , yii::t('app','删除成功'));
 			$this->redirect(array('goods/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -328,7 +394,7 @@ class GoodsController extends BackendController
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		
+
 		if($product){
 			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0,'update_at'=>date('Y-m-d H:i:s',time())));
 		}
@@ -348,7 +414,7 @@ class GoodsController extends BackendController
 		}
 		$treeDataSource = array('data'=>array(),'delay'=>400);
 		$categories = Helper::getCategory($compid,$pid);
-	
+
 		foreach($categories as $c){
 			$tmp['name'] = $c['category_name'];
 			$tmp['id'] = $c['lid'];
@@ -374,7 +440,7 @@ class GoodsController extends BackendController
 		Yii::app()->end(json_encode($treeDataSource));
 	}
 	private function getCategories(){
-		
+
 		$comps = Yii::app()->db->createCommand('select comp_dpid from nb_company where delete_flag = 0 and dpid ='.$this->companyId)->queryRow();
 		//var_dump($compid);exit;
 		if(!empty($comps)){
@@ -383,14 +449,14 @@ class GoodsController extends BackendController
 			Yii::app()->user->setFlash('error' , yii::t('app','读取总部信息失败！'));
 			$this->redirect(array('goods/index' , 'companyId' => $this->companyId)) ;
 		}
-		
+
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$compid ;
 		$criteria->order = ' tree,t.lid asc ';
-		
+
 		$models = MaterialCategory::model()->findAll($criteria);
-                
+
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
@@ -453,7 +519,7 @@ class GoodsController extends BackendController
 			return false;
 		}
 	}
-	
+
 
 	public function actionStorewx(){
 		$pid = Yii::app()->request->getParam('pid');
@@ -468,11 +534,11 @@ class GoodsController extends BackendController
 			->execute(array( ':companyId' => $this->companyId));
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
-			
+
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			Yii::app()->end(json_encode(array("status"=>"fail")));
 		}
 	}
-	
+
 }

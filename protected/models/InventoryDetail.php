@@ -33,11 +33,11 @@ class InventoryDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, update_at, inventory_stock, remark', 'required'),
+			array('lid, dpid, update_at, material_id', 'required'),
 			array('lid, dpid, inventory_id, material_id, inventory_stock,retreat_id', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at,remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, inventory_id, material_id, inventory_stock,retreat_id, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
@@ -52,6 +52,7 @@ class InventoryDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'material'=>array(self::BELONGS_TO , 'ProductMaterial' , '','on'=>'t.dpid=material.dpid and t.material_id=material.lid '),
 		);
 	}
 
