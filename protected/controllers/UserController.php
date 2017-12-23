@@ -17,7 +17,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		$dpidSelf = Yii::app()->session['dpid_self'];
+		$dpidSelf = Yii::app()->session['dpid_self_'.$this->companyId];
 		if($dpidSelf==1){
 			$comdpid = $this->company['dpid'];
 		}else{
