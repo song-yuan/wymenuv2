@@ -1,8 +1,6 @@
 
 		<!--App自定义的css-->
-		<link rel="stylesheet" type="text/css" href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/app.css" />
-		<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.picker.css" rel="stylesheet" />
-		<link href="<?php echo  Yii::app()->request->baseUrl; ?>/css/ymall/mui.poppicker.css" rel="stylesheet" />
+
 		<style>
 			.back-color{background-color: #F0F0E1;}
 			.width{width:100px;}
@@ -42,6 +40,7 @@
 				overflow: hidden;
 				width: 70%;
 			}
+			.mui-toast-container{bottom: 50%!important;}
 		</style>
 
 		<header class="mui-bar mui-bar-nav mui-hbar">
@@ -84,10 +83,7 @@
 
 		    
 	    </div>
-		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.picker.js"></script>
-		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/mui.poppicker.js"></script>
-		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/city.data.js" type="text/javascript" charset="utf-8"></script>
-		<script src="<?php echo  Yii::app()->request->baseUrl; ?>/js/ymall/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+
 		<script type="text/javascript">
 			(function($, doc) {
 				$.init();
@@ -128,19 +124,19 @@
 				var cityResult4 = document.getElementById('cityResult4');
 				var textarea = document.getElementById('textarea');
 				if(name.value == ''){
-					mui.alert('请填写联系人姓名 !!!');
+					mui.toast('请填写联系人姓名 !!!',{ duration:'long', type:'div' });
 					// name.focus();
 					return false;
 				}else if(mobile.value == ''){
-					mui.alert('请填写联系电话 !!!');
+					mui.toast('请填写联系电话 !!!',{ duration:'long', type:'div' });
 					// mobile.focus();
 					return false;
 				}else if ( cityResult4.value == '') {
-					mui.alert('请选择所在地区 !!!');
+					mui.toast('请选择所在地区 !!!',{ duration:'long', type:'div' });
 					// cityResult4.focus();
 					return false;
 				}else if( textarea.value == ''){
-					mui.alert('请填写详细地址 !!!');
+					mui.toast('请填写详细地址 !!!',{ duration:'long', type:'div' });
 					// textarea.focus();
 					return false;
 				}
@@ -149,7 +145,7 @@
 			//状态提示
 			var status = '<?php echo $error; ?>';
 			if(status == '1'){
-				mui.toast('修改失败 !!!');
+				mui.toast('修改失败 !!!',{ duration:'long', type:'div' });
 			}
 
 		</script>

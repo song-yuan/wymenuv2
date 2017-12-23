@@ -16,6 +16,7 @@
 .mui-content-padded {
     margin: 0 9px;
 }
+.mui-toast-container{bottom: 50%!important;}
 </style>
 <header class="mui-bar mui-bar-nav  mui-hbar">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>

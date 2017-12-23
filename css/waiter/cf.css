@@ -66,9 +66,21 @@
 .flo-l{
 	float: left;
 }
+.flo-r{
+	float: right;
+}
 .wid-50{
 	width: 50%;
 }
 .text-c{
 	text-align: center;
+}
+.wid-33{
+	width: 33%;
+}
+.wid-10{
+	width: 10%;
+}
+.wid-70{
+	width: 70%;
 }

@@ -29,6 +29,7 @@
 				text-overflow: ellipsis;
 				color: #929292;
 			}
+			.mui-toast-container{bottom: 50%!important;}
 		</style>
 
 		<header class="mui-bar mui-bar-nav mui-hbar">
@@ -85,9 +86,9 @@
 								function(data){
 									if (data == 1) {
 										$('#absign').fadeOut(1000).remove();
-										mui.toast('删除成功');
+										mui.toast('删除成功',{ duration:'long', type:'div' });
 									}else if(data == 0) {
-										mui.toast('因网络原因删除失败 , 请重新删除 ! ! !');
+										mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
 									}
 								},'json'
 							);
@@ -109,11 +110,11 @@
 					},
 					function(data) {
 						if (data == 1) {
-							mui.toast('修改成功');
+							mui.toast('修改成功',{ duration:'long', type:'div' });
 							$('.color-l-orange').removeClass('color-l-orange');
 							$("input[name='addres']:checked").parent('span').children('label').addClass('color-l-orange');
 						}else if(data == 0){
-							mui.toast('修改失败');
+							mui.toast('修改失败',{ duration:'long', type:'div' });
 							$(".color-l-orange").parent('span').children('input').attr('checked','checked');
 						}
 				});
@@ -122,8 +123,8 @@
 			//状态提示
 			var status = '<?php echo $success; ?>';
 			if (status == '1') {
-				mui.toast('添加成功');
+				mui.toast('添加成功',{ duration:'long', type:'div' });
 			}else if(status == '2'){
-				mui.toast('修改成功');
+				mui.toast('修改成功',{ duration:'long', type:'div' });
 			}
 		</script>

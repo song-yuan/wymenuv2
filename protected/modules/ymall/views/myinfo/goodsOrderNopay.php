@@ -16,6 +16,7 @@
 .mui-content-padded {
     margin: 0 9px;
 }
+.mui-toast-container{bottom: 50%!important;}
 </style>
 <header class="mui-bar mui-bar-nav  mui-hbar">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
@@ -193,9 +194,9 @@ function upFn() {
 	});
 })(mui);
 <?php if ($success==2): ?>
-mui.toast('下单失败 , 请重新下单 ! ! !');
+mui.toast('下单失败 , 请重新下单 ! ! !',{ duration:'long', type:'div' });
 <?php elseif ($success==3): ?>
-mui.toast('下单失败 , 订单异常 , 请删除后重新下单 ! ! !');
+mui.toast('下单失败 , 订单异常 , 请删除后重新下单 ! ! !',{ duration:'long', type:'div' });
 <?php endif; ?>
 
 </script>

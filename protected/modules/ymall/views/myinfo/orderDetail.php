@@ -575,12 +575,12 @@
 						//将图标的数量减去
 						// var num = $('#nopay').html();
 						// $('#nopay').html(num-1);
-						mui.alert('删除成功 ! ! !');
+						mui.toast('删除成功 ! ! !',{ duration:'long', type:'div' });
 						location.href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>";
 					}else if(data == 2) {
-						mui.alert('因网络原因删除失败 , 请重新删除 ! ! !');
+						mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
 					}else if(data == 3) {
-						mui.alert('未查寻到商品删除失败 ! ! !');
+						mui.toast('未查寻到商品删除失败 ! ! !',{ duration:'long', type:'div' });
 					}
 				},'json'
 			);
@@ -594,7 +594,7 @@
 	 	if (invoice_accountno) {
 			location.href = '<?php echo $this->createUrl("myinfo/sureorder",array("companyId"=>$this->companyId)) ?>/account_no/'+account_no+'/invoice_accountno/'+invoice_accountno;
 	 	} else {
-	 		mui.alert('仓库正在配货 , 无法确认收货');
+	 		mui.toast('仓库正在配货 , 无法确认收货',{ duration:'long', type:'div' });
 	 	}
 	});
 </script>

@@ -3,7 +3,13 @@
 			.big-ul{margin-bottom: 100px;margin-top:44px!important;}
 			.big-li{padding:1px 0 0 0;background-color: #EFEFF4!important;}
 			.div-store{margin-bottom: 2px;height: 35px;}
-			.a-store{font-size: 20px;color:#EC971F;height:35px;line-height: 35px;}
+			.a-store{
+				font-size: 20px;
+				font-weight:900;
+				color:darkblue;
+				height:35px;
+				line-height: 35px;
+			}
 			.edit{margin-top:11px;z-index: 1;}
 			.img-show{width: 98px;height:98px;margin-left: -14px;margin-right: 10px;}
 			.nav-none{margin-bottom: 50px;display: none;}
@@ -43,13 +49,24 @@
 				vertical-align: middle;
 				white-space: nowrap;
 				text-overflow: ellipsis;
-				color: #929292;
+				color: #666;
 			}
-			.mui-numbox{width: 160px!important;}
+			.mui-numbox{
+				width: 140px!important;
+				border: solid 1px #fff;
+			}
+			.mui-numbox .mui-input-numbox, .mui-numbox .mui-numbox-input {
+				 border-right: solid 1px #fff!important; 
+				 border-left: solid 1px #fff!important; 
+			}
 			.ui-table-view-cell{padding:15px 0!important;border-bottom: 1px solid #f0f0e4;}
 			.goods_product{top:34px!important;}
 			.cblack{color:#2F4F4F;}
-			.mui-content{background-color: white!important;}
+			/*.mui-content{background-color: white!important;}*/
+			.mui-table-view .mui-media, .mui-table-view .mui-media-body {
+				overflow: visible;
+			}
+			.mui-toast-container{bottom: 50%!important;}
 		</style>
 
 
@@ -77,7 +94,7 @@
 			<!--页面标题栏结束-->
 			<!--页面主内容区开始-->
 			<div class="mui-page-content">
-			<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-content mui-scroll-wrapper" style="background-color: #FBF3F0!important;">
 			<div class="mui-scroll">
 			<ul class="mui-table-view big-ul" >
 				<?php if (!empty($materials)): ?>
@@ -88,12 +105,14 @@
 					    		<input name="checkbox" type="checkbox" class="selectlist">
 					    	</div>
 					    	<div class="mui-col-xs-10 ">
-					    		<a class="mui-navigate-right a-store"><?php echo $products[0]['company_name']; ?></a>
+					    		<a class="mui-navigate-right a-store">
+					    		<img style="width: 25px;height: 25px;vertical-align: text-bottom;" src="<?php echo  Yii::app()->request->baseUrl; ?>/img/cangku.png" /> 
+					    		<?php echo $products[0]['company_name']; ?></a>
 					    	</div>
 				    	</div>
 				        <ul class="mui-table-view" id="">
 				        	<?php foreach ($products as $product):?>
-						    <li class="mui-row  mui-media ui-table-view-cell">
+						    <li class="mui-row  mui-media ui-table-view-cell" style="background-color: #FBF3F0;">
 						    	<div class="mui-col-xs-2 mui-checkbox">
 						    		<input name="goods_cart_id" value="<?php echo $product['lid']; ?>" type="checkbox" class="goods_product">
 						    	</div>
@@ -105,26 +124,21 @@
 						                <a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
 						                	<span class="cblack"><?php echo $product['goods_name']; ?></span>
 						                </a>
-						                <p class='mui-ellipsis'><?php echo $product['description']?$product['description']:'操作员偷懒,没有描述'; ?></p>
-						                <span style="color:darkslategray; display: block;">单价
+						                <p class='mui-ellipsis' style="color: purple;"><?php echo $product['unit_name']; ?></p>
+						                <span style="color:darkslategray; display: block;"><b>￥</b>
 						                <span style="color: red;" class="price">
 						                <?php
 						                	//显示goods表的原始价格 , 会员价暂时未考虑
 							                echo $product['now_price'];
 						                ?>
-						                </span>元
-						                <?php if ($product['now_price'] < $product['price']) :
-						                //如果当前价格低于加入购物车时的价格,显示向下的箭头
-						                ?>
-						                <span class="mui-icon mui-icon-pulldown" style="color:greenyellow;"></span>
-						            	<?php endif; ?>
+						                </span> / <span style="color:darkslategray;"><?php echo $product['goods_unit']; ?></span>
 						                </span>
 						                <div class="mui-numbox mui-right " data-numbox-step='1' data-numbox-min='1' data-numbox-max='<?php echo 10000;//$product['store_number']; ?>'>
 										  <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
 										  <input class="mui-numbox-input" type="number" value="<?php echo $product['num']; ?>" readonly = "readonly" />
 										  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 										</div>
-										<span style="color:darkslategray;"><?php echo $product['goods_unit']; ?></span>
+										
 						            </div>
 						    	</div>
 						    </li>
@@ -194,7 +208,7 @@
 						$('.all_price').html('0.00');
 					}else if($("#edit").text()=='完成'){
 						if ($("input[name='goods_cart_id']:checked").length > 0) {
-							mui.alert('数据已改变 , 请点击保存 ! ! !')
+							mui.toast(' 数据已改变 , 请点击保存 ! ! !',{ duration:'long', type:'div' })
 						}else{
 							$("#gopay").removeClass("nav-none").addClass("nav-on");
 							$("#godelete").removeClass("nav-on").addClass("nav-none");
@@ -297,19 +311,19 @@
 		 		var goods_num_edit = goods_num_edit.join(",");
 				// console.log(goods_num_edit);
 				if (isempty) {
-					mui.alert('请选择要保存的商品 ! ! !');
+					mui.toast('请选择要保存的商品 ! ! !',{ duration:'long', type:'div' });
 				}else{
 					mui.post('<?php echo $this->createUrl("ymallcart/editymallcart",array("companyId"=>$this->companyId)) ?>',{
 						   goods_num_edit:goods_num_edit,
 						},
 						function(data){
 							if (data == 1) {
-								mui.alert('保存成功 ! ! !');
+								mui.toast('保存成功 ! ! !',{ duration:'long', type:'div' });
 								$("input[type='checkbox']").each(function(){this.checked=false;});//取消选中
 							}else if(data == 2) {
-								mui.alert('因网络原因保存失败 , 请重新保存 ! ! !');
+								mui.toast('因网络原因保存失败 , 请重新保存 ! ! !',{ duration:'long', type:'div' });
 							}else if(data == 3) {
-								mui.alert('未查寻到商品保存失败 ! ! !');
+								mui.toast('未查寻到商品保存失败 ! ! !',{ duration:'long', type:'div' });
 							}
 						},'json'
 					);
@@ -355,9 +369,9 @@
 										//将图标的数量减去
 										var num = $('#car_num').html();
 										$('#car_num').html(num-i);
-										mui.alert('删除成功 ! ! !');
+										mui.toast('删除成功 ! ! !',{ duration:'long', type:'div' });
 									}else if(data == 2) {
-										mui.alert('因网络原因删除失败 , 请重新删除 ! ! !');
+										mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
 									}
 								},'json'
 							);
@@ -395,7 +409,7 @@
 					lid = lid.join(",");
 					location.href="<?php echo $this->createUrl('ymallcart/addgoodsorder',array('companyId'=>$this->companyId));?>/lid/"+lid;
 				} else{
-					mui.alert('请选择需要结算的商品 !!!')
+					mui.toast('请选择需要结算的商品 !!!',{ duration:'long', type:'div' })
 				}
 		    });
 		</script>

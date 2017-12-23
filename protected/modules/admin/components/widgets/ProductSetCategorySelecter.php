@@ -16,7 +16,7 @@ class ProductSetCategorySelecter extends CWidget {
                 
 		$rootCategoties = Helper::getSetCategories($this->companyId);
                 //var_dump($this->categoryId,$rootCategoties);exit;
-		if($this->categoryId!=0 && $category = ProductCategory::model()->find('t.lid = :cid and t.dpid=:dpid',array(':cid'=>$this->categoryId,':dpid'=>$this->companyId))){
+		if($this->categoryId!=0 && $category = ProductCategory::model()->find('t.delete_flag =0 and t.lid = :cid and t.dpid=:dpid',array(':cid'=>$this->categoryId,':dpid'=>$this->companyId))){
 			//var_dump($category->tree);exit;
                         $categoryTree = explode(',',$category['tree']);
                         //var_dump($categoryTree);exit;

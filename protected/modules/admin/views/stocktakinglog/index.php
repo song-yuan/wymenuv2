@@ -44,7 +44,15 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php if($status)echo yii::t('app','盘损日志');else echo yii::t('app','盘点日志');?></div>
 					<div class="actions">
 						<div class="btn-group">
-				
+							<select id="stype" class="btn yellow" >
+								<option value="0" <?php if ($stype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','选择类型');?></option>
+								<option value="1" <?php if ($stype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日盘');?></option>
+								<option value="2" <?php if ($stype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','周盘');?></option>
+								<option value="3" <?php if ($stype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','月盘');?></option>
+							</select>
+						</div>
+						<div class="btn-group">
+							
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control ui_timepicker" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
 								<span class="input-group-addon">~</span>
@@ -140,13 +148,10 @@
 	});
 		  
 		   $('#btn_time_query').click(function time() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
+			  var stype = $('#stype').val();
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId ,'status'=>$status));?>/begin_time/"+begin_time+"/end_time/"+end_time   
+			   location.href="<?php echo $this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId ,'status'=>$status));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/stype/"+stype   
 			  
 	        });
 	});

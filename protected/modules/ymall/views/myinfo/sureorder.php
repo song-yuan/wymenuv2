@@ -230,6 +230,7 @@
 	.abc{
 		padding:0!important;
 	}
+	.mui-toast-container{bottom: 50%!important;}
 </style>
 
 		<header class="mui-bar mui-bar-nav mui-hbar">
@@ -373,14 +374,13 @@
 						},
 						function(data){
 							if (data == 1) {
-								mui.alert('收货成功 ! ! !');
+								mui.toast('收货成功 ! ! !',{ duration:'long', type:'div' });
 								location.href='<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId)) ?>/account_no/'+account_no+'/type/3';
 							}else if(data == 0) {
-								mui.alert('因网络原因确认收货失败 , 请重新确认 ! ! !');
+								mui.toast('因网络原因确认收货失败 , 请重新确认 ! ! !',{ duration:'long', type:'div' });
 							}
 						},'json'
 					);
-
 				}else{
 					mui.post('<?php echo $this->createUrl('myinfo/sureorderd',array('companyId'=>$this->companyId)) ?>',{
 						   value:value,
@@ -389,10 +389,10 @@
 						},
 						function(data){
 							if (data == 1) {
-								mui.alert('收货成功 ! ! !');
+								mui.toast('收货成功 ! ! !',{ duration:'long', type:'div' });
 								location.href='<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId)) ?>/account_no/'+account_no+'/type/3';
 							}else if(data == 0) {
-								mui.alert('因网络原因确认收货失败 , 请重新确认 ! ! !');
+								mui.toast('因网络原因确认收货失败 , 请重新确认 ! ! !',{ duration:'long', type:'div' });
 							}
 						},'json'
 					);

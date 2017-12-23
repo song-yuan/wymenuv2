@@ -9,6 +9,7 @@
  * @property string $create_at
  * @property string $update_at
  * @property string $opretion_id
+ * @property string $reason_id
  * @property string $inventory_account_no
  * @property string $status
  * @property string $remark
@@ -33,16 +34,16 @@ class Inventory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, update_at, opretion_id, inventory_account_no, remark', 'required'),
-			array('opretion_id', 'numerical', 'integerOnly'=>true),
+			array('lid, dpid, update_at, opretion_id, inventory_account_no,reason_id', 'required'),
+			//array('opretion_id', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('inventory_account_no', 'length', 'max'=>32),
 			array('status, delete_flag', 'length', 'max'=>2),
 			array('opretion_id,is_sync', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at,remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, opretion_id, inventory_account_no, status, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, opretion_id, reason_id,inventory_account_no, status, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,6 +55,7 @@ class Inventory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'retreat'=>array(self::BELONGS_TO , 'Retreat' , '','on'=>'t.dpid=retreat.dpid and t.reason_id=retreat.lid '),
 		);
 	}
 
@@ -68,6 +70,7 @@ class Inventory extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'opretion_id' => '操作员',
+			'reason_id' => '盘损原因',
 			'inventory_account_no' => '盘损单号',
 			'status' => '状态',
 			'remark' => '备注',

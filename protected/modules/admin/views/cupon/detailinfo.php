@@ -160,29 +160,34 @@
 						
 						</div>
 				         <div id="reportlistdiv" style="display:inline-block;width:50%;font-size:1.5em;float: left;">
+				         <form action="<?php echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId));?>/cuid/<?php echo $cuponid;?>/cucode/<?php echo $cuponcode;?>" method = 'post' onsubmit="return toVaild()">
 					         <div class="form-group">
 					        	<span class="col-md-5 control-label">选择二级分类</span>
 								<div class="col-md-4">
 									<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control',));?>
 		                       	</div>
-		                      </div>
-		                      <form action="<?php echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId));?>/cuid/<?php echo $cuponid;?>/cucode/<?php echo $cuponcode;?>" method = 'post' onsubmit="return toVaild()"> 
+		                      </div> 
 		                      	<div class="form-group">
-									<span class="col-md-5 control-label">选择单品</span>
+									<span style="margin-left: 100px;" class="col-md-5 control-label">选择单品</span>
 									<div style="display:inline-block;width:80%;">
 						         
 						         <?php if($products):?>
 						         <?php foreach($products as $key=>$product):?>
-						         	<ul id="<?php echo $key;?>" style="margin:0;padding:0;list-style:none;display: none;">
+						         	<ul id="<?php echo $key;?>" style="margin:0;padding:0;list-style:none;">
 						         	<?php foreach($product as $key=>$product_name):?>
 								         <li style="width:50%;float:left;">
 									         <div style="width:85%;float:left;"><?php echo $product_name;?></div>
 									         <div style="width:10%;float:left;">
-									         	<input style="height:20px;" type="checkbox" class="check" value="<?php echo $key;?>"/>
+									         	<input style="height:20px;" type="checkbox" class="check" value="<?php echo $key;?>" name="product_id[]"/>
 									         </div>
 								         </li>
 								         <?php endforeach;?>
-								          <li style="width:100%;">
+								         
+							        </ul>
+							     <?php endforeach;?>
+							     <?php endif;?>   
+						        <ul style="margin:0;padding:0;list-style:none;">
+						        	 <li style="width:100%;">
 								         <div style="width:10%;float:left;"></div>
 								         <div style="width:60%;float:left;"></div>
 								         <div style="width:20%;float:right;">
@@ -191,10 +196,7 @@
 								         </div>
 								         
 							         </li>        
-							        </ul>
-							     <?php endforeach;?>
-							     <?php endif;?>   
-						        
+						        </ul>
 					         </div>
 								</div>
 								<div class="button-style">
@@ -246,21 +248,28 @@
                 });
             }
         });
-
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			<?php foreach ($products as $key => $product):?>
-			if(cid=='<?php echo $key;?>'){
-				$('#'+cid).show();
-				$('#<?php echo $key;?> .check').attr('name','product_id[]');
-			}else{
-				if(cid!='<?php echo $key;?>'){
-					$('#<?php echo $key;?>').hide();
-					$('#<?php echo $key;?> .check').attr('name','product');
+			if(cid!=0){
+				<?php foreach ($products as $key => $product):?>
+				if(cid=='<?php echo $key;?>'){
+					$('#'+cid).show();
+					$('#<?php echo $key;?> .check').attr('name','product_id[]');
+				}else{
+					if(cid!='<?php echo $key;?>'){
+						$('#<?php echo $key;?>').hide();
+						$('#<?php echo $key;?> .check').attr('name','product');
+					}
+					
 				}
-				
+				<?php endforeach;?>
+			}else{
+				<?php foreach ($products as $key => $product):?>
+				$('#<?php echo $key;?>').show();
+				$('#<?php echo $key;?> .check').attr('name','product_id[]');
+				<?php endforeach;?>
 			}
-			<?php endforeach;?>
+			
 			
 		});
 

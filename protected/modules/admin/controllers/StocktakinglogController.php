@@ -11,18 +11,22 @@ class StocktakinglogController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
+		$stype = Yii::app()->request->getParam('stype','0');
 		$status = Yii::app()->request->getParam('status','0');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d 00:00:00',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d 23:59:59',time()));
 		//var_dump($begin_time);exit;
 		//$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
+		
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
 		$criteria->addCondition("t.create_at >='$begin_time '");
 		$criteria->addCondition("t.create_at <='$end_time '");
 		
 		$criteria->addCondition("t.status ='$status'");
-		
+		if($stype){
+			$criteria->addCondition("t.type =".$stype);
+		}
 		$criteria->order = ' t.lid desc ';	
 		$pages = new CPagination(StockTaking::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -35,6 +39,7 @@ class StocktakinglogController extends BackendController
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'status'=>$status,
+				'stype'=>$stype
 				//'categoryId'=>$categoryId
 		));
 	}

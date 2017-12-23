@@ -14,6 +14,7 @@
 			.big-ul{margin-top:2px!important;}
 			.margin-b{margin:0;margin-bottom: 120px!important;}
 			#suretopay{margin:0;height:50px;top:0;border-radius: 0;}
+			.mui-toast-container{bottom: 50%!important;}
 		</style>
 
 
@@ -53,10 +54,10 @@
 				        	<?php foreach ($products as $product):?>
 						    <li class="mui-row mui-table-view-cell mui-media">
 					    		<div>
-						            <img class=" mui-pull-left img-show" src="<?php echo  'http://menu.wymenu.com/'.$product['main_picture']; ?>" >
+						            <img class=" mui-pull-left img-show" src="<?php if($product['main_picture']){ echo $product['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
 						            <div class="mui-media-body" >
 						                <span><?php echo $product['goods_name']; ?></span>
-						                <p class='mui-ellipsis'><?php echo $product['description']?$product['description']:'操作员偷懒,没有描述'; ?></p>
+						                <p class='mui-ellipsis'><?php echo $product['unit_name']; ?></p>
 						                <span>单价 : <span style="color: red;"><?php echo $product['price']; ?></span>元</span>
 						                <span style="color:darkslategray;">共</span>
 						                <span style="color:red;"><?php echo $product['num']; ?></span>
@@ -132,6 +133,6 @@
 		    });
 
 		    <?php if ($success==3): ?>
-		    	mui.toast('商户没有开通微信商户的支付功能,请选择到付!!!');
+		    	mui.toast('商户没有开通微信商户的支付功能,请选择到付!!!',{ duration:'long', type:'div' });
 		    <?php endif; ?>
 		</script>

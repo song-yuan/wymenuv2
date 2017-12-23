@@ -156,6 +156,11 @@ class Helper
 		}// var_dump($companies);exit;
 		return CHtml::listData($companies, 'lid', 'username');
 	}
+	static public function getOpretion($companyId) {//管理员
+		
+		$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId.' and status=1 and role >='.Yii::app()->user->role) ;
+		return CHtml::listData($companies, 'username', 'username');
+	}
 	static public function genRetreats($dpid) {//盘损原因
 		
 		$companies = Retreat::model()->findAll('delete_flag=0 and dpid='.$dpid.' and type=2 ') ;

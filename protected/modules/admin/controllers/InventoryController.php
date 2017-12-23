@@ -14,46 +14,40 @@ class InventoryController extends BackendController
 
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
+		$criteria->with = 'retreat';
 		$mid=0;
 		$oid=0;
 		$begintime=0;
 		$endtime=0;
 		$storage=0;
 		$purchase=0;
-		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0 and type =1');
+		$criteria->addCondition('t.dpid='.$this->companyId.' and t.delete_flag=0 and t.type =1');
 		if(Yii::app()->request->isPostRequest){
 			
-			$storage = Yii::app()->request->getPost('storage',0);
+			$storage = Yii::app()->request->getPost('reasonid',0);
 			if($storage){
-				//echo($oid);
-				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
-				//var_dump($ogname);exit;
-				$criteria->addSearchCondition('inventory_account_no',$storage);
+				$criteria->addCondition('t.reason_id ='.$storage);
 			}
 			$purchase = Yii::app()->request->getPost('purchase',0);
 			if($purchase){
-				//echo($oid);
-				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
-				//var_dump($ogname);exit;
-				$criteria->addSearchCondition('purchase_account_no',$purchase);
+				$criteria->addSearchCondition('t.purchase_account_no',$purchase);
 			}
 			$begintime = Yii::app()->request->getPost('begintime',0);
 			if($begintime){
-				$criteria->addCondition('storage_date >= "'.$begintime.'" ');
+				$criteria->addCondition('t.storage_date >= "'.$begintime.'" ');
 			}
 			$endtime = Yii::app()->request->getPost('endtime',0);
 			if($endtime){
-				$criteria->addCondition('storage_date <= "'.$endtime.'" ');
+				$criteria->addCondition('t.storage_date <= "'.$endtime.'" ');
 			}
 		}
-		$criteria->order = ' lid desc ';
-		$criteria->params[':dpid']=$this->companyId;
+		$criteria->order = ' t.lid desc ';
 		$pages = new CPagination(Inventory::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Inventory::model()->findAll($criteria);
+		
+		$retreats = $this->getRets();
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -62,6 +56,7 @@ class InventoryController extends BackendController
 				'endtime'=>$endtime,
 				'storage'=>$storage,
 				'purchase'=>$purchase,
+				'retreats'=>$retreats,
 		));
 	}
 	public function actionSetMealList() {
@@ -73,23 +68,26 @@ class InventoryController extends BackendController
 
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Inventory');
+			$retreatId = Yii::app()->request->getParam('Inventory_reason_id');
 			$se=new Sequence("inventory");
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->reason_id = $retreatId;
 			$model->inventory_account_no = date('YmdHis',time()).substr($model->lid,-4);
 			$model->status = 0;
-
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('inventory/detailindex','lid' => $model->lid , 'companyId' => $model->dpid));
 			}
 		}
-		//$categories = $categories = StorageOrder::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
-		//var_dump($categories);exit;
-		$this->render('create' , array(
+		$retreatId =0;
+		$retreats = $this->getretreats();
+		$retreatslist=CHtml::listData($retreats, 'lid', 'name');		$this->render('create' , array(
 			'model' => $model ,
-			//'categories' => $categories
+			'retreats'=>$retreats,
+			'retreatId'=>$retreatId
 		));
 	}
 	
@@ -128,6 +126,7 @@ class InventoryController extends BackendController
 		$criteria = new CDbCriteria;
 		$slid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
+		$criteria->with = 'material';
 		$storage = Inventory::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
 		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.inventory_id='.$slid;
 		$pages = new CPagination(InventoryDetail::model()->count($criteria));
@@ -143,38 +142,40 @@ class InventoryController extends BackendController
 		));
 	}
 	public function actionDetailCreate(){
-		$model = new InventoryDetail();
 		//var_dump($model);exit;
-		$model->dpid = $this->companyId ;
 		$rlid = Yii::app()->request->getParam('lid');//var_dump($polid);exit;
-		$model->inventory_id=$rlid;
+		$db = Yii::app()->db;
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('InventoryDetail');
-			$retreatId = Yii::app()->request->getParam('InventoryDetail_retreat_id');
-			$se=new Sequence("inventory_detail");
-			$model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->retreat_id = $retreatId;
-			//var_dump($model);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId, 'lid'=>$model->inventory_id ));
+			$m = Yii::app()->request->getPost('ms');
+			$ms = array();
+			$ms = explode(',',$m);
+			foreach ($ms as $m){
+				$sql = 'select * from nb_inventory_detail where delete_flag =0 and material_id ='.$m.' and inventory_id='.$rlid;
+				$mid = $db->createCommand($sql)->queryRow();
+				if(empty($mid)){
+					$idm = new InventoryDetail();
+					$se=new Sequence("inventory_detail");
+					$idm->lid = $se->nextval();
+					$idm->dpid = $this->companyId;
+					$idm->create_at = date('Y-m-d H:i:s',time());
+					$idm->update_at = date('Y-m-d H:i:s',time());
+					$idm->inventory_id = $rlid;
+					$idm->material_id = $m;
+					$idm->save();
+				}
 			}
+			
+			Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+			$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId,'lid'=>$rlid ));
+			
 		}
 		$categories = $this->getCategories();
 		$retreats = $this->getretreats();
-		$categoryId=0;
 		$retreatId=0;
-		$materials = $this->getMaterials($categoryId);
-		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
-		$retreats = $this->getretreats();
-		$retreatslist=CHtml::listData($retreats, 'lid', 'name');
+		$materials = $this->getMaterials();
 		$this->render('detailcreate' , array(
-				'model' => $model ,
 				'categories'=>$categories,
-				'categoryId'=>$categoryId,
-				'materials'=>$materialslist,
+				'materials'=>$materials,
 				'retreats'=>$retreats,
 				'retreatId'=>$retreatId
 		));
@@ -218,17 +219,14 @@ class InventoryController extends BackendController
 	public function actionDetailDelete(){
 		$slid = Yii::app()->request->getParam('slid');
 		$status = Yii::app()->request->getParam('status');
-		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-		
-		//Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_inventory_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('inventory/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
 		} else {
-			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+			Yii::app()->user->setFlash('error' , yii::t('app','请勾选要删除的项目'));
 			$this->redirect(array('inventory/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
 		}
 	}
@@ -274,10 +272,7 @@ class InventoryController extends BackendController
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
-
 		$models = MaterialCategory::model()->findAll($criteria);
-
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
@@ -313,13 +308,15 @@ class InventoryController extends BackendController
 		//var_dump($optionsReturn);exit;
 		return $optionsReturn;
 	}
-	private function getMaterials($categoryId){
-		if($categoryId==0)
-		{
-			$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
-		}else{
-			$materials = ProductMaterial::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
-		}
+	private function getRets(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.type=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = Retreat::model()->findAll($criteria);
+		return $models;
+	}
+	private function getMaterials(){
+		$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
 		$materials = $materials ? $materials : array();
 		return $materials;
 	}
@@ -576,7 +573,47 @@ class InventoryController extends BackendController
 			$storage->status = '1';
 			$storage->update();
 			$transaction->commit();
-			Yii::app()->end(json_encode(array("status"=>"success","msg"=>$nostockmsg,"logid"=>$logid)));
+			Yii::app()->end(true);
+	
+			return true;
+		}catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			exit;
+			Yii::app()->end(false);
+			return false;
+		}
+	}
+
+	public function actionSaveStore(){
+	
+		$username = Yii::app()->user->username;
+		$optvals = Yii::app()->request->getParam('optval');
+		$pid = Yii::app()->request->getParam('pid');
+		$optval = array();
+		$optval = explode(';',$optvals);
+		//var_dump($optval);
+		$dpid = $this->companyId;
+		$db = Yii::app()->db;
+		$nostockmsg = '';
+		$transaction = $db->beginTransaction();
+		try
+		{
+			foreach ($optval as $opts){
+				$opt = array();
+				$opt = explode(',',$opts);
+				$id = $opt[0];
+				$nowNum = $opt[1];
+	
+				$sts = InventoryDetail::model()->find('lid='.$id.' and delete_flag=0 and inventory_id ='.$pid);
+				if(!empty($sts)){
+					$sts->update_at = date('Y-m-d H:i:s',time());
+					$sts->inventory_stock = $nowNum;
+					$sts-> update();
+				}
+	
+			}
+			$transaction->commit();
+			Yii::app()->end(json_encode(array("status"=>"success","msg"=>$nostockmsg,)));
 	
 			return true;
 		}catch (Exception $e) {
@@ -586,6 +623,5 @@ class InventoryController extends BackendController
 			return false;
 		}
 	}
-	
 	
 }

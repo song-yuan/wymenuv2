@@ -33,10 +33,19 @@
 	<!-- END PAGE HEADER-->
 	<style>
 		.find form input{display: inline;width:180px;}
+		.find form select{display: inline;width:180px;}
 	</style>
 	<div class="find">
 		<form action="" method="post">
-			<input type="text" name="storage" class="form-control" placeholder="盘损单号" value="<?php echo isset($storage) && $storage ?$storage:'';?>" />
+			<select class="form-control" id="pdname">
+				<option cate = "0" value="0"><?php echo '--请选择原因--';?></option>
+				<?php if($retreats):?>
+				<?php foreach ($retreats as $m):?>
+				<option class="proname " value="<?php echo $m['lid'];?>"><?php echo $m['name'];?></option>
+				<?php endforeach;endif;?>
+				<?php ?>
+			</select>
+			<input type="hidden" name="reasonid" id="reasonid" class="form-control" value="" />
 			<input type="text" name="begintime" class="ui_timepicker form-control" placeholder="起始日期" value="<?php echo isset($begintime) && $begintime ?$begintime:'';?>" />
 			<input type="text" name="endtime" class="ui_timepicker form-control" placeholder="结束日期" value="<?php echo isset($endtime) && $endtime ?$endtime:'';?>" />
 			<button type="submit" class="btn green">
@@ -78,7 +87,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 							
 								<th><?php echo yii::t('app','操作员');?></th>
-								<th><?php echo yii::t('app','盘损单号');?></th>
+								<th><?php echo yii::t('app','盘损原因');?></th>
 								<th><?php echo yii::t('app','盘损日期');?></th>
 								
 								<th><?php echo yii::t('app','状态');?></th>
@@ -93,7 +102,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->opretion_id;?></td>
-								<td><?php echo $model->inventory_account_no;?></td>
+								<td><?php if($model->retreat)echo $model->retreat->name;?></td>
 								<td><?php echo $model->create_at;?></td>
 								
 								<td><span style="color: red;"><?php if($model->status==1){ echo '确认盘损';}elseif($model->status==0){ echo '正在编辑';}else{echo '已失效';}?></span></td>
@@ -160,17 +169,9 @@
 			}
 			return true;
 		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('storageOrder/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('storageOrder/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+		$('#pdname').change(function () {
+			var pid = $(this).val();
+			$('#reasonid').val(pid);
 		});
 	});
 	$(function () {

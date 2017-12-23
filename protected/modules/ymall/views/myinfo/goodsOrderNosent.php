@@ -16,6 +16,7 @@
 .mui-content-padded {
     margin: 0 9px;
 }
+.mui-toast-container{bottom: 50%!important;}
 </style>
 <header class="mui-bar mui-bar-nav  mui-hbar">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
@@ -193,7 +194,7 @@ function upFn() {
 	});
 })(mui);
 <?php if ($success==1): ?>
-mui.toast('下单成功 , 仓库正在加紧备货 ! ! !');
+	mui.toast('下单成功 , 仓库正在加紧备货 ! ! !',{ duration:'long', type:'div' });
 <?php endif; ?>
 
 </script>

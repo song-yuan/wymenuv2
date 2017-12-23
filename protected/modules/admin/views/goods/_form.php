@@ -223,7 +223,7 @@
 	   					$parent.append(str);
 	   					$parent.find('span').remove();
 	   				}else{
-		   				layer.msg('ceshi');
+		   				//layer.msg('ceshi');
 		   				var str = '<select class="form-control materials" tabindex="-1" name="category_id_selecter" id="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
 	   					'<option value="0">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
 	   					str = str + '</select>';
