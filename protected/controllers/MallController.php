@@ -30,7 +30,7 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		$dpidSelf = Yii::app()->session['dpid_self'];
+		$dpidSelf = Yii::app()->session['dpid_self_'.$this->companyId];
 		if($dpidSelf==1){
 			$comdpid = $this->company['dpid'];
 		}else{
@@ -182,7 +182,6 @@ class MallController extends Controller
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
 		$carts = $cartObj->getCart();
 		if(empty($carts['disable'])&&empty($carts['available'])){
-			
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		$isMustYue = $cartObj->pormotionYue;
@@ -190,14 +189,41 @@ class MallController extends Controller
 		$disables = $carts['disable'];
 		$availables = $carts['available'];
 		$original = WxCart::getCartOrigianPrice($availables); // 购物车原价
-		$price = WxCart::getCartPrice($availables,$user,$this->type);// 购物车优惠原价
-		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables);// 购物车优惠原价
+		$price = WxCart::getCartPrice($availables,$user,$this->type);// 购物车价格 会员折扣后价格
+		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables);// 购物车可使用优惠券的价格
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		
+		$memdisprice = $original - $price;
 		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
 		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
+		// 如果没普通优惠活动  可满减满送
+		$fullsent = array();
+		if(!$cartObj->haspormotion){
+			$fullsentProduct = WxFullSent::getFullsentActive($this->companyId, $price, 0); // 满送商品
+			$fullminusPrice = WxFullSent::getFullsentActive($this->companyId, $price, 1); // 满减价
+		}
+		if(!empty($fullsentProduct)&&!empty($fullminusPrice)){
+			if($fullsentProduct['full_cost'] > $fullminusPrice['full_cost']){
+				$fullsent = $fullsentProduct;
+			}else{
+				$fullsent = $fullminusPrice;
+			}
+		}else{
+			if(!empty($fullsentProduct)){
+				$fullsent = $fullsentProduct;
+			}
+			if(!empty($fullminusPrice)){
+				$fullsent = $fullminusPrice;
+				$minusprice = $price - $fullsent['extra_cost'];
+				if($minusprice > 0){
+					$price = $minusprice;
+				}else{
+					$price = 0;
+				}
+			}
+		}
 		if($this->type!=6){
 			$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
 			$isPackingFee = WxCompanyFee::get(2,$this->companyId);
@@ -210,7 +236,7 @@ class MallController extends Controller
 			$isFreightFee = 0;
 			$address = array();
 		}
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'memdisprice'=>$memdisprice,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'fullsent'=>$fullsent,'msg'=>$msg));
 	}
 	/**
 	 * 
