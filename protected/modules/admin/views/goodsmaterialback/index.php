@@ -176,7 +176,7 @@
 	});
 
 	$('.status').click(function() {
-		<?php if(Yii::app()->user->role < 5):?>
+		<?php if(Yii::app()->user->role < 7):?>
 		if (confirm('是否修改损耗产品的退款状态?')) {
 			var account_no = $(this).attr('lid');
 			var status = $(this).attr('status');
