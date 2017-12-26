@@ -36,30 +36,37 @@ function fun()
 
 	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
          <div class="modal-header">
-         	<h4 class="modal-title">选择需要下发套餐的店铺</h4>
-         	<span style="color:red;">套餐下发之前请先确认是否下发相应菜品，否则，套餐下发会出现不可预知的错误！！！</span>
+         	<h4 class="modal-title">选择需要下发菜品的店铺</h4>
+         </div>
+         <div>
+         <span>选择店铺类型</span>
+         <select id="selectype">
+         <option value="0">全部</option>
+         <option value="3">微店</option>
+         <option value="1">非微店</option>
+         </select>
          </div>
          <div class="modal-body">
 	         <div class="portlet-body" id="table-manage">
 		         <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
 			         <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
 			         <?php if($dpids):?>
-			         <?php foreach($dpids as $dpid): if($dpid['type']!=0):?>
-				         <li style="width:50%;float:left;">
-					         <div style="width:10%;float:left;"><?php echo $a++;?></div>
+			         <?php foreach($dpids as $dpid):?>
+				         <li style="width:50%;float:left;" class="company <?php $a=$dpid['is_rest']; if($a == 3)echo 'wxdp';else echo 'ortherdp';?>">
+					         <div style="width:20%;float:left;"><?php echo $dpid['dpid']%1000;?></div>
 					         <div style="width:10%;float:left;">
-					         	<input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" id="aa<?php echo $dpid['dpid'];?>" />
+					         	<input style="height:20px;" type="checkbox" class="checkdpids ckall <?php if($a == 3) echo 'ckwx';else echo 'ckor';?>" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" id="rep<?php echo $dpid['dpid'];?>"/>
 					         </div>
-					         <div style="width:70%;float:left;"><label for="aa<?php echo $dpid['dpid'];?>"><?php echo $dpid['company_name'];?></label></div>
+					         <div style="width:70%;float:left;"><label for="rep<?php echo $dpid['dpid'];?>"><?php echo $dpid['company_name'];?></label></div>
 				         </li>
-				     <?php endif;endforeach;?>
+				     <?php endforeach;?>
 				     <?php endif;?>
 				         <li style="width:100%;">
 					         <div style="width:10%;float:left;"></div>
 					         <div style="width:60%;float:left;"></div>
 					         <div style="width:14%;float:right;">
-					         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" id="as" />
-					         	<label for="as">全选</label>
+					         	<input id="checkall" style="height:20px;" type="checkbox" class="group-checkable checkall" cate="ckall" />
+					         	全选
 					         </div>
 
 				         </li>
@@ -67,6 +74,7 @@ function fun()
 		         </div>
 	         </div>
 	         <div class="modal-footer">
+
 				<select name="groups" id="groups" class="btn" style="border:1px solid gray;" disabled>
 					<?php if (!$groups):?>
 						<option value="">您还没有添加区域价格分组,(默认总部价格)</option>
@@ -80,8 +88,8 @@ function fun()
 		         <button id="printall" type="button" class="btn blue">确认下发</button>
 		         <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
 		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
-
 	         </div>
+	         <span style="color:red;">注意 : 下发可能需要点时间,请耐心等待</span>
 		 </div>
 
 		</div>
@@ -216,6 +224,36 @@ function fun()
 	        layer_index_printerportlist = 0;
 	        });
 	<?php endif; ?>
+
+	$('#selectype').change(function(){
+		var type = $(this).val();
+		if(type == 0){
+			$('.company').show();
+			$('#checkall').attr('cate','ckall');
+		}else if(type == 3){
+			$('.company').hide();
+			$('.wxdp').show();
+			$('#checkall').attr('cate','ckwx');
+		}else{
+			$('.company').show();
+			$('.wxdp').hide();
+			$('#checkall').attr('cate','ckor');
+		}
+	})
+	$('#checkall').change(function(){
+		
+		var a = $(this).attr('cate');
+		var b = $(this).attr('checked');
+		if(b){
+			$("."+a).each(function () {
+	            $(this).attr("checked", true);
+	        });
+		}else{
+			$("."+a).each(function () {
+	            $(this).attr("checked", false);
+	        });
+	    }
+	})
 	$("#su").on('click',function() {
 
         //alert(11);
