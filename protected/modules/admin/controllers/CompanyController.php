@@ -82,7 +82,6 @@ class CompanyController extends BackendController
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-		//var_dump($criteria);exit;
 		$models = Company::model()->findAll($criteria);
 		$this->render('index',array(
 				'models'=> $models,
@@ -173,7 +172,7 @@ class CompanyController extends BackendController
 		//var_dump($criteria);exit;
 		
 		$pages = new CPagination(Company::model()->count($criteria));
-		//	    $pages->setPageSize(1);
+			    // $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Company::model()->findAll($criteria);
 		
@@ -250,7 +249,8 @@ public function actionCreate(){
         }else if(Yii::app()->user->role > 3 && Yii::app()->user->role <= 9){
             if(Yii::app()->request->isPostRequest) {
                     $model->attributes = Yii::app()->request->getPost('Company');
-
+                    $coms = Yii::app()->request->getPost('com');
+                    // var_dump($coms);exit();
                     $pay_online = Yii::app()->request->getParam('pay_online');
 
                     $province = Yii::app()->request->getParam('province1');
@@ -266,7 +266,7 @@ public function actionCreate(){
                     $model->comp_dpid = $this->getCompanyId(Yii::app()->user->username);   
                     //var_dump($model);exit;
                     //$model->type="0";
-                    if($model->save()){
+                    if($model->save() && $coms){
                             $comp_dpid = Yii::app()->db->getLastInsertID();
                             $userid = new Sequence("company_property");
                             $id = $userid->nextval();
@@ -277,10 +277,22 @@ public function actionCreate(){
                                             'update_at'=>date('Y-m-d H:i:s',time()),
                                             'pay_type'=>$pay_online,
                                             'pay_channel'=>$pay_online,
+                                            'price_group_id'=>$coms['price'],
                                             'delete_flag'=>'0',
                             );
                             $command = $db->createCommand()->insert('nb_company_property',$data);
-                            
+                            $areaid = new Sequence("area_group_company");
+                            $area = $areaid->nextval();
+                            $date_area = array(
+                            	'lid'=>$area,
+                            	'dpid'=>$this->companyId,
+                            	'create_at'=>date('Y-m-d H:i:s',time()),
+                                'update_at'=>date('Y-m-d H:i:s',time()),
+                                'area_group_id'=>$coms['group'],
+                                'company_id'=>$comp_dpid
+                            ); 
+                            $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+                            // var_dump($areamodel);exit();
                             //厂商分类
                             $manu = new Sequence("manufacturer_classification");
                             $manu_lid = $manu->nextval();
@@ -324,7 +336,13 @@ public function actionCreate(){
         }
         $role = Yii::app()->user->role;
         $printers = $this->getPrinterList();
-        //var_dump($printers);exit;
+        $sql = "select lid,group_name from nb_area_group where dpid=".$this->companyId." and type=2 and delete_flag=0";
+        $groups = Yii::app()->db->createCommand($sql)->queryAll();
+        $sqls = "select lid,group_name from nb_price_group where dpid=".$this->companyId." and delete_flag=0";
+        $prices = Yii::app()->db->createCommand($sqls)->queryAll();
+        // var_dump($prices);exit;
+        $company = "";
+        $property = "";
         return $this->render('create',array(
                         'model' => $model,
                         'printers'=>$printers,
@@ -332,6 +350,10 @@ public function actionCreate(){
         'companyId'=>  $this->companyId,
                         'type'=> $type,
                         'type2'=> $type2,
+                        'groups'=>$groups,
+                        'prices'=>$prices,
+		                'company'=>$company,
+		                'property'=>$property
         ));
 }else{
         $this->redirect(array('company/index','companyId'=>  $this->companyId));
@@ -339,10 +361,16 @@ public function actionCreate(){
 }
 	public function actionUpdate(){
 		$role = Yii::app()->user->role;
+		$db = Yii::app()->db;
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
 		$type = Yii::app()->request->getParam('type');
 		$type2 = 'update';
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
+		$sql = "select a.area_group_id from nb_area_group_company a,nb_area_group g where a.company_id=".$dpid." and a.area_group_id=g.lid and g.type=2 and a.delete_flag=g.delete_flag and a.delete_flag=0";
+		$company = Yii::app()->db->createCommand($sql)->queryRow();
+		// var_dump($company);exit;
+		$sqls = "select price_group_id from nb_company_property where dpid=".$dpid." and delete_flag=0";
+		$property = Yii::app()->db->createCommand($sqls)->queryRow();
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('company/index' , 'companyId' => $this->companyId)) ;
@@ -350,6 +378,7 @@ public function actionCreate(){
 		if(Yii::app()->request->isPostRequest) {
             //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			$model->attributes = Yii::app()->request->getPost('Company');
+			$coms = Yii::app()->request->getPost('com');
 			$province = Yii::app()->request->getParam('province1');
 			$city = Yii::app()->request->getParam('city1');
 			$area = Yii::app()->request->getParam('area1');
@@ -362,6 +391,23 @@ public function actionCreate(){
 			
 			//var_dump($model);exit;
 			if($model->save()){
+				if(!empty($company)){
+					// echo "cccc";exit;
+					$area = $db->createCommand('update nb_area_group_company set area_group_id="'.$coms['group'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where company_id ='.$dpid.' and delete_flag=0')->execute();
+				}else{
+					$areaid = new Sequence("area_group_company");
+                    $area = $areaid->nextval();
+                    $date_area = array(
+                    	'lid'=>$area,
+                    	'dpid'=>$this->companyId,
+                    	'create_at'=>date('Y-m-d H:i:s',time()),
+                        'update_at'=>date('Y-m-d H:i:s',time()),
+                        'area_group_id'=>$coms['group'],
+                        'company_id'=>$dpid
+                    ); 
+                    $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+				}
+				$price = $db->createCommand('update nb_company_property set price_group_id="'.$coms['price'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$dpid.' and delete_flag=0')->execute();
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
 				$this->redirect(array('company/index','companyId'=>$this->companyId));
 			} else {
@@ -369,6 +415,10 @@ public function actionCreate(){
 			}
 		}
 		$printers = $this->getPrinterList();
+		$sql = "select lid,group_name from nb_area_group where dpid=".$this->companyId." and type=2 and delete_flag=0";
+        $groups = Yii::app()->db->createCommand($sql)->queryAll();
+        $sqls = "select lid,group_name from nb_price_group where dpid=".$this->companyId." and delete_flag=0";
+        $prices = Yii::app()->db->createCommand($sqls)->queryAll();
 		return $this->render('update',array(
 				'model'=>$model,
 				'printers'=>$printers,
@@ -376,6 +426,10 @@ public function actionCreate(){
                 'companyId'=>$this->companyId,
 				'type'=>$type,
 				'type2'=>$type2,
+				'groups'=>$groups,
+                'prices'=>$prices,
+                'company'=>$company,
+                'property'=>$property
 		));
 	}
 

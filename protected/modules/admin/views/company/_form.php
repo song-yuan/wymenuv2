@@ -79,6 +79,32 @@
 									
 									<?php endif;?>
 									<?php if($type !='2'):?>
+									<?php if(!empty($groups)):?>
+									<div class="form-group">
+									<LABEL class="col-md-3 control-label ">选择店铺标签</LABEL>
+										<div class="col-md-4">
+											<SELECT name="com[group]" class="form-control pay_online">
+											<option>---请选择---</option>
+											<?php foreach($groups as $group):?>
+												<OPTION value="<?php echo $group['lid'];?>" <?php if(!empty($company)): if($company['area_group_id']==$group['lid']):?> selected = "selected"<?php endif;endif;?>><?php echo $group['group_name'];?></OPTION>
+											<?php endforeach;?>
+											</SELECT>
+										</div>
+									</div>
+									<?php endif;?>
+									<?php if(!empty($prices)):?>
+									<div class="form-group">
+									<LABEL class="col-md-3 control-label ">选择店铺价格体系</LABEL>
+										<div class="col-md-4">
+											<SELECT name="com[price]" class="form-control pay_online">
+											<option>---请选择---</option>
+											<?php foreach($prices as $price):?>
+												<OPTION value="<?php echo $price['lid'];?>" <?php if(!empty($property)): if($property['price_group_id']==$price['lid']):?> selected = "selected"<?php endif;endif;?>><?php echo $price['group_name'];?></OPTION>
+											<?php endforeach;?>
+											</SELECT>
+										</div>
+									</div>
+									<?php endif;?>
 									<div id="yincang" style="display:black;">
 									<div class="form-group"> 
 										<?php echo $form->label($model, 'is_membercard_recharge',array('class' => 'col-md-3 control-label'));?>
@@ -98,7 +124,7 @@
 									<div class="form-group"> 
 										<?php echo $form->label($model, 'membercard_enable_date',array('class' => 'col-md-3 control-label'));?>
  										<div class="col-md-4"> 
-											<?php echo $form->textField($model, 'membercard_enable_date' ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('membercard_enable_date'),'onkeyup'=>"if(isNaN(value))execCommand('undo')", 'onafterpaste'=>"if(isNaN(value))execCommand('undo')" ));?>
+											<?php echo $form->textField($model, 'membercard_enable_date' ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('membercard_enable_date'),'onkeyup'=>"if(isNaN(value))execCommand('undo')", 'onafterpaste'=>"if(isNaN(value))execCommand('undo')"));?>
 											<?php echo $form->error($model, 'membercard_enable_date' )?>
 										</div> 
 									</div>
