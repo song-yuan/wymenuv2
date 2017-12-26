@@ -281,17 +281,19 @@ public function actionCreate(){
                                             'delete_flag'=>'0',
                             );
                             $command = $db->createCommand()->insert('nb_company_property',$data);
-                            $areaid = new Sequence("area_group_company");
-                            $area = $areaid->nextval();
-                            $date_area = array(
-                            	'lid'=>$area,
-                            	'dpid'=>$this->companyId,
-                            	'create_at'=>date('Y-m-d H:i:s',time()),
-                                'update_at'=>date('Y-m-d H:i:s',time()),
-                                'area_group_id'=>$coms['group'],
-                                'company_id'=>$comp_dpid
-                            ); 
-                            $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+                           if($coms['group']=='0' && $coms['group']==null){
+                           		$areaid = new Sequence("area_group_company");
+	                            $area = $areaid->nextval();
+	                            $date_area = array(
+	                            	'lid'=>$area,
+	                            	'dpid'=>$this->companyId,
+	                            	'create_at'=>date('Y-m-d H:i:s',time()),
+	                                'update_at'=>date('Y-m-d H:i:s',time()),
+	                                'area_group_id'=>$coms['group'],
+	                                'company_id'=>$comp_dpid
+	                            ); 
+	                            $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+                           }
                             // var_dump($areamodel);exit();
                             //厂商分类
                             $manu = new Sequence("manufacturer_classification");
@@ -347,7 +349,7 @@ public function actionCreate(){
                         'model' => $model,
                         'printers'=>$printers,
                         'role'=>$role,
-        'companyId'=>  $this->companyId,
+        				'companyId'=>$this->companyId,
                         'type'=> $type,
                         'type2'=> $type2,
                         'groups'=>$groups,
