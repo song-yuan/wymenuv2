@@ -39,26 +39,34 @@ function fun()
          <div class="modal-header">
          	<h4 class="modal-title">选择需要下发菜品的店铺</h4>
          </div>
+         <div>
+         <span>选择店铺类型</span>
+         <select id="selectype">
+         <option value="0">全部</option>
+         <option value="3">微店</option>
+         <option value="1">非微店</option>
+         </select>
+         </div>
          <div class="modal-body">
 	         <div class="portlet-body" id="table-manage">
 		         <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
 			         <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
 			         <?php if($dpids):?>
-			         <?php foreach($dpids as $dpid): if($dpid['type']!=0):?>
-				         <li style="width:50%;float:left;">
-					         <div style="width:10%;float:left;"><?php echo $a++;?></div>
+			         <?php foreach($dpids as $dpid):?>
+				         <li style="width:50%;float:left;" class="company <?php $a=$dpid['is_rest']; if($a == 3)echo 'wxdp';else echo 'ortherdp';?>">
+					         <div style="width:20%;float:left;"><?php echo $dpid['dpid']%1000;?></div>
 					         <div style="width:10%;float:left;">
-					         	<input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" id="rep<?php echo $dpid['dpid'];?>"/>
+					         	<input style="height:20px;" type="checkbox" class="checkdpids ckall <?php if($a == 3) echo 'ckwx';else echo 'ckor';?>" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" id="rep<?php echo $dpid['dpid'];?>"/>
 					         </div>
 					         <div style="width:70%;float:left;"><label for="rep<?php echo $dpid['dpid'];?>"><?php echo $dpid['company_name'];?></label></div>
 				         </li>
-				     <?php endif;endforeach;?>
+				     <?php endforeach;?>
 				     <?php endif;?>
 				         <li style="width:100%;">
 					         <div style="width:10%;float:left;"></div>
 					         <div style="width:60%;float:left;"></div>
 					         <div style="width:14%;float:right;">
-					         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
+					         	<input id="checkall" style="height:20px;" type="checkbox" class="group-checkable checkall" cate="ckall" />
 					         	全选
 					         </div>
 
@@ -228,20 +236,40 @@ function fun()
 			}
 			return true;
 		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('copyproduct/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('copyproduct/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('copyproduct/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
-
+	$('#selectype').change(function(){
+		var type = $(this).val();
+		if(type == 0){
+			$('.company').show();
+			$('#checkall').attr('cate','ckall');
+		}else if(type == 3){
+			$('.company').hide();
+			$('.wxdp').show();
+			$('#checkall').attr('cate','ckwx');
+		}else{
+			$('.company').show();
+			$('.wxdp').hide();
+			$('#checkall').attr('cate','ckor');
+		}
+	})
+	$('#checkall').change(function(){
+		
+		var a = $(this).attr('cate');
+		var b = $(this).attr('checked');
+		if(b){
+			$("."+a).each(function () {
+	            $(this).attr("checked", true);
+	        });
+		}else{
+			$("."+a).each(function () {
+	            $(this).attr("checked", false);
+	        });
+	    }
+	})
 
 	$("#su").on('click',function() {
 

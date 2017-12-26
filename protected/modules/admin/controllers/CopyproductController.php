@@ -32,7 +32,7 @@ class CopyproductController extends BackendController
 		$models = Product::model()->findAll($criteria);
 
 		$db = Yii::app()->db;
-		$sql = 'select t.dpid,t.type,t.company_name from nb_company t where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		$sql2 = 'select * from nb_price_group where dpid = '.$this->companyId. ' and delete_flag=0';
