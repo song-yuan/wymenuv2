@@ -293,7 +293,6 @@ class CuponController extends BackendController
 				if(!empty($prod)&&empty($cuprod)){
 					$se = new Sequence("cupon_product");
 					$id = $se->nextval();
-
 					$data = array(
 							'lid'=>$id,
 							'dpid'=>$this->companyId,
@@ -308,9 +307,6 @@ class CuponController extends BackendController
 					//var_dump($data);exit;
 					$command = $db->createCommand()->insert('nb_cupon_product',$data);
 					
-				}else{
-					Yii::app()->user->setFlash('error' ,yii::t('app', '该菜品已有代金券，请重新选择！'));
-					$this->redirect(array('cupon/detailinfo' , 'lid'=>$cuid,'code'=>$cucode,'companyId' => $this->companyId));
 				}
 			}
 			if($command){

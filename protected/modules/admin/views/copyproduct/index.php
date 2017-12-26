@@ -118,7 +118,6 @@ function fun()
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品列表');?></div>
 					<div class="actions">
 						<a id="su"  class="btn yellow" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','菜单下发');?></a>
-						<a id="clearsu"  class="btn red" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','清除下发');?></a>
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
