@@ -277,7 +277,7 @@ class CuponController extends BackendController
 	public function actionAddprod(){
 		$db = Yii::app()->db;
 		$prodcodes = Yii::app()->request->getPost('product_id');
-		// var_dump($prodcode);exit();
+		// var_dump($prodcodes);exit();
 		$cuid = Yii::app()->request->getParam('cuid');
 		$cucode = Yii::app()->request->getParam('cucode');
 		foreach ($prodcodes as $prodcode) {
@@ -307,18 +307,18 @@ class CuponController extends BackendController
 					);
 					//var_dump($data);exit;
 					$command = $db->createCommand()->insert('nb_cupon_product',$data);
-					if($command){
-						$sql = 'update nb_cupon set type_prod = 1 where dpid ='.$this->companyId.' and lid ='.$cuid;
-						$result = $db->createCommand($sql)->execute();
-						Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-						$this->redirect(array('cupon/detailinfo' , 'lid'=>$cuid,'code'=>$cucode,'companyId' => $this->companyId));
-					}
+					
 				}else{
 					Yii::app()->user->setFlash('error' ,yii::t('app', '该菜品已有代金券，请重新选择！'));
 					$this->redirect(array('cupon/detailinfo' , 'lid'=>$cuid,'code'=>$cucode,'companyId' => $this->companyId));
 				}
 			}
-			
+			if($command){
+				$sql = 'update nb_cupon set type_prod = 1 where dpid ='.$this->companyId.' and lid ='.$cuid;
+				$result = $db->createCommand($sql)->execute();
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('cupon/detailinfo' , 'lid'=>$cuid,'code'=>$cucode,'companyId' => $this->companyId));
+			}
 			
 	}
 
