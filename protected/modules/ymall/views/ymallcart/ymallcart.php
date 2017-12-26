@@ -227,6 +227,7 @@
 								$('#aa').css('display', 'none');
 								$('#aa').prev().children("button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');
 								$('#aa').prev().children("input.mui-numbox-input").attr('readonly','readonly');
+								$('#aa').prev().children("input.mui-numbox-input").removeAttr('gb');
 								$('#aa').removeAttr('id');
 							}else if(data == 2) {
 								mui.toast('因网络原因保存失败 , 请重新保存 ! ! !',{ duration:'long', type:'div' });
