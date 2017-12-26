@@ -11,7 +11,7 @@
 				line-height: 35px;
 			}
 			.edit{margin-top:11px;z-index: 1;}
-			.img-show{width: 98px;height:98px;margin-left: -14px;margin-right: 10px;}
+			.img-show{width: 98px;height:98px;margin-left: -14px;margin-right: 10px;border-radius: 10px;}
 			.nav-none{margin-bottom: 50px;display: none;}
 			.nav-on{margin-bottom: 50px;}
 			.ui-bar {
@@ -65,8 +65,10 @@
 			/*.mui-content{background-color: white!important;}*/
 			.mui-table-view .mui-media, .mui-table-view .mui-media-body {
 				overflow: visible;
+				position: relative;
 			}
 			.mui-toast-container{bottom: 50%!important;}
+
 		</style>
 
 
@@ -117,12 +119,13 @@
 						    		<input name="goods_cart_id" value="<?php echo $product['lid']; ?>" type="checkbox" class="goods_product">
 						    	</div>
 						    	<div class="mui-col-xs-10" >
-					    			<a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
+					    			<a href1="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
 						            	<img class=" mui-pull-left img-show" src="<?php if($product['main_picture']){ echo $product['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" >
 							        </a>
 						            <div class="mui-media-body">
-						                <a href="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
+						                <a href1="<?php echo $this->createUrl('productdetail/productdetail',array('companyId' =>$this->companyId , )); ?>">
 						                	<span class="cblack"><?php echo $product['goods_name']; ?></span>
+						                	<span class="mui-icon mui-icon-compose mui-pull-right edited" style="color:#666;margin-right: 10px;z-index: 1;"></span>
 						                </a>
 						                <p class='mui-ellipsis' style="color: purple;"><?php echo $product['unit_name']; ?></p>
 						                <span style="color:darkslategray; display: block;"><b>￥</b>
@@ -138,7 +141,7 @@
 										  <input class="mui-numbox-input" type="number" value="<?php echo $product['num']; ?>" readonly = "readonly" />
 										  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 										</div>
-										
+										<button class="saved" style="height: 100px;border:0;position: absolute;right: 0;top: 0px;color:#fff;background: orange;display: none;" value="<?php echo $product['lid']; ?>">完成</button>
 						            </div>
 						    	</div>
 						    </li>
@@ -194,6 +197,54 @@
 		<script type="text/javascript">
 			mui('.mui-numbox').numbox();
 			mui('.mui-scroll-wrapper').scroll();
+
+
+			//单个编辑
+			mui('.mui-media-body a').on('tap','.edited',function(){
+				$(this).parent().parent().children(".mui-numbox.mui-right").children("input.mui-numbox-input,button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").removeAttr('disabled');
+				$(this).parent().parent().children(".saved").css('display', 'block');
+				$(this).parent().parent().children(".mui-numbox.mui-right").children("input.mui-numbox-input").removeAttr('readonly');
+			});
+			//单个保存
+			$(".saved").click(function(){
+				// alert('222');
+				var goods_num_edit=[];
+				var goods_num = $(this).prev('.mui-numbox').children("input[type='number']").val();
+				var goods_cart_id = parseInt($(this).attr('value'));
+				goods_num_edit[0] = goods_cart_id+'_'+goods_num;
+		 		var goods_num_edit = goods_num_edit.join(",");
+		 		$(this).attr('id', 'aa');
+				var ischange = $(this).prev().children('input').attr('gb');
+				// console.log(ischecked);
+				if (ischange) {
+					mui.post(
+						'<?php echo $this->createUrl("ymallcart/editymallcart",array("companyId"=>$this->companyId)) ?>',
+						{goods_num_edit:goods_num_edit},
+						function(data){
+							if (data == 1) {
+								mui.toast('保存成功 ! ! !',{ duration:'long', type:'div' });
+								// $("input[type='checkbox']").each(function(){this.checked=false;});//取消选中
+								$('#aa').css('display', 'none');
+								$('#aa').prev().children("button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');
+								$('#aa').prev().children("input.mui-numbox-input").attr('readonly','readonly');
+								$('#aa').removeAttr('id');
+							}else if(data == 2) {
+								mui.toast('因网络原因保存失败 , 请重新保存 ! ! !',{ duration:'long', type:'div' });
+							}else if(data == 3) {
+								mui.toast('未查寻到商品保存失败 ! ! !',{ duration:'long', type:'div' });
+							}
+						},'json'
+					);
+				} else{
+					$('#aa').css('display', 'none');
+					$('#aa').prev().children("button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');
+					$('#aa').prev().children("input.mui-numbox-input").attr('readonly','readonly');
+					$('#aa').removeAttr('id');
+				}
+			});
+
+
+
 			$("document").ready(function(){
 				$("input.mui-numbox-input,button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');
 				$("#edit").click(function(){
@@ -203,6 +254,7 @@
 						$("#godelete").removeClass("nav-none").addClass("nav-on");
 						$("input.mui-numbox-input,button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").removeAttr('disabled');
 						$("input.mui-numbox-input").removeAttr('readonly');
+						$(".edited").css('display', 'none');
 						$("#edit").text('完成');
 						$("input[type='checkbox']").each(function(){this.checked=false;});
 						$('.all_price').html('0.00');
@@ -214,15 +266,18 @@
 							$("#godelete").removeClass("nav-on").addClass("nav-none");
 							$("button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');
 							$("input.mui-numbox-input").attr('readonly','readonly');
+							$(".edited").css('display', 'block');
 							$("#edit").text('编辑');
 							$("input[type='checkbox']").each(function(){this.checked=false;});
 						}
 						$('.all_price').html('0.00');
 					}
 				});
+
 					//编辑时,数量改变自动选中
 				$("input[type='number']").change(function(){
 					$(this).parent('.mui-numbox').parent('.mui-media-body').parent('.mui-col-xs-10').prev('.mui-col-xs-2').children('.goods_product').attr('checked','checked');
+					$(this).attr('gb', 'true');
 					// this.checked=true;
 				});
 				$("#selectall").click(function(){
@@ -352,9 +407,9 @@
 				if (isempty) {
 					mui.alert('请选择要删除的商品 ! ! !');
 				}else{
-					var btnArray = ['是','否'];
-					mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
-						if(e.index==0){
+					var btnArray = ['取消', '确定'];
+					mui.confirm('确定删除所选产品 ？','提示',btnArray,function(e){
+						if(e.index==1){
 							//自己的逻辑
 							mui.post('<?php echo $this->createUrl("ymallcart/delete",array("companyId"=>$this->companyId)) ?>',{
 								   goods_num_edit:goods_num_edit,
