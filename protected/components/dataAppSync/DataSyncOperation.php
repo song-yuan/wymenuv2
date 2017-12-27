@@ -1198,7 +1198,7 @@ class DataSyncOperation {
 						$refund_fee = -$retreatprice;
 					}
 					$remark = $pay['remark'];
-					$sql = 'select * from nb_order_pay where dpid='.$dpid.' and create_at="'.$retreatTime.'" and order_id='.$orderId.' and account_no="'.$accountNo.'" paytype='.$pay['paytype'].' and payment_method_id='.$pay['payment_method_id'].' and paytype_id='.$pay['paytype_id'];
+					$sql = 'select * from nb_order_pay where dpid='.$dpid.' and create_at="'.$retreatTime.'" and order_id='.$orderId.' and account_no="'.$accountNo.'" and paytype='.$pay['paytype'].' and payment_method_id='.$pay['payment_method_id'].' and paytype_id='.$pay['paytype_id'];
 					$orderpay = Yii::app ()->db->createCommand ($sql)->queryRow();
 					if($orderpay){
 						continue;
