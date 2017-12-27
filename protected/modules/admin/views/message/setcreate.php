@@ -1,6 +1,7 @@
-	<!-- BEGIN PAGE -->  
+
+	<!-- BEGIN PAGE -->
 		<div class="page-content">
-			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -22,27 +23,36 @@
 			</div>
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺列表'),'url'=>$this->createUrl('company/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加店铺'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/index' , array('companyId' => $this->companyId,)))));?>
+			<!-- BEGIN PAGE HEADER-->
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加短信套餐'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('message/setindex' , array('companyId' => $this->companyId,)))));?>
+
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加企业（店铺）');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加短信套餐');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'printers'=>$printers,'role'=>$role,'type'=>$type,'type2'=>$type2,'groups'=>$groups,'prices'=>$prices,'company'=>$company,'property'=>$property));?>
-							<!-- END FORM--> 
+							<?php echo $this->renderPartial('_form', array('dpids' => $dpids ,'model'=>$model)); ?>
+							<!-- END FORM-->
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- END PAGE CONTENT-->    
+			<!-- END PAGE CONTENT-->
 		</div>
-		<!-- END PAGE -->  
+		<!-- END PAGE -->
+<script>
+
+
+    $(function() {
+            //var cHeight = Zepto('#blank').offset().height;
+
+        });
+</script>

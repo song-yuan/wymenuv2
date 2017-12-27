@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','添加盘损单详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘损单管理'),'url'=>$this->createUrl('inventory/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','盘损单详情管理'),'url'=>$this->createUrl('inventory/detailindex' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','添加盘损单详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('inventory/detailindex' , array('companyId' => $this->companyId,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','添加盘损单详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘损单管理'),'url'=>$this->createUrl('inventory/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','盘损单详情管理'),'url'=>$this->createUrl('inventory/detailindex' , array('companyId'=>$this->companyId,'lid' => $rlid))),array('word'=>yii::t('app','添加盘损单详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('inventory/detailindex' , array('companyId' => $this->companyId,'lid' => $rlid)))));?>
 	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

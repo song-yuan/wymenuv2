@@ -177,7 +177,8 @@ class InventoryController extends BackendController
 				'categories'=>$categories,
 				'materials'=>$materials,
 				'retreats'=>$retreats,
-				'retreatId'=>$retreatId
+				'retreatId'=>$retreatId,
+				'rlid'=>$rlid
 		));
 	}
 

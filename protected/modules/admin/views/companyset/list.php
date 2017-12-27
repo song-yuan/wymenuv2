@@ -91,6 +91,12 @@
 		                <div class="list_small">设置登录界面底部显示的名称，图标以及标语口号</div>
 		                </a> 
 	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+						<a href="<?php echo $this->createUrl('message/index',array('companyId'=>$this->companyId));?>">
+		                <div class="list_big"><i class="fa fa-star-half-o"></i> 短信套餐</div>
+		                <div class="list_small">购买短信条数，用途：实体卡消费时，发送短信提醒。</div>
+		                </a> 
+	                </div>
 	               <?php endif;?>
 	               
                 </div>	
