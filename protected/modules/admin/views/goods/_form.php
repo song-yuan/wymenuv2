@@ -84,6 +84,13 @@
 											<?php if($islock&&Yii::app()->user->role >=11):?><span style="color: red;">已开通微店，价格已被总部锁定，无法修改。</span><?php endif;?>
 										</div>
 									</div>
+									<div class="form-group" <?php if($model->hasErrors('erp_code')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'erp_code',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'erp_code',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('erp_code'),'disabled'=>$b,));?>
+											<?php echo $form->error($model, 'erp_code' )?>
+										</div>
+									</div>
 									<div class="form-group" <?php if($model->hasErrors('sort')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'sort',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -223,7 +230,7 @@
 	   					$parent.append(str);
 	   					$parent.find('span').remove();
 	   				}else{
-		   				//layer.msg('ceshi');
+		   				layer.msg('ceshi');
 		   				var str = '<select class="form-control materials" tabindex="-1" name="category_id_selecter" id="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
 	   					'<option value="0">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
 	   					str = str + '</select>';

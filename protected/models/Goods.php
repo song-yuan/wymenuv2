@@ -56,10 +56,11 @@ class Goods extends CActiveRecord
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
 			array('is_member_discount, is_discount, is_show, is_show_wx, is_lock, delete_flag', 'length', 'max'=>2),
+			array('erp_code','length', 'max'=>32),
 			array('member_price, description, main_picture, goods_code, cate_code, update_at, create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, category_id, cate_code, goods_code, goods_name, simple_code, main_picture, description, sort, is_member_discount, is_discount, original_price, member_price, goods_unit, store_number, order_number, favourite_number, is_show, is_show_wx, is_lock, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, category_id, cate_code, goods_code, goods_name, simple_code, main_picture, description, sort, is_member_discount, is_discount, original_price, member_price, goods_unit, store_number, order_number, favourite_number, is_show, is_show_wx, is_lock,erp_code,delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -103,6 +104,7 @@ class Goods extends CActiveRecord
 			'is_show' => '是否显示',
 			'is_show_wx' => '是否显示在微信端',
 			'is_lock' => '控制价格是否锁定，0不锁定，价格可以修改；1锁定，价格不能修改。',
+			'erp_code'=>'商品的erp',
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => '同步标志',
 		);

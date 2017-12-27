@@ -80,18 +80,31 @@
 									case 2 : echo '<span style="color:red">货到付款</span>';break;
 									default: echo '未知';break;
 								}?></td>
-								<td><?php switch ($model['pay_status']){
-									case 0 : echo '<span style="color:red">未支付</span>';break;
-									case 1 : echo '<span style="color:green">已支付</span>';break;
-									default: echo '未知';break;
-								}?></td>
+								<td>
+								<?php 
+								if ($model['order_status']==8) {
+									echo '<span style="color:blue">已驳回</span>';
+								}else{
+									switch ($model['pay_status']){
+										case 0 : echo '<span style="color:red">未支付</span>';break;
+										case 1 : echo '<span style="color:green">已支付</span>';break;
+										default: echo '未知';break;
+									}
+								}
+								?>
+								</td>
 								<td>
 								<?php
-									if ($model['goods_order_accountno']=='') {
-										echo '<span style="color:red">待处理</span>';
-									}else{
+									if ($model['order_status']==8) {
 										echo '<span style="color:green">已处理</span>';
+									}else{
+										if ($model['goods_order_accountno']=='') {
+											echo '<span style="color:red">待处理</span>';
+										}else{
+											echo '<span style="color:green">已处理</span>';
+										}
 									}
+									
 								?>
 								</td>
                                 <td class="center">
