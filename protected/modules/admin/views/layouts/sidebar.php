@@ -29,7 +29,7 @@
                         <span class="title"><?php echo yii::t('app','店铺设置');?></span>					
                     </a>
             </li>
-            <li class="<?php if(in_array(Yii::app()->controller->id , array('product' ,'payMethod', 'basicFee' ,'productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice', 'copyproduct', 'floor', 'site', 'siteType', 'sitePersons', 'siteChannel', 'pad', 'printer', 'printerWay', 'taste', 'productTaste', 'takeawayMember','muchupdateProd','muchprinterProd','materialCategory','materialUnit','productMaterial','materialUnitRatio','productBom','copyproductSet','copytaste','productLabel','copyPrinter'))) echo 'active';?>">
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('product' ,'payMethod', 'basicFee' ,'productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice', 'copyproduct', 'floor', 'site', 'siteType', 'sitePersons', 'siteChannel', 'pad', 'printer', 'printerWay', 'taste', 'productTaste', 'takeawayMember','muchupdateProd','muchprinterProd','materialCategory','materialUnit','productMaterial','materialUnitRatio','productBom','copyproductSet','copytaste','productLabel','copymaterial','copyPrinter','copyproductbom'))) echo 'active';?>">
                 <a href="<?php echo $this->createUrl('product/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-cog"></i> 
                     <span class="title"><?php echo yii::t('app','基础设置');?></span>					
@@ -64,7 +64,7 @@
                     </a>
             </li>
         <?php if(Yii::app()->user->role != '8'): ?>
-            <li class="<?php if(in_array(Yii::app()->controller->id , array('bom','stocktakinglog','nowmaterialstock','copymaterial','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','bomProduct','bomproductCategory','stockSetting','materialStockLog','commit','commitDetail','inventory','stockInventory','stockTaking'))) echo 'active';?>">
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('bom','stocktakinglog','nowmaterialstock','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','bomProduct','bomproductCategory','stockSetting','materialStockLog','commit','commitDetail','inventory','stockInventory','stockTaking'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('bom/bom',array('companyId' => $this->companyId,'type'=>2));?>">
                     <i class="fa fa-coffee"></i> 
                     <span class="title"><?php echo yii::t('app','进销存管理');?></span>

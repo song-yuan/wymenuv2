@@ -27,14 +27,10 @@ class CopymaterialController extends BackendController
 		if($categoryId){
 			$criteria->condition.=' and t.category_id = '.$categoryId;
 		}
-		
-		//$pages = new CPagination(Product::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		//$pages->applyLimit($criteria);
 		$models = ProductMaterial::model()->findAll($criteria);
 		
 		$db = Yii::app()->db;
-		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		//var_dump($dpids);exit;
@@ -45,60 +41,6 @@ class CopymaterialController extends BackendController
 				'dpids'=>$dpids,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId
-		));
-	}
-	public function actionSetMealList() {
-		
-	}
-	public function actionCreate(){
-		$model = new Product();
-		$model->dpid = $this->companyId ;
-		//$model->create_time = time();
-		
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('Product');
-                        $se=new Sequence("product");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->update_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->product_name);
-                        //var_dump($model);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
-			}
-		}
-		$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-                //echo 'ss';exit;
-		$this->render('create' , array(
-			'model' => $model ,
-			'categories' => $categories
-		));
-	}
-	
-	public function actionUpdate(){
-		$id = Yii::app()->request->getParam('id');
-		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
-		$model->dpid = $this->companyId;
-		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('Product');
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->product_name);
-			$model->update_at=date('Y-m-d H:i:s',time());
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
-			}
-		}
-		$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-		$this->render('update' , array(
-				'model' => $model ,
-				'categories' => $categories
 		));
 	}
 	public function actionStorMaterial(){

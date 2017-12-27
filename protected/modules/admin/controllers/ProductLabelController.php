@@ -4,7 +4,7 @@ class ProductLabelController extends BackendController
 {
     public function actionIndex()
     {
-        $sql = 'select t.*,p.lid as plid from nb_product t left join nb_product_label p on( t.lid=p.product_id and p.delete_flag=0 and p.dpid='.$this->companyId.') where t.delete_flag=0 and t.is_show=1 and t.dpid='.$this->companyId.' order by plid desc';
+        $sql = 'select t.*,p.lid as plid from nb_product t left join nb_product_label p on( t.lid=p.product_id and p.delete_flag=0 and p.dpid='.$this->companyId.') where t.delete_flag=0 and t.is_show=1 and t.dpid='.$this->companyId.' group by t.lid order by plid desc';
         $models = Yii::app()->db->createCommand($sql)->queryAll();
         $this->render('index',array(
             'models'=>$models,
