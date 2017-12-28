@@ -244,8 +244,6 @@
 				}
 			});
 
-
-
 			$("document").ready(function(){
 				$("input.mui-numbox-input,button.mui-numbox-btn-plus,button.mui-numbox-btn-minus").attr('disabled','disabled');
 				$("#edit").click(function(){
@@ -468,6 +466,10 @@
 					mui.toast('请选择需要结算的商品 !!!',{ duration:'long', type:'div' })
 				}
 		    });
+
+		    <?php if ($error==1): ?>
+		    	mui.toast('因网络原因 , 下单失败 ! ! !',{ duration:'long', type:'div' });
+		    <?php endif; ?>
 		</script>
 
 
