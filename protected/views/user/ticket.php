@@ -39,30 +39,26 @@
 
  .active a{
      display:inline;
-    color:  #e4393c ;
-      border-bottom:2px solid #e4393c; 
-
+     color:  #e4393c ;
+     border-bottom:2px solid #e4393c; 
  }
 
     .cupon_items{
-       
-       
        padding-top: 55px;
-       padding-left: 16px;
-      
     }
    .cupon_item{
-       margin-bottom: 20px;   
+   	   width:90%;
+   	   margin:0 auto 20px;
     }
     .type{
-        min-width: 32%;
+       width: 32%;
+       height: 78px;
+       padding-top: 30px;
        background-color: #74d2d4;
        float: left;
        border-top-left-radius: 6px;
        border-bottom-left-radius: 6px;
        text-align: center;
-        padding-top: 30px;
-        min-height: 78px;
        color:#fff;
   
     }
@@ -86,20 +82,26 @@
      font-size: 14px;
     }
     .range{
-        width: 57%;
-        min-height: 88px;
+        width: 64%;
+        height: 88px;
         background-color: #fff;
         float: left;
         border-top-right-radius: 6px;
         border-bottom-right-radius: 6px;
-        padding: 10px 10px 10px 15px;
+        padding:10px 2%;
         font-size: 13px;
         color:#787878;
     }
     .range .describe{
         min-height: 68px;
     }
-    
+    .cupon_item .tips{
+    	background-color: #fff;
+    	border-top:1px dashed #FBF9FE;
+    	padding:2px 5px;
+    	font-size:12px;
+    	border-radius:6px;
+    }
 </style>
 
 
@@ -148,6 +150,28 @@
                     </div> 
                 </div>
                 <div style="clear:both"></div>
+                <div class="tips">使用范围:
+                <?php 
+                $typeArr = explode(',',$v['type']); 
+                if(in_array(1, $typeArr)){
+                	echo 'POS机端 ';
+                }
+                if(in_array(2, $typeArr)){
+                	echo '微信堂食 ';
+                }
+                if(in_array(3, $typeArr)){
+                	echo '微信外卖 ';
+                }
+                if($v['type']=='1'){
+                	echo '只限领取店铺使用 ';
+                }elseif($v['type']=='2'){
+                	echo '只限部分店铺可用 ';
+                }
+                if($v['type_prod']=='1'){
+                	echo '只限部分产品可用 ';
+                }
+                ?>
+                </div>
              </div>
             
             <?php endforeach;?>
