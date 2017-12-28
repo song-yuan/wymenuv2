@@ -1,5 +1,4 @@
 <?php
-
 class GoodsorderController extends BackendController
 {
 	public function actions() {
@@ -55,12 +54,12 @@ class GoodsorderController extends BackendController
 		$goid = Yii::app()->request->getParam('lid');
 		$name = Yii::app()->request->getParam('name');
 		$papage = Yii::app()->request->getParam('papage');
-
+		$dpid = Yii::app()->request->getParam('dpid');
 		$db = Yii::app()->db;
 
 		$sqls = 'select c.company_name,t.* from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
-
+		// var_dump($model);exit;
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
 
@@ -84,6 +83,7 @@ class GoodsorderController extends BackendController
 				'papage'=>$papage,
 				'name'=>$name,
 				'goid'=>$goid,
+				'dpid'=>$dpid
 		));
 
 	}
@@ -264,26 +264,6 @@ class GoodsorderController extends BackendController
 			//return false;
 		}
 	}
-	//驳回定单
-	public function actionOrderCheck(){
-		$account_no = Yii::app()->request->getParam('account_no');
-		$order_status = Yii::app()->request->getParam('order_status');
-		$back_reason = Yii::app()->request->getParam('back_reason',null);
-		if ($back_reason != null) {
-			$str = ' back_reason = "'.$back_reason.'",';
-		}else{
-			$str = '';
-		}
-		$info = Yii::app()->db->createCommand('update nb_goods_order set '.$str.'order_status='.$order_status.',update_at ="'.date('Y-m-d H:i:s',time()).'" where account_no ='.$account_no)->execute();
-		if ($info) {
-			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
-		}else{
-			Yii::app()->end(json_encode(array("status"=>"fail",'msg'=>'失败')));
-		}
-		//return true;
-	}
-
-
 	public function actionStockstore(){
 		$pid = Yii::app()->request->getParam('pid');//订单lid编号
 		$dpid = $this->companyId;
@@ -386,5 +366,67 @@ class GoodsorderController extends BackendController
 			return false;
 		}
 	}
-
+	public function actionSeeinvoice(){
+		$lid = Yii::app()->request->getParam('lid');
+		// var_dump($lid);exit();
+		$account_no = Yii::app()->request->getParam('account_no');
+		$sql = "select company_name from nb_company where dpid=".$lid." and delete_flag=0";
+		// echo $sql;exit;
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		// var_dump($model);exit();
+		$sqls = "select y.delivery_accountno,c.company_name from nb_goods_delivery y,nb_company c where y.goods_order_accountno=".$account_no." and y.dpid=c.dpid and y.delete_flag=c.delete_flag and y.delete_flag=0";
+		// echo $sqls;exit();
+		$models = Yii::app()->db->createCommand($sqls)->queryAll();
+		$sqll = "select status from nb_goods_invoice where goods_order_accountno=".$account_no." and delete_flag=0";
+		$account = Yii::app()->db->createCommand($sqll)->queryRow();
+		// var_dump($account);exit();
+		$this->render('seeinvoice',array(
+			'model'=>$model,
+			'models'=>$models,
+			'account'=>$account,
+			'lid'=>$lid,
+			'account_no'=>$account_no
+			));
+	}
+	public function actionSeedetails(){
+		$lid = Yii::app()->request->getParam('lid');
+		// var_dump($lid);exit();
+		$account_no = Yii::app()->request->getParam('account_no');
+		$delivery_accountno = Yii::app()->request->getParam('delivery_accountno');
+		$sql = "select company_name from nb_company where dpid=".$lid." and delete_flag=0";
+		// echo $sql;exit;
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		$sqls = "select s.price,s.num,g.goods_name,c.company_name from nb_goods_delivery_details s,nb_goods g,nb_company c where s.goods_delivery_id=(select lid from nb_goods_delivery where delivery_accountno=".$delivery_accountno." and delete_flag=0) and s.dpid=(select dpid from nb_goods_delivery where delivery_accountno=".$delivery_accountno." and delete_flag=0) and s.delete_flag=0 and g.lid=s.goods_id and g.goods_code=s.goods_code and g.delete_flag=0 and s.dpid=c.dpid and c.delete_flag=0";
+		// echo $sqls;exit;
+		$models = Yii::app()->db->createCommand($sqls)->queryAll();
+		// var_dump($models);exit();
+		$this->render('seedetails',array(
+			'model'=>$model,
+			'models'=>$models,
+			'account_no'=>$account_no,
+			'lid'=>$lid
+			));
+	}
+	public function actionSeeodo(){
+		$lid = Yii::app()->request->getParam('lid');
+		// var_dump($lid);exit();
+		$account_no = Yii::app()->request->getParam('account_no');
+		$delivery_accountno = Yii::app()->request->getParam('delivery_accountno');
+		$sql = "select company_name from nb_company where dpid=".$lid." and delete_flag=0";
+		// echo $sql;exit;
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		$sqls = "select s.price,s.num,g.goods_name,c.company_name from nb_goods_delivery_details s,nb_goods g,nb_company c where s.goods_delivery_id=(select lid from nb_goods_delivery where delivery_accountno=".$delivery_accountno." and delete_flag=0) and s.dpid=(select dpid from nb_goods_delivery where delivery_accountno=".$delivery_accountno." and delete_flag=0) and s.delete_flag=0 and g.lid=s.goods_id and g.goods_code=s.goods_code and g.delete_flag=0 and s.dpid=c.dpid and c.delete_flag=0";
+		// echo $sqls;exit;
+		$models = Yii::app()->db->createCommand($sqls)->queryAll();
+		// var_dump($models);exit();
+		$sqll = "select status from nb_goods_invoice where goods_order_accountno=".$delivery_accountno." and delete_flag=0";
+		$account = Yii::app()->db->createCommand($sqll)->queryRow();
+		$this->render('seeodo',array(
+			'model'=>$model,
+			'models'=>$models,
+			'account'=>$account,
+			'account_no'=>$account_no,
+			'lid'=>$lid
+			));
+	}
 }
