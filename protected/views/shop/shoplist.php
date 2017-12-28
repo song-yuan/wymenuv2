@@ -34,15 +34,18 @@
 		        url:'<?php echo $this->createUrl('/shop/ajaxGetShop',array('companyId'=>$this->companyId));?>',
 		        data:{page:page,lat:latitude,lng:longitude,keyword:shopName},
 		        success:function(msg){
+		        	var isShowMore = false;
 			        if(msg.length > 0){
-			        	if(msg.length==10){
-			        		$('#more').show();
-			        	}else{
-			        		$('#more').hide();
-			        	}
 			        	var str = '';
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
+					       var juli = parseFloat(cObj.juli);
+					       if(juli>10000){
+						       break;
+						   }
+						   if(i==msg.length-1){
+							   isShowMore = true;
+						   }
 					       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
 					       str +='<div class="right">';
 					    	   str +='<h1><span class="com-name">'+cObj.company_name+'</span><span class="rest_message small font_l">';
@@ -60,7 +63,6 @@
 					    			   str +='<span class=" font_l">营业时间: '+cObj.shop_time+'-'+cObj.closing_time+'</span><br>';
 					    			   str +='<span style="font-weight:800;">电话: <a class="" href="tel:'+cObj.telephone+'">'+cObj.telephone+'</a></span>';
 					    			   str +='</span>';
-								var juli = parseFloat(cObj.juli);
 							    if(juli > 1000){
 							    	str +='<span class="right font_org">'+parseFloat(juli/1000).toFixed(2)+'千米</span>';
 						    	}else{
@@ -70,16 +72,14 @@
 						   	str +='</div>';
 						 	str +='</li>';
 					    }
-				        if(page==0){
-				        	$('#tips').hide();
-				        	$('#activeshop').html(str);
+					    if(isShowMore){
+					    	$('#tips').hide();
 					    }else{
-					    	$('#activeshop').append(str);
-					    }
-				    }else{
-					    if(page > 0){
-						    $('#more').hide();
+					    	$('#more').hide(); 
 						}
+					    $('#activeshop').html(str);
+				    }else{
+						 $('#more').hide();
 				    }
 		        },
 		        dataType : 'json'
