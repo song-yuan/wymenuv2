@@ -129,6 +129,16 @@ class WxBrandUser {
 		return $brandUser;
 	}
 	/**
+	 * 通过手机号查找用户
+	 *
+	 */
+	public static function getFromMobile($dpid,$mobile) {
+		$comdpid = WxCompany::getCompanyDpid($dpid);
+		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_brand_user t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid and t1.level_type=1 and t1.delete_flag=0 where t.dpid in('.$dpid.','.$comdpid.') and t.mobile_num = "'.$mobile.'"';
+		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		return $brandUser;
+	}
+	/**
 	 * 
 	 * 获取会员总余额
 	 * 

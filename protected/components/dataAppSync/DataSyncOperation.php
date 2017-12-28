@@ -2055,7 +2055,13 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
 		$productIds = isset($data['pro_ids'])?$data['pro_ids']:'';
-		$user = WxBrandUser::getFromCardId($dpid,$cardId);
+		$type = isset($data['type'])?$data['type']:'0';
+		if($type){
+			$user = WxBrandUser::getFromMobile($dpid,$cardId);
+		}else{
+			$user = WxBrandUser::getFromCardId($dpid,$cardId);
+		}
+		
 		if($user){
 			$user['user_birthday'] = date('m.d',strtotime($user['user_birthday']));
 			$cupon = WxCupon::getUserPosCupon($user['lid'],$dpid,$productIds);
