@@ -95,6 +95,9 @@
 							</div>
 						</li>
 						<?php endforeach; ?>
+						<li class="mui-table-view-cell">
+							<span style="color:darkblue;">驳回理由 : </span><?php if($goods_orders[0]['back_reason']){ echo $goods_orders[0]['back_reason'];}else{ echo '没有理由!';} ?>
+						</li>
 					</ul>
 				<?php endif; ?>
 				</div>
