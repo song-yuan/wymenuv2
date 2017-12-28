@@ -63,17 +63,17 @@ class MyinfoController extends BaseYmallController
 
 		// 查询已收货
 
-		$sql3 = 'select count(*) from (select go.* from nb_goods_order go'
-				.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
-				.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
-				.' where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.user_id='.$user_id
-				.' and go.order_status=5'
-				.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
-				.' and gi.status=2'
-				.' group by go.account_no order by go.create_at desc ) t';
+		// $sql3 = 'select count(*) from (select go.* from nb_goods_order go'
+		// 		.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+		// 		.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+		// 		.' where go.dpid='.$this->companyId
+		// 		.' and go.delete_flag=0 and go.user_id='.$user_id
+		// 		.' and go.order_status=5'
+		// 		.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+		// 		.' and gi.status=2'
+		// 		.' group by go.account_no order by go.create_at desc ) t';
 
-		$getted_no = $db->createCommand($sql3)->queryRow();
+		// $getted_no = $db->createCommand($sql3)->queryRow();
 		// p($getted_no);
 
 		$this->render('myinfo',array(
@@ -83,7 +83,7 @@ class MyinfoController extends BaseYmallController
 			'nocheck_no'=>$nocheck_no['count(*)'],
 			'nosent_no'=>$nosent_no['count(*)'],
 			'noget_no'=>$noget_no['count(*)'],
-			'getted_no'=>$getted_no['count(*)'],
+			'getted_no'=>0,
 		));
 	}
 
@@ -645,7 +645,7 @@ class MyinfoController extends BaseYmallController
 		$type = Yii::app()->request->getParam('type',0);
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$sql = 'select gorder.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,g.main_picture,g.goods_unit,c.company_name,mu.unit_name '
-		.' from (select go.dpid,go.create_at,go.account_no,go.goods_address_id,go.username,go.user_id,go.order_status,go.order_type,go.reality_total,go.paytype,go.pay_status,god.lid,god.stock_dpid,god.goods_name,god.goods_id,god.goods_code,god.material_code,god.price,god.num from nb_goods_order go left join nb_goods_order_detail god on ( go.account_no=god.account_no) ) gorder '
+		.' from (select go.dpid,go.create_at,go.account_no,go.goods_address_id,go.username,go.user_id,go.order_status,go.order_type,go.reality_total,go.paytype,go.pay_status,go.back_reason,god.lid,god.stock_dpid,god.goods_name,god.goods_id,god.goods_code,god.material_code,god.price,god.num from nb_goods_order go left join nb_goods_order_detail god on ( go.account_no=god.account_no) ) gorder '
 		.' left join nb_goods_address ga on(gorder.goods_address_id=ga.lid)'
 		.' left join nb_goods g on(gorder.goods_id=g.lid)'
 		.' left join nb_goods_material gm on (gorder.goods_id=gm.goods_id )'
@@ -866,7 +866,7 @@ class MyinfoController extends BaseYmallController
 			}
 		}
 	}
-	//删除未支付订单
+	//删除订单
 	public function actionDelete_order()
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
