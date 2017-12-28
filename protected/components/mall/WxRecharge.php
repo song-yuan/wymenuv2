@@ -172,4 +172,16 @@ class WxRecharge
 		->queryAll();
 		return $recharges;
 	}
+	/**
+	 *
+	 * 获取消费记录
+	 *
+	 */
+	public static function getConsumeRecord($userId){
+		$sql = 'select * from nb_member_consume_record where type=2 and card_id=:userId and delete_flag=0 order by lid desc limit 10';
+		$recharges = Yii::app()->db->createCommand($sql)
+		->bindValue(':userId',$userId)
+		->queryAll();
+		return $recharges;
+	}
 }
