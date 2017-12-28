@@ -266,7 +266,7 @@ public function actionCreate(){
                     $model->comp_dpid = $this->getCompanyId(Yii::app()->user->username);   
                     //var_dump($model);exit;
                     //$model->type="0";
-                    if($model->save() && $coms){
+                    if($model->save()){
                             $comp_dpid = Yii::app()->db->getLastInsertID();
                             $userid = new Sequence("company_property");
                             $id = $userid->nextval();
@@ -281,7 +281,7 @@ public function actionCreate(){
                                             'delete_flag'=>'0',
                             );
                             $command = $db->createCommand()->insert('nb_company_property',$data);
-                           if($coms['group']=='0' && $coms['group']==null){
+                           if($coms['group']!=0){
                            		$areaid = new Sequence("area_group_company");
 	                            $area = $areaid->nextval();
 	                            $date_area = array(
@@ -381,6 +381,7 @@ public function actionCreate(){
             //Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			$model->attributes = Yii::app()->request->getPost('Company');
 			$coms = Yii::app()->request->getPost('com');
+			// var_dump($coms);exit();
 			$province = Yii::app()->request->getParam('province1');
 			$city = Yii::app()->request->getParam('city1');
 			$area = Yii::app()->request->getParam('area1');
@@ -393,23 +394,25 @@ public function actionCreate(){
 			
 			//var_dump($model);exit;
 			if($model->save()){
-				if(!empty($company)){
-					// echo "cccc";exit;
-					$area = $db->createCommand('update nb_area_group_company set area_group_id="'.$coms['group'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where company_id ='.$dpid.' and delete_flag=0')->execute();
-				}else{
-					$areaid = new Sequence("area_group_company");
-                    $area = $areaid->nextval();
-                    $date_area = array(
-                    	'lid'=>$area,
-                    	'dpid'=>$this->companyId,
-                    	'create_at'=>date('Y-m-d H:i:s',time()),
-                        'update_at'=>date('Y-m-d H:i:s',time()),
-                        'area_group_id'=>$coms['group'],
-                        'company_id'=>$dpid
-                    ); 
-                    $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+				if(!empty($coms) && $coms['group']!=0 && $coms['price']!=0){
+					if(!empty($company)){
+						// echo "cccc";exit;
+						$area = $db->createCommand('update nb_area_group_company set area_group_id="'.$coms['group'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where company_id ='.$dpid.' and delete_flag=0')->execute();
+					}else{
+						$areaid = new Sequence("area_group_company");
+	                    $area = $areaid->nextval();
+	                    $date_area = array(
+	                    	'lid'=>$area,
+	                    	'dpid'=>$this->companyId,
+	                    	'create_at'=>date('Y-m-d H:i:s',time()),
+	                        'update_at'=>date('Y-m-d H:i:s',time()),
+	                        'area_group_id'=>$coms['group'],
+	                        'company_id'=>$dpid
+	                    ); 
+	                    $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+					}
+					$price = $db->createCommand('update nb_company_property set price_group_id="'.$coms['price'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$dpid.' and delete_flag=0')->execute();
 				}
-				$price = $db->createCommand('update nb_company_property set price_group_id="'.$coms['price'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$dpid.' and delete_flag=0')->execute();
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
 				$this->redirect(array('company/index','companyId'=>$this->companyId));
 			} else {
