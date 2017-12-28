@@ -35,6 +35,7 @@
 		        data:{page:page,lat:latitude,lng:longitude,keyword:shopName},
 		        success:function(msg){
 		        	var isShowMore = false;
+		        	var isShowTips = true;
 			        if(msg.length > 0){
 			        	var str = '';
 				        for(var i=0;i<msg.length;i++){
@@ -46,6 +47,7 @@
 						   if(i==msg.length-1){
 							   isShowMore = true;
 						   }
+						   isShowTips = false;
 					       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
 					       str +='<div class="right">';
 					    	   str +='<h1><span class="com-name">'+cObj.company_name+'</span><span class="rest_message small font_l">';
@@ -73,10 +75,15 @@
 						 	str +='</li>';
 					    }
 					    if(isShowMore){
-					    	$('#tips').hide();
-					    }else{
-					    	$('#more').hide(); 
+					    	$('#more').show(); 
+						}else{
+							$('#more').hide();
 						}
+						if(isShowTips){
+							$('#tips').show();
+					    }else{
+					    	$('#tips').hide();
+					    }
 					    $('#activeshop').html(str);
 				    }else{
 						 $('#more').hide();
