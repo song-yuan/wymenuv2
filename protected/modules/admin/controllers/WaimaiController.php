@@ -1,4 +1,5 @@
 <?php
+header("Content-Type: text/html;charset=utf-8");
 class WaimaiController extends BackendController
 {
 	public $signkey = '8isnqx6h2xewfmiu';
@@ -19,14 +20,21 @@ class WaimaiController extends BackendController
 		$this->render('list');
 	}
 	public function actionIndex(){
-		$this->render('index');
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$models = MeituanToken::model()->findAll('dpid=:dpid and type=:type and delete_flag=0',array(':dpid'=>$companyId,':type'=>'1'));
+		// print_r($models);exit();
+		$this->render('index',array(
+			'companyId'=>$companyId,
+			'models'=>$models
+			));
 	}
 	public function actionCaipinyingshe(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$signkey = '852d9t3q9cm28m6t';
 		$epoiid= 'type=1 and ePoiId='.$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		// print_r($tokenmodel);exit;
-		$criteria = " dpid=".$companyId." and is_show=1 and delete_flag=0";
+		$criteria = " dpid=".$companyId." and delete_flag=0";
 		$productmodels = Product::model()->findAll($criteria);
 		$setmodels = ProductSet::model()->findAll($criteria);
 		// print_r($productmodels);exit;
@@ -34,13 +42,21 @@ class WaimaiController extends BackendController
 				"productmodels"=>$productmodels,
 				"tokenmodel"=>$tokenmodel,
 				"companyId"=>$companyId,
-				"setmodels"=>$setmodels
+				"setmodels"=>$setmodels,
+				'signkey'=>$signkey
 			));
 	}
 	public function actionDpbd(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
+		$tokenmodel = MeituanToken::model()->find($epoiid);
+		$developerId='100943';
+		$signkey = '852d9t3q9cm28m6t';
 		$this->render('dpbd',array(
 			'companyId'=>$companyId,
+			'developerId'=>$developerId,
+			'signkey'=>$signkey,
+			'tokenmodel'=>$tokenmodel
 			));
 	}
 	public function actionJcbd(){
@@ -50,6 +66,18 @@ class WaimaiController extends BackendController
 		$this->render('jcbd',array(
 			'tokenmodel' =>$tokenmodel
 			));
+	}
+	public function actionPeisong(){
+		if(Yii::app()->request->getParam('meituan')){
+			$meituan = Yii::app()->request->getParam('meituan');
+			$dpid = $meituan['companyId'];
+			$orderId = $meituan['orderid'];
+			$courierName = $meituan['name'];
+			$courierPhone = $meituan['phone'];
+			$result = MtOrder::orderDistr($dpid,$orderId,$courierName,$courierPhone);
+
+		}
+		$this->render('peisong');
 	}
 	public function actionSetting(){
 		$model = WaimaiSetting::model()->find('dpid='.$this->companyId.' and delete_flag=0');

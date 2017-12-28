@@ -14,7 +14,11 @@ class ElemeController extends BackendController
 	}
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$this->render('index',array('companyId'=>$companyId));
+		$models = ElemeToken::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$companyId));
+		// var_dump($dp);exit();
+		$sql = "select * from nb_eleme_dpdy where dpid=".$this->companyId." and delete_flag=0";
+	    $dp = Yii::app()->db->createCommand($sql)->queryRow();
+		$this->render('index',array('companyId'=>$companyId,'models'=>$models,'dp'=>$dp));
 	}
 	public function actionDpsq(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
@@ -51,6 +55,7 @@ class ElemeController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$dpid = $companyId;
 		$resultid = Elm::elemeId($companyId);
+		// var_dump($resultid);exit();
 		$obj = json_decode($resultid);
 		$auth = $obj->result->authorizedShops;
 		$shopid = $auth[0]->id;
@@ -165,10 +170,24 @@ class ElemeController extends BackendController
 		$auth = $obj->result->authorizedShops;
 		$shopid = $auth[0]->id;
 		$result = Elm::elemeUpdateId($companyId,$shopid);
-		$this->render('dpdy',array(
-			'result' =>$result,
-			'shopid'=>$shopid
-			));
+		$obj = json_decode($result);
+        if(!empty($obj->result)){
+    		$se=new Sequence("eleme_dpdy");
+			$lid = $se->nextval();
+			$creat_at = date("Y-m-d H:i:s");
+			$update_at = date("Y-m-d H:i:s");
+			$shopid = $obj->result->id;
+			$inserData = array(
+						'lid'=>	$lid,
+						'dpid'=>$this->companyId,
+						'create_at'=>$creat_at,
+						'update_at'=>$update_at,
+						'shopId'=>$shopid
+				);
+			$res = Yii::app()->db->createCommand()->insert('nb_eleme_dpdy',$inserData);
+			Yii::app()->user->setFlash('success',yii::t('app','店铺对应成功！'));
+			$this->redirect(array('eleme/index' ,'companyId' => $this->companyId));
+        }
 	}
 	public function actionGlcp(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
@@ -203,6 +222,19 @@ class ElemeController extends BackendController
 			}
 		}
 		 Yii::app()->end(json_encode($treeDataSource));
+	}
+	public function actionDpjb(){
+		$sql = "update nb_eleme_token set delete_flag=1 where dpid=".$this->companyId;
+		$token = Yii::app()->db->createCommand($sql)->execute();
+		$sqls = "update nb_eleme_dpdy set delete_flag=1 where dpid=".$this->companyId;
+		$dpdy = Yii::app()->db->createCommand($sqls)->execute();
+		if($token && $dpdy){
+			Yii::app()->user->setFlash('success',yii::t('app','店铺解绑成功！'));
+			$this->redirect(array('eleme/index' ,'companyId' => $this->companyId));
+		}else{
+			Yii::app()->user->setFlash('error' ,yii::t('app', '店铺解绑失败！'));
+			$this->redirect(array('eleme/index' , 'lid'=>$cuid,'code'=>$cucode,'companyId' => $this->companyId));
+		}
 	}
 }
 ?>

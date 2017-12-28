@@ -22,7 +22,7 @@
  	$result = $category_id->result;
  	$dpid = $this->companyId;	
  ?> 
- <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖设置'),'url'=>$this->createUrl('waimai/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','饿了么外卖'),'url'=>$this->createUrl('eleme/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','菜品对应'),'url'=>$this->createUrl('eleme/cpdy' , array('companyId'=>$this->companyId,'type'=>0)))),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('waimai/list' , array('companyId' => $this->companyId,'type' => '0')))));?>
+ <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖设置'),'url'=>$this->createUrl('waimai/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','饿了么外卖'),'url'=>$this->createUrl('eleme/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','菜品对应'),'url'=>$this->createUrl('eleme/cpdy' , array('companyId'=>$this->companyId,'type'=>0)))),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('eleme/index' , array('companyId' => $this->companyId,'type' => '0')))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -38,6 +38,9 @@
 		)); ?>
 	<div class="col-md-12">
 		<div class="portlet purple box">
+			<div class="portlet-title">
+				<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','菜品对应');?></div>
+			</div>
 			<div class="portlet-body">
 				<div class="table-responsive">
 					<table class="tree table table-striped table-hover table-bordered dataTable">

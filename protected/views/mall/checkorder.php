@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('确认订单');
+	$fval = '0-0-0';// 满类型-满lid-送lid
 	$isCupon = false;
 	if(!empty($cupons)){
 		$isCupon = true;
@@ -320,12 +321,35 @@
 	<?php endif;?>
 </div>
 <div class="activity-info">
-	<?php if($original!=$price):?>
+	<?php if($memdisprice):?>
 	<div class="order-copun disabled">
-		<div class="copun-lt">会员折扣优惠</div>
-		<div class="copun-rt"><?php echo '-￥'.number_format($original-$price,2);?></div>
+		<div class="copun-lt">等级优惠</div>
+		<div class="copun-rt"><?php echo '-￥'.number_format($memdisprice,2);?></div>
 		<div class="clear"></div>
 	</div>
+	<?php endif;?>
+	<?php if(!empty($fullsent)):?>
+		<?php if($fullsent['full_type']):$fval = '1-'.$fullsent['lid'].'-0';?>
+		<div class="order-copun disabled">
+			<div class="copun-lt">满减优惠</div>
+			<div class="copun-rt"><?php echo '-￥'.$fullsent['extra_cost'];?></div>
+			<div class="clear"></div>
+		</div>
+		<?php else:$fval = '0-'.$fullsent['lid'].'-'.$fullsent['sent_product'][0]['lid'];?>
+			<?php if(count($fullsent['sent_product']) > 1):?>
+			<div class="order-copun arrowright fullsent disabled">
+				<div class="copun-lt">满送优惠</div>
+				<div class="copun-rt"><?php echo $fullsent['sent_product'][0]['product_name'];?></div>
+				<div class="clear"></div>
+			</div>
+			<?php else:?>
+			<div class="order-copun fullsent disabled">
+				<div class="copun-lt">满送优惠</div>
+				<div class="copun-rt"><?php echo $fullsent['sent_product'][0]['product_name'];?></div>
+				<div class="clear"></div>
+			</div>
+			<?php endif;?>
+		<?php endif;?>
 	<?php endif;?>
 	<!-- 如果是餐座 则显示下单 不需要支付  -->
 	<?php if($this->type!=1):?>
@@ -333,7 +357,7 @@
 	<?php if($user['mobile_num']&&$user['user_birthday']):?>
 		<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
 			<div class="copun-lt">代金券</div>
-			<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
+			<div class="copun-rt"><?php if($isCupon){echo count($cupons).'张可用';}else{echo '暂无可用';}?></div>
 			<div class="clear"></div>
 		</div>
 	<?php else:?>
@@ -344,7 +368,7 @@
 		</div>
 	<?php endif;?>
 </div>
-<div class="totalinfo"><?php if($original!=$price) echo '<span class="font_l" style="margin-right:20px;">优惠￥'.number_format($original-$price,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
+<div class="totalinfo"><?php if($memdisprice) echo '<span class="font_l" style="margin-right:20px;">优惠￥'.number_format($memdisprice,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
 
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
@@ -420,6 +444,25 @@
 	<?php endif;?>
 	</div>
 </div>
+<div class="user-cupon" id="sentList">
+	<div class="cupon-container">
+		<div class="item">
+			<div class="item-top">
+				<div class="item-top-left">甜筒</div>
+				<div class="item-top-right">￥0.00</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="item">
+			<div class="item-top">
+				<div class="item-top-left">甜筒</div>
+				<div class="item-top-right">￥0.00</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+	<input type="hidden" name="fullsent" value="<?php echo $fval;?>" />
 	<input type="hidden" name="cupon" value="0" />
 	<input type="hidden" name="takeout_typeid" value="0" />
 </form>
@@ -507,6 +550,7 @@ function reset_total(price){
 window.onload = emptyCart;
 $(document).ready(function(){
 	var cupon_layer = 0;
+	var sent_layer = 0;
 	var msg = "<?php echo $msg;?>";
 	if(msg){
 		layer.msg(msg);
@@ -769,7 +813,7 @@ $(document).ready(function(){
 	     });
 	});
   // 选择代金券
-	$('.user-cupon .item.useCupon').click(function(){
+	$('#cuponList .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
 		var noCuponMoney = $('.noCupon').attr('cupon-money');
@@ -777,7 +821,7 @@ $(document).ready(function(){
 		var total = $('#total').html();
 		var money = 0;
 		
-		$('.user-cupon .item').removeClass('on');
+		$('#cuponList .item').removeClass('on');
 		$(this).addClass('on');
 		$('input[name="cupon"]').val(userCuponId);
 		$('.noCupon').attr('min-money',minMoney);
@@ -796,14 +840,14 @@ $(document).ready(function(){
 		$('.cupon').find('.copun-rt').html('-￥'+cuponMoney);
 		layer.close(cupon_layer);
 	});
-	$('.user-cupon .item.noCupon').click(function(){
+	$('#cuponList .item.noCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
 		var minMoney = $(this).attr('min-money');
 		var total = $('#total').html();
 		var money = 0;
 		
-		$('.user-cupon .item').removeClass('on');
+		$('#cuponList .item').removeClass('on');
 		$('input[name="cupon"]').val(userCuponId);
 		
 		$(this).attr('min-money',0);
@@ -821,6 +865,7 @@ $(document).ready(function(){
 		$('.cupon').find('.copun-rt').html('请选择代金券');
 		layer.close(cupon_layer);
 	});
+	// 选择代金券
 	$('.cupon').click(function(){
 		if($(this).hasClass('disabled')){
 			layer.msg('无可用代金券');
@@ -833,6 +878,17 @@ $(document).ready(function(){
 		    closeBtn: 0,
 		    area: ['100%','100%'],
 		    content:$('#cuponList'),
+		});
+	});
+	// 选择赠送产品
+	$('.fullsent').click(function(){
+		sent_layer = layer.open({
+		    type: 1,
+		    title: false,
+		    shadeClose: true,
+		    closeBtn: 0,
+		    area: ['100%','100%'],
+		    content:$('#sentList'),
 		});
 	});
 	$('input[name="yue"]').change(function(){

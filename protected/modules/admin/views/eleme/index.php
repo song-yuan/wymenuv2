@@ -64,24 +64,44 @@ span.tab{
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','外卖管理');?></div>
+					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','饿了么外卖');?></div>
+					<?php if(!$models) :?>
+					<div class="actions">
+						<a href="<?php echo $this->createUrl('eleme/dpsq',array('companyId'=>$this->companyId));?>" class="btn blue"><i class="fa fa-plus"></i> <?php echo yii::t('app','店铺授权');?></a>
+					</div>
+					<?php endif;?>
 				</div>
-				<div class="portlet-body" style="min-height: 750px">
-                 <a href="<?php echo $this->createUrl('eleme/dpsq',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item-info">店铺授权</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('eleme/dpdy',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item-info">店铺对应</div>
-						</div>
-					</a>
-					<a href="<?php echo $this->createUrl('eleme/cpdy',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item-info">菜品对应</div>
-						</div>
-					</a>
+				<div class="portlet-body">
+				<div class="dataTables_wrapper form-inline">
+					<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover" id="sample_1">
+						<thead>
+							<tr >
+								<th ><?php echo yii::t('app','授权时间');?></th>
+								<th ><?php echo yii::t('app','授权到期时间');?></th>
+								<th ><?php echo yii::t('app','操作');?></th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php if($models) :?>
+						<?php foreach ($models as $model):?>
+							<tr class="odd gradeX">
+								<td width="33%"><?php echo $model->create_at;?></td>
+                                <td width="33%"><?php echo date('Y-m-d H:i:s', $model->expires_in);?></td>
+								<td width="33%">
+									<a class = "btn<?php if(empty($dp)):?> green<?php else:?> payonline<?php endif;?>" <?php if(empty($dp)):?> href="<?php echo $this->createUrl('eleme/dpdy',array('companyId'=>$this->companyId));?>"<?php endif;?><?php if(!empty($dp)):?> style="color: #000;"<?php endif;?>><?php if(empty($dp)):?>店铺对应<?php else:?>店铺已对应<?php endif;?></a>
+									<a class = "btn yellow" href="<?php echo $this->createUrl('eleme/cpdy',array('companyId'=>$this->companyId));?>">菜品对应</a>
+									<a class = "btn red" href="<?php echo $this->createUrl('eleme/dpjb',array('companyId'=>$this->companyId));?>/type/1">解绑</a>
+								</td>
+							</tr>
+						<?php endforeach;?>
+						<?php else:?>
+						<tr class="odd gradeX"><td colspan="3">暂无数据</td></tr>
+						<?php endif;?>
+						</tbody>
+					</table>
+					</div>
+					</div>
 				</div>
 			</div>
 		</div>
