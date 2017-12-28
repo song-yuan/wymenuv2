@@ -122,12 +122,12 @@
 								<?php elseif($status == 4):?>
 								<td colspan="20" style="text-align: right;">
 								<input id="goods_deliveried" type="button" class="btn" disabled value="已生成发货单" />&nbsp;
-								<input id="check_goods_delivery" type="button" class="btn green" value="查看发货单" />&nbsp;
+								<a href="<?php echo $this->createUrl('goodsorder/seeinvoice',array('companyId'=>$this->companyId,'account_no'=>$model['account_no'],'lid'=>$dpid));?>" class="btn green">查看发货单</a>&nbsp;
 								</td>
 								<?php elseif($status == 5):?>
 								<td colspan="20" style="text-align: right;">
 								<input id="goods_invoice" type="button" class="btn" disabled value="已发货" />&nbsp;
-								<input id="goods_invoiceed" type="button" class="btn green" value="查看出库单" />&nbsp;
+								<a href="<?php echo $this->createUrl('goodsorder/Seeinvoice',array('companyId'=>$this->companyId,'account_no'=>$model['account_no'],'lid'=>$dpid));?>" class="btn green">查看发货单</a>&nbsp;
 								</td>
 								<?php elseif($status == 8):?>
 								<td colspan="20" style="text-align: right;">

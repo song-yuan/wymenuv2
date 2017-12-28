@@ -32,14 +32,24 @@ class UserIdentity extends CUserIdentity
 			$field = 'password';
 			$this->errorCode =  self::ERROR_PASSWORD_INVALID;
 		}else {
-			$this->userId = $user->lid.'_'.$user->dpid ;
-			$this->role = $user->role ;
-			$this->mobile = $user->mobile;
-			$this->companyId = $user->dpid;
-			$this->email = $user->email;
-			$this->staffNo = $user->staff_no;
-			$this->status = $user->status;
-			$this->errorCode =  self::ERROR_NONE;
+
+			$comps = Yii::app()->db->createCommand('select * from nb_company where delete_flag = 0 and  dpid ='.$user->dpid)->queryRow();
+			//var_dump($companyId);var_dump($role);
+			if($comps){
+
+				$this->userId = $user->lid.'_'.$user->dpid ;
+				$this->role = $user->role ;
+				$this->mobile = $user->mobile;
+				$this->companyId = $user->dpid;
+				$this->email = $user->email;
+				$this->staffNo = $user->staff_no;
+				$this->status = $user->status;
+				$this->errorCode =  self::ERROR_NONE;
+			}else{
+				$field = 'username';
+				$this->errorCode =  self::ERROR_USERNAME_INVALID;
+			}
+			
 		}
 		//var_dump($user);exit;
 		return array('field' =>$field , 'status' => $this->errorCode);

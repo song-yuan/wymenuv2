@@ -13,10 +13,8 @@ class YmallcartController extends BaseYmallController
 	public function actionIndex()
 	{
 
-		// p(substr(Yii::app()->user->userId,0,10));
-		// p(Yii::app()->user->name);
-
 		$user_id = substr(Yii::app()->user->userId,0,10);
+		$error = Yii::app()->request->getParam('error');
 
 		$db = Yii::app()->db;
 		$sql = 'select gc.*,g.description,g.goods_unit,g.store_number,g.main_picture,g.price as now_price,g.price as now_mbprice,c.company_name,mu.unit_name from nb_goods_carts gc '
@@ -38,12 +36,10 @@ class YmallcartController extends BaseYmallController
 			}
 			array_push($materials[$product['stock_dpid']], $product);
 		}
-		// $cart_num = $this->getCartsnum();
-		// p($cart_num);
 		$this->render('ymallcart',array(
 			'materials'=>$materials,
 			'companyId'=>$this->companyId,
-			// 'cart_num'=>$cart_num['num'],
+			'error'=>$error,
 		));
 	}
 
@@ -212,6 +208,10 @@ class YmallcartController extends BaseYmallController
 		$db = Yii::app()->db;
 		$sql = 'select gc.dpid,gc.stock_dpid,gc.goods_name,gc.goods_id,gc.goods_code,gc.material_code,gc.promotion_price,gc.price,g.price as new_price,gc.num,gc.end_time from nb_goods_carts gc left join nb_goods g on(g.lid=gc.goods_id and g.goods_code=gc.goods_code ) where gc.lid in('.$lids.') and gc.delete_flag=0';
 		$products = $db->createCommand($sql)->queryAll();
+		if (empty($products)) {
+			$this->redirect(array('ymallcart/index' , 'companyId' => $this->companyId,'error'=>1));
+			exit;
+		}
 		$should_total = 0;
 		$reality_total = 0;
 		foreach ($products as $product) {
