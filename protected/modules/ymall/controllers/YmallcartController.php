@@ -301,7 +301,7 @@ class YmallcartController extends BaseYmallController
 		if ($daofu==1) {
 			if ($order) {
 				$order->paytype = 2;
-				$order->order_status = 7;
+				$order->order_status = 3;
 				$order->order_info = $textarea;
 				$order->wayofpay = $pay_way;
 				if ($order->update()) {
