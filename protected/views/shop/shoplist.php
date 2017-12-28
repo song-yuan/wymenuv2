@@ -44,6 +44,7 @@
 					       if(juli>10000){
 						       break;
 						   }
+						   alert(i==msg.length-1);
 						   if(i==msg.length-1){
 							   isShowMore = true;
 						   }
