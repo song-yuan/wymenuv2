@@ -256,7 +256,7 @@ class DataSyncOperation {
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
 			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			$order ['nb_order_platform'] = $orderPlatform;
-			$sql = 'select *,"" as set_name,sum(price*amount) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id > 0 and delete_flag=0 group by set_id ,main_id'.
+			$sql = 'select *,"" as set_name,sum(price*amount/zhiamount) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id > 0 and delete_flag=0 group by set_id ,main_id'.
 				   ' union select *,"" as set_name,"0.00" as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id = 0 and delete_flag=0';
 			$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			foreach ( $orderProduct as $k => $product ) {
