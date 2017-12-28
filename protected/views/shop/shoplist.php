@@ -40,11 +40,9 @@
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
 					       var juli = parseFloat(cObj.juli);
-					       alert(juli);
 					       if(juli>10000){
 						       break;
 						   }
-						   alert(i==msg.length-1);
 						   if(i==msg.length-1){
 							   isShowMore = true;
 						   }
@@ -76,10 +74,10 @@
 					    }
 					    if(isShowMore){
 					    	$('#tips').hide();
-				        	$('#activeshop').html(str);
 					    }else{
 					    	$('#more').hide(); 
 						}
+					    $('#activeshop').html(str);
 				    }else{
 						 $('#more').hide();
 				    }
