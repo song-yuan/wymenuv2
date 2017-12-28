@@ -205,7 +205,7 @@
 			                </a> 
 						</div>
 						<div class="list col-sm-3 col-xs-12">
-			                <a href="<?php echo $this->createUrl('floor/index',array('companyId'=>$this->companyId));?>">
+			                <a href="<?php echo $this->createUrl('sitetype/index',array('companyId'=>$this->companyId));?>">
 			                	<div class="margin-left-right">
 			                	<div class="list_big"><i class="fa fa-home"></i>餐桌种类</div>
 			                	<div class="list_small">设置餐桌的座位类型以及编号</div>
@@ -213,7 +213,7 @@
 			                </a> 
 						</div>
 						<div class="list col-sm-3 col-xs-12">
-			                <a href="<?php echo $this->createUrl('floor/index',array('companyId'=>$this->companyId));?>">
+			                <a href="<?php echo $this->createUrl('sitePersons/index',array('companyId'=>$this->companyId));?>">
 			                	<div class="margin-left-right">
 			                	<div class="list_big"><i class="fa fa-home"></i>餐桌人数</div>
 			                	<div class="list_small">为餐桌设置一个人数限定</div>
@@ -221,7 +221,7 @@
 			                </a> 
 						</div>
 						<div class="list col-sm-3 col-xs-12">
-			                <a href="<?php echo $this->createUrl('floor/index',array('companyId'=>$this->companyId));?>">
+			                <a href="<?php echo $this->createUrl('site/index',array('companyId'=>$this->companyId));?>">
 			                	<div class="margin-left-right">
 			                	<div class="list_big"><i class="fa fa-home"></i>餐桌明细</div>
 			                	<div class="list_small">将设置好的楼层区域、餐桌种类、餐桌人数进行整合添加</div>
