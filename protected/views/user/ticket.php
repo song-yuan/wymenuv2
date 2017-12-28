@@ -99,6 +99,8 @@
     	background-color: #fff;
     	border-top:1px dashed #FBF9FE;
     	padding:2px 5px;
+    	font-size:12px;
+    	border-radius:6px;
     }
 </style>
 
