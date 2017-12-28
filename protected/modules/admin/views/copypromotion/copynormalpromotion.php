@@ -91,6 +91,7 @@ function fun()
 						<input type="hidden" id="code" name="code" value="" />
 						<input type="hidden" id="chscode" name="chscode" value="" />
 						<input type="hidden" id="dpids" name="dpids" value="" />
+						<input type="hidden" id="ckc" name="ckc" value="" />
 						</div>
 					</table>
 					</div>
@@ -116,7 +117,9 @@ function fun()
          <option value="3">微店</option>
          <option value="1">非微店</option>
          </select>
+         <span>&nbsp;清除该时间段以前的活动</span><input type="checkbox" id="ckclear" />
          </div>
+         
          <div class="modal-body">
 	         <div class="portlet-body" id="table-manage">
 		         <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
@@ -236,6 +239,9 @@ function fun()
 
 	        //获取店铺的dpid
 			$("#printall").on("click",function(){
+				var clear = $('#ckclear').attr('checked');
+				if(clear){ckc = 1;}else{ckc = 2;}
+				//layer.msg(ckc);return false;
 	            //alert("暂无权限！！！");
 	            var dpids =new Array();
 	            var dpids="";
@@ -247,6 +253,7 @@ function fun()
 	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
 	            	$("#dpids").val(dpids);
 	            	$("#code").val(codep);
+	            	$("#ckc").val(ckc);
 	    	        $("#copyproduct-form").submit();
 	            }else{
 					alert("请选择店铺。。。");return;

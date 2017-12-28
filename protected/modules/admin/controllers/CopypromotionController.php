@@ -71,6 +71,7 @@ class CopypromotionController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
 		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
 		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$ckc = Yii::app()->request->getParam('ckc');//判断是否清除以前的活动
 		$normalcodes = array();
 		$normalcodes = explode(',',$codes);//接收活动编码,总部唯一
 		$dpids = array();
@@ -81,7 +82,6 @@ class CopypromotionController extends BackendController
 
 		$db = Yii::app()->db;
 
-
 		//var_dump($catep1,$catep2,$products);exit;
         //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
@@ -89,10 +89,17 @@ class CopypromotionController extends BackendController
         	try{
 	        	foreach ($dpids as $dpid){//遍历需要下发活动的店铺
 
+	        		if($ckc==1){
+	        			$sqlclear = 'update nb_normal_promotion set delete_flag =1,update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$dpid.' and source = 1';
+	        			$db->createCommand($sqlclear)->execute();
+	        			$sqlclears = 'update nb_normal_promotion_detail set delete_flag = 1,update_at ="'.date('Y-m-d h:i:s',time()).'" where dpid ='.$dpid.' and normal_promotion_id in(select lid from nb_normal_promotion where delete_flag =0 and source =1 and dpid='.$dpid.')';
+	        			$db->createCommand($sqlclears)->execute();
+	        		}
+	        		
         			foreach ($normalcodes as $normalcode){//遍历需要下发的活动
-
+        				
         				//查询店铺是否已经由此活动
-        				$promotionself = NormalPromotion::model()->find('normal_code =:code and dpid=:dpid and delete_flag=0' , array(':code'=>$normalcode , ':dpid'=>$dpid));
+        				$promotionself = NormalPromotion::model()->find('normal_code =:code and dpid=:dpid' , array(':code'=>$normalcode , ':dpid'=>$dpid));
 
         				//查询总公司是否有此活动
         				$promotioncomp = NormalPromotion::model()->find('normal_code =:code and dpid=:dpid and delete_flag=0' , array(':code'=>$normalcode , ':dpid'=>$this->companyId));
@@ -127,6 +134,7 @@ class CopypromotionController extends BackendController
 	        					$promotionself->group_id = $promotioncomp->group_id;
 	        					$promotionself->order_num = $promotioncomp->order_num;
 	        					$promotionself->is_available = $promotioncomp->is_available;
+	        					$promotionself->delete_flag = 0;
 
 	        					if($promotionself->save()){//店铺活动更新成功,查询店铺活动详情
 
