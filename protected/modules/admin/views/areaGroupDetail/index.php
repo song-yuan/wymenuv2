@@ -63,7 +63,7 @@
 						<?php if($models) : ?>
 						<thead>
 							<tr>
-								<th class="table-checkbox" ><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+								<th class="table-checkbox" ></th>
 								<?php if(Yii::app()->user->role < '5'): ?><th>ID</th><?php endif; ?>
 								<th><?php echo yii::t('app','店铺名称');?></th>
 								<th><?php echo yii::t('app','联系人');?></th>
@@ -75,7 +75,7 @@
 						<tbody>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td></td>
 								<?php if(Yii::app()->user->role < '5'): ?><td><?php echo $model['dpid'];?></td><?php endif; ?>
 								<td style="width:10%"><?php echo $model['company_name'];?></td>
 								<td ><?php echo $model['contact_name'];?></td>

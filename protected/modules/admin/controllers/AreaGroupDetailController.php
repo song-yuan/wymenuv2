@@ -16,11 +16,14 @@ class AreaGroupDetailController extends BackendController
         $groups = Yii::app()->db->createCommand($sql2)->queryALL();
 
         if(Yii::app()->request->isPostRequest) {
+        	
             foreach($price_group_id as $did =>$price_group_idd){
             	if($price_group_idd==0){
             		continue;
             	}
-                $model = AreaGroupCompany::model()->find('dpid=:dpid and area_group_id=:aGroupId and company_id=:companyId and delete_flag=0',array(':dpid'=>$dpid,':aGroupId'=>$price_group_idd,':companyId'=>$did));
+            	//var_dump($price_group_id);exit;
+                $model = AreaGroupCompany::model()->find('dpid=:dpid and company_id=:companyId and delete_flag=0',array(':dpid'=>$dpid,':companyId'=>$did));
+                //exit;
                 // p($model);
                 if ($model) {
                     $model->saveAttributes(array('area_group_id'=>$price_group_idd,'update_at'=>date('Y-m-d H:i:s',time())));
@@ -56,11 +59,11 @@ class AreaGroupDetailController extends BackendController
     	$dpid = Yii::app()->request->getParam('companyId');
         $pcode = Yii::app()->request->getParam('arr');
         $arr = explode(':',$pcode);
-        // var_dump($arr);exit;
+        //var_dump($arr);exit;
 
         $db = Yii::app()->db;
-        $model = AreaGroupCompany::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$arr[0]));
-        // p($model);
+        $model = AreaGroupCompany::model()->find('company_id=:dpid and delete_flag=0',array(':dpid'=>$arr[0]));
+        //var_dump($model);exit;
         if ($model) {
             $command = $model->saveAttributes(array('area_group_id'=>$arr[1],'update_at'=>date('Y-m-d H:i:s',time())));
         }else{
