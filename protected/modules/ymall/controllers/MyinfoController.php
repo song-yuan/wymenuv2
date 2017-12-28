@@ -876,6 +876,8 @@ class MyinfoController extends BaseYmallController
 			$infod = GoodsOrderDetail::model()->deleteAll('dpid=:dpid and account_no=:account_no',array(':dpid'=>$this->companyId,':account_no'=>$account_no));
 			if ($infod) {
 				echo json_encode(1);exit;
+			}else{
+				echo json_encode(3);exit;
 			}
 		}else{
 			echo json_encode(2);exit;
