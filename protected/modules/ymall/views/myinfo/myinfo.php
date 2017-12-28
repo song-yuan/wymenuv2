@@ -309,12 +309,12 @@
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="li-cell ">
 						<div id="segmentedControl" class="mui-segmented-control">
-							<a class="mui-control-item mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>">
-									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/wallet.jpg ">
-									<?php if($nopay_no): ?>
-									<span class="mui-badge daifa" id="nopay" style="background-color: red;color: white;"><?php echo $nopay_no; ?></span>
+							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderCheck',array('companyId'=>$this->companyId));?>">
+									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/order_check.png">
+									<?php if($nocheck_no): ?>
+									<span class="mui-badge daifa" id="nopay" style="background-color: red;color: white;"><?php echo $nocheck_no; ?></span>
 									<?php endif; ?>
-									<span class="mui-label">待付款</span>
+									<span class="mui-label">审核</span>
 								</a>
 							<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">
 									<img class="mui-icons " src="<?php echo  Yii::app()->request->baseUrl; ?>/img/ymall/waitsent.png ">
@@ -343,8 +343,8 @@
 
 				</ul>
 				<ul class="mui-table-view" style="margin-top: 20px!important;margin-bottom: 30px!important;">
-					<li class="mui-table-view-cell" style="text-align: center;">
-						<a id='exit' style="text-align: center;color: #FF3B30;">退出登录</a>
+					<li class="mui-table-view-cell" style="text-align: center;" id='exit'>
+						<span  style="text-align: center;color: #FF3B30;">退出登录</span>
 					</li>
 				</ul>
 			</div>
@@ -366,9 +366,9 @@
 
  	//退出操作******************
 	document.getElementById('exit').addEventListener('tap', function() {
-	 		var btnArray = ['是','否'];
-			mui.confirm('是否确定退出 ？','提示',btnArray,function(e){
-				if(e.index==0){
+	 		var btnArray = ['取消', '确定'];
+			mui.confirm('确定退出 ？','提示',btnArray,function(e){
+				if(e.index==1){
 			 	location.href = '<?php echo $this->createUrl("login/logout",array("companyId"=>$this->companyId)) ?>';
 				}
 			});

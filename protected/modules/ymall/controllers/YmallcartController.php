@@ -194,8 +194,6 @@ class YmallcartController extends BaseYmallController
 		$lids = Yii::app()->request->getParam('lid');
 		// $lids = explode(',',$lid);
 		//生成订单号(账单号) 店铺id.时间戳
-
-
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
 		//查询默认的$goods_address_id
@@ -238,13 +236,15 @@ class YmallcartController extends BaseYmallController
 				$goods_order->user_id = $user_id;
 				$goods_order->username = $user_name;
 				$goods_order->goods_address_id = $goods_address_id;
-				$goods_order->order_status = 0;//未支付
+				$goods_order->order_status = 0;//订单状态
 				$goods_order->order_type = 1;
 				$goods_order->should_total = $should_total;
 				$goods_order->reality_total = $reality_total;
 				$goods_order->pay_status = 0;//未支付
 				$goods_order->paytype = 1;//默认线上支付
 				$goods_order->pay_time = 0;//不确定
+				$goods_order->order_info = '';
+				$goods_order->wayofpay = '微信线上支付';
 				$goods_order->delete_flag=0;
 				$goods_order->is_sync = $is_sync;
 				if ($goods_order->insert()) {
@@ -277,7 +277,7 @@ class YmallcartController extends BaseYmallController
 				$sql = 'delete from nb_goods_carts  where lid in('.$lids.') and dpid=:dpid and delete_flag=0';
 				$command=Yii::app()->db->createCommand($sql)->execute(array(':dpid'=>$this->companyId));
 				}
-			$transaction->commit();
+				$transaction->commit();
 				$url = $this->createUrl('ymallcart/orderlist');
                 $this->redirect($url.'?companyId='.$this->companyId.'&account_no='.$account_no) ;
             }catch (Exception $e){
@@ -292,6 +292,8 @@ class YmallcartController extends BaseYmallController
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
 		$daofu = Yii::app()->request->getParam('daofu',0);
+		$textarea = Yii::app()->request->getParam('textarea');
+		$pay_way = Yii::app()->request->getParam('pay_way');
 
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
@@ -299,13 +301,16 @@ class YmallcartController extends BaseYmallController
 		if ($daofu==1) {
 			if ($order) {
 				$order->paytype = 2;
+				$order->order_status = 3;
+				$order->order_info = $textarea;
+				$order->wayofpay = $pay_way;
 				if ($order->update()) {
-					$this->redirect(array('myinfo/goodsOrderNosent' , 'companyId' => $this->companyId,'success'=>1));
+					$this->redirect(array('myinfo/goodsOrderCheck' , 'companyId' => $this->companyId,'success'=>1));
 				}else{
-					$this->redirect(array('myinfo/goodsOrderNopay' , 'companyId' => $this->companyId,'success'=>3));
+					$this->redirect(array('myinfo/goodsOrderCheck' , 'companyId' => $this->companyId,'success'=>3));
 				}
 			} else {
-				$this->redirect(array('myinfo/goodsOrderNopay' , 'companyId' => $this->companyId,'success'=>2));
+				$this->redirect(array('myinfo/goodsOrderCheck' , 'companyId' => $this->companyId,'success'=>2));
 			}
 		}else if($daofu==0){//修改地址
 			//查询默认的$goods_address_id
@@ -326,7 +331,7 @@ class YmallcartController extends BaseYmallController
 	}
 
 
-
+	//确认下单
 	public function actionOrderlist()
 	{
 		$account_no = Yii::app()->request->getParam('account_no');

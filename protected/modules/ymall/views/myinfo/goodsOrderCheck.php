@@ -17,6 +17,7 @@
     margin: 0 9px;
 }
 .mui-toast-container{bottom: 50%!important;}
+.img-check{width: 25px;height: 25px;position: absolute;right:20px;top:8px;}
 </style>
 <header class="mui-bar mui-bar-nav  mui-hbar">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:white;"></a>
@@ -27,9 +28,9 @@
 	<div style="padding: 10px 10px;">
 		<div id="segmentedControl" class="mui-segmented-control">
 			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderAll',array('companyId'=>$this->companyId));?>">全部</a>
-			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderCheck',array('companyId'=>$this->companyId));?>">审核<?php if ($nopay_no) {echo '('.$nopay_no.')';}  ?></a>
-			<a class="mui-control-item  mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">待发货<?php if ($nosent_no) {echo '('.$nosent_no.')';}  ?></a>
-			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId));?>">待收货<?php if ($noget_no) {echo '('.$noget_no.')';}  ?></a>
+			<a class="mui-control-item  mui-active" href="<?php echo $this->createUrl('myinfo/goodsOrderCheck',array('companyId'=>$this->companyId));?>">审核<?php if ($nopay_no) {echo '('.$nopay_no.')';}?></a>
+			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId));?>">待发货<?php if ($nosent_no) {echo '('.$nosent_no.')';} ?></a>
+			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderNoget',array('companyId'=>$this->companyId));?>">待收货<?php if ($noget_no) {echo '('.$noget_no.')';}?></a>
 			<a class="mui-control-item" href="<?php echo $this->createUrl('myinfo/goodsOrderGetted',array('companyId'=>$this->companyId));?>">已收货</a>
 		</div>
 	</div>
@@ -50,14 +51,31 @@
 						订单号:<?php echo $goods_order['account_no'];?>
 						<p>下单日期: <?php echo $goods_order['create_at'];?></p>
 					</div>
+					<?php if($goods_order['order_status']==7): ?>
+					<img class="img-check" src="<?php echo Yii::app()->request->baseUrl; ?>/img/ymall/pass.jpg" />
+					<?php elseif($goods_order['order_status']==8): ?>
+					<img class="img-check" src="<?php echo Yii::app()->request->baseUrl; ?>/img/ymall/nopass.jpg" />
+					<?php elseif($goods_order['order_status']==3): ?>
+					<img class="img-check" src="<?php echo Yii::app()->request->baseUrl; ?>/img/ymall/check.jpg" />
+					<?php endif; ?>
 				</div>
 				<div class="mui-card-content" >
 				</div>
 				<div class="mui-card-footer">
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_order['reality_total']; ?></a>
-					<a class="mui-card-link"><?php if($goods_order['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_order['paytype']==2){echo '<span style="color:red">线下支付</span>';} ?></a>
-					<a class="mui-card-link"><?php if($goods_order['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_order['pay_status']==0){echo '<span style="color:red">未付款</span>';} ?></a>
-					<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId,'account_no'=>$goods_order['account_no'],'type'=>2));?>">查看详情</a>
+					<a class="mui-card-link">
+						<?php if($goods_order['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_order['paytype']==2){echo '<span style="color:red">线下支付</span>';} ?>
+					</a>
+					<a class="mui-card-link">
+						<?php if($goods_order['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_order['pay_status']==0){echo '<span style="color:red">未付款</span>';} ?>
+					</a>
+					<?php if($goods_order['order_status']==7): ?>
+						<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId,'account_no'=>$goods_order['account_no'],'type'=>1));?>">查看详情</a>
+					<?php elseif($goods_order['order_status']==8): ?>
+						<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/orderDetailEdit',array('companyId'=>$this->companyId,'account_no'=>$goods_order['account_no'],'type'=>1));?>">查看详情</a>
+					<?php elseif($goods_order['order_status']==3): ?>
+						<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/orderDetail',array('companyId'=>$this->companyId,'account_no'=>$goods_order['account_no'],'type'=>1));?>">查看详情</a>
+					<?php endif; ?>
 				</div>
 			</div>
 			<?php endforeach;?>
@@ -95,7 +113,7 @@ function upFn() {
 	if (list_length<10) {
 		mui('.mui-scroll-wrapper').pullRefresh().endPullupToRefresh(true);
 	}else{
-	    mui.ajax("<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId)); ?>",{
+	    mui.ajax("<?php echo $this->createUrl('myinfo/goodsOrderCheck',array('companyId'=>$this->companyId)); ?>",{
 			data:{up:++y,date:date},
 			dataType:'json',//服务器返回json格式数据
 			type:'post',//HTTP请求类型
@@ -174,7 +192,7 @@ function upFn() {
 					 */
 					// result.innerText = '选择结果2: ' + rs.text;
 					// result.value = rs.text;
-					location.href='<?php echo $this->createUrl('myinfo/goodsOrderNosent',array('companyId'=>$this->companyId)); ?>/date/'+rs.text;
+					location.href='<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId)); ?>/date/'+rs.text;
 					/* 
 					 * 返回 false 可以阻止选择框的关闭
 					 * return false;
@@ -193,8 +211,10 @@ function upFn() {
 		}, false);
 	});
 })(mui);
-<?php if ($success==1): ?>
-	mui.toast('下单成功 , 仓库正在加紧备货 ! ! !',{ duration:'long', type:'div' });
+<?php if ($success==2): ?>
+mui.toast('下单失败 , 请重新下单 ! ! !',{ duration:'long', type:'div' });
+<?php elseif ($success==3): ?>
+mui.toast('下单失败 , 订单异常 , 请删除后重新下单 ! ! !',{ duration:'long', type:'div' });
 <?php endif; ?>
 
 </script>

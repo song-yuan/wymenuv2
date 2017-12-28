@@ -59,7 +59,7 @@
 				<div class="mui-card-content" >
 				<?php if ($type==0 )://全部  ?>
 
-					<?php if($goods_orders[0]['paytype']==1 && $goods_orders[0]['pay_status']==0)://待付款 ?>
+					<?php if($goods_orders[0]['order_status']<=3 || $goods_orders[0]['order_status']==7 || $goods_orders[0]['order_status']==8 )://审核 线上未支付 ?>
 						<ul class="mui-table-view">
 							<?php foreach ($goods_orders as $key => $value):?>
 							<li class="mui-table-view-cell mui-media">
@@ -71,27 +71,24 @@
 									<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 								</p>
 								<p class='mui-ellipsis'>
-								<?php if($value['paytype']==2 || ($value['paytype']==1 && $value['pay_status']==1)): ?>
-									<?php if($value['invoice_accountno']): ?>
-									<span class="mui-pull-left">配送单号 : <?php echo $value['invoice_accountno'];?> </span>
-										<?php if($value['istatus']==2): ?>
-											<span class="mui-pull-right" style="color:green;"><?php echo '已签收';?> </span>
-										<?php elseif($value['istatus']==1): ?>
-											<span class="mui-pull-right" style="color:red;"><?php echo '运输中';?> </span>
-										<?php elseif($value['istatus']==0): ?>
-											<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?> </span>
-										<?php endif; ?>
-									<?php else: ?>
 									<span class="mui-pull-left">仓库 : <?php echo $value['company_name'];?></span>
-									<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?></span>
+									<?php if($value['order_status']==3): ?>
+										<span class="mui-pull-right" style="color:red;"><?php echo '审核中';?></span>
+									<?php elseif($value['order_status']==7): ?>
+										<span class="mui-pull-right" style="color:green;"><?php echo '通过审核';?></span>
+									<?php elseif($value['order_status']==8): ?>
+										<span class="mui-pull-right" style="color:red;"><?php echo '被驳回';?></span>
+									<?php elseif($value['order_status']<3 && $value['pay_status']==0): ?>
+										<span class="mui-pull-right" style="color:red;"><?php echo '未付款';?></span>
 									<?php endif; ?>
-								<?php endif; ?>
 								</p>
 								</div>
 							</li>
 							<?php endforeach; ?>
 						</ul>
-					<?php elseif((($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0) || $goods_orders[0]['pay_status']==1) && $goods_orders[0]['order_status']<5)://待发货 ?>
+
+
+					<?php elseif((($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0) || $goods_orders[0]['pay_status']==1) && $goods_orders[0]['order_status']<5 && $goods_orders[0]['order_status']>3)://待发货 ?>
 						<?php
 							$nosents =array();
 							foreach ($goods_orders as $key1 => $goods_order) {
@@ -154,6 +151,8 @@
 							</div>
 						</div>
 						<?php endforeach; ?>
+
+
 					<?php elseif($goods_orders[0]['order_status']==5 && ($goods_orders[0]['istatus']==0 || $goods_orders[0]['istatus']==1) && (($goods_orders[0]['order_type']==1 && $goods_orders[0]['pay_status']==1) || ($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0)))://待收货 ?>
 						<?php
 							$nogets =array();
@@ -209,14 +208,14 @@
 										<a class="mui-card-link">
 										<span class="mui-pull-right"><?php echo $value['sent_personnel'];?> </span>
 										</a>
-										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">物流单号 : 
+										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">物流单号 :
 										<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
 										</a>
 									<?php else: ?>
-										<a class="mui-card-link">配送员 : 
+										<a class="mui-card-link">配送员 :
 										<span class="mui-pull-right" style="color:black;"> <?php echo $value['sent_personnel'];?> </span>
 										</a>
-										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">手机号 : 
+										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">手机号 :
 										<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
 										</a>
 									<?php endif; ?>
@@ -293,14 +292,14 @@
 										<a class="mui-card-link">
 										<span class="mui-pull-right"><?php echo $value['sent_personnel'];?> </span>
 										</a>
-										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">物流单号 : 
+										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">物流单号 :
 										<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
 										</a>
 									<?php else: ?>
-										<a class="mui-card-link">配送员 : 
+										<a class="mui-card-link">配送员 :
 										<span class="mui-pull-right" style="color:black;"> <?php echo $value['sent_personnel'];?> </span>
 										</a>
-										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">手机号 : 
+										<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">手机号 :
 										<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
 										</a>
 									<?php endif; ?>
@@ -326,7 +325,7 @@
 
 
 
-				<?php elseif($type==1)://线上支付待付款 ?>
+				<?php elseif($type==1)://审核 ?>
 					<ul class="mui-table-view">
 						<?php foreach ($goods_orders as $key => $value):?>
 						<li class="mui-table-view-cell mui-media">
@@ -338,21 +337,14 @@
 								<span class="mui-pull-right">x <?php echo $value['num'];?> / <?php echo $value['goods_unit'];?></span>
 							</p>
 							<p class='mui-ellipsis'>
-							<?php if($value['paytype']==2 || ($value['paytype']==1 && $value['pay_status']==1)): ?>
-								<?php if($value['invoice_accountno']): ?>
-								<span class="mui-pull-left">配送单号 : <?php echo $value['invoice_accountno'];?> </span>
-									<?php if($value['istatus']==2): ?>
-										<span class="mui-pull-right" style="color:green;"><?php echo '已签收';?> </span>
-									<?php elseif($value['istatus']==1): ?>
-										<span class="mui-pull-right" style="color:red;"><?php echo '运输中';?> </span>
-									<?php elseif($value['istatus']==0): ?>
-										<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?> </span>
-									<?php endif; ?>
-								<?php else: ?>
+
 								<span class="mui-pull-left">仓库 : <?php echo $value['company_name'];?></span>
-								<span class="mui-pull-right" style="color:red;"><?php echo '备货中';?></span>
+								<?php if($value['order_status']==3): ?>
+									<span class="mui-pull-right" style="color:red;"><?php echo '审核中';?></span>
+								<?php elseif($value['order_status']==7): ?>
+									<span class="mui-pull-right" style="color:green;"><?php echo '通过审核';?></span>
 								<?php endif; ?>
-							<?php endif; ?>
+
 							</p>
 							</div>
 						</li>
@@ -476,14 +468,14 @@
 									<a class="mui-card-link">
 									<span class="mui-pull-right"><?php echo $value['sent_personnel'];?> </span>
 									</a>
-									<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">物流单号 : 
+									<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">物流单号 :
 									<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
 									</a>
 								<?php else: ?>
-									<a class="mui-card-link">配送员 : 
+									<a class="mui-card-link">配送员 :
 									<span class="mui-pull-right" style="color:black;"> <?php echo $value['sent_personnel'];?> </span>
 									</a>
-									<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">手机号 : 
+									<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">手机号 :
 									<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
 									</a>
 								<?php endif; ?>
@@ -507,38 +499,127 @@
 					<?php endforeach; ?>
 				<?php endif; ?>
 				</div>
+
+
+
+
+
+
+
 				<div class="mui-card-footer">
 				<?php if($type==0)://全部 ?>
 					<?php if ($goods_orders[0]['reality_total']): ?>
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
 					<?php endif; ?>
-					<?php if($goods_orders[0]['paytype']==1 && $goods_orders[0]['pay_status']==0)://待付款 ?>
-						<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">直接付款</button>
-						<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
+
+					<?php if($goods_orders[0]['order_status']<=3 || $goods_orders[0]['order_status']==7 || $goods_orders[0]['order_status']==8 )://审核 ?>
+						<?php if($goods_orders[0]['order_status']==3): ?>
+							<?php if($goods_orders[0]['pay_status']==0): ?>
+								<?php if ($company_property['stock_paytype']==1): ?>
+									<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+								<?php else: ?>
+									<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+								<?php endif; ?>
+							<?php else: ?>
+								<a class="mui-card-link"><?php echo '已付款'; ?></a>
+							<?php endif; ?>
+						<?php elseif($goods_orders[0]['order_status']==7): //审核通过?>
+							<?php if($goods_orders[0]['pay_status']==0): ?>
+								<?php if ($company_property['stock_paytype']==1): ?>
+									<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+								<?php else: ?>
+									<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+								<?php endif; ?>
+							<?php else: ?>
+								<a class="mui-card-link"><?php echo '已付款'; ?></a>
+							<?php endif; ?>
+						<?php elseif($goods_orders[0]['order_status']==8): ?>
+							<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotoedit" account_no="<?php echo $goods_orders[0]['account_no']; ?>">修改订单</button>
+							<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
+						<?php elseif($goods_orders[0]['order_status']<3 && $goods_orders[0]['pay_status']==0): ?>
+								<?php if ($company_property['stock_paytype']==1): ?>
+									<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+								<?php else: ?>
+									<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+								<?php endif; ?>
+							<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
+						<?php endif; ?>
 					<?php elseif((($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0) || $goods_orders[0]['pay_status']==1) && $goods_orders[0]['order_status']<5)://待发货 ?>
 						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
-						<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
+						<?php if($goods_orders[0]['pay_status']==0): ?>
+							<?php if ($company_property['stock_paytype']==1): ?>
+								<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+							<?php else: ?>
+								<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+							<?php endif; ?>
+						<?php else: ?>
+							<a class="mui-card-link"><?php echo '已付款'; ?></a>
+						<?php endif; ?>
 					<?php elseif($goods_orders[0]['order_status']==5 && ($goods_orders[0]['istatus']==0 || $goods_orders[0]['istatus']==1) && (($goods_orders[0]['order_type']==1 && $goods_orders[0]['pay_status']==1) || ($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0)))://待收货 ?>
 						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
-						<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
+						<?php if($goods_orders[0]['pay_status']==0): ?>
+							<?php if ($company_property['stock_paytype']==1): ?>
+								<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+							<?php else: ?>
+								<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+							<?php endif; ?>
+						<?php else: ?>
+							<a class="mui-card-link"><?php echo '已付款'; ?></a>
+						<?php endif; ?>
 						<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
 					<?php elseif($goods_orders[0]['order_status']==5 && $goods_orders[0]['istatus']==2  && (($goods_orders[0]['order_type']==1 && $goods_orders[0]['pay_status']==1) || ($goods_orders[0]['paytype']==2 && $goods_orders[0]['pay_status']==0)))://已签收 ?>
 						<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
-						<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
+						<?php if($goods_orders[0]['pay_status']==0): ?>
+							<?php if ($company_property['stock_paytype']==1): ?>
+								<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+							<?php else: ?>
+								<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+							<?php endif; ?>
+						<?php else: ?>
+							<a class="mui-card-link"><?php echo '已付款'; ?></a>
+						<?php endif; ?>
 						<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
 					<?php endif; ?>
-				<?php elseif($type==1)://待付款 ?>
+
+
+				<?php elseif($type==1)://审核 ?>
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
-					<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">直接付款</button>
+					<?php if($goods_orders[0]['pay_status']==0): ?>
+						<?php if ($company_property['stock_paytype']==1): ?>
+							<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+						<?php else: ?>
+							<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+						<?php endif; ?>
+					<?php else: ?>
+						<a class="mui-card-link"><?php echo '已付款'; ?></a>
+					<?php endif; ?>
+					<?php if($goods_orders[0]['order_status']!=7)://审核通过不能删除 ?>
 					<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
+					<?php endif; ?>
 				<?php elseif($type==2)://待发货 ?>
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
 					<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
-					<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
+					<?php if($goods_orders[0]['pay_status']==0): ?>
+						<?php if ($company_property['stock_paytype']==1): ?>
+							<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+						<?php else: ?>
+							<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+						<?php endif; ?>
+					<?php else: ?>
+						<a class="mui-card-link"><?php echo '已付款'; ?></a>
+					<?php endif; ?>
 				<?php elseif($type==3||$type==4)://待收货 ?>
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
 					<a class="mui-card-link"><?php if($goods_orders[0]['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_orders[0]['paytype']==2){echo '<span style="color:red">线下支付</span>';}  ?></a>
-					<a class="mui-card-link"><?php if($goods_orders[0]['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_orders[0]['pay_status']==0){echo '<span style="color:red">未付款</span>';}  ?></a>
+					<?php if($goods_orders[0]['pay_status']==0): ?>
+						<?php if ($company_property['stock_paytype']==1): ?>
+							<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">立即付款</button>
+						<?php else: ?>
+							<a class="mui-card-link" style="color:red;"><?php echo '未付款'; ?></a>
+						<?php endif; ?>
+					<?php else: ?>
+						<a class="mui-card-link"><?php echo '已付款'; ?></a>
+					<?php endif; ?>
 					<a class="mui-card-link" href="<?php echo $this->createUrl('myinfo/goodsRejected',array('companyId'=>$this->companyId,'account_no'=>$goods_orders[0]['account_no'])); ?>">查看运输损耗</a>
 				<?php endif; ?>
 				</div>
@@ -554,37 +635,37 @@
 	$('.gotopay').on('tap',function(){
 		var account_no = $(this).attr('account_no');
 		var companyId ='<?php echo $this->companyId; ?>';
-		console.log(account_no);
+		// console.log(account_no);
 		location.href = '<?php echo $this->createUrl("ymallcart/orderlist") ?>?companyId='+companyId+'&account_no='+account_no;
+	});
+	$('.gotoedit').on('tap',function(){
+		var account_no = $(this).attr('account_no');
+		var companyId ='<?php echo $this->companyId; ?>';
+		// console.log(account_no);
+		location.href = '<?php echo $this->createUrl("myinfo/orderDetailEdit") ?>?companyId='+companyId+'&account_no='+account_no+'&type=1';
 	});
 	$('.delete_nopay').on('tap',function(){
 		var account_no = $(this).attr('account_no');
-		console.log(account_no);
+		// console.log(account_no);
 		$(this).attr('id', 'aa');
 		var btnArray = ['否','是'];
 		mui.confirm('是否确定删除所选产品 ？','提示',btnArray,function(e){
 			if(e.index==1){
-			mui.post('<?php echo $this->createUrl("myinfo/delete_nopay",array("companyId"=>$this->companyId)) ?>',{
-				   account_no:account_no,
-				},
-				function(data){
-					if (data == 1) {
-					 	// var x = $('#aa').parent('div').parent('.big-li').attr('class');
-					 	// alert(x);
-						// $('#aa').parent().parent('.big-li').fadeOut(1000).remove();
-						//将图标的数量减去
-						// var num = $('#nopay').html();
-						// $('#nopay').html(num-1);
-						mui.toast('删除成功 ! ! !',{ duration:'long', type:'div' });
-						location.href="<?php echo $this->createUrl('myinfo/goodsOrderNopay',array('companyId'=>$this->companyId));?>";
-					}else if(data == 2) {
-						mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
-					}else if(data == 3) {
-						mui.toast('未查寻到商品删除失败 ! ! !',{ duration:'long', type:'div' });
-					}
-				},'json'
-			);
-		}
+				mui.post('<?php echo $this->createUrl("myinfo/delete_order",array("companyId"=>$this->companyId)) ?>',{
+					   account_no:account_no,
+					},
+					function(data){
+						if (data == 1) {
+							mui.toast('删除成功 ! ! !',{ duration:'long', type:'div' });
+							location.href="<?php echo $this->createUrl('myinfo/goodsOrderCheck',array('companyId'=>$this->companyId));?>";
+						}else if(data == 2) {
+							mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
+						}else if(data == 3) {
+							mui.toast('未查寻到商品删除失败 ! ! !',{ duration:'long', type:'div' });
+						}
+					},'json'
+				);
+			}
 		});
 	});
 	$('.mui-sureo').on('tap',function(){

@@ -20,10 +20,16 @@ class MyinfoController extends BaseYmallController
 		$phone = $db->createCommand($sqll)->queryRow();
 		// p($phone);
 		//查询未支付订单
+		// $sql = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
+		// 		.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+		// 		.' order by go.create_at desc) t';
+		// $nopay_no = $db->createCommand($sql)->queryRow();
+
+		//查询待审核订单
 		$sql = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.' order by go.create_at desc) t';
-		$nopay_no = $db->createCommand($sql)->queryRow();
+		$nocheck_no = $db->createCommand($sql)->queryRow();
 		// p($nopay_no);
 
 		//查询待发货订单
@@ -32,7 +38,7 @@ class MyinfoController extends BaseYmallController
 			.' where go.dpid='.$this->companyId
 				.' and go.delete_flag=0 and go.user_id='.$user_id
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc ) t';
 		$nosent_no = $db->createCommand($sql1)->queryRow();
 
@@ -73,7 +79,8 @@ class MyinfoController extends BaseYmallController
 		$this->render('myinfo',array(
 			'phone'=>$phone,
 			'user_info'=>$user_info,
-			'nopay_no'=>$nopay_no['count(*)'],
+			// 'nopay_no'=>$nopay_no['count(*)'],
+			'nocheck_no'=>$nocheck_no['count(*)'],
 			'nosent_no'=>$nosent_no['count(*)'],
 			'noget_no'=>$noget_no['count(*)'],
 			'getted_no'=>$getted_no['count(*)'],
@@ -151,7 +158,7 @@ class MyinfoController extends BaseYmallController
 		}
 		// p($goods_orders);
 		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.' order by go.create_at desc) t';
 		$nopay_no = $db->createCommand($sql0)->queryRow();
 		// p($nopay_no);
@@ -162,7 +169,7 @@ class MyinfoController extends BaseYmallController
 			.' where go.dpid='.$this->companyId
 				.' and go.delete_flag=0 and go.user_id='.$user_id
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc ) t';
 		$nosent_no = $db->createCommand($sql1)->queryRow();
 
@@ -193,7 +200,82 @@ class MyinfoController extends BaseYmallController
 	}
 
 	//查看待支付订单
-	public function actionGoodsOrderNopay()
+	// public function actionGoodsOrderNopay()
+	// {
+	// 	$db = Yii::app()->db;
+	// 	$user_id = substr(Yii::app()->user->userId,0,10);
+	// 	$up = Yii::app()->request->getParam('up');
+	// 	$date = Yii::app()->request->getParam('date',0);
+	// 	$success = Yii::app()->request->getParam('success');
+	// 	if($date){
+	// 		$b_time = ' and UNIX_TIMESTAMP(go.create_at)>UNIX_TIMESTAMP("'.$date.' 00:00:00")';
+	// 		$e_time = ' and UNIX_TIMESTAMP(go.create_at)<UNIX_TIMESTAMP("'.$date.' 23:59:59")';
+	// 	}else{
+	// 		$b_time = '';
+	// 		$e_time = '';
+	// 	}
+	// 	if(Yii::app()->request->isAjaxRequest){
+	// 		$offset = $up*10;
+	// 		$sql = 'select go.* from nb_goods_order go where go.dpid='.$this->companyId
+	// 			.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+	// 			.$b_time
+	// 			.$e_time
+	// 			.' order by go.create_at desc limit '.$offset.',10';
+	// 		$goods_orders = $db->createCommand($sql)->queryAll();
+	// 		echo json_encode($goods_orders);exit;
+	// 	}else{
+	// 		$sql = 'select go.* from nb_goods_order go where go.dpid='.$this->companyId
+	// 			.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+	// 			.$b_time
+	// 			.$e_time
+	// 			.' order by go.create_at desc limit 0,10';
+	// 		$goods_orders = $db->createCommand($sql)->queryAll();
+	// 	}
+	// 	// p($goods_orders);
+	// 	$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
+	// 			.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+	// 			.' order by go.create_at desc) t';
+	// 	$nopay_no = $db->createCommand($sql0)->queryRow();
+	// 	// p($nopay_no);
+
+	// 	//查询待发货订单
+
+	// 	$sql1 = 'select count(*) from (select go.* from nb_goods_order go'
+	// 		.' where go.dpid='.$this->companyId
+	// 			.' and go.delete_flag=0 and go.user_id='.$user_id
+	// 			.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
+	// 			.' and (go.order_status < 5 and go.order_status > 3)'
+	// 			.' order by go.create_at desc ) t';
+	// 	$nosent_no = $db->createCommand($sql1)->queryRow();
+
+	// 	// p($materials_pay);
+
+
+	// 	//查询待收货
+	// 	$sql2 = 'select count(*) from (select go.* from nb_goods_order go'
+	// 			.' left join nb_goods_delivery gd on(go.account_no=gd.goods_order_accountno)'
+	// 			.' left join nb_goods_invoice gi on(go.account_no=gi.goods_order_accountno)'
+	// 			.' where go.dpid='.$this->companyId
+	// 			.' and go.delete_flag=0 and go.user_id='.$user_id
+	// 			.' and go.order_status=5'
+	// 			.' and ((go.order_type=1 and go.pay_status=1) or (go.paytype=2 and go.pay_status=0)) '
+	// 			.' and (gi.status=0 or gi.status=1)'
+	// 			.' group by go.account_no order by go.create_at desc ) t';
+
+	// 	$noget_no = $db->createCommand($sql2)->queryRow();
+	// 	// p($noget_no);
+	// 	$this->render('goodsOrderNopay',array(
+	// 		'goods_orders'=>$goods_orders,
+	// 		'date'=>$date,
+	// 		'success'=>$success,
+	// 		'nopay_no'=>$nopay_no['count(*)'],
+	// 		'nosent_no'=>$nosent_no['count(*)'],
+	// 		'noget_no'=>$noget_no['count(*)'],
+	// 	));
+	// }
+
+	//查看审核
+	public function actionGoodsOrderCheck()
 	{
 		$db = Yii::app()->db;
 		$user_id = substr(Yii::app()->user->userId,0,10);
@@ -210,7 +292,7 @@ class MyinfoController extends BaseYmallController
 		if(Yii::app()->request->isAjaxRequest){
 			$offset = $up*10;
 			$sql = 'select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.$b_time
 				.$e_time
 				.' order by go.create_at desc limit '.$offset.',10';
@@ -218,7 +300,7 @@ class MyinfoController extends BaseYmallController
 			echo json_encode($goods_orders);exit;
 		}else{
 			$sql = 'select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.$b_time
 				.$e_time
 				.' order by go.create_at desc limit 0,10';
@@ -226,7 +308,7 @@ class MyinfoController extends BaseYmallController
 		}
 		// p($goods_orders);
 		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.' order by go.create_at desc) t';
 		$nopay_no = $db->createCommand($sql0)->queryRow();
 		// p($nopay_no);
@@ -237,7 +319,7 @@ class MyinfoController extends BaseYmallController
 			.' where go.dpid='.$this->companyId
 				.' and go.delete_flag=0 and go.user_id='.$user_id
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc ) t';
 		$nosent_no = $db->createCommand($sql1)->queryRow();
 
@@ -257,7 +339,7 @@ class MyinfoController extends BaseYmallController
 
 		$noget_no = $db->createCommand($sql2)->queryRow();
 		// p($noget_no);
-		$this->render('goodsOrderNopay',array(
+		$this->render('goodsOrderCheck',array(
 			'goods_orders'=>$goods_orders,
 			'date'=>$date,
 			'success'=>$success,
@@ -266,6 +348,7 @@ class MyinfoController extends BaseYmallController
 			'noget_no'=>$noget_no['count(*)'],
 		));
 	}
+
 
 	//查看待发货订单
 	public function actionGoodsOrderNosent()
@@ -290,7 +373,7 @@ class MyinfoController extends BaseYmallController
 				.$b_time
 				.$e_time
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc limit '.$offset.',10';
 			$goods_orders = $db->createCommand($sql)->queryAll();
 			echo json_encode($goods_orders);exit;
@@ -301,13 +384,13 @@ class MyinfoController extends BaseYmallController
 				.$b_time
 				.$e_time
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc limit 0,10';
 			$goods_orders = $db->createCommand($sql)->queryAll();
 		}
 		// p($goods_orders);
 		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.' order by go.create_at desc) t';
 		$nopay_no = $db->createCommand($sql0)->queryRow();
 		// p($nopay_no);
@@ -318,7 +401,7 @@ class MyinfoController extends BaseYmallController
 			.' where go.dpid='.$this->companyId
 				.' and go.delete_flag=0 and go.user_id='.$user_id
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc ) t';
 		$nosent_no = $db->createCommand($sql1)->queryRow();
 
@@ -394,7 +477,7 @@ class MyinfoController extends BaseYmallController
 		}
 		// p($goods_orders);
 		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.' order by go.create_at desc) t';
 		$nopay_no = $db->createCommand($sql0)->queryRow();
 		// p($nopay_no);
@@ -405,7 +488,7 @@ class MyinfoController extends BaseYmallController
 			.' where go.dpid='.$this->companyId
 				.' and go.delete_flag=0 and go.user_id='.$user_id
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc ) t';
 		$nosent_no = $db->createCommand($sql1)->queryRow();
 
@@ -480,7 +563,7 @@ class MyinfoController extends BaseYmallController
 		}
 		// p($goods_orders);
 		$sql0 = 'select count(*) from (select go.* from nb_goods_order go where go.dpid='.$this->companyId
-				.' and go.delete_flag=0 and go.paytype=1 and go.pay_status=0 and go.user_id='.$user_id
+				.' and go.delete_flag=0 and (go.order_status=3 or go.order_status>=7) and go.user_id='.$user_id
 				.' order by go.create_at desc) t';
 		$nopay_no = $db->createCommand($sql0)->queryRow();
 		// p($nopay_no);
@@ -491,7 +574,7 @@ class MyinfoController extends BaseYmallController
 			.' where go.dpid='.$this->companyId
 				.' and go.delete_flag=0 and go.user_id='.$user_id
 				.' and (( go.pay_status = 1) or ( go.pay_status = 0 and go.paytype = 2))'
-				.' and go.order_status < 5'
+				.' and (go.order_status < 5 and go.order_status > 3)'
 				.' order by go.create_at desc ) t';
 		$nosent_no = $db->createCommand($sql1)->queryRow();
 
@@ -529,7 +612,7 @@ class MyinfoController extends BaseYmallController
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$sql = 'select gorder.*,gdel.*,gin.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,g.main_picture,g.goods_unit,c.company_name '
 		.' from (select go.dpid,go.create_at,go.account_no,go.goods_address_id,go.username,go.user_id,go.order_status,go.order_type,go.reality_total,go.paytype,go.pay_status,god.stock_dpid,god.goods_name,god.goods_id,god.goods_code,god.material_code,god.price,god.num from nb_goods_order go left join nb_goods_order_detail god on ( go.account_no=god.account_no) ) gorder '
-		.' left join (select gd.create_at as create_atd,gd.goods_order_accountno as dgoods_order_accountno,gd.auditor as dauditor,gd.operators as doperators,gd.delivery_accountno,gd.status as dstatus,gd.delivery_amount,gd.pay_status as dpay_status,gdd.dpid as stock_dpidd,gdd.goods_id as dgoods_id,gdd.goods_code as dgoods_code,gdd.material_code as dmaterial_code,gdd.price as dprice,gdd.num as dnum,gdd.pici from nb_goods_delivery gd left join nb_goods_delivery_details gdd on ( gd.lid=gdd.goods_delivery_id) 
+		.' left join (select gd.create_at as create_atd,gd.goods_order_accountno as dgoods_order_accountno,gd.auditor as dauditor,gd.operators as doperators,gd.delivery_accountno,gd.status as dstatus,gd.delivery_amount,gd.pay_status as dpay_status,gdd.dpid as stock_dpidd,gdd.goods_id as dgoods_id,gdd.goods_code as dgoods_code,gdd.material_code as dmaterial_code,gdd.price as dprice,gdd.num as dnum,gdd.pici from nb_goods_delivery gd left join nb_goods_delivery_details gdd on ( gd.lid=gdd.goods_delivery_id)
 			) gdel on ( gorder.account_no=gdel.dgoods_order_accountno and gorder.goods_id=gdel.dgoods_id)'
 		.' left join (select gi.create_at as create_ati,gi.auditor as iauditor,gi.goods_order_accountno as igoods_order_accountno,gi.operators as operators,gi.invoice_accountno,gi.sent_type,gi.sent_personnel,gi.mobile,gi.status as istatus,gi.invoice_amount,gi.pay_status as ipay_status,gid.dpid as stock_dpidi,gid.goods_id as igoods_id,gid.goods_code as igoods_code,gid.material_code as imaterial_code,gid.price as iprice,
 		gid.num as inum from nb_goods_invoice gi left join nb_goods_invoice_details gid on ( gi.lid=gid.goods_invoice_id)
@@ -541,11 +624,46 @@ class MyinfoController extends BaseYmallController
 		.' group by goods_id';
 		$goods_orders = $db->createCommand($sql)->queryAll();
 		// p($goods_orders);
+		
+
+		$sql5 = 'select * from nb_company_property where dpid='.$this->companyId.' and delete_flag=0';
+		$company_property = $db->createCommand($sql5)->queryrow();
+		// p($company_property);
 		$this->render('orderDetail',array(
+			'goods_orders'=>$goods_orders,
+			'type'=>$type,
+			'company_property'=>$company_property,
+		));
+	}
+
+	//查看订单详情
+	public function actionOrderDetailEdit()
+	{
+		// p($account_no);
+		$db = Yii::app()->db;
+		$account_no = Yii::app()->request->getParam('account_no');
+		$type = Yii::app()->request->getParam('type',0);
+		$user_id = substr(Yii::app()->user->userId,0,10);
+		$sql = 'select gorder.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,g.main_picture,g.goods_unit,c.company_name,mu.unit_name '
+		.' from (select go.dpid,go.create_at,go.account_no,go.goods_address_id,go.username,go.user_id,go.order_status,go.order_type,go.reality_total,go.paytype,go.pay_status,god.lid,god.stock_dpid,god.goods_name,god.goods_id,god.goods_code,god.material_code,god.price,god.num from nb_goods_order go left join nb_goods_order_detail god on ( go.account_no=god.account_no) ) gorder '
+		.' left join nb_goods_address ga on(gorder.goods_address_id=ga.lid)'
+		.' left join nb_goods g on(gorder.goods_id=g.lid)'
+		.' left join nb_goods_material gm on (gorder.goods_id=gm.goods_id )'
+		.' left join nb_company c on(gorder.stock_dpid=c.dpid)'
+		.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=gm.unit_code)'
+
+		.' where gorder.dpid='.$this->companyId.' and gorder.user_id='.$user_id.' and gorder.account_no='.$account_no
+		.' group by goods_id';
+		$goods_orders = $db->createCommand($sql)->queryAll();
+		// p($goods_orders);
+		$this->render('orderDetailEdit',array(
 			'goods_orders'=>$goods_orders,
 			'type'=>$type,
 		));
 	}
+
+
+
 	//仓库默认设置
 	public function actionStockSetting()
 	{
@@ -749,7 +867,7 @@ class MyinfoController extends BaseYmallController
 		}
 	}
 	//删除未支付订单
-	public function actionDelete_nopay()
+	public function actionDelete_order()
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
 		// p($account_no);
@@ -761,6 +879,47 @@ class MyinfoController extends BaseYmallController
 			}
 		}else{
 			echo json_encode(2);exit;
+		}
+	}
+
+	//删除订单里的单个商品
+	public function actionDelete_order_detail()
+	{
+		$account_no = Yii::app()->request->getParam('account_no');
+		$lid = Yii::app()->request->getParam('lid');
+		// echo $lid.'----';
+		// p($account_no);
+		$infod = GoodsOrderDetail::model()->deleteAll('dpid=:dpid and account_no=:account_no and lid=:lid',array(':dpid'=>$this->companyId,':account_no'=>$account_no,':lid'=>$lid));
+		if ($infod) {
+			echo json_encode(1);exit;//删除成功
+		}else{
+			echo json_encode(2);exit;//删除失败
+		}
+	}
+
+	//重新提交订单
+	public function actionPut_order()
+	{
+		$account_no = Yii::app()->request->getParam('account_no');
+		$strs = Yii::app()->request->getParam('strs');
+		// echo $account_no.'----';
+		// p($strs);
+		$arr = explode(",",$strs);
+		$db=Yii::app()->db;
+		$transaction = $db->beginTransaction();
+		try{
+			$sql1 = 'update nb_goods_order set order_status =3 where  delete_flag = 0 and dpid=:dpid and account_no = :account_no';
+	  		$command1=Yii::app()->db->createCommand($sql1)->execute(array(':dpid'=>$this->companyId,':account_no'=>$account_no));
+			foreach ($arr as $value) {
+				$info = explode("_",$value);
+				$sql = 'update nb_goods_order_detail set num =:num where lid =:lid  and delete_flag = 0 and dpid=:dpid and account_no=:account_no';
+	  			$command=Yii::app()->db->createCommand($sql)->execute(array(':num'=>$info[1],':lid'=>$info[0],':dpid'=>$this->companyId,':account_no'=>$account_no));
+			}
+			$transaction->commit();
+			echo json_encode(1);exit;//提交成功
+		}catch (Exception $e){
+		    $transaction->rollback();
+			echo json_encode(2);exit;//提交失败
 		}
 	}
 }
