@@ -154,21 +154,21 @@
                 <?php 
                 $typeArr = explode(',',$v['type']); 
                 if(in_array(1, $typeArr)){
-                	echo 'POS机端、';
+                	echo 'POS机端 ';
                 }
                 if(in_array(2, $typeArr)){
-                	echo '微信堂食、';
+                	echo '微信堂食 ';
                 }
                 if(in_array(3, $typeArr)){
-                	echo '微信外卖  ';
+                	echo '微信外卖 ';
                 }
                 if($v['type']=='1'){
-                	echo '只限领取店铺使用  ';
+                	echo '只限领取店铺使用 ';
                 }elseif($v['type']=='2'){
-                	echo '只限部分店铺可用  ';
+                	echo '只限部分店铺可用 ';
                 }
                 if($v['type_prod']=='1'){
-                	echo '只限部分产品可用  ';
+                	echo '只限部分产品可用 ';
                 }
                 ?>
                 </div>
