@@ -30,6 +30,7 @@
 		height: 76px;
 		border-radius: 10px;
 	}
+	.mui-toast-container{bottom: 50%!important;}
 </style>
 
 
