@@ -140,6 +140,8 @@ $(document).ready(function(){
 						}
 						$('.recharge').find('.weui_cells').append(str);
 						page++;
+					}else{
+						$('.recharge').find('.more').hide();
 					}
 				},
 				dataType:'json'
@@ -166,6 +168,8 @@ $(document).ready(function(){
 							}
 							$('.consumer').find('.weui_cells').append(str);
 							page++;
+						}else{
+							$('.consumer').find('.more').hide();
 						}
 					},
 					dataType:'json'
