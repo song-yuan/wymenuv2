@@ -120,7 +120,8 @@ class UserController extends Controller
     	$remainMoey = WxBrandUser::getYue($userId, $this->companyId);
     	$comments = WxRecharge::getWxRechargeComment($this->companyId,2,2);
     	$rechargeRecords = WxRecharge::getRechargeRecord($this->companyId,$userId);
-        $this->render('money',array('remainMoey'=>$remainMoey,'user'=>$user,'comments'=>$comments,'records'=>$rechargeRecords));
+    	$consumes = WxRecharge::getConsumeRecord($userId);
+        $this->render('money',array('remainMoey'=>$remainMoey,'user'=>$user,'comments'=>$comments,'records'=>$rechargeRecords,'consumes'=>$consumes));
     } 
     public function actionPoint(){
         //$user就是brand_user表里的一行

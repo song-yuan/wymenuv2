@@ -22,6 +22,14 @@
     padding-right: 15px;
     text-align: center;
 }
+.empty2 .tab{
+	padding:10px;
+	margin:10px;
+	float:left;
+}
+.empty2 .tab-active{
+	border-bottom:1px solid #04BE02;
+}
 .record span{
 	width:33.33%;
 	text-align:center;
@@ -59,8 +67,8 @@
          </div>
       </div>
       <?php endif;?>
-      <div class="empty2">充值记录</div>
-      <div class="bd"> 
+      <div class="empty2 clearfix"><div class="tab tab-active" for="recharge">充值记录</div><div class="tab" for="consumer">消费记录</div></div>
+      <div class="tab-content recharge"> 
         <div class="weui_cells weui_cells_access global_navs">
         	<a class="weui_cell js_cell" href="javascript:;" >
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
@@ -76,4 +84,31 @@
               <?php endforeach;?>
          </div>
       </div>
+      <div class="tab-content consumer" style="display:none;"> 
+        <div class="weui_cells weui_cells_access global_navs">
+        	<a class="weui_cell js_cell" href="javascript:;" >
+                 <div class="weui_cell_bd weui_cell_primary record clearfix">
+                 	<span class="left">消费时间</span><span class="left">消费金额</span><span class="left">类型</span>
+                  </div>
+              </a>
+           	 <?php foreach ($consumes as $consume):?>
+             <a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">
+                 <div class="weui_cell_bd weui_cell_primary record clearfix">
+                 	<span class="left"><?php echo date('Y-m-d',strtotime($consume['create_at']));?></span><span class="left"><?php echo $consume['consume_amount'];?></span><span class="left"><?php if($consume['consume_type']=='3'){ echo '退款';}else{ echo '消费';}?></span>
+                  </div>
+              </a>
+              <?php endforeach;?>
+         </div>
+      </div>
 </div>   
+<script>
+$(document).ready(function(){
+	$('.tab').click(function(){
+		var typeTigger = $(this).attr('for');
+		$('.tab-active').removeClass('tab-active');
+		$(this).addClass('tab-active');
+		$('.tab-content').hide();
+		$('.'+typeTigger).show();
+	});
+});
+</script>
