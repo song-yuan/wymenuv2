@@ -132,7 +132,7 @@ $(document).ready(function(){
 						var str = '';
 						for(var i=0;i<msg.length;i++){
 							var obj = msg[i];
-							str = '<a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">'
+							str += '<a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">'
 				                 +'<div class="weui_cell_bd weui_cell_primary record clearfix">'
 				                 +'<span class="left">'+obj.create_at.substr(0,10)+'</span><span class="left">'+obj.recharge_money+'</span><span class="left">'+obj.cashback_num+'</span>'
 				                 +'</div>'
@@ -158,7 +158,7 @@ $(document).ready(function(){
 								}else{
 									var typeStr = '消费';
 								}
-								str = '<a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">'
+								str += '<a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">'
 					                 +'<div class="weui_cell_bd weui_cell_primary record clearfix">'
 					                 +'<span class="left">'+obj.create_at.substr(0,10)+'</span><span class="left">'+obj.consume_amount+'</span><span class="left">'+typeStr+'</span>'
 					                 +'</div>'
