@@ -1,4 +1,5 @@
 <?php
+
 class GoodsorderController extends BackendController
 {
 	public function actions() {
@@ -50,6 +51,18 @@ class GoodsorderController extends BackendController
 			));
 
 	}
+	public function actionUpdateorder(){
+		$account_no = Yii::app()->request->getParam('account_no');
+		// var_dump($account_no);exit();
+		$pay = Yii::app()->db->createCommand('update nb_goods_order set pay_status = 1,update_at ="'.date('Y-m-d H:i:s',time()).'" where account_no ='.$account_no.' and delete_flag=0')
+			->execute();
+		if($pay){
+			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+		}else{
+			Yii::app()->end(json_encode(array("status"=>"fail")));
+			return false;
+		}
+	}
 	public function actionDetailindex(){
 		$goid = Yii::app()->request->getParam('lid');
 		$name = Yii::app()->request->getParam('name');
@@ -59,7 +72,7 @@ class GoodsorderController extends BackendController
 
 		$sqls = 'select c.company_name,t.* from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
-		// var_dump($model);exit;
+
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
 

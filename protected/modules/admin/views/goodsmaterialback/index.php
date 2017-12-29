@@ -60,7 +60,15 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','运输损耗列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+		<?php 
+			if ($company_info->type == 0) {
+				$this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','运输损耗列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId' => $this->companyId,'type'=>0)))));
+			}elseif($company_info->type == 2){
+				$this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','仓库配置'),'url'=>$this->createUrl('tmall/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','运输损耗列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('tmall/list' , array('companyId' => $this->companyId,'type'=>0)))));
+			}
+
+?>
+
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -102,7 +110,9 @@
 								<th><?php echo yii::t('app','详情');?></th>
 								<th><?php echo yii::t('app','退货人');?></th>
                                 <th><?php echo yii::t('app','退款金额');?></th>
+                                <?php if(Yii::app()->user->role < 7):?>
                                 <th><?php echo yii::t('app','是否退钱');?></th>
+                            	<?php endif; ?>
 							</tr>
 						</thead>
 						<tbody>
@@ -140,6 +150,7 @@
 
 								<td><?php echo $model[0]['username'];?></td>
 								<td><?php echo $zongjia;?></td>
+								<?php if(Yii::app()->user->role <7):?>
                                 <td class="center">
 								<?php if($model[0]['status']==0): ?>
 									<button class="status btn red" lid="<?php echo $account_no;?>" status="<?php echo $model[0]['status'];?>"> 未退款</button>
@@ -148,6 +159,7 @@
 								<?php endif; ?>
 
 								</td>
+							<?php endif; ?>
 							</tr>
 						<?php endforeach;?>
 						<?php else: ?>

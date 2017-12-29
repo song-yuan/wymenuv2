@@ -55,16 +55,16 @@ class GoodsmaterialbackController extends BackendController
 				array_push($models_back[$model['goods_order_accountno']], $model);
 			}
 		}
-		// p($models_back);
+
 
 		$this->render('index',array(
 			'models'=>$models_back,
 			'back_status'=>$back_status,
+			'company_info'=>$company_info,
 			'begin_time'=>$begin_time,
 			'end_time'=>$end_time,
 		));
 	}
-
 
 	public function actionChangestatus()
 	{

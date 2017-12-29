@@ -63,9 +63,11 @@
 				</div>
 				<div class="mui-card-footer">
 					<a class="mui-card-link">合计 : ¥ <?php echo $goods_order['reality_total']; ?></a>
-					<a class="mui-card-link">
-						<?php if($goods_order['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_order['paytype']==2){echo '<span style="color:red">线下支付</span>';} ?>
-					</a>
+					<?php if(empty($goods_order['wayofpay'])): ?>
+					<a class="mui-card-link"><?php if($goods_order['paytype']==1){echo '<span style="color:green">线上支付</span>';}else if($goods_order['paytype']==2){echo '<span style="color:red">线下支付</span>';} ?></a>
+					<?php else: ?>
+					<a class="mui-card-link"><?php echo '<span style="color:red">'.$goods_order['wayofpay'].'</span>'; ?></a>
+					<?php endif; ?>
 					<a class="mui-card-link">
 						<?php if($goods_order['pay_status']==1){echo '<span style="color:green">已付款</span>';}else if($goods_order['pay_status']==0){echo '<span style="color:red">未付款</span>';} ?>
 					</a>

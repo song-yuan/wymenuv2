@@ -87,6 +87,12 @@
 							<div class="ku-item-info">发货单</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('goodsmaterialback/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple splr"></div>
+							<div class="ku-item-info">运输损耗列表</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId,'types'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple splr"></div>
