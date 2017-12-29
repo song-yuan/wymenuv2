@@ -41,9 +41,6 @@
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
 					       var juli = parseFloat(cObj.juli);
-					       if(juli>10000){
-						       break;
-						   }
 						   if(i==msg.length-1){
 							   isShowMore = true;
 						   }
