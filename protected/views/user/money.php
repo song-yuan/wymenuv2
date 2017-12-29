@@ -83,6 +83,11 @@
               </a>
               <?php endforeach;?>
          </div>
+         <?php if(count($records) < 10):?>
+          <div class="more" style="text-align:center;margin-bottom:20px;display:none;">点击查看更多</div>
+          <?php else:?>
+          <div class="more" style="text-align:center;margin-bottom:20px;">点击查看更多</div>
+          <?php endif;?>
       </div>
       <div class="tab-content consumer" style="display:none;"> 
         <div class="weui_cells weui_cells_access global_navs">
@@ -99,10 +104,16 @@
               </a>
               <?php endforeach;?>
          </div>
+         <?php if(count($consumes) < 10):?>
+          <div class="more" style="text-align:center;margin-bottom:20px;display:none;">点击查看更多</div>
+          <?php else:?>
+          <div class="more" style="text-align:center;margin-bottom:20px;">点击查看更多</div>
+          <?php endif;?>
       </div>
 </div>   
 <script>
 $(document).ready(function(){
+	var page = 1;
 	$('.tab').click(function(){
 		var typeTigger = $(this).attr('for');
 		$('.tab-active').removeClass('tab-active');
@@ -110,5 +121,54 @@ $(document).ready(function(){
 		$('.tab-content').hide();
 		$('.'+typeTigger).show();
 	});
+	$('.more').click(function(){
+		var typeTigger = $('.tab-active').attr('for');
+		if(typeTigger=='recharge'){
+			$.ajax({
+				url:"<?php echo $this->createUrl('/user/ajaxMemberRecharge',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>",
+				success:function(msg){
+					if(msg.length > 0){
+						var str = '';
+						for(var i=0;i<msg.length;i++){
+							var obj = msg[i];
+							str = '<a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">'
+				                 +'<div class="weui_cell_bd weui_cell_primary record clearfix">'
+				                 +'<span class="left">'+obj.create_at.substr(0,10)+'</span><span class="left">'+obj.recharge_money+'</span><span class="left">'+obj.cashback_num+'</span>'
+				                 +'</div>'
+				                 +'</a>';
+						}
+						$('.recharge').find('.weui_cells').append(str);
+						page++;
+					}
+				},
+				dataType:'json'
+			});
+		}else if(typeTigger=='consumer'){
+			$.ajax({
+					url:"<?php echo $this->createUrl('/user/ajaxMemberConsume',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>",
+					success:function(msg){
+						if(msg.length > 0){
+							var str = '';
+							for(var i=0;i<msg.length;i++){
+								var obj = msg[i];
+								if(obj.consume_type=='3'){
+									var typeStr = '退款';
+								}else{
+									var typeStr = '消费';
+								}
+								str = '<a class="weui_cell js_cell" href="javascript:;" style="font-size:14px;">'
+					                 +'<div class="weui_cell_bd weui_cell_primary record clearfix">'
+					                 +'<span class="left">'+obj.create_at.substr(0,10)+'</span><span class="left">'+obj.consume_amount+'</span><span class="left">'+typeStr+'</span>'
+					                 +'</div>'
+					                 +'</a>';
+							}
+							$('.consumer').find('.weui_cells').append(str);
+							page++;
+						}
+					},
+					dataType:'json'
+			});
+		}
+	});	
 });
 </script>

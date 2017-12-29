@@ -766,4 +766,34 @@ class UserController extends Controller
 		echo json_encode($orderLists);
 		exit;
 	}
+	/**
+	 *
+	 * ajax充值记录
+	 *
+	 */
+	public function actionAjaxMemberRecharge()
+	{
+		$userId = Yii::app()->request->getParam('userId');
+		$dpid = Yii::app()->request->getParam('companyId');
+	
+		$recharges = WxRecharge::getRechargeRecord($dpid,$cardId,$page);
+		echo json_encode($recharges);
+		exit;
+	}
+	/**
+	 *
+	 * ajax储值消费记录
+	 *
+	 */
+	public function actionAjaxMemberConsume()
+	{
+		$userId = Yii::app()->request->getParam('userId');
+		$cardId = Yii::app()->request->getParam('cardId');
+		$type = Yii::app()->request->getParam('t',0);
+		$page = Yii::app()->request->getParam('p',1);
+	
+		$orderLists = WxOrder::getUserOrderList($userId,$cardId,$type,$page);
+		echo json_encode($orderLists);
+		exit;
+	}
 }
