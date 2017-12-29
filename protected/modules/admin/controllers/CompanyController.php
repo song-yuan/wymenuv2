@@ -267,6 +267,11 @@ public function actionCreate(){
                     //var_dump($model);exit;
                     //$model->type="0";
                     if($model->save()){
+                    		if(isset($coms['price'])){
+                    			$price = $coms['price'];
+                    		}else{
+                    			$price = "";
+                    		}
                             $comp_dpid = Yii::app()->db->getLastInsertID();
                             $userid = new Sequence("company_property");
                             $id = $userid->nextval();
@@ -277,11 +282,11 @@ public function actionCreate(){
                                             'update_at'=>date('Y-m-d H:i:s',time()),
                                             'pay_type'=>$pay_online,
                                             'pay_channel'=>$pay_online,
-                                            'price_group_id'=>$coms['price'],
+                                            'price_group_id'=>$price,
                                             'delete_flag'=>'0',
                             );
                             $command = $db->createCommand()->insert('nb_company_property',$data);
-                           if($coms['group']!=0){
+                           if(!empty($coms['group']) && $coms['group']!=0){
                            		$areaid = new Sequence("area_group_company");
 	                            $area = $areaid->nextval();
 	                            $date_area = array(
