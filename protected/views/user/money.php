@@ -105,8 +105,8 @@
 $(document).ready(function(){
 	$('.tab').click(function(){
 		var typeTigger = $(this).attr('for');
-		$('.tab-active').removeClass('.tab-active');
-		$(this).addClass('.tab-active');
+		$('.tab-active').removeClass('tab-active');
+		$(this).addClass('tab-active');
 		$('.tab-content').hide();
 		$('.'+typeTigger).show();
 	});
