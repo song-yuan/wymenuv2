@@ -50,6 +50,26 @@ class GoodsorderController extends BackendController
 			));
 
 	}
+	public function actionUpdateorder(){
+		$account_no = Yii::app()->request->getParam('account_no');
+		$sql = "select pay_status from nb_goods_order where account_no=".$account_no." and delete_flag=0";
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		if($model['pay_status']==0){
+			$pay = Yii::app()->db->createCommand('update nb_goods_order set pay_status = 1,update_at ="'.date('Y-m-d H:i:s',time()).'" where account_no ='.$account_no.' and delete_flag=0')
+				->execute();
+			if($pay){
+				Yii::app()->user->setFlash('success',yii::t('app','确认收款成功'));
+				$this->redirect(array('goodsorder/index','companyId'=>$this->companyId));
+			}
+		}else{
+			$pay = Yii::app()->db->createCommand('update nb_goods_order set pay_status = 0,update_at ="'.date('Y-m-d H:i:s',time()).'" where account_no ='.$account_no.' and delete_flag=0')
+				->execute();
+			if($pay){
+				Yii::app()->user->setFlash('success',yii::t('app','修改订单状态成功'));
+				$this->redirect(array('goodsorder/index','companyId'=>$this->companyId));
+			}
+		}
+	}
 	public function actionDetailindex(){
 		$goid = Yii::app()->request->getParam('lid');
 		$name = Yii::app()->request->getParam('name');
