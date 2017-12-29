@@ -87,7 +87,7 @@
 									</p>
 									<div class="mui-numbox mui-right " data-numbox-step='1' data-numbox-min='1' data-numbox-max='<?php echo 10000;//$product['store_number']; ?>'>
 										<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-										<input class="mui-numbox-input" type="number" lid="<?php echo $value['lid']; ?>" value="<?php echo $value['num']; ?>" />
+										<input class="mui-numbox-input" type="number" price="<?php echo $value['price'];?>" lid="<?php echo $value['lid']; ?>" value="<?php echo $value['num']; ?>" />
 										<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 									</div> / <?php echo $value['goods_unit'];?>
 									</div>
@@ -103,7 +103,7 @@
 				</div>
 				<div class="mui-card-footer">
 				<?php if($type==1)://全部 ?>
-					<a class="mui-card-link">合计 : ¥ <?php echo $goods_orders[0]['reality_total']; ?></a>
+					<a class="mui-card-link">合计 : ¥ <span id="zongjia"></span></a>
 					<button type="button" class="mui-btn mui-btn-success mui-btn-outlined gotocheck" account_no="<?php echo $goods_orders[0]['account_no']; ?>">重新审核</button>
 					<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete_nopay" account_no="<?php echo $goods_orders[0]['account_no']; ?>">删除订单</button>
 				<?php endif; ?>
@@ -117,6 +117,22 @@
 <script type="text/javascript">
 	mui.init();
 	mui('.mui-scroll-wrapper').scroll();
+	sum_price();
+	function sum_price()
+	{
+		var zongjia = 0;
+		$('.mui-numbox input.mui-numbox-input').each(function() {
+			var price = $(this).attr('price');
+			var num = $(this).val();
+			zongjia += price*num;
+		});
+		$('#zongjia').text(zongjia.toFixed(2));
+	}
+
+	$('.mui-numbox input.mui-numbox-input').change(function() {
+		sum_price();
+	});
+
 	$('.gotocheck').on('tap',function(){
 		var account_no = $(this).attr('account_no');
 		var arr = [];
@@ -126,12 +142,14 @@
 			arr.push(lid+'_'+num);
 		});
 		var strs = arr.join(',');
+		var all_price = $('#zongjia').text();
 		var btnArray = ['否','是'];
 		mui.confirm('是否重新提交该订单 ？','提示',btnArray,function(e){
 			if(e.index==1){
 			mui.post('<?php echo $this->createUrl("myinfo/put_order",array("companyId"=>$this->companyId)) ?>',{
 				   account_no:account_no,
 				   strs:strs,
+				   all_price:all_price,
 				},
 				function(data){
 					if (data == 1) {
@@ -147,10 +165,9 @@
 		}
 		});
 	});
+
 	$('.delete_nopay').on('tap',function(){
 		var account_no = $(this).attr('account_no');
-		// console.log(account_no);
-		// $(this).attr('id', 'aa');
 		var btnArray = ['否','是'];
 		mui.confirm('是否确定删除该订单 ？','提示',btnArray,function(e){
 			if(e.index==1){
@@ -164,7 +181,8 @@
 					}else if(data == 2) {
 						mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
 					}else if(data == 3) {
-						mui.toast('未查寻到该订单删除失败 ! ! !',{ duration:'long', type:'div' });
+						mui.toast('订单已删除, 但未查寻到要删除商品 ! ! !',{ duration:'long', type:'div' });
+						location.href="<?php echo $this->createUrl('myinfo/goodsOrderCheck',array('companyId'=>$this->companyId));?>";
 					}
 				},'json'
 			);
@@ -189,6 +207,7 @@
 						if (data == 1) {
 							mui.toast('删除成功 ! ! !',{ duration:'long', type:'div' });
 							elem.parentNode.removeChild(elem);
+							sum_price()
 						}else if(data == 2) {
 							mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
 							$('#aa').removeAttr('id');
@@ -210,7 +229,6 @@
 		});
 	});
 
-
 	$('.delete').on('tap',function(){
 		var account_no = $(this).attr('account_no');
 		var lid = $(this).attr('dlid');
@@ -227,6 +245,7 @@
 						if (data == 1) {
 							mui.toast('删除成功 ! ! !',{ duration:'long', type:'div' });
 							$('#bb').parent().parent().remove();
+							sum_price()
 						}else if(data == 2) {
 							mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
 							$('#bb').removeAttr('id');

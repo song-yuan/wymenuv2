@@ -904,14 +904,13 @@ class MyinfoController extends BaseYmallController
 	{
 		$account_no = Yii::app()->request->getParam('account_no');
 		$strs = Yii::app()->request->getParam('strs');
-		// echo $account_no.'----';
-		// p($strs);
+		$all_price = Yii::app()->request->getParam('all_price');
 		$arr = explode(",",$strs);
 		$db=Yii::app()->db;
 		$transaction = $db->beginTransaction();
 		try{
-			$sql1 = 'update nb_goods_order set order_status =3 where  delete_flag = 0 and dpid=:dpid and account_no = :account_no';
-	  		$command1=Yii::app()->db->createCommand($sql1)->execute(array(':dpid'=>$this->companyId,':account_no'=>$account_no));
+			$sql1 = 'update nb_goods_order set order_status =3,should_total=:should_total,reality_total=:reality_total where  delete_flag = 0 and dpid=:dpid and account_no = :account_no';
+	  		$command1=Yii::app()->db->createCommand($sql1)->execute(array(':should_total'=>$all_price,':reality_total'=>$all_price,':dpid'=>$this->companyId,':account_no'=>$account_no));
 			foreach ($arr as $value) {
 				$info = explode("_",$value);
 				$sql = 'update nb_goods_order_detail set num =:num where lid =:lid  and delete_flag = 0 and dpid=:dpid and account_no=:account_no';
