@@ -174,7 +174,7 @@
                         </div>
                         <div class="weui_cell_ft small font_org"><?php echo number_format($remainMoney,2);?></div>         
                     </a>
-                    
+                    <!-- 
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/point',array('companyId'=>$this->companyId));?>" >
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdjf.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
@@ -183,6 +183,7 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
+                    -->
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/ticket',array('companyId'=>$this->companyId));?>" >
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdq.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
