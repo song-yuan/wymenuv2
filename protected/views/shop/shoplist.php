@@ -41,9 +41,6 @@
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
 					       var juli = parseFloat(cObj.juli);
-						   if(i==msg.length-1){
-							   isShowMore = true;
-						   }
 						   isShowTips = false;
 					       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
 					       str +='<div class="right">';
@@ -71,19 +68,20 @@
 						   	str +='</div>';
 						 	str +='</li>';
 					    }
-					    if(isShowMore){
-					    	$('#more').show(); 
-						}else{
-							$('#more').hide();
-						}
-						if(isShowTips){
-							$('#tips').show();
-					    }else{
-					    	$('#tips').hide();
-					    }
 					    $('#activeshop').html(str);
+				    }
+				    if(msg.length == 10){
+					   isShowMore = true;
+				    }
+				    if(isShowMore){
+				    	$('#more').show(); 
+					}else{
+						$('#more').hide();
+					}
+					if(isShowTips){
+						$('#tips').show();
 				    }else{
-						 $('#more').hide();
+				    	$('#tips').hide();
 				    }
 		        },
 		        dataType : 'json'
