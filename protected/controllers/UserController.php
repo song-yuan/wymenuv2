@@ -788,12 +788,9 @@ class UserController extends Controller
 	public function actionAjaxMemberConsume()
 	{
 		$userId = Yii::app()->request->getParam('userId');
-		$cardId = Yii::app()->request->getParam('cardId');
-		$type = Yii::app()->request->getParam('t',0);
-		$page = Yii::app()->request->getParam('p',1);
 	
-		$orderLists = WxOrder::getUserOrderList($userId,$cardId,$type,$page);
-		echo json_encode($orderLists);
+		$consumes = WxRecharge::getConsumeRecord($userId,$page);
+		echo json_encode($consumes);
 		exit;
 	}
 }
