@@ -1,4 +1,5 @@
 <?php
+
 class GoodsorderController extends BackendController
 {
 	public function actions() {
@@ -42,6 +43,7 @@ class GoodsorderController extends BackendController
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
 		// var_dump($models);exit;
+
 			$this->render('index',array(
 					'models'=>$models,
 					'pages'=>$pages,
@@ -51,16 +53,14 @@ class GoodsorderController extends BackendController
 	}
 	public function actionUpdateorder(){
 		$account_no = Yii::app()->request->getParam('account_no');
-		$sql = "select pay_status from nb_goods_order where account_no=".$account_no." and delete_flag=0";
-		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		// var_dump($account_no);exit();
 		$pay = Yii::app()->db->createCommand('update nb_goods_order set pay_status = 1,update_at ="'.date('Y-m-d H:i:s',time()).'" where account_no ='.$account_no.' and delete_flag=0')
 			->execute();
 		if($pay){
-			Yii::app()->user->setFlash('success',yii::t('app','确认收款成功'));
-			$this->redirect(array('goodsorder/index','companyId'=>$this->companyId));
+			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 		}else{
-			Yii::app()->user->setFlash('error',yii::t('app','确认收款失败'));
-			$this->redirect(array('goodsorder/index','companyId'=>$this->companyId));
+			Yii::app()->end(json_encode(array("status"=>"fail")));
+			return false;
 		}
 	}
 	public function actionDetailindex(){
@@ -72,7 +72,7 @@ class GoodsorderController extends BackendController
 
 		$sqls = 'select c.company_name,t.* from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
-		// var_dump($model);exit;
+
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
 
@@ -277,6 +277,26 @@ class GoodsorderController extends BackendController
 			//return false;
 		}
 	}
+	//驳回定单
+	public function actionOrderCheck(){
+		$account_no = Yii::app()->request->getParam('account_no');
+		$order_status = Yii::app()->request->getParam('order_status');
+		$back_reason = Yii::app()->request->getParam('back_reason',null);
+		if ($back_reason != null) {
+			$str = ' back_reason = "'.$back_reason.'",';
+		}else{
+			$str = '';
+		}
+		$info = Yii::app()->db->createCommand('update nb_goods_order set '.$str.'order_status='.$order_status.',update_at ="'.date('Y-m-d H:i:s',time()).'" where account_no ='.$account_no)->execute();
+		if ($info) {
+			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+		}else{
+			Yii::app()->end(json_encode(array("status"=>"fail",'msg'=>'失败')));
+		}
+		//return true;
+	}
+
+
 	public function actionStockstore(){
 		$pid = Yii::app()->request->getParam('pid');//订单lid编号
 		$dpid = $this->companyId;

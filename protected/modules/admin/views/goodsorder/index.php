@@ -111,7 +111,7 @@
                                 <td class="center">
 									<a href="<?php echo $this->createUrl('goodsorder/detailindex',array('lid' => $model['lid'] ,'companyId' => $this->companyId, 'dpid' => $model['dpid'],'name' =>$model['company_name'], 'papage' => $pages->getCurrentPage()+1));?>"><?php echo yii::t('app','查看明细');?></a>
 								</td>
-								<td><?php if($model['order_status']!=8 && $model['paytype']!=1):?><?php if($model['pay_status']==0):?><a href="<?php echo $this->createUrl('goodsorder/updateorder',array('companyId' => $this->companyId,'account_no'=>$model['account_no']));?>"  class="btn green">确认收款</a><?php else:?><input id="goods_invoice" type="button" class="btn" disabled value="已收款" /><?php endif;?><?php else:?>　<?php endif;?></td>
+								<td><?php if($model['order_status']!=8 && $model['paytype']!=1):?><?php if($model['pay_status']==0):?><input id="pay" lid="<?php echo $model['account_no'];?>" type="button" class="btn green" value="确认收款"/><?php else:?><input id="goods_invoice" type="button" class="btn" disabled value="已收款" /><?php endif;?><?php else:?>　<?php endif;?></td>
 								
 							</tr>
 						<?php endforeach;?>
@@ -177,4 +177,22 @@
 
             }
         };
+        $('#pay').click(function(){
+        	var account_no = $(this).attr('lid');
+        	if(confirm('是否确认收款？')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('goodsorder/updateorder',array('companyId'=>$this->companyId));?>',
+					data:{account_no:account_no},
+					success:function(data){
+						var msg = eval("("+data+")");
+						if(msg.status=='success'){
+							layer.msg(msg.msg);
+						}else{
+							alert('失败');
+						}
+						history.go(0);
+					}
+				});
+			}
+        });
 	</script>
