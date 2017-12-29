@@ -68,7 +68,7 @@
       </div>
       <?php endif;?>
       <div class="empty2 clearfix"><div class="tab tab-active" for="recharge">充值记录</div><div class="tab" for="consumer">消费记录</div></div>
-      <div class="recharge"> 
+      <div class="tab-content recharge"> 
         <div class="weui_cells weui_cells_access global_navs">
         	<a class="weui_cell js_cell" href="javascript:;" >
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
@@ -84,7 +84,7 @@
               <?php endforeach;?>
          </div>
       </div>
-      <div class="consumer" style="display:none;"> 
+      <div class="tab-content consumer" style="display:none;"> 
         <div class="weui_cells weui_cells_access global_navs">
         	<a class="weui_cell js_cell" href="javascript:;" >
                  <div class="weui_cell_bd weui_cell_primary record clearfix">
@@ -101,3 +101,12 @@
          </div>
       </div>
 </div>   
+<script>
+$(document).ready(function(){
+	$('.tab').click(function(){
+		var typeTigger = $(this).attr('for');
+		$('.tab-content').hide();
+		$('.'+typeTigger).show();
+	});
+});
+</script>

@@ -5,12 +5,12 @@ $out_refund_no = $now.'-'.$dpid.'-'.$rand;
 if(isset($admin_id) && $admin_id != "" ){
 	$admin = WxAdminUser::get($dpid, $admin_id);
 	if(!$admin){
-		$msg = array('status'=>false);
+		$msg = array('status'=>false,'msg'=>'不存在该管理员');
 		echo json_encode($msg);
 		exit;
 	}
 }else{
-	$msg = array('status'=>false);
+	$msg = array('status'=>false,'msg'=>'未传入admin_id');
 	echo json_encode($msg);
 	exit;
 }
@@ -37,10 +37,10 @@ if(isset($out_trade_no) && $out_trade_no!="" && $out_trade_no!=0){
 	if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
 		$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
 	}else{
-		$msg = array('status'=>false);
+		$msg = array('status'=>false,'msg'=>$result);
 	}
 }else{
-	$msg = array('status'=>false);
+	$msg = array('status'=>true,'msg'=>'手动确认错误,退款订单号不存在,直接退款');
 }
 echo json_encode($msg);
 exit;
