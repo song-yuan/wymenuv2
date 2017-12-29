@@ -140,7 +140,9 @@ $(document).ready(function(){
 						}
 						$('.recharge').find('.weui_cells').append(str);
 						page++;
-					}else{
+						
+					}
+					if(msg.length!=10){
 						$('.recharge').find('.more').hide();
 					}
 				},
@@ -168,7 +170,8 @@ $(document).ready(function(){
 							}
 							$('.consumer').find('.weui_cells').append(str);
 							page++;
-						}else{
+						}
+						if(msg.length!=10){
 							$('.consumer').find('.more').hide();
 						}
 					},
