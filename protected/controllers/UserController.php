@@ -773,9 +773,9 @@ class UserController extends Controller
 	 */
 	public function actionAjaxMemberRecharge()
 	{
-		$userId = Yii::app()->request->getParam('userId');
 		$dpid = Yii::app()->request->getParam('companyId');
-	
+		$userId = Yii::app()->request->getParam('userId');
+		$page = Yii::app()->request->getParam('page');
 		$recharges = WxRecharge::getRechargeRecord($dpid,$cardId,$page);
 		echo json_encode($recharges);
 		exit;
@@ -788,7 +788,7 @@ class UserController extends Controller
 	public function actionAjaxMemberConsume()
 	{
 		$userId = Yii::app()->request->getParam('userId');
-	
+		$page = Yii::app()->request->getParam('page');
 		$consumes = WxRecharge::getConsumeRecord($userId,$page);
 		echo json_encode($consumes);
 		exit;

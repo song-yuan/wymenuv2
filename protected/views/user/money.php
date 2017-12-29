@@ -126,6 +126,7 @@ $(document).ready(function(){
 		if(typeTigger=='recharge'){
 			$.ajax({
 				url:"<?php echo $this->createUrl('/user/ajaxMemberRecharge',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>",
+				data:{page:page},
 				success:function(msg){
 					if(msg.length > 0){
 						var str = '';
@@ -146,6 +147,7 @@ $(document).ready(function(){
 		}else if(typeTigger=='consumer'){
 			$.ajax({
 					url:"<?php echo $this->createUrl('/user/ajaxMemberConsume',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>",
+					data:{page:page},
 					success:function(msg){
 						if(msg.length > 0){
 							var str = '';
