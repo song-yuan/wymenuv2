@@ -101,11 +101,12 @@ class SqbPay{
     	Helper::writeLog($bodystr);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	
+    	Helper::writeLog($result);
     	$obj = json_decode($result,true);
     	//var_dump($obj);exit;
     	$return_code = $obj['result_code'];
     	
-    	Helper::writeLog($result);
+    	//Helper::writeLog($result);
     	//判断支付返回状态...
     	if($return_code == '200'){
     		$result_codes = $obj['biz_response']['result_code'];
