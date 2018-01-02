@@ -264,9 +264,17 @@ class SqbPay{
 	    					'msg'=>'未知状态！');
 	    		}
 	
-	    	}else{
+	    	}elseif($return_code == '200'){
 	    		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
 	    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
+	    	}elseif($return_code == '200'){
+	    		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
+	    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
+	    	}else{
+	    		$result = array(
+	    				"return_code"=>"SUCCESS",
+	    				"result_code"=>"CANCEL",
+	    				'msg'=>'未知状态！');
 	    	}
     	}else{
     		
@@ -306,8 +314,8 @@ class SqbPay{
     			}else{
     				$status = true;
     			}
-    			sleep(2);
-    		}while ($i<=15&&$status);
+    			sleep(1);
+    		}while ($i<=3&&$status);
     		
     		if($status){
     			$result = array(
