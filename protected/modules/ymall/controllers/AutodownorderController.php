@@ -36,7 +36,7 @@ class AutodownorderController extends BaseYmallController
 		.' WHERE t.delete_flag=0 and t.dpid='.$this->companyId;
 		$stocks_goods = $db->createCommand($sqls)->queryAll();
 
-		$sqld='select k.max_stock,k.safe_stock,k.material_id FROM ( select a.* from nb_product_material_safe a where a.create_at>DATE_SUB(NOW(), INTERVAL 2 DAY) and a.dpid = '.$this->companyId
+		$sqld='select k.max_stock,k.safe_stock,k.material_id FROM ( select a.* from nb_product_material_safe a where a.create_at>DATE_SUB(NOW(), INTERVAL 3 DAY) and a.dpid = '.$this->companyId
 		.' order by a.create_at desc) k group by k.material_id';
 		$stock_s = $db->createCommand($sqld)->queryAll();
 		$stocks_arr=array();
@@ -147,9 +147,9 @@ class AutodownorderController extends BaseYmallController
 		}
 
 		$sqls = 'select `t`.lid,`t`.material_name,`t`.mphs_code,ifnull(stock.stock,0) as stock,u.unit_name,mc.category_name,t.category_id FROM `nb_product_material` `t`'
-		.' left join nb_material_unit u  ON (t.sales_unit_id=u.lid and t.dpid) '
+		.' left join nb_material_unit u  on (t.sales_unit_id=u.lid and t.dpid) '
 		.' left join nb_material_category mc on (mc.lid=t.category_id )'
-		.' left JOIN ( select material_id,dpid,SUM(stock) AS stock from `nb_product_material_stock` where stock!=0 and dpid ='.$this->companyId.' and delete_flag=0 GROUP BY material_id) `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid )'
+		.' left join ( select material_id,dpid,SUM(stock) AS stock from `nb_product_material_stock` where stock!=0 and dpid ='.$this->companyId.' and delete_flag=0 GROUP BY material_id) `stock` ON (t.lid=stock.material_id and stock.dpid=t.dpid )'
 		.' WHERE t.delete_flag=0 and t.dpid='.$this->companyId;
 		$stocks_goods = $db->createCommand($sqls)->queryAll();
 
