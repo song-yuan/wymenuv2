@@ -302,8 +302,8 @@ class SqbPay{
     			}else{
     				$status = true;
     			}
-    			 
-    		}while ($i<=6&&$status);
+    			sleep(2);
+    		}while ($i<=15&&$status);
     		
     		if($status){
     			$result = array(
