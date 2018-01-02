@@ -97,8 +97,9 @@ class SqbPay{
     				'operator'=>$operator,
     	);
     	$body = json_encode($datas);
+    	$bodystr = 't_sn:'.$terminal_sn.';sn:'.$clientSn.';t_a:'.$total_amount.';pt:'.$paytype;
+    	Helper::writeLog($bodystr);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
-    	
     	
     	$obj = json_decode($result,true);
     	//var_dump($obj);exit;
