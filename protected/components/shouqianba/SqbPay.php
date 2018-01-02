@@ -102,167 +102,223 @@ class SqbPay{
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	
     	Helper::writeLog($result);
-    	$obj = json_decode($result,true);
-    	//var_dump($obj);exit;
-    	$return_code = $obj['result_code'];
     	
-    	//Helper::writeLog($result);
-    	//判断支付返回状态...
-    	if($return_code == '200'){
-    		$result_codes = $obj['biz_response']['result_code'];
+    	if(!empty($result)){
     		
-    		if($result_codes == 'PAY_SUCCESS'){
+	    	$obj = json_decode($result,true);
+	    	//var_dump($obj);exit;
+	    	$return_code = $obj['result_code'];
+	    	
+	    	//Helper::writeLog($result);
+	    	//判断支付返回状态...
+	    	if($return_code == '200'){
+	    		$result_codes = $obj['biz_response']['result_code'];
+	    		
+	    		if($result_codes == 'PAY_SUCCESS'){
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"SUCCESS",
+	    					"msg"=>"支付成功！",
+	    					"transaction_id"=>$obj['biz_response']['data']['trade_no'],
+	    					"data"=>$obj['biz_response']['data']);
+	    			
+	    		}elseif($result_codes == 'PAY_FAIL'){
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"ERROR",
+	    					"msg"=>"支付失败！",
+	    					"data"=>$obj['biz_response']['data']);
+	    			
+	    		}elseif($result_codes == 'PAY_IN_PROGRESS'){
+	    			/*发起轮询*/
+	    			do {
+	    				$i=1;
+	    				++$i;
+	    				$status = true;
+	    				$resultstatus = SqbPay::query(array(
+	    						'terminal_sn'=>$terminal_sn,
+	    						'terminal_key'=>$terminal_key,
+	    						'sn'=>$obj['biz_response']['data']['sn'],
+	    						'client_sn'=>$clientSn,
+	    				));
+	    				$rsts = json_decode($resultstatus,true);
+	    				$q_code = $rsts['result_code'];
+	    				if($q_code == '200'){
+	    					$q_re_code = $rsts['biz_response']['data']['order_status'];
+	    					if($q_re_code == 'CREATED'){
+	    						'支付中...';
+	    						$status = true;
+	    					}elseif($q_re_code == 'PAID'){
+	    						'支付成功';
+	    						$status = false;
+	    					}elseif($q_re_code == 'REFUNDED'){
+	    						'成功退款';
+	    						$status = false;
+	    					}elseif($q_re_code == 'PARTIAL_REFUNDED'){
+	    						'成功部分退款';
+	    						$status = false;
+	    					}else{
+	    						'其他';
+	    						$status = true;
+	    					}
+	    				}else{
+	    					$status = true;
+	    				}
+	    				
+	    			}while ($i<=6&&$status);
+	    			
+	    			if($status){
+	    				$result = array(
+	    						"return_code"=>"SUCCESS",
+	    						"result_code"=>"ERROR",
+	    						"msg"=>"失败！",
+	    						"data"=>'');
+	    			}else{
+	    				$result = array(
+	    						"return_code"=>"SUCCESS",
+	    						"result_code"=>"SUCCESS",
+	    						"msg"=>"支付成功！",
+	    						"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
+	    						"data"=>$rsts['biz_response']['data']);
+	    			}
+	    		}elseif($result_codes == 'FAIL'){
+	    			$result = array(
+			    			"return_code"=>"SUCCESS",
+			    			"result_code"=>"ERROR",
+			    			"msg"=>"操作失败！",
+			    			"data"=>$obj['biz_response']['data']);
+	    		}elseif($result_codes == 'SUCCESS'){
+	    			$order_status = $obj['biz_response']['data']['order_status'];
+	    			if($order_status == 'CREATED'){
+	    				
+	    				/*发起轮询*/
+	    				do {
+	    					$i=1;
+	    					++$i;
+	    					$status = true;
+	    					$resultstatus = SqbPay::query(array(
+	    							'terminal_sn'=>$terminal_sn,
+	    							'terminal_key'=>$terminal_key,
+	    							'sn'=>$obj['biz_response']['data']['sn'],
+	    							'client_sn'=>$clientSn,
+	    					));
+	    					$rsts = json_decode($resultstatus,true);
+	    					$q_code = $rsts['result_code'];
+	    					if($q_code == '200'){
+	    						$q_re_code = $rsts['biz_response']['data']['order_status'];
+	    						if($q_re_code == 'CREATED'){
+	    							'支付中...';
+	    							$status = true;
+	    						}elseif($q_re_code == 'PAID'){
+	    							'支付成功';
+	    							$status = false;
+	    						}elseif($q_re_code == 'REFUNDED'){
+	    							'成功退款';
+	    							$status = false;
+	    						}elseif($q_re_code == 'PARTIAL_REFUNDED'){
+	    							'成功部分退款';
+	    							$status = false;
+	    						}else{
+	    							'其他';
+	    							$status = true;
+	    						}
+	    					}else{
+	    						$status = true;
+	    					}
+	    				
+	    				}while ($i<=6&&$status);
+	    				 
+	    				if($status){
+	    					$result = array(
+	    							"return_code"=>"SUCCESS",
+	    							"result_code"=>"ERROR",
+	    							"msg"=>"失败！",
+	    							"data"=>'');
+	    				}else{
+	    					$result = array(
+	    							"return_code"=>"SUCCESS",
+	    							"result_code"=>"SUCCESS",
+	    							"msg"=>"支付成功！",
+	    							"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
+	    							"data"=>$rsts['biz_response']['data']);
+	    				}
+	    			}elseif($order_status == 'PAID'){
+	    				$result = array(
+	    						"return_code"=>"SUCCESS",
+	    						"result_code"=>"SUCCESS",
+	    						"msg"=>"支付成功！",
+	    						"transaction_id"=>$obj['biz_response']['data']['trade_no'],
+	    						"data"=>$obj['biz_response']['data']);
+	    			}else{
+	    				$result = array(
+	    						"return_code"=>"SUCCESS",
+	    						"result_code"=>"ERROR",
+	    						"msg"=>"支付失败！",
+	    						"data"=>$obj['biz_response']['data']);
+	    			}
+	    		}else{
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"CANCEL",
+	    					'msg'=>'未知状态！');
+	    		}
+	
+	    	}else{
+	    		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
+	    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
+	    	}
+    	}else{
+    		/*发起轮询*/
+    		do {
+    			$i=1;
+    			++$i;
+    			$status = true;
+    			$resultstatus = SqbPay::query(array(
+    					'terminal_sn'=>$terminal_sn,
+    					'terminal_key'=>$terminal_key,
+    					'sn'=>'',
+    					'client_sn'=>$clientSn,
+    			));
+    			$rsts = json_decode($resultstatus,true);
+    			$q_code = $rsts['result_code'];
+    			if($q_code == '200'){
+    				$q_re_code = $rsts['biz_response']['data']['order_status'];
+    				if($q_re_code == 'CREATED'){
+    					'支付中...';
+    					$status = true;
+    				}elseif($q_re_code == 'PAID'){
+    					'支付成功';
+    					$status = false;
+    				}elseif($q_re_code == 'REFUNDED'){
+    					'成功退款';
+    					$status = false;
+    				}elseif($q_re_code == 'PARTIAL_REFUNDED'){
+    					'成功部分退款';
+    					$status = false;
+    				}else{
+    					'其他';
+    					$status = true;
+    				}
+    			}else{
+    				$status = true;
+    			}
+    			 
+    		}while ($i<=6&&$status);
+    		
+    		if($status){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"ERROR",
+    					"msg"=>"失败！",
+    					"data"=>'');
+    		}else{
     			$result = array(
     					"return_code"=>"SUCCESS",
     					"result_code"=>"SUCCESS",
     					"msg"=>"支付成功！",
-    					"transaction_id"=>$obj['biz_response']['data']['trade_no'],
-    					"data"=>$obj['biz_response']['data']);
-    			
-    		}elseif($result_codes == 'PAY_FAIL'){
-    			$result = array(
-    					"return_code"=>"SUCCESS",
-    					"result_code"=>"ERROR",
-    					"msg"=>"支付失败！",
-    					"data"=>$obj['biz_response']['data']);
-    			
-    		}elseif($result_codes == 'PAY_IN_PROGRESS'){
-    			/*发起轮询*/
-    			do {
-    				$i=1;
-    				++$i;
-    				$status = true;
-    				$resultstatus = SqbPay::query(array(
-    						'terminal_sn'=>$terminal_sn,
-    						'terminal_key'=>$terminal_key,
-    						'sn'=>$obj['biz_response']['data']['sn'],
-    						'client_sn'=>$clientSn,
-    				));
-    				$rsts = json_decode($resultstatus,true);
-    				$q_code = $rsts['result_code'];
-    				if($q_code == '200'){
-    					$q_re_code = $rsts['biz_response']['data']['order_status'];
-    					if($q_re_code == 'CREATED'){
-    						'支付中...';
-    						$status = true;
-    					}elseif($q_re_code == 'PAID'){
-    						'支付成功';
-    						$status = false;
-    					}elseif($q_re_code == 'REFUNDED'){
-    						'成功退款';
-    						$status = false;
-    					}elseif($q_re_code == 'PARTIAL_REFUNDED'){
-    						'成功部分退款';
-    						$status = false;
-    					}else{
-    						'其他';
-    						$status = true;
-    					}
-    				}else{
-    					$status = true;
-    				}
-    				
-    			}while ($i<=6&&$status);
-    			
-    			if($status){
-    				$result = array(
-    						"return_code"=>"SUCCESS",
-    						"result_code"=>"ERROR",
-    						"msg"=>"失败！",
-    						"data"=>'');
-    			}else{
-    				$result = array(
-    						"return_code"=>"SUCCESS",
-    						"result_code"=>"SUCCESS",
-    						"msg"=>"支付成功！",
-    						"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
-    						"data"=>$rsts['biz_response']['data']);
-    			}
-    		}elseif($result_codes == 'FAIL'){
-    			$result = array(
-		    			"return_code"=>"SUCCESS",
-		    			"result_code"=>"ERROR",
-		    			"msg"=>"操作失败！",
-		    			"data"=>$obj['biz_response']['data']);
-    		}elseif($result_codes == 'SUCCESS'){
-    			$order_status = $obj['biz_response']['data']['order_status'];
-    			if($order_status == 'CREATED'){
-    				
-    				/*发起轮询*/
-    				do {
-    					$i=1;
-    					++$i;
-    					$status = true;
-    					$resultstatus = SqbPay::query(array(
-    							'terminal_sn'=>$terminal_sn,
-    							'terminal_key'=>$terminal_key,
-    							'sn'=>$obj['biz_response']['data']['sn'],
-    							'client_sn'=>$clientSn,
-    					));
-    					$rsts = json_decode($resultstatus,true);
-    					$q_code = $rsts['result_code'];
-    					if($q_code == '200'){
-    						$q_re_code = $rsts['biz_response']['data']['order_status'];
-    						if($q_re_code == 'CREATED'){
-    							'支付中...';
-    							$status = true;
-    						}elseif($q_re_code == 'PAID'){
-    							'支付成功';
-    							$status = false;
-    						}elseif($q_re_code == 'REFUNDED'){
-    							'成功退款';
-    							$status = false;
-    						}elseif($q_re_code == 'PARTIAL_REFUNDED'){
-    							'成功部分退款';
-    							$status = false;
-    						}else{
-    							'其他';
-    							$status = true;
-    						}
-    					}else{
-    						$status = true;
-    					}
-    				
-    				}while ($i<=6&&$status);
-    				 
-    				if($status){
-    					$result = array(
-    							"return_code"=>"SUCCESS",
-    							"result_code"=>"ERROR",
-    							"msg"=>"失败！",
-    							"data"=>'');
-    				}else{
-    					$result = array(
-    							"return_code"=>"SUCCESS",
-    							"result_code"=>"SUCCESS",
-    							"msg"=>"支付成功！",
-    							"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
-    							"data"=>$rsts['biz_response']['data']);
-    				}
-    			}elseif($order_status == 'PAID'){
-    				$result = array(
-    						"return_code"=>"SUCCESS",
-    						"result_code"=>"SUCCESS",
-    						"msg"=>"支付成功！",
-    						"transaction_id"=>$obj['biz_response']['data']['trade_no'],
-    						"data"=>$obj['biz_response']['data']);
-    			}else{
-    				$result = array(
-    						"return_code"=>"SUCCESS",
-    						"result_code"=>"ERROR",
-    						"msg"=>"支付失败！",
-    						"data"=>$obj['biz_response']['data']);
-    			}
-    		}else{
-    			$result = array(
-    					"return_code"=>"SUCCESS",
-    					"result_code"=>"CANCEL",
-    					'msg'=>'未知状态！');
+    					"transaction_id"=>$rsts['biz_response']['data']['trade_no'],
+    					"data"=>$rsts['biz_response']['data']);
     		}
-
-    	}else{
-    		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
-    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
     	}
     	return $result;
     }
