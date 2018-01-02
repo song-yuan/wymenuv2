@@ -109,7 +109,8 @@ class SqbPay{
 	    	//var_dump($obj);exit;
 	    	$return_code = $obj['result_code'];
 	    	
-	    	//Helper::writeLog($result);
+	    	$str = $clientSn.';返回信息：'.$return_code;
+	    	Helper::writeLog($str);
 	    	//判断支付返回状态...
 	    	if($return_code == '200'){
 	    		$result_codes = $obj['biz_response']['result_code'];
@@ -268,6 +269,9 @@ class SqbPay{
 	    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
 	    	}
     	}else{
+    		
+    		$str = $clientSn.';无返回信息：进入轮询。';
+    		Helper::writeLog($str);
     		/*发起轮询*/
     		do {
     			$i=1;
