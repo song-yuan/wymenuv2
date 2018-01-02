@@ -65,7 +65,7 @@
 				<div class="mui-card-header mui-card-media">
 					<img src="<?php echo  Yii::app()->request->baseUrl; ?>/img/order_list.png" />
 					<div class="mui-media-body">
-						订单号:<?php echo $goods_orders[0]['account_no'];?>
+						订单号:<a href="tel:<?php echo $goods_orders[0]['account_no']; ?>"><?php echo $goods_orders[0]['account_no'];?></a>
 						<p>下单日期: <?php echo $goods_orders[0]['create_at'];?></p>
 					</div>
 				</div>
@@ -96,9 +96,16 @@
 							</div>
 						</li>
 						<?php endforeach; ?>
+						<?php if($goods_orders[0]['order_info']): ?>
+						<li class="mui-table-view-cell">
+							<span style="color:darkblue;">备注 : </span><?php if($goods_orders[0]['order_info']){ echo $goods_orders[0]['order_info'];}else{ echo '没有理由!';} ?>
+						</li>
+						<?php endif; ?>
+						<?php if($goods_orders[0]['order_status']==8): ?>
 						<li class="mui-table-view-cell">
 							<span style="color:darkblue;">驳回理由 : </span><?php if($goods_orders[0]['back_reason']){ echo $goods_orders[0]['back_reason'];}else{ echo '没有理由!';} ?>
 						</li>
+						<?php endif; ?>
 					</ul>
 				<?php endif; ?>
 				</div>

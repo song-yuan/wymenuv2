@@ -52,7 +52,7 @@
 				<div class="mui-card-header mui-card-media">
 					<img src="<?php echo  Yii::app()->request->baseUrl; ?>/img/order_list.png" />
 					<div class="mui-media-body">
-						订单号:<?php echo $goods_orders[0]['account_no'];?>
+						订单号:<a href="tel:<?php echo $goods_orders[0]['account_no']; ?>"><?php echo $goods_orders[0]['account_no'];?></a>
 						<p>下单日期: <?php echo $goods_orders[0]['create_at'];?></p>
 					</div>
 				</div>
@@ -322,9 +322,6 @@
 						</div>
 						<?php endforeach; ?>
 					<?php endif; ?>
-
-
-
 				<?php elseif($type==1)://审核 ?>
 					<ul class="mui-table-view">
 						<?php foreach ($goods_orders as $key => $value):?>
@@ -498,14 +495,20 @@
 					</div>
 					<?php endforeach; ?>
 				<?php endif; ?>
+				<ul class="mui-table-view">
+
+					<?php if($goods_orders[0]['order_info']): ?>
+					<li class="mui-table-view-cell">
+						<span style="color:darkblue;">备注 : </span><?php if($goods_orders[0]['order_info']){ echo $goods_orders[0]['order_info'];}else{ echo '没有理由!';} ?>
+					</li>
+					<?php endif; ?>
+					<?php if($goods_orders[0]['order_status']==8): ?>
+					<li class="mui-table-view-cell">
+						<span style="color:darkblue;">驳回理由 : </span><?php if($goods_orders[0]['back_reason']){ echo $goods_orders[0]['back_reason'];}else{ echo '没有理由!';} ?>
+					</li>
+					<?php endif; ?>
+				</ul>
 				</div>
-
-
-
-
-
-
-
 				<div class="mui-card-footer">
 				<?php if($type==0)://全部 ?>
 					<?php if ($goods_orders[0]['reality_total']): ?>
@@ -661,7 +664,8 @@
 						}else if(data == 2) {
 							mui.toast('因网络原因删除失败 , 请重新删除 ! ! !',{ duration:'long', type:'div' });
 						}else if(data == 3) {
-							mui.toast('未查寻到商品删除失败 ! ! !',{ duration:'long', type:'div' });
+							mui.toast('订单已删除, 但未查寻到要删除商品 ! ! !',{ duration:'long', type:'div' });
+							location.href="<?php echo $this->createUrl('myinfo/goodsOrderCheck',array('companyId'=>$this->companyId));?>";
 						}
 					},'json'
 				);
