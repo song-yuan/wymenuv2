@@ -11,11 +11,15 @@ class TakeawayMemberController extends BackendController {
 	
 	public function actionIndex() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$types = Yii::app()->request->getParam('types');
+		$types = Yii::app()->request->getParam('types',0);
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'company' ;
 		//$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->companyId ;
-		$criteria->condition = 't.dpid='.$this->companyId ;
+		if($types){
+			$criteria->condition = 't.type=1 and t.dpid='.$this->companyId ;
+		}else{
+			$criteria->condition = 't.type=0 and t.dpid='.$this->companyId ;
+		}
 		$pages = new CPagination(TakeawayMember::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
