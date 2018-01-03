@@ -34,7 +34,7 @@ class TakeawayMemberController extends BackendController {
 	}
 	public function actionCreate(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$types = Yii::app()->request->getParam('types');
+		$types = Yii::app()->request->getParam('types',0);
 		$model = new TakeawayMember() ;
 		$model->dpid = $companyId ;
 		if(Yii::app()->request->isPostRequest) {
@@ -42,6 +42,7 @@ class TakeawayMemberController extends BackendController {
 			$se=new Sequence("takeaway_member");
                         $model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s');
+				$model->create_at = $types;
                         $model->update_at=date('Y-m-d H:i:s',time());
 //			var_dump($model->attributes);exit;
 			if($model->save()){
