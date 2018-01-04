@@ -30,7 +30,7 @@ class WaimaiController extends BackendController
 	}
 	public function actionCaipinyingshe(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$signkey = '852d9t3q9cm28m6t';
+		$signkey = '8isnqx6h2xewfmiu';
 		$epoiid= 'type=1 and ePoiId='.$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		// print_r($tokenmodel);exit;
@@ -50,8 +50,8 @@ class WaimaiController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
-		$developerId='100943';
-		$signkey = '852d9t3q9cm28m6t';
+		$developerId='100746';
+		$signkey = '8isnqx6h2xewfmiu';
 		$this->render('dpbd',array(
 			'companyId'=>$companyId,
 			'developerId'=>$developerId,
