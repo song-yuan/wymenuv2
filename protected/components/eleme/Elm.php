@@ -28,17 +28,25 @@ class Elm
 	            "client_id" => $key
 	        );
 			$re = ElUnit::postHttpsHeader($token_url,$header,$body);
+			Helper::writeLog('eleme-token---'.$dpid.$re);
 			$obj = json_decode($re);
 			if(isset($obj->access_token)){
 				$refresh_token = $obj->refresh_token;
 				$token_type = $obj->token_type;
 				$access_token = $obj->access_token;
 				$expires_in =time() + $obj->expires_in;
-				$se=new Sequence("eleme_token");
-				$lid = $se->nextval();
-				$creat_at = date("Y-m-d H:i:s");
-				$update_at = date("Y-m-d H:i:s");
-				$inserData = array(
+				
+				$sql = "select * from nb_eleme_token where dpid=".$dpid." and delete_flag=0";
+				$res = Yii::app()->db->createCommand($sql)->queryRow();
+				if($res){
+					$sql1 = 'update nb_eleme_token set access_token="'.$access_token.'",expires_in='.$expires_in.',refresh_token="'.$refresh_token.'" where dpid='.$dpid.' and delete_flag=0';
+					$res1 = Yii::app()->db->createCommand($sql1)->execute();
+				}else{
+					$se=new Sequence("eleme_token");
+					$lid = $se->nextval();
+					$creat_at = date("Y-m-d H:i:s",time());
+					$update_at = date("Y-m-d H:i:s",time());
+					$inserData = array(
 							'lid'=>	$lid,
 							'dpid'=>$dpid,
 							'create_at'=>$creat_at,
@@ -47,8 +55,9 @@ class Elm
 							'access_token'=>$access_token,
 							'expires_in'=>$expires_in,
 							'refresh_token'=>$refresh_token
-				);
-				$res = Yii::app()->db->createCommand()->insert('nb_eleme_token',$inserData);
+					);
+					$res = Yii::app()->db->createCommand()->insert('nb_eleme_token',$inserData);
+				}
 				return "授权成功";
 			}else{
 				return "授权失败";
@@ -81,7 +90,7 @@ class Elm
 					$access_token = $obj->access_token;
 					$expires_in =time() + $obj->expires_in;
 					$refresh_token = $obj->refresh_token;
-					$sql1 = 'update nb_eleme_token set access_token="'.$access_token.'",expires_in='.$expires_in.',refresh_token="'.$refresh_token.'" where dpid=$dpid and delete_flag=0';
+					$sql1 = 'update nb_eleme_token set access_token="'.$access_token.'",expires_in='.$expires_in.',refresh_token="'.$refresh_token.'" where dpid='.$dpid.' and delete_flag=0';
 					$res1 = Yii::app()->db->createCommand($sql1)->execute();
 					return $access_token;
 				}

@@ -4,6 +4,8 @@
 */
 class MtUnit
 {
+	const developerId = '100746';
+	const signkey = '8isnqx6h2xewfmiu';
 	public static function dealData($params)
 	{
 		$paramsArr = explode('&',$params); 
@@ -39,7 +41,7 @@ class MtUnit
 		foreach ($data as $key => $value) {
 			$sign.= $key.$value;
 		}
-		$sign = '8isnqx6h2xewfmiu'.$sign;
+		$sign = self::signkey.$sign;
 		$sign = strtolower(sha1($sign));
 		return $sign;
 	}
