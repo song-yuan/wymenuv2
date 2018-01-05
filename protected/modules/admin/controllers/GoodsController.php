@@ -84,11 +84,16 @@ class GoodsController extends BackendController
 		$dpids = Company::model()->findAll('comp_dpid=:dpid and delete_flag=0 and type=2',array(':dpid'=>$this->companyId));
 		if ($info) {
 			// p($dpids);
-			$dpidstr = '';
-			foreach ($dpids as $key => $dp_id) {
-				$dpidstr .= $dp_id->dpid.',';
+			if($dpids){
+				$dpidstr = '';
+				foreach ($dpids as $key => $dp_id) {
+					$dpidstr .= $dp_id->dpid.',';
+				}
+				$dpidstr = substr($dpidstr,0,strlen($dpidstr)-1);
+			}else{
+				$dpidstr = $dpid;
 			}
-			$dpidstr = substr($dpidstr,0,strlen($dpidstr)-1);
+			
 		}else{
 			$dpidstr = $dpid;
 		}
