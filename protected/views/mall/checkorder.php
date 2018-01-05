@@ -320,39 +320,35 @@
 		<!-- end餐位费 -->
 	<?php endif;?>
 </div>
+<!-- 如果是餐座 则显示下单 不需要支付  -->
+<?php if($this->type!=1):?>
 <div class="activity-info">
 	<?php if($memdisprice):?>
 	<div class="order-copun disabled">
-		<div class="copun-lt">等级优惠</div>
+		<div class="copun-lt">会员折扣</div>
 		<div class="copun-rt"><?php echo '-￥'.number_format($memdisprice,2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
 	<?php if(!empty($fullsent)):?>
-		<?php if($fullsent['full_type']):$fval = '1-'.$fullsent['lid'].'-0';?>
+		<?php if($fullsent['full_type']):
+				$fminusprice = $fullsent['extra_cost'];
+				$memdisprice += $fminusprice;
+				$fval = '1-'.$fullsent['lid'].'-0';
+		?>
 		<div class="order-copun disabled">
 			<div class="copun-lt">满减优惠</div>
-			<div class="copun-rt"><?php echo '-￥'.$fullsent['extra_cost'];?></div>
+			<div class="copun-rt"><?php echo '-￥'.$fminusprice;?></div>
 			<div class="clear"></div>
 		</div>
-		<?php else:$fval = '0-'.$fullsent['lid'].'-'.$fullsent['sent_product'][0]['lid'];?>
-			<?php if(count($fullsent['sent_product']) > 1):?>
-			<div class="order-copun arrowright fullsent disabled">
+		<?php else:?>
+			<div class="order-copun arrowright fullsent">
 				<div class="copun-lt">满送优惠</div>
-				<div class="copun-rt"><?php echo $fullsent['sent_product'][0]['product_name'];?></div>
+				<div class="copun-rt">选择产品</div>
 				<div class="clear"></div>
 			</div>
-			<?php else:?>
-			<div class="order-copun fullsent disabled">
-				<div class="copun-lt">满送优惠</div>
-				<div class="copun-rt"><?php echo $fullsent['sent_product'][0]['product_name'];?></div>
-				<div class="clear"></div>
-			</div>
-			<?php endif;?>
 		<?php endif;?>
 	<?php endif;?>
-	<!-- 如果是餐座 则显示下单 不需要支付  -->
-	<?php if($this->type!=1):?>
 	<!-- 完善资料才能使用代金券  -->
 	<?php if($user['mobile_num']&&$user['user_birthday']):?>
 		<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
@@ -368,8 +364,11 @@
 		</div>
 	<?php endif;?>
 </div>
-<div class="totalinfo"><?php if($memdisprice) echo '<span class="font_l" style="margin-right:20px;">优惠￥'.number_format($memdisprice,2).'</span>';?><span>实付￥<?php echo $price;?></span></div>
+<?php endif;?>
 
+<div class="totalinfo"><span class="font_l" style="margin-right:20px;<?php if(!$memdisprice) echo 'dispaly:none';?>">优惠￥<span class="cart-discount"><?php echo number_format($memdisprice,2);?></span></span><span>实付￥<span class="cart-price"><?php echo $price;?></span></span></div>
+
+<?php if($this->type!=1):?>
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
 </div>
@@ -440,26 +439,32 @@
 			</div>
 		</div>
 	<?php endforeach;?>
-		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
+		<div class="item noCupon" cupon-num="<?php echo count($cupons);?>" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
 	</div>
 </div>
 <div class="user-cupon" id="sentList">
 	<div class="cupon-container">
-		<div class="item">
+		<?php if(!empty($fullsent)&&$fullsent['full_type']==0):?>
+		<?php 
+			foreach ($fullsent['sent_product'] as $sent):
+			$sentProPrice = 0;
+			if($sent['is_discount']){
+				$sentProPrice = number_format($sent['original_price']*$sent['promotion_discount'],2);
+			}else{
+				$sentProPrice = number_format($sent['original_price'] - $sent['promotion_money'],2);
+			}
+		?>
+		<div class="item useSent" sent-type="0" sent-id="<?php echo $fullsent['lid'];?>" sent-product-id="<?php echo $sent['lid'];?>" sent-price="<?php echo $sentProPrice;?>">
 			<div class="item-top">
-				<div class="item-top-left">甜筒</div>
-				<div class="item-top-right">￥0.00</div>
+				<div class="item-top-left"><?php echo $sent['product_name'];?></div>
+				<div class="item-top-right"><span style="font-size:15px;color:gray;"><strike>￥<?php echo $sent['original_price'];?></strike></span> <span>￥<?php echo $sentProPrice;?></span></div>
 				<div class="clear"></div>
 			</div>
 		</div>
-		<div class="item">
-			<div class="item-top">
-				<div class="item-top-left">甜筒</div>
-				<div class="item-top-right">￥0.00</div>
-				<div class="clear"></div>
-			</div>
-		</div>
+		<?php endforeach;?>
+		<div class="item noSent" sent-type="0" sent-id="0" sent-product-id="0" sent-price="0.00" >不选择赠送产品</div>
+		<?php endif;?>
 	</div>
 </div>
 	<input type="hidden" name="fullsent" value="<?php echo $fval;?>" />
@@ -812,12 +817,28 @@ $(document).ready(function(){
 	      	dataType:'json'
 	     });
 	});
-  // 选择代金券
+	// 点击选择代金券
+	$('.cupon').click(function(){
+	    if($(this).hasClass('disabled')){
+	      layer.msg('无可用代金券');
+	      return;
+	    }
+	    cupon_layer = layer.open({
+	      				    type: 1,
+	      				    title: false,
+	      				    shadeClose: true,
+	      				    closeBtn: 0,
+	      				    area: ['100%','100%'],
+	      				    content:$('#cuponList'),
+	      				});
+	});	      		  		
+    // 选择代金券
 	$('#cuponList .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
 		var noCuponMoney = $('.noCupon').attr('cupon-money');
 		var minMoney = $(this).attr('min-money');
+		var cartDiscount = $('.cart-discount').html();
 		var total = $('#total').html();
 		var money = 0;
 		
@@ -835,15 +856,22 @@ $(document).ready(function(){
 			$('.noCupon').attr('cupon-money',total);
 		}
 		money = money.toFixed(2);
+		cartDiscount = parseFloat(cartDiscount)-parseFloat(noCuponMoney)+parseFloat(cuponMoney);
+		cartDiscount = cartDiscount.toFixed(2);
+		$('.cart-discount').html(cartDiscount);
+		$('.cart-price').html(money);
 		$('#total').html(money);
 		$('#total').attr('total',money);
 		$('.cupon').find('.copun-rt').html('-￥'+cuponMoney);
 		layer.close(cupon_layer);
 	});
+	// 选择不使用代金券
 	$('#cuponList .item.noCupon').click(function(){
+		var cuponNum = $(this).attr('cupon-num');
 		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
 		var minMoney = $(this).attr('min-money');
+		var cartDiscount = $('.cart-discount').html();
 		var total = $('#total').html();
 		var money = 0;
 		
@@ -860,27 +888,17 @@ $(document).ready(function(){
 			money = 0;
 		}
 		money = money.toFixed(2);
+		cartDiscount = parseFloat(cartDiscount)-parseFloat(cuponMoney);
+		cartDiscount = cartDiscount.toFixed(2);
+		$('.cart-discount').html(cartDiscount);
+		$('.cart-price').html(money);
 		$('#total').html(money);
 		$('#total').attr('total',money);
-		$('.cupon').find('.copun-rt').html('请选择代金券');
+		$('.cupon').find('.copun-rt').html(cuponNum+'张可用');
 		layer.close(cupon_layer);
 	});
-	// 选择代金券
-	$('.cupon').click(function(){
-		if($(this).hasClass('disabled')){
-			layer.msg('无可用代金券');
-			return;
-		}
-		cupon_layer = layer.open({
-		    type: 1,
-		    title: false,
-		    shadeClose: true,
-		    closeBtn: 0,
-		    area: ['100%','100%'],
-		    content:$('#cuponList'),
-		});
-	});
-	// 选择赠送产品
+	
+	// 点击选择赠送产品
 	$('.fullsent').click(function(){
 		sent_layer = layer.open({
 		    type: 1,
@@ -891,6 +909,48 @@ $(document).ready(function(){
 		    content:$('#sentList'),
 		});
 	});
+	$('#sentList .item.useSent').click(function(){
+		var sentType = $(this).attr('sent-type');
+		var sentId = $(this).attr('sent-id');
+		var sentProductId = $(this).attr('sent-product-id');
+		var sentPrice = $(this).attr('sent-price');
+		var noSentMoney = $('.noSent').attr('sent-price');
+		var sval = sentType+'-'+sentId+'-'+sentProductId;
+		var pName = $(this).find('.item-top-left').html();
+
+		var total = $('#total').html();
+		var money = 0;
+		$('#sentList .item').removeClass('on');
+		$(this).addClass('on');
+		
+		$('.noSent').attr('sent-price',sentPrice);
+		$('input[name="fullsent"]').val(sval);
+		$('.fullsent').find('.copun-rt').html(pName+'￥'+sentPrice);
+
+		money = parseFloat(total) - parseFloat(noSentMoney) + parseFloat(sentPrice);
+		money = money.toFixed(2);
+		$('#total').html(money);
+		$('#total').attr('total',money);
+		
+		layer.close(sent_layer);
+	});
+	$('#sentList .item.noSent').click(function(){
+		var sval = '0-0-0';
+		var sentPrice = $(this).attr('sent-price');
+		var total = $('#total').html();
+		var money = 0;
+		$('#sentList .item').removeClass('on');
+		$('input[name="fullsent"]').val(sval);
+		$(this).attr('sent-price','0.00');
+		money = parseFloat(total) - parseFloat(sentPrice);
+		money = money.toFixed(2);
+		$('#total').html(money);
+		$('#total').attr('total',money);
+		$('.fullsent').find('.copun-rt').html('选择产品');
+		
+		layer.close(sent_layer);
+	});	
+	
 	$('input[name="yue"]').change(function(){
 		if(isMustYue){
 			layer.msg('有储值支付活动产品<br>需使用储值支付');

@@ -18,12 +18,15 @@ class WxOrder
 	public $type;
 	public $number;
 	public $cartNumber = 0;// 购物车产品数量
-	public $cartPrice = 0;// 购物车产品总价
 	public $isTemp = 0;
 	public $seatingFee = 0;
 	public $packingFee = 0;
 	public $freightFee = 0;
 	public $takeoutTypeId = 0;
+	public $hasfullsent = false;
+	public $fullsent = '0-0-0';//满送满减信息
+	public $fullMinus = 0; //满减金额
+	public $fullSentProduct = array(); //满送产品
 	public $cart = array();
 	public $normalPromotionIds = array();
 	public $tastes = array();//原始产品口味
@@ -32,7 +35,7 @@ class WxOrder
 	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,number,price))
 	public $order = false;
 	
-	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array(),$takeoutTypeId){
+	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array(),$others){
 		$this->dpid = $dpid;
 		$this->userId = $user['lid'];
 		$this->user = $user;
@@ -40,8 +43,10 @@ class WxOrder
 		$this->type = $type;
 		$this->number = $number;
 		$this->tastes = $tastes;
-		$this->takeoutTypeId = $takeoutTypeId;
+		$this->takeoutTypeId = $others['takeout'];
+		$this->fullsent = $others['fullsent'];
 		$this->setDetail = $productSet;
+		$this->getFullsent();
 		$this->getCart();
 		$this->dealTastes();
 		$this->dealProductSet();
@@ -60,6 +65,38 @@ class WxOrder
 		}else{
 			$this->orderOpenSite();
 		}
+	}
+	public function getFullsent(){
+		if($this->fullsent!='0-0-0'){
+			$now = date('Y-m-d H:i:s',time());
+			$this->hasfullsent = true;
+			$fullsentArr = explode('-', $this->fullsent);
+			$fullType = $fullsentArr[0];
+			$fullsentId = $fullsentArr[1];
+			$fullsentdetailId = $fullsentArr[2];
+			$fullsentObj = WxFullSent::checkFullsent($fullsentId,$this->dpid);
+			if(!$fullsentObj){
+				throw new Exception('满减满送活动不存在');
+			}
+			$this->fullsent = $fullsentObj;
+			if($now < $fullsentObj['begin_time']){
+				throw new Exception('满减满送活动未开始');
+			}
+			if($now > $fullsentObj['end_time']){
+				throw new Exception('满减满送活动已结束');
+			}
+			if($fullType==0){
+				$fullsentdetail = WxFullSent::checkFullsentproduct($fullsentdetailId,$fullsentId,$this->dpid);
+				if(!$fullsentdetail){
+					throw new Exception('无改满送产品');
+				}
+				$this->fullSentProduct = $fullsentdetail;
+			}else{
+				$this->fullMinus = $fullsentObj['extra_cost'];
+			}
+			
+		}
+		
 	}
 	//获取购物车信息
 	public function getCart(){
@@ -135,7 +172,6 @@ class WxOrder
 				$results[$k]['price'] = $result['member_price'];
 				$results[$k]['promotion'] = array('promotion_type'=>0,'price'=>0,'promotion_info'=>array());
 			}
-			$this->cartPrice += $result['member_price']*$result['num'];
 			$this->cartNumber +=$result['num'];
 		}
 		$this->cart = $results;
@@ -320,14 +356,14 @@ class WxOrder
 		//整单口味
 		if(isset($this->productTastes[0]) && !empty($this->productTastes[0])){
 			foreach($this->productTastes[0] as $ordertaste){
-				if($ordertaste[2] > 0){
-					$orderPrice +=$ordertaste[2];
-					$realityPrice +=$ordertaste[2];
-				}
 				$sql = 'select * from nb_taste where lid='.$ordertaste[1].' and dpid='.$this->dpid.' and delete_flag=0';
 				$tasteRes = Yii::app()->db->createCommand($sql)->queryRow();
 				if(!$tasteRes){
 					continue;
+				}
+				if($ordertaste[2] > 0){
+					$orderPrice +=$ordertaste[2];
+					$realityPrice +=$ordertaste[2];
 				}
 				$se = new Sequence("order_taste");
 				$orderTasteId = $se->nextval();
@@ -557,6 +593,28 @@ class WxOrder
 				$realityPrice += $this->freightFee;
 			}
 		}
+		if($this->fullMinus > 0){
+			$se = new Sequence("order_account_discount");
+			$orderAccountId = $se->nextval();
+			$orderAccountData = array(
+					'lid'=>$orderAccountId,
+					'dpid'=>$this->dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'order_id'=>$orderId,
+					'account_no'=>$accountNo,
+					'discount_title'=>$this->fullsent['title'],
+					'discount_id'=>0,
+					'discount_money	'=>$this->fullMinus,
+					'is_sync'=>DataSync::getInitSync(),
+			);
+			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
+			$orderPrice = $orderPrice - $this->fullMinus;
+			if($orderPrice < 0){
+				$orderPrice = 0;
+			}
+		}
+		
 		if($orderPrice==0){
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status=3,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
