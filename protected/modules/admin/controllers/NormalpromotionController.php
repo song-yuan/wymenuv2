@@ -89,13 +89,7 @@ class NormalpromotionController extends BackendController
 			$model->weekday = $weekdayID;
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
-			$s = $model->is_available;
-			if(!empty($s)){
-				$st = implode(",",$s);
-			}else{
-				$st = 0;
-			}
-			$model->is_available = $st;
+			
 			if(!empty($groupID)){
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("normal_branduser");
@@ -148,14 +142,12 @@ class NormalpromotionController extends BackendController
 		$sql = 'select t1.brand_user_lid from nb_normal_promotion t left join nb_normal_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.normal_promotion_id = t.lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId.' or t.dpid ='.$modeldpid->comp_dpid;
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
-		
-		$model->is_available =explode(',',$model->is_available);
 		//var_dump($userlvs);exit;
 		//$db = Yii::app()->db;
 // 		$transaction = $db->beginTransaction();
 // 		try
 // 		{
-		if(Yii::app()->user->role >=11){
+		if($model->is_available == '2'&&Yii::app()->user->role >=11){
 			Yii::app()->user->setFlash('error' , yii::t('app','总部审核后无法修改...'));
 			$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId));
 		}
@@ -205,13 +197,11 @@ class NormalpromotionController extends BackendController
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->weekday = $weekdayID;
 			$model->is_sync=$is_sync;
-			$s = $model->is_available;
-			if(!empty($s)){
-				$st = implode(",",$s);
-			}else{
-				$st = 0;
-			}
-			$model->is_available = $st;
+			//$gropid = array();
+			//$gropid = (dexplode(',',$groupID));
+			//var_dump(dexplode(',',$groupID));exit;
+			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
+			//$transaction->commit(); //提交事务会真正的执行数据库操作
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId));

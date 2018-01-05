@@ -113,14 +113,6 @@ class BuysentpromotionController extends BackendController
 			$model->weekday = $weekdayID;
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
-			
-			$s = $model->is_available;
-			if(!empty($s)){
-				$st = implode(",",$s);
-			}else{
-				$st = 0;
-			}
-			$model->is_available = $st;
 			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
@@ -150,7 +142,7 @@ class BuysentpromotionController extends BackendController
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
 
-		$model->is_available =explode(',',$model->is_available);
+		
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -197,14 +189,6 @@ class BuysentpromotionController extends BackendController
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->weekday=$weekdayID;
 			$model->is_sync = $is_sync;
-			
-			$s = $model->is_available;
-			if(!empty($s)){
-				$st = implode(",",$s);
-			}else{
-				$st = 0;
-			}
-			$model->is_available = $st;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('buysentpromotion/index' , 'companyId' => $this->companyId));
