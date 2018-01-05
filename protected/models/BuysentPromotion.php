@@ -49,10 +49,10 @@ class BuysentPromotion extends CActiveRecord
 			array('sole_code', 'length', 'max'=>20),
 			array('promotion_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
-			array('promotion_type, can_cupon, to_group, is_available, source, delete_flag', 'length', 'max'=>2),
+			array('promotion_type, can_cupon, to_group, source, delete_flag', 'length', 'max'=>2),
 			array('weekday', 'length', 'max'=>32),
 			array('day_begin, day_end', 'length', 'max'=>8),
-			array('create_at, update_at, begin_time, end_time, promotion_memo, to_group, promotion_type ', 'safe'),
+			array('create_at, update_at, begin_time, end_time, promotion_memo, to_group, is_available, promotion_type ', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, sole_code, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, can_cupon, begin_time, end_time, weekday, day_begin, day_end, to_group, group_id, is_available, source, delete_flag, is_sync', 'safe', 'on'=>'search'),
