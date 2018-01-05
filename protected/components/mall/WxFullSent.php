@@ -72,11 +72,11 @@ class WxFullSent
 	 * price 订单价格
 	 *
 	 */
-	public static function getFullsentActive($dpid,$price,$type){
+	public static function getFullsentActive($dpid,$price,$orderType,$type){
 		$fullsentActive = array();
 		if($type==0){
 			// 获取满送活动
-			$fullSents = self::getAllFullsent($dpid, 0); 
+			$fullSents = self::getAllFullsent($dpid, $orderType, 0); 
 			if(!empty($fullSents)){
 				foreach ($fullSents as $sent){
 					$fullcost = $sent['full_cost'];
@@ -88,7 +88,7 @@ class WxFullSent
 			}
 		}else{
 			// 获取满减活动
-			$fullminus = self::getAllFullsent($dpid, 1);
+			$fullminus = self::getAllFullsent($dpid, $orderType, 1);
 			if(!empty($fullminus)){
 				foreach ($fullminus as $minus){
 					$fullcost = $minus['full_cost'];
