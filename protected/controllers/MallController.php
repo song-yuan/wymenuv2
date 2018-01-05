@@ -211,8 +211,8 @@ class MallController extends Controller
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
 		if(!$cartObj->haspormotion){
-			$fullsentProduct = WxFullSent::getFullsentActive($this->companyId, $price, 0); // 满送商品
-			$fullminusPrice = WxFullSent::getFullsentActive($this->companyId, $price, 1); // 满减价
+			$fullsentProduct = WxFullSent::getFullsentActive($this->companyId, $price, $this->type, 0); // 满送商品
+			$fullminusPrice = WxFullSent::getFullsentActive($this->companyId, $price, $this->type, 1); // 满减价
 		}
 		if(!empty($fullsentProduct)&&!empty($fullminusPrice)){
 			if($fullsentProduct['full_cost'] > $fullminusPrice['full_cost']){
