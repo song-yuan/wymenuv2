@@ -605,7 +605,7 @@ class WxOrder
 					'account_no'=>$accountNo,
 					'discount_title'=>$this->fullsent['title'],
 					'discount_id'=>0,
-					'discount_money	'=>$this->fullMinus,
+					'discount_money'=>$this->fullMinus,
 					'is_sync'=>DataSync::getInitSync(),
 			);
 			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
