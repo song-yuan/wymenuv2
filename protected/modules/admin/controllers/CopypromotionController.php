@@ -321,9 +321,9 @@ class CopypromotionController extends BackendController
 				foreach ($dpids as $dpid){//遍历需要下发活动的店铺
 					foreach ($normalcodes as $normalcode){//遍历需要下发的活动
 						//查询店铺是否已经由此活动
-						$sql = 'update nb_normal_promotion set delete_flag=1 where normal_code='.$normalcode;
+						$sql = 'update nb_normal_promotion set delete_flag=1 where normal_code='.$normalcode.' and dpid='.$dpid;
 						$db->createCommand($sql)->execute();
-						$sql = 'update nb_normal_promotion_detail set delete_flag=1 where normal_code_pa='.$normalcode;
+						$sql = 'update nb_normal_promotion_detail set delete_flag=1 where normal_code_pa='.$normalcode.' and dpid ='.$dpid;
 						$db->createCommand($sql)->execute();
 					}
 				}
