@@ -15,10 +15,16 @@ class WxFullSent
 	 * 0 满送 1满减
 	 * 
 	 */
-	public static function getAllFullsent($dpid,$type){
+	public static function getAllFullsent($dpid,$orderType,$type){
 		$fullsentArr = array();
 		$time = date('Y-m-d H:i:s',time());
-		$sql = 'select * from nb_full_sent where dpid='.$dpid.' and full_type='.$type.' and begin_time < "'.$time.'" and end_time > "'.$time.'" and delete_flag=0 order by full_cost asc';
+		$orderType = -1;
+		if($orderType=='6'){
+			$orderType = 2;// 微信堂食
+		}elseif($orderType=='2'){
+			$orderType = 3;// 微信外卖
+		}
+		$sql = 'select * from nb_full_sent where dpid='.$dpid.' and full_type='.$type.' and begin_time < "'.$time.'" and end_time > "'.$time.'" and is_available like "%'.$orderType.'%" and delete_flag=0 order by full_cost asc';
 		$fullsent = Yii::app()->db->createCommand($sql)->queryAll();
 		if($type==0){
 			foreach ($fullsent as $key=>$sent){
@@ -66,11 +72,11 @@ class WxFullSent
 	 * price 订单价格
 	 *
 	 */
-	public static function getFullsentActive($dpid,$price,$type){
+	public static function getFullsentActive($dpid,$price,$orderType,$type){
 		$fullsentActive = array();
 		if($type==0){
 			// 获取满送活动
-			$fullSents = self::getAllFullsent($dpid, 0); 
+			$fullSents = self::getAllFullsent($dpid, $orderType, 0); 
 			if(!empty($fullSents)){
 				foreach ($fullSents as $sent){
 					$fullcost = $sent['full_cost'];
@@ -82,7 +88,7 @@ class WxFullSent
 			}
 		}else{
 			// 获取满减活动
-			$fullminus = self::getAllFullsent($dpid, 1);
+			$fullminus = self::getAllFullsent($dpid, $orderType, 1);
 			if(!empty($fullminus)){
 				foreach ($fullminus as $minus){
 					$fullcost = $minus['full_cost'];

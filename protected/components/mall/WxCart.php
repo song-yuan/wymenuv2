@@ -429,18 +429,8 @@ class WxCart
 		}
 		return $success;
 	}
-	public static function getCartPrice($cartArrs,$user,$type){
+	public static function getCartPrice($cartArrs,$levelDiscunt,$type){
 		$price = 0;
-		$levelDiscunt = 1;
-		if($type!=2&&$user['level']){
-			$birthday = date('m-d',strtotime($user['user_birthday']));
-			$today = date('m-d',time());
-			if($birthday==$today){
-				$levelDiscunt = $user['level']['birthday_discount'];
-			}else{
-				$levelDiscunt = $user['level']['level_discount'];
-			}
-		}
 		foreach($cartArrs as $cart){
 			if($cart['promotion_id'] > 0){
 				$price += $cart['price']*$cart['num'];

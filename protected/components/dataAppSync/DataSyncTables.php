@@ -976,7 +976,7 @@ class DataSyncTables
         		"to_group varchar(2) NOT NULL DEFAULT '0',".
         		"group_id int(10) NOT NULL DEFAULT '0',".
         		"order_num int(4) NOT NULL DEFAULT '0',".
-        		"is_available varchar(2) NOT NULL DEFAULT '0',".
+        		"is_available varchar(16) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
@@ -1013,6 +1013,7 @@ class DataSyncTables
         	    "full_cost decimal(10,2) NOT NULL DEFAULT '0.00',".
                 "extra_cost decimal(10,2) NOT NULL DEFAULT '0.00',".
                 "sent_number int(3) NOT NULL DEFAULT '1',".
+        		"is_available varchar(16) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
@@ -1052,7 +1053,7 @@ class DataSyncTables
         		"to_group varchar(2) NOT NULL DEFAULT '0',".
         		"group_id int(10) NOT NULL DEFAULT '0',".
         		"order_num tinyint(4) NOT NULL DEFAULT '0',".
-        		"is_available varchar(2) NOT NULL DEFAULT '0',".
+        		"is_available varchar(16) NOT NULL DEFAULT '0',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
