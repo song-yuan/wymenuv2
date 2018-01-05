@@ -186,10 +186,21 @@ class MallController extends Controller
 		}
 		$isMustYue = $cartObj->pormotionYue;
 		
+		$levelDiscunt = 1;
+		if(in_array($this->type, array(2,7,8))&&$user['level']){
+			$birthday = date('m-d',strtotime($user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscunt = $user['level']['birthday_discount'];
+			}else{
+				$levelDiscunt = $user['level']['level_discount'];
+			}
+		}
+		
 		$disables = $carts['disable'];
 		$availables = $carts['available'];
 		$original = WxCart::getCartOrigianPrice($availables); // 购物车原价
-		$price = WxCart::getCartPrice($availables,$user,$this->type);// 购物车价格 会员折扣后价格
+		$price = WxCart::getCartPrice($availables,$levelDiscunt,$this->type);// 购物车价格 会员折扣后价格
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables);// 购物车可使用优惠券的价格
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$memdisprice = $original - $price;
@@ -241,7 +252,7 @@ class MallController extends Controller
 			$isFreightFee = 0;
 			$address = array();
 		}
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'memdisprice'=>$memdisprice,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'fullsent'=>$fullsent,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'memdisprice'=>$memdisprice,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'levelDiscunt'=>$levelDiscunt,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'fullsent'=>$fullsent,'msg'=>$msg));
 	}
 	/**
 	 * 

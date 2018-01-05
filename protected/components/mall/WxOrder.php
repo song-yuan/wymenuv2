@@ -293,7 +293,9 @@ class WxOrder
 		$time = time();
 		$orderPrice = 0;
 		$realityPrice = 0;
+		$memdiscount = 0;
 	    $orderProductStatus = 9;
+	    $isSync = DataSync::getInitSync();
 	    if($this->type==1){
 	    	// 餐桌
 	    	$orderProductStatus = 1;
@@ -319,7 +321,7 @@ class WxOrder
 	    				'order_type'=>$this->type,
 	    				'takeout_typeid'=>$this->takeoutTypeId,
 	    				'appointment_time'=>date('Y-m-d H:i:s',$time),
-	    				'is_sync'=>DataSync::getInitSync(),
+	    				'is_sync'=>$isSync,
 	    		);
 	    		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 	    	}
@@ -341,7 +343,7 @@ class WxOrder
 					'order_status'=>2,
 					'order_type'=>$this->type,
 					'takeout_typeid'=>$this->takeoutTypeId,
-					'is_sync'=>DataSync::getInitSync(),
+					'is_sync'=>$isSync,
 			);
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 			
@@ -376,7 +378,7 @@ class WxOrder
 						'taste_id'=>$ordertaste[1],
 						'order_id'=>$orderId,
 						'is_order'=>1,
-						'is_sync'=>DataSync::getInitSync(),
+						'is_sync'=>$isSync,
 				);
 				$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
@@ -423,11 +425,10 @@ class WxOrder
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>$orderProductStatus,
 							'taste_memo'=>$setName,
-							'is_sync'=>DataSync::getInitSync(),
+							'is_sync'=>$isSync,
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				}
-				$isSync = DataSync::getInitSync();
 				if($cart['store_number'] > 0){
 					$sql = 'update nb_product_set set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
 					Yii::app()->db->createCommand($sql)->execute();
@@ -457,7 +458,7 @@ class WxOrder
 								'taste_id'=>$taste[1],
 								'order_id'=>$orderProductId,
 								'is_order'=>0,
-								'is_sync'=>DataSync::getInitSync(),
+								'is_sync'=>$isSync,
 						);
 						Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 					}
@@ -476,11 +477,10 @@ class WxOrder
 						'original_price'=>$cart['original_price']+$ortherPrice,
 						'amount'=>$cart['num'],
 						'product_order_status'=>$orderProductStatus,
-						'is_sync'=>DataSync::getInitSync(),
+						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 		
-				$isSync = DataSync::getInitSync();
 				if($cart['store_number'] > 0){
 					$sql = 'update nb_product set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
 					Yii::app()->db->createCommand($sql)->execute();
@@ -506,14 +506,15 @@ class WxOrder
 							'promotion_money'=>$promotion['promotion_money'],
 							'can_cupon'=>$promotion['can_cupon'],
 							'delete_flag'=>0,
-							'is_sync'=>DataSync::getInitSync(),
+							'is_sync'=>$isSync,
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);
 				}
 				$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			}else{
 				if($cart['is_member_discount']){
-					$orderPrice +=  ($cart['price']*$levelDiscount+$ortherPrice)*$cart['num'];
+					$memdiscount += number_format(($cart['price']+$ortherPrice)*(1-$levelDiscount)*$cart['num'],2);
+					$orderPrice +=  number_format(($cart['price']+$ortherPrice)*$levelDiscount*$cart['num'],2);
 				}else{
 					$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 				}
@@ -538,7 +539,7 @@ class WxOrder
 					'original_price'=>$this->seatingFee,
 					'amount'=>$this->number,
 					'product_order_status'=>9,
-					'is_sync'=>DataSync::getInitSync(),
+					'is_sync'=>$isSync,
 			);
 			Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 			$orderPrice +=  $this->seatingFee*$this->number;
@@ -562,7 +563,7 @@ class WxOrder
 						'original_price'=>$this->packingFee,
 						'amount'=>$this->cartNumber,
 						'product_order_status'=>9,
-						'is_sync'=>DataSync::getInitSync(),
+						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				$orderPrice +=  $this->packingFee*$this->cartNumber;
@@ -586,12 +587,29 @@ class WxOrder
 						'original_price'=>$this->freightFee,
 						'amount'=>1,
 						'product_order_status'=>9,
-						'is_sync'=>DataSync::getInitSync(),
+						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				$orderPrice +=  $this->freightFee;
 				$realityPrice += $this->freightFee;
 			}
+		}
+		if($memdiscount > 0){
+			$se = new Sequence("order_account_discount");
+			$orderAccountId = $se->nextval();
+			$orderAccountData = array(
+					'lid'=>$orderAccountId,
+					'dpid'=>$this->dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'order_id'=>$orderId,
+					'account_no'=>$accountNo,
+					'discount_title'=>'会员折扣',
+					'discount_id'=>0,
+					'discount_money'=>$memdiscount,
+					'is_sync'=>$isSync,
+			);
+			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 		}
 		if($this->fullMinus > 0){
 			$se = new Sequence("order_account_discount");
@@ -606,7 +624,7 @@ class WxOrder
 					'discount_title'=>$this->fullsent['title'],
 					'discount_id'=>0,
 					'discount_money'=>$this->fullMinus,
-					'is_sync'=>DataSync::getInitSync(),
+					'is_sync'=>$isSync,
 			);
 			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 			$orderPrice = $orderPrice - $this->fullMinus;
@@ -912,6 +930,7 @@ class WxOrder
 	 */
 	 public static function insertOrderPay($order,$paytype = 1,$out_trade_no = ''){
 	 	$time = time();
+	 	$isSync = DataSync::getInitSync();
 	 	if($paytype==10){
 	 		$user = WxBrandUser::get($order['user_id'],$order['dpid']);
 	 		if(!$user){
@@ -931,7 +950,7 @@ class WxOrder
 		        	'pay_amount'=>$payMoney,
 		        	'paytype'=>$paytype,
 		    		'remark'=>$user['card_id'],
-		        	'is_sync'=>DataSync::getInitSync(),
+		        	'is_sync'=>$isSync,
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 		
@@ -970,7 +989,7 @@ class WxOrder
 		        	'pay_amount'=>$payPrice,
 		        	'paytype'=>$paytype,
 		    		'remark'=>$out_trade_no,
-		        	'is_sync'=>DataSync::getInitSync(),
+		        	'is_sync'=>$isSync,
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 	}

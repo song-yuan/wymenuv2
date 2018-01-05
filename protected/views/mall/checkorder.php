@@ -143,8 +143,11 @@
 	    	<?php foreach($orderTastes as $k=>$groups):?>
 	    	<div class="item-group"><?php echo $groups['name'];?></div>
 	    	<div class="item-group">
-	    		<?php foreach($groups['tastes'] as $taste):?>
-	    			<div class="item t-item taste-item"  group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
+	    		<?php 
+	    			foreach($groups['tastes'] as $taste):
+	    			$taste['price'] = number_format($taste['price']*$levelDiscunt,2);
+	    		?>
+	    			<div class="item t-item taste-item"  group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" allflage="<?php echo $taste['allflae'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="0" />
 	    		<div class="clear"></div>
@@ -199,7 +202,11 @@
 	    				$tprice = '';
 	    				if($taste["price"]>0){
 	    					$original += $taste["price"];
-	    					$price += $taste["price"];
+	    					if($model['is_member_discount']){
+	    						$memdisprice += number_format($taste["price"]*(1-$levelDiscunt),2);
+	    						$taste["price"] = number_format($taste["price"]*$levelDiscunt,2);
+	    					}
+    						$price += $taste["price"];
 	    					$tprice = '('.$taste["price"].')';
 	    				}
 	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
@@ -231,6 +238,10 @@
 	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
 	    				if($item['price'] > 0){
 	    					$original += $item["price"];
+	    					if($model['is_member_discount']){
+	    						$memdisprice += number_format($item["price"]*(1-$levelDiscunt),2);
+	    						$taste["price"] = number_format($item["price"]*$levelDiscunt,2);
+	    					}
 	    					$price += $item["price"];
 	    				}
 	    				$detailDesc .='</span>';
@@ -254,7 +265,11 @@
 			    				$tprice = '';
 			    				if($taste["price"]>0){
 			    					$original += $taste["price"];
-			    					$price += $taste["price"];
+			    					if($model['is_member_discount']){
+			    						$memdisprice += number_format($taste["price"]*(1-$levelDiscunt),2);
+	    								$taste["price"] = number_format($taste["price"]*$levelDiscunt,2);
+			    					}
+		    						$price += $taste["price"];
 			    				}
 			    				$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 			    			}
@@ -698,7 +713,6 @@ $(document).ready(function(){
   	if(sectionObj.find('.num').length > 0){
   		num = sectionObj.find('.num').html();
   	}
-  	
   	if($(this).hasClass('on')){
   	  	if(allflage=='0'){
   	  	  	return;
