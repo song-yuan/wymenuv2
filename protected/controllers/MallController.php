@@ -64,7 +64,7 @@ class MallController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2146;
+			$userId = 2204;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
@@ -192,7 +192,6 @@ class MallController extends Controller
 		$price = WxCart::getCartPrice($availables,$user,$this->type);// 购物车价格 会员折扣后价格
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables);// 购物车可使用优惠券的价格
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
-		
 		$memdisprice = $original - $price;
 		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
 		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
@@ -209,6 +208,12 @@ class MallController extends Controller
 				$fullsent = $fullsentProduct;
 			}else{
 				$fullsent = $fullminusPrice;
+				$minusprice = $price - $fullsent['extra_cost'];
+				if($minusprice > 0){
+					$price = $minusprice;
+				}else{
+					$price = 0;
+				}
 			}
 		}else{
 			if(!empty($fullsentProduct)){
@@ -251,6 +256,7 @@ class MallController extends Controller
 		$paytype = Yii::app()->request->getPost('paytype');
 		$cuponId = Yii::app()->request->getPost('cupon',0);
 		$takeoutTypeId = Yii::app()->request->getPost('takeout_typeid',0);
+		$fullsentId = Yii::app()->request->getPost('fullsent','0-0-0');
 		$yue = Yii::app()->request->getPost('yue',0);
 		$addressId = Yii::app()->request->getPost('address',-1);
 		$orderTime = Yii::app()->request->getPost('order_time',null);
@@ -260,8 +266,9 @@ class MallController extends Controller
 		$number = 1;
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
+		$others = array('takeout'=>$takeoutTypeId,'fullsent'=>$fullsentId);
 		try{
-			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$takeoutTypeId);
+			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$others);
 			if(empty($orderObj->cart)){
 				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}

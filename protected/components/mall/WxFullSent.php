@@ -49,6 +49,17 @@ class WxFullSent
 	}
 	/**
 	 *
+	 *
+	 * 检查活动是否生效
+	 *
+	 */
+	public static function checkFullsentproduct($fullsentdetailId,$fullsentId,$dpid){
+		$sql = 'select t.*,t1.product_name,t1.original_price,t1.member_price from nb_full_sent_detail t,nb_product t1 where t.dpid=t1.dpid and t.product_id=t1.lid and t.lid='.$fullsentdetailId.' and t.dpid='.$dpid.' and t.full_sent_id='.$fullsentId.' and t.delete_flag=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+		$fullsentDetail = Yii::app()->db->createCommand($sql)->queryRow();
+		return $fullsent;
+	}
+	/**
+	 *
 	 * 满减满送活动列表 满足条件 金额 从小到大
 	 * $type 0 满送 1 满减
 	 * $dpid 
