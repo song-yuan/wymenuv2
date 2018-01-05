@@ -187,7 +187,7 @@ class MallController extends Controller
 		$isMustYue = $cartObj->pormotionYue;
 		
 		$levelDiscunt = 1;
-		if(in_array($this->type, array(2,7,8))&&$user['level']){
+		if(!in_array($this->type, array(2,7,8))&&$user['level']){
 			$birthday = date('m-d',strtotime($user['user_birthday']));
 			$today = date('m-d',time());
 			if($birthday==$today){
