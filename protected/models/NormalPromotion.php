@@ -19,7 +19,6 @@
  * @property string $to_group
  * @property string $group_id
  * @property integer $order_num
- * @property string $is_available
  * @property string $delete_flag
  * @property string $is_sync
  */
@@ -46,8 +45,8 @@ class NormalPromotion extends CActiveRecord
 			array('lid, dpid, group_id', 'length', 'max'=>10),
 			array('promotion_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
-			array('promotion_type, can_cupon, to_group, is_available, delete_flag', 'length', 'max'=>2),
-			array('create_at,update_at, begin_time, end_time, weekday, day_begin, day_end', 'safe'),
+			array('promotion_type, can_cupon, to_group, delete_flag', 'length', 'max'=>2),
+			array('create_at,update_at, begin_time, end_time, weekday, day_begin, day_end,is_available', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, is_sync, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, can_cupon, begin_time, end_time, weekday, day_begin, day_end, to_group, group_id, order_num, is_available, delete_flag', 'safe', 'on'=>'search'),
