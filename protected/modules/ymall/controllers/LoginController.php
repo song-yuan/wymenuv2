@@ -31,7 +31,7 @@ class LoginController extends BaseYmallController
                     'out_time'=>"0000-00-00 00:00:00",
                 );
                 Yii::app()->db->createCommand()->insert('nb_b_login',$data);
-				$this->redirect(array('product/index/companyId/'.Yii::app()->user->companyId));
+				$this->redirect(array('product/index','companyId'=>Yii::app()->user->companyId));
 			}
 		}
 		$this->render('index',array('model' => $model));
