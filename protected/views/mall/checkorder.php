@@ -391,7 +391,7 @@
 	<div class="select-type">选择支付方式</div>
 	<!-- 余额 -->
 	<div class="chooselist points" style="padding:15px;">
-		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_org">剩余￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span> 可使用￥<?php echo $remainMoney > $price?$price:$remainMoney;?></span></div>
+		<div class="left"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png"/> 储值支付 <span class="small font_org">剩余￥<span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span> 可使用￥<span class="use-yue"><?php echo $remainMoney > $price?$price:$remainMoney;?></span></span></div>
 		<div class="right">
 		<?php if($remainMoney > 0):?>
 		<label><input type="checkbox" name="yue" checked="checked" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
@@ -854,6 +854,7 @@ $(document).ready(function(){
 		var minMoney = $(this).attr('min-money');
 		var cartDiscount = $('.cart-discount').html();
 		var total = $('#total').html();
+		var yue = parseFloat($('#yue').attr('yue'));
 		var money = 0;
 		
 		$('#cuponList .item').removeClass('on');
@@ -868,6 +869,13 @@ $(document).ready(function(){
 		}else{
 			money = 0;
 			$('.noCupon').attr('cupon-money',total);
+		}
+		if(yue > 0){
+			if(yue > money){
+				$('.use-yue').html(money.toFixed(2));
+			}else{
+				$('.use-yue').html(yue.toFixed(2));
+			}
 		}
 		money = money.toFixed(2);
 		cartDiscount = parseFloat(cartDiscount)-parseFloat(noCuponMoney)+parseFloat(cuponMoney);
@@ -887,6 +895,7 @@ $(document).ready(function(){
 		var minMoney = $(this).attr('min-money');
 		var cartDiscount = $('.cart-discount').html();
 		var total = $('#total').html();
+		var yue = parseFloat($('#yue').attr('yue'));
 		var money = 0;
 		
 		$('#cuponList .item').removeClass('on');
@@ -900,6 +909,13 @@ $(document).ready(function(){
 			money = money;
 		}else{
 			money = 0;
+		}
+		if(yue > 0){
+			if(yue > money){
+				$('.use-yue').html(money.toFixed(2));
+			}else{
+				$('.use-yue').html(yue.toFixed(2));
+			}
 		}
 		money = money.toFixed(2);
 		cartDiscount = parseFloat(cartDiscount)-parseFloat(cuponMoney);
@@ -931,7 +947,7 @@ $(document).ready(function(){
 		var noSentMoney = $('.noSent').attr('sent-price');
 		var sval = sentType+'-'+sentId+'-'+sentProductId;
 		var pName = $(this).find('.item-top-left').html();
-
+		var yue = parseFloat($('#yue').attr('yue'));
 		var total = $('#total').html();
 		var money = 0;
 		$('#sentList .item').removeClass('on');
@@ -942,6 +958,14 @@ $(document).ready(function(){
 		$('.fullsent').find('.copun-rt').html(pName+'￥'+sentPrice);
 
 		money = parseFloat(total) - parseFloat(noSentMoney) + parseFloat(sentPrice);
+
+		if(yue > 0){
+			if(yue > money){
+				$('.use-yue').html(money.toFixed(2));
+			}else{
+				$('.use-yue').html(yue.toFixed(2));
+			}
+		}
 		money = money.toFixed(2);
 		$('#total').html(money);
 		$('#total').attr('total',money);
@@ -951,12 +975,20 @@ $(document).ready(function(){
 	$('#sentList .item.noSent').click(function(){
 		var sval = '0-0-0';
 		var sentPrice = $(this).attr('sent-price');
+		var yue = parseFloat($('#yue').attr('yue'));
 		var total = $('#total').html();
 		var money = 0;
 		$('#sentList .item').removeClass('on');
 		$('input[name="fullsent"]').val(sval);
 		$(this).attr('sent-price','0.00');
 		money = parseFloat(total) - parseFloat(sentPrice);
+		if(yue > 0){
+			if(yue > money){
+				$('.use-yue').html(money.toFixed(2));
+			}else{
+				$('.use-yue').html(yue.toFixed(2));
+			}
+		}
 		money = money.toFixed(2);
 		$('#total').html(money);
 		$('#total').attr('total',money);

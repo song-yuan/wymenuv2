@@ -266,15 +266,15 @@ class WxPromotion
 	 	$promotion = self::getPromotion($dpid,$promotionType, $promotionId);
 	 	if($promotion){
 	 		if($type==2){
-	 			if(!in_array($promotion['is_available'], array(2,3,5))){
+	 			if(strpos($promotion['is_available'],'3')===FALSE){
 	 				return false;
 	 			}
 	 		}elseif($type==6){
-	 			if(!in_array($promotion['is_available'], array(2,3,4))){
+	 			if(strpos($promotion['is_available'],'2')===FALSE){
 	 				return false;
 	 			}
 	 		}else{
-	 			if(!in_array($promotion['is_available'], array(2,3))){
+	 			if(strpos($promotion['is_available'],'2')===FALSE){
 	 				return false;
 	 			}
 	 		}
