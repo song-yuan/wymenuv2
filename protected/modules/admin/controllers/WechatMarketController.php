@@ -40,9 +40,9 @@ class WechatMarketController extends BackendController {
 		$noordertime=Yii::app()->request->getPost('noordertime',"%");//未消费时长
 
 		//省 市 地区
-		$findprovince=Yii::app()->request->getPost('province',"%");
-		$findcity=Yii::app()->request->getPost('city',"%");
-		$findarea=Yii::app()->request->getPost('area',"%");
+		$findprovince=Yii::app()->request->getPost('province',"请选择..");
+		$findcity=Yii::app()->request->getPost('city',"请选择..");
+		$findarea=Yii::app()->request->getPost('area',"请选择..");
 
 		$pointfrom = Yii::app()->request->getPost('pointfrom',"0");
 		$source = Yii::app()->request->getPost('source',"");//来源
@@ -180,8 +180,8 @@ class WechatMarketController extends BackendController {
 		$yearnow=date('Y',time());
 		$yearbegin=$yearnow-$ageto;
 		$yearend=$yearnow-$agefrom;
-		$sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) <= '".$yearend."'";
-		$sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) <= '".$birthto."'";
+		$sql.= " and substring(ifnull(t.user_birthday,'2000-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'2000-01-01'),1,4) <= '".$yearend."'";
+		$sql.= " and substring(ifnull(t.user_birthday,'2000-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'2000-01-01'),6,5) <= '".$birthto."'";
 		//$sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
 		//$sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) >= "
 		//	.$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) <=".$remainto;
