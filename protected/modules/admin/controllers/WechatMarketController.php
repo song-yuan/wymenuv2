@@ -40,9 +40,9 @@ class WechatMarketController extends BackendController {
 		$noordertime=Yii::app()->request->getPost('noordertime',"%");//未消费时长
 
 		//省 市 地区
-		$findprovince=Yii::app()->request->getPost('province',"%");
-		$findcity=Yii::app()->request->getPost('city',"%");
-		$findarea=Yii::app()->request->getPost('area',"%");
+		$findprovince=Yii::app()->request->getPost('province',"请选择..");
+		$findcity=Yii::app()->request->getPost('city',"请选择..");
+		$findarea=Yii::app()->request->getPost('area',"请选择..");
 
 		$pointfrom = Yii::app()->request->getPost('pointfrom',"0");
 		$source = Yii::app()->request->getPost('source',"");//来源
