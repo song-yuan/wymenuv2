@@ -42,10 +42,11 @@ class FullSent extends CActiveRecord
 			array('title', 'length', 'max'=>64),
 			array('infor', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
+			array('is_available', 'length', 'max'=>16),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, title, infor, begin_time, end_time, full_cost, extra_cost, sent_number, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, title, infor, begin_time, end_time, full_cost, extra_cost, sent_number, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 

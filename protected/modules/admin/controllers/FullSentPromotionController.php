@@ -61,9 +61,6 @@ class FullSentPromotionController extends BackendController
 	public function actionCreate(){
 		$model = new FullSent();
 		$model->dpid = $this->companyId ;
-		//$brdulvs = $this->getBrdulv();
-		//$model->create_time = time();
-		//var_dump($model);exit;
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
 			$db = Yii::app()->db;
@@ -82,19 +79,21 @@ class FullSentPromotionController extends BackendController
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
 			$model->full_type = '0';
+			$s = $model->is_available;
+			if(!empty($s)){
+				$st = implode(",",$s);
+			}else{
+				$st = 0;
+			}
+			$model->is_available = $st;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('fullSentPromotion/detailindex','lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product'));
 			}
 		}
 		
-		//$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-		//echo 'ss';exit;
 		$this->render('create' , array(
 				'model' => $model ,
-				//'brdulvs'=>$brdulvs,
-				//'categories' => $categories
 		));
 	}
 	
@@ -103,25 +102,22 @@ class FullSentPromotionController extends BackendController
 	 */
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
-		//echo 'ddd';
-		//$groupID = Yii::app()->request->getParam('str');
-		//var_dump($groupID);exit;
-		//$brdulvs = $this->getBrdulv();
 		$is_sync = DataSync::getInitSync();
 		$model = FullSent::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 
-		
+		$model->is_available =explode(',',$model->is_available);
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('FullSent');
-	
-			//print_r(explode(',',$groupID));
-			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->is_sync = $is_sync;
-			//$gropid = array();
-			//$gropid = (dexplode(',',$groupID));
-			//var_dump(dexplode(',',$groupID));exit;
-			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
+			$s = $model->is_available;
+			if(!empty($s)){
+				$st = implode(",",$s);
+			}else{
+				$st = 0;
+			}
+			$model->is_available = $st;
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('FullSentPromotion/index' , 'companyId' => $this->companyId));
@@ -129,8 +125,6 @@ class FullSentPromotionController extends BackendController
 		}
 		$this->render('update' , array(
 				'model'=>$model,
-				//'brdulvs'=>$brdulvs,
-				//'userlvs'=>$userlvs,
 		));
 	}
 
@@ -176,24 +170,17 @@ class FullSentPromotionController extends BackendController
 			}
 
 			if(!empty($categoryId)){
-				//var_dump($typeId);exit;
-				//$criteria->condition.=' and t.category_id = '.$categoryId;
 				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.number,t1.product_id,t1.full_sent_id,t.* from nb_product t left join nb_full_sent_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0 and t1.full_sent_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.category_id = '.$categoryId.' ) k';
-				
-				//var_dump($sql);exit;
 			}
 	
 			elseif(!empty($csinquery)){
-				//$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
 				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.number,t1.product_id,t1.full_sent_id,t.* from nb_product t left join nb_full_sent_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0 and t1.full_sent_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.simple_code like "%'.strtoupper($csinquery).'%" ) k';
 					
 			}else{
 				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.number,t1.product_id,t1.full_sent_id,t.* from nb_product t left join nb_full_sent_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0 and t1.full_sent_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.') k' ;
 					
 			}
-			//var_dump($sql);exit;
 			$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-			//var_dump($count);exit;
 			$pages = new CPagination($count);
 			$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 			$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
@@ -201,9 +188,6 @@ class FullSentPromotionController extends BackendController
 			$models = $pdata->queryAll();
 			$categories = $this->getCategories();
 
-			
-			//$categories = $this->getCategories();
-			//var_dump($promotionID);exit;
 			$this->render('detailindex',array(
 					'models'=>$models,
 					'pages'=>$pages,
@@ -259,16 +243,9 @@ class FullSentPromotionController extends BackendController
 		$proID = Yii::app()->request->getParam('proID');
 		$proNum = Yii::app()->request->getParam('proNum');
 		$dpid = $this->companyId;
-		//$promotion_money = Yii::app()->request->getParam('promotion_money');
-		//$promotion_discount = Yii::app()->request->getParam('promotion_discount');
 		$order_num = Yii::app()->request->getParam('order_num');
 		$is_set = Yii::app()->request->getParam('is_set');
-		//$db = Yii::app()->db;
-		//Yii::app()->end(json_encode(array("status"=>"success")));
-		//var_dump($order_num);exit;
-		//$sql='';
 		$ceshi=$id."+".$promotionID."+".$proID."+".$proNum."+".$dpid."+".$typeId;
-		//Yii::app()->end(json_encode(array("status"=>"success")));
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
 		try 
@@ -279,8 +256,6 @@ class FullSentPromotionController extends BackendController
 
 		if($typeId=='product')
 		{
-			//$sql = 'delete from nb_private_promotion_detail where is_set=0 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
-			//var_dump($sql);exit;
 			$sql = 'update nb_full_sent_detail set delete_flag = "1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
 				
 			$command=$db->createCommand($sql);
@@ -302,13 +277,8 @@ class FullSentPromotionController extends BackendController
 						'delete_flag'=>'0',
 						'is_sync'=>$is_sync
 				);
-				//$db->createCommand()->insert('private_promotion_detail',$data);
-				
-			//$sql="insert into nb_private_promotion_detail (lid,dpid,create_at,update_at,private_promotion_id,product_id,is_set,promotion_money,promotion_discount,order_num,) 
-			//		values ('$model->lid','$this->companyId','')";
 		}elseif($proID=="1"){
 		
-			//$sql='insert nb_private_promotion_detail set is_set="0", product_id = '.$id.', promotion_discount = '.$proNum.', order_num = "'.$order_num.'" where lid='.$id.' and dpid='.$this->companyId;
 			$data = array(
 					'lid'=>$lid,
 					'dpid'=>$dpid,
@@ -324,13 +294,10 @@ class FullSentPromotionController extends BackendController
 					'delete_flag'=>'0',
 					'is_sync'=>$is_sync
 			);
-			//$db->createCommand()->insert('nb_private_promotion_detail',$data);
 		
 		
 		}
-		//var_dump($sql);exit;
 		}else{
-			//$sql = 'delete from nb_private_promotion_detail where is_set=1 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
 			$sql = 'update nb_full_sent_detail set delete_flag ="1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
 				
 			$command=$db->createCommand($sql);
@@ -357,7 +324,6 @@ class FullSentPromotionController extends BackendController
 			
 			}elseif($proID=='1'){
 		
-				//$sql='insert nb_private_promotion_detail set is_set="1", product_id = '.$id.', promotion_discount = '.$proNum.', order_num = '.$order_num.' where lid='.$id.' and dpid='.$this->companyId;
 				$data = array(
 						'lid'=>$lid,
 						'dpid'=>$dpid,
@@ -374,10 +340,8 @@ class FullSentPromotionController extends BackendController
 						'is_sync'=>$is_sync
 				);
 			}
-		}//Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID)));
-		//$db->createCommand()->insert('private_promotion_detail',$data);
+		}
 		$command = $db->createCommand()->insert('nb_full_sent_detail',$data);
-		//Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID)));
 		
 		$transaction->commit(); //提交事务会真正的执行数据库操作
 		Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID,'msg'=>$ceshi)));
@@ -408,25 +372,6 @@ class FullSentPromotionController extends BackendController
 		$command=$db->createCommand($sql);
 		if($command->execute())
 		{
-			//                    Gateway::getOnlineStatus();
-			//                    $store = Store::instance('wymenu');
-			//                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
-			//                    //var_dump($pads);exit;
-			//                    $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
-			//                        "do_id"=>"sell_off",
-			//                        "do_data"=>array(array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-			//                            //,array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-			//                            )));
-			//                    //var_dump($sendjsondata);exit;
-			//                    foreach($pads as $pad)
-				//                    {
-				//                        $clientId=$store->get("padclient_".$this->companyId.$pad->lid);
-				//                        //var_dump($clientId,$print_data);exit;
-				//                        if(!empty($clientId))
-					//                        {
-					//                            Gateway::sendToClient($clientId,$sendjsondata);
-					//                        }
-					//                    }
 			Yii::app()->end(json_encode(array("status"=>"success")));
 		}else{
 			Yii::app()->end(json_encode(array("status"=>"fail")));
@@ -520,9 +465,6 @@ class FullSentPromotionController extends BackendController
 									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.full_sent_id = '.$promotionID.' order by t.lid asc) k' ;
 	
 		}
-		//$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_private_promotion_detail t1  where t1.is_set = 0 and t1.private_promotion_id ='.$promotionID.' t1.delete_flag = 0 and t1.dpid='.$this->companyId.') k' ;
-	
-	
 		//var_dump($sql);exit;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -557,16 +499,11 @@ class FullSentPromotionController extends BackendController
 		if(!empty($brdules)){
 		return $brdules;
 		}
-// 		else{
-// 			return flse;
-// 		}				
 	}
 	public function getProductSetPrice($productSetId,$dpid){
 		$proSetPrice = '';
 		$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id from nb_product_set_detail t where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
 		$connect = Yii::app()->db->createCommand($sql);
-		//	$connect->bindValue(':site_id',$siteId);
-		//	$connect->bindValue(':dpid',$dpid);
 		$proSetPrice = $connect->queryRow();
 		//var_dump($proSetPrice);exit;
 		if(!empty($proSetPrice)){
