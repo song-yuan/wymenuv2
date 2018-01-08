@@ -178,7 +178,7 @@
                  $('#dialog2').show();
                  return false;
              }
-             if($('#birthday').val() > currYear+'/'+currMonth+'/'+currDate){
+             if(new Date(Date.parse($('#birthday').val())) > new Date(Date.parse(currYear+'/'+currMonth+'/'+currDate))){
             	 $('#dialog2').find('.weui_dialog_bd').html('生日日期不能大于今天日期！');
                  $('#dialog2').show();
                  return false
@@ -234,7 +234,7 @@ $('document').ready(function(){
 	var date = new Date();
 	var currYear = date.getFullYear(); 
 	var currMonth = date.getMonth()+1; 
-	var currDate = date.getDate();   
+	var currDate = date.getDate(); 
     $('.sentMessage').click(function(){
             if($(this).hasClass('disable')){
                     return;
