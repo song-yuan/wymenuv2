@@ -182,9 +182,6 @@
                  $('#dialog2').show();
                  return false;
              }
-             alert($('#birthday').val());
-             alert(currYear+'/'+currMonth+'/'+currDate);
-             alert(new Date(Date.parse($('#birthday').val())) > new Date(Date.parse(currYear+'/'+currMonth+'/'+currDate)));
              if(new Date(Date.parse($('#birthday').val())) > new Date(Date.parse(currYear+'/'+currMonth+'/'+currDate))){
             	 $('#dialog2').find('.weui_dialog_bd').html('生日日期不能大于今天日期！');
                  $('#dialog2').show();
@@ -207,9 +204,9 @@
                     async: false,
                     success:function(msg){
                             if(!parseInt(msg)){
-                                    $('#dialog2').find('.weui_dialog_bd').html('验证码错误');
-                            $('#dialog2').show();
-                            success = false;
+                                 $('#dialog2').find('.weui_dialog_bd').html('验证码错误');
+                            	$('#dialog2').show();
+                            	success = false;
                              
                             }
                     }
