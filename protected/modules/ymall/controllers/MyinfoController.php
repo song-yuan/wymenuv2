@@ -676,7 +676,8 @@ class MyinfoController extends BaseYmallController
 				$lid = $se->nextval();
 				$model->create_at=date('Y-m-d H:i:s',time());
 				$model->update_at=date('Y-m-d H:i:s',time());
-				$model->update_at=$lid;
+				$model->lid=$lid;
+				$model->dpid=$this->companyId;
 			}
 			$csales_day = Yii::app()->request->getParam('csales_day');
 			$csafe_min_day = Yii::app()->request->getParam('csafe_min_day');
