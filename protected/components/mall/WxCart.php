@@ -429,7 +429,7 @@ class WxCart
 		}
 		return $success;
 	}
-	public static function getCartPrice($cartArrs,$levelDiscunt,$type){
+	public static function getCartPrice($cartArrs,$levelDiscunt){
 		$price = 0;
 		foreach($cartArrs as $cart){
 			if($cart['promotion_id'] > 0){
@@ -452,11 +452,15 @@ class WxCart
 		return number_format($price,2);
 	}
 	// 除去活动后的价格
-	public static function getCartUnDiscountPrice($cartArrs){
+	public static function getCartUnDiscountPrice($cartArrs,$levelDiscunt){
 		$price = 0;
 		foreach($cartArrs as $cart){
 			if($cart['promotion_id'] < 0){
-				$price += $cart['price']*$cart['num'];
+				if($cart['is_member_discount']){
+					$price += $cart['price']*$levelDiscunt*$cart['num'];
+				}else{
+					$price += $cart['price']*$cart['num'];
+				}
 			}else{
 				if($cart['can_cupon'] == 0){
 					$price += $cart['price']*$cart['num'];
