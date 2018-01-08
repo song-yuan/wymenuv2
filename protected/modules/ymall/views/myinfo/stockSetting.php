@@ -40,6 +40,7 @@
 			            <input type="range" id='inline-range' value="<?php if ($model['csales_day']) {echo $model['csales_day']; }else{echo '20';} ?>" min="1" max="31" >
 			        </div>
 		     	</div>
+			    <div style="color:red;">注:日均消耗将会用于按天采购/安全库存的计算</div>
 		     	<div style="height: 138px;background-color: white;">
 			     	<h4>日均销量 x <span id='inline-range1-val' class="c-red"><?php if ($model['csafe_min_day']) {echo $model['csafe_min_day']; }else{echo '3';} ?></span>天 < <span class="c-green">安全库存</span> < 日均销量 x <span id='inline-range2-val' class="c-red"><?php if ($model['csafe_max_day']) {echo $model['csafe_max_day']; }else{echo '20';} ?></span>天 </h4>
 			        <div class="mui-input-row mui-input-range">
@@ -51,6 +52,7 @@
 			            <input type="range" id='inline-range2' value="<?php if ($model['csafe_max_day']) {echo $model['csafe_max_day']; }else{echo '20';} ?>" min="1" max="31" >
 			        </div>
 		     	</div>
+			    <div style="color:red;">注:请合理设置安全库存周期,安全库存采购将会根据本周期进行采购</div>
 		        <button type="button" class="m-top mui-btn mui-btn-block mui-btn-primary" id="sure">确认</button>
 
 
@@ -78,9 +80,9 @@
 			var csales_day = $('#inline-range').val();
 			var csafe_min_day = $('#inline-range1').val();
 			var csafe_max_day = $('#inline-range2').val();
-			console.log('日均天数'+csales_day);
-			console.log('最小天数'+csafe_min_day);
-			console.log('最大天数'+csafe_max_day);
+			// console.log('日均天数'+csales_day);
+			// console.log('最小天数'+csafe_min_day);
+			// console.log('最大天数'+csafe_max_day);
 			mui.post('<?php echo $this->createUrl("myinfo/stockSetting",array("companyId"=>$this->companyId)) ?>',{  //请求接口地址
 				   csales_day:csales_day, // 参数  键 ：值
 				   csafe_min_day:csafe_min_day,
@@ -92,7 +94,7 @@
 					if (data=='1111') {
 						mui.toast('保存成功,两天后生效!!!',{ duration:'long', type:'div' });
 					}else if(data=='2222'){
-						mui.toast('保存失败!!!',{ duration:'long', type:'div' });
+						mui.toast('保存失败,请刷新页面,重新保存!!!',{ duration:'long', type:'div' });
 					}
 
 				},'json'
