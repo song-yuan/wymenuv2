@@ -180,8 +180,8 @@ class WechatMarketController extends BackendController {
 		$yearnow=date('Y',time());
 		$yearbegin=$yearnow-$ageto;
 		$yearend=$yearnow-$agefrom;
-		$sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1917-01-01'),1,4) <= '".$yearend."'";
-		$sql.= " and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1917-01-01'),6,5) <= '".$birthto."'";
+		$sql.= " and substring(ifnull(t.user_birthday,'2000-01-01'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'2000-01-01'),1,4) <= '".$yearend."'";
+		$sql.= " and substring(ifnull(t.user_birthday,'2000-01-01'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'2000-01-01'),6,5) <= '".$birthto."'";
 		//$sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
 		//$sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) >= "
 		//	.$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) <=".$remainto;
