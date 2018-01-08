@@ -87,7 +87,13 @@ class FullMinusPromotionController extends BackendController
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
 			$model->full_type = '1';
-
+			$s = $model->is_available;
+			if(!empty($s)){
+				$st = implode(",",$s);
+			}else{
+				$st = 0;
+			}
+			$model->is_available = $st;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('fullMinusPromotion/index' , 'companyId' => $this->companyId ));
@@ -109,7 +115,7 @@ class FullMinusPromotionController extends BackendController
 		$is_sync = DataSync::getInitSync();
 		$model = FullSent::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 
-		
+		$model->is_available =explode(',',$model->is_available);
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -119,6 +125,13 @@ class FullMinusPromotionController extends BackendController
 	
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->is_sync = $is_sync;
+			$s = $model->is_available;
+			if(!empty($s)){
+				$st = implode(",",$s);
+			}else{
+				$st = 0;
+			}
+			$model->is_available = $st;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('FullMinusPromotion/index' , 'companyId' => $this->companyId));
