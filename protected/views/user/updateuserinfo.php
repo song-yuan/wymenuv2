@@ -151,6 +151,10 @@
 
 </body>
 <script type="text/javascript">
+	var date = new Date();
+	var currYear = date.getFullYear(); 
+	var currMonth = date.getMonth()+1; 
+	var currDate = date.getDate(); 
   function validate() {
         if($('#name').val() == ''){
             $('#dialog2').find('.weui_dialog_bd').html('请填写姓名！');
@@ -200,9 +204,9 @@
                     async: false,
                     success:function(msg){
                             if(!parseInt(msg)){
-                                    $('#dialog2').find('.weui_dialog_bd').html('验证码错误');
-                            $('#dialog2').show();
-                            success = false;
+                                 $('#dialog2').find('.weui_dialog_bd').html('验证码错误');
+                            	$('#dialog2').show();
+                            	success = false;
                              
                             }
                     }
@@ -231,10 +235,6 @@
 		},1000);
     }
 $('document').ready(function(){
-	var date = new Date();
-	var currYear = date.getFullYear(); 
-	var currMonth = date.getMonth()+1; 
-	var currDate = date.getDate(); 
     $('.sentMessage').click(function(){
             if($(this).hasClass('disable')){
                     return;
