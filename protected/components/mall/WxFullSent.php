@@ -18,11 +18,12 @@ class WxFullSent
 	public static function getAllFullsent($dpid,$orderType,$type){
 		$fullsentArr = array();
 		$time = date('Y-m-d H:i:s',time());
-		$orderType = -1;
 		if($orderType=='6'){
 			$orderType = 2;// 微信堂食
 		}elseif($orderType=='2'){
 			$orderType = 3;// 微信外卖
+		}else{
+			$orderType = 2;
 		}
 		$sql = 'select * from nb_full_sent where dpid='.$dpid.' and full_type='.$type.' and begin_time < "'.$time.'" and end_time > "'.$time.'" and is_available like "%'.$orderType.'%" and delete_flag=0 order by full_cost asc';
 		$fullsent = Yii::app()->db->createCommand($sql)->queryAll();
