@@ -95,11 +95,11 @@
 						<?php endif;?>
 							<tr>
 								<td colspan="7" style="text-align: right;">
-								<?php if($storage->status==1):?><?php if(Yii::app()->user->role<15):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待确认入库</span><?php endif;?>
+								<?php if($storage->status==1):?><?php if(Yii::app()->user->role<15):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" cfv="1"/><?php else:?><span style="color:red">等待确认入库</span><?php endif;?>
 								<?php elseif($storage->status==3):?><span style="color:red">已入库</span>
-								<?php elseif($storage->status==2):?><?php if(Yii::app()->user->role<15):?><input id="status-2" type="button" class="btn blue" value="重新送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待重新送审</span><?php endif;?>
-								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<15):?><input id="status-0" type="button" class="btn blue" value="确认 入库" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
-								<?php elseif($storage->status==4):?><?php if(Yii::app()->user->role<15):?><input id="status-4" type="button" class="btn blue" value="审核通过" storage-id="<?php echo $storage->lid;?>" />&nbsp;<input id="status-1" type="button" class="btn blue" value="驳回" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待审核</span><?php endif;?>
+								<?php elseif($storage->status==2):?><?php if(Yii::app()->user->role<15):?><input id="status-2" type="button" class="btn blue" value="重新送审" storage-id="<?php echo $storage->lid;?>" cfv="1"/><?php else:?><span style="color:red">等待重新送审</span><?php endif;?>
+								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<15):?><input id="status-0" type="button" class="btn blue" value="确认 入库" storage-id="<?php echo $storage->lid;?>" cfv="1"/><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
+								<?php elseif($storage->status==4):?><?php if(Yii::app()->user->role<15):?><input id="status-4" type="button" class="btn blue" value="审核通过" storage-id="<?php echo $storage->lid;?>" cfv="1"/>&nbsp;<input id="status-1" type="button" class="btn blue" value="驳回" storage-id="<?php echo $storage->lid;?>" cfv="1"/><?php else:?><span style="color:red">等待审核</span><?php endif;?>
 								<?php endif;?>
 								</td>
 							</tr>
@@ -151,15 +151,16 @@
 		$('#storage-in').click(function(){
 			var id = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
+			var cfv = $(this).attr('cfv');
 			
-			if(storagedetail == 1 && a == 0){
+			if(storagedetail == 1 && a == 0 && cfv){
 			$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageIn' , array('companyId'=>$this->companyId));?>',
 					data:{sid:id},
 					success:function(msg){
 						if(msg=='true'){
 						   alert('入库成功!');	
-						   	a = 1 ;
+						   
 						}else{
 							//alert(msg);
 							alert('入库失败1!');
@@ -168,14 +169,16 @@
 						//location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 					},
 				});
+				$(this).attr('cfv',0);	a = 1 ;
 			}else{
-					alert('请添加需要入库的品项');
+					alert('请添加需要入库的品项或重复提交');
 				}
 		});
 		$('#status-0').click(function(){
 			var pid = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
 			var prices = 1;
+			var cfv = $(this).attr('cfv');
 			$(".price").each(function(){
 				var price = $(this).text();
 				if(price == '0.00'){
@@ -195,7 +198,7 @@
 					return false;
 				}
 			}
-			if(storagedetail == 1 && a == 0){
+			if(storagedetail == 1 && a == 0 && cfv){
 				$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
 					data:{type:1,pid:pid},
@@ -207,7 +210,7 @@
 								success:function(msg){
 									if(msg=='true'){
 									   alert('入库成功!');	
-									   	a = 1 ;
+									   
 									}else{
 										alert('入库失败2!');
 									}
@@ -223,17 +226,17 @@
 						//location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
-			
+				$(this).attr('cfv',0);	a = 1 ;
 			}else{
-				alert('请添加需要入库的详细品项');
+				alert('请添加需要入库的详细品项或重复提交');
 				}
 		});
 
 		$('#status-1').click(function(){
 			var pid = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
-			
-			if(storagedetail == 1){
+			var cfv = $(this).attr('cfv');
+			if(storagedetail == 1 && cfv){
 			if(confirm('确认驳回该入库单')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
@@ -249,15 +252,16 @@
 					}
 				});
 			}
+			$(this).attr('cfv',0);
 			}else{
-				alert('请添加需要入库的详细品项');
+				alert('请添加需要入库的详细品项或重复提交');
 				}
 		});
 		$('#status-2').click(function(){
 			var pid = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
-			
-			if(storagedetail == 1){
+			var cfv = $(this).attr('cfv');
+			if(storagedetail == 1 && cfv){
 			if(confirm('确认重新送审该入库单')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
@@ -273,8 +277,9 @@
 					}
 				});
 			}
+			$(this).attr('cfv',0);
 			}else{
-				alert('请添加需要入库的详细品项');
+				alert('请添加需要入库的详细品项或重复提交');
 				}
 		});
 		$('#status-4').click(function(){
