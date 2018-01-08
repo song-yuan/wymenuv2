@@ -81,7 +81,7 @@ class WxFullSent
 			if(!empty($fullSents)){
 				foreach ($fullSents as $sent){
 					$fullcost = $sent['full_cost'];
-					if($price <= $fullcost){
+					if($price < $fullcost){
 						break;
 					}
 					$fullsentActive = $sent;
@@ -93,7 +93,7 @@ class WxFullSent
 			if(!empty($fullminus)){
 				foreach ($fullminus as $minus){
 					$fullcost = $minus['full_cost'];
-					if($price <= $fullcost){
+					if($price < $fullcost){
 						break;
 					}
 					$fullsentActive = $minus;
