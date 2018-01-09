@@ -201,7 +201,7 @@
 	</div>
 	<!-- END PAGE CONTENT-->
 
-	<div class="page-content" style="overflow:hidden;">
+
 	<div id="main2" name="main2" style="min-width: 500px;min-height:300px;display:none;background: white;">
 	<div id="content">
 		<div class="form-body">
