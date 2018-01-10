@@ -260,6 +260,7 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
+		Helper::writeLog($this->sceneId);
 		$sceneArr = explode('-', $this->sceneId);
 		$sceneId = $sceneArr[0];
 		$dpid = $sceneArr[1];
