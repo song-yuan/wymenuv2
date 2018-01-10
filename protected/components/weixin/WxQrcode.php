@@ -12,6 +12,7 @@ class WxQrcode {
 
 	
 	public $db;
+	public $companyId;
 	public $account;
 	
 	public function __construct($brandId){
@@ -21,20 +22,18 @@ class WxQrcode {
 	}
 	public function getWxAccount($brandId){
 		$this->account = WxAccount::get($this->brandId);
-		if($this->brandId != $this->account['dpid']){
-			$this->brandId = $this->account['dpid'];
-		}
+		$this->companyId = $this->account['dpid'];
 	}
 	/**
 	 * 获取场景ID
 	 */
-	public function getSceneId($type,$id,$expireTime = null){
-		$scene = WxScene::get($this->brandId,$type,$id);
+	public function getSceneId($type,$scenelid,$scenedpid,$expireTime = null){
+		$scene = WxScene::get($this->companyId,$scenelid,$scenedpid,$type);
 		$sceneId = $scene?$scene['scene_id']:false;
 		if($sceneId){
 			WxScene::update($scene['lid'],$scene['dpid'],$expireTime);
 		}else{
-		    $sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
+		    $sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->companyId;
 			$maxSceneArr = $this->db->createCommand($sql)->queryRow();
 				
 			$maxSceneId = $maxSceneArr['maxId'];
@@ -45,7 +44,7 @@ class WxQrcode {
 			$se=new Sequence("scene");
             $lid = $se->nextval();
             
-			$sceneData = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$sceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'is_sync'=>$isSync);
+			$sceneData = array('lid'=>$lid,'dpid'=>$this->companyId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$sceneId,'type'=>$type,'scene_lid'=>$id,'scene_dpid'=>$this->brandId,'expire_time'=>$expireTime,'is_sync'=>$isSync);
 			WxScene::insert($sceneData);				
 		}
 		return $sceneId;
@@ -54,8 +53,7 @@ class WxQrcode {
 	 * 生成限制二维码
 	 */
 	public function getLimitQrcodeTicket($sceneId){
-		Helper::writeLog('--'.$sceneId);
-		$accessTokenObj = new AccessToken($this->brandId);
+		$accessTokenObj = new AccessToken($this->companyId);
         $accessToken = $accessTokenObj->accessToken;
 		if(!$accessToken){
 			return false;
@@ -99,8 +97,8 @@ class WxQrcode {
    		}
    		return $path;
     }
-	public function getQrcode($type,$id,$expireTime = null,$limit = true){	
-		$sceneId = $this->getSceneId($type,$id,$expireTime);
+	public function getQrcode($type,$scenelid,$scenedpid,$expireTime = null,$limit = true){	
+		$sceneId = $this->getSceneId($type,$scenelid,$scenedpid,$expireTime);
 		if($limit){
 			$ticket = $this->getLimitQrcodeTicket($sceneId);
 		}else{
