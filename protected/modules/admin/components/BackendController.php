@@ -8,16 +8,18 @@ class BackendController extends CController
 		date_default_timezone_set('PRC');
 		parent::beforeAction($action);
 		$controllerId = Yii::app()->controller->getId();
-		$action = Yii::app()->controller->getAction()->getId();   
-	//var_dump(Yii::app()->user->companyId);             
-        //$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
-        //var_dump(Yii::app()->user->role);exit;
+		$action = Yii::app()->controller->getAction()->getId(); 
+		
+		$adminReturnUrl = Yii::app()->params['admin_return_url'];
 		if(Yii::app()->user->isGuest) {
 			if($controllerId != 'login' && $action != 'upload') {
-				$this->redirect(Yii::app()->params['admin_return_url']);
+				$this->redirect($adminReturnUrl);
 			}
 		}elseif(Yii::app()->user->role >= User::GROUPER &&$controllerId != 'login'){
-			$this->redirect(Yii::app()->params['admin_return_url']);
+			/**
+			 * 服务员 收银员 无权限登录系统
+			 */
+			$this->redirect($adminReturnUrl);
 		}else{
 			$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
 			
