@@ -30,7 +30,6 @@ class WxQrcode {
 		$sceneId = $scene?$scene['scene_id']:false;
 		if($sceneId){
 			WxScene::update($scene['lid'],$scene['dpid'],$expireTime);
-			return $sceneId;
 		}else{
 		    $sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
 			$maxSceneArr = $this->db->createCommand($sql)->queryRow();
