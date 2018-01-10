@@ -260,7 +260,10 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
-		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$this->sceneId. ' AND dpid =' .$this->brandId;
+		$sceneArr = explode('-', $this->sceneId);
+		$sceneId = $sceneArr[0];
+		$dpid = $sceneArr[1];
+		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$sceneId. ' AND dpid =' .$dpid;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$this->scene)
 			throw new Exception('该品牌没有此场景信息');
