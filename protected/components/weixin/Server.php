@@ -260,10 +260,8 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
-		Helper::writeLog($this->sceneId);
-		$sceneArr = explode('-', $this->sceneId);
-		$sceneId = $sceneArr[0];
-		$dpid = $sceneArr[1];
+		$sceneId = $this->sceneId;
+		$dpid = $this->brandId;
 		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$sceneId. ' AND dpid =' .$dpid;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$this->scene)

@@ -21,6 +21,9 @@ class WxQrcode {
 	}
 	public function getWxAccount($brandId){
 		$this->account = WxAccount::get($this->brandId);
+		if($this->brandId != $this->account['dpid']){
+			$this->brandId = $this->account['dpid'];
+		}
 	}
 	/**
 	 * 获取场景ID
@@ -45,7 +48,7 @@ class WxQrcode {
 			$sceneData = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$sceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'is_sync'=>$isSync);
 			WxScene::insert($sceneData);				
 		}
-		return $sceneId.'-'.$this->brandId;
+		return $sceneId;
 	}
 	/**
 	 * 生成限制二维码
