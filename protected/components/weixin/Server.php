@@ -194,6 +194,7 @@ class Server {
 	public function sceneResponse() {
 		$subPushs = array();
 		$sceneType = $this->scene['type'];
+		Helper::writeLog('scene-type:'.$sceneType);
 		if($sceneType==1){
 			$tableArr = array(
 				1=>array('serial', 'type_id','欢迎前来就餐', $this->hostInfo.'/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
@@ -203,6 +204,7 @@ class Server {
 			if(isset($tableArr[$sceneType][5])){
 				$sql.= ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['id'];
 			}
+			Helper::writeLog('scene-sql:'.$sql);
 			$query = Yii::app()->db->createCommand($sql)->queryRow();
 			$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 			
@@ -219,7 +221,7 @@ class Server {
 				$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
 					
 				array_push($subPushs,$siteArr);
-				
+				Helper::writeLog('scene-Arr:'.json_encode($siteArr));
 				return $this->news($subPushs);
 			}else{
 				return $this->generalResponse();
