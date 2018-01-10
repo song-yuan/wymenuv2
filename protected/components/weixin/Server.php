@@ -213,7 +213,6 @@ class Server {
 				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$query['dpid'],'type'=>1));
 				
 				$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$query['dpid'];
-				Helper::writeLog($sql);
 				$siteType = Yii::app()->db->createCommand($sql)->queryRow();
 		
 				$typeName = isset($siteType['name'])?$siteType['name']:'';

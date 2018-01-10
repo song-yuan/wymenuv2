@@ -52,10 +52,10 @@ class MallController extends Controller
 			}
 			if($this->type==1){
 				//堂吃
-				$scaned = WxScanLog::get($this->companyId,$userId);
+				$scaned = WxScanLog::get($comdpid,$userId);
 				if(!empty($scaned)){
-					$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
-					Yii::app()->session['qrcode-'.$userId] = $scene['id'];
+					$scene = WxScanLog::getScene($comdpid,$scaned['scene_id']);
+					Yii::app()->session['qrcode-'.$userId] = $scene['scene_lid'];
 				}else{
 					Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
 				}
