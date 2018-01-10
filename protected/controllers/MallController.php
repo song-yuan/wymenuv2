@@ -81,12 +81,12 @@ class MallController extends Controller
         $userId = $user['lid'];
         $cartList = array();
         $siteId = Yii::app()->session['qrcode-'.$userId];
-        var_dump($siteId);exit;
         if($this->type==1){
         	$site = WxSite::get($siteId,$this->companyId);
         	if($site){
         		$siteId = $site['lid'];
         		$siteNo = WxSite::getSiteNo($siteId,$this->companyId);
+        		var_dump($siteNo);exit;
         		if(in_array($siteNo['status'],array(1,2,3))){
         			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
         		}
