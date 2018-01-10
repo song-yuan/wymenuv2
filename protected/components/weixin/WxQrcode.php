@@ -51,8 +51,9 @@ class WxQrcode {
 	 * 生成限制二维码
 	 */
 	public function getLimitQrcodeTicket($sceneId){
-		 $accessTokenObj = new AccessToken($this->brandId);
-         $accessToken = $accessTokenObj->accessToken;
+		Helper::writeLog('--'.$sceneId);
+		$accessTokenObj = new AccessToken($this->brandId);
+        $accessToken = $accessTokenObj->accessToken;
 		if(!$accessToken){
 			return false;
 		}
