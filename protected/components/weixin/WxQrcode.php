@@ -45,7 +45,6 @@ class WxQrcode {
 			$sceneData = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$sceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'is_sync'=>$isSync);
 			WxScene::insert($sceneData);				
 		}
-		Helper::writeLog($sceneId.'-'.$this->brandId);
 		return $sceneId.'-'.$this->brandId;
 	}
 	/**
