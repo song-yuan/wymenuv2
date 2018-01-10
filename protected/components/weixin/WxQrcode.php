@@ -44,7 +44,7 @@ class WxQrcode {
 			$se=new Sequence("scene");
             $lid = $se->nextval();
             
-			$sceneData = array('lid'=>$lid,'dpid'=>$this->companyId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$sceneId,'type'=>$type,'scene_lid'=>$id,'scene_dpid'=>$this->brandId,'expire_time'=>$expireTime,'is_sync'=>$isSync);
+			$sceneData = array('lid'=>$lid,'dpid'=>$this->companyId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$sceneId,'type'=>$type,'scene_lid'=>$scenelid,'scene_dpid'=>$scenedpid,'expire_time'=>$expireTime,'is_sync'=>$isSync);
 			WxScene::insert($sceneData);				
 		}
 		return $sceneId;
