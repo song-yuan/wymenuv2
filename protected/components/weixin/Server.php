@@ -203,7 +203,6 @@ class Server {
 			if(isset($tableArr[$sceneType][5])){
 				$sql.= ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['scene_lid'];
 			}
-			Helper::writeLog($sql);
 			$query = Yii::app()->db->createCommand($sql)->queryRow();
 			
 			if($query) {
@@ -211,7 +210,7 @@ class Server {
 				$urlArr = array(
 					1=>array('mall/index','companyId'),
 				);
-				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId,'type'=>1));
+				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$query['dpid'],'type'=>1));
 				
 				$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$query['dpid'];
 				Helper::writeLog($sql);
