@@ -1866,7 +1866,31 @@ class DataSyncOperation {
 					}else{
 						$stockPrice = 0;
 					}
-					
+					if($realityStock<=0 && $k+1==$count){
+						// 最后一批库存还小于等于0 
+						$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+						Yii::app ()->db->createCommand ( $sql )->execute ();
+							
+						$se = new Sequence ( "material_stock_log" );
+						$materialStockLogId = $se->nextval ();
+						$materialStockLog = array (
+								'lid' => $materialStockLogId,
+								'dpid' => $dpid,
+								'create_at' => $createAt,
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'logid'=>$materialStock['lid'],
+								'order_product_id'=>$orderProductId,
+								'material_id' => $materialId,
+								'type' => 1,
+								'stock_num' => $temStock,
+								'original_num'=>$materialStock['batch_stock'],
+								'unit_price'=>$stockPrice,
+								'resean' => '正常消耗',
+								'is_sync' => DataSync::getInitSync ()
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
+						break;
+					}
 					$temStock = $temStock - $realityStock;
 					if($temStock > 0){
 						// 消耗库存大于该批次库存
