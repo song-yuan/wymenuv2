@@ -102,4 +102,24 @@ class WxFullSent
 		}
 		return $fullsentActive;
 	}
+	public static function canUseFullsent($dpid,$price,$type){
+		$fullsent = array();
+		$fullsentProduct = WxFullSent::getFullsentActive($dpid, $price, $type, 0); // 满送商品
+		$fullminusPrice = WxFullSent::getFullsentActive($dpid, $price, $type, 1); // 满减价
+		if(!empty($fullsentProduct)&&!empty($fullminusPrice)){
+			if($fullsentProduct['full_cost'] > $fullminusPrice['full_cost']){
+				$fullsent = $fullsentProduct;
+			}else{
+				$fullsent = $fullminusPrice;
+			}
+		}else{
+			if(!empty($fullsentProduct)){
+				$fullsent = $fullsentProduct;
+			}
+			if(!empty($fullminusPrice)){
+				$fullsent = $fullminusPrice;
+			}
+		}
+		return $fullsent;
+	}
 }

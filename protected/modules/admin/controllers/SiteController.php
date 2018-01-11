@@ -120,7 +120,7 @@ class SiteController extends BackendController
 		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
 
 		$wxQrcode = new WxQrcode($this->companyId);
-		$qrcode = $wxQrcode->getQrcode(WxQrcode::SITE_QRCODE,$model->lid,strtotime('2050-01-01 00:00:00'));
+		$qrcode = $wxQrcode->getQrcode(WxQrcode::SITE_QRCODE,$model->lid,$model->dpid,strtotime('2050-01-01 00:00:00'));
 		
 		if($qrcode){
 			$model->saveAttributes(array('qrcode'=>$qrcode));

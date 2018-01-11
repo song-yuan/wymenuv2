@@ -145,7 +145,7 @@
 	    	<div class="item-group">
 	    		<?php 
 	    			foreach($groups['tastes'] as $taste):
-	    			$taste['price'] = number_format($taste['price']*$levelDiscunt,2);
+	    			$taste['price'] = number_format($taste['price']*$levelDiscount,2);
 	    		?>
 	    			<div class="item t-item taste-item"  group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" allflage="<?php echo $taste['allflae'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
@@ -203,8 +203,8 @@
 	    				if($taste["price"]>0){
 	    					$original += $taste["price"];
 	    					if($model['is_member_discount']){
-	    						$memdisprice += number_format($taste["price"]*(1-$levelDiscunt),2);
-	    						$taste["price"] = number_format($taste["price"]*$levelDiscunt,2);
+	    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
+	    						$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
 	    					}
     						$price += $taste["price"];
 	    					$tprice = '('.$taste["price"].')';
@@ -239,8 +239,8 @@
 	    				if($item['price'] > 0){
 	    					$original += $item["price"];
 	    					if($model['is_member_discount']){
-	    						$memdisprice += number_format($item["price"]*(1-$levelDiscunt),2);
-	    						$taste["price"] = number_format($item["price"]*$levelDiscunt,2);
+	    						$memdisprice += number_format($item["price"]*(1-$levelDiscount),2);
+	    						$taste["price"] = number_format($item["price"]*$levelDiscount,2);
 	    					}
 	    					$price += $item["price"];
 	    				}
@@ -266,8 +266,8 @@
 			    				if($taste["price"]>0){
 			    					$original += $taste["price"];
 			    					if($model['is_member_discount']){
-			    						$memdisprice += number_format($taste["price"]*(1-$levelDiscunt),2);
-	    								$taste["price"] = number_format($taste["price"]*$levelDiscunt,2);
+			    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
+	    								$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
 			    					}
 		    						$price += $taste["price"];
 			    				}
@@ -381,9 +381,8 @@
 </div>
 <?php endif;?>
 
-<div class="totalinfo"><span class="font_l" style="margin-right:20px;<?php if(!$memdisprice) echo 'dispaly:none';?>">优惠￥<span class="cart-discount"><?php echo number_format($memdisprice,2);?></span></span><span>实付￥<span class="cart-price"><?php echo $price;?></span></span></div>
-
 <?php if($this->type!=1):?>
+<div class="totalinfo"><span class="font_l" style="margin-right:20px;<?php if(!$memdisprice) echo 'dispaly:none';?>">优惠￥<span class="cart-discount"><?php echo number_format($memdisprice,2);?></span></span><span>实付￥<span class="cart-price"><?php echo $price;?></span></span></div>
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
 </div>
@@ -427,7 +426,7 @@
 <?php else:?>
 <footer>
     <div class="ft-lt">
-        <p style="margin-left:10px;">付款 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
+        <p style="margin-left:10px;">总计 ￥<span id="total" class="total" total="<?php echo $original;?>"><?php echo $original;?></span></p>
     </div>
     <div class="ft-rt" id="payorder">
     	<a href="javascript:;">

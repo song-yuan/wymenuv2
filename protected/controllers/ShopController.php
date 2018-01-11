@@ -4,7 +4,7 @@ class ShopController extends Controller
 {
 	public $companyId = 0;
 	public $type = 0;
-	
+	public $company;
 	public $layout = '/layouts/shopmain';
 	public function init()
 	{
@@ -12,6 +12,7 @@ class ShopController extends Controller
 		$type = Yii::app()->request->getParam('type',6);
 		$this->companyId = $companyId;
 		$this->type = $type;
+		$this->company = WxCompany::get($this->companyId);
 	}
 	public function actionIndex(){
 		$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type));

@@ -7,9 +7,9 @@
  */
 class WxScene
 {
-	public static function get($dpid,$id,$type){
-		$sql = 'select * from nb_scene where id=:id and dpid=:dpid and type=:type';
-		$scene = Yii::app()->db->createCommand($sql)->bindValue(':id',$id)->bindValue(':dpid',$dpid)->bindValue(':type',$type)->queryRow();
+	public static function get($dpid,$scenelid,$scenedpid,$type){
+		$sql = 'select * from nb_scene where dpid='.$dpid.' and scene_lid='.$scenelid.' and scene_dpid='.$scenedpid.' and type='.$type;
+		$scene = Yii::app()->db->createCommand($sql)->queryRow();
 		return $scene;
 	}
 	public static function insert($data){

@@ -199,34 +199,33 @@ class Server {
 				1=>array('serial', 'type_id','欢迎前来就餐', $this->hostInfo.'/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 			);
 			
-			$sql = 'SELECT '.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->brandId;
+			$sql = 'SELECT dpid,'.$tableArr[$sceneType][0].' as title,'.$tableArr[$sceneType][1].', "'.$tableArr[$sceneType][2].'" as description, "'.$tableArr[$sceneType][3].'" as imgUrl FROM '.$tableArr[$sceneType][4].' WHERE dpid = ' .$this->scene['scene_dpid'];
 			if(isset($tableArr[$sceneType][5])){
-				$sql.= ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['id'];
+				$sql.= ' AND '.$tableArr[$sceneType][5].' = ' .$this->scene['scene_lid'];
 			}
 			$query = Yii::app()->db->createCommand($sql)->queryRow();
-			$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 			
 			if($query) {
+				$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 				$urlArr = array(
 					1=>array('mall/index','companyId'),
 				);
-				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId,'type'=>1));
+				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$query['dpid'],'type'=>1));
 				
-				$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$this->brandId;
+				$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$query['dpid'];
 				$siteType = Yii::app()->db->createCommand($sql)->queryRow();
 		
 				$typeName = isset($siteType['name'])?$siteType['name']:'';
 				$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
 					
 				array_push($subPushs,$siteArr);
-				
 				return $this->news($subPushs);
 			}else{
 				return $this->generalResponse();
 			}
 		}else{
 			if($this->brandUser['weixin_group']==$this->brandId){
-				$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['id']);
+				$data = array('openid'=>$this->postArr['FromUserName'],'group'=>$this->scene['scene_lid']);
 				WxBrandUser::updateByOpenid($data);
 			}
 			if($this->event == 'subscribe') {
@@ -260,7 +259,9 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
-		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$this->sceneId. ' AND dpid =' .$this->brandId;
+		$sceneId = $this->sceneId;
+		$dpid = $this->brandId;
+		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$sceneId. ' AND dpid =' .$dpid;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$this->scene)
 			throw new Exception('该品牌没有此场景信息');

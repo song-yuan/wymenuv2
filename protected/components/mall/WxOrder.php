@@ -249,9 +249,13 @@ class WxOrder
 		}
 		if(!in_array($siteNo['status'],array(1,2,3))){
 			throw new Exception('请联系服务员,开台后下单');
-		}elseif($siteNo['status'] != 1){
-			$this->siteId = $siteNo['lid'];
-			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
+		}else{
+			if($siteNo['status'] != 1){
+				$this->siteId = $siteNo['lid'];
+				$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
+			}else{
+				$this->siteId = $siteNo['lid'];
+			}
 		}
 	}
 	//获取餐位费
@@ -383,16 +387,7 @@ class WxOrder
 				$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
 		}
-		$levelDiscount = 1;
-		if($this->type!=2&&$this->user['level']){
-			$birthday = date('m-d',strtotime( $this->user['user_birthday']));
-			$today = date('m-d',time());
-			if($birthday==$today){
-				$levelDiscount =  $this->user['level']['birthday_discount'];
-			}else{
-				$levelDiscount =  $this->user['level']['level_discount'];
-			}
-		}
+		$levelDiscount = WxBrandUser::getUserDiscount($this->user,$this->type);
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			
@@ -512,7 +507,7 @@ class WxOrder
 				}
 				$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			}else{
-				if($cart['is_member_discount']){
+				if($cart['is_member_discount']&&$this->type!=1){
 					$memdiscount += number_format(($cart['price']+$ortherPrice)*(1-$levelDiscount)*$cart['num'],2);
 					$orderPrice +=  number_format(($cart['price']+$ortherPrice)*$levelDiscount*$cart['num'],2);
 				}else{
@@ -696,13 +691,15 @@ class WxOrder
 			if($product['set_id']>0){
 				$oProduct = WxProduct::getProductSet($product['set_id'], $dpid);
 				$productSet = self::getOrderProductSetDetail($product['order_id'],$dpid,$product['set_id'],$product['main_id']);
-				$orderProduct[$k]['detail'] = $productSet;
 				$orderProduct[$k]['phs_code'] = $oProduct['pshs_code'];
+				$orderProduct[$k]['is_member_discount'] = $oProduct['is_member_discount'];
+				$orderProduct[$k]['detail'] = $productSet;
 			}else{
 				$oProduct = WxProduct::getProduct($product['product_id'], $dpid);
 				$productTaste = self::getOrderTaste($product['lid'],$dpid,0);
-				$orderProduct[$k]['taste'] = $productTaste;
 				$orderProduct[$k]['phs_code'] = $oProduct['phs_code'];
+				$orderProduct[$k]['is_member_discount'] = $oProduct['is_member_discount'];
+				$orderProduct[$k]['taste'] = $productTaste;
 			}
 		}
 	    return $orderProduct;

@@ -38,7 +38,7 @@ class WxSite
 	public static function getSiteNoByLid($siteNoId,$dpid){
 		$sql = 'select * from nb_site_no where lid=:siteNoId and dpid=:dpid and is_temp=0 and delete_flag=0 order by lid desc limit 1';
 		$siteNo = Yii::app()->db->createCommand($sql)
-			->bindValue(':siteNoId',$siteId)
+			->bindValue(':siteNoId',$siteNoId)
 			->bindValue(':dpid',$dpid)
 			->queryRow();
 		return $siteNo;
