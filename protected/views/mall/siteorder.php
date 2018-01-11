@@ -24,38 +24,39 @@
 	$orderProducts = $order['product_list'];
 ?>
 <div class="order-info">
-<div class="order-info-title">下单时间:<?php echo $order['create_at'];?></div>
-<?php if(!empty($order['taste'])):?>
-<div class="taste">整单口味:
-	<?php foreach ($order['taste'] as $otaste): ?>
-	<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
-	<?php endforeach;?>
-</div>
-<?php endif;?>
-	<?php foreach($orderProducts as $product):?>
-	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?></div>
-		<div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
-		<div class="clear"></div>
+	<div class="order-info-title">下单时间:<?php echo $order['create_at'];?></div>
+	<?php if(!empty($order['taste'])):?>
+	<div class="taste">整单口味:
+		<?php foreach ($order['taste'] as $otaste): ?>
+		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
+		<?php endforeach;?>
 	</div>
-		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
-		<div class="taste">口味:
-		<?php foreach ($product['taste'] as $taste):?>
-		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
-		<?php endforeach;?>
+	<?php endif;?>
+		<?php foreach($orderProducts as $product):?>
+		<div class="item">
+			<div class="lt"><?php echo $product['product_name'];?></div>
+			<div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+			<div class="clear"></div>
 		</div>
-		<?php endif;?>
-		
-		<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
-		<div class="taste">
-		<?php foreach ($product['detail'] as $detail):?>
-		<span> <?php echo $detail['product_name'];?> </span>
+			<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
+			<div class="taste">口味:
+			<?php foreach ($product['taste'] as $taste):?>
+			<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+			<?php endforeach;?>
+			</div>
+			<?php endif;?>
+			
+			<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
+			<div class="taste">
+			<?php foreach ($product['detail'] as $detail):?>
+			<span> <?php echo $detail['product_name'];?> </span>
+			<?php endforeach;?>
+			</div>
+			<?php endif;?>
+			
 		<?php endforeach;?>
-		</div>
-		<?php endif;?>
-		
-	<?php endforeach;?>
-</div>
+	</div>
+<div class="ht-10"></div>
 <?php endforeach;?>
 
 <div class="bottom"></div>
