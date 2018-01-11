@@ -666,19 +666,20 @@ class WxOrder
 	}
 	/**
 	 * 
-	 * 通过siteid获取订单未支付
+	 * 通过siteid获取所有未支付订单
 	 * 
 	 */
 	public static function getOrderBySiteId($siteId,$dpid){
 		$sql = 'select * from nb_order where site_id=:siteId and dpid=:dpid and order_status=2 and is_temp=0 and order_type=1';
-		$order = Yii::app()->db->createCommand($sql)
+		$orders = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':siteId',$siteId)
 				  ->bindValue(':dpid',$dpid)
-				  ->queryRow();
-	  	if($order){
-	  		$order['taste'] = self::getOrderTaste($order['lid'], $dpid, 1);
-	  	}
-	    return $order;
+				  ->queryAll();
+		foreach ($orders as $key=>$order){
+			$orders[$key]['taste'] = self::getOrderTaste($order['lid'], $dpid, 1);
+			$orders[$key]['product_list'] = self::getOrderProduct($order['lid'],$dpid);
+		}
+	    return $orders;
 	}
 	public static function getOrderProduct($orderId,$dpid){
 		$sql = 'select lid,order_id,main_id,set_id,price,amount,zhiamount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0 and set_id=0';

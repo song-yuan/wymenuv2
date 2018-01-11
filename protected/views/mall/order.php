@@ -12,15 +12,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
-<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_002.js" type="text/javascript"></script>
-<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_004.js" type="text/javascript"></script>
-<link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_002.css" rel="stylesheet" type="text/css">
-<link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll.css" rel="stylesheet" type="text/css">
-<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll.js" type="text/javascript"></script>
-<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_003.js" type="text/javascript"></script>
-<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_005.js" type="text/javascript"></script>
-<link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <style>
 .layui-layer-btn{height:42px;}
 .weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:50%;}
@@ -28,98 +19,44 @@
 .weui_dialog{z-index:9003;}
 </style>
 
-<form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'type'=>$this->type));?>" method="post">
+<form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'siteId'=>$siteId,'type'=>$this->type));?>" method="post">
 <div class="order-title">我的订单</div>
-<?php if($order['order_type']==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
-<?php elseif($order['order_type']==2):?>
-<!-- 地址 -->
-<div class="address arrowright">
-	<?php if($address):?>
-	<div class="location">
-		<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
-		<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
-		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
-	</div>
-	<?php else:?>
-	<div class="location" style="line-height: 50px;">
-		<span class="add">添加收货地址</span>
-		<input type="hidden" name="address" value="-1"/>
-	</div>
-	<?php endif;?>
-</div>
-<?php elseif($order['order_type']==3):?>
-<div class="address arrowright">
-	<?php if($address):?>
-	<div class="location" style="line-height: 50px;">
-		<span>预约人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
-		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
-	</div>
-	<?php else:?>
-	<div class="location" style="line-height: 50px;">
-		<span class="add">添加预约人信息</span>
-		<input type="hidden" name="address" value="-1"/>
-	</div>
-	<?php endif;?>
-</div>
-<!-- 地址 -->
-<div class="order-time arrowright">
-	<div class="time-lt">预约时间</div>
-	<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="<?php if($order['appointment_time'] > "0000-00-00 00:00:00") echo $order['appointment_time'];?>" placeholder="选择预约时间" readonly="readonly" ></div>
-	<div class="clear"></div>
-</div>
-<?php endif;?>
-<div class="ht1"></div>
-<?php if(!empty($order['taste'])):?>
-	<div class="taste">整单口味:
-	<?php foreach ($order['taste'] as $otaste):?>
-	<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
-	<?php endforeach;?>
-	</div>
-<?php endif;?>
+
 <div class="order-info">
-	<?php foreach($orderProducts as $product):?>
-	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?></div>
-		<div class="rt">x<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
-		<div class="clear"></div>
-	</div>
-		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
-		<div class="taste">口味:
-		<?php foreach ($product['taste'] as $taste):?>
-		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
-		<?php endforeach;?>
+	<?php 
+		foreach ($orders as $order):
+		$orderProducts = $order['product_list'];
+	?>
+		<?php foreach($orderProducts as $product):?>
+		<div class="item">
+			<div class="lt"><?php echo $product['product_name'];?></div>
+			<div class="rt">x<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+			<div class="clear"></div>
 		</div>
-		<?php endif;?>
-		
-		<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
-		<div class="taste">
-		<?php foreach ($product['detail'] as $detail):?>
-		<span> <?php echo $detail['product_name'];?> </span>
+			<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
+			<div class="taste">口味:
+			<?php foreach ($product['taste'] as $taste):?>
+			<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+			<?php endforeach;?>
+			</div>
+			<?php endif;?>
+			
+			<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
+			<div class="taste">
+			<?php foreach ($product['detail'] as $detail):?>
+			<span> <?php echo $detail['product_name'];?> </span>
+			<?php endforeach;?>
+			</div>
+			<?php endif;?>
 		<?php endforeach;?>
-		</div>
-		<?php endif;?>
-		
 	<?php endforeach;?>
 	<!-- 其他费用 -->
-	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
-		<div class="lt">餐位费:</div>
+		<div class="lt">餐位费</div>
 		<div class="rt">x1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
-	<?php elseif($order['order_type']==2):?>
-	<div class="item">
-		<div class="lt">包装费:</div>
-		<div class="rt">x1 ￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
-		<div class="clear"></div>
-	</div>
-	<div class="item">
-		<div class="lt">配送费:</div>
-		<div class="rt">x1 ￥<?php echo $freightFee?number_format($freightFee,2):'0.00';?></div>
-		<div class="clear"></div>
-	</div>
-	<?php endif;?>
 </div>
 
 <div class="activity-info">
@@ -293,18 +230,6 @@
 </div>
 <!--END actionSheet-->  
 <script>
-function getOrderStatus(){
-	var timestamp=new Date().getTime()
-    var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
-	
-	$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
-		if(parseInt(msg) > 1){
-			layer.alert('服务员已经确认,请点击待付!');
-		}else{
-			getOrderStatus();
-		}
-	});
-}
 function reset_total(price){
 	var setTotal = $('#total').attr('total');
 	var total = $('#total').html();
@@ -323,32 +248,7 @@ $(document).ready(function(){
 	var cupon_layer = 0;
 	var sent_layer = 0;
 	var isMustYue = false;
-	<?php if($order['order_type']!=1):?>
-	var currYear = (new Date()).getFullYear();	
-	var opt={};
-	opt.date = {preset : 'date'};
-	opt.datetime = {preset : 'datetime'};
-	opt.time = {preset : 'time'};
-	opt.default = {
-		theme: 'android-ics light', //皮肤样式
-        display: 'modal', //显示方式 
-        mode: 'scroller', //日期选择模式
-		dateFormat: 'yyyy-mm-dd',
-		lang: 'zh',
-		showNow: true,
-		nowText: "今天",
-        startYear: currYear, //开始年份
-        endYear: currYear + 1 //结束年份
-	};
-
-  	var optDateTime = $.extend(opt['datetime'], opt['default']);
-  	var optTime = $.extend(opt['time'], opt['default']);
-    $("#appDateTime").mobiscroll(optDateTime).datetime(optDateTime);
-    
-	$('.location').click(function(){
-		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/order',array('companyId'=>$this->companyId,'type'=>$this->type,'orderId'=>$order['lid'])))));?>';
-	});
-	<?php endif;?>
+	
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
 		$('.paytype .item').removeClass('on');
@@ -534,43 +434,12 @@ $(document).ready(function(){
 		}
 	});
 	$('#payorder').click(function(){
-		<?php if($order['order_type']==1):?>
 		if($('input[name="yue"]').is(':checked')){
 			$('#dialog1').show();
 			return;
 		}
 		layer.load(2);
 		$('form').submit();
-		<?php elseif($order['order_type']==2):?>
-		var address = $('input[name="address"]').val();
-		if(parseInt(address) < 0){
-			layer.msg('请添加收货地址!');
-			return;
-		}
-		if($('input[name="yue"]').is(':checked')){
-			$('#dialog1').show();
-			return;
-		}
-		layer.load(2);
-		$('form').submit();
-		<?php elseif($order['order_type']==3):?>
-		var address = $('input[name="address"]').val();
-		if(parseInt(address) < 0){
-			layer.msg('请添加预约人信息!');
-			return;
-		}
-		var orderTime = $('input[name="order_time"]').val();
-		if(!orderTime){
-			layer.msg('请选择预约时间!');
-			return;
-		}
-		if($('input[name="yue"]').is(':checked')){
-			$('#dialog1').show();
-			return;
-		}
-		layer.load(2);
-		$('form').submit();
-		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
 		$('#dialog').hide();
