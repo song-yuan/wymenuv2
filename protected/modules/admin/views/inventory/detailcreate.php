@@ -39,33 +39,65 @@
 						<div class="portlet-body form">
 							<div class="form-horizontal form-body">
 								<div class="form-group">
+									<label class="col-md-3 control-label">盘损类型</label>
+									<div class="col-md-2">
+										<select class="form-control" id="selcatetype">
+											<option value="1" >原料</option>
+											<option value="2" >成品</option>
+											<option value="0" >全部</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
 									<label class="col-md-3 control-label">按分类选择</label>
-									<div class="col-md-4">
+									<div class="col-md-4 mat">
 										<?php echo CHtml::dropDownList('selectCategory', 0, $categories , array('class'=>'form-control'));?>
+									</div>
+									<div class="col-md-4 pro hide">
+										<?php echo CHtml::dropDownList('selproCategory', 0, $cateps , array('class'=>'form-control'));?>
 									</div>
 								</div>
 								<?php $form=$this->beginWidget('CActiveForm', array(
-		'id' => 'material-form',
-		'errorMessageCssClass' => 'help-block',
-		'htmlOptions' => array(
-			'class' => 'form-horizontal',
-			'enctype' => 'multipart/form-data'
-		),
-)); ?>
-								<div class="form-group " id="table-manage">
+										'id' => 'material-form',
+										'errorMessageCssClass' => 'help-block',
+										'htmlOptions' => array(
+											'class' => 'form-horizontal',
+											'enctype' => 'multipart/form-data'
+										),
+								)); ?>
+								<div class="form-group mat" id="table-manage">
 									<label class="col-md-3 control-label">请勾选品项</label>
 									<div class="col-md-9" id="checkm">
 									<?php if($materials):?>
 									<?php foreach ($materials as $m):?>
 									<div id="mc" class="wid-33 flo-l mc" cate="<?php echo $m['category_id'];?>">
 								         <div class="wid-10 flo-l">
-								         	<input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $m['lid'];?>" name="mlist[]" id="m<?php echo $m['lid'];?>"/>
+								         	<input style="height:20px;" type="checkbox" catp="1" class="checkdpids" value="<?php echo $m['lid'];?>" name="mlist[]" id="m<?php echo $m['lid'];?>"/>
 								         </div>
 								         <div class="wid-70 flo-l"><label for="m<?php echo $m['lid'];?>"><?php echo $m['material_name'];?></label></div>
 									</div>
 									<?php endforeach;?>
 									<div class="wid-10 flo-r checkal">
 							         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#checkm .checkdpids" id="checkall"/>
+							         	<label for="checkall">全选</label>
+							         </div>
+									<?php endif;?>
+									</div>
+								</div>
+								<div class="form-group pro hide" id="table-manage">
+									<label class="col-md-3 control-label">请勾选产品</label>
+									<div class="col-md-9" id="checkmp">
+									<?php if($products):?>
+									<?php foreach ($products as $m):?>
+									<div id="mcp" class="wid-33 flo-l mcp" cate="<?php echo $m['category_id'];?>">
+								         <div class="wid-10 flo-l">
+								         	<input style="height:20px;" type="checkbox" catp="2" class="checkdpids" value="<?php echo $m['lid'];?>" name="mplist[]" id="mp<?php echo $m['lid'];?>"/>
+								         </div>
+								         <div class="wid-70 flo-l"><label for="mp<?php echo $m['lid'];?>"><?php echo $m['product_name'];?></label></div>
+									</div>
+									<?php endforeach;?>
+									<div class="wid-10 flo-r checkalp">
+							         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#checkmp .checkdpids" id="checkallp"/>
 							         	<label for="checkall">全选</label>
 							         </div>
 									<?php endif;?>
@@ -103,11 +135,41 @@
 			});
 		}
 	})
+		$('#selproCategory').change(function(){
+		var id = $(this).val();
+		if(id == 0){
+			$('.mcp').removeClass('hide');
+			$('.checkalp').removeClass('hide');
+			}else{
+				$('.checkalp').addClass('hide');
+			$('.mcp').each(function(){
+				var cate = $(this).attr('cate');
+				if(cate == id){
+					$(this).removeClass('hide');
+				}else{
+					$(this).addClass('hide');
+				}
+			});
+		}
+	})
+	$('#selcatetype').change(function(){
+		var tp = $(this).val();
+		if(tp ==1){
+			$('.pro').addClass('hide');
+			$('.mat').removeClass('hide');
+		}else if(tp ==2){
+			$('.mat').addClass('hide');
+			$('.pro').removeClass('hide');
+		}else{
+			$('.mat').removeClass('hide');
+			$('.pro').removeClass('hide');
+		}
+	})
 	$('.add_save').on('click',function(){
 		var dpids =new Array();
         var dpids="";
         $('.checkdpids:checked').each(function(){
-            dpids += $(this).val()+',';
+            dpids += $(this).val()+','+ $(this).attr('catp') +';';
         });
         if(dpids!=''){
         	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”

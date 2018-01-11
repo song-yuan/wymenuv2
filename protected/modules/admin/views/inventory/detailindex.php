@@ -68,12 +68,12 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php if($model->material)echo $model->material->material_name;?></td>
+								<td style="width:16%"><?php if($model->material && $model->type == 1)echo $model->material->material_name;elseif($model->product&&$model->type==2)echo $model->product->product_name;?></td>
 								<td ><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['inventory_stock'];?>" name="idss[]" />
 								<input class="kucundiv" type="text" <?php if($status != 0)echo 'disabled';?>  style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_stock'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
 								</td>
 								<td class="center">
-								<?php if($status == 0):?>
+								<?php if($status == 11):?>
 									<a href="<?php echo $this->createUrl('inventory/detailupdate',array('lid' => $model->lid , 'slid'=>$model->inventory_id,  'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>

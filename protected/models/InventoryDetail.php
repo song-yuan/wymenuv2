@@ -53,6 +53,7 @@ class InventoryDetail extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 				'material'=>array(self::BELONGS_TO , 'ProductMaterial' , '','on'=>'t.dpid=material.dpid and t.material_id=material.lid '),
+				'product'=>array(self::BELONGS_TO , 'Product' , '','on'=>'t.dpid=product.dpid and t.material_id=product.lid '),
 		);
 	}
 
