@@ -86,14 +86,14 @@ class MallController extends Controller
         $promotions = $promotion->promotionProductList;
         $buySentPromotions = $promotion->buySentProductList;
         $fullSents = $promotion->fullSentList;
-        $cache = Yii::app()->cache->get($key);
-        if($cache!=false){
-        	$products = json_decode($cache,true);
-        }else{
+//         $cache = Yii::app()->cache->get($key);
+//         if($cache!=false){
+//         	$products = json_decode($cache,true);
+//         }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-        	Yii::app()->cache->set($key,json_encode($products),$expire);
-        }
+//         	Yii::app()->cache->set($key,json_encode($products),$expire);
+//         }
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
         $disables = $carts['disable'];
@@ -176,22 +176,13 @@ class MallController extends Controller
 		}
 		$isMustYue = $cartObj->pormotionYue;
 		
-		$levelDiscunt = 1;
-		if(!in_array($this->type, array(2,7,8))&&$user['level']){
-			$birthday = date('m-d',strtotime($user['user_birthday']));
-			$today = date('m-d',time());
-			if($birthday==$today){
-				$levelDiscunt = $user['level']['birthday_discount'];
-			}else{
-				$levelDiscunt = $user['level']['level_discount'];
-			}
-		}
+		$levelDiscount = WxBrandUser::getUserDiscount($user,$this->type);
 		
 		$disables = $carts['disable'];
 		$availables = $carts['available'];
 		$original = WxCart::getCartOrigianPrice($availables); // 购物车原价
-		$price = WxCart::getCartPrice($availables,$levelDiscunt);// 购物车价格 会员折扣后价格
-		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables,$levelDiscunt);// 购物车可使用优惠券的价格
+		$price = WxCart::getCartPrice($availables,$levelDiscount);// 购物车价格 会员折扣后价格
+		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables,$levelDiscount);// 购物车可使用优惠券的价格
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$memdisprice = $original - $price;
 		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
@@ -201,32 +192,15 @@ class MallController extends Controller
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
 		if(!$cartObj->haspormotion){
-			$fullsentProduct = WxFullSent::getFullsentActive($this->companyId, $price, $this->type, 0); // 满送商品
-			$fullminusPrice = WxFullSent::getFullsentActive($this->companyId, $price, $this->type, 1); // 满减价
-		}
-		if(!empty($fullsentProduct)&&!empty($fullminusPrice)){
-			if($fullsentProduct['full_cost'] > $fullminusPrice['full_cost']){
-				$fullsent = $fullsentProduct;
-			}else{
-				$fullsent = $fullminusPrice;
-				$minusprice = $price - $fullsent['extra_cost'];
-				if($minusprice > 0){
-					$price = $minusprice;
-				}else{
-					$price = 0;
-				}
-			}
-		}else{
-			if(!empty($fullsentProduct)){
-				$fullsent = $fullsentProduct;
-			}
-			if(!empty($fullminusPrice)){
-				$fullsent = $fullminusPrice;
-				$minusprice = $price - $fullsent['extra_cost'];
-				if($minusprice > 0){
-					$price = $minusprice;
-				}else{
-					$price = 0;
+			$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, $this->type);
+			if(!empty($fullsent)){
+				if($fullsent['full_type']){
+					$minusprice = $price - $fullsent['extra_cost'];
+					if($minusprice > 0){
+						$price = $minusprice;
+					}else{
+						$price = 0;
+					}
 				}
 			}
 		}
@@ -242,7 +216,7 @@ class MallController extends Controller
 			$isFreightFee = 0;
 			$address = array();
 		}
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'memdisprice'=>$memdisprice,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'levelDiscunt'=>$levelDiscunt,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'fullsent'=>$fullsent,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'original'=>$original,'memdisprice'=>$memdisprice,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'levelDiscount'=>$levelDiscount,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'fullsent'=>$fullsent,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -450,6 +424,7 @@ class MallController extends Controller
 		$freightFee = 0;
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$levelDiscount = WxBrandUser::getUserDiscount($user,$order['order_type']);
 		if($order['order_type']==1){
 			$siteNo = WxSite::getSiteNoByLid($order['site_id'],$this->companyId);
 			$site = WxSite::get($siteNo['site_id'], $this->companyId);
@@ -476,9 +451,12 @@ class MallController extends Controller
 			}
 		}
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		
 		$proCodeArr = array();
 		$productArr = array();
+		$haspormotion = false;
+		
+		$price = 0;
+		$memdisprice = 0;
 		foreach ($orderProducts as $product){
 			if($product['set_id'] > 0){
 				$amount = $product['zhiamount'];
@@ -488,17 +466,44 @@ class MallController extends Controller
 			$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
 			array_push($proCodeArr, $product['phs_code']);
 			if($orderPromotion){
-				array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon']));
+				$haspormotion = true;
+				$isdiscount = 0;
+				array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon'],'is_member_discount'=>'0'));
 			}else{
-				array_push($productArr, array('promotion_id'=>-1,'num'=>$amount,'price'=>$product['price'],'can_cupon'=>1));
+				$isdiscount = $product['is_member_discount'];
+				array_push($productArr, array('promotion_id'=>-1,'num'=>$amount,'price'=>$product['price'],'can_cupon'=>1,'is_member_discount'=>$isdiscount));
+			}
+			if($isdiscount){
+				$memdisprice += $amount*$product['price']*(1-$levelDiscount);
+				$price +=  $amount*$product['price']*$levelDiscount;
+			}else{
+				$price +=  $amount*$product['price'];
 			}
 		}
-		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr);// 购物车优惠原价
+		
+		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr,$levelDiscount);// 购物车优惠原价
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		
 		$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
+		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+		// 如果没普通优惠活动  可满减满送
+		$fullsent = array();
+		if(!$haspormotion){
+			$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, $order['order_type']);
+			if(!empty($fullsent)){
+				if($fullsent['full_type']){
+					$minusprice = $price - $fullsent['extra_cost'];
+					if($minusprice > 0){
+						$price = $minusprice;
+					}else{
+						$price = 0;
+					}
+				}
+			}
+		}
+		
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'price'=>$price,'remainMoney'=>$remainMoney,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
 	 }
 	 /**
 	  * 

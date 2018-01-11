@@ -32,49 +32,63 @@ class WxBrandUser {
 		$brandUserLevel = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUserLevel;
 	}
-        
-        /**
+	/**
+	 * 返回会员等级折扣
+	 */
+	public static function getUserDiscount($user,$type) {
+		$levelDiscount = 1;
+		if(!in_array($type, array(2,7,8))&&$user['level']){
+			$birthday = date('m-d',strtotime($user['user_birthday']));
+			$today = date('m-d',time());
+			if($birthday==$today){
+				$levelDiscount = $user['level']['birthday_discount'];
+			}else{
+				$levelDiscount = $user['level']['level_discount'];
+			}
+		}
+		return $levelDiscount;
+	}   
+    /**
 	 * 返回店铺所有等级
 	 */
-        public static function getAllLevel($dpid) {
-            $sql = 'SELECT * FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
-            $result = Yii::app()->db->createCommand($sql)->queryAll();
-			return $result;
-        }
+     public static function getAllLevel($dpid) {
+         $sql = 'SELECT * FROM nb_brand_user_level WHERE dpid = ' .$dpid .' and level_type=1 and delete_flag=0 order by level_discount desc ';
+         $result = Yii::app()->db->createCommand($sql)->queryAll();
+		 return $result;
+     }
         
         
-        /**
-         * 返回会员卡图片
-         */
-        public static function getCardImg($style_id,$dpid) {
-
+    /**
+    * 返回会员卡图片
+    */
+    public static function getCardImg($style_id,$dpid) {
 		$sql = 'SELECT * FROM nb_member_wxcard_style WHERE lid = ' .$style_id .' and dpid = '.$dpid.' and delete_flag=0';
 		$card_img = Yii::app()->db->createCommand($sql)->queryRow();
 		return $card_img;
 	}
-        /**
-         * 返回满送
-         */
-        public static function getFullGive($dpid) {
-                $now = date('Y-m-d H:i:s',time());
+    /**
+    * 返回满送
+    */
+    public static function getFullGive($dpid) {
+        $now = date('Y-m-d H:i:s',time());
 		$sql = 'SELECT * FROM nb_full_sent WHERE full_type = 0 and begin_time <=:now and end_time>=:now and dpid = '.$dpid.' and delete_flag=0';
 		$full_give =  Yii::app()->db->createCommand($sql)->bindValue(':now',$now)->queryAll();
 		return $full_give;
 	}
-         /**
-         * 返回满减
-         */
-        public static function getFullMinus($dpid) {
-                $now = date('Y-m-d H:i:s',time());
+    /**
+    * 返回满减
+    */
+    public static function getFullMinus($dpid) {
+        $now = date('Y-m-d H:i:s',time());
 		$sql = 'SELECT * FROM nb_full_sent WHERE full_type = 1 and begin_time <=:now and end_time>=:now and dpid = '.$dpid.' and delete_flag=0 ';
 		$full_minus = Yii::app()->db->createCommand($sql)->bindValue(':now',$now)->queryAll();
 		return $full_minus;
 	}
         
-         /**
-         * 返回账单
-         */
-        public static function getOrderPay($card_id,$dpid) {
+    /**
+    * 返回账单
+    */
+    public static function getOrderPay($card_id,$dpid) {
         $dpid = WxCompany::getDpids($dpid);       
 		$sql = 'SELECT * , sum(pay_amount) as amount FROM nb_order_pay WHERE  dpid in ( '.$dpid.') and remark = '.$card_id.' and paytype in (8,9,10) GROUP BY account_no ';
 		$order_pay = Yii::app()->db->createCommand($sql)->queryAll();
