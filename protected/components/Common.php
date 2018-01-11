@@ -53,6 +53,15 @@ class Common{
        // var_dump($sql);exit;
         return $materialname;
     }
+    static public function getproductName($Id){
+    	$pn = "";
+    	$sql="select t.product_name from nb_product t where  t.lid=".$Id;
+    	$connect = Yii::app()->db->createCommand($sql);
+    	$p = $connect->queryRow();
+    	$pn = $p['product_name'];
+    	// var_dump($sql);exit;
+    	return $pn;
+    }
     static public function getStockSortCode($stockId){
         //var_dump($stockId);
         $unitname = "";

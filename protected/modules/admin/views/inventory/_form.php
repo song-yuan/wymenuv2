@@ -25,7 +25,7 @@
        <div class="form-group <?php if($model->hasErrors('reason_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'reason_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo CHtml::dropdownlist('reason_id' ,$retreatId,$retreats ,array('class' => 'form-control', ));?>
+				<?php echo $form->dropdownlist($model,'reason_id' ,$retreats ,array('class' => 'form-control', ));?>
 				<?php echo $form->error($model, 'reason_id' )?>
 				<input class="form-control" name="Inventory_reason_id" id="Inventory_reason_id" type="hidden" value="<?php echo $model->reason_id;?>"></input>
 			</div>
