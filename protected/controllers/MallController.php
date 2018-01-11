@@ -69,7 +69,7 @@ class MallController extends Controller
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
 			Yii::app()->session['userId-'.$userDpid] = $userId;
-			Yii::app()->session['qrcode-'.$userId] = -1;
+			Yii::app()->session['qrcode-'.$userId] = 602;
 		}
 		return true;
 	}
@@ -81,17 +81,6 @@ class MallController extends Controller
         $userId = $user['lid'];
         $cartList = array();
         $siteId = Yii::app()->session['qrcode-'.$userId];
-        if($this->type==1){
-        	$site = WxSite::get($siteId,$this->companyId);
-        	if($site){
-        		$siteId = $site['lid'];
-        		$siteNo = WxSite::getSiteNo($siteId,$this->companyId);
-        		var_dump($siteNo);exit;
-        		if(in_array($siteNo['status'],array(1,2,3))){
-        			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
-        		}
-        	}
-        }
         
         $promotion = new WxPromotion($this->companyId,$userId,$this->type);
         $promotions = $promotion->promotionProductList;
@@ -375,13 +364,12 @@ class MallController extends Controller
 				$orderProducts = WxOrder::getOrderProduct($order['lid'],$this->companyId);
 			}else{
 				$msg = '不存在该餐桌';
-				$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 			}
 		}else{
 			$msg = '不存在该餐桌';
-			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
-		
 		$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$user,'site'=>$site,'siteType'=>$siteType,'siteNo'=>$siteNo));
 	}
 	 /**
