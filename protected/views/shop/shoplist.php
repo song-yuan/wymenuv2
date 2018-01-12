@@ -43,8 +43,38 @@
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
 					       var juli = parseFloat(cObj.juli);
-					       if(juli <= showDiscount*1000){
-					    	   count++;
+					       if(shopName==''){
+					    	   if(juli <= showDiscount*1000){
+						    	   count++;
+						    	   isShowTips = false;
+							       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
+							       str +='<div class="right">';
+							    	   str +='<h1><span class="com-name">'+cObj.company_name+'</span><span class="rest_message small font_l">';
+							    	   if(cObj.is_rest=='2'){
+							    		   str +='(休息中...)';
+								    	}
+								    	str +='</span></h1>';
+							    	   	str +='<div class="info small font_l" style="margin-top:5px;">地址: <span class="address_info">'+cObj.province;
+							    	   	if(cObj.city!='市辖区'){
+							    		   str +=cObj.city;
+								    	}
+							    	   	str +=cObj.county_area+cObj.address+'</span><span class="open-location"><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>';
+							    	   	str +='<div class="misinfo small" style="margin-top:5px;">';
+							    		   str +='<span class="left">';
+							    			   str +='<span class=" font_l">营业时间: '+cObj.shop_time+'-'+cObj.closing_time+'</span><br>';
+							    			   str +='<span style="font-weight:800;">电话: <a class="" href="tel:'+cObj.telephone+'">'+cObj.telephone+'</a></span>';
+							    			   str +='</span>';
+									    if(juli > 1000){
+									    	str +='<span class="right font_org">'+parseFloat(juli/1000).toFixed(2)+'千米</span>';
+								    	}else{
+								    		str +='<span class="right font_org">'+juli.toFixed(2)+'米</span>';
+								    	}
+								    	str +='</div>';
+								   	str +='</div>';
+								 	str +='</li>';
+						       }
+						   }else{
+							   count++;
 					    	   isShowTips = false;
 						       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
 						       str +='<div class="right">';
@@ -71,7 +101,8 @@
 							    	str +='</div>';
 							   	str +='</div>';
 							 	str +='</li>';
-					       }
+						   }
+					       
 					    }
 					    if(count == 10){
 						   isShowMore = true;
