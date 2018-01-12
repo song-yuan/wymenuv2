@@ -43,7 +43,7 @@
 				        for(var i=0;i<msg.length;i++){
 					       var cObj = msg[i];
 					       var juli = parseFloat(cObj.juli);
-					       if(juli <= showDiscount*1000){
+					       if(juli <= showDiscount*1000&&shopName==''){
 					    	   count++;
 					    	   isShowTips = false;
 						       str +='<li href="<?php echo $this->createUrl('/mall/index');?>?companyId='+cObj.dpid+'&type=<?php echo $this->type;?>" lat="'+cObj.lat+'" lng="'+cObj.lng+'">';
