@@ -9,7 +9,7 @@
 								<style>
 								#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 								</style>
-								<?php  if($istempp){ $a = true;}else{$a=false;}?>
+								<?php  if($istempp&&(Yii::app()->user->role>5)){ $a = true;}else{$a=false;}?>
 								<?php  if(Yii::app()->user->role>=11&&$islock){ $b = true;}else{$b=false;}?>
 								<div class="form-body">
 									<div class="form-group  <?php if($model->hasErrors('category_id')) echo 'has-error';?>">
@@ -20,7 +20,7 @@
 										</div>
 										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 									</div>
-								<?php if($istempp){ echo '<script>
+								<?php if($istempp&&(Yii::app()->user->role>5)){ echo '<script>
 															$(".category_selecter").each(function(){
 																$(this).attr("disabled",true)
 																//document.querySelector(".category_selecter").setAttribute("disabled",true);
@@ -232,7 +232,7 @@
 	   			dataType:'json',
 	   			success:function(result){
 	   				if(result.data.length){
-	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
+	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter" ,<?php if ($a&&Yii::app()->user->role>5) echo 'disabled = true';else echo '';?>>'+
 	   					'<option value="">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
 	   					$.each(result.data,function(index,value){
 	   						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
