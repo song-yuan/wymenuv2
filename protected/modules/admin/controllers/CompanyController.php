@@ -399,24 +399,28 @@ public function actionCreate(){
 			
 			//var_dump($model);exit;
 			if($model->save()){
-				if(!empty($coms) && $coms['group']!=0 && $coms['price']!=0){
-					if(!empty($company)){
+				if(!empty($coms)){
+					if(isset($coms['group'])){
+						if(!empty($company)){
 						// echo "cccc";exit;
-						$area = $db->createCommand('update nb_area_group_company set area_group_id="'.$coms['group'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where company_id ='.$dpid.' and delete_flag=0')->execute();
-					}else{
-						$areaid = new Sequence("area_group_company");
-	                    $area = $areaid->nextval();
-	                    $date_area = array(
-	                    	'lid'=>$area,
-	                    	'dpid'=>$this->companyId,
-	                    	'create_at'=>date('Y-m-d H:i:s',time()),
-	                        'update_at'=>date('Y-m-d H:i:s',time()),
-	                        'area_group_id'=>$coms['group'],
-	                        'company_id'=>$dpid
-	                    ); 
-	                    $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+							$area = $db->createCommand('update nb_area_group_company set area_group_id="'.$coms['group'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where company_id ='.$dpid.' and delete_flag=0')->execute();
+						}else{
+							$areaid = new Sequence("area_group_company");
+		                    $area = $areaid->nextval();
+		                    $date_area = array(
+		                    	'lid'=>$area,
+		                    	'dpid'=>$this->companyId,
+		                    	'create_at'=>date('Y-m-d H:i:s',time()),
+		                        'update_at'=>date('Y-m-d H:i:s',time()),
+		                        'area_group_id'=>$coms['group'],
+		                        'company_id'=>$dpid
+		                    ); 
+		                    $areamodel = $db->createCommand()->insert('nb_area_group_company',$date_area);
+						}
 					}
-					$price = $db->createCommand('update nb_company_property set price_group_id="'.$coms['price'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$dpid.' and delete_flag=0')->execute();
+					if(isset($coms['price'])){
+						$price = $db->createCommand('update nb_company_property set price_group_id="'.$coms['price'].'",update_at="'.date('Y-m-d H:i:s',time()).'" where dpid ='.$dpid.' and delete_flag=0')->execute();
+					}
 				}
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
 				$this->redirect(array('company/index','companyId'=>$this->companyId));
