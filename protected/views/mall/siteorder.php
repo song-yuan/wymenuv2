@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('餐桌菜品列表');
+	$this->setPageTitle('我的订单');
+	$orderPrice = 0;
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
@@ -10,65 +11,59 @@
 .layui-layer-btn{height:42px;}
 </style>
 
-<div class="order-title">我的订单</div>
+<div class="order-title">已点菜品</div>
 <div class="order-site">
 	<div class="lt">桌号:<?php echo $siteType['name'];?><?php echo $site['serial'];?></div>
 	<div  class="rt"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>"><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="../img/mall/icon_add.png">加菜</a></div>
 	<div class="clear"></div>
 </div>
+
+<?php 
+	foreach ($orders as $order):
+	$orderPrice += $order['should_total'];
+	$orderProducts = $order['product_list'];
+?>
 <div class="order-info">
-	<?php foreach($orderProducts as $product):?>
-	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?></div>
-		<div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
-		<div class="clear"></div>
-	</div>
-		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
-		<div class="taste">口味:
-		<?php foreach ($product['taste'] as $taste):?>
-		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
-		<?php endforeach;?>
-		</div>
-		<?php endif;?>
-		
-		<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
-		<div class="taste">
-		<?php foreach ($product['detail'] as $detail):?>
-		<span> <?php echo $detail['product_name'];?> </span>
-		<?php endforeach;?>
-		</div>
-		<?php endif;?>
-		
-	<?php endforeach;?>
-	<div class="ht1"></div>
+	<div class="order-info-title">下单时间:<?php echo $order['create_at'];?></div>
 	<?php if(!empty($order['taste'])):?>
-		<div class="taste">整单口味:
-		<?php foreach ($order['taste'] as $otaste): $orderTatsePrice +=$otaste['price'];?>
+	<div class="taste">整单口味:
+		<?php foreach ($order['taste'] as $otaste): ?>
 		<span> <?php echo $otaste['name'].'('.$otaste['price'].')';?> </span>
 		<?php endforeach;?>
+	</div>
+	<?php endif;?>
+		<?php foreach($orderProducts as $product):?>
+		<div class="item">
+			<div class="lt"><?php echo $product['product_name'];?></div>
+			<div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+			<div class="clear"></div>
 		</div>
-	<?php endif;?>
-	<div class="item">
-		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
-		<div class="clear"></div>
+			<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
+			<div class="taste">口味:
+			<?php foreach ($product['taste'] as $taste):?>
+			<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+			<?php endforeach;?>
+			</div>
+			<?php endif;?>
+			
+			<?php if(isset($product['detail'])&&!empty($product['detail'])):?>
+			<div class="taste">
+			<?php foreach ($product['detail'] as $detail):?>
+			<span> <?php echo $detail['product_name'];?> </span>
+			<?php endforeach;?>
+			</div>
+			<?php endif;?>
+			
+		<?php endforeach;?>
 	</div>
-	<?php if($order['reality_total'] > $order['should_total']):?>
-	<div class="item">
-		<div class="lt">优惠</div><div class="rt">-￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
-		<div class="clear"></div>
-	</div>
-	<?php endif;?>
-	<div class="item">
-		<div class="lt">实付:</div><div class="rt">￥<?php echo $order['should_total'];?></div>
-		<div class="clear"></div>
-	</div>
-</div>
+<div class="ht-10"></div>
+<?php endforeach;?>
 
 <div class="bottom"></div>
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total"><?php echo $order['should_total'];?></span></p>
+        <p>总计￥<span id="total" class="total"><?php echo number_format($orderPrice,2);?></span></p>
     </div>
     <div class="ft-rt">
         <p><a id="payorder" href="javascript:;">去买单</a></p>
@@ -81,7 +76,7 @@
 <script>
 $(document).ready(function(){
 	$('#payorder').click(function(){
-		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
+		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'siteId'=>$order['site_id']));?>';
 	});
 });
 </script>

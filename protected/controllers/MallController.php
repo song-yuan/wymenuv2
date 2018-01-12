@@ -322,30 +322,6 @@ class MallController extends Controller
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 	}
-	public function actionSiteOrder()
-	{
-		$user = $this->brandUser;
-        $userId = $user['lid'];
-		$siteId = Yii::app()->session['qrcode-'.$userId];
-		$msg = '';
-		$site = WxSite::get($siteId, $this->companyId);
-		if($site){
-			$siteNo = WxSite::getSiteNo($siteId, $this->companyId);
-			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
-			$siteNoLid = $siteNo['lid'];
-			$order = WxOrder::getOrderBySiteId($siteNoLid, $this->companyId);
-			if($order){
-				$orderProducts = WxOrder::getOrderProduct($order['lid'],$this->companyId);
-			}else{
-				$msg = '不存在该餐桌';
-				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
-			}
-		}else{
-			$msg = '不存在该餐桌';
-			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
-		}
-		$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$user,'site'=>$site,'siteType'=>$siteType,'siteNo'=>$siteNo));
-	}
 	 /**
 	 * 
 	 * 
@@ -406,6 +382,28 @@ class MallController extends Controller
 	 	SqbPay::preOrder($data);
 	 	exit;
 	 }
+	 public function actionSiteOrder()
+	 {
+	 	$user = $this->brandUser;
+	 	$userId = $user['lid'];
+	 	$siteId = Yii::app()->session['qrcode-'.$userId];
+	 	$msg = '';
+	 	$site = WxSite::get($siteId, $this->companyId);
+	 	if($site){
+	 		$siteNo = WxSite::getSiteNo($siteId, $this->companyId);
+	 		$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+	 		$siteNoLid = $siteNo['lid'];
+	 		$orders = WxOrder::getOrderBySiteId($siteNoLid, $this->companyId);
+	 		if(empty($orders)){
+	 			$msg = '该餐桌还未下单';
+	 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+	 		}
+	 	}else{
+	 		$msg = '该餐桌不存在';
+	 		$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+	 	}
+	 	$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'orders'=>$orders,'user'=>$user,'site'=>$site,'siteType'=>$siteType,'siteNo'=>$siteNo));
+	 }
 	/**
 	 * 
 	 * 
@@ -416,77 +414,53 @@ class MallController extends Controller
 	 {
 	 	$user = $this->brandUser;
         $userId = $user['lid'];
-		$orderId = Yii::app()->request->getParam('orderId');
-		$siteType = false;
-		$address = false;
-		$seatingFee = 0;
-		$packingFee = 0;
-		$freightFee = 0;
-		
-		$order = WxOrder::getOrder($orderId,$this->companyId);
-		$levelDiscount = WxBrandUser::getUserDiscount($user,$order['order_type']);
-		if($order['order_type']==1){
-			$siteNo = WxSite::getSiteNoByLid($order['site_id'],$this->companyId);
-			$site = WxSite::get($siteNo['site_id'], $this->companyId);
-			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
-		}
-		
-		if(in_array($order['order_type'],array(2,3))){
-			$address = WxAddress::getDefault($userId,$this->companyId);
-		}
-		
-		if(in_array($order['order_type'],array(1,3))){
-			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
-			foreach($seatingProducts as $seatingProduct){
-				$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
-			}
-		}else{
-			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
-			foreach($packingProducts as $packingProduct){
-				$packingFee += $packingProduct['price']*$packingProduct['amount'];
-			}
-			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
-			foreach($freightProducts as $freightProduct){
-				$freightFee += $freightProduct['price']*$freightProduct['amount'];
-			}
-		}
-		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$siteId = Yii::app()->request->getParam('siteId');//订单里的餐桌id
 		$proCodeArr = array();
 		$productArr = array();
 		$haspormotion = false;
-		
+		$siteType = false;
+		$seatingFee = 0;
 		$price = 0;
 		$memdisprice = 0;
-		foreach ($orderProducts as $product){
-			if($product['set_id'] > 0){
-				$amount = $product['zhiamount'];
-			}else{
-				$amount = $product['amount'];
-			}
-			$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
-			array_push($proCodeArr, $product['phs_code']);
-			if($orderPromotion){
-				$haspormotion = true;
-				$isdiscount = 0;
-				array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon'],'is_member_discount'=>'0'));
-			}else{
-				$isdiscount = $product['is_member_discount'];
-				array_push($productArr, array('promotion_id'=>-1,'num'=>$amount,'price'=>$product['price'],'can_cupon'=>1,'is_member_discount'=>$isdiscount));
-			}
-			if($isdiscount){
-				$memdisprice += $amount*$product['price']*(1-$levelDiscount);
-				$price +=  $amount*$product['price']*$levelDiscount;
-			}else{
-				$price +=  $amount*$product['price'];
+		
+		$levelDiscount = WxBrandUser::getUserDiscount($user,'1');
+		$siteNo = WxSite::getSiteNoByLid($siteId,$this->companyId);
+		$site = WxSite::get($siteNo['site_id'], $this->companyId);
+		$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+		
+		$orders = WxOrder::getOrderBySiteId($siteId, $this->companyId);
+		
+		foreach ($orders as $order){
+			$orderProducts = $order['product_list'];
+			foreach ($orderProducts as $product){
+				if($product['set_id'] > 0){
+					$amount = $product['zhiamount'];
+				}else{
+					$amount = $product['amount'];
+				}
+				$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
+				array_push($proCodeArr, $product['phs_code']);
+				if($orderPromotion){
+					$haspormotion = true;
+					$isdiscount = 0;
+					array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon'],'is_member_discount'=>'0'));
+				}else{
+					$isdiscount = $product['is_member_discount'];
+					array_push($productArr, array('promotion_id'=>-1,'num'=>$amount,'price'=>$product['price'],'can_cupon'=>1,'is_member_discount'=>$isdiscount));
+				}
+				if($isdiscount){
+					$memdisprice += $amount*$product['price']*(1-$levelDiscount);
+					$price +=  $amount*$product['price']*$levelDiscount;
+				}else{
+					$price +=  $amount*$product['price'];
+				}
 			}
 		}
 		
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr,$levelDiscount);// 购物车优惠原价
-		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		
 		$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
-		
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
 		if(!$haspormotion){
@@ -502,8 +476,7 @@ class MallController extends Controller
 				}
 			}
 		}
-		
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'price'=>$price,'remainMoney'=>$remainMoney,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
+		$this->render('order',array('companyId'=>$this->companyId,'orders'=>$orders,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'user'=>$user,'siteId'=>$siteId,'price'=>$price,'remainMoney'=>$remainMoney,'seatingFee'=>$seatingFee,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
 	 }
 	 /**
 	  * 
