@@ -73,7 +73,7 @@
                 <?php endif;?>
                 
                 <div class="form-group">
-                     <label class="col-md-3 control-label" for="ProductCategory_show_type">微信端是否显示</label>
+                     <label class="col-md-3 control-label" for="ProductCategory_show_type">终端是否显示</label>
                      <div class="col-md-4">
                          <select class="form-control" placeholder="微信端是否显示" name="ProductCategory[show_type]" id="ProductCategory_show_type">
                          <?php if(Yii::app()->user->role < User::SHOPKEEPER){?>
@@ -81,11 +81,15 @@
                                 <option value="2">外卖不显示</option>
                                 <option value="3">堂食不显示</option>
                                 <option value="4">微信端都不显示</option>
+                                   <option value="5">POS端不显示</option>
+                                   <option value="6">都不显示</option>
                               <?php }else{?>
                                 <option value="1" disabled="true">都显示</option>
                                 <option value="2" disabled="true">外卖不显示</option>
                                 <option value="3" disabled="true">堂食不显示</option>
                                 <option value="4"selected="true">微信端都不显示</option>
+                                   <option value="5" disabled="true">POS端不显示</option>
+                                   <option value="6" disabled="true">都不显示</option>
                                 <?php }?>
                           </select>
                      </div>
@@ -99,7 +103,7 @@
                              </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="ProductCategory_show_type">终端显示</label>
+                        <label class="col-md-3 control-label" for="ProductCategory_show_type">终端是否显示</label>
                         <div class="col-md-4">
                             <select class="form-control" placeholder="微信端是否显示" name="ProductCategory[show_type]">
                             <?php if(Yii::app()->user->role < User::SHOPKEEPER){?>
