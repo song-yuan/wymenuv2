@@ -61,9 +61,18 @@ class WxFullSent
 	 *
 	 */
 	public static function checkFullsentproduct($fullsentdetailId,$fullsentId,$dpid){
-		$sql = 'select t.*,t1.product_name,t1.original_price,t1.member_price from nb_full_sent_detail t,nb_product t1 where t.dpid=t1.dpid and t.product_id=t1.lid and t.lid='.$fullsentdetailId.' and t.dpid='.$dpid.' and t.full_sent_id='.$fullsentId.' and t.delete_flag=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+		$sql = 'select t.*,t1.product_name,t1.original_price,t1.member_price,t1.main_picture from nb_full_sent_detail t,nb_product t1 where t.dpid=t1.dpid and t.product_id=t1.lid and t.lid='.$fullsentdetailId.' and t.dpid='.$dpid.' and t.full_sent_id='.$fullsentId.' and t.delete_flag=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 		$fullsentDetail = Yii::app()->db->createCommand($sql)->queryRow();
-		return $fullsent;
+		if($fullsentDetail){
+			$sentProPrice = 0;
+			if($sent['is_discount']){
+				$sentProPrice = number_format($fullsentDetail['original_price']*$fullsentDetail['promotion_discount'],2);
+			}else{
+				$sentProPrice = number_format($fullsentDetail['original_price'] - $fullsentDetail['promotion_money'],2);
+			}
+			$fullsentDetail['price'] = $sentProPrice;
+		}
+		return $fullsentDetail;
 	}
 	/**
 	 *

@@ -19,7 +19,7 @@
 .weui_dialog{z-index:9003;}
 </style>
 
-<form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'siteId'=>$siteId,'type'=>$this->type));?>" method="post">
+<form action="<?php echo $this->createUrl('/mall/generalSiteOrder',array('companyId'=>$this->companyId,'siteNoId'=>$siteId,'type'=>$this->type));?>" method="post">
 <div class="order-title">我的订单</div>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 

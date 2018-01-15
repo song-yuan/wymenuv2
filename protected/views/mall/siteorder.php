@@ -76,7 +76,7 @@
 <script>
 $(document).ready(function(){
 	$('#payorder').click(function(){
-		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'siteId'=>$order['site_id']));?>';
+		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'siteNoId'=>$siteNo['lid']));?>';
 	});
 });
 </script>
