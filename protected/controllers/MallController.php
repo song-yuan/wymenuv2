@@ -490,7 +490,7 @@ class MallController extends Controller
 			$remark = Yii::app()->request->getPost('remark',null);
 			$others = array('fullsent'=>$fullsent);
 			try {
-				$sorderObj = new WxSiteOrder($dpid, $siteId, $user, $others);
+				$sorderObj = new WxSiteOrder($this->companyId, $siteId, $user, $others);
 				if(empty($this->orders)){
 					throw new Exception('没有订单不能支付！');
 				}
