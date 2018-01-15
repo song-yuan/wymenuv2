@@ -483,8 +483,8 @@ class ProductController extends BackendController
 	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		//$criteria->with = 'company';
+		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
 
 		$models = ProductCategory::model()->findAll($criteria);
