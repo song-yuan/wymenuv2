@@ -247,15 +247,6 @@ class MallController extends Controller
 			if(empty($orderObj->cart)){
 				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}
-		}catch (Exception $e) {
-			$msg = $e->getMessage();
-			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
-		}
-		
-		$transaction = Yii::app()->db->beginTransaction();
-		try{
-			//生成订单
-			$orderId = $orderObj->createOrder();
 			//订单地址
 			if(in_array($this->type,array(2,3,7,8))){
 				if($addressId > 0){
@@ -267,6 +258,15 @@ class MallController extends Controller
 					throw new Exception('请添加订单地址信息！');
 				}
 			}
+		}catch (Exception $e) {
+			$msg = $e->getMessage();
+			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+		}
+		
+		$transaction = Yii::app()->db->beginTransaction();
+		try{
+			//生成订单
+			$orderId = $orderObj->createOrder();
 		
 			//使用现金券
 			if($cuponId){
@@ -298,6 +298,12 @@ class MallController extends Controller
 					}
 				}
 			}
+			if($paytype == 1){
+				WxOrder::updatePayType($orderId,$this->companyId,2);
+				$order = WxOrder::getOrder($orderId,$this->companyId);
+			}else{
+				WxOrder::updatePayType($orderId,$this->companyId,1);
+			}
 		   $transaction->commit();
 		}catch (Exception $e) {
 			$transaction->rollback();
@@ -309,24 +315,18 @@ class MallController extends Controller
 		}
 		if($paytype == 1){
 			//支付宝支付
-			WxOrder::updatePayType($orderId,$this->companyId,2);
-			$order = WxOrder::getOrder($orderId,$this->companyId);
-			$orderPays = WxOrderPay::get($this->companyId,$orderId);
 			if($order['order_status'] > 2){
 				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 			}else{
+				$orderPays = WxOrderPay::get($this->companyId,$orderId);
 				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'order'=>$order,'orderPays'=>$orderPays));
 			}
 		}else{
-			WxOrder::updatePayType($orderId,$this->companyId,1);
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 	}
 	 /**
-	 * 
-	 * 
 	 * 支付订单
-	 * 
 	 */
 	 public function actionPayOrder()
 	 {
@@ -371,9 +371,7 @@ class MallController extends Controller
 	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	 /**
-	  * 
 	  * 收钱吧支付
-	  * 
 	  */
 	 public function actionSqbPayOrder()
 	 {
@@ -386,7 +384,7 @@ class MallController extends Controller
 	 {
 	 	$user = $this->brandUser;
 	 	$userId = $user['lid'];
-	 	$siteId = Yii::app()->session['qrcode-'.$userId];
+	 	$siteId = Yii::app()->session['qrcode-'.$userId];//餐桌id
 	 	$msg = '';
 	 	$site = WxSite::get($siteId, $this->companyId);
 	 	if($site){
@@ -405,16 +403,13 @@ class MallController extends Controller
 	 	$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'orders'=>$orders,'user'=>$user,'site'=>$site,'siteType'=>$siteType,'siteNo'=>$siteNo));
 	 }
 	/**
-	 * 
-	 * 
 	 * 订单
-	 * 
 	 */
 	 public function actionOrder()
 	 {
 	 	$user = $this->brandUser;
         $userId = $user['lid'];
-		$siteId = Yii::app()->request->getParam('siteId');//订单里的餐桌id
+		$siteId = Yii::app()->request->getParam('siteNoId');//订单里的site_id
 		$proCodeArr = array();
 		$productArr = array();
 		$haspormotion = false;
@@ -480,63 +475,63 @@ class MallController extends Controller
 	 }
 	 /**
 	  * 
-	  * 处理 现金券
+	  * 处理餐桌订单
+	  * 餐桌有多个订单的合并到最新订单里
 	  * 
 	  */
-	  public function actionOrderCupon(){
+	  public function actionGeneralSiteOrder(){
 	  		$contion = null;
 		  	$user = $this->brandUser;
         	$userId = $user['lid'];
-			$orderId = Yii::app()->request->getParam('orderId');
+			$siteId = Yii::app()->request->getParam('siteNoId');
 			$paytype = Yii::app()->request->getPost('paytype');
-			$addressId = Yii::app()->request->getPost('address',-1);
+			$fullsent = Yii::app()->request->getPost('fullsent');
 			$cuponId = Yii::app()->request->getPost('cupon');
-			$orderTime = Yii::app()->request->getPost('order_time',null);
 			$remark = Yii::app()->request->getPost('remark',null);
+			$others = array('fullsent'=>$fullsent);
+			try {
+				$sorderObj = new WxSiteOrder($dpid, $siteId, $user, $others);
+				if(empty($this->orders)){
+					throw new Exception('没有订单不能支付！');
+				}
+			}catch (Exception $e){
+				$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>1));
+			}
 			
-			$order = WxOrder::getOrder($orderId,$this->companyId);
-			
-			if(in_array($order['order_type'],array(2,3))){
-				if($addressId > 0){
-					$address = WxAddress::getAddress($addressId,$this->companyId);
-					$result = WxOrderAddress::addOrderAddress($orderId,$address);
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+				$orderId = $sorderObj->createOrder();
+				if($cuponId){
+					$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
 					if(!$result){
 						$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 					}
-				}else{
-					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 				}
-			}
-			
-			if($cuponId){
-				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
-				if(!$result){
-					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+					
+				if($remark){
+					$contion = $contion.' remark="'.$remark.'",';
 				}
-			}
-			
-			if($orderTime){
-				$contion = $contion.' appointment_time="'.$orderTime.'",';
-			}
-			if($remark){
-				$contion = $contion.' taste_memo="'.$remark.'",';
-			}
-			
-			if($contion){
-				WxOrder::update($orderId,$this->companyId,$contion);
-			}
-			
-			if($paytype == 1){
-				$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
-				//支付宝支付
-				WxOrder::updatePayType($orderId,$this->companyId,2);
-				$order = WxOrder::getOrder($orderId,$this->companyId);
-				if($order['order_status'] > 2){
-					$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+					
+				if($contion){
+					WxOrder::update($orderId,$this->companyId,$contion);
 				}
-				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+					
+				if($paytype == 1){
+					$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
+					//支付宝支付
+					WxOrder::updatePayType($orderId,$this->companyId,2);
+					$order = WxOrder::getOrder($orderId,$this->companyId);
+					if($order['order_status'] > 2){
+						$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+					}
+					$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+				}
+				WxOrder::updatePayType($orderId,$this->companyId);
+				$transaction->commit();
+			}catch (Exception $e){
+				$transaction->rollback();
+				$msg = $e->getMessage();
 			}
-			WxOrder::updatePayType($orderId,$this->companyId);
 			
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }

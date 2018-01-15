@@ -208,7 +208,7 @@ class Server {
 			if($query) {
 				$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 				$urlArr = array(
-					1=>array('mall/index','companyId'),
+					1=>array('mall/siteOrder','companyId'),
 				);
 				$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$query['dpid'],'type'=>1));
 				

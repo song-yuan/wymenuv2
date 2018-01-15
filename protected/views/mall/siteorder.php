@@ -65,9 +65,11 @@
     <div class="ft-lt">
         <p>总计￥<span id="total" class="total"><?php echo number_format($orderPrice,2);?></span></p>
     </div>
+    <!-- 
     <div class="ft-rt">
         <p><a id="payorder" href="javascript:;">去买单</a></p>
     </div>
+     -->
     <div class="clear"></div>
 </footer>
 
@@ -76,7 +78,7 @@
 <script>
 $(document).ready(function(){
 	$('#payorder').click(function(){
-		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'siteId'=>$order['site_id']));?>';
+		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'siteNoId'=>$siteNo['lid']));?>';
 	});
 });
 </script>
