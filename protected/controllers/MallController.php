@@ -428,14 +428,14 @@ class MallController extends Controller
 		foreach ($orders as $order){
 			$orderProducts = $order['product_list'];
 			foreach ($orderProducts as $product){
+				array_push($proCodeArr, $product['phs_code']);
 				if($product['set_id'] > 0){
 					$amount = $product['zhiamount'];
 				}else{
 					$amount = $product['amount'];
 				}
-				$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
-				array_push($proCodeArr, $product['phs_code']);
-				if($orderPromotion){
+				if($product['private_promotion_lid'] > 0){
+					$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
 					$haspormotion = true;
 					$isdiscount = 0;
 					array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon'],'is_member_discount'=>'0'));
@@ -491,7 +491,7 @@ class MallController extends Controller
 			$others = array('fullsent'=>$fullsent);
 			try {
 				$sorderObj = new WxSiteOrder($this->companyId, $siteId, $user, $others);
-				if(empty($this->orders)){
+				if(empty($sorderObj->orders)){
 					throw new Exception('没有订单不能支付！');
 				}
 			}catch (Exception $e){
