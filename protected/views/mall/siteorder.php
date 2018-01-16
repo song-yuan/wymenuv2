@@ -35,7 +35,7 @@
 		<?php foreach($orderProducts as $product):?>
 		<div class="item">
 			<div class="lt"><?php echo $product['product_name'];?></div>
-			<div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+			<div class="rt">x<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 			<div class="clear"></div>
 		</div>
 			<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
@@ -76,7 +76,7 @@
 <script>
 $(document).ready(function(){
 	$('#payorder').click(function(){
-		location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'siteNoId'=>$siteNo['lid']));?>';
+		location.href = '<?php echo $this->createUrl('/mall/checkSiteOrder',array('companyId'=>$this->companyId,'siteNoId'=>$siteNo['lid']));?>';
 	});
 });
 </script>

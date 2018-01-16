@@ -21,7 +21,7 @@
 	<div class="rt">
 	<?php 
 		if($order['order_status']==1){
-			echo '<span style="color:#ff9933;font-size:18px;">待确认</span>';
+			echo '<span style="color:#ff9933;font-size:18px;">已下单</span>';
 		}elseif(1 < $order['order_status']&&$order['order_status'] < 3){
 			echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';
 		}elseif($order['order_status'] == 3){
@@ -75,7 +75,7 @@
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">x<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 		<div class="clear"></div>
 	</div>
 		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
@@ -107,18 +107,18 @@
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
 		<div class="lt">餐位费:</div>
-		<div class="rt">X1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
+		<div class="rt">x1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php elseif($order['order_type']==2):?>
 	<div class="item">
 		<div class="lt">包装费:</div>
-		<div class="rt">X1 ￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
+		<div class="rt">x1 ￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
 		<div class="lt">配送费:</div>
-		<div class="rt">X1 ￥<?php echo $freightFee?number_format($freightFee,2):'0.00';?></div>
+		<div class="rt">x1 ￥<?php echo $freightFee?number_format($freightFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
