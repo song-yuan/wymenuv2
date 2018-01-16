@@ -56,7 +56,9 @@
 	<?php if($order['appointment_time']!=$order['create_at']):?>
 	<span>期望时间: <?php echo $order['appointment_time'];?></span>
 	<?php endif;?>
-	
+	<?php elseif($order['order_type']==1):?>
+	<span>类型: 餐桌</span>
+	<span>桌号: <?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></span>
 	<?php endif;?>
 	<span>交易序号: <?php echo $order['account_no'];?></span>
 	<span>下单时间: <?php echo $order['create_at'];?></span>
