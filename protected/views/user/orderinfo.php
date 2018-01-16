@@ -11,7 +11,9 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 
 
-<?php if($order['order_type']!=1):?>
+<?php if($order['order_type']==1):?>
+<div class="order-title">桌号: <?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
+<?php else:?>
 <div class="order-title">取餐号: <?php echo substr($order['lid'], -4);?></div>
 <?php endif;?>
 <div class="order-site">
@@ -52,7 +54,6 @@
 	<?php endif;?>
 	<?php elseif($order['order_type']==1):?>
 	<span>类型: 餐桌</span>
-	<span>桌号: <?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></span>
 	<?php endif;?>
 	<span>交易序号: <?php echo $order['account_no'];?></span>
 	<span>下单时间: <?php echo $order['create_at'];?></span>
