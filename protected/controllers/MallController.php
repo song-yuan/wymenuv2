@@ -470,7 +470,7 @@ class MallController extends Controller
 	/**
 	 * 处理餐桌订单
 	 */
-	 public function actionCheckOrder()
+	 public function actionCheckSiteOrder()
 	 {
 	 	$user = $this->brandUser;
         $userId = $user['lid'];
