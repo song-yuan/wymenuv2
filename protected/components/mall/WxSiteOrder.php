@@ -164,7 +164,9 @@ class WxSiteOrder
 		if(count($this->orders) > 1){
 			$sorderId = rtrim($sorderId,',');
 			$sorderproductId = rtrim($sorderId,',');
-			// 取消 该餐桌比较早订单
+			//更改该订单为下单状态  取消该餐桌比较早订单
+			$sql = 'update nb_order set order_status=2 where lid = '.$forderId.' and dpid='.$this->dpid;
+			Yii::app()->db->createCommand($sql)->execute();
 			$sql = 'update nb_order set order_status=7 where lid in ('.$sorderId.') and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 			$sql = 'update nb_order_product set order_id='.$forderId.' where order_id in ('.$sorderId.') and dpid='.$this->dpid;

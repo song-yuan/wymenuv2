@@ -371,6 +371,71 @@ class MallController extends Controller
 	    $this->render('payorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	 /**
+	  * 订单
+	  */
+	 public function actionOrder()
+	 {
+	 	$user = $this->brandUser;
+	 	$userId = $user['lid'];
+	 	$orderId = Yii::app()->request->getParam('orderId');
+	 	$siteType = false;
+	 	$address = false;
+	 	$seatingFee = 0;
+	 	$packingFee = 0;
+	 	$freightFee = 0;
+	 
+	 	$order = WxOrder::getOrder($orderId,$this->companyId);
+	 	if($order['order_type']==1){
+	 		$siteNo = WxSite::getSiteNoByLid($order['site_id'],$this->companyId);
+	 		$site = WxSite::get($siteNo['site_id'], $this->companyId);
+	 		$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+	 	}
+	 
+	 	if(in_array($order['order_type'],array(2,3))){
+	 		$address = WxAddress::getDefault($userId,$this->companyId);
+	 	}
+	 
+	 	if(in_array($order['order_type'],array(1,3))){
+	 		$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+	 		foreach($seatingProducts as $seatingProduct){
+	 			$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
+	 		}
+	 	}else{
+	 		$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+	 		foreach($packingProducts as $packingProduct){
+	 			$packingFee += $packingProduct['price']*$packingProduct['amount'];
+	 		}
+	 		$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+	 		foreach($freightProducts as $freightProduct){
+	 			$freightFee += $freightProduct['price']*$freightProduct['amount'];
+	 		}
+	 	}
+	 	$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+	 
+	 	$proCodeArr = array();
+	 	$productArr = array();
+	 	foreach ($orderProducts as $product){
+	 		array_push($proCodeArr, $product['phs_code']);
+	 		if($product['set_id'] > 0){
+	 			$amount = $product['zhiamount'];
+	 		}else{
+	 			$amount = $product['amount'];
+	 		}
+	 		$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
+	 		if($orderPromotion){
+	 			array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon']));
+	 		}else{
+	 			array_push($productArr, array('promotion_id'=>-1,'num'=>$amount,'price'=>$product['price'],'can_cupon'=>1));
+	 		}
+	 	}
+	 	$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr);// 购物车优惠原价
+	 	$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
+	 
+	 	$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
+	 
+	 	$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+	 }
+	 /**
 	  * 收钱吧支付
 	  */
 	 public function actionSqbPayOrder()
@@ -403,9 +468,9 @@ class MallController extends Controller
 	 	$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'orders'=>$orders,'user'=>$user,'site'=>$site,'siteType'=>$siteType,'siteNo'=>$siteNo));
 	 }
 	/**
-	 * 订单
+	 * 处理餐桌订单
 	 */
-	 public function actionOrder()
+	 public function actionCheckOrder()
 	 {
 	 	$user = $this->brandUser;
         $userId = $user['lid'];
@@ -515,7 +580,17 @@ class MallController extends Controller
 				if($contion){
 					WxOrder::update($orderId,$this->companyId,$contion);
 				}
-					
+				
+				//使用余额
+				if($yue){
+					$order = WxOrder::getOrder($orderId,$this->companyId);
+					if($order['order_status'] < 3){
+						$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
+						if($remainMoney > 0){
+							WxOrder::insertOrderPay($order,10,'');
+						}
+					}
+				}	
 				if($paytype == 1){
 					$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
 					//支付宝支付

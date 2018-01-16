@@ -18,7 +18,7 @@
 <?php endif;?>
 <div class="order-site">
 	<div class="lt">订单状态</div>
-	<div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';elseif ($order['order_status']==7) echo '<span style="color:#999999;font-size:18px;">已取消</span>';else echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';?></div>
+	<div class="rt"><?php if($order['order_status']=1){ echo '<span style="color:#ff9933;font-size:18px;">待确认</span>';}elseif(1< $order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';elseif ($order['order_status']==7) echo '<span style="color:#999999;font-size:18px;">已取消</span>';else echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';?></div>
 	<div class="clear"></div>
 </div>
 <?php if($address):?>
@@ -221,11 +221,7 @@ $(document).ready(function(){
 	var orderDpid = 0;
 	$('.payOrder').click(function(){
 		var status = $(this).attr('status');
-		if(parseInt(status) < 2){
-			location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
-		}else{
-			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
-		}
+		location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
 	});
 	$('.close_window').click(function(){
 		orderId = $(this).attr('order-id');
