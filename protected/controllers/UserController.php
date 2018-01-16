@@ -194,6 +194,7 @@ class UserController extends Controller
 	 */
 	public function actionOrderInfo()
 	{
+		$site = false;
 		$siteType = false;
 		$address = false;
 		$seatingFee = 0;
