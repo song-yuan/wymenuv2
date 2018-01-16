@@ -18,7 +18,21 @@
 <?php endif;?>
 <div class="order-site">
 	<div class="lt">订单状态</div>
-	<div class="rt"><?php if($order['order_status']=1){ echo '<span style="color:#ff9933;font-size:18px;">待确认</span>';}elseif(1< $order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';elseif ($order['order_status']==7) echo '<span style="color:#999999;font-size:18px;">已取消</span>';else echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';?></div>
+	<div class="rt">
+	<?php 
+		if($order['order_status']==1){
+			echo '<span style="color:#ff9933;font-size:18px;">待确认</span>';
+		}elseif(1 < $order['order_status']&&$order['order_status'] < 3){
+			echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';
+		}elseif($order['order_status'] == 3){
+			echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';
+		}elseif ($order['order_status']==7){
+			echo '<span style="color:#999999;font-size:18px;">已取消</span>';
+		}else{
+			echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';
+		}
+	?>
+	</div>
 	<div class="clear"></div>
 </div>
 <?php if($address):?>
