@@ -2074,6 +2074,7 @@ class DataSyncOperation {
 	/**
 	 * 
 	 * 获取 微信会员信息
+	 * 现金券必须注册后才能使用
 	 * 
 	 */
 	public static function getUserInfo($data) {
@@ -2087,7 +2088,7 @@ class DataSyncOperation {
 			$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		}
 		
-		if($user){
+		if($user&&$user['mobile_num']){
 			$user['user_birthday'] = date('m.d',strtotime($user['user_birthday']));
 			$cupon = WxCupon::getUserPosCupon($user['lid'],$dpid,$productIds);
 			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
