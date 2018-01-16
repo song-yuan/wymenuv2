@@ -2088,10 +2088,15 @@ class DataSyncOperation {
 			$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		}
 		
-		if($user&&$user['mobile_num']){
+		if($user){
 			$user['user_birthday'] = date('m.d',strtotime($user['user_birthday']));
-			$cupon = WxCupon::getUserPosCupon($user['lid'],$dpid,$productIds);
-			$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
+			if(!empty($user['mobile_num'])){
+				$cupon = WxCupon::getUserPosCupon($user['lid'],$dpid,$productIds);
+				$point = WxPoints::getAvaliablePoints($user['lid'], $user['dpid']);
+			}else{
+				$cupon = array();
+				$point = 0;
+			}
 			$msg = array('status'=>true,'user'=>$user,'cupon'=>$cupon,'points'=>$point);
 		}else{
 			$msg = array('status'=>false);
