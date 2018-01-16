@@ -488,6 +488,7 @@ class MallController extends Controller
 			$fullsent = Yii::app()->request->getPost('fullsent');
 			$cuponId = Yii::app()->request->getPost('cupon');
 			$remark = Yii::app()->request->getPost('remark',null);
+			$yue = Yii::app()->request->getPost('yue',0);
 			$others = array('fullsent'=>$fullsent);
 			try {
 				$sorderObj = new WxSiteOrder($this->companyId, $siteId, $user, $others);
