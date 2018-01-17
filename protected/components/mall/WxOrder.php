@@ -400,6 +400,7 @@ class WxOrder
 							'update_at'=>date('Y-m-d H:i:s',$time),
 							'order_id'=>$orderId,
 							'set_id'=>$cart['product_id'],
+							'private_promotion_lid'=>$cart['promotion_id'],
 							'product_id'=>$detail[1],
 							'product_name'=>$detail['product_name'],
 							'product_pic'=>$detail['main_picture'],
@@ -454,6 +455,7 @@ class WxOrder
 						'update_at'=>date('Y-m-d H:i:s',$time),
 						'order_id'=>$orderId,
 						'set_id'=>0,
+						'private_promotion_lid'=>$cart['promotion_id'],
 						'product_id'=>$cart['product_id'],
 						'product_name'=>$cart['product_name'],
 						'product_pic'=>$cart['main_picture'],
@@ -696,8 +698,8 @@ class WxOrder
 	    return $orders;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select lid,order_id,main_id,set_id,price,amount,zhiamount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0 and set_id=0';
-		$sql .=' union select t.lid,t.order_id,t.main_id,t.set_id,sum(t.price*t.amount) as price,t.amount,t.zhiamount,t.is_retreat,t.product_id,t1.set_name as product_name,t.product_pic,t.original_price from nb_order_product t,nb_product_set t1  where t.set_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=0 and t.delete_flag=0 and t.set_id>0 group by t.set_id,t.main_id';
+		$sql = 'select lid,order_id,private_promotion_lid,main_id,set_id,price,amount,zhiamount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0 and set_id=0';
+		$sql .=' union select t.lid,t.order_id,t.private_promotion_lid,t.main_id,t.set_id,sum(t.price*t.amount) as price,t.amount,t.zhiamount,t.is_retreat,t.product_id,t1.set_name as product_name,t.product_pic,t.original_price from nb_order_product t,nb_product_set t1  where t.set_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=0 and t.delete_flag=0 and t.set_id>0 group by t.set_id,t.main_id';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 					    ->bindValue(':orderId',$orderId)
 					    ->bindValue(':dpid',$dpid)

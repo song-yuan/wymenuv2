@@ -11,10 +11,28 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 
 
+<?php if($order['order_type']==1):?>
+<div class="order-title">桌号: <?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
+<?php else:?>
 <div class="order-title">取餐号: <?php echo substr($order['lid'], -4);?></div>
+<?php endif;?>
 <div class="order-site">
-	<div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div>
-	<div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';elseif ($order['order_status']==7) echo '<span style="color:#999999;font-size:18px;">已取消</span>';else echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';?></div>
+	<div class="lt">订单状态</div>
+	<div class="rt">
+	<?php 
+		if($order['order_status']==1){
+			echo '<span style="color:#ff9933;font-size:18px;">已下单</span>';
+		}elseif(1 < $order['order_status']&&$order['order_status'] < 3){
+			echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';
+		}elseif($order['order_status'] == 3){
+			echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';
+		}elseif ($order['order_status']==7){
+			echo '<span style="color:#999999;font-size:18px;">已取消</span>';
+		}else{
+			echo '<span style="color:#ff9933;font-size:18px;">已完成</span>';
+		}
+	?>
+	</div>
 	<div class="clear"></div>
 </div>
 <?php if($address):?>
@@ -48,7 +66,8 @@
 	<?php if($order['appointment_time']!=$order['create_at']):?>
 	<span>期望时间: <?php echo $order['appointment_time'];?></span>
 	<?php endif;?>
-	
+	<?php elseif($order['order_type']==1):?>
+	<span>类型: 餐桌</span>
 	<?php endif;?>
 	<span>交易序号: <?php echo $order['account_no'];?></span>
 	<span>下单时间: <?php echo $order['create_at'];?></span>
@@ -56,7 +75,7 @@
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
+		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">x<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 		<div class="clear"></div>
 	</div>
 		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
@@ -88,18 +107,18 @@
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
 		<div class="lt">餐位费:</div>
-		<div class="rt">X1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
+		<div class="rt">x1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php elseif($order['order_type']==2):?>
 	<div class="item">
 		<div class="lt">包装费:</div>
-		<div class="rt">X1 ￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
+		<div class="rt">x1 ￥<?php echo $packingFee?number_format($packingFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
 		<div class="lt">配送费:</div>
-		<div class="rt">X1 ￥<?php echo $freightFee?number_format($freightFee,2):'0.00';?></div>
+		<div class="rt">x1 ￥<?php echo $freightFee?number_format($freightFee,2):'0.00';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
@@ -216,11 +235,7 @@ $(document).ready(function(){
 	var orderDpid = 0;
 	$('.payOrder').click(function(){
 		var status = $(this).attr('status');
-		if(parseInt(status) < 2){
-			location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
-		}else{
-			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
-		}
+		location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
 	});
 	$('.close_window').click(function(){
 		orderId = $(this).attr('order-id');

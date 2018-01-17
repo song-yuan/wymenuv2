@@ -194,6 +194,7 @@ class UserController extends Controller
 	 */
 	public function actionOrderInfo()
 	{
+		$site = false;
 		$siteType = false;
 		$address = false;
 		$seatingFee = 0;
@@ -203,9 +204,12 @@ class UserController extends Controller
 		$orderId = Yii::app()->request->getParam('orderId');
 		$orderDpid = Yii::app()->request->getParam('orderDpid');
 		$order = WxOrder::getOrder($orderId,$orderDpid);
-		$site = $site = WxSite::get($order['site_id'],$orderDpid);
-		if($site){
-			$siteType = WxSite::getSiteType($site['type_id'],$orderDpid);
+		if($order['order_type']=='1'){
+			$siteNo = WxSite::getSiteNoByLid($order['site_id'], $orderDpid);
+			if($siteNo){
+				$site = WxSite::get($siteNo['site_id'],$orderDpid);
+				$siteType = WxSite::getSiteType($site['type_id'],$orderDpid);
+			}
 		}
 		
 		$orderProducts = WxOrder::getOrderProduct($orderId,$orderDpid);

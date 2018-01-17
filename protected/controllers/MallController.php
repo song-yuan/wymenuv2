@@ -403,9 +403,9 @@ class MallController extends Controller
 	 	$this->render('siteorder',array('companyId'=>$this->companyId,'company'=>$this->company,'userId'=>$userId,'orders'=>$orders,'user'=>$user,'site'=>$site,'siteType'=>$siteType,'siteNo'=>$siteNo));
 	 }
 	/**
-	 * 订单
+	 * 处理餐桌订单
 	 */
-	 public function actionOrder()
+	 public function actionCheckSiteOrder()
 	 {
 	 	$user = $this->brandUser;
         $userId = $user['lid'];
@@ -428,14 +428,14 @@ class MallController extends Controller
 		foreach ($orders as $order){
 			$orderProducts = $order['product_list'];
 			foreach ($orderProducts as $product){
+				array_push($proCodeArr, $product['phs_code']);
 				if($product['set_id'] > 0){
 					$amount = $product['zhiamount'];
 				}else{
 					$amount = $product['amount'];
 				}
-				$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
-				array_push($proCodeArr, $product['phs_code']);
-				if($orderPromotion){
+				if($product['private_promotion_lid'] > 0){
+					$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
 					$haspormotion = true;
 					$isdiscount = 0;
 					array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon'],'is_member_discount'=>'0'));
@@ -488,10 +488,11 @@ class MallController extends Controller
 			$fullsent = Yii::app()->request->getPost('fullsent');
 			$cuponId = Yii::app()->request->getPost('cupon');
 			$remark = Yii::app()->request->getPost('remark',null);
+			$yue = Yii::app()->request->getPost('yue',0);
 			$others = array('fullsent'=>$fullsent);
 			try {
 				$sorderObj = new WxSiteOrder($this->companyId, $siteId, $user, $others);
-				if(empty($this->orders)){
+				if(empty($sorderObj->orders)){
 					throw new Exception('没有订单不能支付！');
 				}
 			}catch (Exception $e){
@@ -515,7 +516,17 @@ class MallController extends Controller
 				if($contion){
 					WxOrder::update($orderId,$this->companyId,$contion);
 				}
-					
+				
+				//使用余额
+				if($yue){
+					$order = WxOrder::getOrder($orderId,$this->companyId);
+					if($order['order_status'] < 3){
+						$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
+						if($remainMoney > 0){
+							WxOrder::insertOrderPay($order,10,'');
+						}
+					}
+				}	
 				if($paytype == 1){
 					$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
 					//支付宝支付

@@ -76,6 +76,8 @@ class WxSiteOrder
 	public function createOrder(){
 		$orderId = 0;
 		$memdisprice = 0;
+		$orderPrice = 0;
+		$realityPrice = 0;
 		$accountNo = 0;
 		$number = 0;
 		$forderId = '';
@@ -102,12 +104,17 @@ class WxSiteOrder
 				}else{
 					$amount = $product['amount'];
 				}
+				$isdiscount = $product['is_member_discount'];
+				if($product['private_promotion_lid'] > 0){
+					$isdiscount = 0;
+				}
 				if($isdiscount){
 					$memdisprice += $amount*$product['price']*(1-$levelDiscount);
-					$price +=  $amount*$product['price']*$levelDiscount;
+					$orderPrice +=  $amount*$product['price']*$levelDiscount;
 				}else{
-					$price +=  $amount*$product['price'];
+					$orderPrice +=  $amount*$product['price'];
 				}
+				$realityPrice += $amount*$product['original_price'];
 			}
 		}
 		if(!empty($this->fullSentProduct)){
@@ -128,7 +135,6 @@ class WxSiteOrder
 					'original_price'=>$this->fullSentProduct['original_price'],
 					'amount'=>1,
 					'product_order_status'=>2,
-					'is_sync'=>$isSync,
 			);
 			Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 		}
@@ -158,7 +164,9 @@ class WxSiteOrder
 		if(count($this->orders) > 1){
 			$sorderId = rtrim($sorderId,',');
 			$sorderproductId = rtrim($sorderId,',');
-			// 取消 该餐桌比较早订单
+			//更改该订单为下单状态  取消该餐桌比较早订单
+			$sql = 'update nb_order set order_status=2 where lid = '.$forderId.' and dpid='.$this->dpid;
+			Yii::app()->db->createCommand($sql)->execute();
 			$sql = 'update nb_order set order_status=7 where lid in ('.$sorderId.') and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 			$sql = 'update nb_order_product set order_id='.$forderId.' where order_id in ('.$sorderId.') and dpid='.$this->dpid;
@@ -172,7 +180,7 @@ class WxSiteOrder
 				Yii::app()->db->createCommand($sql)->execute();
 			}
 		}
-		if($memdiscount > 0){
+		if($memdisprice > 0){
 			$se = new Sequence("order_account_discount");
 			$orderAccountId = $se->nextval();
 			$orderAccountData = array(
@@ -184,7 +192,7 @@ class WxSiteOrder
 					'account_no'=>$accountNo,
 					'discount_title'=>'会员折扣',
 					'discount_id'=>0,
-					'discount_money'=>$memdiscount,
+					'discount_money'=>$memdisprice,
 			);
 			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 		}
@@ -201,7 +209,6 @@ class WxSiteOrder
 					'discount_title'=>$this->fullsent['title'],
 					'discount_id'=>0,
 					'discount_money'=>$this->fullMinus,
-					'is_sync'=>$isSync,
 			);
 			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 			$orderPrice = $orderPrice - $this->fullMinus;
