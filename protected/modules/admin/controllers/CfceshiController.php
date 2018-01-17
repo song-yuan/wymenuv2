@@ -323,5 +323,52 @@ class CfceshiController extends BackendController
 		var_dump($result) ;
 		exit;
 	}
+	public function actionMtpay(){
+		
+		$pay_price = Yii::app()->request->getParam('pay_price');
+		$auth_code = Yii::app()->request->getParam('auth_code');
+		$dpid = Yii::app()->request->getParam('dpid');
+		//$result = SqbPay::pay($dpid,$_POST);
+		//$obj = json_decode($result,true);
+		$data = array(
+				'dpid' => $dpid,
+				'channel' => 'wx_barcode_pay',
+				'outTradeNo' => $pay_price,
+				'authCode' => $auth_code,
+				'totalFee' => '1',
+				'subject' => '壹点吃',
+				'body' => '壹点吃测试单',
+				'expireMinutes' => '5',
+		);
+		$result = MtpPay::pay($data);
+		var_dump($result);exit;
+		$order=new Order();
+		$se=new Sequence("order");
+		$order->lid = $se->nextval();
+		$order->dpid=$dpid;
+		$order->username=Yii::app()->user->name;
+		$order->create_at = date('Y-m-d H:i:s',time());
+		$order->lock_status = '0';
+		$order->order_status = '1';
+		$order->site_id = '0';
+		$order->number = '1';
+		$order->is_temp = '1';
+		$order->account_no = $obj['biz_response']['data']['sn'];
+		//var_dump($order);exit;
+		$order->save();
+	
+		if($pay_code == '200'){
+			if($result_code == 'PAY_SUCCESS'){
+				Yii::app()->end(json_encode(array('type'=>'1',"status"=>"success",'msg'=>'支付成功！','data'=>$obj['biz_response']['data'])));
+			}elseif($result_code == 'PAY_IN_PROGRESS'){
+				Yii::app()->end(json_encode(array('type'=>'2',"status"=>"success",'msg'=>'交易进行中...','data'=>$obj['biz_response']['data'])));
+			}else{
+				Yii::app()->end(json_encode(array('type'=>'3',"status"=>"success",'msg'=>'支付失败，原因：'.$obj['biz_response']['error_message'],'data'=>$obj['biz_response']['data'])));
+			}
+		}else{
+			Yii::app()->end(json_encode(array('type'=>'4',"status"=>"success",'msg'=>'金额有误...')));
+		}
+		exit;
+	}
 	
 }
