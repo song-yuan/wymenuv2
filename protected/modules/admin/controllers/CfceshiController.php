@@ -339,36 +339,31 @@ class CfceshiController extends BackendController
 				'subject' => '壹点吃',
 				'body' => '壹点吃测试单',
 				'expireMinutes' => '5',
+				'random'=>'2131231',
 		);
 		$result = MtpPay::pay($data);
 		var_dump($result);exit;
-		$order=new Order();
-		$se=new Sequence("order");
-		$order->lid = $se->nextval();
-		$order->dpid=$dpid;
-		$order->username=Yii::app()->user->name;
-		$order->create_at = date('Y-m-d H:i:s',time());
-		$order->lock_status = '0';
-		$order->order_status = '1';
-		$order->site_id = '0';
-		$order->number = '1';
-		$order->is_temp = '1';
-		$order->account_no = $obj['biz_response']['data']['sn'];
-		//var_dump($order);exit;
-		$order->save();
+	}
+	public function actionMtwappay(){
 	
-		if($pay_code == '200'){
-			if($result_code == 'PAY_SUCCESS'){
-				Yii::app()->end(json_encode(array('type'=>'1',"status"=>"success",'msg'=>'支付成功！','data'=>$obj['biz_response']['data'])));
-			}elseif($result_code == 'PAY_IN_PROGRESS'){
-				Yii::app()->end(json_encode(array('type'=>'2',"status"=>"success",'msg'=>'交易进行中...','data'=>$obj['biz_response']['data'])));
-			}else{
-				Yii::app()->end(json_encode(array('type'=>'3',"status"=>"success",'msg'=>'支付失败，原因：'.$obj['biz_response']['error_message'],'data'=>$obj['biz_response']['data'])));
-			}
-		}else{
-			Yii::app()->end(json_encode(array('type'=>'4',"status"=>"success",'msg'=>'金额有误...')));
-		}
-		exit;
+		//$result = SqbPay::pay($dpid,$_POST);
+		//$obj = json_decode($result,true);
+    	$data = array(
+    			'outTradeNo'=>'20180118001',
+    			'dpid'=>'27',
+    			'totalFee'=>'1',
+    			'subject'=>'壹点吃',
+    			'body'=>'壹点吃支付测试',
+    			'channel'=>'wx_scan_pay',
+    			'expireMinutes'=>'3',
+    			'tradeType'=>'NATIVE',
+    			'notifyUrl'=>'http://www.wymenu.com/wymenuv2/Cfceshi/Mtwappayresult',
+    			'merchantId'=>'4282256',
+    			'appId'=>'31140',
+    			'random'=>'1234565432',
+    	);
+		$result = MtpPay::preOrder($data);
+		var_dump($result);exit;
 	}
 	
 }

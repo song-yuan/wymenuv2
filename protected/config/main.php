@@ -27,6 +27,7 @@ return array(
 		'application.components.mall.*',
 		'application.components.wxcard.*',
 		'application.components.shouqianba.*',
+		'application.components.meituanpay.*',
 		'application.components.meituan.*',
 		'application.components.eleme.*',
 		'application.components.alipay.*',
@@ -119,7 +120,7 @@ return array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		'cache'=>$params['memcache'],
+		//'cache'=>$params['memcache'],
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
