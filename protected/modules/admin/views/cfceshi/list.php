@@ -99,7 +99,8 @@
 							<button type="button" class="btn green" id="rijieOrder">日结</button> 
 							<button type="button" class="btn green" id="rijieOrders">日结2</button>  
 							<button type="button" class="btn green" id="rijieOrderReport">生成日结报表</button>  
-							<button type="button" class="btn green" id="ceshigg">测试光光接口</button>                     
+							<button type="button" class="btn green" id="ceshigg">测试光光接口</button>  
+							<button type="button" class="btn green" id="mtpay">美团支付</button>                    
 						</div>
 					</div>
 			</div>
@@ -515,5 +516,26 @@
 		},
 	});
     
+	});
+	$("#mtpay").on("click",function(){
+
+		var dpid = $("#dpid").val();
+        var price = $("#price").val();
+        var dynamicId = $("#dynamicId").val();
+        //var username = '<?php echo Yii::app()->user->username?>';
+        $.ajax({
+            type:'GET',
+			url:"<?php echo $this->createUrl('cfceshi/mtpay',array('companyId'=>$this->companyId,));?>/pay_price/"+price+"/auth_code/"+dynamicId+"/dpid/"+dpid,
+			async: false,
+            cache:false,
+            dataType:'json',
+			success:function(msg){
+	            layer.msg(msg.status);
+			},
+            error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+        
 	});
 	</script>
