@@ -1171,7 +1171,7 @@ class WxOrder
 	  public static function getAccountNo($dpid,$siteId,$isTemp,$orderId){
             $sql="select ifnull(min(account_no),'000000000000') as account_no from nb_order where dpid="
                     .$dpid." and site_id=".$siteId." and is_temp=".$isTemp
-                    ." and order_status in ('1','2','3')";
+                    ." and order_status in ('1','2')";
             $ret=Yii::app()->db->createCommand($sql)->queryScalar();      
             if($isTemp || empty($ret) || $ret=="0000000000")
             {
