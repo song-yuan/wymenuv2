@@ -15,6 +15,7 @@ class WxOrder
 	public $userId;
 	public $user;
 	public $siteId;
+	public $siteNoId;
 	public $type;
 	public $number;
 	public $cartNumber = 0;// 购物车产品数量
@@ -250,7 +251,7 @@ class WxOrder
 		if(!in_array($siteNo['status'],array(1,2))){
 			throw new Exception('请联系服务员,开台后下单');
 		}else{
-			$this->siteId = $siteNo['lid'];
+			$this->siteNoId = $siteNo['lid'];
 		}
 	}
 	//获取餐位费
@@ -308,7 +309,7 @@ class WxOrder
     				'update_at'=>date('Y-m-d H:i:s',$time),
     				'account_no'=>$accountNo,
     				'user_id'=>$this->userId,
-    				'site_id'=>$this->siteId,
+    				'site_id'=>$this->siteNoId,
     				'is_temp'=>$this->isTemp,
     				'number'=>$this->number,
     				'order_status'=>1,
@@ -498,7 +499,7 @@ class WxOrder
 				}
 				$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
 			}else{
-				if($cart['is_member_discount']&&$this->type!=1){
+				if($cart['is_member_discount']){
 					$memdiscount += number_format(($cart['price']+$ortherPrice)*(1-$levelDiscount)*$cart['num'],2);
 					$orderPrice +=  number_format(($cart['price']+$ortherPrice)*$levelDiscount*$cart['num'],2);
 				}else{
@@ -604,44 +605,54 @@ class WxOrder
 					$realityPrice += $this->freightFee;
 				}
 			}
-		}
-		if($memdiscount > 0){
-			$se = new Sequence("order_account_discount");
-			$orderAccountId = $se->nextval();
-			$orderAccountData = array(
-					'lid'=>$orderAccountId,
-					'dpid'=>$this->dpid,
-					'create_at'=>date('Y-m-d H:i:s',$time),
-					'update_at'=>date('Y-m-d H:i:s',$time),
-					'order_id'=>$orderId,
-					'account_no'=>$accountNo,
-					'discount_title'=>'会员折扣',
-					'discount_id'=>0,
-					'discount_money'=>$memdiscount,
-					'is_sync'=>$isSync,
-			);
-			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
-		}
-		if($this->fullMinus > 0){
-			$se = new Sequence("order_account_discount");
-			$orderAccountId = $se->nextval();
-			$orderAccountData = array(
-					'lid'=>$orderAccountId,
-					'dpid'=>$this->dpid,
-					'create_at'=>date('Y-m-d H:i:s',$time),
-					'update_at'=>date('Y-m-d H:i:s',$time),
-					'order_id'=>$orderId,
-					'account_no'=>$accountNo,
-					'discount_title'=>$this->fullsent['title'],
-					'discount_id'=>0,
-					'discount_money'=>$this->fullMinus,
-					'is_sync'=>$isSync,
-			);
-			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
-			$orderPrice = $orderPrice - $this->fullMinus;
-			if($orderPrice < 0){
-				$orderPrice = 0;
+			// 会员折扣
+			if($memdiscount > 0){
+				$se = new Sequence("order_account_discount");
+				$orderAccountId = $se->nextval();
+				$orderAccountData = array(
+						'lid'=>$orderAccountId,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'order_id'=>$orderId,
+						'account_no'=>$accountNo,
+						'discount_title'=>'会员折扣',
+						'discount_id'=>0,
+						'discount_money'=>$memdiscount,
+						'is_sync'=>$isSync,
+				);
+				Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 			}
+			// 满减优惠
+			if($this->fullMinus > 0){
+				$se = new Sequence("order_account_discount");
+				$orderAccountId = $se->nextval();
+				$orderAccountData = array(
+						'lid'=>$orderAccountId,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'order_id'=>$orderId,
+						'account_no'=>$accountNo,
+						'discount_title'=>$this->fullsent['title'],
+						'discount_id'=>0,
+						'discount_money'=>$this->fullMinus,
+						'is_sync'=>$isSync,
+				);
+				Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
+				$orderPrice = $orderPrice - $this->fullMinus;
+				if($orderPrice < 0){
+					$orderPrice = 0;
+				}
+			}
+			
+			$sql = 'update nb_site_no set status=2 where site_id='.$this->siteId.' and dpid='.$this->dpid;
+			Yii::app()->db->createCommand($sql)->execute();
+		}else{
+			$sql = 'update nb_site set status=2 where lid='.$this->siteId.' and dpid='.$this->dpid;
+			Yii::app()->db->createCommand($sql)->execute();
+			$sql = 'update nb_site_no set status=2 where lid='.$this->siteNoId.' and dpid='.$this->dpid;
+			Yii::app()->db->createCommand($sql)->execute();
 		}
 		
 		if($orderPrice==0){
