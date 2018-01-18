@@ -14,7 +14,7 @@ class MtpayController extends Controller
 				'body'=>'壹点吃支付测试',
 				'channel'=>'wx_scan_pay',
 				'expireMinutes'=>'3',
-				'tradeType'=>'NATIVE',
+				'tradeType'=>'JSAPI',
 				'notifyUrl'=>'http://www.wymenu.com/wymenuv2/mtpay/mtwappayresult',
 				'merchantId'=>'4282256',
 				'appId'=>'31140',
