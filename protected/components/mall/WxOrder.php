@@ -247,7 +247,7 @@ class WxOrder
 		if(!$siteNo){
 			throw new Exception('请联系服务员,开台后下单');
 		}
-		if(!in_array($siteNo['status'],array(1,2,3))){
+		if(!in_array($siteNo['status'],array(1,2))){
 			throw new Exception('请联系服务员,开台后下单');
 		}else{
 			$this->siteId = $siteNo['lid'];
@@ -1057,9 +1057,9 @@ class WxOrder
 	 	WxOrder::updateOrderProductStatus($orderId,$dpid);
 	 	//修改座位状态
 	 	if($order['order_type']==1){
-	 		WxSite::updateSiteStatus($order['site_id'],$dpid,3);
+	 		WxSite::updateSiteStatus($order['site_id'],$dpid,4);
 	 	}else{
-	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,3);
+	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
 	 		
 	 	//减少库存
@@ -1115,7 +1115,7 @@ class WxOrder
 		$accountNo = self::getAccountNo($dpid,0,1,$orderId);
 		
 		$transaction = Yii::app()->db->beginTransaction();
-			try{
+		try{
         	    $insertOrderArr = array(
         	        	'lid'=>$orderId,
         	        	'dpid'=>$dpid,
@@ -1154,14 +1154,14 @@ class WxOrder
 								'product_order_status'=>9,
 								'is_sync'=>DataSync::getInitSync(),
 								);
-				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-        	    $transaction->commit();
-                $msg = json_encode(array('status'=>true,'order_id'=>$orderId));
-			}catch (Exception $e) {
-				$transaction->rollback();
-				$msg = json_encode(array('status'=>false,'order_id'=>0));
-			}
-            return $msg;
+			 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+        	 $transaction->commit();
+             $msg = json_encode(array('status'=>true,'order_id'=>$orderId));
+		}catch (Exception $e) {
+			$transaction->rollback();
+			$msg = json_encode(array('status'=>false,'order_id'=>0));
+		}
+        return $msg;
      }
 	 /**
 	  * 
