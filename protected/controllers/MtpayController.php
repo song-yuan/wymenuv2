@@ -15,6 +15,7 @@ class MtpayController extends Controller
 				'channel'=>'wx_scan_pay',
 				'expireMinutes'=>'3',
 				'tradeType'=>'JSAPI',
+				'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
 				'notifyUrl'=>'http://www.wymenu.com/wymenuv2/mtpay/mtwappayresult',
 				'merchantId'=>'4282256',
 				'appId'=>'31140',
