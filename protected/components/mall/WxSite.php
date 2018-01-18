@@ -86,7 +86,11 @@ class WxSite
 	 */
 	public static function updateSiteStatus($siteId,$dpid,$status){
 		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_site set status='.$status.',is_sync='.$isSync.' where lid='.$siteId.' and dpid='.$dpid;
+		$siteNo = self::getSiteNoByLid($siteId, $dpid);
+		$sql = 'update nb_site_no set status='.$status.',is_sync='.$isSync.' where lid='.$siteId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+		
+		$sql = 'update nb_site set status='.$status.',is_sync='.$isSync.' where lid='.$siteNo['site_id'].' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
