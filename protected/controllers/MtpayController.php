@@ -26,8 +26,8 @@ class MtpayController extends Controller
 		$st = json_encode($st);
 		header("Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st);
 		
-		$result = MtpPay::preOrder($data);
-		var_dump($result);exit;
+		//$result = MtpPay::preOrder($data);
+		//var_dump($result);exit;
 	}
 	public function actionMtwappayresult(){
 		Helper::writeLog('进入方法.返回参数');
