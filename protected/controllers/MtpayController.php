@@ -23,7 +23,7 @@ class MtpayController extends Controller
 				'random'=>'1234565432',
 		);
 		//$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
-		$st = json_encode('http://www.wymenu.com/wymenuv2/mtpay/mtwappay');
+		$st = urlencode("http://www.wymenu.com/wymenuv2/mtpay/mtwappayresult");
 		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st;
 		Helper::writeLog($url);
 		header($url);
@@ -33,6 +33,10 @@ class MtpayController extends Controller
 	}
 	public function actionMtwappayresult(){
 		Helper::writeLog('进入方法.返回参数');
+		
+		$openId = Yii::app()->request->getParam('openId');
+		Helper::writeLog('授权openID参数：'.$openId);
+		
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		//Helper::writeLog('异步通知的参数:'.$xml);
