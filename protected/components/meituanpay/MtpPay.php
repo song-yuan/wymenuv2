@@ -326,7 +326,7 @@ class MtpPay{
     			'merchantId'=>$merchantId,
     			'appId'=>$appId,
     			'random'=>$random,
-    			'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
+    			'openId'=>'ovmY7wzTPgk8U2NCopVlvF8yQePw',
     	);
     	 
     	ksort($datas);

@@ -3,8 +3,6 @@
 class MtpayController extends Controller
 {
 	public function actionMtwappay(){
-		$openId = Yii::app()->request->getParam('openId');
-		Helper::writeLog('授权openID参数：'.$openId);
 		//$result = SqbPay::pay($dpid,$_POST);
 		//$obj = json_decode($result,true);
 		$data = array(
@@ -16,27 +14,23 @@ class MtpayController extends Controller
 				'channel'=>'wx_scan_pay',
 				'expireMinutes'=>'3',
 				'tradeType'=>'JSAPI',
-				//'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
-				'notifyUrl'=>'http://www.wymenu.com/wymenuv2/mtpay/mtwappayresult',
+				'openId'=>'ovmY7wzTPgk8U2NCopVlvF8yQePw',
+				'notifyUrl'=>'http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult',
 				'merchantId'=>'4282256',
 				'appId'=>'31140',
 				'random'=>'1234565432',
 		);
 		//$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
-		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappay");
-		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st;
-		Helper::writeLog($url);
-		header($url);
+// 		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappay");
+// 		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st;
+// 		Helper::writeLog($url);
+// 		header($url);
 		
-		//$result = MtpPay::preOrder($data);
-		//var_dump($result);exit;
+		$result = MtpPay::preOrder($data);
+		var_dump($result);exit;
 	}
 	public function actionMtwappayresult(){
 		Helper::writeLog('进入方法.返回参数');
-		
-		$openId = Yii::app()->request->getParam('openId');
-		Helper::writeLog('授权openID参数：'.$openId);
-		
 		//收钱吧异步回调数据接收及解析...
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		//Helper::writeLog('异步通知的参数:'.$xml);
