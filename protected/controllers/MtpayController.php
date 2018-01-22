@@ -23,7 +23,7 @@ class MtpayController extends Controller
 				'random'=>'1234565432',
 		);
 		//$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
-		$st = urlencode("http://www.wymenu.com/wymenuv2/mtpay/mtwappayresult");
+		$st = urlencode("http://www.wymenu.com/wymenuv2/mtpay/mtwappay");
 		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st;
 		Helper::writeLog($url);
 		header($url);
