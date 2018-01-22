@@ -13,5 +13,6 @@ class MtpConfig{
 	//美团支付的APPID
 	const MTP_KEY = '7a8288ec99f34e78adecd83386c98a3a';
 	//美团支付的签名秘钥
+	const MTP_OPENID = 'ovmY7wzTPgk8U2NCopVlvF8yQePw';
 }
 ?>

@@ -314,6 +314,7 @@ class MtpPay{
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
     	$appId = MtpConfig::MTP_APPID;
     	$key = MtpConfig::MTP_KEY;
+    	$openId = MtpConfig::MTP_OPENID;
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'totalFee'=>$totalFee,
@@ -326,7 +327,7 @@ class MtpPay{
     			'merchantId'=>$merchantId,
     			'appId'=>$appId,
     			'random'=>$random,
-    			'openId'=>'ovmY7wzTPgk8U2NCopVlvF8yQePw',
+    			'openId'=>$openId,
     	);
     	 
     	ksort($datas);
@@ -360,7 +361,7 @@ class MtpPay{
     			'merchantId'=>$merchantId,
     			'appId'=>$appId,
     			'random'=>$random,
-    			'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
+    			'openId'=>$openId,
     			'sign'=>$sign,
     	);
 
