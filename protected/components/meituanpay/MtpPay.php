@@ -384,7 +384,7 @@ class MtpPay{
     			$prepayId = $obj['prepayId'];
     			
     			Helper::writeLog('已进入支付：'.$resulturl);
-    			header("http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$wxappid."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true");
+    			header("Location:http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$wxappid."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true");
     		}
     	}
     	return $result;
