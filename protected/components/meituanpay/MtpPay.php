@@ -369,6 +369,26 @@ class MtpPay{
     	Helper::writeLog('公众号支付传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('公众号支付返回结果：'.$result);
+    	
+    	if(!empty($result)){
+    		$obj = json_decode($result,true);
+    		$status = $obj['status'];
+    		if($status=='SUCCESS'){
+    			$resulturl = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult");
+    			$wxappid = 'wxc57dd1ee95c70c2c';
+    			$appId = $obj['appId'];
+    			$timeStamp = $obj['timeStamp'];
+    			$nonceStr = $obj['nonceStr'];
+    			$signType = $obj['signType'];
+    			$paySign = $obj['paySign'];
+    			$prepayId = $obj['prepayId'];
+    			
+    			Helper::writeLog('已进入支付：'.$resulturl);
+    			header("http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$wxappid."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true");
+    		}
+    	}
+    	
+    	
     	return $result;
     	exit;
     	if(!empty($paramsStrs)){

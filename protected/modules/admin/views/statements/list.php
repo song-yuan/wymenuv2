@@ -149,7 +149,7 @@
                                 <div class="list_small">查询门店日结详情数据，日结完成后方可显示数据</div>
                             </a> 
                         </div>
-                        <?php if(Yii::app()->user->role <=5):?>
+                        <?php if(Yii::app()->user->role <=11):?>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                            <a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
                                 <div class="list_big">支付方式(员工业绩)</div>
@@ -162,7 +162,7 @@
                                 <div class="list_small">查询门店账单总营业额和总单数及微信端的账单数据和金额数据</div>
                             </a> 
                         </div>
-                        <?php endif;if(Yii::app()->user->role >=11||Yii::app()->user->role <5):?>
+                        <?php endif;if(Yii::app()->user->role <5):?>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                            <a href="<?php echo $this->createUrl('statements/paymentReportSql',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
                                 <div class="list_big">支付方式(优化)</div>
