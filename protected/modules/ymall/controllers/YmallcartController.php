@@ -43,6 +43,7 @@ class YmallcartController extends BaseYmallController
 		));
 	}
 
+
 	/**
 	 * @Author    zhang
 	 * @DateTime  2017-09-18T09:53:01+0800
@@ -127,28 +128,29 @@ class YmallcartController extends BaseYmallController
 		//查询提交者信息
 		$user_id = substr(Yii::app()->user->userId,0,10);
 		$user_name = Yii::app()->user->name;
-		// Yii::app()->user->username;
-		// Yii::app()->user->userId;
 		$arr = array();
 		foreach (explode(',',$goods_num_edit) as  $value) {
 			$val = explode('_',$value);
 			$arr[$val[0]] = $val[1];
 		}
- 		// print_r($arr[18]);exit;
 		if(Yii::app()->request->isAjaxRequest){
+			$arr_num = 0;
 			foreach ($arr as $key => $num) {
 				//查询购物车中是否存在该商品, 存在直接数量加1 , 如果不存在则直接插入,价格不一致直接插入
 				$goods_cart = GoodsCarts::model()->find('dpid=:dpid and lid=:lid and user_id=:user_id and delete_flag=0',array(':dpid'=>$this->companyId,':lid'=>$key,':user_id'=>$user_id));
 				if (!empty($goods_cart)) {
 					$goods_cart->num = $num ;
 					if ($goods_cart->update()) {
-						echo json_encode(1);exit;//更新成功
-					}else {
-						echo json_encode(2);exit;//更新失败
+						$arr_num++;
 					}
-				}else {
-						echo json_encode(3);exit;//没有查询到商品,数据有问题
 				}
+			}
+			if($arr_num==count($arr)){
+				echo json_encode(1);exit;//更新成功
+			}else if($arr_num>0){
+				echo json_encode(2);exit;//更新部分成功
+			}else{
+				echo json_encode(3);exit;//没有查询到商品,数据有问题
 			}
 		}
 	}
