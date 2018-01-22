@@ -96,6 +96,7 @@ return array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				'ymall/<controller:\w+>/<action:\w+>'=>'ymall/<controller>/<action>',
 			),
 		),
 		/*
@@ -120,7 +121,7 @@ return array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		//'cache'=>$params['memcache'],
+		'cache'=>$params['memcache'],
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
