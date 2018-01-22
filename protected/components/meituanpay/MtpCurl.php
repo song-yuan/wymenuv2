@@ -14,6 +14,7 @@ class MtpCurl{
 		
 		//$authorization = 'Authorization: '.$sign;
 		$header = array($contentType, $contentLength);
+		var_dump($data);exit;
 		$ch = curl_init();									// 创建一个新cURL资源
 		curl_setopt($ch, CURLOPT_URL, $url);				// 需要获取的URL地址，也可以在curl_init()函数中设置
 		curl_setopt($ch, CURLOPT_HEADER, false);			// 不启用头文件的信息作为数据流输出
