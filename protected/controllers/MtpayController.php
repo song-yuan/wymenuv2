@@ -29,8 +29,9 @@ class MtpayController extends Controller
 		$result = MtpPay::preOrder($data);
 	}
 	public function actionMtwappayresult(){
-		Helper::writeLog('进入方法.返回参数');
+		
 		$payStatus = Yii::app()->request->getParam('payStatus');
+		Helper::writeLog('进入方法.返回参数'.$payStatus);
 		echo $payStatus;
 	}
 }
