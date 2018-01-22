@@ -24,7 +24,9 @@ class MtpayController extends Controller
 		);
 		$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
 		$st = json_encode($st);
-		header("Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st);
+		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st;
+		Helper::writeLog($url);
+		header($url);
 		
 		//$result = MtpPay::preOrder($data);
 		//var_dump($result);exit;
