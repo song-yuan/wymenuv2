@@ -3,7 +3,8 @@
 class MtpayController extends Controller
 {
 	public function actionMtwappay(){
-	
+		$openId = Yii::app()->request->getParam('openId');
+		Helper::writeLog('授权openID参数：'.$openId);
 		//$result = SqbPay::pay($dpid,$_POST);
 		//$obj = json_decode($result,true);
 		$data = array(
@@ -21,6 +22,10 @@ class MtpayController extends Controller
 				'appId'=>'31140',
 				'random'=>'1234565432',
 		);
+		$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
+		$st = json_encode($st);
+		header("Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st);
+		
 		$result = MtpPay::preOrder($data);
 		var_dump($result);exit;
 	}
