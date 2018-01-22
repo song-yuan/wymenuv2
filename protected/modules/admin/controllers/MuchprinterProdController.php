@@ -71,28 +71,26 @@ class MuchprinterProdController extends BackendController
 	        		$product =  Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$pid,':companyId'=>$this->companyId));
 	        		//var_dump($pid);//exit;	
 	        		if($product){
+	        			$sql = 'update nb_product_printerway set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where product_id ='.$pid.' and dpid ='.$this->companyId;
+	        			$result = $db->createCommand($sql)->execute();
 	        			foreach ($printids as $printid){
-	        				$prodprinter = ProductPrinterway::model()->find(' dpid=:companyId and delete_flag=0 and product_id=:proid and printer_way_id=:printerId' , array(':proid'=>$pid,':printerId'=>$printid,':companyId'=>$this->companyId));
+	        				
+	        				//$prodprinter = ProductPrinterway::model()->find(' dpid=:companyId and delete_flag=0 and product_id=:proid and printer_way_id=:printerId' , array(':proid'=>$pid,':printerId'=>$printid,':companyId'=>$this->companyId));
 	        				//var_dump($prodprinter);
-	        				if($prodprinter){
-	        					
-	        				}else{
-	        					$se=new Sequence("product_printerway");
-	        					$lid = $se->nextval();
-	        					$data = array(
-	        							'lid'=>$lid,
-	        							'dpid'=>$this->companyId,
-	        							'create_at'=>date('Y-m-d H:i:s',time()),
-	        							'update_at'=>date('Y-m-d H:i:s',time()),
-	        							'printer_way_id'=>$printid,
-	        							'product_id'=>$pid,
-	        							'delete_flag'=>"0",
-	        					);
-	        					//var_dump($data);exit;
-	        					Yii::app()->db->createCommand()->insert('nb_product_printerway',$data);
-	        				}
-	        			//$product->$updatename = $prodnum2;
-	        			//$product->save();
+        				
+        					$se=new Sequence("product_printerway");
+        					$lid = $se->nextval();
+        					$data = array(
+        							'lid'=>$lid,
+        							'dpid'=>$this->companyId,
+        							'create_at'=>date('Y-m-d H:i:s',time()),
+        							'update_at'=>date('Y-m-d H:i:s',time()),
+        							'printer_way_id'=>$printid,
+        							'product_id'=>$pid,
+        							'delete_flag'=>"0",
+        					);
+        					Yii::app()->db->createCommand()->insert('nb_product_printerway',$data);
+	        				
 	        			}
 	        		}
 	        	}
@@ -113,35 +111,6 @@ class MuchprinterProdController extends BackendController
 			$product->saveAttributes(array('status'=>$product->status?0:1,'update_at'=>date('Y-m-d H:i:s',time())));
 		}
 		exit;
-	}
-	public function actionRecommend(){
-		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		
-		if($product){
-			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0,'update_at'=>date('Y-m-d H:i:s',time())));
-		}
-		exit;
-	}
-	private function getCategoryList(){
-		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
-		//var_dump($categories);exit;
-		return CHtml::listData($categories, 'lid', 'category_name');
-	}
-	public function actionGetChildren(){
-		$pid = Yii::app()->request->getParam('pid',0);
-		if(!$pid){
-			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
-		}
-		$treeDataSource = array('data'=>array(),'delay'=>400);
-		$categories = Helper::getCategories($this->companyId,$pid);
-	
-		foreach($categories as $c){
-			$tmp['name'] = $c['category_name'];
-			$tmp['id'] = $c['lid'];
-			$treeDataSource['data'][] = $tmp;
-		}
-		Yii::app()->end(json_encode($treeDataSource));
 	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;
@@ -171,9 +140,6 @@ class MuchprinterProdController extends BackendController
 		}
 		return $optionsReturn;
 	}
-	private function getDepartments(){
-		$departments = Department::model()->findAll('company_id=:companyId',array(':companyId'=>$this->companyId)) ;
-		return CHtml::listData($departments, 'department_id', 'name');
-	}
+
 	
 }
