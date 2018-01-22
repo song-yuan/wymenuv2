@@ -365,7 +365,7 @@ class MtpPay{
     	);
 
     	$body = json_encode($datas);
-    	var_dump($body);exit;
+    	Helper::writeLog('公众号支付传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('公众号支付返回结果：'.$result);
     	return $result;
