@@ -264,10 +264,10 @@ class SqbPay{
 	    					'msg'=>'未知状态！');
 	    		}
 	
-	    	}elseif($return_code == '200'){
+	    	}elseif($return_code == '400'){
 	    		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
 	    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
-	    	}elseif($return_code == '200'){
+	    	}elseif($return_code == '500'){
 	    		$msg = 'result_code=['.$obj['result_code'].'],error_code=['.$obj['error_code'].'],error_message=['.$obj['error_message'].']';
 	    		$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$msg);
 	    	}else{
