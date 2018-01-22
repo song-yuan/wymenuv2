@@ -1315,6 +1315,7 @@ class DataSyncOperation {
 				if($type==2){
 					// 新增订单
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
+					Helper::writeLog(json_encode($value));
 					$result = self::operateOrder($pData);
 				}elseif($type==4){
 					// 退款
