@@ -16,14 +16,14 @@ class MtpayController extends Controller
 				'channel'=>'wx_scan_pay',
 				'expireMinutes'=>'3',
 				'tradeType'=>'JSAPI',
-				'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
+				//'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
 				'notifyUrl'=>'http://www.wymenu.com/wymenuv2/mtpay/mtwappayresult',
 				'merchantId'=>'4282256',
 				'appId'=>'31140',
 				'random'=>'1234565432',
 		);
-		$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
-		$st = json_encode($st);
+		//$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
+		$st = json_encode('http://www.wymenu.com/wymenuv2/mtpay/mtwappay');
 		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st;
 		Helper::writeLog($url);
 		header($url);
