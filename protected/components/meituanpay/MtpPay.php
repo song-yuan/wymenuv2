@@ -387,36 +387,8 @@ class MtpPay{
     			header("http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$wxappid."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true");
     		}
     	}
-    	
-    	
     	return $result;
     	exit;
-    	if(!empty($paramsStrs)){
-    		$paramsStr = rtrim($paramsStrs,"&");
-    		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
-    		$paramsStr = $paramsStr."&sign=".$sign;
-    		
-    		if($payChannel==2){
-    			Helper::writeLog($client_sn.'&&'.$terminal_sn);
-	    		$string = "Location:https://m.wosai.cn/qr/gateway?".$paramsStr;
-	    		Helper::writeLog("支付请求链接:".$string);
-	    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
-    		}else{
-    			Helper::writeLog($client_sn.'&&'.$terminal_sn);
-    			$string = "Location:https://qr.shouqianba.com/gateway?".$paramsStr;
-    			Helper::writeLog("支付请求链接:".$string);
-    			header("Location:https://qr.shouqianba.com/gateway?".$paramsStr);
-    		}
-    		//exit;
-    	}else{
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'msg'=>'未知状态！');
-    		
-    		return $result;
-    	}
-    	
     } 
     
     public static function close($data){

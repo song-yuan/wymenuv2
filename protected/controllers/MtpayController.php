@@ -27,7 +27,6 @@ class MtpayController extends Controller
 // 		header($url);
 		
 		$result = MtpPay::preOrder($data);
-		var_dump($result);exit;
 	}
 	public function actionMtwappayresult(){
 		Helper::writeLog('进入方法.返回参数');
