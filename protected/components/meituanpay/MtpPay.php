@@ -524,5 +524,17 @@ class MtpPay{
     	return $result;
     
     }
+    public static function getOpenId($data){
+    	/*该接口用于获取授权，*/
+    	//Helper::writeLog("进入获取openID");
+    	$merchantId = '4282256';
+		$appId = MtpConfig::MTP_APPID;
+		//$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
+		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtopenidresult");
+		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
+		Helper::writeLog($url);
+		header($url);
+    	return true;
+    }
 }
 ?>

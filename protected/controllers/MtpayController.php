@@ -20,11 +20,6 @@ class MtpayController extends Controller
 				'appId'=>'31140',
 				'random'=>'1234565432',
 		);
-		//$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
-// 		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappay");
-// 		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=31140&mchId=4282256&redirect_uri=".$st;
-// 		Helper::writeLog($url);
-// 		header($url);
 		
 		$result = MtpPay::preOrder($data);
 	}
@@ -33,5 +28,18 @@ class MtpayController extends Controller
 		$payStatus = Yii::app()->request->getParam('payStatus');
 		Helper::writeLog('进入方法.返回参数'.$payStatus);
 		echo $payStatus;
+	}
+	public function actionMtopenidresult(){
+		Helper::writeLog('美团回调openID');
+		$openId = Yii::app()->request->getParam('openId');
+		Helper::writeLog('该商户的授权码为：'.$openId);
+		exit;
+	}
+	public function actionMtopenid(){
+		$data = array(
+			'merchantId'=>'4282256',
+		);
+		$result = MtpPay::getOpenId($data);
+		return $result;
 	}
 }
