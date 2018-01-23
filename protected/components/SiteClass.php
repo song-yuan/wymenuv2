@@ -207,9 +207,9 @@ class SiteClass
 	        		$siteNoId = $siteNo['lid'];
 	        		$siteNumber = $siteNo['number'];
 	        		$sql = 'update nb_site_no set status=6 where site_id='.$sid.' and dpid='.$companyId;
-	        		$db->createCommand()->execute();
+	        		$db->createCommand($sql)->execute();
 	        		$sql = 'update nb_site set status=6 where lid='.$sid.' and dpid='.$companyId;
-	        		$db->createCommand()->execute();
+	        		$db->createCommand($sql)->execute();
 	        		
 	        		$se = new Sequence("site_no");
 	        		$lid = $se->nextval();
@@ -229,7 +229,7 @@ class SiteClass
 	        		);
 	        		$db->createCommand()->insert('nb_site_no',$data);
 	        		$sql = 'update nb_order set site_id='.$lid.' where site_id='.$siteNoId.' and dpid='.$companyId.' and order_staus in (1,2)';
-	        		$db->createCommand()->execute();
+	        		$db->createCommand($sql)->execute();
 	        		$msg = '换台成功';
 	        	}elseif($type==2){
 	        		$msg = '并台成功';
