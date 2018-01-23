@@ -33,7 +33,7 @@ class MtpayController extends Controller
 		Helper::writeLog('美团回调openID');
 		$openId = Yii::app()->request->getParam('openId');
 		Helper::writeLog('该商户的授权码为：'.$openId);
-		exit;
+		echo 'ok!';
 	}
 	public function actionMtopenid(){
 		$data = array(

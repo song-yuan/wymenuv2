@@ -375,8 +375,8 @@ class MtpPay{
     		$status = $obj['status'];
     		if($status=='SUCCESS'){
     			$resulturl = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult");
-    			$wxappid = 'wxc57dd1ee95c70c2c';
-    			$appId = $obj['appId'];
+    			//$wxappid = 'wxc57dd1ee95c70c2c';
+    			$appIds = $obj['appId'];
     			$timeStamp = $obj['timeStamp'];
     			$nonceStr = $obj['nonceStr'];
     			$signType = $obj['signType'];
@@ -384,7 +384,7 @@ class MtpPay{
     			$prepayId = $obj['prepayId'];
     			
     			
-    			$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$wxappid."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true";
+    			$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$appIds."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true";
     			Helper::writeLog('已进入支付：'.$url);
     			header("Location:".$url);
     		}
@@ -534,7 +534,7 @@ class MtpPay{
 		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
 		Helper::writeLog($url);
 		header($url);
-    	return true;
+    	return 'true';
     }
 }
 ?>
