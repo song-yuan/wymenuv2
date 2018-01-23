@@ -405,6 +405,7 @@
 		            		if(data){
 		            			layer.msg('删除成功,请稍后.');
 		            			$('#aa').parent().parent().remove();
+		            			location.reload();
 		            		}else{
 		            			layer.msg('删除失败,请重新删除.');
 		            		}
