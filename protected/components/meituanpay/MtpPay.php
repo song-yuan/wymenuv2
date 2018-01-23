@@ -314,6 +314,7 @@ class MtpPay{
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
     	$appId = MtpConfig::MTP_APPID;
     	$key = MtpConfig::MTP_KEY;
+    	$openId = MtpConfig::MTP_OPENID;
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'totalFee'=>$totalFee,
@@ -326,7 +327,7 @@ class MtpPay{
     			'merchantId'=>$merchantId,
     			'appId'=>$appId,
     			'random'=>$random,
-    			'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
+    			'openId'=>$openId,
     	);
     	 
     	ksort($datas);
@@ -360,7 +361,7 @@ class MtpPay{
     			'merchantId'=>$merchantId,
     			'appId'=>$appId,
     			'random'=>$random,
-    			'openId'=>'oIj93t8fhn5tW00Ts5rSrFyEPbZo',
+    			'openId'=>$openId,
     			'sign'=>$sign,
     	);
 
@@ -368,60 +369,78 @@ class MtpPay{
     	Helper::writeLog('公众号支付传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('公众号支付返回结果：'.$result);
+    	
+    	if(!empty($result)){
+    		$obj = json_decode($result,true);
+    		$status = $obj['status'];
+    		if($status=='SUCCESS'){
+    			$resulturl = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult");
+    			//$wxappid = 'wxc57dd1ee95c70c2c';
+    			$appIds = $obj['appId'];
+    			$timeStamp = $obj['timeStamp'];
+    			$nonceStr = $obj['nonceStr'];
+    			$signType = $obj['signType'];
+    			$paySign = $obj['paySign'];
+    			$prepayId = $obj['prepayId'];
+    			
+    			
+    			$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$appIds."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true";
+    			Helper::writeLog('已进入支付：'.$url);
+    			header("Location:".$url);
+    		}
+    	}
     	return $result;
     	exit;
-    	if(!empty($paramsStrs)){
-    		$paramsStr = rtrim($paramsStrs,"&");
-    		$sign = strtoupper(md5($paramsStr.'&key='.$terminal_key));
-    		$paramsStr = $paramsStr."&sign=".$sign;
-    		
-    		if($payChannel==2){
-    			Helper::writeLog($client_sn.'&&'.$terminal_sn);
-	    		$string = "Location:https://m.wosai.cn/qr/gateway?".$paramsStr;
-	    		Helper::writeLog("支付请求链接:".$string);
-	    		header("Location:https://m.wosai.cn/qr/gateway?".$paramsStr);
-    		}else{
-    			Helper::writeLog($client_sn.'&&'.$terminal_sn);
-    			$string = "Location:https://qr.shouqianba.com/gateway?".$paramsStr;
-    			Helper::writeLog("支付请求链接:".$string);
-    			header("Location:https://qr.shouqianba.com/gateway?".$paramsStr);
+    } 
+    
+    public static function close($data){
+    	/*该接口用于关闭订单，*/
+    	$outTradeNo = $data['outTradeNo'];
+    	$random = $data['random'];
+    	
+    	$merchantId = '4282256';
+    	$url = SqbConfig::SQB_DOMAIN.'/api/close';
+    	$appId = MtpConfig::MTP_APPID;
+    	$key = MtpConfig::MTP_KEY;
+    	
+    	$datas = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'merchantId'=>$merchantId,
+    			'appId'=>$appId,
+    			'random'=>$random,
+    	);
+
+    	ksort($datas);
+    	$paramsStrs = '';
+    	if(is_array($datas)){
+    		foreach($datas as $k => $v)
+    		{
+    			$paramsStrs .= $k.'='.$v.'&';
     		}
-    		//exit;
     	}else{
     		$result = array(
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
     				'msg'=>'未知状态！');
-    		
     		return $result;
     	}
+    	$st = $paramsStrs.'key='.$key;
+    	Helper::writeLog('关闭订单参数：'.$st);
+    	$sign=hash('sha256', $st , false);
+    	Helper::writeLog('关闭订单加密:'.$sign);
     	
-    } 
-    
-    public static function cancel($type,$data){
-    	/*该接口用于撤单，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
-    	$terminal_sn = $data['terminal_sn'];
-    	$terminal_key = $data['terminal_key'];
-    	/*终端号及终端秘钥*/
-    	$sn = $data['sn'];
-    	/*收钱吧系统内部唯一订单号*/
-    	$clientSn = $data['clientSn'];
-    	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
-    	if($type){
-    		$url = SqbConfig::SQB_DOMAIN.'/upay/v2/cancel';
-    		/*自动撤单*/
-    	}else{
-    		$url = SqbConfig::SQB_DOMAIN.'/upay/v2/revoke';
-    		/*收到撤单*/
-    	}
-    	
-    	$data = array(
-    			'terminal_sn'=>$terminal_sn,
-    			'sn'=>$sn,
-    			'client_sn'=>$clientSn,
+    	$datas = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'merchantId'=>$merchantId,
+    			'appId'=>$appId,
+    			'random'=>$random,
+    			'sign'=>$sign,
     	);
-    	$body = json_encode($data);
-    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+    	
+    	$body = json_encode($datas);
+    	Helper::writeLog('关闭订单传输参数：'.$body);
+    	$result = MtpCurl::httpPost($url, $body);
+    	Helper::writeLog('关闭订单返回结果：'.$result);
     	return $result;
     
     }
@@ -446,26 +465,76 @@ class MtpPay{
     	return $result;
     
     }
-    public static function prequery($data){
-    	/*该接口用于查询，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
-    	$terminal_sn = $data['terminal_sn'];
-    	$terminal_key = $data['terminal_key'];
-    	/*终端号及终端秘钥*/
-    	$sn = $data['sn'];
-    	/*收钱吧系统内部唯一订单号*/
-    	$clientSn = $data['client_sn'];
-    	/*商户系统订单号,必须在商户系统内唯一；且长度不超过32字节*/
+
+    public static function refund($data){
+    	/*该接口用于关闭订单，*/
+    	$outTradeNo = $data['outTradeNo'];
+    	$refundFee = $data['refundFee'];
+    	$refundNo = $data['refundNo'];
+    	$refundReason = $data['refundReason'];
+    	$merchantId = $data['merchantId'];
+    	$random = $data['random'];
     	 
-    	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/query';
-    	$data = array(
-    			'terminal_sn'=>$terminal_sn,
-    			'sn'=>$sn,
-    			'client_sn'=>$clientSn,
+    	$merchantId = '4282256';
+    	$url = SqbConfig::SQB_DOMAIN.'/api/refund';
+    	$appId = MtpConfig::MTP_APPID;
+    	$key = MtpConfig::MTP_KEY;
+    	 
+    	$datas = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'refundFee'=>$refundFee,
+    			'refundNo'=>$refundNo,
+    			'refundReason'=>$refundReason,
+    			'merchantId'=>$merchantId,
+    			'appId'=>$appId,
+    			'random'=>$random,
     	);
-    	$body = json_encode($data);
-    	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+    
+    	ksort($datas);
+    	$paramsStrs = '';
+    	if(is_array($datas)){
+    		foreach($datas as $k => $v)
+    		{
+    			$paramsStrs .= $k.'='.$v.'&';
+    		}
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	$st = $paramsStrs.'key='.$key;
+    	Helper::writeLog('关闭订单参数：'.$st);
+    	$sign=hash('sha256', $st , false);
+    	Helper::writeLog('关闭订单加密:'.$sign);
+    	 
+    	$datas = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'merchantId'=>$merchantId,
+    			'appId'=>$appId,
+    			'random'=>$random,
+    			'sign'=>$sign,
+    	);
+    	 
+    	$body = json_encode($datas);
+    	Helper::writeLog('关闭订单传输参数：'.$body);
+    	$result = MtpCurl::httpPost($url, $body);
+    	Helper::writeLog('关闭订单返回结果：'.$result);
     	return $result;
     
+    }
+    public static function getOpenId($data){
+    	/*该接口用于获取授权，*/
+    	//Helper::writeLog("进入获取openID");
+    	$merchantId = '4282256';
+		$appId = MtpConfig::MTP_APPID;
+		//$st = 'http://www.wymenu.com/wymenuv2/mtpay/mtwappay';
+		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtopenidresult");
+		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
+		Helper::writeLog($url);
+		header($url);
+    	return 'true';
     }
 }
 ?>
