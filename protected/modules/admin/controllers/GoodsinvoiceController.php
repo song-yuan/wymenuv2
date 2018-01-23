@@ -53,41 +53,104 @@ class GoodsinvoiceController extends BackendController
 		));
 
 	}
+
 	public function actionDetailindex(){
 		$goid = Yii::app()->request->getParam('lid');
 		$name = Yii::app()->request->getParam('name');
 		$papage = Yii::app()->request->getParam('papage');
-
 		$db = Yii::app()->db;
-
-		$sqls = 'select t.* from nb_goods_invoice t where t.lid ='.$goid;
+		$sqls = 'select t.*,ga.pcc,ga.street,ga.mobile as amobile,ga.name as ganame,c.company_name,cc.company_name as dianming,cc.comp_dpid from nb_goods_invoice t left join nb_goods_address ga on(t.goods_address_id=ga.lid) left join nb_company c on(t.dpid=c.dpid) left join nb_company cc on(ga.dpid=cc.dpid) where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
+		// p($model);
+		$sql = 'select k.* from (select ggm.goods_name,ggm.erp_code,ggm.goods_unit,t.*,mu.unit_name,mc.category_name from nb_goods_invoice_details t '
+		.' left join (select g.*,gm.material_code,gm.unit_code from nb_goods g left join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(t.goods_id = ggm.lid)'
+		.' left join nb_company c on(c.dpid = t.dpid)'
+		.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=ggm.unit_code) '
+		.' left join (select mc0.lid,mc1.category_name,mc1.dpid from nb_material_category mc0 left join nb_material_category mc1 on(mc0.pid=mc1.lid) ) mc on(mc.lid=ggm.category_id and mc.dpid='.$model["comp_dpid"].')'
+		.' where t.goods_invoice_id = '.$goid.' order by t.lid) k';
+		$materials= $db->createCommand($sql)->queryAll();
 
-		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
-		$stocks = $db->createCommand($sqlstock)->queryAll();
-
-		$sql = 'select k.* from (select c.goods_name,co.company_name as stock_name,t.* from nb_goods_invoice_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) where t.goods_invoice_id = '.$goid.' order by t.lid) k';
-
-
-		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-		//var_dump($count);exit;
-		$pages = new CPagination($count);
-		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-		$models = $pdata->queryAll();
-		//var_dump($models);exit;
+		$models =array();
+		foreach ($materials as $key => $product) {
+			if(!isset($models[$product['category_name']])){
+				$models[$product['category_name']] = array();
+			}
+			array_push($models[$product['category_name']], $product);
+		}
+		// p($models);
+		$bottoms =GoodsOrderLabel::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId));
 
 		$this->render('detailindex',array(
 				'models'=>$models,
 				'model'=>$model,
-				'stocks'=>$stocks,
-				'pages'=>$pages,
-				'papage'=>$papage,
+				'bottoms'=>$bottoms,
 				'name'=>$name,
 				'goid'=>$goid,
 		));
+	}
 
+	public function actionaddbottom(){
+		$formdata = Yii::app()->request->getPost('acon');
+		if(Yii::app()->request->isPostRequest) {
+			$data = explode(",",$formdata);
+			// p($data);
+			$num = 0;
+			foreach ($data as $key => $value) {
+				$info = explode("_",$value);
+				if(empty($info[2])) {
+					$bottoms = new GoodsOrderLabel();
+					$se=new Sequence("goods_order_label");
+		            $lid = $se->nextval();
+		            $bottoms->lid = $lid;
+		            $bottoms->dpid = $this->companyId;
+		            $bottoms->create_at = date('Y-m-d H:i:s');
+		            $bottoms->update_at = date('Y-m-d H:i:s');
+		            $bottoms->content = $info[1];
+		            $bottoms->sort_no = $info[0];
+					// p($bottoms);
+		        	if ($bottoms->insert()) {
+		        		$num+=1;
+					}
+				}else{
+					$bottoms =GoodsOrderLabel::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$info[2],':dpid'=>$this->companyId));
+					// p($bottoms);
+					$bottoms->update_at = date('Y-m-d H:i:s');
+		            $bottoms->content = $info[1];
+		            $bottoms->sort_no = $info[0];
+					// p($bottoms);
+		        	if ($bottoms->update()) {
+		        		$num+=1;
+					}
+				}
+			}
+			if ($num==count($data)) {
+				echo json_encode(1);exit;
+			}else{
+				echo json_encode(0);exit;
+			}
+
+		}
+	}
+
+
+	public function actiondelete(){
+		$lid = Yii::app()->request->getPost('lid');
+		if(Yii::app()->request->isPostRequest) {
+			$bottoms =GoodsOrderLabel::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$lid,':dpid'=>$this->companyId));
+			if ($bottoms) {
+				$bottoms->update_at = date('Y-m-d H:i:s');
+				$bottoms->delete_flag=1;
+				// p($bottoms);
+				if($bottoms->update()) {
+					echo json_encode(1);exit;
+				}else{
+					echo json_encode(0);exit;
+				}
+			}else{
+				echo json_encode(2);exit;
+			}
+			
+		}
 	}
 
 
