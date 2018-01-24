@@ -214,7 +214,6 @@ class SiteClass
 	        		$se = new Sequence("site_no");
 	        		$lid = $se->nextval();
 	        		$site_id = $osid;
-	        		$code = self::getCode($companyId);
 	        		$data = array(
 	        				'lid'=>$lid,
 	        				'dpid'=>$companyId,
@@ -223,8 +222,6 @@ class SiteClass
 	        				'is_temp'=>$istemp,
 	        				'site_id'=>$site_id,
 	        				'status'=>'1',
-	        				'code'=>$code,
-	        				'waiter_id'=>'',
 	        				'number'=>$siteNumber,
 	        		);
 	        		$db->createCommand()->insert('nb_site_no',$data);
