@@ -225,7 +225,7 @@ class SiteClass
 	        				'number'=>$siteNumber,
 	        		);
 	        		$db->createCommand()->insert('nb_site_no',$data);
-	        		$sql = 'update nb_order set site_id='.$lid.' where site_id='.$siteNoId.' and dpid='.$companyId.' and order_staus in (1,2)';
+	        		$sql = 'update nb_order set site_id='.$lid.' where site_id='.$siteNoId.' and dpid='.$companyId.' and order_status in (1,2)';
 	        		$db->createCommand($sql)->execute();
 	        		$msg = '换台成功';
 	        	}elseif($type==2){
