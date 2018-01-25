@@ -577,7 +577,7 @@ class InventoryController extends BackendController
 												'taking_stock' => $stockori,
 												'demage_price'=>$all_price,
 												'number'=>'-'.$stockori,
-												'reasion'=>'',
+												'reasion'=>''.$damagereason,
 												'status' => 1,
 												'is_sync'=>$is_sync,
 		
@@ -624,7 +624,7 @@ class InventoryController extends BackendController
 						foreach ($pbs as $pb){
 							$mid = $pb['material_id'];
 							
-							$nowNum = $nowNum * $pb['number'];
+							$nowNums = $nowNum * $pb['number'];
 							
 							$originalNum = '0.00';
 							$sql = 'select sum(pms.stock) as stocks from nb_product_material_stock pms where pms.stock>=0 and pms.dpid ='.$dpid.' and pms.material_id ='.$mid;
@@ -650,8 +650,8 @@ class InventoryController extends BackendController
 										'material_id'=>$mid,
 										'material_stock_id' => $stocks->lid,
 										'reality_stock' => $originalNum,
-										'taking_stock' => $nowNum,
-										'number'=>$nowNum,
+										'taking_stock' => $nowNums,
+										'number'=>$nowNums,
 										'reasion'=>$damagereason,
 										'status' => 0,
 										'is_sync'=>$is_sync,
@@ -709,7 +709,7 @@ class InventoryController extends BackendController
 														'taking_stock' => ''.$changestock,
 														'demage_price'=>$all_price,
 														'number'=>'-'.$minusnum,
-														'reasion'=>'',
+														'reasion'=>''.$damagereason,
 														'status' => 1,
 														'is_sync'=>$is_sync,
 												);
@@ -744,7 +744,7 @@ class InventoryController extends BackendController
 														'taking_stock' => $stockori,
 														'demage_price'=>$all_price,
 														'number'=>'-'.$stockori,
-														'reasion'=>'',
+														'reasion'=>''.$damagereason,
 														'status' => 1,
 														'is_sync'=>$is_sync,
 															
