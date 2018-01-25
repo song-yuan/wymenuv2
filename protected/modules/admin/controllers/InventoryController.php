@@ -659,12 +659,12 @@ class InventoryController extends BackendController
 								//var_dump($stocktakingdetails);
 								$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
 									
-								if($nowNum>0){
+								if($nowNums>0){
 										
 									$sql = 'select t.* from nb_product_material_stock t where t.stock != "0.00" and t.delete_flag = 0 and t.dpid ='.$dpid.' and t.material_id = '.$mid.' order by t.create_at asc';
 									$command = $db->createCommand($sql);
 									$stock2 = $command->queryAll();
-									$minusnum = $nowNum;
+									$minusnum = $nowNums;
 									//var_dump($minusnum.'@');
 									foreach ($stock2 as $stockid){
 										//print_r($stockid);exit;
@@ -774,7 +774,7 @@ class InventoryController extends BackendController
 										'material_id'=>$mid,
 										'material_stock_id' => '0000000000',
 										'reality_stock' => '0.00',
-										'taking_stock' => ''.$nowNum,
+										'taking_stock' => ''.$nowNums,
 										'number'=>'0',
 										'reasion'=>'该次盘损['.$matername.']尚未入库，无法进行盘损,请先入库.',
 										'status' => 0,
