@@ -365,5 +365,34 @@ class CfceshiController extends BackendController
 		$result = MtpPay::preOrder($data);
 		var_dump($result);exit;
 	}
+	public function actionMtquery(){
+	
+		$clientSn = Yii::app()->request->getParam('clientSn');
+		$dpid = Yii::app()->request->getParam('dpid');
+		$data = array(
+				'outTradeNo'=>$clientSn,
+				'dpid'=>$dpid,
+				'random'=>'1234565432',
+		);
+		$result = MtpPay::query($data);
+		var_dump($result);exit;
+	}
+	public function actionMtrefund(){
+	
+		$clientSn = Yii::app()->request->getParam('clientSn');
+		$price = Yii::app()->request->getParam('price');
+		$refundNo = Yii::app()->request->getParam('refundno');
+		$dpid = Yii::app()->request->getParam('dpid');
+		$data = array(
+				'outTradeNo'=>$clientSn,
+				'refundFee'=>$price,
+				'refundNo'=>$refundNo,
+				'dpid'=>$dpid,
+				'refundReason'=>'测试退款',
+				'random'=>'1234565432',
+		);
+		$result = MtpPay::refund($data);
+		var_dump($result);exit;
+	}
 	
 }
