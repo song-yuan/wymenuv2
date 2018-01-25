@@ -34,11 +34,11 @@ class InventoryController extends BackendController
 			}
 			$begintime = Yii::app()->request->getPost('begintime',0);
 			if($begintime){
-				$criteria->addCondition('t.storage_date >= "'.$begintime.'" ');
+				$criteria->addCondition('t.create_at >= "'.$begintime.'" ');
 			}
 			$endtime = Yii::app()->request->getPost('endtime',0);
 			if($endtime){
-				$criteria->addCondition('t.storage_date <= "'.$endtime.'" ');
+				$criteria->addCondition('t.update_at <= "'.$endtime.'" ');
 			}
 		}
 		$criteria->order = ' t.lid desc ';
@@ -151,33 +151,35 @@ class InventoryController extends BackendController
 		$db = Yii::app()->db;
 		if(Yii::app()->request->isPostRequest) {
 			$m = Yii::app()->request->getPost('ms');
-			$ms = array();
-			$ms = explode(';',$m);
-			foreach ($ms as $mss){
-				
-				$m = explode(',',$mss);
-				$mt = $m[1];
-				$md = $m[0];
-				//var_dump($md);exit;
-				$sql = 'select * from nb_inventory_detail where delete_flag =0 and material_id ='.$md.' and inventory_id='.$rlid;
-				$mid = $db->createCommand($sql)->queryRow();
-				if(empty($mid)){
-					$idm = new InventoryDetail();
-					$se=new Sequence("inventory_detail");
-					$idm->lid = $se->nextval();
-					$idm->dpid = $this->companyId;
-					$idm->create_at = date('Y-m-d H:i:s',time());
-					$idm->update_at = date('Y-m-d H:i:s',time());
-					$idm->inventory_id = $rlid;
-					$idm->material_id = $md;
-					$idm->type = $mt;
-					$idm->save();
+			if(!empty($m)){
+				$ms = array();
+				$ms = explode(';',$m);
+				foreach ($ms as $mss){
+					
+					$m = explode(',',$mss);
+					$mt = $m[1];
+					$md = $m[0];
+					//var_dump($md);exit;
+					$sql = 'select * from nb_inventory_detail where delete_flag =0 and material_id ='.$md.' and inventory_id='.$rlid;
+					$mid = $db->createCommand($sql)->queryRow();
+					if(empty($mid)){
+						$idm = new InventoryDetail();
+						$se=new Sequence("inventory_detail");
+						$idm->lid = $se->nextval();
+						$idm->dpid = $this->companyId;
+						$idm->create_at = date('Y-m-d H:i:s',time());
+						$idm->update_at = date('Y-m-d H:i:s',time());
+						$idm->inventory_id = $rlid;
+						$idm->material_id = $md;
+						$idm->type = $mt;
+						$idm->save();
+					}
 				}
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId,'lid'=>$rlid ));
+			}else{
+				Yii::app()->user->setFlash('error' , yii::t('app','请选择要盘损的具体项'));
 			}
-			
-			Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-			$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId,'lid'=>$rlid ));
-			
 		}
 		$categories = $this->getCategories();
 		$cateps = $this->getCateps();
