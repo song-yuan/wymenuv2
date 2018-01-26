@@ -543,7 +543,7 @@ class DataSyncOperation {
 		if($orderCache!=false){
 			$msg = json_encode ( array (
 					'status' => false,
-					'msg' => '生成订单中,等待结果',
+					'msg' => '生成订单中,等待结果'.$orderKey,
 					'orderId' => ''
 			) );
 			return $msg;	
