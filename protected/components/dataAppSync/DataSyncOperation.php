@@ -557,7 +557,7 @@ class DataSyncOperation {
 		}
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
-			if($siteNo){
+			if($orderInfo->is_temp==0&&$siteNo){
 				$sql = 'update nb_site_no set status=4 where lid='.$siteNo['lid'].' and dpid='.$siteNo['dpid'];
 				Yii::app ()->db->createCommand ($sql)->execute();
 			}
