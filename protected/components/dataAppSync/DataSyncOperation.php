@@ -549,9 +549,18 @@ class DataSyncOperation {
 			return $msg;	
 		}
 		$orderCache = Yii::app()->cache->set($orderKey,true);
-		
+		if($orderInfo->is_temp==0){
+			$siteNo = WxSite::getSiteNo($siteId, $dpid);
+			if($siteNo){
+				$orderInfo->site_id = $siteNo['lid'];
+			}
+		}
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
+			if($siteNo){
+				$sql = 'update nb_site_no set status=4 where lid='.$siteNo['lid'].' and dpid='.$siteNo['dpid'];
+				Yii::app ()->db->createCommand ($sql)->execute();
+			}
 			$se = new Sequence ( "order" );
 			$orderId = $se->nextval ();
 			
