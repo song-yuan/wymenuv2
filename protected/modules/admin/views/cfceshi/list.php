@@ -101,7 +101,9 @@
 							<button type="button" class="btn green" id="rijieOrderReport">生成日结报表</button>  
 							<button type="button" class="btn green" id="ceshigg">测试光光接口</button>  
 							<button type="button" class="btn green" id="mtpay">美团支付</button>   
-							<button type="button" class="btn green" id="mtpayopenid">获取openID</button>                 
+							<button type="button" class="btn green" id="mtpayopenid">获取openID</button>   
+							<button type="button" class="btn green" id="mtquery">mt查询</button> 
+							<button type="button" class="btn green" id="mtrefund">mt退款</button>              
 						</div>
 					</div>
 			</div>
@@ -548,6 +550,46 @@
         $.ajax({
             type:'GET',
 			url:"<?php echo $this->createUrl('cfceshi/mtpay',array('companyId'=>$this->companyId,));?>/pay_price/"+price+"/auth_code/"+dynamicId+"/dpid/"+dpid,
+			async: false,
+            cache:false,
+            dataType:'json',
+			success:function(msg){
+	            layer.msg(msg.status);
+			},
+            error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+        
+	});
+	$("#mtquery").on("click",function(){
+
+		var dpid = $("#dpid").val();
+        var clientSn = $("#clientSn").val();
+        $.ajax({
+            type:'GET',
+			url:"<?php echo $this->createUrl('cfceshi/mtquery',array('companyId'=>$this->companyId,));?>/clientSn/"+clientSn+"/dpid/"+dpid,
+			async: false,
+            cache:false,
+            dataType:'json',
+			success:function(msg){
+	            layer.msg(msg.status);
+			},
+            error:function(){
+				layer.msg("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+        
+	});
+	$("#mtrefund").on("click",function(){
+
+		var dpid = $("#dpid").val();
+        var clientSn = $("#clientSn").val();
+        var price = $("#price").val();
+        var refundno = $("#dynamicId").val();
+        $.ajax({
+            type:'GET',
+			url:"<?php echo $this->createUrl('cfceshi/mtrefund',array('companyId'=>$this->companyId,));?>/clientSn/"+clientSn+"/dpid/"+dpid+"/price/"+price+"/refundno/"+refundno,
 			async: false,
             cache:false,
             dataType:'json',

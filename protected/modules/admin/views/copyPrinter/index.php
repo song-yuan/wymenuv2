@@ -8,10 +8,15 @@
         display: inline-block;
         margin-right: 40px;
     }
-    
+    legend{
+        background: #ccc;
+        color:darkblue;
+        font-weight: 900;
+    }
+
 </style>
 <div class="page-content">
-    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
     <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                     <div class="modal-content">
@@ -50,16 +55,28 @@
             )); ?>
         <div class="col-md-12">
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
-            <div class="portlet box purple">                
-                <div class="portlet-body" id="table-manage">   
+            <div class="portlet box purple">
+                <div class="portlet-body" id="table-manage">
                     <div class="print col-md-offset-2 col-md-7">
-                        <span>1、打印机 </span>
-                        <span>2、厨打方案</span>	
+                        <fieldset>
+                            <legend>下发项目</legend>
+                            <span>1、打印机设置 </span>
+                            <span>2、厨打方案设置</span>
+                        </fieldset>
                     </div>
-                    <div class="col-md-offset-2 col-md-7">                        
+                    <div class=" col-md-offset-2 col-md-7">
+                        <fieldset>
+                            <legend>下发方式</legend>
+                            <select name="down_type" id="down_type" class="form-control" style="width:150px;">
+                                <option value="1">覆盖(打印机设置)下发</option>
+                                <option value="0">无覆盖(打印机设置)下发</option>
+                            </select>
+                        </fieldset>
+                    </div>
+                    <div class="print col-md-offset-3 col-md-7">
                         <button type="button" id="su" class="btn green" ><?php echo yii::t('app','一键下发');?></button>
                     </div>
-                    <div style="display: none;">                       
+                    <div style="display: none;">
                         <input type="hidden" id="dpids" name="dpids" value="" />
                     </div>
                 </div>
@@ -69,22 +86,24 @@
         <?php $this->endWidget(); ?>
     </div>
 	<!-- END PAGE CONTENT-->
-    <div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">		                
+    <div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
         <div class="modal-header">
             <h4 class="modal-title">选择需要下发打印机的店铺</h4>
         </div>
         <div class="modal-body">
-            <div class="portlet-body" id="table-manage">  
+            <div class="portlet-body" id="table-manage">
                 <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
                     <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
                         <?php if($dpids):?>
                         <?php foreach($dpids as $dpid):?>
                             <li style="width:50%;float:left;">
-                                    <div style="width:10%;float:left;"><?php echo $a++;?></div>
-                                    <div style="width:70%;float:left;"><?php echo $dpid['company_name'];?></div>
                                     <div style="width:10%;float:left;">
-                                           <input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" />
+                                           <input style="height:20px;" type="checkbox" class="checkdpids" value="<?php  echo $dpid['dpid'];?>" id="check<?php echo $a; ?>" name="reportlist[]" />
                                     </div>
+                                    <label for="check<?php echo $a; ?>" style="font-size:1em;width:80%;">
+                                    <div style="width:10%;float:left;"><?php echo $a; $a++;?></div>
+                                    <div style="width:90%;float:left;"><?php echo $dpid['company_name'];?></div>
+                                    </label>
                             </li>
                         <?php endforeach;?>
                         <?php endif;?>
@@ -92,11 +111,11 @@
                                     <div style="width:10%;float:left;"></div>
                                     <div style="width:60%;float:left;"></div>
                                     <div style="width:14%;float:right;">
-                                           <input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
-                                           全选
+                                           <input style="height:20px;" id="all" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
+                                           <label for="all" style="font-size:1em;">全选</label>
                                     </div>
 
-                            </li>                                                                       
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -106,14 +125,14 @@
                     <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
 
             </div>
-        </div>				                	
-    </div>        
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
-$("#su").on('click',function() {		        
-        
-    
-       
+$("#su").on('click',function() {
+
+
+
         if(window.confirm("确认进行此项操作?")){
             layer_index_printreportlist=layer.open({
 	            type: 1,
@@ -123,10 +142,10 @@ $("#su").on('click',function() {
 	            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
 	            cancel: function(index){
 	                layer.close(index);
-	                layer_index_printreportlist=0;                                                                                                     
+	                layer_index_printreportlist=0;
 	            }
             });
-            
+
             $("#printall").on("click",function(){
 	            //alert("暂无权限！！！");
 	            var dpids =new Array();
@@ -138,8 +157,9 @@ $("#su").on('click',function() {
 	            if(dpids!=''){
 	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
 	            	//alert(dpids);
-	            	$("#dpids").val(dpids);
-	            	
+                    $("#dpids").val(dpids);
+	            	// $("#down_type").val();
+
 	    	        $("#CopyPrinter-form").submit();
                     }else{
                             alert("请选择店铺。。。");return;
@@ -153,6 +173,6 @@ $("#su").on('click',function() {
         }else{
 			return false;
             }
-	});	
-</script>	
+	});
+</script>
 

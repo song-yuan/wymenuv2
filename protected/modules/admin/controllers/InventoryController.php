@@ -34,11 +34,11 @@ class InventoryController extends BackendController
 			}
 			$begintime = Yii::app()->request->getPost('begintime',0);
 			if($begintime){
-				$criteria->addCondition('t.storage_date >= "'.$begintime.'" ');
+				$criteria->addCondition('t.create_at >= "'.$begintime.'" ');
 			}
 			$endtime = Yii::app()->request->getPost('endtime',0);
 			if($endtime){
-				$criteria->addCondition('t.storage_date <= "'.$endtime.'" ');
+				$criteria->addCondition('t.update_at <= "'.$endtime.'" ');
 			}
 		}
 		$criteria->order = ' t.lid desc ';
@@ -151,33 +151,35 @@ class InventoryController extends BackendController
 		$db = Yii::app()->db;
 		if(Yii::app()->request->isPostRequest) {
 			$m = Yii::app()->request->getPost('ms');
-			$ms = array();
-			$ms = explode(';',$m);
-			foreach ($ms as $mss){
-				
-				$m = explode(',',$mss);
-				$mt = $m[1];
-				$md = $m[0];
-				//var_dump($md);exit;
-				$sql = 'select * from nb_inventory_detail where delete_flag =0 and material_id ='.$md.' and inventory_id='.$rlid;
-				$mid = $db->createCommand($sql)->queryRow();
-				if(empty($mid)){
-					$idm = new InventoryDetail();
-					$se=new Sequence("inventory_detail");
-					$idm->lid = $se->nextval();
-					$idm->dpid = $this->companyId;
-					$idm->create_at = date('Y-m-d H:i:s',time());
-					$idm->update_at = date('Y-m-d H:i:s',time());
-					$idm->inventory_id = $rlid;
-					$idm->material_id = $md;
-					$idm->type = $mt;
-					$idm->save();
+			if(!empty($m)){
+				$ms = array();
+				$ms = explode(';',$m);
+				foreach ($ms as $mss){
+					
+					$m = explode(',',$mss);
+					$mt = $m[1];
+					$md = $m[0];
+					//var_dump($md);exit;
+					$sql = 'select * from nb_inventory_detail where delete_flag =0 and material_id ='.$md.' and inventory_id='.$rlid;
+					$mid = $db->createCommand($sql)->queryRow();
+					if(empty($mid)){
+						$idm = new InventoryDetail();
+						$se=new Sequence("inventory_detail");
+						$idm->lid = $se->nextval();
+						$idm->dpid = $this->companyId;
+						$idm->create_at = date('Y-m-d H:i:s',time());
+						$idm->update_at = date('Y-m-d H:i:s',time());
+						$idm->inventory_id = $rlid;
+						$idm->material_id = $md;
+						$idm->type = $mt;
+						$idm->save();
+					}
 				}
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId,'lid'=>$rlid ));
+			}else{
+				Yii::app()->user->setFlash('error' , yii::t('app','请选择要盘损的具体项'));
 			}
-			
-			Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-			$this->redirect(array('inventory/detailindex' , 'companyId' => $this->companyId,'lid'=>$rlid ));
-			
 		}
 		$categories = $this->getCategories();
 		$cateps = $this->getCateps();
@@ -577,7 +579,7 @@ class InventoryController extends BackendController
 												'taking_stock' => $stockori,
 												'demage_price'=>$all_price,
 												'number'=>'-'.$stockori,
-												'reasion'=>'',
+												'reasion'=>''.$damagereason,
 												'status' => 1,
 												'is_sync'=>$is_sync,
 		
@@ -624,7 +626,7 @@ class InventoryController extends BackendController
 						foreach ($pbs as $pb){
 							$mid = $pb['material_id'];
 							
-							$nowNum = $nowNum * $pb['number'];
+							$nowNums = $nowNum * $pb['number'];
 							
 							$originalNum = '0.00';
 							$sql = 'select sum(pms.stock) as stocks from nb_product_material_stock pms where pms.stock>=0 and pms.dpid ='.$dpid.' and pms.material_id ='.$mid;
@@ -650,8 +652,8 @@ class InventoryController extends BackendController
 										'material_id'=>$mid,
 										'material_stock_id' => $stocks->lid,
 										'reality_stock' => $originalNum,
-										'taking_stock' => $nowNum,
-										'number'=>$nowNum,
+										'taking_stock' => $nowNums,
+										'number'=>$nowNums,
 										'reasion'=>$damagereason,
 										'status' => 0,
 										'is_sync'=>$is_sync,
@@ -659,12 +661,12 @@ class InventoryController extends BackendController
 								//var_dump($stocktakingdetails);
 								$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
 									
-								if($nowNum>0){
+								if($nowNums>0){
 										
 									$sql = 'select t.* from nb_product_material_stock t where t.stock != "0.00" and t.delete_flag = 0 and t.dpid ='.$dpid.' and t.material_id = '.$mid.' order by t.create_at asc';
 									$command = $db->createCommand($sql);
 									$stock2 = $command->queryAll();
-									$minusnum = $nowNum;
+									$minusnum = $nowNums;
 									//var_dump($minusnum.'@');
 									foreach ($stock2 as $stockid){
 										//print_r($stockid);exit;
@@ -709,7 +711,7 @@ class InventoryController extends BackendController
 														'taking_stock' => ''.$changestock,
 														'demage_price'=>$all_price,
 														'number'=>'-'.$minusnum,
-														'reasion'=>'',
+														'reasion'=>''.$damagereason,
 														'status' => 1,
 														'is_sync'=>$is_sync,
 												);
@@ -744,7 +746,7 @@ class InventoryController extends BackendController
 														'taking_stock' => $stockori,
 														'demage_price'=>$all_price,
 														'number'=>'-'.$stockori,
-														'reasion'=>'',
+														'reasion'=>''.$damagereason,
 														'status' => 1,
 														'is_sync'=>$is_sync,
 															
@@ -774,7 +776,7 @@ class InventoryController extends BackendController
 										'material_id'=>$mid,
 										'material_stock_id' => '0000000000',
 										'reality_stock' => '0.00',
-										'taking_stock' => ''.$nowNum,
+										'taking_stock' => ''.$nowNums,
 										'number'=>'0',
 										'reasion'=>'该次盘损['.$matername.']尚未入库，无法进行盘损,请先入库.',
 										'status' => 0,
@@ -813,14 +815,15 @@ class InventoryController extends BackendController
 					
 					
 				}
-				$storage = Inventory::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$dpid));
-				$storage->status = '1';
-				$storage->update();
-				$transaction->commit();
-				Yii::app()->end(true);
-		
-				return true;
+				
 			}
+			$storage = Inventory::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$dpid));
+			$storage->status = '1';
+			$storage->update();
+			$transaction->commit();
+			Yii::app()->end(true);
+			
+			return true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			exit;
