@@ -815,14 +815,15 @@ class InventoryController extends BackendController
 					
 					
 				}
-				$storage = Inventory::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$dpid));
-				$storage->status = '1';
-				$storage->update();
-				$transaction->commit();
-				Yii::app()->end(true);
-		
-				return true;
+				
 			}
+			$storage = Inventory::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$dpid));
+			$storage->status = '1';
+			$storage->update();
+			$transaction->commit();
+			Yii::app()->end(true);
+			
+			return true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			exit;
