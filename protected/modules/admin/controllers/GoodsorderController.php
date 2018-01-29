@@ -76,7 +76,7 @@ class GoodsorderController extends BackendController
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
 
-		$sql = 'select k.* from (select co.company_name as stock_name,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
+		$sql = 'select k.* from (select co.company_name as stock_name,c.goods_unit,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
 		//;
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -86,7 +86,7 @@ class GoodsorderController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		//var_dump($models);exit;
+		// var_dump($models);exit;
 
 		$this->render('detailindex',array(
 				'models'=>$models,
@@ -121,7 +121,7 @@ class GoodsorderController extends BackendController
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
 
-		$sql = 'select k.* from (select co.company_name as stock_name,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
+		$sql = 'select k.* from (select co.company_name as stock_name,c.goods_unit,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
 		$models = $db->createCommand($sql)->queryAll();
 		// var_dump($models);exit;
 		// p($model);
@@ -188,7 +188,8 @@ class GoodsorderController extends BackendController
         ->setCellValue('A6',yii::t('app','货品名称'))
         ->setCellValue('B6',yii::t('app','价格'))
         ->setCellValue('C6',yii::t('app','数量'))
-        ->setCellValue('D6',yii::t('app','发货仓库'));
+        ->setCellValue('D6',yii::t('app','单位'))
+        ->setCellValue('E6',yii::t('app','发货仓库'));
         $j=7;
         if($models){
             foreach ($models as $key => $v) {
@@ -196,47 +197,49 @@ class GoodsorderController extends BackendController
                 ->setCellValue('A'.$j,$v['goods_name'])
                 ->setCellValue('B'.$j,$v['price'])
                 ->setCellValue('C'.$j,$v['num'])
-                ->setCellValue('D'.$j,$v['stock_name']);
+                ->setCellValue('D'.$j,$v['goods_unit'])
+                ->setCellValue('E'.$j,$v['stock_name']);
 
                 //细边框引用
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':D'.$j)->applyFromArray($linestyle);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':E'.$j)->applyFromArray($linestyle);
                 //设置字体靠左
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':E'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
                 $j++;
             }
         }
         //冻结窗格
         $objPHPExcel->getActiveSheet()->freezePane('A7');
         //合并单元格
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
-        $objPHPExcel->getActiveSheet()->mergeCells('A3:D3');
-        $objPHPExcel->getActiveSheet()->mergeCells('A4:D4');
-        $objPHPExcel->getActiveSheet()->mergeCells('A5:D5');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
+        $objPHPExcel->getActiveSheet()->mergeCells('A3:E3');
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:E4');
+        $objPHPExcel->getActiveSheet()->mergeCells('A5:E5');
         //单元格加粗，居中：
         // $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$jj)->applyFromArray($lineBORDER);//大边框格式引用
         // 将A1单元格设置为加粗，居中
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:D2')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A4:D4')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A5:D5')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:E2')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:E4')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A5:E5')->applyFromArray($linestyle);
         //加粗字体
-        $objPHPExcel->getActiveSheet()->getStyle('A2:D2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A4:D4')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A5:D5')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A6:D6')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:E2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:E4')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A5:E5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:E6')->getFont()->setBold(true);
         //设置字体垂直居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         //设置字体水平居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         //设置每列宽度
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         //输出
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $filename="壹点吃餐饮管理系统店铺采购货单---（".date('m-d',time())."）.xls";

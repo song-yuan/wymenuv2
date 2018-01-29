@@ -31,15 +31,15 @@ class GoodstockController extends BackendController
 			$str = '';
 		}
 		$db = Yii::app()->db;
-		$sql = 'select k.* from (select c.company_name,t.* from nb_goods_delivery t left join nb_company c on(t.dpid = c.dpid) where t.dpid ='.$this->companyId.$str.') k order by status asc';
-
+		$sql = 'select k.* from (select c.company_name,t.*,y.company_name as name from nb_goods_delivery t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_order o on(t.goods_order_accountno=o.account_no) left join nb_company y on(o.dpid=y.dpid) where t.dpid ='.$this->companyId.$str.') k order by status asc';
+// echo $sql;exit();
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		$pages = new CPagination($count);
 		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		// p($models);
+		// var_dump($models);exit();
 		$this->render('goodsdelivery',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -57,10 +57,11 @@ class GoodstockController extends BackendController
 		$sqls = 'select t.* from nb_goods_delivery t where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
 
-		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
-		$stocks = $db->createCommand($sqlstock)->queryAll();
-
-		$sql = 'select k.* from (select c.goods_name,co.company_name as stock_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
+		$sqlstock = "select company_name from nb_company where dpid=(select dpid from nb_goods_order where account_no=".$model['goods_order_accountno']." and delete_flag=0) and delete_flag=0";
+		// echo $sqlstock;exit();
+		$stocks = $db->createCommand($sqlstock)->queryRow();
+// var_dump($stocks);exit;
+		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
 		//;
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -70,7 +71,7 @@ class GoodstockController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		//var_dump($models);exit;
+		// var_dump($models);exit;
 
 		$this->render('detailindex',array(
 				'models'=>$models,
@@ -98,11 +99,12 @@ class GoodstockController extends BackendController
 		// $sqls = 'select t.* from nb_goods_delivery t where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
 
-		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
-		$stocks = $db->createCommand($sqlstock)->queryAll();
+		$sqlstock = "select company_name from nb_company where dpid=(select dpid from nb_goods_order where account_no=".$model['goods_order_accountno']." and delete_flag=0) and delete_flag=0";
+		// echo $sqlstock;exit();
+		$stocks = $db->createCommand($sqlstock)->queryRow();
 
-		$sql = 'select k.* from (select c.goods_name,co.company_name as stock_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
-		$models = $db->createCommand($sql)->queryAll();
+		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
+		$materials = $db->createCommand($sql)->queryAll();
 		// var_dump($models);exit;
 		// p($model);
 
@@ -162,64 +164,86 @@ class GoodstockController extends BackendController
         $objPHPExcel->setActiveSheetIndex(0)
         ->setCellValue('A1',yii::t('app','壹点吃餐饮管理系统仓库配货单'))
         ->setCellValue('A2',yii::t('app','配货单号:'.$model['delivery_accountno'].'--订单号:'.$model['goods_order_accountno']))
-        ->setCellValue('A3',yii::t('app','总金额:'.$model['delivery_amount'].'--状态:'.($model['pay_status']?'已支付':'未支付')))
-        ->setCellValue('A4',yii::t('app','收货地址:'.$model['pcc'].' '.$model['street']))
-        ->setCellValue('A5',yii::t('app','收货人:'.$model['name'].'--联系电话:'.$model['phone']))
-        ->setCellValue('A6',yii::t('app','货品名称'))
-        ->setCellValue('B6',yii::t('app','价格'))
-        ->setCellValue('C6',yii::t('app','数量'))
-        ->setCellValue('D6',yii::t('app','批次'))
-        ->setCellValue('E6',yii::t('app','发货仓库'));
-        $j=7;
+        ->setCellValue('A3',yii::t('app','店铺名称:'.$stocks['company_name']))
+        ->setCellValue('A4',yii::t('app','总金额:'.$model['delivery_amount'].'--状态:'.($model['pay_status']?'已支付':'未支付')))
+        ->setCellValue('A5',yii::t('app','收货地址:'.$model['pcc'].' '.$model['street']))
+        ->setCellValue('A6',yii::t('app','收货人:'.$model['name'].'--联系电话:'.$model['phone']))
+        ->setCellValue('A7',yii::t('app','货品名称'))
+        ->setCellValue('B7',yii::t('app','价格'))
+        ->setCellValue('C7',yii::t('app','数量'))
+        ->setCellValue('D7',yii::t('app','单位'))
+        ->setCellValue('E7',yii::t('app','批次'))
+        ->setCellValue('F7',yii::t('app','发货仓库'));
+        $j=8;
+        $models = array();
+        foreach ($materials as $key => $product) {
+			if(!isset($models[$product['category_name']])){
+				$models[$product['category_name']] = array();
+			}
+			array_push($models[$product['category_name']], $product);
+		}
         if($models){
-            foreach ($models as $key => $v) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A'.$j,$v['goods_name'])
-                ->setCellValue('B'.$j,$v['price'])
-                ->setCellValue('C'.$j,$v['num'])
-                ->setCellValue('D'.$j,$v['pici'])
-                ->setCellValue('E'.$j,$v['stock_name']);
+        	foreach ($models as $key => $value) {
+        		
+        		$objPHPExcel->setActiveSheetIndex(0)
+	                ->setCellValue('A'.$j,$key);
+                 //细边框引用
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->applyFromArray($linestyle);
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$j.':F'.$j);
+				$j++;
+	            foreach ($value as $key => $v) {
+	                $objPHPExcel->setActiveSheetIndex(0)
+	                ->setCellValue('A'.$j,$v['goods_name'])
+	                ->setCellValue('B'.$j,$v['price'])
+	                ->setCellValue('C'.$j,$v['num'])
+	                ->setCellValue('D'.$j,$v['goods_unit'])
+	                ->setCellValue('E'.$j,$v['pici'])
+	                ->setCellValue('F'.$j,$v['stock_name']);
 
-                //细边框引用
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':E'.$j)->applyFromArray($linestyle);
-                //设置字体靠左
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':E'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-                $j++;
+	                //细边框引用
+	                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->applyFromArray($linestyle);
+	                //设置字体靠左
+	                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+	                $j++;
+	            }
             }
         }
         //冻结窗格
-        $objPHPExcel->getActiveSheet()->freezePane('A7');
+        $objPHPExcel->getActiveSheet()->freezePane('A8');
         //合并单元格
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
-        $objPHPExcel->getActiveSheet()->mergeCells('A3:E3');
-        $objPHPExcel->getActiveSheet()->mergeCells('A4:E4');
-        $objPHPExcel->getActiveSheet()->mergeCells('A5:E5');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
+        $objPHPExcel->getActiveSheet()->mergeCells('A3:F3');
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:F4');
+        $objPHPExcel->getActiveSheet()->mergeCells('A5:F5');
+
         //单元格加粗，居中：
         // $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$jj)->applyFromArray($lineBORDER);//大边框格式引用
         // 将A1单元格设置为加粗，居中
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:E2')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A4:E4')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A5:E5')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:F4')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A5:F5')->applyFromArray($linestyle);
         //加粗字体
-        $objPHPExcel->getActiveSheet()->getStyle('A2:E2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A4:E4')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A5:E5')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A6:E6')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:F4')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A5:F5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:F6')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:F7')->getFont()->setBold(true);
         //设置字体垂直居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         //设置字体水平居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         //设置每列宽度
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
         //输出
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $filename="壹点吃餐饮管理系统仓库配货单---（".date('m-d',time())."）.xls";
