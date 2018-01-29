@@ -18,12 +18,16 @@ class UserController extends Controller
 	
 	public function beforeAction($actin){
 		$dpidSelf = Yii::app()->session['dpid_self_'.$this->companyId];
-		if($dpidSelf==1){
-			$comdpid = $this->company['dpid'];
+		if(!empty($dpidSelf)){
+			if($dpidSelf==1){
+				$comdpid = $this->company['dpid'];
+			}else{
+				$comdpid = $this->company['comp_dpid'];
+			}
+			$userId = Yii::app()->session['userId-'.$comdpid];
 		}else{
-			$comdpid = $this->company['comp_dpid'];
+			$userId = null;
 		}
-		$userId = Yii::app()->session['userId-'.$comdpid];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
