@@ -59,6 +59,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','订单号');?></th>
                                 <th><?php echo yii::t('app','配货单号');?></th>
+                                <th><?php echo yii::t('app','店铺名称');?></th>
                                 <th><?php echo yii::t('app','订单总额');?></th>
                                 <th><?php echo yii::t('app','支付状态');?></th>
                                 <th><?php echo yii::t('app','订单状态');?></th>
@@ -72,6 +73,7 @@
 								<td><?php echo $model['lid']/1;?></td>
 								<td><?php echo $model['goods_order_accountno'];?></td>
 								<td><?php echo $model['delivery_accountno'];?></td>
+								<td><?php echo $model['name'];?></td>
 								<td><?php echo $model['delivery_amount'];?></td>
 								<td><?php switch ($model['pay_status']){
 									case 0 : echo '<span style="color:red">未支付</span>';break;

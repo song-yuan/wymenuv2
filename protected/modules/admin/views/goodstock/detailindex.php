@@ -48,7 +48,7 @@
 				<?php if($model):?>
 				<?php $plid = $model['lid'];$status = $model['status']?>
 				<div style="vertical-align:middle;text-align: center;" <?php echo $plid;?>>
-
+					<h1><?php echo $stocks['company_name'];?></h1>
 					<div class="actions" style="font-size: 20px;">
 					<span>配货单号：<?php echo $model['delivery_accountno'];?> </span>
 					<span>&nbsp;</span>
@@ -69,6 +69,7 @@
 								<th><?php echo yii::t('app','名称');?></th>
                                 <th><?php echo yii::t('app','价格');?></th>
                                 <th><?php echo yii::t('app','数量');?></th>
+                                <th><?php echo yii::t('app','单位');?></th>
                                 <th><?php echo yii::t('app','发货仓库');?></th>
                                	<?php if($status == 0):?>
                                 <th><?php echo yii::t('app','调整批次');?>
@@ -86,6 +87,7 @@
 								<td ><?php echo $model['goods_name'] ;?></td>
 								<td ><?php echo $model['price'] ;?></td>
 								<td ><?php echo $model['num'] ;?></td>
+								<td><?php echo $model['goods_unit'];?></td>
 								<td ><?php echo $model['stock_name'] ;?></td>
 								<?php if($status ==0):?>
 								<td >

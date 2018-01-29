@@ -72,6 +72,7 @@
 								<th><?php echo yii::t('app','名称');?></th>
                                 <th><?php echo yii::t('app','价格');?></th>
                                 <th><?php echo yii::t('app','数量');?></th>
+                                <th><?php echo yii::t('app','单位');?></th>
                                 <th><?php echo yii::t('app','发货仓库');?></th>
                                 <?php if($status<=3):?>
                                 <th><?php echo yii::t('app','调整仓库');?>
@@ -89,6 +90,7 @@
 								<td ><?php echo $model['goods_name'] ;?></td>
 								<td ><?php echo $model['price'] ;?></td>
 								<td ><?php echo $model['num'] ;?></td>
+								<td><?php echo $model['goods_unit'];?></td>
 								<td ><?php echo $model['stock_name'] ;?></td>
 								<?php if($status<=3 ):?>
 								<td >
