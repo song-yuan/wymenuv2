@@ -10,7 +10,7 @@
 					'class'=>'form-horizontal'
 				),
 			)); ?>
-<h5 style="margin-left: 150px;">选择<span style="color: red;"><?php echo $name?><input type="hidden" name="eleme[elemeId]" value="<?php echo $elemeId?>"></span>关联菜品</h5>
+<h5 style="margin-left: 150px;">选择<span style="color: red;"><?php echo $name.$specname;?><input type="hidden" name="eleme[elemeId]" value="<?php echo $elemeId?>"><?php if($specsid):?><input type="hidden" name="eleme[specid]" value="<?php echo $specsid;?>"><?php endif;?></span>关联菜品</h5>
 <div class="form-group">
      <label class="col-md-3 control-label" for="ProductCategory_show_type">关联菜品</label>
      <div class="col-md-4">
@@ -46,8 +46,7 @@ $(document).ready(function(){
 	   						$.each(result.data,function(index,value){
 	   						$(".category_selecter").append('<option value="'+value.id+'">'+value.name+'</option>');
 
-	   					});
-	   					
+	   					});	
             },
             error: function (msg) {//ajax请求失败后触发的方法
                 alert('该分类没有菜品');//弹出错误信息

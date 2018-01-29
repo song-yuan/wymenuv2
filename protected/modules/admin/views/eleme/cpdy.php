@@ -54,12 +54,42 @@
  		?>
  		<?php
 			$products = Elm::getItems($dpid,$categoryId);
+
 	 		$productsobj = json_decode($products,true);
-	 		$resultid = $productsobj['result'];	 		
+	 		$resultid = $productsobj['result'];	 
+	 		// var_dump($resultid);exit();		
 			foreach ($resultid as $product){
+				$specs = $product['specs'];
 			?>
- 		<tr >
+ 		
+			<?php if(count($specs)>1):?>
+				<?php foreach($specs as $spec):?>
+			<tr>
 			<td>
+				<span class="id" style="display: none;"><?php echo $product['id'];?></span><span><?php echo $product['name'];?><?php echo $spec['name'];?></span>
+			</td>
+			<?php if(in_array($product['id'], $itemm ) && in_array($spec['specId'], $spemodel)){?>
+			<td>
+			<?php foreach ($items as $item):?>
+			<?php if(in_array($spec['specId'], $item)):?>
+				<span><?php echo $item['name'];?></span>
+				<?php endif;?>
+
+			<?php endforeach;?>		
+			</td>
+			<td>
+				<a class="add_btn" pid="<?php echo $product['id'];?>" specsId="<?php echo $spec['specId'];?>" data-toggle="modal"><?php echo yii::t('app','菜品重新关联')?></a>
+			</td>
+			<?php }else{?>
+			<td>
+				<a class="add_btn" pid="<?php echo $product['id'];?>" specsId="<?php echo $spec['specId'];?>" data-toggle="modal"><?php echo yii::t('app','菜品关联')?></a>
+			</td>
+			<?php }?>
+			</tr>
+			<?php endforeach;?>
+			<?php else:?>
+			<tr >
+				<td>
 				<span class="id" style="display: none;"><?php echo $product['id'];?></span><span><?php echo $product['name'];?></span>
 			</td>
 				<?php if(in_array($product['id'], $itemm)){?>
@@ -79,6 +109,7 @@
 				<a class="add_btn" pid="<?php echo $product['id'];?>" data-toggle="modal"><?php echo yii::t('app','菜品关联')?></a>
 			</td>
 			<?php }?>
+			<?php endif;?>
  		</tr>
  		<?php }?>
  	<?php }?>
@@ -97,9 +128,15 @@
          return false;
         <?php endif;?>
         id = $(this).attr('pid');
-    	//alert(catetype);alert(pid);
-        $modal.find('.modal-content').load('<?php echo $this->createUrl('eleme/glcp',array('companyId'=>$this->companyId));?>/id/'+id+'', function(){
-          $modal.modal();
-        });
+        specs = $(this).attr('specsId');
+        if(specs){
+        	 $modal.find('.modal-content').load('<?php echo $this->createUrl('eleme/glcp',array('companyId'=>$this->companyId));?>/id/'+id+'/specs/'+specs+'', function(){
+	          $modal.modal();
+	        });
+        }else{
+        	 $modal.find('.modal-content').load('<?php echo $this->createUrl('eleme/glcp',array('companyId'=>$this->companyId));?>/id/'+id+'', function(){
+	          $modal.modal();
+	        });
+        }
     });
 </script>
