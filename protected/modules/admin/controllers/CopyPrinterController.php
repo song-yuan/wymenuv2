@@ -85,6 +85,26 @@ class CopyPrinterController extends BackendController
                     //总部打印机方案设置存在就下发
                     //  店铺里存在就删除方案和详情
                     //  之后在插入
+                    if ($down_type){
+                        $way_branch_exists = PrinterWay::model()->findAll('dpid=:dpid and delete_flag=0 and source=1',array(':dpid'=>$dpid));
+                        // p($way_branch_exists);
+                        if(!empty($way_branch_exists)){
+                            foreach ($way_branch_exists as $key => $way_branch_exist) {
+                                $way_branch_exist->delete_flag = 1;
+                                $way_branch_exist->update();
+                                $db->createCommand('update nb_printer_way_detail set delete_flag=1 where print_way_id =:print_way_id and dpid = :dpid')
+                                ->execute(array(':print_way_id'=> $way_branch_exist->lid, ':dpid' => $dpid));
+                            }
+                        }
+                        $printer_exists = Printer::model()->findAll('dpid=:dpid and delete_flag=0 and source=1',array(':dpid'=>$dpid));
+                        // p($printer_exists);
+                        if(!empty($printer_exists)){
+                            foreach ($printer_exists as $key => $printer_exist) {
+                                $printer_exist->delete_flag = 1;
+                                $printer_exist->update();
+                            }
+                        }
+                    }
                     if(!empty($printer_way_hqs)){
                         foreach ($printer_way_hqs as $printer_way_hq){
                             $way_branch_exist = PrinterWay::model()->find('phs_code =:phs_code and dpid=:dpid and delete_flag=0 ',array(':dpid'=>$dpid,':phs_code'=>$printer_way_hq['phs_code']));
