@@ -1,7 +1,6 @@
 <style>
     .print{
         font-size: 20px;
-        margin-top:30px;
         margin-bottom:30px;
     }
     .print span{
@@ -12,7 +11,13 @@
         background: #ccc;
         color:darkblue;
         font-weight: 900;
+        margin-bottom: 10px;
     }
+    td {
+        font-size: 14px!important;
+    }
+.clearfix:after{content:"";height:0;line-height:0;display:block;visibility:hidden;clear:both;}
+.clearfix{zoom:1;}
 
 </style>
 <div class="page-content">
@@ -56,21 +61,50 @@
         <div class="col-md-12">
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
             <div class="portlet box purple">
-                <div class="portlet-body" id="table-manage">
-                    <div class="print col-md-offset-2 col-md-7">
+                <div class="portlet-body clearfix:after clearfix" id="table-manage">
+                    <div class="print col-md-offset-2 col-md-7 " >
+                        
+
                         <fieldset>
-                            <legend>下发项目</legend>
-                            <span>1、打印机设置 </span>
-                            <span>2、厨打方案设置</span>
+                            <legend>厨打方案设置</legend>
+                            <table class="table table-striped table-bordered table-hover" id="sample_2">
+                            <?php if($modelss):?>
+                                <thead>
+                                    <tr>
+                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_2 .checkboxes2" /></th>
+                                        <th><?php echo yii::t('app','厨打方案名称');?></th>
+                                        <th><?php echo yii::t('app','是否整单打印');?></th>
+                                        <th><?php echo yii::t('app','打印份数');?></th>
+                                        <th><?php echo yii::t('app','备注');?></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                
+                                <?php foreach ($modelss as $model):?>
+                                    <tr class="odd gradeX">
+                                        <td><input type="checkbox" class="checkboxes2" value="<?php echo $model->lid;?>" name="printer_way_ids[]" /></td>
+                                        <td ><?php echo $model->name ;?></td>
+                                        <td ><?php  if($model->is_onepaper=="1") echo "整单打印"; else echo "分开打印";?></td>
+                                        <td ><?php echo $model->list_no ;?></td>
+                                        <td><?php echo $model->memo;?></td>
+                                    </tr>
+                                <?php endforeach;?>
+                                </tbody>
+                                <?php else:?>
+                                <tr><td><?php echo yii::t('app','还没有添加打印方案');?></td></tr>
+                                <?php endif;?>
+                            </table>
                         </fieldset>
-                    </div>
-                    <div class=" col-md-offset-2 col-md-7">
                         <fieldset>
                             <legend>下发方式</legend>
-                            <select name="down_type" id="down_type" class="form-control" style="width:150px;">
-                                <option value="1">覆盖(打印机设置)下发</option>
-                                <option value="0">无覆盖(打印机设置)下发</option>
+                            <select name="down_type" id="down_type" class="form-control" style="width:150px;display: inline-block;">
+                                <option value="1" selected>有覆盖下发</option>
+                                <option value="0">无覆盖下发</option>
                             </select>
+                            <span style="color:red;display: inline-block;font-size: 14px;">
+                                <span id="notice1" style="display: inline-block;"> <b>注:</b>有覆盖下发会将下发店铺中的配置覆盖 !</span>
+                                <span id="notice0" style="display: none;"> <b>注:</b>无覆盖下发会跳过已下发过的店铺 !</span>
+                            </span>
                         </fieldset>
                     </div>
                     <div class="print col-md-offset-3 col-md-7">
@@ -97,23 +131,23 @@
                         <?php if($dpids):?>
                         <?php foreach($dpids as $dpid):?>
                             <li style="width:50%;float:left;">
-                                    <div style="width:10%;float:left;">
-                                           <input style="height:20px;" type="checkbox" class="checkdpids" value="<?php  echo $dpid['dpid'];?>" id="check<?php echo $a; ?>" name="reportlist[]" />
-                                    </div>
-                                    <label for="check<?php echo $a; ?>" style="font-size:1em;width:80%;">
+                                <div style="width:10%;float:left;">
+                                       <input style="height:20px;" type="checkbox" class="checkdpids" value="<?php  echo $dpid['dpid'];?>" id="check<?php echo $a; ?>" name="reportlist[]" />
+                                </div>
+                                <label for="check<?php echo $a; ?>" style="font-size:1em;width:80%;">
                                     <div style="width:10%;float:left;"><?php echo $a; $a++;?></div>
                                     <div style="width:90%;float:left;"><?php echo $dpid['company_name'];?></div>
-                                    </label>
+                                </label>
                             </li>
                         <?php endforeach;?>
                         <?php endif;?>
                             <li style="width:100%;">
-                                    <div style="width:10%;float:left;"></div>
-                                    <div style="width:60%;float:left;"></div>
-                                    <div style="width:14%;float:right;">
-                                           <input style="height:20px;" id="all" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
-                                           <label for="all" style="font-size:1em;">全选</label>
-                                    </div>
+                                <div style="width:10%;float:left;"></div>
+                                <div style="width:60%;float:left;"></div>
+                                <div style="width:14%;float:right;">
+                                       <input style="height:20px;" id="all" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
+                                       <label for="all" style="font-size:1em;">全选</label>
+                                </div>
 
                             </li>
                     </ul>
@@ -130,49 +164,70 @@
 </div>
 <script type="text/javascript">
 $("#su").on('click',function() {
-
-
-
+    if ( $('.checkboxes2:checked').length>0) {
         if(window.confirm("确认进行此项操作?")){
             layer_index_printreportlist=layer.open({
-	            type: 1,
-	            shade: false,
-	            title: false, //不显示标题
-	            area: ['60%', '60%'],
-	            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-	            cancel: function(index){
-	                layer.close(index);
-	                layer_index_printreportlist=0;
-	            }
+                type: 1,
+                shade: false,
+                title: false, //不显示标题
+                area: ['60%', '60%'],
+                content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                cancel: function(index){
+                    layer.close(index);
+                    layer_index_printreportlist=0;
+                }
             });
-
             $("#printall").on("click",function(){
-	            //alert("暂无权限！！！");
-	            var dpids =new Array();
-	            var dpids="";
-	            $('.checkdpids:checked').each(function(){
-	                dpids += $(this).val()+',';
-	                //alert(dpids);
-	            });
-	            if(dpids!=''){
-	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
-	            	//alert(dpids);
+                //alert("暂无权限！！！");
+                var dpids =new Array();
+                var dpids="";
+                $('.checkdpids:checked').each(function(){
+                    dpids += $(this).val()+',';
+                    //alert(dpids);
+                });
+                if(dpids!=''){
+                	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
+                	//alert(dpids);
                     $("#dpids").val(dpids);
-	            	// $("#down_type").val();
+                	// $("#down_type").val();
 
-	    	        $("#CopyPrinter-form").submit();
+        	        $("#CopyPrinter-form").submit();
                     }else{
                             alert("请选择店铺。。。");return;
                         }
                 });
-	        $("#closeall").on('click',function(){
-		        //alert("123");
-		        layer.closeAll();
-		        layer_index_printerportlist = 0;
-		        });
+            $("#closeall").on('click',function(){
+    	        //alert("123");
+    	        layer.closeAll();
+    	        layer_index_printerportlist = 0;
+    	        });
         }else{
-			return false;
-            }
-	});
+    		return false;
+        }
+    }else{
+        layer.msg('请选择要下发的厨打方案设置');
+    }
+});
+
+
+
+$('#down_type').change(function(event) {
+    /* Act on the event */
+    if(this.value==1){
+        $('#notice1').css({
+            display: 'inline-block'
+        });
+        $('#notice0').css({
+            display: 'none'
+        });
+    }else if(this.value==0){
+        $('#notice0').css({
+            display: 'inline-block'
+        });
+        $('#notice1').css({
+            display: 'none'
+        });
+    }
+});
 </script>
 
