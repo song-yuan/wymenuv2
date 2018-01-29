@@ -25,6 +25,5 @@ function meituan_order($data){
 	$order = $resArr['order'];
 	$order = urldecode($order);
 }
-Yii::app()->cache->delete('order-27-2018-01-26 11:30:35-151693743545');
-Yii::app()->cache->delete('order-27-2018-01-26 13:02:36-151694295655');
+
 ?>
