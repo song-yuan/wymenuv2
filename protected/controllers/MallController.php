@@ -31,6 +31,7 @@ class MallController extends Controller
 			exit;
 		}
 		$dpidSelf = Yii::app()->session['dpid_self_'.$this->companyId];
+		var_dump($dpidSelf);
 		if(!empty($dpidSelf)){
 			if($dpidSelf==1){
 				$comdpid = $this->company['dpid'];
