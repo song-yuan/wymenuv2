@@ -7,6 +7,9 @@ class TestController extends Controller
 	{
 		$this->render('index');
 	}
+	public function actionTest(){
+		$this->render('test');
+	}
 	public function actionReadLog()
 	{
 		echo '<meta charset="utf-8">';
@@ -18,11 +21,6 @@ class TestController extends Controller
 		$url = 'https://m.wosai.cn/qr/gateway?client_sn=0000033658-0000000027-087&notify_url=http://menu.wymenu.com/wymenuv2/sqbpay/wappayresult&operator=微信会员-0000002200&payway=3&reflect={"companyId":"0000000027","dpid":"0000000027"}&return_url=http://menu.wymenu.com/wymenuv2/sqbpay/wappayreturn&subject=壹点吃演示店-微信点餐订单&terminal_sn=100000930002128676&total_amount=700&sign=39601E5E603C0927890424DFF8254717';
 		$code=new QRCode($url);
 		$code->create();exit;
-	}
-	public function actionMicroPay(){
-		$companyId = Yii::app()->request->getParam('companyId');
-		$orderId = Yii::app()->request->getParam('orderId');
-		$this->render('micropay',array('companyId'=>$companyId,'orderId'=>$orderId));
 	}
 	public function actionMemercache(){
 		$dpid = 30;

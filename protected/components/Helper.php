@@ -22,20 +22,27 @@ class Helper
 	}
 	// 替换掉换行符等
 	static function dealString($str) {
-		$str = str_replace(array("\r\n", "\\r\n", "\n","\\n", "\r", "\\r", "'", "\'"), '', $str);
+		$replace = array(
+					"\r\n","\\r\n",
+					"\n","\\n", 
+					"\r","\\r",
+					"'","\'",
+					"\t","\\t"
+				);
+		$str = str_replace($replace, '', $str);
 		return $str;
 	}
 	static public function genPassword($password)
 	{
-			return md5(md5($password).Yii::app()->params['salt']);
+		return md5(md5($password).Yii::app()->params['salt']);
 	}
 	static public function getCompanyId($companyId) {
-            if(Yii::app()->user->role <= '9')
-            {
-		return $companyId;
-            }else{
-                return Yii::app()->user->companyId ;
-            }
+        if(Yii::app()->user->role <= '9')
+        {
+			return $companyId;
+        }else{
+            return Yii::app()->user->companyId ;
+        }
 	}
 	static public function getCompanyIds($companyId) {
 		if(Yii::app()->user->role=='5')
@@ -58,15 +65,13 @@ class Helper
 	}
           
      static public function getCompanyName($companyId) {
-            if($companyId)
-            {
-				$models = Company::model()->find('t.dpid = '.$companyId);
-                //return Yii::app()->user->role == User::POWER_ADMIN ? $companyId : Yii::app()->user->companyId ;
-               
-            }else{
-                $models = Company::model()->find('t.dpid = '.Yii::app()->user->companyId); 
-            }
-             return $models->company_name;
+         if($companyId)
+         {
+			$models = Company::model()->find('t.dpid = '.$companyId);
+         }else{
+            $models = Company::model()->find('t.dpid = '.Yii::app()->user->companyId); 
+         }
+         return $models->company_name;
 	}
 
 	static public function getCompanyType($companyId) {
