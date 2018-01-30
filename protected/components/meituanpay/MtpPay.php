@@ -663,7 +663,7 @@ class MtpPay{
     		$appId = Yii::app()->request->getParam('appid');
 
     		$appId = MtpConfig::MTP_APPID;
-    		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/getOpenId");
+    		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtppay/getOpenId");
     		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
     		Helper::writeLog($url);
     		header($url);
