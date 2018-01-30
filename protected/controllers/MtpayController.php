@@ -50,6 +50,7 @@ class MtpayController extends Controller
     		Helper::writeLog($url);
     		header($url);
     	}else{
+    		Helper::writeLog($openId);
     		return $openId;
     	}
     	

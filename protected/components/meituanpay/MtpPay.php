@@ -352,82 +352,85 @@ class MtpPay{
     	//$openId = MtpConfig::MTP_OPENID;
     	
     	$openId = Yii::app()->runController('mtpay/getOpenId/mid/'.$merchantId.'/appid/'.$appId);
-    	
-    	$datas = array(
-    			'outTradeNo'=>$outTradeNo,
-    			'totalFee'=>$totalFee,
-    			'subject'=>$subject,
-    			'body'=>$body,
-    			'channel'=>$channel,
-    			'expireMinutes'=>$expireMinutes,
-    			'tradeType'=>$tradeType,
-    			'notifyUrl'=>$notifyUrl,
-    			'merchantId'=>$merchantId,
-    			'appId'=>$appId,
-    			'random'=>$random,
-    			'openId'=>$openId,
-    	);
-    	 
-    	ksort($datas);
-    	$paramsStrs = '';
-    	if(is_array($datas)){
-    		foreach($datas as $k => $v)
-    		{
-    			$paramsStrs .= $k.'='.$v.'&';
+    	//$this->redirect(urldecode($url));
+    	if(!empty($openId)){
+    		$datas = array(
+    				'outTradeNo'=>$outTradeNo,
+    				'totalFee'=>$totalFee,
+    				'subject'=>$subject,
+    				'body'=>$body,
+    				'channel'=>$channel,
+    				'expireMinutes'=>$expireMinutes,
+    				'tradeType'=>$tradeType,
+    				'notifyUrl'=>$notifyUrl,
+    				'merchantId'=>$merchantId,
+    				'appId'=>$appId,
+    				'random'=>$random,
+    				'openId'=>$openId,
+    		);
+    		
+    		ksort($datas);
+    		$paramsStrs = '';
+    		if(is_array($datas)){
+    			foreach($datas as $k => $v)
+    			{
+    				$paramsStrs .= $k.'='.$v.'&';
+    			}
+    		}else{
+    			$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
+    			return $result;
     		}
-    	}else{
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'msg'=>'未知状态！');
+    		$st = $paramsStrs.'key='.$key;
+    		Helper::writeLog('参数：'.$st);
+    		$sign=hash('sha256', $st , false);
+    		Helper::writeLog('加密:'.$sign);
+    		
+    		$datas = array(
+    				'outTradeNo'=>$outTradeNo,
+    				'totalFee'=>$totalFee,
+    				'subject'=>$subject,
+    				'body'=>$body,
+    				'channel'=>$channel,
+    				'expireMinutes'=>$expireMinutes,
+    				'tradeType'=>$tradeType,
+    				'notifyUrl'=>$notifyUrl,
+    				'merchantId'=>$merchantId,
+    				'appId'=>$appId,
+    				'random'=>$random,
+    				'openId'=>$openId,
+    				'sign'=>$sign,
+    		);
+    		
+    		$body = json_encode($datas);
+    		Helper::writeLog('公众号支付传输参数：'.$body);
+    		$result = MtpCurl::httpPost($url, $body);
+    		Helper::writeLog('公众号支付返回结果：'.$result);
+    		 
+    		if(!empty($result)){
+    			$obj = json_decode($result,true);
+    			$status = $obj['status'];
+    			if($status=='SUCCESS'){
+    				$resulturl = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult");
+    				//$wxappid = 'wxc57dd1ee95c70c2c';
+    				$appIds = $obj['appId'];
+    				$timeStamp = $obj['timeStamp'];
+    				$nonceStr = $obj['nonceStr'];
+    				$signType = $obj['signType'];
+    				$paySign = $obj['paySign'];
+    				$prepayId = $obj['prepayId'];
+    				 
+    				$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$appIds."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true";
+    				Helper::writeLog('已进入支付：'.$url);
+    				header("Location:".$url);
+    			}
+    		}
     		return $result;
+    		exit;
     	}
-    	$st = $paramsStrs.'key='.$key;
-    	Helper::writeLog('参数：'.$st);
-    	$sign=hash('sha256', $st , false);
-    	Helper::writeLog('加密:'.$sign);
-    	 
-    	$datas = array(
-    			'outTradeNo'=>$outTradeNo,
-    			'totalFee'=>$totalFee,
-    			'subject'=>$subject,
-    			'body'=>$body,
-    			'channel'=>$channel,
-    			'expireMinutes'=>$expireMinutes,
-    			'tradeType'=>$tradeType,
-    			'notifyUrl'=>$notifyUrl,
-    			'merchantId'=>$merchantId,
-    			'appId'=>$appId,
-    			'random'=>$random,
-    			'openId'=>$openId,
-    			'sign'=>$sign,
-    	);
 
-    	$body = json_encode($datas);
-    	Helper::writeLog('公众号支付传输参数：'.$body);
-    	$result = MtpCurl::httpPost($url, $body);
-    	Helper::writeLog('公众号支付返回结果：'.$result);
-    	
-    	if(!empty($result)){
-    		$obj = json_decode($result,true);
-    		$status = $obj['status'];
-    		if($status=='SUCCESS'){
-    			$resulturl = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult");
-    			//$wxappid = 'wxc57dd1ee95c70c2c';
-    			$appIds = $obj['appId'];
-    			$timeStamp = $obj['timeStamp'];
-    			$nonceStr = $obj['nonceStr'];
-    			$signType = $obj['signType'];
-    			$paySign = $obj['paySign'];
-    			$prepayId = $obj['prepayId'];
-    			
-    			$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$appIds."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=true";
-    			Helper::writeLog('已进入支付：'.$url);
-    			header("Location:".$url);
-    		}
-    	}
-    	return $result;
-    	exit;
     } 
     
     public static function close($data){
@@ -655,7 +658,7 @@ class MtpPay{
     	return $result;
     
     }
-    public static function getOpenid($mid,$appid){
+    public function getOpenid(){
     	/*该接口用于获取授权，*/
     	$openId = Yii::app()->request->getParam('openId');
     	if(!$openId){
