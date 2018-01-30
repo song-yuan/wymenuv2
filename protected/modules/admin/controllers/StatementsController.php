@@ -4591,11 +4591,11 @@ class StatementsController extends BackendController
 
 	public function actionCeshiproductReportExport(){
 		$objPHPExcel = new PHPExcel();
-		//$uid = Yii::app()->user->id;
 		$str = Yii::app()->request->getParam('str');
 		//var_dump($str);exit();
 		$text = Yii::app()->request->getParam('text');
 		$setid = Yii::app()->request->getParam('setid');
+		$categoryId = Yii::app()->request->getParam('cid',0);
 		if($setid == 0){
 			$setids = '=0';
 			$setname = '单品、';
@@ -4648,6 +4648,9 @@ class StatementsController extends BackendController
 		}
 		if($ordertype >0){
 			$criteria->addCondition("order.order_type =".$ordertype);
+		}
+		if($categoryId >0){
+			$criteria->addCondition("product.category_id =".$categoryId);
 		}
 		//$criteria->addCondition("t.order_id in('.$ords.')");
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
