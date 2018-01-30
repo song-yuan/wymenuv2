@@ -43,7 +43,7 @@ class MtpayController extends Controller
     	if(!$openId){
     		$merchantId = Yii::app()->request->getParam('mid');
     		$appId = Yii::app()->request->getParam('appid');
-
+			//var_dump($merchantId);exit;
     		$appId = MtpConfig::MTP_APPID;
     		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/getOpenId");
     		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;

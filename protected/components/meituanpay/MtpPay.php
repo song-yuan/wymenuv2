@@ -351,7 +351,7 @@ class MtpPay{
     	$key = MtpConfig::MTP_KEY;
     	//$openId = MtpConfig::MTP_OPENID;
     	
-    	$openId = Yii::app()->runController('mtpay/getOpenId',['mid'=>$merchantId],['appid'=>$appId]);;
+    	$openId = Yii::app()->runController('mtpay/getOpenId/mid/'.$merchantId.'/appid/'.$appId);
     	
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
