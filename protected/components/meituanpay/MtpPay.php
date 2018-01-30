@@ -351,7 +351,7 @@ class MtpPay{
     	$key = MtpConfig::MTP_KEY;
     	//$openId = MtpConfig::MTP_OPENID;
     	
-    	$openId = header("location:http://menu.wymenu.com/wymenuv2/mtpay/getOpenId/mid/".$merchantId."/appid/".$appId);
+    	$openId = Yii::app()->runController('mtpay/getOpenId',['mid'=>$merchantId],['appid'=>$appId]);;
     	
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
@@ -655,6 +655,21 @@ class MtpPay{
     	return $result;
     
     }
-
+    public static function getOpenid($mid,$appid){
+    	/*该接口用于获取授权，*/
+    	$openId = Yii::app()->request->getParam('openId');
+    	if(!$openId){
+    		$merchantId = Yii::app()->request->getParam('mid');
+    		$appId = Yii::app()->request->getParam('appid');
+    
+    		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtppay/getOpenid");
+    		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
+    		Helper::writeLog($url);
+    		header($url);
+    	}else{
+    		return $openId;
+    	}
+    	 
+    }
 }
 ?>

@@ -37,7 +37,7 @@ class MtpayController extends Controller
 		$re = Yii::app()->db->createCommand($sql)->execute();
 		Helper::writeLog('该商户的授权码为：'.$openId);
 	}
-    public static function getOpenId(){
+    public function actionGetOpenId(){
     	/*该接口用于获取授权，*/
     	$openId = Yii::app()->request->getParam('openId');
     	if(!$openId){
