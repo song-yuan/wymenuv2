@@ -61,9 +61,9 @@ class GoodstockController extends BackendController
 		// echo $sqlstock;exit();
 		$stocks = $db->createCommand($sqlstock)->queryRow();
 // var_dump($stocks);exit;
-		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
+		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t inner join nb_goods c on(t.goods_id = c.lid) inner join nb_company co on(co.dpid = t.dpid ) inner join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) inner join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) inner join nb_material_category a on(y.pid=a.lid and y.dpid=a.dpid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
 		//;
-
+// echo $sql;exit();
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
@@ -103,7 +103,7 @@ class GoodstockController extends BackendController
 		// echo $sqlstock;exit();
 		$stocks = $db->createCommand($sqlstock)->queryRow();
 
-		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
+		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t inner join nb_goods c on(t.goods_id = c.lid) inner join nb_company co on(co.dpid = t.dpid ) inner join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) inner join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) inner join nb_material_category a on(y.pid=a.lid and y.dpid=a.dpid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
 		$materials = $db->createCommand($sql)->queryAll();
 		// var_dump($models);exit;
 		// p($model);

@@ -31,13 +31,19 @@ class MtpayController extends Controller
 	}
 	public function actionMtopenidresult(){
 		Helper::writeLog('美团回调openID');
+		$dpid = Yii::app()->request->getParam('dpid');
 		$openId = Yii::app()->request->getParam('openId');
+		$sql = 'update nb_mtpay_config set mt_openId ="'.$openId.'" where dpid ='.$dpid;
+		$re = Yii::app()->db->createCommand($sql)->execute();
 		Helper::writeLog('该商户的授权码为：'.$openId);
-		echo 'ok!';
 	}
 	public function actionMtopenid(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$mid = Yii::app()->request->getParam('mid');
+		//var_dump($mid);exit;
 		$data = array(
-			'merchantId'=>'4282256',
+			'merchantId'=>$mid,
+			'dpid'=>$dpid,
 		);
 		$result = MtpPay::getOpenId($data);
 		return $result;
