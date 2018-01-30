@@ -351,7 +351,7 @@ class MtpPay{
     	$key = MtpConfig::MTP_KEY;
     	//$openId = MtpConfig::MTP_OPENID;
     	
-    	$openId = header("location:http://menu.wymenu.com/wymenuv2/mtpay/getOpenId/mid/".$merchantId."/appid/".$appId);
+    	$openId = header("location:http://menu.wymenu.com/wymenuv2/mtppay/getOpenId/mid/".$merchantId."/appid/".$appId);
     	
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
