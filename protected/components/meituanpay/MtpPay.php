@@ -682,12 +682,11 @@ class MtpPay{
     }
     public static function getOpenId($data,$url){
     	/*该接口用于获取授权，*/
-    		Helper::writeLog('进入到获取授权方法：');
     		$merchantId = $data['merchantid'];
     		$appId = $data['appid'];
     		
-    		$url = "Location: http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
-    		Helper::writeLog($url);
+//     		$url = "Location: http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
+    		$url = 'Location: http://www.baidu.com';
     		header($url);
     	 	exit;
     }
