@@ -89,7 +89,7 @@
 				'channel'=>'wx_scan_pay',
 				'expireMinutes'=>5,
 				'tradeType'=>'JSAPI',
-				'notifyUrl'=>$reflect,
+				'notifyUrl'=>$notifyUrl
 		);
 		Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/mtPayOrder',$data);
