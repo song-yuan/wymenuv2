@@ -31,15 +31,28 @@ class MtpayController extends Controller
 	}
 	public function actionMtopenidresult(){
 		Helper::writeLog('美团回调openID');
+		$dpid = Yii::app()->request->getParam('dpid');
 		$openId = Yii::app()->request->getParam('openId');
+		$sql = 'update nb_mtpay_config set mt_openId ="'.$openId.'" where dpid ='.$dpid;
+		$re = Yii::app()->db->createCommand($sql)->execute();
 		Helper::writeLog('该商户的授权码为：'.$openId);
-		echo 'ok!';
 	}
-	public function actionMtopenid(){
-		$data = array(
-			'merchantId'=>'4282256',
-		);
-		$result = MtpPay::getOpenId($data);
-		return $result;
-	}
+    public function actionGetOpenId(){
+    	/*该接口用于获取授权，*/
+    	$openId = Yii::app()->request->getParam('openId');
+    	if(!$openId){
+    		$merchantId = Yii::app()->request->getParam('mid');
+    		$appId = Yii::app()->request->getParam('appid');
+			//var_dump($merchantId);exit;
+    		$appId = MtpConfig::MTP_APPID;
+    		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/getOpenId");
+    		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
+    		Helper::writeLog($url);
+    		header($url);
+    	}else{
+    		Helper::writeLog($openId);
+    		return $openId;
+    	}
+    	
+    }
 }

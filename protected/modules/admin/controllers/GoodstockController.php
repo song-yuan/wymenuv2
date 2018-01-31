@@ -56,14 +56,14 @@ class GoodstockController extends BackendController
 
 		$sqls = 'select t.* from nb_goods_delivery t where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
-
+// var_dump($model);exit();
 		$sqlstock = "select company_name from nb_company where dpid=(select dpid from nb_goods_order where account_no=".$model['goods_order_accountno']." and delete_flag=0) and delete_flag=0";
 		// echo $sqlstock;exit();
 		$stocks = $db->createCommand($sqlstock)->queryRow();
 // var_dump($stocks);exit;
-		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
-		//;
+		$sql = 'select k.* from (select ggm.goods_name,ggm.erp_code,ggm.goods_unit,t.*,mu.unit_name,mc.category_name,c.company_name as stock_name from nb_goods_invoice_details t '.' left join (select g.*,gm.material_code,gm.unit_code from nb_goods g left join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(t.goods_id = ggm.lid)'.' left join nb_company c on(c.dpid = t.dpid)'.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=ggm.unit_code) '.' left join (select mc0.lid,mc1.category_name,mc1.dpid from nb_material_category mc0 left join nb_material_category mc1 on(mc0.pid=mc1.lid) ) mc on(mc.lid=ggm.category_id and mc.dpid='.$model["compid"].')'.' where t.goods_invoice_id = '.$goid.' order by t.lid) k';
 
+// echo $sql;exit();
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
@@ -103,7 +103,7 @@ class GoodstockController extends BackendController
 		// echo $sqlstock;exit();
 		$stocks = $db->createCommand($sqlstock)->queryRow();
 
-		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and t.dpid=l.dpid) left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
+		$sql = 'select k.* from (select ggm.goods_name,ggm.erp_code,ggm.goods_unit,t.*,mu.unit_name,mc.category_name,c.company_name as stock_name from nb_goods_invoice_details t '.' left join (select g.*,gm.material_code,gm.unit_code from nb_goods g left join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(t.goods_id = ggm.lid)'.' left join nb_company c on(c.dpid = t.dpid)'.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=ggm.unit_code) '.' left join (select mc0.lid,mc1.category_name,mc1.dpid from nb_material_category mc0 left join nb_material_category mc1 on(mc0.pid=mc1.lid) ) mc on(mc.lid=ggm.category_id and mc.dpid='.$model["compid"].')'.' where t.goods_invoice_id = '.$goid.' order by t.lid) k';
 		$materials = $db->createCommand($sql)->queryAll();
 		// var_dump($models);exit;
 		// p($model);
@@ -172,8 +172,7 @@ class GoodstockController extends BackendController
         ->setCellValue('B7',yii::t('app','价格'))
         ->setCellValue('C7',yii::t('app','数量'))
         ->setCellValue('D7',yii::t('app','单位'))
-        ->setCellValue('E7',yii::t('app','批次'))
-        ->setCellValue('F7',yii::t('app','发货仓库'));
+        ->setCellValue('E7',yii::t('app','发货仓库'));
         $j=8;
         $models = array();
         foreach ($materials as $key => $product) {
@@ -182,14 +181,15 @@ class GoodstockController extends BackendController
 			}
 			array_push($models[$product['category_name']], $product);
 		}
+		// var_dump($models);exit();
         if($models){
         	foreach ($models as $key => $value) {
         		
         		$objPHPExcel->setActiveSheetIndex(0)
 	                ->setCellValue('A'.$j,$key);
                  //细边框引用
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->applyFromArray($linestyle);
-                $objPHPExcel->getActiveSheet()->mergeCells('A'.$j.':F'.$j);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':E'.$j)->applyFromArray($linestyle);
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$j.':E'.$j);
 				$j++;
 	            foreach ($value as $key => $v) {
 	                $objPHPExcel->setActiveSheetIndex(0)
@@ -197,13 +197,12 @@ class GoodstockController extends BackendController
 	                ->setCellValue('B'.$j,$v['price'])
 	                ->setCellValue('C'.$j,$v['num'])
 	                ->setCellValue('D'.$j,$v['goods_unit'])
-	                ->setCellValue('E'.$j,$v['pici'])
-	                ->setCellValue('F'.$j,$v['stock_name']);
+	                ->setCellValue('E'.$j,$v['stock_name']);
 
 	                //细边框引用
-	                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->applyFromArray($linestyle);
+	                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':E'.$j)->applyFromArray($linestyle);
 	                //设置字体靠左
-	                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':F'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+	                $objPHPExcel->getActiveSheet()->getStyle('A'.$j.':E'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 	                $j++;
 	            }
             }
@@ -211,31 +210,31 @@ class GoodstockController extends BackendController
         //冻结窗格
         $objPHPExcel->getActiveSheet()->freezePane('A8');
         //合并单元格
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
-        $objPHPExcel->getActiveSheet()->mergeCells('A3:F3');
-        $objPHPExcel->getActiveSheet()->mergeCells('A4:F4');
-        $objPHPExcel->getActiveSheet()->mergeCells('A5:F5');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
+        $objPHPExcel->getActiveSheet()->mergeCells('A3:E3');
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:E4');
+        $objPHPExcel->getActiveSheet()->mergeCells('A5:E5');
 
         //单元格加粗，居中：
         // $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$jj)->applyFromArray($lineBORDER);//大边框格式引用
         // 将A1单元格设置为加粗，居中
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A4:F4')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A5:F5')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:E2')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:E4')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A5:E5')->applyFromArray($linestyle);
         //加粗字体
-        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A4:F4')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A5:F5')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A6:F6')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A7:F7')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:E2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:E4')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A5:E5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:E6')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:E7')->getFont()->setBold(true);
         //设置字体垂直居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         //设置字体水平居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         //设置每列宽度
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
@@ -243,7 +242,6 @@ class GoodstockController extends BackendController
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
         //输出
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $filename="壹点吃餐饮管理系统仓库配货单---（".date('m-d',time())."）.xls";
