@@ -9,10 +9,24 @@
 class MtpConfig{
 	const MTP_DOMAIN = 'http://payfront.zc.st.meituan.com';
 	//美团支付的测试环境外网
-	const MTP_APPID = '31140';
-	//美团支付的APPID
-	const MTP_KEY = '7a8288ec99f34e78adecd83386c98a3a';
-	//美团支付的签名秘钥
-	const MTP_OPENID = 'ovmY7wzTPgk8U2NCopVlvF8yQePw';
+	public function MTPAppKeyMid($dpid){
+		if($dpid){
+			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid ='.$dpid;
+			$ms = $db->createCommand($sql)->query();
+			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid in(select comp_dpid where dpid ='.$dpid.')';
+			$as = $db->createCommand($sql)->query();
+			if((!empty($ms))&&(!empty($as))){
+				$merchantId = $ms['mt_merchantId'];
+				$appId = $as['mt_appId'];
+				$key = $as['mt_key'];
+				return $merchantId.','.$appId.','.$key;
+			}else{
+				Helper::writeLog('未查询到参数:'.$dpid);
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
 }
 ?>

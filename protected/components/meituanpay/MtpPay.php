@@ -313,6 +313,8 @@ class MtpPay{
     	//     	/*商品标题*/
     	//     	$body = $data['body'];
     	//		/*商品详情*/
+    	//     	$channel = $data['channel'];
+    	//		/*支付渠道：'wx_scan_pay':微信扫码支付 ；'ali_scan_pay':支付宝扫码支付*/
     	//     	$expireMinutes = $data['expireMinutes'];
     	//		/*创建支付订单后，订单关闭时间，单位为分钟。默认设置为5分钟,最长不超过30分钟，超过关单时间无法支付*/
     	//     	$tradeType = $data['tradeType'];
@@ -339,19 +341,49 @@ class MtpPay{
     	$expireMinutes = $data['expireMinutes'];
     	$tradeType = $data['tradeType'];
     	$notifyUrl = $data['notifyUrl'];
-    	$random = $data['random'];
-    	 
-    	$merchantId = '4282256';
-    	//该字段为美团平台分配的商户id，系统后天查询。
+    	$random = time();
     	
-    	$dpid =$data['dpid'];
+    	$account_nos = explode('-',$outTradeNo);
+    	$orderid = $account_nos[0];
+    	$orderdpid = $account_nos[1];
     	
+    	//获取美团支付参数
+    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
-    	$appId = MtpConfig::MTP_APPID;
-    	$key = MtpConfig::MTP_KEY;
-    	//$openId = MtpConfig::MTP_OPENID;
+    	if($mtr){
+    		$mts = explode(',',$mtr);
+    		$merchantId = $mts[0];
+    		$appId = $mts[1];
+    		$key = $mts[2];
+    	}else {
+    		$result = array(
+    					"return_code"=>"ERROR",
+    					"result_code"=>"ERROR",
+    					'msg'=>'未知状态！');
+    			return $result;
+    			exit;
+    	}
+    	$ods = array(
+    		'merchantid'=>$merchantId,
+    		'appid'=>$appId,
+    		'dpid'=>$orderdpid,
+    		'order_id'=>$orderid,
+    		'account_no'=>$outTradeNo,
+    	);
+    	MtpPay::getOpenId($ods);
     	
-    	$openId = Yii::app()->runController('mtpay/getOpenId/mid/'.$merchantId.'/appid/'.$appId);
+    	$sqlo = 'select * from nb_mtpay_openid where account_no ="'.$outTradeNo.'"';
+    	$opens = $db->createCommand($sqlo)->query();
+    	if(!empty($opens)){
+    		$openId = $opens['mt_openId'];
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    		exit;
+    	}
     	//$this->redirect(urldecode($url));
     	if(!empty($openId)){
     		$datas = array(
@@ -427,8 +459,15 @@ class MtpPay{
     				header("Location:".$url);
     			}
     		}
-    		return $result;
-    		exit;
+    		return $result;exit;
+    		
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		Helper::writeLog('未查询到openid.');
+    		return $result;exit;
     	}
 
     } 
@@ -658,21 +697,20 @@ class MtpPay{
     	return $result;
     
     }
-    public function getOpenid(){
+    public static function getOpenId($data){
     	/*该接口用于获取授权，*/
-    	$openId = Yii::app()->request->getParam('openId');
-    	if(!$openId){
-    		$merchantId = Yii::app()->request->getParam('mid');
-    		$appId = Yii::app()->request->getParam('appid');
-    
-    		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtppay/getOpenid");
+    		
+    		$merchantId = $data['merchantid'];
+    		$appId = $data['appid'];
+    		$dpid = $data['dpid'];
+    		$order_id = $data['order_id'];
+    		$account_no = $data['account_no'];
+    		
+    		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtopenidresult?dpid=".$dpid."&accountno=".$account_no."&orderid=".$order_id);
     		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
     		Helper::writeLog($url);
     		header($url);
-    	}else{
-    		return $openId;
-    	}
-    	 
+    	
     }
 }
 ?>
