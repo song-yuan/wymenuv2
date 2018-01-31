@@ -26,6 +26,7 @@ class MtpayController extends Controller
 		echo $payStatus;
 	}
 	public function actionMtopenidresult(){
+		$db = Yii::app()->db;
 		Helper::writeLog('美团回调openID');
 		$dpid = Yii::app()->request->getParam('dpid');
 		$accountno = Yii::app()->request->getParam('accountno');
