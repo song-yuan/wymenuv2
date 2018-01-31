@@ -6,7 +6,7 @@ class MtpayController extends Controller
 		//$result = SqbPay::pay($dpid,$_POST);
 		//$obj = json_decode($result,true);
 		$data = array(
-				'outTradeNo'=>'20180131'.'-0000000027'.'-001',
+				'outTradeNo'=>'20180131'.'-0000000027'.'-002',
 				'totalFee'=>'1',
 				'subject'=>'壹点吃',
 				'body'=>'壹点吃支付测试',
@@ -30,7 +30,7 @@ class MtpayController extends Controller
 		Helper::writeLog('美团回调openID');
 		$dpid = Yii::app()->request->getParam('dpid');
 		$accountno = Yii::app()->request->getParam('accountno');
-		$order_id = Yii::app()->request->getParam('order_id');
+		$order_id = Yii::app()->request->getParam('orderid');
 		$openId = Yii::app()->request->getParam('openId');
 		
 		$se = new Sequence("mtpay_openid");
