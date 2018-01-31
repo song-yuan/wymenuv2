@@ -348,6 +348,7 @@ class MtpPay{
     	$orderid = $account_nos[0];
     	$orderdpid = $account_nos[1];
     	
+    	Helper::writeLog('进入在线支付方法：'.$outTradeNo);
     	//获取美团支付参数
     	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
@@ -371,10 +372,11 @@ class MtpPay{
     		'order_id'=>$orderid,
     		'account_no'=>$outTradeNo,
     	);
+    	Helper::writeLog('执行到获取授权：');
     	MtpPay::getOpenId($ods);
     	
     	$sqlo = 'select * from nb_mtpay_openid where account_no ="'.$outTradeNo.'"';
-    	$opens = $db->createCommand($sqlo)->query();
+    	$opens = $db->createCommand($sqlo)->queryRow();
     	if(!empty($opens)){
     		$openId = $opens['mt_openId'];
     	}else{
@@ -700,7 +702,7 @@ class MtpPay{
     }
     public static function getOpenId($data){
     	/*该接口用于获取授权，*/
-    		
+    		Helper::writeLog('进入到获取授权方法：');
     		$merchantId = $data['merchantid'];
     		$appId = $data['appid'];
     		$dpid = $data['dpid'];
