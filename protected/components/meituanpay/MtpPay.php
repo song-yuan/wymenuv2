@@ -686,7 +686,7 @@ class MtpPay{
     		$merchantId = $data['merchantid'];
     		$appId = $data['appid'];
     		
-    		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
+    		$url = "Location: http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
     		Helper::writeLog($url);
     		header($url);
     	 	exit;
