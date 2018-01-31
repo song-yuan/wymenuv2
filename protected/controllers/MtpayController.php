@@ -6,19 +6,15 @@ class MtpayController extends Controller
 		//$result = SqbPay::pay($dpid,$_POST);
 		//$obj = json_decode($result,true);
 		$data = array(
-				'outTradeNo'=>'20180118'.time(),
-				'dpid'=>'27',
+				'outTradeNo'=>'20180131'.'-0000000027'.'-001',
 				'totalFee'=>'1',
 				'subject'=>'壹点吃',
 				'body'=>'壹点吃支付测试',
 				'channel'=>'wx_scan_pay',
 				'expireMinutes'=>'3',
 				'tradeType'=>'JSAPI',
-				'openId'=>'ovmY7wzTPgk8U2NCopVlvF8yQePw',
 				'notifyUrl'=>'http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult',
 				'merchantId'=>'4282256',
-				'appId'=>'31140',
-				'random'=>'1234565432',
 		);
 		
 		$result = MtpPay::preOrder($data);
