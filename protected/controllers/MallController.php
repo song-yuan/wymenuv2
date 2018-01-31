@@ -44,6 +44,7 @@ class MallController extends Controller
 		}
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
+			var_dump($userId);exit;
 			if(empty($userId)){
 				$url = Yii::app()->request->url;
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));

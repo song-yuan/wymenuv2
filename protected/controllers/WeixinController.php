@@ -100,7 +100,7 @@ class WeixinController extends Controller
 	 	}else{
 	 		Yii::app()->session['dpid_self_'.$companyId] = 0;
 	 	}
-	 	var_dump($companyId);var_dump($userDpid);exit;
+	 	var_dump($companyId);var_dump($userDpid);
 	 	Yii::app()->session['userId-'.$userDpid] = $userId;
 	 	
 	 	$this->redirect(urldecode($url));
