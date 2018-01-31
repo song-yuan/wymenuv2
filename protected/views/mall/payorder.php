@@ -75,25 +75,24 @@
 		Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
 	}elseif($payChannel==3){
-		// 线上支付 新接口
+		// 美团线上支付 新接口
 		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayreturn');
 		$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
 		$data = array(
 				'companyId'=>$this->companyId,
 				'dpid'=>$order['dpid'],
-				'client_sn'=>$orderId,
-				'total_amount'=>$payPrice,
+				'outTradeNo'=>$orderId,
+				'totalFee'=>$payPrice*100,
 				'subject'=>$company['company_name']."-微信点餐订单",
-				'payway'=>3,
-				'pay_channel'=>$payChannel,
-				'operator'=>'微信会员-'.$user['lid'],
-				'reflect'=>$reflect,
-				'notify_url'=>$notifyUrl,
-				'return_url'=>$returnUrl,
+				'body'=>$company['company_name']."-微信点餐订单",
+				'channel'=>'wx_scan_pay',
+				'expireMinutes'=>5,
+				'tradeType'=>'JSAPI',
+				'notifyUrl'=>$reflect,
 		);
 		Helper::writeLog('view:'.$orderId);
-		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
+		$sqbpayUrl = $this->createUrl('/mall/mtPayOrder',$data);
 	}
 ?>
 

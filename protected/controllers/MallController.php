@@ -384,6 +384,16 @@ class MallController extends Controller
 	 	SqbPay::preOrder($data);
 	 	exit;
 	 }
+	 /**
+	  * 美团支付
+	  */
+	 public function actionMtPayOrder()
+	 {
+	 	$data = $_GET;
+	 	unset($data['companyId']);
+	 	MtpPay::preOrder($data);
+	 	exit;
+	 }
 	 public function actionSiteOrder()
 	 {
 	 	$user = $this->brandUser;

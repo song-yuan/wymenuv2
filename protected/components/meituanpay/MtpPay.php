@@ -334,6 +334,7 @@ class MtpPay{
     	//		/*随机数*/
     	//     	$wxSubAppId= $data['wxSubAppId'];
     	//		/*用到小程序支付才有，申请小程序时微信分配的小程序的appid 此参数不参与签名*/
+    	$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
     	$outTradeNo = $data['outTradeNo'];
     	$totalFee = $data['totalFee'];
     	$subject = $data['subject'];
@@ -359,44 +360,24 @@ class MtpPay{
     		$key = $mts[2];
     	}else {
     		$result = array(
-    					"return_code"=>"ERROR",
-    					"result_code"=>"ERROR",
-    					'msg'=>'未知状态！');
-    			return $result;
-    			exit;
-    	}
-    	$ods = array(
-    		'merchantid'=>$merchantId,
-    		'appid'=>$appId,
-    		'dpid'=>$orderdpid,
-    		'order_id'=>$orderid,
-    		'account_no'=>$outTradeNo,
-    	);
-    	Helper::writeLog('执行到获取授权：');
-    	MtpPay::getOpenId($ods);
-    	sleep(1);
-    	$i=0;
-    	do {
-    		$i++;
-    		$j=true;
-	    	$sqlo = 'select * from nb_mtpay_openid where account_no ="'.$outTradeNo.'"';
-	    	$opens = $db->createCommand($sqlo)->queryRow();
-	    	if(!empty($opens)){
-	    		$openId = $opens['mt_openId'];
-	    		$j = false;
-	    	}
-	    	sleep(1);
-    	}while ($i<5&&$j);
-    	if($j){
-    		$result = array(
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
     				'msg'=>'未知状态！');
     		return $result;
     		exit;
     	}
-    	//$this->redirect(urldecode($url));
-    	if(!empty($openId)){
+    	$ods = array(
+    			'merchantid'=>$merchantId,
+    			'appid'=>$appId,
+    			'dpid'=>$orderdpid,
+    			'order_id'=>$orderid,
+    			'account_no'=>$outTradeNo,
+    	);
+    	Helper::writeLog('执行到获取授权：');
+    	$openId = Yii::app()->request->getParam('openId');
+    	if(!isset($openId)){
+    		MtpPay::getOpenId($ods,$baseUrl);
+    	}
     		$datas = array(
     				'outTradeNo'=>$outTradeNo,
     				'totalFee'=>$totalFee,
@@ -471,16 +452,6 @@ class MtpPay{
     			}
     		}
     		return $result;exit;
-    		
-    	}else{
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'msg'=>'未知状态！');
-    		Helper::writeLog('未查询到openid.');
-    		return $result;exit;
-    	}
-
     } 
     
     public static function close($data){
@@ -708,17 +679,13 @@ class MtpPay{
     	return $result;
     
     }
-    public static function getOpenId($data){
+    public static function getOpenId($data,$url){
     	/*该接口用于获取授权，*/
     		Helper::writeLog('进入到获取授权方法：');
     		$merchantId = $data['merchantid'];
     		$appId = $data['appid'];
-    		$dpid = $data['dpid'];
-    		$order_id = $data['order_id'];
-    		$account_no = $data['account_no'];
     		
-    		$st = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtopenidresult?dpid=".$dpid."&accountno=".$account_no."&orderid=".$order_id);
-    		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$st;
+    		$url = "Location:http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
     		Helper::writeLog($url);
     		header($url);
     	

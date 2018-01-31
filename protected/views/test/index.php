@@ -24,6 +24,9 @@ function meituan_order($data){
 	$ePoiId = $resArr['ePoiId'];
 	$order = $resArr['order'];
 	$order = urldecode($order);
+	$result = MtOrder::dealOrder($order,$ePoiId,2);
+	$reobj = json_decode($result);
+	var_dump($reobj);
 }
 
 ?>
