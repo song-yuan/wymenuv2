@@ -31,7 +31,6 @@ class MallController extends Controller
 			exit;
 		}
 		$dpidSelf = Yii::app()->session['dpid_self_'.$this->companyId];
-		var_dump($dpidSelf);
 		if(!empty($dpidSelf)){
 			if($dpidSelf==1){
 				$comdpid = $this->company['dpid'];
@@ -42,7 +41,6 @@ class MallController extends Controller
 		}else{
 			$userId = null;
 		}
-		var_dump($userId);exit;
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
@@ -50,6 +48,7 @@ class MallController extends Controller
 				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
 				exit;
 			}
+			var_dump($userId);exit;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			if(empty($this->brandUser)){
 				$url = Yii::app()->request->url;
