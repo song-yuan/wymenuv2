@@ -374,12 +374,20 @@ class MtpPay{
     	);
     	Helper::writeLog('执行到获取授权：');
     	MtpPay::getOpenId($ods);
-    	
-    	$sqlo = 'select * from nb_mtpay_openid where account_no ="'.$outTradeNo.'"';
-    	$opens = $db->createCommand($sqlo)->queryRow();
-    	if(!empty($opens)){
-    		$openId = $opens['mt_openId'];
-    	}else{
+    	sleep(1);
+    	$i=0;
+    	do {
+    		$i++;
+    		$j=true;
+	    	$sqlo = 'select * from nb_mtpay_openid where account_no ="'.$outTradeNo.'"';
+	    	$opens = $db->createCommand($sqlo)->queryRow();
+	    	if(!empty($opens)){
+	    		$openId = $opens['mt_openId'];
+	    		$j = false;
+	    	}
+	    	sleep(1);
+    	}while ($i<5&&$j);
+    	if($j){
     		$result = array(
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",

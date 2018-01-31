@@ -6,7 +6,7 @@ class MtpayController extends Controller
 		//$result = SqbPay::pay($dpid,$_POST);
 		//$obj = json_decode($result,true);
 		$data = array(
-				'outTradeNo'=>'20180131'.'-0000000027'.'-002',
+				'outTradeNo'=>'20180131'.'-0000000027'.'-004',
 				'totalFee'=>'1',
 				'subject'=>'壹点吃',
 				'body'=>'壹点吃支付测试',
