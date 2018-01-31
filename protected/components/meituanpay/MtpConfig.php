@@ -14,7 +14,7 @@ class MtpConfig{
 			$db = Yii::app()->db;
 			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid ='.$dpid;
 			$ms = $db->createCommand($sql)->query();
-			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid in(select comp_dpid where dpid ='.$dpid.')';
+			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid in(select comp_dpid from nb_company where dpid ='.$dpid.')';
 			$as = $db->createCommand($sql)->query();
 			if((!empty($ms))&&(!empty($as))){
 				$merchantId = $ms['mt_merchantId'];
