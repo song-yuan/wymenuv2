@@ -84,10 +84,10 @@
 				'dpid'=>$order['dpid'],
 				'outTradeNo'=>$orderId,
 				'totalFee'=>$payPrice*100,
-				'subject'=>urldecode($company['company_name']."-微信点餐订单"),
-				'body'=>urldecode($company['company_name']."-微信点餐订单"),
+				'subject'=>'add',
+				'body'=>'ddd',
 				'channel'=>'wx_scan_pay',
-				'expireMinutes'=>5,
+				'expireMinutes'=>'5',
 				'tradeType'=>'JSAPI',
 				'notifyUrl'=>$notifyUrl
 		);
