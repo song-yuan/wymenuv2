@@ -302,6 +302,7 @@ class MtpPay{
 
     // 线上web api
     public static function preOrder($data){
+    	$db = Yii::app()->db;
     	//     	/*该接口用于美团线上支付*/
     	//     	$channel = $data['channel'];
     	//     	/*支付渠道、必填项、最大64字符、'wx_barcode_pay':微信刷卡支付'ali_barcode_pay':支付宝刷卡支付*/
