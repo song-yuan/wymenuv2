@@ -11,6 +11,7 @@ class MtpConfig{
 	//美团支付的测试环境外网
 	public function MTPAppKeyMid($dpid){
 		if($dpid){
+			$db = Yii::app()->db;
 			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid ='.$dpid;
 			$ms = $db->createCommand($sql)->query();
 			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid in(select comp_dpid where dpid ='.$dpid.')';
