@@ -375,6 +375,7 @@ class MtpPay{
     	);
     	Helper::writeLog('执行到获取授权：');
     	$openId = Yii::app()->request->getParam('openId');
+    	Helper::writeLog($openId);
     	if(!isset($openId)){
     		MtpPay::getOpenId($ods,$baseUrl);
     	}
