@@ -31,8 +31,8 @@ class MallController extends Controller
 			exit;
 		}
 		$dpidSelf = Yii::app()->session['dpid_self_'.$this->companyId];
-		if(!empty($dpidSelf)){
-			if($dpidSelf==1){
+		if($dpidSelf !== null){
+			if($dpidSelf == 1){
 				$comdpid = $this->company['dpid'];
 			}else{
 				$comdpid = $this->company['comp_dpid'];
@@ -41,7 +41,6 @@ class MallController extends Controller
 		}else{
 			$userId = null;
 		}
-		var_dump($userId);exit;
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
