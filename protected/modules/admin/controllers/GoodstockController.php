@@ -56,12 +56,13 @@ class GoodstockController extends BackendController
 
 		$sqls = 'select t.* from nb_goods_delivery t where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
+		// var_dump($model);exit();
 // var_dump($model);exit();
 		$sqlstock = "select company_name from nb_company where dpid=(select dpid from nb_goods_order where account_no=".$model['goods_order_accountno']." and delete_flag=0) and delete_flag=0";
 		// echo $sqlstock;exit();
 		$stocks = $db->createCommand($sqlstock)->queryRow();
 // var_dump($stocks);exit;
-		$sql = 'select k.* from (select ggm.goods_name,ggm.erp_code,ggm.goods_unit,t.*,mu.unit_name,mc.category_name,c.company_name as stock_name from nb_goods_invoice_details t '.' left join (select g.*,gm.material_code,gm.unit_code from nb_goods g left join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(t.goods_id = ggm.lid)'.' left join nb_company c on(c.dpid = t.dpid)'.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=ggm.unit_code) '.' left join (select mc0.lid,mc1.category_name,mc1.dpid from nb_material_category mc0 left join nb_material_category mc1 on(mc0.pid=mc1.lid) ) mc on(mc.lid=ggm.category_id and mc.dpid='.$model["compid"].')'.' where t.goods_invoice_id = '.$goid.' order by t.lid) k';
+		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and l.dpid='.$model['compid'].') left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid and a.dpid=y.dpid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
 
 // echo $sql;exit();
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -103,7 +104,7 @@ class GoodstockController extends BackendController
 		// echo $sqlstock;exit();
 		$stocks = $db->createCommand($sqlstock)->queryRow();
 
-		$sql = 'select k.* from (select ggm.goods_name,ggm.erp_code,ggm.goods_unit,t.*,mu.unit_name,mc.category_name,c.company_name as stock_name from nb_goods_invoice_details t '.' left join (select g.*,gm.material_code,gm.unit_code from nb_goods g left join nb_goods_material gm on (g.lid=gm.goods_id )) ggm on(t.goods_id = ggm.lid)'.' left join nb_company c on(c.dpid = t.dpid)'.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=ggm.unit_code) '.' left join (select mc0.lid,mc1.category_name,mc1.dpid from nb_material_category mc0 left join nb_material_category mc1 on(mc0.pid=mc1.lid) ) mc on(mc.lid=ggm.category_id and mc.dpid='.$model["compid"].')'.' where t.goods_invoice_id = '.$goid.' order by t.lid) k';
+		$sql = 'select k.* from (select c.goods_name,c.goods_unit,co.company_name as stock_name,a.category_name,t.* from nb_goods_delivery_details t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.dpid ) left join nb_product_material l on(t.material_code=l.mphs_code and l.dpid='.$model['compid'].') left join nb_material_category y on(l.mchs_code=y.mchs_code and l.dpid=y.dpid) left join nb_material_category a on(y.pid=a.lid and a.dpid=y.dpid) where t.goods_delivery_id = '.$goid.' order by t.lid) k';
 		$materials = $db->createCommand($sql)->queryAll();
 		// var_dump($models);exit;
 		// p($model);
