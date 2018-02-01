@@ -71,11 +71,6 @@
                                 <th><?php echo yii::t('app','数量');?></th>
                                 <th><?php echo yii::t('app','单位');?></th>
                                 <th><?php echo yii::t('app','发货仓库');?></th>
-                               	<?php if($status == 0):?>
-                                <th><?php echo yii::t('app','调整批次');?>
-                                <input id="change_stock" type="button" value="一键保存" />&nbsp;
-                                </th>
-                                <?php endif;?>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -89,19 +84,6 @@
 								<td ><?php echo $model['num'] ;?></td>
 								<td><?php echo $model['goods_unit'];?></td>
 								<td ><?php echo $model['stock_name'] ;?></td>
-								<?php if($status ==0):?>
-								<td >
-									<select id="paymentid" class="col-md-9 form-control stockselect" >
-			                           	<option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 0){?> selected="selected" <?php }?> >--选择批次--</option>
-			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 1){?> selected="selected" <?php }?> >1</option>
-			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 2){?> selected="selected" <?php }?> >2</option>
-			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 3){?> selected="selected" <?php }?> >3</option>
-			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 4){?> selected="selected" <?php }?> >4</option>
-			                            <option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 5){?> selected="selected" <?php }?> >5</option>
-
-	                    			</select>
-                    			</td>
-                    			<?php endif;?>
 								<td></td>
 							</tr>
 
