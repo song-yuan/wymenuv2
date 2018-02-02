@@ -305,7 +305,7 @@ class MtpPay{
     	$channel = $data['channel'];
     	$expireMinutes = $data['expireMinutes'];
     	$tradeType = $data['tradeType'];
-    	$notifyUrl = $data['notifyUrl'].'?accountno='.$outTradeNo;
+    	$notifyUrl = $data['notifyUrl'];
     	$returnUrl = $data['return_url'];
     	//      /*支付完成后的回调地址*/
     	$random = time();
