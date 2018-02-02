@@ -36,6 +36,9 @@ class MtpPay{
     	//		/*验证签名*/
     	//     	$random= $data['random'];
     	//		/*随机数*/
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
     	$channel = $data['channel'];
     	$outTradeNo = $data['outTradeNo'];
     	$authCode = $data['authCode'];
@@ -45,29 +48,9 @@ class MtpPay{
     	$expireMinutes = $data['expireMinutes'];
     	$dpid =$data['dpid'];
     	$random = time();
-    	
-    	//订单号解析orderID和dpid
-    	$account_nos = explode('-',$outTradeNo);
-    	$orderid = $account_nos[0];
-    	$orderdpid = $account_nos[1];
-    	//获取美团支付参数
-    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
+
     	$url = MtpConfig::MTP_DOMAIN.'/api/pay/micropay';
-    	if($mtr){
-    		$mts = explode(',',$mtr);
-    		$merchantId = $mts[0];
-    		$appId = $mts[1];
-    		$key = $mts[2];
-    	}else {
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				"result_msg"=>"REPAY",
-    				'msg'=>'未查询到支付参数！');
-    		return $result;
-    		exit;
-    	}
-    	
+
     	$datas = array(
     				'channel'=>$channel,
     				'outTradeNo'=>$outTradeNo,
@@ -265,7 +248,6 @@ class MtpPay{
 
     // 线上web api
     public static function preOrder($data){
-    	$db = Yii::app()->db;
     	//     	/*该接口用于美团线上支付*/
     	//     	$channel = $data['channel'];
     	//     	/*支付渠道、必填项、最大64字符、'wx_barcode_pay':微信刷卡支付'ali_barcode_pay':支付宝刷卡支付*/
@@ -395,30 +377,14 @@ class MtpPay{
     
     public static function close($data){
     	/*该接口用于关闭订单，*/
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
     	$outTradeNo = $data['outTradeNo'];
     	$random = time();
-    	
-    	$account_nos = explode('-',$outTradeNo);
-    	$orderid = $account_nos[0];
-    	$orderdpid = $account_nos[1];
-    	
-    	//Helper::writeLog('进入在线支付方法：'.$outTradeNo);
-    	//获取美团支付参数
-    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
-    	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
-    	if($mtr){
-    		$mts = explode(',',$mtr);
-    		$merchantId = $mts[0];
-    		$appId = $mts[1];
-    		$key = $mts[2];
-    	}else {
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'msg'=>'未知状态！');
-    		return $result;
-    		exit;
-    	}
+	
+    	$url = MtpConfig::MTP_DOMAIN.'/api/close';
+
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'merchantId'=>$merchantId,
@@ -462,29 +428,13 @@ class MtpPay{
     }
     public static function query($data){
     	/*该接口用于查询订单状态，*/
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
     	$outTradeNo = $data['outTradeNo'];
     	$random = time();
     	
-    	$account_nos = explode('-',$outTradeNo);
-    	$orderid = $account_nos[0];
-    	$orderdpid = $account_nos[1];
-    	
-    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/pay/query';
-    	if($mtr){
-    		$mts = explode(',',$mtr);
-    		$merchantId = $mts[0];
-    		$appId = $mts[1];
-    		$key = $mts[2];
-    	}else {
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'result_msg'=>'REQUERY',
-    				'msg'=>'未知状态！');
-    		return $result;
-    		exit;
-    	}
     	
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
@@ -591,33 +541,17 @@ class MtpPay{
 
     public static function refund($data){
     	/*该接口用于订单退款，*/
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
     	$outTradeNo = $data['outTradeNo'];
     	$refundFee = $data['refundFee'];
     	$refundNo = $data['refundNo'];
     	$refundReason = $data['refundReason'];
     	$random = time();
-    	 
-    	$account_nos = explode('-',$outTradeNo);
-    	$orderid = $account_nos[0];
-    	$orderdpid = $account_nos[1];
-    	
-    	//Helper::writeLog('进入在线支付方法：'.$outTradeNo);
-    	//获取美团支付参数
-    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
-    	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
-    	if($mtr){
-    		$mts = explode(',',$mtr);
-    		$merchantId = $mts[0];
-    		$appId = $mts[1];
-    		$key = $mts[2];
-    	}else {
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'msg'=>'未知状态！');
-    		return $result;
-    		exit;
-    	}
+
+    	$url = MtpConfig::MTP_DOMAIN.'/api/refund';
+
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'refundFee'=>$refundFee,
@@ -661,10 +595,6 @@ class MtpPay{
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('mt退款返回结果：'.$result);
     	
-//     	if(!empty($result)){
-//     		$obj = json_decode($result,true);
-//     		$return_status = $obj['status'];
-//     	}
     	return $result;
     
     }
