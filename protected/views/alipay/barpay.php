@@ -19,7 +19,7 @@ if($authCode!=''&&$result['status']){
 		echo json_encode($msg);
 		exit;
 	}
-	if($this->compaychannel['pay_channel']=='2'||$this->compaychannel['pay_channel']=='3'){
+	if($this->compaychannel['pay_channel']=='2'){
 		$result = SqbPay::pay(array(
 				'type'=>'1',
 				'device_id'=>$poscode,
@@ -30,27 +30,17 @@ if($authCode!=''&&$result['status']){
 				'subject'=>$company['company_name'],
 				'operator'=>$username,
 		));
-		if($result){
-			if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
-				$transactionId = $result["transaction_id"];
-				MicroPayModel::update($dpid, $outTradeNo, $transactionId, json_encode($result));
-				echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
-				exit;
-			}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
-				echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
-				exit;
-			}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL_SUCCESS"){
-				echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
-				exit;
-			}else{
-				echo json_encode(array('status'=>false));
-				exit;
-			}
-		}else{
-			echo json_encode(array('status'=>false));
-			exit;
-		}
-		
+	}elseif ($this->compaychannel['pay_channel']=='3'){
+		$result = MtpPay::pay(array(
+				'channel'=>'ali_barcode_pay',
+				'authCode'=>$authCode,
+				'totalFee'=>''.$totalAmount*100,
+				'outTradeNo'=>$outTradeNo,
+				'dpid'=>$dpid,
+				'subject'=>$company['company_name'],
+				'body'=>$company['company_name'],
+				'expireMinutes'=>5,
+		));
 	}else{
 		$subject = $company['company_name']."-扫码";
 		
@@ -130,7 +120,24 @@ if($authCode!=''&&$result['status']){
 				echo json_encode(array('status'=>false));
 				break;
 		}
+		exit;
 	}
-	exit;
+	if($result){
+		if($result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS"){
+			$transactionId = $result["transaction_id"];
+			MicroPayModel::update($dpid, $outTradeNo, $transactionId, json_encode($result));
+			echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
+		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
+			echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
+		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL_SUCCESS"){
+			echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
+		}else{
+			echo json_encode(array('status'=>false));
+		}
+		exit;
+	}else{
+		echo json_encode(array('status'=>false));
+		exit;
+	}
 }
 ?>

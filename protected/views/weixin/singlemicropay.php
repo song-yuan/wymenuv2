@@ -26,7 +26,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 		echo json_encode($msg);
 		exit;
 	}
-	if($compaychannel['pay_channel']=='2'||$compaychannel['pay_channel']=='3'){
+	if($compaychannel['pay_channel']=='2'){
 		$result = SqbPay::pay(array(
 				'type'=>'3',
 				'device_id'=>$poscode,
@@ -38,6 +38,17 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 				'operator'=>$username,
 		));
 		
+	}elseif ($compaychannel['pay_channel']=='3'){
+		$result = MtpPay::pay(array(
+				'channel'=>'wx_barcode_pay',
+				'authCode'=>$auth_code,
+				'totalFee'=>''.$should_total*100,
+				'outTradeNo'=>$orderId,
+				'dpid'=>$dpid,
+				'subject'=>$company['company_name'],
+				'body'=>$company['company_name'],
+				'expireMinutes'=>5,
+		));
 	}else{
 
 		$input = new WxPayMicroPay();

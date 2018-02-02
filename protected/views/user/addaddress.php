@@ -88,17 +88,24 @@
         	return false;
         }
         if($('input[name="address[lng]"]').val() == '0'||$('input[name="address[lat]"]').val() == '0'){
-            alert('请点击页面空白处,已获取地址坐标！');
+        	alert('没有获取到该地址位置,确定后会再次获取！');
+        	var province = $('#province').val();
+    		var city = $('#city').val();
+    		var area = $('#area').val();
+    		var street = $('#street').val();
+    		var fullAddress = province+city+area+street;
+    		codeAddress(fullAddress);
         	return false;
         }
     }
     $(document).ready(function(){
         init();
+        var fullAddress = '';
         var province = $('#province').val();
         var city = $('#city').val();
 		var area = $('#area').val();
 		var street = $('#street').val();
-		var fullAddress = province+city+area+street;
+		fullAddress = province+city+area+street;
 		codeAddress(fullAddress);
     	$('#street').change(function(){
     		province = $('#province').val();
