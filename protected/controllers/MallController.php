@@ -410,7 +410,6 @@ class MallController extends Controller
 	 	$data['merchantId'] = $merchantId;
 	 	$data['appId'] = $appId;
 	 	$data['key'] = $key;
-	 	var_dump($data);exit;
 	 	MtpPay::preOrder($data);
 	 	exit;
 	 }
