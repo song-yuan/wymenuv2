@@ -403,7 +403,7 @@ class MtpPay{
     			$obj = json_decode($result,true);
     			$status = $obj['status'];
     			if($status=='SUCCESS'){
-    				$resulturl = urlencode($returnUrl);
+    				$resulturl = urlencode($notifyUrl);
     				//回调地址
     				//$wxappid = 'wxc57dd1ee95c70c2c';
     				$appIds = $obj['appId'];

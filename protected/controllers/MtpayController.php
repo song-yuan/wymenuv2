@@ -18,23 +18,15 @@ class MtpayController extends Controller
 		
 		$result = MtpPay::preOrder($data);
 	}
-	
+
 	public function actionMtwappayresult(){
 		Helper::writeLog('美团在线支付返回');
 		$payStatus = Yii::app()->request->getParam('payStatus');
+		$accountNo = Yii::app()->request->getParam('accountNo');
 		Helper::writeLog('美团在线支付返回参数'.$payStatus);
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		Helper::writeLog('美团在线支付返回参数:'.$xml);
 
-		//$obj = json_decode($xml,true);
-		
-		//$payStatus = Yii::app()->request->getParam('payStatus');
-		//$orderid = Yii::app()->request->getParam('orderid');
-		$accountno = Yii::app()->request->getParam('outTradeNo');
-		//$total_amount = Yii::app()->request->getParam('totalFee');
-		//Helper::writeLog('美团在线支付返回参数'.$accountno);
-		//echo $payStatus;
-	
 		//订单号解析orderID和dpid
 		$account_nos = explode('-',$accountno);
 		$orderid = $account_nos[0];
