@@ -20,6 +20,9 @@ class MtpayController extends Controller
 	}
 	
 	public function actionMtwappayresult(){
+		Helper::writeLog('美团在线支付返回');
+		$payStatus = Yii::app()->request->getParam('payStatus');
+		Helper::writeLog('美团在线支付返回参数'.$payStatus);
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		Helper::writeLog('美团在线支付返回参数:'.$xml);
 
@@ -29,7 +32,7 @@ class MtpayController extends Controller
 		//$orderid = Yii::app()->request->getParam('orderid');
 		$accountno = Yii::app()->request->getParam('outTradeNo');
 		//$total_amount = Yii::app()->request->getParam('totalFee');
-		Helper::writeLog('美团在线支付返回参数'.$accountno);
+		//Helper::writeLog('美团在线支付返回参数'.$accountno);
 		//echo $payStatus;
 	
 		//订单号解析orderID和dpid
