@@ -35,7 +35,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组设置'),'url'=>$this->createUrl('pricegroupM/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','价格信息编辑'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroupM/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','原料价格分组设置'),'url'=>$this->createUrl('pricegroupM/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','价格信息编辑'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroupM/index' , array('companyId' => $this->companyId,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -159,21 +159,21 @@
 		var cid = $(this).val();
 		var dpid = $('#dpid').val();
 		var pricegroupid ="<?php echo $pricegroupid; ?>";
-		location.href="<?php echo $this->createUrl('priceGroupM/detailIndex' , array('companyId'=>$this->companyId));?>/dpid/"+dpid+"/pricegroupid/"+pricegroupid+"/cid/"+cid;
+		location.href="<?php echo $this->createUrl('pricegroupM/detailIndex' , array('companyId'=>$this->companyId));?>/dpid/"+dpid+"/pricegroupid/"+pricegroupid+"/cid/"+cid;
 	});
 
 	$('#dpid').change(function(){
 		var cid = $('#selectCategory').val();
 		var dpid = $(this).val();
 		var pricegroupid ="<?php echo $pricegroupid; ?>";
-		location.href="<?php echo $this->createUrl('priceGroupM/detailIndex' , array('companyId'=>$this->companyId));?>/dpid/"+dpid+"/cid/"+cid+"/pricegroupid/"+pricegroupid;
+		location.href="<?php echo $this->createUrl('pricegroupM/detailIndex' , array('companyId'=>$this->companyId));?>/dpid/"+dpid+"/cid/"+cid+"/pricegroupid/"+pricegroupid;
 	});
 
 	$('#search').click(function(event) {
 		/* Act on the event */
 		var pricegroupid ="<?php echo $pricegroupid; ?>";
 		var pname = $('#pname').val();
-		location.href="<?php echo $this->createUrl('priceGroupM/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/pname/"+pname;
+		location.href="<?php echo $this->createUrl('pricegroupM/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/pname/"+pname;
 	});
 
 	document.onkeydown=function(event){
@@ -182,7 +182,7 @@
         //要做的事情
 		var pricegroupid ="<?php echo $pricegroupid; ?>";
 		var pname = $('#pname').val();
-		location.href="<?php echo $this->createUrl('priceGroupM/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/pname/"+pname;
+		location.href="<?php echo $this->createUrl('pricegroupM/detailIndex' , array('companyId'=>$this->companyId));?>/pricegroupid/"+pricegroupid+"/pname/"+pname;
         }
     };
 
@@ -205,7 +205,7 @@
 					var str = prices.join(',');
 					// alert(str);
 					$.ajax({
-						url: '<?php echo $this->createUrl('priceGroupM/detailIndex',array('companyId'=>$this->companyId)) ?>',
+						url: '<?php echo $this->createUrl('pricegroupM/detailIndex',array('companyId'=>$this->companyId)) ?>',
 						type:'POST',
 						dataType: 'json',
 						data: {
@@ -237,7 +237,7 @@
 
 				// console.log(str);
 				$.ajax({
-					url: '<?php echo $this->createUrl('priceGroupM/detailIndex',array('companyId'=>$this->companyId)) ?>',
+					url: '<?php echo $this->createUrl('pricegroupM/detailIndex',array('companyId'=>$this->companyId)) ?>',
 					type:'POST',
 					dataType: 'json',
 					data: {
