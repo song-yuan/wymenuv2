@@ -20,6 +20,11 @@ class MtpayController extends Controller
 	}
 	
 	public function actionMtwappayresult(){
+		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+		Helper::writeLog('美团在线支付返回参数:'.$xml);
+
+		//$obj = json_decode($xml,true);
+		
 		//$payStatus = Yii::app()->request->getParam('payStatus');
 		//$orderid = Yii::app()->request->getParam('orderid');
 		$accountno = Yii::app()->request->getParam('outTradeNo');
