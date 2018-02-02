@@ -3,7 +3,7 @@
  * 
  * 
  * @author dys
- * 收钱吧支付 接口类
+ * 美团支付 接口类
  *pay 支付接口
  *precreate 预下单接口
  *refund 退款接口
@@ -46,6 +46,10 @@ class MtpPay{
     	$dpid =$data['dpid'];
     	$random = time();
     	
+    	//订单号解析orderID和dpid
+    	$account_nos = explode('-',$outTradeNo);
+    	$orderid = $account_nos[0];
+    	$orderdpid = $account_nos[1];
     	//获取美团支付参数
     	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/pay/micropay';
@@ -88,6 +92,7 @@ class MtpPay{
     		$result = array(
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
+    				'result_msg'=>'REPAY',
     				'msg'=>'未知状态！');
     		return $result;
     	}
@@ -145,108 +150,71 @@ class MtpPay{
 	    			
 	    		}else{
 	    			/*发起轮询*/
-	    			do {
-	    				$i=1;
-	    				++$i;
-	    				$status = true;
-	    				$resultstatus =  MtpPay::query(array(
-								'outTradeNo'=>$outTradeNo,
-								'dpid'=>$dpid,
-								'random'=>$random,
+		    		$i=1;
+					$j=true;
+					do{
+						sleep(1);
+						$i++;
+						$results = MtpPay::query(array(
+								'outTradeNo'=>$outTradeNo
 						));
-	    				$rsts = json_decode($resultstatus,true);
-	    				$mtqstatus = $rsts['status'];
-	    				if($mtqstatus == 'SUCCESS'){
-	    					$q_status = $rsts['order_status'];
-	    					if($q_status == 'ORDER_PART_REFUND'){
-	    						$msg='已部分退款';
-	    						$status = false;
-	    					}elseif($q_status == 'ORDER_ALL_REFUND'){
-	    						$msg='已全额退款';
-	    						$status = false;
-	    					}elseif($q_status == 'ORDER_REFUNDING'){
-	    						$msg='正在进行退款操作';
-	    						$status = true;
-	    					}elseif($q_status == 'ORDER_FAILED' || $q_status == 'ORDER_CLOSE'){
-	    						$msg='交易失败';
-	    						$status = true;
-	    					}else{
-	    						$msg='其他';
-	    						$status = true;
-	    					}
-	    				}else{
-	    					$status = true;
-	    				}
-	    				sleep(1);
-	    			}while ($i<=6&&$status);
-	    			
-	    			if($status){
-	    				$result = array(
-	    						"return_code"=>"SUCCESS",
-	    						"result_code"=>"ERROR",
-	    						"msg"=>"失败！",
-	    						"order_id"=>$obj['outTradeNo']);
-	    			}else{
-	    				$result = array(
-	    						"return_code"=>"SUCCESS",
-	    						"result_code"=>"SUCCESS",
-	    						"msg"=>"支付成功！",
-	    						"order_id"=>$obj['outTradeNo']);
-	    			}
+						$return_code = $results['return_code'];
+						$result_code = $results['result_code'];
+						$result_msg = $results['result_msg'];
+						if($result_msg == 'ORDER_SUCCESS'){
+							$result = array(
+									"return_code"=>"SUCCESS",
+									"result_code"=>"SUCCESS",
+	    							"result_msg"=>$result_msg,
+									"msg"=>"支付成功！",
+									"accountno"=>$outTradeNo);
+							$j=false;
+						}
+					}while (($i<=5)&&$j);
+					if(($i==5)&&$j){
+						$result = array(
+									"return_code"=>"SUCCESS",
+									"result_code"=>"ERROR",
+									"result_msg"=>'REQUERY',
+									"msg"=>"查询失败！",
+									"accountno"=>$outTradeNo);
+					}
 	    		}
 	
 	    	}elseif($return_status == 'FAIL'){
 	    		$re_code = $obj['errCode'];
 	    		if($re_code == "TRADE_PAY_UNKOWN_ERROR" || $re_code == "TRADE_PAYING_ERROR"){
 	    			/*正在支付，发起轮询*/
-	    			do {
-	    				$i=1;
-	    				++$i;
-	    				$status = true;
-	    				$resultstatus =  MtpPay::query(array(
-	    						'outTradeNo'=>$outTradeNo,
-	    						'dpid'=>$dpid,
-	    						'random'=>$random,
-	    				));
-	    				$rsts = json_decode($resultstatus,true);
-	    				$mtqstatus = $rsts['status'];
-	    				if($mtqstatus == 'SUCCESS'){
-	    					$q_status = $rsts['order_status'];
-	    					if($q_status == 'ORDER_PART_REFUND'){
-	    						$msg='已部分退款';
-	    						$status = false;
-	    					}elseif($q_status == 'ORDER_ALL_REFUND'){
-	    						$msg='已全额退款';
-	    						$status = false;
-	    					}elseif($q_status == 'ORDER_REFUNDING'){
-	    						$msg='正在进行退款操作';
-	    						$status = true;
-	    					}elseif($q_status == 'ORDER_FAILED' || $q_status == 'ORDER_CLOSE'){
-	    						$msg='交易失败';
-	    						$status = true;
-	    					}else{
-	    						$msg='其他';
-	    						$status = true;
-	    					}
-	    				}else{
-	    					$status = true;
-	    				}
-	    				sleep(1);
-	    			}while ($i<=6&&$status);
-	    			
-	    			if($status){
-	    				$result = array(
-	    						"return_code"=>"SUCCESS",
-	    						"result_code"=>"ERROR",
-	    						"msg"=>"失败！",
-	    						"order_id"=>$obj['outTradeNo']);
-	    			}else{
-	    				$result = array(
-	    						"return_code"=>"SUCCESS",
-	    						"result_code"=>"SUCCESS",
-	    						"msg"=>"支付成功！",
-	    						"order_id"=>$obj['outTradeNo']);
-	    			}
+	    		/*发起轮询*/
+		    		$i=1;
+					$j=true;
+					do{
+						sleep(1);
+						$i++;
+						$results = MtpPay::query(array(
+								'outTradeNo'=>$outTradeNo
+						));
+						$return_code = $results['return_code'];
+						$result_code = $results['result_code'];
+						$result_msg = $results['result_msg'];
+						if($result_msg == 'ORDER_SUCCESS'){
+							$result = array(
+									"return_code"=>"SUCCESS",
+									"result_code"=>"SUCCESS",
+	    							"result_msg"=>$result_msg,
+									"msg"=>"支付成功！",
+									"accountno"=>$outTradeNo);
+							$j=false;
+						}
+					}while (($i<=5)&&$j);
+					if(($i==5)&&$j){
+						$result = array(
+									"return_code"=>"SUCCESS",
+									"result_code"=>"ERROR",
+									"result_msg"=>'REQUERY',
+									"msg"=>"查询失败！",
+									"accountno"=>$outTradeNo);
+					}
 	    		}else{
 	    			$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$obj['errMsg']);
 	    		}
@@ -262,54 +230,35 @@ class MtpPay{
     		$str = $outTradeNo.';无返回信息：进入轮询。';
     		Helper::writeLog($str);
     		/*正在支付，发起轮询*/
-    			do {
-    				$i=1;
-    				++$i;
-    				$status = true;
-    				$resultstatus =  MtpPay::query(array(
-    						'outTradeNo'=>$outTradeNo,
-    						'dpid'=>$dpid,
-    						'random'=>$random,
-    				));
-    				$rsts = json_decode($resultstatus,true);
-    				$mtqstatus = $rsts['status'];
-    				if($mtqstatus == 'SUCCESS'){
-    					$q_status = $rsts['order_status'];
-    					if($q_status == 'ORDER_PART_REFUND'){
-    						$msg='已部分退款';
-    						$status = false;
-    					}elseif($q_status == 'ORDER_ALL_REFUND'){
-    						$msg='已全额退款';
-    						$status = false;
-    					}elseif($q_status == 'ORDER_REFUNDING'){
-    						$msg='正在进行退款操作';
-    						$status = true;
-    					}elseif($q_status == 'ORDER_FAILED' || $q_status == 'ORDER_CLOSE'){
-    						$msg='交易失败';
-    						$status = true;
-    					}else{
-    						$msg='其他';
-    						$status = true;
-    					}
-    				}else{
-    					$status = true;
-    				}
-    				sleep(1);
-    			}while ($i<=6&&$status);
-    			
-    			if($status){
-    				$result = array(
-    						"return_code"=>"SUCCESS",
-    						"result_code"=>"ERROR",
-    						"msg"=>"失败！",
-    						"order_id"=>$outTradeNo);
-    			}else{
-    				$result = array(
-    						"return_code"=>"SUCCESS",
-    						"result_code"=>"SUCCESS",
-    						"msg"=>"支付成功！",
-    						"order_id"=>$outTradeNo);
-    			}
+	    		$i=1;
+				$j=true;
+				do{
+					sleep(1);
+					$i++;
+					$results = MtpPay::query(array(
+							'outTradeNo'=>$outTradeNo
+					));
+					$return_code = $results['return_code'];
+					$result_code = $results['result_code'];
+					$result_msg = $results['result_msg'];
+					if($result_msg == 'ORDER_SUCCESS'){
+						$result = array(
+								"return_code"=>"SUCCESS",
+								"result_code"=>"SUCCESS",
+    							"result_msg"=>$result_msg,
+								"msg"=>"支付成功！",
+								"accountno"=>$outTradeNo);
+						$j=false;
+					}
+				}while (($i<=5)&&$j);
+				if(($i==5)&&$j){
+					$result = array(
+								"return_code"=>"SUCCESS",
+								"result_code"=>"ERROR",
+								"result_msg"=>'REQUERY',
+								"msg"=>"查询失败！",
+								"accountno"=>$outTradeNo);
+				}
     	}
     	return $result;
     }
@@ -358,6 +307,7 @@ class MtpPay{
     	$tradeType = $data['tradeType'];
     	$notifyUrl = $data['notifyUrl'];
     	$returnUrl = $data['return_url'];
+    	//      /*支付完成后的回调地址*/
     	$random = time();
     	
     	$account_nos = explode('-',$outTradeNo);
@@ -474,13 +424,29 @@ class MtpPay{
     public static function close($data){
     	/*该接口用于关闭订单，*/
     	$outTradeNo = $data['outTradeNo'];
-    	$random = $data['random'];
+    	$random = time();
     	
-    	$merchantId = '4282256';
-    	$url = MtpConfig::MTP_DOMAIN.'/api/close';
-    	$appId = MtpConfig::MTP_APPID;
-    	$key = MtpConfig::MTP_KEY;
+    	$account_nos = explode('-',$outTradeNo);
+    	$orderid = $account_nos[0];
+    	$orderdpid = $account_nos[1];
     	
+    	Helper::writeLog('进入在线支付方法：'.$outTradeNo);
+    	//获取美团支付参数
+    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
+    	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
+    	if($mtr){
+    		$mts = explode(',',$mtr);
+    		$merchantId = $mts[0];
+    		$appId = $mts[1];
+    		$key = $mts[2];
+    	}else {
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    		exit;
+    	}
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'merchantId'=>$merchantId,
@@ -657,13 +623,29 @@ class MtpPay{
     	$refundFee = $data['refundFee'];
     	$refundNo = $data['refundNo'];
     	$refundReason = $data['refundReason'];
-    	$random = $data['random'];
+    	$random = time();
     	 
-    	$merchantId = '4282256';
-    	$url = MtpConfig::MTP_DOMAIN.'/api/refund';
-    	$appId = MtpConfig::MTP_APPID;
-    	$key = MtpConfig::MTP_KEY;
-    	 
+    	$account_nos = explode('-',$outTradeNo);
+    	$orderid = $account_nos[0];
+    	$orderdpid = $account_nos[1];
+    	
+    	Helper::writeLog('进入在线支付方法：'.$outTradeNo);
+    	//获取美团支付参数
+    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
+    	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
+    	if($mtr){
+    		$mts = explode(',',$mtr);
+    		$merchantId = $mts[0];
+    		$appId = $mts[1];
+    		$key = $mts[2];
+    	}else {
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    		exit;
+    	}
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'refundFee'=>$refundFee,
