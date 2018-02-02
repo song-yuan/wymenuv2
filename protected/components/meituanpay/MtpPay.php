@@ -44,14 +44,26 @@ class MtpPay{
     	$body = $data['body'];
     	$expireMinutes = $data['expireMinutes'];
     	$dpid =$data['dpid'];
-    	$random = $data['random'];
+    	$random = time();
     	
-    	$merchantId = '4282256';
-    	//该字段为美团平台分配的商户id，系统后天查询。
-
+    	//获取美团支付参数
+    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/pay/micropay';
-    	$appId = MtpConfig::MTP_APPID;
-    	$key = MtpConfig::MTP_KEY;
+    	if($mtr){
+    		$mts = explode(',',$mtr);
+    		$merchantId = $mts[0];
+    		$appId = $mts[1];
+    		$key = $mts[2];
+    	}else {
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				"result_msg"=>"REPAY",
+    				'msg'=>'未查询到支付参数！');
+    		return $result;
+    		exit;
+    	}
+    	
     	$datas = array(
     				'channel'=>$channel,
     				'outTradeNo'=>$outTradeNo,
@@ -118,6 +130,7 @@ class MtpPay{
 	    			$result = array(
 	    					"return_code"=>"SUCCESS",
 	    					"result_code"=>"SUCCESS",
+	    					"result_msg"=>$pay_status,
 	    					"msg"=>"支付成功！",
 	    					"transaction_id"=>$obj['tradeNo'],
 	    					"order_id"=>$obj['outTradeNo']);
@@ -126,6 +139,7 @@ class MtpPay{
 	    			$result = array(
 	    					"return_code"=>"SUCCESS",
 	    					"result_code"=>"ERROR",
+	    					"result_msg"=>$pay_status,
 	    					"msg"=>"支付失败！",
 	    					"order_id"=>$obj['outTradeNo']);
 	    			
@@ -343,6 +357,7 @@ class MtpPay{
     	$expireMinutes = $data['expireMinutes'];
     	$tradeType = $data['tradeType'];
     	$notifyUrl = $data['notifyUrl'];
+    	$returnUrl = $data['return_url'];
     	$random = time();
     	
     	$account_nos = explode('-',$outTradeNo);
@@ -438,7 +453,8 @@ class MtpPay{
     			$obj = json_decode($result,true);
     			$status = $obj['status'];
     			if($status=='SUCCESS'){
-    				$resulturl = urlencode("http://menu.wymenu.com/wymenuv2/mtpay/mtwappayresult");
+    				$resulturl = urlencode($returnUrl);
+    				//回调地址
     				//$wxappid = 'wxc57dd1ee95c70c2c';
     				$appIds = $obj['appId'];
     				$timeStamp = $obj['timeStamp'];
@@ -509,13 +525,29 @@ class MtpPay{
     public static function query($data){
     	/*该接口用于查询订单状态，*/
     	$outTradeNo = $data['outTradeNo'];
-    	$random = $data['random'];
+    	$random = time();
     	
-    	$merchantId = '4282256';
+    	$account_nos = explode('-',$outTradeNo);
+    	$orderid = $account_nos[0];
+    	$orderdpid = $account_nos[1];
+    	
+    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/pay/query';
-    	$appId = MtpConfig::MTP_APPID;
-    	$key = MtpConfig::MTP_KEY;
-    	$openId = MtpConfig::MTP_OPENID;
+    	if($mtr){
+    		$mts = explode(',',$mtr);
+    		$merchantId = $mts[0];
+    		$appId = $mts[1];
+    		$key = $mts[2];
+    	}else {
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'result_msg'=>'REQUERY',
+    				'msg'=>'未知状态！');
+    		return $result;
+    		exit;
+    	}
+    	
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'appId'=>$appId,
@@ -534,6 +566,7 @@ class MtpPay{
     		$result = array(
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
+    				'result_msg'=>'REQUERY',
     				'msg'=>'未知状态！');
     		return $result;
     	}
@@ -548,7 +581,7 @@ class MtpPay{
     			'sign'=>$sign,
     	);
     	$body = json_encode($datas);
-    	Helper::writeLog('mt查询订单传输参数：'.$body);
+    	//Helper::writeLog('mt查询订单传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('mt查询订单返回信息：'.$result);
     	if(!empty($result)){
@@ -600,7 +633,7 @@ class MtpPay{
 	    			$results = array(
 	    					'return_code'=>"SUCCESS",
 	    					'result_code'=>"ERROR",
-	    					'result_msg'=>$pay_status,
+	    					'result_msg'=>'REQUERY',
 	    					'msg'=>'重新查询！',
 	    			);
 	    		}
@@ -610,6 +643,7 @@ class MtpPay{
 	    		$results = array(
 	    				'return_code'=>"SUCCESS",
 	    				'result_code'=>"ERROR",
+	    				'result_msg'=>'REQUERY',
 	    				'msg'=>'查询失败！',
 	    		);
 	    	}
