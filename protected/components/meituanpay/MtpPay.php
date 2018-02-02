@@ -314,7 +314,7 @@ class MtpPay{
     	$orderid = $account_nos[0];
     	$orderdpid = $account_nos[1];
     	
-    	Helper::writeLog('进入在线支付方法：'.$outTradeNo);
+    	//Helper::writeLog('进入在线支付方法：'.$outTradeNo);
     	//获取美团支付参数
     	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
@@ -338,9 +338,9 @@ class MtpPay{
     			'order_id'=>$orderid,
     			'account_no'=>$outTradeNo,
     	);
-    	Helper::writeLog('执行到获取授权：');
+    	//Helper::writeLog('执行到获取授权：');
     	$openId = Yii::app()->request->getParam('openId');
-    	Helper::writeLog($openId);
+    	//Helper::writeLog($openId);
     	if(!isset($openId)){
     		MtpPay::getOpenId($ods,$baseUrl);
     	}
@@ -374,9 +374,9 @@ class MtpPay{
     			return $result;
     		}
     		$st = $paramsStrs.'key='.$key;
-    		Helper::writeLog('参数：'.$st);
+    		//Helper::writeLog('美团支付参数：'.$st);
     		$sign=hash('sha256', $st , false);
-    		Helper::writeLog('加密:'.$sign);
+    		//Helper::writeLog('加密:'.$sign);
     		
     		$datas = array(
     				'outTradeNo'=>$outTradeNo,
@@ -430,7 +430,7 @@ class MtpPay{
     	$orderid = $account_nos[0];
     	$orderdpid = $account_nos[1];
     	
-    	Helper::writeLog('进入在线支付方法：'.$outTradeNo);
+    	//Helper::writeLog('进入在线支付方法：'.$outTradeNo);
     	//获取美团支付参数
     	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
@@ -469,9 +469,9 @@ class MtpPay{
     		return $result;
     	}
     	$st = $paramsStrs.'key='.$key;
-    	Helper::writeLog('关闭订单参数：'.$st);
+    	//Helper::writeLog('关闭订单参数：'.$st);
     	$sign=hash('sha256', $st , false);
-    	Helper::writeLog('关闭订单加密:'.$sign);
+    	//Helper::writeLog('关闭订单加密:'.$sign);
     	
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
@@ -629,7 +629,7 @@ class MtpPay{
     	$orderid = $account_nos[0];
     	$orderdpid = $account_nos[1];
     	
-    	Helper::writeLog('进入在线支付方法：'.$outTradeNo);
+    	//Helper::writeLog('进入在线支付方法：'.$outTradeNo);
     	//获取美团支付参数
     	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
@@ -702,7 +702,7 @@ class MtpPay{
     		$appId = $data['appid'];
     		
     		$url = "Location: http://openpay.zc.st.meituan.com/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
-//     		$url = 'Location: http://www.baidu.com';
+			//Helper::writeLog('获取授权：'.$url);
     		header($url);
     	 	exit;
     }

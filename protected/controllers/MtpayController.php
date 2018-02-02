@@ -24,8 +24,8 @@ class MtpayController extends Controller
 		$orderid = Yii::app()->request->getParam('orderid');
 		$accountno = Yii::app()->request->getParam('accounno');
 		$total_amount = Yii::app()->request->getParam('totalFee');
-		Helper::writeLog('进入方法.返回参数'.$payStatus);
-		echo $payStatus;
+		Helper::writeLog('美团在线支付返回参数'.$payStatus);
+		//echo $payStatus;
 	
 		//订单号解析orderID和dpid
 		$account_nos = explode('-',$accountno);
