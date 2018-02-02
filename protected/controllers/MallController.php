@@ -390,7 +390,8 @@ class MallController extends Controller
 	 public function actionMtPayOrder()
 	 {
 	 	$data = $_GET;
-	 	var_dump($data);exit;
+	 	$baseUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+	 	var_dump($data);var_dump($baseUrl);exit;
 	 	unset($data['companyId']);
 	 	MtpPay::preOrder($data);
 	 	exit;
