@@ -390,25 +390,29 @@ class MallController extends Controller
 	 public function actionMtPayOrder()
 	 {
 	 	$data = $_GET;
-// 	 	$dpid = $data['companyId'];
-// 	 	$mtr = MtpConfig::MTPAppKeyMid($dpid);
-// 	 	if($mtr){
-// 	 		$mts = explode(',',$mtr);
-// 	 		$merchantId = $mts[0];
-// 	 		$appId = $mts[1];
-// 	 		$key = $mts[2];
-// 	 	}
-// 	 	$ods = array(
-// 	 			'merchantid'=>$merchantId,
-// 	 			'appid'=>$appId,
-// 	 	);
-// 	 	if(!isset($_GET['openId'])){
-// 	 		$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-// 	 		MtpPay::getOpenId($ods,$baseUrl);
-// 	 	}
-	 	
-// 	 	var_dump($data);var_dump($baseUrl);exit;
+	 	$dpid = $data['companyId'];
+	 	$mtr = MtpConfig::MTPAppKeyMid($dpid);
+	 	if($mtr){
+	 		$mts = explode(',',$mtr);
+	 		$merchantId = $mts[0];
+	 		$appId = $mts[1];
+	 		$key = $mts[2];
+	 	}
+	 	$ods = array(
+	 			'merchantid'=>$merchantId,
+	 			'appid'=>$appId,
+	 	);
+	 	$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+	 	if(!isset($_GET['openId'])){
+	 		MtpPay::getOpenId($ods,$baseUrl);
+	 	}
+	 	$data['merchantId'] = $merchantId;
+	 	$data['appId'] = $appId;
+	 	$data['key'] = $key;
+	 	$data['return_url'] .= '&orderId='.$data['orderId'].'&orderDpid='.$data['orderDpid'];
 	 	unset($data['companyId']);
+	 	unset($data['orderId']);
+	 	unset($data['orderDpid']);
 	 	MtpPay::preOrder($data);
 	 	exit;
 	 }

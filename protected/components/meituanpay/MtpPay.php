@@ -297,7 +297,9 @@ class MtpPay{
     	//		/*随机数*/
     	//     	$wxSubAppId= $data['wxSubAppId'];
     	//		/*用到小程序支付才有，申请小程序时微信分配的小程序的appid 此参数不参与签名*/
-    	$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
     	$outTradeNo = $data['outTradeNo'];
     	$totalFee = $data['totalFee'];
     	$subject = $data['subject'];
@@ -307,44 +309,14 @@ class MtpPay{
     	$tradeType = $data['tradeType'];
     	$notifyUrl = $data['notifyUrl'];
     	$returnUrl = $data['return_url'];
+    	$openId = $data['openId'];
     	//      /*支付完成后的回调地址*/
     	$random = time();
-    	
-    	$account_nos = explode('-',$outTradeNo);
-    	$orderid = $account_nos[0];
-    	$orderdpid = $account_nos[1];
-    	
-    	//Helper::writeLog('进入在线支付方法：'.$outTradeNo);
-    	//获取美团支付参数
-    	$mtr = MtpConfig::MTPAppKeyMid($orderdpid);
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
-    	if($mtr){
-    		$mts = explode(',',$mtr);
-    		$merchantId = $mts[0];
-    		$appId = $mts[1];
-    		$key = $mts[2];
-    	}else {
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'msg'=>'未知状态！');
-    		return $result;
-    		exit;
-    	}
-    	$ods = array(
-    			'merchantid'=>$merchantId,
-    			'appid'=>$appId,
-    			'dpid'=>$orderdpid,
-    			'order_id'=>$orderid,
-    			'account_no'=>$outTradeNo,
-    	);
-    	//Helper::writeLog('执行到获取授权：');
-    	$openId = Yii::app()->request->getParam('openId');
-    	//Helper::writeLog($openId);
-    	if(!isset($openId)){
-    		MtpPay::getOpenId($ods,$baseUrl);
-    	}
-    		$datas = array(
+    	Helper::writeLog('return_url==='.$returnUrl);
+    	
+    	//获取美团支付参数
+    	$datas = array(
     				'outTradeNo'=>$outTradeNo,
     				'totalFee'=>$totalFee,
     				'subject'=>$subject,
