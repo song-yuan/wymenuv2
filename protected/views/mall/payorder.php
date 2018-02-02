@@ -72,13 +72,11 @@
 				'notify_url'=>$notifyUrl,
 				'return_url'=>$returnUrl,
 		);
-		Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/sqbPayOrder',$data);
 	}elseif($payChannel==3){
 		// 美团线上支付 新接口
-		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
+		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtwappayresult');
 		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
-		$reflect = json_encode(array('companyId'=>$this->companyId,'dpid'=>$order['dpid']));
 		$data = array(
 				'companyId'=>$this->companyId,
 				'dpid'=>$order['dpid'],
@@ -92,7 +90,6 @@
 				'notifyUrl'=>$notifyUrl,
 				'return_url'=>$returnUrl
 		);
-		Helper::writeLog('view:'.$orderId);
 		$sqbpayUrl = $this->createUrl('/mall/mtPayOrder',$data);
 	}
 ?>
