@@ -80,6 +80,12 @@
 							<div class="ku-item-info">原料商城轮播广告</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('pricegroupM/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple splr"></div>
+							<div class="ku-item-info">原料价格体系</div>
+						</div>
+					</a>
 				</div>
 			</div>
 		</div>

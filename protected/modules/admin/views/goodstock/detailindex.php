@@ -89,7 +89,7 @@
 								<td ><?php echo $model['num'] ;?></td>
 								<td><?php echo $model['goods_unit'];?></td>
 								<td ><?php echo $model['stock_name'] ;?></td>
-								<?php if($status ==0):?>
+								<?php if($status==0):?>
 								<td >
 									<select id="paymentid" class="col-md-9 form-control stockselect" >
 			                           	<option lid="<?php echo $model['lid'];?>" oldpici="<?php echo $model['pici'];?>" <?php if ($model['pici'] == 0){?> selected="selected" <?php }?> >--选择批次--</option>
