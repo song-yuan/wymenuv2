@@ -402,17 +402,15 @@ class MallController extends Controller
 	 			'merchantid'=>$merchantId,
 	 			'appid'=>$appId,
 	 	);
-	 	$openId = $_GET['openId'];
 	 	$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-	 	if(!isset($openId)){
+	 	if(!isset($_GET['openId'])){
 	 		MtpPay::getOpenId($ods,$baseUrl);
 	 	}
-	 	
 	 	unset($data['companyId']);
 	 	$data['merchantId'] = $merchantId;
 	 	$data['appId'] = $appId;
 	 	$data['key'] = $key;
-	 	$data['openId'] = $openId;
+	 	var_dump($data);exit;
 	 	MtpPay::preOrder($data);
 	 	exit;
 	 }
