@@ -309,6 +309,7 @@ class MtpPay{
     	$tradeType = $data['tradeType'];
     	$notifyUrl = $data['notifyUrl'];
     	$returnUrl = $data['return_url'];
+    	$openId = $data['openId'];
     	//      /*支付完成后的回调地址*/
     	$random = time();
     	Helper::writeLog('return_url==='.$returnUrl);
