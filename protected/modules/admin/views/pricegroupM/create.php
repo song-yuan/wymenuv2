@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','价格分组'),'url'=>$this->createUrl('pricegroup/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加价格分组'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroup/index' , array('companyId'=>$this->companyId)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','原料价格分组'),'url'=>$this->createUrl('pricegroupM/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加原料价格分组'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pricegroupM/index' , array('companyId'=>$this->companyId)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><?php echo yii::t('app','添加价格分组');?></div>
+							<div class="caption"><?php echo yii::t('app','添加原料价格分组');?></div>
 						</div>
 					</div>
 						<div class="portlet-body form" style="margin-top:20px;">
