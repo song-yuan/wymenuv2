@@ -35,7 +35,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员列表');?></div>
 					<div class="actions">
-					<?php if(Yii::app()->user->role<9):?>
+					<?php if(Yii::app()->user->role<11):?>
 
 						<button class="btn yellow" id="inExcel2"><i class="fa fa-pencil"></i> <?php echo yii::t('app','导入旧Excel文件');?></button>
 						<button class="btn yellow" id="inExcel"><i class="fa fa-pencil"></i> <?php echo yii::t('app','导入Excel文件');?></button>
