@@ -90,7 +90,7 @@
 				'notifyUrl'=>$notifyUrl,
 				'return_url'=>$returnUrl
 		);
-		$sqbpayUrl = $this->createUrl('/mall/mtPayOrder',$data);
+		$mtpayUrl = $this->createUrl('/mall/mtPayOrder',$data);
 	}
 ?>
 
@@ -208,12 +208,6 @@
     </div>
     <div class="clear"></div>
 </footer>
-<div id="zf-qrcode" class="pre-order">
-	<div class="pre-step">第一步:长按下方二维码↓↓↓</div>
-	<div class="pre-step">第二步:点击 <span class="cl-red">识别图中二维码</span>按钮</div>
-	<div><img id="qrcode-url" src=""/></div>
-	<div class="pre-step tx-center">有效时间4分钟</div>
-</div>
 <script type="text/javascript">
 	//调用微信JS api 支付
 	function jsApiCall()
@@ -253,9 +247,12 @@
 		}else{
 		    jsApiCall();
 		}
-		<?php elseif($payChannel==2||$payChannel==3):?>
+		<?php elseif($payChannel==2):?>
 		// 收钱吧线上支付
 		location.href = '<?php echo $sqbpayUrl;?>';
+		<?php elseif($payChannel==3):?>
+		// 美团线上支付
+		location.href = '<?php echo $mtpayUrl;?>';
 		<?php else:?>
 		layer.msg('无支付信息,请联系客服!');
 		<?php endif;?>
