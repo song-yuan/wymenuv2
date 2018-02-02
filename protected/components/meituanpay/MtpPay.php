@@ -312,6 +312,7 @@ class MtpPay{
     	$openId = $data['openId'];
     	//      /*支付完成后的回调地址*/
     	$random = time();
+    	$url = MtpConfig::MTP_DOMAIN.'/api/pay/precreate';
     	Helper::writeLog('return_url==='.$returnUrl);
     	
     	//获取美团支付参数
