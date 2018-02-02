@@ -428,7 +428,7 @@ Header and header elements.
 }
 
 .header .navbar-nav > li.dropdown.user .dropdown-toggle .username {
-  color: #0efd00;
+  color: #ffc122;
 	font-size: 14px;
 	font-weight: 600;
 }
