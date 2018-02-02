@@ -139,7 +139,7 @@ function fun()
 						</div>
 <!-- 						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>-->
 							<div class="btn-group"> 
-							<button type="button" id="su"  class="btn red form-control" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','菜单批量修改');?></button>
+							<button type="submit" id="su"  class="btn red form-control" ><i class="fa fa-share-square-o "></i> <?php echo yii::t('app','菜单批量修改');?></button>
  						</div> 
 					</div>
 				</div>
@@ -149,15 +149,15 @@ function fun()
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /><?php echo yii::t('app','全选');?></th>
-								<th style="width:15%"><?php echo yii::t('app','名称');?></th>
+								<th style="width: 15%;"><?php echo yii::t('app','名称');?></th>
 								<th><?php echo yii::t('app','类别');?></th>
-								<th><?php echo yii::t('app','现价');?></th>
-								<th><?php echo yii::t('app','会员价');?></th>
-								<th><?php echo yii::t('app','排序号');?></th>
-								<th><?php echo yii::t('app','打包费');?></th>
-								<th><?php echo yii::t('app','是否参与会员折扣');?></th>
-								<th><?php echo yii::t('app','是否允许折扣');?></th>
-								<th><?php echo yii::t('app','是否允许销售');?></th>
+								<th style="width: 80px;"><?php echo yii::t('app','现价');?></th>
+								<th style="width: 80px;"><?php echo yii::t('app','会员价');?></th>
+								<th style="width: 80px;"><?php echo yii::t('app','排序号');?></th>
+								<th style="width: 80px;"><?php echo yii::t('app','打包费');?></th>
+								<th style="width: 130px;"><?php echo yii::t('app','是否参与会员折扣');?></th>
+								<th style="width: 110px;"><?php echo yii::t('app','是否允许折扣');?></th>
+								<th style="width: 110px;"><?php echo yii::t('app','是否允许销售');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -166,15 +166,24 @@ function fun()
 							<tr class="odd gradeX">
 								<td><input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" phs_code="<?php echo $model->phs_code;?>" chs_code="<?php echo $model->chs_code;?>" name="ids[]" />
 								</td>
-								<td style="width:25%"><?php echo $model->product_name;?></td>
+								<td><?php echo $model->product_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
-								<td ><?php echo $model->original_price;?></td>
-								<td ><?php echo $model->member_price;?></td>
-								<td ><?php echo $model->sort;?></td>
-								<td ><?php echo $model->dabao_fee;?></td>
-								<td ><?php echo $model->is_member_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
-								<td ><?php echo $model->is_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
-                                <td ><?php echo $model->is_show=='0'?yii::t('app','否'):yii::t('app','是');?></td>
+								<td ><?php echo $form->textField($model, 'original_price',array('class' => 'form-control','name'=>$model->getAttributeLabel('originalprice[]')));?>
+									</td>
+								<td >
+								<?php echo $form->textField($model, 'member_price',array('class' => 'form-control','name'=>$model->getAttributeLabel('memberprice[]')));?>
+									
+								</td>
+								<td ><?php echo $form->textField($model, 'sort',array('class' => 'form-control','name'=>$model->getAttributeLabel('sort[]')));?>
+									</td>
+								<td ><?php echo $form->textField($model, 'dabao_fee',array('class' => 'form-control','name'=>$model->getAttributeLabel('dabaofee[]')));?>
+								</td>
+								<td ><?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','name'=>$model->getAttributeLabel('ismemberdiscount[]')));?>
+									</td>
+								<td ><?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','name'=>$model->getAttributeLabel('isdiscount[]')));?>
+									</td>
+                                <td ><?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','name'=>$model->getAttributeLabel('isshow[]')));?>
+									</td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -229,59 +238,59 @@ function fun()
         if(pids!=''){
         	pids = pids.substr(0,pids.length-1);//除去最后一个“，”
         }else{
-       	 	alert("<?php echo yii::t('app','请选择要下发的菜品！！！');?>");
+       	 	alert("<?php echo yii::t('app','请选择要修改的菜品！！！');?>");
        		return false;
        	}
         
-		if(window.confirm("确认进行此项操作?")){
-			layer_index_printreportlist=layer.open({
-	            type: 1,
-	            shade: false,
-	            title: false, //不显示标题
-	            area: ['60%', '60%'],
-	            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-	            cancel: function(index){
-	                layer.close(index);
-	                layer_index_printreportlist=0;                                                                                                     
-	            }
-	        });
-			$("#printall").on("click",function(){
-	            //alert("暂无权限！！！");
-	            var dpids =new Array();
-	            var prodids="";
-	            var nums = "";
-	            $('.checkdpids:checked').each(function(){
-	                prodids += $(this).val()+',';
-	                var id = $(this).val();
-	                var num = $('#'+id).val();
-	                if(num==""){
-						alert("请填写勾选的选项！");
-						return false;
-		                }
-	                nums += id+'@'+$('#'+id).val()+',';
-	                //alert(ids);alert(nums);
-	            });
-	            if(prodids!=''&&nums!=''){
-	            	prodids = prodids.substr(0,prodids.length-1);//除去最后一个“，”
-	            	nums = nums.substr(0,nums.length-1);//除去最后一个“，”
-	            	//alert(dpids);
-	            	$("#pids").val(pids);
-	            	$("#prodids").val(prodids);
-	            	$("#nums").val(nums);
-	            	//alert(ids);alert(prodids);alert(nums);
-	    	        $("#muchupdateProd-form").submit();
-		            }else{
-						alert("请勾选需要修改的选项。。。");return;
-			            }
-			});
-	        $("#closeall").on('click',function(){
-		        //alert("123");
-		        layer.closeAll();
-		        layer_index_printerportlist = 0;
-		        });
-	    }else{
-			return false;
-			}
+		// if(window.confirm("确认进行此项操作?")){
+		// 	layer_index_printreportlist=layer.open({
+	 //            type: 1,
+	 //            shade: false,
+	 //            title: false, //不显示标题
+	 //            area: ['60%', '60%'],
+	 //            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+	 //            cancel: function(index){
+	 //                layer.close(index);
+	 //                layer_index_printreportlist=0;                                                                                                     
+	 //            }
+	 //        });
+		// 	$("#printall").on("click",function(){
+	 //            //alert("暂无权限！！！");
+	 //            var dpids =new Array();
+	 //            var prodids="";
+	 //            var nums = "";
+	 //            $('.checkdpids:checked').each(function(){
+	 //                prodids += $(this).val()+',';
+	 //                var id = $(this).val();
+	 //                var num = $('#'+id).val();
+	 //                if(num==""){
+		// 				alert("请填写勾选的选项！");
+		// 				return false;
+		//                 }
+	 //                nums += id+'@'+$('#'+id).val()+',';
+	 //                //alert(ids);alert(nums);
+	 //            });
+	 //            if(prodids!=''&&nums!=''){
+	 //            	prodids = prodids.substr(0,prodids.length-1);//除去最后一个“，”
+	 //            	nums = nums.substr(0,nums.length-1);//除去最后一个“，”
+	 //            	//alert(dpids);
+	 //            	$("#pids").val(pids);
+	 //            	$("#prodids").val(prodids);
+	 //            	$("#nums").val(nums);
+	 //            	//alert(ids);alert(prodids);alert(nums);
+	 //    	        $("#muchupdateProd-form").submit();
+		//             }else{
+		// 				alert("请勾选需要修改的选项。。。");return;
+		// 	            }
+		// 	});
+	 //        $("#closeall").on('click',function(){
+		//         //alert("123");
+		//         layer.closeAll();
+		//         layer_index_printerportlist = 0;
+		//         });
+	 //    }else{
+		// 	return false;
+		// 	}
 	});
 	
 	</script>	

@@ -52,61 +52,38 @@ class MuchupdateProdController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$is_sync = DataSync::getInitSync();
 		//var_dump($companyId);exit;
-		$opids = Yii::app()->request->getParam('pids');
-		$oprodids = Yii::app()->request->getParam('prodids');
-		$onums = Yii::app()->request->getParam('nums');
-		//$dpid = Yii::app()->request->getParam('dpids');
-		//var_dump($pids);var_dump($prodids);var_dump($nums);exit;
-		$pids = array();
-		$pids = explode(',',$opids);
-		$prodids = array();
-		$prodids = explode(',',$oprodids);
-		$nums = array();
-		$nums = explode(',',$onums);
-		//var_dump($pids,$prodids,$nums);exit;
-		
+		$ids = Yii::app()->request->getParam('ids');
+		$original_price = Yii::app()->request->getParam('Originalprice');
+		$member_price = Yii::app()->request->getParam('Memberprice');
+		$sort = Yii::app()->request->getParam('Sort');
+		$dabao_fee = Yii::app()->request->getParam('Dabaofee');
+		$is_member_discount = Yii::app()->request->getParam('Ismemberdiscount');
+		$is_discount = Yii::app()->request->getParam('Isdiscount');
+		$is_show = Yii::app()->request->getParam('Isshow');
+		$models = array();
+		for($i=0;$i<=count($ids)-1;$i++){
+			$model = array(
+				'lid'=>$ids[$i],
+				'original_price'=>$original_price[$i],
+				'member_price'=>$member_price[$i],
+				'sort'=>$sort[$i],
+				'dabao_fee'=>$dabao_fee[$i],
+				'is_member_discount'=>$is_member_discount[$i],
+				'is_discount'=>$is_discount[$i],
+				'is_show'=>$is_show[$i]
+				);
+			array_push($models, $model);
+		}
+		// var_dump($models);exit();
 		//****查询公司的产品分类。。。****
 		$db = Yii::app()->db;
 		
 		//var_dump($catep1,$catep2,$products);exit;
         //Until::isUpdateValid($pids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-        if((!empty($pids))&&(!empty($prodids))&&(Yii::app()->user->role <= User::SHOPKEEPER)){
-        	foreach ($nums as $num){
-        		$prodid = array();
-        		$prodnums = explode('@',$num);
-        		$prodnum1 = $prodnums[0];
-        		$prodnum2 = $prodnums[1];
-        		if($prodnum1 == "price"){
-        			$updatename = 'original_price';
-        		}elseif($prodnum1 == "memberprice"){
-        			$updatename = 'member_price';
-        		}
-        		elseif($prodnum1 == "sort"){
-        			$updatename = 'sort';
-        		}
-        		elseif($prodnum1 == "dabaofee"){
-        			$updatename = 'dabao_fee';
-        		}
-        		elseif($prodnum1 == "ismemberdiscount"){
-        			$updatename = 'is_member_discount';
-        		}
-        		elseif($prodnum1 == "isdiscount"){
-        			$updatename = 'is_discount';
-        		}
-
-        		elseif($prodnum1 == "isshow"){
-        			$updatename = 'is_show';
-        		}
-        		//var_dump($updatename);exit;
-	        	foreach ($pids as $pid){
-	        		$product =  Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$pid,':companyId'=>$this->companyId));
-	        		//var_dump($pid);//exit;	
-	        		if($product){
-	        			$product->$updatename = $prodnum2;
-	        			$product->save();
-
-	        		}
-	        	}
+        if((!empty($models))&&(Yii::app()->user->role <= User::SHOPKEEPER)){
+        	foreach ($models as $key => $model){
+        		$sql = "update nb_product set update_at='".date("Y-m-d H:i:s",time())."',original_price=".$models[$key]['original_price'].",member_price=".$models[$key]['member_price'].",sort=".$models[$key]['sort'].",dabao_fee=".$models[$key]['dabao_fee'].",is_member_discount=".$models[$key]['is_member_discount'].",is_discount=".$models[$key]['is_discount'].",is_show=".$models[$key]['is_show']." where lid=".$models[$key]['lid']." and delete_flag=0";
+        		$rel = $db->createCommand($sql)->execute();
         	}
         	Yii::app()->user->setFlash('success' , yii::t('app','菜品批量修改成功！！！'));
         	$this->redirect(array('muchupdateProd/index' , 'companyId' => $companyId)) ;
