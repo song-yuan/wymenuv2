@@ -390,24 +390,24 @@ class MallController extends Controller
 	 public function actionMtPayOrder()
 	 {
 	 	$data = $_GET;
-// 	 	$dpid = $data['companyId'];
-// 	 	$mtr = MtpConfig::MTPAppKeyMid($dpid);
-// 	 	if($mtr){
-// 	 		$mts = explode(',',$mtr);
-// 	 		$merchantId = $mts[0];
-// 	 		$appId = $mts[1];
-// 	 		$key = $mts[2];
-// 	 	}
-// 	 	$ods = array(
-// 	 			'merchantid'=>$merchantId,
-// 	 			'appid'=>$appId,
-// 	 	);
-// 	 	if(!isset($_GET['openId'])){
-// 	 		$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-// 	 		MtpPay::getOpenId($ods,$baseUrl);
-// 	 	}
+	 	$dpid = $data['companyId'];
+	 	$mtr = MtpConfig::MTPAppKeyMid($dpid);
+	 	if($mtr){
+	 		$mts = explode(',',$mtr);
+	 		$merchantId = $mts[0];
+	 		$appId = $mts[1];
+	 		$key = $mts[2];
+	 	}
+	 	$ods = array(
+	 			'merchantid'=>$merchantId,
+	 			'appid'=>$appId,
+	 	);
+	 	if(!isset($_GET['openId'])){
+	 		$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+	 		MtpPay::getOpenId($ods,$baseUrl);
+	 	}
 	 	
-// 	 	var_dump($data);var_dump($baseUrl);exit;
+	 	var_dump($data);var_dump($baseUrl);exit;
 	 	unset($data['companyId']);
 	 	MtpPay::preOrder($data);
 	 	exit;
