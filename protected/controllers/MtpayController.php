@@ -24,6 +24,7 @@ class MtpayController extends Controller
 		$payStatus = Yii::app()->request->getParam('payStatus');
 		$accountNo = Yii::app()->request->getParam('accountNo');
 		Helper::writeLog('美团在线支付返回参数'.$payStatus);
+		Helper::writeLog('美团在线支付返回参数'.$accountNo);
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		Helper::writeLog('美团在线支付返回参数:'.$xml);
 
