@@ -538,6 +538,12 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
+		if($orderInfo->is_temp==0){
+			$siteNo = WxSite::getSiteNo($siteId, $dpid);
+			if($siteNo){
+				$orderInfo->site_id = $siteNo['lid'];
+			}
+		}
 		$orderKey = 'order-'.(int)$dpid.'-'.$createAt.'-'.$accountNo;
 		$orderCache = Yii::app()->cache->get($orderKey);
 		if($orderCache!=false){
@@ -546,15 +552,10 @@ class DataSyncOperation {
 					'msg' => '生成订单中,等待结果'.$orderKey,
 					'orderId' => ''
 			) );
-			return $msg;	
+			return $msg;
 		}
 		$orderCache = Yii::app()->cache->set($orderKey,true);
-		if($orderInfo->is_temp==0){
-			$siteNo = WxSite::getSiteNo($siteId, $dpid);
-			if($siteNo){
-				$orderInfo->site_id = $siteNo['lid'];
-			}
-		}
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			if($orderInfo->is_temp==0&&$siteNo){
