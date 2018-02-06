@@ -524,7 +524,7 @@ class DataSyncOperation {
 		
 		$accountNo = $orderInfo->account_no;
 		$createAt = $orderInfo->creat_at;
-		
+		$siteId = $orderInfo->site_id;
 		$time = time ();
 		
 		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and user_id='.$padSetLid.' and account_no="'.$accountNo.'"';
@@ -538,6 +538,12 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
+		if($orderInfo->is_temp==0){
+			$siteNo = WxSite::getSiteNo($siteId, $dpid);
+			if($siteNo){
+				$orderInfo->site_id = $siteNo['lid'];
+			}
+		}
 		$orderKey = 'order-'.(int)$dpid.'-'.$createAt.'-'.$accountNo;
 		$orderCache = Yii::app()->cache->get($orderKey);
 		if($orderCache!=false){
@@ -546,19 +552,14 @@ class DataSyncOperation {
 					'msg' => '生成订单中,等待结果'.$orderKey,
 					'orderId' => ''
 			) );
-			return $msg;	
+			return $msg;
 		}
 		$orderCache = Yii::app()->cache->set($orderKey,true);
-		if($orderInfo->is_temp==0){
-			$siteNo = WxSite::getSiteNo($siteId, $dpid);
-			if($siteNo){
-				$orderInfo->site_id = $siteNo['lid'];
-			}
-		}
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			if($orderInfo->is_temp==0&&$siteNo){
-				$sql = 'update nb_site_no set status=4 where lid='.$siteNo['lid'].' and dpid='.$siteNo['dpid'];
+				$sql = 'update nb_site_no set status=4 where site_id='.$siteId.' and dpid='.$dpid.' and status in(1,2,5)';
 				Yii::app ()->db->createCommand ($sql)->execute();
 			}
 			$se = new Sequence ( "order" );
