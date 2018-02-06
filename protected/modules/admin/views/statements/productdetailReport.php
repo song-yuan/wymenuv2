@@ -129,7 +129,7 @@
 								<th>
 								</th>
 								<th><?php echo yii::t('app','类别');?></th>
-                                <th><?php echo yii::t('app','单品名称');?></th>
+                                <th><?php echo yii::t('app','单品名称(旧名称)');?></th>
                                 <th><?php echo yii::t('app','销量');?></th>
                                 <th><?php echo yii::t('app','销售金额');?></th>                                                        
                                 <th><?php echo yii::t('app','折扣金额');?></th>
@@ -148,7 +148,7 @@
 								<td><?php echo $model['create_at'];?></td>
 								<td><?php echo $model['company_name'];?></td>
 								<td><?php if($model['category_name']) echo $model['category_name'];else '其他';?></td>
-								<td><?php if($model['product_type'] !=2) echo $model['product_name'];else echo '打包费';?></td>
+								<td><?php if($model['product_type'] !=2) echo $model['new_name'].'('.$model['product_name'].')';else echo '打包费';?></td>
 								<td><?php echo $model['all_total'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_jiage']);?></td>
 								<td><?php echo sprintf("%.2f",$model['all_jiage']-$model['all_price']);?></td>

@@ -2907,7 +2907,7 @@ class StatementsController extends BackendController
 			$cats = '';
 		}
 		if($pdname){
-			$pns = " and p.phs_code like'%".$pdname."%'";
+			$pns = " and p.phs_code ='".$pdname."'";
 		}else{
 			$pns = '';
 		}
@@ -2935,12 +2935,13 @@ class StatementsController extends BackendController
 				.' sum(op.price) as all_money,sum(op.amount) as all_total,sum(op.price*op.amount) as all_price,sum(op.original_price*op.amount) as all_jiage '
 				.' from nb_order_product op '
 				.' left join nb_order ord on(ord.lid = op.order_id and ord.dpid = op.dpid) '
-				.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
+				.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid and p.delete_flag=0) '
 				.' left join nb_company c on(c.dpid = op.dpid) '
 				.' left join nb_product_category pc on(p.category_id = pc.lid)'
 				.' where op.is_retreat=0 and op.product_order_status in(1,2,8,9) and op.delete_flag=0 and op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
 				.' group by '.$group.' order by '.$orderby
 				.' )k';
+		//echo $sql;exit;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
