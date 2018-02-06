@@ -136,13 +136,13 @@
                 </div>
                 <?php endif;?>
 					<?php if(Yii::app()->user->role <= 1):?>
-<!--					<a href="<?php// echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
+<!--					<a href="<?php echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple wxdp"></div>
 							<div class="ku-item-info">微信设置</div>
 						</div>
 					</a>
-					<a href="<?php// echo $this->createUrl('alipay/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('alipay/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple zfbsz"></div>
 							<div class="ku-item-info">支付宝设置</div>
