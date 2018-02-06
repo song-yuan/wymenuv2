@@ -9,6 +9,6 @@
 // var_dump($caution);
 // var_dump($jcaution);
 // var_dump($recipientAddress);
-
+Yii::app()->cache->flush();
 ?>
 
