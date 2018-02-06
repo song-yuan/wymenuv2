@@ -71,14 +71,14 @@
 											<?php echo $form->error($model, 'spicy' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
+                                    <div class="form-group">
 										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount')));?>
 											<?php echo $form->error($model, 'is_discount' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
+                                    <div class="form-group">
 										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show')));?>
@@ -92,14 +92,14 @@
 											<?php echo $form->error($model, 'product_unit' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
+                                    <div class="form-group">
 										<?php echo $form->label($model, 'is_weight_confirm',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'is_weight_confirm', array('0' =>yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_weight_confirm')));?>
 											<?php echo $form->error($model, 'is_weight_confirm' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group" <?php if($model->hasErrors('weight_unit')) echo 'has-error';?>>
+                                    <div class="form-group" <?php if($model->hasErrors('weight_unit')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'weight_unit',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'weight_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('weight_unit')));?>

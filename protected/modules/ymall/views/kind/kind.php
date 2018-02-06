@@ -42,16 +42,13 @@
 			.bottom{
 				
 				position:absolute;
-				bottom:8px;
+				bottom:4px;
 				font-size:0.9em;
 			}
-			/*.mui-search.mui-active .mui-placeholder {
-			    right: 200px!important;
-			}*/
 			.addicon{
 				position:absolute;
 				right:6px;
-				bottom:9px;
+				bottom:4px;
 				width: 64px;
 				height: 20px;
 				line-height: 20px;
@@ -66,9 +63,6 @@
 			}
 			.addicon1{
 				background-color: darkred!important;
-				/*
-			    border:1px solid red;
-			    color: red;*/
 			}
 			.mui-badge{
 				font-size: 12px!important;
@@ -139,8 +133,8 @@
 							<?php foreach ($products as $m):?>
 								<li class="ui-table-view-cell mui-media mui-col-xs-6">
 									<div class="">
-										<div class="goods-pic">
-											<img src="<?php if($m['main_picture']){ echo $m['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height:110px; "/>
+										<div class="">
+											<img src="<?php if($m['main_picture']){ echo $m['main_picture'];}else{ echo 'http://menu.wymenu.com/wymenuv2/img/product_default.png';} ?>" style="height:130px; width: 100%;"/>
 										</div>
 										<div style="text-align: center;">
 											<span style="font-size: 16px;line-height: 16px;color:black;margin-left: 10px;">
@@ -148,11 +142,11 @@
 											</span>
 										</div>
 										<div class="cent_footer">
-											<div style="text-align: center;">
-												<span class="color-blue" style="font-size: 14px;line-height: 14px;">
+											<div style="text-align: center;height: 16px;overflow: hidden;">
+												<span class="color-blue" style="display:inline-block;width:45%;font-size: 14px;line-height: 16px;height: 16px;overflow: hidden;">
 													[<?php echo $m['company_name'];?>]
 												</span>
-												<span style="font-size: 14px;line-height: 14px;color:#666;">
+												<span style="display:inline-block;width:50%;font-size: 14px;line-height: 16px;height: 16px;color:#666;overflow: hidden;">
 													<?php echo $m['unit_name'];?>
 												</span>
 											</div>

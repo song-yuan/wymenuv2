@@ -112,8 +112,14 @@
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                             <a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-                                <div class="list_big">单品销售</div>
+                                <div class="list_big">单品销售统计</div>
                                 <div class="list_small">查询不同时间段的单品以及套餐内单品的销售数据</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/productdetailReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                                <div class="list_big">单品销售详情</div>
+                                <div class="list_small">查询单品以及套餐内单品的销售时间</div>
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
