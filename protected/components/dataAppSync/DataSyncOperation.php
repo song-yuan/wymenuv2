@@ -524,7 +524,7 @@ class DataSyncOperation {
 		
 		$accountNo = $orderInfo->account_no;
 		$createAt = $orderInfo->creat_at;
-		
+		$siteId = $orderInfo->site_id;
 		$time = time ();
 		
 		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and user_id='.$padSetLid.' and account_no="'.$accountNo.'"';
@@ -558,7 +558,7 @@ class DataSyncOperation {
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			if($orderInfo->is_temp==0&&$siteNo){
-				$sql = 'update nb_site_no set status=4 where lid='.$siteNo['lid'].' and dpid='.$siteNo['dpid'];
+				$sql = 'update nb_site_no set status=4 where site_id='.$siteId.' and dpid='.$dpid.' and status in(1,2,5)';
 				Yii::app ()->db->createCommand ($sql)->execute();
 			}
 			$se = new Sequence ( "order" );
