@@ -2860,7 +2860,121 @@ class StatementsController extends BackendController
 				'pdname'=>$pdname
 		));
 	}
+	/**
+	 * 产品销售时段详情报表
+	 *
+	 **/
+	public function actionProductdetailReport(){
+		//$uid = Yii::app()->user->id;
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$cks = Yii::app()->request->getParam('cks');
+		//var_dump($str);exit();
+		$text = Yii::app()->request->getParam('text');
+		$setid = Yii::app()->request->getParam('setid');
+		$categoryId = Yii::app()->request->getParam('cid',0);
+		if($setid == 0){
+			$setids = '=0';
+		}elseif ($setid == 2){
+			$setids = '>0';
+		}else{
+			$setids = '>=0';
+		}
+		$ordertype = Yii::app()->request->getParam('ordertype');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
+		$day_begin = Yii::app()->request->getParam('day_begin','00:00');
+		$day_end = Yii::app()->request->getParam('day_end','23:59');
+		$pdname = Yii::app()->request->getParam('pdname');
+	
+		$cks = Yii::app()->request->getParam('cks');
+	
+		if($cks){
+			$day_begins = ' '.$day_begin.'00';
+			$day_ends = ' '.$day_end.'59';
+		}else{
+			$day_begins = ' 00:00:00';
+			$day_ends = ' 23:59:59';
+		}
+		if($ordertype >=0){
+			$ordertypes = '='.$ordertype;
+		}else{
+			$ordertypes = '>=0';
+		}
+		if($categoryId >0){
+			$cats = ' and p.chs_code ='.$categoryId;
+		}else{
+			$cats = '';
+		}
+		if($pdname){
+			$pns = " and p.phs_code like'%".$pdname."%'";
+		}else{
+			$pns = '';
+		}
+	
+		if($text==1){
+			$group =' op.lid';
+			$orderby = 'op.create_at asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}elseif($text==2){
+			$group =' op.lid';
+			$orderby = 'op.create_at asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}else{
+			$group =' op.lid';
+			$orderby = 'op.create_at asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}
+		$db = Yii::app()->db;
+	
+		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid in('.$str.') and k.create_at >="'.$begin_time.$day_begins.'" and k.create_at <="'.$end_time.$day_ends.'" and date_format(k.create_at,"%H:%i:%s") >="'.$day_begin.'" and date_format(k.create_at,"%H:%i:%s") <="'.$day_end.'" group by k.user_id,k.account_no,k.create_at';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		$sql = 'select k.* from( select '
+				.' op.product_name,p.product_name as new_name,pc.category_name,op.create_at,op.dpid,op.product_id,op.product_type,c.company_name, '
+				.' sum(op.price) as all_money,sum(op.amount) as all_total,sum(op.price*op.amount) as all_price,sum(op.original_price*op.amount) as all_jiage '
+				.' from nb_order_product op '
+				.' left join nb_order ord on(ord.lid = op.order_id and ord.dpid = op.dpid) '
+				.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
+				.' left join nb_company c on(c.dpid = op.dpid) '
+				.' left join nb_product_category pc on(p.category_id = pc.lid)'
+				.' where op.is_retreat=0 and op.product_order_status in(1,2,8,9) and op.delete_flag=0 and op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
+				.' group by '.$group.' order by '.$orderby
+				.' )k';
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		//var_dump($models);exit;
+	
+		$comName = $this->getComName();
+		$categories = $this->getComCategories();
+		$products = $this->getComProducts();
+		$dpids = $this->getDpids($this->companyId,'');
+	
+		$this->render('productdetailReport',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'day_begin'=>$day_begin,
+				'end_time'=>$end_time,
+				'day_end'=>$day_end,
+				'text'=>$text,
+				'str'=>$str,
+				'setid'=>$setid,
+				'comName'=>$comName,
+				'ordertype'=>$ordertype,
+				'categories'=>$categories,
+				'products'=>$products,
+				'categoryId'=>$categoryId,
+				'dpids'=>$dpids,
+				'cks'=>$cks,
+				'pdname'=>$pdname
+		));
+	}
 	public function getDpids($dpid,$names){
 		if($names){
 
@@ -4819,6 +4933,245 @@ class StatementsController extends BackendController
 		header('Cache-Control: max-age=0');
 		$objWriter->save('php://output');
 
+	}
+	/*
+	 *
+	* 产品时段销售报表
+	*
+	*/
+	
+	public function actionProductdetailReportExport(){
+		$objPHPExcel = new PHPExcel();
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$cks = Yii::app()->request->getParam('cks');
+		//var_dump($str);exit();
+		$text = Yii::app()->request->getParam('text');
+		$setid = Yii::app()->request->getParam('setid');
+		$categoryId = Yii::app()->request->getParam('cid',0);
+		if($setid == 0){
+			$setids = '=0';
+			$setname = '单品、';
+		}elseif ($setid == 2){
+			$setids = '>0';
+			$setname = '套餐单品、';
+		}else{
+			$setids = '>=0';
+			$setname = '综合、';
+		}
+		$ordertype = Yii::app()->request->getParam('ordertype');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		$day_begin = Yii::app()->request->getParam('day_begin','00:00');
+		$day_end = Yii::app()->request->getParam('day_end','23:59');
+		$pdname = Yii::app()->request->getParam('pdname');
+	
+		$cks = Yii::app()->request->getParam('cks');
+	
+		if($cks){
+			$day_begins = ' '.$day_begin.'00';
+			$day_ends = ' '.$day_end.'59';
+		}else{
+			$day_begins = ' 00:00:00';
+			$day_ends = ' 23:59:59';
+		}
+		if($ordertype >=0){
+			$ordertypes = '='.$ordertype;
+		}else{
+			$ordertypes = '>=0';
+		}
+		if($categoryId >0){
+			$cats = ' and p.chs_code ='.$categoryId;
+		}else{
+			$cats = '';
+		}
+		if($pdname){
+			$pns = " and p.phs_code like'%".$pdname."%'";
+		}else{
+			$pns = '';
+		}
+		$typesname = '';
+		switch($ordertype){
+			case -1: $typesname = '全部';break;
+			case 0: $typesname = '堂食';break;
+			case 1: $typesname = '微信堂食';break;
+			case 2: $typesname = '微信外卖';break;
+			case 3: $typesname = '微信预约';break;
+			case 4: $typesname = '后台外卖';break;
+			case 5: $typesname = '自助';break;
+			case 6: $typesname = '微信点单';break;
+			case 7: $typesname = '美团·';break;
+			case 8: $typesname = '饿了么·';break;
+			default: $typesname = '';break;
+		}
+		if($text==1){
+			$group =' op.lid';
+			$orderby = 'op.create_at asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}elseif($text==2){
+			$group =' op.lid';
+			$orderby = 'op.create_at asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}else{
+			$group =' op.lid';
+			$orderby = 'op.create_at asc,sum(op.amount) desc,sum(op.original_price*op.amount) desc,op.dpid asc';
+		}
+		$db = Yii::app()->db;
+	
+		$sql = 'select k.lid from nb_order k where k.order_type '.$ordertypes.' and k.order_status in(3,4,8) and k.dpid in('.$str.') and k.create_at >="'.$begin_time.$day_begins.'" and k.create_at <="'.$end_time.$day_ends.'" and date_format(k.create_at,"%H:%i:%s") >="'.$day_begin.'" and date_format(k.create_at,"%H:%i:%s") <="'.$day_end.'" group by k.user_id,k.account_no,k.create_at';
+		$orders = $db->createCommand($sql)->queryAll();
+		$ords ='0000000000';
+		foreach ($orders as $order){
+			$ords = $ords .','.$order['lid'];
+		}
+		$sql = 'select k.* from( select '
+				.' op.product_name,p.product_name as new_name,pc.category_name,op.create_at,op.dpid,op.product_id,op.product_type,c.company_name, '
+				.' sum(op.price) as all_money,sum(op.amount) as all_total,sum(op.price*op.amount) as all_price,sum(op.original_price*op.amount) as all_jiage '
+				.' from nb_order_product op '
+				.' left join nb_order ord on(ord.lid = op.order_id and ord.dpid = op.dpid) '
+				.' left join nb_product p on(p.lid = op.product_id and p.dpid = op.dpid) '
+				.' left join nb_company c on(c.dpid = op.dpid) '
+				.' left join nb_product_category pc on(p.category_id = pc.lid)'
+				.' where op.is_retreat=0 and op.product_order_status in(1,2,8,9) and op.delete_flag=0 and op.order_id in('.$ords.') and op.set_id '.$setids.$cats.$pns
+				.' group by '.$group.' order by '.$orderby
+				.' )k';
+		$models = $db->createCommand($sql)->queryAll();
+		//var_dump($models);exit();
+	
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1','产品销售报表')
+		->setCellValue('A2',yii::t('app','查询条件：').$typesname.';'.$setname.';'.yii::t('app','时间段：').$begin_time.yii::t('app',' 至 ').$end_time."".yii::t('app',';时段：').$day_begin.'~'.$day_end.yii::t('app',';生成时间：').date('m-d h:i',time()))
+		->setCellValue('A3','时间')
+		->setCellValue('B3','店铺名称')
+		->setCellValue('C3','分类')
+		->setCellValue('D3','单品名称')
+		->setCellValue('E3','销量')
+		->setCellValue('F3','销售金额')
+		->setCellValue('G3','折扣金额')
+		->setCellValue('H3','实收金额');
+		$i=4;
+	
+		foreach($models as $v){
+			//print_r($v);exit;
+			if($v['product_type'] !=2) { $name = $v['product_name'];}else {$name = '打包费';}
+			if($v['category_name']){$catname = $v['category_name'];}else{$catename = '其他';}
+	
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A'.$i,$v['create_at'])
+			->setCellValue('B'.$i,$v['company_name'])
+			->setCellValue('C'.$i,$catname)
+			->setCellValue('D'.$i,$name)
+			->setCellValue('E'.$i,$v['all_total'])
+			->setCellValue('F'.$i,$v['all_jiage'])
+			->setCellValue('G'.$i,$v['all_jiage']-$v['all_price'])
+			->setCellValue('H'.$i,$v['all_price']);
+	
+			$objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':H'.$i)->applyFromArray($linestyle);
+			//设置填充颜色
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
+			//设置字体靠左
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objPHPExcel->getActiveSheet()->getStyle('F'.$i.':H'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			$i++;
+		}
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:H1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:H2');
+		//单元格加粗，居中：
+		$objPHPExcel->getActiveSheet()->getStyle('A1:H'.$i)->applyFromArray($lineBORDER);//大边框格式引用
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+	
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(6);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(6);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+	
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="产品销售详情表（".date('m-d H:i',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
 	}
 	/*
 	 *
