@@ -471,17 +471,17 @@ class MtpPay{
     	$body = json_encode($datas);
     	//Helper::writeLog('mt查询订单传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
-    	Helper::writeLog('mt查询订单返回信息：'.$result);
+    	//Helper::writeLog('mt查询订单返回信息：'.$result);
     	if(!empty($result)){
     		$obj = json_decode($result,true);
     		$return_status = $obj['status'];
-    		Helper::writeLog('返回信息：'.$return_status);
+    		//Helper::writeLog('返回信息：'.$return_status);
 	    	if($return_status == 'SUCCESS'){
 
 	    		$tradeNo = $obj['tradeNo'];
 	    		$outTradeNo = $obj['outTradeNo'];
 	    		$pay_status = $obj['orderStatus'];
-	    		Helper::writeLog('返回信息订单号：'.$outTradeNo.'，'.$tradeNo.','.$pay_status);
+	    		//Helper::writeLog('返回信息订单号：'.$outTradeNo.'，'.$tradeNo.','.$pay_status);
 	    		
 	    		if($pay_status == 'ORDER_SUCCESS'){
 	    			$results = array(
