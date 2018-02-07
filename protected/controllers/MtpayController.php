@@ -30,20 +30,38 @@ class MtpayController extends Controller
 		$orderid = $account_nos[0];
 		$orderdpid = $account_nos[1];
 		Helper::writeLog('账单号:'.$accountno.';第三方订单号:'.$orderid);
-	
+		$ords = false;$nots = false;$inf =false; 
+		
 		$sql = 'select * from nb_mtpay_info where dpid ='.$orderdpid.' and accountno="'.$accountno.'" and transactionId ="'.$transactionId.'"';
 		Helper::writeLog('查询：'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)->queryRow();
 
-		$ords = false;$nots = false;
+		$infos = MtpConfig::MTPAppKeyMid($orderdpid);
+		$info = explode(',',$infos);
+		$appId = $info[1];
+		$merchantId = $info[0];
+		$key = $info[2];
+		if(!empty($infos)){
+			$inf = true;
+		}else{
+			$infos = MtpConfig::MTPAppKeyMid($orderdpid);
+			$info = explode(',',$infos);
+			$appId = $info[1];
+			$merchantId = $info[0];
+			$key = $info[2];
+		}
+		
 		if(!empty($notify)){
 			Helper::writeLog('未查到信息！');
 		}else{
 			Helper::writeLog('查询支付信息！');
 			$results = MtpPay::query(array(
-					'outTradeNo'=>$accountno
+					'outTradeNo'=>$outTradeNo,
+	    			'appId'=>$appId,
+	    			'key'=>$key,
+	    			'merchantId'=>$merchantId,
 			));
-			//Helper::writeLog('返回支付信息！'.$results);
+			Helper::writeLog('返回支付信息！'.$results);
 			$return_code = $results['return_code'];
 			$result_code = $results['result_code'];
 			$result_msg = $results['result_msg'];
@@ -182,7 +200,7 @@ class MtpayController extends Controller
 			Helper::writeLog('未查询到该条订单：'.$orderid);
 		}
 
-		if($nots&&$ords){
+		if($nots&&$ords&&$inf){
 			return $nots = '{"status":"SUCCESS"}';
 		}
 
