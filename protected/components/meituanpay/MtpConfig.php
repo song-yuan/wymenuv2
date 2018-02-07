@@ -7,7 +7,8 @@
  * 
  */
 class MtpConfig{
-	const MTP_DOMAIN = 'http://payfront.zc.st.meituan.com';
+	//const MTP_DOMAIN = 'http://payfront.zc.st.meituan.com';/*测试环境*/
+	const MTP_DOMAIN = 'https://openpay.meituan.com/';/*正式环境*/
 	//美团支付的测试环境外网
 	static function MTPAppKeyMid($dpid){
 		//Helper::writeLog('进入查询参数');
