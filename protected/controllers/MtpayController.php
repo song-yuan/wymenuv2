@@ -61,7 +61,7 @@ class MtpayController extends Controller
 	    			'key'=>$key,
 	    			'merchantId'=>$merchantId,
 			));
-			Helper::writeLog('返回支付信息！'.$results);
+			Helper::writeLog('返回支付信息！');
 			$return_code = $results['return_code'];
 			$result_code = $results['result_code'];
 			$result_msg = $results['result_msg'];
