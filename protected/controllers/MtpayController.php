@@ -31,7 +31,7 @@ class MtpayController extends Controller
 		$orderdpid = $account_nos[1];
 		Helper::writeLog('账单号:'.$accountno.';第三方订单号:'.$orderid);
 	
-		$sql = 'select * from nb_mtpay_info where dpid ='.$orderdpid.' and account_no="'.$accountno.'" and transactionId ="'.$transactionId.'"';
+		$sql = 'select * from nb_mtpay_info where dpid ='.$orderdpid.' and accountno="'.$accountno.'" and transactionId ="'.$transactionId.'"';
 		Helper::writeLog('查询：'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)->queryRow();
 
