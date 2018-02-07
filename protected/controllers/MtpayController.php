@@ -52,16 +52,16 @@ class MtpayController extends Controller
 		}
 		
 		if(!empty($notify)){
-			//Helper::writeLog('未查到信息！');
+			Helper::writeLog('已通知！');
 		}else{
-			//Helper::writeLog('查询支付信息！');
+			Helper::writeLog('查询支付信息！');
 			$results = MtpPay::query(array(
 					'outTradeNo'=>$accountno,
 	    			'appId'=>$appId,
 	    			'key'=>$key,
 	    			'merchantId'=>$merchantId,
 			));
-			//Helper::writeLog('返回支付信息！');
+			Helper::writeLog('返回支付信息！');
 			$return_code = $results['return_code'];
 			$result_code = $results['result_code'];
 			$result_msg = $results['result_msg'];
