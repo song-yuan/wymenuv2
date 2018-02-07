@@ -39,7 +39,15 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 		));
 		
 	}elseif ($compaychannel['pay_channel']=='3'){
+		$mtr = MtpConfig::MTPAppKeyMid($dpid);
+		$mts = explode(',',$mtr);
+		$merchantId = $mts[0];
+		$appId = $mts[1];
+		$key = $mts[2];
 		$result = MtpPay::pay(array(
+				'merchantId'=>$merchantId,
+				'appid'=>$appId,
+				'key'=>$key,
 				'channel'=>'wx_barcode_pay',
 				'authCode'=>$auth_code,
 				'totalFee'=>''.$should_total*100,
