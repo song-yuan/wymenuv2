@@ -52,16 +52,16 @@ class MtpayController extends Controller
 		}
 		
 		if(!empty($notify)){
-			Helper::writeLog('已通知！');
+			//Helper::writeLog('已通知！');
 		}else{
-			Helper::writeLog('查询支付信息！');
+			//Helper::writeLog('查询支付信息！');
 			$results = MtpPay::query(array(
 					'outTradeNo'=>$accountno,
 	    			'appId'=>$appId,
 	    			'key'=>$key,
 	    			'merchantId'=>$merchantId,
 			));
-			Helper::writeLog('返回支付信息！');
+			//Helper::writeLog('返回支付信息！');
 			$return_code = $results['return_code'];
 			$result_code = $results['result_code'];
 			$result_msg = $results['result_msg'];
@@ -82,7 +82,7 @@ class MtpayController extends Controller
 				);
 				//$data = json_encode($notifyWxwapData);
 				$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
-				Helper::writeLog('插入数据库：'.$result);
+				//Helper::writeLog('插入数据库：'.$result);
 				if($result){
 					//订单成功支付...
 					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
