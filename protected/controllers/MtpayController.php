@@ -22,10 +22,10 @@ class MtpayController extends Controller
 	public function actionMtwappayresult(){
 		$data=file_get_contents("php://input");
 		//Helper::writeLog('美团result'.$data);
-		$datas = json_decode($data, TRUE);
-		$accountno = $datas['outTradeNo'];
-		$transactionId = $datas['transactionId'];
-		$totalFee = $datas['totalFee'];
+		//$datas = json_decode($data, TRUE);
+		$accountno = $_POST['outTradeNo'];
+		$transactionId = $_POST['transactionId'];
+		$totalFee = $_POST['totalFee'];
 		//订单号解析orderID和dpid
 		$account_nos = explode('-',$accountno);
 		$orderid = $account_nos[0];
