@@ -168,21 +168,21 @@ function fun()
 								</td>
 								<td><?php echo $model->product_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
-								<td ><?php echo $form->textField($model, 'original_price',array('class' => 'form-control','name'=>$model->getAttributeLabel('originalprice[]')));?>
+								<td ><?php echo $form->textField($model, 'original_price',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('originalprice['.$model["lid"].'][]')));?>
 									</td>
 								<td >
-								<?php echo $form->textField($model, 'member_price',array('class' => 'form-control','name'=>$model->getAttributeLabel('memberprice[]')));?>
+								<?php echo $form->textField($model, 'member_price',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('memberprice['.$model["lid"].'][]')));?>
 									
 								</td>
-								<td ><?php echo $form->textField($model, 'sort',array('class' => 'form-control','name'=>$model->getAttributeLabel('sort[]')));?>
+								<td ><?php echo $form->textField($model, 'sort',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('sort['.$model["lid"].'][]')));?>
 									</td>
-								<td ><?php echo $form->textField($model, 'dabao_fee',array('class' => 'form-control','name'=>$model->getAttributeLabel('dabaofee[]')));?>
+								<td ><?php echo $form->textField($model, 'dabao_fee',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('dabaofee['.$model["lid"].'][]')));?>
 								</td>
-								<td ><?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','name'=>$model->getAttributeLabel('ismemberdiscount[]')));?>
+								<td ><?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('ismemberdiscount['.$model["lid"].'][]')));?>
 									</td>
-								<td ><?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','name'=>$model->getAttributeLabel('isdiscount[]')));?>
+								<td ><?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('isdiscount['.$model["lid"].'][]')));?>
 									</td>
-                                <td ><?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','name'=>$model->getAttributeLabel('isshow[]')));?>
+                                <td ><?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('isshow['.$model["lid"].'][]')));?>
 									</td>
 							</tr>
 						<?php endforeach;?>
@@ -241,56 +241,5 @@ function fun()
        	 	alert("<?php echo yii::t('app','请选择要修改的菜品！！！');?>");
        		return false;
        	}
-        
-		// if(window.confirm("确认进行此项操作?")){
-		// 	layer_index_printreportlist=layer.open({
-	 //            type: 1,
-	 //            shade: false,
-	 //            title: false, //不显示标题
-	 //            area: ['60%', '60%'],
-	 //            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-	 //            cancel: function(index){
-	 //                layer.close(index);
-	 //                layer_index_printreportlist=0;                                                                                                     
-	 //            }
-	 //        });
-		// 	$("#printall").on("click",function(){
-	 //            //alert("暂无权限！！！");
-	 //            var dpids =new Array();
-	 //            var prodids="";
-	 //            var nums = "";
-	 //            $('.checkdpids:checked').each(function(){
-	 //                prodids += $(this).val()+',';
-	 //                var id = $(this).val();
-	 //                var num = $('#'+id).val();
-	 //                if(num==""){
-		// 				alert("请填写勾选的选项！");
-		// 				return false;
-		//                 }
-	 //                nums += id+'@'+$('#'+id).val()+',';
-	 //                //alert(ids);alert(nums);
-	 //            });
-	 //            if(prodids!=''&&nums!=''){
-	 //            	prodids = prodids.substr(0,prodids.length-1);//除去最后一个“，”
-	 //            	nums = nums.substr(0,nums.length-1);//除去最后一个“，”
-	 //            	//alert(dpids);
-	 //            	$("#pids").val(pids);
-	 //            	$("#prodids").val(prodids);
-	 //            	$("#nums").val(nums);
-	 //            	//alert(ids);alert(prodids);alert(nums);
-	 //    	        $("#muchupdateProd-form").submit();
-		//             }else{
-		// 				alert("请勾选需要修改的选项。。。");return;
-		// 	            }
-		// 	});
-	 //        $("#closeall").on('click',function(){
-		//         //alert("123");
-		//         layer.closeAll();
-		//         layer_index_printerportlist = 0;
-		//         });
-	 //    }else{
-		// 	return false;
-		// 	}
 	});
-	
 	</script>	

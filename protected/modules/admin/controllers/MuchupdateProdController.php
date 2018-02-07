@@ -53,7 +53,9 @@ class MuchupdateProdController extends BackendController
 		$is_sync = DataSync::getInitSync();
 		//var_dump($companyId);exit;
 		$ids = Yii::app()->request->getParam('ids');
+		// var_dump($ids);exit();
 		$original_price = Yii::app()->request->getParam('Originalprice');
+		// var_dump($original_price);exit();
 		$member_price = Yii::app()->request->getParam('Memberprice');
 		$sort = Yii::app()->request->getParam('Sort');
 		$dabao_fee = Yii::app()->request->getParam('Dabaofee');
@@ -61,16 +63,17 @@ class MuchupdateProdController extends BackendController
 		$is_discount = Yii::app()->request->getParam('Isdiscount');
 		$is_show = Yii::app()->request->getParam('Isshow');
 		$models = array();
+		$c = 0;
 		for($i=0;$i<=count($ids)-1;$i++){
 			$model = array(
 				'lid'=>$ids[$i],
-				'original_price'=>$original_price[$i],
-				'member_price'=>$member_price[$i],
-				'sort'=>$sort[$i],
-				'dabao_fee'=>$dabao_fee[$i],
-				'is_member_discount'=>$is_member_discount[$i],
-				'is_discount'=>$is_discount[$i],
-				'is_show'=>$is_show[$i]
+				'original_price'=>$original_price[$ids[$i]][$c],
+				'member_price'=>$member_price[$ids[$i]][$c],
+				'sort'=>$sort[$ids[$i]][$c],
+				'dabao_fee'=>$dabao_fee[$ids[$i]][$c],
+				'is_member_discount'=>$is_member_discount[$ids[$i]][$c],
+				'is_discount'=>$is_discount[$ids[$i]][$c],
+				'is_show'=>$is_show[$ids[$i]][$c]
 				);
 			array_push($models, $model);
 		}
