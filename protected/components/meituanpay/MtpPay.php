@@ -357,7 +357,7 @@ class MtpPay{
     			$obj = json_decode($result,true);
     			$status = $obj['status'];
     			if($status=='SUCCESS'){
-    				$resulturl = urlencode($notifyUrl.'?accountNo='.$outTradeNo);
+    				$resulturl = urlencode($returnUrl.'?accountNo='.$outTradeNo);
     				//回调地址
     				//$wxappid = 'wxc57dd1ee95c70c2c';
     				$appIds = $obj['appId'];
