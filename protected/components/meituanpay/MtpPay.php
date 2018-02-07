@@ -475,12 +475,13 @@ class MtpPay{
     	if(!empty($result)){
     		$obj = json_decode($result,true);
     		$return_status = $obj['status'];
-	    	
+    		Helper::writeLog('返回信息：'.$return_status);
 	    	if($return_status == 'SUCCESS'){
 
 	    		$tradeNo = $obj['tradeNo'];
 	    		$outTradeNo = $obj['outTradeNo'];
 	    		$pay_status = $obj['orderStatus'];
+	    		Helper::writeLog('返回信息订单号：'.$outTradeNo.'，'.$tradeNo.','.$pay_status);
 	    		
 	    		if($pay_status == 'ORDER_SUCCESS'){
 	    			$results = array(
