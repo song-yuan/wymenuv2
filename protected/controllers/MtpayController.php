@@ -56,7 +56,7 @@ class MtpayController extends Controller
 		}else{
 			Helper::writeLog('查询支付信息！');
 			$results = MtpPay::query(array(
-					'outTradeNo'=>$outTradeNo,
+					'outTradeNo'=>$accountno,
 	    			'appId'=>$appId,
 	    			'key'=>$key,
 	    			'merchantId'=>$merchantId,
