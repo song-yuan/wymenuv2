@@ -22,7 +22,6 @@ class MtpayController extends Controller
 	public function actionMtwappayresult(){
 		$data=file_get_contents("php://input");
 		//Helper::writeLog('美团result'.$data);
-		//$datas = json_decode($data, TRUE);
 		$accountno = $_POST['outTradeNo'];
 		$transactionId = $_POST['transactionId'];
 		$totalFee = $_POST['totalFee'];
@@ -30,12 +29,11 @@ class MtpayController extends Controller
 		$account_nos = explode('-',$accountno);
 		$orderid = $account_nos[0];
 		$orderdpid = $account_nos[1];
-		Helper::writeLog('账单号:'.$accountno.';第三方订单号:'.$transactionId);
+		Helper::writeLog('账单号:'.$accountno.';第三方订单号:'.$orderid);
 	
 		$sql = 'select * from nb_mtpay_info where dpid ='.$orderdpid.' and account_no="'.$accountno.'" and transactionId ="'.$transactionId.'"';
-		//Helper::writeLog('进入方法'.$sql);
-		$notify = Yii::app()->db->createCommand($sql)
-		->queryRow();
+		Helper::writeLog('查询：'.$sql);
+		$notify = Yii::app()->db->createCommand($sql)->queryRow();
 
 		$ords = false;$nots = false;
 		if(!empty($notify)){
@@ -45,7 +43,7 @@ class MtpayController extends Controller
 			$results = MtpPay::query(array(
 					'outTradeNo'=>$accountno
 			));
-			Helper::writeLog('返回支付信息！'.$results);
+			//Helper::writeLog('返回支付信息！'.$results);
 			$return_code = $results['return_code'];
 			$result_code = $results['result_code'];
 			$result_msg = $results['result_msg'];
