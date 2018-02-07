@@ -30,7 +30,7 @@ class MtpayController extends Controller
 		$account_nos = explode('-',$accountno);
 		$orderid = $account_nos[0];
 		$orderdpid = $account_nos[1];
-		//Helper::writeLog('进入方法'.$sn.';店铺:'.$companyId);
+		Helper::writeLog('账单号:'.$accountno.';第三方订单号:'.$transactionId);
 	
 		$sql = 'select * from nb_mtpay_info where dpid ='.$orderdpid.' and account_no="'.$accountno.'" and transactionId ="'.$transactionId.'"';
 		//Helper::writeLog('进入方法'.$sql);
@@ -39,11 +39,13 @@ class MtpayController extends Controller
 
 		$ords = false;$nots = false;
 		if(!empty($notify)){
-			
+			Helper::writeLog('未查到信息！');
 		}else{
+			Helper::writeLog('查询支付信息！');
 			$results = MtpPay::query(array(
 					'outTradeNo'=>$accountno
 			));
+			Helper::writeLog('返回支付信息！'.$results);
 			$return_code = $results['return_code'];
 			$result_code = $results['result_code'];
 			$result_msg = $results['result_msg'];
@@ -64,6 +66,7 @@ class MtpayController extends Controller
 				);
 				//$data = json_encode($notifyWxwapData);
 				$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
+				Helper::writeLog('插入数据库：'.$result);
 				if($result){
 					//订单成功支付...
 					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
@@ -100,7 +103,6 @@ class MtpayController extends Controller
 								'pay_status' => $result_msg
 						);
 						//$data = json_encode($notifyWxwapData);
-						//Helper::writeLog('第一次2:['.$sn.'],插入数据：');
 						$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
 						if($result){
 							//订单成功支付...
