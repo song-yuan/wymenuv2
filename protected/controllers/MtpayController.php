@@ -20,7 +20,9 @@ class MtpayController extends Controller
 	}
 
 	public function actionMtwappayresult(){
-		Helper::writeLog('美团result');
+		$data=file_get_contents("php://input");
+		
+		Helper::writeLog('美团result'.$data);
 		$datas = $_POST['status'];
 		//$statu = $datas['status'];
 		//$outTradeNo = $datas['outTradeNo'];
