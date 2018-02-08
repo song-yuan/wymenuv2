@@ -383,16 +383,34 @@ class CfceshiController extends BackendController
 		$price = Yii::app()->request->getParam('price');
 		$refundNo = Yii::app()->request->getParam('refundno');
 		$dpid = Yii::app()->request->getParam('dpid');
-		$data = array(
-				'outTradeNo'=>$clientSn,
-				'refundFee'=>$price,
-				'refundNo'=>$refundNo,
-				'dpid'=>$dpid,
-				'refundReason'=>'测试退款',
-				'random'=>'1234565432',
-		);
-		$result = MtpPay::refund($data);
-		var_dump($result);exit;
+		
+		if($dpid){
+			$db = Yii::app()->db;
+			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid ='.$dpid;
+			$ms = $db->createCommand($sql)->queryRow();
+			$sql = 'select * from nb_mtpay_config where delete_flag =0 and dpid in(select comp_dpid from nb_company where dpid ='.$dpid.')';
+			$as = $db->createCommand($sql)->queryRow();
+			if((!empty($ms))&&(!empty($as))){
+				//var_dump($ms);exit;
+				$merchantId = $ms['mt_merchantId'];
+				$appId = $as['mt_appId'];
+				$key = $as['mt_key'];
+		
+				$data = array(
+						'merchantId'=>$merchantId,
+						'appId'=>$appId,
+						'key'=>$key,
+						'outTradeNo'=>$clientSn,
+						'refundFee'=>$price,
+						'refundNo'=>$refundNo,
+						'refundReason'=>'测试退款',
+						'random'=>'1234565432',
+				);
+				$result = MtpPay::refund($data);
+				var_dump($result);exit;
+			}
+		}
+
 	}
 	
 }
