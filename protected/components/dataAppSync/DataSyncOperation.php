@@ -1082,7 +1082,7 @@ class DataSyncOperation {
 		$retreatprice = $data ['retreatprice'];
 		$adminId = $data ['admin_id'];
 		$username =  $data ['username'];
-		$pruductIds = split('==',$data ['pruductids']);
+		$pruductIds = explode('==',$data ['pruductids']);
 		$memo = $data ['memo'];
 		$retreatTime = $data ['retreattime'];
 		if($retreatTime==''){
@@ -1140,7 +1140,7 @@ class DataSyncOperation {
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 				foreach ($pruductIds as $productId){
-					$productArr = split(',', $productId);
+					$productArr = explode(',', $productId);
 					$psetId = $productArr[0];
 					$pproductId = $productArr[1];
 					$pamount = $productArr[2];
@@ -1358,7 +1358,7 @@ class DataSyncOperation {
 					$result = self::operateOrder($pData);
 				}elseif($type==4){
 					// 退款
-					$contentArr = split('::', $content);
+					$contentArr = explode('::', $content);
 					$createAt = isset($contentArr[7])?$contentArr[7]:'';
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 					$result = self::retreatOrder($pData);
@@ -1367,7 +1367,7 @@ class DataSyncOperation {
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 					$result = self::addMemberCard($pData);
 				}elseif($type==5){
-					$contentArr = split('::', $content);
+					$contentArr = explode('::', $content);
 					$rjDpid = $contentArr[0];
 					$rjUserId = $contentArr[1];
 					$rjCreateAt = $contentArr[2];
@@ -1409,7 +1409,7 @@ class DataSyncOperation {
 						$result = self::operateOrder($pData);
 					}elseif($type==4){
 						// 退款
-						$contentArr = split('::', $content);
+						$contentArr = explode('::', $content);
 						$createAt = isset($contentArr[7])?$contentArr[7]:'';
 						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 						$result = self::retreatOrder($pData);
@@ -1418,7 +1418,7 @@ class DataSyncOperation {
 						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 						$result = self::addMemberCard($pData);
 					}elseif($type==5){
-						$contentArr = split('::', $content);
+						$contentArr = explode('::', $content);
 						$rjDpid = $contentArr[0];
 						$rjUserId = $contentArr[1];
 						$rjCreateAt = $contentArr[2];
@@ -2174,7 +2174,7 @@ class DataSyncOperation {
 					}
 				}
 				if($points!='0-0'){
-					$pointArr = split('-', $points);
+					$pointArr = explode('-', $points);
 					$res = WxPoints::dealPoints($user['lid'], $user['dpid'],$pointArr[1]);
 					if(!$res){
 						throw new Exception('积分支付失败');
@@ -2219,7 +2219,7 @@ class DataSyncOperation {
 				WxBrandUser::refundYue($yue, $user, $dpid);
 			}
 			if($points!='0-0'){
-				$pointArr = split('-', $points);
+				$pointArr = explode('-', $points);
 				$res = WxPoints::refundPoints($user['lid'], $user['dpid'],$pointArr[1]);
 				if(!$res){
 					throw new Exception('积分退回失败');
