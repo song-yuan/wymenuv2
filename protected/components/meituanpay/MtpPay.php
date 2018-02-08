@@ -139,7 +139,10 @@ class MtpPay{
 						sleep(1);
 						$i++;
 						$results = MtpPay::query(array(
-								'outTradeNo'=>$outTradeNo
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
 						));
 						$return_code = $results['return_code'];
 						$result_code = $results['result_code'];
@@ -175,7 +178,10 @@ class MtpPay{
 						sleep(1);
 						$i++;
 						$results = MtpPay::query(array(
-								'outTradeNo'=>$outTradeNo
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
 						));
 						$return_code = $results['return_code'];
 						$result_code = $results['result_code'];
@@ -219,8 +225,11 @@ class MtpPay{
 					sleep(1);
 					$i++;
 					$results = MtpPay::query(array(
-							'outTradeNo'=>$outTradeNo
-					));
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
+						));
 					$return_code = $results['return_code'];
 					$result_code = $results['result_code'];
 					$result_msg = $results['result_msg'];
@@ -616,6 +625,40 @@ class MtpPay{
     						'result_msg'=>'SUCCESS',
     						'msg'=>'退款成功！',
     				);
+    			}elseif($errCode == 'TRADE_REFUNDING_ERROR'){
+    				/*发起轮询*/
+    				$i=1;
+    				$j=true;
+    				do{
+    					sleep(1);
+    					$i++;
+    					$results = MtpPay::query(array(
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
+						));
+    					$return_code = $results['return_code'];
+    					$result_code = $results['result_code'];
+    					$result_msg = $results['result_msg'];
+    					if($result_msg == 'ORDER_PART_REFUND' || $result_msg == 'ORDER_ALL_REFUND'){
+    						$result = array(
+    								"return_code"=>"SUCCESS",
+    								"result_code"=>"SUCCESS",
+    								"result_msg"=>$result_msg,
+    								"msg"=>"退款成功！",
+    								"accountno"=>$outTradeNo);
+    						$j=false;
+    					}
+    				}while (($i<=5)&&$j);
+    				if(($i==5)&&$j){
+    					$result = array(
+    							"return_code"=>"SUCCESS",
+    							"result_code"=>"ERROR",
+    							"result_msg"=>'REFUND',
+    							"msg"=>"退款失败,重新操作！",
+    							"accountno"=>$outTradeNo);
+    				}
     			}else{
     				$results = array(
     						'return_code'=>"SUCCESS",
