@@ -27,9 +27,17 @@ class Helper
 					"\n","\\n", 
 					"\r","\\r",
 					"'","\'",
-					"\t","\\t"
+					"\t","\\t",
 				);
 		$str = str_replace($replace, '', $str);
+		$replace = '/./u';
+		$str = preg_replace_callback(
+					$replace,
+					function (array $match) {
+						return strlen($match[0]) >= 4 ? '' : $match[0];
+					},
+					$str
+				);
 		return $str;
 	}
 	static public function genPassword($password)

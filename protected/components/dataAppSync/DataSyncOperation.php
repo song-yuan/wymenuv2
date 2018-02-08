@@ -900,13 +900,28 @@ class DataSyncOperation {
 				}
 			}
 			$compaychannel = WxCompany::getpaychannel($dpid);
-			if($compaychannel['pay_channel']=='2'||$compaychannel['pay_channel']=='3'){
+			if($compaychannel['pay_channel']=='2'){
 				$result = SqbPay::refund(array(
 						'device_id'=>$poscode,
 						'refund_amount'=>''.$refund_fee*100,
 						'clientSn'=>$out_trade_no,
 						'dpid'=>$dpid,
 						'operator'=>$admin_id,
+				));
+			}elseif ($compaychannel['pay_channel']=='3'){
+				$mtr = MtpConfig::MTPAppKeyMid($dpid);
+				$mts = explode(',',$mtr);
+				$merchantId = $mts[0];
+				$appId = $mts[1];
+				$key = $mts[2];
+				$result = SqbPay::refund(array(
+						'merchantId'=>$merchantId,
+						'appId'=>$appId,
+						'key'=>$key,
+						'refundFee'=>''.$refund_fee*100,
+						'outTradeNo'=>$out_trade_no,
+						'refundReason'=>'商家退款',
+						'refundNo'=>$out_refund_no,
 				));
 			}else{
 				$total_fee = $total_fee*100;
@@ -967,7 +982,7 @@ class DataSyncOperation {
 				return json_encode($msg);
 			}
 			$compaychannel = WxCompany::getpaychannel($dpid);
-			if($compaychannel['pay_channel']=='2'||$compaychannel['pay_channel']=='3'){
+			if($compaychannel['pay_channel']=='2'){
 				$result = SqbPay::refund(array(
 						'device_id'=>$poscode,
 						'refund_amount'=>''.$refund_amount*100,
@@ -980,6 +995,21 @@ class DataSyncOperation {
 				}else{
 					$msg = array('status'=>false,'msg'=>'支付宝退款失败!!!');
 				}
+			}elseif($compaychannel['pay_channel']=='3'){
+				$mtr = MtpConfig::MTPAppKeyMid($dpid);
+				$mts = explode(',',$mtr);
+				$merchantId = $mts[0];
+				$appId = $mts[1];
+				$key = $mts[2];
+				$result = SqbPay::refund(array(
+						'merchantId'=>$merchantId,
+						'appId'=>$appId,
+						'key'=>$key,
+						'refundFee'=>''.$refund_amount*100,
+						'outTradeNo'=>$out_trade_no,
+						'refundReason'=>'商家退款',
+						'refundNo'=>$out_request_no,
+				));
 			}else{
 				$alipayAccount = AlipayAccount::get($dpid);
 				$f2fpayConfig = array(
