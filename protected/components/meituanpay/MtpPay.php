@@ -571,7 +571,7 @@ class MtpPay{
     			$paramsStrs .= $k.'='.$v.'&';
     		}
     	}else{
-    		$result = array(
+    		$results = array(
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
     				'msg'=>'未知状态！');
@@ -592,11 +592,49 @@ class MtpPay{
     	);
     	 
     	$body = json_encode($datas);
-    	Helper::writeLog('mt退款传输参数：'.$body);
+    	//Helper::writeLog('mt退款传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('mt退款返回结果：'.$result);
     	
-    	return $result;
+    	if(!empty($result)){
+    		$obj = json_decode($result,true);
+    		$status = $obj['status'];
+    		if($status == 'SUCCESS'){
+    			$results = array(
+	    				'return_code'=>"SUCCESS",
+	    				'result_code'=>"SUCCESS",
+	    				'result_msg'=>'SUCCESS',
+	    				'msg'=>'退款成功！',
+	    		);
+    		}else{
+    			$errCode = $obj['errCode'];
+    			$errMsg = $obj['errMsg'];
+    			if($errCode == 'TRADE_REFUND_NO_AOUNT_ERROR'){
+    				$results = array(
+    						'return_code'=>"SUCCESS",
+    						'result_code'=>"SUCCESS",
+    						'result_msg'=>'SUCCESS',
+    						'msg'=>'退款成功！',
+    				);
+    			}else{
+    				$results = array(
+    						'return_code'=>"SUCCESS",
+    						'result_code'=>"ERROR",
+    						'result_msg'=>$errCode,
+    						'msg'=>$errMsg,
+    				);
+    			}
+    		}
+    	}else{
+    		$results = array(
+    				'return_code'=>"SUCCESS",
+    				'result_code'=>"ERROR",
+    				'result_msg'=>"REFUND",
+    				'msg'=>'请尝试重新操作！',
+    		);
+    	}
+    	
+    	return $results;
     
     }
     public static function getOpenId($data,$url){
