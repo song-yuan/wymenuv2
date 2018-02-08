@@ -14,7 +14,7 @@ class SitePersonsController extends BackendController
 		$criteria->with = 'company';
                // $criteria->select='t.lid as lid,t.dpid as dpid,t.name as name,c.company_name as company_name';
                 //$criteria->join = 'LEFT JOIN nb_company c ON c.dpid=t.dpid';
-		$criteria->condition = 't.dpid='.$this->companyId;
+		$criteria->condition = 't.dpid='.$this->companyId.' and t.delete_flag=0';
 		$pages = new CPagination(SitePersons::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -71,7 +71,7 @@ class SitePersonsController extends BackendController
                 //$command=Yii::app()->db->createCommand($sql);
                 //$command->bindValue(":ids" , implode(',' , $ids));
                 //$command->bindValue(":dpid" , $this->companyId);
-                //var_dump($command);exit;
+                // var_dump($ids);exit;
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_site_persons set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
