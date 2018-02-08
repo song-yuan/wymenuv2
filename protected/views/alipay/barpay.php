@@ -31,7 +31,15 @@ if($authCode!=''&&$result['status']){
 				'operator'=>$username,
 		));
 	}elseif ($this->compaychannel['pay_channel']=='3'){
+		$mtr = MtpConfig::MTPAppKeyMid($dpid);
+		$mts = explode(',',$mtr);
+		$merchantId = $mts[0];
+		$appId = $mts[1];
+		$key = $mts[2];
 		$result = MtpPay::pay(array(
+				'merchantId'=>$merchantId,
+				'appId'=>$appId,
+				'key'=>$key,
 				'channel'=>'ali_barcode_pay',
 				'authCode'=>$authCode,
 				'totalFee'=>''.$totalAmount*100,
