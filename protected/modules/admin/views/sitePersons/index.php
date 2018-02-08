@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'siteType-form',
-				'action' => $this->createUrl('siteType/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('sitePersons/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
