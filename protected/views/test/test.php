@@ -1,4 +1,5 @@
 <?php 
+Yii::app()->cache->flush();
 $dpid = 27;
 $adminId = 362;
 $poscode = '04480027819609';
