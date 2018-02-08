@@ -914,7 +914,7 @@ class DataSyncOperation {
 				$merchantId = $mts[0];
 				$appId = $mts[1];
 				$key = $mts[2];
-				$result = SqbPay::refund(array(
+				$result = MtpPay::refund(array(
 						'merchantId'=>$merchantId,
 						'appId'=>$appId,
 						'key'=>$key,
@@ -1001,7 +1001,7 @@ class DataSyncOperation {
 				$merchantId = $mts[0];
 				$appId = $mts[1];
 				$key = $mts[2];
-				$result = SqbPay::refund(array(
+				$result = MtpPay::refund(array(
 						'merchantId'=>$merchantId,
 						'appId'=>$appId,
 						'key'=>$key,
