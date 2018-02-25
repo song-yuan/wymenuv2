@@ -242,16 +242,25 @@ class DataSyncOperation {
 	 */
 	public static function getSyncData($dpid) {
 		$data = array ();
+		$now = date('Y-m-d H:i:s',time());
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
+		$key = 'order_online_total_operation';
+		$cache = Yii::app()->cache->get($key);
+		if($cache==false){
+			Yii::app()->cache->set($key,1);
+		}else{
+			if($cache > 9){
+				return json_encode ( $data );
+			}
+			$cache++;
+			Yii::app()->cache->set($key,$cache);
+		}
 		//订单数据
-		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status=3 or order_status=4) and is_sync<>0 limit 2';
+		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
-			if($result['remark']!=''){
-				$result['remark'] = Helper::dealString($result['remark']);
-			}
 			$order ['nb_order'] = $result;
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
 			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
@@ -271,12 +280,12 @@ class DataSyncOperation {
 					$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					if(!empty($productSet)){
 						$orderProduct[$k]['amount'] = $product['zhiamount'];
-						$orderProduct[$k]['set_name'] = Helper::dealString($productSet[0]['set_name']);
+						$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
 						$orderProduct[$k]['set_price'] = $product['set_price'];
 						$orderProduct[$k]['set_detail'] = $productSet;
 					}
 				}
-				$orderProduct[$k]['product_name'] = Helper::dealString($product['product_name']);
+				$orderProduct[$k]['product_name'] = $product['product_name'];
 			}
 			$order ['nb_order_product'] = $orderProduct;
 			$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
@@ -287,9 +296,6 @@ class DataSyncOperation {
 			$order ['nb_order_taste'] = $orderTaste;
 			$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
 			$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			if($orderAddress){
-				$orderAddress[0]['street'] = Helper::dealString($orderAddress[0]['street']);
-			}
 			$order ['nb_order_address'] = $orderAddress;
 			$sql = 'select * from nb_order_account_discount where dpid='.$dpid.' and order_id='.$result ['lid'].' and delete_flag=0';
 			$orderDiscount = Yii::app ()->db->createCommand ( $sql )->queryAll ();
@@ -306,6 +312,11 @@ class DataSyncOperation {
 			array_push ( $data ['member_card'], $card );
 			$sql = 'update nb_member_card set is_sync=0 where dpid=' . $dpid . ' and lid=' . $card ['lid'];
 			Yii::app ()->db->createCommand ( $sql )->execute ();
+		}
+		$cache = Yii::app()->cache->get($key);
+		if($cache>0){
+			$cache--;
+			Yii::app()->cache->set($key,$cache);
 		}
 		return json_encode ( $data );
 	}
