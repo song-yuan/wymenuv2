@@ -139,7 +139,10 @@ class MtpPay{
 						sleep(1);
 						$i++;
 						$results = MtpPay::query(array(
-								'outTradeNo'=>$outTradeNo
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
 						));
 						$return_code = $results['return_code'];
 						$result_code = $results['result_code'];
@@ -175,7 +178,10 @@ class MtpPay{
 						sleep(1);
 						$i++;
 						$results = MtpPay::query(array(
-								'outTradeNo'=>$outTradeNo
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
 						));
 						$return_code = $results['return_code'];
 						$result_code = $results['result_code'];
@@ -219,8 +225,11 @@ class MtpPay{
 					sleep(1);
 					$i++;
 					$results = MtpPay::query(array(
-							'outTradeNo'=>$outTradeNo
-					));
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
+						));
 					$return_code = $results['return_code'];
 					$result_code = $results['result_code'];
 					$result_msg = $results['result_msg'];
@@ -571,7 +580,7 @@ class MtpPay{
     			$paramsStrs .= $k.'='.$v.'&';
     		}
     	}else{
-    		$result = array(
+    		$results = array(
     				"return_code"=>"ERROR",
     				"result_code"=>"ERROR",
     				'msg'=>'未知状态！');
@@ -592,11 +601,83 @@ class MtpPay{
     	);
     	 
     	$body = json_encode($datas);
-    	Helper::writeLog('mt退款传输参数：'.$body);
+    	//Helper::writeLog('mt退款传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('mt退款返回结果：'.$result);
     	
-    	return $result;
+    	if(!empty($result)){
+    		$obj = json_decode($result,true);
+    		$status = $obj['status'];
+    		if($status == 'SUCCESS'){
+    			$results = array(
+	    				'return_code'=>"SUCCESS",
+	    				'result_code'=>"SUCCESS",
+	    				'result_msg'=>'SUCCESS',
+	    				'msg'=>'退款成功！',
+	    		);
+    		}else{
+    			$errCode = $obj['errCode'];
+    			$errMsg = $obj['errMsg'];
+    			if($errCode == 'TRADE_REFUND_NO_AOUNT_ERROR'){
+    				$results = array(
+    						'return_code'=>"SUCCESS",
+    						'result_code'=>"SUCCESS",
+    						'result_msg'=>'SUCCESS',
+    						'msg'=>'退款成功！',
+    				);
+    			}elseif($errCode == 'TRADE_REFUNDING_ERROR'){
+    				/*发起轮询*/
+    				$i=1;
+    				$j=true;
+    				do{
+    					sleep(1);
+    					$i++;
+    					$results = MtpPay::query(array(
+							'outTradeNo'=>$outTradeNo,
+			    			'appId'=>$appId,
+			    			'key'=>$key,
+			    			'merchantId'=>$merchantId,
+						));
+    					$return_code = $results['return_code'];
+    					$result_code = $results['result_code'];
+    					$result_msg = $results['result_msg'];
+    					if($result_msg == 'ORDER_PART_REFUND' || $result_msg == 'ORDER_ALL_REFUND'){
+    						$result = array(
+    								"return_code"=>"SUCCESS",
+    								"result_code"=>"SUCCESS",
+    								"result_msg"=>$result_msg,
+    								"msg"=>"退款成功！",
+    								"accountno"=>$outTradeNo);
+    						$j=false;
+    					}
+    				}while (($i<=5)&&$j);
+    				if(($i==5)&&$j){
+    					$result = array(
+    							"return_code"=>"SUCCESS",
+    							"result_code"=>"ERROR",
+    							"result_msg"=>'REFUND',
+    							"msg"=>"退款失败,重新操作！",
+    							"accountno"=>$outTradeNo);
+    				}
+    			}else{
+    				$results = array(
+    						'return_code'=>"SUCCESS",
+    						'result_code'=>"ERROR",
+    						'result_msg'=>$errCode,
+    						'msg'=>$errMsg,
+    				);
+    			}
+    		}
+    	}else{
+    		$results = array(
+    				'return_code'=>"SUCCESS",
+    				'result_code'=>"ERROR",
+    				'result_msg'=>"REFUND",
+    				'msg'=>'请尝试重新操作！',
+    		);
+    	}
+    	
+    	return $results;
     
     }
     public static function getOpenId($data,$url){

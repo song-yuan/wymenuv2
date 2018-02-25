@@ -101,7 +101,10 @@ class MtpayController extends Controller
 					sleep(1);
 					$i++;
 					$results = MtpPay::query(array(
-							'outTradeNo'=>$accountno
+						'outTradeNo'=>$accountno,
+		    			'appId'=>$appId,
+		    			'key'=>$key,
+		    			'merchantId'=>$merchantId,
 					));
 					if($result_msg == 'ORDER_SUCCESS'){
 						//像微信公众号支付记录表插入记录...
