@@ -144,6 +144,12 @@
                                             <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type,'pay_online'=>$paytype));?>"><?php echo yii::t('app','编辑');?></a>
                                         <?php endif; ?>
                                             <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
+                                            <?php if($model->property&&Yii::app()->user->role<=5):?>
+                                            <?php if($model->property->pay_channel == '3'):?>
+                                            <a  class='btn ' style="margin-top: 5px;" id="setPayid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','已置成美团支付');?></a>
+                                        	<?php else:?>
+                                        	<a  class='btn green setPayid' style="margin-top: 5px;" id="setPayid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','置成美团支付');?></a>
+                                        	<?php endif;endif;?>
                                         <?php if(Yii::app()->user->role <= User::POWER_ADMIN):?>
                                             <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','online-pay');?></a>
                                     	<?php endif;?>
@@ -319,5 +325,31 @@
 	        });
 		});
 	});
-
+	$('.setPayid').on('click',function(){
+		var dpid = $(this).attr('dpid');
+		var url = "<?php echo $this->createUrl('company/paystore');?>/companyId/"+dpid;
+		//alert(dpid);
+		if(window.confirm("确认进行本操作？本过程不可逆！")){
+			
+	        $.ajax({
+	            url:url,
+	            type:'GET',
+	            //data:orderid,//CF
+	            async:false,
+	            dataType: "json",
+	            success:function(msg){
+	                var data=msg;
+	                if(data.status){
+	                	layer.msg('成功！！！');
+	                	location.reload();
+	                }else{
+	                	layer.msg('失败！！！');
+	                }
+	            },
+	            error: function(msg){
+	                layer.msg('网络错误！！！');
+	            }
+	        });
+		}
+	});
 </script>
