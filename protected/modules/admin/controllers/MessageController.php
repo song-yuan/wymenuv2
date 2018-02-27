@@ -175,9 +175,9 @@ class MessageController extends BackendController
 						'payway'=>$payway,
 						'subject'=>$subject,
 						'operator'=>$operator,
-						'notify_url'=> $notifyurl,
+						'notify_url'=> 'http://menu.wymenu.com/wymenuv2/admin/message/createOrderresult',
 				);
-				var_dump($data);exit;
+				//var_dump($data);exit;
 				$body = json_encode($data);
 				$results = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
 				$obj = json_decode($results,true);
@@ -207,6 +207,7 @@ class MessageController extends BackendController
 	
 	public function actionCreateOrderresult(){
 		Helper::writeLog('预下单回调通知参数：');
+		echo 'OK';
 	}
 
 }
