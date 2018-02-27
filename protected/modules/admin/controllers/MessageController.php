@@ -206,6 +206,7 @@ class MessageController extends BackendController
 	}
 	
 	public function actionCreateOrderresult(){
+		Helper::writeLog('预下单回调通知参数：');
 		$data=file_get_contents("php://input");
 		Helper::writeLog('预下单回调通知参数：'.$data);
 	}
