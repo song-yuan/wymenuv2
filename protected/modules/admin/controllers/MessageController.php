@@ -165,8 +165,7 @@ class MessageController extends BackendController
 					$result = array('status'=>false, 'result'=>false);
 					return $result;
 				}
-				$notifyurl = Yii::app()->basePath.$this->createUrl('message/createOrderresult');
-				$notifyurl = str_replace('\\','/',$notifyurl);
+				$notifyurl = 'menu.wymenu.com/wymenuv2/admin/message/createOrderresult';
 				
 				$url = SqbConfig::SQB_DOMAIN.'/upay/v2/precreate';
 				$data = array(
