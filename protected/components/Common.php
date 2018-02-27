@@ -95,5 +95,13 @@ class Common{
     	$ret = date('Ymd',time()).substr("0000000000".$dpid,-3).substr("0000000000".$lid,-4).substr("0000000000".$id,-5);
     	return $ret;
     }
+    /**
+     * 生成短信套餐订单号
+     * */
+    static public function getMsOrder($dpid,$lid,$id)
+    {
+    	$ret = substr("0000000000".$dpid,-3).substr("0000000000".$id,-2).substr("0000000000".$lid,-5).rand(10,99);
+    	return $ret;
+    }
 }
 ?>

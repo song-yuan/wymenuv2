@@ -36,18 +36,10 @@
 					<div class="panel_body row">
 					<p>短息套餐购买</p>
 						<div class="list col-sm-3 col-xs-12">
-			                <a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>">
+			                <a href="<?php echo $this->createUrl('message/index',array('companyId'=>$this->companyId));?>">
 			                	<div class="margin-left-right">
-			                	<div class="list_big"><i class="fa fa-home"></i>原料下发</div>
-			                	<div class="list_small">将设置好的原料信息下发到所需店铺</div>
-			                	</div>
-			                </a> 
-						</div>
-						<div class="list col-sm-3 col-xs-12">
-			                <a href="<?php echo $this->createUrl('copyproductbom/index',array('companyId'=>$this->companyId));?>">
-			                	<div class="margin-left-right">
-			                	<div class="list_big"><i class="fa fa-home"></i>配方下发</div>
-			                	<div class="list_small">将设置好的配方信息下发到所需店铺</div>
+			                	<div class="list_big"><i class="fa fa-home"></i>短信套餐购买</div>
+			                	<div class="list_small">购买短信套餐，短信用来微信会员注册</div>
 			                	</div>
 			                </a> 
 						</div>

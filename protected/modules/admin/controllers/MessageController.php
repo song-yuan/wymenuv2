@@ -122,6 +122,93 @@ class MessageController extends BackendController
 			$this->redirect(array('message/setindex' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		}
 	}
-
+	public function actionCreateOrder(){
+		$dpid = $_POST['dpid'];
+		$msid = $_POST['msid'];
+		$username = $_POST['username'];
+		$paytype = $_POST['paytype'];
+		//$notifyurl = $_POST['notifyurl'];
+		$db = Yii::app()->db;
+		if((!empty($dpid))&&(!empty($msid))){
+			$sql = 'select downdate,all_message_no,send_message_no,money from nb_message_set where lid ='.$msid;
+			$mss = $db->createCommand($sql)->queryRow();
+			if(!empty($mss)){
+				$se = new Sequence("message_order");
+				$id = $se->nextval();
+				$data = array(
+					'lid' => $id,
+					'dpid' => $dpid,
+					'create_at' => date('Y-m-d H:i:s',time()),
+					'update_at' => date('Y-m-d H:i:s',time()),
+					'username' => $username,
+					'message_set_id' => $msid,
+					'accountno' =>$accountno = Common::getMsOrder($dpid, $id, $msid),
+					'pay_status' => '0',
+				);
+				$result = $db->createCommand()->insert('nb_message_order',$data);
+			}
+			if($result){
+				
+				$total_amount = (int)($mss['money']*100);
+				/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
+				$payway = $paytype;
+				$subject = '短信套餐';
+				/*本次交易的简要介绍*/
+				$operator = $username;
+				/*发起本次交易的操作员*/
+				 
+				$devicemodel = WxCompany::getSqbPayinfo('27');
+				if(!empty($devicemodel)){
+					$terminal_sn = $devicemodel['terminal_sn'];
+					$terminal_key = $devicemodel['terminal_key'];
+				}else{
+					$result = array('status'=>false, 'result'=>false);
+					return $result;
+				}
+				$notifyurl = 'http://menu.wymenu.com/wymenuv2/admin/message/createOrderresult';
+				
+				$url = SqbConfig::SQB_DOMAIN.'/upay/v2/precreate';
+				$data = array(
+						'terminal_sn'=>$terminal_sn,
+						'client_sn'=>$accountno,
+						'total_amount'=>''.$total_amount,
+						'payway'=>$payway,
+						'subject'=>$subject,
+						'operator'=>$operator,
+						'notify_url'=> $notifyurl,
+				);
+				//var_dump($data);exit;
+				$body = json_encode($data);
+				$results = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
+				$obj = json_decode($results,true);
+				$result_code = $obj['result_code'];
+				Helper::writeLog('预下单返回参数：'.$results);
+				
+				if($result_code == '200'){
+					$result_codes = $obj['biz_response']['result_code'];
+					if($result_codes == 'PRECREATE_SUCCESS'){
+						$imgurl = $obj['biz_response']['data']['qr_code_image_url'];
+						Yii::app()->end(json_encode(array("status"=>"success","msg"=>$imgurl,)));
+					}else{
+						$error_message = $obj['biz_response']['error_message'];
+						Yii::app()->end(json_encode(array("status"=>"error","msg"=>$error_message,)));
+					}
+				}else{
+					$error_message = $obj['error_message'];
+					Yii::app()->end(json_encode(array("status"=>"error","msg"=>$error_message,)));
+				}
+				
+			}
+			
+		} else {
+			Yii::app()->end(json_encode(array("status"=>"error","msg"=>'创建短信订单失败！',)));
+		}
+	}
+	
+	public function actionCreateOrderresult(){
+		Helper::writeLog('预下单回调通知参数：');
+		$data=file_get_contents("php://input");
+		Helper::writeLog('预下单回调通知参数：'.$data);
+	}
 
 }
