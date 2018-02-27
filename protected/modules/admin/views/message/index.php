@@ -49,6 +49,9 @@
             <div class="portlet box purple">
                 <div class="portlet-title">
                     <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','短信套餐剩余详情');?></div>
+                    <div class="actions">
+                    	<a href="<?php echo $this->createUrl('message/setcreate' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>   
+                    </div>	
                 </div>
                 <div class="portlet-body">
                     <table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -92,7 +95,7 @@
                             <div>使用年限/年 : <span> <?php echo $model['downdate'] ?></span></div>
                             <div>价格/元 : <span> <?php echo $model['money'] ?></span></div><br>
 
-                            <a class="btn green"  <?php echo $this->createUrl('message/surepay',array('message_set_id'=>$model['lid'],'companyId'=>$this->companyId)); ?> >立即购买</a>
+                            <a class="btn green buymessage" msid = "<?php echo $model['lid'];?>" >立即购买</a>
                         </div>
                         <?php endforeach; ?>
                         <?php endif; ?>
@@ -102,10 +105,209 @@
 			<!-- END EXAMPLE TABLE PORTLET-->
         </div>
     </div>
+
 	<!-- END PAGE CONTENT-->
 </div>
-
+            <!--**支付窗口...**-->
+        <div id="pay_layer" class="translucent hide" style="width: 98%;">
+            <div class="pay" style="background-color: #ffcad3; width: 100%;height: 100%;">
+                <p style="font-size: 20px;color: red;text-align: center;">点击图标扫码，支付更方便</p>
+                <p style="text-align: center;">（请在两分钟内完成支付！！！）</p>
+                <div class="qrCode wxpayclass" isclick="0" id="weixinpay" style="width: 50%;float: left;">
+                    <p style="text-align:center; "><img id="wxpayimg" style="width: 50%;" src="../../../../img/waiter/weixin.png"/></p>
+                    <span style="text-align: center;display:block;">微信支付</span>
+                </div>
+                <div class="qrCode" isclick="0" id="zhifubaopay" style="width: 50%;float: left;">
+                    <p style="text-align:center; "><img id="alipayimg" style="width: 50%;" src="../../../../img/waiter/zhifubao.png"/></p>
+                    <span style="text-align: center;display:block;">支付宝支付</span>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        <input id="msid" type="hidden"/>
+        </div> 
 <script type="text/javascript">
+	$(".buymessage").on('click',function(){
+		var msid = $(this).attr('msid');
+		$('#msid').val(msid);
+		layer.msg(msid);
+		$('#pay_layer').removeClass('hide');
+		layer_pay=layer.open({
+            type: 1,
+            shade: 0.5,
+            title: false, //不显示标题
+            area: ['60%', '50%'],
+            //time: 3000,
+            closeBtn: 1,//关闭按钮
+            content: $('#pay_layer'),
+            cancel: function(index){
+                layer.close(index);
+                layer_pay=0;
+                $('#pay_layer').addClass("uhide");
+           }
+       })
+	})
+	        
+        //微信支付
+        $("#weixinpay").on('click',function(){
+            isprinter=0;
+            var msid = $("#msid").val();
+            layer.msg(msid);
+            var isclick = $(this).attr('isclick');
+            var paytype = 1;
+            //防止二次点击。。。（点击出现二维码则isclick置1，禁止二次点击再生成二维码。。。）
+            if(isclick=="0"){
+                $.ajax({
+                    url : '<?php echo $this->createUrl('message/createOrder');?>',
+                    type : 'POST',
+                    data : {
+                        msid: msid,
+                        username: '<?php echo Yii::app()->user->username;?>',
+                        dpid: '<?php echo $this->companyId;?>',
+                        paytype:3,
+                    },
+                    success:function(msg){
+                        if(msg.status){
+                            var imgurl = msg.msg;
+                            $("#wxpayimg").attr('src',imgurl);
+                            $("#weixinpay").attr('isclick','1');
+                            $("#zhifubaopay").attr('isclick','1');
+                            setInt = setInterval(orderstatus_time,1000,dpid,orderid,sendjson,sendprinter,sendsave,paytype);
+                        }else{
+                            alert("失败！");
+                        }
+                    },
+                    error:function(){
+                       
+                        alert('error：网络错误');  
+                      },
+                    dataType:'json'
+                });
+                
+            }else{
+                //alert("请扫码支付！");
+                //$("#cancel").trigger(vartouchstart);
+            }
+            //alert(orderproductId,orderpayId);//alert(dpid);
+            //alert(orderid);
+            
+        })//微信支付、、、
 
+        function orderstatus_time(dpid,orderid,sendjson,sendprinter,sendsave,paytype){
+            //定时请求任务，如果支付成功，则清空购物车，关闭支付窗口。
+                //alert(111);
+                
+               var allprice=$("#sum").data("sum");           
+               $.ajax({
+                   url : 'http://menu.wymenu.com/wymenuv2/admin/dataAppSync/getOrderStatus',
+                   type : 'POST',
+                   //timeout:60000,
+                   data : {
+                       companyId: dpid,
+                       orderId: orderid,
+                   },
+                   success:function(msg){
+                       if(!msg.status){
+                           alert("支付失败！");
+                       }else{
+                           if(isprinter==0){
+                           var orderStatus = msg.order_status;
+                           if(orderStatus=="3"){
+                               isprinter = 1;
+                               //alert("支付成功！");
+                               //支付成功的弹窗。。。
+                               $("#paymsgtext").text("支付成功");
+                               $('#paymsg_layer').removeClass("uhide");
+                               layer_paymsg=layer.open({
+                                    type: 1,
+                                    shade: false,
+                                    title: false, //不显示标题
+                                    area: ['30%', '24%'],
+                                    time: 3000,
+                                    closeBtn: 0,
+                                    content: $('#paymsg_layer'),//$('#productInfo'), //捕获的元素
+                                    cancel: function(index){
+                                        layer.close(index);
+                                        layer_paymsg=0;
+                                        $('#paymsg_layer').addClass("uhide");
+                                   }
+                               })
+                               // clearInterval(setInt);
+                               // setInt = 0;
+                               // ordertime = 0;
+                               //后面跟打印。。。
+                               printerdata(orderid,sendprinter,allprice); 
+                               printerall();
+                               //关闭定时向云端取值的任务、、、
+                               clearTimeout();
+                               // clearInterval(setInt);
+                               // setInt = 0;
+                               // ordertime = 0;
+                               //微信图标
+                               $("#wxpayimg").attr('src','images/weixin.png');
+                               //点击事件置0
+                               $("#weixinpay").attr('isclick','0');
+                               $("#zhifubaopay").attr('isclick','0');
+                               //关闭支付窗口、、
+                               
+                               layer.close(layer_order);
+                               layer_order=0;
+                               if(layer_alipay){
+                                   //alert(layer_alipay);
+                                   layer.close(layer_alipay);
+                                   layer_alipay=0;
+                               }
+                               //清空购物车、、
+                               $("#cancel").trigger(vartouchstart);
+                               //保存数据到本地
+                               saveorderpay(dpid,orderid,allprice,paytype);
+                               saveorderprod(dpid,orderid,sendsave);
+                               //alert(111);
+                               
+                               
+                               //printerdata(orderid,sendprinter,allprice); 
+                           }
+                          } 
+                       }
+                   },
+                   error:function(){
+                       //alert('请检查网络...');  
+                     },
+                   dataType:'json'
+               });  
+               
+              ordertime++;//alert(ordertime)
+              //if(ordertime==70){alert("70");}
+              if(ordertime ==120){
+                  //关闭定时向云端取订单状态的方法；
+                  setTimeout(clearTimeout,5000);
+                  
+                  //alert("点击重新支付！！");
+                  //$("#paymsgtext").text("请重新扫码支付。");
+                  $('#paymsg_layer_error').removeClass("uhide");
+                   layer_paymsg_error=layer.open({
+                        type: 1,
+                        shade: false,
+                        title: false, //不显示标题
+                        area: ['34%', '30%'],
+                        //area: auto,
+                        time: 3000,
+                        closeBtn: 0,
+                        content: $('#paymsg_layer_error'),//$('#productInfo'), //捕获的元素
+                        cancel: function(index){
+                            layer.close(index);
+                            layer_paymsg_error=0;
+                            $('#paymsg_layer_error').addClass("uhide");
+                       }
+                   })
+                  //微信图标
+                   $("#wxpayimg").attr('src','images/weixin.png');
+                   //点击事件置0
+                   $("#weixinpay").attr('isclick','0');
+                   $("#zhifubaopay").attr('isclick','0');
+                   layer.close(layer_alipay);
+                   layer_alipay=0;
+                   
+              }
+       }
 </script>
 
