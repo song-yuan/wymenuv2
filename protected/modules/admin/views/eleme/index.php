@@ -91,7 +91,7 @@ span.tab{
 								<td width="33%">
 									<a class = "btn<?php if(empty($dp)):?> green<?php else:?> payonline<?php endif;?>" <?php if(empty($dp)):?> href="<?php echo $this->createUrl('eleme/dpdy',array('companyId'=>$this->companyId));?>"<?php endif;?><?php if(!empty($dp)):?> style="color: #000;"<?php endif;?>><?php if(empty($dp)):?>店铺对应<?php else:?>店铺已对应<?php endif;?></a>
 									<a class = "btn yellow" href="<?php echo $this->createUrl('eleme/cpdy',array('companyId'=>$this->companyId));?>">菜品对应</a>
-									<a class = "btn red" href="<?php echo $this->createUrl('eleme/dpjb',array('companyId'=>$this->companyId));?>/type/1">解绑</a>
+									<a class="btn red a" dpid="<?php echo $this->companyId;?>">解绑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -106,3 +106,24 @@ span.tab{
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$('.a').click(function(){
+        	var dpid = $(this).attr('dpid');
+        	// alert(dpid);
+        	if(confirm('是否确认解绑？')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('eleme/dpjb',array('companyId'=>$this->companyId));?>',
+					data:{dpid:dpid},
+					success:function(data){
+						var msg = eval("("+data+")");
+						if(msg.status=='success'){
+							layer.msg(msg.msg);
+						}else{
+							alert('失败');
+						}
+						history.go(0);
+					}
+				});
+			}
+        });
+	</script>
