@@ -165,8 +165,8 @@ class MessageController extends BackendController
 					$result = array('status'=>false, 'result'=>false);
 					return $result;
 				}
-				$notifyurl = 'http://menu.wymenu.com/wymenuv2/admin/message/createOrderresult';
-				
+				//$notifyurl = 'http://menu.wymenu.com/wymenuv2/admin/message/createOrderresult';
+				$notifyurl = 'http://119.23.61.6';
 				$url = SqbConfig::SQB_DOMAIN.'/upay/v2/precreate';
 				$data = array(
 						'terminal_sn'=>$terminal_sn,
@@ -177,7 +177,7 @@ class MessageController extends BackendController
 						'operator'=>$operator,
 						'notify_url'=> $notifyurl,
 				);
-				//var_dump($data);exit;
+				var_dump($data);exit;
 				$body = json_encode($data);
 				$results = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
 				$obj = json_decode($results,true);
