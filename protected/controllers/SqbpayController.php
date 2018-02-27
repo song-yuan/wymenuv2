@@ -326,4 +326,10 @@ class SqbpayController extends Controller
 		$notify->Handle('pre-create');
 		exit;
 	}
+
+	public function actionCreateOrderresult(){
+		$data = $_POST['client_sn'];
+		Helper::writeLog('预下单回调通知参数：'.$data);
+		echo 'OK';
+	}
 }
