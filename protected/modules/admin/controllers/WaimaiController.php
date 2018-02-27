@@ -2,8 +2,6 @@
 header("Content-Type: text/html;charset=utf-8");
 class WaimaiController extends BackendController
 {
-	public $signkey = '8isnqx6h2xewfmiu';
-	public $developerId = 100746;
 	public function actions() {
 		return array(
 			'upload'=>array(
@@ -50,7 +48,7 @@ class WaimaiController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
-		$developerId=MtUnit::developerId;
+		$developerId = MtUnit::developerId;
 		$signkey = MtUnit::signkey;
 		$this->render('dpbd',array(
 			'companyId'=>$companyId,
