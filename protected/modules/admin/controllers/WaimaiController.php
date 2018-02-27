@@ -59,10 +59,12 @@ class WaimaiController extends BackendController
 	}
 	public function actionJcbd(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$signkey = MtUnit::signkey;
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$this->render('jcbd',array(
-			'tokenmodel' =>$tokenmodel
+			'tokenmodel' =>$tokenmodel,
+			'signkey'=>$signkey
 			));
 	}
 	public function actionPeisong(){

@@ -262,6 +262,12 @@ class DataSyncOperation {
 		foreach ( $results as $result ) {
 			$order = array ();
 			$order ['nb_order'] = $result;
+			if($result['order_type']=='1'){
+				// 桌台模式
+				$sql = 'select * from nb_site_no where lid=' . $result ['site_id'] . ' and dpid='.$dpid;
+				$siteNo = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+				$order ['nb_site_no'] = $siteNo;
+			}
 			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
 			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			$order ['nb_order_platform'] = $orderPlatform;
