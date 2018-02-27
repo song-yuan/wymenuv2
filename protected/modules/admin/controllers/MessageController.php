@@ -149,7 +149,7 @@ class MessageController extends BackendController
 			}
 			if($result){
 				
-				$total_amount = (int)$mss['money']*100;
+				$total_amount = (int)($mss['money']*100);
 				/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
 				$payway = $paytype;
 				$subject = '短信套餐';
