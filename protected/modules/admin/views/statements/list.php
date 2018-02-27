@@ -102,6 +102,7 @@
                             </a> 
                         </div>
                     </div>
+                    
                     <div class= "panel_body row">
                         <p>菜品明细报表</p>
         			     <div style="height: 80px;" class="list col-sm-3 col-xs-12">
@@ -211,7 +212,27 @@
                             </a> 
                         </div>
                     </div>
-                   
+                   <div class="panel_body row">
+                   		<p>成本</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('costs/costsReport',array('companyId' => $this->companyId,'time'=>date('Y-m-d',time())));?>">
+                                <div class="list_big">成本管控</div>
+                                <div class="list_small">查询所有支出</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('costs/costsMaterialReport',array('companyId' => $this->companyId,'time'=>date('Y-m-d',time())));?>">
+                                <div class="list_big">原料成本</div>
+                                <div class="list_small">按条件查询原料成本支出</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('costs/costsDayReport',array('companyId' => $this->companyId,'time'=>date('Y-m-d',time())));?>">
+                                <div class="list_big">支出成本</div>
+                                <div class="list_small">按日期查询支出成本</div>
+                            </a> 
+                        </div>
+                    </div>
                     <div class= "panel_body row">
                         <p>其他</p>
         				<div style="height: 80px;" class="list col-sm-3 col-xs-12">
