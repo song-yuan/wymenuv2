@@ -178,7 +178,7 @@ class MessageController extends BackendController
 						'operator'=>$operator,
 						'notify_url'=> $notifyurl,
 				);
-				//var_dump($data);exit;
+				var_dump($data);exit;
 				$body = json_encode($data);
 				$results = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
 				$obj = json_decode($results,true);
