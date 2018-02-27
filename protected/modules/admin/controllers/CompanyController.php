@@ -558,5 +558,33 @@ public function actionCreate(){
 		}
 		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 	}
-	
+	public function actionPaystore(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		//var_dump($dpid);exit;
+		//****查询公司的产品分类。。。****
+		$db = Yii::app()->db;
+		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
+		if(!empty($compros)){
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",pay_type ="2",pay_channel ="3" where dpid ='.$dpid;
+			$command = $db->createCommand($sql);
+			$command->execute();
+		}else{
+			$se = new Sequence("company_property");
+			$id = $se->nextval();
+			$data = array(
+					'lid'=>$id,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'pay_type'=>'2',
+					'pay_channel'=>'3',
+					'appId'=>'',
+					'code'=>'',
+					'delete_flag'=>'0',
+			);
+			//var_dump($dataprod);exit;
+			$command = $db->createCommand()->insert('nb_company_property',$data);
+		}
+		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+	}
 }
