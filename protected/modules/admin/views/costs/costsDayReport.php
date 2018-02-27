@@ -129,7 +129,7 @@
 					?>
 					</td>
 					<td><?php echo $value['price']; ?></td>
-					<td>
+					<td class="pric">
 						<?php
 							if($cost_type==0){
 								if($value['pay_type']==0){
@@ -187,7 +187,7 @@
 		               <th style="background: #ccc!important;"></th>
 		               <th style="background: #ccc!important;"></th>
 		               <th style="background: #ccc!important;"><?php echo yii::t('app','成本(支出)');?></th>
-		               <th style="background: #ccc!important;"> - <?php
+		               <th style="background: #ccc!important;"> - <span id="paynum"><?php
 							if($cost_type==0){
 								echo sprintf("%.2f", $pay);
 							}elseif($cost_type==1){
@@ -195,7 +195,7 @@
 							}elseif($cost_type==2){
 								echo sprintf("%.2f", $pay);
 							}
-						?> 元</th>
+						?> </span> 元</th>
 		               <th style="background: #ccc!important;"></th>
 		        </tr>
 	        </tbody>
@@ -308,7 +308,7 @@ jQuery(document).ready(function(){
 		if (confirm('确认删除该记录吗？')) {
 
      	var lid = $(this).attr('lid');
-     	// alert(lid);
+     	var paynum = $('#paynum').text();
      	$(this).attr('id','aa');
      	$.ajax({
      		url: "<?php echo $this->createUrl('costs/delete' , array('companyId'=>$this->companyId ));?>",
@@ -317,6 +317,9 @@ jQuery(document).ready(function(){
      		data: {lid: lid},
      		success:function(data){
      			if (data==1) {
+     				var juncosts = $('#aa').parent().parent().children('.pric').text();
+     				var obj = paynum-juncosts;
+     				$('#paynum').text(obj.toFixed(2));
      				$('#aa').parent().parent().remove();
      			}else{
      				layer.msg('删除失败!!!');
