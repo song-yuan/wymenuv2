@@ -257,14 +257,16 @@ class DataSyncOperation {
 			Yii::app()->cache->set($key,$cache);
 		}
 		//订单数据
-		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
+		$sql = 'select * from (select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 '.
+			   ' union select * from nb_order where dpid=' . $dpid . ' and order_status=2 and order_type=1 and is_sync!=0)m limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
 			$order ['nb_order'] = $result;
+			$order ['nb_site_no'] = array();
 			if($result['order_type']=='1'){
 				// 桌台模式
-				$sql = 'select * from nb_site_no where lid=' . $result ['site_id'] . ' and dpid='.$dpid;
+				$sql = 'select t.*,t1.serial from nb_site_no t,nb_site t1 where t.site_id=t1.lid and t.dpid=t1.dpid and t.lid=' . $result ['site_id'] . ' and t.dpid='.$dpid;
 				$siteNo = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 				$order ['nb_site_no'] = $siteNo;
 			}
