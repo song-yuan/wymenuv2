@@ -258,7 +258,7 @@ class DataSyncOperation {
 		}
 		//订单数据
 		$sql = 'select * from (select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 '.
-			   ' union select * from nb_order where dpid=' . $dpid . ' and order_status in(1,2) and order_type=1 and is_sync!=0)m limit 2';
+			   ' union select * from nb_order where dpid=' . $dpid . ' and order_status=2 and order_type=1 and is_sync!=0)m limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();

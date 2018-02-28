@@ -312,7 +312,7 @@ class WxOrder
     				'site_id'=>$this->siteNoId,
     				'is_temp'=>$this->isTemp,
     				'number'=>$this->number,
-    				'order_status'=>1,
+    				'order_status'=>2,
     				'order_type'=>$this->type,
     				'takeout_typeid'=>$this->takeoutTypeId,
     				'appointment_time'=>date('Y-m-d H:i:s',$time),
