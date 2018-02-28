@@ -165,8 +165,8 @@ class MessageController extends BackendController
 					$result = array('status'=>false, 'result'=>false);
 					return $result;
 				}
-				$notifyurl = 'http://menu.wymenu.com/wymenuv2/admin/message/createOrderresult';
-				
+				$notifyurl = 'http://menu.wymenu.com/wymenuv2/sqbpay/createOrderresult';
+				//$notifyurl = 'http://119.23.61.6';
 				$url = SqbConfig::SQB_DOMAIN.'/upay/v2/precreate';
 				$data = array(
 						'terminal_sn'=>$terminal_sn,
@@ -204,11 +204,6 @@ class MessageController extends BackendController
 			Yii::app()->end(json_encode(array("status"=>"error","msg"=>'创建短信订单失败！',)));
 		}
 	}
-	
-	public function actionCreateOrderresult(){
-		Helper::writeLog('预下单回调通知参数：');
-		$data=file_get_contents("php://input");
-		Helper::writeLog('预下单回调通知参数：'.$data);
-	}
+
 
 }
