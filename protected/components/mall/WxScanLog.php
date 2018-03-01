@@ -23,11 +23,8 @@ class WxScanLog
 	 * 
 	 */
  	public static function invalidScene($dpid,$siteId){
- 		$sql = 'select * from nb_scene where dpid=:dpid and id=:siteId and type=1';
- 		$scene = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':siteId',$siteId)->queryRow();
-		if($scene){
-			$sql = 'update nb_scene_scan_log set delete_flag=1 where dpid='.$dpid.' and scene_id='.$scene['scene_id'].' and delete_flag=0';
-			Yii::app()->db->createCommand($sql)->execute();
-		}
+ 		$siteNo = WxSite::getSiteNoByLid($siteId, $dpid);
+		$sql = 'update nb_scene_scan_log set delete_flag=1 where scene_id=(select scene_id from nb_scene where type=1 and scene_lid='.$siteNo['site_id'].' and scene_dpid='.$dpid.')';
+		Yii::app ()->db->createCommand ($sql)->execute();
  	}
 }

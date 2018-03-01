@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('我的订单');
+	$this->setPageTitle('已点菜品');
 	$orderPrice = 0;
 ?>
 
@@ -10,8 +10,9 @@
 <style>
 .layui-layer-btn{height:42px;}
 </style>
-
+<!--  
 <div class="order-title">已点菜品</div>
+-->
 <div class="order-site">
 	<div class="lt">桌号:<?php echo $siteType['name'];?><?php echo $site['serial'];?></div>
 	<div  class="rt"><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>"><img style="width:25px;height:25px;vertical-align:middle;" alt="" src="../img/mall/icon_add.png">加菜</a></div>

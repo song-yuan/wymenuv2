@@ -460,7 +460,10 @@ class MallController extends Controller
 		$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		
 		$orders = WxOrder::getOrderBySiteId($siteId, $this->companyId);
-		
+		if(empty($orders)){
+			$msg = '该餐桌还未下单';
+			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>1,'msg'=>$msg));
+		}
 		foreach ($orders as $order){
 			$orderProducts = $order['product_list'];
 			foreach ($orderProducts as $product){
@@ -539,7 +542,7 @@ class MallController extends Controller
 			try{
 				$orderId = $sorderObj->createOrder();
 				if($cuponId){
-					$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+					$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
 					if(!$result){
 						$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 					}
