@@ -73,7 +73,7 @@ class MallController extends Controller
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
 			Yii::app()->session['userId-'.$userDpid] = $userId;
-			Yii::app()->session['qrcode-'.$userId] = 602;
+			Yii::app()->session['qrcode-'.$userId] = 504;
 		}
 		return true;
 	}
@@ -304,7 +304,6 @@ class MallController extends Controller
 			}
 			if($paytype == 1){
 				WxOrder::updatePayType($orderId,$this->companyId,2);
-				$order = WxOrder::getOrder($orderId,$this->companyId);
 			}else{
 				WxOrder::updatePayType($orderId,$this->companyId,1);
 			}
@@ -319,6 +318,7 @@ class MallController extends Controller
 		}
 		if($paytype == 1){
 			//支付宝支付
+			$order = WxOrder::getOrder($orderId,$this->companyId);
 			if($order['order_status'] > 2){
 				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 			}else{
@@ -542,10 +542,7 @@ class MallController extends Controller
 			try{
 				$orderId = $sorderObj->createOrder();
 				if($cuponId){
-					$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
-					if(!$result){
-						$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
-					}
+					WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
 				}
 					
 				if($remark){
@@ -567,14 +564,8 @@ class MallController extends Controller
 					}
 				}	
 				if($paytype == 1){
-					$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
 					//支付宝支付
 					WxOrder::updatePayType($orderId,$this->companyId,2);
-					$order = WxOrder::getOrder($orderId,$this->companyId);
-					if($order['order_status'] > 2){
-						$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-					}
-					$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
 				}
 				WxOrder::updatePayType($orderId,$this->companyId);
 				$transaction->commit();
@@ -582,7 +573,15 @@ class MallController extends Controller
 				$transaction->rollback();
 				$msg = $e->getMessage();
 			}
-			
+			if($paytype == 1){
+				$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
+				//支付宝支付
+				$order = WxOrder::getOrder($orderId,$this->companyId);
+				if($order['order_status'] > 2){
+					$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+				}
+				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+			}
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }
 	 /**

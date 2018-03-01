@@ -229,7 +229,7 @@ class MtOrder
 					$foodProperty = $value['food_property'];
 					$tasteArr = array();
 					if($foodProperty!=''){
-						$spes = split(',', $foodProperty);
+						$spes = explode(',', $foodProperty);
 						foreach ($spes as $k => $val) {
 							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$val));
 						}
