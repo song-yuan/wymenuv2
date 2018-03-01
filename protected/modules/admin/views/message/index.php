@@ -194,7 +194,52 @@ var ordertime = 1;
             //alert(orderid);
             
         })//微信支付、、、
-
+        //支付宝支付
+        $("#zhifubaopay").on('click',function(){
+            isprinter=0;
+            var msid = $("#msid").val();
+            //layer.msg(msid);
+            var isclick = $(this).attr('isclick');
+            var paytype = 1;
+            //防止二次点击。。。（点击出现二维码则isclick置1，禁止二次点击再生成二维码。。。）
+            if(isclick=="0"){
+                $.ajax({
+                    url : '<?php echo $this->createUrl('message/createOrder');?>',
+                    type : 'POST',
+                    data : {
+                        msid: msid,
+                        username: '<?php echo Yii::app()->user->username;?>',
+                        dpid: '<?php echo $this->companyId;?>',
+                        paytype:1,
+                    },
+                    success:function(msg){
+                        if(msg.status){
+                            var imgurl = msg.msg;
+                            var orderid = msg.orderid;
+                            var did = msg.did;
+                            $("#alipayimg").attr('src',imgurl);
+                            $("#weixinpay").attr('isclick','1');
+                            $("#zhifubaopay").attr('isclick','1');
+                            setInt = setInterval(orderstatus_time,1000,did,orderid);
+                        }else{
+                            alert("失败！");
+                        }
+                    },
+                    error:function(){
+                       
+                        alert('error：网络错误');  
+                      },
+                    dataType:'json'
+                });
+                
+            }else{
+                //alert("请扫码支付！");
+                //$("#cancel").trigger(vartouchstart);
+            }
+            //alert(orderproductId,orderpayId);//alert(dpid);
+            //alert(orderid);
+            
+        })//微信支付、、、
         function orderstatus_time(dpid,orderid){
             //定时请求任务，如果支付成功，则清空购物车，关闭支付窗口。
                $.ajax({
