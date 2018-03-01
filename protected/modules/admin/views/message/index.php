@@ -126,6 +126,7 @@
         <input id="msid" type="hidden"/>
         </div> 
 <script type="text/javascript">
+var ordertime = 1;
 	$(".buymessage").on('click',function(){
 		var msid = $(this).attr('msid');
 		$('#msid').val(msid);
@@ -168,10 +169,12 @@
                     success:function(msg){
                         if(msg.status){
                             var imgurl = msg.msg;
+                            var orderid = msg.orderid;
+                            var did = msg.did;
                             $("#wxpayimg").attr('src',imgurl);
                             $("#weixinpay").attr('isclick','1');
                             $("#zhifubaopay").attr('isclick','1');
-                            setInt = setInterval(orderstatus_time,1000,dpid,orderid,sendjson,sendprinter,sendsave,paytype);
+                            setInt = setInterval(orderstatus_time,1000,did,orderid);
                         }else{
                             alert("失败！");
                         }
@@ -192,81 +195,40 @@
             
         })//微信支付、、、
 
-        function orderstatus_time(dpid,orderid,sendjson,sendprinter,sendsave,paytype){
+        function orderstatus_time(dpid,orderid){
             //定时请求任务，如果支付成功，则清空购物车，关闭支付窗口。
-                //alert(111);
-                
-               var allprice=$("#sum").data("sum");           
                $.ajax({
-                   url : 'http://menu.wymenu.com/wymenuv2/admin/dataAppSync/getOrderStatus',
+            	   url : '<?php echo $this->createUrl('message/checkOrder');?>',
                    type : 'POST',
                    //timeout:60000,
                    data : {
-                       companyId: dpid,
-                       orderId: orderid,
+                       dpid: dpid,
+                       orderid: orderid,
                    },
                    success:function(msg){
-                       if(!msg.status){
-                           alert("支付失败！");
-                       }else{
-                           if(isprinter==0){
-                           var orderStatus = msg.order_status;
-                           if(orderStatus=="3"){
-                               isprinter = 1;
-                               //alert("支付成功！");
-                               //支付成功的弹窗。。。
-                               $("#paymsgtext").text("支付成功");
-                               $('#paymsg_layer').removeClass("uhide");
-                               layer_paymsg=layer.open({
-                                    type: 1,
-                                    shade: false,
-                                    title: false, //不显示标题
-                                    area: ['30%', '24%'],
-                                    time: 3000,
-                                    closeBtn: 0,
-                                    content: $('#paymsg_layer'),//$('#productInfo'), //捕获的元素
-                                    cancel: function(index){
-                                        layer.close(index);
-                                        layer_paymsg=0;
-                                        $('#paymsg_layer').addClass("uhide");
-                                   }
-                               })
-                               // clearInterval(setInt);
-                               // setInt = 0;
-                               // ordertime = 0;
-                               //后面跟打印。。。
-                               printerdata(orderid,sendprinter,allprice); 
-                               printerall();
-                               //关闭定时向云端取值的任务、、、
-                               clearTimeout();
-                               // clearInterval(setInt);
-                               // setInt = 0;
-                               // ordertime = 0;
-                               //微信图标
-                               $("#wxpayimg").attr('src','images/weixin.png');
-                               //点击事件置0
-                               $("#weixinpay").attr('isclick','0');
-                               $("#zhifubaopay").attr('isclick','0');
-                               //关闭支付窗口、、
-                               
-                               layer.close(layer_order);
-                               layer_order=0;
-                               if(layer_alipay){
-                                   //alert(layer_alipay);
-                                   layer.close(layer_alipay);
-                                   layer_alipay=0;
+                       if(msg.status){
+                    	   
+                               var orderStatus = msg.msg;
+                               if(orderStatus=="1"){
+                                   //支付成功的弹窗。。。
+                                   layer.msg('支付成功！');
+                                   //关闭定时向云端取值的任务、、、
+                                   clearInterval(setInt);
+                                   clearTimeout();
+                                   //微信图标
+                                   $("#wxpayimg").attr('src','../../../../img/waiter/weixin.png');
+                                   $("#alipayimg").attr('src','../../../../img/waiter/zhifubao.png');
+                                   //点击事件置0
+                                   $("#weixinpay").attr('isclick','0');
+                                   $("#zhifubaopay").attr('isclick','0');
+                                   //关闭支付窗口、、
+                                   
+                                   layer.close(layer_pay);
+                                   layer_pay=0;
                                }
-                               //清空购物车、、
-                               $("#cancel").trigger(vartouchstart);
-                               //保存数据到本地
-                               saveorderpay(dpid,orderid,allprice,paytype);
-                               saveorderprod(dpid,orderid,sendsave);
-                               //alert(111);
-                               
-                               
-                               //printerdata(orderid,sendprinter,allprice); 
-                           }
-                          } 
+                              
+                       }else{
+                           layer.msg(msg.msg);
                        }
                    },
                    error:function(){
@@ -278,34 +240,19 @@
               ordertime++;//alert(ordertime)
               //if(ordertime==70){alert("70");}
               if(ordertime ==120){
+            	  clearInterval(setInt);
                   //关闭定时向云端取订单状态的方法；
                   setTimeout(clearTimeout,5000);
+                  layer.msg('支付失败！');
+                  $("#wxpayimg").attr('src','../../../../img/waiter/weixin.png');
+                  $("#alipayimg").attr('src','../../../../img/waiter/zhifubao.png');
+                  //点击事件置0
+                  $("#weixinpay").attr('isclick','0');
+                  $("#zhifubaopay").attr('isclick','0');
+                  //关闭支付窗口、、
                   
-                  //alert("点击重新支付！！");
-                  //$("#paymsgtext").text("请重新扫码支付。");
-                  $('#paymsg_layer_error').removeClass("uhide");
-                   layer_paymsg_error=layer.open({
-                        type: 1,
-                        shade: false,
-                        title: false, //不显示标题
-                        area: ['34%', '30%'],
-                        //area: auto,
-                        time: 3000,
-                        closeBtn: 0,
-                        content: $('#paymsg_layer_error'),//$('#productInfo'), //捕获的元素
-                        cancel: function(index){
-                            layer.close(index);
-                            layer_paymsg_error=0;
-                            $('#paymsg_layer_error').addClass("uhide");
-                       }
-                   })
-                  //微信图标
-                   $("#wxpayimg").attr('src','images/weixin.png');
-                   //点击事件置0
-                   $("#weixinpay").attr('isclick','0');
-                   $("#zhifubaopay").attr('isclick','0');
-                   layer.close(layer_alipay);
-                   layer_alipay=0;
+                  layer.close(layer_pay);
+                  layer_pay=0;
                    
               }
        }
