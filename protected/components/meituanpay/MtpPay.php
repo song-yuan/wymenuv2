@@ -376,7 +376,7 @@ class MtpPay{
     				$paySign = $obj['paySign'];
     				$prepayId = $obj['prepayId'];
     				 
-    				$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$appIds."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl."&debug=false";
+    				$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$appIds."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl;
     				Helper::writeLog('已进入支付：'.$url);
     				header("Location:".$url);
     			}

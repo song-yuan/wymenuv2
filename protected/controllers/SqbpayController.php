@@ -331,7 +331,20 @@ class SqbpayController extends Controller
 		
 		Helper::writeLog('预下单回调通知参数：'.date('Y-m-d H:i:s',time()));
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-		Helper::writeLog('回调获取参数：'.$xml);
-		echo 'OK';
+		$obj = json_decode($xml,true);
+		
+		$client_sn = $obj['client_sn'];
+		$order_status = $obj['order_status'];
+		if($order_status == 'PAID'){
+			$sql = 'update nb_message_order set update_at="'.date('Y-m-d H:i:s',time()).'",pay_status =1 where accountno='.$client_sn;
+			$res = Yii::app()->db->createCommand($sql)->execute();
+			if($res){
+				
+			}else{
+				Helper::writeLog('购买短息套餐支付成功，'.$client_sn);
+			}
+			return 'SUCCESS';
+		}
+
 	}
 }

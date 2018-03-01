@@ -188,7 +188,7 @@ class MessageController extends BackendController
 					$result_codes = $obj['biz_response']['result_code'];
 					if($result_codes == 'PRECREATE_SUCCESS'){
 						$imgurl = $obj['biz_response']['data']['qr_code_image_url'];
-						Yii::app()->end(json_encode(array("status"=>"success","msg"=>$imgurl,)));
+						Yii::app()->end(json_encode(array("status"=>"success","msg"=>$imgurl,"did"=>$dpid,"orderid"=>$accountno,)));
 					}else{
 						$error_message = $obj['biz_response']['error_message'];
 						Yii::app()->end(json_encode(array("status"=>"error","msg"=>$error_message,)));
@@ -203,7 +203,19 @@ class MessageController extends BackendController
 		} else {
 			Yii::app()->end(json_encode(array("status"=>"error","msg"=>'创建短信订单失败！',)));
 		}
-	}
 
+	}
+	public function actionCheckOrder(){
+		$dpid = $_POST['dpid'];
+		$orderid = $_POST['orderid'];
+		$sql ='select pay_status from nb_message_order where dpid ='.$dpid.' and accountno='.$orderid;
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($result)){
+			Helper::writeLog('查询点单状态。成功'.$result['pay_status']);
+			Yii::app()->end(json_encode(array("status"=>true,"msg"=>$result['pay_status'],)));
+		}else{
+			Yii::app()->end(json_encode(array("status"=>false,"msg"=>'查询失败！',)));
+		}
+	}
 
 }
