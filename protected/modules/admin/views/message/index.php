@@ -123,6 +123,7 @@
                 </div>
                 <div style="clear: both;"></div>
             </div>
+            <button class="btn" id="closepay" style="float: right;">关闭</button>
         <input id="msid" type="hidden"/>
         </div> 
 <script type="text/javascript">
@@ -130,7 +131,7 @@ var ordertime = 1;
 	$(".buymessage").on('click',function(){
 		var msid = $(this).attr('msid');
 		$('#msid').val(msid);
-		layer.msg(msid);
+		//layer.msg(msid);
 		$('#pay_layer').removeClass('hide');
 		layer_pay=layer.open({
             type: 1,
@@ -138,7 +139,7 @@ var ordertime = 1;
             title: false, //不显示标题
             area: ['60%', '50%'],
             //time: 3000,
-            closeBtn: 1,//关闭按钮
+            closeBtn: 0,//关闭按钮
             content: $('#pay_layer'),
             cancel: function(index){
                 layer.close(index);
@@ -147,16 +148,31 @@ var ordertime = 1;
            }
        })
 	})
-	        
+	    $('#closepay').on('click',function(){
+	    	//clearInterval(setInt);
+            clearTimeout();
+            //微信图标
+            $("#wxpayimg").attr('src','../../../../img/waiter/weixin.png');
+            $("#alipayimg").attr('src','../../../../img/waiter/zhifubao.png');
+            //点击事件置0
+            $("#weixinpay").attr('isclick','0');
+            $("#zhifubaopay").attr('isclick','0');
+            //关闭支付窗口、、
+            
+            layer.close(layer_pay);
+            layer_pay=0;
+        })    
         //微信支付
         $("#weixinpay").on('click',function(){
             isprinter=0;
             var msid = $("#msid").val();
-            layer.msg(msid);
+            //layer.msg(msid);
             var isclick = $(this).attr('isclick');
             var paytype = 1;
             //防止二次点击。。。（点击出现二维码则isclick置1，禁止二次点击再生成二维码。。。）
             if(isclick=="0"){
+                $("#weixinpay").attr('isclick','1');
+                $("#zhifubaopay").attr('isclick','1');
                 $.ajax({
                     url : '<?php echo $this->createUrl('message/createOrder');?>',
                     type : 'POST',
@@ -172,8 +188,6 @@ var ordertime = 1;
                             var orderid = msg.orderid;
                             var did = msg.did;
                             $("#wxpayimg").attr('src',imgurl);
-                            $("#weixinpay").attr('isclick','1');
-                            $("#zhifubaopay").attr('isclick','1');
                             setInt = setInterval(orderstatus_time,1000,did,orderid);
                         }else{
                             alert("失败！");
@@ -203,6 +217,9 @@ var ordertime = 1;
             var paytype = 1;
             //防止二次点击。。。（点击出现二维码则isclick置1，禁止二次点击再生成二维码。。。）
             if(isclick=="0"){
+
+                $("#weixinpay").attr('isclick','1');
+                $("#zhifubaopay").attr('isclick','1');
                 $.ajax({
                     url : '<?php echo $this->createUrl('message/createOrder');?>',
                     type : 'POST',
@@ -218,8 +235,6 @@ var ordertime = 1;
                             var orderid = msg.orderid;
                             var did = msg.did;
                             $("#alipayimg").attr('src',imgurl);
-                            $("#weixinpay").attr('isclick','1');
-                            $("#zhifubaopay").attr('isclick','1');
                             setInt = setInterval(orderstatus_time,1000,did,orderid);
                         }else{
                             alert("失败！");
