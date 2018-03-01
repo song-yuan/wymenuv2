@@ -1069,6 +1069,7 @@ class WxOrder
 	 	//修改座位状态
 	 	if($order['order_type']==1){
 	 		WxSite::updateSiteStatus($order['site_id'],$dpid,4);
+	 		WxScanLog::invalidScene($dpid, $order['site_id']);
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
