@@ -328,8 +328,10 @@ class SqbpayController extends Controller
 	}
 
 	public function actionCreateOrderresult(){
-		$data = $_POST['client_sn'];
-		Helper::writeLog('预下单回调通知参数：'.$data);
+		
+		Helper::writeLog('预下单回调通知参数：'.date('Y-m-d H:i:s',time()));
+		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+		Helper::writeLog('回调获取参数：'.$xml);
 		echo 'OK';
 	}
 }

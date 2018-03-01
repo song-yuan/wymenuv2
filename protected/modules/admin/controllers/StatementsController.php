@@ -619,13 +619,13 @@ class StatementsController extends BackendController
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =14 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
 					.' group by '.$users
-				.' ) op14 on(t.dpid = op1.dpid and op14.username '.$user.$timesy.'op14.y_oo'.$timesm.'op14.m_oo'.$timesd.'op14.d_oo ) '
+				.' ) op14 on(t.dpid = op14.dpid and op14.username '.$user.$timesy.'op14.y_oo'.$timesm.'op14.m_oo'.$timesd.'op14.d_oo ) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
 					.' where top.dpid = '.$this->companyId.' and top.paytype =15 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
 					.' group by '.$users
-				.' ) op15 on(t.dpid = op1.dpid and op15.username '.$user.$timesy.'op15.y_oo'.$timesm.'op15.m_oo'.$timesd.'op15.d_oo ) '
+				.' ) op15 on(t.dpid = op15.dpid and op15.username '.$user.$timesy.'op15.y_oo'.$timesm.'op15.m_oo'.$timesd.'op15.d_oo ) '
 				.' left join ('
 					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
 					.' from nb_order_paytype_total top '
@@ -641,7 +641,7 @@ class StatementsController extends BackendController
 				.' where t.paytype in(0,1,2,3,4,5,6,8,9,10,12,13,14,15) and t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.username '.$username.' and t.delete_flag=0'
 				.' group by '.$useros		
 		;
-		
+		//echo $sql;exit;
 		$payments = $this->getPayment($this->companyId);
 		$username = $this->getUsername($this->companyId);
 		$comName = $this->getComName();
