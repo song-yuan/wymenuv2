@@ -8,9 +8,8 @@
 class WxScanLog
 {
 	public static function get($dpid,$userId){
-		$time = date('Y-m-d H:i:s',time()-5*60*60);
-		$sql = 'select * from nb_scene_scan_log where dpid=:dpid and user_id=:userId and create_at > :time and delete_flag=0 order by lid desc';
-		$categorys = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':userId',$userId)->bindValue(':time',$time)->queryRow();
+		$sql = 'select * from nb_scene_scan_log where dpid=:dpid and user_id=:userId and delete_flag=0 order by lid desc';
+		$categorys = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':userId',$userId)->queryRow();
 		return $categorys;
 	}
 	public static function getScene($dpid,$sceneId){
