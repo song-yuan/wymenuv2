@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('支付订单');
+	$this->setPageTitle('确认订单');
 	$orderTatsePrice = 0.00;
 	$fval = '0-0-0';// 满类型-满lid-送lid
 	$isCupon = false;
@@ -20,7 +20,9 @@
 </style>
 
 <form action="<?php echo $this->createUrl('/mall/generalSiteOrder',array('companyId'=>$this->companyId,'siteNoId'=>$siteId,'type'=>$this->type));?>" method="post">
+<!--  
 <div class="order-title">我的订单</div>
+-->
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 
 <div class="order-info">
