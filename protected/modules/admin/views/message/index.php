@@ -211,7 +211,7 @@ var ordertime = 1;
                                var orderStatus = msg.msg;
                                if(orderStatus=="1"){
                                    //支付成功的弹窗。。。
-                                   layer.msg('支付成功！');
+                                   layer.msg('购买成功！');
                                    //关闭定时向云端取值的任务、、、
                                    clearInterval(setInt);
                                    clearTimeout();
