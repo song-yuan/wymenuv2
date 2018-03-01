@@ -329,7 +329,7 @@ class SqbpayController extends Controller
 
 	public function actionCreateOrderresult(){
 		
-		Helper::writeLog('预下单回调通知参数：'.date('Y-m-d H:i:s',time()));
+		//Helper::writeLog('预下单回调通知参数：'.date('Y-m-d H:i:s',time()));
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		$obj = json_decode($xml,true);
 		
@@ -338,33 +338,40 @@ class SqbpayController extends Controller
 		if($order_status == 'PAID'){
 			$sqlm = 'select * from nb_message_order where accountno='.$client_sn;
 			$ms = Yii::app()->db->createCommand($sqlm)->queryRow();
-			if(!empty($ms)){
-			
-				$sql = 'update nb_message_order set update_at="'.date('Y-m-d H:i:s',time()).'",pay_status =1 where accountno='.$client_sn;
-				$res = Yii::app()->db->createCommand($sql)->execute();
-				if($res){
-					$sql = 'select * from nb_message_set where lid ='.$ms['message_set_id'];
-					$re = Yii::app()->db->createCommand($sql)->queryRow();
-					if(!empty($re)){
-						$all = $re['all_message_no'] + $re['send_message_no'];
-						
-						$se = new Sequence('message');
-						$dat = array(
-							'lid' => $se->nextval(),
-							'dpid' => $ms['dpid'],
-							'create_at' => date('Y-m-d H:i:s',time()),
-							'update_at' => date('Y-m-d H:i:s',time()),
-							'downdate_at' => date('Y-m-d H:i:s',strtotime("+".$re['downdate']." years", time())),
-							'buy_no' => $re['all_message_no'],
-							'sent_no' => $re['send_message_no'],
-							'odd_message_no' => $all,
+			$sqlme = 'select lid from nb_message where accountno='.$client_sn;
+			$mss = Yii::app()->db->createCommand($sqlme)->queryRow();
+			if(!empty($mss)){
+				
+			}else{
+				if(!empty($ms)){
+				
+					$sql = 'update nb_message_order set update_at="'.date('Y-m-d H:i:s',time()).'",pay_status =1 where accountno='.$client_sn;
+					$res = Yii::app()->db->createCommand($sql)->execute();
+					if($res){
+						$sql = 'select * from nb_message_set where lid ='.$ms['message_set_id'];
+						$re = Yii::app()->db->createCommand($sql)->queryRow();
+						if(!empty($re)){
+							$all = $re['all_message_no'] + $re['send_message_no'];
 							
-						);
-						$result = Yii::app ()->db->createCommand ()->insert('nb_message',$dat);
+							$se = new Sequence('message');
+							$dat = array(
+								'lid' => $se->nextval(),
+								'dpid' => $ms['dpid'],
+								'create_at' => date('Y-m-d H:i:s',time()),
+								'update_at' => date('Y-m-d H:i:s',time()),
+								'accountno' => $client_sn,
+								'downdate_at' => date('Y-m-d H:i:s',strtotime("+".$re['downdate']." years", time())),
+								'buy_no' => $re['all_message_no'],
+								'sent_no' => $re['send_message_no'],
+								'odd_message_no' => $all,
+								
+							);
+							$result = Yii::app ()->db->createCommand ()->insert('nb_message',$dat);
+						}
+						
+					}else{
+						Helper::writeLog('购买短息套餐支付成功,但更改状态失败，'.$client_sn);
 					}
-					
-				}else{
-					Helper::writeLog('购买短息套餐支付成功,但更改状态失败，'.$client_sn);
 				}
 			}
 			return 'SUCCESS';
