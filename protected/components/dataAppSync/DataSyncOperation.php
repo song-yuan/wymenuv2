@@ -580,6 +580,8 @@ class DataSyncOperation {
 			if($orderInfo->is_temp==0&&$siteNo){
 				$sql = 'update nb_site_no set status=4 where site_id='.$siteId.' and dpid='.$dpid.' and status in(1,2,5)';
 				Yii::app ()->db->createCommand ($sql)->execute();
+				$sql = 'update nb_scene_scan_log set delete_flag=1 where scene_id=(select scene_id from nb_scene where type=1 and scene_lid='.$siteNo['site_id'].' and scene_dpid='.$dpid.')';
+				Yii::app ()->db->createCommand ($sql)->execute();
 				$sql = 'update nb_order set order_status=7 where site_id='.$siteNo['lid'].' and dpid='.$dpid.' and order_status=2';
 				Yii::app ()->db->createCommand ($sql)->execute();
 			}

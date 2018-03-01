@@ -92,6 +92,9 @@ class WxSite
 		
 		$sql = 'update nb_site set status='.$status.',is_sync='.$isSync.' where lid='.$siteNo['site_id'].' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
+		
+		$sql = 'update nb_scene_scan_log set delete_flag=1 where scene_id=(select scene_id from nb_scene where type=1 and scene_lid='.$siteId.' and scene_dpid='.$dpid.')';
+		Yii::app ()->db->createCommand ($sql)->execute();
 	}
 	/**
 	 * 
