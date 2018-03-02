@@ -191,6 +191,8 @@ class SiteClass
         	$transaction = $db->beginTransaction();
         	try {
 	        	if($type==3){
+	        		$sql = 'update nb_scene_scan_log set delete_flag=1 where scene_id=(select scene_id from nb_scene where type=1 and scene_lid='.$sid.' and scene_dpid='.$companyId.')';
+	        		Yii::app ()->db->createCommand ($sql)->execute();
 	        		$sql = "update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2')";
 	        		$commandsiteno = $db->createCommand($sql)
 					        		->bindValue(":sid" , $sid)
