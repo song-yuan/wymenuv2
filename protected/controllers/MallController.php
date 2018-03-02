@@ -190,7 +190,6 @@ class MallController extends Controller
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$memdisprice = $original - $price;
 		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
-		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
 		// 如果没普通优惠活动  可满减满送
@@ -200,6 +199,7 @@ class MallController extends Controller
 			if(!empty($fullsent)){
 				if($fullsent['full_type']){
 					$minusprice = $price - $fullsent['extra_cost'];
+					$canuseCuponPrice = $canuseCuponPrice - $fullsent['extra_cost'];
 					if($minusprice > 0){
 						$price = $minusprice;
 					}else{
@@ -208,6 +208,7 @@ class MallController extends Controller
 				}
 			}
 		}
+		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 		if($this->type!=6){
 			$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
 			$isPackingFee = WxCompanyFee::get(2,$this->companyId);
@@ -493,7 +494,6 @@ class MallController extends Controller
 		
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr,$levelDiscount);// 购物车优惠原价
 		
-		$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
@@ -502,6 +502,7 @@ class MallController extends Controller
 			if(!empty($fullsent)){
 				if($fullsent['full_type']){
 					$minusprice = $price - $fullsent['extra_cost'];
+					$canuseCuponPrice = $canuseCuponPrice - $fullsent['extra_cost'];
 					if($minusprice > 0){
 						$price = $minusprice;
 					}else{
@@ -510,6 +511,8 @@ class MallController extends Controller
 				}
 			}
 		}
+		$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
+		
 		$this->render('order',array('companyId'=>$this->companyId,'orders'=>$orders,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'user'=>$user,'siteId'=>$siteId,'price'=>$price,'remainMoney'=>$remainMoney,'seatingFee'=>$seatingFee,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
 	 }
 	 /**
