@@ -62,6 +62,7 @@
 
 <div class="bottom"></div>
 
+<!--  
 <footer>
     <div class="ft-lt">
         <p>总计￥<span id="total" class="total"><?php echo number_format($orderPrice,2);?></span></p>
@@ -71,7 +72,7 @@
     </div>
     <div class="clear"></div>
 </footer>
-
+-->
 
 
 <script>
