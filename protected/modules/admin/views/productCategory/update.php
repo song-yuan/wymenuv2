@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form1', array('model'=>$model)); ?>
+							<?php echo $this->renderPartial('_form2', array('model'=>$model)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
