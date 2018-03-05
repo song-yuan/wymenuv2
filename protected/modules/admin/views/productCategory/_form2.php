@@ -75,8 +75,12 @@
           		<div class="form-group">
                      <?php echo $form->label($model, 'show_type',array('class' => 'col-md-3 control-label'));?>
                      <div class="col-md-4">
-                          <?php echo $form->dropDownList($model, 'show_type', array('1' => yii::t('app','都显示') , '2' => yii::t('app','微信外卖不显示'), '3' => yii::t('app','微信堂食不显示'), '4' => yii::t('app','微信端都不显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('show_type')));?>
-                          <?php echo $form->error($model, 'show_type' )?>
+                     	<?php if(Yii::app()->user->role<11):?>
+                        <?php echo $form->dropDownList($model, 'show_type', array('1' => yii::t('app','都显示') , '2' => yii::t('app','微信外卖不显示'), '3' => yii::t('app','微信堂食不显示'), '4' => yii::t('app','微信端都不显示'), '5' => yii::t('app','POS端都不显示'), '6' => yii::t('app','都不显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('show_type')));?>
+                        <?php else:?>
+                        <?php echo $form->dropDownList($model, 'show_type', array('1' => yii::t('app','都显示') , '2' => yii::t('app','微信外卖不显示'), '3' => yii::t('app','微信堂食不显示'), '4' => yii::t('app','微信端都不显示'), '5' => yii::t('app','POS端都不显示'), '6' => yii::t('app','都不显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('show_type'),'disabled'=>true));?>
+                        <?php endif;?>
+                        <?php echo $form->error($model, 'show_type' )?>
                      </div>
                 </div>
 	</div>
