@@ -82,7 +82,7 @@ return array(
                    'class'=>'CMemCache',
 					'servers'=>array(
 							array(
-									'host'=>'121.42.12.97',
+									'host'=>'127.0.0.1',
 									'port'=>11211,
 									'weight'=>60,
 							),
