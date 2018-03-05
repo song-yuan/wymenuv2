@@ -846,7 +846,7 @@ class WxOrder
 	 */
 	public static function updateOrderCupon($orderId,$dpid,$cuponBranduser,$user){
 		$now = date('Y-m-d H:i:s',time());
-		$cuponBranduserArr = split('-', $cuponBranduser);
+		$cuponBranduserArr = explode('-', $cuponBranduser);
 		$cuponBranduserLid = $cuponBranduserArr[0];
 		$cuponBranduserDpid = $cuponBranduserArr[1];
 		$order = self::getOrder($orderId,$dpid);

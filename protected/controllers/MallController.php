@@ -73,7 +73,7 @@ class MallController extends Controller
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
 			Yii::app()->session['userId-'.$userDpid] = $userId;
-			Yii::app()->session['qrcode-'.$userId] = 602;
+			Yii::app()->session['qrcode-'.$userId] = 504;
 		}
 		return true;
 	}
@@ -190,7 +190,6 @@ class MallController extends Controller
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$memdisprice = $original - $price;
 		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
-		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		
 		// 如果没普通优惠活动  可满减满送
@@ -200,6 +199,7 @@ class MallController extends Controller
 			if(!empty($fullsent)){
 				if($fullsent['full_type']){
 					$minusprice = $price - $fullsent['extra_cost'];
+					$canuseCuponPrice = $canuseCuponPrice - $fullsent['extra_cost'];
 					if($minusprice > 0){
 						$price = $minusprice;
 					}else{
@@ -208,6 +208,7 @@ class MallController extends Controller
 				}
 			}
 		}
+		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 		if($this->type!=6){
 			$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
 			$isPackingFee = WxCompanyFee::get(2,$this->companyId);
@@ -304,7 +305,6 @@ class MallController extends Controller
 			}
 			if($paytype == 1){
 				WxOrder::updatePayType($orderId,$this->companyId,2);
-				$order = WxOrder::getOrder($orderId,$this->companyId);
 			}else{
 				WxOrder::updatePayType($orderId,$this->companyId,1);
 			}
@@ -319,6 +319,7 @@ class MallController extends Controller
 		}
 		if($paytype == 1){
 			//支付宝支付
+			$order = WxOrder::getOrder($orderId,$this->companyId);
 			if($order['order_status'] > 2){
 				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 			}else{
@@ -493,7 +494,6 @@ class MallController extends Controller
 		
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr,$levelDiscount);// 购物车优惠原价
 		
-		$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
 		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
@@ -502,6 +502,7 @@ class MallController extends Controller
 			if(!empty($fullsent)){
 				if($fullsent['full_type']){
 					$minusprice = $price - $fullsent['extra_cost'];
+					$canuseCuponPrice = $canuseCuponPrice - $fullsent['extra_cost'];
 					if($minusprice > 0){
 						$price = $minusprice;
 					}else{
@@ -510,6 +511,8 @@ class MallController extends Controller
 				}
 			}
 		}
+		$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
+		
 		$this->render('order',array('companyId'=>$this->companyId,'orders'=>$orders,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'user'=>$user,'siteId'=>$siteId,'price'=>$price,'remainMoney'=>$remainMoney,'seatingFee'=>$seatingFee,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
 	 }
 	 /**
@@ -542,10 +545,7 @@ class MallController extends Controller
 			try{
 				$orderId = $sorderObj->createOrder();
 				if($cuponId){
-					$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
-					if(!$result){
-						$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
-					}
+					WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
 				}
 					
 				if($remark){
@@ -567,14 +567,8 @@ class MallController extends Controller
 					}
 				}	
 				if($paytype == 1){
-					$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
 					//支付宝支付
 					WxOrder::updatePayType($orderId,$this->companyId,2);
-					$order = WxOrder::getOrder($orderId,$this->companyId);
-					if($order['order_status'] > 2){
-						$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-					}
-					$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
 				}
 				WxOrder::updatePayType($orderId,$this->companyId);
 				$transaction->commit();
@@ -582,7 +576,15 @@ class MallController extends Controller
 				$transaction->rollback();
 				$msg = $e->getMessage();
 			}
-			
+			if($paytype == 1){
+				$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
+				//支付宝支付
+				$order = WxOrder::getOrder($orderId,$this->companyId);
+				if($order['order_status'] > 2){
+					$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+				}
+				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+			}
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }
 	 /**
