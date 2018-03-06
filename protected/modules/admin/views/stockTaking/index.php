@@ -105,7 +105,7 @@
 								<th ><?php echo yii::t('app','类型');?></th>
 								<th><?php echo yii::t('app','库存单位');?></th>
 								<!-- <th><?php echo yii::t('app','实时库存');?></th> -->
-								<th><?php echo yii::t('app','盘点库存');?></th>
+								<th><?php echo yii::t('app','盘点库存（大单位、小单位、转换比例）');?>
 								<!--<th><php echo yii::t('app','库存成本');?></th>-->
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
@@ -125,8 +125,12 @@
 								<td ><?php echo $model['unit_name'];?></td>
 								                               
                                 <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['stock_all'];?>" name="idss[]" />
-								<input class="kucundiv" type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_stock'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
-								<input class="kucundiv" type="text"   style="width:100px;" name="rightnum<?php echo $model['lid'];?>" id="idrightnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_stock'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+                                
+								<input class="kucundiv" type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_stock'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" placeholder="库存大单位">
+								<span><?php echo $model['unit_name'];?></span>
+								<input class="kucundiv" type="text"   style="width:100px;" name="rightnum<?php echo $model['lid'];?>" id="idrightnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_sales'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" placeholder="零售小单位">
+								<?php echo $model['sales_name'];?>
+								<input type="button" disabled type="text" class="checkboxes" id="mratio<?php echo $model['lid'];?>" value="<?php  echo $this->getRatio($model['mu_lid'],$model['ms_lid']);?>"/>
 								</td>
 								<td class="center">
 								<?php if(Yii::app()->user->role <5):?>
@@ -137,7 +141,7 @@
 								
 								</td>
 							</tr>
-                                             <?php   ;?>
+                          
                                                       
                                                    
 						<?php endforeach;?>
@@ -166,7 +170,7 @@
 		});   
 	})             
 	$("#stocktaking").on("click",function(){
-		var loading = layer.load();
+		//var loading = layer.load();
 		//alert("123");
 		var sttype = $('#sttype').val();
         var arr=document.getElementsByName("idss[]");
@@ -183,13 +187,28 @@
         for(var i=0;i<arr.length;i++)
         {
             var vid = $(arr[i]).attr("id").substr(11,10);  
-            var nownum = $("#idleftnum0"+vid).val(); 
+            var nownumd = $("#idleftnum0"+vid).val(); 
+            var nownumx = $("#idrightnum0"+vid).val(); 
+            var ratio = $("#mratio"+vid).val();
+            
             //alert(nownum);return false;
             var originalnum = $("#originalnum"+vid).val();
-            var difference = parseFloat(nownum) - parseFloat(originalnum);
-				difference = difference.toFixed(2);
-            if(nownum != ''){
-                optval = vid +','+ difference +','+ nownum +','+ originalnum +';'+ optval;
+            //var difference = parseFloat(nownum) - parseFloat(originalnum);
+				//difference = difference.toFixed(2);
+			if(nownumd ==''){
+				nownumd = '0';
+			}
+			if(nownumx ==''){
+				nownumx = '0';
+			}
+			//var a = 1;
+			if(nownumd == '0'&&nownumx == '0'){
+				a = 0;
+			}else{
+				a = 1;
+			}
+            if(ratio != ''&&a==1){
+                optval = vid +','+ nownumd +','+ nownumx +','+ ratio +','+ originalnum +';'+ optval;
                 } 
             //var optval=arr[i].value;
             //alert(vid+nownum+originalnum);
@@ -202,7 +221,7 @@
             layer.closeAll('loading');
             return false;
             }
-        //
+        //alert(optval);return false;
 		var categoryId = '<?php echo $categoryId;?>';
         $.ajax({
             type:'GET',
@@ -245,14 +264,31 @@
         var arr=document.getElementsByName("idss[]");
         var optid;
         var optval = '';
+        
         for(var i=0;i<arr.length;i++)
         {
             var vid = $(arr[i]).attr("id").substr(11,10);  
-            var nownum = $("#idleftnum0"+vid).val(); 
+            var nownumd = $("#idleftnum0"+vid).val(); 
+            var nownumx = $("#idrightnum0"+vid).val();
             var stockid = $("#idleftnum0"+vid).attr('stockid');
-            if(nownum != ''){
-                optval = vid +','+ nownum +','+ stockid +';'+ optval;
-                } 
+            var ratio = $("#mratio"+vid).val();
+
+            if(nownumd ==''){
+				nownumd = '0';
+			}
+			if(nownumx ==''){
+				nownumx = '0';
+			}
+			//var a = 1;
+			if(nownumd == '0'&&nownumx == '0'){
+				a = 0;
+			}else{
+				a = 1;
+			}
+			
+            if(ratio != ''&&a==1){
+                optval = vid +','+ nownumd +','+ nownumx +','+ ratio +','+ stockid +';'+ optval;
+            } 
         }
         if(optval.length >0){
         	optval = optval.substr(0,optval.length-1);//除去最后一个“，”
@@ -262,7 +298,7 @@
             layer.closeAll('loading');
             return false;
             }
-        //
+        //alert(optval);return false;
 		var categoryId = '<?php echo $categoryId;?>';
         $.ajax({
             type:'GET',
