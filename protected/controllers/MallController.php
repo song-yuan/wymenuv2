@@ -286,6 +286,7 @@ class MallController extends Controller
 			}
 			//备注
 			if($remark){
+				$remark = Helper::dealString($remark);
 				$contion = $contion.' remark="'.$remark.'",';
 			}
 			
@@ -549,6 +550,7 @@ class MallController extends Controller
 				}
 					
 				if($remark){
+					$remark = Helper::dealString($remark);
 					$contion = $contion.' remark="'.$remark.'",';
 				}
 					
