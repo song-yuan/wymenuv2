@@ -29,11 +29,12 @@ class StockTakingController extends BackendController
 			$cate ='>0';
 		}
 		
-		$sql = 'select ms.stock_all,mu.unit_name,k.category_name,inv.inventory_stock,inv.lid as invtid,t.* from nb_product_material t '.
+		$sql = 'select ms.stock_all,mu.unit_name,mu.lid as mu_lid,ms.lid as ms_lid,ms.unit_name as sales_name,k.category_name,inv.inventory_stock,inv.inventory_sales,inv.ratio,inv.lid as invtid,t.* from nb_product_material t '.
 				'left join nb_material_category k on(t.category_id = k.lid and t.dpid = k.dpid)'.
 				'left join nb_material_unit mu on(t.stock_unit_id = mu.lid and t.dpid = mu.dpid and mu.delete_flag =0) '.
+				'left join nb_material_unit ms on(t.sales_unit_id = ms.lid and t.dpid = ms.dpid and ms.delete_flag =0) '.
 				'left join (select sum(stock) as stock_all,material_id from nb_product_material_stock where dpid='.$this->companyId.' and delete_flag=0 group by material_id) ms on(t.lid = ms.material_id)'.
-				'left join (select lid,material_id,inventory_stock from nb_inventory_detail where inventory_id in(select max(lid) from nb_inventory where dpid ='.$this->companyId.' and type =2 and status =0) group by material_id) inv on(inv.material_id = t.lid)'.
+				'left join (select lid,material_id,inventory_stock,inventory_sales,ratio from nb_inventory_detail where inventory_id in(select max(lid) from nb_inventory where dpid ='.$this->companyId.' and type =2 and status =0) group by material_id) inv on(inv.material_id = t.lid)'.
 				'where t.lid in(select tt.lid from nb_product_material tt where tt.delete_flag = 0 and tt.dpid ='.$this->companyId.' and tt.category_id '.$cate.') order by t.category_id asc,t.lid asc';
 		$models = $db->createCommand($sql)->queryAll();
 		$categories = $this->getCategories();
@@ -179,9 +180,16 @@ class StockTakingController extends BackendController
 				$opt = array();
 				$opt = explode(',',$opts); 
 				$id = $opt[0];
-				$difference = $opt[1];
-				$nowNum = $opt[2];
-				$originalNum = $opt[3];
+// 				$difference = $opt[1];
+// 				$nowNum = $opt[2];
+// 				$originalNum = $opt[3];
+				
+				$nownumd = $opt[1];
+				$nownumx = $opt[2];
+				$ratio = $opt[3];
+				$originalNum = $opt[4];
+				$nowNum = $nownumd*$ratio+$nownumx;
+				$difference = $nowNum-$originalNum;
 				
 				$all_num = '0.00';
 				$laststocks = '0.00';
@@ -678,8 +686,10 @@ class StockTakingController extends BackendController
 				$opt = array();
 				$opt = explode(',',$opts);
 				$id = $opt[0];
-				$nowNum = $opt[1];
-				$stsid = $opt[2];
+				$nowNumd = $opt[1];
+				$nowNumx = $opt[2];
+				$ratio = $opt[3];
+				$stsid = $opt[4];
 	
 				if($stsid){
 					//$sqlsts = 'select * from nb_inventory_detail where lid='.$stsid.' and delete_flag=0 and inventory_id ='.$stid;
@@ -687,7 +697,9 @@ class StockTakingController extends BackendController
 					$sts = InventoryDetail::model()->find('lid='.$stsid.' and delete_flag=0 and inventory_id ='.$stid);
 					if(!empty($sts)){
 						$sts->update_at = date('Y-m-d H:i:s',time());
-						$sts->inventory_stock = $nowNum;
+						$sts->inventory_stock = $nowNumd;
+						$sts->inventory_sales = $nowNumx;
+						$sts->ratio = $ratio;
 						$sts-> update();
 					} 
 				}else{
@@ -700,7 +712,9 @@ class StockTakingController extends BackendController
 						'update_at' => date('Y-m-d H:i:s',time()),
 						'inventory_id' => $stid,
 						'material_id' => $id,
-						'inventory_stock' => $nowNum,
+						'inventory_stock' => $nowNumd,
+						'inventory_sales' => $nowNumx,
+						'ratio' => $ratio
 						
 					);
 					$command = $db->createCommand()->insert('nb_inventory_detail',$invtds);
@@ -776,6 +790,16 @@ class StockTakingController extends BackendController
 		$criteria->order = ' t.lid asc ';
 		$models = Retreat::model()->findAll($criteria);
 		return $models;
+	}
+	public function getRatio($mulid,$mslid){
+		$sql = 'select unit_ratio from nb_material_unit_ratio where stock_unit_id='.$mulid.' and sales_unit_id='.$mslid;
+		$models = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($models)){
+			$r = $models['unit_ratio'];
+		}else{
+			$r = '0';
+		}
+		return $r;
 	}
 
 	//导出excel
