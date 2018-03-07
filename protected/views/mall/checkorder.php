@@ -381,13 +381,12 @@
 		</div>
 	<?php endif;?>
 </div>
-<?php endif;?>
-
-<?php if($this->type!=1):?>
 <div class="totalinfo"><span class="font_l" style="margin-right:20px;<?php if(!$memdisprice) echo 'dispaly:none';?>">优惠￥<span class="cart-discount"><?php echo number_format($memdisprice,2);?></span></span><span>实付￥<span class="cart-price"><?php echo $price;?></span></span></div>
+<?php endif;?>
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="请输入备注内容(可不填)"></textarea>
 </div>
+<?php if($this->type!=1):?>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<!-- 余额 -->
