@@ -164,12 +164,12 @@
 							<LABEL class="col-md-3 control-label">选择配送类型:</LABEL>
 									<div class="col-md-4">
 										<select id="sentype" class="form-control" >
-				                            <option value="1">自配送</option>
-				                            <option value="3">第三方物流</option>
+				                            <option value="1" <?php if ($models['sent_type'] == 1) { echo 'selected';} ?>>自配送</option>
+				                            <option value="3" <?php if ($models['sent_type'] == 3) { echo 'selected';} ?>>第三方物流</option>
 			                    		</select>
 			                    	</div>
 			                    </div>
-			                    <div class="center self">
+			                    <div class="center self <?php if ($models['sent_type'] == 3) { echo 'uhide';} ?>">
 									<div class="form-group cfs">
 									<LABEL class="col-md-3 control-label">选择配送员:</LABEL>
 										<div class="col-md-4">
@@ -177,7 +177,7 @@
 					                            <?php $phone=''; if($pers):?>
 					                            <?php foreach ($pers as $p):?>
 					                            <?php $phone = $pers[0]['phone_number'];?>
-					                            <option mobile="<?php echo $p['phone_number'];?>" value="<?php echo $p['member_name'];?>"><?php echo $p['member_name'];?></option>
+					                            <option mobile="<?php echo $p['phone_number'];?>" value="<?php echo $p['member_name'];?>" <?php if ($models['sent_personnel'] == $p['member_name']) { echo 'selected';} ?>><?php echo $p['member_name'];?></option>
 					                            <?php endforeach;?>
 					                            <?php endif;?>
 				                    		</select>
@@ -186,21 +186,33 @@
 				                    <div class="form-group cfs">
 									<LABEL class="col-md-3 control-label">联系电话:</LABEL>
 										<div class="col-md-4">
-					                    	<input id="mobile" class="form-control" disabled value="<?php echo $phone;?>"/>
+					                    	<input id="mobile" class="form-control" disabled value="<?php if (empty($models['sent_personnel'])) {echo $phone;}else{echo $models['mobile'];}?>"/>
 				                    	</div>
 				                    </div>
 								</div>
-								<div class="center orther uhide">
+								<div class="center orther <?php if ($models['sent_type'] == 1) { echo 'uhide';} ?>">
 									<div class="form-group cfs">
 									<LABEL class="col-md-3 control-label">第三方物流公司:</LABEL>
 										<div class="col-md-4">
-											<input id="wuliu_name" class="form-control" value=""/>
+											<input id="wuliu_name" class="form-control" value="<?php if (!empty($models['sent_personnel'])) {echo $models['sent_personnel'];}?>"/>
 				                    	</div>
 				                    </div>
 				                    <div class="form-group cfs">
 									<LABEL class="col-md-3 control-label">物流单号:</LABEL>
 										<div class="col-md-4">
-					                    	<input id="wuliu_nums" class="form-control" value=""/>
+					                    	<input id="wuliu_nums" class="form-control" value="<?php if (!empty($models['mobile'])) {echo $models['mobile'];}?>"/>
+				                    	</div>
+				                    </div>
+				                    <div class="form-group cfs">
+									<LABEL class="col-md-3 control-label">配送员:</LABEL>
+										<div class="col-md-4">
+					                    	<input id="wuliu_sender" class="form-control" value="<?php if (!empty($models['sent_personnel_2'])) {echo $models['sent_personnel_2'];}?>"/>
+				                    	</div>
+				                    </div>
+				                    <div class="form-group cfs">
+									<LABEL class="col-md-3 control-label">电 话:</LABEL>
+										<div class="col-md-4">
+					                    	<input id="wuliu_phone" class="form-control" value="<?php if (!empty($models['mobile'])) {echo $models['mobile_2'];}?>"/>
 				                    	</div>
 				                    </div>
 								</div>
@@ -244,19 +256,18 @@ $(document).ready(function(){
 		}else{
 			var name = $('#wuliu_name').val();
 			var nums = $('#wuliu_nums').val();
+			var sender = $('#wuliu_sender').val();
+			var phone = $('#wuliu_phone').val();
 		}
-// 		layer.msg(name+'@'+nums);
-// 		alert(name);
+
 		if(name == '' || nums == '' || name == undefined || nums == undefined){
 			layer.msg('请填写相应信息，再保存！');
 			return false;
 		}else{
-			var url = "<?php echo $this->createUrl('goodsinvoice/storestock',array('companyId'=>$this->companyId));?>/name/"+name+"/nums/"+nums+"/gid/"+gid+"/type/"+type;
+			var url = "<?php echo $this->createUrl('goodsinvoice/storestock',array('companyId'=>$this->companyId));?>/name/"+name+"/nums/"+nums+"/gid/"+gid+"/type/"+type+"/sender/"+sender+"/phone/"+phone;
 	        $.ajax({
 	            url:url,
 	            type:'POST',
-	            //data:plids,//CF
-	            //async:false,
 	            dataType: "json",
 	            success:function(msg){
 	                var data=msg;

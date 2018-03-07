@@ -459,39 +459,62 @@
 								<?php endforeach; ?>
 							</ul>
 						</div>
-						<div class="mui-card-footer">
 							<?php if($value['invoice_accountno']): ?>
 								<?php if($value['sent_type']==3): ?>
+								<div class="mui-card-footer">
 									<a class="mui-card-link">
-									<span class="mui-pull-right"><?php echo $value['sent_personnel'];?> </span>
+									<span class="mui-pull-right"><?php if(empty($value['sent_personnel'])){echo '';}else{echo '物 流 :'.$value['sent_personnel'];} ?> </span>
 									</a>
-									<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">物流单号 :
-									<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
+									<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">
+									<span class="mui-pull-right" > <?php if(!empty($value['mobile'])){echo '物流单号 :'.$value['mobile'];}?> </span>
 									</a>
+									<a class="mui-card-link" >
+									</a>
+								</div>
+								<div class="mui-card-footer">
+									<a class="mui-card-link">
+									<span class="mui-pull-right"><?php if(empty($value['sent_personnel_2'])){echo $value['sent_personnel'];}else{echo '配送员 :'.$value['sent_personnel_2'];} ?> </span>
+									</a>
+									<a class="mui-card-link" href="tel:<?php echo $value['mobile_2'];?>">
+									<span class="mui-pull-right" > <?php if(empty($value['mobile_2'])){echo '物流单号 :'.$value['mobile'];}else{echo '手机号 :'.$value['mobile_2'];}?> </span>
+									</a>
+									<?php if($value['istatus']==1): ?>
+										<a class="mui-card-link">
+										<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined mui-sureo" style="padding: 2px 12px;float:right;" invoice_accountno="<?php echo $value['invoice_accountno']; ?>" account_no="<?php echo $value['account_no']; ?>">确认收货</button>
+										</a>
+									<?php elseif($value['istatus']==2): ?>
+										<a class="mui-card-link">
+										<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined mui-sureo" style="padding: 2px 12px;float:right;" disabled invoice_accountno="<?php echo $value['invoice_accountno']; ?>" account_no="<?php echo $value['account_no']; ?>">已收货</button>
+										</a>
+									<?php endif; ?>
+								</div>
 								<?php else: ?>
+								<div class="mui-card-footer">
 									<a class="mui-card-link">配送员 :
 									<span class="mui-pull-right" style="color:black;"> <?php echo $value['sent_personnel'];?> </span>
 									</a>
 									<a class="mui-card-link" href="tel:<?php echo $value['mobile'];?>">手机号 :
 									<span class="mui-pull-right" > <?php echo $value['mobile'];?> </span>
 									</a>
-								<?php endif; ?>
-								<?php if($value['istatus']==1): ?>
-									<a class="mui-card-link">
-									<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined mui-sureo" style="padding: 2px 12px;float:right;" invoice_accountno="<?php echo $value['invoice_accountno']; ?>" account_no="<?php echo $value['account_no']; ?>">确认收货</button>
-									</a>
-								<?php elseif($value['istatus']==2): ?>
-									<a class="mui-card-link">
-									<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined mui-sureo" style="padding: 2px 12px;float:right;" disabled invoice_accountno="<?php echo $value['invoice_accountno']; ?>" account_no="<?php echo $value['account_no']; ?>">已收货</button>
-									</a>
+									<?php if($value['istatus']==1): ?>
+										<a class="mui-card-link">
+										<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined mui-sureo" style="padding: 2px 12px;float:right;" invoice_accountno="<?php echo $value['invoice_accountno']; ?>" account_no="<?php echo $value['account_no']; ?>">确认收货</button>
+										</a>
+									<?php elseif($value['istatus']==2): ?>
+										<a class="mui-card-link">
+										<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined mui-sureo" style="padding: 2px 12px;float:right;" disabled invoice_accountno="<?php echo $value['invoice_accountno']; ?>" account_no="<?php echo $value['account_no']; ?>">已收货</button>
+										</a>
+									<?php endif; ?>
+								</div>
 								<?php endif; ?>
 							<?php else: ?>
+							<div class="mui-card-footer">
 								<a class="mui-card-link"></a>
 								<a class="mui-card-link">
 									<span class="mui-pull-right" style="color:red;"><?php echo '备货中...';?></span>
 								</a>
+							</div>
 							<?php endif; ?>
-						</div>
 					</div>
 					<?php endforeach; ?>
 				<?php endif; ?>
