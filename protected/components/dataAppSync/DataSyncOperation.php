@@ -250,7 +250,7 @@ class DataSyncOperation {
 		if($cache==false){
 			Yii::app()->cache->set($key,1);
 		}else{
-			if($cache > 9){
+			if($cache > 49){
 				return json_encode ( $data );
 			}
 			$cache++;
