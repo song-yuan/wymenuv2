@@ -148,7 +148,7 @@
 						</div>
 					</div>
 					<?php endif;?>
-					<div class="portlet-body" id="table-manage">
+					<div class="" id="table-manage">
 						<table class="table table-striped table-bordered table-hover" id="sample_1" style="font-size: 8px;">
 							<thead>
 								<tr style="background: lightblue;font-size: 8px;">
