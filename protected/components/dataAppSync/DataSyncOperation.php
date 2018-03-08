@@ -257,8 +257,19 @@ class DataSyncOperation {
 			Yii::app()->cache->set($key,$cache);
 		}
 		//订单数据
-		$sql = 'select * from (select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 '.
-			   ' union select * from nb_order where dpid=' . $dpid . ' and order_status=2 and order_type=1 and is_sync!=0)m limit 2';
+		$results = array();
+		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
+		$payresult = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+		if($payresult){
+			array_merge($results,$payresult);
+		}
+		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=2 and order_type=1 and is_sync!=0 limit 2';
+		$siteresult = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+		if($siteresult){
+			array_merge($results,$payresult);
+		}
+// 		$sql = 'select * from (select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 '.
+// 			   ' union select * from nb_order where dpid=' . $dpid . ' and order_status=2 and order_type=1 and is_sync!=0)m limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
