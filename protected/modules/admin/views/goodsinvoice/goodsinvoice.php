@@ -141,14 +141,15 @@
 	<SCRIPT type="text/javascript">
 	$(document).ready(function(){
 	
-	var $modal = $('.modal');
-    $('.add_btn').on('click', function(){
-    	gid = $(this).attr('gid');
-        $modal.find('.modal-content').load('<?php echo $this->createUrl('goodsinvoice/addp',array('companyId'=>$this->companyId));?>/gid/'+gid, '', function(){
-          $modal.modal();
-        });
-    });
-});
+		var $modal = $('.modal');
+	    $('.add_btn').on('click', function(){
+	    	gid = $(this).attr('gid');
+	        $modal.find('.modal-content').load('<?php echo $this->createUrl('goodsinvoice/addp',array('companyId'=>$this->companyId));?>/gid/'+gid, '', function(){
+	          $modal.modal();
+	        });
+	    });
+	});
+	
 		$('#pnamebtn').click(function(event) {
 			var pname = $('#content').val();
 				location.href='<?php echo $this->createUrl('goodsinvoice/goodsinvoice',array('companyId'=>$this->companyId))?>/content/'+pname;

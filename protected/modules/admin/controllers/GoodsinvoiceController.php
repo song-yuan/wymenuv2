@@ -19,6 +19,8 @@ class GoodsinvoiceController extends BackendController
 		}
 		return true;
 	}
+
+
 	public function actionGoodsinvoice(){
 		$content = Yii::app()->request->getParam('content',0);
 		if (is_numeric($content)) {
@@ -317,6 +319,8 @@ class GoodsinvoiceController extends BackendController
 	public function actionStorestock(){
 		$name = Yii::app()->request->getParam('name');
 		$nums = Yii::app()->request->getParam('nums');
+		$sender = Yii::app()->request->getParam('sender');
+		$phone = Yii::app()->request->getParam('phone');
 		$gid = Yii::app()->request->getParam('gid');
 		$type = Yii::app()->request->getParam('type');
 		//var_dump($name);
@@ -328,9 +332,12 @@ class GoodsinvoiceController extends BackendController
 		try
 		{
 			$is_sync = DataSync::getInitSync();
-			$db->createCommand('update nb_goods_invoice set sent_type ='.$type.',sent_personnel="'.$name.'",mobile="'.$nums.'",update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$gid)
-			->execute();
-
+			if ($type == 1) {
+				$db->createCommand('update nb_goods_invoice set sent_type ='.$type.',sent_personnel="'.$name.'",mobile="'.$nums.'",update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$gid)->execute();
+			} else {
+				$db->createCommand('update nb_goods_invoice set sent_type ='.$type.',sent_personnel="'.$name.'",mobile="'.$nums.'",sent_personnel_2="'.$sender.'",mobile_2="'.$phone.'",update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$gid)->execute();
+			}
+			
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 			//return true;
@@ -347,8 +354,8 @@ class GoodsinvoiceController extends BackendController
 
 		$db = Yii::app()->db;
 		$sql ='select t.* from nb_goods_invoice t where t.lid ='.$gid.' and t.delete_flag =0 ';
-		$models = $db->createCommand($sql)->queryAll();
-
+		$models = $db->createCommand($sql)->queryRow();
+// p($models);
 		$sql2 = 'select t.* from nb_takeaway_member t where t.delete_flag =0 and t.dpid ='.$this->companyId.' or t.dpid in(select c.dpid from nb_company c where c.delete_flag =0 and c.comp_dpid ='.$this->companyId.')';
 		$pers = $db->createCommand($sql2)->queryAll();
 

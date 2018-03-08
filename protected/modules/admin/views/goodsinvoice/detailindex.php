@@ -7,19 +7,7 @@
          <div class="modal-body">
 	         <div class="portlet-body" id="table-manage">
 		         <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
- 	            <?php
-			            //$form=$this->beginWidget('CActiveForm', array(
-							// 'id' => 'product-form',
-							// 'action' => '',
-							// 'errorMessageCssClass' => 'help-block',
-							// 'htmlOptions' => array(
-							// 	'class' => 'form-horizontal',
-							// 	'enctype' => 'multipart/form-data'
-							// ),
-						//));
-					?>
 
-					<?php //$this->endWidget(); ?>
 					<table id="nb_bottom" style="width: 100%;">
 							<tr class='indexx'>
 								<td style="border:1px solid #ccc!important;width:10%;">排序</td>
@@ -119,21 +107,35 @@
 					<style>
 					td{border:1px solid black!important;}
 					</style>
-					<?php if($model): $plid = $model['lid'];$status = $model['status']?>
+					<?php if($model): $plid = $model['lid'];$status = $model['status'];?>
 					<div style="vertical-align:middle;text-align: center;" <?php echo $plid;?>>
 						<div class="actions" style="font-size: 20px;">
 							<span><?php echo $model['company_name'];?>食品销售单</span>
 							<span style="display:inline-block;float: right;margin-right:50px;font-size: 6px;margin-top: 10px;">1/1</span>
 						</div>
-						<div class="row" style="font-size: 10px; text-align: left;">
+						<!-- <div class="row" style="font-size: 10px; text-align: left;">
 							<span class="col-xs-3">销售日期：<?php echo date('Y-m-d',time());?> </span>
 							<span class="col-xs-3">配送员：<?php echo $model['sent_personnel'];?> </span>
 							<span class="col-xs-3">电话：<?php echo $model['mobile'];?> </span>
 							<span class="col-xs-3">状态：<?php  switch ($model['pay_status']){case 0: echo '未支付';break;case 1: echo '已支付';break;default:echo '';break;}?> </span>
-						<!--
-							<span>总金额：<?php echo $model['invoice_amount'];?> </span>
-							<span>&nbsp;</span>
-							<span style="color: red;"><?php switch ($model['pay_status']){case 0: echo '未支付';break;case 1: echo '已支付';break;default:echo '';break;}?> </span> -->
+
+						</div> -->
+						<div class="row" style="font-size: 10px; text-align: left;">
+							<span class="col-xs-3">销售日期：<?php echo date('Y-m-d',time());?> </span>
+							<span class="col-xs-3">状态：<?php  switch ($model['pay_status']){case 0: echo '未支付';break;case 1: echo '已支付';break;default:echo '';break;}?> </span>
+							<span class="col-xs-3">配送方式：<?php switch ($model['sent_type']){case 1: echo '自配送';break;case 3: echo '第三方物流';break;default:echo '';break;}?> </span>
+
+						</div>
+						<div class="row" style="font-size: 10px; text-align: left;">
+							<?php if ($model['sent_type'] == 3): ?>
+								<span class="col-xs-3">快递公司:<?php echo $model['sent_personnel']?> </span>
+								<span class="col-xs-3">快递单号：<?php echo $model['mobile'];?> </span>
+								<span class="col-xs-3">配送员：<?php echo $model['sent_personnel_2'];?> </span>
+								<span class="col-xs-3">电话：<?php echo $model['mobile_2'];?> </span>
+							<?php elseif ($model['sent_type'] == 1):?>
+								<span class="col-xs-6">配送员：<?php echo $model['sent_personnel'];?> </span>
+								<span class="col-xs-6">电话：<?php echo $model['mobile'];?> </span>
+							<?php endif;?>
 						</div>
 						<div class="actions row" style="font-size: 10px; text-align: left;">
 							<span class="col-xs-4">订单编号：<?php echo $model['goods_order_accountno'];?> </span>
@@ -146,7 +148,7 @@
 						</div>
 					</div>
 					<?php endif;?>
-					<div class="portlet-body" id="table-manage">
+					<div class="" id="table-manage">
 						<table class="table table-striped table-bordered table-hover" id="sample_1" style="font-size: 8px;">
 							<thead>
 								<tr style="background: lightblue;font-size: 8px;">
