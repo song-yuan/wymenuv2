@@ -56,13 +56,22 @@
              <div class="actions"></div>
         </div>
         <div class="portlet-body" >
-            <div class="row">
-                <?php if($hasOrder):?>
-                <p>该订单已经存在</p>
-                <?php else:?>
-                <?php echo $data;?>
-                <?php endif;?>
-         	</div>
+             <?php if($hasOrder):?>
+              <p>该订单已经存在</p>
+             <?php else:?>
+               <?php $obj = $data.data;?>
+               <p>需要补充的订单信息,如下:</p>
+               <table>
+	               <tr><td>订单编号:</td><td><?php echo $obj->orderId;?></td></tr>
+	               <tr><td>订单时间:</td><td><?php echo date('Y-m-d H:i:s',$obj->cTime);?></td></tr>
+	               <tr><td>产品详情:</td>
+	               	<td><?php $detail = $obj.detail; foreach($detail as $dt){ echo $dt->food_name.' ';}?></td>
+	               </tr>
+	               <tr><td>收货人名称:</td><td><?php echo $obj->recipientName;?></td></tr>
+	               <tr><td>收货人电话:</td><td><?php echo $obj->recipientPhone;?></td></tr>
+	               <tr><td>收货人地址:</td><td><?php echo $obj->recipientAddress;?></td></tr>
+               </table>
+              <?php endif;?>
         </div>
         </div> 
     </div>

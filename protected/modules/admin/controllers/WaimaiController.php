@@ -124,6 +124,7 @@ class WaimaiController extends BackendController
 				}else{
 					$data = Elm::getOrderById($this->companyId, $orderId);
 				}
+				$data = json_decode($data);
 			}
 		}
 		$this->render('order',array('hasOrder'=>$hasOrder,'data'=>$data));

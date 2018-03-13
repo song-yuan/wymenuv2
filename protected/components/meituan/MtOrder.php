@@ -159,7 +159,7 @@ class MtOrder
 	// 通过订单号查询订单信息
 	public static function getOrderById($dpid,$orderId){
 		$timestamp = time();
-		$sql = "select appAuthToken from nb_meituan_token where dpid=".$dpid." and delete_flag=0";
+		$sql = "select appAuthToken from nb_meituan_token where dpid=".$dpid." and type=1 and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		$url = "http://api.open.cater.meituan.com/waimai/order/queryById";
 		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,'orderId'=>$orderId );
