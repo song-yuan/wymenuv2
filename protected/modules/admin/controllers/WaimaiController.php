@@ -121,9 +121,8 @@ class WaimaiController extends BackendController
 			}else{
 				if($orderType==1){
 					$data = MtOrder::getOrderById($this->companyId, $orderId);
-					var_dump($data);exit;
 				}else{
-					
+					$data = Elm::getOrderById($this->companyId, $orderId);
 				}
 			}
 		}

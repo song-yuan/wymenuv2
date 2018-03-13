@@ -56,13 +56,14 @@
              <div class="actions"></div>
         </div>
         <div class="portlet-body" >
-            
+            <div class="row">
+                <?php if($hasOrder):?>
+                <p>该订单已经存在</p>
+                <?php else:?>
+                <?php echo $data;?>
+                <?php endif;?>
+         	</div>
         </div>
-        <div class="row">
-                
-     
-         
-         </div>
         </div> 
     </div>
 	</div>
