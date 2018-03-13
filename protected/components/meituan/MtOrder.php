@@ -164,8 +164,8 @@ class MtOrder
 		$url = "http://api.open.cater.meituan.com/waimai/order/queryById";
 		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,'orderId'=>$orderId );
 		$sign = MtUnit::sign($array);
-		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=".$timestamp."&sign=".$sign."&orderId=".$orderId;
-		$result = MtUnit::postHttps($url, $data);
+		$url .= "?appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=".$timestamp."&sign=".$sign."&orderId=".$orderId;
+		$result = MtUnit::postHttps($url);
 		return $result;
 	}
 	public static function orderDistr($dpid,$orderId,$courierName,$courierPhone){
