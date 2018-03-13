@@ -124,10 +124,15 @@ class WaimaiController extends BackendController
 				}else{
 					$data = Elm::getOrderById($this->companyId, $orderId);
 				}
-				$data = json_decode($data);
 			}
 		}
 		$this->render('order',array('hasOrder'=>$hasOrder,'data'=>$data));
 	}
+	public function actionDealOrder(){
+		$data = Yii::app()->request->getParam('data');
+		$reslut = MtOrder::dealOrder($data, $this->companyId, 2);
+		echo $reslut;exit;
+	}
+	
 }
 ?>
