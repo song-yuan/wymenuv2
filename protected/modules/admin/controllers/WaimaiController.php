@@ -108,5 +108,26 @@ class WaimaiController extends BackendController
 			"model"=>$model
 			));
 	}
+	public function actionOrder(){
+		$hasOrder = false;
+		$data = '';
+		if(Yii::app()->request->isPostRequest) {
+			$orderType = Yii::app()->request->getPost('orderType');
+			$orderId = Yii::app()->request->getPost('orderId');
+			$sql = 'select * from nb_order where account_no='.$orderId;
+			$order = Yii::app()->db->createCommand($sql)->queryRow();
+			if($order){
+				$hasOrder = true;
+			}else{
+				if($orderType==1){
+					$data = MtOrder::getOrderById($this->companyId, $orderId);
+					var_dump($data);exit;
+				}else{
+					
+				}
+			}
+		}
+		$this->render('order',array('hasOrder'=>$hasOrder,'data'=>$data));
+	}
 }
 ?>
