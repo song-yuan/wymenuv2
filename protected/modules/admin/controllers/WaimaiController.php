@@ -110,10 +110,16 @@ class WaimaiController extends BackendController
 	}
 	public function actionOrder(){
 		$hasOrder = false;
+		$orderId = '';
+		$orderType = 1;
 		$data = '';
 		if(Yii::app()->request->isPostRequest) {
 			$orderType = Yii::app()->request->getPost('orderType');
 			$orderId = Yii::app()->request->getPost('orderId');
+			if($orderId == ''){
+				Yii::app()->user->setFlash('error' , yii::t('app','请输入订单号'));
+				$this->redirect(array('/admin/waimai/order','companyId'=>$this->companyId));
+			}
 			$sql = 'select * from nb_order where account_no='.$orderId;
 			$order = Yii::app()->db->createCommand($sql)->queryRow();
 			if($order){
@@ -126,11 +132,29 @@ class WaimaiController extends BackendController
 				}
 			}
 		}
-		$this->render('order',array('hasOrder'=>$hasOrder,'data'=>$data));
+		$this->render('order',array('hasOrder'=>$hasOrder,'orderId'=>$orderId,'orderType'=>$orderType,'data'=>$data));
 	}
 	public function actionDealOrder(){
+		$type = Yii::app()->request->getParam('type');
 		$data = Yii::app()->request->getParam('data');
-		$reslut = MtOrder::dealOrder($data, $this->companyId, 2);
+		if($type==1){
+			$obj = json_decode(urldecode($data),true);
+			$obj['data']['ctime'] = $obj['data']['cTime'];
+			$obj['data']['status'] = 4;
+			unset($obj['data']['cTime']);
+			$data = json_encode($obj['data']);
+			$reslut = MtOrder::dealOrder($data, $this->companyId, 2);
+		}else{
+			$obj = json_decode(urldecode($data));
+			$data = $obj->result;
+			$reslut = Elm::dealOrder($data, $this->companyId, 4);
+			if($reslut){
+				$msg = array('status'=>true);
+			}else{
+				$msg = array('status'=>false);
+			}
+			$reslut = json_encode($msg);
+		}
 		echo $reslut;exit;
 	}
 	
