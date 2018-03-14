@@ -51,6 +51,46 @@ class MtpayController extends Controller
 			$key = $info[2];
 		}
 		
+
+		$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
+		$orders = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($orders)){
+			if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
+				$pay_type = '12';
+			}elseif($orders['order_type'] == '2'){
+				$pay_type = '13';
+			}else{
+				$pay_type = '1';
+			}
+			$sql = 'select * from nb_order_pay where dpid ='.$orderdpid.' and order_id ='.$orderid.' and account_no ="'.$orders['account_no'].'" and paytype ='.$pay_type;
+			$ordpays = Yii::app()->db->createCommand($sql)
+			->queryRow();
+			if(!empty($ordpays)){
+		
+			}else{
+				$se = new Sequence ( "order_pay" );
+				$orderpayId = $se->nextval();
+				$orderpayData = array (
+						'lid' => $orderpayId,
+						'dpid' => $orderdpid,
+						'create_at' => $orders['create_at'],
+						'update_at' => $orders['update_at'],
+						'order_id' => $orderid,
+						'account_no' => $orders['account_no'],
+						'pay_amount' => number_format($totalFee/100,2),
+						'paytype' => $pay_type,
+						'remark' => $accountno,
+				);
+				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
+				if($result){
+					$ords = true;
+				}
+			}
+		
+		}else{
+			Helper::writeLog('未查询到该条订单：'.$orderid);
+		}
+		
 		if(!empty($notify)){
 			//Helper::writeLog('已通知！');
 		}else{
@@ -163,45 +203,7 @@ class MtpayController extends Controller
 				}
 			}
 		}
-		
-		$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-		$orders = Yii::app()->db->createCommand($sql)->queryRow();
-		if(!empty($orders)){
-			if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
-				$pay_type = '12';
-			}elseif($orders['order_type'] == '2'){
-				$pay_type = '13';
-			}else{
-				$pay_type = '1';
-			}
-			$sql = 'select * from nb_order_pay where dpid ='.$orderdpid.' and order_id ='.$orderid.' and account_no ="'.$orders['account_no'].'" and paytype ='.$pay_type;
-			$ordpays = Yii::app()->db->createCommand($sql)
-			->queryRow();
-			if(!empty($ordpays)){
-				
-			}else{
-				$se = new Sequence ( "order_pay" );
-				$orderpayId = $se->nextval();
-				$orderpayData = array (
-						'lid' => $orderpayId,
-						'dpid' => $orderdpid,
-						'create_at' => $orders['create_at'],
-						'update_at' => $orders['update_at'],
-						'order_id' => $orderid,
-						'account_no' => $orders['account_no'],
-						'pay_amount' => number_format($totalFee/100,2),
-						'paytype' => $pay_type,
-						'remark' => $accountno,
-				);
-				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
-				if($result){
-					$ords = true;
-				}
-			}
-				
-		}else{
-			Helper::writeLog('未查询到该条订单：'.$orderid);
-		}
+
 
 		if($nots&&$ords&&$inf){
 			return $nots = '{"status":"SUCCESS"}';
