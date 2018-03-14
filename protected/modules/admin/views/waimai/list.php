@@ -70,7 +70,7 @@ span.tab{
 					<div class="panel_body row">
                         <p>外卖设置</p>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-                            <a href="<?php echo $this->createUrl('waimai/Setting',array('companyId'=>$this->companyId));?>">
+                            <a href="<?php echo $this->createUrl('waimai/setting',array('companyId'=>$this->companyId));?>">
                                 <div class="list_big">设置是否自动接单</div>
                                 <div class="list_small">设置美团和饿了么是否自动接单</div>
                             </a> 
@@ -88,24 +88,15 @@ span.tab{
                             </a> 
                         </div>
                     </div>
-                 <!-- <a href="<?php echo $this->createUrl('waimai/Setting',array('companyId'=>$this->companyId));?>">
-					<div class="pull-left margin-left-right">
-						<div class="ku-item ku-purple wmsz"></div>
-						<div class="ku-item-info">外卖设置</div>
-					</div>
-				</a> -->
-                <!--  <a href="<?php echo $this->createUrl('waimai/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple mtwm"></div>
-							<div class="ku-item-info">美团外卖</div>
-						</div>
-					</a> -->
-					<!-- <a href="<?php echo $this->createUrl('eleme/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple eleme"></div>
-							<div class="ku-item-info">饿了么外卖</div>
-						</div>
-					</a> -->
+                    <div class="panel_body row">
+                    	<p>外卖订单</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('waimai/order',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">外卖订单查询</div>
+                                <div class="list_small">查询外卖订单是否已经存在，漏单补单功能</div>
+                            </a> 
+                        </div>
+                    </div>   
 				</div>
 			</div>
 		</div>

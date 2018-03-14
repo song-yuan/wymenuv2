@@ -116,8 +116,8 @@ class Elm
             "params" => array("key"=>"value"),
         );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-         $result =ElUnit::post($url,$protocol);
-         return $result;
+        $result =ElUnit::post($url,$protocol);
+        return $result;
 	}
 	public static function elemeUpdateId($dpid,$shopid){
 		$access_token = self::elemeGetToken($dpid);
@@ -328,6 +328,31 @@ class Elm
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
         $result = ElUnit::post($url,$protocol);
         return $result;
+	}
+	public static function getOrderById($dpid,$orderId){
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+		$protocol = array(
+				"nop" => '1.0.0',
+				"id" => ElUnit::create_uuid(),
+				"action" => "eleme.order.getOrder",
+				"token" => $access_token,
+				"metas" => array(
+						"app_key" => $app_key,
+						"timestamp" => time(),
+				),
+				"params" => array(
+						'orderId'=>$orderId
+				),
+		);
+		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+		$result = ElUnit::post($url,$protocol);
+		return $result;
 	}
 	public static function orderStatus($message,$dpid){
 		$me = json_decode($message);

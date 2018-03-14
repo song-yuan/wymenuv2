@@ -257,8 +257,8 @@ class DataSyncOperation {
 			Yii::app()->cache->set($key,$cache);
 		}
 		//订单数据
-		$sql = 'select * from (select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 '.
-			   ' union select * from nb_order where dpid=' . $dpid . ' and order_status=2 and order_type=1 and is_sync!=0)m limit 2';
+// 		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status in(3,4) or (order_status=2 and order_type=1)) and is_sync!=0 limit 2';
+		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
@@ -1033,6 +1033,11 @@ class DataSyncOperation {
 						'refundReason'=>'商家退款',
 						'refundNo'=>$out_request_no,
 				));
+				if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
+					$msg = array('status'=>true, 'trade_no'=>$out_trade_no);
+				}else{
+					$msg = array('status'=>false,'msg'=>'支付宝退款失败!!!');
+				}
 			}else{
 				$alipayAccount = AlipayAccount::get($dpid);
 				$f2fpayConfig = array(
@@ -1153,7 +1158,7 @@ class DataSyncOperation {
 		if($orderCache!=false){
 			$msg = json_encode ( array (
 					'status' => false,
-					'msg' => '订单退款中,等待结果',
+					'msg' => '订单退款中,等待结果'.$orderKey,
 					'orderId' => ''
 			) );
 			return $msg;
