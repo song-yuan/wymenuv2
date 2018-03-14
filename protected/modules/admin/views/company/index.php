@@ -38,7 +38,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('companyset/list' , array('companyId' => $this->companyId,)))));?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -143,7 +143,7 @@
                                         <?php if(Yii::app()->user->role <= User::SHOPKEEPER && Yii::app()->user->role != '4') : ?><!-- Yii::app()->params->master_slave=='m' -->
                                             <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type,'pay_online'=>$paytype));?>"><?php echo yii::t('app','编辑');?></a>
                                         <?php endif; ?>
-                                            <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
+                                            <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('companyset/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
                                             <?php if($model->property&&Yii::app()->user->role<=5):?>
                                             <?php if($model->property->pay_channel == '3'):?>
                                             <a  class='btn ' style="margin-top: 5px;" id="setPayid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','已置成美团支付');?></a>
