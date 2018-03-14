@@ -49,11 +49,11 @@ class PosfeeController extends BackendController
 		if(Yii::app()->user->role < '5')
 		{
 			//if($this->companyId=='0000000001'){
-				if ($content=='') {
+				if ($content!='') {
 					$criteria->condition =' t.delete_flag=0 and t.type=0';
 				}else{
 					//$criteria->condition =' t.delete_flag=0';
-					$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
+					$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.$this->companyId;
 				}
 // 			}else{
 // 				$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
