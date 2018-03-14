@@ -72,7 +72,6 @@
 		                <div class="list_small">添加及查询收银机序列号</div>
 		                </a> 
 	                </div>
-	                
 	                <div class="list col-sm-3 col-xs-12">
 						<a href="<?php echo $this->createUrl('copyScreen/index',array('companyId'=>$this->companyId));?>">
 		                <div class="list_big"><i class="fa fa-cloud-download"></i> 双屏下发</div>
@@ -100,7 +99,13 @@
 	                <div class="list col-sm-3 col-xs-12">
 						<a href="<?php echo $this->createUrl('mtpayConfig/index',array('companyId'=>$this->companyId));?>">
 		                <div class="list_big"><i class="fa fa-star-half-o"></i> 美团支付配置</div>
-		                <div class="list_small">填写美团支付相关参数配置。</div>
+		                <div class="list_small">当商户支付通道改成美团支付时，需要填写美团支付相关参数配置。</div>
+		                </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+						<a href="<?php echo $this->createUrl('posfee/setindex',array('companyId'=>$this->companyId));?>">
+		                <div class="list_big"><i class="fa fa-star-half-o"></i> 软件期限设置</div>
+		                <div class="list_small">软件使用期限设置。</div>
 		                </a> 
 	                </div>
 	               <?php endif;?>
@@ -131,6 +136,12 @@
 						<a href="<?php echo $this->createUrl('connectUs/index',array('companyId'=>$this->companyId));?>">
 		                <div class="list_big"><i class="fa fa-phone"></i>联系我们</div>
 		                <div class="list_small"></div>
+		                </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+						<a href="<?php echo $this->createUrl('posfee/index',array('companyId'=>$this->companyId));?>">
+		                <div class="list_big"><i class="fa fa-star-half-o"></i> 软件收费配置</div>
+		                <div class="list_small">软件使用期限设置。</div>
 		                </a> 
 	                </div>
                 </div>

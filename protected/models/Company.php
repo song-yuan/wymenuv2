@@ -72,7 +72,8 @@ class Company extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'property'=>array(self::HAS_ONE,'CompanyProperty','','on'=>'t.dpid = property.dpid')
+				'property'=>array(self::HAS_ONE,'CompanyProperty','','on'=>'t.dpid = property.dpid'),
+				'posfee'=>array(self::HAS_MANY,'PoscodeFee','','on'=>'t.dpid = posfee.dpid')
 		);
 	}
 
