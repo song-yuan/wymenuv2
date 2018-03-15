@@ -406,7 +406,7 @@
 						</div>
 						<?php endif;?>
 					 </div>
-					<?php if(Yii::app()->user->role < User::SHOPKEEPER):?>
+					<?php if(Yii::app()->user->role < User::SHOPKEEPER && $this->comptype ==0):?>
 					<div class="panel_body row">
 					<p>原料及配方下发</p>
 						<div class="list col-sm-3 col-xs-12">
@@ -418,16 +418,11 @@
 			                </a> 
 						</div>
 						<div class="list col-sm-3 col-xs-12">
-						<?php if(Yii::app()->user->role<5):?>
 			                <a href="<?php echo $this->createUrl('copyproductbom/index',array('companyId'=>$this->companyId));?>">
-			            <?php endif;?>
 			                	<div class="margin-left-right">
 			                	<div class="list_big"><i class="fa fa-home"></i>配方下发</div>
 			                	<div class="list_small">将设置好的配方信息下发到所需店铺</div>
 			                	</div>
-			                	<?php if(Yii::app()->user->role>=5):?>
-			                	<span style="color:red;">该功能升级中，暂停使用！</span>
-			                	<?php endif;?>
 			                </a> 
 						</div>
 					</div>
