@@ -10,6 +10,9 @@ class TestController extends Controller
 	public function actionTest(){
 		$this->render('test');
 	}
+	public function actionHh(){
+		$this->render('hh');
+	}
 	// 新上铁 数据
 	public function actionXst(){
 		$begain = Yii::app()->request->getParam('begain');
