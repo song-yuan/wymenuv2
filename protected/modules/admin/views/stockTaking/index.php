@@ -152,7 +152,7 @@
 					<div class="form-actions fluid">
 						<div class="col-md-offset-9 col-md-3">
 				<!--        <button type="submit" class="btn blue">确定</button>     -->   
-							<button type="button" class="btn green" id="stocktaking">一键盘点</button>                              
+							<button type="button" class="btn green" id="stocktaking" clk='0'>一键盘点</button>                              
 						</div>
 					</div>			
 				</div>
@@ -184,6 +184,13 @@
                 layer.closeAll('loading');
                 return false;
                 }
+
+        var clk = $(this).attr('clk');
+        if(clk=='1'){
+			layer.msg('请勿多次操作！');
+			return false;
+        }
+        $(this).attr('clk',1);
         for(var i=0;i<arr.length;i++)
         {
             var vid = $(arr[i]).attr("id").substr(11,10);  
@@ -219,6 +226,7 @@
         }else{
             alert('请至少盘点一项');
             layer.closeAll('loading');
+            $(this).attr('clk',0);
             return false;
             }
         //alert(optval);return false;
