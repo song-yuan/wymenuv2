@@ -801,6 +801,120 @@ public function actionAccountDetail(){
      	}
 
      }
+     
+     public function actionCreatedp(){
+     	$provinces = Yii::app()->request->getParam('province',0);
+     	$citys = Yii::app()->request->getParam('city',0);
+     	$areas = Yii::app()->request->getParam('area',0);
+     	$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+     	$num =  Yii::app()->request->getParam('num');
+     	$criteria = new CDbCriteria;
+     	$criteria->with = 'property';
+     	$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 and tt.type=1) or t.dpid='.Yii::app()->user->companyId;
+     	// echo $criteria->condition;exit();
+     	$province = $provinces;
+     	$city = $citys;
+     	$area = $areas;
+     
+     	if($citys == '市辖区'|| $citys == '省直辖县级行政区划' || $citys == '市辖县'){
+     		$city = '0';
+     	}
+     	if($areas == '市辖区'){
+     		$area = '0';
+     	}
+     	if($province){
+     		$criteria->addCondition('t.province like "'.$province.'"');
+     	}
+     	if($city){
+     		$criteria->addCondition('t.city like "'.$city.'"');
+     	}
+     	if($area){
+     		$criteria->addCondition('t.county_area like "'.$area.'"');
+     	}
+     	$criteria->order = 't.dpid asc';
+     	// var_dump($criteria);exit;
+     	$pages = new CPagination(Company::model()->count($criteria));
+     	//      $pages->setPageSize(1);
+     	$pages->applyLimit($criteria);
+     	$models = Company::model()->findAll($criteria);
+     	// var_dump($models);exit;
+     	$this->render('createdp',array(
+     			'models'=> $models,
+     			'pages'=>$pages,
+     			'province'=>$provinces,
+     			'city'=>$citys,
+     			'area'=>$areas,
+     			'num'=>$num
+     	));
+     }
+     public function actionDp(){
+     	$num =  Yii::app()->request->getParam('num');
+     	// var_dump($checkbox_names);exit;
+     	$sql = "select b.*,c.company_name from nb_brand_user_admin b,nb_company c where b.brand_user_id=".$num." and c.dpid=b.admin_dpid and b.delete_flag=0";
+     	$models = Yii::app()->db->createCommand($sql)->queryAll();
+     	// var_dump($models);exit;
+     	$this->render('dp',array(
+     			'num'=>$num,
+     			'models'=>$models
+     	));
+     
+     }
+     public function actionDpcreate(){
+     	$db = Yii::app()->db;
+     	$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+     	$companyIds = Yii::app()->request->getParam('companyIds');
+     	// var_dump($companyIds);exit();
+     	$num = Yii::app()->request->getParam('num');
+     	if(!empty($companyIds)){
+     		foreach ($companyIds as $admin_dpid) {
+     			$sql = "select * from nb_brand_user_admin where brand_user_id=".$num." and admin_dpid=".$admin_dpid." and delete_flag=0";
+     			// echo $sql;exit();
+     			$user_admin = Yii::app()->db->createCommand($sql)->queryRow();
+     			// var_dump($user_admin);exit;
+     			if(empty($user_admin)){
+     				$userid = new Sequence("brand_user_admin");
+     				$id = $userid->nextval();
+     				$data = array(
+     						'lid'=>$id,
+     						'dpid'=>$companyId,
+     						'create_at'=>date('Y-m-d H:i:s',time()),
+     						'update_at'=>date('Y-m-d H:i:s',time()),
+     						'brand_user_id'=>$num,
+     						'admin_dpid'=>$admin_dpid,
+     				);
+     				$command = $db->createCommand()->insert('nb_brand_user_admin',$data);
+     				// var_dump($command);exit();
+     				if(!empty($command)){
+     					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+     					$this->redirect(array('WechatMember/createdp','num'=>$num , 'companyId' =>$this->companyId ));
+     				}
+     			}else{
+     				Yii::app()->user->setFlash('error',yii::t('app','该店铺已存在！'));
+     				$this->redirect(array('WechatMember/createdp','num'=>$num,'companyId' => $this->companyId ));
+     			}
+     
+     		}
+     	}
+     }
+     public function actionDeletedp(){
+     	$num =  Yii::app()->request->getParam('num');
+     	$checkbox_names = Yii::app()->request->getParam('checkbox_name');
+     	$checkbox_names = json_encode($checkbox_names);
+     	$checkbox_names = str_replace('[', '', $checkbox_names);
+     	$checkbox_names = str_replace(']', '', $checkbox_names);
+     	$checkbox_names = str_replace('"', '', $checkbox_names);
+     	// var_dump($checkbox_names); exit();
+     	$sql = "update nb_brand_user_admin set delete_flag=1 where lid in (".$checkbox_names.")";
+     	$res = Yii::app()->db->createCommand($sql)->execute();
+     	// var_dump($res);exit();
+     	if(empty($res)){
+     		Yii::app()->user->setFlash('error',yii::t('app','删除失败'));
+     		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
+     	}else{
+     		Yii::app()->user->setFlash('success',yii::t('app','删除成功'));
+     		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
+     	}
+     }
 }
 
 

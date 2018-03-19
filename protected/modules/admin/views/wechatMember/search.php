@@ -256,6 +256,7 @@
                                         <a class='btn default btn-sm blue' target="_blank"  href="<?php echo $this->createUrl('wechatMember/searchdetail',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>"><i class="fa fa-search"></i>详情</a>
                                         <?php if(Yii::app()->user->role <=5):?>
                                         <a  class='btn default yellow addCash' id="setAppid<?php echo $model['dpid'];?>" userid="<?php echo $model['lid'];?>" dpid="<?php echo $model['dpid'];?>" name="<?php echo $model['user_name'].'|'.$model['nickname'];?>"><i class="fa fa-rmb"></i><?php echo yii::t('app','充值');?></a>
+                                        <a class='btn default btn-sm blue' href="<?php echo $this->createUrl('wechatMember/createdp',array('num' => $model['lid'],'card_id' => $model['card_id'],'companyId' => $this->companyId));?>">设置为店长</a>
                                         <?php endif;?>
                                     </td>
                                 </tr>

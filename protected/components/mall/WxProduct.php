@@ -27,7 +27,7 @@ class WxProduct
 	}
 	public function productList(){
 		foreach($this->categoryProductLists as $k=>$category){
-			if(($this->type=='6'&&$category['show_type']=='3')||($this->type=='2'&&$category['show_type']=='2')||$category['show_type']=='4'){
+			if(($this->type=='6'&&$category['show_type']=='3')||($this->type=='2'&&$category['show_type']=='2')||$category['show_type']=='4'||$category['show_type']=='6'){
 				unset($this->categoryProductLists[$k]);
 				continue;
 			}
