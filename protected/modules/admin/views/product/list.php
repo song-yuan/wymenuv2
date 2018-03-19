@@ -406,7 +406,7 @@
 						</div>
 						<?php endif;?>
 					 </div>
-					<?php if(Yii::app()->user->role < User::SHOPKEEPER):?>
+					<?php if(Yii::app()->user->role < User::SHOPKEEPER && $this->comptype ==0):?>
 					<div class="panel_body row">
 					<p>原料及配方下发</p>
 						<div class="list col-sm-3 col-xs-12">
