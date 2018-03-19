@@ -60,6 +60,7 @@ class  CrontabController extends Controller
 		$sql = 'select * from nb_eleme_token where expires_in < '.$time.' and delete_flag=0';
 		$elemeTokens = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($elemeTokens as $token){
+			$dpid = $token['dpid'];
 			$refresh_token = $token['refresh_token'];
 			$key = ElmConfig::key;
 			$secret = ElmConfig::secret;
