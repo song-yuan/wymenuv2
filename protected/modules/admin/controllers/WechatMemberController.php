@@ -863,7 +863,6 @@ public function actionAccountDetail(){
      	$db = Yii::app()->db;
      	$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
      	$companyIds = Yii::app()->request->getParam('companyIds');
-     	// var_dump($companyIds);exit();
      	$num = Yii::app()->request->getParam('num');
      	if(!empty($companyIds)){
      		foreach ($companyIds as $admin_dpid) {
@@ -883,17 +882,13 @@ public function actionAccountDetail(){
      						'admin_dpid'=>$admin_dpid,
      				);
      				$command = $db->createCommand()->insert('nb_brand_user_admin',$data);
-     				// var_dump($command);exit();
-     				if(!empty($command)){
-     					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-     					$this->redirect(array('WechatMember/createdp','num'=>$num , 'companyId' =>$this->companyId ));
-     				}
-     			}else{
-     				Yii::app()->user->setFlash('error',yii::t('app','该店铺已存在！'));
-     				$this->redirect(array('WechatMember/createdp','num'=>$num,'companyId' => $this->companyId ));
      			}
-     
      		}
+     		Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+     		$this->redirect(array('WechatMember/createdp','num'=>$num , 'companyId' =>$this->companyId ));
+     	}else{
+     		Yii::app()->user->setFlash('error',yii::t('app','请选择店铺！'));
+     		$this->redirect(array('WechatMember/createdp','num'=>$num,'companyId' => $this->companyId ));
      	}
      }
      public function actionDeletedp(){
