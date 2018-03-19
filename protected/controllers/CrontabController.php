@@ -51,4 +51,36 @@ class  CrontabController extends Controller
 			}
 		}
 	}
+	/**
+	 * 查询饿了么token如果过期了 系统自动刷新token
+	 * 
+	 */
+	public function actionGetelemeToken(){
+		$time = time();
+		$sql = 'select * from nb_eleme_token where expires_in < '.$time.' and delete_flag=0';
+		$elemeTokens = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($elemeTokens as $token){
+			$refresh_token = $token['refresh_token'];
+			$key = ElmConfig::key;
+			$secret = ElmConfig::secret;
+			$token_url = ElmConfig::token;
+			$header = array(
+					"Authorization: Basic " . base64_encode(urlencode($key) . ":" . urlencode($secret)),
+					"Content-Type: application/x-www-form-urlencoded; charset=utf-8",
+					"Accept-Encoding: gzip");
+			$body = array(
+					"grant_type" => "refresh_token",
+					"refresh_token"=>$refresh_token
+			);
+			$re = ElUnit::postHttpsHeader($token_url,$header,$body);
+			$obj = json_decode($re);
+			if(isset($obj->access_token)){
+				$access_token = $obj->access_token;
+				$expires_in = $time + $obj->expires_in;
+				$refresh_token = $obj->refresh_token;
+				$sql = 'update nb_eleme_token set access_token="'.$access_token.'",expires_in='.$expires_in.',refresh_token="'.$refresh_token.'" where dpid='.$dpid.' and delete_flag=0';
+				$res = Yii::app()->db->createCommand($sql)->execute();
+			}
+		}
+	}
 }
