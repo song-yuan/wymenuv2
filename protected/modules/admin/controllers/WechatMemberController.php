@@ -810,7 +810,7 @@ public function actionAccountDetail(){
      	$num =  Yii::app()->request->getParam('num');
      	$criteria = new CDbCriteria;
      	$criteria->with = 'property';
-     	$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 and tt.type=1) or t.dpid='.Yii::app()->user->companyId;
+     	$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$companyId.' and tt.delete_flag=0 and tt.type=1)';
      	// echo $criteria->condition;exit();
      	$province = $provinces;
      	$city = $citys;
