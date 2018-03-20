@@ -18,6 +18,7 @@ class WxRiJie
 	 * btime 前一次日结时间
 	 * etime 本次日结时间
 	 * rjcode 日结编码的结构：dpid(4)+日期(8)+次数(2)
+	 * 日结时检查软件是否到期
 	 * 
 	 */
 	public static function setRijieCode($dpid,$create_at,$poscode,$btime,$etime,$rjcode){
@@ -27,6 +28,8 @@ class WxRiJie
 					'msg' => '缺少参数'
 			) );
 		}
+		$sql = 'select * from nb_poscode_fee where poscode="'.$poscode.'"';
+		$poscodeStatus = Yii::app()->db->createCommand($sql)->queryRow();
 		
 		$sql = 'select * from nb_rijie_code where dpid='.$dpid.' and rijie_code="'.$rjcode.'" and delete_flag=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
@@ -34,8 +37,9 @@ class WxRiJie
 			if($result['is_rijie']==1){
 				return json_encode ( array (
 						'status' => true,
-						'msg' => ''
-				) );
+						'msg' => '',
+						'posstatus' => $poscodeStatus
+				));
 			}
 			
 			if($result['end_time'] < $etime){
@@ -45,18 +49,20 @@ class WxRiJie
 				if($result){
 					return json_encode ( array (
 							'status' => true,
-							'msg' => ''
+							'msg' => '',
+							'posstatus' => $poscodeStatus
 					) );
 				}else{
 					return json_encode ( array (
 							'status' => false,
-							'msg' => ''
+							'msg' => '',
 					) );
 				}
 			}else{
 				return json_encode ( array (
 						'status' => true,
-						'msg' => ''
+						'msg' => '',
+						'posstatus' => $poscodeStatus
 				) );
 			}
 		}else{
@@ -79,14 +85,15 @@ class WxRiJie
 					'rijie_code'=>$rjcode,
 					'is_rijie'=>'0',
 					'delete_flag'=>'0',
-					'is_sync'=>'11111',
+					'is_sync'=>'11111'
 			);
 			$result = Yii::app()->db->createCommand()->insert('nb_rijie_code',$data);
 				
 			if($result){
 				return json_encode ( array (
 						'status' => true,
-						'msg' => ''
+						'msg' => '',
+						'posstatus' => $poscodeStatus
 				) );
 			}
 			return json_encode ( array (
