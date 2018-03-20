@@ -39,6 +39,17 @@ class DataAppSyncController extends Controller
 		$posinfo = DataSyncOperation::getDataSyncPosInfor($code,$mac);
 		echo json_encode($posinfo);exit;
 	}
+	public function actionGetPoscodeStatus(){
+		$dpid = Yii::app()->request->getParam('dpid',0);
+		$poscode = Yii::app()->request->getParam('poscode','');
+		$posinfo = WxRiJie::getPoscodeStatus($dpid,$poscode);
+		if($posinfo==''){
+			echo $posinfo;
+		}else{
+			echo json_encode($posinfo);
+		}
+		exit;
+	}
 	/**
 	 * 
 	 * 获取基础数据表

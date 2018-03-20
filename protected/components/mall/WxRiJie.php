@@ -28,8 +28,7 @@ class WxRiJie
 					'msg' => '缺少参数'
 			) );
 		}
-		$sql = 'select * from nb_poscode_fee where poscode="'.$poscode.'"';
-		$poscodeStatus = Yii::app()->db->createCommand($sql)->queryRow();
+		$poscodeStatus = self::getPoscodeStatus($dpid,$poscode);
 		
 		$sql = 'select * from nb_rijie_code where dpid='.$dpid.' and rijie_code="'.$rjcode.'" and delete_flag=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
@@ -102,7 +101,14 @@ class WxRiJie
 			) );
 		}
 	}
-	
+	public static function getPoscodeStatus($dpid,$poscode){
+		$sql = 'select * from nb_poscode_fee where dpid='.$dpid.' and poscode="'.$poscode.'"';
+		$poscodeStatus = Yii::app()->db->createCommand($sql)->queryRow();
+		if(empty($poscodeStatus)){
+			$poscodeStatus = '';
+		}
+		return $poscodeStatus;
+	}
 	/**
 	 * 
 	 * 跟据日结编码数据生成 日结统计数据
