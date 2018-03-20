@@ -11,7 +11,7 @@
         <?php if(isset($key)):?>
             <a class="mui-navigate-right" href="#"><?php echo $key;?></a>
         <?php endif;?>
-            <div class="mui-collapse-content" style="overflow: auto;height: 200px;">
+            <div class="mui-collapse-content" style="overflow: auto;">
             <?php if(count($fens)>1):?>
                 <?php foreach($fens as $fen):?>
              <div style="height: 20px;"><a style="text-align: right;position:fixed;left: 270px;" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$companyId,'type'=>$fen['lid']));?>">多店统计>></a>
