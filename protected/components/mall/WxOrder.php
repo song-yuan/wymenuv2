@@ -766,14 +766,14 @@ class WxOrder
 	}
 	public static function getUserOrderList($userId,$cardId,$type,$page){
 		if($type==1){
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.order_type=0 and t.order_status in (1,2) and t1.remark="'.$cardId.'" order by lid desc';
+			$sql = 'selet * from (select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2)';
+			$sql .= ' union select t.* from nb_order t, nb_order_pay t1 where t.lid=t1.order_id and t.dpid=t1.dpid and t.order_type=0 and t.order_status in (1,2) and t1.remark="'.$cardId.'")m order by lid desc';
 		}elseif($type==2){
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4,8)';
-			$sql .= ' union select t.* from nb_order t left join nb_order_pay t1 on t.lid=t1.order_id and t.dpid=t1.dpid where t.order_type=0 and t.order_status in (3,4,8) and t1.remark="'.$cardId.'" order by lid desc';
+			$sql = 'selet * from (select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4,8)';
+			$sql .= ' union select t.* from nb_order t, nb_order_pay t1 where t.lid=t1.order_id and t.dpid=t1.dpid and t.order_type=0 and t.order_status in (3,4,8) and t1.remark="'.$cardId.'")m order by lid desc';
 		}else{
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4,8)';
-			$sql .= ' union select t1.* from nb_order_pay t left join nb_order t1 where t.order_id=t1.lid and t.dpid=t1.dpid and t1.order_type=0 and t1.order_status in (1,2,3,4,8) and t.remark="'.$cardId.'" order by lid desc';
+			$sql = 'selet * from (select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4,8)';
+			$sql .= ' union select t1.* from nb_order_pay t, nb_order t1 where t.order_id=t1.lid and t.dpid=t1.dpid and t1.order_type=0 and t1.order_status in (1,2,3,4,8) and t.remark="'.$cardId.'")m order by lid desc';
 		}
 		$sql .= '  limit '. ($page-1)*10 .',10';
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
