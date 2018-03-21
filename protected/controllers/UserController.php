@@ -44,7 +44,7 @@ class UserController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2146;
+			$userId = 2204;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];

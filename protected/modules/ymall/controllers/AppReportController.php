@@ -34,7 +34,7 @@ class AppReportController extends Controller
 			}
 		}else{
 			//pc 浏览
-			$userId = 2130;
+			$userId = 2204;
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			$userId = $this->brandUser['lid'];
 			$userDpid = $this->brandUser['dpid'];
