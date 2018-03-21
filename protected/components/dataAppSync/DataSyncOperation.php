@@ -75,7 +75,29 @@ class DataSyncOperation {
 						);
 						$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_status', $data );
 					}
-					
+					$sql = 'select * from nb_poscode_fee where dpid = '.$dpid.' and poscode="'.$code.'"';
+					$poscodefee = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+					if(empty($poscodefee)){
+						$sql = 'select years from nb_poscode_feeset where dpid = (select comp_dpid from nb_company where dpid = '.$dpid.')';
+						$years = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+						
+						if($years==0){
+							$years = 30;
+						}
+						$expTime = strtotime("+".$years." year");
+						$se = new Sequence ( "poscode_fee");
+						$lid = $se->nextval ();
+						$data = array (
+								'lid' => $lid,
+								'dpid' => $dpid,
+								'create_at' => date ( 'Y-m-d H:i:s', time () ),
+								'update_at' => date ( 'Y-m-d H:i:s', time () ),
+								'poscode' => $code,
+								'exp_time' => $expTime,
+								'num' => $padNo
+						);
+						$res = Yii::app()->db->createCommand ()->insert ( 'nb_poscode_fee', $data );
+					}
 					$se = new Sequence ( "pad_setting_detail" );
 					$lid = $se->nextval ();
 					$data = array (
@@ -250,15 +272,15 @@ class DataSyncOperation {
 		if($cache==false){
 			Yii::app()->cache->set($key,1);
 		}else{
-			if($cache > 49){
+			if($cache > 79){
 				return json_encode ( $data );
 			}
 			$cache++;
 			Yii::app()->cache->set($key,$cache);
 		}
 		//订单数据
-// 		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status in(3,4) or (order_status=2 and order_type=1)) and is_sync!=0 limit 2';
-		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
+		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status in(3,4) or (order_status=2 and order_type=1)) and is_sync!=0 limit 2';
+// 		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
 			$order = array ();
