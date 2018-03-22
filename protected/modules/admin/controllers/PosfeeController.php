@@ -23,8 +23,10 @@ class PosfeeController extends BackendController
         if(Yii::app()->request->isPostRequest){
         	$postData = Yii::app()->request->getPost('PoscodeFeeset');
         	//var_dump($postData);exit;
+        	$model->dpid = $this->companyId;
             $postData['update_at'] = date('Y-m-d H:i:s',time());
         	$model->attributes = $postData;
+        	//var_dump($model);exit;
         	if($model->save()){
         		Yii::app()->user->setFlash('success' ,yii::t('app', '设置成功'));
         	}else{
