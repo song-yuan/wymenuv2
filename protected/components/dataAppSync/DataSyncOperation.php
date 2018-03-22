@@ -279,7 +279,7 @@ class DataSyncOperation {
 			Yii::app()->cache->set($key,$cache);
 		}
 		//订单数据
-		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status in(3,4) or (order_status=2 and order_type=1)) and is_sync!=0 limit 2';
+		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status in("3","4") or (order_status="2" and order_type=1)) and is_sync!="0" limit 2';
 // 		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ( $results as $result ) {
