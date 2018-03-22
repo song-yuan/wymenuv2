@@ -57,6 +57,7 @@ class CopyproductController extends BackendController
 		$chscode = Yii::app()->request->getParam('chscode');
 		$phscode = Yii::app()->request->getParam('phscode');
 		$groups = Yii::app()->request->getParam('groups');
+		$ctp = Yii::app()->request->getParam('ctp');
 		$dpid = Yii::app()->request->getParam('dpids');
 		$chscodes = array();
 		$chscodes = explode(',',$chscode);
@@ -198,8 +199,23 @@ class CopyproductController extends BackendController
         			}
         		}
         		if($products){
+        			if($ctp==2){
+        				$sql ='delete from nb_product where is_temp_price=1 and dpid ='.$dpid;
+        				$re = Yii::app()->db->createCommand($sql)->execute();
+        			}elseif($ctp==3){
+        				$sql ='delete from nb_product where dpid ='.$dpid;
+        				$re = Yii::app()->db->createCommand($sql)->execute();
+        			}
         			foreach ($phscodes as $prodhscode){
-        				$producto = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
+        				if($ctp==1){
+        					$producto = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
+        				}elseif($ctp==2){
+        					$producto='';
+        					
+        				}else{
+        					$producto='';
+        				}
+        				
         				$product =  Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
         				$categoryId = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$product['chs_code'],':companyId'=>$dpid));
         				/*
@@ -259,6 +275,7 @@ class CopyproductController extends BackendController
 	        					}
 			                }
         				}
+        				
         				if((!empty($product))&&(empty($producto))&&(!empty($categoryId))){
         					$se = new Sequence("product");
         					$id = $se->nextval();
