@@ -42,16 +42,16 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐列表');?></div>
 					<div class="actions">
+						<div class="btn-group">
+							<input type="text" class="form-control" name="pname" id="pname" placeholder='<?php if ($pname) {echo $pname;}else{echo '请输入名称关键字';} ?>'>
+						</div>
+						<div class="btn-group">
+							<span  class="btn blue" id="pnamebtn"><i class="glyphicon glyphicon-search"></i> <?php echo yii::t('app','查询');?></span>
+						</div>
+						<div class="btn-group">
+							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+						</div>
 						<a href="<?php echo $this->createUrl('productSet/create' , array('companyId' => $this->companyId,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<!-- <div class="btn-group">
-							<a class="btn green" href="#" data-toggle="dropdown">
-							<i class="fa fa-cogs"></i> Tools
-							<i class="fa fa-angle-down"></i>
-							</a>
-							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
-							</ul>
-						</div> -->
                         <div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
@@ -142,4 +142,17 @@
 		</div>
             <?php $this->endWidget(); ?>
 	</div>
+	<script type="text/javascript">
+	$('#pnamebtn').click(function(event) {
+		var pname = $('#pname').val();
+		// alert(pname);
+		
+			location.href='<?php echo $this->createUrl('productSet/index',array('companyId'=>$this->companyId))?>/pname/'+pname;
+		
+	});
+	$('#selectCategory').change(function(){
+		var cid = $(this).val();
+		location.href="<?php echo $this->createUrl('productSet/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+	});
+	</script>
 	<!-- END PAGE CONTENT-->
