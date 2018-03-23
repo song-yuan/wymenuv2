@@ -1,7 +1,7 @@
 <?php
 class ProductSetController extends BackendController
 {
-        public function actions() {
+   public function actions() {
 		return array(
 				'upload'=>array(
 						'class'=>'application.extensions.swfupload.SWFUploadAction',
@@ -21,17 +21,29 @@ class ProductSetController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
+		$categoryId = Yii::app()->request->getParam('cid',0);
+		$pname = Yii::app()->request->getParam('pname',null);
+		
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.dpid='.$this->companyId .' and delete_flag=0';
+		if($categoryId){
+			$criteria->condition.=' and t.category_id = '.$categoryId;
+		}
+		if($pname){
+			$criteria->condition.=' and t.set_name like "%'.$pname.'%"';
+		}
 		$criteria->order = 't.lid asc';
 		$pages = new CPagination(ProductSet::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 
 		$models = ProductSet::model()->findAll($criteria);
-
+		$categories = $this->getCategories();
 		$this->render('index',array(
 			'models'=>$models,
+			'categories'=>$categories,
+			'categoryId'=>$categoryId,
+			'pname'=>$pname,
 			'pages'=>$pages
 		));
 	}
@@ -635,10 +647,10 @@ class ProductSetController extends BackendController
                 return $command->queryScalar();
 	}
 
-        private function getCategories(){
+    private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
-		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->condition =  't.cate_type =2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
 
 		$models = ProductCategory::model()->findAll($criteria);
@@ -664,10 +676,33 @@ class ProductSetController extends BackendController
 		return $optionsReturn;
 	}
 
-        private function getCategoryList(){
-		$categories = ProductCategory::model()->findAll('cate_type=2 and delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
-		//var_dump($categories);exit;
-		return CHtml::listData($categories, 'lid', 'category_name');
+   private function getCategoryList(){
+		$criteria = new CDbCriteria;
+		//$criteria->with = 'company';
+		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
+
+		$models = ProductCategory::model()->findAll($criteria);
+
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+                        //var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+                    //var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
 	}
 	private function getGroupnos($setid){
 		if($setid)

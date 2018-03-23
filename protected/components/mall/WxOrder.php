@@ -766,11 +766,11 @@ class WxOrder
 	}
 	public static function getUserOrderList($userId,$cardId,$type,$page){
 		if($type==1){
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2) order by lid desc';
+			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in ("1","2") order by lid desc';
 		}elseif($type==2){
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (3,4,8) order by lid desc';
+			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in ("3","4","8") order by lid desc';
 		}else{
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in (1,2,3,4,8) order by lid desc';
+			$sql = 'select * from nb_order where user_id='.$userId.' and order_type in (1,2,3,6) and order_status in ("1","2","3","4","8") order by lid desc';
 		}
 		$sql .= '  limit '. ($page-1)*10 .',10';
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();

@@ -45,12 +45,10 @@ class ProductController extends BackendController
 			}
 			$criteria->order = 't.sort asc,t.lid asc';
 			$pages = new CPagination(Product::model()->count($criteria));
-			//	    $pages->setPageSize(1);
 			$pages->applyLimit($criteria);
 			$models = Product::model()->findAll($criteria);
-			//var_dump($models);exit;
+			
 			$categories = $this->getCategories();
-			//      var_dump($categories);exit;
 			$this->render('index',array(
 					'models'=>$models,
 					'pages'=>$pages,
