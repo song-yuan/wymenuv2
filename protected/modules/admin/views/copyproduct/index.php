@@ -86,9 +86,8 @@ function fun()
 						<?php endforeach; ?>
 					<?php endif;?>
 				</select>
-		         <button ctp="1" type="button" class="btn blue printall" title="会覆盖已存在的下发产品">覆盖下发</button>
-		         <button ctp="2" type="button" class="btn blue printall" title="先清空以前下发的产品，再进行下发">限制下发</button>
-		         <button ctp="3" type="button" class="btn blue printall" title="清空店铺所有产品，再进行下发">强制下发</button>
+		         <button ctp="1" type="button" class="btn blue printall" title="会覆盖已存在的下发产品">普通下发</button>
+		         <button ctp="2" type="button" class="btn blue printall" title="先清空以前下发的产品，再进行下发">覆盖下发</button>
 		         <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
 		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
 		         
