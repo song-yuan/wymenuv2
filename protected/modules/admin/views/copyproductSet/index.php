@@ -287,7 +287,7 @@ function fun()
 	                layer_index_printreportlist=0;
 	            }
 	        });
-			$("。printall").on("click",function(){
+			$(".printall").on("click",function(){
 				if(window.confirm("请将鼠标悬浮至按钮，认真阅读各下发区别，确认后，下发过程不可逆，请谨慎操作！！！")){
 		            //alert("暂无权限！！！");
 		            var ctp = $(this).attr('ctp');
