@@ -43,6 +43,7 @@ class CopyproductSetController extends BackendController
 		$pshscode = Yii::app()->request->getParam('pshscode');
 		$groups = Yii::app()->request->getParam('groups');
 		$copydpids = Yii::app()->request->getParam('dpids');
+		$ctp = Yii::app()->request->getParam('ctp');
 		// p($groups);
 		$pshscodes = array();
 		$pshscodes = explode(',',$pshscode);
@@ -191,6 +192,10 @@ class CopyproductSetController extends BackendController
 	        				}
 	        			}
 
+	        		}
+	        		if($ctp==2){
+	        			$sql ='delete from nb_product_set where source=1 and dpid ='.$dpid;
+	        			$re = Yii::app()->db->createCommand($sql)->execute();
 	        		}
         			foreach ($pshscodes as $prodsethscode){
         				$prodsets = ProductSet::model()->find('pshs_code=:pscode and dpid=:companyId and delete_flag=0' , array(':pscode'=>$prodsethscode,':companyId'=>$this->companyId));

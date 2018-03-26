@@ -38,7 +38,7 @@ class ProductSetController extends BackendController
 		$pages->applyLimit($criteria);
 
 		$models = ProductSet::model()->findAll($criteria);
-		$categories = $this->getCategories();
+		$categories = $this->getSCategories();
 		$this->render('index',array(
 			'models'=>$models,
 			'categories'=>$categories,
@@ -206,10 +206,6 @@ class ProductSetController extends BackendController
 		}
 	}
 
-
-
-
-
         public function actionDetailIndex(){
 		$pwlid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');// var_dump($pwlid);exit;
@@ -256,11 +252,6 @@ class ProductSetController extends BackendController
 			'islock'=>$islock,
 		));
 	}
-
-
-
-
-
 
 	public function actionDetailCreate(){
 
@@ -386,7 +377,6 @@ class ProductSetController extends BackendController
 		}
 	}
 
-
 	public function actionGroupdelete(){
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -416,7 +406,6 @@ class ProductSetController extends BackendController
 			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId, 'lid' => $pslid));
 		}
 	}
-
 
 	public function actionDetailUpdate(){
 
@@ -647,10 +636,38 @@ class ProductSetController extends BackendController
                 return $command->queryScalar();
 	}
 
-    private function getCategories(){
+    private function getSCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.cate_type =2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
+
+		$models = ProductCategory::model()->findAll($criteria);
+
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+                        //var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+                    //var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
+	}
+        private function getCategories(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
 
 		$models = ProductCategory::model()->findAll($criteria);

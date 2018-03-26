@@ -85,7 +85,8 @@ function fun()
 						<?php endforeach; ?>
 					<?php endif;?>
 				</select>
-		         <button id="printall" type="button" class="btn blue">确认下发</button>
+		         <button ctp="1" type="button" class="btn blue printall" title="会覆盖已存在的下发产品">普通下发</button>
+		         <button ctp="2" type="button" class="btn blue printall" title="先清空以前下发的产品，再进行下发">覆盖下发</button>
 		         <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
 		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
 	         </div>
@@ -148,6 +149,7 @@ function fun()
 						<input type="hidden" id="pshscode" name="pshscode" value="" />
 						<input type="hidden" id="dpids" name="dpids" value="" />
 						<input type="hidden" id="pgroups" name="groups" value="" />
+						<input type="hidden" id="ctp" name="ctp" value="" />
 
 						</div>
 					</table>
@@ -285,38 +287,42 @@ function fun()
 	                layer_index_printreportlist=0;
 	            }
 	        });
-			$("#printall").on("click",function(){
-	            //alert("暂无权限！！！");
-	            var dpids =new Array();
-	            var dpids="";
-	            $('.checkdpids:checked').each(function(){
-	                dpids += $(this).val()+',';
-	            });
-	            var groups = $('#groups').find("option:selected").val();
-	                // alert(groups);
-	            if(dpids!=''){
-	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
-	            	//alert(dpids);
-	            	$("#dpids").val(dpids);
-	            	$("#pshscode").val(codep);
-	            	$("#pgroups").val(groups);
-	    	        $("#copyproductset-form").submit();
-	    	        $("#printall").attr('disabled','disabled');
-
-					layer_index_printreportlist=layer.open({
-			            type: 1,
-			            shade: false,
-			            title: false, //不显示标题
-			            area: ['60%', '60%'],
-			            content: $('#noticed'),//$('#productInfo'), //捕获的元素
-			            cancel: function(index){
-			                layer.close(index);
-			                layer_index_printreportlist=0;
-			            }
-			        });
-		            }else{
-						alert("请选择店铺。。。");return;
-			            }
+			$(".printall").on("click",function(){
+				if(window.confirm("请将鼠标悬浮至按钮，认真阅读各下发区别，确认后，下发过程不可逆，请谨慎操作！！！")){
+		            //alert("暂无权限！！！");
+		            var ctp = $(this).attr('ctp');
+		            var dpids =new Array();
+		            var dpids="";
+		            $('.checkdpids:checked').each(function(){
+		                dpids += $(this).val()+',';
+		            });
+		            var groups = $('#groups').find("option:selected").val();
+		                // alert(groups);
+		            if(dpids!=''){
+		            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
+		            	//alert(dpids);
+		            	$("#dpids").val(dpids);
+		            	$("#pshscode").val(codep);
+		            	$("#pgroups").val(groups);
+		            	$("#ctp").val(ctp);
+		    	        $("#copyproductset-form").submit();
+		    	        $("#printall").attr('disabled','disabled');
+	
+						layer_index_printreportlist=layer.open({
+				            type: 1,
+				            shade: false,
+				            title: false, //不显示标题
+				            area: ['60%', '60%'],
+				            content: $('#noticed'),//$('#productInfo'), //捕获的元素
+				            cancel: function(index){
+				                layer.close(index);
+				                layer_index_printreportlist=0;
+				            }
+				        });
+			            }else{
+							alert("请选择店铺。。。");return;
+				            }
+				}
 			});
 	        $("#closeall").on('click',function(){
 		        //alert("123");
