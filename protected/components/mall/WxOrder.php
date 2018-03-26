@@ -957,32 +957,15 @@ class WxOrder
 	 * 
 	 */
 	 public static function insertOrderPay($order,$paytype = 1,$out_trade_no = ''){
-	 	$time = time();
-	 	$isSync = DataSync::getInitSync();
 	 	if($paytype==10){
 	 		$user = WxBrandUser::get($order['user_id'],$order['dpid']);
 	 		if(!$user){
 	 			throw new Exception('不存在该会员!');
 	 		}
 	 		$payMoney = self::reduceYue($user,$order);
-	 		
-	 		$se = new Sequence("order_pay");
-		    $orderPayId = $se->nextval();
-		    $insertOrderPayArr = array(
-		        	'lid'=>$orderPayId,
-		        	'dpid'=>$order['dpid'],
-		        	'create_at'=>date('Y-m-d H:i:s',$time),
-		        	'update_at'=>date('Y-m-d H:i:s',$time), 
-		        	'order_id'=>$order['lid'],
-		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$payMoney,
-		        	'paytype'=>$paytype,
-		    		'remark'=>$user['card_id'],
-		        	'is_sync'=>$isSync,
-		        );
-			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
-	 		
 	 	}else{
+	 		$time = time();
+	 		$isSync = DataSync::getInitSync();
 	 		// 微信支付
 	 		$payYue = 0.00;
 	 		$payCupon = 0.00;
@@ -1050,6 +1033,23 @@ class WxOrder
 		$total = $orderTotal - $payCupon - $payPoints;
 		
 		$payMoney = WxBrandUser::reduceYue($userId, $userDpId, $dpid, $total);	
+		
+		$time = time();
+		$se = new Sequence("order_pay");
+		$orderPayId = $se->nextval();
+		$insertOrderPayArr = array(
+				'lid'=>$orderPayId,
+				'dpid'=>$order['dpid'],
+				'create_at'=>date('Y-m-d H:i:s',$time),
+				'update_at'=>date('Y-m-d H:i:s',$time),
+				'order_id'=>$order['lid'],
+				'account_no'=>$order['account_no'],
+				'pay_amount'=>$payMoney,
+				'paytype'=>10,
+				'remark'=>$user['card_id'],
+		);
+		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
+		
 		if($payMoney==$total){
 			self::dealOrder($user,$order);
 		} 	

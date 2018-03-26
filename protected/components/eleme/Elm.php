@@ -290,7 +290,8 @@ class Elm
 		$message = Helper::dealString($message);
 		$me = json_decode($message);
 		$orderId = $me->id;
-		Yii::app()->cache->set($orderId,$message);
+		$expire = 30*60; // 过期时间
+		Yii::app()->cache->set($orderId,$message,$expire);
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
 			$order = self::confirmOrder($dpid,$orderId);
