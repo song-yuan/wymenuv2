@@ -91,10 +91,10 @@
 								<th><?php echo yii::t('app','类别');?></th>
 								<th><?php echo yii::t('app','现价');?></th>
 								<th><?php echo yii::t('app','会员价');?></th>
-								<th><?php echo yii::t('app','打包费');?></th>
                                 <th><?php echo yii::t('app','会员折扣');?></th>
 								<th><?php echo yii::t('app','可折');?></th>
                                 <th><?php echo yii::t('app','可售');?></th>
+                                <th><?php echo yii::t('app','微信端');?></th>
                                 <th><?php echo yii::t('app','来源');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -111,7 +111,6 @@
 								<td ><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
 								<td ><?php echo $model->member_price;?></td>
-								<td ><?php echo $model->dabao_fee;?></td>
                                 <td ><?php echo $model->is_member_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
 								<td ><?php echo $model->is_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                 <td ><?php switch($model->is_show){
@@ -119,6 +118,13 @@
                                 	case 1: echo '可售';break;
                                 	case 6: echo '公司下架';break;
                                 	case 7: echo '自下架';break;
+                                	default: echo '未知';break;
+                                }?></td>
+                                <td ><?php switch($model->is_show_wx){
+                                	case 1: echo '都显示';break;
+                                	case 2: echo '都不显示';break;
+                                	case 3: echo '只显示微信堂食';break;
+                                	case 4: echo '只显示微信外卖';break;
                                 	default: echo '未知';break;
                                 }?></td>
                                 <td ><?php switch($model->is_temp_price) {case 0 :echo '自建';break;case 1:echo '总部下发';break;default: echo '';break;}?></td>
@@ -147,9 +153,19 @@
 									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "6" style="">统一下架</button>
 									<?php endif;?>
 									<?php if($model->is_show_wx == '1'):?>
-									<button type="button" class = "on_off_sellwx xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "2" >微店下架</button>
-									<?php else:?>
+									<button type="button" class = "on_off_sellwx xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "2" title="点击按钮，进行下架操作，下架后，微信端不可见">微店下架</button>
+									<?php elseif($model->is_show_wx == '2'):?>
 									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "1" >微店上架</button>
+									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "3" title="微店堂食上架">微堂</button>
+									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "4" title="微店外卖上架">微外</button>
+									<?php elseif($model->is_show_wx == '3'):?>
+									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "1" >微店上架</button>
+									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "4" title="微店外卖上架">微外</button>
+									<button type="button" class = "on_off_sellwx xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "2" title="点击按钮，进行下架操作，下架后，微信端不可见">微店下架</button>
+									<?php elseif($model->is_show_wx =='4'):?>
+									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "1" title="点击上架后，微信堂食及外卖端都显示">微店上架</button>
+									<button type="button" class = "on_off_sellwx shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "3" title="微店堂食上架">微堂</button>
+									<button type="button" class = "on_off_sellwx xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "2" title="点击按钮，进行下架操作，下架后，微信端不可见">微店下架</button>
 									<?php endif;?>
 									
 								<?php endif;?>
