@@ -79,7 +79,7 @@ class DataSyncOperation {
 					$poscodefee = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 					if(empty($poscodefee)){
 						$sql = 'select years from nb_poscode_feeset where dpid = (select comp_dpid from nb_company where dpid = '.$dpid.')';
-						$years = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+						$years = Yii::app ()->db->createCommand ( $sql )->queryScalar();
 						
 						if($years==0){
 							$years = 30;

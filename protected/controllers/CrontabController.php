@@ -56,8 +56,9 @@ class  CrontabController extends Controller
 	 * 
 	 */
 	public function actionGetelemeToken(){
-		$time = time();
+		$time = strtotime('+1 day');
 		$sql = 'select * from nb_eleme_token where expires_in < '.$time.' and delete_flag=0';
+		echo $sql;exit;
 		$elemeTokens = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($elemeTokens as $token){
 			$dpid = $token['dpid'];
