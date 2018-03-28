@@ -111,7 +111,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'is_show_wx',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show_wx', array('1' => yii::t('app','是') , '2' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx'),'disabled'=>$b,));?>
+											<?php echo $form->dropDownList($model, 'is_show_wx', array('1' => yii::t('app','是') , '2' => yii::t('app','否'), '3' => yii::t('app','只显示微信堂食'), '4' => yii::t('app','只显示微信外卖')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show_wx'),'disabled'=>$b,));?>
 											<?php echo $form->error($model, 'is_show_wx' )?>
 										</div>
 									</div>
