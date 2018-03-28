@@ -75,29 +75,29 @@ class DataSyncOperation {
 						);
 						$res = Yii::app()->db->createCommand ()->insert ( 'nb_pad_setting_status', $data );
 					}
-					$sql = 'select * from nb_poscode_fee where dpid = '.$dpid.' and poscode="'.$code.'"';
-					$poscodefee = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-					if(empty($poscodefee)){
-						$sql = 'select years from nb_poscode_feeset where dpid = (select comp_dpid from nb_company where dpid = '.$dpid.')';
-						$years = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+// 					$sql = 'select * from nb_poscode_fee where dpid = '.$dpid.' and poscode="'.$code.'"';
+// 					$poscodefee = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+// 					if(empty($poscodefee)){
+// 						$sql = 'select years from nb_poscode_feeset where dpid = (select comp_dpid from nb_company where dpid = '.$dpid.')';
+// 						$years = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 						
-						if($years==0){
-							$years = 30;
-						}
-						$expTime = strtotime("+".$years." year");
-						$se = new Sequence ( "poscode_fee");
-						$lid = $se->nextval ();
-						$data = array (
-								'lid' => $lid,
-								'dpid' => $dpid,
-								'create_at' => date ( 'Y-m-d H:i:s', time () ),
-								'update_at' => date ( 'Y-m-d H:i:s', time () ),
-								'poscode' => $code,
-								'exp_time' => date('Y-m-d H:i:s',$expTime),
-								'num' => $padNo
-						);
-						$res = Yii::app()->db->createCommand ()->insert ( 'nb_poscode_fee', $data );
-					}
+// 						if($years==0){
+// 							$years = 30;
+// 						}
+// 						$expTime = strtotime("+".$years." year");
+// 						$se = new Sequence ( "poscode_fee");
+// 						$lid = $se->nextval ();
+// 						$data = array (
+// 								'lid' => $lid,
+// 								'dpid' => $dpid,
+// 								'create_at' => date ( 'Y-m-d H:i:s', time () ),
+// 								'update_at' => date ( 'Y-m-d H:i:s', time () ),
+// 								'poscode' => $code,
+// 								'exp_time' => date('Y-m-d H:i:s',$expTime),
+// 								'num' => $padNo
+// 						);
+// 						$res = Yii::app()->db->createCommand ()->insert ( 'nb_poscode_fee', $data );
+// 					}
 					$se = new Sequence ( "pad_setting_detail" );
 					$lid = $se->nextval ();
 					$data = array (
