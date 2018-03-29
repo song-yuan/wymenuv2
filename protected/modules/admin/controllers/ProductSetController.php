@@ -32,7 +32,7 @@ class ProductSetController extends BackendController
 		if($pname){
 			$criteria->condition.=' and t.set_name like "%'.$pname.'%"';
 		}
-		$criteria->order = 't.lid asc';
+		$criteria->order = 't.sort asc';
 		$pages = new CPagination(ProductSet::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
