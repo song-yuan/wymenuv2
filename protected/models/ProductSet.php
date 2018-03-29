@@ -48,7 +48,7 @@ class ProductSet extends CActiveRecord
 			array('set_name, lid', 'required'),
 			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, set_price, member_price,category_id', 'length', 'max'=>10),
-			array('set_name, is_sync', 'length', 'max'=>50),
+			array('set_name, is_sync, sort', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
 			array('type, is_show, is_show_wx, is_lock', 'length', 'max'=>2),
@@ -56,7 +56,7 @@ class ProductSet extends CActiveRecord
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, category_id, set_name, type, simple_code, main_picture, set_price, member_price, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, is_show,is_show_wx,is_lock, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, category_id, set_name, type, simple_code, main_picture, set_price, member_price, description, rank, sort, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, is_show,is_show_wx,is_lock, delete_flag, is_sync', 'safe', 'on'=>'search'),
 
 		);
 	}
@@ -93,6 +93,7 @@ class ProductSet extends CActiveRecord
 			'member_price' => yii::t('app','套餐基础价格（会员）'),
 			'description' => yii::t('app','描述'),
 			'rank' => yii::t('app','推荐星级'),
+			'sort' => yii::t('app','排序'),
 			'is_member_discount' => yii::t('app','是否参与会员折扣'),
 			'is_special' => yii::t('app','是否特价菜'),
 			'is_discount' => yii::t('app','是否可折扣'),
@@ -139,6 +140,7 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('member_price',$this->member_price,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('rank',$this->rank);
+		$criteria->compare('sort',$this->sort);
 		$criteria->compare('is_member_discount',$this->is_member_discount,true);
 		$criteria->compare('is_special',$this->is_special,true);
 		$criteria->compare('is_discount',$this->is_discount,true);
