@@ -105,6 +105,7 @@
 								<th><?php echo yii::t('app','打烊时间');?></th>
 								<th><?php echo yii::t('app','是否同步价格');?></th>
 								<th><?php echo yii::t('app','是否锁定');?></th>
+								<th><?php echo yii::t('app','微店类型');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -137,6 +138,7 @@
 								};?></td>
 								<td><?php if($model->property){if($model->property->is_copyprice) echo '已同步';else echo '未同步';}?></td>
 								<td><?php if($model->property){if($model->property->is_lock) echo '已锁定';else echo '未锁定';}?></td>
+								<td><?php if($model->property){switch($model->property->sale_type): case 1: echo '正常';break;case 2: echo '堂食';break;case 3: echo '外卖';break;default: echo '未知';break;endswitch;}?></td>
 								<td class="center">
 									<div class="actions">
 									<?php if($model->type == 1):?>
@@ -151,6 +153,16 @@
                                         		<?php elseif($model->property->is_rest == '3'):?>
                                         			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
                                         			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','强制关店');?></a>
+                                        			<?php if($model->property->sale_type == '1'):?>
+	                                        			<a class='btn green open-wxtype' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开堂食');?></a>
+	                                        			<a class='btn green open-wxtype' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开外卖');?></a>
+                                        			<?php elseif($model->property->sale_type == '2'):?>
+                                        				<a class='btn green open-wxtype' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开外卖');?></a>
+                                        				<a class='btn green open-wxtype' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','全开');?></a>
+                                        			<?php elseif($model->property->sale_type == '3'):?>
+                                        				<a class='btn green open-wxtype' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开堂食');?></a>
+                                        				<a class='btn green open-wxtype' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','全开');?></a>
+                                        			<?php endif;?>
                                         		<?php endif;?>
                                         	<?php else:?>
                                         		<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开通');?></a>
@@ -163,6 +175,9 @@
                                         			<a class='btn green open-wxdpid' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开店');?></a>
                                         		<?php elseif($model->property->is_rest == '3'):?>
                                         			<a class='btn red open-wxdpid' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','关店');?></a>
+                                        			<a class='btn green open-wxtype' style="margin-top: 5px;" rest='2' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开堂食');?></a>
+                                        			<a class='btn green open-wxtype' style="margin-top: 5px;" rest='3' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','开外卖');?></a>
+                                        				<a class='btn green open-wxtype' style="margin-top: 5px;" rest='1' dpid='<?php echo $model->dpid;?>'><?php echo yii::t('app','全开');?></a>
                                         		<?php endif;?>
                                         	<?php else:?>
                                         		
@@ -284,6 +299,33 @@ jQuery(document).ready(function() {
             }
         });
 		});
+	$('.open-wxtype').on('click',function(){
+		var rest = $(this).attr('rest');
+		var dpid = $(this).attr('dpid');
+		
+		var url = "<?php echo $this->createUrl('companyWx/typestore');?>/companyId/"+dpid+"/rest/"+rest;
+		//alert(url);
+		//return false;
+        $.ajax({
+            url:url,
+            type:'GET',
+            //data:orderid,//CF
+            async:false,
+            dataType: "json",
+            success:function(msg){
+                var data=msg;
+                if(data.status){
+                	layer.msg('成功！！！');
+                	location.reload();
+                }else{
+                	layer.msg('失败！！！');
+                }
+            },
+            error: function(msg){
+                layer.msg('网络错误！！！');
+            }
+        });
+	});
 	$('.setAppid').on('click',function(){
 
 		
