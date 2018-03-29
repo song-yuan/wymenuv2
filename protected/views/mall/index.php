@@ -19,6 +19,12 @@
 		if($currentTime >= $this->company['closing_time'] || $currentTime <= $this->company['shop_time']){
 			$closeShop = true;
 		}
+		if($this->type==6&&$this->company['sale_type']==3){
+			$closeShop = true;
+		}
+		if($this->type==2&&$this->company['sale_type']==2){
+			$closeShop = true;
+		}
 	}
 	$current = false;
 	$plus = '<img src="'.$baseUrl.'/img/mall/plus.png"/>';
