@@ -15,7 +15,7 @@ class ShopController extends Controller
 		$this->company = WxCompany::get($this->companyId);
 	}
 	public function actionIndex(){
-		$this->render('shoplist',array('companyId'=>$this->companyId,'type'=>$this->type));
+		$this->render('shoplist',array('companyId'=>$this->companyId));
 	}
 	public function actionAjaxGetShop(){
 		$page = Yii::app()->request->getParam('page');

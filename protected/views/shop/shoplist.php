@@ -32,7 +32,7 @@
 		var showDiscount = <?php echo $this->company['distance'];?>;
 		function getShopList(){ 
 	    	$.ajax({
-		        url:'<?php echo $this->createUrl('/shop/ajaxGetShop',array('companyId'=>$this->companyId));?>',
+		        url:'<?php echo $this->createUrl('/shop/ajaxGetShop',array('companyId'=>$this->companyId,'type'=>$this->type));?>',
 		        data:{page:page,lat:latitude,lng:longitude,keyword:shopName},
 		        success:function(msg){
 		        	var isShowMore = false;
