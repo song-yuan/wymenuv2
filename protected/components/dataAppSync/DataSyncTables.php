@@ -417,6 +417,7 @@ class DataSyncTables
         		"member_price decimal(10,2) NOT NULL DEFAULT '0.00',".
 				"description text NOT NULL,".
 				"rank tinyint(3) NOT NULL DEFAULT '3',".
+        		"sort int(4) NOT NULL DEFAULT '50',".
 				"is_member_discount char(1) NOT NULL DEFAULT '0',".
 				"is_special char(1) NOT NULL DEFAULT '0',".
 				"is_discount char(1) NOT NULL DEFAULT '0',".
