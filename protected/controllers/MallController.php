@@ -90,6 +90,7 @@ class MallController extends Controller
         $promotions = $promotion->promotionProductList;
         $buySentPromotions = $promotion->buySentProductList;
         $fullSents = $promotion->fullSentList;
+        echo '6666';exit;
         $cache = Yii::app()->cache->get($key);
         if($cache!=false){
         	var_dump(0);
