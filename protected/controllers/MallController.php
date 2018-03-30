@@ -92,16 +92,12 @@ class MallController extends Controller
         $fullSents = $promotion->fullSentList;
         $cache = Yii::app()->cache->get($key);
         if($cache!=false){
-        	var_dump(0);
         	$products = json_decode($cache,true);
         }else{
-        	var_dump(1);
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
         	Yii::app()->cache->set($key,json_encode($products),$expire);
-        	var_dump($products);exit;
         }
-        var_dump($products);exit;
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
         $disables = $carts['disable'];
