@@ -91,7 +91,6 @@ class MallController extends Controller
         $buySentPromotions = $promotion->buySentProductList;
         $fullSents = $promotion->fullSentList;
         $cache = Yii::app()->cache->get($key);
-        echo '6666';exit;
         if($cache!=false){
         	var_dump(0);
         	$products = json_decode($cache,true);
