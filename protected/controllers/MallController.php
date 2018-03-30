@@ -98,8 +98,8 @@ class MallController extends Controller
         	var_dump(1);
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-        	echo '8888';exit;
         	Yii::app()->cache->set($key,json_encode($products),$expire);
+        	echo '8888';exit;
         }
         var_dump($products);exit;
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
