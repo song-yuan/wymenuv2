@@ -1,16 +1,3 @@
-<script type="text/javascript">
-function fun()
-		{
-			
-			if($(this).checked){
-				document.$("FirstItem").checked;
-			}
-
-		};
-		
-		
-		
-</script>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -74,9 +61,9 @@ function fun()
 		         </div>
 	         </div>
 	         <div class="modal-footer">
-		         <button id="printall" type="button" class="btn blue">确认下发</button>
-		         <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
-		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
+	         	<button ctp="1" type="button" class="btn blue printall" title="会覆盖已存在的下发产品">普通下发</button>
+		        <button ctp="2" type="button" class="btn blue printall" title="先清空以前下发的产品，再进行下发">覆盖下发</button>
+		        <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
 	         </div>
 	         <span style="color:red;">注意 : 下发可能需要点时间,请耐心等待</span>
 		 </div>
@@ -241,8 +228,9 @@ function fun()
 	                layer_index_printreportlist=0;                                                                                                     
 	            }
 	        });
-			$("#printall").on("click",function(){
+			$(".printall").on("click",function(){
 	            //alert("暂无权限！！！");
+	            var ctp = $(this).attr('ctp');
 	            var dpids =new Array();
 	            var dpids="";
 	            $('.checkdpids:checked').each(function(){

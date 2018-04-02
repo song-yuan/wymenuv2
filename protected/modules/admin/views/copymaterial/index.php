@@ -74,9 +74,9 @@ function fun()
 		         </div>
 	         </div>
 	         <div class="modal-footer">
-		         <button id="printall" type="button" class="btn blue">确认下发</button>
-		         <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
-		         <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
+	         	<button ctp="1" type="button" class="btn blue printall" title="会覆盖已存在的下发产品">普通下发</button>
+		        <button ctp="2" type="button" class="btn blue printall" title="先清空以前下发的产品，再进行下发">覆盖下发</button>
+		       	<button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
 	         </div>
 	         <span style="color:red;">注意 : 下发可能需要点时间,请耐心等待</span>
 		 </div>
@@ -147,42 +147,11 @@ function fun()
 						<input type="hidden" id="mulhscode" name="mulhscode" value="" />
 						<input type="hidden" id="mushscode" name="mushscode" value="" />
 						<input type="hidden" id="dpids" name="dpids" value="" />
+						<input type="hidden" id="ctp" name="ctp" value="" />
 						</div>
 					</table>
 					</div>
-					
-<!-- 						<php if($pages->getItemCount()):?>
-<!-- 						<div class="row"> --
-<!-- 							<div class="col-md-5 col-sm-12"> 
-<!-- 								<div class="dataTables_info">
-									<php echo yii::t('app','共');?> <php echo $pages->getPageCount();?> <php echo yii::t('app','页');?> , <php echo $pages->getItemCount();?> <php echo yii::t('app','条数据');?> , <php echo yii::t('app','当前是第');?> <php echo $pages->getCurrentPage()+1;?> <php echo yii::t('app','页');?>
-<!-- 								</div> --
-<!-- 							</div> --
-<!-- 							<div class="col-md-7 col-sm-12"> --
-<!-- 								<div class="dataTables_paginate paging_bootstrap"> --
-								<php $this->widget('CLinkPager', array(
-// 									'pages' => $pages,
-// 									'header'=>'',
-// 									'firstPageLabel' => '<<',
-// 									'lastPageLabel' => '>>',
-// 									'firstPageCssClass' => '',
-// 									'lastPageCssClass' => '',
-// 									'maxButtonCount' => 8,
-// 									'nextPageCssClass' => '',
-// 									'previousPageCssClass' => '',
-// 									'prevPageLabel' => '<',
-// 									'nextPageLabel' => '>',
-// 									'selectedPageCssClass' => 'active',
-// 									'internalPageCssClass' => '',
-// 									'hiddenPageCssClass' => 'disabled',
-// 									'htmlOptions'=>array('class'=>'pagination pull-right')
-// 								));
-// 								?>
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 						</div> 
-						<php endif;?>					
--->					
+
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -284,8 +253,9 @@ function fun()
 	                layer_index_printreportlist=0;                                                                                                     
 	            }
 	        });
-			$("#printall").on("click",function(){
+			$(".printall").on("click",function(){
 	            //alert("暂无权限！！！");
+	            var ctp = $(this).attr('ctp');
 	            var dpids =new Array();
 	            var dpids="";
 	            $('.checkdpids:checked').each(function(){
@@ -300,6 +270,7 @@ function fun()
 	            	$("#mphscode").val(codemp);
 	            	$("#mulhscode").val(codemul);
 	            	$("#mushscode").val(codemus);
+	            	$("#ctp").val(ctp);
 	    	        $("#copymaterial-form").submit();
 		            }else{
 						alert("请选择店铺。。。");return;

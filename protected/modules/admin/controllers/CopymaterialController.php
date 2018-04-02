@@ -46,7 +46,6 @@ class CopymaterialController extends BackendController
 	public function actionStorMaterial(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$is_sync = DataSync::getInitSync();
-		//var_dump($companyId);exit;
 		$db = Yii::app()->db;
 		$ids = Yii::app()->request->getPost('ids');
 		$mchscode = Yii::app()->request->getParam('mchscode');
@@ -54,6 +53,7 @@ class CopymaterialController extends BackendController
 		$mulhscode = Yii::app()->request->getParam('mulhscode');
 		$mushscode = Yii::app()->request->getParam('mushscode');
 		$dpid = Yii::app()->request->getParam('dpids');
+		$ctp = Yii::app()->request->getParam('ctp');
 		$mchscodes = array();
 		$mchscodes = explode(',',$mchscode);
 		$mphscodes = array();
@@ -64,8 +64,6 @@ class CopymaterialController extends BackendController
 		$mushscodes = explode(',',$mushscode);
 		$dpids = array();
 		$dpids = explode(',',$dpid);
-		//var_dump($ids,$mchscodes,$dpids,$mphscodes,$mulhscodes,$mushscodes);exit;
-		
 		//****查询公司的产品分类。。。****
 		
 		$sql = 'select t.* from nb_material_category t where t.delete_flag = 0 and t.pid = 0 and t.dpid = '.$this->companyId;
@@ -87,22 +85,16 @@ class CopymaterialController extends BackendController
 		$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$materials = $command->queryAll();
-		
 		//var_dump($materialunitratio);exit;
         //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
         	foreach ($dpids as $dpid){
         		if(!empty($catep1)){
         			foreach($catep1 as $category){
-        				
         				if($category['mchs_code']){
-        					//var_dump($category);
 	        				$catep = MaterialCategory::model()->find('mchs_code=:mccode and dpid=:companyId and delete_flag =0' , array(':mccode'=>$category['mchs_code'],':companyId'=>$dpid));
 	        				if($catep){
-	//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-	// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
 	        				}else{//var_dump($catep);exit;
-	        					
 		                        $semc = new Sequence("material_category");
 		                        $id = $semc->nextval();
 		                        $data = array(
@@ -112,20 +104,14 @@ class CopymaterialController extends BackendController
 		                        		'update_at'=>date('Y-m-d H:i:s',time()),
 		                        		'category_name'=>$category['category_name'],
 		                        		'pid'=>"0",
-		                        		//'type'=>$category['type'],
 		                        		'mchs_code'=> $category['mchs_code'],
 		                        		'main_picture'=>$category['main_picture'],
 		                        		'order_num'=>$category['order_num'],
 		                        		'delete_flag'=>'0',
 		                        		'is_sync'=>$is_sync,
 		                        );
-		                        //var_dump($data,'fenlei');
 		                        $command = $db->createCommand()->insert('nb_material_category',$data);
-		                      
-		                        	//var_dump(mysql_query($command));exit;
-		                        	//var_dump($model);exit;
 	 	                        	$self = MaterialCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
-	 	                        	//var_dump($self);exit;
 		                        	if($self->pid!='0'){
 		                        		$parent = MaterialCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$model->pid,':dpid'=> $dpid));
 		                        		$self->tree = $parent->tree.','.$self->lid;
@@ -133,7 +119,6 @@ class CopymaterialController extends BackendController
 		                        		$self->tree = '0,'.$self->lid;
 		                        	}
 		                        	$self->update();
-		                        	//var_dump($self);
 	        				}
         				}
         			}
@@ -144,17 +129,10 @@ class CopymaterialController extends BackendController
 	        					$command = $db->createCommand($sql);
 	        					$sqltree = $command->queryRow();
 	        					$mchscode = $sqltree['mchs_code'];
-	        					//$chscodetree = $sqltree['tree'];
 	        					$catep = MaterialCategory::model()->find('mchs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$category['mchs_code'],':companyId'=>$dpid));
 	        					$cateptree = MaterialCategory::model()->find('mchs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$mchscode,':companyId'=>$dpid));
-	        					
-	        					
-	        					//var_dump($cateptree,$sqltree);exit;
 	        					if($catep){
-	        						//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-	        						// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
 	        					}else{//var_dump($catep);exit;
-	        				
 	        						$se = new Sequence("material_category");
 	        						$id = $se->nextval();
 	        						$datacate = array(
@@ -164,7 +142,6 @@ class CopymaterialController extends BackendController
 	        								'update_at'=>date('Y-m-d H:i:s',time()),
 	        								'category_name'=>$category['category_name'],
 	        								'pid'=>$cateptree['lid'],
-	        								//'type'=>$category['type'],
 	        								'mchs_code'=> $category['mchs_code'],
 	        								'main_picture'=>$category['main_picture'],
 	        								'order_num'=>$category['order_num'],
@@ -172,20 +149,13 @@ class CopymaterialController extends BackendController
 	        								'is_sync'=>$is_sync,
 	        						);
 	        						$command = $db->createCommand()->insert('nb_material_category',$datacate);
-	        				
-	        						//var_dump(mysql_query($command));exit;
-	        						//var_dump($datacate);
 	        						$self = MaterialCategory::model()->find('lid=:pid and dpid=:dpid and delete_flag=0' , array(':pid'=>$id,':dpid'=>$dpid ));
-	        						//var_dump($self);exit;
 	        						if($self->pid!='0'){
-	        							//$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->pid,':dpid'=> $dpid));
 	        							$self->tree = $cateptree['tree'].','.$self->lid;
 	        						} else {
 	        							$self->tree = '0,'.$self->lid;
 	        						}
 	        						$self->update();
-	        						
-	        				
 	        					}
         					}
         				}
@@ -198,10 +168,7 @@ class CopymaterialController extends BackendController
         				if($materialunits['muhs_code']){
 	        				$unit = MaterialUnit::model()->find('muhs_code=:mucode and dpid=:companyId and delete_flag =0' , array(':mucode'=>$materialunits['muhs_code'],':companyId'=>$dpid));
 	        				if($unit){
-	        					//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-	        					// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
 	        				}else{//var_dump($catep);exit;
-	        					 
 	        					$se = new Sequence("material_unit");
 	        					$id = $se->nextval();
 	        					$data = array(
@@ -219,11 +186,9 @@ class CopymaterialController extends BackendController
 	        							'is_sync'=>$is_sync,
 	        					);
 	        					$command = $db->createCommand()->insert('nb_material_unit',$data);
-	        					//var_dump($data,'danwei');
 	        				}
 	        			}
         			}
-        			
         		}
 
         		if(!empty($materialunitratio)){
@@ -258,15 +223,20 @@ class CopymaterialController extends BackendController
 	        							'is_sync'=>$is_sync,
 	        					);
 	        					$command = $db->createCommand()->insert('nb_material_unit_ratio',$data);
-	        					// var_dump($data,'bili');
 	        				}
 	        			}
         			}
-        			 
         		}
         		if($materials){
+        			if($ctp==2){
+        				$sql ='delete from nb_product_material where source=1 and dpid ='.$dpid;
+        				$re = Yii::app()->db->createCommand($sql)->execute();
+        			}
         			foreach ($mphscodes as $prodhscode){
         				$materialo = ProductMaterial::model()->find('mphs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
+        				if($ctp==2){
+        					$materialo = '';
+        				}
         				$material =  ProductMaterial::model()->find('mphs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
         				$categoryId = MaterialCategory::model()->find('mchs_code=:ccode and dpid=:companyId and delete_flag=0' , array(':ccode'=>$material['mchs_code'],':companyId'=>$dpid));
         				//var_dump($product,$producto,$categoryId);exit;
@@ -291,6 +261,7 @@ class CopymaterialController extends BackendController
         							'mphs_code'=>$material['mphs_code'],
         							'mulhs_code'=>$material['mulhs_code'],
         							'mushs_code'=>$material['mushs_code'],
+        							'source'=>1,
         							'delete_flag'=>'0',
         							'is_sync'=>$is_sync,
         					);
@@ -323,6 +294,7 @@ class CopymaterialController extends BackendController
         					$materialo->mphs_code = $material['mphs_code'];
         					$materialo->mulhs_code = $material['mulhs_code'];
         					$materialo->mushs_code = $material['mushs_code'];
+        					$materialo->source = 1;
         					$materialo->save();
         				}
         			}

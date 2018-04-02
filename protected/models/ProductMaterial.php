@@ -16,6 +16,7 @@
  * @property string $sales_unit_id
  * @property string $stock
  * @property string $stock_cost
+ * @property string $source
  * @property integer $delete_flag
  * @property string $is_sync
  */
@@ -42,13 +43,13 @@ class ProductMaterial extends CActiveRecord
 			array('lid, dpid, category_id, stock_unit_id, sales_unit_id', 'length', 'max'=>10),
 			array('material_name, material_identifier, material_private_identifier', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at, source', 'safe'),
 			array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项类别')),
 			array('stock_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择库存单位')),
 			array('sales_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择零售单位')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, category_id, create_at, update_at, material_name, material_identifier, material_private_identifier, stock_unit_id, sales_unit_id, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, category_id, create_at, update_at, material_name, material_identifier, material_private_identifier, stock_unit_id, sales_unit_id, source, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -84,6 +85,7 @@ class ProductMaterial extends CActiveRecord
 			'material_private_identifier' => '店内码',
 			'stock_unit_id' => '库存单位',
 			'sales_unit_id' => '零售单位',
+			'source' => '来演',
 			'delete_flag' => '删除 0未删除 1删除',
 			'is_sync' => 'Is Sync',
 		);
@@ -117,6 +119,7 @@ class ProductMaterial extends CActiveRecord
 		$criteria->compare('material_private_identifier',$this->material_private_identifier,true);
 		$criteria->compare('stock_unit_id',$this->stock_unit_id,true);
 		$criteria->compare('sales_unit_id',$this->sales_unit_id,true);
+		$criteria->compare('source',$this->source,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

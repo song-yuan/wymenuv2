@@ -95,6 +95,7 @@ class ProductMaterialController extends BackendController
 				            $model->mchs_code = $categoryCode;
 				            $model->mulhs_code = $stockUnitId;
 				            $model->mushs_code = $salesUnitId;
+				            $model->source = 0;
 				            $model->delete_flag = '0';
 				            
 				            $se=new Sequence("product_material_stock");

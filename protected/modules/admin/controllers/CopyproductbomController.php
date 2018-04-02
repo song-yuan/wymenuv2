@@ -33,9 +33,7 @@ class CopyproductbomController extends BackendController
 		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
-		//var_dump($dpids);exit;
 		$categories = $this->getCategories();
-//                var_dump($categories);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
@@ -52,6 +50,7 @@ class CopyproductbomController extends BackendController
 		$chscode = Yii::app()->request->getParam('chscode');
 		$phscode = Yii::app()->request->getParam('phscode');
 		$dpid = Yii::app()->request->getParam('dpids');
+		$ctp = Yii::app()->request->getParam('ctp');
 		$chscodes = array();
 		$chscodes = explode(',',$chscode);
 		$phscodes = array();
@@ -61,8 +60,6 @@ class CopyproductbomController extends BackendController
 		$msgnull = '下列产品暂无配方，请添加后再进行下发操作：';
 		$msgprod = '下列产品尚未下发至选择店铺，请先下发产品再下发配方：';
 		$msgmate = '下列原料尚未下发至选择店铺，请先下发原料再下发配方：';
-		//var_dump($dpids,$phscodes);exit;
-		
 		//****查询公司的产品分类。。。****
 		
 		$db = Yii::app()->db;
@@ -73,21 +70,21 @@ class CopyproductbomController extends BackendController
         //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
         	foreach ($dpids as $dpid){
-
         			foreach ($phscodes as $prodhscode){
         				$prods = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
         				$producto = ProductBom::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
         				$product =  ProductBom::model()->findAll('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
-        				//var_dump($product,$producto);exit;
-        				//var_dump(!empty($producto));exit;
         				if(!empty($product)){
-	        				if(!empty($producto)){
-	        					$sql = 'update nb_product_bom set delete_flag = 1 where phs_code ='.$prodhscode.' and dpid ='.$dpid;
+	        				if((!empty($producto))&& ($ctp ==1)){
+	        					$sql = 'delete from nb_product_bom where phs_code ='.$prodhscode.' and dpid ='.$dpid;
 	        					$command=$db->createCommand($sql);
 								$command->execute();
+	        				}else{
+	        					$sql = 'delete from nb_product_bom where source=1 and dpid ='.$dpid;
+	        					$command=$db->createCommand($sql);
+	        					$command->execute();
 	        				}
 	        				foreach ($product as $prod){
-	        					
 	        					$prodid = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
 	        					$mateid = ProductMaterial::model()->find('mphs_code=:mpcode and mushs_code =:muscode and dpid=:companyId and delete_flag=0' , array(':mpcode'=>$prod['mphs_code'],':muscode'=>$prod['mushs_code'],':companyId'=>$dpid));
 	        					if(!empty($prodid)&&!empty($mateid)){
@@ -105,6 +102,7 @@ class CopyproductbomController extends BackendController
 		        							'mphs_code'=>$mateid['mphs_code'],
 		        							'phs_code'=>$prodid['phs_code'],
 		        							'mushs_code'=>$mateid['mushs_code'],
+		        							'source'=>1,
 		        							'delete_flag'=>'0',
 		        							'is_sync'=>$is_sync,
 		        					);
