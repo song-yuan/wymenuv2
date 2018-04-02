@@ -1,6 +1,7 @@
 <?php 
-	$cache = Yii::app()->cache->flush();
-	var_dump($cache);exit;
+	$key = 'redis_key';
+	$cache = Yii::app()->redis->get($key);
+	var_dump($cache);
 ?>
 
 

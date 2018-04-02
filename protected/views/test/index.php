@@ -1,7 +1,4 @@
 <?php
-$dpid = '';
-$data = '';
-
 function eleme_order($data,$dpid){
 	$data = urldecode($data);
 	$obj = json_decode($data);
