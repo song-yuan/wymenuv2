@@ -36,12 +36,12 @@ class ProductBom extends CActiveRecord
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, product_id, material_id, number, sales_unit_id', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at ,update_at', 'safe'),
+			array('create_at ,update_at ,source', 'safe'),
 			array('material_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项名称')),
 			array('sales_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择零售单位')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, product_id, material_id, number, sales_unit_id, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, product_id, material_id, number, sales_unit_id, source, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,6 +75,7 @@ class ProductBom extends CActiveRecord
 			'material_id' => '原料名称',
 			'number' => '消耗数量',
 			'sales_unit_id' => '零售单位',
+			'source' => '来源',
 			'delete_flag' => '删除 0未删除 1删除',
 			'is_sync' => 'Is Sync',
 		);
@@ -106,6 +107,7 @@ class ProductBom extends CActiveRecord
 		$criteria->compare('material_id',$this->material_id,true);
 		$criteria->compare('number',$this->number,true);
 		$criteria->compare('sales_unit_id',$this->sales_unit_id,true);
+		$criteria->compare('source',$this->source,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

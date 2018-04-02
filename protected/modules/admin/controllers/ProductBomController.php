@@ -139,6 +139,7 @@ class ProductBomController extends BackendController
 					$model->mphs_code = $materialId;
 					$model->phs_code = $productCode;
 					$model->mushs_code = $salesUnitId;
+					$model->source = 0;
 		            //var_dump($model);exit;
 					if($model->save()) {
 						Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
