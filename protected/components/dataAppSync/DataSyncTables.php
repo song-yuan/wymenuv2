@@ -688,7 +688,7 @@ class DataSyncTables
         		"resource_id int(10) NOT NULL DEFAULT '0',".
         		"points int(10) NOT NULL DEFAULT '0',".
         		"remain_points	int(10) NOT NULL DEFAULT '0',".
-        		"create_at TIMESTAMP NOT NULL default '0000-00-00 00:00:00',".
+        		"end_time TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
