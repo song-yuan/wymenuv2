@@ -465,7 +465,9 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"prod_group_id int(10) NOT NULL DEFAULT '0',".
+        		"pg_code varchar(12) NOT NULL DEFAULT '',".
         		"product_id int(10) NOT NULL DEFAULT '0',".
+        		"phs_code varchar(12) NOT NULL DEFAULT '',".
         		"price decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"number tinyint NOT NULL DEFAULT '1',".
         		"is_select char(1) NOT NULL DEFAULT '1',".
