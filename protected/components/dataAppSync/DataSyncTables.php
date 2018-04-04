@@ -503,8 +503,11 @@ class DataSyncTables
         		"dpid int(10) NOT NULL,".
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"type varchar(2) NOT NULL DEFAULT '1',".
+        		"sole_code varchar(15) NOT NULL DEFAULT '',".
         		"name varchar(50) NOT NULL,".
 				"tip varchar(50) NOT NULL ,".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
