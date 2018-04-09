@@ -219,7 +219,6 @@
             $.ajax({
                 type:'GET',
     			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/optval/"+optval+"/cid/"+categoryId+"/sttype/"+sttype,
-    			async: false,
     			//data:"companyId="+company_id+'&padId='+pad_id,
                 cache:false,
                 dataType:'json',
