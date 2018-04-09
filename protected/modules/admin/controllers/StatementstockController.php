@@ -167,7 +167,7 @@ class StatementstockController extends BackendController
 		//echo $sql;exit;
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 		
-		//var_dump($models);exit;
+		//var_dump($sqlmodels);exit;
 		$categories = $this->getCategories();
 		$this->render('stockmonthReport',array(
 				'sqlmodels'=>$sqlmodels,
