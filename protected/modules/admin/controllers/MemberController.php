@@ -430,17 +430,19 @@ class MemberController extends BackendController
 				$members = MemberCard::model()->find('rfid=:lid and dpid=:dpid', array(':lid' => $model->rfid,':dpid'=>  $this->companyId));
 				if(!empty($members)){
 					Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败，该卡已添加过！！'));
+				}else{
+					$se=new Sequence("member_card");
+					$model->lid = $se->nextval();
+					$model->create_at = date('Y-m-d H:i:s',time());
+					$model->update_at=date('Y-m-d H:i:s',time());
+					$model->delete_flag = '0';
+					if($model->save()) {
+						Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+						$this->redirect(array('member/index' , 'companyId' => $this->companyId));
+					}
 				}
-			}
-			
-            $se=new Sequence("member_card");
-            $model->lid = $se->nextval();
-            $model->create_at = date('Y-m-d H:i:s',time());
-            $model->update_at=date('Y-m-d H:i:s',time());
-            $model->delete_flag = '0';
-			if($model->save()) {
-				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
+			}else{
+				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败，读取卡号必须填写！！'));
 			}
 		}
 		$this->render('create' , array(

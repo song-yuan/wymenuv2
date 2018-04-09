@@ -55,9 +55,9 @@ class MemberCard extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, all_money,selfcode,rfid,level_id', 'length', 'max'=>10),
+			array('lid, dpid, all_money,selfcode,level_id', 'length', 'max'=>10),
 			array('name, mobile, ages', 'length', 'max'=>20),
-			//array('rfid', 'length', 'max'=>128),
+			array('rfid', 'length', 'max'=>11),
 			array('email', 'length', 'max'=>100),
 			array('haspassword, sex, delete_flag', 'length', 'max'=>1),
 			array('password_hash', 'length', 'max'=>60),
@@ -96,8 +96,8 @@ class MemberCard extends CActiveRecord
 			'dpid' => 'Dpid',
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
-			'selfcode' => '会员号',
-			'rfid' => '卡号',
+			'selfcode' => '会员卡号',
+			'rfid' => '读取卡号或手机号',
 			'level_id' => '会员等级',
 			'name' => '姓名',
 			'mobile' => '联系方式',

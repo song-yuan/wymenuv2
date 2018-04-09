@@ -465,7 +465,9 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"prod_group_id int(10) NOT NULL DEFAULT '0',".
+        		"pg_code varchar(12) NOT NULL DEFAULT '',".
         		"product_id int(10) NOT NULL DEFAULT '0',".
+        		"phs_code varchar(12) NOT NULL DEFAULT '',".
         		"price decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"number tinyint NOT NULL DEFAULT '1',".
         		"is_select char(1) NOT NULL DEFAULT '1',".
@@ -501,8 +503,11 @@ class DataSyncTables
         		"dpid int(10) NOT NULL,".
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"type varchar(2) NOT NULL DEFAULT '1',".
+        		"sole_code varchar(15) NOT NULL DEFAULT '',".
         		"name varchar(50) NOT NULL,".
 				"tip varchar(50) NOT NULL ,".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
@@ -677,9 +682,13 @@ class DataSyncTables
         		"dpid int(10) NOT NULL,".
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"member_card_rfid varchar(10) NOT NULL DEFAULT '0',".
-        		"order_id int(10) NOT NULL DEFAULT '0',".
+        		"card_type tinyint(2) NOT NULL DEFAULT '0',".
+        		"card_id varchar(10) NOT NULL DEFAULT '0',".
+        		"point_resource tinyint(2) NOT NULL DEFAULT '0',".
+        		"resource_id int(10) NOT NULL DEFAULT '0',".
         		"points int(10) NOT NULL DEFAULT '0',".
+        		"remain_points	int(10) NOT NULL DEFAULT '0',".
+        		"end_time TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
@@ -775,11 +784,12 @@ class DataSyncTables
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"order_id int(10) NOT NULL DEFAULT '0',".
         		"account_no varchar(20) NOT NULL ,".
+        		"discount_title varchar(255) NOT NULL DEFAULT '0',".
         		"discount_type varchar(2) NOT NULL ,".
         		"discount_id int(10) NOT NULL DEFAULT '0',".
         		"discount_money decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
-        		"is_sync varchar(50) NOT NULL ,".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
         	"nb_order_address"=>"CREATE TABLE IF NOT EXISTS nb_order_address (".

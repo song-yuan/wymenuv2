@@ -68,10 +68,9 @@ return array(
 	'components'=>array(
 		"redis" => array(
 				"class" => "application.extensions.redis.ARedisConnection",
-				"hostname" => "121.40.124.21",
+				"hostname" => "127.0.0.1",
 				"port" => 6379,
 				"database" => 0,
-				"prefix" => "",
 				'password'=>'MYmenu123',
 		),
 		'user'=>array(
