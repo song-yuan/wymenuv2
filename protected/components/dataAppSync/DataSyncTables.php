@@ -784,11 +784,12 @@ class DataSyncTables
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"order_id int(10) NOT NULL DEFAULT '0',".
         		"account_no varchar(20) NOT NULL ,".
+        		"discount_title varchar(255) NOT NULL DEFAULT '',".
         		"discount_type varchar(2) NOT NULL ,".
         		"discount_id int(10) NOT NULL DEFAULT '0',".
         		"discount_money decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
-        		"is_sync varchar(50) NOT NULL ,".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
         	"nb_order_address"=>"CREATE TABLE IF NOT EXISTS nb_order_address (".
