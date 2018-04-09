@@ -217,9 +217,9 @@
              }
     		var categoryId = '<?php echo $categoryId;?>';
             $.ajax({
-                type:'GET',
-    			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/optval/"+optval+"/cid/"+categoryId+"/sttype/"+sttype,
-    			//data:"companyId="+company_id+'&padId='+pad_id,
+                type:'POST',
+    			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/cid/"+categoryId+"/sttype/"+sttype,
+    			data:{optval:optval},
                 cache:false,
                 dataType:'json',
     			success:function(msg){
