@@ -43,7 +43,7 @@ class MemberRecharge extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('update_at', 'required'),
-			array('lid, dpid, member_card_id, reality_money, give_money', 'length', 'max'=>10),
+			array('lid, dpid, reality_money, give_money', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			array('member_card_id','length','max'=>11),
