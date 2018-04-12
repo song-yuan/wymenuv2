@@ -69,7 +69,7 @@ class EntityCardController extends BackendController {
                 $model->update_at = date('Y-m-d H:i:s',time());
                 $model->create_at = date('Y-m-d H:i:s',time());
                 $model->delete_flag = '0';
-                var_dump($model->attribute);
+                var_dump($model->attribute());
                 var_dump($model->save()); var_dump($member->update());exit;
                 if($model->save()&&$member->update()) {
                         $transaction->commit();
