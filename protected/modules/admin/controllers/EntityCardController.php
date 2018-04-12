@@ -56,7 +56,7 @@ class EntityCardController extends BackendController {
             //var_dump($rfid);
             // exit();
             $transaction=Yii::app()->db->beginTransaction();
-            try{
+//             try{
                 $member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode and dpid=:dpid',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id,':dpid'=>$this->companyId));
                 //Until::validOperate($member->lid, $this);
                 //var_dump($member);exit;
@@ -77,11 +77,11 @@ class EntityCardController extends BackendController {
                                 $transaction->rollback();
                                 Yii::app()->user->setFlash('error',yii::t('app', '充值失败'));
                         }
-                }catch(Exception $e){
-                        Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
-                        $transaction->rollback();
-                }
-                $this->redirect(array('entityCard/recharge','companyId'=>$this->companyId));
+//                 }catch(Exception $e){
+//                         Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
+//                         $transaction->rollback();
+//                 }
+//                 $this->redirect(array('entityCard/recharge','companyId'=>$this->companyId));
         }
         $this->render('recharge' , array(
                         'model' => $model , 
