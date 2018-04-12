@@ -55,7 +55,7 @@ class EntityCardController extends BackendController {
 
             //var_dump($rfid);
             // exit();
-            $transaction=Yii::app()->db->beginTransaction();
+//             $transaction=Yii::app()->db->beginTransaction();
 //             try{
                 $member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode and dpid=:dpid',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id,':dpid'=>$this->companyId));
                 //Until::validOperate($member->lid, $this);
@@ -69,6 +69,7 @@ class EntityCardController extends BackendController {
                 $model->update_at = date('Y-m-d H:i:s',time());
                 $model->create_at = date('Y-m-d H:i:s',time());
                 $model->delete_flag = '0';
+                var_dump($model);
                 var_dump($model->save()); var_dump($member->update());exit;
                 if($model->save()&&$member->update()) {
                         $transaction->commit();
