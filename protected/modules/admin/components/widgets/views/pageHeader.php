@@ -42,7 +42,7 @@
 						</div>
 					</div>
 				</div>
-	  			<?php Yii::app()->clientScript->registerScript('myHideEffect','$("#message").animate({opacity: 0}, 1500).fadeOut(2000);',CClientScript::POS_READY);?>
+	  			<?php Yii::app()->clientScript->registerScript('myHideEffect','$("#message").animate({opacity: 0}, 2000).fadeOut(2000);',CClientScript::POS_READY);?>
 				<?php elseif(Yii::app()->user->hasFlash('error')):?>
 				<div class="mymodel" id="message">
 					<div class="alert alert-danger col-md-12">
@@ -52,6 +52,6 @@
 						</div>
 					</div>
 				</div>
-	  			<?php Yii::app()->clientScript->registerScript('myHideEffect','$("#message").animate({opacity: 0}, 1500).fadeOut(2000);',CClientScript::POS_READY);?>
+	  			<?php Yii::app()->clientScript->registerScript('myHideEffect','$("#message").animate({opacity: 0}, 2000).fadeOut(2000);',CClientScript::POS_READY);?>
 				<?php endif;?>
 			
