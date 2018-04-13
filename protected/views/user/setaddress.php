@@ -34,11 +34,11 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 	<ul class="addlist" id="list">
 		<?php foreach($addresss as $k=>$address):?>
 		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
-		<li id='<?php echo $address['lid'];?>' <?php if($type==2&&$company['distance']*1000 < $distance):?>class="over-distance"<?php endif;?>>
+		<li id='<?php echo $address['lid'];?>' <?php if($type==2&&$company['distance'] < $distance/1000):?>class="over-distance"<?php endif;?>>
 			<input type="radio" id="add<?php echo $k+1;?>" name="addresslist" <?php if($address['default_address']){ echo 'checked';}?> value="" >
 			<label for="add<?php echo $k+1;?>" address-id="<?php echo $address['lid'];?>" address-dpid="<?php echo $address['dpid'];?>">
 			<span class="user">收货人：<?php echo $address['name'];?></span>
-			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?> <?php echo number_format($distance/1000,2);?>千米</span>
 			<div class="weui_cell_ft small"><i class="weui_icon_warn"></i><br>超出范围</div>
 			</label>
 		</li>
@@ -56,22 +56,25 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 </body>
 
 <script>
+function deleteItem(lid,dpid){
+	$.ajax({
+		url:"<?php echo $this->createUrl('/user/ajaxDeleteAddress',array('companyId'=>$this->companyId));?>",
+		data:{lid,dpid:dpid},
+		success:function(data){
+			if(parseInt(data)){
+				history.go(0);
+			}else{
+				layer.msg('删除失败');
+			}
+		}
+	});
+}
 var list = document.getElementById("list");
 new SwipeOut(list);
 list.addEventListener("delete", function(evt) {
 	var listId = evt.target.id;
-	var dpid = $('#user_dpid').value();
-	$.ajax({
-			url:'<?php echo $this->createUrl('/user/ajaxDeleteAddress',array('companyId'=>$this->companyId));?>',
-			data:{lid:listId,dpid:dpid},
-			success:function(msg){
-				if(parseInt(data)){
-					history.go(0);
-				}else{
-					layer.msg('删除失败');
-				}
-			}
-		});
+	var dpid = $('#user_dpid').val();
+	deleteItem(listId,dpid);
 });
 
 $(document).ready(function(){

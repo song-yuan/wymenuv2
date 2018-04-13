@@ -140,19 +140,52 @@ class StatementsController extends BackendController
 
 	public function actionPaymentReport(){
 		$str = Yii::app()->request->getParam('str');
-		$text = Yii::app()->request->getParam('text');
+		$text = Yii::app()->request->getParam('text');//时间类型
 		$userid = Yii::app()->request->getParam('userid');
-		$begin_time = Yii::app()->request->getParam('begin_time','');
-		$end_time = Yii::app()->request->getParam('end_time','');
+		$begin_time = Yii::app()->request->getParam('begin_time','');//开始时间
+		$end_time = Yii::app()->request->getParam('end_time','');//结束时间
 		$dpname = Yii::app()->request->getParam('dpname','');
-
-		if(empty($begin_time) && Yii::app()->user->role >=11){
-			$begin_time = date('Y-m-d',time());
-		}
-		if(empty($end_time) && Yii::app()->user->role >=11){
-			$end_time = date('Y-m-d',time());
-		}
-
+		
+// 		$results = array();
+// 		if(empty($begin_time)){
+// 			$begin_time = date('Y-m-d',time());
+// 		}
+// 		if(empty($end_time)){
+// 			$end_time = date('Y-m-d',time());
+// 		}
+// 		$begin_time = $begin_time.' 00:00:00';
+// 		$end_time = $end_time.' 23:59:59';
+		
+// 		$whereUser = '';
+// 		if($userid != '0'){
+// 			$whereUser = 'and t1.username ="'.$userid.'"';
+// 		}
+// 		if($text==1){
+// 			// 按年查询
+// 			$sql = 'select t1.dpid,DATE_FORMAT(t1.create_at,"%Y") as create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(t.order_id) as all_nums,count(t.account_no) as all_num  from nb_order_pay t,nb_order t1'.
+// 					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$begin_time.'" and t1.create_at<="'.$end_time.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+// 		}elseif ($text==2){
+// 			// 按月查询
+// 			$sql = 'select t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m") as create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(t.order_id) as all_nums,count(t.account_no) as all_num  from nb_order_pay t,nb_order t1'.
+// 					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$begin_time.'" and t1.create_at<="'.$end_time.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+// 		}elseif ($text==3){
+// 			// 按日查询
+// 			$sql = 'select t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m-%d") as create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(t.order_id) as all_nums,count(t.account_no) as all_num  from nb_order_pay t,nb_order t1'.
+// 				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$begin_time.'" and t1.create_at<="'.$end_time.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+				   
+// 		}
+		
+// 		$sql .= ' group by create_at,paytype,payment_method_id order by create_at asc';
+// 		$models = Yii::app()->db->createCommand($sql)->queryAll();
+// 		foreach ($models as $model){
+// 			$createAt = $model['create_at'];
+// 			if(!isset($results[$createAt])){
+// 				$results[$createAt] = array();
+// 			}
+// 			array_push($results[$createAt],$model);
+// 		}
+// 		var_dump($results);exit;
+		
 		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();

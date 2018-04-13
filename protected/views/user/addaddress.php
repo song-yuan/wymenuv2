@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/address.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/address.js?_=20180410"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
 <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>

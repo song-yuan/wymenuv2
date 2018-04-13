@@ -33,14 +33,10 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 </body>
 
 <script>
-var list = document.getElementById("list");
-new SwipeOut(list);
-list.addEventListener("delete", function(evt) {
-	var listId = evt.target.id;
-	var dpid = $('#address_dpid').value();
+function deleteItem(lid,dpid){
 	$.ajax({
 		url:"<?php echo $this->createUrl('/user/ajaxDeleteAddress',array('companyId'=>$this->companyId));?>",
-		data:{lid:listId,dpid:dpid},
+		data:{lid,dpid:dpid},
 		success:function(data){
 			if(parseInt(data)){
 				history.go(0);
@@ -49,5 +45,12 @@ list.addEventListener("delete", function(evt) {
 			}
 		}
 	});
+}
+var list = document.getElementById("list");
+new SwipeOut(list);
+list.addEventListener("delete", function(evt) {
+	var listId = evt.target.id;
+	var dpid = $('#address_dpid').val();
+	deleteItem(listId,dpid);
 });
 </script>

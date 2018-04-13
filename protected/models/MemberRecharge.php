@@ -43,12 +43,11 @@ class MemberRecharge extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('update_at', 'required'),
-			array('lid, dpid, member_card_id, reality_money, give_money', 'length', 'max'=>10),
+			array('lid, dpid, reality_money, give_money', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
-				array('is_sync','length','max'=>50),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
+			array('member_card_id','length','max'=>11),
+			array('is_sync','length','max'=>50),
 			array('lid, dpid, create_at, is_sync, update_at, member_card_id, reality_money, give_money, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
