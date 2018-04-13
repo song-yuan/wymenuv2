@@ -78,15 +78,6 @@
                             <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
                         </div>
 					<?php endif;?>
-					<!-- <div class="btn-group">
-						<a class="btn green" href="#" data-toggle="dropdown">
-						<i class="fa fa-cogs"></i> Tools
-						<i class="fa fa-angle-down"></i>
-						</a>
-						<ul class="dropdown-menu pull-right">
-							<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','冻结');?></a></li>
-						</ul>
-					</div> -->
 
                     <?php endif; ?>
 					</div>
@@ -117,7 +108,7 @@
 							<tr class="odd gradeX">
 								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
 								<?php if(Yii::app()->user->role < '5'): ?><td><?php echo $model->dpid;?></td><?php endif; ?>
-                                <td><a href="<?php if(Yii::app()->user->role != '4') echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
+                                <td><a href="<?php if(Yii::app()->user->role != '4'&& Yii::app()->user->role != '10') echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
 								<td ><?php if($model->property&&$model->property->qr_code):?><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->property->qr_code;?>" /><?php endif;?><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->dpid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 								<td ><?php echo $model->contact_name;?></td>
@@ -140,10 +131,14 @@
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="actions">
-                                        <?php if(Yii::app()->user->role <= User::SHOPKEEPER && Yii::app()->user->role != '4') : ?><!-- Yii::app()->params->master_slave=='m' -->
+                                        <?php if(Yii::app()->user->role <= User::SHOPKEEPER && Yii::app()->user->role != '4'&& Yii::app()->user->role != '10') : ?><!-- Yii::app()->params->master_slave=='m' -->
                                             <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type,'pay_online'=>$paytype));?>"><?php echo yii::t('app','编辑');?></a>
                                         <?php endif; ?>
-                                            <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('companyset/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
+                                        <?php if(Yii::app()->user->role !=10):?>
+                                        <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('companyset/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
+                                        <?php else:?>
+                                        <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('statements/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
+                                        <?php endif;?>
                                             <?php if($model->property&&Yii::app()->user->role<=5):?>
                                             <?php if($model->property->pay_channel == '3'):?>
                                             <a  class='btn ' style="margin-top: 5px;" id="setPayid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','已置成美团支付');?></a>

@@ -15,6 +15,7 @@
                     </a>
             </li>
             -->
+   <?php if(Yii::app()->user->role !=10):?>
    <?php if($this->comptype != 2 && Yii::app()->user->role <= '15' && Yii::app()->user->role !='4'): ?>
         <?php if(Yii::app()->user->role != '8'): ?>
         	<li class="<?php if(in_array(Yii::app()->controller->id , array('company'))) echo 'active';?>">
@@ -131,7 +132,20 @@
                     </a>
             </li>
             <?php endif;?>
-
+	<?php else:?>
+			<li class="<?php if(in_array(Yii::app()->controller->id , array('company'))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('company/index',array('companyId'=>$this->companyId));?>">
+                        <i class="fa fa-home"></i> 
+                        <span class="title"><?php echo yii::t('app','店铺管理');?></span>					
+                    </a>
+            </li>
+            <li class="<?php if(in_array(Yii::app()->controller->id , array('statements','orderManagement','statementmember','pos','statementstock'))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('statements/list',array('companyId' => $this->companyId,'type'=>0));?>">
+                    <i class="fa fa-bar-chart-o"></i> 
+                    <span class="title"><?php echo yii::t('app','报表中心');?></span>					
+                    </a>
+            </li>
+	<?php endif;?>
                 
         </ul>
         <!-- END SIDEBAR MENU -->
