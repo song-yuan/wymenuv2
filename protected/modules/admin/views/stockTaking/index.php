@@ -178,12 +178,12 @@
         var optid;
         var optval = '';
         
+        var clk = $(this).attr('clk');
+        if(clk=='1'){
+			layer.msg('请勿多次操作！');
+			return false;
+        }
         if(confirm('确认盘点，则在此时间前保存的盘损，盘点记录将实效。')){
-        	var clk = $(this).attr('clk');
-            if(clk=='1'){
-    			layer.msg('请勿多次操作！');
-    			return false;
-            }
             $(this).attr('clk',1);
             $('.pd-product').each(function(){
             	var vid = $(this).attr('vid');
@@ -215,15 +215,15 @@
                 $(this).attr('clk',0);
                 return false;
              }
+            layer.load(2);
     		var categoryId = '<?php echo $categoryId;?>';
             $.ajax({
                 type:'POST',
     			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/cid/"+categoryId+"/sttype/"+sttype,
     			data:{optval:optval},
-                cache:false,
                 dataType:'json',
     			success:function(msg){
-    	            //alert(msg.status);
+    				layer.closeAll('loading');
     	            if(msg.status=="success")
     	            {            
     		            if(msg.msg !=''){
@@ -233,12 +233,9 @@
     			            alert("盘点成功！");
     			        }  
     		            location.href="<?php echo $this->createUrl('stocktakinglog/detailindex' , array('companyId'=>$this->companyId,));?>/id/"+msg.logid
-    		            //location.reload();
-    		            layer.closeAll('loading');
     	            }else{
     		            alert("<?php echo yii::t('app','失败'); ?>"+"1");
     		            location.reload();
-    		            layer.closeAll('loading');
     	            }
     			},
                 error:function(){
