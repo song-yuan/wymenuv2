@@ -37,7 +37,7 @@ class CompanyController extends BackendController
 			}else{
 				$criteria->condition =' t.delete_flag=0';
 			}
-		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
+		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '10')
 		{
 			//var_dump(Yii::app()->user->role);exit;
 			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;

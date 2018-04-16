@@ -45,7 +45,7 @@ class Helper
 		return md5(md5($password).Yii::app()->params['salt']);
 	}
 	static public function getCompanyId($companyId) {
-        if(Yii::app()->user->role <= '9')
+        if(Yii::app()->user->role <= '10')
         {
 			return $companyId;
         }else{
@@ -53,12 +53,10 @@ class Helper
         }
 	}
 	static public function getCompanyIds($companyId) {
-		if(Yii::app()->user->role=='5')
+		if(Yii::app()->user->role<='10')
 		{
 			$models = Company::model()->findAll('t.dpid = '.$companyId);
 			$companyIds = Company::model()->findAllBySql("select dpid from nb_company where comp_dpid=:dpid",array(':dpid'=>$companyId));
-			//$companyIds = Company::model()->findAllByPk('dpid',"comp_dpid =:dpid",array(':dpid'=>$companyId));
-			//$companyIds = Company::model()->findAllByPk(array('condition'=>'comp_dpid = '.$companyId,'index'=>'dpid'));
 			$dpids = $companyId;
 			if($models){
 				foreach ($companyIds as $dpid){
