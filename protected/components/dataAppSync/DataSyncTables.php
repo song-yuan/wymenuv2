@@ -141,6 +141,7 @@ class DataSyncTables
         		"serial_number TINYINT(2) NOT NULL DEFAULT '0',".
 				"is_product_free varchar(1) NOT NULL  DEFAULT '0',".
         		"order_number TINYINT(2) NOT NULL  DEFAULT '1',".
+        		"payment_mode varchar(1) NOT NULL  DEFAULT '0',".
 				"sync_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
 				"delete_flag varchar(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
