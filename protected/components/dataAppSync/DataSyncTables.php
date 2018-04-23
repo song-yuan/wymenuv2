@@ -507,7 +507,7 @@ class DataSyncTables
         		"type varchar(2) NOT NULL DEFAULT '1',".
         		"sole_code varchar(15) NOT NULL DEFAULT '',".
         		"name varchar(50) NOT NULL,".
-				"tip varchar(50) NOT NULL ,".
+				"tip varchar(50) NOT NULL DEFAULT '',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
@@ -534,7 +534,7 @@ class DataSyncTables
 				"overtime_fee decimal(10,2) NOT NULL DEFAULT '0.00',".
 				"floor_id int(10) NOT NULL DEFAULT '0',".
 				"status char(1) NOT NULL DEFAULT '0',".
-				"qrcode varchar(255) DEFAULT NULL,".
+				"qrcode varchar(255) DEFAULT NULL DEFAULT '',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
@@ -577,9 +577,9 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"type varchar(2) NOT NULL DEFAULT '0',".
-        		"member_name varchar(255) NOT NULL,".
-        		"phone_number varchar(11) NOT NULL,".
-        		"cardId varchar(25) NOT NULL,".
+        		"member_name varchar(255) NOT NULL DEFAULT '',".
+        		"phone_number varchar(11) NOT NULL DEFAULT '',".
+        		"cardId varchar(25) NOT NULL DEFAULT '',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
