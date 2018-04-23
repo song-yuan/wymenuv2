@@ -321,7 +321,7 @@ class DataSyncTables
                 "product_name varchar(50) NOT NULL,".
                 "simple_code varchar(25) NOT NULL,".
                 "main_picture varchar(255) NOT NULL,".
-                "description text NOT NULL,".
+                "description text NOT NULL DEFAULT '',".
                 "rank tinyint NOT NULL DEFAULT '3',".
         		"sort int(4) NOT NULL DEFAULT '50',".
                 "spicy tinyint NOT NULL DEFAULT '0',".
@@ -333,8 +333,8 @@ class DataSyncTables
                 "dabao_fee decimal(10,2) NOT NULL DEFAULT '0.00',".
                 "original_price decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"member_price decimal(10,2) NOT NULL DEFAULT '0.00',".
-                "product_unit varchar(10) NOT NULL,".
-                "weight_unit varchar(10) NOT NULL,".
+                "product_unit varchar(10) NOT NULL DEFAULT '',".
+                "weight_unit varchar(10) NOT NULL DEFAULT '',".
                 "is_weight_confirm char(1) NOT NULL DEFAULT '0',".
                 "store_number int(10) NOT NULL DEFAULT '-1',".
                 "order_number int(10) NOT NULL DEFAULT '0',".
@@ -353,7 +353,7 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
 				"product_id int(10) NOT NULL DEFAULT '0',".
-                "icache_picture varchar(255) NOT NULL,".
+                "icache_picture varchar(255) NOT NULL DEFAULT '',".
                 "is_set varchar(2) NOT NULL DEFAULT '0',".
                 "delete_flag char(1) NOT NULL DEFAULT '0',".
                 "is_sync varchar(50) NOT NULL DEFAULT '11111',".
@@ -371,7 +371,7 @@ class DataSyncTables
 				"type varchar(3) NOT NULL DEFAULT '0',".
         		"cate_type tinyint NOT NULL DEFAULT '0',".
         		"show_type varchar(2) NOT NULL DEFAULT '1',".
-				"main_picture varchar(255) NOT NULL,".
+				"main_picture varchar(255) NOT NULL DEFAULT '',".
 				"order_num int(4) NOT NULL DEFAULT '0',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
@@ -384,7 +384,7 @@ class DataSyncTables
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"product_id int(10) NOT NULL DEFAULT '0',".
 				"is_set char(1) NOT NULL DEFAULT '0',".
-				"pic_path varchar(255) NOT NULL,".
+				"pic_path varchar(255) NOT NULL DEFAULT '',".
 				"pic_show_order tinyint NOT NULL DEFAULT '1',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
@@ -416,7 +416,7 @@ class DataSyncTables
 				"main_picture varchar(255) NOT NULL,".
         		"set_price decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"member_price decimal(10,2) NOT NULL DEFAULT '0.00',".
-				"description text NOT NULL,".
+				"description text NOT NULL DEFAULT '',".
 				"rank tinyint(3) NOT NULL DEFAULT '3',".
         		"sort int(4) NOT NULL DEFAULT '50',".
 				"is_member_discount char(1) NOT NULL DEFAULT '0',".
