@@ -271,11 +271,11 @@ class DataSyncTables
                 "update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"phs_code varchar(25) NOT NULL DEFAULT '0',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
-        		"name varchar(64) NOT NULL,".
-        		"address varchar(64) NOT NULL ,".
+        		"name varchar(64) NOT NULL DEFAULT '',".
+        		"address varchar(64) NOT NULL DEFAULT '',".
         		"language char(2) NOT NULL DEFAULT '1',".
-        		"brand varchar(50) NOT NULL,".
-        		"remark varchar(50) NOT NULL,".
+        		"brand varchar(50) NOT NULL DEFAULT '',".
+        		"remark varchar(50) NOT NULL DEFAULT '',".
         		"printer_type varchar(2) NOT NULL DEFAULT '0',".
         		"width_type varchar(2) NOT NULL DEFAULT '1',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
@@ -292,7 +292,7 @@ class DataSyncTables
         		"name varchar(50) NOT NULL,".
 				"is_onepaper char(1) NOT NULL DEFAULT '1',".
 				"list_no tinyint NOT NULL DEFAULT '1',".
-				"memo varchar(100) NOT NULL,".
+				"memo varchar(100) NOT NULL DEFAULT '',".
 				"delete_flag char(1) NOT NULL DEFAULT '0',".
 				"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
