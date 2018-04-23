@@ -319,8 +319,8 @@ class DataSyncTables
                 "phs_code varchar(12) NOT NULL,".
                 "chs_code varchar(12) NOT NULL,".
                 "product_name varchar(50) NOT NULL,".
-                "simple_code varchar(25) NOT NULL,".
-                "main_picture varchar(255) NOT NULL,".
+                "simple_code varchar(25) NOT NULL DEFAULT '',".
+                "main_picture varchar(255) NOT NULL DEFAULT '',".
                 "description text NOT NULL DEFAULT '',".
                 "rank tinyint NOT NULL DEFAULT '3',".
         		"sort int(4) NOT NULL DEFAULT '50',".
