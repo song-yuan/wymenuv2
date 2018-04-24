@@ -266,7 +266,6 @@ class DataSyncOperation {
 		$data = array ();
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
-		var_dump($data);exit;
 		$key = 'order_platform_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
 		if($isActive){
