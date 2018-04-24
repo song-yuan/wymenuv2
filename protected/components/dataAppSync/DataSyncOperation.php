@@ -268,6 +268,7 @@ class DataSyncOperation {
 		$data ['member_card'] = array ();
 		$key = 'order_platform_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
+		var_dump($isActive);exit;
 		if($isActive){
 			return json_encode ( $data );
 		}else{
@@ -290,92 +291,6 @@ class DataSyncOperation {
 			Yii::app()->redis->set($key,false);
 			return json_encode ( $data );
 		}
-		
-		$now = date('Y-m-d H:i:s',time());
-		$data ['order'] = array ();
-		$data ['member_card'] = array ();
-		$key = 'order_online_total_operation';
-		$cache = Yii::app()->cache->get($key);
-		if($cache==false){
-			Yii::app()->cache->set($key,1);
-		}else{
-			if($cache > 79){
-				return json_encode ( $data );
-			}
-			$cache++;
-			Yii::app()->cache->set($key,$cache);
-		}
-		//订单数据
-		$sql = 'select * from nb_order where dpid=' . $dpid . ' and (order_status in("3","4") or (order_status="2" and order_type=1)) and is_sync!="0" limit 2';
-// 		$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status in(3,4) and is_sync!=0 limit 2';
-		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-		foreach ( $results as $result ) {
-			$order = array ();
-			$order ['nb_order'] = $result;
-			$order ['nb_site_no'] = array();
-			if($result['order_type']=='1'){
-				// 桌台模式
-				$sql = 'select t.*,t1.serial from nb_site_no t,nb_site t1 where t.site_id=t1.lid and t.dpid=t1.dpid and t.lid=' . $result ['site_id'] . ' and t.dpid='.$dpid;
-				$siteNo = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-				$order ['nb_site_no'] = $siteNo;
-			}
-			$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
-			$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
-			$order ['nb_order_platform'] = $orderPlatform;
-			$sql = 'select *,"" as set_name,sum(price*amount/zhiamount) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id > 0 and delete_flag=0 group by set_id ,main_id'.
-				   ' union select *,"" as set_name,"0.00" as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id = 0 and delete_flag=0';
-			$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			foreach ( $orderProduct as $k => $product ) {
-				$sql = 'select create_at,taste_id,order_id,is_order,taste_name as name from nb_order_taste where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and is_order=0 and delete_flag=0';
-				$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-				$orderProduct [$k] ['product_taste'] = $orderProductTaste;
-				$sql = 'select promotion_title,promotion_type,promotion_id,promotion_money,can_cupon from nb_order_product_promotion where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and delete_flag=0';
-				$orderProductPromotion = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-				$orderProduct [$k] ['product_promotion'] = $orderProductPromotion;
-				if($product['set_id'] > 0){
-					$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'];
-					$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-					if(!empty($productSet)){
-						$orderProduct[$k]['amount'] = $product['zhiamount'];
-						$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
-						$orderProduct[$k]['set_price'] = $product['set_price'];
-						$orderProduct[$k]['set_detail'] = $productSet;
-					}
-				}
-				$orderProduct[$k]['product_name'] = $product['product_name'];
-			}
-			$order ['nb_order_product'] = $orderProduct;
-			$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
-			$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			$order ['nb_order_pay'] = $orderPay;
-			$sql = 'select create_at,taste_id,order_id,is_order,taste_name as name from nb_order_taste where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and is_order=1 and delete_flag=0';
-			$orderTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			$order ['nb_order_taste'] = $orderTaste;
-			$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
-			$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			$order ['nb_order_address'] = $orderAddress;
-			$sql = 'select * from nb_order_account_discount where dpid='.$dpid.' and order_id='.$result ['lid'].' and delete_flag=0';
-			$orderDiscount = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			$order ['nb_order_account_discount'] = $orderDiscount;
-			array_push ( $data ['order'], $order );
-		}
-		//会员数据
-		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
-		$memberCard = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-		foreach ( $memberCard as $card ) {
-			$sql = 'select * from nb_member_recharge where 	member_card_id='.$card['lid'].' and dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
-			$memberCardRecharge = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			$card['member_recharge'] = $memberCardRecharge;
-			array_push ( $data ['member_card'], $card );
-			$sql = 'update nb_member_card set is_sync=0 where dpid=' . $dpid . ' and lid=' . $card ['lid'];
-			Yii::app ()->db->createCommand ( $sql )->execute ();
-		}
-		$cache = Yii::app()->cache->get($key);
-		if($cache>0){
-			$cache--;
-			Yii::app()->cache->set($key,$cache);
-		}
-		return json_encode ( $data );
 	}
 	/**
 	 * 
