@@ -1400,10 +1400,10 @@ class DataSyncOperation {
 		$key = 'order_online_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
 		if(!$isActive){
-			$orderSize = Yii::app()->redis->lSize('redis-order-data-'.$dpid);
+			$orderSize = Yii::app()->redis->lSize('redis-order-data-'.(int)$dpid);
 			if($orderSize > 0){
 				Yii::app()->redis->set($key,true);
-				$orderData = Yii::app()->redis->rPop('redis-order-data-'.$dpid);
+				$orderData = Yii::app()->redis->rPop('redis-order-data-'.(int)$dpid);
 				$orderDataArr = json_decode($orderData,true);
 				$type = $orderDataArr['type'];
 				if($type==2){
@@ -1428,7 +1428,7 @@ class DataSyncOperation {
 				if($resObj->status){
 					self::dealRedisData($dpid);
 				}else{
-					Yii::app()->redis->lPush('redis-order-data-'.$dpid,$orderData);
+					Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,$orderData);
 				}
 			}else{
 				Yii::app()->redis->set($key,false);
