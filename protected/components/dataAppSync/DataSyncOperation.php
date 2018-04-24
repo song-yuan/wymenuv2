@@ -268,12 +268,14 @@ class DataSyncOperation {
 		$data ['member_card'] = array ();
 		$key = 'order_platform_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
+		var_dump($isActive);
 		if($isActive){
 			return json_encode ( $data );
 		}else{
 			Yii::app()->redis->set($key,true);
 			$keyOrder = 'redis-third-platform-'.(int)$dpid;
 			$orderSize = Yii::app()->redis->lSize($keyOrder);
+			var_dump($orderSize);exit;
 			if($orderSize > 5){
 				for ($i=0; $i<5; $i++){
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
