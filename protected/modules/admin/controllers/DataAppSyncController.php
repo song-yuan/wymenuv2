@@ -26,7 +26,7 @@ class DataAppSyncController extends Controller
 	public function actionGetServerTime(){
 		$now = time();
 		$date = date('Y-m-d H:i:s');
-		return $date;
+		echo $date;exit;
 	}
 	/**
 	 * 

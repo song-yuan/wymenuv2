@@ -34,7 +34,6 @@ class UserIdentity extends CUserIdentity
 		}else {
 
 			$comps = Yii::app()->db->createCommand('select * from nb_company where delete_flag = 0 and  dpid ='.$user->dpid)->queryRow();
-			//var_dump($companyId);var_dump($role);
 			if($comps){
 
 				$this->userId = $user->lid.'_'.$user->dpid ;
