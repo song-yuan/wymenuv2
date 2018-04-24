@@ -1402,12 +1402,13 @@ class DataSyncOperation {
 	public static function dealRedisData($dpid){
 		$key = 'order_online_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
-		var_dump($isActive);exit;
+		Yii::app()->redis->set($key,false);
 		if(!$isActive){
 			$orderSize = Yii::app()->redis->lSize('redis-order-data-'.(int)$dpid);
 			if($orderSize > 0){
 				Yii::app()->redis->set($key,true);
 				$orderData = Yii::app()->redis->rPop('redis-order-data-'.(int)$dpid);
+				var_dump($orderData);
 				$orderDataArr = json_decode($orderData,true);
 				$type = $orderDataArr['type'];
 				if($type==2){
@@ -1429,6 +1430,7 @@ class DataSyncOperation {
 					$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 				}
 				$resObj = json_decode($result);
+				var_dump($resObj);
 				if($resObj->status){
 					self::dealRedisData($dpid);
 				}else{
