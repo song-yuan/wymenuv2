@@ -1385,7 +1385,7 @@ class DataSyncOperation {
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
-			self::callUserFunc(array($this, 'dealRedisData'), $dpid);
+			self::dealRedisData($dpid);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
 		}else{
 			$msg = json_encode(array('status'=>false,'msg'=>''));
