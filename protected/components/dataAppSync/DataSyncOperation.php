@@ -1405,6 +1405,7 @@ class DataSyncOperation {
 		Yii::app()->redis->set($key,false);
 		if(!$isActive){
 			$orderSize = Yii::app()->redis->lSize('redis-order-data-'.(int)$dpid);
+			var_dump($orderSize);
 			if($orderSize > 0){
 				Yii::app()->redis->set($key,true);
 				$orderData = Yii::app()->redis->rPop('redis-order-data-'.(int)$dpid);
