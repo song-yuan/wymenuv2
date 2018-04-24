@@ -17,6 +17,9 @@
  * 
  */
 class DataSyncOperation {
+	public static function callUserFunc($callback,$dpid){
+		return call_user_func($callback,$dpid);
+	}
 	/**
 	 *
 	 * 获取pos设备信息
@@ -268,7 +271,6 @@ class DataSyncOperation {
 		$data ['member_card'] = array ();
 		$key = 'order_platform_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
-		var_dump($isActive);
 		Yii::app()->redis->set($key,false);
 		if($isActive){
 			return json_encode ( $data );
@@ -276,19 +278,16 @@ class DataSyncOperation {
 			Yii::app()->redis->set($key,true);
 			$keyOrder = 'redis-third-platform-'.(int)$dpid;
 			$orderSize = Yii::app()->redis->lSize($keyOrder);
-			var_dump($orderSize);
 			if($orderSize > 5){
 				for ($i=0; $i<5; $i++){
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
 					array_push($data ['order'], json_decode($orderStr,true));
 				}
-			}elseif($orderSize > 0 && $orderSize <= 5){
+			}else{
 				for ($i=0; $i<$orderSize; $i++){
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
 					array_push($data ['order'], json_decode($orderStr,true));
 				}
-			}else{
-				self::dealRedisData($dpid);
 			}
 			Yii::app()->redis->set($key,false);
 			return json_encode ( $data );
@@ -1386,6 +1385,7 @@ class DataSyncOperation {
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
+			self::callUserFunc(array($this, 'dealRedisData'), $dpid);
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
 		}else{
 			$msg = json_encode(array('status'=>false,'msg'=>''));
@@ -1402,15 +1402,13 @@ class DataSyncOperation {
 	public static function dealRedisData($dpid){
 		$key = 'order_online_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
-		Yii::app()->redis->set($key,false);
 		if(!$isActive){
 			$orderKey = 'redis-order-data-'.(int)$dpid;
 			$orderSize = Yii::app()->redis->lSize($orderKey);
-			var_dump($orderKey);var_dump($orderSize);
 			if($orderSize > 0){
 				Yii::app()->redis->set($key,true);
 				$orderData = Yii::app()->redis->rPop($orderKey);
-				var_dump($orderData);
+				Helper::writeLog($orderData);
 				$orderDataArr = json_decode($orderData,true);
 				$type = $orderDataArr['type'];
 				if($type==2){
@@ -1432,7 +1430,6 @@ class DataSyncOperation {
 					$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 				}
 				$resObj = json_decode($result);
-				var_dump($resObj);
 				if($resObj->status){
 					self::dealRedisData($dpid);
 				}else{
