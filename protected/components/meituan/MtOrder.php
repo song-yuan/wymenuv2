@@ -95,11 +95,7 @@ class MtOrder
 		$order = $resArr['order'];
 		$order = urldecode($order);
 		$result = self::dealOrder($order,$ePoiId,2);
-		$reobj = json_decode($result);
-		if($reobj->status){
-			return true;
-		}
-		return false;
+		return $result;
 	}
 	public static function orderCancel($data){
 		if(empty($data)){
@@ -200,15 +196,20 @@ class MtOrder
 	 * 
 	 */
 	public static function dealOrder($data,$dpid,$type){
+		// 生成订单数据数组
+		$orderArr = array();
+		// 收银机云端同步订单数据
+		$orderCloudArr = array();
 		$data = Helper::dealString($data);
 		$obj = json_decode($data);
-		$orderArr = array();
 		$orderTime = $obj->ctime;
 		$payType = $obj->payType;
 		$deliveryTime = $obj->deliveryTime;
 		if($deliveryTime==0){
 			$deliveryTime = $orderTime;
 		}
+		$orderTime = date('Y-m-d H:i:s',$orderTime);
+		$deliveryTime = date('Y-m-d H:i:s',$deliveryTime);
 		if($payType==2){
 			$orderPayPaytype = 14;
 		}else{
@@ -216,9 +217,14 @@ class MtOrder
 		}
 		$poiReceiveDetail = json_decode($obj->poiReceiveDetail);
 		
-		$orderArr['order_info'] = array('creat_at'=>date('Y-m-d H:i:s',$orderTime),'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'appointment_time'=>date('Y-m-d H:i:s',$deliveryTime),'remark'=>$obj->caution);
+		$orderArr['order_info'] = array('creat_at'=>$orderTime,'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'appointment_time'=>$deliveryTime,'remark'=>$obj->caution,'taste_memo'=>'');
 		$orderArr['order_platform'] = array('original_total'=>$obj->originalPrice,'logistics_total'=>$poiReceiveDetail->logisticsFee/100,'platform_total'=>$poiReceiveDetail->foodShareFeeChargeByPoi/100,'pay_total'=>$poiReceiveDetail->onlinePayment/100,'receive_total'=>$poiReceiveDetail->wmPoiReceiveCent/100);
 		$orderArr['order_product'] = array();
+		
+		$orderCloudArr ['nb_site_no'] = array();
+		$orderCloudArr['nb_order'] = array('dpid'=>$dpid,'creat_at'=>$orderTime,'account_no'=>$obj->orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'appointment_time'=>$deliveryTime,'remark'=>$obj->caution,'taste_memo'=>'');
+		$orderCloudArr['nb_order_platform'] = array('dpid'=>$dpid,'original_total'=>$obj->originalPrice,'logistics_total'=>$poiReceiveDetail->logisticsFee/100,'platform_total'=>$poiReceiveDetail->foodShareFeeChargeByPoi/100,'pay_total'=>$poiReceiveDetail->onlinePayment/100,'receive_total'=>$poiReceiveDetail->wmPoiReceiveCent/100);
+		$orderCloudArr['nb_order_product'] = array();
 		$array_detail=json_decode($obj->detail,true);
 		foreach ($array_detail as $key => $value) {
 			$phsCode =  $value['sku_id'];
@@ -229,42 +235,64 @@ class MtOrder
 			
 			if(!$res){
 				$foodName = $value['food_name'];
-				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>$foodName.'(未对应菜品)','original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>1,'product_taste'=>array(),'product_promotion'=>array());
-				array_push($orderArr['order_product'], $orderProduct);
 				
+				$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>$foodName.'(未)','original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>1,'product_taste'=>array(),'product_promotion'=>array());
+				array_push($orderArr['order_product'], $orderProduct);
 				if(!empty($value['box_price'])){
 					$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'餐盒费','original_price'=>$value['box_price'],'price'=>$value['box_price'],'amount'=>$value['box_num'],'zhiamount'=>1,'product_type'=>2,'product_taste'=>array(),'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
 				}
+				
+				$orderProduct = array('is_set'=>0,'set_name'=>'','set_price'=>0,'dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>0,'main_id'=>0,'product_id'=>0,'product_name'=>$foodName.'(未)','product_pic'=>'','original_price'=>$price,'price'=>$price,'amount'=>$amount,'zhiamount'=>1,'product_type'=>0,'product_order_status'=>2,'taste_memo'=>'','product_taste'=>array(),'product_promotion'=>array());
+				array_push($orderCloudArr['nb_order_product'], $orderProduct);
+				
+				if(!empty($value['box_price'])){
+					$orderProduct = array('is_set'=>0,'set_name'=>'','set_price'=>0,'dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>0,'main_id'=>0,'product_id'=>0,'product_name'=>'餐盒费','product_pic'=>'','original_price'=>$value['box_price'],'price'=>$value['box_price'],'amount'=>$value['box_num'],'zhiamount'=>1,'product_type'=>2,'product_order_status'=>2,'taste_memo'=>'','product_taste'=>array(),'product_promotion'=>array());
+					array_push($orderCloudArr['nb_order_product'], $orderProduct);
+				}
 			}else{
 				if( $res['is_set']==0){
+					// 单品 
 					$foodProperty = $value['food_property'];
 					$tasteArr = array();
 					if($foodProperty!=''){
 						$spes = explode(',', $foodProperty);
 						foreach ($spes as $k => $val) {
-							array_push($tasteArr, array("taste_id"=>"0","is_order"=>"0","taste_name"=>$val));
+							array_push($tasteArr, array('dpid'=>$dpid,'create_at'=>$orderTime,'taste_id'=>'0','is_order'=>'0','taste_name'=>$val));
 						}
 					}
-					$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$res['original_price'],'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
+					
+					$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$res['original_price'],'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
+					
+					$orderProduct = array('is_set'=>0,'set_name'=>'','set_price'=>0,'dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>0,'main_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'product_pic'=>'','original_price'=>$res['original_price'],'price'=>$price,'amount'=>$amount,'zhiamount'=>1,'product_type'=>0,'product_order_status'=>2,'taste_memo'=>'','product_taste'=>$tasteArr,'product_promotion'=>array());
+					array_push($orderCloudArr['nb_order_product'], $orderProduct);
 				}else{
+					// 套餐
 					$sql = 'select sum(t.number*t1.original_price) from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 					$totalProductPrice = Yii::app()->db->createCommand($sql)->queryScalar();
 					
 					$sql = 'select t.*,t1.product_name,t1.original_price from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id='.$res['lid'].' and t.dpid='.$dpid.' and t.is_select=1 and t.delete_flag=0 and t1.delete_flag=0';
 					$productDetails = Yii::app()->db->createCommand($sql)->queryAll();
 					
+					$pdetail = array();
 					foreach ($productDetails as $detail){
 						$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $price);
 						
-						$orderProduct = array('is_set'=>$res['is_set'],'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
+						$orderProduct = array('is_set'=>1,'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 						array_push($orderArr['order_product'], $orderProduct);
+						
+						array_push($pdetail,array('dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>$res['lid'],'main_id'=>0,'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'product_pic'=>'','original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_type'=>0,'product_order_status'=>2,'taste_memo'=>''));
 					}
+					$orderProduct = array('is_set'=>1,'set_name'=>$res['name'],'set_price'=>$price,'amount'=>$amount,'set_detail'=>$pdetail,'product_taste'=>array(),'product_promotion'=>array());
+					array_push($orderCloudArr['nb_order_product'], $orderProduct);
 				}
 				if(!empty($value['box_price'])){
 					$orderProduct = array('is_set'=>'0','set_id'=>'0','product_id'=>'0','product_name'=>'餐盒费','original_price'=>$value['box_price'],'price'=>$value['box_price'],'amount'=>$value['box_num'],'zhiamount'=>$value['box_num'],'product_type'=>2,'product_taste'=>array(),'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
+					
+					$orderProduct = array('is_set'=>0,'set_id'=>0,'set_name'=>'','set_price'=>0,'dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>0,'main_id'=>0,'product_id'=>0,'product_name'=>'餐盒费','product_pic'=>'','original_price'=>$value['box_price'],'price'=>$value['box_price'],'amount'=>$value['box_num'],'zhiamount'=>1,'product_type'=>2,'product_order_status'=>2,'taste_memo'=>'','product_taste'=>array(),'product_promotion'=>array());
+					array_push($orderCloudArr['nb_order_product'], $orderProduct);
 				}
 			}
 		}
@@ -272,25 +300,44 @@ class MtOrder
 		if($obj->shippingFee > 0){
 			$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>0,'product_name'=>'配送费','original_price'=>$obj->shippingFee,'price'=>$obj->shippingFee,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_taste'=>array(),'product_promotion'=>array());
 			array_push($orderArr['order_product'], $orderProduct);
+			
+			$orderProduct = array('is_set'=>0,'set_name'=>'','set_price'=>0,'dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>0,'main_id'=>0,'product_id'=>0,'product_name'=>'配送费','product_pic'=>'','original_price'=>$obj->shippingFee,'price'=>$obj->shippingFee,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_order_status'=>2,'taste_memo'=>'','product_taste'=>array(),'product_promotion'=>array());
+			array_push($orderCloudArr['nb_order_product'], $orderProduct);
 		}
-		if(empty($orderArr['order_product'])){
-			return '{ "data": "OK"}';
-		}
+		
 		$extras = json_decode($obj->extras,true);
+		
 		// 整单优惠
 		$orderArr['order_discount'] = array();
+		$orderCloudArr['nb_order_discount'] = array();
 		
 		foreach ($extras as  $extra) {
 			if(!empty($extra)){
 				array_push($orderArr['order_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
+				array_push($orderCloudArr['nb_order_account_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
 			}
 		}
 		
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		
+		$orderCloudArr['nb_order_address'] = array(array('dpid'=>$dpid,'consignee'=>$obj->recipientName,'privince'=>'','city'=>'','area'=>'','street'=>$obj->recipientAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
+		$orderCloudArr['nb_order_pay'] = array(array('dpid'=>$dpid,'create_at'=>$orderTime,'account_no'=>$obj->orderId,'pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		
 		$orderStr = json_encode($orderArr);
-		$data = array('dpid'=>$dpid,'data'=>$orderStr);
-		$result = DataSyncOperation::operateOrder($data);
-		return $result;
+		$orderCloudStr = json_encode($orderCloudArr);
+		// type 同步类型  2订单
+		$orderData = array('dpid'=>$dpid,'type'=>2,'data'=>$orderStr);
+		
+		// 放入redis中
+		$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($orderData));
+		$result = Yii::app()->redis->lPush('redis-third-platform-'.(int)$dpid,$orderCloudStr);
+		if($result > 0){
+			$msg = true;	
+		}else{
+			$msg = false;
+		}
+// 		$result = DataSyncOperation::operateOrder($data);
+		return $msg;
 	}
 }

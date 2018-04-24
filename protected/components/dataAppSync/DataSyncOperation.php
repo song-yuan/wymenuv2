@@ -264,6 +264,33 @@ class DataSyncOperation {
 	 */
 	public static function getSyncData($dpid) {
 		$data = array ();
+		$data ['order'] = array ();
+		$data ['member_card'] = array ();
+		$key = 'order_platform_total_operation_'.(int)$dpid;
+		$isActive = Yii::app()->redis->get($key);
+		if($isActive){
+			return json_encode ( $data );
+		}else{
+			Yii::app()->redis->set($key,true);
+			$keyOrder = 'redis-third-platform-'.(int)$dpid;
+			$orderSize = Yii::app()->redis->lSize($keyOrder);
+			if($orderSize > 5){
+				for ($i=0; $i<5; $i++){
+					$orderStr = Yii::app()->redis->rPop($keyOrder);
+					array_push($data ['order'], json_decode($orderStr,true));
+				}
+			}elseif(5>= $orderSize > 0){
+				for ($i=0; $i<$orderSize; $i++){
+					$orderStr = Yii::app()->redis->rPop($keyOrder);
+					array_push($data ['order'], json_decode($orderStr,true));
+				}
+			}else{
+				self::dealRedisData($dpid);
+			}
+			Yii::app()->redis->set($key,false);
+			return json_encode ( $data );
+		}
+		
 		$now = date('Y-m-d H:i:s',time());
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
@@ -1404,19 +1431,75 @@ class DataSyncOperation {
 				$content = str_replace(PHP_EOL, '', $content);
 				if($type==2){
 					// 新增订单
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-					$result = self::operateOrder($pData);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
+					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
 				}elseif($type==4){
 					// 退款
 					$contentArr = explode('::', $content);
 					$createAt = isset($contentArr[7])?$contentArr[7]:'';
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
-					$result = self::retreatOrder($pData);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
+					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
 				}elseif($type==3){
 					// 增加会员卡
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-					$result = self::addMemberCard($pData);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
+					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
 				}elseif($type==5){
+					// 日结 $rjDpid $rjUserId $rjCreateAt $rjPoscode $rjBtime $rjcode
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
+					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
+				}
+				if($result > 0){
+					$msg = array('status'=>true);
+				}else{
+					$msg = array('status'=>false,'msg'=>'推入redis缓存失败');
+				}
+				if($msg['status']){
+					array_push($lidArr, $lid);
+				}else{
+					Helper::writeLog('推入redis缓存失败:'.$dpid.json_encode($obj).'错误信息:'.$msg['msg']);
+					// 插入同步不成功数据
+					$data = array('dpid'=>$dpid,'jobid'=>$padLid,'pos_sync_lid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
+					$resFail = self::setSyncFailure($data);
+					$failObj = json_decode($resFail);
+					if($failObj->status){
+						array_push($lidArr, $lid);
+					}
+				}
+			}
+			$count = count($lidArr);
+			$lidStr = join(',', $lidArr);
+			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
+			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
+		}else{
+			$msg = json_encode(array('status'=>false,'msg'=>''));
+		}
+		return $msg;
+	}
+	/**
+	 * 
+	 * 饿了么 美团 还有收款机订单保存
+	 * redis 数据
+	 * type  2 同步云端    3新增会员卡 4 退款失败 5 日结
+	 * 
+	 */
+	public static function dealRedisData($dpid){
+		$key = 'order_online_total_operation_'.(int)$dpid;
+		$isActive = Yii::app()->redis->get($key);
+		if(!$isActive){
+			$orderSize = Yii::app()->redis->lSize('redis-order-data-'.$dpid);
+			if($orderSize > 0){
+				Yii::app()->redis->set($key,true);
+				$orderData = Yii::app()->redis->rPop('redis-order-data-'.$dpid);
+				$orderDataArr = json_decode($orderData,true);
+				$type = $orderDataArr['type'];
+				if($type==2){
+					$result = self::operateOrder($orderData);
+				}elseif($type==3){
+					$result = self::addMemberCard($pData);
+				}elseif($type==4){
+					$result = self::retreatOrder($pData);
+				}elseif($type==5){
+					$content = $orderDataArr['data'];
 					$contentArr = explode('::', $content);
 					$rjDpid = $contentArr[0];
 					$rjUserId = $contentArr[1];
@@ -1429,71 +1512,15 @@ class DataSyncOperation {
 				}
 				$resObj = json_decode($result);
 				if($resObj->status){
-					array_push($lidArr, $lid);
+					self::dealRedisData($dpid);
 				}else{
-					Helper::writeLog('同步失败:同步内容:'.$dpid.json_encode($obj).'错误信息:'.$resObj->msg);
-					// 插入同步不成功数据
-					$data = array('dpid'=>$dpid,'jobid'=>$padLid,'pos_sync_lid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
-					$resFail = self::setSyncFailure($data);
-					$failObj = json_decode($resFail);
-					if($failObj->status){
-						array_push($lidArr, $lid);
-					}
+					Yii::app()->redis->lPush('redis-order-data-'.$dpid,$orderData);
 				}
+			}else{
+				Yii::app()->redis->set($key,false);
 			}
-			// 获取云端失败数据
-			$syncData = self::getAllSyncFailure($dpid);
-			$syncArr = json_decode($syncData);
-			if(!empty($syncArr)){
-				foreach ($syncArr as $sync){
-					$lid = $sync->lid;
-					$dpid = $sync->dpid;
-					$padLid = $sync->jobid;
-					$syncLid = $sync->pos_sync_lid;
-					$type = $sync->sync_type;
-					$syncurl = $sync->sync_url;
-					$content = $sync->content;
-					if($type==2){
-						// 新增订单
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-						$result = self::operateOrder($pData);
-					}elseif($type==4){
-						// 退款
-						$contentArr = explode('::', $content);
-						$createAt = isset($contentArr[7])?$contentArr[7]:'';
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
-						$result = self::retreatOrder($pData);
-					}elseif($type==3){
-						// 增加会员卡
-						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-						$result = self::addMemberCard($pData);
-					}elseif($type==5){
-						$contentArr = explode('::', $content);
-						$rjDpid = $contentArr[0];
-						$rjUserId = $contentArr[1];
-						$rjCreateAt = $contentArr[2];
-						$rjPoscode = $contentArr[3];
-						$rjBtime = $contentArr[4];
-						$rjEtime = $contentArr[5];
-						$rjcode = $contentArr[6];
-						$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
-					}
-					$resObj = json_decode($result);
-					if($resObj->status){
-						self::delSyncFailure($lid,$dpid);
-					}else{
-						Helper::writeLog('再次同步失败:同步内容:'.$dpid.json_encode($sync).'错误信息:'.$resObj->msg);
-					}
-				}
-			}
-			$count = count($lidArr);
-			$lidStr = join(',', $lidArr);
-			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
-			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
-		}else{
-			$msg = json_encode(array('status'=>false,'msg'=>''));
 		}
-		return $msg;
+		
 	}
 	/**
 	 * 
