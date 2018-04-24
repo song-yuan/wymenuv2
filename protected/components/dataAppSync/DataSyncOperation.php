@@ -1404,10 +1404,12 @@ class DataSyncOperation {
 		$isActive = Yii::app()->redis->get($key);
 		Yii::app()->redis->set($key,false);
 		if(!$isActive){
-			$orderSize = Yii::app()->redis->lSize('redis-order-data-'.(int)$dpid);
+			$orderKey = 'redis-order-data-'.(int)$dpid;
+			$orderSize = Yii::app()->redis->lSize($orderKey);
+			var_dump($orderKey);var_dump($orderSize);
 			if($orderSize > 0){
 				Yii::app()->redis->set($key,true);
-				$orderData = Yii::app()->redis->rPop('redis-order-data-'.(int)$dpid);
+				$orderData = Yii::app()->redis->rPop($orderKey);
 				var_dump($orderData);
 				$orderDataArr = json_decode($orderData,true);
 				$type = $orderDataArr['type'];
