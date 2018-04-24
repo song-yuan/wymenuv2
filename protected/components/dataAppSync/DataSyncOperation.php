@@ -1412,11 +1412,11 @@ class DataSyncOperation {
 				$orderDataArr = json_decode($orderData,true);
 				$type = $orderDataArr['type'];
 				if($type==2){
-					$result = self::operateOrder($orderData);
+					$result = self::operateOrder($orderDataArr);
 				}elseif($type==3){
-					$result = self::addMemberCard($pData);
+					$result = self::addMemberCard($orderDataArr);
 				}elseif($type==4){
-					$result = self::retreatOrder($pData);
+					$result = self::retreatOrder($orderDataArr);
 				}elseif($type==5){
 					$content = $orderDataArr['data'];
 					$contentArr = explode('::', $content);
