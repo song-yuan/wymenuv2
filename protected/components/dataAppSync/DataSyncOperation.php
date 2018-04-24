@@ -288,7 +288,6 @@ class DataSyncOperation {
 					array_push($data ['order'], json_decode($orderStr,true));
 				}
 			}else{
-				var_dump($orderSize);exit;
 				self::dealRedisData($dpid);
 			}
 			Yii::app()->redis->set($key,false);
@@ -1403,6 +1402,7 @@ class DataSyncOperation {
 	public static function dealRedisData($dpid){
 		$key = 'order_online_total_operation_'.(int)$dpid;
 		$isActive = Yii::app()->redis->get($key);
+		var_dump($isActive);exit;
 		if(!$isActive){
 			$orderSize = Yii::app()->redis->lSize('redis-order-data-'.(int)$dpid);
 			if($orderSize > 0){
