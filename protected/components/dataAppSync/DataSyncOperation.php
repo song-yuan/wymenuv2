@@ -1386,7 +1386,6 @@ class DataSyncOperation {
 			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
 			// 生成云端订单
 			$key = 'order_online_total_operation_'.(int)$dpid;
-			Yii::app()->redis->set($key,false);
 			$isActive = Yii::app()->redis->get($key);
 			if(!$isActive){
 				self::dealRedisData($dpid);
@@ -1411,7 +1410,6 @@ class DataSyncOperation {
 		if($orderSize > 0){
 			Yii::app()->redis->set($key,true);
 			$orderData = Yii::app()->redis->rPop($orderKey);
-			var_dump($orderData);
 			$orderDataArr = json_decode($orderData,true);
 			$type = $orderDataArr['type'];
 			if($type==2){
@@ -1432,13 +1430,11 @@ class DataSyncOperation {
 				$rjcode = $contentArr[6];
 				$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 			}
-			var_dump($result);
 			$resObj = json_decode($result);
-			if($resObj->status){
-				self::dealRedisData($dpid);
-			}else{
+			if(!$resObj->status){
 				Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,$orderData);
 			}
+			self::dealRedisData($dpid);
 		}else{
 			Yii::app()->redis->set($key,false);
 		}
