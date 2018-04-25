@@ -1384,6 +1384,7 @@ class DataSyncOperation {
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
+			// 生成云端订单
 			$key = 'order_online_total_operation_'.(int)$dpid;
 			$isActive = Yii::app()->redis->get($key);
 			if(!$isActive){
