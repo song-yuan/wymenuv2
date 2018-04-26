@@ -894,6 +894,7 @@ class DataSyncTables
         		"taste_id int(10) NOT NULL DEFAULT '0',".
         		"order_id int(10) NOT NULL DEFAULT '0',".
         		"is_order char(1) NOT NULL DEFAULT '0',".
+        		"taste_name varchar(255) NOT NULL DEFAULT '',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
@@ -906,9 +907,11 @@ class DataSyncTables
         		"order_id int(10) NOT NULL DEFAULT '0',".
         		"order_product_id int(10) NOT NULL DEFAULT '0',".
         		"account_no varchar(20) NOT NULL,".
+        		"promotion_title varchar(255) NOT NULL DEFAULT '',".
         		"promotion_type varchar(2) NOT NULL DEFAULT '0',".
         		"promotion_id int(10) NOT NULL DEFAULT '0',".
         		"promotion_money decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"can_cupon varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
