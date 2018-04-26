@@ -101,6 +101,10 @@
 			$('#dialog1').attr('order-dpid',orderDpid);
 			$('#dialog1').show();
 		});
+		$('.payorder').click(function(){
+			var href = $(this).attr('href');
+			location.href = href;
+		});
 		$('#dialog1 .primary').click(function(){
 			layer.load(2);
 			var orderId = $('#dialog1').attr('order-id');
