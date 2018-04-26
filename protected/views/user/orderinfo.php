@@ -23,7 +23,7 @@
 		if($order['order_status']==1){
 			echo '<span style="color:#ff9933;font-size:18px;">已下单</span>';
 		}elseif(1 < $order['order_status']&&$order['order_status'] < 3){
-			echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';
+			echo '<span style="color:#f5342f;font-size:18px;">待付款</span>';
 		}elseif($order['order_status'] == 3){
 			echo '<span style="color:#ff9933;font-size:18px;">已支付</span>';
 		}elseif ($order['order_status']==7){
@@ -175,7 +175,10 @@
 </div>
 
 <?php if($order['order_status']< 3):?>
-<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="font-size:1.2em;">取消订单</div>
+<div class="bttnbar">
+	<button class="bttn_large bttn_black2" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="margin-right:1.2em;">取消订单</button>
+	<button class="payOrder bttn_large bttn_orange" status="<?php echo $order['order_status'];?>">去支付</button>
+</div>
 <?php endif;?>
  <!--BEGIN dialog1-->
 <div class="weui_dialog_confirm" id="dialog1" style="display: none;">
