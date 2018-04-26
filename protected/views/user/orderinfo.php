@@ -177,7 +177,7 @@
 <?php if($order['order_status']< 3):?>
 <div class="bttnbar">
 	<button class="cancelOrder bttn_large bttn_black2" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="margin-right:1.2em;">取消订单</button>
-	<button class="payOrder bttn_large bttn_red2" status="<?php echo $order['order_status'];?>">去支付</button>
+	<button class="payOrder bttn_large bttn_red" status="<?php echo $order['order_status'];?>">去支付</button>
 </div>
 <?php endif;?>
  <!--BEGIN dialog1-->
