@@ -116,7 +116,7 @@
 				success:function(data){
 					layer.closeAll('loading');
 					if(parseInt(data)){
-						history.go(0);
+						$('.cancel[order-id="'+orderId+'"][order-dpid="'+orderDpid+'"]').parents('li').remove();
 					}else{
 						$('#dialog2').show();
 					}
