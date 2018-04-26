@@ -176,8 +176,8 @@
 
 <?php if($order['order_status']< 3):?>
 <div class="bttnbar">
-	<button class="bttn_large bttn_black2" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="margin-right:1.2em;">取消订单</button>
-	<button class="payOrder bttn_large bttn_orange" status="<?php echo $order['order_status'];?>">去支付</button>
+	<button class="cancelOrder bttn_large bttn_black2" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="margin-right:1.2em;">取消订单</button>
+	<button class="payOrder bttn_large bttn_red2" status="<?php echo $order['order_status'];?>">去支付</button>
 </div>
 <?php endif;?>
  <!--BEGIN dialog1-->
@@ -240,7 +240,7 @@ $(document).ready(function(){
 		var status = $(this).attr('status');
 		location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
 	});
-	$('.close_window').click(function(){
+	$('.cancelOrder').click(function(){
 		orderId = $(this).attr('order-id');
 		orderDpid = $(this).attr('order-dpid');
 		$('#dialog1').show();
