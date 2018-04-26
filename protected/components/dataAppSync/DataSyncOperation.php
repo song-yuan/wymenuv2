@@ -1388,7 +1388,7 @@ class DataSyncOperation {
 			$key = 'order_online_total_operation_'.(int)$dpid;
 			$isActive = Yii::app()->redis->get($key);
 			if(!$isActive){
-				self::dealRedisData($dpid);
+				self::callUserFunc('self::dealRedisData', $dpid);
 			}
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
 		}else{

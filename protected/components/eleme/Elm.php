@@ -800,13 +800,13 @@ class Elm
 					if(!empty($newSpecs)){
 						foreach ($newSpecs as $newSpec){
 							if(strpos($foodName,$newSpec->value)===false){
-								array_push($tasteArr, array('dpid'=>$dpid,'create_at'=>$createdAt,'taste_id'=>'0','is_order'=>'0','taste_name'=>$newSpec->value));
+								array_push($tasteArr, array('dpid'=>$dpid,'create_at'=>$createdAt,'taste_id'=>'0','is_order'=>'0','taste_name'=>$newSpec->value,'name'=>$newSpec->value));
 							}
 						}
 					}
 					if(!empty($attributes)){
 						foreach ($attributes as $attribute){
-							array_push($tasteArr, array('dpid'=>$dpid,'taste_id'=>'0','is_order'=>'0','taste_name'=>$attribute->value));
+							array_push($tasteArr, array('dpid'=>$dpid,'taste_id'=>'0','is_order'=>'0','taste_name'=>$attribute->value,'name'=>$attribute->value));
 						}
 					}
 					
