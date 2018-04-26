@@ -52,7 +52,7 @@
 					<?php if($model['order_status']< 3):?>
 					<div class="order_bttnbar pad_10">
 						<button class="bttn_large bttn_black2 cancel" order-id="<?php echo $model['lid'];?>" order-dpid="<?php echo $model['dpid'];?>">取消订单</button>
-						<button class="bttn_large bttn_orange payorder" href="<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$model['lid'],'orderDpid'=>$model['dpid']));?>">去支付</button>
+						<button class="bttn_large bttn_red2 payorder" href="<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$model['lid'],'orderDpid'=>$model['dpid']));?>">去支付</button>
 					</div>
 					<?php endif;?>
 			</li>
