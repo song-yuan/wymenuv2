@@ -878,11 +878,11 @@ class Elm
 		$orderStr = json_encode($orderArr);
 		$orderCloudStr = json_encode($orderCloudArr);
 		// type 同步类型  2订单
-		$data = array('dpid'=>$dpid,'type'=>2,'data'=>$orderStr);
+		$orderData = array('dpid'=>$dpid,'type'=>2,'data'=>$orderStr);
 		
 		// 放入redis中
-		$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,$orderStr);
-		$result = Yii::app()->redis->lPush('redis-third-platform-'.(int)$dpid,$orderCloudStr);
+		$result = WxRedis::pushOrder($dpid, json_encode($orderData));
+		$result = WxRedis::pushPlatform($dpid, $orderCloudStr);
 		if($result > 0){
 			$msg = true;
 		}else{
