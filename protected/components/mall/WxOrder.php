@@ -708,6 +708,7 @@ class WxOrder
 		}
 	    return $orders;
 	}
+	// 获取订单产品 
 	public static function getOrderProduct($orderId,$dpid){
 		$sql = 'select lid,order_id,private_promotion_lid,main_id,set_id,price,amount,zhiamount,is_retreat,product_id,product_name,product_pic,original_price from nb_order_product  where order_id = :orderId and dpid = :dpid and product_type=0 and delete_flag=0 and set_id=0';
 		$sql .=' union select t.lid,t.order_id,t.private_promotion_lid,t.main_id,t.set_id,sum(t.price*t.amount) as price,t.amount,t.zhiamount,t.is_retreat,t.product_id,t1.set_name as product_name,t.product_pic,t.original_price from nb_order_product t,nb_product_set t1  where t.set_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=0 and t.delete_flag=0 and t.set_id>0 group by t.set_id,t.main_id';
@@ -731,6 +732,32 @@ class WxOrder
 			}
 		}
 	    return $orderProduct;
+	}
+	// 获取订单产品数据(放入缓存的订单产品数据)
+	public static function getOrderProductData($orderId,$dpid){
+		$sql = 'select *,"" as set_name,sum(price*amount/zhiamount) as set_price from nb_order_product where order_id=' . $orderId . ' and dpid='.$dpid.' and set_id > 0 and delete_flag=0 group by set_id ,main_id'.
+				' union select *,"" as set_name,"0.00" as set_price from nb_order_product where order_id=' . $orderId . ' and dpid='.$dpid.' and set_id = 0 and delete_flag=0';
+		$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+		foreach ( $orderProduct as $k => $product ) {
+			$sql = 'select create_at,taste_id,order_id,is_order,taste_name from nb_order_taste where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and is_order=0 and delete_flag=0';
+			$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+			$orderProduct [$k] ['product_taste'] = $orderProductTaste;
+			$sql = 'select promotion_title,promotion_type,promotion_id,promotion_money,can_cupon from nb_order_product_promotion where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and delete_flag=0';
+			$orderProductPromotion = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+			$orderProduct [$k] ['product_promotion'] = $orderProductPromotion;
+			if($product['set_id'] > 0){
+				$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'];
+				$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+				if(!empty($productSet)){
+					$orderProduct[$k]['amount'] = $product['zhiamount'];
+					$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
+					$orderProduct[$k]['set_price'] = $product['set_price'];
+					$orderProduct[$k]['set_detail'] = $productSet;
+				}
+			}
+			$orderProduct[$k]['product_name'] = $product['product_name'];
+		}
+		return $orderProduct;
 	}
 	public static function getOrderProductSetDetail($orderId,$dpid,$setId,$mainId){
 		$sql = 'select * from nb_order_product where order_id=:orderId and set_id=:setId and dpid=:dpid and main_id=:mainId and product_type=0 and delete_flag=0';
@@ -782,6 +809,7 @@ class WxOrder
 		}
 	    return $orderList;
 	}
+	// 订单地址
 	public static function getOrderAddress($orderId,$dpid){
 		$sql = 'select * from nb_order_address where order_lid=:orderId and dpid=:dpid and delete_flag=0';
 		$address = Yii::app()->db->createCommand($sql)
@@ -790,6 +818,16 @@ class WxOrder
 				  ->queryRow();
 	    return $address;
 	}
+	// 订单折扣优惠
+	public static function getOrderAccountDiscount($orderId,$dpid){
+		$sql = 'select * from nb_order_account_discount where dpid=:dpid and order_id=:orderId and delete_flag=0';
+		$orderDiscount = Yii::app()->db->createCommand($sql)
+				->bindValue(':dpid',$dpid)
+				->bindValue(':orderId',$orderId)
+				->queryAll ();
+		return $orderDiscount;
+	}
+	// 订单产品优惠活动
 	public static function getOrderProductPromotion($orderProductId,$dpid){
 		$sql = 'select * from nb_order_product_promotion where order_id=:orderProductId and dpid=:dpid and delete_flag=0';
 		$promotion = Yii::app()->db->createCommand($sql)
@@ -1061,14 +1099,18 @@ class WxOrder
 	  * 
 	  */ 
 	 public static function dealOrder($user,$order){
+	 	$orderArr = array();
+	 	$orderArr['nb_site_no'] = array();
+	 	$orderArr['nb_order_platform'] = array();
+	 	$orderArr['nb_order'] = $order;
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
 	 	
 	 	WxBrandUser::isUserFirstOrder($user,$dpid);
 	 	//修改订单状态
-	 	WxOrder::updateOrderStatus($orderId,$dpid);
+	 	self::updateOrderStatus($orderId,$dpid);
 	 	//修改订单产品状态
-	 	WxOrder::updateOrderProductStatus($orderId,$dpid);
+	 	self::updateOrderProductStatus($orderId,$dpid);
 	 	//修改座位状态
 	 	if($order['order_type']==1){
 	 		WxSite::updateSiteStatus($order['site_id'],$dpid,4);
@@ -1076,17 +1118,15 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
-	 		
-	 	//减少库存
-	 	$orderProducts = WxOrder::getOrderProduct($orderId, $dpid);
-	 	foreach($orderProducts as $product){
+	 	// 获取订单中产品 减少库存
+	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
+	 	foreach ($orderProducts as $product){
 	 		if($product['set_id'] > 0){
-	 			// 套餐
-	 			$setDetails = $product['detail'];
+	 			$setDetails = $product['set_detail'];
 	 			foreach($setDetails as $detail){
 	 				$productTasteArr = array();
-	 				if(isset($detail['taste'])&&!empty($detail['taste'])){
-	 					foreach ($detail['taste'] as $taste){
+	 				if(isset($detail['product_taste'])&&!empty($detail['product_taste'])){
+	 					foreach ($detail['product_taste'] as $taste){
 	 						array_push($productTasteArr, $taste['taste_id']);
 	 					}
 	 				}
@@ -1100,8 +1140,8 @@ class WxOrder
 	 			}
 	 		}else{
 	 			$productTasteArr = array();
-	 			if(isset($product['taste'])&&!empty($product['taste'])){
-	 				foreach ($product['taste'] as $taste){
+	 			if(isset($product['product_taste'])&&!empty($product['product_taste'])){
+	 				foreach ($product['product_taste'] as $taste){
 	 					array_push($productTasteArr, $taste['taste_id']);
 	 				}
 	 			}
@@ -1114,6 +1154,17 @@ class WxOrder
 	 			}
 	 		}
 	 	}
+	 	$orderPays = WxOrderPay::get($dpid, $orderId);
+	 	$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
+	 	$orderArr['nb_order_product'] = $orderProducts;
+	 	$orderArr['nb_order_pay'] = $orderPays;
+	 	$orderArr['nb_order_address'] = $orderAddress;
+	 	$orderArr['nb_order_taste'] = $order['taste'];
+	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
+	 	
+	 	$orderCloudStr = json_encode($orderCloudArr);
+	 	WxRedis::pushPlatform($dpid, $orderCloudStr);
 	 }
      /**
       * 
