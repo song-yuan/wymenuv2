@@ -1163,8 +1163,8 @@ class WxOrder
 	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
 	 	
-	 	$orderCloudStr = json_encode($orderCloudArr);
-	 	WxRedis::pushPlatform($dpid, $orderCloudStr);
+	 	$orderStr = json_encode($orderArr);
+	 	WxRedis::pushPlatform($dpid, $orderStr);
 	 }
      /**
       * 
