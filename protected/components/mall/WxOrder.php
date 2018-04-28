@@ -1121,6 +1121,7 @@ class WxOrder
 	 	}
 	 	// 获取订单中产品 减少库存
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
+	 	Helper::writeLog('go-orderproduct:'.json_encode($orderProducts));
 	 	foreach ($orderProducts as $product){
 	 		if($product['set_id'] > 0){
 	 			$setDetails = $product['set_detail'];
@@ -1156,14 +1157,17 @@ class WxOrder
 	 		}
 	 	}
 	 	$orderPays = WxOrderPay::get($dpid, $orderId);
+	 	Helper::writeLog('go-orderpay:'.json_encode($orderPays));
 	 	$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 	Helper::writeLog('go-orderaddress:'.json_encode($orderAddress));
 	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
+	 	Helper::writeLog('go-orderaccountdiscount:'.json_encode($orderDiscount));
 	 	$orderArr['nb_order_product'] = $orderProducts;
 	 	$orderArr['nb_order_pay'] = $orderPays;
 	 	$orderArr['nb_order_address'] = $orderAddress;
 	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
-	 	
+	 	Helper::writeLog('go-orderData:'.json_encode($orderArr));
 	 	$orderStr = json_encode($orderArr);
 	 	WxRedis::pushPlatform($dpid, $orderStr);
 	 }
