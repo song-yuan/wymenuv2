@@ -23,7 +23,7 @@ class WxSite
 	 * 
 	 */
 	public static function getSiteNo($siteId,$dpid){
-		$sql = 'select * from nb_site_no where site_id=:siteId and dpid=:dpid and is_temp=0 and delete_flag=0 order by lid desc limit 1';
+		$sql = 'select t.*,t1.serial from nb_site_no t,nb_site t1 where t.site_id=t1.lid and t.dpid=t1.dpid and t.site_id=:siteId and t.dpid=:dpid and t.is_temp=0 and t.delete_flag=0';
 		$siteNo = Yii::app()->db->createCommand($sql)
 				->bindValue(':siteId',$siteId)
 				->bindValue(':dpid',$dpid)
@@ -36,7 +36,7 @@ class WxSite
 	 *
 	 */
 	public static function getSiteNoByLid($siteNoId,$dpid){
-		$sql = 'select * from nb_site_no where lid=:siteNoId and dpid=:dpid and is_temp=0 and delete_flag=0 order by lid desc limit 1';
+		$sql = 'select t.*,t1.serial from nb_site_no t,nb_site t1 where t.site_id=t1.lid and t.dpid=t1.dpid and t.lid=:siteNoId and t.dpid=:dpid and t.is_temp=0 and t.delete_flag=0';
 		$siteNo = Yii::app()->db->createCommand($sql)
 			->bindValue(':siteNoId',$siteNoId)
 			->bindValue(':dpid',$dpid)
