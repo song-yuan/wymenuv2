@@ -673,7 +673,7 @@ class WxOrder
 			$order = self::getOrder($orderId, $this->dpid);
 			$orderProduct = self::getOrderProductData($orderId, $this->dpid);
 			$orderDiscount = self::getOrderAccountDiscount($orderId, $this->dpid);
-			$orderArr['nb_site_no'] =$this->siteNo;
+			$orderArr['nb_site_no'] = $this->siteNo;
 			$orderArr['nb_order_platform'] = array();
 			$orderArr['nb_order'] = $order;
 			$orderArr['nb_order_product'] = $orderProduct;
