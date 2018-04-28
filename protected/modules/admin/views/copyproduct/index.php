@@ -321,7 +321,7 @@ function fun()
 	         }
         });
 		$(".printall").on("click",function(){
-			if(window.confirm("请将鼠标悬浮至按钮，认真阅读各下发区别，确认后，下发过程不可逆，请谨慎操作！！！")){
+			if(window.confirm("普通下方将会把选中的产品下发到对应门店;(注)覆盖下发将会清空之前下发的产品后,把选中的产品下发到对应门店！！！")){
 	            //alert("暂无权限！！！");
 	            var ctp = $(this).attr('ctp');
 	            var dpids =new Array();
