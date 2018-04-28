@@ -1,7 +1,7 @@
 <?php 
-$key = 'redis-order-data-27';
-$size = Yii::app()->redis->lSize($key);
-var_dump($size);
+$key = 'order_platform_total_operation_27';
+$isActive = Yii::app()->redis->get($key);
+var_dump($isActive);
 ?>
 
 
