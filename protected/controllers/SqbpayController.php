@@ -297,18 +297,14 @@ class SqbpayController extends Controller
 					'operator' => $operator,
 			);
 			$data = json_encode($notifyWxwapData);
-			//Helper::writeLog('第一次2:['.$sn.'],插入数据：');
 			$result = Yii::app ()->db->createCommand ()->insert('nb_notify_wxwap',$notifyWxwapData);
 			if($result){
 
 				if($order_status == 'PAID'){
 					//订单成功支付...
 					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
-					//exit;
-					$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-					$orders = Yii::app()->db->createCommand($sql)->queryRow();
+					$orders = WxOrder::getOrder($orderid, $orderdpid);
 					if(!empty($orders)){
-						//sleep(15);
 						$user = WxBrandUser::getFromUserId($orders['user_id']);
 						WxOrder::dealOrder($user, $orders);
 					}

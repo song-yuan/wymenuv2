@@ -120,14 +120,11 @@ class MtpayController extends Controller
 						'content' => $data,
 						'pay_status' => $result_msg
 				);
-				//$data = json_encode($notifyWxwapData);
 				$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
-				//Helper::writeLog('插入数据库：'.$result);
 				if($result){
 					//订单成功支付...
 					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
-					$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-					$orders = Yii::app()->db->createCommand($sql)->queryRow();
+					$orders = WxOrder::getOrder($orderid, $orderdpid);
 					if(!empty($orders)){
 						$user = WxBrandUser::getFromUserId($orders['user_id']);
 						WxOrder::dealOrder($user, $orders);

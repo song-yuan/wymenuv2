@@ -1161,9 +1161,8 @@ class WxOrder
 	 	$orderArr['nb_order_product'] = $orderProducts;
 	 	$orderArr['nb_order_pay'] = $orderPays;
 	 	$orderArr['nb_order_address'] = $orderAddress;
-	 	$orderArr['nb_order_taste'] = isset($order['taste'])?$order['taste']:array();
+	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
-	 	Helper::writeLog('go-orderData:'.json_encode($orderArr));
 	 	$orderStr = json_encode($orderArr);
 	 	WxRedis::pushPlatform($dpid, $orderStr);
 	 }
