@@ -528,7 +528,7 @@ class DataSyncOperation {
 			}
 		}
 		$orderKey = 'order-'.(int)$dpid.'-'.$createAt.'-'.$accountNo;
-		$orderCache = Yii::app()->cache->get($orderKey);
+		$orderCache = Yii::app()->redis->get($orderKey);
 		if($orderCache!=false){
 			$msg = json_encode ( array (
 					'status' => false,
@@ -537,7 +537,7 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		$orderCache = Yii::app()->cache->set($orderKey,true);
+		$orderCache = Yii::app()->redis->set($orderKey,true);
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
@@ -828,7 +828,7 @@ class DataSyncOperation {
 				}
 			}
 			$transaction->commit ();
-			Yii::app()->cache->delete($orderKey);
+			Yii::app()->redis->delete($orderKey);
 			$msg = json_encode ( array (
 					'status' => true,
 					'orderId' => $orderId,
@@ -838,7 +838,7 @@ class DataSyncOperation {
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
 			Helper::writeLog($dpid.'---'.$orderData.'---'.$e->getMessage());
-			Yii::app()->cache->delete($orderKey);
+			Yii::app()->redis->delete($orderKey);
 			$msg = json_encode ( array (
 					'status' => false,
 					'msg' => $e->getMessage(),
@@ -1118,7 +1118,7 @@ class DataSyncOperation {
 			return $msg;
 		}
 		$orderKey = 'retreat-'.(int)$dpid.'-'.$order['create_at'].'-'.$accountNo;
-		$orderCache = Yii::app()->cache->get($orderKey);
+		$orderCache = Yii::app()->redis->get($orderKey);
 		if($orderCache!=false){
 			$msg = json_encode ( array (
 					'status' => false,
@@ -1127,7 +1127,7 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		$orderCache = Yii::app()->cache->set($orderKey,true);
+		$orderCache = Yii::app()->redis->set($orderKey,true);
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
@@ -1312,7 +1312,7 @@ class DataSyncOperation {
 					Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
 				}
 				$transaction->commit ();
-				Yii::app()->cache->delete($orderKey);
+				Yii::app()->redis->delete($orderKey);
 				$msg = json_encode ( array (
 						'status' => true,
 						'syncLid' => $syncLid,
@@ -1320,7 +1320,7 @@ class DataSyncOperation {
 				) );
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
-			Yii::app()->cache->delete($orderKey);
+			Yii::app()->redis->delete($orderKey);
 			$msg = json_encode ( array (
 					'status' => false,
 					'msg'=>$e->getMessage()
