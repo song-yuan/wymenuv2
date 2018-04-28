@@ -675,7 +675,7 @@ class WxOrder
 			$orderProduct = self::getOrderProductData($orderId, $this->dpid);
 			$orderDiscount = self::getOrderAccountDiscount($orderId, $this->dpid);
 			$orderArr['nb_order'] = $order;
-			$orderArr['nb_order_product'] = $orderProducts;
+			$orderArr['nb_order_product'] = $orderProduct;
 			$orderArr['nb_order_pay'] = array();
 			$orderArr['nb_order_address'] = array();
 			$orderArr['nb_order_taste'] = $order['taste'];
