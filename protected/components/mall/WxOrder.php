@@ -34,6 +34,7 @@ class WxOrder
 	public $productTastes = array();//处理后的产品口味
 	public $setDetail = array();  // 套餐详情 set_id - product_id - number - price
 	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,number,price))
+	public $siteNo = false;
 	public $order = false;
 	
 	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array(),$others){
@@ -244,14 +245,14 @@ class WxOrder
 	}
 	//获取座位状态
 	public function getSite(){
-		$siteNo = WxSite::getSiteNo($this->siteId,$this->dpid);
-		if(!$siteNo){
+		$this->siteNo = WxSite::getSiteNo($this->siteId,$this->dpid);
+		if(!$this->siteNo){
 			throw new Exception('请联系服务员,开台后下单');
 		}
-		if(!in_array($siteNo['status'],array(1,2))){
+		if(!in_array($this->siteNo['status'],array(1,2))){
 			throw new Exception('请联系服务员,开台后下单');
 		}else{
-			$this->siteNoId = $siteNo['lid'];
+			$this->siteNoId = $this->siteNo['lid'];
 		}
 	}
 	//获取餐位费
@@ -669,11 +670,11 @@ class WxOrder
 		// 餐桌模式 数据放入缓存中
 		if($this->type==1){
 			$orderArr = array();
-			$orderArr['nb_site_no'] = array();
-			$orderArr['nb_order_platform'] = array();
 			$order = self::getOrder($orderId, $this->dpid);
 			$orderProduct = self::getOrderProductData($orderId, $this->dpid);
 			$orderDiscount = self::getOrderAccountDiscount($orderId, $this->dpid);
+			$orderArr['nb_site_no'] =$this->siteNo;
+			$orderArr['nb_order_platform'] = array();
 			$orderArr['nb_order'] = $order;
 			$orderArr['nb_order_product'] = $orderProduct;
 			$orderArr['nb_order_pay'] = array();
