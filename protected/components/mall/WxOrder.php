@@ -1102,6 +1102,7 @@ class WxOrder
 	 	$orderArr = array();
 	 	$orderArr['nb_site_no'] = array();
 	 	$orderArr['nb_order_platform'] = array();
+	 	$order['order_status'] = 3;
 	 	$orderArr['nb_order'] = $order;
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
