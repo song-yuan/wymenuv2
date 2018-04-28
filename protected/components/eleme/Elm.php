@@ -291,7 +291,7 @@ class Elm
 		$me = json_decode($message);
 		$orderId = $me->id;
 		$expire = 30*60; // 过期时间
-		Yii::app()->cache->set($orderId,$message,$expire);
+		Yii::app()->redis->set($orderId,$message,$expire);
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
 			$order = self::confirmOrder($dpid,$orderId);
@@ -358,12 +358,12 @@ class Elm
 	public static function orderStatus($message,$dpid){
 		$me = json_decode($message);
 		$accountNo = $me->orderId;
-		$cache = Yii::app()->cache->get($accountNo);
+		$cache = Yii::app()->redis->get($accountNo);
 		if($cache!=false){
 			$order = json_decode($cache);
 			$res = self::dealOrder($order,$dpid,4);
 			if($res){
-				Yii::app()->cache->delete($accountNo);
+				Yii::app()->redis->delete($accountNo);
 			}
 			return $res;
 		}else{
