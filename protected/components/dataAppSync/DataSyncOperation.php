@@ -1329,6 +1329,17 @@ class DataSyncOperation {
 		return $msg;
 	}
 	public static function batchSync($data) {
+		$checkDayStr = date('Y-m-d ',time());
+		$timeBegin1 = strtotime($checkDayStr."11:00:00");
+		$timeEnd1 = strtotime($checkDayStr."14:00:00");
+		 
+		$curr_time = time();
+		 
+		if($curr_time >= $timeBegin1 && $curr_time <= $timeEnd1)
+		{
+			$msg = json_encode(array('status'=>false,'msg'=>''));
+			return $msg;
+		}
 		if(isset($data) && !empty($data['data'])){
 			$dpid = 0;
 			$lidArr = array();
