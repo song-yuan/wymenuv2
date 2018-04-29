@@ -1337,7 +1337,7 @@ class DataSyncOperation {
 		 
 		if($curr_time >= $timeBegin1 && $curr_time <= $timeEnd1)
 		{
-			$msg = json_encode(array('status'=>false,'msg'=>''));
+			$msg = json_encode(array('status'=>false,'msg'=>'时间限制'));
 			return $msg;
 		}
 		if(isset($data) && !empty($data['data'])){
