@@ -127,6 +127,9 @@ class WxRiJie
 				$end_time = $rj['end_time'];
 				$rjcode = $rj['rijie_code'];
 				
+				// 确保redis里订单数据生成订单
+				WxRedis::dealRedisData($dpid);
+				
 				$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$dpid.' and k.create_at >="'.$begin_time.'" and k.create_at <="'.$end_time.'" group by k.account_no,k.create_at,k.user_id';
 				$orders = $db->createCommand($sql)->queryColumn();
 				if(empty($orders)){
