@@ -282,10 +282,17 @@ class DataSyncOperation {
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
 					array_push($data ['order'], json_decode($orderStr,true));
 				}
-			}else{
+			}elseif($orderSize > 0 && $orderSize <= 5){
 				for ($i=0; $i<$orderSize; $i++){
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
 					array_push($data ['order'], json_decode($orderStr,true));
+				}
+			}else{
+				// 生成云端订单
+				$key = 'order_online_total_operation_'.(int)$dpid;
+				$isActive = Yii::app()->redis->get($key);
+				if(!$isActive){
+					self::callUserFunc('self::dealRedisData', $dpid);
 				}
 			}
 			Yii::app()->redis->set($key,false);
@@ -1329,17 +1336,6 @@ class DataSyncOperation {
 		return $msg;
 	}
 	public static function batchSync($data) {
-		$checkDayStr = date('Y-m-d ',time());
-		$timeBegin1 = strtotime($checkDayStr."11:00:00");
-		$timeEnd1 = strtotime($checkDayStr."14:00:00");
-		 
-		$curr_time = time();
-		 
-		if($curr_time >= $timeBegin1 && $curr_time <= $timeEnd1)
-		{
-			$msg = json_encode(array('status'=>false,'msg'=>'时间限制'));
-			return $msg;
-		}
 		if(isset($data) && !empty($data['data'])){
 			$dpid = 0;
 			$lidArr = array();
@@ -1395,12 +1391,6 @@ class DataSyncOperation {
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
-			// 生成云端订单
-			$key = 'order_online_total_operation_'.(int)$dpid;
-			$isActive = Yii::app()->redis->get($key);
-			if(!$isActive){
-				self::callUserFunc('self::dealRedisData', $dpid);
-			}
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
 		}else{
 			$msg = json_encode(array('status'=>false,'msg'=>''));
