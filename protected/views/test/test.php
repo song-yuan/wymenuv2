@@ -1,6 +1,6 @@
 <?php 
-$key = 'redis-third-platform-28';
-$orderSize = Yii::app()->redis->lSize($key);
+$key = 'order_platform_total_operation_28';
+$orderSize = Yii::app()->redis->set($key,false);
 var_dump($orderSize);
 ?>
 
