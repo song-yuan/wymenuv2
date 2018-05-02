@@ -270,8 +270,8 @@ class DataSyncOperation {
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
 		$key = 'order_platform_total_operation_'.(int)$dpid;
+		Yii::app()->redis->set($key,false);
 		$isActive = Yii::app()->redis->get($key);
-		$isActive = false;
 		if($isActive){
 			return json_encode ( $data );
 		}else{
@@ -285,8 +285,8 @@ class DataSyncOperation {
 				}
 			}else{
 				// 生成云端订单
-				$key = 'order_online_total_operation_'.(int)$dpid;
-				$isActive = Yii::app()->redis->get($key);
+				$ckey = 'order_online_total_operation_'.(int)$dpid;
+				$isActive = Yii::app()->redis->get($ckey);
 				if(!$isActive){
 					self::callUserFunc('WxRedis::dealRedisData', $dpid);
 				}
