@@ -277,15 +277,17 @@ class DataSyncOperation {
 			Yii::app()->redis->set($key,true);
 			$keyOrder = 'redis-third-platform-'.(int)$dpid;
 			$orderSize = Yii::app()->redis->lSize($keyOrder);
-			if($orderSize > 5){
-				for ($i=0; $i<5; $i++){
+			if($orderSize > 0){
+				for ($i=0; $i<$orderSize; $i++){
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
 					array_push($data ['order'], json_decode($orderStr,true));
 				}
 			}else{
-				for ($i=0; $i<$orderSize; $i++){
-					$orderStr = Yii::app()->redis->rPop($keyOrder);
-					array_push($data ['order'], json_decode($orderStr,true));
+				// 生成云端订单
+				$key = 'order_online_total_operation_'.(int)$dpid;
+				$isActive = Yii::app()->redis->get($key);
+				if(!$isActive){
+					self::callUserFunc('WxRedis::dealRedisData', $dpid);
 				}
 			}
 			Yii::app()->redis->set($key,false);
