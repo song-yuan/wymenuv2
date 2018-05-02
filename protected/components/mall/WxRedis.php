@@ -37,11 +37,11 @@ class WxRedis
 			$orderDataArr = json_decode($orderData,true);
 			$type = $orderDataArr['type'];
 			if($type==2){
-				$result = self::operateOrder($orderDataArr);
+				$result = DataSyncOperation::operateOrder($orderDataArr);
 			}elseif($type==3){
-				$result = self::addMemberCard($orderDataArr);
+				$result = DataSyncOperation::addMemberCard($orderDataArr);
 			}elseif($type==4){
-				$result = self::retreatOrder($orderDataArr);
+				$result = DataSyncOperation::retreatOrder($orderDataArr);
 			}elseif($type==5){
 				$content = $orderDataArr['data'];
 				$contentArr = explode('::', $content);
