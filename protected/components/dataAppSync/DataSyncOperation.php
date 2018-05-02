@@ -282,17 +282,10 @@ class DataSyncOperation {
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
 					array_push($data ['order'], json_decode($orderStr,true));
 				}
-			}elseif($orderSize > 0 && $orderSize <= 5){
+			}else{
 				for ($i=0; $i<$orderSize; $i++){
 					$orderStr = Yii::app()->redis->rPop($keyOrder);
 					array_push($data ['order'], json_decode($orderStr,true));
-				}
-			}else{
-				// 生成云端订单
-				$key = 'order_online_total_operation_'.(int)$dpid;
-				$isActive = Yii::app()->redis->get($key);
-				if(!$isActive){
-					self::callUserFunc('self::dealRedisData', $dpid);
 				}
 			}
 			Yii::app()->redis->set($key,false);
@@ -1391,6 +1384,12 @@ class DataSyncOperation {
 			$count = count($lidArr);
 			$lidStr = join(',', $lidArr);
 			Helper::writeLog($dpid.'新增订单 返回:'.$lidStr);
+			// 生成云端订单
+			$key = 'order_online_total_operation_'.(int)$dpid;
+			$isActive = Yii::app()->redis->get($key);
+			if(!$isActive){
+				self::callUserFunc('self::dealRedisData', $dpid);
+			}
 			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
 		}else{
 			$msg = json_encode(array('status'=>false,'msg'=>''));
