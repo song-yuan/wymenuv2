@@ -270,7 +270,6 @@ class DataSyncOperation {
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
 		$key = 'order_platform_total_operation_'.(int)$dpid;
-		Yii::app()->redis->set($key,false);
 		$isActive = Yii::app()->redis->get($key);
 		if($isActive){
 			return json_encode ( $data );
