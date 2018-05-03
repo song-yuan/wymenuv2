@@ -318,10 +318,10 @@ class MallController extends Controller
 		if($this->type==1){
 			// 餐桌模式 数据放入缓存中
 			$orderArr = array();
-			$order = self::getOrder($orderId, $this->dpid);
-			$orderProduct = self::getOrderProductData($orderId, $this->dpid);
-			$orderDiscount = self::getOrderAccountDiscount($orderId, $this->dpid);
-			$orderArr['nb_site_no'] = $this->siteNo;
+			$order = WxOrder::getOrder($orderId, $this->companyId);
+			$orderProduct = WxOrder::getOrderProductData($orderId, $this->companyId);
+			$orderDiscount = WxOrder::getOrderAccountDiscount($orderId, $this->companyId);
+			$orderArr['nb_site_no'] = $orderObj->siteNo;
 			$orderArr['nb_order_platform'] = array();
 			$orderArr['nb_order'] = $order;
 			$orderArr['nb_order_product'] = $orderProduct;
