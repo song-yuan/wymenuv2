@@ -666,24 +666,6 @@ class WxOrder
 		//清空购物车
 		$sql = 'delete from nb_cart where user_id='.$this->userId.' and dpid='.$this->dpid;
 		Yii::app()->db->createCommand($sql)->execute();
-		
-		// 餐桌模式 数据放入缓存中
-		if($this->type==1){
-			$orderArr = array();
-			$order = self::getOrder($orderId, $this->dpid);
-			$orderProduct = self::getOrderProductData($orderId, $this->dpid);
-			$orderDiscount = self::getOrderAccountDiscount($orderId, $this->dpid);
-			$orderArr['nb_site_no'] = $this->siteNo;
-			$orderArr['nb_order_platform'] = array();
-			$orderArr['nb_order'] = $order;
-			$orderArr['nb_order_product'] = $orderProduct;
-			$orderArr['nb_order_pay'] = array();
-			$orderArr['nb_order_address'] = array();
-			$orderArr['nb_order_taste'] = $order['taste'];
-			$orderArr['nb_order_account_discount'] = array();
-			$orderStr = json_encode($orderArr);
-			WxRedis::pushPlatform($this->dpid, $orderStr);
-		}
 		return $orderId;
 	}
 	public static function getOrder($orderId,$dpid){
