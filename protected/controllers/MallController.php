@@ -330,7 +330,7 @@ class MallController extends Controller
 			$orderArr['nb_order_taste'] = $order['taste'];
 			$orderArr['nb_order_account_discount'] = array();
 			$orderStr = json_encode($orderArr);
-			WxRedis::pushPlatform($this->dpid, $orderStr);
+			WxRedis::pushPlatform($this->companyId, $orderStr);
 			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		if($paytype == 1){
