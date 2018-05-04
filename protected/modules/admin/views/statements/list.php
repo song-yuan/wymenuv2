@@ -57,12 +57,25 @@
 			<div class="portlet purple box">
 			      	<div class="portlet-title">
 					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-shopping-cart">&nbsp</em><a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','营业数据');?></span></a></div>
+					<?php if(Yii::app()->user->role == 10):?>
 					<div class="caption"><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-truck">&nbsp</em><a href="<?php echo $this->createUrl('statementstock/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','进销存数据');?></span></a></div>
 					<div class="caption"><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-group">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>"><?php echo yii::t('app','会员数据');?></span></a></div>
 					<div class="caption"><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-warning ">&nbsp</em><a href="<?php echo $this->createUrl('statementmember/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app','清除数据');?></span></a></div>
+					<?php endif;?>
 				</div>
 				<div class="portlet-body clearfix" >
         		<?php if($type==0):?>
+        			<?php if(Yii::app()->user->role == 10):?>
+        			<div class="panel_body row">
+                        <p>支付统计报表</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/rijieReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
+                                <div class="list_big">日结统计(优化)</div>
+                                <div class="list_small">查询门店日结详情数据，日结完成后方可显示数据</div>
+                            </a> 
+                        </div>
+                    </div>
+        			<?php else:?>
                     <div class="panel_body row">
                         <p>基础营业报表</p>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
@@ -275,7 +288,8 @@
                                 <div class="list_small">查询桌台的客流、单数、金额统计和占比等</div>
                             </a> 
                         </div>
-                    </div>  
+                    </div> 
+                    <?php endif;?> 
                 <?php endif;?>
                 </div> 
 				
