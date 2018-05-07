@@ -1331,7 +1331,6 @@ class DataSyncOperation {
 		return $msg;
 	}
 	public static function batchSync($data) {
-		Helper::writeLog(json_encode($data));
 		if(isset($data) && !empty($data['data'])){
 			$dpid = 0;
 			$lidArr = array();

@@ -146,101 +146,56 @@ class StatementsController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time','');//结束时间
 		$dpname = Yii::app()->request->getParam('dpname','');
 		
-// 		$results = array();
-// 		if(empty($begin_time)){
-// 			$begin_time = date('Y-m-d',time());
-// 		}
-// 		if(empty($end_time)){
-// 			$end_time = date('Y-m-d',time());
-// 		}
-// 		$begin_time = $begin_time.' 00:00:00';
-// 		$end_time = $end_time.' 23:59:59';
-		
-// 		$whereUser = '';
-// 		if($userid != '0'){
-// 			$whereUser = 'and t1.username ="'.$userid.'"';
-// 		}
-// 		if($text==1){
-// 			// 按年查询
-// 			$sql = 'select t1.dpid,DATE_FORMAT(t1.create_at,"%Y") as create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(t.order_id) as all_nums,count(t.account_no) as all_num  from nb_order_pay t,nb_order t1'.
-// 					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$begin_time.'" and t1.create_at<="'.$end_time.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
-// 		}elseif ($text==2){
-// 			// 按月查询
-// 			$sql = 'select t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m") as create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(t.order_id) as all_nums,count(t.account_no) as all_num  from nb_order_pay t,nb_order t1'.
-// 					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$begin_time.'" and t1.create_at<="'.$end_time.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
-// 		}elseif ($text==3){
-// 			// 按日查询
-// 			$sql = 'select t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m-%d") as create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(t.order_id) as all_nums,count(t.account_no) as all_num  from nb_order_pay t,nb_order t1'.
-// 				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$begin_time.'" and t1.create_at<="'.$end_time.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
-				   
-// 		}
-		
-// 		$sql .= ' group by create_at,paytype,payment_method_id order by create_at asc';
-// 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-// 		foreach ($models as $model){
-// 			$createAt = $model['create_at'];
-// 			if(!isset($results[$createAt])){
-// 				$results[$createAt] = array();
-// 			}
-// 			array_push($results[$createAt],$model);
-// 		}
-// 		var_dump($results);exit;
-		
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
+		$orderArrs = array();
+		$orderPayArrs = array();
+		if(empty($begin_time)){
+			$begin_time = date('Y-m-d',time());
 		}
-		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,t.username,sum(orderpay.pay_amount) as all_reality,orderpay.paytype,orderpay.payment_method_id,count(distinct t.account_no) as all_num,count(distinct orderpay.order_id) as all_nums';//array_count_values()
-		$criteria->with = array('company','orderpay');
-		$criteria->condition = 'orderpay.paytype != "11" and t.order_status in (3,4,8)' ;
-		$criteria->addCondition('t.lid in('.$ords.')');
-		$criteria->addCondition('t.dpid ='.$this->companyId);
-
-
-		if($str){
-			$criteria->condition = 't.dpid in('.$str.')';
+		if(empty($end_time)){
+			$end_time = date('Y-m-d',time());
 		}
-		if($userid != '0' && $userid != '-1'){
-			$criteria->addCondition ('t.username ="'.$userid.'"');
+		$beginTime = $begin_time.' 00:00:00';
+		$endTime = $end_time.' 23:59:59';
+		
+		$whereUser = '';
+		if($userid != '0'){
+			$whereUser = ' and t1.username ="'.$userid.'"';
 		}
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		if($text==1){
-			if($userid != '0'){
-				$criteria->group ='t.dpid,year(t.create_at),t.username';
-				$criteria->order = 'year(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
-			}else{
-				$criteria->group ='t.dpid,year(t.create_at)';
-				$criteria->order = 'year(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
-			}
-		}elseif($text==2){
-			if($userid != '0' ){
-				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),t.username';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
-			}else{
-				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at)';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
-			}
-		}elseif($text==3){
-			if($userid != '0'){
-				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
-			}else{
-				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
-				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(orderpay.pay_amount) desc,t.dpid asc';
-			}
+			// 按年查询
+			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+		}elseif ($text==2){
+			// 按月查询
+			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+		}elseif ($text==3){
+			// 按日查询
+			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
+				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+				   
 		}
-		$criteria->distinct = TRUE;
-		$model = Order::model()->findAll($criteria);
-		//var_dump($model);exit;
-		$payments = $this->getPayment($this->companyId);
-		$username = $this->getUsername($this->companyId);
+		$sql .= ' order by create_at asc,paytype asc';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($models as $model){
+			$orderId = $model['order_id'];
+			$createAt = $model['create_at'];
+			$payType = $model['paytype'];
+			$payMethodId = $model['payment_method_id'];
+			if(!isset($orderArrs[$createAt][$orderId])){
+				$orderArrs[$createAt][$orderId] = array();
+			}
+			if(!isset($orderPayArrs[$createAt][$payType.'-'.$payMethodId])){
+				$orderPayArrs[$createAt][$payType.'-'.$payMethodId] = array();
+			}
+			
+			array_push($orderArrs[$createAt][$orderId],$model);
+			array_push($orderPayArrs[$createAt][$payType.'-'.$payMethodId],$model);
+		}
+		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
+		$payments = $this->getPayment($this->companyId); // 后台手动添加到支付方式
+		$username = $this->getUsername($this->companyId);// 后台所有管理员
 		$comName = $this->getComName();
-		//var_dump($model);exit;
 		$this->render('paymentReport',array(
 				'models'=>$model,
 				'begin_time'=>$begin_time,
@@ -8398,5 +8353,51 @@ class StatementsController extends BackendController
 // 		}
 		//var_dump($options);exit;
 		return $models;
+	}
+	// 支付方式 员工业绩 处理 array('时间'=>array('order'=>array(),'order_pay'=>array()))
+	private function dealOrderReport($orderArr,$orderPayArr){
+		$resluts = array();
+		//$key 表示日期
+		foreach ($orderArr as $key=>$orders){
+			$orderTotal = 0;
+			$orderRealTotal = 0;
+			$orderRetreat = 0;
+			$orderNum = count($orders);
+			foreach ($orders as $order){
+				foreach ($order as $k=>$v){
+					if($k==0){
+						$orderTotal += $v['should_total'];
+						$orderRealTotal += $v['reality_total'];
+					}
+					if($v['pay_amount'] < 0){
+						$orderTotal += $v['pay_amount'];
+						$orderRealTotal += $v['pay_amount'];
+						$orderRetreat += $v['pay_amount'];
+					}
+				}
+			}
+			$resluts[$key]['order'] = array('create_at'=>$key,'order_num'=>$orderNum,'should_total'=>$orderTotal,'reality_total'=>$orderRealTotal,'order_retreat'=>$orderRetreat);
+		}
+		//$key 表示日期
+		foreach ($orderPayArr as $key=>$orderPays){
+			if(!isset($resluts[$key]['order_pay'])){
+				$resluts[$key]['order_pay'] = array();
+			}
+			foreach ($orderPays as $pays){
+				// 遍历 付款方式
+				$payType = 0;
+				$payMethodId = 0;
+				$payAmount = 0;
+				$payCount = count($pays);
+				foreach ($pays as $pay){
+					$payType = $pay['paytype'];
+					$payMethodId = (int)$pay['payment_method_id'];
+					$payAmount += $pay['pay_amount'];
+				}
+				
+				$resluts[$key]['order_pay'][$payType.'-'.$payMethodId] = array('pay_type'=>$payType,'payment_method_id'=>$payMethodId,'pay_amount'=>$payAmount,'pay_count'=>$payCount);
+			}
+		}
+		return $resluts;
 	}
 }
