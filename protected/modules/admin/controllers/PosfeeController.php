@@ -130,10 +130,8 @@ class PosfeeController extends BackendController
 		if(!empty($models)){
 			foreach ($models as $model){
 				$sql ='select * from nb_poscode_fee where dpid='.$model['dpid'].' and poscode='.$model['pad_code'];
-				$re = $db->createCommand($sql)->queryAll();
-				if(!empty($re)){
-					
-				}else{
+				$re = $db->createCommand($sql)->queryRow();
+				if(empty($re)){
 					$se = new Sequence("poscode_fee");
 					$id = $se->nextval();
 					$data = array(

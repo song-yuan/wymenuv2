@@ -293,7 +293,6 @@
             url:url,
             type:'GET',
             //data:orderid,//CF
-            async:false,
             dataType: "json",
             success:function(msg){
                 var data=msg;
