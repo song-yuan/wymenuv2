@@ -749,6 +749,7 @@ class Elm
 		$serviceFee = $me->serviceFee;//饿了么服务费
 		$vipDeliveryFeeDiscount = $me->vipDeliveryFeeDiscount;// 会员配送费
 		$orderActivities = $me->orderActivities;// 订单活动
+		$createdAt = date('Y-m-d H:i:s',strtotime($createdAt));
 		if($book){
 			$deliveryTime = $me->deliverTime;
 		}else{
