@@ -259,7 +259,7 @@ class StatementmemberController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 		
-		$sql = 'select com.company_name,pri.all_reality,pri.all_nums,point.point_price,cupon.cupon_price,recharge_price from '
+		$sql = 'select com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address,pri.all_reality,pri.all_nums,point.point_price,cupon.cupon_price,recharge_price from '
 				.' nb_company com '
 				.' left join '
 					.'( select op.dpid,sum(op.pay_amount) as all_reality,count(distinct op.order_id) as all_nums '
@@ -305,7 +305,6 @@ class StatementmemberController extends BackendController
 				.' where com.delete_flag =0 and (com.dpid ='.$this->companyId.' or com.comp_dpid ='.$this->companyId.') and cdp.is_rest in(2,3)';
 		//echo $sql;
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-		
 		$payments = $this->getPayment($this->companyId);
 		$username = $this->getUsername($this->companyId);
 		$comName = $this->getComName();
