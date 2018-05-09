@@ -62,6 +62,7 @@
 		               <th><?php echo yii::t('app','店铺');?></th>
 		               <th><?php echo yii::t('app','联系人');?></th>
 		               <th><?php echo yii::t('app','联系电话');?></th>
+		               <th><?php echo yii::t('app','联系地址');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','实收款');?></th> 
 		               <th><?php echo yii::t('app','系统券');?></th>
@@ -88,6 +89,7 @@
 		        	<td><?php echo $model['company_name'];?></td>
 		        	<td><?php echo $model['contact_name'];?></td>
 		        	<td><?php echo $model['mobile'];?></td>
+		        	<td><?php echo $model['province'].$model['city'].$model['county_area'].$model['address'];?></td>
 		            <td><?php 
 		                $orders_total = $orders_total+$model['all_nums'];    //总单数
 		                echo $model['all_nums'];?></td>
@@ -119,6 +121,7 @@
 		        <?php endforeach;?>	
 		        <tr>
 		            <td><?php echo "总计";?></td>
+		            <td></td>
 		            <td></td>
 		            <td></td>
 		            <td><?php echo $orders_total; ?></td>
