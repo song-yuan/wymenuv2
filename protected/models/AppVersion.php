@@ -36,9 +36,9 @@ class AppVersion extends CActiveRecord
 			array('lid', 'numerical', 'integerOnly'=>true),
 			array('type, app_type, delete_flag', 'length', 'max'=>2),
 			array('app_version', 'length', 'max'=>15),
-			array('apk_url, content', 'length', 'max'=>255),
+			array('apk_url', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>55),
-			array('create_at, update_at', 'safe'),
+			array('create_at, update_at,content', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, create_at, update_at, type, app_type, app_version, apk_url, content, delete_flag, is_sync', 'safe', 'on'=>'search'),

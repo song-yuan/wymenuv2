@@ -752,6 +752,7 @@ class Elm
 		$createdAt = date('Y-m-d H:i:s',strtotime($createdAt));
 		if($book){
 			$deliveryTime = $me->deliverTime;
+			$deliveryTime = date('Y-m-d H:i:s',strtotime($deliveryTime));
 		}else{
 			$deliveryTime = $createdAt;
 		}
@@ -860,6 +861,8 @@ class Elm
 		$me->deliveryPoiAddress = $me->deliveryPoiAddress;
 		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$income,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
+		
+		
 		$orderCloudArr['nb_order_address'] = array(array('dpid'=>$dpid,'consignee'=>$me->consignee,'privince'=>'','city'=>'','area'=>'','street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
 		$orderCloudArr['nb_order_pay'] = array(array('dpid'=>$dpid,'create_at'=>$createdAt,'account_no'=>$orderId,'pay_amount'=>$income,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		

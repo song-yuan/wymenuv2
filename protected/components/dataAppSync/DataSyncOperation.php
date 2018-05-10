@@ -269,30 +269,23 @@ class DataSyncOperation {
 		$data = array ();
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
-		$key = 'order_platform_total_operation_'.(int)$dpid;
-		$isActive = Yii::app()->redis->get($key);
-		if($isActive){
-			return json_encode ( $data );
-		}else{
-			Yii::app()->redis->set($key,true);
-			$keyOrder = 'redis-third-platform-'.(int)$dpid;
-			$orderSize = Yii::app()->redis->lSize($keyOrder);
-			if($orderSize > 0){
-				for ($i=0; $i<$orderSize; $i++){
-					$orderStr = Yii::app()->redis->rPop($keyOrder);
-					array_push($data ['order'], json_decode($orderStr,true));
-				}
-			}else{
-				// 生成云端订单
-				$ckey = 'order_online_total_operation_'.(int)$dpid;
-				$isActive = Yii::app()->redis->get($ckey);
-				if(!$isActive){
-					self::callUserFunc('WxRedis::dealRedisData', $dpid);
-				}
+		
+		$keyOrder = 'redis-third-platform-'.(int)$dpid;
+		$orderSize = Yii::app()->redis->lSize($keyOrder);
+		if($orderSize > 0){
+			for ($i=0; $i<$orderSize; $i++){
+				$orderStr = Yii::app()->redis->rPop($keyOrder);
+				array_push($data ['order'], json_decode($orderStr,true));
 			}
-			Yii::app()->redis->set($key,false);
-			return json_encode ( $data );
+		}else{
+			// 生成云端订单
+			$ckey = 'order_online_total_operation_'.(int)$dpid;
+			$isActive = Yii::app()->redis->get($ckey);
+			if(!$isActive){
+				self::callUserFunc('WxRedis::dealRedisData', $dpid);
+			}
 		}
+		return json_encode ( $data );
 	}
 	/**
 	 * 
