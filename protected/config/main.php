@@ -71,7 +71,7 @@ return array(
 				"hostname" => "127.0.0.1",
 				"port" => 6379,
 				"database" => 0,
-				'password'=>'MYmenu123@mymenu12',
+				'password'=>'MYmenu123@mymenu123',
 		),
 		'user'=>array(
 			// enable cookie-based authentication
