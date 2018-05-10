@@ -1156,12 +1156,16 @@ class WxOrder
 	 			}
 	 		}
 	 	}
+	 	$orderAddressArr = array();
 	 	$orderPays = WxOrderPay::get($dpid, $orderId);
 	 	$orderAddress = self::getOrderAddress($orderId, $dpid);
 	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
 	 	$orderArr['nb_order_product'] = $orderProducts;
 	 	$orderArr['nb_order_pay'] = $orderPays;
-	 	$orderArr['nb_order_address'] = $orderAddress;
+	 	if($orderAddress){
+	 		array_push($orderAddressArr, $orderAddress);
+	 	}
+	 	$orderArr['nb_order_address'] = $orderAddressArr;
 	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
 	 	$orderStr = json_encode($orderArr);
