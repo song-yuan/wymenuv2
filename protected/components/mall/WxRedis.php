@@ -56,7 +56,9 @@ class WxRedis
 			}
 			$resObj = json_decode($result);
 			if(!$resObj->status){
-				Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,$orderData);
+				$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderDataArr['data']);
+				$resFail = DataSyncOperation::setSyncFailure($data);
+				$failObj = json_decode($resFail);
 			}
 			self::dealRedisData($dpid);
 		}else{
