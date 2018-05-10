@@ -57,8 +57,7 @@ class WxRedis
 			$resObj = json_decode($result);
 			if(!$resObj->status){
 				$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderDataArr['data']);
-				$resFail = DataSyncOperation::setSyncFailure($data);
-				$failObj = json_decode($resFail);
+				DataSyncOperation::setSyncFailure($data);
 			}
 			self::dealRedisData($dpid);
 		}else{
