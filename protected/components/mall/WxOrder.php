@@ -1162,7 +1162,7 @@ class WxOrder
 	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
 	 	$orderArr['nb_order_product'] = $orderProducts;
 	 	$orderArr['nb_order_pay'] = $orderPays;
-	 	if($orderAddress){
+	 	if(!empty($orderAddress)){
 	 		array_push($orderAddressArr, $orderAddress);
 	 	}
 	 	$orderArr['nb_order_address'] = $orderAddressArr;
