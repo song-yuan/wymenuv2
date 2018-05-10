@@ -71,7 +71,7 @@ return array(
 				"hostname" => "127.0.0.1",
 				"port" => 6379,
 				"database" => 0,
-				'password'=>'MYmenu123',
+				'password'=>'MYmenu123@mymenu12',
 		),
 		'user'=>array(
 			// enable cookie-based authentication
@@ -120,7 +120,7 @@ return array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		'cache'=>$params['memcache'],
+// 		'cache'=>$params['memcache'],
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
