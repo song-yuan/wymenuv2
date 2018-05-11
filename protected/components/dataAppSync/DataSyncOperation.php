@@ -96,6 +96,7 @@ class DataSyncOperation {
 								'create_at' => date ( 'Y-m-d H:i:s', time () ),
 								'update_at' => date ( 'Y-m-d H:i:s', time () ),
 								'poscode' => $code,
+								'used_at'=>date ( 'Y-m-d H:i:s', time () ),
 								'exp_time' => date('Y-m-d H:i:s',$expTime),
 								'num' => $padNo
 						);

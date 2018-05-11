@@ -108,7 +108,6 @@ class PosfeeController extends BackendController
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Company::model()->findAll($criteria);
-		
 		//$sql = 'select * from nb_company c left join nb_poscode_fee pf on(pf.dpid = c.dpid and pf.delete_flag=0) where ';
 		
 		$this->render('setindex',array(
