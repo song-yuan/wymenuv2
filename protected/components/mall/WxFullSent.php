@@ -65,7 +65,7 @@ class WxFullSent
 		$fullsentDetail = Yii::app()->db->createCommand($sql)->queryRow();
 		if($fullsentDetail){
 			$sentProPrice = 0;
-			if($sent['is_discount']){
+			if($fullsentDetail['is_discount']){
 				$sentProPrice = number_format($fullsentDetail['original_price']*$fullsentDetail['promotion_discount'],2);
 			}else{
 				$sentProPrice = number_format($fullsentDetail['original_price'] - $fullsentDetail['promotion_money'],2);
