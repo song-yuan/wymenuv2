@@ -35,7 +35,7 @@ class PoscodeFee extends CActiveRecord
 			array('num', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('poscode', 'length', 'max'=>50),
-			array('exp_time', 'length', 'max'=>255),
+			array('used_at, exp_time', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>25),
 			array('create_at, update_at', 'safe'),
 			// The following rule is used by search().
@@ -66,6 +66,7 @@ class PoscodeFee extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '最近一次更新时间',
 			'poscode' => '序列号',
+			'used_at' => '到期时间',
 			'exp_time' => '到期时间',
 			'num' => '第几台机器',
 			'status' => '0表示状态正常，1表示POS端不可用，2表示线上不可用，3表示都不可用',
@@ -95,6 +96,7 @@ class PoscodeFee extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('poscode',$this->poscode,true);
+		$criteria->compare('used_at',$this->used_at,true);
 		$criteria->compare('exp_time',$this->exp_time,true);
 		$criteria->compare('num',$this->num);
 		$criteria->compare('status',$this->status,true);
