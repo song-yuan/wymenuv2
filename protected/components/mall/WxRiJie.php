@@ -313,10 +313,8 @@ class WxRiJie
 						}
 					}
 					$sql = 'update nb_order set order_status = 8 where lid in('.$ords.') and dpid ='.$dpid.' and order_status in(3,4)';
-					$rjResult = Yii::app()->db->createCommand($sql)->execute();
-					if(!$rjResult){
-						throw new Exception('修改订单状态');
-					}
+					Yii::app()->db->createCommand($sql)->execute();
+					
 					$sql = 'update nb_rijie_code set is_rijie = 1 where lid ='.$rj['lid'].' and dpid ='.$dpid;
 					$result = $db->createCommand($sql)->execute();
 					if(!$result){
