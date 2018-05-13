@@ -1354,6 +1354,12 @@ class DataSyncOperation {
 					// 增加会员卡
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
 					$result = self::addMemberCard($pData);
+					$resObj = json_decode($result);
+					if($resObj->status){
+						$result = 1;
+					}else{
+						$result = 0;
+					}
 				}elseif($type==5){
 					// 日结 $rjDpid $rjUserId $rjCreateAt $rjPoscode $rjBtime $rjcode
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
