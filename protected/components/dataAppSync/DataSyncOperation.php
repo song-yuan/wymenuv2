@@ -1343,21 +1343,21 @@ class DataSyncOperation {
 				if($type==2){
 					// 新增订单
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
+					$result = WxRedis::pushOrder($dpid, json_encode($pData));
 				}elseif($type==4){
 					// 退款
 					$contentArr = explode('::', $content);
 					$createAt = isset($contentArr[7])?$contentArr[7]:'';
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
-					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
+					$result = WxRedis::pushOrder($dpid, json_encode($pData));
 				}elseif($type==3){
 					// 增加会员卡
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
+					$result = self::addMemberCard($pData);
 				}elseif($type==5){
 					// 日结 $rjDpid $rjUserId $rjCreateAt $rjPoscode $rjBtime $rjcode
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-					$result = Yii::app()->redis->lPush('redis-order-data-'.(int)$dpid,json_encode($pData));
+					$result = WxRedis::pushOrder($dpid, json_encode($pData));
 				}
 				if($result > 0){
 					$msg = array('status'=>true);
