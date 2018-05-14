@@ -68,6 +68,7 @@ class WxRedis
 			}catch(Exception $e){
 				Yii::app()->redis->lPush($orderData);
 				Yii::app()->redis->set($key,false);
+				self::dealRedisData($dpid);
 			}
 		}else{
 			Yii::app()->redis->set($key,false);
