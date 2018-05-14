@@ -20,7 +20,9 @@ class  CrontabController extends Controller
 		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
 		foreach ($dpids as $dpid){
 			// 确保redis里订单数据生成订单
+			Helper::writeLog('redis-data begain:'.$dpid);
 			WxRedis::dealRedisData($dpid);
+			Helper::writeLog('redis-data end:'.$dpid);
 		}
 	}
 	/**
