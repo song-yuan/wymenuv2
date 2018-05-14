@@ -35,7 +35,6 @@ class MicroPayModel
 	}
 	public static function update($dpid,$out_trade_no,$transactionId,$result){
 		$sql = "update nb_micro_pay set transaction_id='".$transactionId."', pay_result='".$result."' where dpid=".$dpid." and out_trade_no='".$out_trade_no."'";
-		Helper::writeLog($sql);
 		Yii::app ()->db->createCommand ($sql)->execute();
 	}
 }
