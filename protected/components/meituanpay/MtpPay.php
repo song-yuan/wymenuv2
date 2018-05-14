@@ -149,7 +149,7 @@ class MtpPay{
 		    		$i=1;
 					$j=true;
 					do{
-						sleep(1);
+						sleep(2);
 						$i++;
 						$results = MtpPay::query(array(
 							'outTradeNo'=>$outTradeNo,
@@ -169,8 +169,8 @@ class MtpPay{
 									"accountno"=>$outTradeNo);
 							$j=false;
 						}
-					}while (($i<=5)&&$j);
-					if(($i==5)&&$j){
+					}while (($i<=15)&&$j);
+					if(($i==15)&&$j){
 						$result = array(
 									"return_code"=>"SUCCESS",
 									"result_code"=>"ERROR",
@@ -188,7 +188,7 @@ class MtpPay{
 		    		$i=1;
 					$j=true;
 					do{
-						sleep(1);
+						sleep(2);
 						$i++;
 						$results = MtpPay::query(array(
 							'outTradeNo'=>$outTradeNo,
@@ -208,8 +208,8 @@ class MtpPay{
 									"accountno"=>$outTradeNo);
 							$j=false;
 						}
-					}while (($i<=5)&&$j);
-					if(($i==5)&&$j){
+					}while (($i<=15)&&$j);
+					if(($i==15)&&$j){
 						$result = array(
 									"return_code"=>"SUCCESS",
 									"result_code"=>"ERROR",
@@ -235,7 +235,7 @@ class MtpPay{
 	    		$i=1;
 				$j=true;
 				do{
-					sleep(1);
+					sleep(2);
 					$i++;
 					$results = MtpPay::query(array(
 							'outTradeNo'=>$outTradeNo,
@@ -255,8 +255,8 @@ class MtpPay{
 								"accountno"=>$outTradeNo);
 						$j=false;
 					}
-				}while (($i<=5)&&$j);
-				if(($i==5)&&$j){
+				}while (($i<=15)&&$j);
+				if(($i==15)&&$j){
 					$result = array(
 								"return_code"=>"SUCCESS",
 								"result_code"=>"ERROR",
