@@ -33,37 +33,41 @@ class WxRedis
 		$orderSize = Yii::app()->redis->lSize($orderKey);
 		if($orderSize > 0){
 			Yii::app()->redis->set($key,true);
-			$orderData = Yii::app()->redis->rPop($orderKey);
-			$orderDataArr = json_decode($orderData,true);
-			if(is_array($orderDataArr)){
-				$type = $orderDataArr['type'];
-				if($type==2){
-					$result = DataSyncOperation::operateOrder($orderDataArr);
-				}elseif($type==3){
-					$result = DataSyncOperation::addMemberCard($orderDataArr);
-				}elseif($type==4){
-					$result = DataSyncOperation::retreatOrder($orderDataArr);
-				}elseif($type==5){
-					$content = $orderDataArr['data'];
-					$contentArr = explode('::', $content);
-					$rjDpid = $contentArr[0];
-					$rjUserId = $contentArr[1];
-					$rjCreateAt = $contentArr[2];
-					$rjPoscode = $contentArr[3];
-					$rjBtime = $contentArr[4];
-					$rjEtime = $contentArr[5];
-					$rjcode = $contentArr[6];
-					$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
+			try {
+				$orderData = Yii::app()->redis->rPop($orderKey);
+				$orderDataArr = json_decode($orderData,true);
+				if(is_array($orderDataArr)){
+					$type = $orderDataArr['type'];
+					if($type==2){
+						$result = DataSyncOperation::operateOrder($orderDataArr);
+					}elseif($type==3){
+						$result = DataSyncOperation::addMemberCard($orderDataArr);
+					}elseif($type==4){
+						$result = DataSyncOperation::retreatOrder($orderDataArr);
+					}elseif($type==5){
+						$content = $orderDataArr['data'];
+						$contentArr = explode('::', $content);
+						$rjDpid = $contentArr[0];
+						$rjUserId = $contentArr[1];
+						$rjCreateAt = $contentArr[2];
+						$rjPoscode = $contentArr[3];
+						$rjBtime = $contentArr[4];
+						$rjEtime = $contentArr[5];
+						$rjcode = $contentArr[6];
+						$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
+					}
+				}else{
+					$result = json_encode(array('status'=>false));
 				}
-			}else{
-				$result = json_encode(array('status'=>false));
+				$resObj = json_decode($result);
+				if(!$resObj->status){
+					$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderDataArr['data']);
+					DataSyncOperation::setSyncFailure($data);
+				}
+				self::dealRedisData($dpid);
+			}catch(Exception $e){
+				Yii::app()->redis->set($key,false);
 			}
-			$resObj = json_decode($result);
-			if(!$resObj->status){
-				$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderDataArr['data']);
-				DataSyncOperation::setSyncFailure($data);
-			}
-			self::dealRedisData($dpid);
 		}else{
 			Yii::app()->redis->set($key,false);
 		}
