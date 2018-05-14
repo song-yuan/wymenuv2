@@ -44,7 +44,7 @@ class MtpNotify{
 				'terminal_key'=>$terminal_key,
 				'sn'=>$sn,
 		);
-		$result = SqbPay::query($preData);
+		$result = MtpPay::query($preData);
 		Helper::writeLog($result);
 		$resArr = json_decode($result,true);
 		if($resArr['result_code']=='200'&&$resArr['biz_response']['result_code']=='SUCCESS'){
