@@ -95,9 +95,8 @@ class MtpPay{
     		return $result;
     	}
     	$st = $paramsStrs.'key='.$key;
-    	Helper::writeLog('参数：'.$st);
     	$sign = hash("sha256", $st);
-    	Helper::writeLog('参数sing：'.$sign);
+    	
     	$datas = array(
     			'channel'=>$channel,
     			'outTradeNo'=>$outTradeNo,
@@ -121,7 +120,6 @@ class MtpPay{
 	    	$obj = json_decode($result,true);
 	    	$return_status = $obj['status'];
 	    	$tradeNo = $obj['tradeNo'];
-	    	$outTradeNo = $obj['outTradeNo'];
 	    	$pay_status = $obj['orderStatus'];
 	    	
 	    	//$str = 'mt付款返回订单号：'.$outTradeNo.';mt订单号：'.$tradeNo.'返回信息：'.$return_status.';支付状态：'.$pay_status;
