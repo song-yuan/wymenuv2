@@ -32,9 +32,9 @@ class WxRedis
 		$orderKey = 'redis-order-data-'.(int)$dpid;
 		$orderSize = Yii::app()->redis->lSize($orderKey);
 		if($orderSize > 0){
+			$orderData = Yii::app()->redis->rPop($orderKey);
 			Yii::app()->redis->set($key,true);
 			try {
-				$orderData = Yii::app()->redis->rPop($orderKey);
 				$orderDataArr = json_decode($orderData,true);
 				if(is_array($orderDataArr)){
 					$type = $orderDataArr['type'];
@@ -66,6 +66,7 @@ class WxRedis
 				}
 				self::dealRedisData($dpid);
 			}catch(Exception $e){
+				Yii::app()->redis->lPush($orderData);
 				Yii::app()->redis->set($key,false);
 			}
 		}else{
