@@ -15,6 +15,14 @@ class  CrontabController extends Controller
 	public function actionRijieStatistics(){
 		$result = WxRiJie::rijieStatistics();
 	}
+	public function actionRedisOrder(){
+		$sql = 'select dpid from nb_company where type=1 and delete_flag = 0';
+		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
+		foreach ($dpids as $dpid){
+			// 确保redis里订单数据生成订单
+			WxRedis::dealRedisData($dpid);
+		}
+	}
 	/**
 	 *
 	 * 新上铁接口
