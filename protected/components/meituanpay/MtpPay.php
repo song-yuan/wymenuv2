@@ -483,6 +483,7 @@ class MtpPay{
     		return $result;
     	}
     	$st = $paramsStrs.'key='.$key;
+    	Helper::writeLog('美团订单查询参数:'.$st);
     	$sign = hash("sha256", $st);
     	
     	$datas = array(
