@@ -85,7 +85,7 @@
 							<tr>
 								<td colspan="6" style="text-align: right;">
 								<?php if($storage->status==1):?><span style="color:red">已确认盘损</span>
-								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<13):?>
+								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<14):?>
 								<span style="color: red;">若修改了盘损量，请先保存再进行盘损！</span>
 								<button type="button" id="save"  class="btn yellow" ><i class="fa fa-pencial"></i><?php echo yii::t('app','暂时保存');?></button>				
 								<input id="status-0" type="button" class="btn blue" value="确认盘损" storage-id="<?php echo $storage->lid;?>" />
