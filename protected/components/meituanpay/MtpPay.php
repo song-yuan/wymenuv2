@@ -96,7 +96,7 @@ class MtpPay{
     	}
     	$st = $paramsStrs.'key='.$key;
     	Helper::writeLog('参数：'.$st);
-    	$sign = md5($st);
+    	$sign = hash("sha256", $st);
     	Helper::writeLog('参数sing：'.$sign);
     	$datas = array(
     			'channel'=>$channel,
@@ -353,7 +353,7 @@ class MtpPay{
     		}
     		$st = $paramsStrs.'key='.$key;
     		//Helper::writeLog('美团支付参数：'.$st);
-    		$sign = md5($st);
+    		$sign = hash("sha256", $st);
     		//Helper::writeLog('加密:'.$sign);
     		
     		$datas = array(
@@ -432,7 +432,7 @@ class MtpPay{
     	}
     	$st = $paramsStrs.'key='.$key;
     	//Helper::writeLog('关闭订单参数：'.$st);
-    	$sign = md5($st);
+    	$sign = hash("sha256", $st);
     	//Helper::writeLog('关闭订单加密:'.$sign);
     	
     	$datas = array(
@@ -483,7 +483,7 @@ class MtpPay{
     		return $result;
     	}
     	$st = $paramsStrs.'key='.$key;
-    	$sign = md5($st);
+    	$sign = hash("sha256", $st);
     	
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
@@ -602,7 +602,7 @@ class MtpPay{
     		return $result;
     	}
     	$st = $paramsStrs.'key='.$key;
-    	$sign = md5($st);
+    	$sign = hash("sha256", $st);
     	 
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
