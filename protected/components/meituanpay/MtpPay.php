@@ -208,6 +208,7 @@ class MtpPay{
 									"accountno"=>$outTradeNo);
 							$j=false;
 						}
+						Helper::writeLog('美团支付 返回查询结果'.json_encode($result));
 						sleep(2);
 					}while (($i<=15)&&$j);
 					if(($i==15)&&$j){
