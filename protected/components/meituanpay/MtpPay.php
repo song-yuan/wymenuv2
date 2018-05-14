@@ -82,7 +82,7 @@ class MtpPay{
     	$st = $paramsStrs.'key='.$key;
     	Helper::writeLog('参数：'.$st);
     	$sign = md5($st);
-    	
+    	Helper::writeLog('参数sing：'.$sign);
     	$datas = array(
     			'channel'=>$channel,
     			'outTradeNo'=>$outTradeNo,
