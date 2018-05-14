@@ -75,7 +75,6 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 			$transactionId = $result["transaction_id"];
 			MicroPayModel::update($dpid, $orderId, $transactionId, json_encode($result));
 			$msg = array('status'=>true, 'result'=>true, 'trade_no'=>$orderId);
-			Helper::writeLog($dpid.'---payresult return---'.json_encode($msg));
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
 			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL_SUCCESS"){
