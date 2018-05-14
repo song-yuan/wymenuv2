@@ -164,8 +164,10 @@ class MtpPay{
 									"return_code"=>"SUCCESS",
 									"result_code"=>"SUCCESS",
 	    							"result_msg"=>$result_msg,
+									"transaction_id"=>$obj['tradeNo'],
 									"msg"=>"支付成功！",
-									"accountno"=>$outTradeNo);
+									"accountno"=>$outTradeNo
+							);
 							$j=false;
 						}
 						sleep(2);
@@ -203,8 +205,10 @@ class MtpPay{
 									"return_code"=>"SUCCESS",
 									"result_code"=>"SUCCESS",
 	    							"result_msg"=>$result_msg,
+									"transaction_id"=>$obj['tradeNo'],
 									"msg"=>"支付成功！",
-									"accountno"=>$outTradeNo);
+									"accountno"=>$outTradeNo
+							);
 							$j=false;
 						}
 						sleep(2);
@@ -250,8 +254,10 @@ class MtpPay{
 								"return_code"=>"SUCCESS",
 								"result_code"=>"SUCCESS",
     							"result_msg"=>$result_msg,
+								"transaction_id"=>$obj['tradeNo'],
 								"msg"=>"支付成功！",
-								"accountno"=>$outTradeNo);
+								"accountno"=>$outTradeNo
+						);
 						$j=false;
 					}
 					sleep(2);
@@ -511,6 +517,7 @@ class MtpPay{
 	    					'return_code'=>"SUCCESS",
 	    					'result_code'=>"SUCCESS",
 	    					'result_msg'=>$pay_status,
+	    					"tradeNo"=>$tradeNo,
 	    					'msg'=>'支付成功！',
 	    			);
 	    		}elseif ($pay_status == 'ORDER_FAILED' || $pay_status == 'ORDER_CLOSE'){
@@ -525,6 +532,7 @@ class MtpPay{
 	    					'return_code'=>"SUCCESS",
 	    					'result_code'=>"SUCCESS",
 	    					'result_msg'=>$pay_status,
+	    					"tradeNo"=>$tradeNo,
 	    					'msg'=>'交易部分退款！',
 	    			);
 	    		}elseif ($pay_status == 'ORDER_ALL_REFUND'){
