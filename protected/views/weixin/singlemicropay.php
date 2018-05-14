@@ -88,6 +88,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 }else{
 	$msg = array('status'=>false, 'result'=>false);
 }
+Helper::writeLog($dpid.'---payresult return---'.json_encode($msg));
 echo json_encode($msg);
 exit;
 ?>

@@ -195,7 +195,6 @@ class MtpPay{
 			    			'key'=>$key,
 			    			'merchantId'=>$merchantId,
 						));
-						Helper::writeLog('美团支付 查询结果'.json_encode($results));
 						$return_code = $results['return_code'];
 						$result_code = $results['result_code'];
 						$result_msg = $results['result_msg'];
@@ -208,7 +207,6 @@ class MtpPay{
 									"accountno"=>$outTradeNo);
 							$j=false;
 						}
-						Helper::writeLog('美团支付 返回查询结果'.json_encode($result));
 						sleep(2);
 					}while (($i<=15)&&$j);
 					if(($i==15)&&$j){
