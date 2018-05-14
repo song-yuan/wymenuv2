@@ -12,6 +12,21 @@
  *code 14599168
  */
 class MtpPay{
+	/**
+	 *
+	 * 产生随机字符串，不长于32位
+	 * @param int $length
+	 * @return 产生的随机字符串
+	 */
+	public static function getNonceStr($length = 32)
+	{
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		$str ="";
+		for ( $i = 0; $i < $length; $i++ )  {
+			$str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
+		}
+		return $str;
+	}
     public static function pay($data){
     	//     	/*该接口用于美团支付*/
     	//     	$channel = $data['channel'];
@@ -47,7 +62,7 @@ class MtpPay{
     	$body = $data['body'];
     	$expireMinutes = $data['expireMinutes'];
     	$dpid =$data['dpid'];
-    	$random = time();
+    	$random = self::getNonceStr();
 
     	$url = MtpConfig::MTP_DOMAIN.'/api/pay/micropay';
 
@@ -302,7 +317,7 @@ class MtpPay{
     	$returnUrl = $data['return_url'];
     	$openId = $data['openId'];
     	//      /*支付完成后的回调地址*/
-    	$random = time();
+    	$random = self::getNonceStr();
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
     	Helper::writeLog('return_url==='.$returnUrl);
     	
@@ -390,7 +405,7 @@ class MtpPay{
     	$appId = $data['appId'];
     	$key = $data['key'];
     	$outTradeNo = $data['outTradeNo'];
-    	$random = time();
+    	$random = self::getNonceStr();
 	
     	$url = MtpConfig::MTP_DOMAIN.'/api/close';
 
@@ -441,7 +456,7 @@ class MtpPay{
     	$appId = $data['appId'];
     	$key = $data['key'];
     	$outTradeNo = $data['outTradeNo'];
-    	$random = time();
+    	$random = self::getNonceStr();
     	
     	$url = MtpConfig::MTP_DOMAIN.'/api/pay/query';
     	
@@ -558,7 +573,7 @@ class MtpPay{
     	$refundFee = $data['refundFee'];
     	$refundNo = $data['refundNo'];
     	$refundReason = $data['refundReason'];
-    	$random = time();
+    	$random = self::getNonceStr();
 
     	$url = MtpConfig::MTP_DOMAIN.'/api/refund';
 
