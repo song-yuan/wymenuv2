@@ -70,6 +70,11 @@ class CopyproductbomController extends BackendController
         //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
         	foreach ($dpids as $dpid){
+        			if($ctp ==2){
+        				$sql = 'delete from nb_product_bom where source=1 and dpid ='.$dpid;
+        				$command=$db->createCommand($sql);
+        				$command->execute();
+        			}
         			foreach ($phscodes as $prodhscode){
         				$prods = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
         				$product =  ProductBom::model()->findAll('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
@@ -78,10 +83,6 @@ class CopyproductbomController extends BackendController
 	        					$sql = 'delete from nb_product_bom where phs_code ='.$prodhscode.' and dpid ='.$dpid;
 	        					$command=$db->createCommand($sql);
 								$command->execute();
-	        				}else{
-	        					$sql = 'delete from nb_product_bom where source=1 and dpid ='.$dpid;
-	        					$command=$db->createCommand($sql);
-	        					$command->execute();
 	        				}
 	        				foreach ($product as $prod){
 	        					$prodid = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
