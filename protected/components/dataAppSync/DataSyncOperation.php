@@ -273,6 +273,7 @@ class DataSyncOperation {
 		
 		$keyOrder = 'redis-third-platform-'.(int)$dpid;
 		$orderSize = Yii::app()->redis->lSize($keyOrder);
+		Helper::writeLog('getsyncDat');
 		if($orderSize > 0){
 			for ($i=0; $i<$orderSize; $i++){
 				$orderStr = Yii::app()->redis->rPop($keyOrder);
