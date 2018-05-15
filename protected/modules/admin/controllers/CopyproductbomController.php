@@ -72,10 +72,9 @@ class CopyproductbomController extends BackendController
         	foreach ($dpids as $dpid){
         			foreach ($phscodes as $prodhscode){
         				$prods = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
-        				$producto = ProductBom::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
         				$product =  ProductBom::model()->findAll('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
         				if(!empty($product)){
-	        				if((!empty($producto))&& ($ctp ==1)){
+	        				if($ctp ==1){
 	        					$sql = 'delete from nb_product_bom where phs_code ='.$prodhscode.' and dpid ='.$dpid;
 	        					$command=$db->createCommand($sql);
 								$command->execute();
