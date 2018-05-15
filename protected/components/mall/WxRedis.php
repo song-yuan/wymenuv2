@@ -56,12 +56,13 @@ class WxRedis
 						$rjcode = $contentArr[6];
 						$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
 					}
+					$resObj = json_decode($result);
+					if(!$resObj->status){
+						$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderDataArr['data']);
+						DataSyncOperation::setSyncFailure($data);
+					}
 				}else{
-					$result = json_encode(array('status'=>false));
-				}
-				$resObj = json_decode($result);
-				if(!$resObj->status){
-					$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderDataArr['data']);
+					$data = array('dpid'=>$dpid,'jobid'=>0,'pos_sync_lid'=>0,'sync_type'=>0,'sync_url'=>'','content'=>$orderData);
 					DataSyncOperation::setSyncFailure($data);
 				}
 				self::dealRedisData($dpid);
