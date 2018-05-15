@@ -126,6 +126,7 @@
 						<input type="hidden" id="phscode" name="phscode" value="" />
 						<input type="hidden" id="chscode" name="chscode" value="" />
 						<input type="hidden" id="dpids" name="dpids" value="" />
+						<input type="hidden" id="ctp" name="ctp" value="" />
 						</div>
 					</table>
 					</div>
@@ -243,6 +244,7 @@
 	            	$("#dpids").val(dpids);
 	            	$("#chscode").val(codec);
 	            	$("#phscode").val(codep);
+	            	$("#ctp").val(ctp);
 	    	        $("#copyproduct-form").submit();
 		            }else{
 						alert("请选择店铺。。。");return;
