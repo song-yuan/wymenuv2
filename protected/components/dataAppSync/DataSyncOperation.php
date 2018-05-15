@@ -276,6 +276,7 @@ class DataSyncOperation {
 		if($orderSize > 0){
 			for ($i=0; $i<$orderSize; $i++){
 				$orderStr = Yii::app()->redis->rPop($keyOrder);
+				Helper::writeLog('rpop'.$orderStr);
 				array_push($data ['order'], json_decode($orderStr,true));
 			}
 		}else{
