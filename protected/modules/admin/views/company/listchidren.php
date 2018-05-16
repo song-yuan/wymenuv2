@@ -111,6 +111,7 @@
 								<th><?php echo yii::t('app','支付');?></th>
 								<th><?php echo yii::t('app','地址');?></th>
 								<th><?php echo yii::t('app','创建时间');?></th>
+								<th><?php echo yii::t('app','支付设置');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -135,12 +136,19 @@
 								<td ><?php echo $model->telephone;?></td>
 								<td >
 								<?php if($model->property){
-										switch ($model->property->pay_type){
+									$channel = '';
+									if($model->property->pay_channel==2){
+										$channel = '收钱吧';
+									}elseif($model->property->pay_channel==3){
+										$channel = '美团';
+									}
+									switch ($model->property->pay_type){
 										case 0: echo '未开通';break;
 										case 1: echo '开通（总部）';break;
-										case 2: echo '开通（个人）';break;
+										case 2: echo '开通（个人:'.$channel.'）';break;
 										default: echo '未知';break;
-								} $paytype = $model->property->pay_type;
+									} 
+									$paytype = $model->property->pay_type;
 								}else{
 									$paytype = '0';
 								};?>
@@ -148,15 +156,24 @@
 								<?php $address = $model->province.$model->city.$model->county_area;?>
 								<td ><?php echo $address;?></td>
 								<td><?php echo $model->create_at;?></td>
+								<td>
+									<?php if($model->property&&Yii::app()->user->role<=5):?>
+                                        <?php if($model->property->pay_channel == '3'):?>
+                                         <a  class='btn ' style="margin-top: 5px;" id="setPayid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','已置成美团支付');?></a>
+                                        <?php else:?>
+                                        <a  class='btn green setPayid' style="margin-top: 5px;" id="setPayid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','置成美团支付');?></a>
+                                        <?php endif;?>
+                                    <?php endif;?>
+									<?php if(Yii::app()->user->role <= '4'):?>
+                                         <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','置成收钱吧支付');?></a>
+                                    <?php endif;?>
+								</td>
 								<td class="center">
 									<div class="actions">
                                         <?php if(Yii::app()->user->role <= User::SHOPKEEPER && Yii::app()->user->role !='4') : ?><!-- Yii::app()->params->master_slave=='m' -->
-                                            <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type,'pay_online'=>$paytype));?>"><?php echo yii::t('app','编辑');?></a>
+                                        <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type,'pay_online'=>$paytype));?>"><?php echo yii::t('app','编辑');?></a>
                                         <?php endif; ?>
-                                            <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
-										<?php if(Yii::app()->user->role <= '4'):?>
-                                            <a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>"><?php echo yii::t('app','online-pay');?></a>
-                                    	<?php endif;?>
+                                        <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/list' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
                                     </div>	
 								</td>
 							</tr>
