@@ -86,35 +86,40 @@
 								<th>店铺序号</th>
                                 <th><?php echo yii::t('app','店铺名称');?></th>
 								<th><?php echo yii::t('app','联系人');?></th>
-								<th><?php echo yii::t('app','店铺POS详情');?></th>
-								<th>&nbsp;</th>
+								<th><?php echo yii::t('app','序列号');?></th>
+								<th><?php echo yii::t('app','使用时间');?></th>
+								<th><?php echo yii::t('app','到期时间');?></th>
+								<th><?php echo yii::t('app','操作');?></th>
 							</tr>
 						</thead>
 						<tbody>
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
+							<?php foreach ($model->posfee as $pf):?>
 							<tr class="odd gradeX">
 								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
 								<td><?php echo $model->dpid;?></td>
                                 <td><?php echo $model->company_name;?></td>
 								<td ><?php echo $model->contact_name;?></td>
+								<td ><?php echo $pf->poscode;?></td>
+								<td ><?php echo $pf->used_at;?></td>
 								<td >
-								<?php if($model->posfee):?>
-								<?php foreach ($model->posfee as $pf):?>
-								<div class="actions">
-									<div class="col-md-5">
-										<span class="form-control col-md-4 "><?php echo $pf->poscode;?></span>
-									</div>
-								<a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>" poscode="<?php echo $pf->poscode;?>" expt="<?php echo $pf->exp_time;?>"><?php echo yii::t('app','延期设置');?></a>
-								<span>到期时间：<?php echo $pf->exp_time;?></span>
-								</div>
-								<?php endforeach;?>
-								<?php else:?>
-								<?php endif;?>
+									<?php 
+										if(strtotime($pf->exp_time)){
+											$leaveday = ceil((strtotime($pf->exp_time) - time())/(24*60*60));
+											if($leaveday > 30){
+												echo $pf->exp_time.'(剩余:<span>'.$leaveday.'</span>天)';
+											}else{
+												echo $pf->exp_time.'(剩余:<span class="text-danger">'.$leaveday.'</span>天)';
+											}
+										}else{
+											echo $pf->exp_time;
+										}
+									?>
 								</td>
-								<td class="center">
-								</td>
+								<td><a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>" poscode="<?php echo $pf->poscode;?>" expt="<?php echo $pf->exp_time;?>"><?php echo yii::t('app','延期设置');?></a></td>
 							</tr>
+							<?php endforeach;?>
 						<?php endforeach;?>
 						<?php endif;?>
 						</tbody>
