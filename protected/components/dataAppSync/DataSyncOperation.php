@@ -273,11 +273,9 @@ class DataSyncOperation {
 		
 		$keyOrder = 'redis-third-platform-'.(int)$dpid;
 		$orderSize = Yii::app()->redis->lSize($keyOrder);
-		Helper::writeLog('getsyncDat');
 		if($orderSize > 0){
 			for ($i=0; $i<$orderSize; $i++){
 				$orderStr = Yii::app()->redis->rPop($keyOrder);
-				Helper::writeLog('rpop'.$orderStr);
 				array_push($data ['order'], json_decode($orderStr,true));
 			}
 		}else{
@@ -307,7 +305,7 @@ class DataSyncOperation {
 					$orderType = $keyArr[1];
 					$accountNo = $keyArr[2];
 				}
-				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'"';
+				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'" and is_sync!=0';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
 		}
