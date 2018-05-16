@@ -85,7 +85,7 @@
 								<td ><?php echo $model->name;?></td>
 								<td ><?php echo $model->address ;?></td>
                                 <td ><?php if($model->language=='1') echo yii::t('app','中文'); else echo yii::t('app','日文'); ?></td>
-								<td ><?php if($model->printer_type=='0') echo yii::t('app','网络'); elseif($model->printer_type=='1') echo yii::t('app','本地');?></td>
+								<td ><?php if($model->printer_type=='0') echo yii::t('app','网络'); elseif($model->printer_type=='2') echo yii::t('app','标签');else echo yii::t('app','本地');;?></td>
 								<td ><?php if($model->width_type=='1') echo yii::t('app','58mm'); else echo yii::t('app','80mm');?></td>
 								<td><?php echo $model->brand;?></td>
                                 <td><?php echo $model->remark;?></td>
