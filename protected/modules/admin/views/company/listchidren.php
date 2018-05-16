@@ -336,6 +336,32 @@
 	            }
 	        });
 		});
+		$('.setPayid').on('click',function(){
+			var dpid = $(this).attr('dpid');
+			var url = "<?php echo $this->createUrl('company/paystore');?>/companyId/"+dpid;
+			//alert(dpid);
+			if(window.confirm("确认进行本操作？本过程不可逆！")){
+		        $.ajax({
+		            url:url,
+		            type:'GET',
+		            //data:orderid,//CF
+		            async:false,
+		            dataType: "json",
+		            success:function(msg){
+		                var data=msg;
+		                if(data.status){
+		                	layer.msg('成功！！！');
+		                	location.reload();
+		                }else{
+		                	layer.msg('失败！！！');
+		                }
+		            },
+		            error: function(msg){
+		                layer.msg('网络错误！！！');
+		            }
+		        });
+			}
+		});
 	});
 	
 </script>
