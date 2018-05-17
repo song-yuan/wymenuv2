@@ -107,8 +107,7 @@ class DataAppSyncController extends Controller
 	 public function actionSyncDataCb(){
 	 	$dpid = Yii::app()->request->getParam('dpid');
 	 	$data = Yii::app()->request->getParam('data');
-	 	$userName = Yii::app()->request->getParam('username','');
-	 	$result = DataSyncOperation::syncDataCb($dpid,$data,$userName);
+	 	$result = DataSyncOperation::syncDataCb($dpid,$data);
 	 	echo $result;exit;
 	 }
 	/**

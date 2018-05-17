@@ -293,22 +293,9 @@ class DataSyncOperation {
 	 * pos接收云端订单验证
 	 * 
 	 */
-	public static function syncDataCb($dpid,$data,$userName) {
-		$orderKey = json_decode($data);
-		if(!empty($orderKey)){
-			foreach ($orderKey as $key){
-				$keyArr = explode('-', $key);
-				if(is_numeric($keyArr[0])){
-					$orderType = $keyArr[0];
-					$accountNo = $keyArr[1];
-				}else{
-					$orderType = $keyArr[1];
-					$accountNo = $keyArr[2];
-				}
-				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'" and is_sync!=0';
-				Yii::app ()->db->createCommand ( $sql )->execute ();
-			}
-		}
+	public static function syncDataCb($dpid,$data) {
+		$key = 'co-order-platformcb-'.(int)$dpid;
+		Yii::app()->redis->set($key,$data);
 	}
 	/**
 	 * 
