@@ -110,6 +110,28 @@ class WxRiJie
 		return $poscodeStatus;
 	}
 	/**
+	 *
+	 * 处理接单回调数据
+	 * 记录 哪个收银员接的单
+	 *
+	 */
+	public static function dealSyncDataCb($dpid) {
+		$key = 'co-order-platformcb-'.(int)$dpid;
+		$data = Yii::app()->redis->get($key);
+		if(!empty($data)){
+			$orderKeys = json_decode($data);
+			foreach ($orderKeys as $orderKey){
+				$keyArr = explode('-', $orderKey);
+				$orderType = $keyArr[1];
+				$accountNo = $keyArr[2];
+				$userName = isset($keyArr[4])?$keyArr[4]:'';
+				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'" and is_sync!=0';
+				Yii::app ()->db->createCommand ( $sql )->execute ();
+			}
+		}
+	
+	}
+	/**
 	 * 
 	 * 跟据日结编码数据生成 日结统计数据
 	 * 
@@ -126,6 +148,8 @@ class WxRiJie
 				$begin_time = $rj['begin_time'];
 				$end_time = $rj['end_time'];
 				$rjcode = $rj['rijie_code'];
+				
+				self::dealSyncDataCb($dpid);
 				
 				$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$dpid.' and k.create_at >="'.$begin_time.'" and k.create_at <="'.$end_time.'" group by k.account_no,k.create_at,k.user_id';
 				$orders = $db->createCommand($sql)->queryColumn();
