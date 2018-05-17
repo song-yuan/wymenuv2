@@ -13,7 +13,6 @@ class WelcomeController extends BackendController
 
     public function actionList() {
     	//var_dump(Yii::app()->user);exit;
-    	var_dump('aaaaa');exit;
     	$type = Yii::app()->request->getParam('type');
     	$this->render('list',array(
     			'companyId' => $this->companyId,
