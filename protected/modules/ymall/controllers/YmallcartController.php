@@ -17,7 +17,7 @@ class YmallcartController extends BaseYmallController
 		$error = Yii::app()->request->getParam('error');
 
 		$db = Yii::app()->db;
-		$sql = 'select gc.*,g.description,g.goods_unit,g.store_number,g.main_picture,g.price as now_price,g.price as now_mbprice,c.company_name,mu.unit_name from nb_goods_carts gc '
+		$sql = 'select gc.*,g.description,g.goods_unit,g.store_number,g.main_picture,gc.price as now_price,gc.price as now_mbprice,c.company_name,mu.unit_name from nb_goods_carts gc '
 				.' left join nb_company c on(c.dpid=gc.stock_dpid) '
 				.' left join nb_goods g on (g.lid=gc.goods_id and g.goods_code=gc.goods_code )'
 				.' left join nb_goods_material gm on (g.lid=gm.goods_id and g.goods_code=gm.goods_code )'
@@ -208,7 +208,7 @@ class YmallcartController extends BaseYmallController
 		$goods_address_id = Yii::app()->request->getParam('goods_address_id',$goods_address_id);
 
 		$db = Yii::app()->db;
-		$sql = 'select gc.dpid,gc.stock_dpid,gc.goods_name,gc.goods_id,gc.goods_code,gc.material_code,gc.promotion_price,gc.price,g.price as new_price,gc.num,gc.end_time from nb_goods_carts gc left join nb_goods g on(g.lid=gc.goods_id and g.goods_code=gc.goods_code ) where gc.lid in('.$lids.') and gc.delete_flag=0';
+		$sql = 'select gc.dpid,gc.stock_dpid,gc.goods_name,gc.goods_id,gc.goods_code,gc.material_code,gc.promotion_price,gc.price,gc.price as new_price,gc.num,gc.end_time from nb_goods_carts gc left join nb_goods g on(g.lid=gc.goods_id and g.goods_code=gc.goods_code ) where gc.lid in('.$lids.') and gc.delete_flag=0';
 		$products = $db->createCommand($sql)->queryAll();
 		if (empty($products)) {
 			$this->redirect(array('ymallcart/index' , 'companyId' => $this->companyId,'error'=>1));
