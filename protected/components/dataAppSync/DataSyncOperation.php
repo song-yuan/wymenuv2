@@ -286,6 +286,7 @@ class DataSyncOperation {
 				self::callUserFunc('WxRedis::dealRedisData', $dpid);
 			}
 		}
+		Helper::writeLog('popPlatform-data:'.json_encode ( $data ));
 		return json_encode ( $data );
 	}
 	/**
