@@ -737,7 +737,7 @@ class Elm
 		// 收银机云端同步订单数据
 		$orderCloudArr = array();
 		$me = $order;
-		$orderId = $me->id;
+		$orderId = (string)$me->id;
 		$createdAt = $me->createdAt;
 		$price = $me->totalPrice;
 		$originalPrice = $me->originalPrice;
