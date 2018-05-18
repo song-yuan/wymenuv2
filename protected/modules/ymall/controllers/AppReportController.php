@@ -176,7 +176,7 @@ class AppReportController extends Controller
 	}
 	public function actionSdbb(){
 		$now = time();
-		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
+		$defaultData = date('Y-m-d',$now);
 		$companyId = $this->companyId;
 		$riq = array();
 		$date = Yii::app()->request->getParam('date',$defaultData);
