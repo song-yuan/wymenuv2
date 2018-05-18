@@ -120,19 +120,16 @@ class WxRiJie
 		$data = Yii::app()->redis->get($key);
 		if(!empty($data)){
 			$orderKeys = json_decode($data);
-			var_dump($orderKeys);
 			foreach ($orderKeys as $orderKey){
 				$keyArr = explode('-', $orderKey);
 				$orderType = $keyArr[1];
 				$accountNo = $keyArr[2];
 				$userName = isset($keyArr[4])?$keyArr[4]:'';
 				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'" and is_sync!=0';
-				var_dump($sql);
 				$res = Yii::app ()->db->createCommand ( $sql )->execute ();
-				var_dump($res);
 			}
 		}
-	
+		Yii::app()->redis->delete($key);
 	}
 	/**
 	 * 
