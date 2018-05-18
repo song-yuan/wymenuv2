@@ -16,7 +16,7 @@
 	}
 	.mui-btn {
 		font-size: 16px;
-		padding: 8px;
+		padding: 8px 0;
 		margin: 3px;
 	}
 	.ui-alert {
