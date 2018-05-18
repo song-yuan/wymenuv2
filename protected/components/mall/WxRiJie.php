@@ -128,8 +128,8 @@ class WxRiJie
 				$sql = 'update nb_order set is_sync=0,username="'.$userName.'" where dpid='.$dpid.' and order_type='.$orderType.' and account_no="'.$accountNo.'" and is_sync!=0';
 				$res = Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
+			Yii::app()->redis->delete($key);
 		}
-		Yii::app()->redis->delete($key);
 	}
 	/**
 	 * 
