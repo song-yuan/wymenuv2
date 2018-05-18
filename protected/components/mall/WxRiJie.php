@@ -118,8 +118,10 @@ class WxRiJie
 	public static function dealSyncDataCb($dpid) {
 		$key = 'co-order-platformcb-'.(int)$dpid;
 		$data = Yii::app()->redis->get($key);
+		var_dump($data);
 		if(!empty($data)){
 			$orderKeys = json_decode($data);
+			var_dump($orderKeys);
 			foreach ($orderKeys as $orderKey){
 				$keyArr = explode('-', $orderKey);
 				$orderType = $keyArr[1];
