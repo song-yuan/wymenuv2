@@ -96,6 +96,7 @@ class DataAppSyncController extends Controller
 	 */
 	 public function actionGetSyncData(){
 	    $dpid = Yii::app()->request->getParam('dpid');
+	    var_dump($dpid);exit;
 	    $result = DataSyncOperation::getSyncData($dpid);
 	 	echo $result;exit;
 	 }
