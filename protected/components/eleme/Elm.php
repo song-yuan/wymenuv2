@@ -881,7 +881,7 @@ class Elm
 		$orderStr = json_encode($orderArr);
 		$orderCloudStr = json_encode($orderCloudArr);
 		// type 同步类型  2订单
-		$orderData = array('dpid'=>$dpid,'type'=>2,'data'=>$orderStr);
+		$orderData = array('sync_lid'=>0,'dpid'=>$dpid,'type'=>2,'is_pos'=>0,'posLid'=>0,'data'=>$orderStr);
 		
 		// 放入redis中
 		$result = WxRedis::pushOrder($dpid, json_encode($orderData));
