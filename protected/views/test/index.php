@@ -1,5 +1,5 @@
 <?php
-$dpid = 42;
+$dpid = 28;
 WxRiJie::dealSyncDataCb($dpid);
 
 ?>
