@@ -244,19 +244,18 @@ class AppReportController extends Controller
 		// $this->render('list');
 	}
 	public function actionYclxh(){
+		$now = time();
+		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
 		$companyId = $this->companyId;
-		$date = Yii::app()->request->getParam('date');
+		$date = Yii::app()->request->getParam('date',$defaultData);
 		$type = $this->type();
 		if($type){
-    		$sql = "select material_name,stock_num,unit_name from (select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) GROUP BY material_id) l inner join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid inner join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
-		// echo $sql;exit;
-			$materials = Yii::app()->db->createCommand($sql)->queryAll();
+    		$sql = 'select t.material_id,sum(t.stock_num) as material_num,t1.material_name,t2.unit_name from nb_material_stock_log t left join nb_product_material t1 on t.material_id=t1.lid and t.dpid=t1.dpid left join nb_material_unit t2 on t1.sales_unit_id=t2.lid and t1.dpid=t2.dpid where t.create_at >= "'.$date['start'].' 00:00:00" and "'.$date['End'].' 23:59:59" >= t.create_at and t.type=1 and t.material_id in(select k.lid from nb_product_material k where k.delete_flag = 0 and k.dpid in(select admin_dpid as dpid from nb_brand_user_admin where brand_user_id='.$this->brandUser['lid'].' and delete_flag=0)) group by t.material_id';
+    		$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		}else{
-			$sql = "select material_name,stock_num,unit_name from ((select material_id,dpid,sum(stock_num) as stock_num from nb_material_stock_log where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." GROUP BY material_id) l left join (select lid,material_name,mushs_code from nb_product_material GROUP BY material_name) c on l.material_id=c.lid) left join (select unit_name,muhs_code from nb_material_unit) t on c.mushs_code=t.muhs_code group by material_name";
-		// echo $sql;exit;
+			$sql = 'select t.material_id,sum(t.stock_num) as stock_num,t1.material_name,t2.unit_name from nb_material_stock_log t left join nb_product_material t1 on t.material_id=t1.lid and t.dpid=t1.dpid left join nb_material_unit t2 on t1.sales_unit_id=t2.lid and t1.dpid=t2.dpid where t.dpid='.$companyId.' and t.create_at >= "'.$date['start'].' 00:00:00" and "'.$date['End'].' 23:59:59" >= t.create_at and t.type=1 and t.material_id in(select k.lid from nb_product_material k where k.delete_flag = 0 and k.dpid = '.$companyId.') group by t.material_id';
 			$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		}
-		// var_dump($materials);exit;
 		$this->render('yclxh',array(
 			'materials'=>$materials,
 			'date'=>$date,

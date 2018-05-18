@@ -30,7 +30,7 @@
 		</form>
 	</div>
 	<ul class="mui-table-view">
-	  	<li class="mui-table-view-cell">原料名称<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;">原料名称</span></li>
+	  	<li class="mui-table-view-cell">原料名称<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;">数量</span></li>
 	  	<div class="dp1">
 	  	<?php foreach($materials as $material):?>
 	  		<li class="mui-table-view-cell"><?php echo $material['material_name'];?><span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php echo $material['stock_num'];?>(<?php echo $material['unit_name'];?>)</span></li>
