@@ -264,8 +264,10 @@ class AppReportController extends Controller
 		// $this->render('list');
 	}
 	public function actionTcxs(){
+		$now = time();
+		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
 		$companyId = $this->companyId;
-		$date = Yii::app()->request->getParam('date');
+		$date = Yii::app()->request->getParam('date',$defaultData);
 		// var_dump($date);exit;
 		$orders =array();
 		$type = $this->type();
@@ -291,41 +293,35 @@ class AppReportController extends Controller
 			));
 	}
 	public function actionZffs(){
+		$now = time();
+		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
 		$companyId = $this->companyId;
 		$orders = array();
 		$zfs = array();
 		$refunds =array();
-		$date = Yii::app()->request->getParam('date');
+		$date = Yii::app()->request->getParam('date',$defaultData);
 		$type = $this->type();
 		if(!empty($type)){
     		if($date){
 				$ordersql = "select count(*) as count,sum(reality_total) as reality_total from nb_order where order_status in (3,4,8) and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59'";
-				// echo $ordersql;exit;
 				$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
-				// var_dump($orders);exit;
-				$zfsql = "select y.paytype,sum(y.pay_amount) as pay_amount from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59') o where y.dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and y.account_no=o.account_no and y.paytype !=11 and y.create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59' group by y.paytype";
-				// echo $zfsql;exit();
+				
+				$zfsql = "select y.paytype,sum(y.pay_amount) as pay_amount,count(y.paytype) as pay_count from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59') o where y.dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and y.account_no=o.account_no and y.paytype !=11 and y.create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59' group by y.paytype";
 				$zfs = Yii::app()->db->createCommand($zfsql)->queryAll();
-				// var_dump($zfs);exit;
-				$refundsql = "select sum(pay_amount) as pay_amount from nb_order_pay where dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and pay_amount<0 and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59'";
-				$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
-				// echo $zffssql;exit;
-				// var_dump($zfs);exit();
+				
+				$refundsql = "select sum(pay_amount) as pay_amount,count(lid) as pay_count from nb_order_pay where dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and pay_amount<0 and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59'";
+				$refunds = Yii::app()->db->createCommand($refundsql)->queryRow();
 			}
     	}else{
     		if($date){
 				$ordersql = "select count(*) as count,sum(reality_total) as reality_total from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59'";
-				// echo $ordersql;exit;
 				$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
-				// var_dump($orders);exit;
-				$zfsql = "select y.paytype,sum(y.pay_amount) as pay_amount from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59') o where y.dpid=".$companyId." and y.account_no=o.account_no and y.paytype !=11 and y.create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59' group by y.paytype";
-				// echo $zfsql;exit();
+				
+				$zfsql = "select y.paytype,sum(y.pay_amount) as pay_amount,count(y.paytype) as pay_count from nb_order_pay y,(select * from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59') o where y.dpid=".$companyId." and y.account_no=o.account_no and y.paytype !=11 and y.create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59' group by y.paytype";
 				$zfs = Yii::app()->db->createCommand($zfsql)->queryAll();
-				// var_dump($zfs);exit;
-				$refundsql = "select sum(pay_amount) as pay_amount from nb_order_pay where dpid=".$companyId." and pay_amount<0 and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59'";
-				$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
-				// echo $zffssql;exit;
-				// var_dump($zfs);exit();
+				
+				$refundsql = "select sum(pay_amount) as pay_amount,count(lid) as pay_count from nb_order_pay where dpid=".$companyId." and pay_amount<0 and create_at BETWEEN '".$date['start']." 00:00:00' AND '".$date['End']." 23:59:59'";
+				$refunds = Yii::app()->db->createCommand($refundsql)->queryRow();
 			}
     	}
 		$this->render('zffs',array(

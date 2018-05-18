@@ -44,9 +44,7 @@
 				?></span></li>
 		<li class="mui-table-view-cell">优惠<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php 
 				if(!empty($refunds)){
-					foreach ($refunds as $refund) {
-					$pay_amount = $refund['pay_amount'];
-					}
+					$pay_amount = $refunds['pay_amount'];
 				}else{
 					$pay_amount = 0;
 				}
@@ -68,7 +66,7 @@
 				if(in_array("0",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==0){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -79,7 +77,7 @@
 				if(in_array("1",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==1){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -89,7 +87,7 @@
 		<li class="mui-table-view-cell">微信点单<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("12",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==12){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -99,7 +97,7 @@
 		if(in_array("13",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==13){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -109,7 +107,7 @@
 		if(in_array("14",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==14){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -118,7 +116,7 @@
 		<li class="mui-table-view-cell">饿了么外卖<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("15",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==15){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -127,7 +125,7 @@
 		<li class="mui-table-view-cell">支付宝<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("2",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==2){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -136,7 +134,7 @@
 		<li class="mui-table-view-cell">银联<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("5",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==5){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -145,7 +143,7 @@
 		<li class="mui-table-view-cell">会员卡<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("4",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==4){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -154,7 +152,7 @@
 		<li class="mui-table-view-cell">后台支付<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("3",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==3){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -163,7 +161,7 @@
 		<li class="mui-table-view-cell">系统劵<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("9",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==9){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -172,7 +170,7 @@
 		<li class="mui-table-view-cell">积分<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("8",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==8){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
@@ -181,7 +179,7 @@
 		<li class="mui-table-view-cell">微信储值<span class="mui-badge mui-badge-inverted" style="font-size: 18px;color: #000;"><?php if(in_array("10",$zfarray)){
 					foreach ($zfs as $zf) {
 						if($zf['paytype']==10){
-							echo $zf['pay_amount'];
+							echo $zf['pay_amount'].'('.$zf['pay_count'].')';
 						}
 					}
 				}else{
