@@ -46,7 +46,6 @@ class AppReportController extends Controller
 		$type = Yii::app()->request->getParam('type',0);
 		$fensql = "select lid,group_name from nb_area_group where lid=".$type." and type=3 and delete_flag=0";
 		$fens = Yii::app()->db->createCommand($fensql)->queryRow();
-		// var_dump($fens);exit;
 		return $fens;	
 	}
 	public function actionIndex(){
@@ -55,7 +54,6 @@ class AppReportController extends Controller
 		if(empty($type)){
 			if($this->brandUser['dpid']==$companyId){
 			$fensql = "select lid,group_name,area_group_id,y.dpid,company_name,logo,address from (select dpid,admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) a inner join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.dpid=g.dpid inner join (select area_group_id,dpid,company_id from nb_area_group_company where delete_flag=0) c on c.area_group_id=g.lid and a.admin_dpid=c.company_id inner join (select dpid,company_name,logo,address from nb_company where type=1 and delete_flag=0) y on a.admin_dpid=y.dpid group by lid,group_name,y.dpid";
-				// echo $fensql;exit;
 				$fens = Yii::app()->db->createCommand($fensql)->queryAll();
 				if(count($fens)>1){
 					//重新组成的数组
@@ -68,7 +66,6 @@ class AppReportController extends Controller
 							array_push($array[$value['group_name']], $value);
 
 						}
-						// var_dump($array);exit();
 						if(!empty($fens)){
 								$this->render('adminlist',array(
 									'array'=>$array,
@@ -86,44 +83,31 @@ class AppReportController extends Controller
 		}
 		 if(!empty($type)){
 		 	$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)) o inner join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where to_days(create_at) = to_days(now()) and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and paytype!=11) y on o.dpid=y.dpid";
-		 	// echo $ordersql;exit;
 		 	$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
 		 	$Membersql = "select distinct count(paytype_id) as paytype_id from nb_order_pay where to_days(create_at) = to_days(now()) and paytype=4 and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)";
 		 	$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
-		 	// var_dump($Members);exit;
 		 	$cardsql = "select count(rfid) as rfid from nb_member_card where to_days(create_at) = to_days(now()) and dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)";
 		 	$cards = Yii::app()->db->createCommand($cardsql)->queryAll();
-		 	// var_dump($cards);exit;
 		 	$Rechargesql = "select sum(reality_money) as reality_money,count(*) as count from nb_member_recharge where to_days(create_at) = to_days(now()) and dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)";
 		 	$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
-		 	// var_dump($Recharge);exit();
 		 	$monthsql = "select counts,number,reality_total,pay_amount from (select lid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and order_status in (3,4,8) and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)) o left join (select order_id,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and paytype!=11) y on o.lid=y.order_id";
 		 	$months = Yii::app()->db->createCommand($monthsql)->queryAll();
-		 	// var_dump($months);exit;
 		 	$refundsql = "select sum(pay_amount) as pay_amount from nb_order_pay where dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and pay_amount<0 and DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )";
 		 	$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 		 }else{
-		 	// var_dump($dps);exit;
 		 	$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where to_days(create_at) = to_days(now()) and order_status in (3,4,8) and dpid=".$companyId.") o inner join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where to_days(create_at) = to_days(now()) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
-		 	// echo $ordersql;exit;
 		 	$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
 		 	$monthsql = "select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total from nb_order where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and order_status in (3,4,8) and dpid=".$companyId.") o left join (select dpid,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and dpid=".$companyId." and paytype!=11) y on o.dpid=y.dpid";
 		 	$months = Yii::app()->db->createCommand($monthsql)->queryAll();
-		 	// var_dump($orders);exit;
 		 	$Membersql = "select distinct count(paytype_id) as paytype_id from nb_order_pay where to_days(create_at) = to_days(now()) and paytype=4 and dpid=".$companyId;
 		 	$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
-		 	// var_dump($todayProfit);exit;
 		 	$cardsql = "select count(rfid) as rfid from nb_member_card where to_days(create_at) = to_days(now()) and dpid=".$companyId;
 		 	$cards = Yii::app()->db->createCommand($cardsql)->queryAll();
-		 	// var_dump($Paymentmethod);exit;
 		 	$Rechargesql = "select sum(reality_money) as reality_money,count(*) as count from nb_member_recharge where to_days(create_at) = to_days(now()) and dpid=".$companyId;
 		 	$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
-		 	// var_dump($Recharge);exit();
-		 	// var_dump($months);exit;
 		 	$refundsql = "select sum(pay_amount) as pay_amount from nb_order_pay where dpid=".$companyId." and pay_amount<0 and DATE_FORMAT( create_at, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )";
 		 	$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 		 }
-		 // var_dump($Paymentmethod);exit;
 		 $this->render('index',array(
 		 		'orders'=>$orders,
 		 		'months'=>$months,
@@ -135,9 +119,11 @@ class AppReportController extends Controller
 		 ));
 	}
 	public function actionYysj(){
+		$now = time();
+		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
 		$companyId = $this->companyId;
 		$type = $this->type();
-		$date = Yii::app()->request->getParam('date');
+		$date = Yii::app()->request->getParam('date',$defaultData);
 		$todayProfit = array();
 		$Recharges = array();
 		$records = array();
@@ -146,42 +132,38 @@ class AppReportController extends Controller
 		if(!empty($type)){
 	    		if(!empty($date)){
 				$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and order_status in (3,4,8)";
-				// echo $Profitsql;exit;
 				$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
-				// var_dump($todayProfit);exit;
+				
 				$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select lid from nb_order where order_status in (3,4,8) and dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59') o where y.dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and y.order_id=o.lid and y.paytype !=11 and y.create_at >='".$date['start']." 00:00:00' and y.create_at <= '".$date['End']." 23:59:59' group by y.paytype";
-				// echo $Paymentsql;exit();
 				$Paymentmethod = Yii::app()->db->createCommand($Paymentsql)->queryAll();
-				// var_dump($Paymentmethod);exit();
+				
 				$Rechargesql = "select sum(reality_money) as reality_money,sum(give_money) as give_money from nb_member_recharge where update_at >='".$date['start']." 00:00:00' and update_at <= '".$date['End']." 23:59:59' and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)";
 				$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
-				// var_dump($Recharges);exit;
+				
 				$recordsql = "select sum(recharge_money) as recharge_money,sum(cashback_num) as cashback_num from nb_recharge_record where update_at >='".$date['start']." 00:00:00' and update_at <= '".$date['End']." 23:59:59' and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)";
 				$records = Yii::app()->db->createCommand($recordsql)->queryAll();
-				// var_dump($records);exit;
+				
 				$refundsql = "select sum(pay_amount) as pay_amount,count(*) as count from nb_order_pay where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and pay_amount<0 and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0)";
-				// echo $refundsql;exit;
 				$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 			}
     	}else{
 	    		if(!empty($date)){
 				$Profitsql = "select count(*) as counts,sum(reality_total) as reality_total,sum(number) as number from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)";
 				$todayProfit = Yii::app()->db->createCommand($Profitsql)->queryAll();
-				// var_dump($todayProfit);exit;
+				
 				$Paymentsql = "select y.paytype,count(y.paytype) as counts,sum(y.pay_amount) as pay_amount,y.payment_method_id from nb_order_pay y,(select lid from nb_order where order_status in (3,4,8) and dpid=".$companyId." and create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59') o where y.dpid=".$companyId." and y.order_id=o.lid and y.paytype !=11 and y.create_at >='".$date['start']." 00:00:00' and y.create_at <= '".$date['End']." 23:59:59' group by y.paytype";
-				// echo $Paymentsql;exit();
 				$Paymentmethod = Yii::app()->db->createCommand($Paymentsql)->queryAll();
-				// var_dump($Paymentmethod);exit();
+				
 				$Rechargesql = "select sum(reality_money) as reality_money,sum(give_money) as give_money from nb_member_recharge where update_at >='".$date['start']." 00:00:00' and update_at <= '".$date['End']." 23:59:59' and dpid=".$companyId;
 				$Recharges = Yii::app()->db->createCommand($Rechargesql)->queryAll();
+				
 				$recordsql = "select sum(recharge_money) as recharge_money,sum(cashback_num) as cashback_num from nb_recharge_record where update_at >='".$date['start']." 00:00:00' and update_at <= '".$date['End']." 23:59:59' and dpid=".$companyId;
 				$records = Yii::app()->db->createCommand($recordsql)->queryAll();
-				// var_dump($Takeouts);exit;
+				
 				$refundsql = "select sum(pay_amount) as pay_amount,count(*) as count from nb_order_pay where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and pay_amount<0 and dpid=".$companyId;
 				$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 			}
     	}
-		// var_dump($Takeouts);exit();
 		$this->render('yysj',array(
 			'todayProfit'=>$todayProfit,
 			'Recharges'=>$Recharges,
@@ -193,24 +175,21 @@ class AppReportController extends Controller
 			));
 	}
 	public function actionSdbb(){
+		$now = time();
+		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
 		$companyId = $this->companyId;
 		$riq = array();
-		// var_dump($date);exit();
-		$date = Yii::app()->request->getParam('date');
+		$date = Yii::app()->request->getParam('date',$defaultData);
 		$type = $this->type();
 		if(!empty($type)){
 	    		if(!empty($date)){
 				$riqsql = "select hour(create_at) as hour, count(1) as count,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT(create_at,'%Y-%m-%d') = '".$date."' and dpid in(select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) group by hour(create_at)";
-				// echo $riqsql;exit();
 				$riq = Yii::app()->db->createCommand($riqsql)->queryAll();
-				// var_dump($riq);exit();
 			}
 		}else{
 			if(!empty($date)){
 				$riqsql = "select hour(create_at) as hour, count(1) as count,sum(pay_amount) as pay_amount from nb_order_pay where DATE_FORMAT(create_at,'%Y-%m-%d') = '".$date."' and paytype!=11 and dpid=".$companyId." group by hour(create_at)";
-				// echo $riqsql;exit();
 				$riq = Yii::app()->db->createCommand($riqsql)->queryAll();
-			// var_dump($riq);exit();
 			}
 		}
 		$this->render('sdbb',array(
@@ -218,24 +197,21 @@ class AppReportController extends Controller
 			'date'=>$date,
 			'type'=>$type
 			));
-		// $this->render('list');
 	}
 	public function actionDpxs(){
+		$now = time();
+		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
 		$companyId = $this->companyId;
-		$date = Yii::app()->request->getParam('date');
-		// var_dump($date);exit();
+		$date = Yii::app()->request->getParam('date',$defaultData);
 		$type = $this->type();
 		if($type){
     		$productsql = "select product_name,amount,original_price,price from (select order_id,`product_name`,sum(amount) AS amount,sum(original_price*amount) AS original_price,sum(`price`*amount) as price from nb_order_product where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) GROUP BY product_name order by amount desc) p left join (select lid,dpid from nb_order where create_at >='2017-10-01 00:00:00' and create_at <= '2017-10-30 23:59:59' and dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) and order_status in (3,4,8)) o on o.lid=p.order_id" ;
-    		// echo $productsql;exit;
 			$products = Yii::app()->db->createCommand($productsql)->queryAll();
 		}else{
 			$productsql = "select product_name,amount,original_price,price from (select order_id, `product_name`,sum(amount) as amount,sum(original_price*amount) AS original_price,sum(`price`*amount) as price from nb_order_product where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." GROUP BY product_name order by amount desc) p left join (select lid,dpid from nb_order where create_at >='".$date['start']." 00:00:00' and create_at <= '".$date['End']." 23:59:59' and dpid=".$companyId." and order_status in (3,4,8)) o on o.lid=p.order_id" ;
-			// echo $productsql;exit;
 			$products = Yii::app()->db->createCommand($productsql)->queryAll();
 
 		}
-		// var_dump($products);exit;
 		$this->render('dpxs',array(
 			'products'=>$products,
 			'date'=>$date,
