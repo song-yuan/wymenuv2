@@ -17,7 +17,7 @@
 	.mui-btn {
 		font-size: 16px;
 		padding: 8px 0;
-		margin: 3px;
+		margin: 3px 0;
 	}
 	.ui-alert {
 		text-align: center;
