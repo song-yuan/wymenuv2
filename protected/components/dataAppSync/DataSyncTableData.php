@@ -33,7 +33,9 @@ class DataSyncTableData
     		$end = date('Y-m-d H:i:s',strtotime($this->end)+24*60*60);
     		$sql .= ' and create_at <= "'.$end.'"';
     	}
-    	$sql .= ' and delete_flag = 0';
+    	if(!in_array($this->tableName, array('nb_order','nb_order_product','nb_order_pay','nb_order_taste','nb_order_retreat'))){
+            $sql .= ' and delete_flag = 0';
+        }
     	$dataCount = Yii::app()->db->createCommand($sql)->queryRow();
     	
     	$sql = str_replace('count(*)', '*', $sql);
