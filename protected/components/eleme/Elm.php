@@ -291,7 +291,7 @@ class Elm
 		$me = json_decode($message);
 		$orderId = $me->id;
 		$expire = 30*60; // 过期时间
-		Yii::app()->redis->set($orderId,$message,$expire);
+		Yii::app()->redis->setex($orderId,$expire,$message);
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
 			$order = self::confirmOrder($dpid,$orderId);

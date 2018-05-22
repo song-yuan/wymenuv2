@@ -96,7 +96,7 @@ class MallController extends Controller
         }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-        	Yii::app()->redis->set($key,json_encode($products),$expire);
+        	Yii::app()->redis->setex($key,$expire,json_encode($products));
         }
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
