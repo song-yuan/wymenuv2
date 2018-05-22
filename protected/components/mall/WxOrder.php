@@ -1158,7 +1158,9 @@ class WxOrder
 	 	}
 	 	$orderAddressArr = array();
 	 	$orderPays = WxOrderPay::get($dpid, $orderId);
-	 	$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 	if(in_array($order['order_type'],array(2,3))){
+	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 	}
 	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
 	 	$orderArr['nb_order_product'] = $orderProducts;
 	 	$orderArr['nb_order_pay'] = $orderPays;
