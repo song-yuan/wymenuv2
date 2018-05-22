@@ -125,7 +125,6 @@ class CopyproductbomController extends BackendController
         				}else{
         					$sql = 'select * from nb_product where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
         					$prods = $db->createCommand($sql)->queryRow();
-        					var_dump($prods);exit;
         					$msgnull = $msgnull +$prods['product_name']+';';
         				}
         					
