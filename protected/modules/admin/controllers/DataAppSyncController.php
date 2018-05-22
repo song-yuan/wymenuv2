@@ -95,10 +95,15 @@ class DataAppSyncController extends Controller
 	 * 
 	 */
 	 public function actionGetSyncData(){
-	 	$get = $_GET;
-	 	Helper::writeLog(json_encode($get));
+	 	$ptype = 0;// 收款机 从模式 不接单 0 主pos 1 从pos
 	    $dpid = Yii::app()->request->getParam('dpid');
-	    $ptype = Yii::app()->request->getParam('ptype','0'); // 收款机 从模式 不接单
+	    $dpidArr = explode('-', $dpid);
+	    if(count($dpidArr)>1){
+	    	$dpid = $dpidArr[0];
+	    	$ptype = $dpidArr[1];
+	    }else{
+	    	$dpid = $dpidArr[0];
+	    }
 	    $result = DataSyncOperation::getSyncData($dpid,$ptype);
 	 	echo $result;exit;
 	 }
