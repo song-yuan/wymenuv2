@@ -76,7 +76,7 @@ class CopyproductbomController extends BackendController
         				$command->execute();
         			}
         			foreach ($phscodes as $prodhscode){
-        				$sql = 'select * nb_product_bom where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
+        				$sql = 'select * from nb_product_bom where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
         				$product = $db->createCommand($sql)->queryAll();
         				if(!empty($product)){
 	        				if($ctp ==1){
@@ -85,10 +85,10 @@ class CopyproductbomController extends BackendController
 								$command->execute();
 	        				}
 	        				foreach ($product as $prod){
-	        					$sql = 'select * nb_product where phs_code="'.$prodhscode.'" and dpid='.$dpid.' and delete_flag=0';
+	        					$sql = 'select * from nb_product where phs_code="'.$prodhscode.'" and dpid='.$dpid.' and delete_flag=0';
 	        					$prodid = $db->createCommand($sql)->queryRow();
 	        					
-	        					$sql = 'select * nb_product_material where mphs_code="'.$prod['mphs_code'].'" and mushs_code ="'.$prod['mushs_code'].'" and dpid='.$dpid.' and delete_flag=0';
+	        					$sql = 'select * from nb_product_material where mphs_code="'.$prod['mphs_code'].'" and mushs_code ="'.$prod['mushs_code'].'" and dpid='.$dpid.' and delete_flag=0';
 	        					$prodid = $db->createCommand($sql)->queryRow();
 	        					if(!empty($prodid)&&!empty($mateid)){
 		        					$se = new Sequence("product_bom");
@@ -123,7 +123,7 @@ class CopyproductbomController extends BackendController
         				
         					}
         				}else{
-        					$sql = 'select * nb_product where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
+        					$sql = 'select * from nb_product where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
         					$prods = $db->createCommand($sql)->queryRow();
         					$msgnull = $msgnull +$prods['product_name']+';';
         				}
