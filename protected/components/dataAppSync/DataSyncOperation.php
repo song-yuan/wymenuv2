@@ -266,11 +266,13 @@ class DataSyncOperation {
 	 * 
 	 * 
 	 */
-	public static function getSyncData($dpid) {
+	public static function getSyncData($dpid,$ptype) {
 		$data = array ();
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
-		
+		if($ptype){
+			return json_encode ( $data );
+		}
 		$keyOrder = 'redis-third-platform-'.(int)$dpid;
 		$orderSize = Yii::app()->redis->lSize($keyOrder);
 		if($orderSize > 0){
