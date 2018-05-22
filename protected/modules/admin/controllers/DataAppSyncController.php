@@ -95,8 +95,10 @@ class DataAppSyncController extends Controller
 	 * 
 	 */
 	 public function actionGetSyncData(){
+	 	$get = $_GET;
+	 	Helper::writeLog(json_encode($get));
 	    $dpid = Yii::app()->request->getParam('dpid');
-	    $ptype = Yii::app()->request->getParam('ptype',0); // 收款机 从模式 不接单
+	    $ptype = Yii::app()->request->getParam('ptype','0'); // 收款机 从模式 不接单
 	    $result = DataSyncOperation::getSyncData($dpid,$ptype);
 	 	echo $result;exit;
 	 }
