@@ -117,7 +117,7 @@ class Helper
 	static public function getCardLevels() { // 传统卡等级名称
 		$db = Yii::app()->db;
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$sql = 'select CONVERT(t.lid,SIGNED) as lids,t.lid,t.level_name from nb_brand_user_level t where t.level_type = 0 and t.delete_flag =0 and t.dpid='.$companyId;
+		$sql = 'select lid as lids,lid,level_name from nb_brand_user_level  where level_type = 0 and delete_flag =0 and dpid='.$companyId;
 		$cardlevels = Yii::app()->db->createCommand($sql)->queryAll();
 		//var_dump($cardlevels);exit;
 		//$cardlevels = BrandUserLevel::model()->findAll('level_type=0 and delete_flag=0 and dpid='.$companyId) ;

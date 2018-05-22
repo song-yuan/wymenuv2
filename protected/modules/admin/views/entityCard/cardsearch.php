@@ -168,7 +168,7 @@ li{
             <form action="" method="post" >     
                     <div class="row find">
                             <div class="col-xs-12 col-sm-5 form-group find_item1">                                    
-                                <input type="text" name="num" class="form-control"  placeholder="" >
+                                <input type="text" name="num" class="form-control"  placeholder="请刷卡或输入卡号或输入手机号" >
                             </div>     
                             <div class="col-xs-12 col-sm-2 find_item2">
                                 <input type="submit"   class=' btn  btn-primary  ' value="查 询"/>           
