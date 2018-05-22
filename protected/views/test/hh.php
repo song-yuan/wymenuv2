@@ -1,7 +1,10 @@
 <?php 
 $dpid = 42;
-$type = 2;// 1 美团  2 饿了么
-$data = '{"requestId":"200014896206530847","type":10,"appId":84719338,"message":"{\"id\":\"3023315330813370439\",\"orderId\":\"3023315330813370439\",\"address\":\"静安区珠江创意中心(彭江路南)2号楼a101\",\"createdAt\":\"2018-05-16T12:59:59\",\"activeAt\":\"2018-05-16T12:59:59\",\"deliverFee\":8.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1398894994,\"skuId\":200000203668448543,\"name\":\"快乐C餐\",\"categoryId\":1,\"price\":60.0,\"quantity\":1,\"total\":60.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"042674038320\",\"barCode\":\"042674038320\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0,\"vfoodId\":1373286253}]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":null,\"phoneList\":[\"15921567345\"],\"shopId\":161856062,\"shopName\":\"快乐星汉堡(西乡路店)\",\"daySn\":5,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":30391781,\"totalPrice\":37.9,\"originalPrice\":68.0,\"consignee\":\"陈(先生)\",\"deliveryGeo\":\"121.44970587,31.28465001\",\"deliveryPoiAddress\":\"静安区珠江创意中心(彭江路南)2号楼a101\",\"invoiced\":false,\"income\":25.42,\"serviceRate\":0.15,\"serviceFee\":-4.48,\"hongbao\":0.0,\"packageFee\":0.0,\"activityTotal\":-30.1,\"shopPart\":-30.1,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000042\",\"secretPhoneExpireTime\":null,\"orderActivities\":[{\"categoryId\":200,\"name\":\"限量抢购29.9午餐晚餐\",\"amount\":-30.1,\"elemePart\":0.0,\"restaurantPart\":-30.1,\"familyPart\":0.0,\"id\":384888585,\"orderAllPartiesPartList\":[{\"partName\":\"商家补贴\",\"partAmount\":\"30.1\"}]}],\"invoiceType\":null,\"taxpayerId\":\"\",\"coldBoxFee\":0.0,\"cancelOrderDescription\":null,\"cancelOrderCreatedAt\":null,\"orderCommissions\":[]}","shopId":161856062,"timestamp":1526446800079,"signature":"B6C5D09B7A1FA14975ABBFFEA2621BD1","userId":363866787356715916}';
+$type = 2;// 1 美团  2 饿了么 3 微信
+$accountNo = '';
+$data = '';
+
+
 if($type==1){
 	$resArr = MtUnit::dealData($data);
 	$dpid = $resArr['ePoiId'];
@@ -141,7 +144,7 @@ if($type==1){
 	$orderCloudStr = json_encode($orderCloudArr);
 	// type 同步类型  2订单
 	$orderData = array('dpid'=>$dpid,'type'=>2,'data'=>$orderStr);
-}else{
+}elseif($type==2){
 	$orderStatus = 4;
 	$data = urldecode($data);
 	$obj = json_decode($data);
@@ -299,6 +302,57 @@ if($type==1){
 	$orderCloudStr = json_encode($orderCloudArr);
 	// type 同步类型  2订单
 	$orderData = array('dpid'=>$dpid,'type'=>2,'data'=>$orderStr);
+}elseif ($type==3){
+	$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'"';
+	$result = Yii::app()->db->createCommand($sql)->queryRow();;
+	$order = array ();
+	$order ['nb_order'] = $result;
+	$order ['nb_site_no'] = array();
+	if($result['order_type']=='1'){
+		// 桌台模式
+		$sql = 'select t.*,t1.serial from nb_site_no t,nb_site t1 where t.site_id=t1.lid and t.dpid=t1.dpid and t.lid=' . $result ['site_id'] . ' and t.dpid='.$dpid;
+		$siteNo = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		$order ['nb_site_no'] = $siteNo;
+	}
+	$sql = 'select * from nb_order_platform where order_id=' . $result ['lid'] . ' and dpid='.$dpid;
+	$orderPlatform = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+	$order ['nb_order_platform'] = $orderPlatform;
+	$sql = 'select *,"" as set_name,sum(price*amount/zhiamount) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id > 0 and delete_flag=0 group by set_id ,main_id'.
+			' union select *,"" as set_name,"0.00" as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id = 0 and delete_flag=0';
+	$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+	foreach ( $orderProduct as $k => $product ) {
+		$sql = 'select create_at,taste_id,order_id,is_order,taste_name from nb_order_taste where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and is_order=0 and delete_flag=0';
+		$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+		$orderProduct [$k] ['product_taste'] = $orderProductTaste;
+		$sql = 'select promotion_title,promotion_type,promotion_id,promotion_money,can_cupon from nb_order_product_promotion where order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and delete_flag=0';
+		$orderProductPromotion = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+		$orderProduct [$k] ['product_promotion'] = $orderProductPromotion;
+		if($product['set_id'] > 0){
+			$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'];
+			$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+			if(!empty($productSet)){
+				$orderProduct[$k]['amount'] = $product['zhiamount'];
+				$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
+				$orderProduct[$k]['set_price'] = $product['set_price'];
+				$orderProduct[$k]['set_detail'] = $productSet;
+			}
+		}
+		$orderProduct[$k]['product_name'] = $product['product_name'];
+	}
+	$order ['nb_order_product'] = $orderProduct;
+	$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
+	$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+	$order ['nb_order_pay'] = $orderPay;
+	$sql = 'select create_at,taste_id,order_id,is_order,taste_name from nb_order_taste where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and is_order=1 and delete_flag=0';
+	$orderTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+	$order ['nb_order_taste'] = $orderTaste;
+	$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
+	$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+	$order ['nb_order_address'] = $orderAddress;
+	$sql = 'select * from nb_order_account_discount where dpid='.$dpid.' and order_id='.$result ['lid'].' and delete_flag=0';
+	$orderDiscount = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+	$order ['nb_order_account_discount'] = $orderDiscount;
+	$orderCloudStr = json_encode($order);
 }
 $result = WxRedis::pushPlatform($dpid, $orderCloudStr);		
 var_dump($result);
