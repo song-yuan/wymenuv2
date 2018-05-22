@@ -270,6 +270,7 @@ class DataSyncOperation {
 		$data = array ();
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
+		Helper::writeLog('getSyncData:'.$dpid.'-'.$ptype);
 		if($ptype){
 			return json_encode ( $data );
 		}
