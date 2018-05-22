@@ -89,7 +89,7 @@ class CopyproductbomController extends BackendController
 	        					$prodid = $db->createCommand($sql)->queryRow();
 	        					
 	        					$sql = 'select * from nb_product_material where mphs_code="'.$prod['mphs_code'].'" and mushs_code ="'.$prod['mushs_code'].'" and dpid='.$dpid.' and delete_flag=0';
-	        					$prodid = $db->createCommand($sql)->queryRow();
+	        					$mateid = $db->createCommand($sql)->queryRow();
 	        					if(!empty($prodid)&&!empty($mateid)){
 		        					$se = new Sequence("product_bom");
 		        					$id = $se->nextval();
@@ -113,10 +113,10 @@ class CopyproductbomController extends BackendController
 		        					$command = $db->createCommand()->insert('nb_product_bom',$dataprodbom);
 		        				
         						}else{
-        							if(empty($prodid)){
+        							if(!empty($prodid)){
         								$msgprod = $msgprod + $prodid['product_name']+';';
         							}
-        							if(empty($mateid)){
+        							if(!empty($mateid)){
         								$msgmate = $msgmate + $prodid['product_name']+';';
         							}
         						}
@@ -125,6 +125,7 @@ class CopyproductbomController extends BackendController
         				}else{
         					$sql = 'select * from nb_product where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
         					$prods = $db->createCommand($sql)->queryRow();
+        					var_dump($prods);exit;
         					$msgnull = $msgnull +$prods['product_name']+';';
         				}
         					
