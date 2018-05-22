@@ -76,8 +76,8 @@ class CopyproductbomController extends BackendController
         				$command->execute();
         			}
         			foreach ($phscodes as $prodhscode){
-        				$prods = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
-        				$product =  ProductBom::model()->findAll('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$this->companyId));
+        				$sql = 'select * nb_product_bom where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
+        				$product = $db->createCommand($sql)->queryAll();
         				if(!empty($product)){
 	        				if($ctp ==1){
 	        					$sql = 'delete from nb_product_bom where phs_code ='.$prodhscode.' and dpid ='.$dpid;
@@ -85,8 +85,11 @@ class CopyproductbomController extends BackendController
 								$command->execute();
 	        				}
 	        				foreach ($product as $prod){
-	        					$prodid = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$prodhscode,':companyId'=>$dpid));
-	        					$mateid = ProductMaterial::model()->find('mphs_code=:mpcode and mushs_code =:muscode and dpid=:companyId and delete_flag=0' , array(':mpcode'=>$prod['mphs_code'],':muscode'=>$prod['mushs_code'],':companyId'=>$dpid));
+	        					$sql = 'select * nb_product where phs_code="'.$prodhscode.'" and dpid='.$dpid.' and delete_flag=0';
+	        					$prodid = $db->createCommand($sql)->queryRow();
+	        					
+	        					$sql = 'select * nb_product_material where mphs_code="'.$prod['mphs_code'].'" and mushs_code ="'.$prod['mushs_code'].'" and dpid='.$dpid.' and delete_flag=0';
+	        					$prodid = $db->createCommand($sql)->queryRow();
 	        					if(!empty($prodid)&&!empty($mateid)){
 		        					$se = new Sequence("product_bom");
 		        					$id = $se->nextval();
@@ -120,6 +123,8 @@ class CopyproductbomController extends BackendController
         				
         					}
         				}else{
+        					$sql = 'select * nb_product where phs_code="'.$prodhscode.'" and dpid='.$this->companyId.' and delete_flag=0';
+        					$prods = $db->createCommand($sql)->queryRow();
         					$msgnull = $msgnull +$prods['product_name']+';';
         				}
         					
