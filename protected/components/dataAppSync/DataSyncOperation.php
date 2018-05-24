@@ -284,7 +284,7 @@ class DataSyncOperation {
 			// 生成云端订单
 			$ckey = 'order_online_total_operation_'.(int)$dpid;
 			$isActive = Yii::app()->redis->get($ckey);
-			if(!$isActive){
+			if($isActive==0){
 				self::callUserFunc('WxRedis::dealRedisData', $dpid);
 			}
 		}
@@ -514,7 +514,7 @@ class DataSyncOperation {
 		}
 		$orderKey = 'order-'.(int)$dpid.'-'.$createAt.'-'.$accountNo;
 		$orderCache = Yii::app()->redis->get($orderKey);
-		if($orderCache!=false){
+		if($orderCache == 1){
 			$msg = json_encode ( array (
 					'status' => false,
 					'msg' => '生成订单中,等待结果'.$orderKey,
@@ -522,7 +522,7 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		$orderCache = Yii::app()->redis->set($orderKey,true);
+		$orderCache = Yii::app()->redis->set($orderKey,'1');
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
@@ -1104,7 +1104,7 @@ class DataSyncOperation {
 		}
 		$orderKey = 'retreat-'.(int)$dpid.'-'.$order['create_at'].'-'.$accountNo;
 		$orderCache = Yii::app()->redis->get($orderKey);
-		if($orderCache!=false){
+		if($orderCache == 1){
 			$msg = json_encode ( array (
 					'status' => false,
 					'msg' => '订单退款中,等待结果'.$orderKey,
@@ -1112,7 +1112,7 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		$orderCache = Yii::app()->redis->set($orderKey,true);
+		$orderCache = Yii::app()->redis->set($orderKey,'1');
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
