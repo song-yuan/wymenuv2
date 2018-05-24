@@ -210,7 +210,7 @@
     <div class="weui_mask" style="z-index:1005;"></div>
     <div class="weui_dialog" style="z-index:1006;">
         <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-        <div class="weui_dialog_bd" style="text-align:center;">如果已经支付成功,请刷新页面查看订单状态,请不要重复支付!!!!</div>
+        <div class="weui_dialog_bd" style="text-align:center;">如果该笔订单已经支付,请刷新页面查看订单状态,请不要重复支付!!!!!!</div>
         <div class="weui_dialog_ft">
             <a href="javascript:;" class="weui_btn_dialog default">取消</a>
             <a href="javascript:;" class="weui_btn_dialog primary">去支付</a>
