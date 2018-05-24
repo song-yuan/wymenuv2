@@ -30,7 +30,7 @@ class WxRedis
 	public static function dealRedisData($dpid){
 		$key = 'order_online_total_operation_'.(int)$dpid;
 		$orderKey = 'redis-order-data-'.(int)$dpid;
-		$orderSize = Yii::app()->redis->lSize($orderKey);
+		$orderSize = Yii::app()->redis->lLen($orderKey);
 		if($orderSize > 0){
 			$orderData = Yii::app()->redis->rPop($orderKey);
 			Yii::app()->redis->set($key,true);
