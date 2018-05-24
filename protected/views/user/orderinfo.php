@@ -177,7 +177,7 @@
 <?php if($order['order_status']< 3):?>
 <div class="bttnbar">
 	<button class="cancelOrder bttn_large bttn_black2" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="margin-right:1.2em;">取消订单</button>
-	<button class="payOrder bttn_large bttn_red" status="<?php echo $order['order_status'];?>">去支付</button>
+	<button class="payOrder bttn_large bttn_red">去支付</button>
 </div>
 <?php endif;?>
  <!--BEGIN dialog1-->
@@ -193,7 +193,7 @@
     </div>
 </div>
 <!--END dialog1-->
- <!--BEGIN dialog2-->
+<!--BEGIN dialog2-->
 <div class="weui_dialog_alert" id="dialog2" style="display: none;">
     <div class="weui_mask" style="z-index:1005;"></div>
     <div class="weui_dialog" style="z-index:1006;">
@@ -205,6 +205,19 @@
     </div>
 </div>
 <!--END dialog2-->
+<!--BEGIN dialog3-->
+<div class="weui_dialog_confirm" id="dialog3" style="display: none;">
+    <div class="weui_mask" style="z-index:1005;"></div>
+    <div class="weui_dialog" style="z-index:1006;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" style="text-align:center;">如果已经支付成功,请刷新页面查看订单状态,请不要重复支付!!!!</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary">去支付</a>
+        </div>
+    </div>
+</div>
+<!--END dialog3-->
 <?php if($redPack && $order['order_status'] > 2):?>
 <?php 
 	$title = '现金红包送不停！';
@@ -237,8 +250,7 @@ $(document).ready(function(){
 	var orderId = 0;
 	var orderDpid = 0;
 	$('.payOrder').click(function(){
-		var status = $(this).attr('status');
-		location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
+		$('#dialog3').show();
 	});
 	$('.cancelOrder').click(function(){
 		orderId = $(this).attr('order-id');
@@ -261,11 +273,17 @@ $(document).ready(function(){
 			}
 		});
 	});
+	$('#dialog3 .primary').click(function(){
+		location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
+	});				
 	$('#dialog1 .default').click(function(){
 		$('#dialog1').hide();
 	});	
 	$('#dialog2 .primary').click(function(){
 		$('#dialog2').hide();
+	});	
+	$('#dialog3 .default').click(function(){
+		$('#dialog3').hide();
 	});	
 	$('.share').click(function(){
 		$('.popshare').show();
