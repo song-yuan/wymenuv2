@@ -132,7 +132,12 @@
 		        $all_wxpoints = 0;
 		        $retreats = 0;
 		         if($prices):?>
-		      	<?php foreach ($prices as $m): ?>
+		      	<?php 
+		      		foreach ($prices as $m): 
+			      		//退款...
+			      		$retreat = $this->getRijieRetreat($m['dpid'],$begin_time,$end_time,$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']);
+			      		$retreats+=$retreat;
+		      	?>
 		
 		        <tr class="odd gradeX">
 		            <td><?php 
@@ -147,18 +152,14 @@
 		            <td><?php $orders_total = $orders_total+$m['maoli_nums'];
 		                echo $m['maoli_nums'];?></td>
 		            <td><?php
-		            		$reality_all = $m['maoli_money'];
+		            		$reality_all = sprintf("%.2f",$m['maoli_money'] + $retreat);
 		             		$grossprofit_total+=$reality_all;
 		             		echo $reality_all;
 		            ?></td>
 		            
 		            <td><?php 
-				            //退款...
-				            $retreat = $this->getRijieRetreat($m['dpid'],$begin_time,$end_time,$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']);
-				            $retreats+=$retreat;
-				            
 				            //折扣
-				            $discount=sprintf("%.2f",$reality_all-$m['chunli_money']);
+				            $discount=sprintf("%.2f",$reality_all-$m['chunli_money']-$retreat);
 				            $discount_total += $discount;
 				            echo $discount;
 		            ?></td>

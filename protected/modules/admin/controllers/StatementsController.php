@@ -2691,8 +2691,6 @@ class StatementsController extends BackendController
 		}else{
 			$criteria->addCondition("t.paytype !='11' ");
 		}
-		//var_dump($criteria);
-		//$criteria->addCondition("order4.order_status in(3,4,8) ");//只要付款了的账单都进行统计
 		if(Yii::app()->request->isPostRequest){
 			$accountno = Yii::app()->request->getPost('accountno1',0);
 			if($accountno){
