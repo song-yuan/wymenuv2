@@ -212,7 +212,7 @@
         <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
         <div class="weui_dialog_bd" style="text-align:center;">如果该笔订单已经支付,请刷新页面查看订单状态,请不要重复支付!!!!!!</div>
         <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog default">刷新</a>
             <a href="javascript:;" class="weui_btn_dialog primary">去支付</a>
         </div>
     </div>
@@ -283,7 +283,7 @@ $(document).ready(function(){
 		$('#dialog2').hide();
 	});	
 	$('#dialog3 .default').click(function(){
-		$('#dialog3').hide();
+		history.go(0);
 	});	
 	$('.share').click(function(){
 		$('.popshare').show();
