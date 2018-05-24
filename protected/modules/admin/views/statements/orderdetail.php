@@ -119,7 +119,7 @@
 							<select id="paymentid" class="form-control btn yellow" >
 	                            <option paymentid="1" value="-1" <?php if ($paymentid=='1' && $ordertype=='-1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择订单类型--');?></option>
 	                            <option paymentid="1" value="0" <?php if ($paymentid=='1' && $ordertype=='0'){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
-	                            <option paymentid="1" value="1" <?php if ($paymentid=='1' && $ordertype=='1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信堂食');?></option>
+	                            <option paymentid="1" value="1" <?php if ($paymentid=='1' && $ordertype=='1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信桌台');?></option>
 	                            <option paymentid="1" value="2" <?php if ($paymentid=='1' && $ordertype=='2'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
 	                            <option paymentid="1" value="4" <?php if ($paymentid=='1' && $ordertype=='4'){?> selected="selected" <?php }?> ><?php echo yii::t('app','后台外卖');?></option>
 	                            <option paymentid="1" value="5" <?php if ($paymentid=='1' && $ordertype=='5'){?> selected="selected" <?php }?> ><?php echo yii::t('app','自助点单');?></option>
@@ -154,9 +154,8 @@
 								<th><?php echo yii::t('app','账单号');?></th>
 								<th><?php echo yii::t('app','下单时间');?></th>
 								<th><?php echo yii::t('app','人数');?></th>
-								<!-- <th><?php echo yii::t('app','账单更新时间');?></th>
-								<th><?php echo yii::t('app','座位');?></th> -->
-                                <th><?php echo yii::t('app','状态');?></th>
+								<!-- <th><?php echo yii::t('app','座位');?></th> -->
+                                <th><?php echo yii::t('app','类型');?></th>
                                 <th><?php echo yii::t('app','原价');?></th>
                                 <th><?php echo yii::t('app','优惠');?></th>                                                                
                                 <th><?php echo yii::t('app','实收');?></th>
@@ -171,53 +170,39 @@
 					
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
-								<td class="accountno" accountno="<?php echo $model->account_no;?>" orderid="<?php echo $model->lid?>" originalp="<?php echo sprintf("%.2f",$model->reality_total);?>" shouldp="<?php echo sprintf("%.2f",$model->should_total);?>" youhuip="<?php echo sprintf("%.2f",$model->reality_total-$model->should_total);?>"><?php echo $model->account_no; ?></td>
-								<td><?php echo $model->create_at;?></td>
-								<td><?php echo $model->all_number;?></td>
+								<td class="accountno" accountno="<?php echo $model['account_no'];?>" orderid="<?php echo $model['lid']?>" originalp="<?php echo sprintf("%.2f",$model['reality_total']);?>" shouldp="<?php echo sprintf("%.2f",$model['should_total']);?>" youhuip="<?php echo sprintf("%.2f",$model['reality_total']-$model['should_total']);?>"><?php echo $model['account_no']; ?></td>
+								<td><?php echo $model['create_at'];?></td>
+								<td><?php echo $model['number'];?></td>
 								<td><?php
-									if($model->order_type == 4){
-										if($model->channel){
-											echo $model->channel->channel_name;
-										}
+									if($model['order_type'] == 4){
+											echo $model['channel_name'];
 									}else{
-										if($model->order_type==0){
+										if($model['order_type']==0){
 											echo '堂食';
-										}elseif($model->order_type==1){
-											echo '微信堂食';
-										}elseif($model->order_type==2){
+										}elseif($model['order_type']==1){
+											echo '微信桌台';
+										}elseif($model['order_type']==2){
 											echo '微信外卖';
-										}elseif($model->order_type==3){
+										}elseif($model['order_type']==3){
 											echo '微信预约';
-										}elseif($model->order_type==5){
+										}elseif($model['order_type']==5){
 											echo '自助点单';
-										}elseif($model->order_type==6){
-											if($model->is_sync==0){
-												echo '微信点单(已同步)';
-											}else{
-												echo '微信点单(未同步)';
-											}
-										}elseif($model->order_type==7){
-											if($model->is_sync==0){
-												echo '美团外卖(已同步)('.$model->callno.')';
-											}else{
-												echo '美团外卖(未同步)('.$model->callno.')';
-											}
-										}elseif($model->order_type==8){
-											if($model->is_sync==0){
-												echo '饿了么(已同步)('.$model->callno.')';
-											}else{
-												echo '饿了么(未同步)('.$model->callno.')';
-											}
+										}elseif($model['order_type']==6){
+											echo '微信点单';
+										}elseif($model['order_type']==7){
+											echo '美团外卖('.$model['callno'].')';
+										}elseif($model['order_type']==8){
+											echo '饿了么('.$model['callno'].')';
 										}else{
 											echo '其他';
 										}
 									}
 								?></td>
-								<td><?php echo sprintf("%.2f",$model->reality_total);?></td>
-								<td><?php echo sprintf("%.2f",$model->reality_total-$model->should_total);?></td>
-								<td><?php echo sprintf("%.2f",$model->should_total);?></td>
-								<td><?php echo sprintf("%.2f",OrderProduct::getMoney($this->companyId,$model->lid));?></td>
-								<td><?php echo sprintf("%.2f",OrderProduct::getChange($this->companyId,$model->lid));?></td>
+								<td><?php echo sprintf("%.2f",$model['reality_total']);?></td>
+								<td><?php echo sprintf("%.2f",$model['reality_total'] - $model['should_total']);?></td>
+								<td><?php echo sprintf("%.2f",$model['should_total']);?></td>
+								<td><?php echo sprintf("%.2f",OrderProduct::getMoney($this->companyId,$model['lid']));?></td>
+								<td><?php echo sprintf("%.2f",OrderProduct::getChange($this->companyId,$model['lid']));?></td>
 								</tr>
 						
 						<?php endforeach;?>	

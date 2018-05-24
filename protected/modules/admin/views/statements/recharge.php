@@ -70,6 +70,7 @@
                               
                                 <th width=100px;><?php echo yii::t('app','传统卡号');?></th>						        
                                 <th><?php echo yii::t('app','名称');?></th>
+                                <th><?php echo yii::t('app','充值手机');?></th>
                                 <th><?php echo yii::t('app','充值金额');?></th>                                                                
                                 <th><?php echo yii::t('app','返现');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
@@ -83,6 +84,17 @@
                                     <tr class="odd gradeX">                                                           
                                         <td><?php echo $model['selfcode'];?></td>
                                         <td><?php echo $model['name'];?></td>
+                                        <td><?php 
+                                        		if($model['type']==0){
+                                        			echo '现金';
+                                        		}elseif ($model['type']==1){
+                                        			echo '微信';
+                                        		}elseif ($model['type']==2){
+                                        			echo '支付宝';
+                                        		}else{
+                                        			echo '其他';
+                                        		}
+                                        	?></td>
                                         <td><?php echo $model['reality_money'];?></td>
                                         <td><?php echo $model['give_money'];?></td>
                                         <td></td>

@@ -130,9 +130,9 @@
                         success:function(msg){
                             var data=msg;
                             if(data.status){
-                                 alert('订单生产成功'); 
+                                 alert('订单生成成功'); 
                             }else{
-                            	alert('订单生产成功失败');  
+                            	alert('订单生成失败');  
                             }
                         }
                  });

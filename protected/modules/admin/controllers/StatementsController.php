@@ -1747,7 +1747,7 @@ class StatementsController extends BackendController
                 $branch = Yii::app()->db->createCommand($branch_sql)->queryAll();
 
 		if($text==1){
-			$sql = 'select k.* from(select t1.selfcode,t1.name,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
+			$sql = 'select k.* from(select t1.selfcode,t1.name,t.type,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
 
 		}else if($text==2){
 
@@ -2626,46 +2626,39 @@ class StatementsController extends BackendController
 		$otype = Yii::app()->request->getParam('otype','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
-		$criteria->select = 'sum(t.number) as all_number,t.*';
+		
+		$sbegin_time = $begin_time.' 00:00:00';
+		$send_time = $end_time.' 23:59:59';
+		
+		$where = '';
 		if($otype>=0){
-			$criteria->addCondition("t.order_type= ".$otype);
+			$where .= ' and order_type ='.$otype;
 		}
-		$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->addCondition("t.order_status in(3,4,8) ");//只要付款了的账单都进行统计
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-		//$criteria->addCondition("t.dpid= ".$this->companyId);
-
 		if(Yii::app()->request->isPostRequest){
 			$accountno = Yii::app()->request->getPost('accountno1',0);
 			if($accountno){
-				$criteria->addSearchCondition('account_no',$accountno);
+				$where .= ' and account_no like "%'.$accountno.'"';
 			}
 		}
-		$criteria->with = array("channel");
-
-		//$connect = Yii::app()->db->createCommand($sql);
-		//$model = $connect->queryAll();
-		$criteria->group = 't.account_no,t.order_status' ;
-		$criteria->order = 't.lid ASC' ;
-		$criteria->distinct = TRUE;
-		$pages = new CPagination(Order::model()->count($criteria));
-		//$pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-
-		$model=  Order::model()->findAll($criteria);
-		//var_dump($model);exit;
+		$sql = 'select m.* from (select *,"" as channel_name from nb_order where dpid='.$this->companyId.' and order_status in(3,4,8) and order_type!=4 and create_at>="'.$sbegin_time.'" and create_at<="'.$send_time.'"'.$where;
+		$sql .= ' union select t.*,t1.channel_name from nb_order t,nb_channel t1 where t.takeout_typeid=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t.order_status in(3,4,8) and t.order_type=4 and t.create_at>="'.$sbegin_time.'" and t.create_at<="'.$send_time.'"'.$where;
+		$sql .= ')m order by lid asc';
+		$count =  Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
+		$pages = new CPagination($count);
+		$pages->pageSize = 10;
+		$pdata =Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());
+		$models = $pdata->queryAll();
+		
 		$this->render('orderdetail',array(
-				'models'=>$model,
+				'models'=>$models,
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'accountno'=>$accountno,
 				'ordertype'=>$otype,
 				'paymentid'=>1,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	/*
