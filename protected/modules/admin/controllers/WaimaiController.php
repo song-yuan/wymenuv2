@@ -113,24 +113,6 @@ class WaimaiController extends BackendController
 		$orderId = '';
 		$orderType = 1;
 		$data = '';
-		$type = Yii::app()->request->getParam('type');
-		if(!empty($type)){
-			$dpid = $this->companyId;
-			$developerId = MtUnit::developerId;
-			$re = MtOrder::downgrade($dpid,$developerId);
-			$re = json_decode($re);
-			$re = $re->data;
-			// foreach ($re as $key => $value) {
-			// 	echo $value->daySeq;
-			// }
-			// exit();
-			if(!isset($re)){
-				Yii::app()->user->setFlash('error' , yii::t('app','拉取失败或者没有降级城市'));
-				$this->redirect(array('/admin/waimai/order','companyId'=>$this->companyId));
-			}
-		}else{
-			$re = "";
-		}
 		if(Yii::app()->request->isPostRequest) {
 			$orderType = Yii::app()->request->getPost('orderType');
 			$orderId = Yii::app()->request->getPost('orderId');
@@ -150,7 +132,24 @@ class WaimaiController extends BackendController
 				}
 			}
 		}
-		$this->render('order',array('hasOrder'=>$hasOrder,'orderId'=>$orderId,'orderType'=>$orderType,'data'=>$data,'re'=>$re));
+		$this->render('order',array('hasOrder'=>$hasOrder,'orderId'=>$orderId,'orderType'=>$orderType,'data'=>$data));
+	}
+	public function actionReal(){
+		$type = Yii::app()->request->getParam('type');
+		if(!empty($type)){
+			$dpid = $this->companyId;
+			$developerId = MtUnit::developerId;
+			$re = MtOrder::downgrade($dpid,$developerId);
+			$re = json_decode($re);
+			$re = $re->data;
+			if(!isset($re)){
+				Yii::app()->user->setFlash('error' , yii::t('app','拉取失败或者没有降级城市'));
+				$this->redirect(array('/admin/waimai/real','companyId'=>$this->companyId));
+			}
+		}else{
+			$re = "";
+		}
+		$this->render('real',array('re'=>$re));
 	}
 	public function actionDealOrder(){
 		$type = Yii::app()->request->getParam('type');

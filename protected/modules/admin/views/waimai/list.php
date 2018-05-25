@@ -96,7 +96,13 @@ span.tab{
                                 <div class="list_small">查询外卖订单是否已经存在，漏单补单功能</div>
                             </a> 
                         </div>
-                    </div>   
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('waimai/real',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">外卖隐私号对应的手机号查询</div>
+                                <div class="list_small">查询外卖订单的隐私号对应的真实手机号</div>
+                            </a> 
+                        </div>
+                    </div>     
 				</div>
 			</div>
 		</div>

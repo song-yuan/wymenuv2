@@ -47,9 +47,6 @@
                   <button type="submit" class="btn green">
                          <i class="fa fa-search">查找 &nbsp;</i>
                   </button>　
-                  <a class="btn green" href="<?php echo $this->createUrl('waimai/order',array('companyId'=>$this->companyId,'type'=>3));?>">
-                         <i class="fa fa-search">查询真实手机号 &nbsp;</i>
-                  </a>
               </div>
              <?php $this->endWidget(); ?>
          </div>
@@ -114,24 +111,6 @@
                 </table>
                 <?php endif;?>
               <?php endif;?>
-              <table>
-                <?php if(!empty($re)):?>
-                 <?php foreach($re as $value):?>
-                    <tr>
-                      <td>订单流水号：</td>
-                      <td><?php echo $value->daySeq?></td>
-                    </tr>
-                    <tr>
-                      <td>订单号：</td>
-                      <td><?php echo $value->orderId?></td>
-                    </tr>
-                    <tr>
-                      <td>真实手机号：</td>
-                      <td><?php echo $value->realPhoneNumber?></td>
-                    </tr>
-                 <?php endforeach;?>
-                <?php endif;?>
-              </table>
         </div>
         </div> 
     </div>
