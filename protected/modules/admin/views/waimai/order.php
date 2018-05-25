@@ -22,7 +22,7 @@
  <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖订单'),'url'=>$this->createUrl('waimai/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','订单查询'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('waimai/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 <div class="row">   
     <div class="col-md-12">
-	<div class="row">
+  <div class="row">
         <div class="col-md-12 col-sm-12">
            <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'Promote',
@@ -46,12 +46,15 @@
                   <span class="input-group-addon">外卖订单号</span><input type="text" name="orderId" class="form-control" style="width:200px;" placeholder="请输入订单号" value="<?php echo $orderId;?>"/>
                   <button type="submit" class="btn green">
                          <i class="fa fa-search">查找 &nbsp;</i>
-                  </button>
+                  </button>　
+                  <a class="btn green" href="<?php echo $this->createUrl('waimai/order',array('companyId'=>$this->companyId,'type'=>3));?>">
+                         <i class="fa fa-search">查询真实手机号 &nbsp;</i>
+                  </a>
               </div>
              <?php $this->endWidget(); ?>
          </div>
     <div class="portlet purple box">
-    	<div class="portlet-title">
+      <div class="portlet-title">
              <div class="caption"><i class="fa fa-group"></i>订单信息</div>
              <div class="actions"></div>
         </div>
@@ -59,28 +62,28 @@
              <?php if($hasOrder):?>
               <p>该订单已经存在</p>
              <?php else:?>
-             	<?php if($data!=''):?>
+              <?php if($data!=''):?>
                 <?php 
                 $dataObj = json_decode($data); 
                 ?>
                 <table>
                 <?php if($orderType==1):
-                	if(isset($dataObj->data)){
-                	$obj = $dataObj->data;?>
-                	<tr><td cospan="2">需要补充的订单信息,如下:</td></tr>
+                  if(isset($dataObj->data)){
+                  $obj = $dataObj->data;?>
+                  <tr><td cospan="2">需要补充的订单信息,如下:</td></tr>
                    <tr><td>序号:</td><td><?php echo $obj->daySeq;?></td></tr>
-	               <tr><td>订单编号:</td><td><?php echo $obj->orderId;?></td></tr>
-	               <tr><td>订单时间:</td><td><?php echo date('Y-m-d H:i:s',$obj->cTime);?></td></tr>
-	               <tr><td>产品详情:</td>
-	               	<td><?php $detail = json_decode($obj->detail); foreach($detail as $dt){ echo $dt->food_name.' ';}?></td>
-	               </tr>
-	               <tr><td>收货人名称:</td><td><?php echo $obj->recipientName;?></td></tr>
-	               <tr><td>收货人电话:</td><td><?php echo $obj->recipientPhone;?></td></tr>
-	               <tr><td>收货人地址:</td><td><?php echo $obj->recipientAddress;?></td></tr>
-	               <tr><td cospan="2"><button type="button" id="createOrder" class="btn blue">确定</button></td></tr>
-                	<?php }else{?>
-                	<tr><td cospan="2">未查询到订单,请确认下订单号是否输入正确</td></tr>
-                	<?php }?>
+                 <tr><td>订单编号:</td><td><?php echo $obj->orderId;?></td></tr>
+                 <tr><td>订单时间:</td><td><?php echo date('Y-m-d H:i:s',$obj->cTime);?></td></tr>
+                 <tr><td>产品详情:</td>
+                  <td><?php $detail = json_decode($obj->detail); foreach($detail as $dt){ echo $dt->food_name.' ';}?></td>
+                 </tr>
+                 <tr><td>收货人名称:</td><td><?php echo $obj->recipientName;?></td></tr>
+                 <tr><td>收货人电话:</td><td><?php echo $obj->recipientPhone;?></td></tr>
+                 <tr><td>收货人地址:</td><td><?php echo $obj->recipientAddress;?></td></tr>
+                 <tr><td cospan="2"><button type="button" id="createOrder" class="btn blue">确定</button></td></tr>
+                  <?php }else{?>
+                  <tr><td cospan="2">未查询到订单,请确认下订单号</td></tr>
+                  <?php }?>
                 <?php else: 
                 if(isset($dataObj->result)){
                 $obj = $dataObj->result;?>
@@ -89,38 +92,56 @@
                   <tr><td>订单编号:</td><td><?php echo $obj->id;?></td></tr>
                   <tr><td>订单时间:</td><td><?php echo $obj->createdAt;?></td></tr>
                   <tr><td>产品详情:</td>
-	               	<td>
-	               	<?php $groups = $obj->groups; 
-	               	foreach($groups as $gr){ 
-	               		$items = $gr->items;
-	               		foreach ($items as $item){
-	               			echo $item->name.' ';
-	               		}
-	               	}
-	               	?>
-	               	</td>
-	               </tr>
-	               <tr><td>收货人名称:</td><td><?php echo $obj->consignee;?></td></tr>
-	               <tr><td>收货人电话:</td><td><?php echo $obj->phoneList[0];?></td></tr>
-	               <tr><td>收货人地址:</td><td><?php echo $obj->deliveryPoiAddress;?></td></tr>
-	               <tr><td cospan="2"><button type="button" id="createOrder" class="btn blue">确定</button></td></tr>
+                  <td>
+                  <?php $groups = $obj->groups; 
+                  foreach($groups as $gr){ 
+                    $items = $gr->items;
+                    foreach ($items as $item){
+                      echo $item->name.' ';
+                    }
+                  }
+                  ?>
+                  </td>
+                 </tr>
+                 <tr><td>收货人名称:</td><td><?php echo $obj->consignee;?></td></tr>
+                 <tr><td>收货人电话:</td><td><?php echo $obj->phoneList[0];?></td></tr>
+                 <tr><td>收货人地址:</td><td><?php echo $obj->deliveryPoiAddress;?></td></tr>
+                 <tr><td cospan="2"><button type="button" id="createOrder" class="btn blue">确定</button></td></tr>
                 <?php }else{?>
-                <tr><td cospan="2">未查询到订单,请确认下订单号是否输入正确</td></tr>
+                <tr><td cospan="2">未查询到订单,请确认下订单号</td></tr>
                 <?php }?>
                 <?php endif;?>
                 </table>
                 <?php endif;?>
               <?php endif;?>
+              <table>
+                <?php if(!empty($re)):?>
+                 <?php foreach($re as $value):?>
+                    <tr>
+                      <td>订单流水号：</td>
+                      <td><?php echo $value->daySeq?></td>
+                    </tr>
+                    <tr>
+                      <td>订单号：</td>
+                      <td><?php echo $value->orderId?></td>
+                    </tr>
+                    <tr>
+                      <td>真实手机号：</td>
+                      <td><?php echo $value->realPhoneNumber?></td>
+                    </tr>
+                 <?php endforeach;?>
+                <?php endif;?>
+              </table>
         </div>
         </div> 
     </div>
-	</div>
+  </div>
 </div>
 
 <script>
     $(function(){
-    	$('#createOrder').click(function() {
-        	if(confirm('是否要确定生成外卖订单吗？')==true){
+      $('#createOrder').click(function() {
+          if(confirm('是否要确定生成外卖订单吗？')==true){
                 var url = "<?php echo $this->createUrl('waimai/dealOrder',array('companyId'=>$this->companyId));?>";
                 $.ajax({
                         url:url,
@@ -130,13 +151,13 @@
                         success:function(msg){
                             var data=msg;
                             if(data.status){
-                                 alert('订单生成成功'); 
+                                 alert('订单生产成功'); 
                             }else{
-                            	alert('订单生成失败');  
+                              alert('订单生产成功失败');  
                             }
                         }
                  });
-        	}
-    	 });
+          }
+       });
     });
 </script>
