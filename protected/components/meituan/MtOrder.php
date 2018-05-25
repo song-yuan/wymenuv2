@@ -125,8 +125,7 @@ class MtOrder
 		if(!empty($releaseBing)){
 			return '{"data":"OK"}';
 		}
-		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=1 and ePoiId='.$ePoiId;
-		$mtToken = Yii::app()->db->createCommand($sql)->queryRow();
+		$mtToken = self::getToken($ePoiId);
 		if(empty($mtToken)){
 			return '{"data":"OK"}';
 		}
@@ -155,8 +154,8 @@ class MtOrder
 	// 通过订单号查询订单信息
 	public static function getOrderById($dpid,$orderId){
 		$timestamp = time();
-		$sql = "select appAuthToken from nb_meituan_token where dpid=".$dpid." and type=1 and delete_flag=0";
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$res = self::getToken($dpid);
+		
 		$url = "http://api.open.cater.meituan.com/waimai/order/queryById";
 		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,'orderId'=>$orderId );
 		$sign = MtUnit::sign($array);
@@ -165,8 +164,7 @@ class MtOrder
 		return $result;
 	}
 	public static function orderDistr($dpid,$orderId,$courierName,$courierPhone){
-		$sql = "select appAuthToken from nb_meituan_token where dpid=$dpid and delete_flag=0";
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$res = self::getToken($dpid);
 		$url = "http://api.open.cater.meituan.com/waimai/order/delivering";
 		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$orderId );
 		$sign=MtUnit::sign($array);
@@ -176,8 +174,7 @@ class MtOrder
 	
 	}
 	public static function downgrade($dpid,$developerId){
-		$sql = "select appAuthToken from nb_meituan_token where dpid=".$dpid." and delete_flag=0 and type=1";
-		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$res = self::getToken($dpid);
 		$url = "http://api.open.cater.meituan.com/waimai/order/batchPullPhoneNumber";
 		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,"degradOffset"=>0,'degradLimit'=>1000,'developerId'=>$developerId);
 		$sign=MtUnit::sign($array);
