@@ -141,7 +141,6 @@ class WaimaiController extends BackendController
 			$developerId = MtUnit::developerId;
 			$re = MtOrder::downgrade($dpid,$developerId);
 			$re = json_decode($re);
-			$re = $re->data;
 			if(!isset($re)){
 				Yii::app()->user->setFlash('error' , yii::t('app','拉取失败或者没有降级城市'));
 				$this->redirect(array('/admin/waimai/real','companyId'=>$this->companyId));
