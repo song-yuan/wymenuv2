@@ -70,7 +70,7 @@
                               
                                 <th width=100px;><?php echo yii::t('app','传统卡号');?></th>						        
                                 <th><?php echo yii::t('app','名称');?></th>
-                                <th><?php echo yii::t('app','充值手机');?></th>
+                                <th><?php echo yii::t('app','充值方式');?></th>
                                 <th><?php echo yii::t('app','充值金额');?></th>                                                                
                                 <th><?php echo yii::t('app','返现');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
