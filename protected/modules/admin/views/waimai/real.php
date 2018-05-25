@@ -34,9 +34,10 @@
                     ),
             )); ?>
             <div class="input-group" style="float:left;width:700px;margin-bottom:15px;">　
-                  <a class="btn green" href="<?php echo $this->createUrl('waimai/real',array('companyId'=>$this->companyId,'type'=>1));?>">
+            	<input type="hidden" name="type" value="1">
+            	<button type="submit" class="btn green">
                          <i class="fa fa-search">查询 &nbsp;</i>
-                  </a>
+                  </button>　
               </div>
              <?php $this->endWidget(); ?>
          </div>
@@ -46,7 +47,29 @@
              <div class="actions"></div>
         </div>
         <div class="portlet-body">
-              <?php echo $re;?>
+              <table>
+                <?php if(!empty($re)):?>
+                <thead>
+              		<th><h3>美团</h3></th>
+              	</thead>
+                 <?php foreach($re as $value):?>
+                    <tr>
+                      <td>订单流水号：</td>
+                      <td><?php echo $value->daySeq?></td>
+                    </tr>
+                    <tr>
+                      <td>订单号：</td>
+                      <td><?php echo $value->orderId?></td>
+                    </tr>
+                    <tr>
+                      <td>真实手机号：</td>
+                      <td><?php echo $value->realPhoneNumber?></td>
+                    </tr>
+                 <?php endforeach;?>
+             <?php else:?>
+             	<?php echo "没有故障订单";?>
+                <?php endif;?>
+              </table>
         </div>
         </div> 
     </div>
