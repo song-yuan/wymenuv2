@@ -240,206 +240,7 @@ class StatementsController extends BackendController
 				'userid'=>$userid,
 				'dpname'=>$dpname,
 		));
-	}
-	
-	public function actionPaymentReportSql(){
-		$str = Yii::app()->request->getParam('str');
-		$text = Yii::app()->request->getParam('text');
-		$userid = Yii::app()->request->getParam('userid');
-		$begin_time = Yii::app()->request->getParam('begin_time','');
-		$end_time = Yii::app()->request->getParam('end_time','');
-		$dpname = Yii::app()->request->getParam('dpname','');
-
-		if(empty($begin_time) && Yii::app()->user->role >=11){
-			$begin_time = date('Y-m-d',time());
-		}
-		if(empty($end_time) && Yii::app()->user->role >=11){
-			$end_time = date('Y-m-d',time());
-		}
-
-		if($text==1){
-			if($userid != '0'){
-				$users ='oo.dpid,year(oo.create_at),oo.username';
-				$useros = 't.dpid,year(t.create_at),t.username';
-				$userots = 'ot.dpid,year(ot.create_at),ot.username';
-				$usernames = ' = t.username';
-			}else{
-				$users ='oo.dpid,year(oo.create_at)';
-				$useros = 't.dpid,year(t.create_at)';
-				$userots = 'ot.dpid,year(ot.create_at)';
-				$usernames = ' != -1';
-			}
-		}elseif($text == 2){
-			if($userid != '0'){
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),oo.username';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at),t.username';
-				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),ot.username';
-				$usernames = ' = t.username';
-			}else{
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at)';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at)';
-				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at)';
-				$usernames = ' != -1';
-			}
-		}else{
-			if($userid != '0'){
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at),oo.username';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
-				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at),ot.username';
-				$usernames = ' = t.username';
-			}else{
-				$users ='oo.dpid,year(oo.create_at),month(oo.create_at),day(oo.create_at)';
-				$useros = 't.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
-				$userots = 'ot.dpid,year(ot.create_at),month(ot.create_at),day(ot.create_at)';
-				$usernames = ' != -1';
-			}
-		}
-
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
-		}
-
-		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
-				.' t.dpid,t.username,t.create_at '
-				.' ,op.all_reality ,o.all_should, '
-				.' op.all_nums,o.all_num,op0.all_cash,op1.all_wxpay,op2.all_alipay,op3.all_htpay,op4.all_member,op5.all_bankpay,op8.all_point,op9.all_cupon,op10.all_wxmember,op12.all_wxdd,op13.all_wxwm,op14.all_mtwm,op15.all_elemewm '
-				.' from nb_order t '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_reality,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype !=11 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op on(t.dpid = op.dpid and op.username '.$usernames.' and year(t.create_at) = op.y_oo and month(t.create_at) = op.m_oo and day(t.create_at) = op.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_cash,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =0 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op0 on(t.dpid = op0.dpid and op0.username '.$usernames.' and year(t.create_at) = op0.y_oo and month(t.create_at) = op0.m_oo and day(t.create_at) = op0.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxpay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =1 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op1 on(t.dpid = op1.dpid and op1.username '.$usernames.' and year(t.create_at) = op1.y_oo and month(t.create_at) = op1.m_oo and day(t.create_at) = op1.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_alipay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =2 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op2 on(t.dpid = op2.dpid and op2.username '.$usernames.' and year(t.create_at) = op2.y_oo and month(t.create_at) = op2.m_oo and day(t.create_at) = op2.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_htpay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =3 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op3 on(t.dpid = op3.dpid and op3.username '.$usernames.' and year(t.create_at) = op3.y_oo and month(t.create_at) = op3.m_oo and day(t.create_at) = op3.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_member,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =4 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op4 on(t.dpid = op4.dpid and op4.username '.$usernames.' and year(t.create_at) = op4.y_oo and month(t.create_at) = op4.m_oo and day(t.create_at) = op4.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_bankpay,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =5 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op5 on(t.dpid = op5.dpid and op5.username '.$usernames.' and year(t.create_at) = op5.y_oo and month(t.create_at) = op5.m_oo and day(t.create_at) = op5.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_point,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =8 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op8 on(t.dpid = op8.dpid and op8.username '.$usernames.' and year(t.create_at) = op8.y_oo and month(t.create_at) = op8.m_oo and day(t.create_at) = op8.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_cupon,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =9 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op9 on(t.dpid = op9.dpid and op9.username '.$usernames.' and year(t.create_at) = op9.y_oo and month(t.create_at) = op9.m_oo and day(t.create_at) = op9.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxmember,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =10 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op10 on(t.dpid = op10.dpid and op10.username '.$usernames.' and year(t.create_at) = op10.y_oo and month(t.create_at) = op10.m_oo and day(t.create_at) = op10.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxdd,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =12 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op12 on(t.dpid = op12.dpid and op12.username '.$usernames.' and year(t.create_at) = op12.y_oo and month(t.create_at) = op12.m_oo and day(t.create_at) = op12.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxwm,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =13 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op13 on(t.dpid = op13.dpid and op13.username '.$usernames.' and year(t.create_at) = op13.y_oo and month(t.create_at) = op13.m_oo and day(t.create_at) = op13.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_mtwm,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =14 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op14 on(t.dpid = op14.dpid and op14.username '.$usernames.' and year(t.create_at) = op14.y_oo and month(t.create_at) = op14.m_oo and day(t.create_at) = op14.d_oo) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_elemewm,count(distinct top.order_id) as all_nums,top.dpid,oo.dpid as gdpid,oo.create_at,oo.username,year(oo.create_at) as y_oo,month(oo.create_at) as m_oo,day(oo.create_at) as d_oo '
-					.' from nb_order_pay top '
-							.'left join nb_order oo on(oo.lid = top.order_id and oo.dpid = top.dpid)'
-					.' where top.paytype =15 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by '.$users
-				.' ) op15 on(t.dpid = op15.dpid and op15.username '.$usernames.' and year(t.create_at) = op15.y_oo and month(t.create_at) = op15.m_oo and day(t.create_at) = op15.d_oo) '
-				.' left join ('
-				.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid,ot.username,year(ot.create_at) as y_ot,month(ot.create_at) as m_ot,day(ot.create_at) as d_ot '
-				.' from nb_order ot '
-				.' where ot.order_status in(3,4,8) and ot.lid in('.$ords.') and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
-				.' group by '.$userots
-				.' ) o on(t.dpid = o.dpid and o.username '.$usernames.' and year(t.create_at) = o.y_ot and month(t.create_at) = o.m_ot and day(t.create_at) = o.d_ot)'
-
-				.' where '
-				.' op.all_reality is not null and '
-				.' t.order_status in(3,4,8) and t.lid in('.$ords.') and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and '
-				.' t.dpid ='.$this->companyId
-				.' group by '.$useros;
-		$prices = Yii::app()->db->createCommand($sql)->queryAll();
-		//echo $sql;exit;
-		$payments = $this->getPayment($this->companyId);
-		$username = $this->getUsername($this->companyId);
-		$comName = $this->getComName();
-		//var_dump($model);exit;
-		$this->render('paymentReportSql',array(
-				//'models'=>$model,
-				'prices'=>$prices,
-				'begin_time'=>$begin_time,
-				'end_time'=>$end_time,
-				'text'=>$text,
-				'str'=>$str,
-				'comName'=>$comName,
-				'payments'=>$payments,
-				'username'=>$username,
-				'userid'=>$userid,
-				'dpname'=>$dpname,
-		));
-	}
-	
-	
+	}		
 
 	public function actionRijieReport(){
 		$str = Yii::app()->request->getParam('str');
@@ -2671,50 +2472,40 @@ class StatementsController extends BackendController
 		$paytype = Yii::app()->request->getParam('paytype','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
-		}
-
-		$criteria->select = 't.*,nb_micro_pay.transaction_id as transactionId';
-		$criteria->with = array("paymentMethod","order4");
-		$criteria->join='LEFT JOIN nb_micro_pay ON t.remark = nb_micro_pay.out_trade_no and t.dpid = nb_micro_pay.dpid';
-		$criteria->addCondition("t.dpid= ".$this->companyId." and t.order_id in (".$ords.")");
-
-		if($paymentid==1){
-			$criteria->addCondition('t.paytype = '.$paytype);
-		}elseif($paymentid==3){
-			$criteria->addCondition('t.paytype = "3" and t.payment_method_id = "'.$paytype.'"');
-		}else{
-			$criteria->addCondition("t.paytype !='11' ");
-		}
+		
+		$where = '';
 		if(Yii::app()->request->isPostRequest){
 			$accountno = Yii::app()->request->getPost('accountno1',0);
 			if($accountno){
-				$criteria->addSearchCondition('t.account_no',$accountno);
+				$where .=' and t.account_no = "'.$accountno.'"';
 			}
 		}else{
-			$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-			$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+			$where .=' and t.create_at >= "'.$begin_time.' 00:00:00"';
+			$where .=' and t.create_at <= "'.$end_time.' 23:59:59"';
 		}
 
-		//$criteria->group = 't.payment_method_id,t.paytype,t.pay_amount' ;
-		$criteria->order = 't.order_id ASC,t.create_at ASC' ;
-		//$criteria->distinct = TRUE;
-
-		$pages = new CPagination(OrderPay::model()->count($criteria));
-		//$pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-
-		$model=  OrderPay::model()->findAll($criteria);
-		//var_dump($model);
-		//var_dump($paymentid,$paytype);exit;
+		$sql = 'select m.*,n.name from (select t.lid,t.dpid,t.account_no,t.pay_amount,t.paytype,t.payment_method_id,t.paytype_id,t1.create_at from nb_order_pay t,nb_order t1 where t.dpid=t1.dpid and t.order_id=t1.lid and t.dpid='.$this->companyId;
+		if($paymentid==1){
+			$where .=' and t.paytype = '.$paytype;
+		}elseif($paymentid==3){
+			$where .=' and t.paytype = 3 and t.payment_method_id = '.$paytype;
+		}else{
+			$where .=' and t.paytype != 11';
+		}
+		$sql .= $where;
+		$sql .=')m left join nb_payment_method n on m.payment_method_id=n.lid and m.dpid=n.dpid';
+		
+		$count =  Yii::app()->db->createCommand(str_replace('m.*,n.name','count(*)',$sql))->queryScalar();
+		$pages = new CPagination($count);
+		$pages->pageSize = 10;
+		$pdata =Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());
+		$models = $pdata->queryAll();
+		
 		$payments = $this->getPayments($this->companyId);
 		$this->render('orderpaytype',array(
-				'models'=>$model,
+				'models'=>$models,
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,

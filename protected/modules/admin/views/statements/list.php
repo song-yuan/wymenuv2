@@ -165,7 +165,7 @@
                         <p>支付统计报表</p>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                             <a href="<?php echo $this->createUrl('statements/rijieReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-                                <div class="list_big">日结统计(优化)</div>
+                                <div class="list_big">日结统计</div>
                                 <div class="list_small">查询门店日结详情数据，日结完成后方可显示数据</div>
                             </a> 
                         </div>
@@ -180,13 +180,6 @@
                            <a href="<?php echo $this->createUrl('statements/comPayYueReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
                                 <div class="list_big">支付方式(储值)</div>
                                 <div class="list_small">查询门店账单总营业额和总单数及微信端的账单数据和金额数据</div>
-                            </a> 
-                        </div>
-                        <?php endif;if(Yii::app()->user->role <5):?>
-                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-                           <a href="<?php echo $this->createUrl('statements/paymentReportSql',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','page'=>1));?>">
-                                <div class="list_big">支付方式(优化)</div>
-                                <div class="list_small">查看所有不同支付方式的账单数据以及总单数</div>
                             </a> 
                         </div>
                         <?php endif;if(Yii::app()->user->role <5):?>
@@ -211,7 +204,7 @@
                         <?php endif;?>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                             <a href="<?php echo $this->createUrl('statements/orderpaytype',array('companyId' => $this->companyId,'text'=>'3','paymentid'=>'0','paytype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-                                <div class="list_big">账单支付方式</div>
+                                <div class="list_big">账单支付方式(列表)</div>
                                 <div class="list_small">查询账单的账单号、下单时间、金额和支付方式</div>
                             </a> 
                         </div>

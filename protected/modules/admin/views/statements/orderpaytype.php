@@ -163,9 +163,6 @@
 							<tr>
 								
 								<th><?php echo yii::t('app','账单号');?></th>
-								<?php if($paymentid=='1' && ($paytype == '1' || $paytype == '2')):?>
-								<th><?php echo yii::t('app','第三方账单号');?></th>
-								<?php endif;?>
 								<th><?php echo yii::t('app','下单时间');?></th>
                                 <th><?php echo yii::t('app','支付方式');?></th>
                                 <th><?php echo yii::t('app','金额');?></th>
@@ -178,14 +175,11 @@
 					
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
-								<td class="accountno" accountno="<?php echo $model->account_no;?>" orderid="<?php echo $model->lid?>" payamount="<?php echo sprintf("%.2f",$model->pay_amount);?>" ><?php echo $model->account_no; ?></td>
-								<?php if($paymentid=='1' && ($paytype == '1' || $paytype == '2')):?>
-								<th><?php echo $model->transactionId;?></th>
-								<?php endif;?>
-								<td><?php echo $model->create_at;?></td>
-								<td><?php if($model->paytype==3){
-										echo $model->paymentMethod->name;
-									}else switch($model->paytype){
+								<td class="accountno" accountno="<?php echo $model['account_no'];?>" orderid="<?php echo $model['lid']?>" payamount="<?php echo sprintf("%.2f",$model['pay_amount']);?>" ><?php echo $model['account_no']; ?></td>
+								<td><?php echo $model['create_at'];?></td>
+								<td><?php if($model['paytype']==3){
+										echo $model['name'];
+									}else switch($model['paytype']){
 										case 0: echo '现金';break;
 										case 1: echo '微信';break;
 										case 2: echo '支付宝';break;
@@ -198,8 +192,8 @@
 										case 13: echo '微信外卖';break;
 										case 14: echo '美团·外卖';break;
 										case 15: echo '饿了么·外卖';break;
-								} ;?><?php if($model->pay_amount<0)echo '(退款)';?></td>
-								<td><?php echo sprintf("%.2f",$model->pay_amount);?></td>
+								} ;?><?php if($model['pay_amount']<0)echo '(退款)';?></td>
+								<td><?php echo sprintf("%.2f",$model['pay_amount']);?></td>
 								</tr>
 						
 						<?php endforeach;?>	
