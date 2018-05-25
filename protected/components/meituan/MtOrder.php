@@ -175,6 +175,16 @@ class MtOrder
 		return $result;
 	
 	}
+	public static function downgrade($dpid,$developerId){
+		$sql = "select appAuthToken from nb_meituan_token where dpid=".$dpid." and delete_flag=0 and type=1";
+		$res = Yii::app()->db->createCommand($sql)->queryRow();
+		$url = "http://api.open.cater.meituan.com/waimai/order/batchPullPhoneNumber";
+		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,"degradOffset"=>0,'degradLimit'=>1000,'developerId'=>$developerId);
+		$sign=MtUnit::sign($array);
+		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=124&sign=".$sign."&degradOffset=0&degradLimit=1000&developerId=".$developerId;
+		$result = MtUnit::postHttps($url, $data);
+		return $result;
+	}
 	/**
 	 * 
 	 * @param unknown $callback
