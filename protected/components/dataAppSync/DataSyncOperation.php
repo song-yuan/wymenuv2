@@ -276,9 +276,16 @@ class DataSyncOperation {
 		$keyOrder = 'redis-third-platform-'.(int)$dpid;
 		$orderSize = Yii::app()->redis->lLen($keyOrder);
 		if($orderSize > 0){
-			for ($i=0; $i<$orderSize; $i++){
-				$orderStr = Yii::app()->redis->rPop($keyOrder);
-				array_push($data ['order'], json_decode($orderStr,true));
+			$popKey = 'redis-third-platform-pop'.(int)$dpid;
+			$isPop = Yii::app()->redis->get($popKey);
+			if($isPop == 0){
+				$expire = 2*60; // 过期时间
+				Yii::app()->redis->setex($popKey,$expire,'1');
+				for ($i=0; $i<$orderSize; $i++){
+					$orderStr = Yii::app()->redis->rPop($keyOrder);
+					array_push($data ['order'], json_decode($orderStr,true));
+				}
+				Yii::app()->redis->set($popKey,'0');
 			}
 		}else{
 			// 生成云端订单
