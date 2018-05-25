@@ -46,27 +46,7 @@
              <div class="actions"></div>
         </div>
         <div class="portlet-body">
-              <table>
-              	<thead>
-              		<th><h3>美团</h3></th>
-              	</thead>
-                <?php if(!empty($re)):?>
-                 <?php foreach($re as $value):?>
-                    <tr>
-                      <td>订单流水号：</td>
-                      <td><?php echo $value->daySeq?></td>
-                    </tr>
-                    <tr>
-                      <td>订单号：</td>
-                      <td><?php echo $value->orderId?></td>
-                    </tr>
-                    <tr>
-                      <td>真实手机号：</td>
-                      <td><?php echo $value->realPhoneNumber?></td>
-                    </tr>
-                 <?php endforeach;?>
-                <?php endif;?>
-              </table>
+              <?php echo $re;?>
         </div>
         </div> 
     </div>
