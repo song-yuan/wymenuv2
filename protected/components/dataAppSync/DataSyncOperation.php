@@ -1335,7 +1335,7 @@ class DataSyncOperation {
 				$type = $obj->sync_type;
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
-				$content = str_replace(PHP_EOL, '', $content);
+				$content = Helper::dealString($content);
 				if($type==2){
 					// 新增订单
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
