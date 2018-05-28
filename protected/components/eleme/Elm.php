@@ -299,7 +299,12 @@ class Elm
 			if(empty($obj->error)){
 				return true;
 			}else{
-				return false;
+				$errmessage = $obj->error->message;
+				if(strpos($errmessage,'订单已确认')===false){
+					return false;
+				}else {
+					return true;
+				}
 			}
 		}else{
 			return true;
