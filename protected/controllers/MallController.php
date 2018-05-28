@@ -420,10 +420,10 @@ class MallController extends Controller
 	 			'appid'=>$appId,
 	 	);
 	 	$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-	 	var_dump($baseUrl);var_dump($_GET);exit;
 	 	if(!isset($_GET['openId'])){
 	 		MtpPay::getOpenId($ods,$baseUrl);
 	 	}
+	 	var_dump($baseUrl);var_dump($_GET);exit;
 	 	$data['merchantId'] = $merchantId;
 	 	$data['appId'] = $appId;
 	 	$data['key'] = $key;
