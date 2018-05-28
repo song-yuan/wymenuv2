@@ -423,7 +423,6 @@ class MallController extends Controller
 	 	if(!isset($_GET['openId'])){
 	 		MtpPay::getOpenId($ods,$baseUrl);
 	 	}
-	 	var_dump($baseUrl);var_dump($_GET);exit;
 	 	$data['merchantId'] = $merchantId;
 	 	$data['appId'] = $appId;
 	 	$data['key'] = $key;
@@ -431,7 +430,6 @@ class MallController extends Controller
 	 	unset($data['companyId']);
 	 	unset($data['orderId']);
 	 	unset($data['orderDpid']);
-	 	var_dump($data);exit;
 	 	MtpPay::preOrder($data);
 	 	exit;
 	 }
