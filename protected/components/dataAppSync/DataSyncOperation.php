@@ -2092,6 +2092,7 @@ class DataSyncOperation {
 	 *
 	 */
 	public static function dealWxHykPay($data) {
+		Helper::writeLog(json_decode($data));
 		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
 		$cupons = isset($data['cupon'])?$data['cupon']:array();
