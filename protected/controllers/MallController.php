@@ -430,6 +430,7 @@ class MallController extends Controller
 	 	unset($data['companyId']);
 	 	unset($data['orderId']);
 	 	unset($data['orderDpid']);
+	 	var_dump($expression);exit;
 	 	MtpPay::preOrder($data);
 	 	exit;
 	 }
