@@ -2095,7 +2095,6 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
 		$cupons = isset($data['cupon'])?json_decode($data['cupon'],true):array();
-		Helper::writeLog(json_encode($cupons));exit;
 		$yue = $data['yue'];
 		$points = $data['points'];
 		$user = WxBrandUser::getFromCardId($dpid,$cardId);
@@ -2104,6 +2103,7 @@ class DataSyncOperation {
 			try{
 				if(!empty($cupons)){
 					foreach ($cupons as $cupon){
+						Helper::writeLog($cupon['dpid'].$cupon['cupon_id']);
 						$res = WxCupon::dealCupon($cupon['dpid'], $cupon['cupon_id'], 2);
 						if(!$res){
 							throw new Exception('代金券核销失败');
