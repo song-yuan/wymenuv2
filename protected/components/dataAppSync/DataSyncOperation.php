@@ -2095,7 +2095,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$cardId = $data['card_id'];
 		$cupons = isset($data['cupon'])?$data['cupon']:array();
-		Helper::writeLog(json_encode($cupons));exit;
+		Helper::writeLog(json_encode($cupons[0]));exit;
 		$yue = $data['yue'];
 		$points = $data['points'];
 		$user = WxBrandUser::getFromCardId($dpid,$cardId);
