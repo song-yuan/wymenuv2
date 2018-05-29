@@ -52,22 +52,21 @@ class MtpayController extends Controller
 		}
 		
 
-		$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-		$orders = Yii::app()->db->createCommand($sql)->queryRow();
-		if(!empty($orders)){
-			if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
-				$pay_type = '12';
-			}elseif($orders['order_type'] == '2'){
-				$pay_type = '13';
-			}else{
-				$pay_type = '1';
-			}
-			$sql = 'select * from nb_order_pay where dpid ='.$orderdpid.' and order_id ='.$orderid.' and account_no ="'.$orders['account_no'].'" and paytype ='.$pay_type;
-			$ordpays = Yii::app()->db->createCommand($sql)
-			->queryRow();
-			if(!empty($ordpays)){
-		
-			}else{
+		if(!empty($notify)){
+			//Helper::writeLog('已通知！');
+			return '{"status":"SUCCESS"}';
+		}else{
+			$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
+			$orders = Yii::app()->db->createCommand($sql)->queryRow();
+			if(!empty($orders)){
+				if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
+					$pay_type = '12';
+				}elseif($orders['order_type'] == '2'){
+					$pay_type = '13';
+				}else{
+					$pay_type = '1';
+				}
+				
 				$se = new Sequence ( "order_pay" );
 				$orderpayId = $se->nextval();
 				$orderpayData = array (
@@ -85,15 +84,9 @@ class MtpayController extends Controller
 				if($result){
 					$ords = true;
 				}
+			}else{
+				Helper::writeLog('未查询到该条订单：'.$orderid);
 			}
-		
-		}else{
-			Helper::writeLog('未查询到该条订单：'.$orderid);
-		}
-		
-		if(!empty($notify)){
-			//Helper::writeLog('已通知！');
-		}else{
 			//Helper::writeLog('查询支付信息！');
 			$results = MtpPay::query(array(
 					'outTradeNo'=>$accountno,
