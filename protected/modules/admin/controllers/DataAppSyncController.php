@@ -311,7 +311,7 @@ class DataAppSyncController extends Controller
 	 * 
 	 */
 	public function actionDealWxHykPay(){
-		Helper::writeLog('actionDealWxHykPay:66666');exit;
+		Helper::writeLog('actionDealWxHykPay:'.json_encode($_POST));exit;
 		$result = DataSyncOperation::dealWxHykPay($_POST);
 		echo $result;exit;
 	}
