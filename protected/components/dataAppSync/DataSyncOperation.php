@@ -1344,7 +1344,7 @@ class DataSyncOperation {
 					// 退款
 					$contentArr = explode('::', $content);
 					$createAt = isset($contentArr[7])?$contentArr[7]:'';
-					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'posLid'=>$padLid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
 					$result = WxRedis::pushOrder($dpid, json_encode($pData));
 				}elseif($type==3){
 					// 增加会员卡
