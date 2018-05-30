@@ -1,13 +1,13 @@
 <?php
-// $dpid = 28;
-// // $size = Yii::app()->redis->lSize('redis-order-data-'.(int)$dpid);
-// // var_dump($size);
-// $ckey = 'order_online_total_operation_'.(int)$dpid;
-// // $isActive = Yii::app()->redis->get($ckey);
-// // var_dump($isActive);
-// $res = Yii::app()->redis->set($ckey,'0');
-// var_dump($res);
-// exit;
+$dpid = 28;
+// $size = Yii::app()->redis->lSize('redis-order-data-'.(int)$dpid);
+// var_dump($size);
+$ckey = 'order_online_total_operation_'.(int)$dpid;
+// $isActive = Yii::app()->redis->get($ckey);
+// var_dump($isActive);
+$res = Yii::app()->redis->set($ckey,'0');
+var_dump($res);
+exit;
 $sql = 'select dpid from nb_company where type=1 and delete_flag = 0';
 $dpids = Yii::app()->db->createCommand($sql)->queryColumn();
 foreach ($dpids as $dpid){
