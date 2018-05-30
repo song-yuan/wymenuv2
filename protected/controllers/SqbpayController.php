@@ -192,46 +192,8 @@ class SqbpayController extends Controller
 		
 		$sql = 'select * from nb_notify_wxwap where dpid ='.$orderdpid.' and sn="'.$sn.'"';
 		//Helper::writeLog('进入方法'.$sql);
-		$notify = Yii::app()->db->createCommand($sql)
-		->queryRow();
+		$notify = Yii::app()->db->createCommand($sql)->queryRow();
 		
-		
-
-		$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-		$orders = Yii::app()->db->createCommand($sql)->queryRow();
-		if(!empty($orders)){
-			if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
-				$pay_type = '12';
-			}elseif($orders['order_type'] == '2'){
-				$pay_type = '13';
-			}else{
-				$pay_type = '1';
-			}
-			$sql = 'select * from nb_order_pay where dpid ='.$orderdpid.' and order_id ='.$orderid.' and account_no ="'.$orders['account_no'].'" and paytype ='.$pay_type;
-			$ordpays = Yii::app()->db->createCommand($sql)
-			->queryRow();
-			if(!empty($ordpays)){
-			
-			}else{
-				$se = new Sequence ( "order_pay" );
-				$orderpayId = $se->nextval();
-				$orderpayData = array (
-						'lid' => $orderpayId,
-						'dpid' => $orderdpid,
-						'create_at' => $orders['create_at'],
-						'update_at' => $orders['update_at'],
-						'order_id' => $orderid,
-						'account_no' => $orders['account_no'],
-						'pay_amount' => number_format($total_amount/100,2),
-						'paytype' => $pay_type,
-						'remark' => $client_sn,
-				);
-				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
-			}
-			
-		}else{
-			Helper::writeLog('未查询到该条订单：'.$orderid);
-		}
 		
 		if(!empty($notify)){
 			if($order_status == $notify['order_status']){
@@ -268,6 +230,38 @@ class SqbpayController extends Controller
 				//Helper::writeLog('不同的2:['.$sn.']');
 			}
 		}else{
+			$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
+			$orders = Yii::app()->db->createCommand($sql)->queryRow();
+			if(!empty($orders)){
+				if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
+					$pay_type = '12';
+				}elseif($orders['order_type'] == '2'){
+					$pay_type = '13';
+				}else{
+					$pay_type = '1';
+				}
+				$sql = 'select * from nb_order_pay where dpid ='.$orderdpid.' and order_id ='.$orderid.' and account_no ="'.$orders['account_no'].'" and paytype ='.$pay_type;
+				$ordpays = Yii::app()->db->createCommand($sql)->queryRow();
+
+				$se = new Sequence ( "order_pay" );
+				$orderpayId = $se->nextval();
+				$orderpayData = array (
+						'lid' => $orderpayId,
+						'dpid' => $orderdpid,
+						'create_at' => $orders['create_at'],
+						'update_at' => $orders['update_at'],
+						'order_id' => $orderid,
+						'account_no' => $orders['account_no'],
+						'pay_amount' => number_format($total_amount/100,2),
+						'paytype' => $pay_type,
+						'remark' => $client_sn,
+				);
+				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
+					
+			}else{
+				Helper::writeLog('未查询到该条订单：'.$orderid);
+			}
+			
 			//Helper::writeLog('第一次1:['.$sn.']');
 			//像微信公众号支付记录表插入记录...
 			$se = new Sequence("notify_wxwap");
