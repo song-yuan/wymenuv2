@@ -2,15 +2,22 @@
 /**
  * 
  * 
- * 获取单品口味
- * 
+ * redis-order-data- $dpid  每家店一个redis 队列
+ * redis-third-platform- $dpid  每家店一个第三方订单 redis 队列 
+ * order_online_total_operation_ $dpid 每家一个订单锁（优化成全部一个锁 order_online_total_operation_0）
  * 
  */
 class WxRedis
 {
+	// 生成队列的 下标号
+	public static function redisIndex($dpid){
+		$ndpid = floor($dpid/100);
+		return $ndpid;
+	}
 	// 生成订单 redis数据
 	public static function pushOrder($dpid,$data){
-		$key = 'redis-order-data-'.(int)$dpid;
+		$nIndex = self::redisIndex($dpid);
+		$key = 'redis-order-data-'.$nIndex;
 		$result = Yii::app()->redis->lPush($key,$data);
 		return $result;
 	}
@@ -28,8 +35,9 @@ class WxRedis
 	 *
 	 */
 	public static function dealRedisData($dpid){
-		$key = 'order_online_total_operation_'.(int)$dpid;
-		$orderKey = 'redis-order-data-'.(int)$dpid;
+		$nIndex = self::redisIndex($dpid);
+		$key = 'order_online_total_operation_'.$nIndex;
+		$orderKey = 'redis-order-data-'.$nIndex;
 		$orderSize = Yii::app()->redis->lLen($orderKey);
 		if($orderSize > 0){
 			$orderData = Yii::app()->redis->rPop($orderKey);

@@ -289,7 +289,8 @@ class DataSyncOperation {
 			}
 		}else{
 			// 生成云端订单
-			$ckey = 'order_online_total_operation_'.(int)$dpid;
+			$nIndex = WxRedis::redisIndex($dpid);
+			$ckey = 'order_online_total_operation_'.$nIndex;
 			$isActive = Yii::app()->redis->get($ckey);
 			if($isActive==0){
 				self::callUserFunc('WxRedis::dealRedisData', $dpid);
