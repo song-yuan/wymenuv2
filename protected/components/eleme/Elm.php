@@ -295,6 +295,7 @@ class Elm
 		$wmSetting = MtUnit::getWmSetting($dpid);
 		if(!empty($wmSetting)&&$wmSetting['is_receive']==1){
 			$order = self::confirmOrder($dpid,$orderId);
+			Helper::writeLog('confirm-eleme:'.$orderId.'-'.$order);
 			$obj = json_decode($order);
 			if(empty($obj->error)){
 				return true;
