@@ -73,6 +73,7 @@ class MtOrder
 				$sign=MtUnit::sign($array);
 				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
 				$result = MtUnit::postHttps($url, $data);
+				Helper::writeLog('confirm-metian:'.$orderId.'-'.$result);
 				$obj = json_decode($result);
 				if($obj->data=='ok'){
 					return true;
