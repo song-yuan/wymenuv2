@@ -75,10 +75,15 @@ class MtOrder
 				$result = MtUnit::postHttps($url, $data);
 				Helper::writeLog('confirm-metian:'.$orderId.'-'.$result);
 				$obj = json_decode($result);
-				if($obj->data=='ok'){
+				if(isset($obj->data) && $obj->data=='ok'){
 					return true;
 				}else{
-					return false;
+					$errmessage = $obj->error->message;
+					if(strpos($errmessage,'订单已经确认')===false){
+						return false;
+					}else {
+						return true;
+					}
 				}
 			}else{
 				return true;
