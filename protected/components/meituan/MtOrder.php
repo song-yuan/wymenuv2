@@ -121,7 +121,7 @@ class MtOrder
 	public static function Jcbd($data){
 		Helper::writeLog('jcbd:'.$data);
 		if(empty($data)){
-			return '200';
+			return '{"data":"success"}';
 		}
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
@@ -129,11 +129,11 @@ class MtOrder
 		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=2 and ePoiId='.$ePoiId.' and timestamp="'.$timestamp.'"';
 		$releaseBing = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!empty($releaseBing)){
-			return '{"data":"OK"}';
+			return '{"data":"success"}';
 		}
 		$mtToken = self::getToken($ePoiId);
 		if(empty($mtToken)){
-			return '{"data":"OK"}';
+			return '{"data":"success"}';
 		}
 		$se = new Sequence("meituan_token");
 		$lid = $se->nextval();
@@ -153,7 +153,7 @@ class MtOrder
 		$sql = "update nb_meituan_token set delete_flag=1 where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId;
 		$res = Yii::app()->db->createCommand($sql)->execute();
 		if($res){
-			return '{"data":"OK"}';
+			return '{"data":"success"}';
 		}
 		return '{"data":"error"}';
 	}
