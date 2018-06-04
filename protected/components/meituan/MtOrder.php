@@ -20,7 +20,7 @@ class MtOrder
 		$ePoiId = $resArr['ePoiId'];
 		$appAuthToken = $resArr['appAuthToken'];
 		$timestamp = isset($resArr['timestamp'])?$resArr['timestamp']:time();
-		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and delete_flag=0';
+		$sql = 'select * from nb_meituan_token where dpid='.$ePoiId.' and type=1 and delete_flag=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result){
 			$sql = 'update nb_meituan_token set appAuthToken="'.$appAuthToken.'",timestamp="'.$timestamp.'" where lid='.$result['lid'].' and dpid='.$result['dpid'];
