@@ -14,7 +14,7 @@ class MtNotify
 		if($type=='new'){
 			$this->ReplyNotify(true);
 			$result = MtOrder::callUserFunc(array($this, 'newOrderCallBack'));
-		}else if($type=='confirm'){
+		}elseif($type=='confirm'){
 			$result = MtOrder::callUserFunc(array($this, 'confirmOrderCallBack'));
 			if($result){
 				$this->ReplyNotify(true);
@@ -29,6 +29,10 @@ class MtNotify
 	}
 	public function confirmOrderCallBack($data){
 		$remt = MtOrder::orderconfirm($data);
+		return $remt;
+	}
+	public function confirmOrderCallBack($data){
+		$remt = MtOrder::downgrade($data);
 		return $remt;
 	}
 	private function ReplyNotify($status = true)

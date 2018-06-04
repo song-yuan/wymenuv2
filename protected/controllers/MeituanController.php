@@ -31,7 +31,18 @@ class MeituanController extends Controller
 		exit();
 	}
 	public function actionXintiao(){
+		//心跳 URL
 		echo '{"data":"OK"}';
+		exit();
+	}
+	public function actionPrivacyNumber(){
+		// 隐私号降级 URL
+		$data = file_get_contents('php://input');
+		if(empty($data)){
+			echo '{"data":"OK"}';
+		}else{
+			echo '{"data":"OK"}';
+		}
 		exit();
 	}
 	public function actionUnbind(){

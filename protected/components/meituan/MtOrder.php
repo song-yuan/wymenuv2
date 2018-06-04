@@ -179,12 +179,16 @@ class MtOrder
 		return $result;
 	
 	}
-	public static function downgrade($dpid,$developerId){
+	public static function privacyNumber($dpid){
+		$timestamp = time();
+		$degradOffset = 0;
+		$degradLimit = 1000;
+		$developerId = MtUnit::developerId;
 		$res = self::getToken($dpid);
 		$url = "http://api.open.cater.meituan.com/waimai/order/batchPullPhoneNumber";
-		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,"degradOffset"=>0,'degradLimit'=>1000,'developerId'=>$developerId);
-		$sign=MtUnit::sign($array);
-		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=124&sign=".$sign."&degradOffset=0&degradLimit=1000&developerId=".$developerId;
+		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,"degradOffset"=>$degradOffset,'degradLimit'=>$degradLimit,'developerId'=>$developerId);
+		$sign = MtUnit::sign($array);
+		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=".$timestamp."&sign=".$sign."&degradOffset=".$degradOffset."&degradLimit=".$degradLimit."&developerId=".$developerId;
 		$result = MtUnit::postHttps($url, $data);
 		return $result;
 	}
