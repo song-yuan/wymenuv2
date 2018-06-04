@@ -29,7 +29,7 @@ class MuchprinterProdController extends BackendController
 		}
 		$models = $db->createCommand($sql)->queryAll();
 		foreach ($models as $key=>$model){
-			$sql = 'select t.lid,t1.name from nb_product_printerway t,nb_printer_way t1 where t.printer_way_id=t1.lid and t.dpid=t1.dpid and t.product_id='.$model['lid'];
+			$sql = 'select t.lid,t1.name from nb_product_printerway t,nb_printer_way t1 where t.printer_way_id=t1.lid and t.dpid=t1.dpid and t.product_id='.$model['lid'].' and t.delete_flag=0';
 			$proprintway = $db->createCommand($sql)->queryAll();
 			$models[$key]['printerway'] = $proprintway;
 		}
