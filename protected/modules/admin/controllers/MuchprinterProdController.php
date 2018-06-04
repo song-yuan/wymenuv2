@@ -21,22 +21,23 @@ class MuchprinterProdController extends BackendController
 	}
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$criteria = new CDbCriteria;
-		$criteria->with = array('company','category','productPrinterway');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
-		if($categoryId){
-			$criteria->condition.=' and t.category_id = '.$categoryId;
-		}
-		$printerWays = PrinterWay::getPrinterWay($this->companyId);
-		$models = Product::model()->findAll($criteria);
 		
 		$db = Yii::app()->db;
+		$sql = 'select t.*,t1.category_name from nb_product t,nb_product_category t1 where t.category_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t.delete_flag=0';
+		if($categoryId){
+			$sql .= ' and t.category_id = '.$categoryId;
+		}
+		$models = $db->createCommand($sql)->queryAll();
+		foreach ($models as $key=>$model){
+			$sql = 'select t.lid,t1.name from nb_product_printerway t,nb_printer_way t1 where t.printer_way_id=t1.lid and t.dpid=t1.dpid and t.product_id='.$model['lid'];
+			$proprintway = $db->createCommand($sql)->queryAll();
+			$models[$key]['printerway'] = $proprintway;
+		}
+		
 		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
-		$command = $db->createCommand($sql);
-		$dpids = $command->queryAll();
-		//var_dump($dpids);exit;
+		$dpids = $db->createCommand($sql)->queryAll();
 		$categories = $this->getCategories();
-//                var_dump($categories);exit;
+		
 		$this->render('index',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
