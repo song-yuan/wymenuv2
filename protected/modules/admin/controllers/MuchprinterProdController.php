@@ -51,35 +51,26 @@ class MuchprinterProdController extends BackendController
 	public function actionStorProduct(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$is_sync = DataSync::getInitSync();
-		//var_dump($companyId);exit;
 		$opids = Yii::app()->request->getParam('pids');
 		$oprintids = Yii::app()->request->getParam('printids');
-		//$dpid = Yii::app()->request->getParam('dpids');
-		//var_dump($pids);var_dump($prodids);var_dump($nums);exit;
 		$pids = array();
 		$pids = explode(',',$opids);
 		$printids = array();
 		$printids = explode(',',$oprintids);
-		//var_dump($pids,$printids);exit;
 		
 		//****查询公司的产品分类。。。****
 		$db = Yii::app()->db;
 		
-		//var_dump($catep1,$catep2,$products);exit;
-         //       Until::isUpdateValid($pids,$companyId,$this);//0,表示企业任何时候都在云端更新。
         if((!empty($pids))&&(!empty($printids))&&(Yii::app()->user->role <= User::SHOPKEEPER)){
         	
 	        	foreach ($pids as $pid){
-	        		$product =  Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$pid,':companyId'=>$this->companyId));
-	        		//var_dump($pid);//exit;	
+	        		$sql = 'select lid from nb_product where lid='.$pid.' and dpid='.$this->companyId.' and delete_flag=0';
+	        		$product = $db->createCommand($sql)->queryRow();
 	        		if($product){
-	        			$sql = 'update nb_product_printerway set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where product_id ='.$pid.' and dpid ='.$this->companyId;
+	        			$sql = 'update nb_product_printerway set delete_flag=1 where product_id ='.$pid.' and dpid ='.$this->companyId;
 	        			$result = $db->createCommand($sql)->execute();
 	        			foreach ($printids as $printid){
 	        				
-	        				//$prodprinter = ProductPrinterway::model()->find(' dpid=:companyId and delete_flag=0 and product_id=:proid and printer_way_id=:printerId' , array(':proid'=>$pid,':printerId'=>$printid,':companyId'=>$this->companyId));
-	        				//var_dump($prodprinter);
-        				
         					$se=new Sequence("product_printerway");
         					$lid = $se->nextval();
         					$data = array(
