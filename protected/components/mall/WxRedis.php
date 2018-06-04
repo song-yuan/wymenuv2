@@ -11,7 +11,7 @@ class WxRedis
 {
 	// 生成队列的 下标号
 	public static function redisIndex($dpid){
-		$ndpid = floor($dpid/100);
+		$ndpid = floor($dpid/10000);
 		return $ndpid;
 	}
 	// 生成订单 redis数据
