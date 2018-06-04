@@ -104,13 +104,13 @@ function fun()
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" phs_code="<?php echo $model->phs_code;?>" chs_code="<?php echo $model->chs_code;?>" name="ids[]" />
+								<td><input id="<?php echo $model['lid'];?>" type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" phs_code="<?php echo $model['phs_code'];?>" chs_code="<?php echo $model['chs_code'];?>" name="ids[]" />
 								</td>
-								<td style="width:15%"><?php echo $model->product_name;?></td>
-								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
+								<td style="width:15%"><?php echo $model['product_name'];?></td>
+								<td><?php  echo $model['category_name'];?></td>
 								<td>
-									<?php foreach($model->productPrinterway as $val){
-											echo ProductPrinterway::getPrinterwayName($val->printer_way_id,$this->companyId).' ';
+									<?php foreach($model['printerway'] as $val){
+											echo $val['name'].' ';
 									}?>
 								</td>
 							</tr>
