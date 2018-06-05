@@ -31,10 +31,6 @@ class MtNotify
 		$remt = MtOrder::orderconfirm($data);
 		return $remt;
 	}
-	public function confirmOrderCallBack($data){
-		$remt = MtOrder::downgrade($data);
-		return $remt;
-	}
 	private function ReplyNotify($status = true)
 	{
 		if($status){
