@@ -67,7 +67,7 @@ class WxRedis
 					if(!$resObj->status){
 						$msg = isset($resObj->msg)?$resObj->msg:'';
 						Helper::writeLog('同步失败:'.$orderData.'-'.$msg);
-						$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderDataArr['data']);
+						$data = array('dpid'=>$orderDataArr['dpid'],'jobid'=>$orderDataArr['posLid'],'pos_sync_lid'=>$orderDataArr['sync_lid'],'sync_type'=>$type,'sync_url'=>'','content'=>$orderData);
 						DataSyncOperation::setSyncFailure($data);
 					}
 				}else{

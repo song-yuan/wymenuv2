@@ -1372,7 +1372,7 @@ class DataSyncOperation {
 				}else{
 					Helper::writeLog('推入redis缓存失败:'.$dpid.json_encode($obj).'错误信息:'.$msg['msg']);
 					// 插入同步不成功数据
-					$data = array('dpid'=>$dpid,'jobid'=>$padLid,'pos_sync_lid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>$content);
+					$data = array('dpid'=>$dpid,'jobid'=>$padLid,'pos_sync_lid'=>$lid,'sync_type'=>$type,'sync_url'=>$syncurl,'content'=>json_encode($pData));
 					$resFail = self::setSyncFailure($data);
 					$failObj = json_decode($resFail);
 					if($failObj->status){
