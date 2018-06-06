@@ -293,6 +293,7 @@ class DataSyncOperation {
 			$ckey = 'order_online_total_operation_'.$nIndex;
 			$isActive = Yii::app()->redis->get($ckey);
 			if($isActive==0){
+				Yii::app()->redis->set($ckey,'1');
 				self::callUserFunc('WxRedis::dealRedisData', $dpid);
 			}
 		}
@@ -1336,7 +1337,6 @@ class DataSyncOperation {
 				$type = $obj->sync_type;
 				$syncurl = $obj->sync_url;
 				$content = $obj->content;
-				$content = Helper::dealString($content);
 				if($type==2){
 					// 新增订单
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'type'=>$type,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
@@ -1496,7 +1496,7 @@ class DataSyncOperation {
 	/**
 	 * 
 	 * 
-	 * 会员卡支付
+	 * 会员卡 消费
 	 * 
 	 * 
 	 */
@@ -1647,6 +1647,7 @@ class DataSyncOperation {
 	 *
 	 * @param $data
 	 * dpid rfid n_card_id level_id o_card_id
+	 * 实体卡 充值 
 	 *
 	 */
 	public static function chargeMemberCard($data) {
@@ -1832,11 +1833,11 @@ class DataSyncOperation {
 	public static function updateMaterialStock($dpid, $createAt, $materialId, $stock,$orderProductId) {
 		$temStock = $stock;
 		$time = time ();
-		$sql = 'select sum(stock) as stock from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock <> 0 and delete_flag=0';
+		$sql = 'select sum(stock) as stock from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock != 0 and delete_flag=0';
 		$summaterialStock = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if($summaterialStock['stock'] > 0){
 			// 总库存大于0
-			$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock <> 0 and delete_flag=0 order by create_at asc';
+			$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock != 0 and delete_flag=0 order by create_at asc';
 			$materialStocks = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			if(!empty($materialStocks)){
 				$count = count($materialStocks);

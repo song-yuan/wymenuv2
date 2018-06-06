@@ -41,8 +41,7 @@ class WxRedis
 		$orderSize = Yii::app()->redis->lLen($orderKey);
 		if($orderSize > 0){
 			$orderData = Yii::app()->redis->rPop($orderKey);
-			Yii::app()->redis->set($key,'1');
-			try {
+			if(!empty($orderData)){
 				$orderDataArr = json_decode($orderData,true);
 				if(is_array($orderDataArr)){
 					$type = $orderDataArr['type'];
@@ -75,12 +74,8 @@ class WxRedis
 					$data = array('dpid'=>$dpid,'jobid'=>0,'pos_sync_lid'=>0,'sync_type'=>0,'sync_url'=>'','content'=>$orderData);
 					DataSyncOperation::setSyncFailure($data);
 				}
-				self::dealRedisData($dpid);
-			}catch(Exception $e){
-				Yii::app()->redis->lPush($orderData);
-				Yii::app()->redis->set($key,'0');
-				self::dealRedisData($dpid);
 			}
+			self::dealRedisData($dpid);
 		}else{
 			Yii::app()->redis->set($key,'0');
 		}
