@@ -19,36 +19,29 @@ class  CrontabController extends Controller
 		$sql = 'select dpid from nb_company where type=1 and delete_flag = 0';
 		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
 		foreach ($dpids as $dpid){
-			// 确保redis里订单数据生成订单
-			Helper::writeLog('redis-data begain:'.$dpid);
-			WxRedis::dealRedisData($dpid);
-			Helper::writeLog('redis-data end:'.$dpid);
 			$syncData = DataSyncOperation::getAllSyncFailure($dpid);
 			$syncArr = json_decode($syncData);
 			if(!empty($syncArr)){
 				foreach ($syncArr as $sync){
-					$lid = $sync->lid;
-					$dpid = $sync->dpid;
-					$padLid = $sync->jobid;
-					$syncLid = $sync->pos_sync_lid;
-					$type = $sync->sync_type;
-					$syncurl = $sync->sync_url;
-					$content = $sync->content;
+					$lid = $sync['lid'];
+					$dpid = $sync['dpid'];
+					$orderData = $sync['content'];
+					$orderDataArr = json_decode($orderData,true);
+					if(!is_array($orderDataArr)){
+						continue;
+					}
+					$type = $orderDataArr['type'];
 					if($type==2){
 						// 新增订单
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-						$result = DataSyncOperation::operateOrder($pData);
+						$result = DataSyncOperation::operateOrder($orderDataArr);
 					}elseif($type==4){
 						// 退款
-						$contentArr = explode('::', $content);
-						$createAt = isset($contentArr[7])?$contentArr[7]:'';
-						$pData = array('sync_lid'=>$syncLid,'dpid'=>$dpid,'admin_id'=>$adminId,'poscode'=>$poscode,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'retreattime'=>$createAt,'data'=>$content);
-						$result = DataSyncOperation::retreatOrder($pData);
+						$result = DataSyncOperation::retreatOrder($orderDataArr);
 					}elseif($type==3){
 						// 增加会员卡
-						$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'posLid'=>$padLid,'data'=>$content);
-						$result = DataSyncOperation::addMemberCard($pData);
+						$result = DataSyncOperation::addMemberCard($orderDataArr);
 					}elseif($type==5){
+						$content = $orderDataArr['data'];
 						$contentArr = explode('::', $content);
 						$rjDpid = $contentArr[0];
 						$rjUserId = $contentArr[1];
