@@ -28,6 +28,7 @@ class Helper
 					"\r","\\r",
 					"'","\'",
 					"\t","\\t",
+					"\\",
 				);
 		$str = str_replace($replace, '', $str);
 		$replace = '/./u';
