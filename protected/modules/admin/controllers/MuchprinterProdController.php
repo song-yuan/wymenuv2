@@ -23,7 +23,7 @@ class MuchprinterProdController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		
 		$db = Yii::app()->db;
-		$sql = 'select t.*,t1.category_name from nb_product t,nb_product_category t1 where t.category_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t1.show_type!=6 and t.delete_flag=0';
+		$sql = 'select t.*,t1.category_name from nb_product t,nb_product_category t1 where t.category_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t.delete_flag=0';
 		if($categoryId){
 			$sql .= ' and t.category_id = '.$categoryId;
 		}
