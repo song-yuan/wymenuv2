@@ -745,7 +745,7 @@ class UserController extends Controller
 		$extime = 5*60;
 		$mkey = $dpid.'-'.$mobile;
 		Yii::app()->redis->setex($mkey, $extime, $code);
-		$content = '【壹点吃】验证码'.$code.'用于完善信息,5分钟内有效,请勿提供给任何人。';
+		$content = '【物易科技】验证码'.$code.'用于完善信息,5分钟内有效,请勿提供给任何人。';
 		$result = WxSentMessage::sentMessage($dpid,$mobile,$type,$user_id,$content);
 		if($result){
 			echo 1;
