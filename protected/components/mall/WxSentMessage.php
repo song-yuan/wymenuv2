@@ -18,11 +18,10 @@ class WxSentMessage
 		$password = 'wymenu6688';
 		$url = 'http://sh2.ipyy.com/smsJson.aspx?action=send&userid='.$userId.'&account='.$account.'&password='.$password.'&mobile='.trim($mobile).'&content='.$content.'&sendTime=&extno=';
 		$result = Curl::httpsRequest($url);
-		var_dump($result);
 		$resObj = json_decode($result);
 		if($resObj->returnstatus=='Success'){
 			// 发送成功
-			self::insert($dpid, $mobile, $code, $type, $userId, $content);
+			self::insert($dpid, $mobile, $type, $userId, $content);
 			$res = true;
 		}else{
 			$res = false;
@@ -34,7 +33,7 @@ class WxSentMessage
 	 * 记录短信
 	 * 
 	 **/
-	public static function insert($dpid,$mobile,$code,$type,$user_id,$content){      
+	public static function insert($dpid,$mobile,$type,$user_id,$content){      
 		$time = time();
 		$se = new Sequence("mobile_message");
         $lid = $se->nextval();
@@ -46,7 +45,7 @@ class WxSentMessage
                         'user_id' => $user_id,
                         'type'=>$type,
 			        	'mobile'=>$mobile,
-			        	'code'=>$code,
+			        	'code'=>0,
 						'status'=>1,
 						'comment'=>$content,
 			        );

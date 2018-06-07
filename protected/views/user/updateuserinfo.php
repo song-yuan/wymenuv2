@@ -222,7 +222,7 @@
    function setTime(){
     	var obj = $('#countdown');
     	if (countdown == 0) { 
-			obj.removeClass("disable");    
+    		$('.sentMessage').removeClass("disable");
 			obj.html(''); 
 			countdown = 60; 
 			return;
