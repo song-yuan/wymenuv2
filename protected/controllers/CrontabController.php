@@ -20,7 +20,7 @@ class  CrontabController extends Controller
 		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
 		foreach ($dpids as $dpid){
 			$syncData = DataSyncOperation::getAllSyncFailure($dpid);
-			$syncArr = json_decode($syncData);
+			$syncArr = json_decode($syncData,true);
 			if(!empty($syncArr)){
 				foreach ($syncArr as $sync){
 					$lid = $sync['lid'];
