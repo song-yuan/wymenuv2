@@ -713,14 +713,16 @@ class UserController extends Controller
 	 */
 	 public function actionAjaxVerifyCode()
 	{
+		$dpid = $this->companyId;
 		$mobile = Yii::app()->request->getParam('mobile');
 		$code = Yii::app()->request->getParam('code');
                
 		$mobile = trim($mobile);
 		$code = trim($code);
                
-		$result = WxSentMessage::getCode($this->companyId,$mobile);
-		if($result && $result['code'] == $code){
+		$mkey = $dpid.'-'.$mobile;
+		$checkCode = Yii::app()->redis->get($mkey);
+		if($checkCode == $code){
 			echo 1;
 		}else{
 			echo 0;
@@ -733,29 +735,23 @@ class UserController extends Controller
 	 * 
 	 */
 	 public function actionAjaxSentMessage()                 
-	{       
-                $user_id = Yii::app()->request->getParam('user_id');
+	{    
+	 	$dpid = $this->companyId;
+        $user_id = Yii::app()->request->getParam('user_id');
 		$mobile = Yii::app()->request->getParam('mobile');
-                $type = Yii::app()->request->getParam('type');
-		$code = rand(1000,9999);
-                $message =  WxSentMessage::insert($this->companyId,$mobile,$code,$type,$user_id);
-                
-		if($message['status']){
-                        $lid= $message['lid'];
-			$content = '【物易科技】您的验证码是：'.$code;
-			$result = WxSentMessage::sentMessage($mobile,$content);
-			$resArr = json_decode($result);
-			if($resArr->returnstatus=='Success'){
-                            WxSentMessage::update($lid ,1);
-				echo 1;
-			}else{
-				echo 0;
-			}
+        $type = Yii::app()->request->getParam('type');
+		$code = Helper::randNum(6);
+		
+		$extime = 5*60;
+		$mkey = $dpid.'-'.$mobile;
+		Yii::app()->redis->setex($mkey, $extime, $code);
+		$content = '【壹点吃】验证码'.$code.'用于完善信息,5分钟内有效,请勿提供给任何人。';
+		$result = WxSentMessage::sentMessage($dpid,$mobile,$type,$user_id,$content);
+		if($result){
+			echo 1;
 		}else{
 			echo 0;
 		}
-              
-                
 		exit;
 	}
 	/**

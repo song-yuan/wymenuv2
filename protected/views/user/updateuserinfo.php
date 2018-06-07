@@ -272,9 +272,6 @@ $('document').ready(function(){
     $('#confirm').click(function(){
             $('#dialog2').hide();
     });
-//    $('.backUrl').click(function(){
-//            history.back();
-//    });
        
     $('.bttn_small').click(function(){
                $('#mobile').removeAttr('readonly');
