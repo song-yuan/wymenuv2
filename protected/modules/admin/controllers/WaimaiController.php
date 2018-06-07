@@ -137,15 +137,7 @@ class WaimaiController extends BackendController
 		$type = Yii::app()->request->getPost('type');
 		if(!empty($type)){
 			$dpid = $this->companyId;
-			$developerId = MtUnit::developerId;
-			$re = MtOrder::downgrade($dpid,$developerId);
-// 			$re = '{
-//     "error": {
-//         "code":705,
-//         "error_type":"waimai_param_error",
-//         "message":"参数格式错误:分页参数不能超过1000"
-//     }
-// }';
+			$re = MtOrder::privacyNumber($dpid);
 			$re = json_decode($re);
 			if(isset($re->error)){
 				Yii::app()->user->setFlash('error' , yii::t('app','参数格式错误或不存在降级城市'));
