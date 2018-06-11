@@ -1534,7 +1534,6 @@ class DataSyncOperation {
 					'msg' => '余额不足' 
 			) );
 		}
-		Helper::writeLog('member_card:'.$result['haspassword'].' password:'.md5($password).' '.$result['password_hash']);
 		if($result['haspassword'] && md5($password)!=$result['password_hash']){
 			return json_encode ( array (
 					'status' => false,
