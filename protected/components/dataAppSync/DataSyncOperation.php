@@ -1437,6 +1437,8 @@ class DataSyncOperation {
 				'name' => $obj->name,
 				'mobile' => $obj->mobile,
 				'email' => $obj->email,
+				'haspassword'=>isset($obj->haspassword)?$obj->haspassword:'0',
+				'password_hash'=>isset($obj->password_hash)?md5($obj->password_hash):'',
 				'sex' => $obj->sex,
 				'ages' => $obj->ages,
 				'birthday' => $obj->birthday,
