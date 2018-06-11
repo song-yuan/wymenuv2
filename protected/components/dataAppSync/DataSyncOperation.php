@@ -1324,13 +1324,13 @@ class DataSyncOperation {
 		return $msg;
 	}
 	public static function batchSync($data) {
-		Helper::writeLog('batch');
 		if(isset($data) && !empty($data['data'])){
 			$dpid = 0;
 			$lidArr = array();
 			$adminId = $data['admin_id'];
 			$poscode = isset($data['poscode'])?$data['poscode']:0;
 			$data = $data['data'];
+			Helper::writeLog('batch:'.$data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
 				$lid = $obj->lid;
