@@ -1532,6 +1532,12 @@ class DataSyncOperation {
 					'msg' => '余额不足' 
 			) );
 		}
+		if($result['haspassword'] && md5($password)!=$result['password_hash']){
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '会员卡密码错误'
+			) );
+		}
 		$time = time();
 		$is_sync = DataSync::getInitSync();
 		$transaction = Yii::app()->db->beginTransaction();
