@@ -15,24 +15,18 @@ class CompanyWxController extends BackendController
 		$provinces = Yii::app()->request->getParam('province',0);
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
+		$isOpen = Yii::app()->request->getParam('isopen',0);
 		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
 		$criteria = new CDbCriteria;
 		$criteria->with = 'property';
-		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE)
-		{
-			$criteria->condition =' t.delete_flag=0 ';
-		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
-		{
-			$criteria->condition ='t.type =1 and t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
-		}else{
-			$criteria->condition = ' t.delete_flag=0 and t.dpid='.Yii::app()->user->companyId ;
-		}
+		$criteria->condition ='t.type =1 and t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$companyId.' and tt.delete_flag=0 ) or t.dpid='.$companyId;
+		
 		$province = $provinces;
 		$city = $citys;
 		$area = $areas;
-		//var_dump($criteria);exit;
+		
 		if($citys == '市辖区'|| $citys == '省直辖县级行政区划' || $citys == '市辖县'){
 			$city = '0';
 		}
@@ -48,6 +42,14 @@ class CompanyWxController extends BackendController
 		if($area){
 			$criteria->addCondition('t.county_area like "'.$area.'"');
 		}
+		if($isOpen){
+			if($isOpen==1){
+				$isopen = '2,3';
+			}else{
+				$isopen = '0,1';
+			}
+			$criteria->addCondition('property.is_rest in('.$isopen.')');
+		}
 		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -59,6 +61,7 @@ class CompanyWxController extends BackendController
 				'province'=>$provinces,
 				'city'=>$citys,
 				'area'=>$areas,
+				'isopen'=>$isOpen
 		));
 	}
 	public function actionStore(){

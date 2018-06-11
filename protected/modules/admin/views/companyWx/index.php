@@ -66,7 +66,7 @@
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'company-form',
-				'action' => $this->createUrl('companyWx/delete', array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('companyWx/index', array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -83,6 +83,11 @@
 						<select id="province" name="province" class="selectedclass"></select>
 						<select id="city" name="city" class="selectedclass"></select>
 						<select id="area" name="area" class="selectedclass"></select>
+						<select name="isopen" class="selectedclass">
+							<option value="0" <?php if($isopen==0) echo 'selected';?>>全部</option>
+							<option value="1" <?php if($isopen==1) echo 'selected';?>>开通</option>
+							<option value="2" <?php if($isopen==2) echo 'selected';?>>未开通</option>
+						</select>
                     </div>
                     <div class="btn-group">
 	                	<button type="button" id="cityselect" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
@@ -251,10 +256,7 @@ jQuery(document).ready(function() {
 		},'json');
 	}
 	$('#cityselect').on('click',function(){
-		 var province = $('#province').children('option:selected').val();
-         var city = $('#city').children('option:selected').val();
-         var area = $('#area').children('option:selected').val();
-         location.href="<?php echo $this->createUrl('companyWx/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
+		$('form').submit();
 	});
 	$('#province').change(function(){
 		changeselect();
@@ -265,12 +267,9 @@ jQuery(document).ready(function() {
 	$('#area').change(function(){
 		changeselect();
 	});
-	 function changeselect(){
-		 var province = $('#province').children('option:selected').val();
-			var city = $('#city').children('option:selected').val();
-	        var area = $('#area').children('option:selected').val();
-			location.href="<?php echo $this->createUrl('companyWx/index' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
-		 }
+	function changeselect(){
+        $('form').submit();
+	}
 
 	$('.open-wxdpid').on('click',function(){
 		var rest = $(this).attr('rest');
