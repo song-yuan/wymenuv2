@@ -66,7 +66,7 @@
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'company-form',
-				'action' => $this->createUrl('companyWx/index', array('companyId' => $this->companyId)),
+				'method' => 'GET',
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
