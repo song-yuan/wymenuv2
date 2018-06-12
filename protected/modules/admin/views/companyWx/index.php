@@ -256,7 +256,11 @@ jQuery(document).ready(function() {
 		},'json');
 	}
 	$('#cityselect').on('click',function(){
-		$('form').submit();
+		var province = $('#province').val();
+		var city = $('#city').val();
+		var area = $('#area').val();
+		var isopen = $('#isopen').val();
+		location.href = '<?php echo $this->createUrl('/admin/companyWx/index',array('companyId'=>$this->companyId));?>/province/'+province+'/city/'+city+'/area/'+area+'/isopen/'+isopen;
 	});
 	$('#province').change(function(){
 		changeselect();
@@ -268,7 +272,11 @@ jQuery(document).ready(function() {
 		changeselect();
 	});
 	function changeselect(){
-        $('form').submit();
+		var province = $('#province').val();
+		var city = $('#city').val();
+		var area = $('#area').val();
+		var isopen = $('#isopen').val();
+		location.href = '<?php echo $this->createUrl('/admin/companyWx/index',array('companyId'=>$this->companyId));?>/province/'+province+'/city/'+city+'/area/'+area+'/isopen/'+isopen;
 	}
 
 	$('.open-wxdpid').on('click',function(){
