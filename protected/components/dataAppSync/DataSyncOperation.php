@@ -1330,7 +1330,6 @@ class DataSyncOperation {
 			$adminId = $data['admin_id'];
 			$poscode = isset($data['poscode'])?$data['poscode']:0;
 			$data = $data['data'];
-			Helper::writeLog('batch:'.$data);
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $obj){
 				$lid = $obj->lid;
