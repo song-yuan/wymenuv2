@@ -83,7 +83,7 @@
 						<select id="province" name="province" class="selectedclass"></select>
 						<select id="city" name="city" class="selectedclass"></select>
 						<select id="area" name="area" class="selectedclass"></select>
-						<select name="isopen" class="selectedclass">
+						<select id="isopen" name="isopen" class="selectedclass">
 							<option value="0" <?php if($isopen==0) echo 'selected';?>>全部</option>
 							<option value="1" <?php if($isopen==1) echo 'selected';?>>开通</option>
 							<option value="2" <?php if($isopen==2) echo 'selected';?>>未开通</option>
