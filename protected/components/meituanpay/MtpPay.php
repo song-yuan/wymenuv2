@@ -184,7 +184,7 @@ class MtpPay{
 	
 	    	}elseif($return_status == 'FAIL'){
 	    		$re_code = $obj['errCode'];
-	    		if($re_code == "TRADE_PAY_UNKOWN_ERROR" || $re_code == "TRADE_PAYING_ERROR"){
+	    		if($re_code == "UNKNOW_ERROR" || $re_code == "TRADE_PAY_UNKOWN_ERROR" || $re_code == "TRADE_PAYING_ERROR"){
 	    			/*正在支付，发起轮询*/
 	    		/*发起轮询*/
 		    		$i=1;
