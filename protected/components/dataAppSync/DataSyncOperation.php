@@ -1424,6 +1424,16 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
+		
+		$passwordHash = '';
+		if(isset($obj->haspassword)){
+			$haspassword = $obj->haspassword;
+		}else{
+			$haspassword = 0;
+		}
+		if($haspassword){
+			$passwordHash = md5($obj->password_hash);
+		}
 		$se = new Sequence ( "member_card" );
 		$memberCardId = $se->nextval ();
 		$inserMemberCardrArr = array (
@@ -1437,8 +1447,8 @@ class DataSyncOperation {
 				'name' => $obj->name,
 				'mobile' => $obj->mobile,
 				'email' => $obj->email,
-				'haspassword'=>isset($obj->haspassword)?$obj->haspassword:'0',
-				'password_hash'=>isset($obj->password_hash)?md5($obj->password_hash):'',
+				'haspassword'=>$haspassword,
+				'password_hash'=>$passwordHash,
 				'sex' => $obj->sex,
 				'ages' => $obj->ages,
 				'birthday' => $obj->birthday,
