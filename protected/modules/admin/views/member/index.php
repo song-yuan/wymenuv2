@@ -27,8 +27,20 @@
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
-
-	<div class="row">
+	<form action="" method="post" >
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<div class="input-group">
+					<input type="text" name="number" class="form-control" placeholder="刷卡或姓名或会员卡号或手机号" value="<?php echo $number ?$number:'';?>">
+					<span class="input-group-btn">
+					<button class="btn green" type="submit">查找 &nbsp;<i class="m-icon-swapright m-icon-white"></i></button>
+					</span>
+				</div>
+			</div>
+		</div>
+    </form>
+	<div class="row margin-top-10">
 		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">

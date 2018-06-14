@@ -18,29 +18,22 @@ class MemberController extends BackendController
 		));
 	}
 	public function actionIndex() {
-                if(Yii::app()->user->role > '15')
-                {
-                    $this->redirect(array('default/error2',
-                                     'companyId'=>$this->companyId,
-                                     'title' => "没有权限"                               
-                             ));  
-                }
-		$id = 0;
+        if(Yii::app()->user->role > '15')
+        {
+             $this->redirect(array('default/error2','companyId'=>$this->companyId,'title' => "没有权限" ));  
+        }
+        $id = Yii::app()->request->getPost('number',0);
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
 		$criteria->with = 'brandUserLevel';
 		if(Yii::app()->request->isPostRequest){
-			$id = Yii::app()->request->getPost('id',0);
 			if($id){
-				//$criteria->addSearchCondition('selfcode',$id);
-				$criteria->addCondition('t.rfid=:card');
-				$criteria->addCondition('t.selfcode=:card','OR');
-				$criteria->addCondition('t.name=:card','OR');
-				$criteria->addCondition('t.mobile=:card','OR');
-				$criteria->params[':card']=$id;
+				$criteria->addCondition('t.rfid="'.$id.'"');
+				$criteria->addCondition('t.selfcode like "%'.$id.'%"','OR');
+				$criteria->addCondition('t.name like "%'.$id.'%"','OR');
+				$criteria->addCondition('t.mobile like "%'.$id.'%"','OR');
 			}
 		}
-		
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
 		$criteria->order = ' t.lid asc ';
 		$criteria->params[':dpid']=$this->companyId;
 		
@@ -52,7 +45,7 @@ class MemberController extends BackendController
 		$this->render('index',array(
 				'models'=>$models,
 				'pages' => $pages,
-				'id'=>$id,
+				'number'=>$id,
 		));
 	}
 
