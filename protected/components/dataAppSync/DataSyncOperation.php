@@ -294,7 +294,11 @@ class DataSyncOperation {
 			$isActive = Yii::app()->redis->get($ckey);
 			if($isActive==0){
 				Yii::app()->redis->set($ckey,'1');
-				self::callUserFunc('WxRedis::dealRedisData', $dpid);
+				try {
+					self::callUserFunc('WxRedis::dealRedisData', $dpid);
+				}catch (Exception $e){
+					Yii::app()->redis->set($ckey,'0');
+				}
 			}
 		}
 		return json_encode ( $data );
