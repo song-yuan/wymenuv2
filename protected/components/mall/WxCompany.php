@@ -39,7 +39,7 @@ class WxCompany
 	}
 	// 获取总部的字店铺
 	public static function getCompanyChildrenPage($dpid,$lat,$lng,$page,$keyword){
-		$sql = 'select t.dpid,t.company_name,t.telephone,t.province,t.city,t.county_area,t.address,t.lng,t.lat,round(6378.138*2*asin(sqrt(pow(sin( ('.$lat.'*pi()/180-lat*pi()/180)/2),2)+cos('.$lat.'*pi()/180)*cos(lat*pi()/180)* pow(sin( ('.$lng.'*pi()/180-lng*pi()/180)/2),2)))*1000) as juli,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.rest_message,DATE_FORMAT(t1.shop_time,"%H:%i") as shop_time,DATE_FORMAT(t1.closing_time,"%H:%i") as closing_time  from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.comp_dpid=:dpid and t.type=1 and (is_rest=2 or is_rest=3) and t.delete_flag=0 and t1.delete_flag=0';
+		$sql = 'select t.dpid,t.company_name,t.telephone,t.province,t.city,t.county_area,t.address,t.lng,t.lat,round(6378.138*2*asin(sqrt(pow(sin( ('.$lat.'*pi()/180-lat*pi()/180)/2),2)+cos('.$lat.'*pi()/180)*cos(lat*pi()/180)* pow(sin( ('.$lng.'*pi()/180-lng*pi()/180)/2),2)))*1000) as juli,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.rest_message,DATE_FORMAT(t1.shop_time,"%H:%i") as shop_time,DATE_FORMAT(t1.closing_time,"%H:%i") as closing_time  from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.comp_dpid=:dpid and t.type=1 and is_rest=3 and t.delete_flag=0 and t1.delete_flag=0';
 		if($keyword!=''){
 			$sql .= ' and t.company_name like "%'.$keyword.'%"';
 		}
