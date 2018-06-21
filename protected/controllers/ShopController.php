@@ -22,7 +22,7 @@ class ShopController extends Controller
 		$lat = Yii::app()->request->getParam('lat');
 		$lng = Yii::app()->request->getParam('lng');
 		$keyword = Yii::app()->request->getParam('keyword');
-		$children = WxCompany::getCompanyChildrenPage($this->companyId,$lat,$lng,$page,$keyword);
+		$children = WxCompany::getCompanyChildrenPage($this->companyId,$this->type,$lat,$lng,$page,$keyword);
 		echo json_encode($children);
 		exit;
 	}
