@@ -68,6 +68,9 @@ class WxOrder
 			$this->orderOpenSite();
 		}
 	}
+	/**
+	 *处理满减满送活动
+	 */
 	public function getFullsent(){
 		if($this->fullsent!='0-0-0'){
 			$now = date('Y-m-d H:i:s',time());
@@ -90,7 +93,7 @@ class WxOrder
 			if($fullType==0){
 				$fullsentdetail = WxFullSent::checkFullsentproduct($fullsentdetailId,$fullsentId,$this->dpid);
 				if(!$fullsentdetail){
-					throw new Exception('无改满送产品');
+					throw new Exception('该增送产品已下架');
 				}
 				$this->fullSentProduct = $fullsentdetail;
 			}else{
@@ -100,7 +103,9 @@ class WxOrder
 		}
 		
 	}
-	//获取购物车信息
+	/**
+	 * 获取购物车产品信息
+	 */
 	public function getCart(){
 		if($this->type==2){
 			$hideCate = WxCategory::getHideCate($this->dpid, 2);
@@ -1171,7 +1176,10 @@ class WxOrder
 	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
 	 	$orderStr = json_encode($orderArr);
-	 	WxRedis::pushPlatform($dpid, $orderStr);
+	 	$result = WxRedis::pushPlatform($dpid, $orderStr);
+	 	if(!$result){
+	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$dpid.';data:'.$orderStr);
+	 	}
 	 }
      /**
       * 
@@ -1242,14 +1250,7 @@ class WxOrder
 	  * 
 	  */
 	  public static function getAccountNo($dpid,$siteId,$isTemp,$orderId){
-            $sql="select ifnull(min(account_no),'000000000000') as account_no from nb_order where dpid="
-                    .$dpid." and site_id=".$siteId." and is_temp=".$isTemp
-                    ." and order_status in ('1','2')";
-            $ret=Yii::app()->db->createCommand($sql)->queryScalar();      
-            if($isTemp || empty($ret) || $ret=="0000000000")
-            {
-                $ret=substr(date('Ymd',time()),-6).substr("0000000000".$orderId, -6);
-            }
-            return $ret;
-        }
+          $ret = substr(date('Ymd',time()),-6).substr("0000000000".$orderId, -6);
+          return $ret;
+      }
 }

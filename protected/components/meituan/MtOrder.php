@@ -344,19 +344,22 @@ class MtOrder
 			}
 		}
 		
-		$orderStr = json_encode($orderArr);
-		$orderCloudStr = json_encode($orderCloudArr);
+		
 		// type 同步类型  2订单
-		$orderData = array('sync_lid'=>0,'dpid'=>$dpid,'type'=>2,'is_pos'=>0,'posLid'=>0,'data'=>$orderStr);
+		$orderData = array('sync_lid'=>0,'dpid'=>$dpid,'type'=>2,'is_pos'=>0,'posLid'=>0,'data'=>json_encode($orderArr));
+		
+		$orderStr = json_encode($orderData);
+		$orderCloudStr = json_encode($orderCloudArr);
 		
 		// 放入redis中
-		$result = WxRedis::pushOrder($dpid, json_encode($orderData));
-		$result = WxRedis::pushPlatform($dpid, $orderCloudStr);
-		if($result > 0){
-			$msg = true;	
-		}else{
-			$msg = false;
+		$result = WxRedis::pushOrder($dpid, $orderStr);
+		if(!$result){
+			Helper::writeLog('redis缓存失败 :类型:美团-订单pushOrder;dpid:'.$dpid.';data:'.$orderStr);
 		}
-		return $msg;
+		$result = WxRedis::pushPlatform($dpid, $orderCloudStr);
+		if(!$result){
+			Helper::writeLog('redis缓存失败 :类型:美团-接单pushPlatform;dpid:'.$dpid.';data:'.$orderCloudStr);
+		}
+		return true;
 	}
 }
