@@ -296,7 +296,7 @@ class DataSyncOperation {
 				}catch (Exception $e){
 					$msg = $e->getMessage();
 					Yii::app()->redis->set($ckey,'0');
-					Helper::writeLog('同步生成订单异常:'.$msg);
+					Helper::writeLog('同步生成订单异常解锁:'.$msg);
 				}
 			}else{
 				// redis 最近生成订单时间 超过5分钟  放开锁定
@@ -306,6 +306,7 @@ class DataSyncOperation {
 					$spaceTime = $now - $orderTime;
 					if($spaceTime > 300){
 						Yii::app()->redis->set($ckey,'0');
+						Helper::writeLog('同步生成订单超时解锁:'.$dpid);
 					}
 				}
 			}
