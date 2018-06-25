@@ -17,9 +17,6 @@
  * 
  */
 class DataSyncOperation {
-	public static function callUserFunc($callback,$dpid){
-		return call_user_func($callback,$dpid);
-	}
 	/**
 	 *
 	 * 获取pos设备信息
@@ -295,8 +292,10 @@ class DataSyncOperation {
 			if($isActive==0){
 				Yii::app()->redis->set($ckey,'1');
 				try {
-					self::callUserFunc('WxRedis::dealRedisData', $dpid);
+					WxRedis::dealRedisData($dpid);
 				}catch (Exception $e){
+					$msg = $e->getMessage();
+					Helper::writeLog('同步生成订单:'.$msg);
 					Yii::app()->redis->set($ckey,'0');
 				}
 			}
