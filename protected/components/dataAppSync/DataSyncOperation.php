@@ -291,12 +291,13 @@ class DataSyncOperation {
 			$isActive = Yii::app()->redis->get($ckey);
 			if($isActive==0){
 				Yii::app()->redis->set($ckey,'1');
+				Helper::writeLog('同步生成订单开始:'.$dpid);
 				try {
 					WxRedis::dealRedisData($dpid);
 				}catch (Exception $e){
 					$msg = $e->getMessage();
-					Helper::writeLog('同步生成订单:'.$msg);
 					Yii::app()->redis->set($ckey,'0');
+					Helper::writeLog('同步生成订单异常:'.$msg);
 				}
 			}else{
 				// redis 最近生成订单时间 超过5分钟  放开锁定
