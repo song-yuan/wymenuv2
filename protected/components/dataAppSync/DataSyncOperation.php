@@ -291,7 +291,6 @@ class DataSyncOperation {
 			$isActive = Yii::app()->redis->get($ckey);
 			if($isActive==0){
 				Yii::app()->redis->set($ckey,'1');
-				Helper::writeLog('同步生成订单开始:'.$dpid);
 				try {
 					WxRedis::dealRedisData($dpid);
 				}catch (Exception $e){
