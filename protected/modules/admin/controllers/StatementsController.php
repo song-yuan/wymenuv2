@@ -2174,9 +2174,8 @@ class StatementsController extends BackendController
 					)c';
 
 		}
-		//$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.zhiamount) as all_num,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid = '.$this->companyId.' group by t.order_id,t.set_id) k where 1 group by k.set_id )c';
 		$count = $db->createCommand(str_replace('c.*','count(*)',$sql))->queryScalar();
-		//echo $sql;exit;
+		
 		$pages = new CPagination($count);
 		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
