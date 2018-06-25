@@ -40,8 +40,9 @@ class WxRedis
 		$orderKey = 'redis-order-data-'.$nIndex;
 		$orderSize = Yii::app()->redis->lLen($orderKey);
 		if($orderSize > 0){
+			Yii::app()->redis->set('redis-cloud-order-time',time());
 			$orderData = Yii::app()->redis->rPop($orderKey);
-			if(!empty($orderData)){
+			if($orderData){
 				$orderDataArr = json_decode($orderData,true);
 				if(is_array($orderDataArr)){
 					$type = $orderDataArr['type'];

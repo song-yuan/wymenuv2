@@ -298,6 +298,16 @@ class DataSyncOperation {
 					Helper::writeLog('同步生成订单:'.$msg);
 					Yii::app()->redis->set($ckey,'0');
 				}
+			}else{
+				// redis 最近生成订单时间 超过5分钟  放开锁定
+				$now = time();
+				$orderTime = Yii::app()->redis->get('redis-cloud-order-time');
+				if($orderTime){
+					$spaceTime = $now - $orderTime;
+					if($spaceTime > 300){
+						Yii::app()->redis->set($ckey,'0');
+					}
+				}
 			}
 		}
 		return json_encode ( $data );
