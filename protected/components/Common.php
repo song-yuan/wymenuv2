@@ -44,14 +44,22 @@ class Common{
         $username = $user['username'].'('.$user['staff_no'].')';
         return $username;
     }
+    // 获取门店的原料名称
     static public function getmaterialName($materialId){
         $materialname = "";
         $sql="select t.material_name from nb_product_material t where  t.lid=".$materialId;
         $connect = Yii::app()->db->createCommand($sql);
         $material = $connect->queryRow();
         $materialname = $material['material_name'];
-       // var_dump($sql);exit;
         return $materialname;
+    }
+    static public function getgoodsName($materialId){
+    	$materialname = "";
+    	$sql="select goods_name from nb_goods where lid=".$materialId;
+    	$connect = Yii::app()->db->createCommand($sql);
+    	$material = $connect->queryRow();
+    	$materialname = $material['goods_name'];
+    	return $materialname;
     }
     static public function getproductName($Id){
     	$pn = "";

@@ -55,8 +55,8 @@
                     </div>
 
                     <div class="btn-group">
-                                    <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                                    <button type="submit" id="excel"  class="btn blue" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
+                        <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+                        <button type="submit" id="excel"  class="btn blue" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
                     </div>
                 </div>
             </div>
@@ -68,16 +68,11 @@
 		            <tr>
 		                <?php  $grouppay_item = 0;?>
 		               <th><?php echo yii::t('app','店铺');?></th>
-		               <th><?php echo yii::t('app','时间');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th>
 		               <th><?php echo yii::t('app','总营业额');?></th>
-		               <th><?php echo yii::t('app','单数');?></th>
 		               <th><?php echo yii::t('app','微信点单');?></th>
-		               <th><?php echo yii::t('app','单数');?></th>
 		               <th><?php echo yii::t('app','微信外卖');?></th>
-		               <th><?php echo yii::t('app','单数');?></th>
 		               <th><?php echo yii::t('app','系统券');?></th>
-		               <th><?php echo yii::t('app','单数');?></th>
 		               <th><?php echo yii::t('app','微信储值消费');?></th>
 
 		            </tr>
@@ -103,75 +98,71 @@
 
 		        <tr class="odd gradeX">
 		        	<td><?php echo $m['company_name'];?></td>
-		            <td><?php
-		            		echo $begin_time.'-'.$end_time;
-					?></td>
-					<td><?php $orders_total_nums = $orders_total_nums+$m['all_nums'];
-		                echo $m['all_nums'];?>
+					<td>
+					<?php 
+						$orders_total_nums = $orders_total_nums+$m['all_nums'];
+		                echo $m['all_nums'];
+	                ?>
 		            </td>
 		            <td>
 		            <?php
-		            $all_money = $m['all_reality'];
-		            $all_moneys = $all_moneys + $all_money;
+			            $all_money = $m['all_reality'];
+			            $all_moneys = $all_moneys + $all_money;
 		                echo $all_money;
-		                ?>
-		            </td>
-		            <td><?php $orders_total_wxord = $orders_total_wxord+$m['nums_wxord'];
-		                echo $m['nums_wxord'];?>
+	                ?>
 		            </td>
 		            <td>
 		            <?php
-		            $wxord = $m['all_wxord'];
-		            $all_wxords = $all_wxords + $wxord;
-		                echo $wxord;
+		            	$wxord = $m['all_wxord'];
+		            	if($wxord){
+		            		$orders_total_wxord = $orders_total_wxord+$m['nums_wxord'];
+		            		$all_wxords = $all_wxords + $wxord;
+		            		echo $wxord.'('.$m['nums_wxord'].')';
+		            	}
 		                ?>
-		            </td>
-		            <td><?php $orders_total_wxwm = $orders_total_wxwm+$m['nums_wxwm'];
-		                echo $m['nums_wxwm'];?>
 		            </td>
 		            <td>
 		            <?php
-		            $wxwm = $m['all_wxwm'];
-		            $all_wxwms = $all_wxwms + $wxwm;
-		                echo $wxwm;
-		                ?>
-		            </td>
-		            <td><?php $orders_total_cupon = $orders_total_cupon+$m['nums_cupon'];
-		                echo $m['nums_cupon'];?>
+			            $wxwm = $m['all_wxwm'];
+			            if($wxwm){
+			            	$orders_total_wxwm = $orders_total_wxwm+$m['nums_wxwm'];
+			            	$all_wxwms = $all_wxwms + $wxwm;
+			            	echo $wxwm.'('.$m['nums_wxwm'].')';
+			            }
+		            ?>
 		            </td>
 		            <td>
 		            <?php
-		            $wxcard = $m['all_cupon'];
-		            $all_wxcards = $all_wxcards + $wxcard;
-		                echo $wxcard;
-		                ?>
+			            $wxcard = $m['all_cupon'];
+			            if($wxcard){
+			            	$orders_total_cupon = $orders_total_cupon+$m['nums_cupon'];
+			            	$all_wxcards = $all_wxcards + $wxcard;
+			            	echo $wxcard.'('.$m['nums_cupon'].')';
+			            }
+	                ?>
 		            </td>
-		            <td><?php $orders_total_yue = $orders_total_yue+$m['nums_yue'];
-		                echo $m['nums_yue'];?>
-		            </td>
-		            
-		            <td><?php
+		            <td>
+		            <?php
 		            $wxcharge = $m['all_wxmember'];
-		            $all_wxcharges = $all_wxcharges + $wxcharge;
-		            echo $wxcharge;
-		                ?>
+		            if($wxcharge){
+		            	$orders_total_yue = $orders_total_yue+$m['nums_yue'];
+		            	$wxcharge = $m['all_wxmember'];
+		            	$all_wxcharges = $all_wxcharges + $wxcharge;
+		            	echo $wxcharge.'('.$m['nums_yue'].')';
+		            }
+	                ?>
 		            </td>
 		        </tr>
 
 		        <?php endforeach;?>
 		        <tr>
-		        	<td></td>
 		            <td><?php echo "总计";?></td>
 		            <td><?php echo $orders_total_nums; ?></td>
 		            <td><?php echo $all_moneys; ?></td>
-		            <td><?php echo $orders_total_wxord; ?></td>
-		            <td><?php echo $all_wxords; ?></td>
-		            <td><?php echo $orders_total_wxwm; ?></td>
-		            <td><?php echo $all_wxwms; ?></td>
-		            <td><?php echo $orders_total_cupon; ?></td>
-		            <td><?php echo $all_wxcards;?></td>
-		            <td><?php echo $orders_total_yue; ?></td>
-		            <td><?php echo $all_wxcharges;?></td>
+		            <td><?php echo $all_wxords.'('.$orders_total_wxord.')'; ?></td>
+		            <td><?php echo $all_wxwms.'('.$orders_total_wxwm.')'; ?></td>
+		            <td><?php echo $all_wxcards.'('.$orders_total_cupon.')';?></td>
+		            <td><?php echo $all_wxcharges.'('.$orders_total_yue.')';?></td>
 
 		        </tr>
 		       	<?php endif;?>

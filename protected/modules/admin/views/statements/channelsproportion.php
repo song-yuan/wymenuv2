@@ -44,11 +44,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','渠道占比报表');?></div>
 					<div class="actions">
-					<div class="btn-group">
-							 <input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
-						</div>
                         <div class="btn-group">
-				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
 								<span class="input-group-addon">~</span>
@@ -70,13 +66,11 @@
 						<thead>
 							<tr>
 								
-								<th><?php echo yii::t('app','渠道名称');?></th>
+								<th><?php echo yii::t('app','类型');?></th>
 								<th><?php echo yii::t('app','单数');?></th>
-								
 								<th><?php echo yii::t('app','单均');?></th>
                                 <th><?php echo yii::t('app','金额');?></th>
                                 <th><?php echo yii::t('app','占比');?></th>                                                               
-                                <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
 						</thead>
@@ -87,19 +81,20 @@
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
 								<td><?php switch($model['order_type']){
-									case 0: echo yii::t('app','到店堂食');break;
+									case 0: echo yii::t('app','堂食');break;
 									case 1: echo yii::t('app','微信堂食');break;
 									case 2: echo yii::t('app','微信外卖');break;
 									case 3: echo yii::t('app','微信预约');break;
 									case 4: echo yii::t('app','后台外卖');break;
-									default: echo "";break;}?>
+									case 6: echo yii::t('app','微信点单');break;
+									case 7: echo yii::t('app','美团外卖');break;
+									case 8: echo yii::t('app','饿了么');break;
+									default: echo "其他";break;}?>
 								</td>
 								<td><?php echo $model['all_account']; ?></td>
 								<td><?php echo sprintf("%.2f",$model['all_amount']/$model['all_account']);?></td>
 								<td><?php echo $model['all_amount'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_amount']*100/$allpay['all_payall']).'%';?></td>
-								<td><?php ?></td>
-								
 								</tr>
 						
 						<?php endforeach;?>	

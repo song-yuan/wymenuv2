@@ -113,9 +113,6 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','账单详情报表');?></div>
 					<div class="actions">
 						<div class="btn-group">
-							 <input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
-						</div>
-						<div class="btn-group">
 							<select id="paymentid" class="form-control btn yellow" >
 	                            <option paymentid="1" value="-1" <?php if ($paymentid=='1' && $ordertype=='-1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择订单类型--');?></option>
 	                            <option paymentid="1" value="0" <?php if ($paymentid=='1' && $ordertype=='0'){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>

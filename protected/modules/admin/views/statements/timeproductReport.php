@@ -102,10 +102,6 @@
 	            <input type="text" class="form-control" name="endtime" id="day_end" placeholder="<?php echo yii::t('app','终止时段');?>"  value="<?php echo $day_end;?>"> 
 	            </div> 
             </div>	
-			<div class="btn-group float-right">
-					<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-					<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>		
-			</div>
 	    </div>
 	</div>
 	</div>
@@ -118,6 +114,12 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','单品销售报表');?></div>
+					<div class="actions">
+						<div class="btn-group">
+							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>		
+						</div>
+					</div>
 			 </div> 
 				<div class="portlet-body" id="table-manage">
 				<div class="dataTables_wrapper form-inline">

@@ -1,0 +1,116 @@
+<?php $form=$this->beginWidget('CActiveForm', array(
+		'id' => 'material-form',
+		'errorMessageCssClass' => 'help-block',
+		'htmlOptions' => array(
+			'class' => 'form-horizontal',
+			'enctype' => 'multipart/form-data',
+			'onsubmit'=>'return checksubmit()'
+		),
+)); ?>
+	<div class="form-body">
+		<div class="form-group">
+			<?php echo $form->label($model, '商品分类',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+			</div>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('material_id')) echo 'has-error';?>">
+			<?php echo $form->label($model, '商品名称',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<select class="form-control" name="StorageOrderDetail[material_id]">
+					<option value="0">-- 请选择 --</option>
+					<?php foreach ($materials as $material):?>
+					<option value="<?php echo $material['lid'];?>" is-batch="<?php echo $material['is_batch'];?>" <?php if($material['lid']==$model->material_id){ echo 'selected="selected"';}?>><?php echo $material['goods_name'];?></option>
+					<?php endforeach;?>
+				</select>
+				<?php echo $form->error($model, 'material_id' )?>
+			</div>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('price')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'price',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('price')));?>
+				<?php echo $form->error($model, 'price' )?>
+			</div>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('stock')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'stock',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock')));?>
+				<?php echo $form->error($model, 'stock' )?>
+			</div>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('free_stock')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'free_stock',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'free_stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('free_stock')));?>
+				<?php echo $form->error($model, 'free_stock' )?>
+			</div>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('batch_code')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'batch_code',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'batch_code',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('batch_code')));?>
+				<?php echo $form->error($model, 'batch_code' )?>
+			</div>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('stock_day')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'stock_day',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'stock_day',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock_day')));?>
+				<?php echo $form->error($model, 'stock_day' )?>
+			</div>
+		</div>
+		<div class="form-actions fluid">
+			<div class="col-md-offset-3 col-md-9">
+				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+				<a href="<?php echo $this->createUrl('storageOrder/ckdetailindex' , array('companyId' => $model->dpid,'lid'=>$model->storage_id, ));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
+			</div>
+		</div>
+<?php $this->endWidget(); ?>
+<?php 
+	$this->widget('ext.kindeditor.KindEditorWidget',array(
+		'id'=>'',	//Textarea id
+		'language'=>'zh_CN',
+		// Additional Parameters (Check http://www.kindsoft.net/docs/option.html)
+		'items' => array(
+			'height'=>'200px',
+			'width'=>'100%',
+			'themeType'=>'simple',
+			'resizeType'=>1,
+			'allowImageUpload'=>true,
+			'allowFileManager'=>true,
+		),
+	)); 
+?>
+						
+<script>
+	function checksubmit(){
+		var isbatch = $('select[name="StorageOrderDetail[material_id]"]').find('option:selected').attr('is-batch');
+		if(isbatch==1){
+			 var batchcode = $('#StorageOrderDetail_batch_code').val();
+			 if(batchcode==''){
+				 alert('请输入批次号!');
+				 return false;
+			 }
+		 }
+		 return true;
+	}
+   $('#selectCategory').change(function(){
+	   var cid = $(this).val();
+	   $.ajax({
+		   url:'<?php echo $this->createUrl('StorageOrder/getGoodsChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
+		   type:'GET',
+		   dataType:'json',
+		   success:function(result){
+			   var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
+			   if(result.data.length){
+				   $.each(result.data,function(index,value){
+					   str = str + '<option value="'+value.id+'" is-batch="'+value.is_batch+'">'+value.name+'</option>';
+				   });
+			   }
+			   $('#StorageOrderDetail_material_id').html(str);
+		   }
+	   });
+   });
+</script>

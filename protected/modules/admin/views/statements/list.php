@@ -80,8 +80,8 @@
                         <p>基础营业报表</p>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                             <a href="<?php echo $this->createUrl('statements/incomeReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-                                <div class="list_big"> 营业收入</div>
-                                <div class="list_small">查询商品的销量、实收款和退款数据等</div>
+                                <div class="list_big"> 单品分类销售详情</div>
+                                <div class="list_small">查询单品分类的销量、实收款和退款数据等</div>
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
@@ -143,7 +143,7 @@
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-                            <a href="<?php echo $this->createUrl('statements/retreatdetailReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
+                            <a href="<?php echo $this->createUrl('statements/retreatdetailReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
                                 <div class="list_big">退菜明细</div>
                                 <div class="list_small">查询所退菜品的信息记录</div>
                             </a> 
@@ -178,7 +178,7 @@
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                            <a href="<?php echo $this->createUrl('statements/comPayYueReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
-                                <div class="list_big">支付方式(储值)</div>
+                                <div class="list_big">支付方式(微信点餐)</div>
                                 <div class="list_small">查询门店账单总营业额和总单数及微信端的账单数据和金额数据</div>
                             </a> 
                         </div>

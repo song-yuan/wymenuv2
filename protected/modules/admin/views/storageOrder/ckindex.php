@@ -22,13 +22,13 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','入库单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','入库单列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
 	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
 	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','仓库管理'),'subhead'=>yii::t('app','入库单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('tmall/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','入库单列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('tmall/list' , array('companyId' => $this->companyId)))));?>
 
 	<!-- END PAGE HEADER-->
 	<style>
@@ -51,7 +51,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('storageOrder/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('storageOrder/ckdelete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -64,11 +64,10 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','入库单列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('storageOrder/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('storageOrder/ckcreate' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
-						<!-- <a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a> -->
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -78,8 +77,8 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','厂商名称');?></th>
-								<th><?php echo yii::t('app','组织名称');?></th>
+								<th style="width:16%"><?php echo yii::t('app','供应商');?></th>
+								<th><?php echo yii::t('app','采购仓库');?></th>
 								<th><?php echo yii::t('app','入库单号');?></th>
 								<th><?php echo yii::t('app','入库负责人');?></th>
 								<th><?php echo yii::t('app','订货单号');?></th>
@@ -94,7 +93,6 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">                                       
-                                                                             <!--此处$model是指StorageOrder表，原本是models，此处别名为model-->
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo Common::getmfrName($model->manufacturer_id);?></td>
 								<td ><?php echo Helper::getCompanyName($model->organization_id);?></td>
@@ -105,11 +103,11 @@
 								<td><?php echo $model->remark;?></td>
 								<td><span style="color: red;"><?php if($model->status==1){ echo '审核通过';}elseif($model->status==2){ echo '审核失败';}elseif($model->status==3){ echo '已入库';}elseif($model->status==4){ echo '送审中...';}else{ echo '正在编辑';};?></span></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('storageOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','入库单详情');?></a>
+									<a href="<?php echo $this->createUrl('storageOrder/ckdetailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','入库单详情');?></a>
 								</td>
 								<td class="center">
 								<?php if($model->status == 0 || $model->status == 2):?>
-									<a href="<?php echo $this->createUrl('storageOrder/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('storageOrder/ckupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>
 							</tr>

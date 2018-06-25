@@ -72,6 +72,7 @@ class Goods extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'category' => array(self::BELONGS_TO , 'MaterialCategory' ,'','on'=> 't.category_id=category.lid'),
 		);
 	}
 
@@ -168,5 +169,12 @@ class Goods extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	public static function getStock($goodsId,$dpid)
+	{
+		$sql = 'select sum(stock) as stock_all from nb_goods_material_stock where dpid='.$dpid.' and goods_id='.$goodsId.' and delete_flag=0';
+		$command = Yii::app()->db->createCommand($sql)->queryRow();
+		$stockAll = $command['stock_all'];
+		return $stockAll;
 	}
 }

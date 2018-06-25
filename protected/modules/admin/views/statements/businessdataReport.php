@@ -40,42 +40,31 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营业数据报表');?></div>
 				<div class="actions">
-					 <div class="btn-group" style="width: auto;">
-				
-						   <div class="input-group date-picker input-daterange" ">
-								<span style="color: red;width: 40px;" class="input-group-addon">查询时，请精确到时分秒</span>          
-						  </div>  
-					</div>
 					<select id="text" class="btn yellow" >
 						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
 						<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
 						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
 					</select>
-				<div class="btn-group">
-				
-						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control ui_timepicker" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control ui_timepicker" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-						  </div>  
-					</div>	
-					
 					<div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-							<!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
+					   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+							<input type="text" class="form-control ui_timepicker" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+							<span class="input-group-addon">~</span>
+						    <input type="text" class="form-control ui_timepicker" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+					  </div>  
+					</div>	
+					<div class="btn-group">
+						<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+						<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
 					</div>			
 				</div>
 			 </div> 
 			
-				<div class="portlet-body" id="table-manage">
+			<div class="portlet-body" id="table-manage">
 				<div class="dataTables_wrapper form-inline">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
-							<!-- 	<th>序号</th> -->
 								<th><?php echo yii::t('app','时间');?></th>
                                 <th><?php echo yii::t('app','客流');?></th>
                                 <th><?php echo yii::t('app','单数');?></th> 
@@ -84,7 +73,6 @@
                                 <th><?php echo yii::t('app','优惠');?></th> 
                                 <th><?php echo yii::t('app','人均');?></th>
                                 <th><?php echo yii::t('app','单均');?></th>                                                           
-                                <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
 						</thead>
@@ -93,10 +81,8 @@
 						<!--foreach-->
 						<?php $a=1;?>
 						<?php foreach ($models as $model):?>
-
 								<tr class="odd gradeX">
 								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
-								
 								<td><?php echo $model['all_number'];?></td>
 								<td><?php echo $model['all_account'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_originalprice']);?></td>
@@ -107,13 +93,9 @@
 								<td><?php echo sprintf("%.2f",$model['all_originalprice']-$model['all_realprice']);?></td>
 								<td><?php if($model['all_number']){echo sprintf("%.2f",($model['all_realprice']+$retreatnum)/$model['all_number']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
 								<td><?php if($model['all_account']){echo sprintf("%.2f",($model['all_realprice']+$retreatnum)/$model['all_account']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
-								
-								<td><?php ?></td>
-								
 							</tr>
 						<?php $a++;?>
 						<?php endforeach;?>	
-						
 						<?php endif;?>
 						</tbody>
 					</table>
