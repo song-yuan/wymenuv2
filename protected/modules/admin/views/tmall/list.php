@@ -24,12 +24,6 @@
                         <div class="list_small">根据配货单生成出库单，在发货单内确认出库</div>
                     </a>
                 </div>
-                <div class="list col-sm-3 col-xs-12">
-                    <a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId));?>">
-                        <div class="list_big "><i class="fa fa-list-ol"></i> 添加配送员</div>
-                        <div class="list_small">添加指定的配送员进行送货服务</div>
-                    </a>
-                </div>
             </div>
             <div class="panel_body row">
                 <p>仓库管理员设置</p>
@@ -38,6 +32,12 @@
                     <a href="<?php echo $this->createUrl('Storekeeper/index',array('companyId'=>$this->companyId));?>">
                         <div class="list_big "><i class="fa fa-list-ol"></i> 仓库管理员</div>
                         <div class="list_small">添加、编辑、删除仓库管理员以及填写相应的管理员信息</div>
+                    </a>
+                </div>
+                <div class="list col-sm-3 col-xs-12">
+                    <a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId));?>">
+                        <div class="list_big "><i class="fa fa-list-ol"></i> 添加配送员</div>
+                        <div class="list_small">添加指定的配送员进行送货服务</div>
                     </a>
                 </div>
             </div>
