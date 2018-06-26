@@ -105,7 +105,7 @@
             <li class="<?php if(in_array(Yii::app()->controller->id , array('comgoodsorder','goodsorder','peisonggroup'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('comgoodsorder/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-shopping-cart"></i> 
-                    <span class="title"><?php echo yii::t('app','进销存');?></span>					
+                    <span class="title"><?php echo yii::t('app','供应链管理');?></span>					
                     </a>
             </li>
             <?php endif;?>
