@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','采购单列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId' => $this->companyId,'type' => 0)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','供应链'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','销售订单列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId' => $this->companyId,'type' => 0)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => '',
+				'action' => $this->createUrl('goodsOrder/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购单列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','销售订单列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
 							<input type="number" class="form-control" name="content" id="content" placeholder='<?php if ($content) {echo $content;}else{echo '请输入订单号';} ?>' style="width: 250px;">
@@ -48,6 +48,9 @@
 						<div class="btn-group">
 							<span  class="btn blue" id="pnamebtn"><i class="glyphicon glyphicon-search"></i> <?php echo yii::t('app','查询');?></span>
 						</div>
+                        <div class="btn-group">
+                            <button type="submit"  class="btn red"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+                        </div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -55,7 +58,9 @@
 					<?php if($models):?>
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+                                <th class="table-checkbox">
+                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
+                                </th>
 								<th><?php echo yii::t('app','订单来源');?></th>
 								<th><?php echo yii::t('app','订单号');?></th>
 								<th><?php echo yii::t('app','下单时间');?></th>
@@ -63,7 +68,7 @@
 								<th><?php echo yii::t('app','支付方式');?></th>
 								<th><?php echo yii::t('app','订单状态');?></th>
 								<th><?php echo yii::t('app','处理状态');?></th>
-								<th>&nbsp;</th>
+								<th><?php echo yii::t('app','操作');?></th>
 								<th><?php echo yii::t('app','是否确认收款');?></th>
 							</tr>
 						</thead>
@@ -71,7 +76,9 @@
 
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><?php echo $model['lid']/1;?></td>
+                                <td>
+                                    <input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" />
+                                </td>
 								<td><?php echo $model['company_name'];?></td>
 								<td><b><?php echo $model['account_no'];?></b></td>
 								<td><?php echo $model['create_at'];?></td>
@@ -105,7 +112,7 @@
 											echo '<span style="color:green">已处理</span>';
 										}
 									}
-									
+
 								?>
 								</td>
                                 <td class="center">
@@ -194,5 +201,16 @@
 					}
 				});
 			}
+        });
+
+        //删除
+        $(document).ready(function(){
+            $('#product-form').submit(function(){
+                if(!$('.checkboxes:checked').length){
+                    alert("<?php echo yii::t('app','请选择要删除的项');?>");
+                    return false;
+                }
+                return true;
+            });
         });
 	</script>

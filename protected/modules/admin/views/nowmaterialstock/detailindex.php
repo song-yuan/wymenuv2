@@ -54,7 +54,9 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+								<th class="table-checkbox">
+                                    <!--<input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />-->
+                                </th>
 								<th ><?php echo yii::t('app','入库时间');?></th>
 								<th ><?php echo yii::t('app','原料名称');?></th>
 								<th><?php echo yii::t('app','库存成本');?></th>
@@ -69,7 +71,9 @@
 							<div style="display: none;" id="storagedetail" val="1"></div>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td>
+                                    <!--<input type="checkbox" class="checkboxes" value="<?php /*echo $model->lid;*/?>" name="ids[]" />-->
+                                </td>
 								<td><?php echo $model->create_at;?></td>
 								<td ><?php echo Common::getmaterialName($model->material_id);?></td>
 								<td><?php echo $model->stock_cost;?></td>
@@ -77,7 +81,6 @@
 								<td><?php echo $model->free_stock;?></td>
 								<td><?php echo $model->stock;?></td>
 								<td><?php echo $model->stock_day;?></td>
-								
 							</tr>
 						<?php endforeach;?>
 						<?php else:?>

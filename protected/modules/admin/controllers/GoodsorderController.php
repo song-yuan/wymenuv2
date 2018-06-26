@@ -4,14 +4,15 @@ class GoodsorderController extends BackendController
 {
 	public function actions() {
 		return array(
-				'upload'=>array(
-						'class'=>'application.extensions.swfupload.SWFUploadAction',
-						//注意这里是绝对路径,.EXT是文件后缀名替代符号
-						'filepath'=>Helper::genFileName().'.EXT',
-						//'onAfterUpload'=>array($this,'saveFile'),
-				)
+			'upload'=>array(
+                'class'=>'application.extensions.swfupload.SWFUploadAction',
+				//注意这里是绝对路径,.EXT是文件后缀名替代符号
+				'filepath'=>Helper::genFileName().'.EXT',
+				//'onAfterUpload'=>array($this,'saveFile'),
+			)
 		);
 	}
+
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
@@ -20,6 +21,7 @@ class GoodsorderController extends BackendController
 		}
 		return true;
 	}
+
 	public function actionIndex(){
 		$content = Yii::app()->request->getParam('content',0);
 		if (is_numeric($content)) {
@@ -32,8 +34,10 @@ class GoodsorderController extends BackendController
 			$str = '';
 		}
 		$db = Yii::app()->db;
-		//只显示货到付款和线上支付已支付的订单
-		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno) where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') '.$str.' and ((t.paytype=1 and t.pay_status=1) or t.paytype=2 ) group by t.account_no) k order by lid desc';
+		//只显示货到付款、线上支付、已支付的订单
+		$sql = 'select k.* from (select c.company_name,t.*,d.goods_order_accountno from nb_goods_order t left join nb_company c on(t.dpid = c.dpid) left join nb_goods_delivery d on(t.account_no=d.goods_order_accountno)
+                where t.dpid in(select t.dpid from nb_company t where t.delete_flag = 0 and t.comp_dpid ='.$this->companyId.') '.$str.' and ((t.paytype=1 and t.pay_status=1 and t.delete_flag=0) or t.paytype=2 )
+                group by t.account_no) k order by lid desc';
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -49,8 +53,23 @@ class GoodsorderController extends BackendController
 					'pages'=>$pages,
 					'content'=>$content,
 			));
-
 	}
+
+    //删除
+    public function actionDelete(){
+        $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+        $ids = Yii::app()->request->getPost('ids');
+        if(!empty($ids)) {
+            Yii::app()->db->createCommand('update nb_goods_order set delete_flag=1 where lid in ('.implode(',' , $ids).')')
+                ->execute(array( ':companyId' => $this->companyId));
+            $this->redirect(array('goodsOrder/index' , 'companyId' => $companyId)) ;
+        } else {
+            Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+            $this->redirect(array('goodsOrder/index' , 'companyId' => $companyId)) ;
+        }
+    }
+
+    //确认收款
 	public function actionUpdateorder(){
 		$account_no = Yii::app()->request->getParam('account_no');
 		// var_dump($account_no);exit();
@@ -60,9 +79,12 @@ class GoodsorderController extends BackendController
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 		}else{
 			Yii::app()->end(json_encode(array("status"=>"fail")));
-			return false;
+			//return false;
 		}
+        return false;
 	}
+
+    //销售订单明细列表
 	public function actionDetailindex(){
 		$goid = Yii::app()->request->getParam('lid');
 		$name = Yii::app()->request->getParam('name');
@@ -76,8 +98,12 @@ class GoodsorderController extends BackendController
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
 		$stocks = $db->createCommand($sqlstock)->queryAll();
 
-		$sql = 'select k.* from (select co.company_name as stock_name,c.goods_unit,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
-		//;
+		$sql = 'select k.* from (select c.company_name as stock_name,g.goods_unit,d.*,sum(m.stock) as stock_all
+                from nb_goods_order_detail d
+                left join nb_goods g on(d.goods_id = g.lid)
+                left join nb_company c on(c.dpid = d.stock_dpid)
+                left join nb_goods_material_stock m on(m.goods_id = g.lid)
+                where d.goods_order_id = '.$goid.' group by g.lid order by d.lid) k';
 
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -86,7 +112,7 @@ class GoodsorderController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
-		// var_dump($models);exit;
+		//var_dump($models);exit;
 
 		$this->render('detailindex',array(
 				'models'=>$models,
@@ -101,21 +127,25 @@ class GoodsorderController extends BackendController
 
 	}
 
+    //调整仓库显示不同仓库的数量
+    public function actionStocks(){
+        $goid = Yii::app()->request->getParam('goods_id');
+        $pid = Yii::app()->request->getParam('pid');
+        $db = Yii::app()->db;
 
+        $sql = 'select sum(stock) as stock_all from nb_goods_material_stock
+                where goods_id = '.$goid.' and dpid='.$pid.' and delete_flag=0';
+        $stocks = $db->createCommand($sql)->queryRow();
+        echo $stocks['stock_all'];exit;
+    }
 
 	public function actionDetailindexExport(){
 		$objPHPExcel = new PHPExcel();
-
 		$goid = Yii::app()->request->getParam('goid');
-		// p($goid);
 		$db = Yii::app()->db;
-
 		// $sqls = 'select t.*,ga.*,ga.mobile as phone from nb_goods_delivery t left join nb_goods_address ga on(t.goods_address_id=ga.lid) where t.lid ='.$goid;
-
-		$sqls = 'select c.company_name,t.*,ga.*,ga.mobile as phone from nb_goods_order t'
-				.' left join nb_company c on(t.dpid = c.dpid)'
-				.' left join nb_goods_address ga on(t.goods_address_id=ga.lid)'
-				.' where t.lid ='.$goid;
+		$sqls = 'select c.company_name,t.*,ga.*,ga.mobile as phone from nb_goods_order t'.' left join nb_company c on(t.dpid = c.dpid)'
+				.' left join nb_goods_address ga on(t.goods_address_id=ga.lid)'.' where t.lid ='.$goid;
 		$model = $db->createCommand($sqls)->queryRow();
 
 		$sqlstock = 'select t.* from nb_company t where t.type = 2 and t.comp_dpid ='.$this->companyId;
@@ -124,7 +154,6 @@ class GoodsorderController extends BackendController
 		$sql = 'select k.* from (select co.company_name as stock_name,c.goods_unit,t.* from nb_goods_order_detail t left join nb_goods c on(t.goods_id = c.lid) left join nb_company co on(co.dpid = t.stock_dpid ) where t.goods_order_id = '.$goid.' order by t.lid) k';
 		$models = $db->createCommand($sql)->queryAll();
 		// var_dump($models);exit;
-		// p($model);
 
         //设置第1行的行高
         $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -135,52 +164,48 @@ class GoodsorderController extends BackendController
         $objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
         $objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
         $styleArray1 = array(
-                        'font' => array(
-                                        'bold' => true,
-                                        'color'=>array(
-                                                        'rgb' => '000000',
-                                        ),
-                                        'size' => '20',
-                        ),
-                        'alignment' => array(
-                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                        ),
+            'font' => array(
+                'bold' => true,
+                'color'=>array('rgb' => '000000',),
+                'size' => '20',
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            ),
         );
         $styleArray2 = array(
-                        'font' => array(
-                                        'color'=>array(
-                                                        'rgb' => 'ff0000',
-                                        ),
-                                        'size' => '16',
-                        ),
-                        'alignment' => array(
-                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                        ),
+            'font' => array(
+                'color'=>array('rgb' => 'ff0000',),
+                'size' => '16',
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            ),
         );
         //大边框样式 边框加粗
         $lineBORDER = array(
-                        'borders' => array(
-                                        'outline' => array(
-                                                        'style' => PHPExcel_Style_Border::BORDER_THICK,
-                                                        'color' => array('argb' => '000000'),
-                                        ),
-                        ),
+            'borders' => array(
+                'outline' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THICK,
+                    'color' => array('argb' => '000000'),
+                ),
+            ),
         );
         //$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
         //细边框样式
         $linestyle = array(
-                        'borders' => array(
-                                        'outline' => array(
-                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
-                                                        'color' => array('argb' => 'FF000000'),
-                                        ),
-                        ),
+            'borders' => array(
+                'outline' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array('argb' => 'FF000000'),
+                ),
+            ),
         );
 
         $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1',yii::t('app','壹点吃餐饮管理系统店铺采购货单'))
+        ->setCellValue('A1',yii::t('app','壹点吃餐饮管理系统店铺销售货单'))
         ->setCellValue('A2',yii::t('app','店铺名称:'.$model['company_name'].'--订单号:'.$model['account_no']))
         ->setCellValue('A3',yii::t('app','总金额:'.$model['reality_total'].'--状态:'.($model['pay_status']?'已支付':'未支付')))
         ->setCellValue('A4',yii::t('app','收货地址:'.$model['pcc'].' '.$model['street']))
@@ -242,13 +267,12 @@ class GoodsorderController extends BackendController
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         //输出
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename="壹点吃餐饮管理系统店铺采购货单---（".date('m-d',time())."）.xls";
+        $filename="壹点吃餐饮管理系统店铺销售货单---（".date('m-d',time())."）.xls";
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
 	}
-
 
 	public function actionStore(){
 		$pid = Yii::app()->request->getParam('pid');
@@ -256,8 +280,7 @@ class GoodsorderController extends BackendController
 		$dpid = $this->companyId;
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
-		try
-		{
+		try {
 			$is_sync = DataSync::getInitSync();
 			$stocks = array();
 			$stocks = explode(';',$pid);
@@ -269,7 +292,6 @@ class GoodsorderController extends BackendController
 				//var_dump($lid);var_dump($stockid);
 				$db->createCommand('update nb_goods_order_detail set stock_dpid = '.$stockid.',update_at ="'.date('Y-m-d H:i:s',time()).'" where lid ='.$lid)
 				->execute();
-
 			}
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
@@ -280,7 +302,8 @@ class GoodsorderController extends BackendController
 			//return false;
 		}
 	}
-	//驳回定单
+
+	//驳回销售订单
 	public function actionOrderCheck(){
 		$account_no = Yii::app()->request->getParam('account_no');
 		$order_status = Yii::app()->request->getParam('order_status');
@@ -299,14 +322,30 @@ class GoodsorderController extends BackendController
 		//return true;
 	}
 
+    //通过销售订单
+    public function actionOrderCheck1(){
+        $account_no = Yii::app()->request->getParam('account_no');
+        $order_status = Yii::app()->request->getParam('order_status');
+        $pass_reason = Yii::app()->request->getParam('pass_reason',null);
+        if ($pass_reason != null) {
+            $str = ' pass_reason = "'.$pass_reason.'",';
+        }else{
+            $str = '';
+        }
+        $info = Yii::app()->db->createCommand('update nb_goods_order set '.$str.'order_status='.$order_status.',update_at ="'.date('Y-m-d H:i:s',time()).'" where account_no ='.$account_no)->execute();
+        if ($info) {
+            Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
+        }else{
+            Yii::app()->end(json_encode(array("status"=>"fail",'msg'=>'失败')));
+        }
+    }
 
 	public function actionStockstore(){
 		$pid = Yii::app()->request->getParam('pid');//订单lid编号
 		$dpid = $this->companyId;
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
-		try
-		{
+		try {
 			$gdmoneys = '0.00';
 
 			$is_sync = DataSync::getInitSync();
@@ -399,9 +438,11 @@ class GoodsorderController extends BackendController
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			Yii::app()->end(json_encode(array("status"=>"fail")));
-			return false;
+			//return false;
 		}
+        return false;
 	}
+
 	public function actionSeeinvoice(){
 		$lid = Yii::app()->request->getParam('lid');
 		// var_dump($lid);exit();
@@ -424,6 +465,7 @@ class GoodsorderController extends BackendController
 			'account_no'=>$account_no
 			));
 	}
+
 	public function actionSeedetails(){
 		$lid = Yii::app()->request->getParam('lid');
 		// var_dump($lid);exit();
@@ -443,6 +485,7 @@ class GoodsorderController extends BackendController
 			'lid'=>$lid
 			));
 	}
+
 	public function actionSeeodo(){
 		$lid = Yii::app()->request->getParam('lid');
 		// var_dump($lid);exit();

@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','采购单列表'),'url'=>$this->createUrl('goodsorder/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','查看发货单'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('goodsorder/index' , array('companyId' => $this->companyId)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','进销存'),'url'=>$this->createUrl('comgoodsorder/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','销售订单列表'),'url'=>$this->createUrl('goodsorder/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','查看发货单'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('goodsorder/index' , array('companyId' => $this->companyId)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -63,7 +63,13 @@
 								<td><?php echo $model['delivery_accountno'];?></td>
 								<td><?php if(empty($account)){ echo "配货中";}else{ echo "已发货";}?></td>
 								<td><?php echo $model['company_name'];?></td>
-								<td><?php if(!empty($account)):?><a class="btn green" href="<?php echo $this->createUrl('goodsorder/seeodo',array('companyId'=>$this->companyId,'delivery_accountno'=>$model['delivery_accountno'],'lid'=>$lid,'account_no'=>$account_no));?>">查看出库单</a><?php else:?><input id="goods_deliveried" type="button" class="btn" disabled value="未生成出库单" />　<a class="btn green" href="<?php echo $this->createUrl('goodsorder/seedetails',array('companyId'=>$this->companyId,'delivery_accountno'=>$model['delivery_accountno'],'lid'=>$lid,'account_no'=>$account_no));?>">查看详情</a><?php endif;?></td>
+								<td><?php if(!empty($account)):?>
+                                    <a class="btn green" href="<?php echo $this->createUrl('goodsorder/seeodo',array('companyId'=>$this->companyId,'delivery_accountno'=>$model['delivery_accountno'],'lid'=>$lid,'account_no'=>$account_no));?>">查看出库单</a>
+                                    <?php else:?>
+                                        <input id="goods_deliveried" type="button" class="btn" disabled value="未生成出库单" />　
+                                    <a class="btn green" href="<?php echo $this->createUrl('goodsorder/seedetails',array('companyId'=>$this->companyId,'delivery_accountno'=>$model['delivery_accountno'],'lid'=>$lid,'account_no'=>$account_no));?>">查看详情</a>
+                                    <?php endif;?>
+                                </td>
 							</tr>
 							<?php endforeach;?>
 						<?php else:?>
