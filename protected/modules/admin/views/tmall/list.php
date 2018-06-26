@@ -51,6 +51,12 @@
                         <div class="list_small">录入仓库的商品，操作商品的上下架</div>
                     </a>
                 </div>
+                <div class="list col-sm-3 col-xs-12">
+                    <a href="<?php echo $this->createUrl('nowmaterialstock/ckindex',array('companyId'=>$this->companyId));?>">
+                        <div class="list_big "><i class="fa fa-list-ol"></i> 实时库存</div>
+                        <div class="list_small">查看现有的原料商品库存储量</div>
+                    </a>
+                </div>
             </div>
 
             <div class="panel_body row">
@@ -77,12 +83,6 @@
                     <a href="<?php echo $this->createUrl('storageOrder/ckindex',array('companyId'=>$this->companyId));?>">
                         <div class="list_big "><i class="fa fa-list-ol"></i> 入库订单</div>
                         <div class="list_small">添加查询删除入库订单信息以及操作入库和状态等</div>
-                    </a>
-                </div>
-                <div class="list col-sm-3 col-xs-12">
-                    <a href="<?php echo $this->createUrl('nowmaterialstock/ckindex',array('companyId'=>$this->companyId));?>">
-                        <div class="list_big "><i class="fa fa-list-ol"></i> 实时库存</div>
-                        <div class="list_small">查看现有的原料商品库存储量</div>
                     </a>
                 </div>
 
