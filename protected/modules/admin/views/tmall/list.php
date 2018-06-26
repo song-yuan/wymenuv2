@@ -35,7 +35,7 @@
                     </a>
                 </div>
                 <div class="list col-sm-3 col-xs-12">
-                    <a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId));?>">
+                    <a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId,'types'=>1));?>">
                         <div class="list_big "><i class="fa fa-list-ol"></i> 添加配送员</div>
                         <div class="list_small">添加指定的配送员进行送货服务</div>
                     </a>
