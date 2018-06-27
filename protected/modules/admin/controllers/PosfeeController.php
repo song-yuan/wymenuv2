@@ -97,7 +97,7 @@ class PosfeeController extends BackendController
 				$criteria->addCondition('t.contact_name like "%'.$content.'%" or t.company_name like "%'.$content.'%"');
 			}
 		}
-		$criteria->order = 't.create_at asc,t.dpid asc';
+		$criteria->order = 'posfee.exp_time asc,t.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);

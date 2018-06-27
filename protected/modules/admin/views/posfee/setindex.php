@@ -71,8 +71,10 @@
                     <div class="btn-group">
 	                	<button type="button" id="serch" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
 	                	<?php if(Yii::app()->user->role<='1'):?>
+	                	<!-- 
 	                	<button type="button" id="posfee" class="btn red" ><i class="fa fa-home"></i> <?php echo yii::t('app','生成POS收费列表');?></button>
-	                	<?php endif;?>
+					     -->            	
+						<?php endif;?>
 	                </div>
 					</div>
 				</div>
