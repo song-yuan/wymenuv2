@@ -43,11 +43,17 @@ class PosfeeController extends BackendController
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
 		$content = Yii::app()->request->getParam('content','');
-		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-01-01',time()));
-		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$begin_time = Yii::app()->request->getParam('begin_time','');
+		$end_time = Yii::app()->request->getParam('end_time','');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		
-		$sql = 'select m.* from (select ps.*,c.province,c.city,c.county_area,c.mobile,c.company_name,c.contact_name,pf.used_at,pf.exp_time from nb_pad_setting ps left join nb_company c on ps.dpid=c.dpid left join nb_poscode_fee pf on ps.pad_code=pf.poscode and ps.dpid=pf.dpid where c.comp_dpid='.$companyId.' and c.comp_dpid!=c.dpid and c.type=1 and pf.used_at >= "'.$begin_time.'" and pf.used_at <= "'.$end_time.'" and ps.delete_flag=0 and c.delete_flag=0';
+		$sql = 'select m.* from (select ps.*,c.province,c.city,c.county_area,c.mobile,c.company_name,c.contact_name,pf.used_at,pf.exp_time from nb_pad_setting ps left join nb_company c on ps.dpid=c.dpid left join nb_poscode_fee pf on ps.pad_code=pf.poscode and ps.dpid=pf.dpid where c.comp_dpid='.$companyId.' and c.comp_dpid!=c.dpid and c.type=1 and ps.delete_flag=0 and c.delete_flag=0';
+		if($begin_time!=''){
+			$sql .=' and pf.used_at >= "'.$begin_time.'"';
+		}
+		if($end_time!=''){
+			$sql .=' and pf.used_at <= "'.$end_time.'"';
+		}
 		$province = $provinces;
 		$city = $citys;
 		$area = $areas;
