@@ -136,7 +136,12 @@ class GoodsorderController extends BackendController
         $sql = 'select sum(stock) as stock_all from nb_goods_material_stock
                 where goods_id = '.$goid.' and dpid='.$pid.' and delete_flag=0';
         $stocks = $db->createCommand($sql)->queryRow();
-        echo $stocks['stock_all'];exit;
+        //echo $stocks['stock_all'];exit;
+        if($stocks['stock_all']==''){
+            echo 0;
+        }else{
+            echo $stocks['stock_all'];
+        }
     }
 
 	public function actionDetailindexExport(){
