@@ -48,6 +48,7 @@
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
+					'method' => 'get',
 					'enctype' => 'multipart/form-data'
 				),
 		)); ?>
