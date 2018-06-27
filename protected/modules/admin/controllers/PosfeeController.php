@@ -50,17 +50,11 @@ class PosfeeController extends BackendController
 		$criteria->with = 'posfee';
 		if(Yii::app()->user->role < '5')
 		{
-			//if($this->companyId=='0000000001'){
 				if ($content!='') {
 					$criteria->condition =' t.delete_flag=0 and t.type=0';
 				}else{
-					//$criteria->condition =' t.delete_flag=0';
 					$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.$this->companyId;
 				}
-// 			}else{
-// 				$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
-					
-// 			}
 			
 		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
@@ -103,7 +97,7 @@ class PosfeeController extends BackendController
 				$criteria->addCondition('t.contact_name like "%'.$content.'%" or t.company_name like "%'.$content.'%"');
 			}
 		}
-		$criteria->order = 't.dpid asc';
+		$criteria->order = 't.create_at asc,t.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
