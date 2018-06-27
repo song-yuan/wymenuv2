@@ -366,12 +366,12 @@ class StorageOrderController extends BackendController
 							'dpid'=>$dpid,
 							'create_at'=>date('Y-m-d H:i:s',time()),
 							'update_at'=>date('Y-m-d H:i:s',time()),
-                                                        'storage_id'=>$storage_id,
+                            'storage_id'=>$storage_id,
 							'material_id'=>$mateid,
 							'stock'=>$matenum,
 							'price'=>$price,
-                                                        'mphs_code'=>$prodmaterials['mphs_code'],
-                                                        'delete_flag'=>'0',
+                            'mphs_code'=>$prodmaterials['mphs_code'],
+                            'delete_flag'=>'0',
 							'is_sync'=>$is_sync,
 					);
                                 
@@ -670,6 +670,7 @@ class StorageOrderController extends BackendController
 								'goods_id'=>$detail['material_id'],
 								'goods_code'=>$detail['mphs_code'],
 								'stock_day'=>$detail['stock_day'],
+								'batch_code'=>$detail['batch_code'],
 								'batch_stock'=>$num,
 								'stock'=>$num,
 								'free_stock'=>$detail['free_stock'],
@@ -688,7 +689,7 @@ class StorageOrderController extends BackendController
 								'material_id'=>$detail['material_id'],
 								'type'=>0,
 								'stock_num'=>$num,
-								'resean'=>'入库单入库',
+								'resean'=>'商品入库单入库',
 						);
 						Yii::app()->db->createCommand()->insert('nb_material_stock_log',$gmlogdata);
 					}
