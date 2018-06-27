@@ -43,8 +43,8 @@ class PosfeeController extends BackendController
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
 		$content = Yii::app()->request->getParam('content','');
-		$begin_time = Yii::app()->request->getParam('begin_time','');
-		$end_time = Yii::app()->request->getParam('end_time','');
+		$begin_time = Yii::app()->request->getParam('begtime','');
+		$end_time = Yii::app()->request->getParam('endtime','');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		
 		$sql = 'select m.* from (select ps.*,c.province,c.city,c.county_area,c.mobile,c.company_name,c.contact_name,pf.used_at,pf.exp_time from nb_pad_setting ps left join nb_company c on ps.dpid=c.dpid left join nb_poscode_fee pf on ps.pad_code=pf.poscode and ps.dpid=pf.dpid where c.comp_dpid='.$companyId.' and c.comp_dpid!=c.dpid and c.type=1 and ps.delete_flag=0 and c.delete_flag=0';
