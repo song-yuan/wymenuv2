@@ -43,27 +43,11 @@ class PosfeeController extends BackendController
 		$citys = Yii::app()->request->getParam('city',0);
 		$areas = Yii::app()->request->getParam('area',0);
 		$content = Yii::app()->request->getParam('content','');
-		$role = Yii::app()->user->role;
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-01-01',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		
-// 		$sql = 'select ps.* from nb_pad_setting ps left join nb_company c on ps.dpid=c.dpid left join nb_poscode_fee pf on ps.pad_code=pf.poscode and ps.dpid=pf.dpid where c.comp_dpid='.$companyId.' and ps.delete_flag=0 and c.delete_flag=0';
-		
-// 		$model = Yii::app()->db->createCommand($sql)->queryAll();
-// 		var_dump($model);exit;
-		$criteria = new CDbCriteria;
-		$criteria->with = 'posfee';
-		if(Yii::app()->user->role < '5')
-		{
-			if ($content!='') {
-				$criteria->condition =' t.delete_flag=0 and t.type=0';
-			}else{
-				$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.$this->companyId;
-			}
-		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9'){
-			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
-		}else{
-			$criteria->condition = ' t.delete_flag=0 and t.dpid='.Yii::app()->user->companyId ;
-		}
+		$sql = 'select m.* from (select ps.*,c.province,c.city,c.county_area,c.mobile,c.company_name,c.contact_name,pf.used_at,pf.exp_time from nb_pad_setting ps left join nb_company c on ps.dpid=c.dpid left join nb_poscode_fee pf on ps.pad_code=pf.poscode and ps.dpid=pf.dpid where c.comp_dpid='.$companyId.' and c.comp_dpid!=c.dpid and c.type=1 and ps.delete_flag=0 and c.delete_flag=0';
 		$province = $provinces;
 		$city = $citys;
 		$area = $areas;
@@ -83,25 +67,32 @@ class PosfeeController extends BackendController
 			$area = '';
 		}
 		if($province){
-			$criteria->addCondition('t.province like "'.$province.'"');
+			$sql .=' and c.province like "'.$province.'"'; 
 		}
 		if($city){
-			$criteria->addCondition('t.city like "'.$city.'"');
+			$sql .=' and c.city like "'.$city.'"';
 		}
 		if($area){
-			$criteria->addCondition('t.county_area like "'.$area.'"');
+			$sql .=' and c.county_area like "'.$area.'"';
 		}
 		if ($content) {
 			if (is_numeric($content)) {
-				$criteria->addCondition('t.mobile like "%'.$content.'%"');
+				$sql .=' and c.mobile like "%'.$content.'%"';
 			}else{
-				$criteria->addCondition('t.contact_name like "%'.$content.'%" or t.company_name like "%'.$content.'%"');
+				$sql .=' and (c.contact_name like "%'.$content.'%" or c.company_name like "%'.$content.'%")';
 			}
 		}
-		$criteria->order = 't.dpid asc';
-		$pages = new CPagination(Company::model()->count($criteria));
-		$pages->applyLimit($criteria);
-		$models = Company::model()->findAll($criteria);
+		$sql .=')m order by m.exp_time asc, m.dpid asc';
+		
+		$count = Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
+		
+		$pages = new CPagination($count);
+		$pdata =Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
+				$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+				$pdata->bindValue(':limit', $pages->getPageSize());
+				$models = $pdata->queryAll();
+		
+// 		var_dump($models);exit;
 		
 		$this->render('setindex',array(
 				'models'=> $models,
@@ -109,7 +100,8 @@ class PosfeeController extends BackendController
 				'province'=>$provinces,
 				'city'=>$citys,
 				'area'=>$areas,
-				'role'=>$role
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time
 		));
 	}
 	public function actionStore(){

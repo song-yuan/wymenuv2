@@ -1,4 +1,5 @@
-<?php //Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
+    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/address.js');?>
 <style>
 .selectedclass{
@@ -44,7 +45,6 @@
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'company-form',
-				//'action' => $this->createUrl('company/delete', array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -66,10 +66,17 @@
 						</select>
                     </div>
 					<div class="btn-group">
+					   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+							<span class="input-group-addon">~</span>
+						    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+					  	</div>  
+					</div>
+					<div class="btn-group">
 						<input type="text" class="form-control" name="ccontent" id="ccontent" placeholder='手机号, 联系人, 店铺名' >
 					</div>
                     <div class="btn-group">
-	                	<button type="button" id="serch" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
+	                	<button type="submit" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
 	                	<?php if(Yii::app()->user->role<='1'):?>
 	                	<!-- 
 	                	<button type="button" id="posfee" class="btn red" ><i class="fa fa-home"></i> <?php echo yii::t('app','生成POS收费列表');?></button>
@@ -84,7 +91,6 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th>店铺序号</th>
                                 <th><?php echo yii::t('app','店铺名称');?></th>
 								<th><?php echo yii::t('app','联系人');?></th>
@@ -97,32 +103,29 @@
 						<tbody>
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
-							<?php foreach ($model->posfee as $pf):?>
 							<tr class="odd gradeX">
-								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
-								<td><?php echo $model->dpid;?></td>
-                                <td><?php echo $model->company_name;?></td>
-								<td ><?php echo $model->contact_name;?></td>
-								<td ><?php echo $pf->poscode;?></td>
-								<td ><?php echo $pf->used_at;?></td>
-								<td >
+								<td><?php echo $model['dpid'];?></td>
+                                <td><?php echo $model['company_name'];?></td>
+								<td><?php echo $model['contact_name'];?></td>
+								<td><?php echo $model['pad_code'];?></td>
+								<td><?php echo $model['used_at'];?></td>
+								<td>
 									<?php 
-										if(strtotime($pf->exp_time)){
-											$leaveday = ceil((strtotime($pf->exp_time) - time())/(24*60*60));
+										if(strtotime($model['exp_time'])){
+											$leaveday = ceil((strtotime($model['exp_time']) - time())/(24*60*60));
 											if($leaveday > 30){
-												echo $pf->exp_time.'(剩余:<span>'.$leaveday.'</span>天)';
+												echo $model['exp_time'].'(剩余:<span>'.$leaveday.'</span>天)';
 											}else{
-												echo $pf->exp_time.'(剩余:<span class="text-danger">'.$leaveday.'</span>天)';
+												echo $model['exp_time'].'(剩余:<span class="text-danger">'.$leaveday.'</span>天)';
 											}
 										}else{
-											echo $pf->exp_time;
+											echo $model['exp_time'];
 										}
 									?>
 								</td>
-								<td><a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>" poscode="<?php echo $pf->poscode;?>" expt="<?php echo $pf->exp_time;?>"><?php echo yii::t('app','延期设置');?></a></td>
+								<td><a  class='btn green setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model['dpid'];?>" dpid="<?php echo $model['dpid'];?>" poscode="<?php echo $model['pad_code'];?>" expt="<?php echo $model['exp_time'];?>"><?php echo yii::t('app','延期设置');?></a></td>
 							</tr>
 							<?php endforeach;?>
-						<?php endforeach;?>
 						<?php endif;?>
 						</tbody>
 					</table>
@@ -175,24 +178,19 @@
 	     case 13:return false; 
 	     }
 	});
-
-
-	function genQrcode(that){
-		var id = $(that).attr('lid');
-		var $parent = $(that).parent();
-		$.get('<?php echo $this->createUrl('/admin/company/genWxQrcode');?>/dpid/'+id,function(data){
-			if(data.status){
-				$parent.find('img').remove();
-				$parent.prepend('<img style="width:100px;" src="/wymenuv2/./'+data.qrcode+'">');
-			}
-			alert(data.msg);
-		},'json');
-	}
-	$('#serch').on('click',function(){
-		 var content = $('#ccontent').val();
-		//alert(111);
-         location.href="<?php echo $this->createUrl('posfee/setindex' , array('companyId'=>$this->companyId));?>/content/"+content;
+	jQuery(document).ready(function(){
+	    if (jQuery().datepicker) {
+            $('.date-picker').datepicker({
+            	format: 'yyyy-mm-dd',
+            	language: 'zh-CN',
+                rtl: App.isRTL(),
+                autoclose: true
+            });
+            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+            
+       }
 	});
+
 	document.onkeydown=function(event){
         var e = event || window.event || arguments.callee.caller.arguments[0];
         if(e && e.keyCode==13){ // enter 键
