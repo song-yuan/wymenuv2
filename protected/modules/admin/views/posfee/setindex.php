@@ -43,15 +43,6 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
-            <?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'company-form',
-				'errorMessageCssClass' => 'help-block',
-				'htmlOptions' => array(
-					'class' => 'form-horizontal',
-					'method' => 'get',
-					'enctype' => 'multipart/form-data'
-				),
-		)); ?>
 		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
@@ -77,7 +68,7 @@
 						<input type="text" class="form-control" name="ccontent" id="ccontent" placeholder='手机号, 联系人, 店铺名' >
 					</div>
                     <div class="btn-group">
-	                	<button type="submit" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
+	                	<button type="button" id="search" class="btn green" ><i class="fa fa-repeat"></i> <?php echo yii::t('app','查询');?></button>
 	                	<?php if(Yii::app()->user->role<='1'):?>
 	                	<!-- 
 	                	<button type="button" id="posfee" class="btn red" ><i class="fa fa-home"></i> <?php echo yii::t('app','生成POS收费列表');?></button>
@@ -167,7 +158,6 @@
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
-            <?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
 <script>
@@ -220,6 +210,12 @@
 			location.href="<?php echo $this->createUrl('posfee/setindex' , array('companyId'=>$this->companyId));?>/province/"+province+"/city/"+city+"/area/"+area;
 
 		 }
+	$('#search').on('click',function(){
+		 var content = $('#ccontent').val();
+		 var begin = $('#begin_time').val();
+		 var end = $('#end_time').val();
+		 location.href = '<?php echo $this->createUrl('posfee/setindex',array('companyId'=>$this->companyId));?>/content/'+content+'/begtime/'+begin+'/endtime/'+end;
+	});
 	$('.setAppid').on('click',function(){
 
 		$('#content').html('');
