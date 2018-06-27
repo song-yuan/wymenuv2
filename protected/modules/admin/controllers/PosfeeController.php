@@ -150,17 +150,41 @@ class PosfeeController extends BackendController
 		$status = Yii::app()->request->getParam('status',0);
 		$time = Yii::app()->request->getParam('expt',date('Y-m-d H:i:s',time()));
 		//var_dump($time);exit;
+		$type = 1;
+		$addtime = 0;
 		if($years){
+			$addtime = $years;
 			$time = date('Y-m-d H:i:s',strtotime('+'.$years.' year '.$time));
 		}
 		if($month){
+			$type = 2;
+			$addtime = $month;
 			$time = date('Y-m-d H:i:s',strtotime('+'.$month.' month '.$time));
 		}
 		//var_dump($time);exit;
 		$db = Yii::app()->db;
+		
 		$sql = 'update nb_poscode_fee set exp_time="'.$time.'",status='.$status.' where dpid='.$dpid.' and poscode='.$poscode;
-		$models = $db->createCommand($sql)->execute();
-	
+		$result = $db->createCommand($sql)->execute();
+		if(!$result){
+			Yii::app()->end(json_encode(array("status"=>false,'msg'=>'失败')));
+		}
+		$se = new Sequence("poscode_fee_record");
+		$id = $se->nextval();
+		$data = array(
+				'lid'=>$id,
+				'dpid'=>$dpid,
+				'create_at'=>date('Y-m-d H:i:s',time()),
+				'update_at'=>date('Y-m-d H:i:s',time()),
+				'poscode'=>$poscode,
+				'type'=>$type,
+				'add_time'=>$addtime,
+				'expire_time'=>$time,
+		);
+		$result = $db->createCommand()->insert('nb_poscode_fee_record',$data);
+		if(!$result){
+			Yii::app()->end(json_encode(array("status"=>false,'msg'=>'失败')));
+		}
 		Yii::app()->end(json_encode(array("status"=>true,'msg'=>'成功')));
 	}
 }
