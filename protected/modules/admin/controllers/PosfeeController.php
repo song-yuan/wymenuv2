@@ -45,20 +45,21 @@ class PosfeeController extends BackendController
 		$content = Yii::app()->request->getParam('content','');
 		$role = Yii::app()->user->role;
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-	
+		
+// 		$sql = 'select ps.* from nb_pad_setting ps left join nb_company c on ps.dpid=c.dpid left join nb_poscode_fee pf on ps.pad_code=pf.poscode and ps.dpid=pf.dpid where c.comp_dpid='.$companyId.' and ps.delete_flag=0 and c.delete_flag=0';
+		
+// 		$model = Yii::app()->db->createCommand($sql)->queryAll();
+// 		var_dump($model);exit;
 		$criteria = new CDbCriteria;
 		$criteria->with = 'posfee';
 		if(Yii::app()->user->role < '5')
 		{
-				if ($content!='') {
-					$criteria->condition =' t.delete_flag=0 and t.type=0';
-				}else{
-					$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.$this->companyId;
-				}
-			
-		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
-		{
-			//var_dump(Yii::app()->user->role);exit;
+			if ($content!='') {
+				$criteria->condition =' t.delete_flag=0 and t.type=0';
+			}else{
+				$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$this->companyId.' and tt.delete_flag=0 ) or t.dpid='.$this->companyId;
+			}
+		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9'){
 			$criteria->condition =' t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or t.dpid='.Yii::app()->user->companyId;
 		}else{
 			$criteria->condition = ' t.delete_flag=0 and t.dpid='.Yii::app()->user->companyId ;
@@ -97,12 +98,10 @@ class PosfeeController extends BackendController
 				$criteria->addCondition('t.contact_name like "%'.$content.'%" or t.company_name like "%'.$content.'%"');
 			}
 		}
-		$criteria->order = 'posfee.exp_time asc,t.dpid asc';
+		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
-		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Company::model()->findAll($criteria);
-		//$sql = 'select * from nb_company c left join nb_poscode_fee pf on(pf.dpid = c.dpid and pf.delete_flag=0) where ';
 		
 		$this->render('setindex',array(
 				'models'=> $models,
