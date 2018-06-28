@@ -844,10 +844,10 @@ class Elm
 								$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $itemprice);
 								array_push($pdetail,array('dpid'=>$dpid,'create_at'=>$createdAt,'set_id'=>$res['lid'],'main_id'=>0,'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'product_pic'=>'','original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_type'=>0,'product_order_status'=>2,'taste_memo'=>''));
 								
-								$orderProduct = array('is_set'=>1,'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
+								$orderProduct = array('is_set'=>1,'set_id'=>$res['lid'],'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_taste'=>array(),'product_promotion'=>array());
 								array_push($orderArr['order_product'], $orderProduct);
 							}
-							$orderProduct = array('is_set'=>1,'set_name'=>$res['name'],'set_price'=>$itemprice,'amount'=>$amount,'set_detail'=>$pdetail,'product_taste'=>array(),'product_promotion'=>array());
+							$orderProduct = array('is_set'=>1,'set_name'=>$res['name'],'set_price'=>$itemprice,'amount'=>$amount,'set_detail'=>$pdetail,'product_taste'=>$tasteArr,'product_promotion'=>array());
 							array_push($orderCloudArr['nb_order_product'], $orderProduct);
 						}
 					}
