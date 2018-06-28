@@ -170,7 +170,7 @@
 				}
 			});
 			if(!canStorage){
-				alert('请输入批次号');
+				alert('批次号必填');
 				return;
 			}
 			if(confirm("确认入库？")){

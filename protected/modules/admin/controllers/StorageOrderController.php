@@ -645,7 +645,8 @@ class StorageOrderController extends BackendController
 		$sid = Yii::app()->request->getParam('sid');
 		$sql = 'select * from nb_storage_order where lid='.$sid.' and dpid='.$this->companyId.' and delete_flag=0';
 		$storage = Yii::app()->db->createCommand($sql)->queryRow();
-		if($storage['status']){
+		
+		if($storage){
 			$sql = 'select * from nb_storage_order_detail where storage_id='.$sid.' and dpid='.$this->companyId.' and delete_flag=0';
 			$storageDetails = Yii::app()->db->createCommand($sql)->queryAll();
 			$transaction = Yii::app()->db->beginTransaction();
@@ -671,7 +672,7 @@ class StorageOrderController extends BackendController
 								'goods_id'=>$detail['material_id'],
 								'goods_code'=>$detail['mphs_code'],
 								'stock_day'=>$detail['stock_day'],
-								'batch_code'=>$detail['batch_code'],
+								'batch_code'=>$detail['batch_code']?$detail['batch_code']:0,
 								'batch_stock'=>$num,
 								'stock'=>$num,
 								'free_stock'=>$detail['free_stock'],
