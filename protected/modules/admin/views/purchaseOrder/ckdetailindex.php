@@ -69,10 +69,13 @@
 						<tbody>
 						<?php if($models) :?>
 							<div style="display: none;" id="storagedetail" val="1"></div>
-						<?php foreach ($models as $model):?>
+						<?php 
+							foreach ($models as $model):
+							$goods = Common::getgoodsName($model->material_id);
+						?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getgoodsName($model->material_id);?></td>
+								<td style="width:16%"><?php echo $goods['goods_name'];?></td>
 								<td><?php echo $model->price;?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>

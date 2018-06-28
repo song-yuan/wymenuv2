@@ -3,6 +3,9 @@
 		width: 1124px;
 		height: 80%;
 	}
+	.error{
+		color:red;
+	}
 </style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -75,14 +78,17 @@
 						<tbody>
 						<?php if($models) :?>
 						<div style="display: none;" id="storagedetail" val="1"></div>
-						<?php foreach ($models as $model):?>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getgoodsName($model->material_id);?></td>
+						<?php 
+							foreach ($models as $model):
+							$goods = Common::getgoodsName($model->material_id);
+						?>
+							<tr class="goods odd gradeX" is-batch="<?php echo $goods['is_batch'];?>">
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]"/></td>
+								<td style="width:16%"><span class="goods_name"><?php echo $goods['goods_name'];?></span></td>
 								<td class="price"><?php echo $model->price;?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
-								<td><?php echo $model->batch_code;?></td>
+								<td class="batch_code"><?php echo $model->batch_code;?></td>
 								<td><?php echo $model->stock_day;?></td>
 								<td class="center">
 								<?php if($status == 0 || $status == 2):?>
@@ -148,151 +154,47 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var a = 0;
-		$('#storage-in').click(function(){
-			var id = $(this).attr('storage-id');
-			var storagedetail = $('#storagedetail').attr('val');
-			var cfv = $(this).attr('cfv');
-			
-			if(storagedetail == 1 && a == 0 && cfv){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/ckstorageIn' , array('companyId'=>$this->companyId));?>',
-					data:{sid:id},
-					success:function(msg){
-						if(msg=='true'){
-						   alert('入库成功!');	
-						   location.href="<?php echo $this->createUrl('storageOrder/ckindex' , array('companyId'=>$this->companyId,));?>";
-						}else{
-							alert('入库失败!');
-						}
-					},
-				});
-				$(this).attr('cfv',0);	a = 1 ;
-			}else{
-					alert('请添加需要入库的品项或重复提交');
-				}
-		});
 		$('#status-0').click(function(){
+			var canStorage = true;
 			var pid = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
-			var prices = 1;
 			var cfv = $(this).attr('cfv');
-			$(".price").each(function(){
-				var price = $(this).text();
-				if(price == '0.00'){
-					prices = 0;
+			$(".goods").each(function(){
+				var isbatch = $(this).attr('is-batch');
+				var batchcode = $(this).find('.batch_code').html();
+				if(isbatch==1&&batchcode==''){
+					canStorage = false;
+					$(this).find('.goods_name').addClass('error');
+				}else{
+					$(this).find('.goods_name').removeClass('error');
 				}
 			});
-			if(prices == 0){
-				if(confirm("有商品入库价格为零，确认继续入库？")){
-					
+			if(!canStorage){
+				alert('请输入批次号');
+				return;
+			}
+			if(confirm("确认入库？")){
+				if(storagedetail == 1 && a == 0 && cfv){
+					$.ajax({
+						url:'<?php echo $this->createUrl('storageOrder/ckstorageIn' , array('companyId'=>$this->companyId));?>',
+						data:{sid:pid},
+						success:function(msg){
+							if(msg=='true'){
+							   alert('入库成功!');	
+							   location.href="<?php echo $this->createUrl('storageOrder/ckindex' , array('companyId'=>$this->companyId,));?>";
+							}else{
+								alert('入库失败2!');
+							}
+						},
+					});
+					$(this).attr('cfv',0);	a = 1 ;
 				}else{
-					return false;
-				}
-			}else{
-				if(confirm("确认入库？")){
-					
-				}else{
-					return false;
+					alert('请添加需要入库的详细品项或重复提交');
 				}
 			}
-			if(storagedetail == 1 && a == 0 && cfv){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
-					data:{type:3,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							$.ajax({
-								url:'<?php echo $this->createUrl('storageOrder/ckstorageIn' , array('companyId'=>$this->companyId));?>',
-								data:{sid:pid},
-								success:function(msg){
-									if(msg=='true'){
-									   alert('入库成功!');	
-									   
-									}else{
-										alert('入库失败2!');
-									}
-									location.href="<?php echo $this->createUrl('storageOrder/ckindex' , array('companyId'=>$this->companyId,));?>";
-								},
-							});
-						}else{
-							alert('入库失败2!');
-						}
-					}
-				});
-				$(this).attr('cfv',0);	a = 1 ;
-			}else{
-				alert('请添加需要入库的详细品项或重复提交');
-				}
+			
 		});
 
-		$('#status-1').click(function(){
-			var pid = $(this).attr('storage-id');
-			var storagedetail = $('#storagedetail').attr('val');
-			var cfv = $(this).attr('cfv');
-			if(storagedetail == 1 && cfv){
-			if(confirm('确认驳回该入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
-					data:{type:2,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('驳回成功');
-						}else{
-							alert('驳回失败');
-						}
-						location.href="<?php echo $this->createUrl('storageOrder/ckindex' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			$(this).attr('cfv',0);
-			}else{
-				alert('请添加需要入库的详细品项或重复提交');
-				}
-		});
-		$('#status-2').click(function(){
-			var pid = $(this).attr('storage-id');
-			var storagedetail = $('#storagedetail').attr('val');
-			var cfv = $(this).attr('cfv');
-			if(storagedetail == 1 && cfv){
-			if(confirm('确认重新送审该入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
-					data:{type:4,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('重新审核成功');
-						}else{
-							alert('重新审核失败');
-						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/ckindex' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			$(this).attr('cfv',0);
-			}else{
-				alert('请添加需要入库的详细品项或重复提交');
-				}
-		});
-		$('#status-4').click(function(){
-			var pid = $(this).attr('storage-id');
-			
-			if(confirm('确认审核入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
-					data:{type:1,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('审核成功');
-						}else{
-							alert('审核失败');
-						}
-						location.href="<?php echo $this->createUrl('storageOrder/ckindex' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			
-		});
     var $modal = $('.modal');
     $('.add_btn').on('click', function(){
     	pid = $(this).attr('pid');

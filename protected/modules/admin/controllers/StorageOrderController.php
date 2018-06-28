@@ -650,7 +650,8 @@ class StorageOrderController extends BackendController
 			$storageDetails = Yii::app()->db->createCommand($sql)->queryAll();
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
-	
+				$sql = 'update nb_storage_order set status=3 where lid='.$sid.' and dpid='.$this->companyId.' and delete_flag=0 ';
+				Yii::app()->db->createCommand($sql)->execute();
 				foreach ($storageDetails as $detail){
 					$sql = 'select * from nb_goods where lid='.$detail['material_id'].' and dpid='.$this->companyId.' and delete_flag=0';
 					$prodmaterial = Yii::app()->db->createCommand($sql)->queryRow();

@@ -55,11 +55,10 @@ class Common{
     }
     static public function getgoodsName($materialId){
     	$materialname = "";
-    	$sql="select goods_name from nb_goods where lid=".$materialId;
+    	$sql="select goods_name,is_batch from nb_goods where lid=".$materialId;
     	$connect = Yii::app()->db->createCommand($sql);
     	$material = $connect->queryRow();
-    	$materialname = $material['goods_name'];
-    	return $materialname;
+    	return $material;
     }
     static public function getproductName($Id){
     	$pn = "";

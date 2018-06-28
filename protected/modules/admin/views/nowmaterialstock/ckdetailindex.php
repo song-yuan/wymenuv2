@@ -57,10 +57,13 @@
 						<tbody>
 						<?php if($models) :?>
 							<div style="display: none;" id="storagedetail" val="1"></div>
-						<?php foreach ($models as $model):?>
+						<?php 
+							foreach ($models as $model):
+							$goods = Common::getgoodsName($model->goods_id);
+						?>
 							<tr class="odd gradeX">
 								<td><?php echo $model->create_at;?></td>
-								<td ><?php echo Common::getgoodsName($model->goods_id);?></td>
+								<td ><?php echo $goods['goods_name'];?></td>
 								<td><?php echo $model->stock_cost;?></td>
 								<td ><?php echo $model->batch_stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
