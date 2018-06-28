@@ -91,8 +91,10 @@
 							<?php if($purchase->status == 0):?>
 								<span style="color:red">正在编辑</span>
 								<input id="verify-pass" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="生成采购单" />&nbsp;
-							<?php else:?>
+							<?php elseif($purchase->status == 1):?>
 								<input id="storageOrder" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="生成入库单" />&nbsp;
+							<?php else:?>
+								<span style="color:red">已生产入库单</span>
 							<?php endif;?>
 							</td>
 						</tr>

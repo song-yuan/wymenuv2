@@ -595,7 +595,7 @@ class StorageOrderController extends BackendController
 						$sql = 'update nb_product_material_stock set stock=0 where stock<0 and delete_flag=0 and material_id='.$detail['material_id'].' and dpid='.$this->companyId;
 						Yii::app()->db->createCommand($sql)->execute();
 						
-						$num = $detail['stock'] * $unitratio->unit_ratio;
+						$num = $detail['stock'] * $unitratio['unit_ratio'];
 						$pms = new Sequence("product_material_stock");
 						$lid = $pms->nextval(); 
 						$gmdata = array(

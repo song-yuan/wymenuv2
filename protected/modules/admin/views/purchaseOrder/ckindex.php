@@ -108,7 +108,7 @@
 								<td>
 									<span style="color: red;">
 									<?php 
-									if($model->status==0){echo '编辑中...';}elseif($model->status==1){ echo '已完成';}
+									if($model->status==0){echo '编辑中...';}elseif($model->status==1){ echo '已确认';}else{ echo '已生成入库单';}
 									?>
 									</span>
 								</td>

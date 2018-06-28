@@ -460,6 +460,9 @@ class PurchaseOrderController extends BackendController
 		if($purchase){
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
+				$purchase->status = 2;
+				$purchase->save();
+				
 				$model = new StorageOrder();
 				$model->dpid = $this->companyId ;
 					
@@ -474,7 +477,7 @@ class PurchaseOrderController extends BackendController
 				$model->purchase_account_no = $purchase->purchase_account_no;
 				$model->storage_date = $purchase->delivery_date;
 				$model->remark = $purchase->remark;
-				$model->status = 1;
+				$model->status = 0;
 				// 入库订单
 				$model->save();
 					

@@ -2199,7 +2199,7 @@ class StatementsController extends BackendController
 	}
 	/**
 	 *
-	 * 就餐人数统计
+	 * 现金券使用情况报表
 	 *
 	 */
 	public function actionCuponReport(){
