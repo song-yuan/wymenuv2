@@ -269,17 +269,16 @@ class MtOrder
 					array_push($orderCloudArr['nb_order_product'], $orderProduct);
 				}
 			}else{
+				$foodProperty = $value['food_property'];
+				$tasteArr = array();
+				if($foodProperty!=''){
+					$spes = explode(',', $foodProperty);
+					foreach ($spes as $k => $val) {
+						array_push($tasteArr, array('dpid'=>$dpid,'create_at'=>$orderTime,'taste_id'=>'0','is_order'=>'0','taste_name'=>$val,'name'=>$val));
+					}
+				}
 				if( $res['is_set']==0){
 					// 单品 
-					$foodProperty = $value['food_property'];
-					$tasteArr = array();
-					if($foodProperty!=''){
-						$spes = explode(',', $foodProperty);
-						foreach ($spes as $k => $val) {
-							array_push($tasteArr, array('dpid'=>$dpid,'create_at'=>$orderTime,'taste_id'=>'0','is_order'=>'0','taste_name'=>$val,'name'=>$val));
-						}
-					}
-					
 					$orderProduct = array('is_set'=>0,'set_id'=>0,'product_id'=>$res['lid'],'product_name'=>$res['name'],'original_price'=>$res['original_price'],'price'=>$price,'amount'=>$amount,'zhiamount'=>$amount,'product_taste'=>$tasteArr,'product_promotion'=>array());
 					array_push($orderArr['order_product'], $orderProduct);
 					
@@ -302,7 +301,7 @@ class MtOrder
 						
 						array_push($pdetail,array('dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>$res['lid'],'main_id'=>0,'product_id'=>$detail['product_id'],'product_name'=>$detail['product_name'],'product_pic'=>'','original_price'=>$detail['original_price'],'price'=>$itemPrice,'amount'=>$detail['number']*$amount,'zhiamount'=>$amount,'product_type'=>0,'product_order_status'=>2,'taste_memo'=>''));
 					}
-					$orderProduct = array('is_set'=>1,'set_name'=>$res['name'],'set_price'=>$price,'amount'=>$amount,'set_detail'=>$pdetail,'product_taste'=>array(),'product_promotion'=>array());
+					$orderProduct = array('is_set'=>1,'set_name'=>$res['name'],'set_price'=>$price,'amount'=>$amount,'set_detail'=>$pdetail,'product_taste'=>$tasteArr,'product_promotion'=>array());
 					array_push($orderCloudArr['nb_order_product'], $orderProduct);
 				}
 				if(!empty($value['box_price'])){
