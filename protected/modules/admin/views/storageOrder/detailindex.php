@@ -162,11 +162,9 @@
 						   alert('入库成功!');	
 						   
 						}else{
-							//alert(msg);
 							alert('入库失败1!');
 						}
-						//history.go(0);
-						//location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
+						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 					},
 				});
 				$(this).attr('cfv',0);	a = 1 ;
