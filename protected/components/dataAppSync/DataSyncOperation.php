@@ -1575,7 +1575,7 @@ class DataSyncOperation {
             $msg = json_encode ( array ('status' => true,'msg'=>'支付成功') );
 		}catch (Exception $e) {
 			$transaction->rollback();
-			 $msg = json_encode ( array ('status' => false,'msg'=>'支付失败') );
+			$msg = json_encode(array('status' => false,'msg'=>$e->getMessage()));
 		}
 		return $msg;
 	}
@@ -1621,7 +1621,6 @@ class DataSyncOperation {
 	public static function opearteMemcardYue($dpid,$rfid,$type,$price){
 		if($type==1){
 			$sql = 'update nb_member_card set all_money=all_money+' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
-			
 		}elseif($type==2){
 			$sql = 'update nb_member_card set all_money=all_money-' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
 		}else{
