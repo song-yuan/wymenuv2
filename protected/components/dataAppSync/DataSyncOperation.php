@@ -1606,6 +1606,7 @@ class DataSyncOperation {
 		if (! $result) {
 			throw new Exception('不存在该会员信息');
 		}
+		$dpid = $result['dpid'];
 		
 		self::opearteMemcardYue($dpid,$rfid,3,$refundPrice);
 		self::memcardRecord($dpid, $rfid, 3, $refundPrice);
