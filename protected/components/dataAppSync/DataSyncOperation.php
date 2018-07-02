@@ -1543,7 +1543,6 @@ class DataSyncOperation {
 					'msg' => '不存在该管理员'
 			) );
 		}
-		Helper::writeLog('1');
 		$dpids = WxCompany::getDpids($dpid);
 		$sql = 'select * from nb_member_card where dpid in (' . $dpids . ') and rfid="' . $rfid . '" and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
@@ -1553,27 +1552,27 @@ class DataSyncOperation {
 					'msg' => '不存在该会员信息' 
 			) );
 		}
-		Helper::writeLog('1');
 		if ($payPrice > $result ['all_money']) {
 			return json_encode ( array (
 					'status' => false,
 					'msg' => '余额不足' 
 			) );
 		}
-		Helper::writeLog('1');
 		if($result['haspassword'] && md5($password)!=$result['password_hash']){
 			return json_encode ( array (
 					'status' => false,
 					'msg' => '会员卡密码错误'
 			) );
 		}
-		Helper::writeLog('1');
 		$dpid = $result['dpid'];
-		
+		Helper::writeLog($dpid);
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
+			Helper::writeLog('1');
 			self::opearteMemcardYue($dpid, $rfid, 2, $payPrice);
+			Helper::writeLog('2');
 			self::memcardRecord($dpid, $rfid, 1, $$payPrice);
+			Helper::writeLog('3');
 			$transaction->commit();
             $msg = json_encode ( array ('status' => true,'msg'=>'支付成功') );
 		}catch (Exception $e) {
