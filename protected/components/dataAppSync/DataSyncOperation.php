@@ -1565,32 +1565,12 @@ class DataSyncOperation {
 					'msg' => '会员卡密码错误'
 			) );
 		}
-		$time = time();
-		$is_sync = DataSync::getInitSync();
+		$dpid = $result['dpid'];
+		
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
-			$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpids . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
-			$result = Yii::app ()->db->createCommand ( $sql )->execute ();
-			if(!$result){
-				throw new Exception('会员卡扣减失败');
-			}
-			$se = new Sequence("member_consume_record");
-			$lid = $se->nextval();
-			$consumeArr = array(
-					'lid'=>$lid,
-					'dpid'=>$dpid,
-					'create_at'=>date('Y-m-d H:i:s',$time),
-					'update_at'=>date('Y-m-d H:i:s',$time),
-					'type'=>1,
-					'consume_type'=>1,
-					'card_id'=>$rfid,
-					'consume_amount'=>$payPrice,
-					'is_sync'=>$is_sync,
-			);
-			$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
-			if(!$result){
-				throw new Exception('插入消费记录表失败');
-			}
+			self::opearteMemcardYue($dpid, $rfid, 2, $payPrice);
+			self::memcardRecord($dpid, $rfid, 1, $$payPrice);
 			$transaction->commit();
             $msg = json_encode ( array ('status' => true,'msg'=>'支付成功') );
 		}catch (Exception $e) {
@@ -1619,18 +1599,6 @@ class DataSyncOperation {
 					'msg' => '不存在该管理员'
 			) );
 		}
-		
-		self::opearteMemcardYue($dpid,$rfid,3,-$refundPrice);
-		$msg = json_encode ( array ('status' => true,'msg'=>'退款成功') );
-		return $msg;
-	}
-	/**
-	 * 
-	 * 实体卡 会员余额变更
-	 * 
-	 */
-	public static function opearteMemcardYue($dpid,$rfid,$ctype,$price){
-		$time = time();
 		$dpid = WxCompany::getDpids($dpid);
 		
 		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
@@ -1639,11 +1607,38 @@ class DataSyncOperation {
 			throw new Exception('不存在该会员信息');
 		}
 		
-		$sql = 'update nb_member_card set all_money=all_money-' . $price . ' where dpid=' . $result['dpid'] . ' and rfid=' . $rfid.' and delete_flag=0';
+		self::opearteMemcardYue($dpid,$rfid,3,$refundPrice);
+		self::memcardRecord($dpid, $rfid, 3, $refundPrice);
+		$msg = json_encode ( array ('status' => true,'msg'=>'退款成功') );
+		return $msg;
+	}
+	/**
+	 * 
+	 * 实体卡 会员余额变更
+	 * $type 1充值  2 消费  3 退款
+	 * 
+	 */
+	public static function opearteMemcardYue($dpid,$rfid,$type,$price){
+		if($type==1){
+			$sql = 'update nb_member_card set all_money=all_money+' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
+			
+		}elseif($type==2){
+			$sql = 'update nb_member_card set all_money=all_money-' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
+		}else{
+			$sql = 'update nb_member_card set all_money=all_money+' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
+		}
 		$result = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if(!$result){
 			throw new Exception('会员卡余额更改失败');
 		}
+		// 发送短信
+		
+	}
+	/**
+	 * 会员卡消费记录
+	 */
+	public static function memcardRecord($dpid,$rfid,$ctype,$price){
+		$time = time();
 		$se = new Sequence("member_consume_record");
 		$lid = $se->nextval();
 		$consumeArr = array(
@@ -1660,13 +1655,10 @@ class DataSyncOperation {
 		if(!$result){
 			throw new Exception('插入会员卡记录表失败');
 		}
-		// 发送短信
-		
 	}
 	/**
 	 * 
-	 * @param $data
-	 * dpid rfid n_card_id level_id o_card_id
+	 * 实体卡更换
 	 * 
 	 */
 	public static function bindMemberCard($data) {
@@ -1722,6 +1714,9 @@ class DataSyncOperation {
 		if($memcard){
 			$transaction = Yii::app ()->db->beginTransaction ();
 			try {
+				$allMoney = $chargeMoney + $giveMoney;
+				self::opearteMemcardYue($dpid, $rfid, 1, $allMoney);
+				
 				$se = new Sequence ( "member_recharge" );
 				$memberRechargeId = $se->nextval ();
 				$insertData = array (
@@ -1739,12 +1734,6 @@ class DataSyncOperation {
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_member_recharge', $insertData );
 				if(!$result){
 					throw new Exception('添加充值记录失败');
-				}
-				$allMoney = $chargeMoney + $giveMoney;
-				$sql = 'update nb_member_card set all_money=all_money+'.$allMoney.' where lid='.$memcard['lid'].' and dpid='.$dpid;
-				$result = Yii::app ()->db->createCommand ( $sql )->execute ();
-				if(!$result){
-					throw new Exception('更改会员卡余额失败');
 				}
 				$transaction->commit ();
 				$msg = json_encode ( array (
