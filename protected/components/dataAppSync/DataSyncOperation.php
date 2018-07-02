@@ -1565,14 +1565,11 @@ class DataSyncOperation {
 			) );
 		}
 		$dpid = $result['dpid'];
-		Helper::writeLog($dpid);
+		
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
-			Helper::writeLog('1');
 			self::opearteMemcardYue($dpid, $rfid, 2, $payPrice);
-			Helper::writeLog('2');
 			self::memcardRecord($dpid, $rfid, 1, $$payPrice);
-			Helper::writeLog('3');
 			$transaction->commit();
             $msg = json_encode ( array ('status' => true,'msg'=>'支付成功') );
 		}catch (Exception $e) {
@@ -1580,6 +1577,7 @@ class DataSyncOperation {
 			Helper::writeLog($e->getMessage());
 			$msg = json_encode(array('status' => false,'msg'=>$e->getMessage()));
 		}
+		Helper::writeLog($msg);
 		return $msg;
 	}
 	/**
@@ -1638,6 +1636,7 @@ class DataSyncOperation {
 	}
 	/**
 	 * 会员卡消费记录
+	 * $ctype 1 充值金额 消费 2 赠送金额 消费
 	 */
 	public static function memcardRecord($dpid,$rfid,$ctype,$price){
 		$time = time();
