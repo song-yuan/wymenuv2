@@ -1565,10 +1565,11 @@ class DataSyncOperation {
 			) );
 		}
 		$dpid = $result['dpid'];
+		$allmoney = $result['all_money'];
 		
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
-			self::opearteMemcardYue($dpid, $rfid, 2, $payPrice);
+			self::opearteMemcardYue($dpid, $rfid, 2, $allmoney, $payPrice);
 			self::memcardRecord($dpid, $rfid, 1, $payPrice);
 			$transaction->commit();
             $msg = json_encode ( array ('status' => true,'msg'=>'支付成功') );
@@ -1607,8 +1608,9 @@ class DataSyncOperation {
 			throw new Exception('不存在该会员信息');
 		}
 		$dpid = $result['dpid'];
+		$allmoney = $result['all_money'];
 		
-		self::opearteMemcardYue($dpid,$rfid,3,$refundPrice);
+		self::opearteMemcardYue($dpid, $rfid, 3, $allmoney, $refundPrice);
 		self::memcardRecord($dpid, $rfid, 3, $refundPrice);
 		$msg = json_encode ( array ('status' => true,'msg'=>'退款成功') );
 		return $msg;
@@ -1619,14 +1621,16 @@ class DataSyncOperation {
 	 * $type 1充值  2 消费  3 退款
 	 * 
 	 */
-	public static function opearteMemcardYue($dpid,$rfid,$type,$price){
+	public static function opearteMemcardYue($dpid,$rfid,$type,$oprice,$price){
+		$allMoney = 0;
 		if($type==1){
-			$sql = 'update nb_member_card set all_money=all_money+' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
+			$allMoney = $oprice + $price;
 		}elseif($type==2){
-			$sql = 'update nb_member_card set all_money=all_money-' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
+			$allMoney = $oprice - $price;
 		}else{
-			$sql = 'update nb_member_card set all_money=all_money+' . $price . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
+			$allMoney = $oprice + $price;
 		}
+		$sql = 'update nb_member_card set all_money=' . $allMoney . ' where dpid=' . $dpid . ' and rfid=' . $rfid.' and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if(!$result){
 			throw new Exception('会员卡余额更改失败');
@@ -1713,10 +1717,11 @@ class DataSyncOperation {
 		$sql = 'select * from nb_member_card where dpid='.$dpid.' and rfid="'.$rfid.'" and delete_flag=0';
 		$memcard = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if($memcard){
+			$allmoney = $memcard['all_money'];
 			$transaction = Yii::app ()->db->beginTransaction ();
 			try {
 				$allMoney = $chargeMoney + $giveMoney;
-				self::opearteMemcardYue($dpid, $rfid, 1, $allMoney);
+				self::opearteMemcardYue($dpid, $rfid, 1, $allmoney, $allMoney);
 				
 				$se = new Sequence ( "member_recharge" );
 				$memberRechargeId = $se->nextval ();
