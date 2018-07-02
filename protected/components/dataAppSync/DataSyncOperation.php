@@ -1620,21 +1620,29 @@ class DataSyncOperation {
 			) );
 		}
 		
+		self::opearteMemcardYue($dpid,$rfid,3,-$refundPrice);
+		$msg = json_encode ( array ('status' => true,'msg'=>'退款成功') );
+		return $msg;
+	}
+	/**
+	 * 
+	 * 实体卡 会员余额变更
+	 * 
+	 */
+	public static function opearteMemcardYue($dpid,$rfid,$ctype,$price){
+		$time = time();
 		$dpid = WxCompany::getDpids($dpid);
 		
 		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $result) {
-			return json_encode ( array (
-					'status' => false,
-					'msg' => '不存在该会员信息'
-			) );
+			throw new Exception('不存在该会员信息');
 		}
-		$time = time();
-		$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
+		
+		$sql = 'update nb_member_card set all_money=all_money-' . $price . ' where dpid=' . $result['dpid'] . ' and rfid=' . $rfid.' and delete_flag=0';
 		$result = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if(!$result){
-			throw new Exception('会员卡退款失败');
+			throw new Exception('会员卡余额更改失败');
 		}
 		$se = new Sequence("member_consume_record");
 		$lid = $se->nextval();
@@ -1644,16 +1652,16 @@ class DataSyncOperation {
 				'create_at'=>date('Y-m-d H:i:s',$time),
 				'update_at'=>date('Y-m-d H:i:s',$time),
 				'type'=>1,
-				'consume_type'=>3,
+				'consume_type'=>$ctype,
 				'card_id'=>$rfid,
-				'consume_amount'=>$refundPrice
+				'consume_amount'=>$price
 		);
 		$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
 		if(!$result){
-			throw new Exception('插入退款记录表失败');
+			throw new Exception('插入会员卡记录表失败');
 		}
-		$msg = json_encode ( array ('status' => true,'msg'=>'退款成功') );
-		return $msg;
+		// 发送短信
+		
 	}
 	/**
 	 * 
