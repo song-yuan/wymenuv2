@@ -1639,6 +1639,7 @@ class DataSyncOperation {
 	 * $ctype 1 充值金额 消费 2 赠送金额 消费
 	 */
 	public static function memcardRecord($dpid,$rfid,$ctype,$price){
+		Helper::writeLog('11');
 		$time = time();
 		$se = new Sequence("member_consume_record");
 		$lid = $se->nextval();
@@ -1653,9 +1654,11 @@ class DataSyncOperation {
 				'consume_amount'=>$price
 		);
 		$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
+		Helper::writeLog('22');
 		if(!$result){
 			throw new Exception('插入会员卡记录表失败');
 		}
+		Helper::writeLog('33');
 	}
 	/**
 	 * 
