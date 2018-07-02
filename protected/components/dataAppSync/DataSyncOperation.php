@@ -1631,35 +1631,28 @@ class DataSyncOperation {
 			) );
 		}
 		$time = time();
-		$transaction = Yii::app()->db->beginTransaction();
-		try{
-			$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
-			$result = Yii::app ()->db->createCommand ( $sql )->execute ();
-			if(!$result){
-				throw new Exception('会员卡退款失败');
-			}
-			$se = new Sequence("member_consume_record");
-			$lid = $se->nextval();
-			$consumeArr = array(
-					'lid'=>$lid,
-					'dpid'=>$dpid,
-					'create_at'=>date('Y-m-d H:i:s',$time),
-					'update_at'=>date('Y-m-d H:i:s',$time),
-					'type'=>1,
-					'consume_type'=>3,
-					'card_id'=>$rfid,
-					'consume_amount'=>$refundPrice
-			);
-			$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
-			if(!$result){
-				throw new Exception('插入退款记录表失败');
-			}
-			$transaction->commit();
-			$msg = json_encode ( array ('status' => true,'msg'=>'退款成功') );
-		}catch (Exception $e) {
-			$transaction->rollback();
-			$msg = json_encode ( array ('status' => false,'msg'=>'退款失败') );
+		$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid in (' . $dpid . ') and lid=' . $result ['lid'] . ' and rfid=' . $rfid;
+		$result = Yii::app ()->db->createCommand ( $sql )->execute ();
+		if(!$result){
+			throw new Exception('会员卡退款失败');
 		}
+		$se = new Sequence("member_consume_record");
+		$lid = $se->nextval();
+		$consumeArr = array(
+				'lid'=>$lid,
+				'dpid'=>$dpid,
+				'create_at'=>date('Y-m-d H:i:s',$time),
+				'update_at'=>date('Y-m-d H:i:s',$time),
+				'type'=>1,
+				'consume_type'=>3,
+				'card_id'=>$rfid,
+				'consume_amount'=>$refundPrice
+		);
+		$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
+		if(!$result){
+			throw new Exception('插入退款记录表失败');
+		}
+		$msg = json_encode ( array ('status' => true,'msg'=>'退款成功') );
 		return $msg;
 	}
 	/**
