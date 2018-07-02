@@ -1575,6 +1575,7 @@ class DataSyncOperation {
             $msg = json_encode ( array ('status' => true,'msg'=>'支付成功') );
 		}catch (Exception $e) {
 			$transaction->rollback();
+			Helper::writeLog($e->getMessage());
 			$msg = json_encode(array('status' => false,'msg'=>$e->getMessage()));
 		}
 		return $msg;
