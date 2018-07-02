@@ -198,16 +198,16 @@
 		        	
 		        	$jfPay = 0;$jfPayCount = 0;
 		        	if(isset($orderPay['8-0'])){
-		        		$jfPay = $orderPay['9-0']['pay_amount'];
-		        		$jfPayCount = $orderPay['9-0']['pay_count'];
+		        		$jfPay = $orderPay['8-0']['pay_amount'];
+		        		$jfPayCount = $orderPay['8-0']['pay_count'];
 		        	}
 		        	$jfPayTotal += $jfPay;
 		        	$jfPayCountTotal += $jfPayCount;
 
 		        	$yhqPay = 0;$yhqPayCount = 0;
 		        	if(isset($orderPay['9-0'])){
-		        		$yhqPay = $orderPay['8-0']['pay_amount'];
-		        		$yhqPayCount = $orderPay['8-0']['pay_count'];
+		        		$yhqPay = $orderPay['9-0']['pay_amount'];
+		        		$yhqPayCount = $orderPay['9-0']['pay_count'];
 		        	}
 		        	$yhqPayTotal += $yhqPay;
 		        	$yhqPayCountTotal += $yhqPayCount;
