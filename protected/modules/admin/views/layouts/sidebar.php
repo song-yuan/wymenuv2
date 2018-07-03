@@ -101,7 +101,7 @@
             </li>
             <?php endif;?>
         <?php endif; ?>
-        	<?php if(Yii::app()->user->role<=1 && $this->comptype == 0):?>
+        	<?php if(Yii::app()->user->role<=1 || $this->comptype == 0):?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('comgoodsorder','goodsorder','peisonggroup'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('comgoodsorder/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-shopping-cart"></i> 
@@ -109,7 +109,7 @@
                     </a>
             </li>
             <?php endif;?>
-            <?php if(Yii::app()->user->role<=1 && $this->comptype == 2):?>
+            <?php if(Yii::app()->user->role<=1 || $this->comptype == 2):?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('tmall','goods','goodstock','goodsinvoice'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('tmall/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-shopping-cart"></i> 
