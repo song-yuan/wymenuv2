@@ -8,84 +8,48 @@ class BackendController extends CController
 		date_default_timezone_set('PRC');
 		parent::beforeAction($action);
 		$controllerId = Yii::app()->controller->getId();
-		//
 		$action = Yii::app()->controller->getAction()->getId(); 
 		
 		$adminReturnUrl = Yii::app()->params['admin_return_url'];
+		$oauthCallback = Yii::app()->request->url;
+		
 		if(Yii::app()->user->isGuest) {
+			// 游客 未登录用户
 			if($controllerId != 'login' && $action != 'upload') {
 				$this->redirect($adminReturnUrl);
 			}
 		}elseif(Yii::app()->user->role >= User::GROUPER && $controllerId != 'login'){
-			/**
-			 * 服务员 收银员 无权限登录系统
-			 */
+			 //服务员 收银员 无权限登录系统
 			$this->redirect($adminReturnUrl);
-			
 		}else{
-			
 			$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
-			
 			$role = Yii::app()->user->role;
-			//var_dump($companyId);var_dump($role);
 			
+			$company = Company::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$companyId));
 			
-			if($role > User::ADMIN && $role != 10 && $controllerId != 'login' && Yii::app()->user->companyId != $companyId){
-				//var_dump('111');exit;
-				//$this->redirect(Yii::app()->request->urlReferrer);
-			}
-			elseif(Yii::app()->user->role == User::ADMIN && $controllerId != 'login' && $action != 'upload'){
-				//$dpids = Helper::getCompanyIds(Yii::app()->request->getParam('companyId',"0000000000"));
-				$dpids = Helper::getCompanyIds(Yii::app()->user->companyId);
-				
-				if($dpids == null){
-					$dpids = array(0);
-				}
-				//var_dump($dpids);var_dump($companyId);
-				//$results =  array_search($companyId, $dpids);in_array
-				$results =  in_array($companyId, $dpids);
-				//var_dump($results);exit;
-				if($results){
-					$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
-					$comptype = Yii::app()->db->createCommand('select type from nb_company where delete_flag = 0 and  dpid ='.Yii::app()->request->getParam('companyId',"0000000000"))->queryRow();
-					$this->comptype = $comptype['type'];
-				}else{//var_dump('222');exit;
-					//var_dump($companyId);var_dump($dpids);var_dump($results);var_dump(Yii::app()->user->role);exit;
-					$this->redirect(Yii::app()->params['admin_return_url']);
-					//$this->redirect(Yii::app()->request->urlReferrer);
-				}
-			}elseif($role ==10 && $controllerId != 'login')
-			{	$dpids = Helper::getCompanyIds(Yii::app()->user->companyId);
-				
-				if($dpids == null){
-					$dpids = array(0);
-				}
-				$results =  in_array($companyId, $dpids);
-				if($results){
-					$c = new WebUser();
-					if(in_array($controllerId, $c->role2ControllerId[10])){
-						$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
-						$comptype = Yii::app()->db->createCommand('select type from nb_company where delete_flag = 0 and  dpid ='.Yii::app()->request->getParam('companyId',"0000000000"))->queryRow();
-						$this->comptype = $comptype['type'];
-					}else{
-						$this->redirect(Yii::app()->params['admin_return_url']);
+			if($company){
+				$this->companyId = $companyId;
+				$this->comptype = $company['type'];
+				if($role < 5){
+					// 超级管理员 所有权限
+					return true;
+				}elseif ($role >=5 && $role < 11){
+					// 总部管理员权限
+					if($company['type']==0 && $companyId==Yii::app()->user->companyId){
+						//总部 管理员  总部管理员所管理的 品牌
+						return true;
 					}
-					
-				}else{
-					$this->redirect(Yii::app()->params['admin_return_url']);
+					if($company['type']!=0 && $company['comp_dpid']==Yii::app()->user->companyId){
+						// 店铺或者仓库   总部直属的仓库
+						return true;
+					}
+				}elseif($role >=11 && $role < 15){
+					// 店铺管理员
+					return true;
 				}
 			}
-			else{
-				$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
-				//var_dump($this->companyId);exit;
-				$comptype = Yii::app()->db->createCommand('select type from nb_company where delete_flag = 0 and  dpid ='.Yii::app()->request->getParam('companyId',"0000000000"))->queryRow();
-				$this->comptype = $comptype['type'];
-				//var_dump($this->companyId);
-			}
+			// 不符合条件 跳转登录界面
+			$this->redirect($adminReturnUrl);
 		}
-                Until::isOperateValid($controllerId, $action,$this->companyId,$this);
-                
-		return true ;
 	}
-
 }

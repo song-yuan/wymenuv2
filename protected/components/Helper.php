@@ -47,8 +47,10 @@ class Helper
 	static public function getCompanyId($companyId) {
         if(Yii::app()->user->role <= '10')
         {
+        	// 返回所选择的店
 			return $companyId;
         }else{
+        	// 只能操作 管理员所在店
             return Yii::app()->user->companyId ;
         }
 	}

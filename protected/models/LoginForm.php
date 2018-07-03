@@ -10,7 +10,7 @@ class LoginForm extends CFormModel
 	public $username;
 	public $password;
 	public $rememberMe;
-
+	
 	private $_identity;
 
 	/**
@@ -22,7 +22,8 @@ class LoginForm extends CFormModel
 	{
 		return array(
 			// username and password are required
-			array('username, password', 'required'),
+			array('username', 'required','message'=> '用户名不能为空'),
+			array('password', 'required','message'=> '密码不能为空'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
 			// password needs to be authenticated
@@ -45,6 +46,7 @@ class LoginForm extends CFormModel
 	/**
 	 * Authenticates the password.
 	 * This is the 'authenticate' validator as declared in rules().
+	 * rules 中  array('password', 'authenticate') 密码验证函数
 	 */
 	public function authenticate($attribute,$params)
 	{
@@ -71,14 +73,10 @@ class LoginForm extends CFormModel
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{ 
-			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
-			//echo Yii::app()->user->login($this->_identity,$duration);exit;
+			$duration=$this->rememberMe ? 3600*24*30 : 3600; // 30 days
 			if(Yii::app()->user->login($this->_identity,$duration)) {
-				//echo Yii::app()->user->login($this->_identity,$duration);
-				//exit;
 				return true;
-			} else {//var_dump($this->_identity);exit;
-				Yii::app()->user->setFlash('error' ,yii::t('app', '对不起，你没有权限登陆'));
+			} else {
 				return false ;
 			}
 		}

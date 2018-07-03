@@ -1577,7 +1577,6 @@ class DataSyncOperation {
 			$transaction->rollback();
 			$msg = json_encode(array('status' => false,'msg'=>$e->getMessage()));
 		}
-		Helper::writeLog($msg);
 		return $msg;
 	}
 	/**

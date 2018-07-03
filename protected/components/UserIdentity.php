@@ -25,17 +25,19 @@ class UserIdentity extends CUserIdentity
 	public function authenticate()
 	{
 		$user = $field = '';
-		if(!$user = User::model()->find('username=:username and status=1',array(':username' => $this->username))) {
-			$field = 'username';
-			$this->errorCode = self::ERROR_USERNAME_INVALID;
-		}elseif(!$user = User::model()->find('username=:username and password_hash=:password and status=1',array(':username'=>$this->username,':password'=>Helper::genPassword($this->password)))) {
-			$field = 'password';
-			$this->errorCode =  self::ERROR_PASSWORD_INVALID;
-		}else {
-
-			$comps = Yii::app()->db->createCommand('select * from nb_company where delete_flag = 0 and  dpid ='.$user->dpid)->queryRow();
-			if($comps){
-
+		$user = User::model()->find('username=:username and password_hash=:password and status=1 and role < 15 and delete_flag=0',array(':username'=>$this->username,':password'=>Helper::genPassword($this->password)));
+		if(!$user){
+			$user = User::model()->find('username=:username and status=1 and role < 15 and delete_flag=0',array(':username' => $this->username));
+			if(!$user){
+				$field = 'username';
+				$this->errorCode = self::ERROR_USERNAME_INVALID;
+			}else{
+				$field = 'password';
+				$this->errorCode =  self::ERROR_PASSWORD_INVALID;
+			}
+		}else{
+			$company = Company::model()->find('dpid=:dpid and delete_flag=0',array(':dpid'=>$user->dpid));
+			if($company){
 				$this->userId = $user->lid.'_'.$user->dpid ;
 				$this->role = $user->role ;
 				$this->mobile = $user->mobile;
@@ -48,9 +50,7 @@ class UserIdentity extends CUserIdentity
 				$field = 'username';
 				$this->errorCode =  self::ERROR_USERNAME_INVALID;
 			}
-			
 		}
-		//var_dump($user);exit;
 		return array('field' =>$field , 'status' => $this->errorCode);
 	}
 }
