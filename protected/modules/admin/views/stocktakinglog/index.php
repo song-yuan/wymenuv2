@@ -150,7 +150,7 @@
 	});
 		  
 		   $('#btn_time_query').click(function time() {  
-			  var stype = $('#stype').val();
+			  var stype = 0;
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   location.href="<?php echo $this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId ,'status'=>$status));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/stype/"+stype   
