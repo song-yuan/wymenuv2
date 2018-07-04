@@ -79,9 +79,9 @@
 					
 					<div class="actions">
 						<select id="sttype" class="btn yellow" >
-							<option value="1" <?php if ($sttype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','月盘');?></option>
+							<option value="3" <?php if ($sttype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','月盘');?></option>
 							<option value="2" <?php if ($sttype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','周盘');?></option>
-							<option value="3" <?php if ($sttype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日盘');?></option>
+							<option value="1" <?php if ($sttype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日盘');?></option>
 						</select>
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
