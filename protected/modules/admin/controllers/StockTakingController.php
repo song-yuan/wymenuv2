@@ -170,7 +170,8 @@ class StockTakingController extends BackendController
 			$stocktaking->dpid = $dpid;
 			$stocktaking->create_at = date('Y-m-d H:i:s',time());
 			$stocktaking->update_at = date('Y-m-d H:i:s',time());
-			$stocktaking->username = $username ;
+			$stocktaking->username = $username;
+			$stocktaking->type = $sttype;
 			$stocktaking->title =''.date('m月d日 H时i分',time()).' 盘点操作记录';
 			$stocktaking->status = 0;
 			$stocktaking->is_sync = $is_sync;
@@ -671,7 +672,7 @@ class StockTakingController extends BackendController
 					'dpid' => $dpid,
 					'create_at' => date('Y-m-d H:i:s',time()),
 					'update_at' => date('Y-m-d H:i:s',time()),
-					'type' => '2',
+					'type' => $sttype,
 					'opretion_id' => Yii::app()->user->username,
 					'inventory_account_no' => date('YmdHis',time()).substr($stid,-4),
 					'status' => 0,

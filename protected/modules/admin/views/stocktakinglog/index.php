@@ -43,6 +43,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php if($status)echo yii::t('app','盘损日志');else echo yii::t('app','盘点日志');?></div>
 					<div class="actions">
+						<?php if(!$status):?>
 						<div class="btn-group">
 							<select id="stype" class="btn yellow" >
 								<option value="0" <?php if ($stype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','选择类型');?></option>
@@ -51,6 +52,7 @@
 								<option value="3" <?php if ($stype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','月盘');?></option>
 							</select>
 						</div>
+						<?php endif;?>
 						<div class="btn-group">
 							
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
