@@ -1,13 +1,6 @@
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl.'/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js';?>"></script>
+<link href="<?php echo Yii::app()->request->baseUrl.'/plugins/bootstrap-timepicker/compiled/timepicker.css';?>" rel="stylesheet" type="text/css"/>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_002.css');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll.css');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_003.css');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_002.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_004.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_003.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_005.js');?> 
 <style>
 .selectedclass{
 	font-size: 14px;
@@ -16,37 +9,67 @@
 	line-height: 34px;
 	padding: 6px 12px;
 }
-.timeset{
-	width: 88%;
-	margin-left: 6%;
-	padding-top: 10px;
-}
-.timeset{
-	width: 88%;
-	margin-left: 6%;
-	padding-top: 10px;
-}
-.android-ics .dw {
-	top: 50px;
-    left: 650px;
-}
 </style>
-
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
-	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="wx-timeset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Modal title</h4>
+					<h4 class="modal-title">微店营业时间设置</h4>
 				</div>
 				<div class="modal-body">
-					Widget settings form goes here
+					<form action="#" class="form-horizontal">
+						<div class="form-group">
+							<label class="control-label col-md-4">堂食营业时间</label>
+							<div class="col-md-5">
+								<div class="input-group bootstrap-timepicker">                                       
+									<input id="shop_time" type="text" class="form-control timepicker-24">
+									<span class="input-group-btn">
+									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4">堂食打烊时间</label>
+							<div class="col-md-5">
+								<div class="input-group bootstrap-timepicker">                                       
+									<input id="closing_time" type="text" class="form-control timepicker-24">
+									<span class="input-group-btn">
+									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4">外卖营业时间</label>
+							<div class="col-md-5">
+								<div class="input-group bootstrap-timepicker">                                       
+									<input id="wm_shop_time" type="text" class="form-control timepicker-24">
+									<span class="input-group-btn">
+									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4">外卖打烊时间</label>
+							<div class="col-md-5">
+								<div class="input-group bootstrap-timepicker">                                       
+									<input id="wm_closing_time" type="text" class="form-control timepicker-24">
+									<span class="input-group-btn">
+									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn blue">Save changes</button>
-					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn blue confirm-settime">确定</button>
 				</div>
 			</div>
 			<!-- /.modal-content -->
@@ -106,8 +129,8 @@
 								<th>logo</th>
 								<th><?php echo yii::t('app','是否开通微店');?></th>
 								<th><?php echo yii::t('app','营业状态');?></th>
-								<th><?php echo yii::t('app','营业时间');?></th>
-								<th><?php echo yii::t('app','打烊时间');?></th>
+								<th><?php echo yii::t('app','堂食营业时间');?></th>
+								<th><?php echo yii::t('app','外卖营业时间');?></th>
 								<th><?php echo yii::t('app','是否同步价格');?></th>
 								<th><?php echo yii::t('app','是否锁定');?></th>
 								<th><?php echo yii::t('app','微店类型');?></th>
@@ -136,10 +159,10 @@
 									echo $model->property->rest_message?$model->property->rest_message:$info;
 								};?></td>
 								<td ><?php if($model->property){
-									echo $model->property->shop_time;
+									echo $model->property->shop_time.'-'.$model->property->closing_time;
 								};?></td>
 								<td ><?php if($model->property){
-									echo $model->property->closing_time;
+									echo $model->property->wm_shop_time.'-'.$model->property->wm_closing_time;
 								};?></td>
 								<td><?php if($model->property){if($model->property->is_copyprice) echo '已同步';else echo '未同步';}?></td>
 								<td><?php if($model->property){if($model->property->is_lock) echo '已锁定';else echo '未锁定';}?></td>
@@ -188,7 +211,7 @@
                                         		
                                         	<?php endif;?>
                                         <?php endif;?>
-                                         <a  class='btn blue setAppid' style="margin-top: 5px;" id="setAppid<?php echo $model->dpid;?>" dpid="<?php echo $model->dpid;?>" dpidname="<?php echo $model->company_name;?>"><?php echo yii::t('app','编辑');?></a>
+                                         <a  class='btn blue setAppid' style="margin-top: 5px;" dpid="<?php echo $model->dpid;?>" dpidname="<?php echo $model->company_name;?>"><?php echo yii::t('app','设置营业时间');?></a>
                                     <?php endif;?>
                                     </div>	
 								</td>
@@ -240,9 +263,6 @@
 <script>
 jQuery(document).ready(function() {
 								
-
-
-								
 	new PCAS("province","city","area","<?php echo $province;?>","<?php echo $city;?>","<?php echo $area;?>");
 	function genQrcode(that){
 		var id = $(that).attr('lid');
@@ -255,6 +275,13 @@ jQuery(document).ready(function() {
 			alert(data.msg);
 		},'json');
 	}
+	
+	$('.timepicker-24').timepicker({
+        autoclose: true,
+        minuteStep: 1,
+        showSeconds: false,
+        showMeridian: false
+    });
 	$('#cityselect').on('click',function(){
 		var province = $('#province').val();
 		var city = $('#city').val();
@@ -334,102 +361,37 @@ jQuery(document).ready(function() {
         });
 	});
 	$('.setAppid').on('click',function(){
-
-		
-		$('#content').html('');
-		var dpid = $(this).attr('dpid');
-		var dpidname = $(this).attr('dpidname');
-		var content = '<div class="timeset"><span style="font-size: 18px;">'+dpidname+'</span><span>  营业时间设置</span></div>'
-					+ '<div class="timeset"><input id="shop_time" placeholder="营业时间"/></div>'
-					+ '<div class="timeset"><input id="closing_time" placeholder="打烊时间"/></div>'
-					+ '<div class="timeset"><button id="appid_store" dpid="'+dpid+'" class="btn green">确认</button></div>'
-					;
-		$('#content').html(content);
-		//alert(dpid);
-		layer_zhexiantu=layer.open({
-		     type: 1,
-		     //shift:5,
-		     shade: [0.5,'#fff'],
-		     //move:'#main2',
-		     moveOut:true,
-		     offset:['100px','200px'],
-		     shade: false,
-		     title: false, //不显示标题
-		     area: ['auto', 'auto'],
-		     content: $('#main2'),//$('#productInfo'), //捕获的元素
-		     cancel: function(index){
-		         layer.close(index);
-		         layer_zhexiantu=0;
-		     }
-		 });
-
-		   layer.style(layer_zhexiantu, {
-			   backgroundColor: 'rgba(255,255,255,0.2)',
-			 });
-
-
-			var currYear = (new Date()).getFullYear();
-			var opt = {};
-			opt.time = {
-			    preset : 'time'
-			};
-			opt.default = {
-				theme : 'android-ics light', //皮肤样式
-				display : 'modal', //显示方式
-				mode : 'scroller', //日期选择模式
-				dateFormat : 'hh:mm:ss',
-				//width : cHeight / 1.2,
-				//height : cHeight / 1.6,
-				width:100,
-				height:40,
-				circular:true,
-				showScrollArrows:true,
-				lang : 'zh',
-				showNow : true,
-				nowText : "现在",
-				startYear : currYear , //开始年份
-				endYear : currYear  //结束年份
-			};
-			
-			var optDateTime = $.extend(opt['time'], opt['default']);
-			$("#shop_time").mobiscroll(optDateTime).time(optDateTime);
-			$("#closing_time").mobiscroll(optDateTime).time(optDateTime);
-			 
-		$('#appid_store').on('click',function(){
-			var shop_time = $('#shop_time').val();
-			var closing_time = $('#closing_time').val();
-			var dpid = $(this).attr('dpid');
-			//alert(appid);
-			if(shop_time&&closing_time){
-				
-				//return false;
-				var url = "<?php echo $this->createUrl('companyWx/storetime');?>/companyId/"+dpid+"/shop_time/"+shop_time+"/closing_time/"+closing_time;
-		        $.ajax({
-		            url:url,
-		            type:'GET',
-		            //data:orderid,//CF
-		            async:false,
-		            dataType: "json",
-		            success:function(msg){
-		                var data=msg;
-		                if(data.status){
-		                	layer.msg('成功！！！');
-		                	layer.close(layer_zhexiantu);
-		   		        	layer_zhexiantu=0;
-		   		        	location.reload();
-		                }else{
-		                	layer.msg('失败！！！');
-		                }
-		            },
-		            error: function(msg){
-		                layer.msg('网络错误！！！');
-		            }
-		        });
-			}else{
-				layer.msg('请完善信息！！！');}
-		});
+		$('.modal').modal();
 	});
-
+	$('.confirm-settime').on('click',function(){
+		var shop_time = $('#shop_time').val();
+		var closing_time = $('#closing_time').val();
+		var wmshop_time = $('#wm_shop_time').val();
+		var wmclosing_time = $('#wm_closing_time').val();
+		var dpid = $('.setAppid').attr('dpid');
+		if(shop_time&&closing_time&&wmshop_time&&wmclosing_time){
+			var url = "<?php echo $this->createUrl('companyWx/storetime');?>";
+	        $.ajax({
+	            url:url,
+	            type:'GET',
+	            data:{companyId:dpid,shop_time:shop_time,closing_time:closing_time,wm_shop_time:wmshop_time,wm_closing_time:wmclosing_time},
+	            dataType: "json",
+	            success:function(msg){
+	                var data=msg;
+	                if(data.status){
+	                	layer.msg('成功！！！');
+	   		        	location.reload();
+	                }else{
+	                	layer.msg('失败！！！');
+	                }
+	            },
+	            error: function(msg){
+	                layer.msg('网络错误！！！');
+	            }
+	        });
+		}else{
+			layer.msg('请完善信息！！！');}
+	});
 
 	$('.copy-price').on('click',function(){
 		var dpid = $(this).attr('dpid');

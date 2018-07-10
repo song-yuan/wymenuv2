@@ -137,15 +137,14 @@ class CompanyWxController extends BackendController
 		$dpid = Yii::app()->request->getParam('companyId');
 		$shop_time = Yii::app()->request->getParam('shop_time');
 		$closing_time = Yii::app()->request->getParam('closing_time');
-		//var_dump($dpid,$appid);exit;
+		$wmshop_time = Yii::app()->request->getParam('wm_shop_time');
+		$wmclosing_time = Yii::app()->request->getParam('wm_closing_time');
 	
 		//****查询公司的产品分类。。。****
 		$db = Yii::app()->db;
 		$compros = CompanyProperty::model()->find('dpid=:companyId and delete_flag=0' , array(':companyId'=>$dpid));
-		//var_dump($compros);
 		if(!empty($compros)){
-			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",shop_time ="'.$shop_time.'",closing_time ="'.$closing_time.'" where dpid ='.$dpid;
-			//var_dump($sql);exit;
+			$sql = 'update nb_company_property set update_at ="'.date('Y-m-d H:i:s',time()).'",shop_time ="'.$shop_time.'",closing_time ="'.$closing_time.'",wm_shop_time ="'.$wmshop_time.'",wm_closing_time ="'.$wmclosing_time.'" where dpid ='.$dpid;
 			$command = $db->createCommand($sql);
 			$command->execute();
 		}else{
@@ -163,9 +162,9 @@ class CompanyWxController extends BackendController
 					'is_rest'=>'0',
 					'shop_time'=>$shop_time,
 					'closing_time'=>$closing_time,
-					'delete_flag'=>'0',
+					'wm_shop_time'=>$wmshop_time,
+					'wm_closing_time'=>$wmclosing_time,
 			);
-			//var_dump($data);exit;
 			$command = $db->createCommand()->insert('nb_company_property',$data);
 		}
 		Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));

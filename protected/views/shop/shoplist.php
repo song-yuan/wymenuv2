@@ -64,9 +64,13 @@
 					    	   	str +=cObj.county_area+cObj.address+'</span><span class="open-location"><img alt="" src="<?php echo $baseUrl;?>/img/wechat_img/icon_location.png" style="width:20px;height:20px;vertical-align:middle;"></span></div>';
 					    	   	str +='<div class="misinfo small" style="margin-top:5px;">';
 					    		   str +='<span class="left">';
-					    			   str +='<span class=" font_l">营业时间: '+cObj.shop_time+'-'+cObj.closing_time+'</span><br>';
-					    			   str +='<span style="font-weight:800;">电话: <a class="" href="tel:'+cObj.telephone+'">'+cObj.telephone+'</a></span>';
-					    			   str +='</span>';
+					    		   <?php if($this->type==2):?>
+					    			   str +='<span class=" font_l">营业时间: '+cObj.wm_shop_time+'-'+cObj.wm_closing_time+'</span><br>';
+									<?php else:?>
+										str +='<span class=" font_l">营业时间: '+cObj.shop_time+'-'+cObj.closing_time+'</span><br>';
+									<?php endif;?>
+						    		str +='<span style="font-weight:800;">电话: <a class="" href="tel:'+cObj.telephone+'">'+cObj.telephone+'</a></span>';
+					    			str +='</span>';
 							    if(juli > 1000){
 							    	str +='<span class="right font_org">'+parseFloat(juli/1000).toFixed(2)+'千米</span>';
 						    	}else{
