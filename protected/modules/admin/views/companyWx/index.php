@@ -25,7 +25,7 @@
 							<label class="control-label col-md-4">堂食营业时间</label>
 							<div class="col-md-5">
 								<div class="input-group bootstrap-timepicker">                                       
-									<input id="shop_time" type="text" class="form-control timepicker-24" readonly>
+									<input id="shop_time" type="text" class="form-control timepicker-24">
 									<span class="input-group-btn">
 									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
 									</span>
@@ -36,7 +36,7 @@
 							<label class="control-label col-md-4">堂食打烊时间</label>
 							<div class="col-md-5">
 								<div class="input-group bootstrap-timepicker">                                       
-									<input id="closing_time" type="text" class="form-control timepicker-24" readonly>
+									<input id="closing_time" type="text" class="form-control timepicker-24">
 									<span class="input-group-btn">
 									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
 									</span>
@@ -47,7 +47,7 @@
 							<label class="control-label col-md-4">外卖营业时间</label>
 							<div class="col-md-5">
 								<div class="input-group bootstrap-timepicker">                                       
-									<input id="wm_shop_time" type="text" class="form-control timepicker-24" readonly>
+									<input id="wm_shop_time" type="text" class="form-control timepicker-24">
 									<span class="input-group-btn">
 									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
 									</span>
@@ -58,7 +58,7 @@
 							<label class="control-label col-md-4">外卖打烊时间</label>
 							<div class="col-md-5">
 								<div class="input-group bootstrap-timepicker">                                       
-									<input id="wm_closing_time" type="text" class="form-control timepicker-24" readonly>
+									<input id="wm_closing_time" type="text" class="form-control timepicker-24">
 									<span class="input-group-btn">
 									<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
 									</span>
