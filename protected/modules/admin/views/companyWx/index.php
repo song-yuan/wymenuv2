@@ -211,7 +211,7 @@
                                         		
                                         	<?php endif;?>
                                         <?php endif;?>
-                                         <a  class='btn blue setAppid' style="margin-top: 5px;" dpid="<?php echo $model->dpid;?>" dpidname="<?php echo $model->company_name;?>"><?php echo yii::t('app','设置营业时间');?></a>
+                                         <a  class='btn blue setAppid' style="margin-top: 5px;" dpid="<?php echo $model->dpid;?>" dpidname="<?php echo $model->company_name;?>" shop_time="<?php echo $model->property->shop_time;?>" closing_time="<?php echo $model->property->closing_time;?>" wmshop_time="<?php echo $model->property->wm_shop_time;?>" wmclosing_time="<?php echo $model->property->wm_closing_time;?>"><?php echo yii::t('app','设置营业时间');?></a>
                                     <?php endif;?>
                                     </div>	
 								</td>
@@ -361,6 +361,14 @@ jQuery(document).ready(function() {
         });
 	});
 	$('.setAppid').on('click',function(){
+		var shop_time = $(this).attr('shop_time');
+		var closing_time =  $(this).attr('closing_time');
+		var wmshop_time = $(this).attr('wmshop_time');
+		var wmclosing_time = $(this).attr('wmclosing_time');
+		$('#shop_time').val(shop_time);
+		$('#closing_time').val(closing_time);
+		$('#wm_shop_time').val(wmshop_time);
+		$('#wm_closing_time').val(wmclosing_time);
 		$('.modal').modal();
 	});
 	$('.confirm-settime').on('click',function(){
