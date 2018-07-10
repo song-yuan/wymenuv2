@@ -69,7 +69,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn blue confirm-settime">确定</button>
+					<button type="button" class="btn blue confirm-settime" dpid="0">确定</button>
 				</div>
 			</div>
 			<!-- /.modal-content -->
@@ -365,18 +365,20 @@ jQuery(document).ready(function() {
 		var closing_time =  $(this).attr('closing_time');
 		var wmshop_time = $(this).attr('wmshop_time');
 		var wmclosing_time = $(this).attr('wmclosing_time');
+		var dpid = $(this).attr('dpid');
 		$('#shop_time').val(shop_time);
 		$('#closing_time').val(closing_time);
 		$('#wm_shop_time').val(wmshop_time);
 		$('#wm_closing_time').val(wmclosing_time);
+		$('.confirm-settime').attr('dpid',dpid);
 		$('.modal').modal();
 	});
 	$('.confirm-settime').on('click',function(){
+		var dpid = $(this).attr('dpid');
 		var shop_time = $('#shop_time').val();
 		var closing_time = $('#closing_time').val();
 		var wmshop_time = $('#wm_shop_time').val();
 		var wmclosing_time = $('#wm_closing_time').val();
-		var dpid = $('.setAppid').attr('dpid');
 		if(shop_time&&closing_time&&wmshop_time&&wmclosing_time){
 			var url = "<?php echo $this->createUrl('companyWx/storetime');?>";
 	        $.ajax({
