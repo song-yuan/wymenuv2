@@ -7,7 +7,7 @@
 	if($this->type==2){
 		$this->setPageTitle('外卖点单');
 	}elseif($this->type==6){
-		$this->setPageTitle('店内点单');
+		$this->setPageTitle('堂食点单');
 	}else{
 		$this->setPageTitle('自助点单');
 	}
@@ -15,15 +15,33 @@
 	if($this->company['is_rest'] < 3){
 		$closeShop = true;
 	}else{
-		$currentTime = date('H:i:s');
-		if($currentTime >= $this->company['closing_time'] || $currentTime <= $this->company['shop_time']){
-			$closeShop = true;
+		$currentTime = date('H:i');
+		if($this->type==6){
+			if($this->company['sale_type']==3){
+				$closeShop = true;
+			}
+			$shopTime = $this->company['shop_time'];
+			$closeTime = $this->company['closing_time'];
+		}elseif($this->type==2){
+			if($this->company['sale_type']==2){
+				$closeShop = true;
+			}
+			$shopTime = $this->company['wm_shop_time'];
+			$closeTime = $this->company['wm_closing_time'];
+		}else {
+			$shopTime = '00:00';
+			$closeTime = '23:59';
 		}
-		if($this->type==6&&$this->company['sale_type']==3){
-			$closeShop = true;
-		}
-		if($this->type==2&&$this->company['sale_type']==2){
-			$closeShop = true;
+		if($shopTime <= $closeTime){
+			// 一天中的时间
+			if($currentTime >= $closeTime || $currentTime <= $shopTime){
+				$closeShop = true;
+			}
+		}else{
+			// 横跨两天
+			if($currentTime >= $closeTime && $currentTime <= $shopTime){
+				$closeShop = true;
+			}
 		}
 	}
 	$current = false;
