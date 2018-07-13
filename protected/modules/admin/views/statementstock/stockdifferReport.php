@@ -22,7 +22,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','库存差异报表');?></div>
 					<div class="actions">
 						<select id="text" class="btn yellow" >
-						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','汇总');?></option>
+						<option selected="selected" ><?php echo yii::t('app','汇总');?></option>
 						</select>
 						<div class="btn-group">
 							 <input style="width: 100px;" type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
@@ -60,42 +60,27 @@
 								<th><?php echo yii::t('app','销售总成本');?></th>
 								<th><?php echo yii::t('app','差异总数量');?></th>
 								<th><?php echo yii::t('app','差异总成本');?></th>
-								
 							</tr>
 						</thead>
 						<tbody>
 							<?php if( $sqlmodels) :?>
 							<!--foreach-->
-							<?php $a=1;?>
 							<?php foreach ($sqlmodels as $model):?>
-							<?php $laststock = 0;
-								$allstoragestock = 0;
-								$takingstock = 0;
-								$salestock = 0;
-							?>
-								<tr class="odd gradeX">
-								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
+							<tr class="odd gradeX">
+								<td><?php echo $model['create_at']?></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
-								<td><?php echo $model['unit_name'];?></td>
-								<?php $allsunyi = $model['all_sunyinum'];$allsunyiprice = $model['all_sunyi_price'];
-											$renum = $model['re_num'];
-											if(!$renum){
-												$renum = 1;
-											}?>
-								<?php $demagestock = $model['all_demagestock']; ?>
-								<?php $demageprice = $model['all_demageprice']; ?>
-								<td><?php $salestock = $model['all_salestock']; echo $salestock;?></td>
-								<td><?php $salesprice = $model['all_salesprice']; echo $salesprice;?></td>
-								<!-- 总消耗 = 销售出库+损耗-损益 -->
-								<td><?php echo $allsunyi;?></td>
-								<td><?php echo sprintf("%.4f",$allsunyiprice/$renum);?></td>
-							<?php $a++;?>
+								<td><?php echo $model['sales_name'];?></td>
+								<td><?php echo $model['salse_num'];?></td>
+								<td><?php echo $model['salse_price'];?></td>
+								<td><?php echo $model['stock_taking_difnum'];?></td>
+								<td><?php echo $model['stock_taking_difprice'];?></td>
+							</tr>
 							<?php endforeach;?>	
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='15'>未查询到数据。</td>
+							<td colspan='8'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>

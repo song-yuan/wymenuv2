@@ -22,7 +22,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存日报');?></div>
 					<div class="actions">
 						<select id="text" class="btn yellow" >
-						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日报');?></option>
+						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日报');?></option>
 						</select>
 						<div class="btn-group">
 							 <input type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
@@ -54,53 +54,54 @@
 								<th><?php echo yii::t('app','原料编码');?></th>
 								<th><?php echo yii::t('app','名称');?></th>                                                              
                                 <th><?php echo yii::t('app','销售单位');?></th>
-                                <th><?php echo yii::t('app','上期库存');?></th>
-                                <th><?php echo yii::t('app','入库量');?></th>
-								<th><?php echo yii::t('app','进货量');?></th>
+                                <th><?php echo yii::t('app','昨日库存');?></th>
+                                <th><?php echo yii::t('app','入库总量');?></th>
+								<th><?php echo yii::t('app','进货总量');?></th>
+								<th><?php echo yii::t('app','进货成本');?></th>
 								<th><?php echo yii::t('app','配送量');?></th>
 								<th><?php echo yii::t('app','调拨量');?></th>
-								<th><?php echo yii::t('app','损耗量');?></th>
+								<th><?php echo yii::t('app','损耗总量');?></th>
+								<th><?php echo yii::t('app','损耗成本');?></th>
 								<th><?php echo yii::t('app','销售出库');?></th>
+								<th><?php echo yii::t('app','销售成本');?></th>
 								<th><?php echo yii::t('app','总消耗量');?></th>
-								<th><?php echo yii::t('app','本期库存');?></th>
+								<th><?php echo yii::t('app','今日库存');?></th>
 								<th><?php echo yii::t('app','盘点库存');?></th>
-								<th><?php echo yii::t('app','损溢量');?></th>
-								
+								<th><?php echo yii::t('app','损溢总量');?></th>
+								<th><?php echo yii::t('app','损溢成本');?></th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php if( $sqlmodels) :?>
 							<!--foreach-->
-							<?php $a=1;?>
 							<?php foreach ($sqlmodels as $model):?>
-							<?php $laststock = 0;
-								$allstoragestock = 0;
-								$takingstock = 0;
-								$salestock = 0;
-							?>
-								<tr class="odd gradeX">
-								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
+							<tr class="odd gradeX">
+								<td><?php echo $model['create_at']?></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
-								<td><?php echo $model['unit_name'];?></td>
-								<td><?php $laststock = $model['last_stock']; echo $laststock;?></td>
-								<td><?php $allstoragestock = $model['all_storagestock']; echo $allstoragestock;?></td>
-								<td><?php  $takingstock = $model['taking_stock'];
-											$sunyinum = $model['number']; echo $model['all_storagestock'];?></td>
-								<td><?php echo '';?></td>
-								<td><?php echo '';?></td>
-								<td><?php $demagestock = $model['demage_stock']; echo $demagestock;?></td>
-								<td><?php $salestock = $model['sales_stocks']; echo $salestock;?></td>
-								<td><?php $usestock = $demagestock+$salestock-$sunyinum; echo $usestock;?></td>
-								<td><?php echo $takingstock;?></td>
-								<td><?php echo $model['taking_stock'];?></td>
-								<td><?php echo $sunyinum;?></td>
-							<?php $a++;?>
+								<td><?php echo $model['sales_name'];?></td>
+								<td><?php echo $model['prestock_taking_num'];?></td>
+								<td><?php echo $model['stockin_num'];?></td>
+								<td><?php echo $model['stockin_num'];?></td>
+								<td><?php echo $model['stockin_price'];?></td>
+								<td></td>
+								<td></td>
+								<td><?php echo $model['damage_num'];?></td>
+								<td><?php echo $model['damage_price'];?></td>
+								<td><?php echo $model['salse_num'];?></td>
+								<td><?php echo $model['salse_price'];?></td>
+								<td><?php echo $model['total_num'];?></td>
+								<!-- 总消耗 = 销售出库+损耗-损益 -->
+								<td><?php echo $model['system_num'];?></td>
+								<td><?php echo $model['stock_taking_num'];?></td>
+								<td><?php echo $model['stock_taking_difnum'];?></td>
+								<td><?php echo $model['stock_taking_difprice'];?></td>
+							</tr>
 							<?php endforeach;?>	
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='15'>未查询到数据。</td>
+							<td colspan='19'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>

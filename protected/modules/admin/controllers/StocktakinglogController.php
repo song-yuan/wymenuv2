@@ -49,7 +49,7 @@ class StocktakinglogController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time');
 		$end_time = Yii::app()->request->getParam('end_time');
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.status = 0 and t.delete_flag=0 and t.dpid='.$this->companyId.' and t.logid ='.$stockTakingId;
+		$criteria->condition =  't.dpid='.$this->companyId.' and t.logid ='.$stockTakingId.' and t.delete_flag=0';
 		//	$criteria->condition.=' and t.lid = '.$categoryId;
 		$pages = new CPagination(StockTakingDetail::model()->count($criteria));
 		//$pages->setPageSize(1);

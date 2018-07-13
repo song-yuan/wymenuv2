@@ -48,7 +48,7 @@ class StorageOrderDetailController extends BackendController
 			$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.lid = '.$model->materil_id;
 			$command2 = $db->createCommand($sql);
 			$stockUnitId = $command2->queryRow()['mphs_code'];
-			var_dump($stockUnitId);exit;
+			
 			if($stockUnitId){
 				$se=new Sequence("storage_order_detail");
 				$model->lid = $se->nextval();

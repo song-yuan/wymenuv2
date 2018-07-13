@@ -117,7 +117,7 @@
                                                  
 						<?php foreach ($models as $model):?>
 
-							<tr class="odd gradeX pd-product" vid="<?php echo $model['lid'];?>" orinin-num="<?php  echo $model['stock_all'];?>">
+							<tr class="odd gradeX pd-product" vid="<?php echo $model['lid'];?>" orinin-num="<?php  echo $model['stock_all'];?>" sales-name="<?php echo $model['sales_name'];?>">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td ><?php echo $model['material_name'];?></td>
@@ -170,11 +170,9 @@
 		});   
 	})             
 	$("#stocktaking").on("click",function(){
-		//var loading = layer.load();
-		//alert("123");
+		var _this = $(this);
 		var sttype = $('#sttype').val();
         var arr=document.getElementsByName("idss[]");
-       // var chx=document.getElementById("optionsCheck"+vid);
         var optid;
         var optval = '';
         
@@ -188,6 +186,8 @@
             $('.pd-product').each(function(){
             	var vid = $(this).attr('vid');
             	var originalnum = $(this).attr('orinin-num'); 
+            	var materialcode = $(this).attr('identifier'); 
+            	var salesname = $(this).attr('sales-name');
                 var nownumd = $(this).find('.kucundiv-left').val(); 
                 var nownumx = $(this).find('.kucundiv-right').val(); 
                 var ratio = $(this).find('.kucundiv-ratio').val();
@@ -204,7 +204,7 @@
     				a = 1;
     			}
                 if(ratio != ''&&a==1){
-                    optval = vid +','+ nownumd +','+ nownumx +','+ ratio +','+ originalnum +';'+ optval;
+                    optval = vid +','+ nownumd +','+ nownumx +','+ ratio +','+ originalnum +','+salesname+';'+ optval;
                 } 
             });
             if(optval.length >0){
@@ -219,8 +219,8 @@
     		var categoryId = '<?php echo $categoryId;?>';
             $.ajax({
                 type:'POST',
-    			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/cid/"+categoryId+"/sttype/"+sttype,
-    			data:{optval:optval},
+    			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId));?>",
+    			data:{cid:categoryId,sttype:sttype,optval:optval},
                 dataType:'json',
     			success:function(msg){
     				layer.closeAll('loading');
@@ -234,12 +234,13 @@
     			        }  
     		            location.href="<?php echo $this->createUrl('stocktakinglog/detailindex' , array('companyId'=>$this->companyId,));?>/id/"+msg.logid
     	            }else{
-    		            alert("<?php echo yii::t('app','失败'); ?>"+"1");
-    		            location.reload();
+    		            alert("<?php echo yii::t('app','失败'); ?>");
+    		            _this.attr('clk',0);
     	            }
     			},
                 error:function(){
-    				alert("<?php echo yii::t('app','失败'); ?>"+"2");  
+                	_this.attr('clk',0);
+    				alert("<?php echo yii::t('app','失败,网络异常'); ?>");  
     				layer.closeAll('loading');                              
     			},
     		});

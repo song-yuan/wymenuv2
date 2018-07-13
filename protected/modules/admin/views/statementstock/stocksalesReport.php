@@ -19,12 +19,17 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存日报');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存消耗');?></div>
 					<div class="actions">
 						<select id="text" class="btn yellow" >
-						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日报');?></option>
+						<option selected="selected"><?php echo yii::t('app','汇总');?></option>
 						</select>
-						
+						<div class="btn-group">
+							 <input style="width: 100px;" type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
+						</div>
+						<div class="btn-group">
+							 <input style="width: 100px;" type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
+						</div>
 						<div class="btn-group">
 							 <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 		                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
@@ -32,7 +37,9 @@
 		                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
 	                    	</div>  
 						</div>	
-						
+						<div class="btn-group">
+								<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+							</div>
 						<div class="btn-group">
 								<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 								<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
@@ -45,32 +52,31 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
+								<th><?php echo yii::t('app','时间');?></th>
+								<th><?php echo yii::t('app','原料编码');?></th>
 								<th><?php echo yii::t('app','原料名称');?></th>
-								<th><?php echo yii::t('app','单位');?></th>
-								<th><?php echo yii::t('app','数量');?></th>
-								
+								<th><?php echo yii::t('app','销售单位');?></th>
+								<th><?php echo yii::t('app','销售数量');?></th>
+								<th><?php echo yii::t('app','销售成本');?></th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php if( $sqlmodels) :?>
 							<!--foreach-->
-							<?php $a=1;?>
 							<?php foreach ($sqlmodels as $model):?>
-							<?php $laststock = 0;
-								$allstoragestock = 0;
-								$takingstock = 0;
-								$salestock = 0;
-							?>
-								<tr class="odd gradeX">
+							<tr class="odd gradeX">
+								<td><?php echo $model['create_at']?></td>
+								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
-								<td><?php echo $model['unit_name'];?></td>
-								<td><?php echo $model['material_num'];?></td>
-							<?php $a++;?>
+								<td><?php echo $model['sales_name'];?></td>
+								<td><?php echo $model['salse_num'];?></td>
+								<td><?php echo $model['salse_price'];?></td>
+							</tr>
 							<?php endforeach;?>	
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='15'>未查询到数据。</td>
+							<td colspan='6'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>
@@ -104,8 +110,10 @@
 	$('#btn_time_query').click(function time() {
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
-		var text = $('#text').val();
-		location.href="<?php echo $this->createUrl('statementstock/stocksalesReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;    
+		var cid = $('#selectCategory').val();
+		var codename = $('#codename').val();
+		var matename = $('#matename').val();
+		location.href="<?php echo $this->createUrl('statementstock/stocksalesReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
 	});
 	$('#excel').click(function excel(){
 		layer.msg('此项功能暂未开放！！',{icon: 5});return false;

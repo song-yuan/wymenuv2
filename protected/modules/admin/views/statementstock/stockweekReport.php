@@ -10,7 +10,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','报表中心'),'url'=>$this->createUrl('statementstock/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','进销存汇总报表 '),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statementstock/list' , array('companyId' => $this->companyId,'type'=>1,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','报表中心'),'url'=>$this->createUrl('statementstock/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','进销存周报 '),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statementstock/list' , array('companyId' => $this->companyId,'type'=>1,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -19,23 +19,21 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存汇总报表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存周报');?></div>
 					<div class="actions">
 						<select id="text" class="btn yellow" >
-						<option selected="selected"><?php echo yii::t('app','汇总');?></option>
+						<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','周报');?></option>
 						</select>
 						<div class="btn-group">
-							 <input style="width: 100px;" type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
+							 <input type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
 						</div>
 						<div class="btn-group">
-							 <input style="width: 100px;" type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
+							 <input type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
 						</div>
 						<div class="btn-group">
-							<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control ui_timepicker" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control ui_timepicker" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-						  	</div>  
+							   <div class="input-group  date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+									<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+							  </div>  
 						</div>	
 						<div class="btn-group">
 								<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
@@ -56,7 +54,7 @@
 								<th><?php echo yii::t('app','原料编码');?></th>
 								<th><?php echo yii::t('app','名称');?></th>                                                              
                                 <th><?php echo yii::t('app','销售单位');?></th>
-                                <th><?php echo yii::t('app','上期库存');?></th>
+                                <th><?php echo yii::t('app','上周库存');?></th>
                                 <th><?php echo yii::t('app','入库总量');?></th>
 								<th><?php echo yii::t('app','进货总量');?></th>
 								<th><?php echo yii::t('app','进货成本');?></th>
@@ -67,7 +65,7 @@
 								<th><?php echo yii::t('app','销售出库');?></th>
 								<th><?php echo yii::t('app','销售成本');?></th>
 								<th><?php echo yii::t('app','总消耗量');?></th>
-								<th><?php echo yii::t('app','本期库存');?></th>
+								<th><?php echo yii::t('app','本周库存');?></th>
 								<th><?php echo yii::t('app','盘点库存');?></th>
 								<th><?php echo yii::t('app','损溢总量');?></th>
 								<th><?php echo yii::t('app','损溢成本');?></th>
@@ -120,28 +118,28 @@
 
 <script>
 
-	//var str=new array();						
-	jQuery(document).ready(function(){
-	    if (jQuery().datepicker) {
-            $('.date-picker').datepicker({
-            	format: 'yyyy-mm-dd',
-            	language: 'zh-CN',
-                rtl: App.isRTL(),
-                autoclose: true
-            });
-            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-            
-       }
-	});
-
+		//var str=new array();						
+		jQuery(document).ready(function(){
+		    if (jQuery().datepicker) {
+	            $('.date-picker').datepicker({
+	            	format: 'yyyy-mm-dd',
+	            	language: 'zh-CN',
+	                rtl: App.isRTL(),
+	                autoclose: true
+	            });
+	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+	            
+           }
+		});
   
 	$('#btn_time_query').click(function time() {
 		var begin_time = $('#begin_time').val();
-		var end_time = $('#end_time').val();
+		var end_time = $('#begin_time').val();
+		var text = $('#text').val();
 		var cid = $('#selectCategory').val();
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
-		location.href="<?php echo $this->createUrl('statementstock/stockallReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
+		location.href="<?php echo $this->createUrl('statementstock/stockReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
 	});
 	$('#excel').click(function excel(){
 		layer.msg('此项功能暂未开放！！',{icon: 5});return false;
@@ -152,11 +150,10 @@
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statementstock/stockallReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
+			location.href="<?php echo $this->createUrl('statementstock/wxmemberExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
 		}
 		else{
-			location.href="<?php echo $this->createUrl('statementstock/stockmonthReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
+			location.href="<?php echo $this->createUrl('statementstock/wxmemberReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
 		}
 	});
-
 </script> 

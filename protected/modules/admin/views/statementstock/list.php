@@ -99,25 +99,25 @@
 					<div class="list col-sm-3 col-xs-12">
 	                   <a href="<?php echo $this->createUrl('statementstock/stockReport',array('companyId'=>$this->companyId,'type'=>1));?>">
 	                        <div class="list_big">进销存日报</div>
-	                        <div class="list_small">统计今日进销存的消耗信息</div>
+	                        <div class="list_small">统计上次日盘到本次日盘进销存的消耗信息</div>
 	                    </a> 
 	                </div>
 	                <div class="list col-sm-3 col-xs-12">
-	                   <a href="<?php echo $this->createUrl('statementstock/stockmonthReport',array('companyId'=>$this->companyId,'text'=>2));?>">
+	                   <a href="<?php echo $this->createUrl('statementstock/stockweekReport',array('companyId'=>$this->companyId,'text'=>2));?>">
+	                        <div class="list_big">进销存周报</div>
+	                        <div class="list_small">统计上次周盘盘到本次周盘进销存的消耗信息</div>
+	                    </a> 
+	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+	                   <a href="<?php echo $this->createUrl('statementstock/stockmonthReport',array('companyId'=>$this->companyId,'text'=>3));?>">
 	                        <div class="list_big">进销存月报</div>
-	                        <div class="list_small">统计一个月量的进销存的消耗信息</div>
+	                        <div class="list_small">统计上次月盘盘到本次月盘进销存的消耗信息</div>
 	                    </a> 
 	                </div>
 	                <div class="list col-sm-3 col-xs-12">
-	                   <a href="<?php echo $this->createUrl('statementstock/stockallReport',array('companyId'=>$this->companyId,'text'=>1));?>">
+	                   <a href="<?php echo $this->createUrl('statementstock/stockallReport',array('companyId'=>$this->companyId));?>">
 	                        <div class="list_big">进销存汇总</div>
-	                        <div class="list_small">统计进销存总量的消耗信息</div>
-	                    </a> 
-	                </div>
-	                <div class="list col-sm-3 col-xs-12">
-	                   <a href="<?php echo $this->createUrl('statementstock/stockdifferReport',array('companyId'=>$this->companyId,'text'=>1));?>">
-	                        <div class="list_big">库存差异报</div>
-	                        <div class="list_small">统计库存的销售总成本和差异总成本信息等</div>
+	                        <div class="list_small">统计进销存总量的消耗信息 <br><br></div>
 	                    </a> 
 	                </div>
 	                <?php if(yii::app()->user->role < 1):?>
@@ -128,6 +128,12 @@
 	                    </a> 
 	                </div>
 	            	<?php endif;?>
+	            	<div class="list col-sm-3 col-xs-12">
+		                   <a href="<?php echo $this->createUrl('statementstock/stockdifferReport',array('companyId'=>$this->companyId,'text'=>1));?>">
+		                        <div class="list_big">库存差异报</div>
+		                        <div class="list_small">统计库存的销售总成本和差异总成本信息等</div>
+		                    </a> 
+		                </div>
 	                <div class="list col-sm-3 col-xs-12">
 	                   <a href="<?php echo $this->createUrl('statementstock/stocksalesReport',array('companyId'=>$this->companyId,'type'=>1));?>">
 	                        <div class="list_big">库存消耗</div>

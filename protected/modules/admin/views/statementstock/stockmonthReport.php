@@ -82,55 +82,34 @@
 						<tbody>
 							<?php if( $sqlmodels) :?>
 							<!--foreach-->
-							<?php $a=1;?>
 							<?php foreach ($sqlmodels as $model):?>
-							<?php $laststock = 0;
-								$allstoragestock = 0;
-								$takingstock = 0;
-								$salestock = 0;
-							?>
-								<tr class="odd gradeX">
-								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
+							<tr class="odd gradeX">
+								<td><?php echo $model['create_at']?></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
-								<td><?php echo $model['unit_name'];?></td>
-								<td><?php $laststock = $model['lms_takingstock']; //上次库存
-											echo $laststock;?></td>
-								<td><?php $allstoragestock = $model['all_storagestock'];//总入库量
-											echo $allstoragestock;?></td>
-								<td><?php  $takingstock = $model['mms_takingstock'];//盘点库存
-											$allsunyi = $model['all_sunyinum']; //损益量
-											$allsunyiprice = $model['all_sunyi_price']; //损益成本
-											echo $model['all_storagestock']; //总入库库存
-								?></td>
-								<td><?php echo $model['all_storageprice']; //进货成本?> </td>
-								<td><?php $renum = $model['re_num'];
-											if(!$renum){
-												$renum = 1;
-											}?></td>
-								<td><?php echo '';?></td>
-								<td><?php $demagestock = $model['all_demagestock']; //盘损量
-											echo $demagestock;?></td>
-								<td><?php $demageprice = $model['all_demageprice']; //盘损成本
-											echo $demageprice;?></td>
-								<td><?php $salestock = $model['all_salestock']; //销售总量
-											echo $salestock;?></td>
-								<td><?php $salesprice = $model['all_salesprice']; //销售总成本
-											echo $salesprice;?></td>
-								<td><?php $usestock = $demagestock+$salestock-$allsunyi; 
-											echo $usestock;?></td>
+								<td><?php echo $model['sales_name'];?></td>
+								<td><?php echo $model['prestock_taking_num'];?></td>
+								<td><?php echo $model['stockin_num'];?></td>
+								<td><?php echo $model['stockin_num'];?></td>
+								<td><?php echo $model['stockin_price'];?></td>
+								<td></td>
+								<td></td>
+								<td><?php echo $model['damage_num'];?></td>
+								<td><?php echo $model['damage_price'];?></td>
+								<td><?php echo $model['salse_num'];?></td>
+								<td><?php echo $model['salse_price'];?></td>
+								<td><?php echo $model['total_num'];?></td>
 								<!-- 总消耗 = 销售出库+损耗-损益 -->
-								<td><?php echo $takingstock;?></td>
-								<td><?php echo $takingstock;?></td>
-								<td><?php //echo sprintf("%.2f",$allsunyi/$renum); 
-										echo $model['all_sunyinum'];?></td>
-								<td><?php echo sprintf("%.4f",$allsunyiprice/$renum);?></td>
-							<?php $a++;?>
+								<td><?php echo $model['system_num'];?></td>
+								<td><?php echo $model['stock_taking_num'];?></td>
+								<td><?php echo $model['stock_taking_difnum'];?></td>
+								<td><?php echo $model['stock_taking_difprice'];?></td>
+							</tr>
 							<?php endforeach;?>	
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='15'>未查询到数据。</td>
+							<td colspan='19'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>
