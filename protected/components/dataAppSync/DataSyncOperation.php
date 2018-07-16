@@ -1239,7 +1239,7 @@ class DataSyncOperation {
 						$refund_fee = -$retreatprice;
 					}
 					$remark = $pay['remark'];
-					$sql = 'select * from nb_order_pay where dpid='.$dpid.' and create_at="'.$retreatTime.'" and order_id='.$orderId.' and account_no="'.$accountNo.'" and paytype='.$pay['paytype'].' and payment_method_id='.$pay['payment_method_id'].' and paytype_id='.$pay['paytype_id'];
+					$sql = 'select * from nb_order_pay where dpid='.$dpid.' and create_at="'.$retreatTime.'" and order_id='.$orderId.' and account_no="'.$accountNo.'" and paytype='.$pay['paytype'].' and payment_method_id='.$pay['payment_method_id'].' and paytype_id='.$pay['paytype_id'].' and remark="'.$remark.'"';
 					$orderpay = Yii::app ()->db->createCommand ($sql)->queryRow();
 					if($orderpay){
 						continue;
@@ -1252,7 +1252,6 @@ class DataSyncOperation {
 						if(!$resObj->status){
 							throw new Exception('微信退款失败'.$result);
 						}
-						$remark = $resObj->trade_no;
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
 						
@@ -1262,7 +1261,6 @@ class DataSyncOperation {
 						if(!$resObj->status){
 							throw new Exception('支付宝退款失败');
 						}
-						$remark = $resObj->trade_no;
 					}elseif($pay['paytype']==4){
 						// 会员卡支付
 						$rData = array(

@@ -22,20 +22,16 @@ class MaterialStockLogController extends BackendController
 	public function actionIndex(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d 00:00:00',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d 23:59:59',time()));
-		//$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with =array('company','material') ;
-		$criteria->condition =  't.type in(0,1) and t.delete_flag=0 and t.dpid='.$this->companyId;	
-//var_dump($begin_time);exit;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		$criteria->order = ' t.lid desc ';	
 		$pages = new CPagination(MaterialStockLog::model()->count($criteria));
-		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = MaterialStockLog::model()->findAll($criteria);
 		$stock=Helper::genSalesUnit();
-		//var_dump($models);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,

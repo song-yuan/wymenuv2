@@ -59,9 +59,6 @@ class InventoryController extends BackendController
 				'retreats'=>$retreats,
 		));
 	}
-	public function actionSetMealList() {
-		
-	}
 	public function actionCreate(){
 		$model = new Inventory();
 		$model->dpid = $this->companyId ;
@@ -69,7 +66,7 @@ class InventoryController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Inventory');
 			$retreatId = Yii::app()->request->getParam('Inventory_reason_id');
-			$se=new Sequence("inventory");
+			$se = new Sequence("inventory");
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
@@ -84,8 +81,9 @@ class InventoryController extends BackendController
 		}
 		$retreatId =0;
 		$retreats = $this->getretreats();
-		//var_dump($retreats);exit;
-		$retreatslist=CHtml::listData($retreats, 'lid', 'name');		$this->render('create' , array(
+		
+		$retreatslist=CHtml::listData($retreats, 'lid', 'name');		
+		$this->render('create' , array(
 			'model' => $model ,
 			'retreats'=>$retreats,
 			'retreatId'=>$retreatId
@@ -97,7 +95,7 @@ class InventoryController extends BackendController
 		$model = Inventory::model()->find('lid=:inventoryId and dpid=:dpid' , array(':inventoryId' => $lid,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
 		$retreatId = $model->reason_id ;
-		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Inventory');
 			$model->update_at=date('Y-m-d H:i:s',time());
@@ -108,15 +106,14 @@ class InventoryController extends BackendController
 		}
 		$retreats = $this->getretreats();
 		$this->render('update' , array(
-				'model' => $model ,
+			'model' => $model ,
 			'retreats'=>$retreats,
 			'retreatId'=>$retreatId
 		));
 	}
 	public function actionDelete(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$ids = Yii::app()->request->getPost('ids');
-        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_inventory set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -130,13 +127,14 @@ class InventoryController extends BackendController
 		$criteria = new CDbCriteria;
 		$slid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
+		
 		$criteria->with = array('material','product');
 		$storage = Inventory::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
 		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.inventory_id='.$slid;
 		$pages = new CPagination(InventoryDetail::model()->count($criteria));
-		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = InventoryDetail::model()->findAll($criteria);
+		
 		$this->render('detailindex',array(
 				'storage'=>$storage,
 				'models'=>$models,
@@ -146,8 +144,7 @@ class InventoryController extends BackendController
 		));
 	}
 	public function actionDetailCreate(){
-		//var_dump($model);exit;
-		$rlid = Yii::app()->request->getParam('lid');//var_dump($polid);exit;
+		$rlid = Yii::app()->request->getParam('lid');
 		$db = Yii::app()->db;
 		if(Yii::app()->request->isPostRequest) {
 			$m = Yii::app()->request->getPost('ms');
@@ -155,17 +152,16 @@ class InventoryController extends BackendController
 				$ms = array();
 				$ms = explode(';',$m);
 				foreach ($ms as $mss){
-					
 					$m = explode(',',$mss);
 					$mt = $m[1];
 					$md = $m[0];
-					//var_dump($md);exit;
 					$sql = 'select * from nb_inventory_detail where delete_flag =0 and material_id ='.$md.' and inventory_id='.$rlid;
 					$mid = $db->createCommand($sql)->queryRow();
 					if(empty($mid)){
 						$idm = new InventoryDetail();
-						$se=new Sequence("inventory_detail");
-						$idm->lid = $se->nextval();
+						$se = new Sequence("inventory_detail");
+						$lid = $se->nextval();
+						$idm->lid = $lid;
 						$idm->dpid = $this->companyId;
 						$idm->create_at = date('Y-m-d H:i:s',time());
 						$idm->update_at = date('Y-m-d H:i:s',time());
@@ -202,11 +198,9 @@ class InventoryController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$model = InventoryDetail::model()->find('lid=:storagedetailId and dpid=:dpid' , array(':storagedetailId' => $lid,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('InventoryDetail');
 			$retreatId = Yii::app()->request->getParam('InventoryDetail_retreat_id');
-			//var_dump($model);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->retreat_id = $retreatId;
 			if($model->save()){
@@ -222,8 +216,6 @@ class InventoryController extends BackendController
 		$materials = $this->getMaterials($categoryId);
 		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
 		
-		//$retreatslist=CHtml::listData($retreats, 'lid', 'name');
-		//var_dump($model);var_dump($categoryId);var_dump($materials);exit;
 		$this->render('detailupdate' , array(
 				'model' => $model ,
 				'categories'=>$categories,
@@ -236,7 +228,7 @@ class InventoryController extends BackendController
 	public function actionDetailDelete(){
 		$slid = Yii::app()->request->getParam('slid');
 		$status = Yii::app()->request->getParam('status');
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = $this->companyId;
 		$ids = Yii::app()->request->getPost('ids');
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_inventory_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
@@ -405,430 +397,125 @@ class InventoryController extends BackendController
 		//var_dump($command->queryScalar());exit;
 		return $command->queryScalar();
 	}
-	public function actionStorageVerify(){
-		$pid = Yii::app()->request->getParam('pid');
-		$type = Yii::app()->request->getParam('type');
-		//echo $type;exit;
-		$storage = Inventory::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
-		$storage->status = $type;
-		//$storage->update();
-		//$sql = 'update nb_inventory set status = 0 where dpid='.$this->companyId.' and lid='.$pid;
-		//Yii::app()->db->createCommand($sql)->execute();
-		//var_dump($storage);
-		//echo $storage;
-		if($storage->update()){
-			echo 'true';
-		}else{
-			echo 'false';
-		}
-		exit;
-	}
-	
-
 
 	public function actionAllStore(){
 		$pid = Yii::app()->request->getParam('pid');
-		$username = Yii::app()->user->username;
 		$dpid = $this->companyId;
 		$db = Yii::app()->db;
-		$nostockmsg = '';
+		
 		$transaction = $db->beginTransaction();
 		try
 		{
-			$is_sync = DataSync::getInitSync();
-			//盘点日志
-			$stocktaking = new StockTaking();
-			$se=new Sequence("stock_taking");
-			$logid = $stocktaking->lid = $se->nextval();
-			$stocktaking->dpid = $dpid;
-			$stocktaking->create_at = date('Y-m-d H:i:s',time());
-			$stocktaking->update_at = date('Y-m-d H:i:s',time());
-			$stocktaking->username = $username ;
-			$stocktaking->title =''.date('m月d日 H时i分',time()).' 盘损记录';
-			$stocktaking->status = 1;
-			$stocktaking->is_sync = $is_sync;
-			$stocktaking->save();
-
 			$sql = 'select t.*,ifnull(r.name,remark) as reason from nb_inventory_detail t left join nb_retreat r on(t.retreat_id = r.lid) where t.delete_flag = 0 and t.dpid ='.$dpid.' and t.inventory_id ='.$pid;
 			$invends = $db->createCommand($sql)->queryAll();
-			//var_dump($invends);exit;
 			foreach ($invends as $opt){
 				$tp = $opt['type'];
 				$id = $opt['material_id'];
 				$nowNum = $opt['inventory_stock'];//盘损的库存
 				$damagereason = $opt['reason'];//盘损原因
-				//var_dump($tp);exit;
-				if($tp==1){
-					//var_dump($tp);exit;
-					$originalNum = '0.00';
-					$sql = 'select sum(pms.stock) as stocks from nb_product_material_stock pms where pms.stock>=0 and pms.dpid ='.$dpid.' and pms.material_id ='.$id;
-					$ms = $db->createCommand($sql)->queryRow();
-					if($ms){
-						$originalNum = $ms['stocks'];//原始库存
-					}
-					//$difference = $opt[1];//盘损库存差值
-					
-					$stocks = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$id.' )',array(':sid'=>$id,':dpid'=>$this->companyId,));
-					if(!empty($stocks)){
-						//对该次盘损进行日志保存
-						$stocktakingdetail = new StockTakingDetail();
-						$se=new Sequence("stock_taking_detail");
-						$detailid = $se->nextval();
-						$stocktakingdetail = array(
-								'lid'=>$detailid,
-								'dpid'=>$dpid,
-								'create_at'=>date('Y-m-d H:i:s',time()),
-								'update_at'=>date('Y-m-d H:i:s',time()),
-								'type'=>'1',
-								'logid'=>$logid,
-								'material_id'=>$id,
-								'material_stock_id' => $stocks->lid,
-								'reality_stock' => $originalNum,
-								'taking_stock' => $nowNum,
-								'number'=>$nowNum,
-								'reasion'=>$damagereason,
-								'status' => 0,
-								'is_sync'=>$is_sync,
-						);
-						//var_dump($stocktakingdetails);
-						$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
-							
-						if($nowNum>0){
-		
-							$sql = 'select t.* from nb_product_material_stock t where t.stock != "0.00" and t.delete_flag = 0 and t.dpid ='.$dpid.' and t.material_id = '.$id.' order by t.create_at asc';
-							$command = $db->createCommand($sql);
-							$stock2 = $command->queryAll();
-							$minusnum = $nowNum;
-							//var_dump($minusnum.'@');
-							foreach ($stock2 as $stockid){
-								//print_r($stockid);exit;
-								//var_dump($stockid);
-								$stockori = $stockid['stock'];
-								if($minusnum >= 0 && $stockori > 0){
-									$minusnums = $minusnum - $stockori ;
-									//var_dump($stockori.'@@');
-									//var_dump($minusnums);exit;
-									$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
-		
-									if($stock->batch_stock == '0.00'||$stock->batch_stock == null){
-										$unit_price = '0';
-									}else{
-										$unit_price = $stock->stock_cost / $stock->batch_stock;
-									}
-									if($minusnums <= 0 ) {
-										//var_dump($minusnums.'@3');
-										$changestock = $stock->stock - $minusnum;
-										$sql1 = 'update nb_product_material_stock set stock = '.$changestock. ' where delete_flag = 0 and material_id ='.$id.' and dpid ='.$this->companyId.' and lid='.$stockid['lid'];
-										//var_dump($sql1);
-										//Yii::app()->db->createCommand($sql)->execute();
-										$command=$db->createCommand($sql1);
-										$command->execute();
-										//$stock->update_at = date('Y-m-d H:i:s',time());
-										//$stock->update();
-										$all_price = -$unit_price *$minusnum;
-										//对该次盘点进行日志保存
-										$stocktakingdetails = new StockTakingDetail();
-										$se=new Sequence("stock_taking_detail");
-										$stocktakingdetails = array(
-												'lid'=>$se->nextval(),
-												'dpid'=>$dpid,
-												'create_at'=>date('Y-m-d H:i:s',time()),
-												'update_at'=>date('Y-m-d H:i:s',time()),
-												'type'=>'1',
-												'logid'=>$logid,
-												'detail_id'=>$detailid,
-												'material_id'=>$id,
-												'material_stock_id' => $stock->lid,
-												'reality_stock' => $stock->stock,
-												'taking_stock' => ''.$changestock,
-												'demage_price'=>$all_price,
-												'number'=>'-'.$minusnum,
-												'reasion'=>'',
-												'status' => 1,
-												'is_sync'=>$is_sync,
-										);
-										//var_dump($stocktakingdetails);
-										$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
-											
-										$minusnum = -1;
-									}else{
-										//var_dump($minusnums.'4');
-										$minusnum = $minusnums;
-										//var_dump($minusnum.'5');
-										$sql2 = 'update nb_product_material_stock set stock=0 where delete_flag = 0 and lid ='.$stockid['lid'].' and dpid ='.$this->companyId.' and material_id ='.$id;
-										//var_dump($sql2);
-										$command=$db->createCommand($sql2);
-										$command->execute();
-										//Yii::app()->db->createCommand($sql)->execute();
-										//$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
-										$all_price = -$unit_price *$stockori;
-										//对该次盘点进行日志保存
-										$materialStockLog = new StockTakingDetail();
-										$se=new Sequence("stock_taking_detail");
-										$materialStockLog = array(
-												'lid'=>$se->nextval(),
-												'dpid'=>$dpid,
-												'create_at'=>date('Y-m-d H:i:s',time()),
-												'update_at'=>date('Y-m-d H:i:s',time()),
-												'type'=>'1',
-												'logid'=>$logid,
-												'detail_id'=>$detailid,
-												'material_id'=>$id,
-												'material_stock_id' => $stock->lid,
-												'reality_stock' => $stock->stock,
-												'taking_stock' => $stockori,
-												'demage_price'=>$all_price,
-												'number'=>'-'.$stockori,
-												'reasion'=>''.$damagereason,
-												'status' => 1,
-												'is_sync'=>$is_sync,
-		
-										);
-										//var_dump($materialStockLog);
-										$command = $db->createCommand()->insert('nb_stock_taking_detail',$materialStockLog);
-											
-									}
+				
+				// 盘损记录
+				$originalNum = 0;
+				$sql = 'select sum(stock) as stocks from nb_product_material_stock where stock > 0 and dpid ='.$dpid.' and material_id ='.$id;
+				$ms = $db->createCommand($sql)->queryRow();
+				if($ms){
+					$originalNum = $ms['stocks'];//原始库存
+				}
+				
+				$sql = 'select * from nb_product_material_stock where material_id='.$id.' and dpid='.$this->companyId.' and delete_flag=0 order by create_at desc limit 1';
+				$stocks = $db->createCommand($sql)->queryRow();
+				// 已经入库
+				if(!empty($stocks)){
+					//对该次盘损进行日志保存
+					if($nowNum>0){
+						$sql = 'select * from nb_product_material_stock where stock != 0 and dpid ='.$dpid.' and material_id = '.$id.' and delete_flag = 0 order by create_at asc';
+						$stock2 = $db->createCommand($sql)->queryAll();
+						$minusnum = $nowNum;
+						
+						foreach ($stock2 as $stock){
+							$stockori = $stock['stock'];
+							if($minusnum >= 0){
+								$minusnums = $minusnum - $stockori ;
+								if($stock['batch_stock'] == '0.00'){
+									$unit_price = '0';
+								}else{
+									$unit_price = $stock['stock_cost'] / $stock['batch_stock'];
 								}
-							}
-							//exit;
-						}
-					}else{
-						$matername = Common::getmaterialName($id);
-						$nostockmsg = $nostockmsg.','.$matername;
-						//对该次盘点进行日志保存
-						$stocktakingdetail = new StockTakingDetail();
-						$se=new Sequence("stock_taking_detail");
-						$detailid = $se->nextval();
-						$stocktakingdetail = array(
-								'lid'=>$detailid,
-								'dpid'=>$dpid,
-								'create_at'=>date('Y-m-d H:i:s',time()),
-								'update_at'=>date('Y-m-d H:i:s',time()),
-								'type'=>'1',
-								'logid'=>$logid,
-								'material_id'=>$id,
-								'material_stock_id' => '0000000000',
-								'reality_stock' => $originalNum,
-								'taking_stock' => $nowNum,
-								'number'=>'0',
-								'reasion'=>'该次盘损['.$matername.']尚未入库，无法进行盘损,请先入库.',
-								'status' => 0,
-								'is_sync'=>$is_sync,
-						);
-						//var_dump($stocktakingdetail);exit;
-						$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
-					}
-				}elseif($tp==2){
-					$sqlbom = 'select t.* from nb_product_bom t left join nb_product_material pm on(pm.lid = t.material_id and pm.dpid = t.dpid) where pm.delete_flag =0 and t.product_id ='.$id.' and t.delete_flag = 0 and t.taste_id=0 and t.dpid ='.$dpid;
-					$pbs = $db->createCommand($sqlbom)->queryAll();
-					//var_dump($pbs);exit;
-					if(!empty($pbs)){
-						foreach ($pbs as $pb){
-							$mid = $pb['material_id'];
-							
-							$nowNums = $nowNum * $pb['number'];
-							
-							$originalNum = '0.00';
-							$sql = 'select sum(pms.stock) as stocks from nb_product_material_stock pms where pms.stock>=0 and pms.dpid ='.$dpid.' and pms.material_id ='.$mid;
-							$ms = $db->createCommand($sql)->queryRow();
-							if($ms){
-								$originalNum = $ms['stocks'];//原始库存
-							}
-							
-							$stocks = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$mid.' )',array(':sid'=>$mid,':dpid'=>$this->companyId,));
-							//var_dump($stocks);exit;
-							if(!empty($stocks)){
-								//对该次盘损进行日志保存
-								$stocktakingdetail = new StockTakingDetail();
-								$se=new Sequence("stock_taking_detail");
-								$detailid = $se->nextval();
-								$stocktakingdetail = array(
-										'lid'=>$detailid,
-										'dpid'=>$dpid,
-										'create_at'=>date('Y-m-d H:i:s',time()),
-										'update_at'=>date('Y-m-d H:i:s',time()),
-										'type'=>'1',
-										'logid'=>$logid,
-										'material_id'=>$mid,
-										'material_stock_id' => $stocks->lid,
-										'reality_stock' => $originalNum,
-										'taking_stock' => $nowNums,
-										'number'=>$nowNums,
-										'reasion'=>$damagereason,
-										'status' => 0,
-										'is_sync'=>$is_sync,
-								);
-								//var_dump($stocktakingdetails);
-								$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
+								if($minusnums <= 0 ) {
+									$changestock = $stock['stock'] - $minusnum;
 									
-								if($nowNums>0){
-										
-									$sql = 'select t.* from nb_product_material_stock t where t.stock != "0.00" and t.delete_flag = 0 and t.dpid ='.$dpid.' and t.material_id = '.$mid.' order by t.create_at asc';
-									$command = $db->createCommand($sql);
-									$stock2 = $command->queryAll();
-									$minusnum = $nowNums;
-									//var_dump($minusnum.'@');
-									foreach ($stock2 as $stockid){
-										//print_r($stockid);exit;
-										//var_dump($stockid);
-										$stockori = $stockid['stock'];
-										if($minusnum >= 0 && $stockori > 0){
-											$minusnums = $minusnum - $stockori ;
-											//var_dump($stockori.'@@');
-											//var_dump($minusnums);exit;
-											$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$mid,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
-												
-											if($stock->batch_stock == '0.00'||$stock->batch_stock == null){
-												$unit_price = '0';
-											}else{
-												$unit_price = $stock->stock_cost / $stock->batch_stock;
-											}
-											if($minusnums <= 0 ) {
-												//var_dump($minusnums.'@3');
-												$changestock = $stock->stock - $minusnum;
-												$sql1 = 'update nb_product_material_stock set stock = '.$changestock. ' where delete_flag = 0 and material_id ='.$mid.' and dpid ='.$this->companyId.' and lid='.$stockid['lid'];
-												//var_dump($sql1);
-												//Yii::app()->db->createCommand($sql)->execute();
-												$command=$db->createCommand($sql1);
-												$command->execute();
-												//$stock->update_at = date('Y-m-d H:i:s',time());
-												//$stock->update();
-												$all_price = -$unit_price *$minusnum;
-												//对该次盘点进行日志保存
-												$stocktakingdetails = new StockTakingDetail();
-												$se=new Sequence("stock_taking_detail");
-												$stocktakingdetails = array(
-														'lid'=>$se->nextval(),
-														'dpid'=>$dpid,
-														'create_at'=>date('Y-m-d H:i:s',time()),
-														'update_at'=>date('Y-m-d H:i:s',time()),
-														'type'=>'1',
-														'logid'=>$logid,
-														'detail_id'=>$detailid,
-														'material_id'=>$mid,
-														'material_stock_id' => $stock->lid,
-														'reality_stock' => $stock->stock,
-														'taking_stock' => ''.$changestock,
-														'demage_price'=>$all_price,
-														'number'=>'-'.$minusnum,
-														'reasion'=>''.$damagereason,
-														'status' => 1,
-														'is_sync'=>$is_sync,
-												);
-												//var_dump($stocktakingdetails);
-												$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
-													
-												$minusnum = -1;
-											}else{
-												//var_dump($minusnums.'4');
-												$minusnum = $minusnums;
-												//var_dump($minusnum.'5');
-												$sql2 = 'update nb_product_material_stock set stock=0 where delete_flag = 0 and lid ='.$stockid['lid'].' and dpid ='.$this->companyId.' and material_id ='.$mid;
-												//var_dump($sql2);
-												$command=$db->createCommand($sql2);
-												$command->execute();
-												//Yii::app()->db->createCommand($sql)->execute();
-												$all_price = -$unit_price *$stockori;
-												//对该次盘点进行日志保存
-												$materialStockLog = new StockTakingDetail();
-												$se=new Sequence("stock_taking_detail");
-												$materialStockLog = array(
-														'lid'=>$se->nextval(),
-														'dpid'=>$dpid,
-														'create_at'=>date('Y-m-d H:i:s',time()),
-														'update_at'=>date('Y-m-d H:i:s',time()),
-														'type'=>'1',
-														'logid'=>$logid,
-														'detail_id'=>$detailid,
-														'material_id'=>$mid,
-														'material_stock_id' => $stock->lid,
-														'reality_stock' => $stock->stock,
-														'taking_stock' => $stockori,
-														'demage_price'=>$all_price,
-														'number'=>'-'.$stockori,
-														'reasion'=>''.$damagereason,
-														'status' => 1,
-														'is_sync'=>$is_sync,
-															
-												);
-												//var_dump($materialStockLog);
-												$command = $db->createCommand()->insert('nb_stock_taking_detail',$materialStockLog);
-													
-											}
-										}
-									}
-									//exit;
+									$sql = 'update nb_product_material_stock set stock = '.$changestock. ' where dpid ='.$this->companyId.' and lid='.$stock['lid'].' and delete_flag = 0';
+									$command=$db->createCommand($sql)->execute();
+									// 盘损成本
+									//对该次盘点进行日志保存
+									$se = new Sequence("material_stock_log");
+									$stocktakingdetails = array(
+											'lid'=>$se->nextval(),
+											'dpid'=>$dpid,
+											'create_at'=>date('Y-m-d H:i:s',time()),
+											'update_at'=>date('Y-m-d H:i:s',time()),
+											'type'=>4,
+											'logid'=>$pid,
+											'material_id'=>$id,
+											'stock_num' => $minusnum,
+											'original_num' => $stock['stock'],
+											'unit_price'=>$unit_price,
+											'resean'=>'盘损消耗',
+									);
+									$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
+									break;
+								}else{
+									$minusnum = $minusnums;
+									$sql = 'update nb_product_material_stock set stock=0 where delete_flag = 0 and lid ='.$stock['lid'].' and dpid ='.$this->companyId;
+									$command = $db->createCommand($sql)->execute();
+									
+									//对该次盘点进行日志保存
+									$se = new Sequence("material_stock_log");
+									$stocktakingdetails = array(
+											'lid'=>$se->nextval(),
+											'dpid'=>$dpid,
+											'create_at'=>date('Y-m-d H:i:s',time()),
+											'update_at'=>date('Y-m-d H:i:s',time()),
+											'type'=>4,
+											'logid'=>$pid,
+											'material_id'=>$id,
+											'stock_num' => $stock['stock'],
+											'original_num' => $stock['stock'],
+											'unit_price'=>$unit_price,
+											'resean'=>'盘损消耗',
+									);
+									$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
 								}
-							}else{
-								$matername = Common::getmaterialName($mid);
-								$nostockmsg = $nostockmsg.','.$matername;
-								//对该次盘点进行日志保存
-								$stocktakingdetail = new StockTakingDetail();
-								$se=new Sequence("stock_taking_detail");
-								$detailid = $se->nextval();
-								$stocktakingdetail = array(
-										'lid'=>$detailid,
-										'dpid'=>$dpid,
-										'create_at'=>date('Y-m-d H:i:s',time()),
-										'update_at'=>date('Y-m-d H:i:s',time()),
-										'type'=>'1',
-										'logid'=>$logid,
-										'material_id'=>$mid,
-										'material_stock_id' => '0000000000',
-										'reality_stock' => '0.00',
-										'taking_stock' => ''.$nowNums,
-										'number'=>'0',
-										'reasion'=>'该次盘损['.$matername.']尚未入库，无法进行盘损,请先入库.',
-										'status' => 0,
-										'is_sync'=>$is_sync,
-								);
-								//var_dump($stocktakingdetail);
-								$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
 							}
 						}
-					}else{
-								$pn = Common::getproductName($id);
-								$nostockmsg = $nostockmsg.','.$pn;
-								//对该次盘点进行日志保存
-								$stocktakingdetail = new StockTakingDetail();
-								$se=new Sequence("stock_taking_detail");
-								$detailid = $se->nextval();
-								$stocktakingdetail = array(
-										'lid'=>$detailid,
-										'dpid'=>$dpid,
-										'create_at'=>date('Y-m-d H:i:s',time()),
-										'update_at'=>date('Y-m-d H:i:s',time()),
-										'type'=>'1',
-										'logid'=>$logid,
-										'material_id'=>$id,
-										'material_stock_id' => '0000000000',
-										'reality_stock' => '0',
-										'taking_stock' => $nowNum,
-										'number'=>'0',
-										'reasion'=>'该次盘损['.$pn.']尚未添加配方，无法进行盘损,请先完善配方信息.',
-										'status' => 0,
-										'is_sync'=>$is_sync,
-								);
-								//var_dump($stocktakingdetail);exit;
-								$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
-							}
-					
-					
+					}
+				}else{
+					$se = new Sequence("material_stock_log");
+					$stocktakingdetails = array(
+							'lid'=>$se->nextval(),
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'type'=>4,
+							'logid'=>$pid,
+							'material_id'=>$id,
+							'stock_num' => $minusnum,
+							'original_num' => 0,
+							'unit_price'=>0,
+							'resean'=>'盘损消耗',
+					);
+					$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
 				}
 				
 			}
-			$storage = Inventory::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$dpid));
-			$storage->status = '1';
-			$storage->update();
+			
+			$sql = 'update nb_inventory set status=1 where lid='.$pid.' and dpid='.$dpid;
+			$db->createCommand($sql)->execute();
 			$transaction->commit();
 			Yii::app()->end(true);
-			
-			return true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
-			exit;
 			Yii::app()->end(false);
-			return false;
 		}
 	}
 
@@ -851,24 +538,15 @@ class InventoryController extends BackendController
 				$opt = explode(',',$opts);
 				$id = $opt[0];
 				$nowNum = $opt[1];
-	
-				$sts = InventoryDetail::model()->find('lid='.$id.' and delete_flag=0 and inventory_id ='.$pid);
-				if(!empty($sts)){
-					$sts->update_at = date('Y-m-d H:i:s',time());
-					$sts->inventory_stock = $nowNum;
-					$sts-> update();
-				}
-	
+				
+				$sql = 'update nb_inventory_detail set inventory_stock='.$nowNum.' where lid='.$id.' and inventory_id ='.$pid.' and delete_flag=0';
+				$db->createCommand($sql)->execute();
 			}
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success","msg"=>$nostockmsg,)));
-	
-			return true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
-			exit;
 			Yii::app()->end(json_encode(array("status"=>"fail")));
-			return false;
 		}
 	}
 	

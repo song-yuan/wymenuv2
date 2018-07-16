@@ -130,14 +130,14 @@
 	            	<?php endif;?>
 	            	<div class="list col-sm-3 col-xs-12">
 		                   <a href="<?php echo $this->createUrl('statementstock/stockdifferReport',array('companyId'=>$this->companyId,'text'=>1));?>">
-		                        <div class="list_big">库存差异报</div>
-		                        <div class="list_small">统计库存的销售总成本和差异总成本信息等</div>
+		                        <div class="list_big">库存差异</div>
+		                        <div class="list_small">统计库存的销售总成本和盘点差异总成本信息等</div>
 		                    </a> 
 		                </div>
 	                <div class="list col-sm-3 col-xs-12">
 	                   <a href="<?php echo $this->createUrl('statementstock/stocksalesReport',array('companyId'=>$this->companyId,'type'=>1));?>">
-	                        <div class="list_big">库存消耗</div>
-	                        <div class="list_small">查询实时的库存消耗量</div>
+	                        <div class="list_big">库存销售</div>
+	                        <div class="list_small">查询实时的库存销售消耗量</div>
 	                    </a> 
 	                </div>
 	            </div>

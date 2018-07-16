@@ -147,6 +147,7 @@
 			if(confirm('确认盘损')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('inventory/allStore',array('companyId'=>$this->companyId));?>',
+					type:'POST',
 					data:{pid:pid},
 					success:function(msg){
 						if(msg){
