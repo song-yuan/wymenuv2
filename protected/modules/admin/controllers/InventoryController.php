@@ -276,94 +276,6 @@ class InventoryController extends BackendController
 		echo 'false';
 		exit;
 	}
-	private function getCategories(){
-		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' t.lid asc ';
-		$models = MaterialCategory::model()->findAll($criteria);
-		$options = array();
-		$optionsReturn = array(yii::t('app','--请选择分类--'));
-		if($models) {
-			foreach ($models as $model) {
-				if($model->pid == '0') {
-					$options[$model->lid] = array();
-				} else {
-					$options[$model->pid][$model->lid] = $model->category_name;
-				}
-			}
-			//var_dump($options);exit;
-		}
-		foreach ($options as $k=>$v) {
-			//var_dump($k,$v);exit;
-			$model = MaterialCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
-			$optionsReturn[$model->category_name] = $v;
-		}
-		return $optionsReturn;
-	}
-	private function getCateps(){
-		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
-		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' t.lid asc ';
-		$models = ProductCategory::model()->findAll($criteria);
-		$options = array();
-		$optionsReturn = array(yii::t('app','--请选择分类--'));
-		if($models) {
-			foreach ($models as $model) {
-				if($model->pid == '0') {
-					$options[$model->lid] = array();
-				} else {
-					$options[$model->pid][$model->lid] = $model->category_name;
-				}
-			}
-			//var_dump($options);exit;
-		}
-		foreach ($options as $k=>$v) {
-			//var_dump($k,$v);exit;
-			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
-			$optionsReturn[$model->category_name] = $v;
-		}
-		return $optionsReturn;
-	}
-	private function getRetreats(){
-		$criteria = new CDbCriteria;
-		$criteria->condition =  't.type=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' t.lid asc ';
-		$models = Retreat::model()->findAll($criteria);
-		//var_dump($models);exit;
-		$options = array();
-		$optionsReturn = array(yii::t('app','--请选择原因--'));
-		if($models) {
-			foreach ($models as $model) {
-				$optionsReturn[$model->lid] = $model->name;
-			}
-		}
-		//var_dump($optionsReturn);exit;
-		return $optionsReturn;
-	}
-	private function getRets(){
-		$criteria = new CDbCriteria;
-		$criteria->condition =  't.type=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' t.lid asc ';
-		$models = Retreat::model()->findAll($criteria);
-		return $models;
-	}
-	private function getMaterials(){
-		$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
-		$materials = $materials ? $materials : array();
-		return $materials;
-	}
-	private function getProducts(){
-		$materials = Product::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
-		$materials = $materials ? $materials : array();
-		return $materials;
-	}
-	private function getRetreatss($dpid){
-		$materials = Retreat::model()->findAll('type =2 and dpid=:companyId and delete_flag=0' , array(':companyId' => $dpid)) ;
-		$materials = $materials ? $materials : array();
-		return $materials;
-	}
 
 	public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);
@@ -381,21 +293,6 @@ class InventoryController extends BackendController
 			$treeDataSource['data'][] = $tmp;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
-	}
-	private function getCategoryId($lid){
-		$db = Yii::app()->db;
-		$sql = "SELECT category_id from nb_inventory_detail so,nb_product_material pm where so.dpid=pm.dpid and so.material_id=pm.lid and so.lid=:lid";
-		$command=$db->createCommand($sql);
-		$command->bindValue(":lid" , $lid);
-		return $command->queryScalar();
-	}
-	private function getRetreatId($lid){
-		$db = Yii::app()->db;
-		$sql = "SELECT retreat_id from nb_inventory_detail where lid=:lid";
-		$command=$db->createCommand($sql);
-		$command->bindValue(":lid" , $lid);
-		//var_dump($command->queryScalar());exit;
-		return $command->queryScalar();
 	}
 
 	public function actionAllStore(){
@@ -447,7 +344,7 @@ class InventoryController extends BackendController
 									$sql = 'update nb_product_material_stock set stock = '.$changestock. ' where dpid ='.$this->companyId.' and lid='.$stock['lid'].' and delete_flag = 0';
 									$command=$db->createCommand($sql)->execute();
 									// 盘损成本
-									//对该次盘点进行日志保存
+									//对该次盘损进行日志保存
 									$se = new Sequence("material_stock_log");
 									$stocktakingdetails = array(
 											'lid'=>$se->nextval(),
@@ -548,6 +445,109 @@ class InventoryController extends BackendController
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			Yii::app()->end(json_encode(array("status"=>"fail")));
 		}
+	}
+	private function getCategories(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = MaterialCategory::model()->findAll($criteria);
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+			//var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+			//var_dump($k,$v);exit;
+			$model = MaterialCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
+	}
+	private function getCateps(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = ProductCategory::model()->findAll($criteria);
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+			//var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+			//var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
+	}
+	private function getRetreats(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.type=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = Retreat::model()->findAll($criteria);
+		//var_dump($models);exit;
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择原因--'));
+		if($models) {
+			foreach ($models as $model) {
+				$optionsReturn[$model->lid] = $model->name;
+			}
+		}
+		//var_dump($optionsReturn);exit;
+		return $optionsReturn;
+	}
+	private function getRets(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.type=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = Retreat::model()->findAll($criteria);
+		return $models;
+	}
+	private function getMaterials(){
+		$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
+		$materials = $materials ? $materials : array();
+		return $materials;
+	}
+	private function getProducts(){
+		$materials = Product::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
+		$materials = $materials ? $materials : array();
+		return $materials;
+	}
+	private function getRetreatss($dpid){
+		$materials = Retreat::model()->findAll('type =2 and dpid=:companyId and delete_flag=0' , array(':companyId' => $dpid)) ;
+		$materials = $materials ? $materials : array();
+		return $materials;
+	}
+	private function getCategoryId($lid){
+		$db = Yii::app()->db;
+		$sql = "SELECT category_id from nb_inventory_detail so,nb_product_material pm where so.dpid=pm.dpid and so.material_id=pm.lid and so.lid=:lid";
+		$command=$db->createCommand($sql);
+		$command->bindValue(":lid" , $lid);
+		return $command->queryScalar();
+	}
+	private function getRetreatId($lid){
+		$db = Yii::app()->db;
+		$sql = "SELECT retreat_id from nb_inventory_detail where lid=:lid";
+		$command=$db->createCommand($sql);
+		$command->bindValue(":lid" , $lid);
+		//var_dump($command->queryScalar());exit;
+		return $command->queryScalar();
 	}
 	
 }
