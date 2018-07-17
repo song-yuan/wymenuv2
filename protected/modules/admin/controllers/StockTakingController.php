@@ -345,7 +345,12 @@ class StockTakingController extends BackendController
 						$minusnum = -$difference;
 						foreach ($stock2 as $stock){
 							$stockori = $stock['stock'];//该批次库存
-							$minusnum = $minusnum - $stockori ;
+							if($stockori < 0){
+								$minusnum = -$minusnum + $stockori;
+							}else{
+								$minusnum = $minusnum - $stockori ;
+							}
+							
 							if($stock['batch_stock'] == 0){
 								$unit_price = '0';
 							}else{
@@ -353,7 +358,11 @@ class StockTakingController extends BackendController
 							}
 							// 该批库存 大于 差值的库存
 							if($minusnum <= 0 ) {
-								$changestock = $stockori - $minusnum;
+								if($stockori < 0){
+									$changestock = $minusnum - $stockori;
+								}else{
+									$changestock = $stockori + $minusnum;
+								}
 								
 								$sql = 'update nb_product_material_stock set stock = stock-'.$changestock. ' where lid ='.$stock['lid'].' and dpid='.$stock['dpid'];
 								$command = $db->createCommand($sql)->execute();
