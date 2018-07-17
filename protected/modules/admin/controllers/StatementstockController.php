@@ -177,8 +177,9 @@ class StatementstockController extends BackendController
 				'categoryId'=>$categoryId,
 		));
 	}
-	
-
+	/**
+	 * 库存差异报表
+	 */
 	public function actionStockdifferReport(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$str = Yii::app()->request->getParam('str');
@@ -189,7 +190,7 @@ class StatementstockController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.salse_num,sts.salse_price,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.'" and sts.create_at <= "'.$end_time.'"';
+		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
@@ -217,7 +218,9 @@ class StatementstockController extends BackendController
 				'categoryId'=>$categoryId,
 		));
 	}	
-	
+	/**
+	 * 库存销售报表
+	 */
 	public function actionStocksalesReport(){
 		$dpid = $this->companyId;
 		$categoryId = Yii::app()->request->getParam('cid',0);
@@ -227,7 +230,7 @@ class StatementstockController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.salse_num,sts.salse_price,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.'" and sts.create_at <= "'.$end_time.'"';
+		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
