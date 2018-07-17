@@ -20,8 +20,9 @@ class MaterialStockLogController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
-		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d 00:00:00',time()));
-		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d 23:59:59',time()));
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
 		$criteria = new CDbCriteria;
 		$criteria->with =array('company','material') ;
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
@@ -31,7 +32,7 @@ class MaterialStockLogController extends BackendController
 		$pages = new CPagination(MaterialStockLog::model()->count($criteria));
 		$pages->applyLimit($criteria);
 		$models = MaterialStockLog::model()->findAll($criteria);
-		$stock=Helper::genSalesUnit();
+		$stock = Helper::genSalesUnit();
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
