@@ -337,7 +337,7 @@ class StockTakingController extends BackendController
 									'stock_num' => $difference,
 									'original_num' => $originalNum,
 									'unit_price'=>$unit_price,
-									'resean'=>'盘点损耗',
+									'resean'=>'盘点损失',
 							);
 							$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
 						}
@@ -397,7 +397,7 @@ class StockTakingController extends BackendController
 											'type'=>3,
 											'logid'=>$logid,
 											'material_id'=>$id,
-											'stock_num' => $changestock,
+											'stock_num' => -$changestock,
 											'original_num' => $stockori,
 											'unit_price'=>$unit_price,
 											'resean'=>'盘点损失',
@@ -420,7 +420,7 @@ class StockTakingController extends BackendController
 										'type'=>3,
 										'logid'=>$logid,
 										'material_id'=>$id,
-										'stock_num' => $stockori,
+										'stock_num' => -$stockori,
 										'original_num' => $stockori,
 										'unit_price'=>$unit_price,
 										'resean'=>'盘点损失',
