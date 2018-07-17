@@ -139,7 +139,9 @@ class StatementstockController extends BackendController
 				'categoryId'=>$categoryId,
 		));
 	}	
-	
+	/**
+	 * 进销存汇总
+	 */
 	public function actionStockallReport(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$str = Yii::app()->request->getParam('str');
@@ -150,7 +152,7 @@ class StatementstockController extends BackendController
 		
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.'" and sts.create_at <= "'.$end_time.'"';
+		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
