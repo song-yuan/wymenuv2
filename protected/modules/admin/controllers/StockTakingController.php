@@ -289,70 +289,95 @@ class StockTakingController extends BackendController
 						);
 						$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
 					}else{
-						//盘点库存小于系统的库存  查出所有批次
+						//盘点库存小于系统的库存  查出所有库存不为0批次
 						$sql = 'select * from nb_product_material_stock where stock!=0 and dpid ='.$dpid.' and material_id = '.$id.' and delete_flag = 0 order by create_at asc';
 						$stock2 = $db->createCommand($sql)->queryAll();
 						
+						if(empty($stock2)){
+							// 如果所有批次都为0 在最后这批扣减
+							if($stocks['batch_stock'] == 0){
+								$unit_price = '0';
+							}else{
+								$unit_price = $stocks['stock_cost'] / $stocks['batch_stock'];
+							}
+							$diffPrice = $unit_price*$difference;
+							
+							//下面是对该次盘点进行的操作。。。
+							$sql = 'update nb_product_material_stock set stock=stock+'.$difference.' where lid='.$stocks['lid'].' and dpid='.$stocks['dpid'];
+							$db->createCommand($sql)->execute();
+							
+							//盘点详情记录
+							$se = new Sequence("stock_taking_detail");
+							$lid = $se->nextval();
+							$stocktakingdetails = array(
+									'lid'=>$lid,
+									'dpid'=>$dpid,
+									'create_at'=>date('Y-m-d H:i:s',$time),
+									'update_at'=>date('Y-m-d H:i:s',$time),
+									'logid'=>$logid,
+									'material_id'=>$id,
+									'material_stock_id' =>$stocks['lid'],
+									'reality_stock' =>$originalNum,
+									'taking_stock' =>$nowNum,
+									'number'=>$difference,
+									'reasion'=>'',
+							);
+							$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
+								
+							$se = new Sequence("material_stock_log");
+							$lid = $se->nextval();
+							$stocktakingdetails = array(
+									'lid'=>$lid,
+									'dpid'=>$dpid,
+									'create_at'=>date('Y-m-d H:i:s',$time),
+									'update_at'=>date('Y-m-d H:i:s',$time),
+									'type'=>3,
+									'logid'=>$logid,
+									'material_id'=>$id,
+									'stock_num' => $difference,
+									'original_num' => $originalNum,
+									'unit_price'=>$unit_price,
+									'resean'=>'盘点损耗',
+							);
+							$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
+						}
+						// 盘点差异 取正
 						$minusnum = -$difference;
 						foreach ($stock2 as $stock){
-							$stockori = $stock['stock'];
-							if($minusnum >= 0 && $stockori > 0){
-								$minusnums = $minusnum - $stockori ;
-								if($stock['batch_stock'] == 0){
-									$unit_price = '0';
-								}else{
-									$unit_price = $stock['stock_cost'] / $stock['batch_stock'];
-								}
-								// 该批库存 大于 差值的库存
-								if($minusnums <= 0 ) {
-									$changestock = $stockori - $minusnum;
-									
-									$sql = 'update nb_product_material_stock set stock = '.$changestock. ' where lid ='.$stock['lid'].' and dpid='.$stock['dpid'];
-									$command = $db->createCommand($sql)->execute();
-									
-									$diffPrice += $unit_price*$minusnum;
-									//对该次盘点进行日志保存
-									$se = new Sequence("stock_taking_detail");
-									$lid = $se->nextval();
-									$stocktakingdetails = array(
-											'lid'=>$lid,
-											'dpid'=>$dpid,
-											'create_at'=>date('Y-m-d H:i:s',$time),
-											'update_at'=>date('Y-m-d H:i:s',$time),
-											'logid'=>$logid,
-											'material_id'=>$id,
-											'material_stock_id' => $stock['lid'],
-											'reality_stock' => $originalNum,
-											'taking_stock' => $nowNum,
-											'number'=>$difference,
-											'reasion'=>'',
-									);
-									$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
-									
-									if($minusnums!=0){
-										$se = new Sequence("material_stock_log");
-										$lid = $se->nextval();
-										$stocktakingdetails = array(
-												'lid'=>$lid,
-												'dpid'=>$dpid,
-												'create_at'=>date('Y-m-d H:i:s',$time),
-												'update_at'=>date('Y-m-d H:i:s',$time),
-												'type'=>3,
-												'logid'=>$logid,
-												'material_id'=>$id,
-												'stock_num' => $minusnums,
-												'original_num' => $stockori,
-												'unit_price'=>$unit_price,
-												'resean'=>'盘点损失',
-										);
-										$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
-									}
-									break;
-								}else{
-									$sql = 'update nb_product_material_stock set stock=0 where lid ='.$stock['lid'].' and dpid ='.$stock['dpid'];
-									$command = $db->createCommand($sql)->execute();
-									$diffPrice += -$unit_price*$stockori;
-									
+							$stockori = $stock['stock'];//该批次库存
+							$minusnum = $minusnum - $stockori ;
+							if($stock['batch_stock'] == 0){
+								$unit_price = '0';
+							}else{
+								$unit_price = $stock['stock_cost'] / $stock['batch_stock'];
+							}
+							// 该批库存 大于 差值的库存
+							if($minusnums <= 0 ) {
+								$changestock = $stockori - $minusnum;
+								
+								$sql = 'update nb_product_material_stock set stock = '.$changestock. ' where lid ='.$stock['lid'].' and dpid='.$stock['dpid'];
+								$command = $db->createCommand($sql)->execute();
+								
+								$diffPrice += $unit_price*$minusnum;
+								//对该次盘点进行日志保存
+								$se = new Sequence("stock_taking_detail");
+								$lid = $se->nextval();
+								$stocktakingdetails = array(
+										'lid'=>$lid,
+										'dpid'=>$dpid,
+										'create_at'=>date('Y-m-d H:i:s',$time),
+										'update_at'=>date('Y-m-d H:i:s',$time),
+										'logid'=>$logid,
+										'material_id'=>$id,
+										'material_stock_id' => $stock['lid'],
+										'reality_stock' => $originalNum,
+										'taking_stock' => $nowNum,
+										'number'=>$difference,
+										'reasion'=>'',
+								);
+								$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
+								
+								if($minusnums!=0){
 									$se = new Sequence("material_stock_log");
 									$lid = $se->nextval();
 									$stocktakingdetails = array(
@@ -363,13 +388,35 @@ class StockTakingController extends BackendController
 											'type'=>3,
 											'logid'=>$logid,
 											'material_id'=>$id,
-											'stock_num' => $stockori,
+											'stock_num' => $minusnum,
 											'original_num' => $stockori,
 											'unit_price'=>$unit_price,
 											'resean'=>'盘点损失',
 									);
 									$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
 								}
+								break;
+							}else{
+								$sql = 'update nb_product_material_stock set stock=0 where lid ='.$stock['lid'].' and dpid ='.$stock['dpid'];
+								$command = $db->createCommand($sql)->execute();
+								$diffPrice += -$unit_price*$stockori;
+								
+								$se = new Sequence("material_stock_log");
+								$lid = $se->nextval();
+								$stocktakingdetails = array(
+										'lid'=>$lid,
+										'dpid'=>$dpid,
+										'create_at'=>date('Y-m-d H:i:s',$time),
+										'update_at'=>date('Y-m-d H:i:s',$time),
+										'type'=>3,
+										'logid'=>$logid,
+										'material_id'=>$id,
+										'stock_num' => $stockori,
+										'original_num' => $stockori,
+										'unit_price'=>$unit_price,
+										'resean'=>'盘点损失',
+								);
+								$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
 							}
 						}
 					}
