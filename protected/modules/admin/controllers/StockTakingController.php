@@ -355,7 +355,7 @@ class StockTakingController extends BackendController
 							if($minusnum <= 0 ) {
 								$changestock = $stockori - $minusnum;
 								
-								$sql = 'update nb_product_material_stock set stock = '.$changestock. ' where lid ='.$stock['lid'].' and dpid='.$stock['dpid'];
+								$sql = 'update nb_product_material_stock set stock = stock-'.$changestock. ' where lid ='.$stock['lid'].' and dpid='.$stock['dpid'];
 								$command = $db->createCommand($sql)->execute();
 								
 								$diffPrice += $unit_price*$minusnum;
@@ -388,7 +388,7 @@ class StockTakingController extends BackendController
 											'type'=>3,
 											'logid'=>$logid,
 											'material_id'=>$id,
-											'stock_num' => $minusnum,
+											'stock_num' => $changestock,
 											'original_num' => $stockori,
 											'unit_price'=>$unit_price,
 											'resean'=>'盘点损失',
