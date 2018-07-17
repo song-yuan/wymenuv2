@@ -53,6 +53,7 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','时间');?></th>
+								<th><?php echo yii::t('app','类型');?></th>
 								<th><?php echo yii::t('app','原料编码');?></th>
 								<th><?php echo yii::t('app','名称');?></th>                                                              
                                 <th><?php echo yii::t('app','销售单位');?></th>
@@ -79,6 +80,7 @@
 							<?php foreach ($sqlmodels as $model):?>
 							<tr class="odd gradeX">
 								<td><?php echo $model['create_at']?></td>
+								<td><?php if($model['type']==1){echo '日报';}elseif ($model['type']==2){echo '周报';}else{echo '月报';}?></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
 								<td><?php echo $model['sales_name'];?></td>

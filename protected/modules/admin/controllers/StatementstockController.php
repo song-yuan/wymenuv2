@@ -165,7 +165,6 @@ class StatementstockController extends BackendController
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 	
-		//var_dump($models);exit;
 		$categories = $this->getCategories();
 		$this->render('stockallReport',array(
 				'sqlmodels'=>$sqlmodels,
