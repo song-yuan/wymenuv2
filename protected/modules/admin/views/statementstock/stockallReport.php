@@ -105,7 +105,7 @@
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='19'>未查询到数据。</td>
+							<td colspan='20'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>

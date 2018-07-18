@@ -12,51 +12,19 @@ class InventoryController extends BackendController
 		);
 	}
 
-	public function actionIndex(){
+	public function actionIndex(){	
+		
 		$criteria = new CDbCriteria;
-		$criteria->with = 'retreat';
-		$mid=0;
-		$oid=0;
-		$begintime=0;
-		$endtime=0;
-		$storage=0;
-		$purchase=0;
-		$criteria->addCondition('t.dpid='.$this->companyId.' and t.delete_flag=0 and t.type =1');
-		if(Yii::app()->request->isPostRequest){
-			
-			$storage = Yii::app()->request->getPost('reasonid',0);
-			if($storage){
-				$criteria->addCondition('t.reason_id ='.$storage);
-			}
-			$purchase = Yii::app()->request->getPost('purchase',0);
-			if($purchase){
-				$criteria->addSearchCondition('t.purchase_account_no',$purchase);
-			}
-			$begintime = Yii::app()->request->getPost('begintime',0);
-			if($begintime){
-				$criteria->addCondition('t.create_at >= "'.$begintime.'" ');
-			}
-			$endtime = Yii::app()->request->getPost('endtime',0);
-			if($endtime){
-				$criteria->addCondition('t.update_at <= "'.$endtime.'" ');
-			}
-		}
+		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and t.delete_flag=0');
 		$criteria->order = ' t.lid desc ';
+		
 		$pages = new CPagination(Inventory::model()->count($criteria));
-		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Inventory::model()->findAll($criteria);
 		
-		$retreats = $this->getRets();
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
-				'oid'=>$oid,
-				'begintime'=>$begintime,
-				'endtime'=>$endtime,
-				'storage'=>$storage,
-				'purchase'=>$purchase,
-				'retreats'=>$retreats,
 		));
 	}
 	public function actionCreate(){
@@ -239,43 +207,68 @@ class InventoryController extends BackendController
 			$this->redirect(array('inventory/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
 		}
 	}
-	public function actionStorageIn(){
-		$sid = Yii::app()->request->getParam('sid');
-		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$sid,':dpid'=>$this->companyId));
-		if($storage->status){
-			$storageDetails = StorageOrderDetail::model()->findAll('storage_id=:sid and dpid=:dpid and delete_flag=0',array(':sid'=>$sid,':dpid'=>$this->companyId));
-			$transaction = Yii::app()->db->beginTransaction();
-			try{
-				
-				foreach ($storageDetails as $detail){
-					$stock = $detail['stock'];
-					$stockCost = ($detail['stock']-$detail['free_stock'])*$detail['price'];
-					ProductMaterialStock::updateStock($storage->organization_id, $detail['material_id'], $stock, $stockCost);
-					
-					//入库日志
-					$materialStockLog = new MaterialStockLog();
-					$se=new Sequence("material_stock_log");
-					$materialStockLog->lid = $se->nextval();
-					$materialStockLog->dpid = $storage->organization_id;
-					$materialStockLog->create_at = date('Y-m-d H:i:s',time());
-					$materialStockLog->update_at = date('Y-m-d H:i:s',time());
-					$materialStockLog->material_id = $detail['material_id'];
-					$materialStockLog->type = 0;
-					$materialStockLog->stock_num = $stock;
-					$materialStockLog->resean = '入库单入库';
-					$materialStockLog->save();
-				}
-				StorageOrder::updateStatus($this->companyId, $sid);
-				$transaction->commit();
-				echo 'true';exit;
-			}catch (Exception $e){
-				$transaction->rollback();
-				echo 'false';exit;
+	public function actionInventorylog(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'retreat';
+		$mid =0;
+		$oid = 0;
+		$begintime = date('Y-m-d',time());
+		$endtime = date('Y-m-d',time());
+		$storage = 0;
+		$purchase = 0;
+		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and status=1 and t.delete_flag=0');
+		
+		if(Yii::app()->request->isPostRequest){
+			$storage = Yii::app()->request->getPost('reasonid',0);
+			if($storage){
+				$criteria->addCondition('t.reason_id ='.$storage);
+			}
+			$purchase = Yii::app()->request->getPost('purchase',0);
+			if($purchase){
+				$criteria->addSearchCondition('t.purchase_account_no',$purchase);
+			}
+			$begintime = Yii::app()->request->getPost('begintime',0);
+			if($begintime){
+				$criteria->addCondition('t.create_at >= "'.$begintime.' 00:00:00"');
+			}
+			$endtime = Yii::app()->request->getPost('endtime',0);
+			if($endtime){
+				$criteria->addCondition('t.update_at <= "'.$endtime.' 23:59:59"');
 			}
 		}
-		echo 'false';
-		exit;
+		$criteria->order = ' t.lid desc ';
+		$pages = new CPagination(Inventory::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = Inventory::model()->findAll($criteria);
+	
+		$retreats = $this->getRets();
+		$this->render('inventorylog',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'oid'=>$oid,
+				'begintime'=>$begintime,
+				'endtime'=>$endtime,
+				'storage'=>$storage,
+				'purchase'=>$purchase,
+				'retreats'=>$retreats,
+		));
 	}
+	public function actionInventorylogdetail(){
+		$criteria = new CDbCriteria;
+		$slid = Yii::app()->request->getParam('lid');
+	
+		$criteria->with = array('material');
+		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.inventory_id='.$slid;
+		$pages = new CPagination(InventoryDetail::model()->count($criteria));
+		$pages->applyLimit($criteria);
+		$models = InventoryDetail::model()->findAll($criteria);
+		$this->render('inventorylogdetail',array(
+				'models'=>$models,
+				'pages'=>$pages,
+		));
+	}
+	
 
 	public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);

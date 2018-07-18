@@ -23,37 +23,8 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘损列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘损记录'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
-	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
-	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
 
 	<!-- END PAGE HEADER-->
-	<style>
-		.find form input{display: inline;width:180px;}
-		.find form select{display: inline;width:180px;}
-	</style>
-	<div class="find">
-		<form action="" method="post">
-			<select class="form-control" id="pdname">
-				<option cate = "0" value="0"><?php echo '--请选择原因--';?></option>
-				<?php if($retreats):?>
-				<?php foreach ($retreats as $m):?>
-				<option class="proname " value="<?php echo $m['lid'];?>"><?php echo $m['name'];?></option>
-				<?php endforeach;endif;?>
-				<?php ?>
-			</select>
-			<input type="hidden" name="reasonid" id="reasonid" class="form-control" value="" />
-			<input type="text" name="begintime" class="ui_timepicker form-control" placeholder="起始日期" value="<?php echo isset($begintime) && $begintime ?$begintime:'';?>" />
-			<input type="text" name="endtime" class="ui_timepicker form-control" placeholder="结束日期" value="<?php echo isset($endtime) && $endtime ?$endtime:'';?>" />
-			<button type="submit" class="btn green">
-				查找 &nbsp;
-				<i class="m-icon-swapright m-icon-white"></i>
-			</button>
-		</form>
-	</div>
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
@@ -69,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘损单列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘损列表');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('inventory/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
@@ -85,11 +56,8 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-							
 								<th><?php echo yii::t('app','操作员');?></th>
-								<th><?php echo yii::t('app','盘损原因');?></th>
 								<th><?php echo yii::t('app','盘损日期');?></th>
-								
 								<th><?php echo yii::t('app','状态');?></th>
 								<th><?php echo yii::t('app','盘损详情');?></th>
 								<th><?php echo yii::t('app','操作');?></th>
@@ -100,11 +68,9 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" <?php if($model->status==1){ echo 'disabled="disabled"';}?>/></td>
 								<td ><?php echo $model->opretion_id;?></td>
-								<td><?php if($model->retreat)echo $model->retreat->name;?></td>
 								<td><?php echo $model->create_at;?></td>
-								
 								<td><span style="color: red;"><?php if($model->status==1){ echo '确认盘损';}elseif($model->status==0){ echo '正在编辑';}else{echo '已失效';}?></span></td>
 								<td class="center">
 									<a href="<?php echo $this->createUrl('inventory/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','盘损单详情');?></a>
@@ -173,14 +139,5 @@
 			var pid = $(this).val();
 			$('#reasonid').val(pid);
 		});
-	});
-	$(function () {
-		$(".ui_timepicker").datetimepicker({
-			showSecond: true,
-			timeFormat: 'hh:mm:ss',
-			stepHour: 1,
-			stepMinute: 1,
-			stepSecond: 1
-		})
 	});
 	</script>	
