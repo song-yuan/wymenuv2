@@ -410,15 +410,15 @@ class PoscountsController extends BackendController
     	$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_poscode_fee_record t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
     	$models = Yii::app()->db->createCommand($sql)->queryAll();
     	
-    	$tableHead = array('店名','序列号','延期日期','延期类型','延期时间','到期时间','联系人','联系电话','联系地址');
+    	$tableHead = array('序号', '店名','序列号','延期日期','延期类型','延期时间','到期时间','联系人','联系电话','联系地址');
     	$tableData = array();
-    	foreach ($models as $model){
+    	foreach ($models as $k=>$model){
     		if($model['type']==1){
     			$type = '年';
     		}else{
     			$type = '月';
     		}
-    		$tempArr = array($model['company_name'],$model['poscode'].'',$model['create_at'],$type,$model['add_time'],$model['expire_time'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address']);
+    		$tempArr = array($k+1,$model['company_name'],$model['poscode'].'',$model['create_at'],$type,$model['add_time'],$model['expire_time'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address']);
     		array_push($tableData, $tempArr);
     	}
     	Helper::exportExcel($tableHead,$tableData,'续费报表-','续费报表');

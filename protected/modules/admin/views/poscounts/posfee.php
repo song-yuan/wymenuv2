@@ -70,6 +70,7 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
+								<th><?php echo yii::t('app','序号');?></th>
 								<th><?php echo yii::t('app','店名');?></th>
 								<th><?php echo yii::t('app','序列号');?></th>
 								<th><?php echo yii::t('app','延期日期');?></th>
@@ -83,8 +84,9 @@
 						</thead>
 						<tbody>
 						<?php if($models) :?>
-						<?php foreach ($models as $model):?>
+						<?php foreach ($models as $key=>$model):?>
 							<tr class="odd gradeX">
+								<td ><?php echo $key+1;?></td>
 								<td ><?php echo $model['company_name'];?></td>
 								<td><?php echo $model['poscode'];?></td>
 								<td><?php echo $model['create_at'];?></td>
