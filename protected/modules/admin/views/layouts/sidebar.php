@@ -132,7 +132,7 @@
                     </a>
             </li>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('poscounts'))) echo 'active';?>">
-                    <a href="<?php echo $this->createUrl('poscounts/hqindex',array('companyId' => $this->companyId));?>">
+                    <a href="<?php echo $this->createUrl('poscounts/list',array('companyId' => $this->companyId));?>">
                     <i class="fa fa-money"></i> 
                     <span class="title"><?php echo yii::t('app','收银机结算');?></span>					
                     </a>
@@ -146,7 +146,7 @@
                     </a>
             </li>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('statements','orderManagement','statementmember','pos','statementstock'))) echo 'active';?>">
-                    <a href="<?php echo $this->createUrl('statements/list',array('companyId' => $this->companyId,'type'=>0));?>">
+                    <a href="<?php echo $this->createUrl('statements/list',array('companyId' => $this->companyId));?>">
                     <i class="fa fa-bar-chart-o"></i> 
                     <span class="title"><?php echo yii::t('app','报表中心');?></span>					
                     </a>

@@ -10,7 +10,9 @@ class PoscountsController extends BackendController
             }
             return true;
     }
-
+    public function actionList(){
+    	$this->render('list');
+    }
     //总部pos机报表
     public function actionHqindex(){
         //查询总公司
@@ -27,16 +29,10 @@ class PoscountsController extends BackendController
         $pos_used = Yii::app()->request->getParam('pos_used',1);
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
         $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-        $company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryALL();
-         //p($model);
+        $company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryAll();
         $models=0;
         $CompanyName=null;
         if($cdpid){
-
-            
-
-            // $CompanyName = Company::model()->findByPk($cdpid)->company_name;
-            // p($CompanyName);
             //查询子公司POS机数据
                 $time = $end_time.' 23:59:59';
                 $use_time ='';
@@ -109,8 +105,31 @@ class PoscountsController extends BackendController
                     $this->redirect(array('poscount/hqindex' , 'companyId' => $companyId)) ;
             }
     }
-
-
+	/**
+	 * 续费报表
+	 */
+    public function actionPosfee(){
+    	$cdpid = Yii::app()->request->getParam('cdpid',0);
+    	$begin_time = Yii::app()->request->getParam('begintime',date('Y-m-d',time()));
+    	$end_time = Yii::app()->request->getParam('endtime',date('Y-m-d',time()));
+    	$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryAll();
+    	if(!$cdpid){
+    		if($company){
+    			$cdpid = $company[0]['dpid'];
+    		}
+    	}
+    	
+    	$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_poscode_fee_record t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
+    	$models = Yii::app()->db->createCommand($sql)->queryAll();
+    	
+    	$this->render('posfee',array(
+    			'companys'=>$company,
+    			'models'=>$models,
+    			'begintime'=>$begin_time,
+    			'endtime'=>$end_time,
+    			'cdpid'=>$cdpid
+    	));
+    }
 
     public function actionPoscountExport(){
         $objPHPExcel = new PHPExcel();
@@ -377,9 +396,35 @@ class PoscountsController extends BackendController
 
     }
 
+    public function actionPosfeeExport(){
+    	$cdpid = Yii::app()->request->getParam('cdpid',0);
+    	$begin_time = Yii::app()->request->getParam('begintime',date('Y-m-d',time()));
+    	$end_time = Yii::app()->request->getParam('endtime',date('Y-m-d',time()));
+    	$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryAll();
+    	if(!$cdpid){
+    		if($company){
+    			$cdpid = $company[0]['dpid'];
+    		}
+    	}
+    	 
+    	$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_poscode_fee_record t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
+    	$models = Yii::app()->db->createCommand($sql)->queryAll();
+    	
+    	$tableHead = array('店名','序列号','延期日期','延期类型','延期时间','到期时间','联系人','联系电话','联系地址');
+    	$tableData = array();
+    	foreach ($models as $model){
+    		if($model['type']==1){
+    			$type = '年';
+    		}else{
+    			$type = '月';
+    		}
+    		$tempArr = array($model['company_name'],$model['poscode'].'',$model['create_at'],$type,$model['add_time'],$model['expire_time'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address']);
+    		array_push($tableData, $tempArr);
+    	}
+    	Helper::exportExcel($tableHead,$tableData,'续费报表-','续费报表');
+    }
 
-
-        public function actionUsed(){
+    public function actionUsed(){
         $companyId = Yii::app()->request->getParam('companyId');
         $pos_type = Yii::app()->request->getParam('pos_type');
         $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));

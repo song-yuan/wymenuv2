@@ -247,6 +247,72 @@ class Helper
 		$command->bindValue(':pid',$pid);
 		return $command->queryAll();
 	}
+	/**
+	 * 导出excel表格（适合没有单元格合并的情况）
+	 * @param array $data 二维数组
+	 * @param array $table_head 表头（即excel工作表的第一行标题）
+	 * @param string $file_name 文件名
+	 * @param string $sheet_name 工作表名
+	 */
+	static public function exportExcel($table_head = array(), $data = array(), $file_name='excel', $sheet_name='sheet')
+	{
+		// 创建PHPExcel对象
+		$objPHPExcel = new PHPExcel();  
+		
+		// 设置excel文件的属性，在excel文件->属性->详细信息，可以看到这些值
+		$objPHPExcel->getProperties()  //获得文件属性对象，给下文提供设置资源
+					->setCreator("admin")     //设置文件的创建者
+					->setLastModifiedBy("admin")    //最后修改者
+					->setTitle("Office 2007 XLSX Record Document")    //标题
+					->setSubject("Office 2007 XLSX Record Document")  //主题
+					->setDescription("Record document for Office 2007 XLSX, generated using PHP classes.") //描述
+					->setKeywords("office 2007 openxml php")    //关键字
+					->setCategory("export file");               //类别
+	
+		// 设置Excel文档的第一张sheet（工作表）为活动表，即当前操作的表。
+		$objPHPExcel->setActiveSheetIndex(0);
+	
+		// 获取当前操作的工作表
+		$activeSheet = $objPHPExcel->getActiveSheet();
+	
+		// 设置工作表的名称
+		$activeSheet->setTitle($sheet_name);
+	
+		// 返回字符A的  ASCII 码值
+		$column = ord('A');
+	
+		// 设置工作表的表头
+		foreach ($table_head as $k=>$v) {
+			// 字体大小
+			$activeSheet->getStyle(chr($column)."1")->getFont()->setSize(13);
+			// 加粗
+			$activeSheet->getStyle(chr($column)."1")->getFont()->setBold(true);
+			// 设置单元格的值
+			$activeSheet->setCellValue(chr($column)."1", $v);
+			// 设置居中
+			$activeSheet->getStyle(chr($column))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+	
+			$column++;
+		}
+	
+		$column = ord('A');   // 返回字符的  ASCII 码值
+		// 将$data中的数据填充到单元格中
+		foreach ($data as $row=>$col) {
+			$i=0;
+			foreach ($col as $k=>$v ) {
+				$activeSheet->setCellValue(chr($column+$i).($row+2), $v);
+				$i++;
+			}
+		}
+	
+		// 导出Excel表格
+		$file_name .= date('YmdHis');   // 文件名
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$file_name.'.xls"');
+		header('Cache-Control: max-age=0');
+		$objWriter = new PHPExcel_Writer_Excel5($objPHPExcel);
+		$objWriter->save('php://output');
+	}
 	//计算order的总价array('total'=>'总价','miniConsumeType'=>'最低消费类型','miniConsume'=>'最低消费','overTime'=>'超时时间','siteOverTime'=>'超时计算单位','buffer'=>'超时计算点','number'=>'人数')
 	static public function calOrderConsume(Order $order, SiteNo $siteNo , $total){
 		//$siteNo = SiteNo::model()->find('$order->site_no_id');
