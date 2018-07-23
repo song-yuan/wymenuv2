@@ -112,7 +112,7 @@ class MtpPay{
     	);
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
-    	Helper::writeLog('mtpay返回结果：'.$result);
+    	Helper::writeLog('mtpay返回结果：'.$dpid.$body.$result);
     	//return $result;
 
     	if(!empty($result)){
@@ -147,8 +147,8 @@ class MtpPay{
 	    		}else{
 	    			/*发起轮询*/
 		    		$i=1;
-					$j=true;
 					do{
+						$j=true;
 						$i++;
 						$results = MtpPay::query(array(
 							'outTradeNo'=>$outTradeNo,
