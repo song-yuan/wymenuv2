@@ -78,7 +78,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
 			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL_SUCCESS"){
-			$msg = array('status'=>true, 'result'=>false, 'trade_no'=>$orderId);
+			$msg = array('status'=>false, 'result'=>false, 'trade_no'=>$orderId);
 		}else{
 			$msg = array('status'=>false, 'result'=>false);
 		}

@@ -97,183 +97,111 @@ class MtpPay{
     	$st = $paramsStrs.'key='.$key;
     	$sign = hash("sha256", $st);
     	
-    	$datas = array(
-    			'channel'=>$channel,
-    			'outTradeNo'=>$outTradeNo,
-    			'authCode'=>$authCode,
-    			'totalFee'=>$totalFee,
-    			'subject'=>$subject,
-    			'body'=>$body,
-    			'expireMinutes'=>$expireMinutes,
-    			'merchantId'=>$merchantId,
-    			'appId'=>$appId,
-    			'random'=>$random,
-    			'sign'=>$sign,
-    	);
+    	$datas['sign'] = $sign;
+    	
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('mtpay返回结果：'.$dpid.$body.$result);
-    	//return $result;
+    	
 
     	if(!empty($result)){
-    		
 	    	$obj = json_decode($result,true);
 	    	$return_status = $obj['status'];
-	    	$tradeNo = $obj['tradeNo'];
 	    	$pay_status = $obj['orderStatus'];
+	    	$tradeNo = $obj['tradeNo'];
 	    	
-	    	//$str = 'mt付款返回订单号：'.$outTradeNo.';mt订单号：'.$tradeNo.'返回信息：'.$return_status.';支付状态：'.$pay_status;
-	    	//Helper::writeLog($str);
-	    	//判断支付返回状态...
-	    	if($return_status == 'SUCCESS'){
-	    		
-	    		if($pay_status == 'ORDER_SUCCESS'){
-	    			$result = array(
-	    					"return_code"=>"SUCCESS",
-	    					"result_code"=>"SUCCESS",
-	    					"result_msg"=>$pay_status,
-	    					"msg"=>"支付成功！",
-	    					"transaction_id"=>$obj['tradeNo'],
-	    					"order_id"=>$obj['outTradeNo']);
-	    			
-	    		}elseif($pay_status == 'ORDER_CLOSE' || $pay_status == 'ORDER_FAILED'){
-	    			$result = array(
-	    					"return_code"=>"SUCCESS",
-	    					"result_code"=>"ERROR",
-	    					"result_msg"=>$pay_status,
-	    					"msg"=>"支付失败！",
-	    					"order_id"=>$obj['outTradeNo']);
-	    			
-	    		}else{
-	    			/*发起轮询*/
-		    		$i=1;
-					do{
-						$j=true;
-						$i++;
-						$results = MtpPay::query(array(
-							'outTradeNo'=>$outTradeNo,
-			    			'appId'=>$appId,
-			    			'key'=>$key,
-			    			'merchantId'=>$merchantId,
-						));
-						$return_code = $results['return_code'];
-						$result_code = $results['result_code'];
-						$result_msg = $results['result_msg'];
-						if($result_msg == 'ORDER_SUCCESS'){
-							$result = array(
-									"return_code"=>"SUCCESS",
-									"result_code"=>"SUCCESS",
-	    							"result_msg"=>$result_msg,
-									"transaction_id"=>$obj['tradeNo'],
-									"msg"=>"支付成功！",
-									"accountno"=>$outTradeNo
-							);
-							$j=false;
-						}
-						sleep(2);
-					}while (($i<=15)&&$j);
-					if(($i==15)&&$j){
-						$result = array(
-									"return_code"=>"SUCCESS",
-									"result_code"=>"ERROR",
-									"result_msg"=>'REQUERY',
-									"msg"=>"查询失败！",
-									"accountno"=>$outTradeNo);
-					}
-	    		}
-	
-	    	}elseif($return_status == 'FAIL'){
-	    		$re_code = $obj['errCode'];
-	    		if($re_code == "UNKNOW_ERROR" || $re_code == "TRADE_PAY_UNKOWN_ERROR" || $re_code == "TRADE_PAYING_ERROR"){
-	    			/*正在支付，发起轮询*/
-	    		/*发起轮询*/
-		    		$i=1;
-					$j=true;
-					do{
-						$i++;
-						$results = MtpPay::query(array(
-							'outTradeNo'=>$outTradeNo,
-			    			'appId'=>$appId,
-			    			'key'=>$key,
-			    			'merchantId'=>$merchantId,
-						));
-						$return_code = $results['return_code'];
-						$result_code = $results['result_code'];
-						$result_msg = $results['result_msg'];
-						if($result_msg == 'ORDER_SUCCESS'){
-							$result = array(
-									"return_code"=>"SUCCESS",
-									"result_code"=>"SUCCESS",
-	    							"result_msg"=>$result_msg,
-									"transaction_id"=>$obj['tradeNo'],
-									"msg"=>"支付成功！",
-									"accountno"=>$outTradeNo
-							);
-							$j=false;
-						}
-						sleep(2);
-					}while (($i<=15)&&$j);
-					if(($i==15)&&$j){
-						$result = array(
-									"return_code"=>"SUCCESS",
-									"result_code"=>"ERROR",
-									"result_msg"=>'REQUERY',
-									"msg"=>"查询失败！",
-									"accountno"=>$outTradeNo);
-					}
-	    		}else{
-	    			$result = array("return_code"=>"ERROR","result_code"=>"EROOR","msg"=>$obj['errMsg']);
-	    		}
-	    		
-	    	}else{
+	    	//交易成功
+	    	if($return_status=='SUCCESS' && $pay_status=='ORDER_SUCCESS'){
 	    		$result = array(
 	    				"return_code"=>"SUCCESS",
-	    				"result_code"=>"CANCEL",
-	    				'msg'=>'未知状态！');
+	    				"result_code"=>"SUCCESS",
+	    				"result_msg"=>$pay_status,
+	    				"msg"=>"支付成功！",
+	    				"transaction_id"=>$obj['tradeNo'],
+	    				"order_id"=>$obj['outTradeNo']
+	    		);
+	    		return $result;
 	    	}
-    	}else{
+	    	// 交易失败
+	    	if($return_status=='SUCCESS' && ($pay_status=='ORDER_CLOSE' || $pay_status=='ORDER_FAILED')){
+	    		$result = array(
+	    				"return_code"=>"SUCCESS",
+	    				"result_code"=>"ERROR",
+	    				"result_msg"=>$pay_status,
+	    				"msg"=>"支付失败！",
+	    				"order_id"=>$obj['outTradeNo']
+	    		);
+	    		return $result;
+	    	}
+    	}
+    	
+    	// 15次查询确认
+    	$queryTimes = 15;
+    	while ($queryTimes > 0){
+    		$returnRes = self::query(array(
+    				'outTradeNo'=>$outTradeNo,
+    				'appId'=>$appId,
+    				'key'=>$key,
+    				'merchantId'=>$merchantId,
+    		));
+    		$obj = json_decode($returnRes,true);
     		
-    		$str = $outTradeNo.';无返回信息：进入轮询。';
-    		Helper::writeLog($str);
-    		/*正在支付，发起轮询*/
-	    		$i=1;
-				$j=true;
-				do{
-					$i++;
-					$results = MtpPay::query(array(
-							'outTradeNo'=>$outTradeNo,
-			    			'appId'=>$appId,
-			    			'key'=>$key,
-			    			'merchantId'=>$merchantId,
-						));
-					$return_code = $results['return_code'];
-					$result_code = $results['result_code'];
-					$result_msg = $results['result_msg'];
-					if($result_msg == 'ORDER_SUCCESS'){
-						$result = array(
-								"return_code"=>"SUCCESS",
-								"result_code"=>"SUCCESS",
-    							"result_msg"=>$result_msg,
-								"transaction_id"=>$obj['tradeNo'],
-								"msg"=>"支付成功！",
-								"accountno"=>$outTradeNo
-						);
-						$j=false;
-					}
-					sleep(2);
-				}while (($i<=15)&&$j);
-				if(($i==15)&&$j){
-					$result = array(
-								"return_code"=>"SUCCESS",
-								"result_code"=>"ERROR",
-								"result_msg"=>'REQUERY',
-								"msg"=>"查询失败！",
-								"accountno"=>$outTradeNo);
-				}
+    		$return_status = $obj['status'];
+	    	$pay_status = $obj['orderStatus'];
+	    	$tradeNo = $obj['tradeNo'];
+	    	// 交易成功
+    		if($return_status=='SUCCESS' && $pay_status=='ORDER_SUCCESS'){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"SUCCESS",
+    					"result_msg"=>$pay_status,
+    					"msg"=>"支付成功！",
+    					"transaction_id"=>$obj['tradeNo'],
+    					"order_id"=>$obj['outTradeNo']
+    			);
+    			return $result;
+    		}
+    		// 交易失败
+    		if($return_status=='SUCCESS' && ($pay_status=='ORDER_CLOSE' || $pay_status=='ORDER_FAILED')){
+    			$result = array(
+    					"return_code"=>"SUCCESS",
+    					"result_code"=>"ERROR",
+    					"result_msg"=>$pay_status,
+    					"msg"=>"支付失败！",
+    					"order_id"=>$obj['outTradeNo']
+    			);
+    			return $result;
+    		}
+    		sleep(2);
+    	}
+    	$cancelData = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'appId'=>$appId,
+    			'random'=>$random,
+    			'merchantId'=>$merchantId,
+    	);
+    	
+    	// 超过15次查询 撤单
+    	if(self::cancel($cancelData)){
+    		$result = array(
+    				"return_code"=>"SUCCESS",
+    				"result_code"=>"CANCEL_SUCCESS",
+    				"result_msg"=>'',
+    				"msg"=>"撤单成功！",
+    				"order_id"=>''
+    		);
+    	}else{
+    		$result = array(
+    				"return_code"=>"SUCCESS",
+    				"result_code"=>"CANCEL",
+    				"result_msg"=>'',
+    				"msg"=>"撤单失败！",
+    				"order_id"=>''
+    		);
     	}
     	return $result;
     }
-
+	
     // 线上web api
     public static function preOrder($data){
     	//     	/*该接口用于美团线上支付*/
@@ -356,25 +284,9 @@ class MtpPay{
     			return $result;
     		}
     		$st = $paramsStrs.'key='.$key;
-    		//Helper::writeLog('美团支付参数：'.$st);
     		$sign = hash("sha256", $st);
-    		//Helper::writeLog('加密:'.$sign);
-    		
-    		$datas = array(
-    				'outTradeNo'=>$outTradeNo,
-    				'totalFee'=>$totalFee,
-    				'subject'=>$subject,
-    				'body'=>$body,
-    				'channel'=>$channel,
-    				'expireMinutes'=>$expireMinutes,
-    				'tradeType'=>$tradeType,
-    				'notifyUrl'=>$notifyUrl,
-    				'merchantId'=>$merchantId,
-    				'appId'=>$appId,
-    				'random'=>$random,
-    				'openId'=>$openId,
-    				'sign'=>$sign,
-    		);
+
+    		$datas['sign'] = $sign;
     		
     		$body = json_encode($datas);
     		Helper::writeLog('公众号支付传输参数：'.$body);
@@ -387,7 +299,6 @@ class MtpPay{
     			if($status=='SUCCESS'){
     				$resulturl = urlencode($returnUrl);
     				//回调地址
-    				//$wxappid = 'wxc57dd1ee95c70c2c';
     				$appIds = $obj['appId'];
     				$timeStamp = $obj['timeStamp'];
     				$nonceStr = $obj['nonceStr'];
@@ -402,60 +313,12 @@ class MtpPay{
     		}
     		return $result;exit;
     } 
-    
-    public static function close($data){
-    	/*该接口用于关闭订单，*/
-    	$merchantId = $data['merchantId'];
-    	$appId = $data['appId'];
-    	$key = $data['key'];
-    	$outTradeNo = $data['outTradeNo'];
-    	$random = self::getNonceStr();
-	
-    	$url = MtpConfig::MTP_DOMAIN.'/api/close';
-
-    	$datas = array(
-    			'outTradeNo'=>$outTradeNo,
-    			'merchantId'=>$merchantId,
-    			'appId'=>$appId,
-    			'random'=>$random,
-    	);
-
-    	ksort($datas);
-    	$paramsStrs = '';
-    	if(is_array($datas)){
-    		foreach($datas as $k => $v)
-    		{
-    			$paramsStrs .= $k.'='.$v.'&';
-    		}
-    	}else{
-    		$result = array(
-    				"return_code"=>"ERROR",
-    				"result_code"=>"ERROR",
-    				'msg'=>'未知状态！');
-    		return $result;
-    	}
-    	$st = $paramsStrs.'key='.$key;
-    	//Helper::writeLog('关闭订单参数：'.$st);
-    	$sign = hash("sha256", $st);
-    	//Helper::writeLog('关闭订单加密:'.$sign);
-    	
-    	$datas = array(
-    			'outTradeNo'=>$outTradeNo,
-    			'merchantId'=>$merchantId,
-    			'appId'=>$appId,
-    			'random'=>$random,
-    			'sign'=>$sign,
-    	);
-    	
-    	$body = json_encode($datas);
-    	Helper::writeLog('关闭订单传输参数：'.$body);
-    	$result = MtpCurl::httpPost($url, $body);
-    	Helper::writeLog('关闭订单返回结果：'.$result);
-    	return $result;
-    
-    }
+    /**
+     * 该接口用于查询订单状态
+     * 查询订单状态
+     * 
+     */
     public static function query($data){
-    	/*该接口用于查询订单状态，*/
     	$merchantId = $data['merchantId'];
     	$appId = $data['appId'];
     	$key = $data['key'];
@@ -489,89 +352,116 @@ class MtpPay{
     	$st = $paramsStrs.'key='.$key;
     	$sign = hash("sha256", $st);
     	
+    	$datas['sign'] = $sign;
+    	
+    	$body = json_encode($datas);
+    	$result = MtpCurl::httpPost($url, $body);
+    	return $result;
+    }
+    /**
+     * 该接口用于查询订单状态
+     * 查询订单状态
+     *
+     */
+    public static function refundQuery($data){
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
+    	$outTradeNo = $data['outTradeNo'];
+    	$refundNo = $data['refundNo'];
+    	$random = self::getNonceStr();
+    	 
+    	$url = MtpConfig::MTP_DOMAIN.'/api/refund/query';
+    	 
+    	$datas = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'refundNo'=>$outTradeNo,
+    			'appId'=>$appId,
+    			'random'=>$random,
+    			'merchantId'=>$merchantId,
+    	);
+    
+    	ksort($datas);
+    	$paramsStrs = '';
+    	if(is_array($datas)){
+    		foreach($datas as $k => $v)
+    		{
+    			$paramsStrs .= $k.'='.$v.'&';
+    		}
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'result_msg'=>'REQUERY',
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	$st = $paramsStrs.'key='.$key;
+    	$sign = hash("sha256", $st);
+    	 
+    	$datas['sign'] = $sign;
+    	 
+    	$body = json_encode($datas);
+    	$result = MtpCurl::httpPost($url, $body);
+    	return $result;
+    }
+    /**
+     * 该接口用于订单取消
+     * 刷卡（条码）支付场景，如果支付超时或失败，用来撤销当前订单
+	 * 当日订单允许撤销，隔日请使用退款接口
+	 * 
+     */
+    public static function cancel($data, $depth = 0){
+    	if($depth > 10){
+    		return false;
+    	}
+    	
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
+    	$outTradeNo = $data['outTradeNo'];
+    	$random = self::getNonceStr();
+    
+    	$url = MtpConfig::MTP_DOMAIN.'/api/cancel';
+    
     	$datas = array(
     			'outTradeNo'=>$outTradeNo,
     			'merchantId'=>$merchantId,
     			'appId'=>$appId,
     			'random'=>$random,
-    			'sign'=>$sign,
     	);
-    	$body = json_encode($datas);
-    	//Helper::writeLog('mt查询订单传输参数：'.$body);
-    	$result = MtpCurl::httpPost($url, $body);
-    	//Helper::writeLog('mt查询订单返回信息：'.$result);
-    	if(!empty($result)){
-    		$obj = json_decode($result,true);
-    		$return_status = $obj['status'];
-    		//Helper::writeLog('返回信息：'.$return_status);
-	    	if($return_status == 'SUCCESS'){
-
-	    		$tradeNo = $obj['tradeNo'];
-	    		$outTradeNo = $obj['outTradeNo'];
-	    		$pay_status = $obj['orderStatus'];
-	    		//Helper::writeLog('返回信息订单号：'.$outTradeNo.'，'.$tradeNo.','.$pay_status);
-	    		
-	    		if($pay_status == 'ORDER_SUCCESS'){
-	    			$results = array(
-	    					'return_code'=>"SUCCESS",
-	    					'result_code'=>"SUCCESS",
-	    					'result_msg'=>$pay_status,
-	    					"tradeNo"=>$tradeNo,
-	    					'msg'=>'支付成功！',
-	    			);
-	    		}elseif ($pay_status == 'ORDER_FAILED' || $pay_status == 'ORDER_CLOSE'){
-	    			$results = array(
-	    					'return_code'=>"SUCCESS",
-	    					'result_code'=>"ERROR",
-	    					'result_msg'=>$pay_status,
-	    					'msg'=>'交易关闭！',
-	    			);
-	    		}elseif ($pay_status == 'ORDER_PART_REFUND'){
-	    			$results = array(
-	    					'return_code'=>"SUCCESS",
-	    					'result_code'=>"SUCCESS",
-	    					'result_msg'=>$pay_status,
-	    					"tradeNo"=>$tradeNo,
-	    					'msg'=>'交易部分退款！',
-	    			);
-	    		}elseif ($pay_status == 'ORDER_ALL_REFUND'){
-	    			$results = array(
-	    					'return_code'=>"SUCCESS",
-	    					'result_code'=>"SUCCESS",
-	    					'result_msg'=>$pay_status,
-	    					'msg'=>'交易全部退款！',
-	    			);
-	    		}elseif ($pay_status == 'ORDER_REFUNDING'){
-	    			$results = array(
-	    					'return_code'=>"SUCCESS",
-	    					'result_code'=>"ERROR",
-	    					'result_msg'=>$pay_status,
-	    					'msg'=>'交易正在进行退款！',
-	    			);
-	    		}else{
-	    			$results = array(
-	    					'return_code'=>"SUCCESS",
-	    					'result_code'=>"ERROR",
-	    					'result_msg'=>'REQUERY',
-	    					'msg'=>'重新查询！',
-	    			);
-	    		}
-	    	}else{
-	    		$errmsg = $obj['errMsg'];
-	    		Helper::writeLog('美团支付查询订单错误信息：'.$outTradeNo.$errmsg);
-	    		$results = array(
-	    				'return_code'=>"SUCCESS",
-	    				'result_code'=>"ERROR",
-	    				'result_msg'=>'REQUERY',
-	    				'msg'=>'查询失败！',
-	    		);
-	    	}
+    
+    	ksort($datas);
+    	$paramsStrs = '';
+    	if(is_array($datas)){
+    		foreach($datas as $k => $v)
+    		{
+    			$paramsStrs .= $k.'='.$v.'&';
+    		}
+    	}else{
+    		return false;
     	}
-    	return $results;
+    	$st = $paramsStrs.'key='.$key;
+    	$sign = hash("sha256", $st);
+    
+    	$datas['sign'] = $sign;
+    	 
+    	$body = json_encode($datas);
+    	$result = MtpCurl::httpPost($url, $body);
+    	
+    	$obj = json_decode($result);
+    	if($obj->status=='SUCCESS'){
+    		return true;
+    	}else{
+    		return $this->cancel($datas, ++$depth);
+    	}
+    	return false;
     }
-
+    /**
+     * 该接口用于订单退款
+     * 
+     */
     public static function refund($data){
-    	/*该接口用于订单退款，*/
     	$merchantId = $data['merchantId'];
     	$appId = $data['appId'];
     	$key = $data['key'];
@@ -609,26 +499,17 @@ class MtpPay{
     	}
     	$st = $paramsStrs.'key='.$key;
     	$sign = hash("sha256", $st);
-    	 
-    	$datas = array(
-    			'outTradeNo'=>$outTradeNo,
-    			'refundFee'=>$refundFee,
-    			'refundNo'=>$refundNo,
-    			'refundReason'=>$refundReason,
-    			'merchantId'=>$merchantId,
-    			'appId'=>$appId,
-    			'random'=>$random,
-    			'sign'=>$sign,
-    	);
+    	
+    	$datas['sign'] = $sign;
     	 
     	$body = json_encode($datas);
-    	//Helper::writeLog('mt退款传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('mt退款返回结果：'.$result);
     	
     	if(!empty($result)){
     		$obj = json_decode($result,true);
     		$status = $obj['status'];
+    		
     		if($status == 'SUCCESS'){
     			$results = array(
 	    				'return_code'=>"SUCCESS",
@@ -639,7 +520,8 @@ class MtpPay{
     		}else{
     			$errCode = $obj['errCode'];
     			$errMsg = $obj['errMsg'];
-    			if($errCode == 'TRADE_REFUND_NO_AOUNT_ERROR'){
+    			if($errCode == 'TRADE_ORDER_REFUNDED_ERROR'){
+    				// 订单已全部退款
     				$results = array(
     						'return_code'=>"SUCCESS",
     						'result_code'=>"SUCCESS",
@@ -647,69 +529,110 @@ class MtpPay{
     						'msg'=>'退款成功！',
     				);
     			}elseif($errCode == 'TRADE_REFUNDING_ERROR'){
-    				/*发起轮询*/
-    				$i=1;
-    				$j=true;
-    				do{
-    					$i++;
-    					$results = MtpPay::query(array(
-							'outTradeNo'=>$outTradeNo,
-			    			'appId'=>$appId,
-			    			'key'=>$key,
-			    			'merchantId'=>$merchantId,
-						));
-    					$return_code = $results['return_code'];
-    					$result_code = $results['result_code'];
-    					$result_msg = $results['result_msg'];
-    					if($result_msg == 'ORDER_PART_REFUND' || $result_msg == 'ORDER_ALL_REFUND'){
-    						$result = array(
-    								"return_code"=>"SUCCESS",
-    								"result_code"=>"SUCCESS",
-    								"result_msg"=>$result_msg,
-    								"msg"=>"退款成功！",
-    								"accountno"=>$outTradeNo);
-    						$j=false;
-    					}
-    					sleep(2);
-    				}while (($i<=15)&&$j);
-    				if(($i==15)&&$j){
-    					$result = array(
-    							"return_code"=>"SUCCESS",
-    							"result_code"=>"ERROR",
-    							"result_msg"=>'REFUND',
-    							"msg"=>"退款失败,重新操作！",
-    							"accountno"=>$outTradeNo);
-    				}
-    			}else{
-    				$results = array(
-    						'return_code'=>"SUCCESS",
-    						'result_code'=>"ERROR",
-    						'result_msg'=>$errCode,
-    						'msg'=>$errMsg,
-    				);
+    				// 15次退款查询确认
+			    	$queryTimes = 15;
+			    	while ($queryTimes > 0){
+			    		$returnRes = self::refundQuery(array(
+			    				'outTradeNo'=>$outTradeNo,
+			    				'refundNo'=>$refundNo,
+			    				'appId'=>$appId,
+			    				'key'=>$key,
+			    				'merchantId'=>$merchantId,
+			    		));
+			    		$obj = json_decode($returnRes,true);
+			    		
+			    		$return_status = $obj['status'];
+				    	$orderStatus = $obj['orderStatus'];
+				    	$tradeNo = $obj['tradeNo'];
+				    	// 交易成功
+			    		if($return_status=='SUCCESS' && $orderStatus=='ORDER_SUCCESS'){
+			    			$result = array(
+	    						'return_code'=>"SUCCESS",
+	    						'result_code'=>"SUCCESS",
+	    						'result_msg'=>'SUCCESS',
+	    						'msg'=>'退款成功！',
+			    			);
+			    			return $result;
+			    		}
+			    		// 交易失败
+			    		if($return_status=='SUCCESS' && ($orderStatus=='ORDER_CLOSE' || $orderStatus=='ORDER_FAILED')){
+			    			$result = array(
+			    					'return_code'=>"SUCCESS",
+		    						'result_code'=>"SUCCESS",
+		    						'result_msg'=>'SUCCESS',
+		    						'msg'=>'退款失败！',
+			    			);
+			    			return $result;
+			    		}
+			    		sleep(2);
+			    	}
     			}
     		}
-    	}else{
-    		$results = array(
-    				'return_code'=>"SUCCESS",
-    				'result_code'=>"ERROR",
-    				'result_msg'=>"REFUND",
-    				'msg'=>'请尝试重新操作！',
-    		);
     	}
+    	$results = array(
+    			'return_code'=>"SUCCESS",
+    			'result_code'=>"ERROR",
+    			'result_msg'=>"REFUND",
+    			'msg'=>'请尝试重新操作！',
+    	);
     	
     	return $results;
     
     }
+    /**
+     * 该接口用于关闭订单
+     */
+    public static function close($data){
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
+    	$outTradeNo = $data['outTradeNo'];
+    	$random = self::getNonceStr();
+    
+    	$url = MtpConfig::MTP_DOMAIN.'/api/close';
+    
+    	$datas = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'merchantId'=>$merchantId,
+    			'appId'=>$appId,
+    			'random'=>$random,
+    	);
+    
+    	ksort($datas);
+    	$paramsStrs = '';
+    	if(is_array($datas)){
+    		foreach($datas as $k => $v)
+    		{
+    			$paramsStrs .= $k.'='.$v.'&';
+    		}
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	$st = $paramsStrs.'key='.$key;
+    	$sign = hash("sha256", $st);
+    
+    	$datas['sign'] = $sign;
+    	 
+    	$body = json_encode($datas);
+    	Helper::writeLog('关闭订单传输参数：'.$body);
+    	$result = MtpCurl::httpPost($url, $body);
+    	Helper::writeLog('关闭订单返回结果：'.$result);
+    	return $result;
+    }
+    /**
+     * 该接口用于获取授权用户的Openid
+     */
     public static function getOpenId($data,$url){
-    	/*该接口用于获取授权，*/
-    		$merchantId = $data['merchantid'];
-    		$appId = $data['appid'];
+    	$merchantId = $data['merchantid'];
+    	$appId = $data['appid'];
     		
-    		$url = "Location: ".MtpConfig::MTP_DOMAIN_SQ."/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
-			//Helper::writeLog('获取授权：'.$url);
-    		header($url);
-    	 	exit;
+    	$url = "Location: ".MtpConfig::MTP_DOMAIN_SQ."/auth?bizId=".$appId."&mchId=".$merchantId."&redirect_uri=".$url;
+    	header($url);
+    	exit;
     }
 }
 ?>
