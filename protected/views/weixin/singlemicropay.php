@@ -19,8 +19,8 @@ $result = MicroPayModel::insert($data);
 
 
 if(isset($auth_code) && $auth_code != ""&&$result['status']){
+	$companyName = trim($company['company_name']);
 	$compaychannel = WxCompany::getpaychannel($dpid);
-	Helper::writeLog($dpid.'---paytype---'.json_encode($compaychannel));
 	if($compaychannel['pay_type']==0){
 		$msg = array('status'=>false, 'result'=>false);
 		echo json_encode($msg);
@@ -34,7 +34,7 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 				'totalAmount'=>''.$should_total*100,
 				'clientSn'=>$orderId,
 				'dpid'=>$dpid,
-				'subject'=>$company['company_name'],
+				'subject'=>$companyName,
 				'operator'=>$username,
 		));
 		
@@ -50,18 +50,18 @@ if(isset($auth_code) && $auth_code != ""&&$result['status']){
 				'key'=>$key,
 				'channel'=>'wx_barcode_pay',
 				'authCode'=>$auth_code,
-				'totalFee'=>''.$should_total*100,
+				'totalFee'=>$should_total*100,
 				'outTradeNo'=>$orderId,
 				'dpid'=>$dpid,
-				'subject'=>$company['company_name'],
-				'body'=>$company['company_name'],
+				'subject'=>$companyName,
+				'body'=>$companyName,
 				'expireMinutes'=>5,
 		));
 	}else{
 
 		$input = new WxPayMicroPay();
 		$input->SetAuth_code($auth_code);
-		$input->SetBody($company['company_name']);
+		$input->SetBody($companyName);
 		$input->SetTotal_fee($should_total*100);
 		$input->SetOut_trade_no($orderId);
 		

@@ -14,6 +14,7 @@ $data = array(
 $result = MicroPayModel::insert($data);
 
 if($authCode!=''&&$result['status']){
+	$companyName = trim($company['company_name']);
 	if($this->compaychannel['pay_type']==0){
 		$msg = array('status'=>false);
 		echo json_encode($msg);
@@ -27,7 +28,7 @@ if($authCode!=''&&$result['status']){
 				'totalAmount'=>''.$totalAmount*100,
 				'clientSn'=>$outTradeNo,
 				'dpid'=>$dpid,
-				'subject'=>$company['company_name'],
+				'subject'=>$companyName,
 				'operator'=>$username,
 		));
 	}elseif ($this->compaychannel['pay_channel']=='3'){
@@ -45,12 +46,12 @@ if($authCode!=''&&$result['status']){
 				'totalFee'=>''.$totalAmount*100,
 				'outTradeNo'=>$outTradeNo,
 				'dpid'=>$dpid,
-				'subject'=>$company['company_name'],
-				'body'=>$company['company_name'],
+				'subject'=>$companyName,
+				'body'=>$companyName,
 				'expireMinutes'=>5,
 		));
 	}else{
-		$subject = $company['company_name']."-扫码";
+		$subject = $companyName;
 		
 		$undiscountableAmount = "0.01";
 		$sellerId = $this->alipay_config['seller_id'];
