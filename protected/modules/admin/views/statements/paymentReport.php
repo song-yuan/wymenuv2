@@ -100,7 +100,7 @@
 		               <th><?php echo yii::t('app','系统券');?></th>
 		               <th><?php echo yii::t('app','积分');?></th> 
 		               <th><?php echo yii::t('app','退款');?></th>
-		
+					   <th><?php echo yii::t('app','支付方式总和');?></th>
 		            </tr>
 		        </thead>
 				<tbody>
@@ -112,6 +112,8 @@
 		        $orderDiscountTotal = 0;
 		        $orderShouldTotal = 0;
 		        $orderRetreatTotal = 0;
+		        $apaytypeTotal = 0;
+		        
 		        $cashPayTotal = 0;$cashPayCountTotal = 0;
 		        $wxPayTotal = 0;$wxPayCountTotal = 0;
 		        $wddPayTotal = 0;$wddPayCountTotal = 0;
@@ -124,6 +126,7 @@
 		        $jfPayTotal = 0;$jfPayCountTotal = 0;
 		        $wxczPayTotal = 0;$wxczPayCountTotal = 0;
 		        foreach ($models as $model):
+		        	$paytypeTotal = 0; // 支付方式总和统计
 		        	$order = $model['order'];
 		        	$orderPay = $model['order_pay'];
 		        	$discount = $order['reality_total']-$order['should_total'];
@@ -136,6 +139,7 @@
 		        	if(isset($orderPay['0-0'])){
 		        		$cashPay = $orderPay['0-0']['pay_amount'];
 		        		$cashPayCount = $orderPay['0-0']['pay_count'];
+		        		$paytypeTotal += $cashPay;
 		        	}
 		        	$cashPayTotal += $cashPay;
 		        	$cashPayCountTotal += $cashPayCount;
@@ -144,6 +148,7 @@
 		        	if(isset($orderPay['1-0'])){
 		        		$wxPay = $orderPay['1-0']['pay_amount'];
 		        		$wxPayCount = $orderPay['1-0']['pay_count'];
+		        		$paytypeTotal += $wxPay;
 		        	}
 		        	$wxPayTotal += $wxPay;
 		        	$wxPayCountTotal += $wxPayCount;
@@ -152,6 +157,7 @@
 		        	if(isset($orderPay['12-0'])){
 		        		$wddPay = $orderPay['12-0']['pay_amount'];
 		        		$wddPayCount = $orderPay['12-0']['pay_count'];
+		        		$paytypeTotal += $wddPay;
 		        	}
 		        	$wddPayTotal += $wddPay;
 		        	$wddPayCountTotal += $wddPayCount;
@@ -160,6 +166,7 @@
 		        	if(isset($orderPay['13-0'])){
 		        		$wwmPay = $orderPay['13-0']['pay_amount'];
 		        		$wwmPayCount = $orderPay['13-0']['pay_count'];
+		        		$paytypeTotal += $wwmPay;
 		        	}
 		        	$wwmPayTotal += $wwmPay;
 		        	$wwmPayCountTotal += $wwmPayCount;
@@ -168,6 +175,7 @@
 		        	if(isset($orderPay['2-0'])){
 		        		$zfbPay = $orderPay['2-0']['pay_amount'];
 		        		$zfbPayCount = $orderPay['2-0']['pay_count'];
+		        		$paytypeTotal += $zfbPay;
 		        	}
 		        	$zfbPayTotal += $zfbPay;
 		        	$zfbPayCountTotal += $zfbPayCount;
@@ -176,6 +184,7 @@
 		        	if(isset($orderPay['4-0'])){
 		        		$hykPay = $orderPay['4-0']['pay_amount'];
 		        		$hykPayCount = $orderPay['4-0']['pay_count'];
+		        		$paytypeTotal += $hykPay;
 		        	}
 		        	$hykPayTotal += $hykPay;
 		        	$hykPayCountTotal += $hykPayCount;
@@ -184,6 +193,7 @@
 		        	if(isset($orderPay['14-0'])){
 		        		$mtPay = $orderPay['14-0']['pay_amount'];
 		        		$mtPayCount = $orderPay['14-0']['pay_count'];
+		        		$paytypeTotal += $mtPay;
 		        	}
 		        	$mtPayTotal += $mtPay;
 		        	$mtPayCountTotal += $mtPayCount;
@@ -192,6 +202,7 @@
 		        	if(isset($orderPay['15-0'])){
 		        		$elmPay = $orderPay['15-0']['pay_amount'];
 		        		$elmPayCount = $orderPay['15-0']['pay_count'];
+		        		$paytypeTotal += $elmPay;
 		        	}
 		        	$elmPayTotal += $elmPay;
 		        	$elmPayCountTotal += $elmPayCount;
@@ -200,6 +211,7 @@
 		        	if(isset($orderPay['8-0'])){
 		        		$jfPay = $orderPay['8-0']['pay_amount'];
 		        		$jfPayCount = $orderPay['8-0']['pay_count'];
+		        		$paytypeTotal += $jfPay;
 		        	}
 		        	$jfPayTotal += $jfPay;
 		        	$jfPayCountTotal += $jfPayCount;
@@ -208,6 +220,7 @@
 		        	if(isset($orderPay['9-0'])){
 		        		$yhqPay = $orderPay['9-0']['pay_amount'];
 		        		$yhqPayCount = $orderPay['9-0']['pay_count'];
+		        		$paytypeTotal += $yhqPay;
 		        	}
 		        	$yhqPayTotal += $yhqPay;
 		        	$yhqPayCountTotal += $yhqPayCount;
@@ -216,6 +229,7 @@
 		        	if(isset($orderPay['10-0'])){
 		        		$wxczPay = $orderPay['10-0']['pay_amount'];
 		        		$wxczPayCount = $orderPay['10-0']['pay_count'];
+		        		$paytypeTotal += $wxczPay;
 		        	}
 		        	$wxczPayTotal += $wxczPay;
 		        	$wxczPayCountTotal += $wxczPayCount;
@@ -248,16 +262,24 @@
 			            	}
 			            	$paymentPayTotal[$payment['lid']]['pay_amount'] += $paymentPay;
 			            	$paymentPayTotal[$payment['lid']]['pay_count'] += $paymentPayCount;
+			            	$paytypeTotal += $paymentPay;
 		            ?>
 	                    <td><?php echo $paymentPay?number_format($paymentPay,2).'('.$paymentPayCount.')':'';?></td>
 	                <?php endforeach;?>
 		            <td><?php echo $yhqPay ? number_format($yhqPay,2).'('.$yhqPayCount.')':'';?></td>
 	                <td><?php echo $jfPay ? number_format($jfPay,2).'('.$jfPayCount.')':'';?></td> 
 		            <td><?php echo number_format($order['order_retreat'],2);?></td>
-										
+					<?php if(number_format($paytypeTotal,2)==number_format($order['should_total'],2)):?>
+					<td><?php echo number_format($paytypeTotal,2);?></td>
+					<?php else:?>
+					<td><span style="color:red"><?php echo number_format($paytypeTotal,2);?></span></td>
+					<?php endif;?>					
 		        </tr>
 		       
-		        <?php endforeach;?>	
+		        <?php 
+		        	$apaytypeTotal += $paytypeTotal;
+		        	endforeach;
+		        ?>	
 		        <tr class="odd gradeX">
 		            <td>总计</td>
 		            <td><?php echo $orderNumTotal;?></td>
@@ -287,7 +309,7 @@
 		            <td><?php echo $yhqPayTotal ? number_format($yhqPayTotal,2).'('.$yhqPayCountTotal.')':'';?></td>
 	                <td><?php echo $jfPayTotal ? number_format($jfPayTotal,2).'('.$jfPayCountTotal.')':'';?></td> 
 		            <td><?php echo number_format($orderRetreatTotal,2);?></td>
-										
+					<td><?php echo number_format($apaytypeTotal,2);?></td>					
 		        </tr>
 		      <?php endif;?> 
 		       
