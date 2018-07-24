@@ -180,7 +180,6 @@ class MtpPay{
     	$cancelData = array(
     			'outTradeNo'=>$outTradeNo,
     			'appId'=>$appId,
-    			'random'=>$random,
     			'merchantId'=>$merchantId,
     	);
     	Helper::writeLog('撤单传入参数:'.json_encode($cancelData));
@@ -456,7 +455,7 @@ class MtpPay{
     	if($obj->status=='SUCCESS'){
     		return true;
     	}else{
-    		return $this->cancel($datas, ++$depth);
+    		return self::cancel($datas, ++$depth);
     	}
     	return false;
     }
