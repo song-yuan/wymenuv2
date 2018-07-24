@@ -534,6 +534,7 @@ class MtpPay{
     				// 15次退款查询确认
 			    	$queryTimes = 15;
 			    	while ($queryTimes > 0){
+			    		$queryTimes--;
 			    		$returnRes = self::refundQuery(array(
 			    				'outTradeNo'=>$outTradeNo,
 			    				'refundNo'=>$refundNo,
