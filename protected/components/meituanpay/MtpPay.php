@@ -357,6 +357,8 @@ class MtpPay{
     	
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
+    	Helper::writeLog('mt订单查询返回结果：'.$result);
+    	
     	return $result;
     }
     /**
@@ -404,6 +406,8 @@ class MtpPay{
     	 
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
+    	Helper::writeLog('mt退单查询返回结果：'.$result);
+    	
     	return $result;
     }
     /**
@@ -449,6 +453,7 @@ class MtpPay{
     	 
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
+    	Helper::writeLog('mt撤单返回结果：'.$result);
     	
     	$obj = json_decode($result);
     	if($obj->status=='SUCCESS'){
