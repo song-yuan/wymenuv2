@@ -176,13 +176,14 @@ class MtpPay{
     		}
     		sleep(2);
     	}
+    	Helper::writeLog('轮询查询:结束 进入撤单');
     	$cancelData = array(
     			'outTradeNo'=>$outTradeNo,
     			'appId'=>$appId,
     			'random'=>$random,
     			'merchantId'=>$merchantId,
     	);
-    	
+    	Helper::writeLog('撤单传入参数:'.json_encode($cancelData));
     	// 超过15次查询 撤单
     	if(self::cancel($cancelData)){
     		$result = array(
