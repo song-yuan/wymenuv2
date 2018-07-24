@@ -164,13 +164,13 @@ class WaimaiController extends BackendController
 			$obj = json_decode(urldecode($data));
 			$data = $obj->result;
 			$reslut = Elm::dealOrder($data, $this->companyId, 4);
-			if($reslut){
-				$msg = array('status'=>true);
-			}else{
-				$msg = array('status'=>false);
-			}
-			$reslut = json_encode($msg);
 		}
+		if($reslut){
+			$msg = array('status'=>true);
+		}else{
+			$msg = array('status'=>false);
+		}
+		$reslut = json_encode($msg);
 		echo $reslut;exit;
 	}
 	
