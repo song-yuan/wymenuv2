@@ -145,7 +145,6 @@ class MtpPay{
     				'key'=>$key,
     				'merchantId'=>$merchantId,
     		));
-    		Helper::writeLog('美团查询结果:'.$returnRes);
     		$obj = json_decode($returnRes,true);
     		
     		$return_status = $obj['status'];
@@ -163,7 +162,7 @@ class MtpPay{
     			);
     			return $result;
     		}
-    		// 交易失败
+    		// 交易失败a
     		if($return_status=='SUCCESS' && ($pay_status=='ORDER_CLOSE' || $pay_status=='ORDER_FAILED')){
     			$result = array(
     					"return_code"=>"SUCCESS",
@@ -176,11 +175,11 @@ class MtpPay{
     		}
     		sleep(2);
     	}
-    	Helper::writeLog('轮询查询:结束 进入撤单');
     	$cancelData = array(
     			'outTradeNo'=>$outTradeNo,
     			'appId'=>$appId,
     			'merchantId'=>$merchantId,
+    			'key'=>$key
     	);
     	Helper::writeLog('撤单传入参数:'.json_encode($cancelData));
     	// 超过15次查询 撤单
@@ -414,6 +413,7 @@ class MtpPay{
 	 * 
      */
     public static function cancel($data, $depth = 0){
+    	Helper::writeLog('取消订单:'.$depth);
     	if($depth > 10){
     		return false;
     	}
