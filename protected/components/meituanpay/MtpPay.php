@@ -181,7 +181,7 @@ class MtpPay{
     			'merchantId'=>$merchantId,
     			'key'=>$key
     	);
-    	Helper::writeLog('撤单传入参数:'.json_encode($cancelData));
+    	
     	// 超过15次查询 撤单
     	if(self::cancel($cancelData)){
     		$result = array(
@@ -413,7 +413,6 @@ class MtpPay{
 	 * 
      */
     public static function cancel($data, $depth = 0){
-    	Helper::writeLog('取消订单:'.$depth);
     	if($depth > 10){
     		return false;
     	}
@@ -450,7 +449,7 @@ class MtpPay{
     	 
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
-    	Helper::writeLog('美团取消订单结果:'.$result);
+    	
     	$obj = json_decode($result);
     	if($obj->status=='SUCCESS'){
     		return true;
@@ -519,6 +518,7 @@ class MtpPay{
 	    				'result_msg'=>'SUCCESS',
 	    				'msg'=>'退款成功！',
 	    		);
+    			return $results;
     		}else{
     			$errCode = $obj['errCode'];
     			$errMsg = $obj['errMsg'];
@@ -530,6 +530,7 @@ class MtpPay{
     						'result_msg'=>'SUCCESS',
     						'msg'=>'退款成功！',
     				);
+    				return $results;
     			}elseif($errCode == 'TRADE_REFUNDING_ERROR'){
     				// 15次退款查询确认
 			    	$queryTimes = 15;
@@ -549,23 +550,23 @@ class MtpPay{
 				    	$tradeNo = $obj['tradeNo'];
 				    	// 交易成功
 			    		if($return_status=='SUCCESS' && $orderStatus=='ORDER_SUCCESS'){
-			    			$result = array(
+			    			$results = array(
 	    						'return_code'=>"SUCCESS",
 	    						'result_code'=>"SUCCESS",
 	    						'result_msg'=>'SUCCESS',
 	    						'msg'=>'退款成功！',
 			    			);
-			    			return $result;
+			    			return $results;
 			    		}
 			    		// 交易失败
 			    		if($return_status=='SUCCESS' && ($orderStatus=='ORDER_CLOSE' || $orderStatus=='ORDER_FAILED')){
-			    			$result = array(
+			    			$results = array(
 			    					'return_code'=>"SUCCESS",
 		    						'result_code'=>"SUCCESS",
 		    						'result_msg'=>'SUCCESS',
 		    						'msg'=>'退款失败！',
 			    			);
-			    			return $result;
+			    			return $results;
 			    		}
 			    		sleep(2);
 			    	}
@@ -578,9 +579,7 @@ class MtpPay{
     			'result_msg'=>"REFUND",
     			'msg'=>'请尝试重新操作！',
     	);
-    	
     	return $results;
-    
     }
     /**
      * 该接口用于关闭订单
