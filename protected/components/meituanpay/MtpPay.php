@@ -144,6 +144,7 @@ class MtpPay{
     				'key'=>$key,
     				'merchantId'=>$merchantId,
     		));
+    		Helper::writeLog('美团查询结果:'.$returnRes);
     		$obj = json_decode($returnRes,true);
     		
     		$return_status = $obj['status'];
@@ -448,7 +449,7 @@ class MtpPay{
     	 
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
-    	
+    	Helper::writeLog('美团取消订单结果:'.$result);
     	$obj = json_decode($result);
     	if($obj->status=='SUCCESS'){
     		return true;
