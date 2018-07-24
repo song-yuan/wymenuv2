@@ -41,7 +41,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','续费报表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','美团支付开通报表');?></div>
 					<div class="actions">
 						<div class="btn-group">
 							<select id="cdpid" name="cdpid" class="btn yellow width" >
