@@ -105,6 +105,31 @@ class PoscountsController extends BackendController
                     $this->redirect(array('poscount/hqindex' , 'companyId' => $companyId)) ;
             }
     }
+    /**
+     * 开通美团支付报表
+     */
+    public function actionPospay(){
+    	$cdpid = Yii::app()->request->getParam('cdpid',0);
+    	$begin_time = Yii::app()->request->getParam('begintime',date('Y-m-d',time()));
+    	$end_time = Yii::app()->request->getParam('endtime',date('Y-m-d',time()));
+    	$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryAll();
+    	if(!$cdpid){
+    		if($company){
+    			$cdpid = $company[0]['dpid'];
+    		}
+    	}
+    	 
+    	$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_mtpay_config t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
+    	$models = Yii::app()->db->createCommand($sql)->queryAll();
+    	 
+    	$this->render('pospay',array(
+    			'companys'=>$company,
+    			'models'=>$models,
+    			'begintime'=>$begin_time,
+    			'endtime'=>$end_time,
+    			'cdpid'=>$cdpid
+    	));
+    }
 	/**
 	 * 续费报表
 	 */
@@ -423,7 +448,30 @@ class PoscountsController extends BackendController
     	}
     	Helper::exportExcel($tableHead,$tableData,'续费报表-','续费报表');
     }
-
+	
+    public function actionPospayExport(){
+    	$cdpid = Yii::app()->request->getParam('cdpid',0);
+    	$begin_time = Yii::app()->request->getParam('begintime',date('Y-m-d',time()));
+    	$end_time = Yii::app()->request->getParam('endtime',date('Y-m-d',time()));
+    	$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryAll();
+    	if(!$cdpid){
+    		if($company){
+    			$cdpid = $company[0]['dpid'];
+    		}
+    	}
+    
+    	$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_mtpay_config t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
+    	$models = Yii::app()->db->createCommand($sql)->queryAll();
+    	 
+    	$tableHead = array('序号', '店名','开通时间','联系人','联系电话','联系地址');
+    	$tableData = array();
+    	foreach ($models as $k=>$model){
+    		$tempArr = array($k+1,$model['company_name'],$model['create_at'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address']);
+    		array_push($tableData, $tempArr);
+    	}
+    	Helper::exportExcel($tableHead,$tableData,'美团支付开通报表-','美团支付开通报表');
+    }
+    
     public function actionUsed(){
         $companyId = Yii::app()->request->getParam('companyId');
         $pos_type = Yii::app()->request->getParam('pos_type');

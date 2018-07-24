@@ -64,6 +64,12 @@
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('poscounts/pospay',array('companyId' => $this->companyId));?>">
+                                <div class="list_big">美团支付开通报表</div>
+                                <div class="list_small">查询门店开通美团支付信息情况</div>
+                            </a> 
+                        </div>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                             <a href="<?php echo $this->createUrl('poscounts/posfee',array('companyId' => $this->companyId));?>">
                                 <div class="list_big">系统年费报表</div>
                                 <div class="list_small">查询门店续费延期情况</div>

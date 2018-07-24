@@ -290,7 +290,6 @@ class MtpPay{
     		$datas['sign'] = $sign;
     		
     		$body = json_encode($datas);
-    		Helper::writeLog('公众号支付传输参数：'.$body);
     		$result = MtpCurl::httpPost($url, $body);
     		Helper::writeLog('公众号支付返回结果：'.$result);
     		 
@@ -308,8 +307,8 @@ class MtpPay{
     				$prepayId = $obj['prepayId'];
     				 
     				$url = "http://openpay.zc.st.meituan.com/pay/?bizId=".$appId."&appId=".$appIds."&nonceStr=".$nonceStr."&prepay_id=".$prepayId."&paySign=".$paySign."&timeStamp=".$timeStamp."&signType=".$signType."&redirect_uri=".$resulturl;
-    				Helper::writeLog('已进入支付：'.$url);
     				header("Location:".$url);
+    				exit;
     			}
     		}
     		return $result;exit;
@@ -625,7 +624,6 @@ class MtpPay{
     	$datas['sign'] = $sign;
     	 
     	$body = json_encode($datas);
-    	Helper::writeLog('关闭订单传输参数：'.$body);
     	$result = MtpCurl::httpPost($url, $body);
     	Helper::writeLog('关闭订单返回结果：'.$result);
     	return $result;
