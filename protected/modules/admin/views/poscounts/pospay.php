@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','收款机结算'),'subhead'=>yii::t('app','年费收取'),'breadcrumbs'=>array(array('word'=>yii::t('app','收款机结算'),'url'=>$this->createUrl('poscounts/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','年费延期'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('poscounts/list' , array('companyId' => $this->companyId)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','收款机结算'),'subhead'=>yii::t('app','美团支付开通'),'breadcrumbs'=>array(array('word'=>yii::t('app','收款机结算'),'url'=>$this->createUrl('poscounts/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','美团支付'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('poscounts/list' , array('companyId' => $this->companyId)))));?>
 	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
 	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
 
