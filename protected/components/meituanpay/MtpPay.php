@@ -138,6 +138,7 @@ class MtpPay{
     	// 15次查询确认
     	$queryTimes = 15;
     	while ($queryTimes > 0){
+    		$queryTimes--;
     		$returnRes = self::query(array(
     				'outTradeNo'=>$outTradeNo,
     				'appId'=>$appId,
