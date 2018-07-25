@@ -1180,7 +1180,9 @@ class WxOrder
 	 	$orderArr['nb_order_address'] = $orderAddressArr;
 	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
+	 	Helper::writeLog('o6');
 	 	$orderStr = json_encode($orderArr);
+	 	Helper::writeLog('o7');
 	 	Helper::writeLog($orderStr);
 	 	$result = WxRedis::pushPlatform($dpid, $orderStr);
 	 	if(!$result){
