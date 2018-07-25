@@ -20,8 +20,8 @@ class MtpayController extends Controller
 	}
 
 	public function actionMtwappayresult(){
-		$data=file_get_contents("php://input");
-		//Helper::writeLog('美团result'.$data);
+		$data = file_get_contents("php://input");
+		Helper::writeLog('美团result'.$data);
 		$accountno = $_POST['outTradeNo'];
 		$transactionId = $_POST['transactionId'];
 		$totalFee = $_POST['totalFee'];
@@ -51,7 +51,6 @@ class MtpayController extends Controller
 			$key = $info[2];
 		}
 		
-
 		if(!empty($notify)){
 			//Helper::writeLog('已通知！');
 			return '{"status":"SUCCESS"}';
@@ -88,12 +87,14 @@ class MtpayController extends Controller
 				Helper::writeLog('未查询到该条订单：'.$orderid);
 			}
 			//Helper::writeLog('查询支付信息！');
-			$results = MtpPay::query(array(
+			$returnRes = MtpPay::query(array(
 					'outTradeNo'=>$accountno,
 	    			'appId'=>$appId,
 	    			'key'=>$key,
 	    			'merchantId'=>$merchantId,
 			));
+			$obj = json_decode($returnRes,true);
+			
 			//Helper::writeLog('返回支付信息！');
 			$return_code = $results['return_code'];
 			$result_code = $results['result_code'];
