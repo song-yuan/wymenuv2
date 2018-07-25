@@ -2,6 +2,7 @@
 
 class MtpayController extends Controller
 {
+	public $layout = '/layouts/screenmain';
 	public function actionMtwappay(){
 		//$result = SqbPay::pay($dpid,$_POST);
 		//$obj = json_decode($result,true);
@@ -21,7 +22,7 @@ class MtpayController extends Controller
 
 	public function actionMtwappayresult(){
 		$data = file_get_contents("php://input");
-		Helper::writeLog('美团result'.$data);
+// 		Helper::writeLog('美团result'.$data);
 		$accountno = $_POST['outTradeNo'];
 		$transactionId = $_POST['transactionId'];
 		$totalFee = $_POST['totalFee'];
@@ -102,29 +103,26 @@ class MtpayController extends Controller
 		}
 		echo '{"status":"FAIL"}';exit;
 	}
-	public function actionMtopenidresult(){
-		$db = Yii::app()->db;
-		Helper::writeLog('美团回调openID');
-		$dpid = Yii::app()->request->getParam('dpid');
-		$accountno = Yii::app()->request->getParam('accountno');
-		$order_id = Yii::app()->request->getParam('orderid');
-		$openId = Yii::app()->request->getParam('openId');
+	public function actionMtpayreturn(){
+		$companyId = Yii::app()->request->getParam('companyId');
+		$orderId = Yii::app()->request->getParam('orderId');
+		$orderDpid = Yii::app()->request->getParam('orderDpid');
 		
-		$se = new Sequence("mtpay_openid");
-		$lid = $se->nextval();
-		$tgdata = array(
-				'lid'=>$lid,
-				'dpid'=>$dpid,
-				'create_at'=>date('Y-m-d H:i:s',time()),
-				'update_at'=>date('Y-m-d H:i:s',time()),
-				'account_no'=>$accountno,
-				'order_id'=>$order_id,
-				'mt_openId'=>$openId,
-				'delete_flag'=>'0',
-				'is_sync'=>'11111',
-		);
-		$command = $db->createCommand()->insert('nb_mtpay_openid',$tgdata);
-		Helper::writeLog('该商户的授权码为：'.$openId);
+		$order = WxOrder::getOrder($orderId, $orderDpid);
+		
+		if(empty($order)){
+			throw new Exception('该订单不存在');
+		}
+		// 订单已支付
+		if(in_array($order['order_status'],array(3,4,8))){
+			$this->redirect(array('/user/orderInfo','companyId'=>$companyId,'orderId'=>$orderId,'orderDpid'=>$orderDpid));
+		}
+		
+		$this->render('mtpayreturn',array(
+				'companyId'=>$companyId,
+				'orderId'=>$orderId,
+				'orderDpid'=>$orderDpid,
+		));
 	}
 
 }

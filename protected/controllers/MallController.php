@@ -882,20 +882,21 @@ class MallController extends Controller
 	}
 	/**
 	 * 
-	 * 获取订单状态
+	 * 获取订单信息
 	 * 
 	 */
-	public function actionGetOrderStatus()
+	public function actionAjaxGetOrder()
 	{
-		$status = 0;
 		$orderId = Yii::app()->request->getParam('orderId');
-		$order = WxOrder::getOrder($orderId,$this->companyId);
-		$orderProduct = WxOrder::getNoPayOrderProduct($orderId,$this->companyId);
-		$status = $order['order_status'];
-		if(!empty($orderProduct)){
-			$status = 0;
+		$orderDpid = Yii::app()->request->getParam('orderDpid');
+		$order = WxOrder::getOrder($orderId,$orderDpid);
+		if($order){
+			$res = array('status'=>true,'data'=>$order);
+		}else{
+			$res = array('status'=>false,'data'=>'订单不存在');
 		}
-		echo $status;exit;
+		echo json_encode($res);
+		exit;
 	}
 	/**
 	 * 

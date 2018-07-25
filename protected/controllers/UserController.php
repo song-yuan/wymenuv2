@@ -207,6 +207,7 @@ class UserController extends Controller
 		
 		$orderId = Yii::app()->request->getParam('orderId');
 		$orderDpid = Yii::app()->request->getParam('orderDpid');
+		
 		$order = WxOrder::getOrder($orderId,$orderDpid);
 		if($order['order_type']=='1'){
 			$siteNo = WxSite::getSiteNoByLid($order['site_id'], $orderDpid);
@@ -242,7 +243,19 @@ class UserController extends Controller
 		//查找分享红包
 		$redPack = WxRedPacket::getOrderShareRedPacket($orderDpid,$order['should_total']);
 		
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'orderPays'=>$orderPays,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+		$this->render('orderinfo',
+				array('companyId'=>$this->companyId,
+						'order'=>$order,
+						'orderProducts'=>$orderProducts,
+						'orderPays'=>$orderPays,
+						'site'=>$site,
+						'address'=>$address,
+						'siteType'=>$siteType,
+						'redPack'=>$redPack,
+						'seatingFee'=>$seatingFee,
+						'packingFee'=>$packingFee,
+						'freightFee'=>$freightFee,
+					));
 	}
 	/**
 	 * 
