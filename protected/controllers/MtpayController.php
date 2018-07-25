@@ -29,34 +29,49 @@ class MtpayController extends Controller
 		$account_nos = explode('-',$accountno);
 		$orderid = $account_nos[0];
 		$orderdpid = $account_nos[1];
-		//Helper::writeLog('账单号:'.$accountno.';第三方订单号:'.$orderid);
 		$ords = false;$nots = false;$inf =false; 
 		
 		$sql = 'select * from nb_mtpay_info where dpid ='.$orderdpid.' and accountno="'.$accountno.'" and transactionId ="'.$transactionId.'"';
-		//Helper::writeLog('查询：'.$sql);
 		$notify = Yii::app()->db->createCommand($sql)->queryRow();
+		if($notify){
+			return '{"status":"SUCCESS"}';
+		}
 
 		$infos = MtpConfig::MTPAppKeyMid($orderdpid);
 		$info = explode(',',$infos);
 		$appId = $info[1];
 		$merchantId = $info[0];
 		$key = $info[2];
-		if(!empty($infos)){
-			$inf = true;
-		}else{
-			$infos = MtpConfig::MTPAppKeyMid($orderdpid);
-			$info = explode(',',$infos);
-			$appId = $info[1];
-			$merchantId = $info[0];
-			$key = $info[2];
-		}
 		
-		if(!empty($notify)){
-			//Helper::writeLog('已通知！');
-			return '{"status":"SUCCESS"}';
-		}else{
+		$returnRes = MtpPay::query(array(
+				'outTradeNo'=>$accountno,
+				'appId'=>$appId,
+				'key'=>$key,
+				'merchantId'=>$merchantId,
+		));
+		$obj = json_decode($returnRes,true);
+		
+		$return_status = $obj['status'];
+		$pay_status = $obj['orderStatus'];
+		if($return_status=='SUCCESS' && $pay_status=='ORDER_SUCCESS'){
+			//像微信公众号支付记录表插入记录...
+			$se = new Sequence("mtpay_info");
+			$notifyWxwapId = $se->nextval();
+			$notifyWxwapData = array (
+					'lid' => $notifyWxwapId,
+					'dpid' => $orderdpid,
+					'create_at' => date ( 'Y-m-d H:i:s', time()),
+					'update_at' => date ( 'Y-m-d H:i:s', time()),
+					'accountno' => $accountno,
+					'transactionId' => $transactionId,
+					'content' => $data,
+					'pay_status' => $result_msg
+			);
+			$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
+			
 			$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
 			$orders = Yii::app()->db->createCommand($sql)->queryRow();
+			
 			if(!empty($orders)){
 				if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
 					$pay_type = '12';
@@ -65,7 +80,7 @@ class MtpayController extends Controller
 				}else{
 					$pay_type = '1';
 				}
-				
+			
 				$se = new Sequence ( "order_pay" );
 				$orderpayId = $se->nextval();
 				$orderpayData = array (
@@ -80,126 +95,13 @@ class MtpayController extends Controller
 						'remark' => $accountno,
 				);
 				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
-				if($result){
-					$ords = true;
-				}
-			}else{
-				Helper::writeLog('未查询到该条订单：'.$orderid);
-			}
-			//Helper::writeLog('查询支付信息！');
-			$returnRes = MtpPay::query(array(
-					'outTradeNo'=>$accountno,
-	    			'appId'=>$appId,
-	    			'key'=>$key,
-	    			'merchantId'=>$merchantId,
-			));
-			$obj = json_decode($returnRes,true);
-			
-			//Helper::writeLog('返回支付信息！');
-			$return_code = $results['return_code'];
-			$result_code = $results['result_code'];
-			$result_msg = $results['result_msg'];
 				
-			if($result_msg == 'ORDER_SUCCESS'){
-				//像微信公众号支付记录表插入记录...
-				$se = new Sequence("mtpay_info");
-				$notifyWxwapId = $se->nextval();
-				$notifyWxwapData = array (
-						'lid' => $notifyWxwapId,
-						'dpid' => $orderdpid,
-						'create_at' => date ( 'Y-m-d H:i:s', time()),
-						'update_at' => date ( 'Y-m-d H:i:s', time()),
-						'accountno' => $accountno,
-						'transactionId' => $transactionId,
-						'content' => $data,
-						'pay_status' => $result_msg
-				);
-				$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
-				if($result){
-					//订单成功支付...
-					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
-					$orders = WxOrder::getOrder($orderid, $orderdpid);
-					if(!empty($orders)){
-						$user = WxBrandUser::getFromUserId($orders['user_id']);
-						WxOrder::dealOrder($user, $orders);
-						$nots = true;
-					}
-				}
-			}else{
-				$i=1;
-				$j=true;
-				do{
-					sleep(1);
-					$i++;
-					$results = MtpPay::query(array(
-						'outTradeNo'=>$accountno,
-		    			'appId'=>$appId,
-		    			'key'=>$key,
-		    			'merchantId'=>$merchantId,
-					));
-					if($result_msg == 'ORDER_SUCCESS'){
-						//像微信公众号支付记录表插入记录...
-						$se = new Sequence("mtpay_info");
-						$notifyWxwapId = $se->nextval();
-						//Helper::writeLog('第一次1:['.$sn.'],插入ID：'.$notifyWxwapId);
-						$notifyWxwapData = array (
-								'lid' => $notifyWxwapId,
-								'dpid' => $orderdpid,
-								'create_at' => date ( 'Y-m-d H:i:s', time()),
-								'update_at' => date ( 'Y-m-d H:i:s', time()),
-								'accountno' => $accountno,
-								'transactionId' => $transactionId,
-								'content' => $data,
-								'pay_status' => $result_msg
-						);
-						//$data = json_encode($notifyWxwapData);
-						$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
-						if($result){
-							//订单成功支付...
-							Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
-							//exit;
-							$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-							$orders = Yii::app()->db->createCommand($sql)->queryRow();
-							if(!empty($orders)){
-								$user = WxBrandUser::getFromUserId($orders['user_id']);
-								WxOrder::dealOrder($user, $orders);
-								$nots = true;
-							}
-						}
-						$j=false;
-					}
-				}while (($i<=5)&&$j);
-				if(($i==5)&&$j){
-					//像微信公众号支付记录表插入记录...
-					$se = new Sequence("mtpay_info");
-					$notifyWxwapId = $se->nextval();
-					//Helper::writeLog('第一次1:['.$sn.'],插入ID：'.$notifyWxwapId);
-					$notifyWxwapData = array (
-							'lid' => $notifyWxwapId,
-							'dpid' => $orderdpid,
-							'create_at' => date ( 'Y-m-d H:i:s', time()),
-							'update_at' => date ( 'Y-m-d H:i:s', time()),
-							'accountno' => $accountno,
-							'transactionId' => $transactionId,
-							'content' => $data,
-							'pay_status' => $result_msg
-					);
-					//$data = json_encode($notifyWxwapData);
-					$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
-					if($result){
-						$nots = true;
-						//订单成功支付...
-						Helper::writeLog('支付失败!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
-					}
-				}
+				$user = WxBrandUser::getFromUserId($orders['user_id']);
+				WxOrder::dealOrder($user, $orders);
+				return '{"status":"SUCCESS"}';
 			}
 		}
-
-
-		if($nots&&$ords&&$inf){
-			return $nots = '{"status":"SUCCESS"}';
-		}
-
+		return '{"status":"FAIL"}';
 	}
 	public function actionMtopenidresult(){
 		$db = Yii::app()->db;
