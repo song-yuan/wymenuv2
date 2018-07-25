@@ -76,7 +76,7 @@
 	}elseif($payChannel==3){
 		// 美团线上支付 新接口
 		$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtwappayresult');
-		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
+		$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtpayreturn',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'orderDpid'=>$order['dpid']));
 		$data = array(
 				'companyId'=>$this->companyId,
 				'dpid'=>$order['dpid'],
