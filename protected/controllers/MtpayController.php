@@ -65,7 +65,7 @@ class MtpayController extends Controller
 					'accountno' => $accountno,
 					'transactionId' => $transactionId,
 					'content' => $data,
-					'pay_status' => $result_msg
+					'pay_status' => $pay_status
 			);
 			$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
 			
