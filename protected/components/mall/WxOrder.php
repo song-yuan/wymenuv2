@@ -1125,6 +1125,7 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
+	 	Helper::writeLog('o1');
 	 	// 获取订单中产品 减少库存
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	foreach ($orderProducts as $product){
@@ -1161,6 +1162,7 @@ class WxOrder
 	 			}
 	 		}
 	 	}
+	 	Helper::writeLog('o2');
 	 	$orderAddressArr = array();
 	 	$orderPays = WxOrderPay::get($dpid, $orderId);
 	 	if(in_array($order['order_type'],array(2,3))){
