@@ -1125,7 +1125,6 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
-	 	Helper::writeLog('o1');
 	 	// 获取订单中产品 减少库存
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	foreach ($orderProducts as $product){
@@ -1162,16 +1161,12 @@ class WxOrder
 	 			}
 	 		}
 	 	}
-	 	Helper::writeLog('o2');
 	 	$orderAddressArr = array();
 	 	$orderPays = WxOrderPay::get($dpid, $orderId);
-	 	Helper::writeLog('o3');
 	 	if(in_array($order['order_type'],array(2,3))){
 	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
-	 		Helper::writeLog('o4');
 	 	}
 	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
-	 	Helper::writeLog('o5');
 	 	$orderArr['nb_order_product'] = $orderProducts;
 	 	$orderArr['nb_order_pay'] = $orderPays;
 	 	if(!empty($orderAddress)){
@@ -1180,9 +1175,7 @@ class WxOrder
 	 	$orderArr['nb_order_address'] = $orderAddressArr;
 	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
-	 	Helper::writeLog('o6');
 	 	$orderStr = json_encode($orderArr);
-	 	Helper::writeLog('o7');
 	 	Helper::writeLog($orderStr);
 	 	$result = WxRedis::pushPlatform($dpid, $orderStr);
 	 	if(!$result){
