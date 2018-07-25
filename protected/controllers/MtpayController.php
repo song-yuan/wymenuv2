@@ -69,9 +69,7 @@ class MtpayController extends Controller
 			);
 			$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
 			
-			$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-			$orders = Yii::app()->db->createCommand($sql)->queryRow();
-			
+			$orders = WxOrder::getOrder($orderid, $orderdpid);
 			if(!empty($orders)){
 				if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
 					$pay_type = '12';
