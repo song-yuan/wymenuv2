@@ -1176,6 +1176,7 @@ class WxOrder
 	 	$orderArr['nb_order_taste'] = $order['taste'];
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
 	 	$orderStr = json_encode($orderArr);
+	 	Helper::writeLog($orderStr);
 	 	$result = WxRedis::pushPlatform($dpid, $orderStr);
 	 	if(!$result){
 	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$dpid.';data:'.$orderStr);
