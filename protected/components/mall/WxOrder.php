@@ -1165,10 +1165,13 @@ class WxOrder
 	 	Helper::writeLog('o2');
 	 	$orderAddressArr = array();
 	 	$orderPays = WxOrderPay::get($dpid, $orderId);
+	 	Helper::writeLog('o3');
 	 	if(in_array($order['order_type'],array(2,3))){
 	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 		Helper::writeLog('o4');
 	 	}
 	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
+	 	Helper::writeLog('o5');
 	 	$orderArr['nb_order_product'] = $orderProducts;
 	 	$orderArr['nb_order_pay'] = $orderPays;
 	 	if(!empty($orderAddress)){
