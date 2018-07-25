@@ -29,12 +29,12 @@ class MtpayController extends Controller
 		$account_nos = explode('-',$accountno);
 		$orderid = $account_nos[0];
 		$orderdpid = $account_nos[1];
-		$ords = false;$nots = false;$inf =false; 
 		
 		$sql = 'select * from nb_mtpay_info where dpid ='.$orderdpid.' and accountno="'.$accountno.'" and transactionId ="'.$transactionId.'"';
 		$notify = Yii::app()->db->createCommand($sql)->queryRow();
 		if($notify){
-			return '{"status":"SUCCESS"}';
+			echo '{"status":"SUCCESS"}';
+			exit;
 		}
 
 		$infos = MtpConfig::MTPAppKeyMid($orderdpid);
@@ -98,10 +98,11 @@ class MtpayController extends Controller
 				
 				$user = WxBrandUser::getFromUserId($orders['user_id']);
 				WxOrder::dealOrder($user, $orders);
-				return '{"status":"SUCCESS"}';
+				echo '{"status":"SUCCESS"}';
+				exit;
 			}
 		}
-		return '{"status":"FAIL"}';
+		echo '{"status":"FAIL"}';exit;
 	}
 	public function actionMtopenidresult(){
 		$db = Yii::app()->db;
