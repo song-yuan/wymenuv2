@@ -1,5 +1,4 @@
 body{ background-color:#E5E5E5;}
-a:link,a:hover,a:visited {color:black;}
 .prolist li{padding:10px;min-height:30px;line-height:30px;background:white;height:auto;}
 .prolist li .item{float:left;text-align:center;}
 li:last-child{margin-bottom:0px;}

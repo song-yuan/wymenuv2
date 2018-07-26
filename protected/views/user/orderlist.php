@@ -5,7 +5,6 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link href='<?php echo $baseUrl;?>/css/mall/common.css' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 <style>
 .more-info{
 	text-align:center;
@@ -63,31 +62,47 @@
 		</ul>
 		<!-- 全部 -->
 	</div>
-	 <!--BEGIN dialog1-->
-    <div class="weui_dialog_confirm" id="dialog1" order-id="0" order-dpid="0" style="display: none;">
-        <div class="weui_mask" style="z-index:1005;"></div>
-        <div class="weui_dialog" style="z-index:1006;">
-            <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-            <div class="weui_dialog_bd" style="text-align:center;">是否要取消订单？</div>
-            <div class="weui_dialog_ft">
-                <a href="javascript:;" class="weui_btn_dialog default">取消</a>
-                <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-            </div>
-        </div>
+<div id="dialogs">
+	<!--BEGIN dialog1-->
+	<div class="js_dialog" id="dialog1" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+	         <div class="weui-dialog__bd">是否要取消订单？</div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+	         </div>
+	     </div>
+	</div>
+	<!--END dialog1-->
+	<!--BEGIN dialog2-->
+	<div class="js_dialog" id="dialog2" style="display: none;">
+     	<div class="weui-mask"></div>
+        <div class="weui-dialog">
+                <div class="weui-dialog__bd">订单取消失败,请重新操作</div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+                </div>
+         </div>
+    </div>       
+	<!--END dialog2-->
+</div>
+<!-- loading toast -->
+<div id="loadingToast" style="display:none;">
+	<div class="weui-mask_transparent"></div>
+ 	<div class="weui-toast">
+    	<i class="weui-loading weui-icon_toast"></i>
+    	<p class="weui-toast__content">订单取消中</p>
     </div>
-    <!--END dialog1-->
-     <!--BEGIN dialog2-->
-    <div class="weui_dialog_alert" id="dialog2" style="display: none;">
-        <div class="weui_mask" style="z-index:1005;"></div>
-        <div class="weui_dialog" style="z-index:1006;">
-            <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-            <div class="weui_dialog_bd">订单取消失败</div>
-            <div class="weui_dialog_ft">
-                <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-            </div>
-        </div>
+</div> 
+<div id="loadingMoreToast" style="display:none;">
+	<div class="weui-mask_transparent"></div>
+ 	<div class="weui-toast">
+    	<i class="weui-loading weui-icon_toast"></i>
+    	<p class="weui-toast__content">订单加载中</p>
     </div>
-    <!--END dialog2-->
+</div> 
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var orderId = 0;
@@ -99,46 +114,44 @@
 			var orderDpid = $(this).attr('order-dpid');
 			$('#dialog1').attr('order-id',orderId);
 			$('#dialog1').attr('order-dpid',orderDpid);
-			$('#dialog1').show();
+			$('#dialog1').fadeIn(200);
 		});
 		$('.payorder').click(function(){
 			var href = $(this).attr('href');
 			location.href = href;
 		});
-		$('#dialog1 .primary').click(function(){
-			layer.load(2);
+		$('#dialog1 .weui-dialog__btn_primary').click(function(){
 			var orderId = $('#dialog1').attr('order-id');
 			var orderDpid = $('#dialog1').attr('order-dpid');
-			$('#dialog1').hide();
+			$('#dialog1').fadeOut(200);
+			$('#loadingToast').fadeIn(200);
 			$.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
 				data:{orderId:orderId,orderDpid:orderDpid},
 				success:function(data){
-					layer.closeAll('loading');
+					$('#loadingToast').fadeOut(200);
 					if(parseInt(data)){
 						$('.cancel[order-id="'+orderId+'"][order-dpid="'+orderDpid+'"]').parents('li').remove();
-					}else{
-						$('#dialog2').show();
 					}
 				}
 			});
 		});
-		$('#dialog1 .default').click(function(){
+		$('#dialog1 .weui-dialog__btn_default').click(function(){
 			$('.bttn_grey').removeClass('bttn_grey').addClass('bttn_orange');
-			$('#dialog1').hide();
+			$('#dialog1').fadeOut(200);
 		});	
-		$('#dialog2 .primary').click(function(){
+		$('#dialog2 .weui-dialog__btn_primary').click(function(){
 			$('.bttn_grey').removeClass('bttn_grey').addClass('bttn_orange');
-			$('#dialog2').hide();
+			$('#dialog2').fadeOut(200);
 		});	
 		$('#more').click(function(){
-			layer.load(2);
+			$('#loadingMoreToast').fadeIn(200);
 			$.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxOrderList',array('companyId'=>$this->companyId,'t'=>$type,'userId'=>$userId,'cardId'=>$cardId));?>',
 				data:{p:page},
 				dataType:'json',
 				success:function(data){
-					layer.closeAll('loading');
+					$('#loadingMoreToast').fadeOut(200);
 					if(data.length==10){
 						page++;
 					}else{

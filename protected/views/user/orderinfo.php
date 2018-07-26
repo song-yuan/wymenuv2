@@ -8,7 +8,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/user.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 
 
 <?php if($order['order_type']==1):?>
@@ -186,44 +185,53 @@
 	<button class="payOrder bttn_large bttn_red">去支付</button>
 </div>
 <?php endif;?>
- <!--BEGIN dialog1-->
-<div class="weui_dialog_confirm" id="dialog1" style="display: none;">
-    <div class="weui_mask" style="z-index:1005;"></div>
-    <div class="weui_dialog" style="z-index:1006;">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-        <div class="weui_dialog_bd" style="text-align:center;">是否要取消订单？</div>
-        <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-        </div>
-    </div>
+<div id="dialogs">
+	<!--BEGIN dialog1-->
+	<div class="js_dialog" id="dialog1" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+	         <div class="weui-dialog__bd">是否要取消订单？</div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+	         </div>
+	     </div>
+	</div>
+	<!--END dialog1-->
+	<!--BEGIN dialog2-->
+	<div class="js_dialog" id="dialog2" style="display: none;">
+     	<div class="weui-mask"></div>
+        <div class="weui-dialog">
+                <div class="weui-dialog__bd">订单取消失败,请重新操作</div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+                </div>
+         </div>
+    </div>       
+	<!--END dialog2-->
+	<!--BEGIN dialog3-->
+	<div class="js_dialog" id="dialog3" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+	         <div class="weui-dialog__bd">如果该笔订单已经支付成功,订单未及时更新,请不要重复支付!!!!!!</div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">刷新</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">去支付</a>
+	         </div>
+	     </div>
+	</div>
+	<!--END dialog3-->
 </div>
-<!--END dialog1-->
-<!--BEGIN dialog2-->
-<div class="weui_dialog_alert" id="dialog2" style="display: none;">
-    <div class="weui_mask" style="z-index:1005;"></div>
-    <div class="weui_dialog" style="z-index:1006;">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-        <div class="weui_dialog_bd">订单取消失败</div>
-        <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-        </div>
+<!-- loading toast -->
+<div id="loadingToast" style="display:none;">
+	<div class="weui-mask_transparent"></div>
+ 	<div class="weui-toast">
+    	<i class="weui-loading weui-icon_toast"></i>
+    	<p class="weui-toast__content">订单取消中</p>
     </div>
-</div>
-<!--END dialog2-->
-<!--BEGIN dialog3-->
-<div class="weui_dialog_confirm" id="dialog3" style="display: none;">
-    <div class="weui_mask" style="z-index:1005;"></div>
-    <div class="weui_dialog" style="z-index:1006;">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-        <div class="weui_dialog_bd" style="text-align:center;">如果该笔订单已经支付,请刷新页面查看订单状态,请不要重复支付!!!!!!</div>
-        <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog default">刷新</a>
-            <a href="javascript:;" class="weui_btn_dialog primary">去支付</a>
-        </div>
-    </div>
-</div>
-<!--END dialog3-->
+</div>                   
 <?php if($redPack && $order['order_status'] > 2):?>
 <?php 
 	$title = '现金红包送不停！';
@@ -256,16 +264,16 @@ $(document).ready(function(){
 	var orderId = 0;
 	var orderDpid = 0;
 	$('.payOrder').click(function(){
-		$('#dialog3').show();
+		$('#dialog3').fadeIn(200);
 	});
 	$('.cancelOrder').click(function(){
 		orderId = $(this).attr('order-id');
 		orderDpid = $(this).attr('order-dpid');
-		$('#dialog1').show();
+		$('#dialog1').fadeIn(200);
 	});
-	$('#dialog1 .primary').click(function(){
-		layer.load(2);
-		$('#dialog1').hide();
+	$('#dialog1 .weui-dialog__btn_primary').click(function(){
+		$('#dialog1').fadeOut(200);
+		$('#loadingToast').fadeIn(200);
 		$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
 			data:{orderId:orderId,orderDpid:orderDpid},
@@ -274,21 +282,18 @@ $(document).ready(function(){
 				if(parseInt(data)){
 					history.go(0);
 				}else{
-					$('#dialog2').show();
+					$('#dialog2').fadeIn(200);
 				}
 			}
 		});
 	});
-	$('#dialog3 .primary').click(function(){
+	$('#dialog3 .weui-dialog__btn_primary').click(function(){
 		location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$order['dpid'],'orderId'=>$order['lid']));?>';
 	});				
-	$('#dialog1 .default').click(function(){
-		$('#dialog1').hide();
-	});	
-	$('#dialog2 .primary').click(function(){
-		$('#dialog2').hide();
-	});	
-	$('#dialog3 .default').click(function(){
+	$('#dialogs').on('click', '.weui-dialog__btn_default', function(){
+        $(this).parents('.js_dialog').fadeOut(200);
+    });	
+	$('#dialog3 .weui-dialog__btn_default').click(function(){
 		history.go(0);
 	});	
 	$('.share').click(function(){
