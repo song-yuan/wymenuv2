@@ -83,7 +83,7 @@
 					    if(count == 10){
 						   isShowMore = true;
 					    }
-					    $('#activeshop').html(str);
+					    $('#activeshop').append(str);
 				    }
 				    if(isShowMore){
 				    	$('#more').show(); 
@@ -119,15 +119,19 @@
  	    	});
  	    	event.stopPropagation();
  		});
+ 		// 点击店铺列表
  	    $('#activeshop').on('click','li',function(){
  		    var href = $(this).attr('href');
  		    location.href = href;
  		});
+ 		// 输入店铺名查找店铺
  		$("#name-search").change(function(){
  			page = 0;
  			shopName = $(this).val();
+ 			$('#activeshop').html('');
  			getShopList();
  		});
+ 		// 点击查找更多
  		$('#more').on('click',function(){
  	    	page++;
  	    	getShopList();
