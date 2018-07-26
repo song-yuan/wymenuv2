@@ -24,7 +24,11 @@
 		$freightFee = 0;
 	}
 ?>
-
+<style>
+.weui-dialog__btn_primary {
+    color: #0bb20c !important;
+}
+</style>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
