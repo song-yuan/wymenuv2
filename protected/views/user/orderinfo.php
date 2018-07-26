@@ -172,12 +172,13 @@
 	<?php endforeach;?>
 	<?php endif;?>
 </div>
+
 <?php if($order['remark']):?>
-<div>
-<span>备注:</span>
-<span><?php echo $order['remark'];?></span>
+<div class="order-site">
+	<span>备注:<?php echo $order['remark'];?></span>
 </div>
 <?php endif;?>
+
 <div style="height:4em;"></div>
 <?php if($order['order_status']< 3):?>
 <div class="bttnbar">
