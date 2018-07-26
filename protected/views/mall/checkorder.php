@@ -38,21 +38,12 @@
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_003.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_005.js" type="text/javascript"></script>
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
-<style>
-.layui-layer-btn{height:42px;}
-.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:50%;}
-.weui_mask{z-index:9002;}
-.weui_dialog{z-index:9003;}
-</style>
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
-<!--  
-<div class="order-title">确认订单</div>
--->
-<div class="order-time" style="margin:10px 0;font-size: 14px;">
-	<p>餐厅名称:<?php echo $this->company['company_name'];?></p>
-	<p>餐厅地址:<?php echo $this->company['address'];?></p>
-</div>
+	<div class="order-time" style="margin:10px 0;font-size: 14px;">
+		<p>餐厅名称:<?php echo $this->company['company_name'];?></p>
+		<p>餐厅地址:<?php echo $this->company['address'];?></p>
+	</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
 	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌台:<?php echo $siteType['name'].$site['serial'];?></div>
@@ -487,7 +478,48 @@
 	<input type="hidden" name="takeout_typeid" value="0" />
 </form>
 
- <!--BEGIN dialog1-->
+<div id="dialogs">
+	<!--BEGIN dialog1-->
+	<div class="js_dialog" id="dialog1" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">储值支付提示</strong></div>
+	         <div class="weui-dialog__bd">确定使用储值支付?</div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+	         </div>
+	     </div>
+	</div>
+	<!--END dialog1-->
+	<!--BEGIN dialog2-->
+	<div class="js_dialog" id="dialog2" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">储值支付提示</strong></div>
+	         <div class="weui-dialog__bd">储值余额不足,请去充值后再下单</div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">去充值</a>
+	         </div>
+	     </div>
+	</div>      
+	<!--END dialog2-->
+	<!--BEGIN dialog-->
+	<div class="js_dialog" id="dialog" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">餐位数提示</strong></div>
+	         <div class="weui-dialog__bd"></div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+	         </div>
+	     </div>
+	</div>
+	<!--END dialog-->
+</div>
+<!--BEGIN dialog1-->
 <div class="weui_dialog_confirm" id="dialog" style="display: none;">
     <div class="weui_mask"></div>
     <div class="weui_dialog">
@@ -500,44 +532,6 @@
     </div>
 </div>
 <!--END dialog1-->
-<!--BEGIN dialog1-->
-<div class="weui_dialog_confirm" id="dialog1" style="display: none;">
-    <div class="weui_mask"></div>
-    <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">储值支付提示</strong></div>
-        <div class="weui_dialog_bd content" style="text-align:center;">确定使用储值支付?</div>
-        <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-        </div>
-    </div>
-</div>
-<!--END dialog1-->
-<!--BEGIN dialog2-->
-<div class="weui_dialog_confirm" id="dialog2" style="display: none;">
-    <div class="weui_mask"></div>
-    <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">储值支付提示</strong></div>
-        <div class="weui_dialog_bd content" style="text-align:center;">储值余额不足,请去充值后再下单</div>
-        <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" class="weui_btn_dialog primary">去充值</a>
-        </div>
-    </div>
-</div>
-<!--END dialog2-->
-<!--BEGIN actionSheet-->
-<div id="actionSheet_wrap">
-   <div class="weui_mask_transition" id="mask"></div>
-   <div class="weui_actionsheet" id="weui_actionsheet" style="z-index:9002;">
-         <div class="weui_actionsheet_menu" style="height:3em;overflow-y:auto;">
-         </div>
-         <div class="weui_actionsheet_action">
-         	<div class="weui_actionsheet_cell" id="actionsheet_cancel">确定</div>
-         </div>
-    </div>
-</div>
-<!--END actionSheet-->               			
 <script>
 function emptyCart(){
 	var timestamp=new Date().getTime()
@@ -1057,20 +1051,20 @@ $(document).ready(function(){
 			$('form').submit();
 		<?php endif;?>
 	});
-	$('#dialog .primary').click(function(){
+	$('#dialog .weui-dialog__btn_primary').click(function(){
 		$('#dialog').hide();
 		layer.load(2);
 		$('form').submit();
 	});
-	$('#dialog .default').click(function(){
+	$('#dialog .weui-dialog__btn_default').click(function(){
 		$('#dialog').hide();
 	});
-	$('#dialog1 .primary').click(function(){
+	$('#dialog1 .weui-dialog__btn_primary').click(function(){
 		$('#dialog1').hide();
 		layer.load(2);
 		$('form').submit();
 	});
-	$('#dialog1 .default').click(function(){
+	$('#dialog1 .weui-dialog__btn_default').click(function(){
 		if(isMustYue){
 			layer.msg('有储值支付活动产品<br>需使用储值支付');
 			location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";
@@ -1079,10 +1073,10 @@ $(document).ready(function(){
 			$('#dialog1').hide();
 		}
 	});
-	$('#dialog2 .primary').click(function(){
+	$('#dialog2 .weui-dialog__btn_primary').click(function(){
 		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$user['dpid'],'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
 	});
-	$('#dialog2 .default').click(function(){
+	$('#dialog2 .weui-dialog__btn_default').click(function(){
 		location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";
 	});
 });
