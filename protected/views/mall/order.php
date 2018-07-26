@@ -12,17 +12,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
-<style>
-.layui-layer-btn{height:42px;}
-.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:50%;}
-.weui_mask{z-index:9002;}
-.weui_dialog{z-index:9003;}
-</style>
 
 <form action="<?php echo $this->createUrl('/mall/generalSiteOrder',array('companyId'=>$this->companyId,'siteNoId'=>$siteId,'type'=>$this->type));?>" method="post">
-<!--  
-<div class="order-title">我的订单</div>
--->
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 
 <div class="order-info">
@@ -193,44 +184,34 @@
 	<input type="hidden" name="cupon" value="0" />
 </form>
 
-<!--BEGIN dialog1-->
-<div class="weui_dialog_confirm" id="dialog1" style="display: none;">
-    <div class="weui_mask"></div>
-    <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">储值支付提示</strong></div>
-        <div class="weui_dialog_bd content" style="text-align:center;">确定使用储值支付?</div>
-        <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-        </div>
-    </div>
+<div id="dialogs">
+	<!--BEGIN dialog1-->
+	<div class="js_dialog" id="dialog1" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">储值支付提示</strong></div>
+	         <div class="weui-dialog__bd">确定使用储值支付?</div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+	         </div>
+	     </div>
+	</div>
+	<!--END dialog1-->
+	<!--BEGIN dialog2-->
+	<div class="js_dialog" id="dialog2" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	         <div class="weui-dialog__hd"><strong class="weui-dialog__title">储值支付提示</strong></div>
+	         <div class="weui-dialog__bd">储值余额不足,请去充值后再下单</div>
+	         <div class="weui-dialog__ft">
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+	         	<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">去充值</a>
+	         </div>
+	     </div>
+	</div>      
+	<!--END dialog2-->
 </div>
-<!--END dialog1-->
-<!--BEGIN dialog2-->
-<div class="weui_dialog_confirm" id="dialog2" style="display: none;">
-    <div class="weui_mask"></div>
-    <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">储值支付提示</strong></div>
-        <div class="weui_dialog_bd content" style="text-align:center;">储值余额不足,请去充值后再下单</div>
-        <div class="weui_dialog_ft">
-            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" class="weui_btn_dialog primary">去充值</a>
-        </div>
-    </div>
-</div>
-<!--END dialog2-->
-<!--BEGIN actionSheet-->
-<div id="actionSheet_wrap">
-   <div class="weui_mask_transition" id="mask"></div>
-   <div class="weui_actionsheet" id="weui_actionsheet" style="z-index:9002;">
-         <div class="weui_actionsheet_menu" style="height:3em;overflow-y:auto;">
-         </div>
-         <div class="weui_actionsheet_action">
-         	<div class="weui_actionsheet_cell" id="actionsheet_cancel">确定</div>
-         </div>
-    </div>
-</div>
-<!--END actionSheet-->  
 <script>
 function reset_total(price){
 	var setTotal = $('#total').attr('total');
@@ -443,20 +424,20 @@ $(document).ready(function(){
 		layer.load(2);
 		$('form').submit();
 	});
-	$('#dialog .primary').click(function(){
+	$('#dialog .weui-dialog__btn_primary').click(function(){
 		$('#dialog').hide();
 		layer.load(2);
 		$('form').submit();
 	});
-	$('#dialog .default').click(function(){
+	$('#dialog .weui-dialog__btn_default').click(function(){
 		$('#dialog').hide();
 	});
-	$('#dialog1 .primary').click(function(){
+	$('#dialog1 .weui-dialog__btn_primary').click(function(){
 		$('#dialog1').hide();
 		layer.load(2);
 		$('form').submit();
 	});
-	$('#dialog1 .default').click(function(){
+	$('#dialog1 .weui-dialog__btn_default').click(function(){
 		if(isMustYue){
 			layer.msg('有储值支付活动产品<br>需使用储值支付');
 			location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";
@@ -465,10 +446,10 @@ $(document).ready(function(){
 			$('#dialog1').hide();
 		}
 	});
-	$('#dialog2 .primary').click(function(){
+	$('#dialog2 .weui-dialog__btn_primary').click(function(){
 		location.href = "<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$user['dpid'],'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>";
 	});
-	$('#dialog2 .default').click(function(){
+	$('#dialog2 .weui-dialog__btn_default').click(function(){
 		location.href = "<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>";
 	});
 });
