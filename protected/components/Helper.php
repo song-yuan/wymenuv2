@@ -54,6 +54,11 @@ class Helper
             return Yii::app()->user->companyId ;
         }
 	}
+	public static function getCompanyChildren($companyId,$type=1) {
+		$sql = 'select * from nb_company where comp_dpid='.$companyId.' and type='.$type;
+		$company = Yii::app()->db->createCommand($sql)->queryAll();
+		return $company;
+	}
 	public static function getCompanyIds($companyId) {
 		if(Yii::app()->user->role<='10')
 		{
