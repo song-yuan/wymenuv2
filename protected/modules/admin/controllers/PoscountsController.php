@@ -425,10 +425,17 @@ class PoscountsController extends BackendController
     	$cdpid = Yii::app()->request->getParam('cdpid',0);
     	$begin_time = Yii::app()->request->getParam('begintime',date('Y-m-d',time()));
     	$end_time = Yii::app()->request->getParam('endtime',date('Y-m-d',time()));
-    	$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryAll();
+    	$comname = '';
     	if(!$cdpid){
+    		$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0 order by dpid asc limit 1")->queryRow();
     		if($company){
-    			$cdpid = $company[0]['dpid'];
+    			$cdpid = $company['dpid'];
+    			$comname = $company['company_name'];
+    		}
+    	}else {
+    		$company = Yii::app()->db->createCommand("select * from nb_company where dpid=".$cdpid." and type=0 and delete_flag =0")->queryRow();
+    		if($company){
+    			$comname = $company['company_name'];
     		}
     	}
     	 
@@ -446,17 +453,24 @@ class PoscountsController extends BackendController
     		$tempArr = array($k+1,$model['company_name'],$model['poscode'].'',$model['create_at'],$type,$model['add_time'],$model['expire_time'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address']);
     		array_push($tableData, $tempArr);
     	}
-    	Helper::exportExcel($tableHead,$tableData,'续费报表-','续费报表');
+    	Helper::exportExcel($tableHead,$tableData,'续费报表--'.$comname,'续费对账报表');
     }
 	
     public function actionPospayExport(){
     	$cdpid = Yii::app()->request->getParam('cdpid',0);
     	$begin_time = Yii::app()->request->getParam('begintime',date('Y-m-d',time()));
     	$end_time = Yii::app()->request->getParam('endtime',date('Y-m-d',time()));
-    	$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0")->queryAll();
+    	$comname = '';
     	if(!$cdpid){
+    		$company = Yii::app()->db->createCommand("select * from nb_company where type=0 and delete_flag =0 order by dpid asc limit 1")->queryRow();
     		if($company){
-    			$cdpid = $company[0]['dpid'];
+    			$cdpid = $company['dpid'];
+    			$comname = $company['company_name'];
+    		}
+    	}else {
+    		$company = Yii::app()->db->createCommand("select * from nb_company where dpid=".$cdpid." and type=0 and delete_flag =0")->queryRow();
+    		if($company){
+    			$comname = $company['company_name'];
     		}
     	}
     
@@ -469,7 +483,7 @@ class PoscountsController extends BackendController
     		$tempArr = array($k+1,$model['company_name'],$model['create_at'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address']);
     		array_push($tableData, $tempArr);
     	}
-    	Helper::exportExcel($tableHead,$tableData,'美团支付开通报表-','美团支付开通报表');
+    	Helper::exportExcel($tableHead,$tableData,'美团支付开通报表---'.$comname,'美团支付开通对账报表');
     }
     
     public function actionUsed(){

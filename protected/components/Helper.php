@@ -275,36 +275,50 @@ class Helper
 	
 		// 设置工作表的名称
 		$activeSheet->setTitle($sheet_name);
-	
+		
+		//设置第1行的行高 第2行的行高
+		$activeSheet->getRowDimension('1')->setRowHeight(30);
+		$activeSheet->getRowDimension('2')->setRowHeight(24);
+		
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		
 		// 返回字符A的  ASCII 码值
 		$column = ord('A');
-	
+		
 		// 设置工作表的表头
 		foreach ($table_head as $k=>$v) {
-			// 字体大小
-			$activeSheet->getStyle(chr($column)."1")->getFont()->setSize(13);
-			// 加粗
-			$activeSheet->getStyle(chr($column)."1")->getFont()->setBold(true);
+			// 居中 加粗
+			$activeSheet->getStyle(chr($column)."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$activeSheet->getStyle(chr($column)."2")->getFont()->setBold(true);
 			// 设置单元格的值
-			$activeSheet->setCellValue(chr($column)."1", $v);
-			// 设置居中
-			$activeSheet->getStyle(chr($column))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-	
+			$activeSheet->setCellValue(chr($column)."2", $v);
 			$column++;
 		}
-	
+		//设置excel表格的 标题 合并单元格 设置居中
+		$activeSheet->setCellValue("A1", $sheet_name);
+		$activeSheet->getStyle("A1")->getFont()->setSize(20);
+		$activeSheet->getStyle("A1")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$activeSheet->mergeCells('A1:'.chr($column-1).'1');
+		
 		$column = ord('A');   // 返回字符的  ASCII 码值
 		// 将$data中的数据填充到单元格中
 		foreach ($data as $row=>$col) {
 			$i=0;
 			foreach ($col as $k=>$v ) {
-				$activeSheet->setCellValue(chr($column+$i).($row+2), $v);
+				// 字体大小
+				$activeSheet->getStyle(chr($column+$i).($row+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$activeSheet->setCellValue(chr($column+$i).($row+3), $v.'');
+				if($row==0){
+					$activeSheet->getColumnDimension(chr($column+$i))->setWidth(strlen($v)+5);
+				}
 				$i++;
 			}
+			//设置每列宽度
 		}
 	
 		// 导出Excel表格
-		$file_name .= date('YmdHis');   // 文件名
+		$file_name .='('. date('m.d'). ')';   // 文件名
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$file_name.'.xls"');
 		header('Cache-Control: max-age=0');
