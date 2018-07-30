@@ -537,7 +537,7 @@ class DataSyncOperation {
 		}
 		$orderKey = 'order-'.(int)$dpid.'-'.$createAt.'-'.$accountNo;
 		$orderCache = Yii::app()->redis->get($orderKey);
-		if($orderCache == 1){
+		if(!empty($orderCache)){
 			$msg = json_encode ( array (
 					'status' => false,
 					'msg' => '生成订单中,等待结果'.$orderKey,
@@ -545,7 +545,7 @@ class DataSyncOperation {
 			) );
 			return $msg;
 		}
-		$orderCache = Yii::app()->redis->set($orderKey,'1');
+		$orderCache = Yii::app()->redis->set($orderKey,json_encode($data));
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
