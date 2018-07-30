@@ -11,11 +11,6 @@
 
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/wechat_js/mobiscroll.min.js"></script>
 <style>
-.weui_select {
-    padding-left: 0px!important;
-    height: 1.41176471em!important;
-  
-}
 .bttn_small {
 	padding: 4px 10px;
 	font-size: 16px;
@@ -132,16 +127,16 @@
 		<div class="weui-dialog">
 			<div class="weui-dialog__bd">亲，生日不能修改哦</div>
 			<div class="weui-dialog__ft">
-			   <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary btn_birth">算你狠</a>
+			   <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default weui-dialog__btn_primary btn_birth">算你狠</a>
 			</div>
 		</div>                                                                                        
 	</div>
 	<div class="js_dialog" id=dialog2 style="display: none;">
 		<div class="weui-mask"></div>
 		<div class="weui-dialog">
-			<div class="weui-dialog__bd">亲，生日不能修改哦</div>
+			<div class="weui-dialog__bd"></div>
 			<div class="weui-dialog__ft">
-			   <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary btn_birth">算你狠</a>
+			   <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default weui-dialog__btn_primary btn_birth">确定</a>
 			</div>
 		</div>                                                                                        
 	</div>
