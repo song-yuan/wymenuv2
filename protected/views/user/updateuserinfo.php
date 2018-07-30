@@ -51,52 +51,52 @@
 	<div class="weui_cells_title">
             <?php  echo $title;?>
         </div>
-    <div class="weui_cells weui_cells_form">
-        <div class="weui_cell">
-            <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="name" name="user[user_name]" type="text" placeholder="请输入姓名" value="<?php echo $user['user_name'];?>"/>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell_hd"><label class="weui-label">姓名</label></div>
+            <div class="weui-cell_bd weui-cell_primary">
+                <input class="weui-input" id="name" name="user[user_name]" type="text" placeholder="请输入姓名" value="<?php echo $user['user_name'];?>"/>
             </div>
         </div>
-        <div class="weui_cell">
-            <div class="weui_cell_hd"><label class="weui_label">性别</label></div>
-            <div id='sex-val-box' class="weui_cell_bd weui_cell_primary " >
+        <div class="weui-cell">
+            <div class="weui-cell_hd"><label class="weui-label">性别</label></div>
+            <div id='sex-val-box' class="weui-cell_bd weui-cell_primary " >
             
-            <select class="weui_select" id="sex" name="user[sex]" >
+            <select class="weui-select" id="sex" name="user[sex]" >
                 <option value="0">保密</option>
                 <option value="1">男</option>
                 <option value="2">女</option>
             </select>
             </div>
         </div>
-       <div class="weui_cell">
-            <div class="weui_cell_hd"><label class="weui_label">手机</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
+       <div class="weui-cell">
+            <div class="weui-cell_hd"><label class="weui-label">手机</label></div>
+            <div class="weui-cell_bd weui-cell_primary">
+                <input class="weui-input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
-            <div class="weui_cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;color: #3CC51F;">
+            <div class="weui-cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;color: #3CC51F;">
                 <span id="countSpan" >获取验证码</span>
                 <span id="countdown"></span>
             </div>
-            <div class="weui_cell_ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
+            <div class="weui-cell_ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
                 <button class=" bttn_small" id="" type="button">修改</button>
             </div>
         </div>
-        <div class="weui_cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
-            <div class="weui_cell_hd" ><label class="weui_label">验证码</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" code_type = "<?php echo $user['mobile_num']?'1':'0'?>" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
+        <div class="weui-cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
+            <div class="weui-cell_hd" ><label class="weui_label">验证码</label></div>
+            <div class="weui-cell_bd weui-cell_primary">
+                <input class="weui-input" code_type = "<?php echo $user['mobile_num']?'1':'0'?>" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
         </div>
-        <div class="weui_cell">
-            <div class="weui_cell_hd"><label for="" class="weui_label">生日</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
+        <div class="weui-cell">
+            <div class="weui-cell_hd"><label for="" class="weui-label">生日</label></div>
+            <div class="weui-cell_bd weui-cell_primary">
                 <?php if($user['user_birthday']):?>
-                <span id="birthday" class="weui_input" data="true"><?php echo date('Y-m-d',strtotime($user['user_birthday']));?></span>
+                <span id="birthday" class="weui-input" data="true"><?php echo date('Y-m-d',strtotime($user['user_birthday']));?></span>
             	<input type="hidden" name="user[user_birthday]" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>">
             	<?php else:?>
-            	 <input class="weui_input"  data="false" id="birthday" name="user[user_birthday]" type="text" value="" placeholder="请填写生日" />
+            	 <input class="weui-input"  data="false" id="birthday" name="user[user_birthday]" type="text" value="" placeholder="请填写生日" />
             	<?php endif;?>
             </div>
         </div>
