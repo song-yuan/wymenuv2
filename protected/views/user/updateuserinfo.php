@@ -9,8 +9,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/mobiscroll.min.css">
 
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
-
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/wechat_js/mobiscroll.min.js"></script>
 <style>
 .weui_select {
@@ -78,7 +76,7 @@
             </div>
         </div>
         <div class="weui-cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
-            <div class="weui-cell__hd" ><label class="weui_label">验证码</label></div>
+            <div class="weui-cell__hd" ><label class="weui-label">验证码</label></div>
             <div class="weui-cell__bd weui-cell_primary">
                 <input class="weui-input" code_type = "<?php echo $user['mobile_num']?'1':'0'?>" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
@@ -268,10 +266,10 @@ $('document').ready(function(){
     });
        
     $('.bttn_small').click(function(){
-               $('#mobile').removeAttr('readonly');
-               $('.sentMessage').css('display','block');
-               $('.revise').css('display','none'); 
-               $('.code_box').css('display','flex');              
+         $('#mobile').removeAttr('readonly');
+         $('.sentMessage').css('display','block');
+         $('.revise').css('display','none'); 
+         $('.code_box').css('display','flex');              
     });
     $("#birthday[data = 'false']").mobiscroll().date({
         theme: 'android-holo-light',
