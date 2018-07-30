@@ -23,7 +23,7 @@
 <form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId,'type'=>$type,'back'=>$back));?>" method="post" >
 
 <div class="page cell">
-	<div class="ui-cells__title">
+	<div class="weui-cells__title">
             <?php  echo $title;?>
         </div>
     <div class="weui-cells weui-cells_form">
