@@ -24,12 +24,6 @@
         background-color: #3CC51F;
         color: #FFFFFF;
 }
-.btn_birth{
-       font-size: 22px; 
-       margin-top: 15px;
-        margin-bottom: 15px;
-        color:#04BE02;
-}
 .update_confirm{
     font-size: 22px; 
        margin-top: 15px;
@@ -48,19 +42,19 @@
 <form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId,'type'=>$type,'back'=>$back));?>" method="post" >
 
 <div class="page cell">
-	<div class="weui_cells_title">
+	<div class="ui-cells__title">
             <?php  echo $title;?>
         </div>
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-            <div class="weui-cell_hd"><label class="weui-label">姓名</label></div>
-            <div class="weui-cell_bd weui-cell_primary">
+            <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+            <div class="weui-cell__hd weui-cell_primary">
                 <input class="weui-input" id="name" name="user[user_name]" type="text" placeholder="请输入姓名" value="<?php echo $user['user_name'];?>"/>
             </div>
         </div>
         <div class="weui-cell">
-            <div class="weui-cell_hd"><label class="weui-label">性别</label></div>
-            <div id='sex-val-box' class="weui-cell_bd weui-cell_primary " >
+            <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
+            <div id='sex-val-box' class="weui-cell__bd weui-cell_primary " >
             
             <select class="weui-select" id="sex" name="user[sex]" >
                 <option value="0">保密</option>
@@ -70,28 +64,28 @@
             </div>
         </div>
        <div class="weui-cell">
-            <div class="weui-cell_hd"><label class="weui-label">手机</label></div>
-            <div class="weui-cell_bd weui-cell_primary">
+            <div class="weui-cell__hd"><label class="weui-label">手机</label></div>
+            <div class="weui-cell__bd weui-cell_primary">
                 <input class="weui-input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
-            <div class="weui-cell_ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;color: #3CC51F;">
+            <div class="weui-cell__ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;color: #3CC51F;">
                 <span id="countSpan" >获取验证码</span>
                 <span id="countdown"></span>
             </div>
-            <div class="weui-cell_ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
+            <div class="weui-cell__ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
                 <button class=" bttn_small" id="" type="button">修改</button>
             </div>
         </div>
         <div class="weui-cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
-            <div class="weui-cell_hd" ><label class="weui_label">验证码</label></div>
-            <div class="weui-cell_bd weui-cell_primary">
+            <div class="weui-cell__hd" ><label class="weui_label">验证码</label></div>
+            <div class="weui-cell__bd weui-cell_primary">
                 <input class="weui-input" code_type = "<?php echo $user['mobile_num']?'1':'0'?>" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
         </div>
         <div class="weui-cell">
-            <div class="weui-cell_hd"><label for="" class="weui-label">生日</label></div>
-            <div class="weui-cell_bd weui-cell_primary">
+            <div class="weui-cell__hd"><label for="" class="weui-label">生日</label></div>
+            <div class="weui-cell__bd weui-cell_primary">
                 <?php if($user['user_birthday']):?>
                 <span id="birthday" class="weui-input" data="true"><?php echo date('Y-m-d',strtotime($user['user_birthday']));?></span>
             	<input type="hidden" name="user[user_birthday]" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>">
@@ -122,33 +116,38 @@
 	</div>
 </div>
 
-<div id="no_revise" style="z-index:90;position: absolute; display: none;">                     
-        <div class="weui_dialog" >                           
-            
-            <div  class="birth_box">
-                亲，生日不能修改哦
-            </div> 
-            <div class="btn_ewm_out btn_birth" >    
-                <a href="javascript:;" class=" btn_birth">算你狠</a>
+<div id="dialogs">
+	<div class="js_dialog" id="dialogaddbirth" style="display: none;">
+            <div class="weui-mask"></div>
+            <div class="weui-dialog">
+                <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+                <div class="weui-dialog__bd">亲，生日提交后不能修改哦！</div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">修改</a>
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary btn-confirm">提交</a>
+                </div>
             </div>
-        </div>
-</div>  
-<div class="sp-lightbox1"  style="z-index:50;position: absolute;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;display: none;"></div>
-
-<div id="revise_birth" style="z-index:90;position: absolute; display: none;">                     
-        <div class="weui_dialog" >                           
-            
-            <div  class="birth_box">
-                亲，生日提交后不能修改哦！
-            </div> 
-            <div class="btn_ewm_out update_confirm" >    
-                <a href="javascript:;" class="btn-update" style="color:red;display: inline-block;margin-right: 70px;">修改</a>
-                <a href="javascript:;" class="btn-confirm" style="color:#04BE02">提交</a>
-            </div>           
-        </div>
-</div>  
-
-
+    </div>
+          
+	<div class="js_dialog" id="dialogbirth" style="display: none;">
+		<div class="weui-mask"></div>
+		<div class="weui-dialog">
+			<div class="weui-dialog__bd">亲，生日不能修改哦</div>
+			<div class="weui-dialog__ft">
+			   <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary btn_birth">算你狠</a>
+			</div>
+		</div>                                                                                        
+	</div>
+	<div class="js_dialog" id=dialog2 style="display: none;">
+		<div class="weui-mask"></div>
+		<div class="weui-dialog">
+			<div class="weui-dialog__bd">亲，生日不能修改哦</div>
+			<div class="weui-dialog__ft">
+			   <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary btn_birth">算你狠</a>
+			</div>
+		</div>                                                                                        
+	</div>
+</div>
 </body>
 <script type="text/javascript">
 	var date = new Date();
@@ -157,20 +156,20 @@
 	var currDate = date.getDate(); 
   function validate() {
         if($('#name').val() == ''){
-            $('#dialog2').find('.weui_dialog_bd').html('请填写姓名！');
-            $('#dialog2').show();
+            $('#dialog2').find('.weui-dialog__bd').html('请填写姓名！');
+            $('#dialog2').fadeIn(200);
             return false;}
         if($('#mobile').val() == ''){
-            $('#dialog2').find('.weui_dialog_bd').html('请填写联系方式！');
-            $('#dialog2').show();
+            $('#dialog2').find('.weui-dialog__bd').html('请填写联系方式！');
+            $('#dialog2').fadeIn(200);
             return false;}
         
         var verify_flag = false;
         if( $(".code_box").css("display")=='flex' ){
             verify_flag = true;
             if( $("#verifyCode").val() == '' ){
-                $('#dialog2').find('.weui_dialog_bd').html('请填写验证码！');
-                $('#dialog2').show();
+                $('#dialog2').find('.weui-dialog__bd').html('请填写验证码！');
+                $('#dialog2').fadeIn(200);
                 return false;
             }
         }
@@ -178,17 +177,16 @@
             return true;
          }else{
         	 if($('#birthday').val() == ''){
-                 $('#dialog2').find('.weui_dialog_bd').html('请填写生日！');
-                 $('#dialog2').show();
+                 $('#dialog2').find('.weui-dialog__bd').html('请填写生日！');
+                 $('#dialog2').fadeIn(200);
                  return false;
              }
              if(new Date(Date.parse($('#birthday').val())) > new Date(Date.parse(currYear+'/'+currMonth+'/'+currDate))){
-            	 $('#dialog2').find('.weui_dialog_bd').html('生日日期不能大于今天日期！');
-                 $('#dialog2').show();
+            	 $('#dialog2').find('.weui-dialog__bd').html('生日日期不能大于今天日期！');
+            	 $('#dialog2').fadeIn(200);
                  return false
              }
-              $("#revise_birth").css("display","block");
-              $('.sp-lightbox1').css('display','block');
+              $("#dialogaddbirth").fadeIn(200);
               return false;           
          }
         
@@ -204,8 +202,8 @@
                     async: false,
                     success:function(msg){
                             if(!parseInt(msg)){
-                                 $('#dialog2').find('.weui_dialog_bd').html('验证码错误');
-                            	$('#dialog2').show();
+                                $('#dialog2').find('.weui-dialog__bd').html('验证码错误');
+                                $('#dialog2').fadeIn(200);
                             	success = false;
                              
                             }
@@ -260,17 +258,13 @@ $('document').ready(function(){
                 data:{mobile:mobile,type:type,user_id:user_id},
                 success:function(msg){
                         if(!parseInt(msg)){
-                                $('#dialog2').find('.weui_dialog_bd').html('发送失败!'+msg);
-                                $('#dialog2').show();
+                                $('#dialog2').find('.weui-dialog__bd').html('发送失败!'+msg);
+                                $('#dialog2').fadeIn(200);
                         }else{
                                 setTime();
                         }
                 }
         });
-    });
-    	
-    $('#confirm').click(function(){
-            $('#dialog2').hide();
     });
        
     $('.bttn_small').click(function(){
@@ -278,7 +272,7 @@ $('document').ready(function(){
                $('.sentMessage').css('display','block');
                $('.revise').css('display','none'); 
                $('.code_box').css('display','flex');              
-               });
+    });
     $("#birthday[data = 'false']").mobiscroll().date({
         theme: 'android-holo-light',
         lang: 'zh',
@@ -287,21 +281,13 @@ $('document').ready(function(){
         endYear: currYear, //开始年份
     });
     $("#birthday[data = 'true']").click(function(){
-        $('#no_revise').css('display','block');
-         $('.sp-lightbox1').css('display','block');
-            });
-    $('.btn_birth').on('click', function () {
-                $('#no_revise').hide();
-                $(".sp-lightbox1").hide();
-            });  
-    $('.btn-update').on('click', function () {
-                $('#revise_birth').hide();
-                $(".sp-lightbox1").hide();
-    });  
-    $('.btn-confirm').on('click', function () {
-                $('#user-info').submit();
-               
-    });  
-       
+        $('#dialogbirth').fadeIn(200);
     });
+    $('#dialogs').on('click', '.weui-dialog__btn_default', function(){
+        $(this).parents('.js_dialog').fadeOut(200);
+    });	  
+    $('.btn-confirm').on('click', function () {
+        $('#user-info').submit();
+    });  
+});
 </script>
