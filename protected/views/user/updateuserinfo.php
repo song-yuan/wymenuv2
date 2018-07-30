@@ -10,14 +10,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/mobiscroll.min.css">
 
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/wechat_js/mobiscroll.min.js"></script>
-<style>
-.bttn_small {
-	padding: 4px 10px;
-	font-size: 16px;
-        background-color: #3CC51F;
-        color: #FFFFFF;
-}
-</style>
 
 <body class="add_address bg_lgrey2">
 <form id="user-info" action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId,'type'=>$type,'back'=>$back));?>" method="post" >
@@ -50,12 +42,12 @@
                 <input class="weui-input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
-            <div class="weui-cell__ft sentMessage"    style="display: <?php echo $user['mobile_num']?'none':'block';?>;font-size:100%;padding-left:5px;border-left:1px solid #888;color: #3CC51F;">
-                <span id="countSpan" >获取验证码</span>
+            <div class="weui-cell__ft sentMessage" style="display: <?php echo $user['mobile_num']?'none':'block';?>;">
+                <button class="weui-vcode-btn">获取验证码</button>
                 <span id="countdown"></span>
             </div>
             <div class="weui-cell__ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
-                <button class=" bttn_small" id="" type="button">修改</button>
+                <button class="weui-vcode-btn bttn_small">修改</button>
             </div>
         </div>
         <div class="weui-cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
