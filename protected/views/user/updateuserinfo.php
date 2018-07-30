@@ -43,11 +43,11 @@
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
             <div class="weui-cell__ft sentMessage" style="display: <?php echo $user['mobile_num']?'none':'block';?>;">
-                <button class="weui-vcode-btn">获取验证码</button>
+                <button class="weui-vcode-btn" type="button">获取验证码</button>
                 <span id="countdown"></span>
             </div>
             <div class="weui-cell__ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
-                <button class="weui-vcode-btn bttn_small">修改</button>
+                <button class="weui-vcode-btn bttn_small" type="button">修改</button>
             </div>
         </div>
         <div class="weui-cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
