@@ -43,7 +43,8 @@
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
             <div class="weui-cell__ft sentMessage" style="display: <?php echo $user['mobile_num']?'none':'block';?>;">
-                <button class="weui-vcode-btn" type="button">获取验证码</button>
+<!--                 <button class="weui-vcode-btn" type="button">获取验证码</button> -->
+                <span id="countSpan">获取验证码</span>
                 <span id="countdown"></span>
             </div>
             <div class="weui-cell__ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
@@ -207,9 +208,9 @@
     }
 $('document').ready(function(){
     $('.sentMessage').click(function(){
-            if($(this).hasClass('disable')){
-                    return;
-            }
+       if($(this).hasClass('disable')){
+          return;
+       }
 
         var mobile = $('#mobile').val();
 
