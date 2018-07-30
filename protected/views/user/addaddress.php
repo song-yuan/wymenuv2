@@ -9,7 +9,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/address.js?_=20180410"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
-<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp"></script>
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=BWSBZ-GYKE2-GQVUX-COYWJ-JWUM6-6FBDD"></script>
 
 <section class="add_address bg_lgrey2">
 	<form action="<?php echo Yii::app()->createUrl('/user/generateAddress',array('companyId'=>$this->companyId,'url'=>$url));?>" method="post" onsubmit="return validate()">
