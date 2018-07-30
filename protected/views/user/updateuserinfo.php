@@ -17,18 +17,6 @@
         background-color: #3CC51F;
         color: #FFFFFF;
 }
-.update_confirm{
-    font-size: 22px; 
-       margin-top: 15px;
-        margin-bottom: 15px;
-}
-.birth_box{
-    text-align: center;
-    margin-top: 25px;    
-    font-size: 22px;
-    border-bottom: 1px solid #CFCFCF;
-    padding-bottom: 25px;
-}
 </style>
 
 <body class="add_address bg_lgrey2">
@@ -51,8 +39,8 @@
             
             <select class="weui-select" id="sex" name="user[sex]" >
                 <option value="0">保密</option>
-                <option value="1">男</option>
-                <option value="2">女</option>
+                <option value="1" <?php if($user['sex']==1){ echo 'selected="selected"';}?>>男</option>
+                <option value="2" <?php if($user['sex']==2){ echo 'selected="selected"';}?>>女</option>
             </select>
             </div>
         </div>
