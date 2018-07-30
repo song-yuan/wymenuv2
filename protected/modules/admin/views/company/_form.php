@@ -1,4 +1,4 @@
-							<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp"></script>
+							<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=BWSBZ-GYKE2-GQVUX-COYWJ-JWUM6-6FBDD"></script>
 							<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/PCASClass.js');?>
 							<?php $form=$this->beginWidget('CActiveForm', array(
 									'id' => 'company-form',
