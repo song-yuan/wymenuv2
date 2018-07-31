@@ -137,9 +137,9 @@ class MtpPay{
 	    	}else{
 	    		// TRADE_PAY_ERROR TRADE_PAY_UNKOWN_ERROR TRADE_PAYING_ERROR TRANSFER_TIMEOUT_ERROR
 	    		// 上述情况需要轮询查询订单
-	    		if($errCode!='TRADE_PAY_ERROR' || 
-	    			$errCode!='TRADE_PAY_UNKOWN_ERROR' || 
-	    			$errCode!='TRADE_PAYING_ERROR' ||
+	    		if($errCode!='TRADE_PAY_ERROR' && 
+	    			$errCode!='TRADE_PAY_UNKOWN_ERROR' && 
+	    			$errCode!='TRADE_PAYING_ERROR' &&
 	    			$errCode!='TRANSFER_TIMEOUT_ERROR'){
 	    				$result = array(
 	    						"return_code"=>"SUCCESS",
