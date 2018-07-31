@@ -42,19 +42,23 @@
                 <input class="weui-input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
+            <!-- 
             <div class="weui-cell__ft sentMessage" style="display: <?php echo $user['mobile_num']?'none':'block';?>;">
                 <button class="weui-vcode-btn" type="button">获取验证码<span id="countdown"></span></button>
             </div>
+            -->
             <div class="weui-cell__ft revise" style="display: <?php echo $user['mobile_num']?'block':'none';?>; font-size:100%;padding-left:5px;">
                 <button class="weui-vcode-btn bttn_small" type="button">修改</button>
             </div>
         </div>
+        <!--
         <div class="weui-cell code_box" style="display:<?php echo $user['mobile_num']?'none':'flex'?>">
             <div class="weui-cell__hd" ><label class="weui-label">验证码</label></div>
             <div class="weui-cell__bd weui-cell_primary">
                 <input class="weui-input" code_type = "<?php echo $user['mobile_num']?'1':'0'?>" id="verifyCode"  show=""  name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
             </div>
         </div>
+        -->
         <div class="weui-cell">
             <div class="weui-cell__hd"><label for="" class="weui-label">生日</label></div>
             <div class="weui-cell__bd weui-cell_primary">
@@ -130,21 +134,30 @@
         if($('#name').val() == ''){
             $('#dialog2').find('.weui-dialog__bd').html('请填写姓名！');
             $('#dialog2').fadeIn(200);
-            return false;}
-        if($('#mobile').val() == ''){
+            return false;
+        }
+        var mobile = $('#mobile').val();
+        if(mobile == ''){
             $('#dialog2').find('.weui-dialog__bd').html('请填写联系方式！');
             $('#dialog2').fadeIn(200);
-            return false;}
-        
-        var verify_flag = false;
-        if( $(".code_box").css("display")=='flex' ){
-            verify_flag = true;
-            if( $("#verifyCode").val() == '' ){
-                $('#dialog2').find('.weui-dialog__bd').html('请填写验证码！');
-                $('#dialog2').fadeIn(200);
-                return false;
+            return false;
+        }else{
+        	var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+            if(!myreg.test(mobile)){ 
+                alert('请输入正确的手机号码！'); 
+                return false; 
             }
         }
+        
+//         var verify_flag = false;
+//         if( $(".code_box").css("display")=='flex' ){
+//             verify_flag = true;
+//             if( $("#verifyCode").val() == '' ){
+//                 $('#dialog2').find('.weui-dialog__bd').html('请填写验证码！');
+//                 $('#dialog2').fadeIn(200);
+//                 return false;
+//             }
+//         }
         if($("#birthday").attr("data")=='true'){
             return true;
          }else{
@@ -184,8 +197,8 @@
            if(success == false){
               return false; 
            }
-            
         }
+        return true;
     }
     
    var countdown = 60;
@@ -241,9 +254,9 @@ $('document').ready(function(){
        
     $('.bttn_small').click(function(){
          $('#mobile').removeAttr('readonly');
-         $('.sentMessage').css('display','block');
-         $('.revise').css('display','none'); 
-         $('.code_box').css('display','flex');              
+//          $('.sentMessage').css('display','block');
+//          $('.revise').css('display','none'); 
+//          $('.code_box').css('display','flex');              
     });
     $("#birthday[data = 'false']").mobiscroll().date({
         theme: 'android-holo-light',
