@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('支付订单');
+	$this->setPageTitle('订单详情');
 	$orderTatsePrice = 0.00;
 	$payYue = 0.00;
 	$payCupon = 0.00;
@@ -97,9 +97,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
-<div class="order-title">支付订单</div>
+<div class="order-title">等待支付</div>
 <?php if($address):?>
 	<?php if($order['order_type']==2):?>
 	<div class="address">

@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('我的订单');
+	$this->setPageTitle('订单详情');
 	
 	$orderTatsePrice = 0.00;
 ?>
