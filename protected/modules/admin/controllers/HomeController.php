@@ -22,19 +22,19 @@ class HomeController extends BackendController
     }
 
     public function actionIndex(){
-    	$dpid = $this->companyId;
     	$beginTime = date('Y-m-d 00:00:00');
     	$endTime = date('Y-m-d 23:59:59');
     	
     	$dpid = Yii::app()->request->getParam('dpid',0);
     	$companys = array();
-    	if($this->comptype==0){
+    	if($this->comptype == 0){
     		$companys = Helper::getCompanyChildren($this->companyId);
     		if($companys&&!$dpid){
     			$dpid = $companys[0]['dpid'];
     		}
+    	}else{
+    		$dpid = $this->companyId;
     	}
-    	
     	//  营业数据报表
     	$sql = 'select count(*) as all_order_num ,sum(should_total) as all_order_total from nb_order where dpid = '.$dpid.' and order_status in(3,4,8) and create_at >= "'.$beginTime.'" and create_at <= "'.$endTime.'"';
     	$order = Yii::app()->db->createCommand($sql)->queryRow();
