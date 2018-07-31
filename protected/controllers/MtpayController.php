@@ -116,7 +116,11 @@ class MtpayController extends Controller
 		if($payStatus != 'ok'){
 			$this->redirect(array('/user/orderInfo','companyId'=>$companyId,'orderId'=>$orderId,'orderDpid'=>$orderDpid));
 		}
+		$order = WxOrder::getOrder($orderId, $orderDpid);
 		
+		if(empty($order)){
+			throw new Exception('该订单不存在');
+		}
 		// 订单已支付
 		if(in_array($order['order_status'],array(3,4,8))){
 			$this->redirect(array('/user/orderInfo','companyId'=>$companyId,'orderId'=>$orderId,'orderDpid'=>$orderDpid));
