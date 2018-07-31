@@ -39,7 +39,7 @@
        <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">手机</label></div>
             <div class="weui-cell__bd weui-cell_primary">
-                <input class="weui-input" <?php echo $user['mobile_num']?'readonly="readonly"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
+                <input class="weui-input" <?php echo $user['mobile_num']?'disabled="disabled"':'' ?>  id="mobile"  name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
                 <input type='hidden' id='old_phone' value='<?php echo $user['mobile_num'];?>'/>
             </div>
             <!-- 
@@ -253,9 +253,9 @@ $('document').ready(function(){
     });
        
     $('.bttn_small').click(function(){
-         $('#mobile').removeAttr('readonly');
+         $('#mobile').removeAttr('disabled');
+         $('.revise').hide();
 //          $('.sentMessage').css('display','block');
-//          $('.revise').css('display','none'); 
 //          $('.code_box').css('display','flex');              
     });
     $("#birthday[data = 'false']").mobiscroll().date({
