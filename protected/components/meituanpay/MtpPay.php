@@ -109,29 +109,47 @@ class MtpPay{
 	    	$return_status = $obj['status'];
 	    	$pay_status = $obj['orderStatus'];
 	    	$tradeNo = $obj['tradeNo'];
+	    	$errCode = $obj['errCode'];
 	    	
-	    	//交易成功
-	    	if($return_status=='SUCCESS' && $pay_status=='ORDER_SUCCESS'){
-	    		$result = array(
-	    				"return_code"=>"SUCCESS",
-	    				"result_code"=>"SUCCESS",
-	    				"result_msg"=>$pay_status,
-	    				"msg"=>"支付成功！",
-	    				"transaction_id"=>$obj['tradeNo'],
-	    				"order_id"=>$obj['outTradeNo']
-	    		);
-	    		return $result;
-	    	}
-	    	// 交易失败
-	    	if($return_status=='SUCCESS' && ($pay_status=='ORDER_CLOSE' || $pay_status=='ORDER_FAILED')){
-	    		$result = array(
-	    				"return_code"=>"SUCCESS",
-	    				"result_code"=>"ERROR",
-	    				"result_msg"=>$pay_status,
-	    				"msg"=>"支付失败！",
-	    				"order_id"=>$obj['outTradeNo']
-	    		);
-	    		return $result;
+	    	if($return_status=='SUCCESS'){
+	    		//交易成功
+	    		if($pay_status=='ORDER_SUCCESS'){
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"SUCCESS",
+	    					"result_msg"=>$pay_status,
+	    					"msg"=>"支付成功！",
+	    					"transaction_id"=>$obj['tradeNo'],
+	    					"order_id"=>$obj['outTradeNo']
+	    			);
+	    			return $result;
+	    		}elseif($pay_status=='ORDER_CLOSE' || $pay_status=='ORDER_FAILED'){
+	    			// 交易失败
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"ERROR",
+	    					"result_msg"=>$pay_status,
+	    					"msg"=>"支付失败！",
+	    					"order_id"=>$obj['outTradeNo']
+	    			);
+	    			return $result;
+	    		}
+	    	}else{
+	    		// TRADE_PAY_ERROR TRADE_PAY_UNKOWN_ERROR TRADE_PAYING_ERROR TRANSFER_TIMEOUT_ERROR
+	    		// 上述情况需要轮询查询订单
+	    		if($errCode!='TRADE_PAY_ERROR' || 
+	    			$errCode!='TRADE_PAY_UNKOWN_ERROR' || 
+	    			$errCode!='TRADE_PAYING_ERROR' ||
+	    			$errCode!='TRANSFER_TIMEOUT_ERROR'){
+	    				$result = array(
+	    						"return_code"=>"SUCCESS",
+	    						"result_code"=>"ERROR",
+	    						"result_msg"=>$pay_status,
+	    						"msg"=>"支付失败！",
+	    						"order_id"=>$obj['outTradeNo']
+	    				);
+	    				return $result;
+	    		}
 	    	}
     	}
     	
@@ -150,29 +168,43 @@ class MtpPay{
     		$return_status = $obj['status'];
 	    	$pay_status = $obj['orderStatus'];
 	    	$tradeNo = $obj['tradeNo'];
-	    	// 交易成功
-    		if($return_status=='SUCCESS' && $pay_status=='ORDER_SUCCESS'){
-    			$result = array(
-    					"return_code"=>"SUCCESS",
-    					"result_code"=>"SUCCESS",
-    					"result_msg"=>$pay_status,
-    					"msg"=>"支付成功！",
-    					"transaction_id"=>$obj['tradeNo'],
-    					"order_id"=>$obj['outTradeNo']
-    			);
-    			return $result;
-    		}
-    		// 交易失败a
-    		if($return_status=='SUCCESS' && ($pay_status=='ORDER_CLOSE' || $pay_status=='ORDER_FAILED')){
-    			$result = array(
-    					"return_code"=>"SUCCESS",
-    					"result_code"=>"ERROR",
-    					"result_msg"=>$pay_status,
-    					"msg"=>"支付失败！",
-    					"order_id"=>$obj['outTradeNo']
-    			);
-    			return $result;
-    		}
+	    	$errCode = $obj['errCode'];
+	    	
+	    	if($return_status=='SUCCESS'){
+	    		// 交易成功
+	    		if($pay_status=='ORDER_SUCCESS'){
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"SUCCESS",
+	    					"result_msg"=>$pay_status,
+	    					"msg"=>"支付成功！",
+	    					"transaction_id"=>$obj['tradeNo'],
+	    					"order_id"=>$obj['outTradeNo']
+	    			);
+	    			return $result;
+	    		}elseif($pay_status=='ORDER_CLOSE' || $pay_status=='ORDER_FAILED'){
+	    			// 交易失败
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"ERROR",
+	    					"result_msg"=>$pay_status,
+	    					"msg"=>"支付失败！",
+	    					"order_id"=>$obj['outTradeNo']
+	    			);
+	    			return $result;
+	    		}
+	    	}else{
+	    		if($errCode != 'TRADE_PAY_QUERY_ERROR'){
+	    			$result = array(
+	    					"return_code"=>"SUCCESS",
+	    					"result_code"=>"ERROR",
+	    					"result_msg"=>$pay_status,
+	    					"msg"=>"支付失败！",
+	    					"order_id"=>$obj['outTradeNo']
+	    			);
+	    			return $result;
+	    		}
+	    	}
     		sleep(2);
     	}
     	$cancelData = array(
