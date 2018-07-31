@@ -103,16 +103,20 @@ class MtpayController extends Controller
 		}
 		echo '{"status":"FAIL"}';exit;
 	}
+	/**
+	 * 支付后跳转页面
+	 * 
+	 */
 	public function actionMtpayreturn(){
 		$companyId = Yii::app()->request->getParam('companyId');
+		$payStatus = Yii::app()->request->getParam('payStatus');
 		$orderId = Yii::app()->request->getParam('orderId');
 		$orderDpid = Yii::app()->request->getParam('orderDpid');
 		
-		$order = WxOrder::getOrder($orderId, $orderDpid);
-		
-		if(empty($order)){
-			throw new Exception('该订单不存在');
+		if($payStatus != 'ok'){
+			$this->redirect(array('/user/orderInfo','companyId'=>$companyId,'orderId'=>$orderId,'orderDpid'=>$orderDpid));
 		}
+		
 		// 订单已支付
 		if(in_array($order['order_status'],array(3,4,8))){
 			$this->redirect(array('/user/orderInfo','companyId'=>$companyId,'orderId'=>$orderId,'orderDpid'=>$orderDpid));
