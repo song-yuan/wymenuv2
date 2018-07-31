@@ -98,7 +98,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 
-<div class="order-title">等待支付</div>
+<div class="order-title">等待付款</div>
 <?php if($address):?>
 	<?php if($order['order_type']==2):?>
 	<div class="address">
