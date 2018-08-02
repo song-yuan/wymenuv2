@@ -95,12 +95,16 @@ class DataAppSyncController extends Controller
 	 * 
 	 */
 	 public function actionGetSyncData(){
-	 	$ptype = 0;// 收款机 从模式 不接单 0 主pos 1 从pos
+	 	// 收款机 从模式 不接单  0 主pos 1 从pos
+	 	$ptype = 0;
 	    $dpid = Yii::app()->request->getParam('dpid');
 	    $dpidArr = explode(',', $dpid);
 	    if(count($dpidArr)>1){
 	    	$dpid = $dpidArr[0];
 	    	$ptype = $dpidArr[1];
+	    	if($ptype == 'NaN'){
+	    		$ptype = 0;
+	    	}
 	    }else{
 	    	$dpid = $dpidArr[0];
 	    }
