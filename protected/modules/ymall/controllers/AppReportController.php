@@ -111,7 +111,7 @@ class AppReportController extends Controller
 		 	$refundsql = "select sum(pay_amount) as pay_amount from nb_order_pay where dpid in(".$admindpid.") and pay_amount<0 and create_at >= '".$beginMonth."' and create_at <= '".$endMonth."'";
 		 	$refunds = Yii::app()->db->createCommand($refundsql)->queryAll();
 		 }else{
-		 	$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total,,sum(should_total) as pay_amount from nb_order where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and order_status in (3,4,8) and dpid=".$companyId.")o";
+		 	$ordersql ="select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total,sum(should_total) as pay_amount from nb_order where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and order_status in (3,4,8) and dpid=".$companyId.")o";
 		 	$orders = Yii::app()->db->createCommand($ordersql)->queryAll();
 		 	
 		 	$monthsql = "select counts,number,reality_total,pay_amount from (select dpid,count(*) as counts,sum(number) as number,sum(reality_total) as reality_total,sum(should_total) as pay_amount from nb_order where create_at >= '".$beginMonth."' and create_at <= '".$endMonth."' and order_status in (3,4,8) and dpid=".$companyId.")o";
