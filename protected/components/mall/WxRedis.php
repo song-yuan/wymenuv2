@@ -36,10 +36,14 @@ class WxRedis
 	 */
 	public static function dealRedisData($dpid){
 		$nIndex = self::redisIndex($dpid);
+		// 同步订单锁 key
 		$key = 'order_online_total_operation_'.$nIndex;
+		// 订单队列key
 		$orderKey = 'redis-order-data-'.$nIndex;
+		// 订单队列长度
 		$orderSize = Yii::app()->redis->lLen($orderKey);
 		if($orderSize > 0){
+			// 生成订单时间戳
 			Yii::app()->redis->set('redis-cloud-order-time',time());
 			$orderData = Yii::app()->redis->rPop($orderKey);
 			if($orderData){
@@ -78,6 +82,7 @@ class WxRedis
 			}
 			self::dealRedisData($dpid);
 		}else{
+			Yii::app()->redis->set('redis-cloud-order-time',time());
 			Yii::app()->redis->set($key,'0');
 		}
 	}

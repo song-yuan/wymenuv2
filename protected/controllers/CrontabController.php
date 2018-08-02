@@ -15,54 +15,49 @@ class  CrontabController extends Controller
 	public function actionRijieStatistics(){
 		$result = WxRiJie::rijieStatistics();
 	}
+	// 同步失败的数据 重新同步
 	public function actionRedisOrder(){
-		$sql = 'select dpid from nb_company where type=1 and delete_flag = 0';
-		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
-		foreach ($dpids as $dpid){
-			$syncData = DataSyncOperation::getAllSyncFailure($dpid);
-			$syncArr = json_decode($syncData,true);
-			if(!empty($syncArr)){
-				foreach ($syncArr as $sync){
-					$lid = $sync['lid'];
-					$dpid = $sync['dpid'];
-					$orderData = $sync['content'];
-					$orderDataArr = json_decode($orderData,true);
-					if(!is_array($orderDataArr)){
-						continue;
-					}
-					$type = $orderDataArr['type'];
-					if($type==2){
-						// 新增订单
-						$result = DataSyncOperation::operateOrder($orderDataArr);
-					}elseif($type==4){
-						// 退款
-						$result = DataSyncOperation::retreatOrder($orderDataArr);
-					}elseif($type==3){
-						// 增加会员卡
-						$result = DataSyncOperation::addMemberCard($orderDataArr);
-					}elseif($type==5){
-						$content = $orderDataArr['data'];
-						$contentArr = explode('::', $content);
-						$rjDpid = $contentArr[0];
-						$rjUserId = $contentArr[1];
-						$rjCreateAt = $contentArr[2];
-						$rjPoscode = $contentArr[3];
-						$rjBtime = $contentArr[4];
-						$rjEtime = $contentArr[5];
-						$rjcode = $contentArr[6];
-						$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
-					}
-					$resObj = json_decode($result);
-					if($resObj->status){
-						DataSyncOperation::delSyncFailure($lid,$dpid);
-					}else{
-						Helper::writeLog('再次同步失败:同步内容:'.$dpid.json_encode($sync).'错误信息:'.$resObj->msg);
-					}
+		$syncData = DataSyncOperation::getAllSyncFailure($dpid, 1);
+		$syncArr = json_decode($syncData,true);
+		if(!empty($syncArr)){
+			foreach ($syncArr as $sync){
+				$lid = $sync['lid'];
+				$dpid = $sync['dpid'];
+				$orderData = $sync['content'];
+				$orderDataArr = json_decode($orderData,true);
+				if(!is_array($orderDataArr)){
+					continue;
+				}
+				$type = $orderDataArr['type'];
+				if($type==2){
+					// 新增订单
+					$result = DataSyncOperation::operateOrder($orderDataArr);
+				}elseif($type==4){
+					// 退款
+					$result = DataSyncOperation::retreatOrder($orderDataArr);
+				}elseif($type==3){
+					// 增加会员卡
+					$result = DataSyncOperation::addMemberCard($orderDataArr);
+				}elseif($type==5){
+					$content = $orderDataArr['data'];
+					$contentArr = explode('::', $content);
+					$rjDpid = $contentArr[0];
+					$rjUserId = $contentArr[1];
+					$rjCreateAt = $contentArr[2];
+					$rjPoscode = $contentArr[3];
+					$rjBtime = $contentArr[4];
+					$rjEtime = $contentArr[5];
+					$rjcode = $contentArr[6];
+					$result = WxRiJie::setRijieCode($rjDpid,$rjCreateAt,$rjPoscode,$rjBtime,$rjEtime,$rjcode);
+				}
+				$resObj = json_decode($result);
+				if($resObj->status){
+					DataSyncOperation::delSyncFailure($lid,$dpid);
+				}else{
+					Helper::writeLog('再次同步失败:同步内容:'.$dpid.json_encode($sync).'错误信息:'.$resObj->msg);
 				}
 			}
 		}
-		
-		
 	}
 	/**
 	 *
