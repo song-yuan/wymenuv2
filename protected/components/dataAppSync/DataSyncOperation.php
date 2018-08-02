@@ -2085,10 +2085,14 @@ class DataSyncOperation {
 	/**
 	 * 
 	 * 获取所有同步失败列表
-	 * 
+	 * $type 0 获取店铺 1 全部同步失败数据
 	 */
-	public static function getAllSyncFailure($dpid) {
-		$sql = 'select * from nb_sync_failure where dpid='.$dpid.' and delete_flag=0';
+	public static function getAllSyncFailure($dpid, $type = 0) {
+		if($type){
+			$sql = 'select * from nb_sync_failure where delete_flag=0';
+		}else{
+			$sql = 'select * from nb_sync_failure where dpid='.$dpid.' and delete_flag=0';
+		}
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return json_encode($results);
 	}
