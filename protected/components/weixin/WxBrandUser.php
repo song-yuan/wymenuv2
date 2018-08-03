@@ -208,7 +208,10 @@ class WxBrandUser {
 		$points = Yii::app()->db->createCommand($sql)->queryRow();
 		return $points['total']?$points['total']:0;
 	}
-	// 判断会员是否再该店第一次下单
+	/**
+	 * 判断会员是否再该店第一次下单
+	 * 
+	 */ 
 	public static function isUserFirstOrder($user,$dpid){
 		if($user['dpid']==$user['weixin_group']){
 			$openId = $user['openid'];
