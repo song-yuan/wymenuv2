@@ -389,7 +389,7 @@ class InventoryController extends BackendController
 							'type'=>4,
 							'logid'=>$pid,
 							'material_id'=>$id,
-							'stock_num' => $minusnum,
+							'stock_num' => $nowNum,
 							'original_num' => 0,
 							'unit_price'=>0,
 							'resean'=>'盘损消耗',
