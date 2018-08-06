@@ -134,14 +134,14 @@
 						<div style="display: none;" id="storagedetail" val="1"></div>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
-								<td><?php echo $model->reality_stock;?></td>
-								<td ><?php echo $model->taking_stock;?></td>
-								<td><?php echo $model->number;?></td>
-								<td><?php echo $model->reasion;?></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td style="width:16%"><?php echo Common::getmaterialName($model['material_id']);?></td>
+								<td><?php echo $model['reality_stock'];?></td>
+								<td ><?php echo $model['taking_stock'];?></td>
+								<td><?php echo $model['number'];?></td>
+								<td><?php echo $model['reasion'];?></td>
 								<td class="center">
-								<a style="color: #121111;" href="javascript:;"><span id="" detailid="<?php echo $model->lid; ?>" detailname="<?php echo Common::getmaterialName($model->material_id);?>" realitystock="<?php echo $model->reality_stock;?>" takingstock="<?php echo $model->taking_stock;?>" number="<?php echo $model->number;?>" reason="<?php echo $model->reasion;?>" class="reason" style="border:1px solid silver;padding: 4px 6px;background-color: rgb(92, 226, 200);">编辑</span></a>
+								<a style="color: #121111;" href="javascript:;"><span id="" detailid="<?php echo $model['lid']; ?>" detailname="<?php echo Common::getmaterialName($model['material_id']);?>" realitystock="<?php echo $model['reality_stock'];?>" takingstock="<?php echo $model['taking_stock'];?>" number="<?php echo $model['number'];?>" reason="<?php echo $model['reasion'];?>" class="reason" style="border:1px solid silver;padding: 4px 6px;background-color: rgb(92, 226, 200);">编辑</span></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

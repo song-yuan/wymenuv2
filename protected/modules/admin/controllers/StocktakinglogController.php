@@ -41,9 +41,11 @@ class StocktakinglogController extends BackendController
 		$status = Yii::app()->request->getParam('status','0');
 		$stockTakingId = Yii::app()->request->getParam('id',0);
 		
-		$criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$this->companyId.' and t.logid ='.$stockTakingId.' and t.delete_flag=0';
-		$models = StockTakingDetail::model()->findAll($criteria);
+		$sql = 'select lid,logid,material_id,material_stock_id,sum(reality_stock) as reality_stock,sum(taking_stock) as taking_stock,sum(number) as number,reasion from nb_stock_taking_detail where dpid='.$this->companyId.' and logid ='.$stockTakingId.' and delete_flag=0 group by material_id';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+// 		$criteria = new CDbCriteria;
+// 		$criteria->condition =  't.dpid='.$this->companyId.' and t.logid ='.$stockTakingId.' and t.delete_flag=0';
+// 		$models = StockTakingDetail::model()->findAll($criteria);
 		$this->render('detailindex',array(
 				'models'=>$models,
 				'status'=>$status,
