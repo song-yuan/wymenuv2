@@ -65,6 +65,8 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
+								<th><?php echo yii::t('app','单位规格');?></th>
+								<th><?php echo yii::t('app','单位名称');?></th>
 								<th><?php echo yii::t('app','入库价格');?></th>
 								<th><?php echo yii::t('app','入库数量');?></th>
 								<th><?php echo yii::t('app','赠品数量');?></th>
@@ -75,10 +77,15 @@
 						<tbody>
 						<?php if($models) :?>
 						<div style="display: none;" id="storagedetail" val="1"></div>
-						<?php foreach ($models as $model):?>
+						<?php 
+							foreach ($models as $model):
+								$materialUnit = Common::getmaterialUnit($model->material_id, $model->dpid, 0);
+						?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
+								<td style="width:16%"><?php echo $materialUnit['material_name'];?></td>
+								<td style="width:16%"><?php echo $materialUnit['unit_specifications'];?></td>
+								<td style="width:16%"><?php echo $materialUnit['unit_name'];?></td>
 								<td class="price"><?php echo $model->price;?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>

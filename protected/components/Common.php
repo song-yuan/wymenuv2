@@ -53,6 +53,20 @@ class Common{
         $materialname = $material['material_name'];
         return $materialname;
     }
+    // 获取门店的原料单位和规格 type 0 入库单位 1 零售单位
+    static public function getmaterialUnit($materialId,$dpid,$type){
+    	$sql = 'select t.lid,t.dpid,t.material_name,t1.unit_name,t1.unit_specifications from nb_product_material t,nb_material_unit t1 where';
+    	if($type==0){
+    		$sql .=' t.stock_unit_id=t1.lid';
+    	}else{
+    		$sql .=' t.sales_unit_id=t1.lid';
+    	}
+    	$sql .=' and t.dpid=t1.dpid and lid='.$materialId.' and dpid='.$dpid.' and t1.unit_type='.$type;
+    	
+    	$connect = Yii::app()->db->createCommand($sql);
+    	$materialunit = $connect->queryRow();
+    	return $materialunit;
+    }
     static public function getgoodsName($materialId){
     	$materialname = "";
     	$sql="select goods_name,is_batch from nb_goods where lid=".$materialId;
