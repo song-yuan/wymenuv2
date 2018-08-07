@@ -61,7 +61,7 @@ class Common{
     	}else{
     		$sql .=' t.sales_unit_id=t1.lid';
     	}
-    	$sql .=' and t.dpid=t1.dpid and lid='.$materialId.' and dpid='.$dpid.' and t1.unit_type='.$type;
+    	$sql .=' and t.dpid=t1.dpid and t.lid='.$materialId.' and t.dpid='.$dpid.' and t1.unit_type='.$type;
     	
     	$connect = Yii::app()->db->createCommand($sql);
     	$materialunit = $connect->queryRow();
