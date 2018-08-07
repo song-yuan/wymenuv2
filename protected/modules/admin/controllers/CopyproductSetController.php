@@ -295,6 +295,7 @@ class CopyproductSetController extends BackendController
 			                        'member_price'=>$mb_price,
 			                        'description'=>$prodsets->description,
 			                        'rank'=>$prodsets->rank,
+			                    	'sort'=>$prodsets->sort,
 			                        'is_member_discount'=>$prodsets->is_member_discount,
 			                        'is_special'=>$prodsets->is_special,
 			                        'is_discount'=>$prodsets->is_discount,
