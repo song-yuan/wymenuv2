@@ -101,7 +101,7 @@
 						<div style="display: none;" id="storagedetail" val="0"></div>
 						<?php endif;?>
 							<tr>
-								<td colspan="7" style="text-align: right;">
+								<td colspan="9" style="text-align: right;">
 								<?php if($storage->status==1):?><?php if(Yii::app()->user->role<15):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" cfv="1"/><?php else:?><span style="color:red">等待确认入库</span><?php endif;?>
 								<?php elseif($storage->status==3):?><span style="color:red">已入库</span>
 								<?php elseif($storage->status==2):?><?php if(Yii::app()->user->role<15):?><input id="status-2" type="button" class="btn blue" value="重新送审" storage-id="<?php echo $storage->lid;?>" cfv="1"/><?php else:?><span style="color:red">等待重新送审</span><?php endif;?>
