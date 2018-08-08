@@ -161,7 +161,9 @@
 			var cfv = $(this).attr('cfv');
 			
 			if(storagedetail == 1 && a == 0 && cfv){
-			$.ajax({
+				$(this).attr('cfv',0);
+				a = 1;
+				$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageIn' , array('companyId'=>$this->companyId));?>',
 					data:{sid:id},
 					success:function(msg){
@@ -174,10 +176,9 @@
 						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 					},
 				});
-				$(this).attr('cfv',0);	a = 1 ;
 			}else{
-					alert('请添加需要入库的品项或重复提交');
-				}
+				alert('请添加需要入库的品项或重复提交');
+			}
 		});
 		$('#status-0').click(function(){
 			var pid = $(this).attr('storage-id');
@@ -204,6 +205,8 @@
 				}
 			}
 			if(storagedetail == 1 && a == 0 && cfv){
+				$(this).attr('cfv',0);
+				a = 1;
 				$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
 					data:{type:1,pid:pid},
@@ -219,11 +222,9 @@
 									}else{
 										alert('入库失败2!');
 									}
-									//history.go(0);
 									location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 								},
 							});
-							//alert('送审成功');
 						}else{
 							alert('入库失败2!');
 						}
@@ -231,10 +232,9 @@
 						//location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
-				$(this).attr('cfv',0);	a = 1 ;
 			}else{
 				alert('请添加需要入库的详细品项或重复提交');
-				}
+			}
 		});
 
 		$('#status-1').click(function(){
@@ -242,70 +242,73 @@
 			var storagedetail = $('#storagedetail').attr('val');
 			var cfv = $(this).attr('cfv');
 			if(storagedetail == 1 && cfv){
-			if(confirm('确认驳回该入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
-					data:{type:2,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('驳回成功');
-						}else{
-							alert('驳回失败');
+				if(confirm('确认驳回该入库单')){
+					$(this).attr('cfv',0);
+					$.ajax({
+						url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
+						data:{type:2,pid:pid},
+						success:function(msg){
+							if(msg=='true'){
+								alert('驳回成功');
+							}else{
+								alert('驳回失败');
+							}
+							location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			$(this).attr('cfv',0);
+					});
+				}
 			}else{
 				alert('请添加需要入库的详细品项或重复提交');
-				}
+			}
 		});
 		$('#status-2').click(function(){
 			var pid = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
 			var cfv = $(this).attr('cfv');
 			if(storagedetail == 1 && cfv){
-			if(confirm('确认重新送审该入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
-					data:{type:4,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('重新审核成功');
-						}else{
-							alert('重新审核失败');
+				if(confirm('确认重新送审该入库单')){
+					$(this).attr('cfv',0);
+					$.ajax({
+						url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
+						data:{type:4,pid:pid},
+						success:function(msg){
+							if(msg=='true'){
+								alert('重新审核成功');
+							}else{
+								alert('重新审核失败');
+							}
+							//history.go(0);
+							location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
-			}
-			$(this).attr('cfv',0);
+					});
+				}
 			}else{
 				alert('请添加需要入库的详细品项或重复提交');
-				}
+			}
 		});
 		$('#status-4').click(function(){
 			var pid = $(this).attr('storage-id');
-			
-			if(confirm('确认审核入库单')){
-				$.ajax({
-					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
-					data:{type:1,pid:pid},
-					success:function(msg){
-						if(msg=='true'){
-							alert('审核成功');
-						}else{
-							alert('审核失败');
+			var cfv = $(this).attr('cfv');
+			if(cfv){
+				if(confirm('确认审核入库单')){
+					$(this).attr('cfv',0);
+					$.ajax({
+						url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
+						data:{type:1,pid:pid},
+						success:function(msg){
+							if(msg=='true'){
+								alert('审核成功');
+							}else{
+								alert('审核失败');
+							}
+							//history.go(0);
+							location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 						}
-						//history.go(0);
-						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-					}
-				});
+					});
+				}
+			}else{
+				alert('请添加需要入库的详细品项或重复提交');
 			}
-			
 		});
     var $modal = $('.modal');
     $('.add_btn').on('click', function(){
