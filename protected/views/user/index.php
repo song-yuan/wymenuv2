@@ -202,7 +202,7 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <!-- 
+                   <?php if($userLevel): ?>
                     <div class="empty1"></div>                     
                     <a class="weui_cell js_cell" href="javascript:;" data-id="privilege" data_target="#chanel_demo1">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdzxtq.png" class="icon_nav" alt=""></span>
@@ -212,95 +212,24 @@
                         <div class="up_down1" ></div>
                     </a>
                     <div class="collapse pri_style" id="chanel_demo1">            
-                        <?php   if($userLevel): ?>
-                        <div class="introduce"><?php  echo $userLevel['level_name']; ?>：</div>
+                        <div class="introduce"><?php echo $userLevel['level_name']; ?>：</div>
                         <ul>
-                            <li>到店即可享受&nbsp;<?php  echo $userLevel['level_discount']*10;?>&nbsp;折优惠</li>
-                            <li>生日可享受&nbsp;<?php echo $userLevel['birthday_discount']*10;?>&nbsp;折优惠</li>
+                            <li>到店即可享受&nbsp;<?php echo WxBrandUser::numTochinese($userLevel['level_discount']*10);?>&nbsp;折优惠</li>
+                            <li>生日当天可享受&nbsp;<?php echo WxBrandUser::numTochinese($userLevel['birthday_discount']*10);?>&nbsp;折优惠</li>
                         </ul>
-                        <?php  else: ?>
-                        <div class="introduce">暂无等级特权</div>
-                        <?php endif; ?>
                     </div>
-   					-->
+   					<?php endif; ?>
                     
                     
-                    
-                    
-                    <div class="empty2 font_l">商家优惠活动</div>
-                    <a class="weui_cell js_cell" href="javascript:;" data-id="sale1" data_target="#chanel_demo2">
-                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
-                        <div class="weui_cell_bd weui_cell_primary">
-                            <p>满减</p>
-                        </div>
-                        <div class="up_down1">
-                        </div>
-                    </a>
-                    <div class="collapse sale1_style" id="chanel_demo2">
-                        <!--  add some code here -->
-                       <div class="introduce">详情说明</div>
-                      <?php 
-                            if($minus):
-                            foreach ($minus as $v):
-                        ?>                        
-                            <ul>
-                                <li><?php echo $v['title'];?>
-                                   （使用时间：<?php echo date('Y.m.d',strtotime($v['begin_time']));?> -
-                                    <?php echo date('Y.m.d',strtotime($v['end_time']));?>）
-                                </li>
-                            </ul> 
-                        <?php 
-                            endforeach; 
-                            else :
-                        ?>
-                           <ul>
-                               <li>暂无满减优惠活动</li> 
-                           </ul> 
-                        <?php endif; ?>
-                    </div>
-                    
-                    <a class="weui_cell js_cell" href="javascript:;" data-id="sale2" data_target="#chanel_demo3">
-                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl?>/img/wechat_img/icon-wdyh.png" class="icon_nav" alt=""></span>
-                        <div class="weui_cell_bd weui_cell_primary">
-                            <p>满送</p>
-                        </div>
-                        <div class="up_down1">
-                        </div>
-                    </a>
-                    <div class="collapse sale2_style" id="chanel_demo3">
-                        <!--  add some code here -->
-                        <div class="introduce">  详情说明</div>
-                            <?php 
-                            if($give):
-                            foreach ($give as $v):
-                        ?>                        
-                            <ul>
-                                <li><?php echo $v['title'];?>
-                             
-                                   （使用时间：<?php echo date('Y.m.d',strtotime($v['begin_time']));?> -
-                                   <?php echo date('Y.m.d',strtotime($v['end_time']));?>）
-                                </li>
-                            </ul> 
-                        <?php 
-                            endforeach; 
-                            else :
-                        ?>
-                           <ul>
-                               <li>暂无满送优惠活动</li> 
-                           </ul> 
-                        <?php endif; ?>
-                    </div>
                     <div class="empty1"></div>
-                    <?php if(!empty($brandUserAdmin)):?>
-                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('/ymall/appReport/index',array('companyId'=>$this->companyId));?>">
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>" >
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>店铺管理</p>
+                            <p>我的订单</p>
                         </div>
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <?php endif;?>
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/setUserInfo',array('companyId'=>$this->companyId));?>">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-grxx.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
@@ -317,14 +246,16 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/orderList',array('companyId'=>$this->companyId));?>" >
+                    <?php if(!empty($brandUserAdmin)):?>
+                    <a class="weui_cell js_cell" href="<?php echo $this->createUrl('/ymall/appReport/index',array('companyId'=>$this->companyId));?>">
                         <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-zd.png" class="icon_nav" alt=""></span>
                         <div class="weui_cell_bd weui_cell_primary">
-                            <p>我的订单</p>
+                            <p>店铺管理</p>
                         </div>
                         <div class="weui_cell_ft">
                         </div>
                     </a>
+                    <?php endif;?>
                     <div class="empty1"></div>
                     <!-- 
                     <div class="empty3"></div>

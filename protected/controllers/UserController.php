@@ -94,9 +94,6 @@ class UserController extends Controller
             $img = WxBrandUser::getCardImg($style_id,$user['dpid']);
         }
         
-        $give = WxBrandUser::getFullGive($this->companyId);
-        $minus = WxBrandUser::getFullMinus($this->companyId);
-
         $remainMoney =  WxBrandUser::getYue($userId,$user['dpid']);
         
         $brandUserAdmin = WxBrandUserAdmin::get($userId, $user['dpid']);
@@ -107,8 +104,6 @@ class UserController extends Controller
                                 'userLevel'=>$userLevel,
                                 'remainMoney'=>$remainMoney, 
                                 'img'=>$img,
-                                'give'=>$give,
-                                'minus'=>$minus,
                                 'upLev'=>$upLev,
                              	'brandUserAdmin'=>$brandUserAdmin
                                 
