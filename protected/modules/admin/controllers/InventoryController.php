@@ -96,7 +96,6 @@ class InventoryController extends BackendController
 		$slid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
 		
-		$criteria->with = array('material','product');
 		$storage = Inventory::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
 		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.inventory_id='.$slid;
 		$pages = new CPagination(InventoryDetail::model()->count($criteria));

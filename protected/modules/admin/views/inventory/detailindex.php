@@ -57,7 +57,9 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
+								<th><?php echo yii::t('app','品项名称');?></th>
+								<th><?php echo yii::t('app','单位规格');?></th>
+								<th><?php echo yii::t('app','单位名称');?></th>
 								<th><?php echo yii::t('app','盘损库存');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -68,7 +70,21 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php if($model->material && $model->type == 1)echo $model->material->material_name;elseif($model->product&&$model->type==2)echo $model->product->product_name;?></td>
+								<?php
+									if($model->type==1):
+										$material = Common::getmaterialUnit($model->material_id, $model->dpid, 1)
+								?>
+								<td><?php echo $material['material_name']?></td>
+								<td><?php echo $material['unit_specifications']?></td>
+								<td><?php echo $material['unit_name']?></td>
+								<?php 
+									else:
+										$productName = Common::getproductName($model->material_id);
+								?>
+								<td><?php echo $productName;?></td>
+								<td>个</td>
+								<td>个</td>
+								<?php endif;?>
 								<td ><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo $model['inventory_stock'];?>" name="idss[]" />
 								<input class="kucundiv" type="text" <?php if($status != 0)echo 'disabled';?>  style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php echo $model['inventory_stock'];?>" stockid="0" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
 								</td>
