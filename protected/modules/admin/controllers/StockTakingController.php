@@ -218,7 +218,7 @@ class StockTakingController extends BackendController
 						$presystemNum = $statict['stock_taking_num'];//上次盘点库存
 						$preStockTime = $statict['create_at'];// 上次盘点时间
 						// 从库存日志记录表 查询上次盘点到本次盘点的 入库库存 盘损库存 销售库存
-						$sql = 'select type,sum(stock_num) as stock_num,sum(stock_num*unit_price) as stock_cost from nb_material_stock_log where material_id='.$id.' and type in(0,1,4) and create_at>"'.$preStockTime.'" group by type';
+						$sql = 'select type,sum(stock_num) as stock_num,sum(stock_num*unit_price) as stock_cost from nb_material_stock_log where dpid='.$dpid.' and material_id='.$id.' and type in(0,1,4) and create_at>"'.$preStockTime.'" group by type';
 						$mStockLogs = $db->createCommand($sql)->queryAll();
 						if($mStockLogs){
 							foreach ($mStockLogs as $mStockArr){
@@ -341,6 +341,7 @@ class StockTakingController extends BackendController
 							);
 							$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
 						}
+						
 						// 盘点差异 取正
 						$minusnum = -$difference;
 						foreach ($stock2 as $stock){
