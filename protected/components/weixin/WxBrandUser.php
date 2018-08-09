@@ -365,6 +365,30 @@ class WxBrandUser {
 			throw new Exception('插入消费记录表失败');
 		}
 	}
+	/**
+	 * 等级转换成中文
+	 */
+	public static function numTochinese($level) {
+		$resStr = '';
+		$numArr = array(
+					'0'=>'',
+					'1'=>'一',
+					'2'=>'二',
+					'3'=>'三',
+					'4'=>'四',
+					'5'=>'五',
+					'6'=>'六',
+					'7'=>'七',
+					'8'=>'八',
+					'9'=>'九',
+					'.'=>''
+				);
+		$levelStr = $level.'';
+		for ($i=0;$i<strlen($levelStr);$i++){
+			$resStr .= $numArr[$levelStr[$i]];
+		}
+		return $resStr;
+	}
 }
 
  

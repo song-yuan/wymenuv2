@@ -164,6 +164,7 @@
                    </div>
                </div>
             </div>
+            
             <div class="bd">
                 <div class="weui_cells weui_cells_access global_navs">
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/money',array('companyId'=>$this->companyId));?>" >
@@ -292,7 +293,6 @@
            <div class="sp-lightbox1"  style="z-index:50;position: absolute;top:0; left: 0; height: 100%;width: 100%;background: rgba(0, 0, 0, .6);cursor: -webkit-zoom-out;cursor: -moz-zoom-out;cursor: zoom-out;display: <?php echo $upLev?'block':'none';?>"></div>
         </div>
     </div>
-    
 <script type="text/javascript">
     $('.weui_cell ').on('click',function(){
         var up_down=(!$(this).find(".up_down1").hasClass('up_down2'))?true:false;

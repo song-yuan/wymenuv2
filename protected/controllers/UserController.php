@@ -106,7 +106,6 @@ class UserController extends Controller
                                 'img'=>$img,
                                 'upLev'=>$upLev,
                              	'brandUserAdmin'=>$brandUserAdmin
-                                
                 ));
 	
     }  
