@@ -262,7 +262,7 @@ class InventoryController extends BackendController
 	public function actionInventorylogdetail(){
 		$slid = Yii::app()->request->getParam('lid');
 		
-		$sql = 'selet t.lid,t.dpid,t1.name from nb_inventory t,nb_retreat t1 where t.reason_id=t1.lid and t.dpid=t1.dpid and t.lid='.$slid.' and dpid='.$this->companyId;
+		$sql = 'select t.lid,t.dpid,t1.name from nb_inventory t,nb_retreat t1 where t.reason_id=t1.lid and t.dpid=t1.dpid and t.lid='.$slid.' and t.dpid='.$this->companyId;
 		$inventory = Yii::app()->db->createCommand($sql)->queryRow();
 		
 		$criteria = new CDbCriteria;
