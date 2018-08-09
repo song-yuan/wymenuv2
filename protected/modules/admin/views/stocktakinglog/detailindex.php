@@ -91,17 +91,12 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php if($status==0):?>
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点记录'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId,'status'=>$status))),array('word'=>yii::t('app','盘点记录详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId' => $this->companyId,'status'=>$status)))));?>
-	<?php elseif($status==1):?>
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘损记录'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId,'status'=>$status))),array('word'=>yii::t('app','盘损记录详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId' => $this->companyId,'status'=>$status)))));?>
-	<?php endif;?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点记录'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','盘点记录详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId' => $this->companyId)))));?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				//'action' => $this->createUrl('storageOrder/detailDelete' , array('companyId' => $this->companyId,'slid'=>$slid,'status'=>$status,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -112,8 +107,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php if($status)echo yii::t('app','盘损记录详情列表');else echo yii::t('app','盘点记录详情列表');?></div>
-					
+					<div class="caption"><i class="fa fa-globe"></i><?php $typeStr = '日盘'; if($stockTaking['type']==2){$typeStr = '周盘';}elseif($stockTaking['type']==3){$typeStr = '月盘';} echo yii::t('app','盘点记录详情列表(类型:'.$typeStr.')');?></div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 				<div class="table-responsive">
@@ -122,8 +116,10 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
+								<th><?php echo yii::t('app','单位规格');?></th>
+								<th><?php echo yii::t('app','单位名称');?></th>
 								<th><?php echo yii::t('app','原始库存');?></th>
-								<th><?php if($status)echo yii::t('app','盘损库存');else echo yii::t('app','盘点库存');?></th>
+								<th><?php echo yii::t('app','盘点库存');?></th>
 								<th><?php echo yii::t('app','盈亏差值');?></th>
 								<th><?php echo yii::t('app','原因备注');?></th>
 								<th>&nbsp;</th>
@@ -132,10 +128,15 @@
 						<tbody>
 						<?php if($models) :?>
 						<div style="display: none;" id="storagedetail" val="1"></div>
-						<?php foreach ($models as $model):?>
+						<?php 
+							foreach ($models as $model):
+								$material = Common::getmaterialUnit($model['material_id'],$model['dpid'],1);
+						?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getmaterialName($model['material_id']);?></td>
+								<td style="width:16%"><?php echo $material['material_name'];?></td>
+								<td><?php echo $material['unit_specifications'];?></td>
+								<td><?php echo $material['unit_name'];?></td>
 								<td><?php echo $model['reality_stock'];?></td>
 								<td ><?php echo $model['taking_stock'];?></td>
 								<td><?php echo $model['number'];?></td>

@@ -7,10 +7,10 @@ class MessageController extends BackendController
 		$db=Yii::app()->db;
 		$sql='select s.lid,s.downdate,s.dpid,s.all_message_no,s.send_message_no,s.money from nb_message_set s  where  s.delete_flag=0 and dpid='.$this->companyId;
 
-		$models = $db->createCommand($sql)->queryALL();
+		$models = $db->createCommand($sql)->queryAll();
 		// p($models);
 		$sql2 = 'select * from nb_message where delete_flag=0 and dpid='.$this->companyId.' and unix_timestamp(downdate_at) >'.time();
-		$infos = $db->createCommand($sql2)->queryALL();
+		$infos = $db->createCommand($sql2)->queryAll();
 		$this->render('index',array(
 				'models'=>$models,
 				'infos'=>$infos,
@@ -25,7 +25,7 @@ class MessageController extends BackendController
 		$sql='select c.company_name,s.lid,s.downdate,s.dpid,s.all_message_no,s.send_message_no,s.money from nb_message_set s left join nb_company c on(c.dpid=s.dpid and c.delete_flag=0 and c.type=0) where  s.delete_flag=0 order by c.company_name asc';//s.dpid='.$dpid.' and
 
 
-		$models = $db->createCommand($sql)->queryALL();
+		$models = $db->createCommand($sql)->queryAll();
 		$count = count($models);
 
 		$pages = new CPagination($count);

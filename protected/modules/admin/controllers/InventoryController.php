@@ -15,6 +15,7 @@ class InventoryController extends BackendController
 	public function actionIndex(){	
 		
 		$criteria = new CDbCriteria;
+		$criteria->with = 'retreat';
 		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and t.delete_flag=0');
 		$criteria->order = ' t.lid desc ';
 		
@@ -92,11 +93,16 @@ class InventoryController extends BackendController
 		}
 	}
 	public function actionDetailIndex(){
-		$criteria = new CDbCriteria;
 		$slid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
 		
-		$storage = Inventory::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
+		$criteriaInventory = new CDbCriteria;
+		$criteriaInventory->with = 'retreat';
+		$criteriaInventory->addCondition('t.lid=:id and t.dpid=:dpid');
+		$criteriaInventory->params = array(':id'=>$slid,':dpid'=>$this->companyId);
+		$storage = Inventory::model()->find($criteriaInventory);
+		
+		$criteria = new CDbCriteria;
 		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.inventory_id='.$slid;
 		$pages = new CPagination(InventoryDetail::model()->count($criteria));
 		$pages->applyLimit($criteria);
@@ -254,15 +260,18 @@ class InventoryController extends BackendController
 		));
 	}
 	public function actionInventorylogdetail(){
-		$criteria = new CDbCriteria;
 		$slid = Yii::app()->request->getParam('lid');
-	
-		$criteria->with = array('material');
+		
+		$sql = 'selet t.lid,t.dpid,t1.name from nb_inventory t,nb_retreat t1 where t.reason_id=t1.lid and t.dpid=t1.dpid and t.lid='.$slid.' and dpid='.$this->companyId;
+		$inventory = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		$criteria = new CDbCriteria;
 		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.inventory_id='.$slid;
 		$pages = new CPagination(InventoryDetail::model()->count($criteria));
 		$pages->applyLimit($criteria);
 		$models = InventoryDetail::model()->findAll($criteria);
 		$this->render('inventorylogdetail',array(
+				'inventory'=>$inventory,
 				'models'=>$models,
 				'pages'=>$pages,
 		));

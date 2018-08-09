@@ -58,6 +58,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','操作员');?></th>
 								<th><?php echo yii::t('app','盘损日期');?></th>
+								<th><?php echo yii::t('app','盘损原因');?></th>
 								<th><?php echo yii::t('app','状态');?></th>
 								<th><?php echo yii::t('app','盘损详情');?></th>
 								<th><?php echo yii::t('app','操作');?></th>
@@ -71,6 +72,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" <?php if($model->status==1){ echo 'disabled="disabled"';}?>/></td>
 								<td ><?php echo $model->opretion_id;?></td>
 								<td><?php echo $model->create_at;?></td>
+								<td><?php echo $model->retreat->name;?></td>
 								<td><span style="color: red;"><?php if($model->status==1){ echo '确认盘损';}elseif($model->status==0){ echo '正在编辑';}else{echo '已失效';}?></span></td>
 								<td class="center">
 									<a href="<?php echo $this->createUrl('inventory/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','盘损单详情');?></a>

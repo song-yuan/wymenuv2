@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项盘损列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项盘损列表(原因:'.$storage->retreat->name.')');?></div>
 					<div class="actions">
 						<?php if($status == 0):?>
 							<a href="<?php echo $this->createUrl('inventory/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>

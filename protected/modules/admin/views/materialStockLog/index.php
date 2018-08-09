@@ -59,6 +59,8 @@
 								<!--<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>-->
 								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
 								<th><?php echo yii::t('app','调整类型');?></th>
+								<th><?php echo yii::t('app','单位规格');?></th>
+								<th><?php echo yii::t('app','单位名称');?></th>
 								<th><?php echo yii::t('app','数量');?></th>
 								<th><?php echo yii::t('app','原因');?></th>
 								<th><?php echo yii::t('app','调整时间');?></th>
@@ -67,11 +69,16 @@
 						</thead>
 						<tbody>
 						<?php if($models) :?>
-						<?php foreach ($models as $model):?>
+						<?php 
+							foreach ($models as $model):
+								$material = Common::getmaterialUnit($model->material_id,$model->dpid,1);
+						?>
 							<tr class="odd gradeX">
 								<!--<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>-->
-								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
+								<td style="width:16%"><?php echo $material['material_name'];?></td>
 								<td ><?php if ($model->type==0) echo "入库"; elseif ($model->type==1) echo "出库";elseif ($model->type==2) echo "盘存";elseif ($model->type==3) echo "盘点";elseif ($model->type==4) echo "盘损";?></td>
+								<td><?php echo $material['unit_specifications'];?></td>
+								<td><?php echo $material['unit_name'];?></td>
 								<td><?php echo $model->stock_num;?></td>
 								<td><?php echo $model->resean;?></td>
 								<td><?php echo $model->create_at;?></td>

@@ -31,7 +31,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项盘损列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项盘损列表(原因:'.$inventory['name'].')');?></div>
 					<div class="actions">
 						
 					</div>
@@ -42,21 +42,33 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th><?php echo yii::t('app','品项编码');?></th>
 								<th><?php echo yii::t('app','品项名称');?></th>
+								<th><?php echo yii::t('app','单位规格');?></th>
+								<th><?php echo yii::t('app','单位名称');?></th>
 								<th><?php echo yii::t('app','盘损库存');?></th>
 							</tr>
 						</thead>
 						<tbody>
 						<?php if($models) :?>
-						<?php foreach ($models as $model):?>
+						<?php 
+							foreach ($models as $model):
+						?>
 							<tr class="odd gradeX">
-								<td><?php echo $model->material->material_identifier;?></td>
-								<td><?php echo $model->material->material_name;?></td>
+								<?php 
+									if($model->type==1):
+										$material = Common::getmaterialUnit($model->material_id, $model->dpid, 1);
+								?>
+								<td><?php echo $material['material_name'];?></td>
+								<td><?php echo $material['unit_specifications'];?></td>
+								<td><?php echo $material['unit_name'];?></td>
+								<?php else:?>
+								<td><?php echo Common::getproductName($model->material_id);?></td>
+								<td>个</td>
+								<td>个</td>
+								<?php endif;?>
 								<td><?php echo $model['inventory_stock'];?></td>
 							</tr>
 						<?php endforeach;?>
-						<tr><td colspan="3"></td></tr>
 						<?php endif;?>
 						</tbody>
 					</table>
