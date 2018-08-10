@@ -120,13 +120,13 @@ if($authCode!=''&&$result['status']){
 				echo json_encode(array('status'=>true, 'result'=>true, 'trade_no'=>$outTradeNo));
 				break;
 			case "FAILED":
-				echo json_encode(array('status'=>false));
+				echo json_encode(array('status'=>false, 'result'=>false));
 				break;
 			case "UNKNOWN":
 				echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
 				break;
 			default:
-				echo json_encode(array('status'=>false));
+				echo json_encode(array('status'=>false, 'result'=>false));
 				break;
 		}
 		exit;
