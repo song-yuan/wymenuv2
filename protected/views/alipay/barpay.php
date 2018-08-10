@@ -139,7 +139,7 @@ if($authCode!=''&&$result['status']){
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL"){
 			echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL_SUCCESS"){
-			echo json_encode(array('status'=>true, 'result'=>false, 'trade_no'=>$outTradeNo));
+			echo json_encode(array('status'=>false, 'result'=>false, 'trade_no'=>$outTradeNo));
 		}else{
 			echo json_encode(array('status'=>false));
 		}
