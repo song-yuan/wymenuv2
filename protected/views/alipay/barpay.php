@@ -141,11 +141,11 @@ if($authCode!=''&&$result['status']){
 		}elseif($result["return_code"] == "SUCCESS" && $result["result_code"] == "CANCEL_SUCCESS"){
 			echo json_encode(array('status'=>false, 'result'=>false, 'trade_no'=>$outTradeNo));
 		}else{
-			echo json_encode(array('status'=>false));
+			echo json_encode(array('status'=>false, 'result'=>false));
 		}
 		exit;
 	}else{
-		echo json_encode(array('status'=>false));
+		echo json_encode(array('status'=>false, 'result'=>false));
 		exit;
 	}
 }
