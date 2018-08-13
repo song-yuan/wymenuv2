@@ -35,7 +35,7 @@ class Inventory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, dpid, update_at, opretion_id, inventory_account_no,reason_id', 'required'),
-			array('reason_id', 'required','必须选择'),
+			array('reason_id', 'required','message'=> '请填写姓名'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('inventory_account_no', 'length', 'max'=>32),
 			array('status, delete_flag', 'length', 'max'=>2),
