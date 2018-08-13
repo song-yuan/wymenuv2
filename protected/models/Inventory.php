@@ -114,7 +114,7 @@ class Inventory extends CActiveRecord
 	}
 	public function validateReason(){
 		$reasonId = $this->reason_id; 
-		if($reasonId == '0'){ 
+		if(!$reasonId){ 
 			$this->addError('reason_id', '盘损原因必须填写'); 
 		}
 	}
