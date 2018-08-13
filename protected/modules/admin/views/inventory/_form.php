@@ -27,7 +27,6 @@
 			<div class="col-md-4">
 				<?php echo $form->dropdownlist($model,'reason_id' ,$retreats ,array('class' => 'form-control', ));?>
 				<?php echo $form->error($model, 'reason_id' )?>
-				<input class="form-control" name="Inventory_reason_id" id="Inventory_reason_id" type="hidden" value="<?php echo $model->reason_id;?>"></input>
 			</div>
 		</div>
 		<div class="form-group" <?php if($model->hasErrors('remark')) echo 'has-error';?>>
@@ -60,11 +59,6 @@
 )); ?>
 						
 <script>
-		$('#reason_id').change(function(){
-			var rid = $(this).val();
-			$('#Inventory_reason_id').val(rid);
-		});
-
 	   $(function () {
 		   $(".ui_timepicker").datetimepicker({
 			   //showOn: "button",

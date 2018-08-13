@@ -40,15 +40,15 @@ class InventoryController extends BackendController
 
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Inventory');
-			$retreatId = Yii::app()->request->getParam('Inventory_reason_id');
 			$se = new Sequence("inventory");
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			//$model->reason_id = $retreatId;
+			if(!$model->reason_id){
+				unset($model->reason_id);
+			}
 			$model->inventory_account_no = date('YmdHis',time()).substr($model->lid,-4);
 			$model->status = 0;
-			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('inventory/detailindex','lid' => $model->lid , 'companyId' => $model->dpid));
@@ -58,7 +58,7 @@ class InventoryController extends BackendController
 		$retreats = $this->getretreats();
 		
 		$retreatslist=CHtml::listData($retreats, 'lid', 'name');		
-		$this->render('create' , array(
+		$this->render('create', array(
 			'model' => $model ,
 			'retreats'=>$retreats,
 			'retreatId'=>$retreatId
