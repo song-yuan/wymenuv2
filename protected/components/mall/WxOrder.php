@@ -1125,6 +1125,8 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
+	 	
+	 	
 	 	// 获取订单中产品 减少库存
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	foreach ($orderProducts as $product){

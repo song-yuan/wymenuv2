@@ -85,12 +85,11 @@ class WxSite
 	 * 
 	 */
 	public static function updateSiteStatus($siteId,$dpid,$status){
-		$isSync = DataSync::getInitSync();
 		$siteNo = self::getSiteNoByLid($siteId, $dpid);
-		$sql = 'update nb_site_no set status='.$status.',is_sync='.$isSync.' where lid='.$siteId.' and dpid='.$dpid;
+		$sql = 'update nb_site_no set status='.$status.' where lid='.$siteId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 		
-		$sql = 'update nb_site set status='.$status.',is_sync='.$isSync.' where lid='.$siteNo['site_id'].' and dpid='.$dpid;
+		$sql = 'update nb_site set status='.$status.' where lid='.$siteNo['site_id'].' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -99,8 +98,7 @@ class WxSite
 	 * 
 	 */
 	public static function updateTempSiteStatus($siteId,$dpid,$status){
-		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_site_no set status='.$status.',is_sync='.$isSync.' where site_id='.$siteId.' and dpid='.$dpid.' and is_temp=1';
+		$sql = 'update nb_site_no set status='.$status.' where site_id='.$siteId.' and dpid='.$dpid.' and is_temp=1';
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 }

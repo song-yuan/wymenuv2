@@ -97,20 +97,14 @@ class SqbPay{
     				'operator'=>$operator,
     	);
     	$body = json_encode($datas);
-    	$bodystr = 't_sn:'.$terminal_sn.';sn:'.$clientSn.';t_a:'.$total_amount.';pt:'.$paytype;
-    	Helper::writeLog($bodystr);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	
-    	Helper::writeLog($result);
+    	Helper::writeLog('sqb支付返回信息：'.$dpid.$result);
     	
     	if(!empty($result)){
-    		
 	    	$obj = json_decode($result,true);
-	    	//var_dump($obj);exit;
 	    	$return_code = $obj['result_code'];
 	    	
-	    	$str = $clientSn.';返回信息：'.$return_code;
-	    	Helper::writeLog($str);
 	    	//判断支付返回状态...
 	    	if($return_code == '200'){
 	    		$result_codes = $obj['biz_response']['result_code'];
