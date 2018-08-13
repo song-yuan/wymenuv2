@@ -223,10 +223,10 @@ class InventoryController extends BackendController
 		$endtime = Yii::app()->request->getPost('endtime',date('Y-m-d',time()));
 		$reasonid = Yii::app()->request->getPost('reasonid',0);
 		
-		$begintime = $begintime.' 00:00:00';
-		$endtime = $endtime.' 23:59:59';
+		$beginTime = $begintime.' 00:00:00';
+		$endTime = $endtime.' 23:59:59';
 		
-		$sql = 'select t.*,t1.opretion_id,t1.reason_id from nb_inventory_detail t,nb_inventory t1 where t.inventory_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t1.create_at>="'.$begintime.'" and t1.create_at<="'.$endtime.'" and t1.status=1';
+		$sql = 'select t.*,t1.opretion_id,t1.reason_id from nb_inventory_detail t,nb_inventory t1 where t.inventory_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.status=1';
 		if($reasonid){
 			$sql .= ' and t1.reason_id='.$reasonid;
 		}
