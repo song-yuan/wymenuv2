@@ -72,7 +72,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" <?php if($model->status==1){ echo 'disabled="disabled"';}?>/></td>
 								<td ><?php echo $model->opretion_id;?></td>
 								<td><?php echo $model->create_at;?></td>
-								<td><?php echo $model->retreat->name;?></td>
+								<td><?php echo isset($model->retreat->name)?$model->retreat->name:'无';?></td>
 								<td><span style="color: red;"><?php if($model->status==1){ echo '确认盘损';}elseif($model->status==0){ echo '正在编辑';}else{echo '已失效';}?></span></td>
 								<td class="center">
 									<a href="<?php echo $this->createUrl('inventory/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','盘损单详情');?></a>

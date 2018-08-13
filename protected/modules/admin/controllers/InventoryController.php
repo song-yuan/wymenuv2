@@ -15,7 +15,6 @@ class InventoryController extends BackendController
 	public function actionIndex(){	
 		
 		$criteria = new CDbCriteria;
-		$criteria->with = 'retreat';
 		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and t.delete_flag=0');
 		$criteria->order = ' t.lid desc ';
 		
@@ -23,9 +22,11 @@ class InventoryController extends BackendController
 		$pages->applyLimit($criteria);
 		$models = Inventory::model()->findAll($criteria);
 		
+		$retreats = $this->getretreats();
 		$this->render('index',array(
 				'models'=>$models,
-				'pages'=>$pages,
+				'retreats'=>$retreats,
+				'pages'=>$pages
 		));
 	}
 	public function actionCreate(){

@@ -24,10 +24,10 @@ class MaterialStockLogController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
+		$criteria->condition = 't.delete_flag=0 and t.dpid='.$this->companyId;	
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-		$criteria->order = ' t.lid desc ';	
+		$criteria->order = ' t.lid desc ';
 		$pages = new CPagination(MaterialStockLog::model()->count($criteria));
 		$pages->applyLimit($criteria);
 		$models = MaterialStockLog::model()->findAll($criteria);
