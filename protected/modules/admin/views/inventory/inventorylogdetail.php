@@ -56,7 +56,7 @@
 							<tr class="odd gradeX">
 								<?php 
 									if($model->type==1):
-										$material = Common::getmaterialUnit($model->material_id, $model->dpid, 1);
+										$material = Common::getmaterialUnit($model->material_id, $model->dpid, 0);
 								?>
 								<td><?php echo $material['material_name'];?></td>
 								<td><?php echo $material['unit_specifications'];?></td>

@@ -130,7 +130,7 @@
 						<div style="display: none;" id="storagedetail" val="1"></div>
 						<?php 
 							foreach ($models as $model):
-								$material = Common::getmaterialUnit($model['material_id'],$model['dpid'],1);
+								$material = Common::getmaterialUnit($model['material_id'],$model['dpid'],0);
 						?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
