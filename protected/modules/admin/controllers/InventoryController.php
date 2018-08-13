@@ -15,6 +15,7 @@ class InventoryController extends BackendController
 	public function actionIndex(){	
 		
 		$criteria = new CDbCriteria;
+		$criteria->with = 'retreat';
 		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and t.delete_flag=0');
 		$criteria->order = ' t.lid desc ';
 		
