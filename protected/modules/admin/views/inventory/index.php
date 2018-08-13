@@ -42,6 +42,15 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘损列表');?></div>
 					<div class="actions">
+						<div class="btn-group">
+							<select class="form-control" id="pdname" name="reasonid">
+								<?php if($retreats):?>
+								<?php foreach ($retreats as $key=>$val):?>
+								<option class="proname " value="<?php echo $key;?>" <?php if($retreatId==$key){ echo 'selected="selected"';}?>><?php echo $val;?></option>
+								<?php endforeach;endif;?>
+								<?php ?>
+							</select>
+						</div>
 						<a href="<?php echo $this->createUrl('inventory/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
@@ -70,7 +79,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" <?php if($model->status==1){ echo 'disabled="disabled"';}?>/></td>
-								<td ><?php echo $model->opretion_id;?></td>
+								<td><?php echo $model->opretion_id;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td><?php echo isset($model->retreat->name)?$model->retreat->name:'无';?></td>
 								<td><span style="color: red;"><?php if($model->status==1){ echo '确认盘损';}elseif($model->status==0){ echo '正在编辑';}else{echo '已失效';}?></span></td>
@@ -139,7 +148,7 @@
 		});
 		$('#pdname').change(function () {
 			var pid = $(this).val();
-			$('#reasonid').val(pid);
+			location.href = '<?php echo $this->createUrl('inventory/index',array('companyId'=>$this->companyId));?>/rid/'+pid;
 		});
 	});
 	</script>	

@@ -45,10 +45,9 @@
 					<div class="actions">
 						<div class="btn-group">
 							<select class="form-control" id="pdname" name="reasonid">
-								<option cate = "0" value="0"><?php echo '--请选择原因--';?></option>
 								<?php if($retreats):?>
-								<?php foreach ($retreats as $m):?>
-								<option class="proname " value="<?php echo $m['lid'];?>"><?php echo $m['name'];?></option>
+								<?php foreach ($retreats as $key=>$val):?>
+								<option class="proname " value="<?php echo $key;?>" <?php if($reasonid==$key){ echo 'selected="selected"';}?>><?php echo $val;?></option>
 								<?php endforeach;endif;?>
 								<?php ?>
 							</select>
@@ -71,62 +70,27 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th><?php echo yii::t('app','操作员');?></th>
-								<th><?php echo yii::t('app','盘损原因');?></th>
-								<th><?php echo yii::t('app','盘损日期');?></th>
-								<th><?php echo yii::t('app','备注');?></th>
-								<th><?php echo yii::t('app','盘损详情');?></th>
+								<th><?php echo yii::t('app','品项名称');?></th>
+								<th><?php echo yii::t('app','单位规格');?></th>
+								<th><?php echo yii::t('app','单位名称');?></th>
+								<th><?php echo yii::t('app','盘损库存');?></th>
 							</tr>
 						</thead>
 						<tbody>
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td ><?php echo $model->opretion_id;?></td>
-								<td><?php if($model->retreat)echo $model->retreat->name;?></td>
-								<td><?php echo $model->create_at;?></td>
-								<td><?php echo $model->remark;?></td>
-								<td class="center">
-									<a href="<?php echo $this->createUrl('inventory/inventorylogdetail',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','盘损详情');?></a>
-								</td>
+								<td ><?php echo $model['material_name'];?></td>
+								<td><?php echo $model['unit_specifications'];?></td>
+								<td><?php echo $model['unit_name'];?></td>
+								<td><?php echo $model['inventory_stock'];?></td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
 						</tbody>
 					</table>
 					</div>
-					<?php if($pages->getItemCount()):?>
-						<div class="row">
-							<div class="col-md-5 col-sm-12">
-								<div class="dataTables_info">
-									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?> , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
-								</div>
-							</div>
-							<div class="col-md-7 col-sm-12">
-								<div class="dataTables_paginate paging_bootstrap">
-								<?php $this->widget('CLinkPager', array(
-									'pages' => $pages,
-									'header'=>'',
-									'firstPageLabel' => '<<',
-									'lastPageLabel' => '>>',
-									'firstPageCssClass' => '',
-									'lastPageCssClass' => '',
-									'maxButtonCount' => 8,
-									'nextPageCssClass' => '',
-									'previousPageCssClass' => '',
-									'prevPageLabel' => '<',
-									'nextPageLabel' => '>',
-									'selectedPageCssClass' => 'active',
-									'internalPageCssClass' => '',
-									'hiddenPageCssClass' => 'disabled',
-									'htmlOptions'=>array('class'=>'pagination pull-right')
-								));
-								?>
-								</div>
-							</div>
-						</div>
-						<?php endif;?>					
-						</div>
+					</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->

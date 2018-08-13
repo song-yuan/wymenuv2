@@ -13,10 +13,13 @@ class InventoryController extends BackendController
 	}
 
 	public function actionIndex(){	
-		
+		$retreatId = Yii::app()->request->getParam('rid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = 'retreat';
 		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and t.delete_flag=0');
+		if($retreatId){
+			$criteria->addCondition('t.reason_id='.$retreatId);
+		}
 		$criteria->order = ' t.lid desc ';
 		
 		$pages = new CPagination(Inventory::model()->count($criteria));
@@ -27,6 +30,7 @@ class InventoryController extends BackendController
 		$this->render('index',array(
 				'models'=>$models,
 				'retreats'=>$retreats,
+				'retreatId'=>$retreatId,
 				'pages'=>$pages
 		));
 	}
@@ -215,50 +219,42 @@ class InventoryController extends BackendController
 		}
 	}
 	public function actionInventorylog(){
-		$criteria = new CDbCriteria;
-		$criteria->with = 'retreat';
-		$mid =0;
-		$oid = 0;
-		$begintime = date('Y-m-d',time());
-		$endtime = date('Y-m-d',time());
-		$storage = 0;
-		$purchase = 0;
-		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and status=1 and t.delete_flag=0');
+		$begintime = Yii::app()->request->getPost('begintime',date('Y-m-d',time()));
+		$endtime = Yii::app()->request->getPost('endtime',date('Y-m-d',time()));
+		$reasonid = Yii::app()->request->getPost('reasonid',0);
 		
-		if(Yii::app()->request->isPostRequest){
-			$storage = Yii::app()->request->getPost('reasonid',0);
-			if($storage){
-				$criteria->addCondition('t.reason_id ='.$storage);
-			}
-			$purchase = Yii::app()->request->getPost('purchase',0);
-			if($purchase){
-				$criteria->addSearchCondition('t.purchase_account_no',$purchase);
-			}
-			$begintime = Yii::app()->request->getPost('begintime',0);
-			if($begintime){
-				$criteria->addCondition('t.create_at >= "'.$begintime.' 00:00:00"');
-			}
-			$endtime = Yii::app()->request->getPost('endtime',0);
-			if($endtime){
-				$criteria->addCondition('t.update_at <= "'.$endtime.' 23:59:59"');
+		$begintime = $begintime.' 00:00:00';
+		$endtime = $endtime.' 23:59:59';
+		
+		$sql = 'select t.*,t1.opretion_id,t1.reason_id from nb_inventory_detail t,nb_inventory t1 where t.inventory_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t1.create_at>="'.$begintime.'" and t1.create_at<="'.$endtime.'" and t1.status=1';
+		if($reasonid){
+			$sql .= ' and t1.reason_id='.$reasonid;
+		}
+		$sql = 'select lid,dpid,opretion_id,type,material_id,reason_id,sum(inventory_stock) as inventory_stock from ('.$sql.')m group by type,material_id';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($models as $key=>$model){
+			$materialId = $model['material_id'];
+			$reasonId = $model['reason_id'];
+			$mtype = $model['type'];
+			if($mtype==1){
+				$material = Common::getmaterialUnit($materialId, $this->companyId, 0);
+				$models[$key]['material_name'] = $material['material_name'];
+				$models[$key]['unit_name'] = $material['unit_name'];
+				$models[$key]['unit_specifications'] = $material['unit_specifications'];
+			}else{
+				$productName = Common::getproductName($materialId);
+				$models[$key]['material_name'] = $productName;
+				$models[$key]['unit_name'] = '个';
+				$models[$key]['unit_specifications'] = '个';
 			}
 		}
-		$criteria->order = ' t.lid desc ';
-		$pages = new CPagination(Inventory::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = Inventory::model()->findAll($criteria);
-	
-		$retreats = $this->getRets();
+		$retreats = $this->getRetreats();
 		$this->render('inventorylog',array(
 				'models'=>$models,
-				'pages'=>$pages,
-				'oid'=>$oid,
 				'begintime'=>$begintime,
 				'endtime'=>$endtime,
-				'storage'=>$storage,
-				'purchase'=>$purchase,
-				'retreats'=>$retreats,
+				'reasonid'=>$reasonid,
+				'retreats'=>$retreats
 		));
 	}
 	public function actionInventorylogdetail(){
@@ -563,6 +559,14 @@ class InventoryController extends BackendController
 		$command=$db->createCommand($sql);
 		$command->bindValue(":lid" , $lid);
 		return $command->queryScalar();
+	}
+	private function getRetreat($lid,$dpid){
+		$db = Yii::app()->db;
+		$sql = "SELECT * from nb_retreat where lid=:lid and dpid=:dpid";
+		$command=$db->createCommand($sql);
+		$command->bindValue(":lid" , $lid);
+		$command->bindValue(":dpid" , $dpid);
+		return $command->queryRow();
 	}
 	private function getRetreatId($lid){
 		$db = Yii::app()->db;
