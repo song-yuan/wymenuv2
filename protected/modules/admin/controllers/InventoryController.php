@@ -44,9 +44,6 @@ class InventoryController extends BackendController
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			if(!$model->reason_id){
-				unset($model->reason_id);
-			}
 			$model->inventory_account_no = date('YmdHis',time()).substr($model->lid,-4);
 			$model->status = 0;
 			if($model->save()){
@@ -74,9 +71,6 @@ class InventoryController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Inventory');
 			$model->update_at=date('Y-m-d H:i:s',time());
-			if(!$model->reason_id){
-				unset($model->reason_id);
-			}
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
 				$this->redirect(array('inventory/index' , 'companyId' => $this->companyId ));

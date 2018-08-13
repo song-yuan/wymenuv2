@@ -35,12 +35,12 @@ class Inventory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, dpid, update_at, opretion_id, inventory_account_no,reason_id', 'required'),
-			array('reason_id', 'required','message'=> '请填写姓名'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('inventory_account_no', 'length', 'max'=>32),
 			array('status, delete_flag', 'length', 'max'=>2),
 			array('opretion_id,is_sync', 'length', 'max'=>50),
 			array('create_at,remark', 'safe'),
+			array('reason_id', 'validateReason'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, opretion_id, reason_id,inventory_account_no, status, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
@@ -112,7 +112,12 @@ class Inventory extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
-
+	public function validateReason(){
+		$reasonId = $this->reason_id; 
+		if($reasonId == '0'){ 
+			$this->addError('reason_id', '盘损原因必须填写'); 
+		}
+	}
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
