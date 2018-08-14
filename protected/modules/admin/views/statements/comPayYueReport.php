@@ -42,9 +42,11 @@
                             <option value="3" <?php if ($typ==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','未开通微店');?></option>
                     </select>
                     <?php if(Yii::app()->user->role <11):?>
+                    <!-- 
                     <div class="btn-group" style="width: 140px;">
 						<input type="text" class="form-control" name="dpname" id="dpname" placeholder="<?php echo yii::t('app','店铺名称');?>" value="<?php echo $dpname;?>" >
 					</div>
+					 -->
 					<?php endif;?>
                     <div class="btn-group">
 	                    <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -67,7 +69,7 @@
 		        <thead>
 		            <tr>
 		                <?php  $grouppay_item = 0;?>
-		               <th><?php echo yii::t('app','店铺');?></th>
+		               <th><?php echo yii::t('app','日期');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th>
 		               <th><?php echo yii::t('app','总营业额');?></th>
 		               <th><?php echo yii::t('app','微信点单');?></th>
@@ -80,89 +82,83 @@
 				<tbody>
 
 		        <!--foreach-->
-		        <?php $a=1;?>
 		        <?php
-		        $orders_total_cupon=0;      // 总单数
-		        $orders_total_yue=0;
-		        $all_wxcards = 0;		//系统券
-		        $all_wxcharges = 0;		//微信余额
 		        $orders_total_nums = 0;
+		        $orders_total_moneys = 0;
+		        
 		        $orders_total_wxord = 0;
+		        $orders_total_wxord_count = 0;
 		        $orders_total_wxwm = 0;
-		        $all_moneys = 0;
-		        $all_wxords = 0;
-		        $all_wxwms = 0;
+		        $orders_total_wxwm_count = 0;
+		        $orders_total_cupon = 0;
+		        $orders_total_cupon_count = 0;
+		        $orders_total_yue = 0;
+		        $orders_total_yue_count = 0;
+		        
 
-				if($prices):?>
-		      <?php foreach ($prices as $m): ?>
+				if($models):?>
+		      <?php 
+		      	foreach ($models as $model): 
+			      	$order = $model['order'];
+			      	$orderPay = $model['order_pay'];
+			      	$all_nums = $order['order_num'];
+			      	$all_moneys = $order['should_total'];
+			      	$orders_total_nums +=$all_nums;
+			      	$orders_total_moneys +=$all_moneys;
+			      	
+			      	$yhqPay = 0;$yhqPayCount = 0;
+			      	if(isset($orderPay['9-0'])){
+			      		$yhqPay = $orderPay['9-0']['pay_amount'];
+			      		$yhqPayCount = $orderPay['9-0']['pay_count'];
+			      	}
+			      	$orders_total_cupon += $yhqPay;
+			      	$orders_total_cupon_count += $yhqPayCount;
+			      	
+			      	$wxczPay = 0;$wxczPayCount = 0;
+			      	if(isset($orderPay['10-0'])){
+			      		$wxczPay = $orderPay['10-0']['pay_amount'];
+			      		$wxczPayCount = $orderPay['10-0']['pay_count'];
+			      	}
+			      	$orders_total_yue += $wxczPay;
+			      	$orders_total_yue_count += $wxczPayCount;
+			      	
+			      	$wddPay = 0;$wddPayCount = 0;
+			      	if(isset($orderPay['12-0'])){
+			      		$wddPay = $orderPay['12-0']['pay_amount'];
+			      		$wddPayCount = $orderPay['12-0']['pay_count'];
+			      	}
+			      	$orders_total_wxord += $wddPay;
+			      	$orders_total_wxord_count += $wddPayCount;
+			      	 
+			      	$wwmPay = 0;$wwmPayCount = 0;
+			      	if(isset($orderPay['13-0'])){
+			      		$wwmPay = $orderPay['13-0']['pay_amount'];
+			      		$wwmPayCount = $orderPay['13-0']['pay_count'];
+			      	}
+			      	$orders_total_wxwm += $wwmPay;
+			      	$orders_total_wxwm_count += $wwmPayCount;
+			      	
+		      ?>
 
 		        <tr class="odd gradeX">
-		        	<td><?php echo $m['company_name'];?></td>
-					<td>
-					<?php 
-						$orders_total_nums = $orders_total_nums+$m['all_nums'];
-		                echo $m['all_nums'];
-	                ?>
-		            </td>
-		            <td>
-		            <?php
-			            $all_money = $m['all_reality'];
-			            $all_moneys = $all_moneys + $all_money;
-		                echo $all_money;
-	                ?>
-		            </td>
-		            <td>
-		            <?php
-		            	$wxord = $m['all_wxord'];
-		            	if($wxord){
-		            		$orders_total_wxord = $orders_total_wxord+$m['nums_wxord'];
-		            		$all_wxords = $all_wxords + $wxord;
-		            		echo $wxord.'('.$m['nums_wxord'].')';
-		            	}
-		                ?>
-		            </td>
-		            <td>
-		            <?php
-			            $wxwm = $m['all_wxwm'];
-			            if($wxwm){
-			            	$orders_total_wxwm = $orders_total_wxwm+$m['nums_wxwm'];
-			            	$all_wxwms = $all_wxwms + $wxwm;
-			            	echo $wxwm.'('.$m['nums_wxwm'].')';
-			            }
-		            ?>
-		            </td>
-		            <td>
-		            <?php
-			            $wxcard = $m['all_cupon'];
-			            if($wxcard){
-			            	$orders_total_cupon = $orders_total_cupon+$m['nums_cupon'];
-			            	$all_wxcards = $all_wxcards + $wxcard;
-			            	echo $wxcard.'('.$m['nums_cupon'].')';
-			            }
-	                ?>
-		            </td>
-		            <td>
-		            <?php
-		            $wxcharge = $m['all_wxmember'];
-		            if($wxcharge){
-		            	$orders_total_yue = $orders_total_yue+$m['nums_yue'];
-		            	$wxcharge = $m['all_wxmember'];
-		            	$all_wxcharges = $all_wxcharges + $wxcharge;
-		            	echo $wxcharge.'('.$m['nums_yue'].')';
-		            }
-	                ?>
-		            </td>
+		        	<td><?php echo $order['create_at'];?></td>
+					<td><?php echo $all_nums;?></td>
+		            <td><?php echo $all_moneys;?></td>
+		            <td><?php echo $wddPay.'('.$wddPayCount.')';?></td>
+		            <td><?php echo $wwmPay.'('.$wwmPayCount.')';?></td>
+		            <td><?php echo $yhqPay.'('.$yhqPayCount.')';?></td>
+		            <td><?php echo $wxczPay.'('.$wxczPayCount.')';?></td>
 		        </tr>
 
 		        <?php endforeach;?>
 		        <tr>
 		            <td><?php echo "总计";?></td>
 		            <td><?php echo $orders_total_nums; ?></td>
-		            <td><?php echo $all_moneys; ?></td>
-		            <td><?php echo $all_wxords.'('.$orders_total_wxord.')'; ?></td>
-		            <td><?php echo $all_wxwms.'('.$orders_total_wxwm.')'; ?></td>
-		            <td><?php echo $all_wxcards.'('.$orders_total_cupon.')';?></td>
-		            <td><?php echo $all_wxcharges.'('.$orders_total_yue.')';?></td>
+		            <td><?php echo $orders_total_moneys; ?></td>
+		            <td><?php echo $orders_total_wxord.'('.$orders_total_wxord_count.')'; ?></td>
+		            <td><?php echo $orders_total_wxwm.'('.$orders_total_wxwm_count.')'; ?></td>
+		            <td><?php echo $orders_total_cupon.'('.$orders_total_cupon_count.')';?></td>
+		            <td><?php echo $orders_total_yue.'('.$orders_total_yue_count.')';?></td>
 
 		        </tr>
 		       	<?php endif;?>
