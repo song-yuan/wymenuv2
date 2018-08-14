@@ -556,96 +556,44 @@ class StatementsController extends BackendController
 	public function actionComPayYueReport(){
 		$str = Yii::app()->request->getParam('str');
 		$typ = Yii::app()->request->getParam('typ');
-		$begin_time = Yii::app()->request->getParam('begin_time','');
-		$end_time = Yii::app()->request->getParam('end_time','');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$dpname = Yii::app()->request->getParam('dpname','');
-
-		if(empty($begin_time) && Yii::app()->user->role >=11){
-			$begin_time = date('Y-m-d',time());
-		}
-		if(empty($end_time) && Yii::app()->user->role >=11){
-			$end_time = date('Y-m-d',time());
-		}
-		if(!empty($dpname)){
-			$dpnames = ' like "%'.$dpname.'%"';
-			$sql = 'select k.lid from nb_order k left join nb_company c on(k.dpid = c.dpid) where k.order_status in(3,4,8) and c.company_name like "%'.$dpname.'%" and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		}else{
-			$dpnames = ' is not null and t.comp_dpid = '.$this->companyId.' or t.dpid ='.$this->companyId;
-			$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in (select c.dpid from nb_company c where (c.comp_dpid = '.$this->companyId.' or c.dpid = '.$this->companyId.') and c.delete_flag =0 and c.type =1) and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		}
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
-		}
-
-		$sql = 'select year(o.create_at) as y_all,month(o.create_at) as m_all,day(o.create_at) as d_all, '
-				.' t.dpid,t.company_name,o.create_at,o.all_should,op.all_reality,op.all_nums, '
-				.' o.all_num,op9.all_cupon,op9.all_nums as nums_cupon,op10.all_wxmember,op10.all_nums as nums_yue, '
-				.' op12.all_wxord,op12.all_nums as nums_wxord,op13.all_wxwm,op13.all_nums as nums_wxwm '
-				.' from nb_company t '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_reality,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-						.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype !=11 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op on(t.dpid = op.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_cupon,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =9 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op9 on(t.dpid = op9.dpid) '
+		
+		$orderArrs = array();
+		$orderPayArrs = array();
+		$beginTime = $begin_time.' 00:00:00';
+		$endTime = $end_time.' 23:59:59';
+		
+		$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
+				' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype in(9,10,12,13) and t.dpid='.$this->companyId;
+		$sql .= ' order by create_at asc,paytype asc';
+		echo $sql;
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($models as $model){
+			$orderId = $model['order_id'];
+			$createAt = $model['create_at'];
+			$payType = $model['paytype'];
+			$payMethodId = $model['payment_method_id'];
+			if(!isset($orderArrs[$createAt][$orderId])){
+				$orderArrs[$createAt][$orderId] = array();
+			}
+			if(!isset($orderPayArrs[$createAt][$payType.'-'.$payMethodId])){
+				$orderPayArrs[$createAt][$payType.'-'.$payMethodId] = array();
+			}
 				
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxmember,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =10 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op10 on(t.dpid = op10.dpid) '
-						
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxord,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =12 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op12 on(t.dpid = op12.dpid) '
-						
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxwm,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =13 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op13 on(t.dpid = op13.dpid) '
-				
-				.' left join ('
-					.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid'
-					.' from nb_order ot '
-					.' where ot.order_status in(3,4,8) and ot.lid in('.$ords.') and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
-					.' group by ot.dpid'
-				.' ) o on(t.dpid = o.dpid)'
-				.' where op.all_reality is not null and t.delete_flag =0 and t.company_name '.$dpnames
-				.' group by t.dpid';
-		$prices = Yii::app()->db->createCommand($sql)->queryAll();
+			array_push($orderArrs[$createAt][$orderId],$model);
+			array_push($orderPayArrs[$createAt][$payType.'-'.$payMethodId],$model);
+		}
+		$models = $this->dealOrderReport($orderArrs, $orderPayArrs);
+		
 
-		$payments = $this->getPayment($this->companyId);
-		$username = $this->getUsername($this->companyId);
-		$comName = $this->getComName();
-		//var_dump($model);exit;
 		$this->render('comPayYueReport',array(
-				'prices'=>$prices,
+				'models'=>$models,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'typ'=>$typ,
 				'str'=>$str,
-				'comName'=>$comName,
-				'payments'=>$payments,
-				'username'=>$username,
 				'dpname'=>$dpname,
 		));
 	}
