@@ -2416,7 +2416,7 @@ class StatementsController extends BackendController
 		foreach ($models as $key=>$model){
 			if($model['paytype']==3){
 				$method = $this->getPayMethod($model['payment_method_id'],$model['dpid']);
-				$models[$key]['name'] = $method['name'];
+				$models[$key]['name'] = $method?$method['name']:'';
 			}else{
 				$models[$key]['name'] = '';
 			}
@@ -2683,13 +2683,13 @@ class StatementsController extends BackendController
 	}
 	//获取店铺的支付方式....
 	public function getPayments($dpid){
-		$sql = 'select * from nb_payment_method t where delete_flag = 0 and dpid='.$dpid;
+		$sql = 'select * from nb_payment_method where delete_flag = 0 and dpid='.$dpid;
 		$connect = Yii::app()->db->createCommand($sql);
 		$models = $connect->queryAll();
 		return $models;
 	}
 	public function getPayMethod($methodId,$dpid){
-		$sql = 'select * from nb_payment_method t where lid='.$methodId.' and dpid='.$dpid;
+		$sql = 'select * from nb_payment_method where lid='.$methodId.' and dpid='.$dpid;
 		$connect = Yii::app()->db->createCommand($sql);
 		$model = $connect->queryRow();
 		return $model;
