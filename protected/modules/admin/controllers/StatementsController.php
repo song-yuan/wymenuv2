@@ -568,7 +568,6 @@ class StatementsController extends BackendController
 		$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
 				' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype in(9,10,12,13) and t.dpid='.$this->companyId;
 		$sql .= ' order by create_at asc,paytype asc';
-		echo $sql;
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($models as $model){
 			$orderId = $model['order_id'];
