@@ -2395,7 +2395,7 @@ class StatementsController extends BackendController
 			$where .=' and t.create_at <= "'.$end_time.' 23:59:59"';
 		}
 
-		$sql = 'select m.*,n.name from (select t.lid,t.dpid,t.account_no,t.pay_amount,t.paytype,t.payment_method_id,t.paytype_id,t1.create_at from nb_order_pay t,nb_order t1 where t.dpid=t1.dpid and t.order_id=t1.lid and t.dpid='.$this->companyId;
+		$sql = 'select m.* from (select t.lid,t.dpid,t.account_no,t.pay_amount,t.paytype,t.payment_method_id,t.paytype_id,t1.create_at from nb_order_pay t,nb_order t1 where t.dpid=t1.dpid and t.order_id=t1.lid and t.dpid='.$this->companyId;
 		if($paymentid==1){
 			$where .=' and t.paytype = '.$paytype;
 		}elseif($paymentid==3){
@@ -2404,16 +2404,21 @@ class StatementsController extends BackendController
 			$where .=' and t.paytype != 11';
 		}
 		$sql .= $where;
-		$sql .=')m left join nb_payment_method n on m.payment_method_id=n.lid and m.dpid=n.dpid';
+		$sql .=')m';
 		
-		$count =  Yii::app()->db->createCommand(str_replace('m.*,n.name','count(*)',$sql))->queryScalar();
+		$count =  Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
 		$pages = new CPagination($count);
 		$pages->pageSize = 10;
 		$pdata =Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());
 		$models = $pdata->queryAll();
-		
+		foreach ($models as $key=>$model){
+			if($model['paytype']==3){
+				$method = $this->getPayMethod($model['payment_method_id'],$model['dpid']);
+				$models[$key]['name'] = $method['name'];
+			}
+		}
 		$payments = $this->getPayments($this->companyId);
 		$this->render('orderpaytype',array(
 				'models'=>$models,
@@ -2676,18 +2681,16 @@ class StatementsController extends BackendController
 	}
 	//获取店铺的支付方式....
 	public function getPayments($dpid){
-		$model =  '';
-		if($dpid){
-			$sql = 'select t.* from nb_payment_method t where t.delete_flag = 0 and t.dpid='.$dpid;
-			$connect = Yii::app()->db->createCommand($sql);
-			$models = $connect->queryAll();
-			//$accountMoney = $money['all_zhifu'];
-		}
-		if(!empty($models)){
-				return $models;
-			}else{
-				return $model;
-			}
+		$sql = 'select * from nb_payment_method t where delete_flag = 0 and dpid='.$dpid;
+		$connect = Yii::app()->db->createCommand($sql);
+		$models = $connect->queryAll();
+		return $models;
+	}
+	public function getPayMethod($methodId,$dpid){
+		$sql = 'select * from nb_payment_method t where lid='.$methodId.' and dpid='.$dpid;
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryRow();
+		return $model;
 	}
 /*
  * 会员卡消费报表
