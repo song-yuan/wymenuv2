@@ -2417,6 +2417,8 @@ class StatementsController extends BackendController
 			if($model['paytype']==3){
 				$method = $this->getPayMethod($model['payment_method_id'],$model['dpid']);
 				$models[$key]['name'] = $method['name'];
+			}else{
+				$models[$key]['name'] = '';
 			}
 		}
 		$payments = $this->getPayments($this->companyId);
