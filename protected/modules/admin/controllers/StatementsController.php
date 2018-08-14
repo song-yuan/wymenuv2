@@ -2377,7 +2377,6 @@ class StatementsController extends BackendController
 	 * 账单支付方式
 	*/
 	public function actionOrderpaytype(){
-		$criteria = new CDbCriteria;
 		$accountno = '';
 		$paymentid = Yii::app()->request->getParam('paymentid',1);
 		$paytype = Yii::app()->request->getParam('paytype','-1');
@@ -2404,7 +2403,7 @@ class StatementsController extends BackendController
 			$where .=' and t.paytype != 11';
 		}
 		$sql .= $where;
-		$sql .=')m';
+		$sql .=')m where 1';
 		
 		$count =  Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
 		$pages = new CPagination($count);
@@ -2413,9 +2412,10 @@ class StatementsController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());
 		$models = $pdata->queryAll();
-		foreach ($models as $key=>$model){
-			if($model['paytype']==3){
-				$method = $this->getPayMethod($model['payment_method_id'],$model['dpid']);
+		
+		foreach ($models as $key=>$val){
+			if($val['paytype']==3){
+				$method = $this->getPayMethod($val['payment_method_id'],$val['dpid']);
 				$models[$key]['name'] = $method?$method['name']:'';
 			}else{
 				$models[$key]['name'] = '';
