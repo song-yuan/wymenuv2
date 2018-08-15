@@ -36,18 +36,9 @@
             <div class="portlet-title">
                 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式报表');?></div>
             	<div class="actions">
-            		<select id="typ" class="btn yellow" style="display: none">
-                            <option value="1" <?php if ($typ==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
-                            <option value="2" <?php if ($typ==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','开通微店');?></option>
-                            <option value="3" <?php if ($typ==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','未开通微店');?></option>
-                    </select>
-                    <?php if(Yii::app()->user->role <11):?>
-                    <!-- 
-                    <div class="btn-group" style="width: 140px;">
-						<input type="text" class="form-control" name="dpname" id="dpname" placeholder="<?php echo yii::t('app','店铺名称');?>" value="<?php echo $dpname;?>" >
-					</div>
-					 -->
-					<?php endif;?>
+            	<div class="btn-group">
+					<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+				</div>
                     <div class="btn-group">
 	                    <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">
@@ -187,23 +178,20 @@ jQuery(document).ready(function(){
 		$('body').removeClass("modal-open");
 	}
 });
-     $('#btn_time_query').click(function time() {
+    $('#btn_time_query').click(function time() {
      	var begin_time = $('#begin_time').val();
      	var end_time = $('#end_time').val();
-     	var typ = $('#typ').val();
-     	var dpname = $('#dpname').val();
-     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/dpname/"+dpname+"/typ/"+typ
-
+     	var selectDpid = $('select[name="selectDpid"]').val();
+     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid;
 	});
 
 	$('#excel').click(function excel(){
 		//return false;
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
-		var typ = $('#typ').val();
-     	var dpname = $('#dpname').val();
+		var selectDpid = $('select[name="selectDpid"]').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/dpname/"+dpname+"/typ/"+typ;
+			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid;
 		}
 	});
 

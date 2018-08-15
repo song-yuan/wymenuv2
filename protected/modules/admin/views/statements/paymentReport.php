@@ -339,14 +339,12 @@ jQuery(document).ready(function(){
 		$('body').removeClass("modal-open");
 	}
 });
-     $('#btn_time_query').click(function time() {  
-
+    $('#btn_time_query').click(function time() {  
      	var begin_time = $('#begin_time').val();
      	var end_time = $('#end_time').val();
      	var text = $('#text').val();
      	var userid = $('#userid').val();
      	location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
-
 	});
 	
 	$('#excel').click(function excel(){
@@ -357,8 +355,6 @@ jQuery(document).ready(function(){
 		var userid = $('#userid').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
 			location.href="<?php echo $this->createUrl('statements/paymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
-		}else{
-			// location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 		}
 	});
 

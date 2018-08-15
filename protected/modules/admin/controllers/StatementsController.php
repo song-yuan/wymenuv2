@@ -106,7 +106,6 @@ class StatementsController extends BackendController
 		$userid = Yii::app()->request->getParam('userid');
 		$begin_time = Yii::app()->request->getParam('begin_time','');//开始时间
 		$end_time = Yii::app()->request->getParam('end_time','');//结束时间
-		$dpname = Yii::app()->request->getParam('dpname','');
 		
 		$orderArrs = array();
 		$orderPayArrs = array();
@@ -168,7 +167,6 @@ class StatementsController extends BackendController
 				'payments'=>$payments,
 				'username'=>$username,
 				'userid'=>$userid,
-				'dpname'=>$dpname,
 		));
 	}		
 	/**
@@ -424,149 +422,83 @@ class StatementsController extends BackendController
 
 	public function actionComPaymentReport(){
 		$str = Yii::app()->request->getParam('str');
-		$text = Yii::app()->request->getParam('text');
-		$begin_time = Yii::app()->request->getParam('begin_time','');
-		$end_time = Yii::app()->request->getParam('end_time','');
-		$dpname = Yii::app()->request->getParam('dpname','');
-
-		if(empty($begin_time) && Yii::app()->user->role >=11){
+		$text = Yii::app()->request->getParam('text');//时间类型
+		$begin_time = Yii::app()->request->getParam('begin_time','');//开始时间
+		$end_time = Yii::app()->request->getParam('end_time','');//结束时间
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		
+		$orderArrs = array();
+		$orderPayArrs = array();
+		if(empty($begin_time)){
 			$begin_time = date('Y-m-d',time());
 		}
-		if(empty($end_time) && Yii::app()->user->role >=11){
+		if(empty($end_time)){
 			$end_time = date('Y-m-d',time());
 		}
-		if(!empty($dpname)){
-			$dpnames = ' like "%'.$dpname.'%"';
-			$sql = 'select k.lid from nb_order k left join nb_company c on(k.dpid = c.dpid) where k.order_status in(3,4,8) and c.company_name like "%'.$dpname.'%" and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		}else{
-			$dpnames = ' is not null and t.comp_dpid = '.$this->companyId.' or t.dpid ='.$this->companyId;
-			$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in (select c.dpid from nb_company c where (c.comp_dpid = '.$this->companyId.' or c.dpid = '.$this->companyId.') and c.delete_flag =0 and c.type =1) and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		$beginTime = $begin_time.' 00:00:00';
+		$endTime = $end_time.' 23:59:59';
+		
+		if($selectDpid == ''){
+			$selectDpid = $this->companyId;
 		}
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
+		if($text==1){
+			// 按年查询
+			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid;
+		}elseif ($text==2){
+			// 按月查询
+			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid;
+		}elseif ($text==3){
+			// 按日查询
+			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
+				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid;
+				   
 		}
-
-		$sql = 'select year(o.create_at) as y_all,month(o.create_at) as m_all,day(o.create_at) as d_all, '
-				.' t.dpid,t.company_name,o.create_at,op.all_reality ,o.all_should, '
-				.' op.all_nums,o.all_num,op0.all_cash,op1.all_wxpay,op2.all_alipay,op3.all_htpay,op4.all_member,op5.all_bankpay,op8.all_point,op9.all_cupon,op10.all_wxmember,op12.all_wxdd,op13.all_wxwm '
-				.' from nb_company t '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_reality,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype !=11 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op on(t.dpid = op.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_cash,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =0 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op0 on(t.dpid = op0.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxpay,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =1 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op1 on(t.dpid = op1.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_alipay,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =2 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op2 on(t.dpid = op2.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_htpay,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =3 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op3 on(t.dpid = op3.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_member,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =4 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op4 on(t.dpid = op4.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_bankpay,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =5 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op5 on(t.dpid = op5.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_point,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =8 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op8 on(t.dpid = op8.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_cupon,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =9 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op9 on(t.dpid = op9.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxmember,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =10 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op10 on(t.dpid = op10.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxdd,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =12 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op12 on(t.dpid = op12.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxwm,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' where top.paytype =13 and top.order_id in('.$ords.') and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op13 on(t.dpid = op13.dpid) '
-				.' left join ('
-					.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid'
-					.' from nb_order ot '
-					.' where ot.order_status in(3,4,8) and ot.lid in('.$ords.') and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
-					.' group by ot.dpid'
-				.' ) o on(t.dpid = o.dpid)'
-				.' where op.all_reality is not null and t.delete_flag =0 and t.company_name '.$dpnames
-				.' group by t.dpid';
-		$prices = Yii::app()->db->createCommand($sql)->queryAll();
-		//var_dump($prices);
-		//exit;
-
-		//var_dump($model);exit;
-		$payments = $this->getPayment($this->companyId);
-		$username = $this->getUsername($this->companyId);
-		$comName = $this->getComName();
-		//var_dump($model);exit;
+		$sql .= ' order by create_at asc,paytype asc';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($models as $model){
+			$orderId = $model['order_id'];
+			$createAt = $model['create_at'];
+			$payType = $model['paytype'];
+			$payMethodId = $model['payment_method_id'];
+			if(!isset($orderArrs[$createAt][$orderId])){
+				$orderArrs[$createAt][$orderId] = array();
+			}
+			if(!isset($orderPayArrs[$createAt][$payType.'-'.$payMethodId])){
+				$orderPayArrs[$createAt][$payType.'-'.$payMethodId] = array();
+			}
+			
+			array_push($orderArrs[$createAt][$orderId],$model);
+			array_push($orderPayArrs[$createAt][$payType.'-'.$payMethodId],$model);
+		}
+		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
+		$payments = $this->getPayment($selectDpid); // 后台手动添加到支付方式
 		$this->render('comPaymentReport',array(
-				'prices'=>$prices,
+				'models'=>$model,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
 				'str'=>$str,
-				'comName'=>$comName,
 				'payments'=>$payments,
-				'username'=>$username,
-				'dpname'=>$dpname,
+				'selectDpid'=>$selectDpid,
 		));
 	}
 	public function actionComPayYueReport(){
-		$str = Yii::app()->request->getParam('str');
-		$typ = Yii::app()->request->getParam('typ');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		$dpname = Yii::app()->request->getParam('dpname','');
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		
 		$orderArrs = array();
 		$orderPayArrs = array();
 		$beginTime = $begin_time.' 00:00:00';
 		$endTime = $end_time.' 23:59:59';
 		
+		if($selectDpid == ''){
+			$selectDpid = $this->companyId;
+		}
 		$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
-				' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype in(9,10,12,13) and t.dpid='.$this->companyId;
+				' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype in(9,10,12,13) and t.dpid='.$selectDpid;
 		$sql .= ' order by create_at asc,paytype asc';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($models as $model){
@@ -591,9 +523,7 @@ class StatementsController extends BackendController
 				'models'=>$models,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-				'typ'=>$typ,
-				'str'=>$str,
-				'dpname'=>$dpname,
+				'selectDpid'=>$selectDpid,
 		));
 	}
 
@@ -3163,7 +3093,6 @@ class StatementsController extends BackendController
 	}
 	//导出支付方式员工营业额的报表
 	public function actionPaymentExport(){
-		date_default_timezone_set('PRC');
 		$objPHPExcel = new PHPExcel();
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');

@@ -186,7 +186,7 @@
         				<div style="height: 80px;" class="list col-sm-3 col-xs-12">
                            <a href="<?php echo $this->createUrl('statements/comPaymentReport',array('companyId' => $this->companyId,'text'=>'3','page'=>1));?>">
                                 <div class="list_big">支付方式</div>
-                                <div class="list_small">查看所有不同支付方式的账单数据以及总单数</div>
+                                <div class="list_small">查看不同门店的所有不同支付方式的账单数据以及总单数</div>
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
