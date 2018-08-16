@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项明细表'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','品项明细表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','单品明细表'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','单品明细表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,37 +34,37 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项明细表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','单品明细表');?></div>
 				<div class="actions">
+					<div class="btn-group">
+						<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+					</div>
 					<select id="ordertype" class="btn yellow" >
-					<option value="-1" <?php if ($ordertype==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
-					<option value="0" <?php if ($ordertype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
-					<option value="1" <?php if ($ordertype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信堂食');?></option>
-					<option value="2" <?php if ($ordertype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
-					<option value="3" <?php if ($ordertype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信预约');?></option>
-					<option value="4" <?php if ($ordertype==4){?> selected="selected" <?php }?> ><?php echo yii::t('app','后台外卖');?></option>
-					<option value="5" <?php if ($ordertype==5){?> selected="selected" <?php }?> ><?php echo yii::t('app','自助');?></option>
-					<option value="6" <?php if ($ordertype==6){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信点单');?></option>
-					<option value="7" <?php if ($ordertype==7){?> selected="selected" <?php }?> ><?php echo yii::t('app','美团');?></option>
-					<option value="8" <?php if ($ordertype==8){?> selected="selected" <?php }?> ><?php echo yii::t('app','饿了么');?></option>
+						<option value="-1" <?php if ($ordertype==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
+						<option value="0" <?php if ($ordertype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
+						<option value="1" <?php if ($ordertype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信堂食');?></option>
+						<option value="2" <?php if ($ordertype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
+						<option value="3" <?php if ($ordertype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信预约');?></option>
+						<option value="4" <?php if ($ordertype==4){?> selected="selected" <?php }?> ><?php echo yii::t('app','后台外卖');?></option>
+						<option value="5" <?php if ($ordertype==5){?> selected="selected" <?php }?> ><?php echo yii::t('app','自助');?></option>
+						<option value="6" <?php if ($ordertype==6){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信点单');?></option>
+						<option value="7" <?php if ($ordertype==7){?> selected="selected" <?php }?> ><?php echo yii::t('app','美团');?></option>
+						<option value="8" <?php if ($ordertype==8){?> selected="selected" <?php }?> ><?php echo yii::t('app','饿了么');?></option>
 					</select>
-				<div class="btn-group">
-				
+					<div class="btn-group">
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
 								<span class="input-group-addon">~</span>
 							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
 						  </div>  
-			    </div>	
-					
+			    	</div>	
 					<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>		
 					</div>			
 			    </div>
 			 </div> 
-			
-				<div class="portlet-body" id="table-manage">
+			 <div class="portlet-body" id="table-manage">
 				<div class="dataTables_wrapper form-inline">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -83,7 +83,6 @@
 						<tbody>
 						<?php if( $models) :?>
 						<!--foreach-->
-						<?php $a=1;?>
 						<?php foreach ($models as $model):?>
 						<?php if($model->all_total == 0 || $model->all_total == null): $model->total = 1;endif;?>
 								<tr class="odd gradeX">
@@ -96,7 +95,6 @@
 								<td></td>
 								
 							</tr>
-						<?php $a++;?>
 						<?php endforeach;?>	
 						<!-- end foreach-->
 						<?php endif;?>
@@ -162,15 +160,17 @@
 			   var ordertype = $('#ordertype').val();
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   location.href="<?php echo $this->createUrl('statements/orderproductsReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/ordertype/"+ordertype;
+			   var selectDpid = $('select[name="selectDpid"]').val();
+			   location.href="<?php echo $this->createUrl('statements/orderproductsReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/ordertype/"+ordertype+'/selectDpid/'+selectDpid;
 			  
 	        });
 			  $('#excel').click(function excel(){
 				   var ordertype = $('#ordertype').val();
 				   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
+				   var selectDpid = $('select[name="selectDpid"]').val();
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-			    	   location.href="<?php echo $this->createUrl('statements/orderproductsReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/ordertype/"+ordertype;
+			    	   location.href="<?php echo $this->createUrl('statements/orderproductsReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/ordertype/"+ordertype+'/selectDpid/'+selectDpid;
 			       }
 			   });
 

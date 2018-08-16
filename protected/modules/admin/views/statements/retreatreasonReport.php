@@ -39,14 +39,16 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','退菜原因统计报表');?></div>
 				<div class="actions">
-				<select id="text" class="btn yellow" >
-					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
-					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
-					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
+					<div class="btn-group">
+						<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+					</div>
+					<select id="text" class="btn yellow" >
+						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
+						<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
+						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
 					</select>
 					
-				<div class="btn-group">
-				
+					<div class="btn-group">
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
 								<span class="input-group-addon">~</span>
@@ -68,8 +70,6 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
-							<!-- 	<th>序号</th> -->
 								<th><?php echo yii::t('app','时间');?></th>
 								<th><?php echo yii::t('app','退菜原因');?></th>
                                 <th><?php echo yii::t('app','次数');?></th>
@@ -82,35 +82,16 @@
 						<tbody>
 						<?php if( $models) :?>
 						<!--foreach-->
-						<?php $a=1;?>
 						<?php foreach ($models as $model):?>
-
 								<tr class="odd gradeX">
 								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
-								
 								<td><?php echo $model['name'];?></td>
-								
 								<td><?php echo $model['all_num'];?></td>
 								<td><?php echo $model['all_amount'];?></td>
 								<td><?php echo $model['all_retreatprice'];?></td>
 								<td><?php ?></td>
-								
 							</tr>
-						<?php $a++;?>
 						<?php endforeach;?>	
-						<!--<php foreach ($money as $moneys):?>
-						<php 
-						if(!empty($moneys)):?>
-						<tr class="odd gradeX">
-						<td><php if($text==1){echo $moneys['y_all'];}elseif($text==2){ echo $moneys['y_all'].-$moneys['m_all'];}else{echo $moneys['y_all'].-$moneys['m_all'].-$moneys['d_all'];}?></td>
-						<td><php echo $moneys['company_name'];?></td>
-						<td><php echo yii::t('app','会员卡支付');?></td>
-						<td><php echo $moneys['all_huiyuan'];?></td>
-						<td><php echo yii::t('app','请注意这是会员卡支付（每一页的数据都是一样的）');?></td>
-						</tr>
-						<php endif;?>
-						<php endforeach;?>
-						<!-- end foreach-->
 						<?php endif;?>
 						</tbody>
 					</table>
@@ -174,66 +155,18 @@
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
-			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/retreatreasonReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
+			   var selectDpid = $('select[name="selectDpid"]').val();
+			   location.href="<?php echo $this->createUrl('statements/retreatreasonReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/selectDpid/"+selectDpid;    
 			  
 	        });
-		   a = new Array();
-		   $('#cx').click(function cx(){  
-			   // var obj = document.getElementById('accept');
-			    var obj=$('.checkedCN');
-			   
-			    var str=new Array();
-					obj.each(function(){
-						if($(this).attr("checked")=="checked")
-						{
-							
-							str += $(this).val()+","
-							
-						}								
-					});
-				a = str = str.substr(0,str.length-1);//除去最后一个“，”
-				//alert(str);
-					  var begin_time = $('#begin_time').val();
-					   var end_time = $('#end_time').val();
-					   var text = $('#text').val();
-					   
-					   //var cid = $(this).val();
-					  
-					 location.href="<?php echo $this->createUrl('statements/retreatreasonReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;	  
-					 return a; 
-			 });
 
 			  $('#excel').click(function excel(){
-// 				  var obj=$('#checkedCNid');
-// 				    alert(obj);
-// 				    var str=new Array();
-// 						obj.each(function(){
-// 							alert(1);
-// 							if($(this).attr("checked")=="checked")
-// 							{
-// 								alert(str);
-// 								str += $(this).val()+","
-								
-// 							}								
-// 						});
-// 					str = str.substr(0,str.length-1);//除去最后一个“，”
-				   var str ='<?php echo $str;?>';
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
-				  
-				   //alert(str);
+				   var selectDpid = $('select[name="selectDpid"]').val();
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/retreatreasonReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/retreatreasonReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/selectDpid/"+selectDpid;
 			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			      
 			   });
-			     excel();
-			     cx();
 </script> 

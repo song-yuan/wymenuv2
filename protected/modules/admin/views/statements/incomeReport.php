@@ -30,35 +30,44 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
+		<div class="col-md-12">
+			<div class="btn-group">
+				<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+			</div>
+			<select id="text" class="btn yellow" >
+			<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
+			<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
+			<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
+			</select>
+			
+			<select id="setid" class="btn green" >
+			<option value="1" <?php if ($setid==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','综合');?></option>
+			<option value="0" <?php if ($setid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','单品');?></option>
+			<option value="2" <?php if ($setid==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
+			</select>
+			<div class="btn-group">
+				   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+						<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+						<span class="input-group-addon">~</span>
+					    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+				  </div>  
+			</div>	
+			
+			<div class="btn-group">
+					<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+					<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+			</div>
+		</div>
+		<br>
+	</div>
+	<div class="row">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet box purple">
 			<div class="portlet-title">
-				<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营业收入报表（菜品分类）');?></div>
+				<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品分类统计报表');?></div>
 			<div class="actions">
-				<select id="text" class="btn yellow" >
-				<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
-				<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
-				<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
-				</select>
-				
-				<select id="setid" class="btn green" >
-				<option value="1" <?php if ($setid==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','综合');?></option>
-				<option value="0" <?php if ($setid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','单品');?></option>
-				<option value="2" <?php if ($setid==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
-				</select>
-				<div class="btn-group">
-					   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-							<span class="input-group-addon">~</span>
-						    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-					  </div>  
-				</div>	
-				
-				<div class="btn-group">
-						<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-						<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-				</div>			
+							
 			</div>
 		 </div> 
 		
@@ -138,7 +147,6 @@
 <!-- END PAGE -->
 
 <script>
-		//var str=new array();						
 		jQuery(document).ready(function(){
 		    if (jQuery().datepicker) {
 	            $('.date-picker').datepicker({
@@ -157,8 +165,8 @@
 	   var end_time = $('#end_time').val();
 	   var text = $('#text').val();
 	   var setid = $('#setid').val();
-	   location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/setid/"+setid    
-		  
+	   var selectDpid = $('select[name="selectDpid"]').val();
+	   location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/setid/"+setid+'/selectDpid/'+selectDpid;    
   });
 
   $('#excel').click(function excel(){

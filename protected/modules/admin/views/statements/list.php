@@ -125,7 +125,7 @@
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-                            <a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                            <a href="<?php echo $this->createUrl('statements/productSalseReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
                                 <div class="list_big">单品销售统计</div>
                                 <div class="list_small">查询不同时间段的单品以及套餐内单品的销售数据</div>
                             </a> 
@@ -137,7 +137,7 @@
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-                            <a href="<?php echo $this->createUrl('statements/ceshiproductsetReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+                            <a href="<?php echo $this->createUrl('statements/productsetSalseReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
                                 <div class="list_big">套餐销售</div>
                                 <div class="list_small">查询不同时间段的套餐销售数据</div>
                             </a> 
@@ -156,8 +156,8 @@
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                             <a href="<?php echo $this->createUrl('statements/orderproductsReport',array('companyId' => $this->companyId,'ordertype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-                                <div class="list_big">品项明细</div>
-                                <div class="list_small">查询品项的名称、账单号以及销售金额等</div>
+                                <div class="list_big">单品明细报表</div>
+                                <div class="list_small">查询单品的名称、账单号以及销售金额等</div>
                             </a> 
                         </div>
                     </div>

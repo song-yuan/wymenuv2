@@ -1,8 +1,6 @@
  <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>
 	
-	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');?>
 <!-- BEGIN PAGE -->
 <style>
 	.font18{
@@ -94,25 +92,19 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','退菜明细报表');?></div>
 				<div class="actions">
-				<!-- 	<select id="text" class="btn yellow" >
-					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
-					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
-					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
-					</select>
-					 -->
-				<div class="btn-group">
-				
-						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-						  </div>  
-					</div>	
-					
 					<div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-							<!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
+						<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+					</div>
+					<div class="btn-group">
+					   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+							<span class="input-group-addon">~</span>
+						    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+					   </div>  
+					</div>	
+					<div class="btn-group">
+						<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+						<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
 					</div>			
 				</div>
 			 </div> 
@@ -123,8 +115,6 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
-							<!-- 	<th>序号</th> -->
 								<th><?php echo yii::t('app','账单号');?></th> 
                               	<th><?php echo yii::t('app','下单时间');?></th>
                                 <th><?php echo yii::t('app','总价');?></th>
@@ -226,7 +216,6 @@ $('.accountno').click(function() {
 	   var originalp = $(this).attr('originalp');
 	   var shouldp = $(this).attr('shouldp');
 	   var youhuip = $(this).attr('youhuip');
-	   //alert(originalp); alert(shouldp);
 	   var url = "<?php echo $this->createUrl('statements/accountDetail',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/type/1";
    $.ajax({
        url:url,
@@ -345,35 +334,22 @@ $('.accountno').click(function() {
 
 });
   
-		   $('#btn_time_query').click(function time() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			   var text = $('#text').val();
-			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/retreatdetailReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
-			  
-	        });
+	   $('#btn_time_query').click(function time() {  
+		   var begin_time = $('#begin_time').val();
+		   var end_time = $('#end_time').val();
+		   var text = $('#text').val();
+		   var selectDpid = $('select[name="selectDpid"]').val();
+		   location.href="<?php echo $this->createUrl('statements/retreatdetailReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+'/selectDpid/'+selectDpid;    
+        });
 		  
 
-			  $('#excel').click(function excel(){
-
-				  
-		    	   var begin_time = $('#begin_time').val();
-				   var end_time = $('#end_time').val();
-				   var text = $('#text').val();
-				  
-				   //alert(str);
-			       if(confirm('确认导出并且下载Excel文件吗？')){
-							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/retreatdetailReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			      
-			   });
+		  $('#excel').click(function excel(){
+	    	   var begin_time = $('#begin_time').val();
+			   var end_time = $('#end_time').val();
+			   var text = $('#text').val();
+			   var selectDpid = $('select[name="selectDpid"]').val();
+		       if(confirm('确认导出并且下载Excel文件吗？')){
+		    	   location.href="<?php echo $this->createUrl('statements/retreatdetailReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+'/selectDpid/'+selectDpid;
+		       }
+		   });
 </script> 

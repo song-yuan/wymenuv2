@@ -44,12 +44,15 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','时段报表');?></div>
 				<div class="actions">
 				  <div class="btn-group">
-						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-						  </div>  
-			    </div>	
+				  		<div class="btn-group">
+							<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+						</div>
+				  		<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+							<span class="input-group-addon">~</span>
+						    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+				  		</div>  
+			    	</div>	
 					
 					<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
@@ -64,24 +67,6 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','序号');?></th>
-								<!-- <th>
-									<div class="btn-group">
-										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
-										<button type="button" class="btn green dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
-										<div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">
-											
-											
-											<?php foreach($comName as $key=>$value):?>
-
-											<label><input name="accept" id="cked" class="checkedCN" value="<?php echo $key;?>" type="checkbox"><?php echo $value;?></label>
-											  
-											<?php endforeach;?>
-											
-											 <button type="submit" id="cx" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','确定');?></button> 
-												
-										</div>
-									</div>
-								</th> -->
                                 <th><?php echo yii::t('app','时段');?></th>
                                 <th><?php echo yii::t('app','单数');?></th>
                                 <th><?php echo yii::t('app','营业额');?></th>
@@ -105,37 +90,6 @@
 						</tbody>
 					</table>
 					</div>
-					<!-- <php if($pages->getItemCount()):?>
-						<div class="row">
-							<div class="col-md-5 col-sm-12">
-								<div class="dataTables_info">
-									<?php echo yii::t('app','共 ');?> <php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> ,  <php echo yii::t('app','当前是第');?> <php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
-								</div>
-							</div>
-							<div class="col-md-7 col-sm-12">
-								<div class="dataTables_paginate paging_bootstrap">
-								<php $this->widget('CLinkPager', array(
-									'pages' => $pages,
-									'header'=>'',
-									'firstPageLabel' => '<<',
-									'lastPageLabel' => '>>',
-									'firstPageCssClass' => '',
-									'lastPageCssClass' => '',
-									'maxButtonCount' => 8,
-									'nextPageCssClass' => '',
-									'previousPageCssClass' => '',
-									'prevPageLabel' => '<',
-									'nextPageLabel' => '>',
-									'selectedPageCssClass' => 'active',
-									'internalPageCssClass' => '',
-									'hiddenPageCssClass' => 'disabled',
-									'htmlOptions'=>array('class'=>'pagination pull-right')
-								));
-								?>
-								</div>
-							</div>
-						</div>
-						<php endif;?> -->
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -163,7 +117,7 @@ var option2 = {
         trigger: 'axis'
     },
     grid: {
-        right: '25%',
+        right: '15%',
         left: '15%',
     },
     toolbox: {
@@ -247,7 +201,7 @@ var option2 = {
      shade: [0.1,'#fff'],
      move:'#main2',
      moveOut:true,
-     offset:['50px','50px'],
+     offset:['20%','20%'],
      shade: false,
      title: false, //不显示标题
      area: ['auto', 'auto'],
@@ -255,15 +209,12 @@ var option2 = {
      cancel: function(index){
          layer.close(index);
          layer_zhexiantu=0;
-//                        this.content.show();
-//                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
      }
  });
 
 
  
 
- //上面用来生成折线图
 		jQuery(document).ready(function(){
 		    if (jQuery().datepicker) {
 	            $('.date-picker').datepicker({
@@ -278,40 +229,21 @@ var option2 = {
 		});
 		 
 		       
-		   $('#btn_time_query').click(function() {  
-			   var begin_time = $('#begin_time').val();
+	   $('#btn_time_query').click(function() {  
+		   var begin_time = $('#begin_time').val();
+		   var end_time = $('#end_time').val();
+		   var selectDpid = $('select[name="selectDpid"]').val();
+		   location.href="<?php echo $this->createUrl('statements/timedataReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;
+		  
+        });
+		$('#excel').click(function excel(){
+	    	   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   location.href="<?php echo $this->createUrl('statements/timedataReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;
-			  
-	        });
-		   $('#cx').click(function(){  
-			   // var obj = document.getElementById('accept');
-			    var obj=$('.checkedCN');
-			    
-			    var str=new Array();
-					obj.each(function(){
-						if($(this).attr("checked")=="checked")
-						{
-							
-							str += $(this).val()+","
-							
-						}								
-					});
-				str = str.substr(0,str.length-1);//除去最后一个“，”
-					  var begin_time = $('#begin_time').val();
-					   var end_time = $('#end_time').val();
-					 location.href="<?php echo $this->createUrl('statements/timedataReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
-					  
-
-			  });
-			  $('#excel').click(function excel(){
-		    	   var begin_time = $('#begin_time').val();
-				   var end_time = $('#end_time').val();
-			       if(confirm('确认导出并且下载Excel文件吗？')){
-
-			    	   location.href="<?php echo $this->createUrl('statements/timedataReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
-			       }
-			      
-			   });
+			   var selectDpid = $('select[name="selectDpid"]').val();
+		       if(confirm('确认导出并且下载Excel文件吗？')){
+		    	   location.href="<?php echo $this->createUrl('statements/timedataReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;
+		       }
+		      
+		 });
 
 </script> 

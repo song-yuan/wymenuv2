@@ -1,10 +1,6 @@
-	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
-    <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
-    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
-    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
-	      <!-- BEGIN PAGE -->
+    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>
+	<!-- BEGIN PAGE -->
     <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -35,27 +31,36 @@
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<div class="col-md-12">
+		<div class="btn-group">
+			<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+		</div>
+		<select id="text" class="btn yellow" >
+			<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
+			<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
+			<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
+		</select>
+		<div class="btn-group">
+		   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+				<input type="text" class="form-control ui_timepicker" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+				<span class="input-group-addon">~</span>
+			    <input type="text" class="form-control ui_timepicker" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+		  </div>  
+		</div>	
+		<div class="btn-group">
+			<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+			<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+		</div>	
+	</div>
+	<br>
+	</div>
+	<div class="row">
+	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营业数据报表');?></div>
 				<div class="actions">
-					<select id="text" class="btn yellow" >
-						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
-						<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
-						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
-					</select>
-					<div class="btn-group">
-					   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-							<input type="text" class="form-control ui_timepicker" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-							<span class="input-group-addon">~</span>
-						    <input type="text" class="form-control ui_timepicker" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-					  </div>  
-					</div>	
-					<div class="btn-group">
-						<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-						<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-					</div>			
+							
 				</div>
 			 </div> 
 			
@@ -142,46 +147,35 @@
 <!-- END PAGE -->
 
 <script>
-$(function () {
-	$(".ui_timepicker").datetimepicker({
- 		//showOn: "button",
-  		//buttonImage: "./css/images/icon_calendar.gif",
-   		//buttonImageOnly: true,
-    	showSecond: true,
-    	timeFormat: 'hh:mm:ss',
-    	stepHour: 1,
-   		stepMinute: 1,
-    	stepSecond: 1
-})
+jQuery(document).ready(function(){
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+        	format: 'yyyy-mm-dd',
+        	language: 'zh-CN',
+            rtl: App.isRTL(),
+            autoclose: true
+        });
+        $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+        
+   }
 });
 
   
-		   $('#btn_time_query').click(function time() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			   var text = $('#text').val();
-			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/businessdataReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
-			  
-	        });
+   $('#btn_time_query').click(function time() {  
+	   var begin_time = $('#begin_time').val();
+	   var end_time = $('#end_time').val();
+	   var text = $('#text').val();
+	   var selectDpid = $('select[name="selectDpid"]').val();
+	   location.href="<?php echo $this->createUrl('statements/businessdataReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+'/selectDpid/'+selectDpid;    
+   });
 		 
-			  $('#excel').click(function excel(){
-				   var str ='<?php echo $str;?>';
-		    	   var begin_time = $('#begin_time').val();
-				   var end_time = $('#end_time').val();
-				   var text = $('#text').val();
-				  
-			       if(confirm('确认导出并且下载Excel文件吗？')){
-							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/businessdataReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			      
-			   });
+	$('#excel').click(function excel(){
+    	var begin_time = $('#begin_time').val();
+		var end_time = $('#end_time').val();
+		var text = $('#text').val();
+		  
+	    if(confirm('确认导出并且下载Excel文件吗？')){
+	    	location.href="<?php echo $this->createUrl('statements/businessdataReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+       	}
+    });
 </script> 

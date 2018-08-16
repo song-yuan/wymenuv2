@@ -44,6 +44,9 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','渠道占比报表');?></div>
 					<div class="actions">
+						<div class="btn-group">
+							<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+						</div>
                         <div class="btn-group">
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
@@ -233,32 +236,18 @@
 		
 		       
 		   $('#btn_time_query').click(function() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   //var Did = $('#Did').var();
-			  //var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/channelsproportion' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
+			   var selectDpid = $('select[name="selectDpid"]').val();
+			   location.href="<?php echo $this->createUrl('statements/channelsproportion' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+'/end_time/'+end_time+'/selectDpid/'+selectDpid;   
 			  
 	        });
 		   $('#excel').click(function excel(){
-
-				   
-		    	   var begin_time = $('#begin_time').val();
-				   var end_time = $('#end_time').val();
-				   var text = $('#text').val();
-				  
-				   //alert(str);
-			       if(confirm('确认导出并且下载Excel文件吗？')){
-							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/ChannelsproportionExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			      
-			   });
+	    	   var begin_time = $('#begin_time').val();
+			   var end_time = $('#end_time').val();
+			   var selectDpid = $('select[name="selectDpid"]').val();
+		       if(confirm('确认导出并且下载Excel文件吗？')){
+		    	   location.href="<?php echo $this->createUrl('statements/ChannelsproportionExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;
+		       }
+		   });
 </script> 

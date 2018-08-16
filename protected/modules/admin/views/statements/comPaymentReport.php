@@ -34,7 +34,7 @@
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet box purple">
             <div class="portlet-title">
-                <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式（员工营业额）报表');?></div>
+                <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式（营业额）报表');?></div>
             	<div class="actions">
 	            	<div class="btn-group">
 						<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>

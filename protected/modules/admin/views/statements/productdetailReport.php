@@ -48,10 +48,9 @@
 	<div class="col-md-12">
 	<div style="border: 1px solid silver;padding: 10px;margin-bottom: 25px;">
 		<div class="actions ">
-			<?php if(Yii::app()->user->role <=5):?>
-			<div id="dpidchoose" class="btn-group "><input class="btn blue" value="选择店铺"/></div>
-			<?php endif;?>
-			<input type="hidden" id="dpids" name="dpids" value="<?php if($str)echo $str;?>" />
+			<div class="btn-group">
+				<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+			</div>
 			<div class="btn-group">
 				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 			</div>
@@ -205,32 +204,6 @@
 </div>
 <!-- END PAGE -->
 	
-		<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
-		<div class="modal-header">
-			<h4 class="modal-title">选择店铺</h4>
-		</div>
-		<div class="modal-body">
-			<div class="portlet-body" id="table-manage">
-				<div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
-					<div class="form-group last">
-						<div class="col-md-9">
-							<select name="country" class="multi-select" multiple="" id="my_multi_select3" >
-							<?php if($dpids):?>
-			            	<?php foreach($dpids as $dpid):?>
-								<option value="<?php echo $dpid['dpid'];?>"><?php echo $dpid['dpid']%1000;?><?php echo $dpid['company_name']?></option>
-							<?php endforeach;?>
-					    	<?php endif;?>
-							</select>
-						</div>
-					</div>
-         	        <div>
-         		        <button id="printall" type="button" class="btn blue">确认</button>
-         	        </div>
-		        </div>
-	        </div>
-		</div>
-	</div>
-
 	
 <script>
 
@@ -246,8 +219,6 @@
 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
 	            
            };
-        //App.init();
-	    FormComponents.init();
 		});
         var bgin_instance = mobiscroll.time('#day_begin', {
             theme: 'mobiscroll',
@@ -264,19 +235,6 @@
             headerText: false,
             maxWidth: 90
         });
-		$("#dpidchoose").on('click',function() {
-			layer_index_printreportlist=layer.open({
-	            type: 1,
-	            shade: false,
-	            title: false, //不显示标题
-	            area: ['60%', '60%'],
-	            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-	            cancel: function(index){
-	                layer.close(index);
-	                layer_index_printreportlist=0;
-	            }
-	        });
-		});
 		$('#checktime').on('change',function(){
 			if($('.times').hasClass('hide')){
 				$('.times').removeClass('hide');
@@ -286,13 +244,12 @@
 		});
 		$('#selectCategory').on('change',function(){
 			var cate = $('#selectCategory').val();
-			//layer.msg(cate);
 			$(".proname").addClass('hide');
 			var s = "#pdname option[cate='"+cate+"']";
 			$(s).removeClass('hide');
 			if(cate == 0){
 				$(".proname").removeClass('hide');
-				}
+			}
 		});
 		   $('#btn_time_query').click(function() {
 			   var ordertype = $('#ordertype').val();
@@ -304,31 +261,18 @@
 			   var setid = $('#setid').val();
 			   var cid = $('#selectCategory').val();
 			   var pdname = $('#pdname').val();
-			   var str = $('#dpids').val();
+			   var selectDpid = $('select[name="selectDpid"]').val();
 			   if($('#checktime').attr('checked')){
 				   var cks = 1;
-				   }else{var cks =0;
-				   }
+			   }else{
+					var cks =0;
+			   }
 			   
-			   location.href="<?php echo $this->createUrl('statements/productdetailReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/day_begin/"+day_begin+"/day_end/"+day_end+"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid+"/pdname/"+pdname+"/str/"+str+"/cks/"+cks;
+			   location.href="<?php echo $this->createUrl('statements/productdetailReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/day_begin/"+day_begin+"/day_end/"+day_end+"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid+"/pdname/"+pdname+"/selectDpid/"+selectDpid+"/cks/"+cks;
 			  
 	        });
-	        $('#printall').on('click',function(){
-		        var dpids = '';
-	        	$('.ms-elem-selectable.ms-selected').each(function(){
-	                dpids += $(this).val()+',';
-	                
-	            });
-	        	if(dpids!=''){
-	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
-	            }else{
-					alert("请选择具体店铺,再确认！");return;
-		            }
-	        	$("#dpids").val(dpids);
-	        	layer.closeAll();
-		        });
 			
-			  $('#excel').click(function excel(){
+			 $('#excel').click(function excel(){
 				  var ordertype = $('#ordertype').val();
 				   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
@@ -338,15 +282,16 @@
 				   var setid = $('#setid').val();
 				   var cid = $('#selectCategory').val();
 				   var pdname = $('#pdname').val();
-				   var str = $('#dpids').val();
+				   var selectDpid = $('select[name="selectDpid"]').val();
 				   if($('#checktime').attr('checked')){
 					   var cks = 1;
-					   }else{var cks =0;
-					   }
+				   }else{
+						var cks =0;
+				   }
 				   
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-			    	   location.href="<?php echo $this->createUrl('statements/productdetailReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/day_begin/"+day_begin+"/day_end/"+day_end+"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid+"/pdname/"+pdname+"/str/"+str+"/cks/"+cks;
-						   }
+			    	   location.href="<?php echo $this->createUrl('statements/productdetailReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/day_begin/"+day_begin+"/day_end/"+day_end+"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid+"/pdname/"+pdname+"/selectDpid/"+selectDpid+"/cks/"+cks;
+				  }
 			      
 			   });
 

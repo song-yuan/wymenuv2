@@ -89,16 +89,13 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','账单支付方式'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
-
-	            <form action="" method="post" class="find">
-
-
-                    <input type="text"  name="accountno1" class="accountno1 form-control" placeholder="账单号" value="<?php echo isset($accountno) && $accountno ?$accountno:'';?>" />     
-                       <button type="submit" class="btn green">
-                               	查找 &nbsp;
-                       		<i class="m-icon-swapright m-icon-white"></i>
-                       </button>
-                </form>
+	<form action="" method="post" class="find">
+    <input type="text"  name="accountno1" class="accountno1 form-control" placeholder="账单号" value="<?php echo isset($accountno) && $accountno ?$accountno:'';?>" />     
+    	<button type="submit" class="btn green">
+          	查找 &nbsp;
+      		<i class="m-icon-swapright m-icon-white"></i>
+        </button>                     
+    </form>                                                                  	            
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -109,8 +106,10 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','账单支付详情');?></div>
 					<div class="actions">
 					<div class="btn-group">
-					<select id="paymentid" class="form-control btn yellow" >
-							
+						<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+					</div>
+					<div class="btn-group">
+						<select id="paymentid" class="form-control btn yellow" >
                             <option paymentid="0" value="-1" <?php if ($paymentid=='0' && $paytype=='-1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择支付方式--');?></option>
                             <option paymentid="1" value="0" <?php if ($paymentid=='1' && $paytype=='0'){?> selected="selected" <?php }?> ><?php echo yii::t('app','现金');?></option>
                             <option paymentid="1" value="1" <?php if ($paymentid=='1' && $paytype=='1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信');?></option>
@@ -128,21 +127,15 @@
                             <option paymentid="3" value="<?php echo $payment['lid'];?>" <?php if ($paymentid=='3' && $paytype==$payment['lid']){?> selected="selected" <?php }?> ><?php echo $payment['name'];?></option>
                             <?php endforeach;?>
                             <?php endif;?>
-                    </select>
-                    </div>
-					<div class="btn-group">
-						<!-- 
-						<input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
-						 -->
-					</div>
-                    <div class="btn-group">
-	                    <div class="input-group input-large date-picker input-daterange" data-date="<?php echo date('d/m/Y',strtotime('-1 months'));?>" data-date-format="mm/dd/yyyy">
-	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','开始时间');?>" value="<?php echo $begin_time; ?>">  
-	                         <span class="input-group-addon">~</span>
-	                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-	                    </div>  
-                    </div>	
-					
+                    	</select>
+                   	 	</div>
+	                    <div class="btn-group">
+		                    <div class="input-group input-large date-picker input-daterange" data-date="<?php echo date('d/m/Y',strtotime('-1 months'));?>" data-date-format="mm/dd/yyyy">
+		                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','开始时间');?>" value="<?php echo $begin_time; ?>">  
+		                         <span class="input-group-addon">~</span>
+		                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+		                    </div>  
+	                    </div>	
 					    <div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
@@ -156,11 +149,11 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
 								<th><?php echo yii::t('app','账单号');?></th>
 								<th><?php echo yii::t('app','下单时间');?></th>
                                 <th><?php echo yii::t('app','支付方式');?></th>
                                 <th><?php echo yii::t('app','金额');?></th>
+                                <th><?php echo yii::t('app','第三方订单号');?></th>
 								
 							</tr>
 						</thead>
@@ -189,6 +182,7 @@
 										case 15: echo '饿了么·外卖';break;
 								} ;?><?php if($model['pay_amount']<0)echo '(退款)';?></td>
 								<td><?php echo sprintf("%.2f",$model['pay_amount']);?></td>
+								<td><?php echo $model['transaction_id'];?></td>
 								</tr>
 						
 						<?php endforeach;?>	
@@ -240,43 +234,34 @@
 </div>
 
 <script>
-$(function () {
-	if (jQuery().datepicker) {
-		$('.date-picker').datepicker({
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-			rtl: App.isRTL(),
-			autoclose: true
-		});
-		$('body').removeClass("modal-open");
-	}
-});
+	$(function () {
+		if (jQuery().datepicker) {
+			$('.date-picker').datepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				rtl: App.isRTL(),
+				autoclose: true
+			});
+			$('body').removeClass("modal-open");
+		}
+	});
 		   
-		   $('#btn_time_query').click(function() {
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			   var paytype = $('#paymentid').val();
-			   //var paymentid = $('#paymentid').attr('paymentid');
-			   var paymentid = $("#paymentid").find("option:selected").attr("paymentid");
-			   //alert(paytype);alert(paymentid);
-			   location.href="<?php echo $this->createUrl('statements/orderpaytype' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"+"/paymentid/"+paymentid+"/paytype/"+paytype;  
-			  
-	        });
-		   $('#excel').click(function excel(){
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			   var paytype = $('#paymentid').val();
-			   //var paymentid = $('#paymentid').attr('paymentid');
-			   var paymentid = $("#paymentid").find("option:selected").attr("paymentid");
-			
-			       if(confirm('确认导出并且下载Excel文件吗？')){
-							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/orderpaytypeExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/paymentid/"+paymentid+"/paytype/"+paytype;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-			       }
-			      
-			   });
+   $('#btn_time_query').click(function() {
+	   var begin_time = $('#begin_time').val();
+	   var end_time = $('#end_time').val();
+	   var paytype = $('#paymentid').val();
+	   var paymentid = $("#paymentid").find("option:selected").attr("paymentid");
+	   var selectDpid = $('select[name="selectDpid"]').val();
+	   location.href="<?php echo $this->createUrl('statements/orderpaytype' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/paymentid/"+paymentid+"/paytype/"+paytype+'/selectDpid/'+selectDpid;  
+   });
+   $('#excel').click(function excel(){
+	   var begin_time = $('#begin_time').val();
+	   var end_time = $('#end_time').val();
+	   var paytype = $('#paymentid').val();
+	   var paymentid = $("#paymentid").find("option:selected").attr("paymentid");
+	   var selectDpid = $('select[name="selectDpid"]').val();
+	   if(confirm('确认导出并且下载Excel文件吗？')){
+    	   location.href="<?php echo $this->createUrl('statements/orderpaytypeExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/paymentid/"+paymentid+"/paytype/"+paytype+'/selectDpid/'+selectDpid;
+       }
+   });
 </script> 
