@@ -30,15 +30,18 @@ class StatementstockController extends BackendController
 	
 	public function actionStockReport(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text',1);
 		$codename = Yii::app()->request->getParam('codename','');
 		$matename = Yii::app()->request->getParam('matename','');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.type=1 and sts.dpid='.$this->companyId.' and sts.create_at like "'.$begin_time.'%"';
+		$sql .= ' where sts.type=1 and sts.dpid='.$selectDpid.' and sts.create_at like "'.$begin_time.'%"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
@@ -59,7 +62,7 @@ class StatementstockController extends BackendController
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
-				'str'=>$str,
+				'selectDpid'=>$selectDpid,
 				'codename'=>$codename,
 				'matename'=>$matename,
 				'categories'=>$categories,
@@ -68,15 +71,18 @@ class StatementstockController extends BackendController
 	}
 	public function actionStockweekReport(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text',1);
 		$codename = Yii::app()->request->getParam('codename','');
 		$matename = Yii::app()->request->getParam('matename','');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-	
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
+		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.type=2 and sts.dpid='.$this->companyId.' and sts.create_at like "'.$begin_time.'%"';
+		$sql .= ' where sts.type=2 and sts.dpid='.$selectDpid.' and sts.create_at like "'.$begin_time.'%"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
@@ -89,7 +95,6 @@ class StatementstockController extends BackendController
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 	
-		//var_dump($models);exit;
 		$categories = $this->getCategories();
 		$this->render('stockweekReport',array(
 				'sqlmodels'=>$sqlmodels,
@@ -97,7 +102,7 @@ class StatementstockController extends BackendController
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
-				'str'=>$str,
+				'selectDpid'=>$selectDpid,
 				'codename'=>$codename,
 				'matename'=>$matename,
 				'categories'=>$categories,
@@ -106,14 +111,18 @@ class StatementstockController extends BackendController
 	}
 	public function actionStockmonthReport(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$codename = Yii::app()->request->getParam('codename','');
 		$matename = Yii::app()->request->getParam('matename','');
-		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m',time()));
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$begin_time = date('Y-m',strtotime($begin_time));
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.type=3 and sts.dpid='.$this->companyId.' and sts.create_at like "'.$begin_time.'%"';
+		$sql .= ' where sts.type=3 and sts.dpid='.$selectDpid.' and sts.create_at like "'.$begin_time.'%"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
@@ -132,7 +141,7 @@ class StatementstockController extends BackendController
 				//'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'text'=>$text,
-				'str'=>$str,
+				'selectDpid'=>$selectDpid,
 				'codename'=>$codename,
 				'matename'=>$matename,
 				'categories'=>$categories,
@@ -144,15 +153,17 @@ class StatementstockController extends BackendController
 	 */
 	public function actionStockallReport(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$str = Yii::app()->request->getParam('str');
 		$codename = Yii::app()->request->getParam('codename','');
 		$matename = Yii::app()->request->getParam('matename','');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
+		$sql .= ' where sts.dpid='.$selectDpid.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
@@ -171,7 +182,7 @@ class StatementstockController extends BackendController
 				//'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-				'str'=>$str,
+				'selectDpid'=>$selectDpid,
 				'codename'=>$codename,
 				'matename'=>$matename,
 				'categories'=>$categories,
@@ -183,15 +194,18 @@ class StatementstockController extends BackendController
 	 */
 	public function actionStockdifferReport(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$codename = Yii::app()->request->getParam('codename','');
 		$matename = Yii::app()->request->getParam('matename','');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-	
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
+		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.salse_num,sts.salse_price,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
+		$sql .= ' where sts.dpid='.$selectDpid.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
@@ -204,7 +218,6 @@ class StatementstockController extends BackendController
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 	
-		//var_dump($models);exit;
 		$categories = $this->getCategories();
 		$this->render('stockdifferReport',array(
 				'sqlmodels'=>$sqlmodels,
@@ -212,7 +225,7 @@ class StatementstockController extends BackendController
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
-				'str'=>$str,
+				'selectDpid'=>$selectDpid,
 				'codename'=>$codename,
 				'matename'=>$matename,
 				'categories'=>$categories,
@@ -229,9 +242,13 @@ class StatementstockController extends BackendController
 		$matename = Yii::app()->request->getParam('matename','');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.salse_num,sts.salse_price,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.dpid='.$this->companyId.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
+		$sql .= ' where sts.dpid='.$selectDpid.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
 		}
@@ -254,8 +271,13 @@ class StatementstockController extends BackendController
 				'matename'=>$matename,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId,
+				'selectDpid'=>$selectDpid
 		));
 	}
+	/**
+	 * 盘损报表
+	 */
+	
 	private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';

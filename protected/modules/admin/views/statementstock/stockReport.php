@@ -15,33 +15,41 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
+		<div class="col-md-12">
+			<div class="btn-group">
+				<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+			</div>
+			<select id="text" class="btn yellow" >
+				<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日报');?></option>
+			</select>
+			<div class="btn-group">
+				 <input type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
+			</div>
+			<div class="btn-group">
+				 <input type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
+			</div>
+			<div class="btn-group">
+				   <div class="input-group  date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+						<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+				  </div>  
+			</div>	
+			<div class="btn-group">
+				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+			</div>
+		</div>
+		<br>
+	</div>
+	<div class="row">
 	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存日报');?></div>
 					<div class="actions">
-						<select id="text" class="btn yellow" >
-						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日报');?></option>
-						</select>
 						<div class="btn-group">
-							 <input type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
-						</div>
-						<div class="btn-group">
-							 <input type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
-						</div>
-						<div class="btn-group">
-							   <div class="input-group  date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-									<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-							  </div>  
-						</div>	
-						<div class="btn-group">
-								<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
-							</div>
-						<div class="btn-group">
-								<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-								<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-						</div>			
+							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+						</div>		
 					</div>
 			 	</div> 
 			<div style="overflow-x: auto;" class="portlet-body" class="portlet-body" >
@@ -139,7 +147,8 @@
 		var cid = $('#selectCategory').val();
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
-		location.href="<?php echo $this->createUrl('statementstock/stockReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
+		var selectDpid = $('select[name="selectDpid"]').val();
+		location.href="<?php echo $this->createUrl('statementstock/stockReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid;    
 	});
 	$('#excel').click(function excel(){
 		layer.msg('此项功能暂未开放！！',{icon: 5});return false;

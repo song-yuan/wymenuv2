@@ -1,14 +1,5 @@
-     <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_002.css');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll.css');?>
-<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_003.css');?>
-     
-     <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
-
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_002.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mall/date/mobiscroll_004.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/waiter/mobiscroll_003.js');?>
-<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mall/date/mobiscroll_005.js');?>
+    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>
     <!-- BEGIN PAGE -->
     <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -23,32 +14,40 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
+		<div class="col-md-12">
+			<div class="btn-group">
+				<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+			</div>
+			<select id="text" class="btn yellow" >
+				<option value="3" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月报');?></option>
+			</select>
+			<div class="btn-group">
+				 <input type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
+			</div>
+			<div class="btn-group">
+				 <input type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
+			</div>
+			<div class="btn-group">
+				   <div class="input-group  date-picker input-daterange" >
+						<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+				  </div>  
+			</div>	
+			<div class="btn-group">
+				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+			</div>
+		</div>
+		<br>
+	</div>
+	<div class="row">
 	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存月报');?></div>
 					<div class="actions">
-						<select id="text" class="btn yellow" >
-						<option value="3" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月报');?></option>
-						</select>
 						<div class="btn-group">
-							 <input type="text" class="form-control" name="codename" id="codename" placeholder="<?php echo yii::t('app','原料编号');?>" value="<?php echo $codename;?>" > 
-						</div>
-						<div class="btn-group">
-							 <input type="text" class="form-control" name="matename" id="matename" placeholder="<?php echo yii::t('app','原料名称');?>" value="<?php echo $matename;?>" > 
-						</div>
-						<div class="btn-group">
-							   <div class="input-group  date-picker input-daterange" >
-									<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-							  </div>  
-						</div>	
-						<div class="btn-group">
-								<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
-							</div>
-						<div class="btn-group">
-								<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-								<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
 						</div>			
 					</div>
 			 	</div> 
@@ -126,35 +125,16 @@
 
 <script>
 jQuery(document).ready(function() {
-	var currYear = (new Date()).getFullYear();
-	var opt = {};
-	opt.date = {preset : 'date'};
-	opt.datetime = {preset : 'datetime'};
-	opt.time = {preset : 'time'};
-	opt.month = {preset : 'month'};
-	opt.default = {
-		theme : 'android-ics light', //皮肤样式
-		display : 'modal', //显示方式
-		mode : 'scroller', //日期选择模式
-		dateWheels: 'yyyy-mm',
-		dateFormat : 'yyyy-mm',
-		//width : cHeight / 1.2,
-		//height : cHeight / 1.6,
-		width:100,
-		height:40,
-		circular:true,
-		showScrollArrows:true,
-		lang : 'zh',
-		showNow : true,
-		nowText : "现在",
-		startYear : currYear-3 , //开始年份
-		endYear : currYear,  //结束年份
-		
-	};
-	
-	var optDateTime = $.extend(opt['month'], opt['default']);
-	$("#begin_time").mobiscroll(optDateTime).date(optDateTime);
-  
+	if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+        	format: 'yyyy-mm-dd',
+        	language: 'zh-CN',
+            rtl: App.isRTL(),
+            autoclose: true
+        });
+        $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+        
+   }
 	$('#btn_time_query').click(function time() {
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#begin_time').val();
@@ -162,7 +142,8 @@ jQuery(document).ready(function() {
 		var cid = $('#selectCategory').val();
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
-		location.href="<?php echo $this->createUrl('statementstock/stockmonthReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename;    
+		var selectDpid = $('select[name="selectDpid"]').val();
+		location.href="<?php echo $this->createUrl('statementstock/stockmonthReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid;    
 	});
 	$('#excel').click(function excel(){
 		layer.msg('此项功能暂未开放！！',{icon: 5});return false;
