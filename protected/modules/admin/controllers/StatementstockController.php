@@ -277,7 +277,55 @@ class StatementstockController extends BackendController
 	/**
 	 * 盘损报表
 	 */
-	
+	public function actionInventoryReport(){
+		$begintime = Yii::app()->request->getPost('begintime',date('Y-m-d',time()));
+		$endtime = Yii::app()->request->getPost('endtime',date('Y-m-d',time()));
+		$reasonid = Yii::app()->request->getPost('reasonid',0);
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
+		
+		$beginTime = $begintime.' 00:00:00';
+		$endTime = $endtime.' 23:59:59';
+		
+		$sql = 'select t.*,t1.opretion_id,t1.reason_id from nb_inventory_detail t,nb_inventory t1 where t.inventory_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$selectDpid.' and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.status=1';
+		if($reasonid){
+			$sql .= ' and t1.reason_id='.$reasonid;
+		}
+		$sql = 'select lid,dpid,opretion_id,type,material_id,reason_id,sum(inventory_stock) as inventory_stock from ('.$sql.')m group by type,material_id';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($models as $key=>$model){
+			$materialId = $model['material_id'];
+			$reasonId = $model['reason_id'];
+			$mtype = $model['type'];
+			if($mtype==1){
+				$material = Common::getmaterialUnit($materialId, $selectDpid, 0);
+				$models[$key]['material_name'] = $material['material_name'];
+				$models[$key]['unit_name'] = $material['unit_name'];
+				$models[$key]['unit_specifications'] = $material['unit_specifications'];
+			}else{
+				$productName = Common::getproductName($materialId);
+				$models[$key]['material_name'] = $productName;
+				$models[$key]['unit_name'] = '个';
+				$models[$key]['unit_specifications'] = '个';
+			}
+		}
+		$retreats = $this->getRetreats($selectDpid);
+		$this->render('inventoryreport',array(
+				'models'=>$models,
+				'begintime'=>$begintime,
+				'endtime'=>$endtime,
+				'reasonid'=>$reasonid,
+				'selectDpid'=>$selectDpid,
+				'retreats'=>$retreats
+		));
+	}
+	public function actionAjaxGetRetreat(){
+		$sdpid = Yii::app()->request->getParam('sdpid',$this->companyId);
+		$restreat = $this->getRetreats($sdpid);
+		echo json_encode($restreat);exit;
+	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
@@ -305,5 +353,10 @@ class StatementstockController extends BackendController
 			$optionsReturn[$model->category_name] = $v;
 		}
 		return $optionsReturn;
+	}
+	private function getRetreats($dpid){
+		$sql = 'select lid,name from nb_retreat where dpid='.$dpid.' and type=2 and delete_flag=0';
+		$retreats = Yii::app()->db->createCommand($sql)->queryAll();
+		return $retreats;
 	}
 }

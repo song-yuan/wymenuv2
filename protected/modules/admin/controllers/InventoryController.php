@@ -215,63 +215,6 @@ class InventoryController extends BackendController
 			$this->redirect(array('inventory/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
 		}
 	}
-	public function actionInventorylog(){
-		$begintime = Yii::app()->request->getPost('begintime',date('Y-m-d',time()));
-		$endtime = Yii::app()->request->getPost('endtime',date('Y-m-d',time()));
-		$reasonid = Yii::app()->request->getPost('reasonid',0);
-		
-		$beginTime = $begintime.' 00:00:00';
-		$endTime = $endtime.' 23:59:59';
-		
-		$sql = 'select t.*,t1.opretion_id,t1.reason_id from nb_inventory_detail t,nb_inventory t1 where t.inventory_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.status=1';
-		if($reasonid){
-			$sql .= ' and t1.reason_id='.$reasonid;
-		}
-		$sql = 'select lid,dpid,opretion_id,type,material_id,reason_id,sum(inventory_stock) as inventory_stock from ('.$sql.')m group by type,material_id';
-		$models = Yii::app()->db->createCommand($sql)->queryAll();
-		foreach ($models as $key=>$model){
-			$materialId = $model['material_id'];
-			$reasonId = $model['reason_id'];
-			$mtype = $model['type'];
-			if($mtype==1){
-				$material = Common::getmaterialUnit($materialId, $this->companyId, 0);
-				$models[$key]['material_name'] = $material['material_name'];
-				$models[$key]['unit_name'] = $material['unit_name'];
-				$models[$key]['unit_specifications'] = $material['unit_specifications'];
-			}else{
-				$productName = Common::getproductName($materialId);
-				$models[$key]['material_name'] = $productName;
-				$models[$key]['unit_name'] = '个';
-				$models[$key]['unit_specifications'] = '个';
-			}
-		}
-		$retreats = $this->getRetreats();
-		$this->render('inventorylog',array(
-				'models'=>$models,
-				'begintime'=>$begintime,
-				'endtime'=>$endtime,
-				'reasonid'=>$reasonid,
-				'retreats'=>$retreats
-		));
-	}
-	public function actionInventorylogdetail(){
-		$slid = Yii::app()->request->getParam('lid');
-		
-		$sql = 'select t.lid,t.dpid,t1.name from nb_inventory t,nb_retreat t1 where t.reason_id=t1.lid and t.dpid=t1.dpid and t.lid='.$slid.' and t.dpid='.$this->companyId;
-		$inventory = Yii::app()->db->createCommand($sql)->queryRow();
-		
-		$criteria = new CDbCriteria;
-		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.inventory_id='.$slid;
-		$pages = new CPagination(InventoryDetail::model()->count($criteria));
-		$pages->applyLimit($criteria);
-		$models = InventoryDetail::model()->findAll($criteria);
-		$this->render('inventorylogdetail',array(
-				'inventory'=>$inventory,
-				'models'=>$models,
-				'pages'=>$pages,
-		));
-	}
-	
 
 	public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);

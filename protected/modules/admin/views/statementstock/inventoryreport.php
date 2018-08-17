@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘损列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘损记录'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表中心'),'subhead'=>yii::t('app','盘损报表'),'breadcrumbs'=>array(array('word'=>yii::t('app','报表中心'),'url'=>$this->createUrl('statementstock/list' , array('companyId'=>$this->companyId,'type'=>1))),array('word'=>yii::t('app','盘损报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statementstock/list' , array('companyId' => $this->companyId,'type' => 1)))));?>
 	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
 	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
 
@@ -44,11 +44,15 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘损日志');?></div>
 					<div class="actions">
 						<div class="btn-group">
+							<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+						</div>
+						<div class="btn-group">
 							<select class="form-control" id="pdname" name="reasonid">
+								<option class="proname" value="0">请选择</option>
 								<?php if($retreats):?>
-								<?php foreach ($retreats as $key=>$val):?>
-								<option class="proname " value="<?php echo $key;?>" <?php if($reasonid==$key){ echo 'selected="selected"';}?>><?php echo $val;?></option>
-								<?php endforeach;endif;?>
+									<?php foreach ($retreats as $val):?>
+									<option class="proname" value="<?php echo $val['lid'];?>" <?php if($reasonid==$val['lid']){ echo 'selected="selected"';}?>><?php echo $val['name'];?></option>
+									<?php endforeach;endif;?>
 								<?php ?>
 							</select>
 						</div>
@@ -57,8 +61,8 @@
 								<input type="text" class="form-control" name=begintime id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begintime;?>">  
 								<span class="input-group-addon">~</span>
 							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $endtime;?>">           
-						  </div> 
-			            </div>
+						  	</div> 
+		            	</div>
 			            <div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 					    </div>
@@ -109,5 +113,22 @@
 			});
 			$('body').removeClass("modal-open");
 		}
+		$('select[name="selectDpid"]').change(function(){
+			var _this = $(this);
+			var sdpid = _this.val();
+			$.ajax({
+					url:'<?php echo $this->createUrl('statementstock/ajaxGetRetreat',array('companyId'=>$this->companyId));?>',
+					data:{sdpid:sdpid},
+					success:function(data){
+						var str = '<option class="proname" value="0">请选择</option>';
+						for(var i in data){
+							var obj = data[i];
+							str += '<option class="proname" value="'+obj.lid+'">'+obj.name+'</option>';
+						}
+						$('select[name="reasonid"]').html(str);
+					},
+					dataType:'json'
+				});
+		});
 	});
 	</script>	

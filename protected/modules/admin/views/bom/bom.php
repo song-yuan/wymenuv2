@@ -387,12 +387,6 @@
 	                        </a> 
 	                    </div>
 	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-	                    	<a href="<?php echo $this->createUrl('inventory/inventorylog',array('companyId'=>$this->companyId));?>">
-	                            <div class="list_big">盘损日志</div>
-	                            <div class="list_small">记录盘损的日期、负责人和损耗原因等</div>
-	                        </a> 
-	                    </div>
-	                    <div style="height: 80px;" class="list col-sm-3 col-xs-12">
 	                    	<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 	                            <div class="list_big">库存日志</div>
 	                            <div class="list_small">查询日常库存的调整类型、调整时间以及状态等</div>
