@@ -2158,11 +2158,14 @@ class StatementsController extends BackendController
 	 * 账单详情报表
 	 */
 	public function actionOrderdetail(){
-		$criteria = new CDbCriteria;
 		$accountno = '';
 		$otype = Yii::app()->request->getParam('otype','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
 		
 		$sbegin_time = $begin_time.' 00:00:00';
 		$send_time = $end_time.' 23:59:59';
@@ -2177,7 +2180,7 @@ class StatementsController extends BackendController
 				$where .= ' and account_no like "%'.$accountno.'"';
 			}
 		}
-		$sql = 'select m.* from (select *,"" as channel_name from nb_order where dpid='.$this->companyId.' and order_status in(3,4,8) and order_type!=4 and create_at>="'.$sbegin_time.'" and create_at<="'.$send_time.'"'.$where;
+		$sql = 'select m.* from (select *,"" as channel_name from nb_order where dpid='.$selectDpid.' and order_status in(3,4,8) and order_type!=4 and create_at>="'.$sbegin_time.'" and create_at<="'.$send_time.'"'.$where;
 		$sql .= ' union select t.*,t1.channel_name from nb_order t,nb_channel t1 where t.takeout_typeid=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t.order_status in(3,4,8) and t.order_type=4 and t.create_at>="'.$sbegin_time.'" and t.create_at<="'.$send_time.'"'.$where;
 		$sql .= ')m order by lid asc';
 		$count =  Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
@@ -2196,6 +2199,7 @@ class StatementsController extends BackendController
 				'accountno'=>$accountno,
 				'ordertype'=>$otype,
 				'paymentid'=>1,
+				'selectDpid'=>$selectDpid
 		));
 	}
 	/*
@@ -5262,38 +5266,27 @@ class StatementsController extends BackendController
 	 *
 	 */
 	public function actionOrderdetailExport(){
-		$objPHPExcel = new PHPExcel();
-		//$uid = Yii::app()->user->id;
-		$criteria = new CDbCriteria;
 		$otype = Yii::app()->request->getParam('otype','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
-		$criteria->select = 'sum(t.number) as all_number,t.*';
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
+		
+		$sbegin_time = $begin_time.' 00:00:00';
+		$send_time = $end_time.' 23:59:59';
+		
+		$where = '';
 		if($otype>=0){
-			$criteria->addCondition("t.order_type= ".$otype);
+			$where .= ' and order_type ='.$otype;
 		}
-		$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->addCondition("t.order_status in(3,4,8) ");//只要付款了的账单都进行统计
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+		$sql = 'select m.* from (select *,"" as channel_name from nb_order where dpid='.$selectDpid.' and order_status in(3,4,8) and order_type!=4 and create_at>="'.$sbegin_time.'" and create_at<="'.$send_time.'"'.$where;
+		$sql .= ' union select t.*,t1.channel_name from nb_order t,nb_channel t1 where t.takeout_typeid=t1.lid and t.dpid=t1.dpid and t.dpid='.$selectDpid.' and t.order_status in(3,4,8) and t.order_type=4 and t.create_at>="'.$sbegin_time.'" and t.create_at<="'.$send_time.'"'.$where;
+		$sql .= ')m order by lid asc';
+		$models =  Yii::app()->db->createCommand($sql)->queryAll();
 
-		if(Yii::app()->request->isPostRequest){
-			$accountno = Yii::app()->request->getPost('accountno1',0);
-			if($accountno){
-				$criteria->addSearchCondition('account_no',$accountno);
-			}
-		}
-		//$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->with = array("company","paymentMethod","channel");
-
-		$criteria->group = 't.account_no,t.order_status' ;
-		$criteria->order = 't.lid ASC' ;
-		$criteria->distinct = TRUE;
-
-		$model=  Order::model()->findAll($criteria);
-
-
+		$objPHPExcel = new PHPExcel();
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 		//设置第2行的行高
@@ -5359,13 +5352,13 @@ class StatementsController extends BackendController
 		->setCellValue('H3','找零')
 		->setCellValue('I3','状态');
 		$i=4;
-		foreach($model as $v){
-			if($v->is_temp=='1'){
+		foreach($models as $v){
+			if($v['is_temp']=='1'){
 				$n ='';
-				if($v->order_type == 4){
-					$n = $v->channel->channel_name;
+				if($v['order_type'] == 4){
+					$n = $v['channel_name'];
 				}else{
-					switch ($v->order_type){
+					switch ($v['order_type']){
 						case 0: $n ='堂食';break;
 						case 1: $n ='微信堂食';break;
 						case 2: $n ='微信外卖';break;
@@ -5379,13 +5372,13 @@ class StatementsController extends BackendController
 				}
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValueExplicit('A'.$i,$v->account_no,PHPExcel_Cell_DataType::TYPE_STRING)
-				->setCellValue('B'.$i,$v->create_at)
-				->setCellValue('C'.$i,$v->all_number)
-				->setCellValue('D'.$i,sprintf("%.2f",$v->reality_total))
-				->setCellValue('E'.$i,sprintf("%.2f",$v->reality_total-$v->should_total))
-				->setCellValue('F'.$i,$v->should_total)
-				->setCellValue('G'.$i,sprintf("%.2f",OrderProduct::getMoney($this->companyId,$v->lid)))
-				->setCellValue('H'.$i,sprintf("%.2f",OrderProduct::getChange($this->companyId,$v->lid)))
+				->setCellValue('B'.$i,$v['create_at'])
+				->setCellValue('C'.$i,$v['number'])
+				->setCellValue('D'.$i,sprintf("%.2f",$v['reality_total']))
+				->setCellValue('E'.$i,sprintf("%.2f",$v['reality_total']-$v['should_total']))
+				->setCellValue('F'.$i,$v['should_total'])
+				->setCellValue('G'.$i,sprintf("%.2f",OrderProduct::getMoney($v['dpid'],$v['lid'])))
+				->setCellValue('H'.$i,sprintf("%.2f",OrderProduct::getChange($v['dpid'],$v['lid'])))
 				->setCellValue('I'.$i,$n);
 			}
 			//细边框引用

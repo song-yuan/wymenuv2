@@ -109,6 +109,9 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','账单详情报表');?></div>
 					<div class="actions">
 						<div class="btn-group">
+							<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+						</div>
+						<div class="btn-group">
 							<select id="paymentid" class="form-control btn yellow" >
 	                            <option paymentid="1" value="-1" <?php if ($paymentid=='1' && $ordertype=='-1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择订单类型--');?></option>
 	                            <option paymentid="1" value="0" <?php if ($paymentid=='1' && $ordertype=='0'){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
@@ -194,8 +197,8 @@
 								<td><?php echo sprintf("%.2f",$model['reality_total']);?></td>
 								<td><?php echo sprintf("%.2f",$model['reality_total'] - $model['should_total']);?></td>
 								<td><?php echo sprintf("%.2f",$model['should_total']);?></td>
-								<td><?php echo sprintf("%.2f",OrderProduct::getMoney($this->companyId,$model['lid']));?></td>
-								<td><?php echo sprintf("%.2f",OrderProduct::getChange($this->companyId,$model['lid']));?></td>
+								<td><?php echo sprintf("%.2f",OrderProduct::getMoney($model['dpid'],$model['lid']));?></td>
+								<td><?php echo sprintf("%.2f",OrderProduct::getChange($model['dpid'],$model['lid']));?></td>
 								</tr>
 						
 						<?php endforeach;?>	
@@ -380,29 +383,19 @@ $(function () {
 	        });
 		       
 		   $('#btn_time_query').click(function() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
 			  var paymentid = $("#paymentid").find("option:selected").attr("paymentid");
 			  var otype = $('#paymentid').val();
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   //var Did = $('#Did').var();
-			  //var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/orderdetail' , array('companyId'=>$this->companyId ));?>/otype/"+otype+"/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
-			  
+			   var selectDpid = $('select[name="selectDpid"]').val();
+			   location.href="<?php echo $this->createUrl('statements/orderdetail' , array('companyId'=>$this->companyId ));?>/otype/"+otype+"/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;    
 	        });
 		   $('#excel').click(function excel(){
-
-				   
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
 				   var otype = $('#paymentid').val();
-				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							//return false;
 			    	   location.href="<?php echo $this->createUrl('statements/orderdetailExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/otype/"+otype+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			      
