@@ -2181,7 +2181,7 @@ class StatementsController extends BackendController
 			}
 		}
 		$sql = 'select m.* from (select *,"" as channel_name from nb_order where dpid='.$selectDpid.' and order_status in(3,4,8) and order_type!=4 and create_at>="'.$sbegin_time.'" and create_at<="'.$send_time.'"'.$where;
-		$sql .= ' union select t.*,t1.channel_name from nb_order t,nb_channel t1 where t.takeout_typeid=t1.lid and t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t.order_status in(3,4,8) and t.order_type=4 and t.create_at>="'.$sbegin_time.'" and t.create_at<="'.$send_time.'"'.$where;
+		$sql .= ' union select t.*,t1.channel_name from nb_order t,nb_channel t1 where t.takeout_typeid=t1.lid and t.dpid=t1.dpid and t.dpid='.$selectDpid.' and t.order_status in(3,4,8) and t.order_type=4 and t.create_at>="'.$sbegin_time.'" and t.create_at<="'.$send_time.'"'.$where;
 		$sql .= ')m order by lid asc';
 		$count =  Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
 		$pages = new CPagination($count);
