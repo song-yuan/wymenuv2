@@ -547,6 +547,12 @@ class DataSyncOperation {
 		}
 		$orderCache = Yii::app()->redis->set($orderKey,json_encode($data));
 		
+		$mLogType = 1;
+		$orderType = $orderInfo->order_type;
+		if($orderType==7 || $orderType==8){
+			$mLogType = 2;
+		}
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			if($orderInfo->is_temp==0&&$siteNo){
@@ -674,7 +680,7 @@ class DataSyncOperation {
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
 							$stock = $bom['number']*$product->amount;
-							self::updateMaterialStock($dpid,$createAt,$bom['material_id'],$stock,$orderProductId);
+							self::updateMaterialStock($dpid,$createAt,$bom['material_id'],$stock,$orderProductId,$mLogType);
 						}
 					}
 				}
@@ -1868,9 +1874,9 @@ class DataSyncOperation {
 		return $results;
 	}
 	/**
-	 * 更新库存
+	 * 更新库存 type 1 堂食出库 2 外卖出库
 	 */
-	public static function updateMaterialStock($dpid, $createAt, $materialId, $stock,$orderProductId) {
+	public static function updateMaterialStock($dpid, $createAt, $materialId, $stock,$orderProductId,$type = 1) {
 		$temStock = $stock;
 		$time = time ();
 		$sql = 'select sum(stock) as stock from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and stock != 0 and delete_flag=0';
@@ -1906,7 +1912,7 @@ class DataSyncOperation {
 								'logid'=>$materialStock['lid'],
 								'order_product_id'=>$orderProductId,
 								'material_id' => $materialId,
-								'type' => 1,
+								'type' => $type,
 								'stock_num' => $temStock,
 								'original_num'=>$materialStock['batch_stock'],
 								'unit_price'=>$stockPrice,
@@ -1933,7 +1939,7 @@ class DataSyncOperation {
 									'logid'=>$materialStock['lid'],
 									'order_product_id'=>$orderProductId,
 									'material_id' => $materialId,
-									'type' => 1,
+									'type' => $type,
 									'stock_num' => $temStock + $realityStock,
 									'original_num'=>$materialStock['batch_stock'],
 									'unit_price'=>$stockPrice,
@@ -1955,7 +1961,7 @@ class DataSyncOperation {
 									'logid'=>$materialStock['lid'],
 									'order_product_id'=>$orderProductId,
 									'material_id' => $materialId,
-									'type' => 1,
+									'type' => $type,
 									'stock_num' => $realityStock,
 									'original_num'=>$materialStock['batch_stock'],
 									'unit_price'=>$stockPrice,
@@ -1979,7 +1985,7 @@ class DataSyncOperation {
 								'logid'=>$materialStock['lid'],
 								'order_product_id'=>$orderProductId,
 								'material_id' => $materialId,
-								'type' => 1,
+								'type' => $type,
 								'stock_num' => $temStock + $realityStock,
 								'original_num'=>$materialStock['batch_stock'],
 								'unit_price'=>$stockPrice,
@@ -2014,7 +2020,7 @@ class DataSyncOperation {
 						'logid'=>$materialStock['lid'],
 						'order_product_id'=>$orderProductId,
 						'material_id' => $materialId,
-						'type' => 1,
+						'type' => $type,
 						'stock_num' => $temStock,
 						'original_num'=>$materialStock['batch_stock'],
 						'unit_price'=>$stockPrice,
