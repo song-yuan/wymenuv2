@@ -181,7 +181,16 @@
 			layer.msg('请勿多次操作！');
 			return false;
         }
-        if(confirm('确认盘点，则在此时间前保存的盘损，盘点记录将实效。')){
+		var sttypestr = '';
+		if(sttype=='1'){
+			sttypestr = '日盘';
+		}else if(sttype=='2'){
+			sttypestr = '周盘';
+		}else{
+			sttypestr = '月盘';
+		}
+        
+        if(confirm('该次盘点为"'+sttypestr+'",请确认后,再进行操作...')){
             $(this).attr('clk',1);
             $('.pd-product').each(function(){
             	var vid = $(this).attr('vid');
