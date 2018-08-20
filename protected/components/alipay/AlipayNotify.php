@@ -186,7 +186,7 @@ class AlipayNotify {
 			if(!empty($productBoms)){
 				foreach ($productBoms as $bom){
 					$stock = $bom['number']/$bom['unit_ratio'];
-					DataSyncOperation::updateMaterialStock($order['dpid'],$bom['material_id'],$stock);
+					DataSyncOperation::updateMaterialStock($order['dpid'],$bom['material_id'],$stock,1);
 				}
 			}
 		}
