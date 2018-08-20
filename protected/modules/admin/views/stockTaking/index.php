@@ -1,46 +1,6 @@
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
 <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/keyboard1.js');?>
 
-<!--<style>
-    .keyboard{
-       width:485px; 
-       padding-bottom: 15px;
-       position: fixed;
-       top:200px;
-       left:450px;
-       display:none;
-      background-color:#FFFFFF;
-      -webkit-border-radius: 6px;
-      -moz-border-radius: 6px;
-      border-radius: 6px; 
-      -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-       -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); 
-      
-    }
-    .keyboard-active{
-        display:block;
-    }
-    button{
-        width:100px;
-        height:60px;
-        margin:15px 0 0px 15px;
-        background-color: #AAAAAA;
-        border:0px;
-        font-size:25px;
-        font-weight:bold;
-        -webkit-border-radius: 6px;
-      -moz-border-radius: 6px;
-      border-radius: 6px; 
-    }
-    
-</style>-->
-
-<style>
-  
-</style>
-
-
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -82,6 +42,7 @@
 							<option value="3" <?php if ($sttype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','月盘');?></option>
 							<option value="2" <?php if ($sttype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','周盘');?></option>
 							<option value="1" <?php if ($sttype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','日盘');?></option>
+							<option value="0" <?php if ($sttype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','请选择');?></option>
 						</select>
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
@@ -180,6 +141,10 @@
         if(clk=='1'){
 			layer.msg('请勿多次操作！');
 			return false;
+        }
+        if(sttype=='0'){
+        	layer.msg('请选择盘点类型,然后再进行一键盘点！');
+			return false; 
         }
 		var sttypestr = '';
 		if(sttype=='1'){

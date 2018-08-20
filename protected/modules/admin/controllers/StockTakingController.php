@@ -21,7 +21,7 @@ class StockTakingController extends BackendController
 	}
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$sttype = Yii::app()->request->getParam('sttype',1);
+		$sttype = Yii::app()->request->getParam('sttype',0);
 		$db = Yii::app()->db;
 		if($categoryId){
 			$cate ='='.$categoryId;
