@@ -89,26 +89,9 @@
                                     <option value="0">--全体--</option>
                                     <?php if(!empty($userlevels)):?>
                                         <?php foreach($userlevels as $userlevel):?>
-                                            <option value="<?php echo $userlevel->lid;?>" <?php if($userlevel->lid==$finduserlevel) echo 'selected';?>><?php echo $userlevel->level_name;?></option>
+                                            <option value="<?php echo $userlevel['lid'];?>" <?php if($userlevel['lid']==$finduserlevel) echo 'selected';?>><?php echo $userlevel['level_name'];?></option>
                                         <?php endforeach;?>
                                     <?php endif;?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
-                            <div class="input-group" style="width:95%;">
-                                <span class="input-group-addon">未消费时长</span>
-                                <select class="form-control" name="noordertime" id="noordertime">
-                                    <option value="%" <?php if("%"==$noordertime) echo 'selected';?>>--全部--</option>
-                                    <option value="1" <?php if("1"==$noordertime) echo 'selected';?>>1个月</option>
-                                    <option value="2" <?php if("2"==$noordertime) echo 'selected';?>>2个月</option>
-                                    <option value="3" <?php if("3"==$noordertime) echo 'selected';?>>3个月</option>
-                                    <option value="4" <?php if("4"==$noordertime) echo 'selected';?>>4个月</option>
-                                    <option value="5" <?php if("5"==$noordertime) echo 'selected';?>>5个月</option>
-                                    <option value="6" <?php if("6"==$noordertime) echo 'selected';?>>半年</option>
-                                    <option value="12" <?php if("12"==$noordertime) echo 'selected';?>>一年</option>
-                                    <option value="18" <?php if("18"==$noordertime) echo 'selected';?>>一年半</option>
-                                    <option value="24" <?php if("24"==$noordertime) echo 'selected';?>>二年</option>
                                 </select>
                             </div>
                         </div>
@@ -131,8 +114,7 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+						<div class="form-group more-condition hide" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
                             <div class="input-group" style="width:95%;">
                                 <span class="input-group-addon">区县</span>
                                 <select id="area" name="area" class="selectedclass form-control">
@@ -155,6 +137,23 @@
 
                     <fieldset>
                         <legend class="more-condition" style="font-size:1.2em;display:<?php echo isset($more) && $more?'':'none';?>;"">订单信息:</legend>
+                        <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                            <div class="input-group" style="width:95%;">
+                                <span class="input-group-addon">未消费时长</span>
+                                <select class="form-control" name="noordertime" id="noordertime">
+                                    <option value="%" <?php if("%"==$noordertime) echo 'selected';?>>--全部--</option>
+                                    <option value="1" <?php if("1"==$noordertime) echo 'selected';?>>1个月</option>
+                                    <option value="2" <?php if("2"==$noordertime) echo 'selected';?>>2个月</option>
+                                    <option value="3" <?php if("3"==$noordertime) echo 'selected';?>>3个月</option>
+                                    <option value="4" <?php if("4"==$noordertime) echo 'selected';?>>4个月</option>
+                                    <option value="5" <?php if("5"==$noordertime) echo 'selected';?>>5个月</option>
+                                    <option value="6" <?php if("6"==$noordertime) echo 'selected';?>>半年</option>
+                                    <option value="12" <?php if("12"==$noordertime) echo 'selected';?>>一年</option>
+                                    <option value="18" <?php if("18"==$noordertime) echo 'selected';?>>一年半</option>
+                                    <option value="24" <?php if("24"==$noordertime) echo 'selected';?>>二年</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group more-condition" style="float:left;width:340px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
                             <div class="input-group date-picker input-daterange" style="width:95%;">
                                 <span class="input-group-addon">订单时间</span><input type="text" class="form-control" name="datefrom" value="<?php echo $datefrom; ?>"><span class="input-group-addon">~</span><input type="text" class="form-control" name="dateto" value="<?php echo $dateto; ?>">
@@ -317,7 +316,7 @@
             </div>
     </div>
 <script>
-addressInit('province', 'city', 'area', '<?php echo $province;?>', '<?php echo $city;?>', '<?php echo $area;?>');
+addressInit('province', 'city', 'area', '<?php echo $province;?>', '<?php echo $city;?>', '请选择..');
 jQuery(document).ready(function() {
    //App.init();
    //checkSelect();
