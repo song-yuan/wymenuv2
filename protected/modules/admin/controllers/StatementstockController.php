@@ -247,23 +247,43 @@ class StatementstockController extends BackendController
 			$selectDpid = $this->companyId;
 		}
 		
-		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.salse_num,sts.salse_price,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
-		$sql .= ' where sts.dpid='.$selectDpid.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
+		$sql = 'select t.material_id,t.type,sum(t.stock_num) as stock_num,sum(t.stock_num*t.unit_price) as price,t1.material_name,t1.material_identifier from nb_material_stock_log t,nb_product_material t1 where t.material_id=t1.lid and t.dpid=t1.dpid and  t.dpid='.$selectDpid.' and t.create_at >= "'.$begin_time.' 00:00:00" and t.create_at <= "'.$end_time.' 23:59:59" and t.delete_flag=0';
 		if($categoryId){
-			$sql .= ' and pm.category_id='.$categoryId;
+			$sql .= ' and t1.category_id='.$categoryId;
 		}
 		if($codename!=''){
-			$sql .= ' and pm.material_identifier like "%'.$codename.'%"';
+			$sql .= ' and t1.material_identifier like "%'.$codename.'%"';
 		}
 		if($matename!=''){
-			$sql .= ' and pm.material_name like "%'.$matename.'%"';
+			$sql .= ' and t1.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' order by sts.lid desc';
-		$result = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-	
+		$sql .= ' group by t.type,t.material_id';
+		$models = Yii::app ()->db->createCommand ( $sql )->queryAll();
+		$results = array();
+		foreach ($models as $model){
+			$materialId = $model['material_id'];
+			$materialType = $model['type'];
+			if($materialType==1){
+				$model['tangshi_stock'] = $model['stock_num'];
+			}elseif ($materialType==2){
+				$model['waimai_stock'] = $model['stock_num'];
+			}elseif ($materialType==4){
+				$model['pansun_stock'] = $model['stock_num'];
+			}else{
+				$model['pandian_stock'] = $model['stock_num'];
+			}
+			if(isset($results[$materialId])){
+				$results[$materialId] = $model;
+			}else{
+				$materUnit = Common::getmaterialUnit($materialId, $selectDpid, 1);
+				$model['unit_name'] = $materUnit['unit_name'];
+				$model['unit_specifications'] = $materUnit['unit_specifications'];
+				$results[$materialId] = $model;
+			}
+		}
 		$categories = $this->getCategories();
 		$this->render('stocksalesReport',array(
-				'sqlmodels'=>$result,
+				'models'=>$results,
 				//'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,

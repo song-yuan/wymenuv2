@@ -60,31 +60,41 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th><?php echo yii::t('app','时间');?></th>
 								<th><?php echo yii::t('app','原料编码');?></th>
 								<th><?php echo yii::t('app','原料名称');?></th>
-								<th><?php echo yii::t('app','销售单位');?></th>
-								<th><?php echo yii::t('app','销售数量');?></th>
-								<th><?php echo yii::t('app','销售成本');?></th>
+								<th><?php echo yii::t('app','原料单位');?></th>
+								<th><?php echo yii::t('app','原料规格');?></th>
+								<th><?php echo yii::t('app','堂食用量');?></th>
+								<th><?php echo yii::t('app','外卖用量');?></th>
+								<th><?php echo yii::t('app','盘损用量');?></th>
+								<th><?php echo yii::t('app','用量汇总');?></th>
 							</tr>
 						</thead>
 						<tbody>
-							<?php if( $sqlmodels) :?>
+							<?php if( $models) :?>
 							<!--foreach-->
-							<?php foreach ($sqlmodels as $model):?>
+							<?php 
+								foreach ($models as $model):
+									$tsStock = isset($model['tangshi_stock'])?$model['tangshi_stock']:0;
+									$wmStock = isset($model['waimai_stock'])?$model['waimai_stock']:0;
+									$psStock = isset($model['pansun_stock'])?-$model['pansun_stock']:0;
+									$pdStock = isset($model['pandian_stock'])?$model['pandian_stock']:0;
+							?>
 							<tr class="odd gradeX">
-								<td><?php echo $model['create_at']?></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
-								<td><?php echo $model['sales_name'];?></td>
-								<td><?php echo $model['salse_num'];?></td>
-								<td><?php echo $model['salse_price'];?></td>
+								<td><?php echo $model['unit_name'];?></td>
+								<td><?php echo $model['unit_specifications'];?></td>
+								<td><?php echo $tsStock;?></td>
+								<td><?php echo $wmStock;?></td>
+								<td><?php echo $psStock;?></td>
+								<td><?php echo $tsStock+$wmStock+$psStock;?></td>
 							</tr>
 							<?php endforeach;?>	
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='6'>未查询到数据。</td>
+							<td colspan='8'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>
