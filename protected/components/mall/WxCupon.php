@@ -42,15 +42,28 @@ class WxCupon
 				$productcode = 0;
 			}
 		}
-		$sql = 'select m.lid,m.dpid,m.is_used,m.valid_day,m.close_day,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo from nb_cupon_branduser m ,(select * from nb_cupon where type like "%1%" and type_dpid=0 and type_prod=0 and delete_flag=0'.
-				' union select t.* from nb_cupon t left join nb_cupon_product t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type like "%1%" and t.type_dpid=0 and t.type_prod=1 and t1.prod_code in('.$productcode.') and t.delete_flag=0 and t1.delete_flag=0'.
-				' union select t.* from nb_cupon t left join nb_cupon_dpid t1 on t.lid=t1.cupon_id and t.dpid=t1.dpid where t.type like "%1%" and t.type_dpid=1 and t.type_prod=0 and t1.cupon_dpid in('.$dpid.') and t.delete_flag=0 and t1.delete_flag=0) n' .
-				' where m.cupon_id=n.lid and m.dpid=n.dpid and m.to_group=3 and m.brand_user_lid=:userId and m.is_used = 1 and m.delete_flag=0 and m.valid_day <=:now and :now <= m.close_day';
-	
+		$sql = 'select m.lid,m.dpid,m.is_used,m.valid_day,m.close_day,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time,n.cupon_memo,n.type_dpid,n.type_prod from nb_cupon_branduser m,nb_cupon n' .
+				' where m.cupon_id=n.lid and m.dpid=n.dpid and m.to_group=3 and m.brand_user_lid=:userId and m.is_used = 1 and m.delete_flag=0 and m.valid_day <=:now and :now <= m.close_day and n.type like "%1%"';
 		$cupon = Yii::app()->db->createCommand($sql)
-		->bindValue(':userId',$userId)
-		->bindValue(':now',$now)
-		->queryAll();
+								->bindValue(':userId',$userId)
+								->bindValue(':now',$now)
+								->queryAll();
+		foreach ($cupon as $key=>$cup){
+			if(in_array($cup['type_dpid'],array(1,2))){
+				$sql = 'select * from nb_cupon_dpid where cupon_id='.$cup['lid'].' and cupon_dpid='.$dpid;
+				$cdpid = Yii::app()->db->createCommand($sql)->queryRow();
+				if(empty($cdpid)){
+					unset($cupon[$key]);
+				}
+			}
+			if($cup['type_prod']==1){
+				$sql = 'select * from nb_cupon_product where cupon_id='.$cup['lid'].' and prod_code in('.$productcode.')';
+				$cprod = Yii::app()->db->createCommand($sql)->queryRow();
+				if(empty($cprod)){
+					unset($cupon[$key]);
+				}
+			}
+		}
 		return $cupon;
 	}
 	/**
