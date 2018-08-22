@@ -257,7 +257,7 @@ class StatementstockController extends BackendController
 		if($matename!=''){
 			$sql .= ' and t1.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' group by t.type,t.material_id';
+		$sql .= ' group by t.type,t.material_id order by t1.material_identifier asc';
 		$models = Yii::app ()->db->createCommand ( $sql )->queryAll();
 		$results = array();
 		foreach ($models as $model){
