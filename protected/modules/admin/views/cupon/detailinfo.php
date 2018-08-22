@@ -136,7 +136,6 @@
 					 </div>
 							                	
 				</div>
-				<?php $this->endWidget(); ?>
 				<div style="width: 100%;border-top: 1px dashed silver;"></div>
 			<?php endif;?>
 				<div id="printRsultListdetail" style="margin:0;padding:0;width:96%;height:96%;">		                
@@ -206,12 +205,10 @@
 				         </form>
 				         <div class="clear"></div>
 			         </div>
-			         
 				 </div>
-						                	
 				</div>
+				<?php $this->endWidget(); ?>
 				</div>
-				
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
