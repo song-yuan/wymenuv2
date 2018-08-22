@@ -78,14 +78,6 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','现金券限定');?></div>
 				</div>
-				<?php $form=$this->beginWidget('CActiveForm', array(
-									'id' => 'sentwxcardpromotion-form',
-									'errorMessageCssClass' => 'help-block',
-									'htmlOptions' => array(
-										'class' => 'form-horizontal',
-										'enctype' => 'multipart/form-data'
-									),
-							)); ?>
 				<?php if(Yii::app()->user->role<11):?>		
 				<div id="printRsultListdetail" style="margin:0;padding:0;width:96%;height:96%;">		                
 			         <div class="modal-header">
@@ -201,13 +193,12 @@
 								<div class="button-style">
 							         <button id="addprod" type="submit" class="btn blue">确认</button>
 						         </div>
+						         </form>
 				         </div>
-				         </form>
 				         <div class="clear"></div>
 			         </div>
 				 </div>
 				</div>
-				<?php $this->endWidget(); ?>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -269,38 +260,6 @@
 			
 			
 		});
-
-		// $('#addprod').on('click',function(){
-		// 	var id_array=new Array();  
-		// 	$('input[name="product_id[]"]:checked').each(function(){  
-		// 	    id_array.push($(this).val());//向数组中添加元素  
-		// 	});  
-		// 	var idstr=id_array.join(',');//将数组元素连接起来以构建一个字符串  
-		// 	alert(idstr);  
-		// 	if(prodcode == '0' || prodcode == null){
-		// 		layer.msg('请选择一项单品！',{icon: 6});
-		// 		return false;
-		// 		}
-		// 	var cuid = '<?php //echo $cuponid;?>';
-		// 	var cucode = '<?php //echo $cuponcode;?>';
-		// 	//return false;
-		// 	$.ajax({
-		// 		url:'<?php //echo $this->createUrl('cupon/addprod',array('companyId'=>$this->companyId,));?>/idstr/'+idstr+"/cuid/"+cuid+"/cucode/"+cucode,
-		// 		type:'GET',
-		// 		dataType:'json',
-		// 		success:function(msg){
-		// 			if(msg.status){
-		// 				 layer.msg('成功！',{icon: 6});
-		// 				 location.reload();
-		// 			}else{
-		// 				 layer.msg('失败！',{icon: 5});
-		// 			}
-		// 		},
-		// 		error:function(){
-		// 			layer.msg('网络错误！',{icon: 5});
-		// 			}
-		// 	});
-		// });
 		$('.delete-prod').on('click',function(){
 			
 			var prodcode = $(this).attr('prod_code');

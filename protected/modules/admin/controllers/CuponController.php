@@ -252,11 +252,9 @@ class CuponController extends BackendController
 
 
 		$categories = $this->getCategories();
-		// var_dump($categories); exit();
 		$categoryId=0;
         $products = $this->getProducts($categoryId);
         $productslist=CHtml::listData($products, 'phs_code', 'product_name','category_id');
-       // var_dump($productslist); exit();
 		$this->render('detailinfo',array(
 				'cuponprods'=>$cuponprods,
 				'cupondpids'=>$cupondpids,
@@ -277,44 +275,39 @@ class CuponController extends BackendController
 	public function actionAddprod(){
 		$db = Yii::app()->db;
 		$prodcodes = Yii::app()->request->getPost('product_id');
-		// var_dump($prodcodes);exit();
 		$cuid = Yii::app()->request->getParam('cuid');
 		$cucode = Yii::app()->request->getParam('cucode');
 		foreach ($prodcodes as $prodcode) {
 			$sql = 'select * from nb_product where dpid ='.$this->companyId.' and phs_code ="'.$prodcode.'" and delete_flag=0';
-			// var_dump($sql);exit;
 			$command = $db->createCommand($sql);
 			$prod = $command->queryRow();
 
 			$sqls = 'select * from nb_cupon_product where dpid ='.$this->companyId.' and prod_code ="'.$prodcode.'" and delete_flag =0 and cupon_id='.$cuid;
 			$command = $db->createCommand($sqls);
 			$cuprod = $command->queryRow();
-			//var_dump($prod.'##'.$cuprod);exit;
-				if(!empty($prod)&&empty($cuprod)){
-					$se = new Sequence("cupon_product");
-					$id = $se->nextval();
-					$data = array(
-							'lid'=>$id,
-							'dpid'=>$this->companyId,
-							'create_at'=>date('Y-m-d H:i:s',time()),
-							'update_at'=>date('Y-m-d H:i:s',time()),
-							'cupon_id'=>$cuid,
-							'cupon_code'=>$cucode,
-							'prod_code'=>$prodcode,
-							'delete_flag'=>'0',
-							'is_sync'=>'11111',
-					);
-					//var_dump($data);exit;
-					$command = $db->createCommand()->insert('nb_cupon_product',$data);
-					
-				}
+			if(!empty($prod)&&empty($cuprod)){
+				$se = new Sequence("cupon_product");
+				$id = $se->nextval();
+				$data = array(
+						'lid'=>$id,
+						'dpid'=>$this->companyId,
+						'create_at'=>date('Y-m-d H:i:s',time()),
+						'update_at'=>date('Y-m-d H:i:s',time()),
+						'cupon_id'=>$cuid,
+						'cupon_code'=>$cucode,
+						'prod_code'=>$prodcode,
+						'delete_flag'=>'0',
+						'is_sync'=>'11111',
+				);
+				$command = $db->createCommand()->insert('nb_cupon_product',$data);
 			}
-			if($command){
-				$sql = 'update nb_cupon set type_prod = 1 where dpid ='.$this->companyId.' and lid ='.$cuid;
-				$result = $db->createCommand($sql)->execute();
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('cupon/detailinfo' , 'lid'=>$cuid,'code'=>$cucode,'companyId' => $this->companyId));
-			}
+		}
+		if($command){
+			$sql = 'update nb_cupon set type_prod = 1 where dpid ='.$this->companyId.' and lid ='.$cuid;
+			$result = $db->createCommand($sql)->execute();
+			Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+			$this->redirect(array('cupon/detailinfo' , 'lid'=>$cuid,'code'=>$cucode,'companyId' => $this->companyId));
+		}
 			
 	}
 
