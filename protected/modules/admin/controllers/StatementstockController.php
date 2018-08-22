@@ -276,8 +276,13 @@ class StatementstockController extends BackendController
 				$results[$materialId] = $model;
 			}else{
 				$materUnit = Common::getmaterialUnit($materialId, $selectDpid, 1);
-				$model['unit_name'] = $materUnit['unit_name'];
-				$model['unit_specifications'] = $materUnit['unit_specifications'];
+				if($materUnit){
+					$model['unit_name'] = $materUnit['unit_name'];
+					$model['unit_specifications'] = $materUnit['unit_specifications'];
+				}else{
+					$model['unit_name'] = '';
+					$model['unit_specifications'] = '';
+				}
 				$results[$materialId] = $model;
 			}
 		}
