@@ -52,6 +52,7 @@ class WxCupon
 			if(in_array($cup['type_dpid'],array(1,2))){
 				$sql = 'select * from nb_cupon_dpid where cupon_id='.$cup['cupon_id'].' and cupon_dpid='.$dpid;
 				$cdpid = Yii::app()->db->createCommand($sql)->queryRow();
+				Helper::writeLog(json_encode($cdpid));
 				if(empty($cdpid)){
 					unset($cupon[$key]);
 				}
@@ -59,11 +60,13 @@ class WxCupon
 			if($cup['type_prod']==1){
 				$sql = 'select * from nb_cupon_product where cupon_id='.$cup['cupon_id'].' and prod_code in('.$productcode.')';
 				$cprod = Yii::app()->db->createCommand($sql)->queryRow();
+				Helper::writeLog(json_encode($cprod));
 				if(empty($cprod)){
 					unset($cupon[$key]);
 				}
 			}
 		}
+		Helper::writeLog(json_encode($cupon));
 		return $cupon;
 	}
 	/**
