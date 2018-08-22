@@ -263,18 +263,26 @@ class StatementstockController extends BackendController
 		foreach ($models as $model){
 			$materialId = $model['material_id'];
 			$materialType = $model['type'];
-			if($materialType==1){
-				$model['tangshi_stock'] = $model['stock_num'];
-			}elseif ($materialType==2){
-				$model['waimai_stock'] = $model['stock_num'];
-			}elseif ($materialType==4){
-				$model['pansun_stock'] = $model['stock_num'];
-			}else{
-				$model['pandian_stock'] = $model['stock_num'];
-			}
 			if(isset($results[$materialId])){
-				$results[$materialId] = $model;
+				if($materialType==1){
+					$results[$materialId]['tangshi_stock'] = $model['stock_num'];
+				}elseif ($materialType==2){
+					$results[$materialId]['waimai_stock'] = $model['stock_num'];
+				}elseif ($materialType==4){
+					$results[$materialId]['pansun_stock'] = $model['stock_num'];
+				}else{
+					$results[$materialId]['pandian_stock'] = $model['stock_num'];
+				}
 			}else{
+				if($materialType==1){
+					$model['tangshi_stock'] = $model['stock_num'];
+				}elseif ($materialType==2){
+					$model['waimai_stock'] = $model['stock_num'];
+				}elseif ($materialType==4){
+					$model['pansun_stock'] = $model['stock_num'];
+				}else{
+					$model['pandian_stock'] = $model['stock_num'];
+				}
 				$materUnit = Common::getmaterialUnit($materialId, $selectDpid, 1);
 				if($materUnit){
 					$model['unit_name'] = $materUnit['unit_name'];
