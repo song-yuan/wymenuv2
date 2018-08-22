@@ -77,7 +77,7 @@
 								foreach ($models as $model):
 									$tsStock = isset($model['tangshi_stock'])?$model['tangshi_stock']:0;
 									$wmStock = isset($model['waimai_stock'])?$model['waimai_stock']:0;
-									$psStock = isset($model['pansun_stock'])?-$model['pansun_stock']:0;
+									$psStock = isset($model['pansun_stock'])?$model['pansun_stock']:0;
 									$pdStock = isset($model['pandian_stock'])?$model['pandian_stock']:0;
 							?>
 							<tr class="odd gradeX">
