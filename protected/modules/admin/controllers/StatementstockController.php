@@ -247,17 +247,17 @@ class StatementstockController extends BackendController
 			$selectDpid = $this->companyId;
 		}
 		
-		$sql = 'select t.material_id,t.type,sum(t.stock_num) as stock_num,sum(t.stock_num*t.unit_price) as price,t1.material_name,t1.material_identifier from nb_material_stock_log t,nb_product_material t1 where t.material_id=t1.lid and t.dpid=t1.dpid and  t.dpid='.$selectDpid.' and t.create_at >= "'.$begin_time.' 00:00:00" and t.create_at <= "'.$end_time.' 23:59:59" and t.delete_flag=0';
+		$sql = 'select material_id,type,sum(stock_num) as stock_num,sum(stock_num*unit_price) as price from nb_material_stock_log where dpid='.$selectDpid.' and create_at >= "'.$begin_time.' 00:00:00" and create_at <= "'.$end_time.' 23:59:59" and delete_flag=0';
 		if($categoryId){
-			$sql .= ' and t1.category_id='.$categoryId;
+			$sql .= ' and category_id='.$categoryId;
 		}
 		if($codename!=''){
-			$sql .= ' and t1.material_identifier like "%'.$codename.'%"';
+			$sql .= ' and material_identifier like "%'.$codename.'%"';
 		}
 		if($matename!=''){
-			$sql .= ' and t1.material_name like "%'.$matename.'%"';
+			$sql .= ' and material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' group by t.type,t.material_id order by t1.material_identifier asc';
+		$sql .= ' group by type,material_id';
 		$models = Yii::app ()->db->createCommand ( $sql )->queryAll();
 		$results = array();
 		foreach ($models as $model){
@@ -284,13 +284,10 @@ class StatementstockController extends BackendController
 					$model['pandian_stock'] = $model['stock_num'];
 				}
 				$materUnit = Common::getmaterialUnit($materialId, $selectDpid, 1);
-				if($materUnit){
-					$model['unit_name'] = $materUnit['unit_name'];
-					$model['unit_specifications'] = $materUnit['unit_specifications'];
-				}else{
-					$model['unit_name'] = '';
-					$model['unit_specifications'] = '';
-				}
+				$model['material_name'] = $materUnit['material_name'];
+				$model['material_identifier'] = $materUnit['material_identifier'];
+				$model['unit_name'] = $materUnit['unit_name'];
+				$model['unit_specifications'] = $materUnit['unit_specifications'];
 				$results[$materialId] = $model;
 			}
 		}
