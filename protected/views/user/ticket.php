@@ -54,7 +54,7 @@
        width: 32%;
        height: 78px;
        padding-top: 30px;
-       background-color: #74d2d4;
+       background-color: rgb(242,174,29);
        float: left;
        border-top-left-radius: 6px;
        border-bottom-left-radius: 6px;
