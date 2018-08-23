@@ -50,7 +50,6 @@
 					<div class="actions">
 						<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
 						</div>			
 					</div>
 			 	</div> 
@@ -133,20 +132,5 @@
 		var matename = $('#matename').val();
 		var selectDpid = $('select[name="selectDpid"]').val();
 		location.href="<?php echo $this->createUrl('statementstock/stocksalesReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid;    
-	});
-	$('#excel').click(function excel(){
-		layer.msg('此项功能暂未开放！！',{icon: 5});return false;
-		var begin_time = $('#begin_time').val();
-		var end_time = $('#begin_time').val();
-		var text = $('#text').val();
-		var cid = $('#selectCategory').val();
-		var codename = $('#codename').val();
-		var matename = $('#matename').val();
-		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statementstock/wxmemberExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
-		}
-		else{
-			location.href="<?php echo $this->createUrl('statementstock/wxmemberReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
-		}
 	});
 </script> 

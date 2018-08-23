@@ -39,6 +39,7 @@ class StatementstockController extends BackendController
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
+		$download = Yii::app()->request->getParam('d',0);
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
 		$sql .= ' where sts.type=1 and sts.dpid='.$selectDpid.' and sts.create_at like "'.$begin_time.'%"';
@@ -53,8 +54,35 @@ class StatementstockController extends BackendController
 		}
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
-		
-		//var_dump($models);exit;
+		if($download){
+			$exportData = array();
+			$tableHeader = array('时间','原料编码','名称','销售单位','昨日库存','入库总量','进货总量','进货成本','配送量','调拨量','损耗总量','损耗成本','销售出库','销售成本','总消耗量','系统库存','盘点库存','损溢总量','损溢成本');
+			foreach ($sqlmodels as $m){
+				$tempArr = array(
+								$m['create_at'],
+								$m['material_identifier'],
+								$m['material_name'],
+								$m['sales_name'],
+								$m['prestock_taking_num'],
+								$m['stockin_num'],
+								$m['stockin_num'],
+								$m['stockin_price'],
+								'','',
+								$m['damage_num'],
+								$m['damage_price'],
+								$m['salse_num'],
+								$m['salse_price'],
+								$m['total_num'],
+								$m['system_num'],
+								$m['stock_taking_num'],
+								$m['stock_taking_difnum'],
+								$m['stock_taking_difprice']
+							);
+				array_push($exportData, $tempArr);
+			}
+			Helper::exportExcel($tableHeader,$exportData,'进销存日报报表','进销存日报');
+			exit;
+		}
 		$categories = $this->getCategories();
 		$this->render('stockReport',array(
 				'sqlmodels'=>$sqlmodels,
@@ -80,6 +108,7 @@ class StatementstockController extends BackendController
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
+		$download = Yii::app()->request->getParam('d',0);
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
 		$sql .= ' where sts.type=2 and sts.dpid='.$selectDpid.' and sts.create_at like "'.$begin_time.'%"';
@@ -94,7 +123,36 @@ class StatementstockController extends BackendController
 		}
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
-	
+		if($download){
+			$exportData = array();
+			$tableHeader = array('时间','原料编码','名称','销售单位','上周库存','入库总量','进货总量','进货成本','配送量','调拨量','损耗总量','损耗成本','销售出库','销售成本','总消耗量','系统库存','盘点库存','损溢总量','损溢成本');
+			foreach ($sqlmodels as $m){
+				$tempArr = array(
+						$m['create_at'],
+						$m['material_identifier'],
+						$m['material_name'],
+						$m['sales_name'],
+						$m['prestock_taking_num'],
+						$m['stockin_num'],
+						$m['stockin_num'],
+						$m['stockin_price'],
+						'','',
+						$m['damage_num'],
+						$m['damage_price'],
+						$m['salse_num'],
+						$m['salse_price'],
+						$m['total_num'],
+						$m['system_num'],
+						$m['stock_taking_num'],
+						$m['stock_taking_difnum'],
+						$m['stock_taking_difprice']
+				);
+				array_push($exportData, $tempArr);
+			}
+			Helper::exportExcel($tableHeader,$exportData,'进销存周报报表','进销存周报');
+			exit;
+		}
+		
 		$categories = $this->getCategories();
 		$this->render('stockweekReport',array(
 				'sqlmodels'=>$sqlmodels,
@@ -120,6 +178,7 @@ class StatementstockController extends BackendController
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
+		$download = Yii::app()->request->getParam('d',0);
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
 		$sql .= ' where sts.type=3 and sts.dpid='.$selectDpid.' and sts.create_at like "'.$begin_time.'%"';
@@ -134,6 +193,35 @@ class StatementstockController extends BackendController
 		}
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
+		if($download){
+			$exportData = array();
+			$tableHeader = array('时间','原料编码','名称','销售单位','上月库存','入库总量','进货总量','进货成本','配送量','调拨量','损耗总量','损耗成本','销售出库','销售成本','总消耗量','系统库存','盘点库存','损溢总量','损溢成本');
+			foreach ($sqlmodels as $m){
+				$tempArr = array(
+						$m['create_at'],
+						$m['material_identifier'],
+						$m['material_name'],
+						$m['sales_name'],
+						$m['prestock_taking_num'],
+						$m['stockin_num'],
+						$m['stockin_num'],
+						$m['stockin_price'],
+						'','',
+						$m['damage_num'],
+						$m['damage_price'],
+						$m['salse_num'],
+						$m['salse_price'],
+						$m['total_num'],
+						$m['system_num'],
+						$m['stock_taking_num'],
+						$m['stock_taking_difnum'],
+						$m['stock_taking_difprice']
+				);
+				array_push($exportData, $tempArr);
+			}
+			Helper::exportExcel($tableHeader,$exportData,'进销存月报报表','进销存月报');
+			exit;
+		}
 		
 		$categories = $this->getCategories();
 		$this->render('stockmonthReport',array(
@@ -161,6 +249,7 @@ class StatementstockController extends BackendController
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
+		$download = Yii::app()->request->getParam('d',0);
 		
 		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.prestock_taking_num,sts.stockin_num,sts.stockin_price,sts.damage_num,sts.damage_price,sts.salse_num,sts.salse_price,sts.total_num,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
 		$sql .= ' where sts.dpid='.$selectDpid.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
@@ -175,7 +264,45 @@ class StatementstockController extends BackendController
 		}
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
-	
+		if($download){
+			$exportData = array();
+			$tableHeader = array('时间','类型','原料编码','名称','销售单位','上期库存','入库总量','进货总量','进货成本','配送量','调拨量','损耗总量','损耗成本','销售出库','销售成本','总消耗量','系统库存','盘点库存','损溢总量','损溢成本');
+			foreach ($sqlmodels as $m){
+				$typeStr = '';
+				if($m['type']==1){
+					$typeStr = '日报';
+				}elseif($m['type']==2){
+					$typeStr = '周报';
+				}else{
+					$typeStr = '月报';
+				}
+				$tempArr = array(
+						$m['create_at'],
+						$typeStr,
+						$m['material_identifier'],
+						$m['material_name'],
+						$m['sales_name'],
+						$m['prestock_taking_num'],
+						$m['stockin_num'],
+						$m['stockin_num'],
+						$m['stockin_price'],
+						'','',
+						$m['damage_num'],
+						$m['damage_price'],
+						$m['salse_num'],
+						$m['salse_price'],
+						$m['total_num'],
+						$m['system_num'],
+						$m['stock_taking_num'],
+						$m['stock_taking_difnum'],
+						$m['stock_taking_difprice']
+				);
+				array_push($exportData, $tempArr);
+			}
+			Helper::exportExcel($tableHeader,$exportData,'进销存综合报表','进销存综合报表');
+			exit;
+		}
+		
 		$categories = $this->getCategories();
 		$this->render('stockallReport',array(
 				'sqlmodels'=>$sqlmodels,
@@ -203,8 +330,9 @@ class StatementstockController extends BackendController
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
+		$download = Yii::app()->request->getParam('d',0);
 		
-		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.salse_num,sts.salse_price,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
+		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
 		$sql .= ' where sts.dpid='.$selectDpid.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
@@ -217,7 +345,35 @@ class StatementstockController extends BackendController
 		}
 		$sql .= ' order by sts.lid desc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
-	
+		if($download){
+			$exportData = array();
+			$tableHeader = array('时间','类型','原料编码','名称','销售单位','系统库存','盘点库存','损溢总量','损溢成本');
+			foreach ($sqlmodels as $m){
+				$typeStr = '';
+				if($m['type']==1){
+					$typeStr = '日报';
+				}elseif($m['type']==2){
+					$typeStr = '周报';
+				}else{
+					$typeStr = '月报';
+				}
+				$tempArr = array(
+						$m['create_at'],
+						$typeStr,
+						$m['material_identifier'],
+						$m['material_name'],
+						$m['sales_name'],
+						$m['system_num'],
+						$m['stock_taking_num'],
+						$m['stock_taking_difnum'],
+						$m['stock_taking_difprice']
+				);
+				array_push($exportData, $tempArr);
+			}
+			Helper::exportExcel($tableHeader,$exportData,'进销存损益报表','进销存损益报表');
+			exit;
+		}
+		
 		$categories = $this->getCategories();
 		$this->render('stockdifferReport',array(
 				'sqlmodels'=>$sqlmodels,
@@ -291,6 +447,7 @@ class StatementstockController extends BackendController
 				$results[$materialId] = $model;
 			}
 		}
+		
 		$categories = $this->getCategories();
 		$this->render('stocksalesReport',array(
 				'models'=>$results,
@@ -332,6 +489,7 @@ class StatementstockController extends BackendController
 			if($mtype==1){
 				$material = Common::getmaterialUnit($materialId, $selectDpid, 0);
 				$models[$key]['material_name'] = $material['material_name'];
+				$models[$key]['material_identifier'] = $material['material_identifier'];
 				$models[$key]['unit_name'] = $material['unit_name'];
 				$models[$key]['unit_specifications'] = $material['unit_specifications'];
 			}else{
@@ -341,6 +499,7 @@ class StatementstockController extends BackendController
 				$models[$key]['unit_specifications'] = '个';
 			}
 		}
+		
 		$retreats = $this->getRetreats($selectDpid);
 		$this->render('inventoryreport',array(
 				'models'=>$models,

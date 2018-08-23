@@ -61,11 +61,12 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','时间');?></th>
+								<th><?php echo yii::t('app','类型');?></th>
 								<th><?php echo yii::t('app','原料编码');?></th>
 								<th><?php echo yii::t('app','名称');?></th>                                                              
                                 <th><?php echo yii::t('app','销售单位');?></th>
-								<th><?php echo yii::t('app','销售总出库');?></th>
-								<th><?php echo yii::t('app','销售总成本');?></th>
+								<th><?php echo yii::t('app','系统库存');?></th>
+								<th><?php echo yii::t('app','盘点库存');?></th>
 								<th><?php echo yii::t('app','差异总数量');?></th>
 								<th><?php echo yii::t('app','差异总成本');?></th>
 							</tr>
@@ -76,11 +77,12 @@
 							<?php foreach ($sqlmodels as $model):?>
 							<tr class="odd gradeX">
 								<td><?php echo $model['create_at']?></td>
+								<td><?php if($model['type']==1){echo '日报';}elseif ($model['type']==2){echo '周报';}else{echo '月报';}?></td>
 								<td><?php echo $model['material_identifier'];?></td>
 								<td><?php echo $model['material_name'];?></td>
 								<td><?php echo $model['sales_name'];?></td>
-								<td><?php echo $model['salse_num'];?></td>
-								<td><?php echo $model['salse_price'];?></td>
+								<td><?php echo $model['system_num'];?></td>
+								<td><?php echo $model['stock_taking_num'];?></td>
 								<td><?php echo $model['stock_taking_difnum'];?></td>
 								<td><?php echo $model['stock_taking_difprice'];?></td>
 							</tr>
@@ -88,7 +90,7 @@
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='8'>未查询到数据。</td>
+							<td colspan='9'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>
@@ -104,8 +106,6 @@
 <!-- END PAGE -->
 
 <script>
-
-	//var str=new array();						
 	jQuery(document).ready(function(){
 	    if (jQuery().datepicker) {
             $('.date-picker').datepicker({
@@ -119,7 +119,6 @@
        }
 	});
 
-  
 	$('#btn_time_query').click(function time() {
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
@@ -128,21 +127,18 @@
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
 		var selectDpid = $('select[name="selectDpid"]').val();
-		location.href="<?php echo $this->createUrl('statementstock/stockdifferReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid;    
+		location.href="<?php echo $this->createUrl('statementstock/stockdifferReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid;
 	});
 	$('#excel').click(function excel(){
-		layer.msg('此项功能暂未开放！！',{icon: 5});return false;
 		var begin_time = $('#begin_time').val();
-		var end_time = $('#begin_time').val();
+		var end_time = $('#end_time').val();
 		var text = $('#text').val();
 		var cid = $('#selectCategory').val();
 		var codename = $('#codename').val();
 		var matename = $('#matename').val();
+		var selectDpid = $('select[name="selectDpid"]').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statementstock/stockdifferReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
-		}
-		else{
-			location.href="<?php echo $this->createUrl('statementstock/stockmonthReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/sex/"+sex+"/sub/"+sub;
+			location.href="<?php echo $this->createUrl('statementstock/stockdifferReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid+'/d/1';
 		}
 	});
 
