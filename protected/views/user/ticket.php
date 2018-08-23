@@ -155,7 +155,7 @@
                 <?php 
                 $typeArr = explode(',',$v['type']); 
                 if(in_array(1, $typeArr)){
-                	echo 'POS机端 ';
+                	echo '堂食 ';
                 }
                 if(in_array(2, $typeArr)){
                 	echo '微信堂食 ';
