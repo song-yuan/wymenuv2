@@ -62,10 +62,10 @@
        color:#fff;
   
     }
-    
+    	
     .type .price{
-       
-        font-weight: bold;
+       color:white;
+       font-weight: bold;
        
     }
     .type .price .yen{
@@ -75,7 +75,7 @@
     }
    .type .price .money{
     line-height: 30px;
-    font-size: 26px;
+    font-size: 35px;
     
     }
    .type .limit{
@@ -126,7 +126,7 @@
                                 
                                 <?php 
                                 if($v['cupon_money'] == floor($v['cupon_money'])){
-                                echo floor($v['cupon_money']);
+                               		echo floor($v['cupon_money']);
                                 }else{
                                     echo $v['cupon_money'];
                                 }
