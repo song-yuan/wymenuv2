@@ -292,7 +292,7 @@ class Helper
 		$column = ord('A');
 		
 		// 设置工作表的表头
-		foreach ($table_head as $k=>$v) {
+		foreach ($table_head as $v) {
 			// 居中 加粗
 			$activeSheet->getStyle(chr($column)."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$activeSheet->getStyle(chr($column)."2")->getFont()->setBold(true);
@@ -300,6 +300,7 @@ class Helper
 			$activeSheet->setCellValue(chr($column)."2", $v);
 			$column++;
 		}
+		
 		//设置excel表格的 标题 合并单元格 设置居中
 		$activeSheet->setCellValue("A1", $sheet_name);
 		$activeSheet->getStyle("A1")->getFont()->setSize(20);
@@ -310,10 +311,10 @@ class Helper
 		// 将$data中的数据填充到单元格中
 		foreach ($data as $row=>$col) {
 			$i=0;
-			foreach ($col as $k=>$v ) {
+			foreach ($col as $v ) {
 				// 字体大小
 				$activeSheet->getStyle(chr($column+$i).($row+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-				$activeSheet->setCellValue(chr($column+$i).($row+3), $v.'');
+				$activeSheet->setCellValue(chr($column+$i).($row+3), $v);
 				if($row==0){
 					$activeSheet->getColumnDimension(chr($column+$i))->setWidth(strlen($v)+5);
 				}
