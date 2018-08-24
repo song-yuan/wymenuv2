@@ -138,7 +138,7 @@
                         </div>   
                 </div>
                 <div class="range " >
-                    <div class="describe">使用条件：<?php echo $v['cupon_memo'];?></div>
+                    <div class="describe"><?php echo $v['cupon_memo'];?></div>
                     <div class="date">
                     		有效期:
                            <span>
