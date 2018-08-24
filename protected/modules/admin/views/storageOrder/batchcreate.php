@@ -273,7 +273,7 @@
                                 <div id="<?php echo $material->lid;?>" catid="<?php echo $material->category_id;?>" class="bodymaterial">
                                         <div class="div1 num"><span><?php echo $a;?></span></div>
                                         <div class="div2">
-                                                 <input id="check<?php echo $material->lid;?>" type="checkbox" stockname="<?php echo Common::getStockName($material->stock_unit_id);?>" matename="<?php echo $material->material_name;?>" class="check" value="<?php echo $material->lid;?>"  name="ids[]" />
+                                                 <input id="check<?php echo $material->lid;?>" type="checkbox" stockname="<?php echo Common::getStockName($material->stock_unit_id);?>" matename="<?php echo $material->material_name;?>" mateprice="<?php echo isset($material->material_price->price)?$material->material_price->price:'';?>" class="check" value="<?php echo $material->lid;?>"  name="ids[]" />
                                         </div>
                                         <div class="matename ">
                                         <label for="check<?php echo $material->lid; ?>"><?php echo $material->material_name;?></label>
@@ -321,9 +321,7 @@
 			<!-- END PAGE CONTENT-->
 <script type="text/javascript">
 $(document).ready(function(){
-        var prodid = '<?php echo $pid;?>';
-        //alert(prodtaste);
-//id="mater0" catid="-1" class="pbommaterial mataction
+    var prodid = '<?php echo $pid;?>';
     $(".matcatbody").on("click",".pbommaterial",function(){
         $(".pbommaterial").removeClass("mataction");
         $(this).addClass("mataction");
@@ -333,28 +331,24 @@ $(document).ready(function(){
         	$(".bodymaterial[catid='"+catid+"']").removeClass("uhide");
         }else{
         	$(".bodymaterial").removeClass("uhide");
-        	}
-        //var settype = $(this).attr("settype");
-        //alert(catid);
-       // product_cate_select(catid,settype); 
+        }
               
     });
     $('#add_material').on('click',function(){
     	var aa = document.getElementsByName("ids[]");
-        var codep=new Array();
+        var codep = new Array();
         var bombodydiv = '';
         for (var i = 0; i < aa.length; i++) {
             if (aa[i].checked) {
-                //alert(aa[i].getAttribute("value"));
                 var materialid = aa[i].getAttribute("value");
                 var matename = aa[i].getAttribute("matename");
-                //
+                var mateprice = aa[i].getAttribute("mateprice");
                 var stockname = aa[i].getAttribute("stockname");
                 codep += materialid +','+ matename + ';';
                 var bommatif = $('#bommat'+materialid).attr('bommatif');
                 if(bommatif == undefined){
                 	bommatif = 0;
-                    }
+                }
                 if(bommatif==0){
                 var bombodyhead = '<div id="bommat'+materialid+'" class="bommaterial" bommatif="1" bommatid="'+materialid+'" matename="'+matename+'">'
 								+'<div class="div1 uhide"><span>'+i+'</span></div>'
@@ -362,7 +356,7 @@ $(document).ready(function(){
 								+matename
 								+'</div>'
 								+'<div class="amount"><input type="text" id="bommatnum'+materialid+'" placeholder="数量"/><span>'+stockname+'</span></div>'
-								+'<div class="price"><input type="text" id="bommatprice'+materialid+'" placeholder="价格"/><span> 元</span></div>'
+								+'<div class="price"><input type="text" id="bommatprice'+materialid+'" placeholder="价格" value="'+mateprice+'"/><span> 元</span></div>'
 								+'<div class="div4"><input type="button" class="bommatdet" materialid="'+materialid+'" value="移除"/></input></div>'
 								+'</div>';
                 bombodydiv = bombodydiv + bombodyhead;
@@ -376,7 +370,6 @@ $(document).ready(function(){
         	$("#bommat"+catid).remove();
                 
          });
-        //alert(codep);
      });
      
      //全选 全不选
@@ -451,8 +444,6 @@ $(document).ready(function(){
     	var tasteid = $(".pbomhead").find(".mataction").attr("tasteid");
     	
     	$(".bommaterial").each(function(){
-                //var materialid = aa[i].getAttribute("value");
-                //bommatid="'+materialid+'"
     		var bommatid = $(this).attr("bommatid");
     		var matename = $(this).attr("matename");
     		var bommatnum = $("#bommatnum"+bommatid).val();
@@ -469,22 +460,15 @@ $(document).ready(function(){
     		matids = matids + bommatid +','+ bommatnum +','+ bommatprice +';';
     		
     		});
-        /*      if(mateprice){
-                  
-                  alert('下列原料价格未填写，请填写完整后再保存：'+mateprice);
-                  
-                }else{    */
-		if(matenames ){
+		if(matenames!=''){
 			alert('下列原料数量未填写，请填写完整后再保存：'+matenames);
+		}else{
+			if(matids == ''){
+				alert("请至少添加一项配方，再保存！");
 			}else{
-				if(matids == ''){
-					alert("请至少添加一项配方，再保存！");
-					//return false;
-				}else{
-					matids = matids.substr(0,matids.length-1);//除去最后一个“；”
-					var url = "<?php echo $this->createUrl('storageOrder/batchsave',array('companyId'=>$this->companyId));?>/matids/"+matids+"/lid/"+prodid;
-                                        console.log(url);
-    					$.ajax({
+				matids = matids.substr(0,matids.length-1);//除去最后一个“；”
+				var url = "<?php echo $this->createUrl('storageOrder/batchsave',array('companyId'=>$this->companyId));?>/matids/"+matids+"/lid/"+prodid;
+    			$.ajax({
 		                   url:url,
 		                   type:'POST',
 		                   data:matids,//CF
@@ -493,30 +477,20 @@ $(document).ready(function(){
 		                   success:function(msg){
 		                       var data=msg;
 		                       if(data.status){
-			                       alert("成功!");
+			                       alert("添加成功!");
 			                       $("#close_modal").click();
-                                               window.location.reload();
-			               /*        if(prodtaste == 0){
-				                       //alert(prodtaste);
-			                       		document.getElementById("close_modal").click();
-			                       }else{
-				                       layer.msg("请添加口味配方；或者点击右下角关闭页面！");
-				                       }  */
-								//alert(data.matids);
-								//alert(data.prodid);  
-                                                                
-                                                                
+                                   window.location.reload();
 		                       }else{
-		                           alert("false");
+		                           alert("添加失败");
 		                       }
 		                   },
 		                   error: function(msg){
 			                   var data=msg;
 		                       alert(data.msg);
 		                   }
-		               });
-					}
+		             });
 				}
+			}
                
      });
 

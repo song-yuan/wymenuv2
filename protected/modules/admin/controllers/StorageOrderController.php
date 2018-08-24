@@ -65,7 +65,7 @@ class StorageOrderController extends BackendController
 				'pages'=>$pages,
 				'mid'=>$mid,
 				'begintime'=>$begintime,
-				'endtime'=>$endtime,
+				'endtimebatchcreate'=>$endtime,
 				'storage'=>$storage,
 				'purchase'=>$purchase,
 		));
@@ -345,22 +345,23 @@ class StorageOrderController extends BackendController
 		$materialnums = explode(';',$matids);
 		
 		$db = Yii::app()->db;
-		//var_dump($dpids,$phscodes);exit;
 		$transaction = $db->beginTransaction();
 		try{
-			//var_dump($materialnums);exit;
 			foreach ($materialnums as $materialnum){
 				$materials = array();
 				$materials = explode(',',$materialnum);
 				$mateid = $materials[0];   // material_id
 				$matenum = $materials[1];  // stock
 				$price = $materials[2];  // price
-				$prodmaterials = ProductMaterial::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$mateid,':companyId'=>$this->companyId));
+				$sql = 'select * from nb_product_material where lid='.$mateid.' and dpid='.$this->companyId.' and delete_flag=0';
+				$prodmaterials = $db->createCommand($sql)->queryRow();
 				
-				if(!empty($prodmaterials)&&!empty($mateid)){
+				$sql = 'select * from nb_product_material_price where material_id='.$mateid.' and dpid='.$this->companyId.' and delete_flag=0';
+				$prodmateprice = $db->createCommand($sql)->queryRow();
+				
+				if(!empty($prodmaterials)){
 					$se = new Sequence("storage_order_detail");
 					$id = $se->nextval();
-					//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
 					$dataprodbom = array(
 							'lid'=>$id,
 							'dpid'=>$dpid,
@@ -374,8 +375,28 @@ class StorageOrderController extends BackendController
                             'delete_flag'=>'0',
 							'is_sync'=>$is_sync,
 					);
-                                
 					$command = $db->createCommand()->insert('nb_storage_order_detail',$dataprodbom);	
+					if(!empty($prodmateprice)){
+						if($price!=$prodmateprice['price']){
+							$sql = 'update nb_product_material_price set price='.$price.' where lid='.$prodmateprice['lid'].' and dpid='.$this->companyId;
+							$db->createCommand($sql)->execute();
+						}
+					}else{
+						$se = new Sequence("product_material_price");
+						$id = $se->nextval();
+						$dataprodprice = array(
+								'lid'=>$id,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'material_id'=>$mateid,
+								'mphs_code'=>$prodmaterials['mphs_code'],
+								'price'=>$price,
+								'delete_flag'=>'0',
+								'is_sync'=>$is_sync,
+						);
+						$db->createCommand()->insert('nb_product_material_price',$dataprodprice);
+					}
 				}
 				
 			}
@@ -391,19 +412,19 @@ class StorageOrderController extends BackendController
     * 入库单批量添加
     */
     public function actionBatchCreate(){
-            	$this->layout = '/layouts/main_picture';
+        $this->layout = '/layouts/main_picture';
 		$pid = Yii::app()->request->getParam('pid',0);
 		$phscode = Yii::app()->request->getParam('phscode',0);
 		$prodname = Yii::app()->request->getParam('prodname',0);
 		
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.pid != 0 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->condition = 't.pid != 0 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$models = MaterialCategory::model()->findAll($criteria);
 		//查询原料分类
 		
 		$criteria = new CDbCriteria;
-            
+        $criteria->with = 'material_price';
 		$criteria->condition =  ' t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$materials = ProductMaterial::model()->findAll($criteria);
@@ -471,7 +492,6 @@ class StorageOrderController extends BackendController
     			if(!empty($prodmaterials)&&!empty($mateid)){
     				$se = new Sequence("storage_order_detail");
     				$id = $se->nextval();
-    				//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
     				$dataprodbom = array(
     						'lid'=>$id,
     						'dpid'=>$dpid,
