@@ -52,7 +52,7 @@ class StatementstockController extends BackendController
 		if($matename!=''){
 			$sql .= ' and pm.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' order by sts.lid desc';
+		$sql .= ' order by pm.material_identifier asc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 		if($download){
 			$exportData = array();
@@ -121,7 +121,7 @@ class StatementstockController extends BackendController
 		if($matename!=''){
 			$sql .= ' and pm.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' order by sts.lid desc';
+		$sql .= ' order by pm.material_identifier asc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 		if($download){
 			$exportData = array();
@@ -191,7 +191,7 @@ class StatementstockController extends BackendController
 		if($matename!=''){
 			$sql .= ' and pm.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' order by sts.lid desc';
+		$sql .= ' order by pm.material_identifier asc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 		if($download){
 			$exportData = array();
@@ -262,7 +262,7 @@ class StatementstockController extends BackendController
 		if($matename!=''){
 			$sql .= ' and pm.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' order by sts.lid desc';
+		$sql .= ' order by pm.material_identifier asc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 		if($download){
 			$exportData = array();
@@ -343,7 +343,7 @@ class StatementstockController extends BackendController
 		if($matename!=''){
 			$sql .= ' and pm.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' order by sts.lid desc';
+		$sql .= ' order by pm.material_identifier asc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 		if($download){
 			$exportData = array();
