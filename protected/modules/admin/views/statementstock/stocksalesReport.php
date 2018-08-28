@@ -64,9 +64,13 @@
 								<th><?php echo yii::t('app','原料单位');?></th>
 								<th><?php echo yii::t('app','原料规格');?></th>
 								<th><?php echo yii::t('app','堂食用量');?></th>
+								<th><?php echo yii::t('app','堂食成本');?></th>
 								<th><?php echo yii::t('app','外卖用量');?></th>
+								<th><?php echo yii::t('app','外卖成本');?></th>
 								<th><?php echo yii::t('app','盘损用量');?></th>
+								<th><?php echo yii::t('app','盘损成本');?></th>
 								<th><?php echo yii::t('app','用量汇总');?></th>
+								<th><?php echo yii::t('app','汇总成本');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -75,9 +79,13 @@
 							<?php 
 								foreach ($models as $model):
 									$tsStock = isset($model['tangshi_stock'])?$model['tangshi_stock']:0;
+									$tsPrice = isset($model['tangshi_price'])?number_format($model['tangshi_price'],2):0;
 									$wmStock = isset($model['waimai_stock'])?$model['waimai_stock']:0;
+									$wmPrice = isset($model['waimai_price'])?number_format($model['waimai_price'],2):0;
 									$psStock = isset($model['pansun_stock'])?$model['pansun_stock']:0;
+									$psPrice = isset($model['pansun_price'])?number_format($model['pansun_price'],2):0;
 									$pdStock = isset($model['pandian_stock'])?$model['pandian_stock']:0;
+									$pdPrice = isset($model['pandian_price'])?number_format($model['pandian_price'],2):0;
 							?>
 							<tr class="odd gradeX">
 								<td><?php echo $model['material_identifier'];?></td>
@@ -85,15 +93,19 @@
 								<td><?php echo $model['unit_name'];?></td>
 								<td><?php echo $model['unit_specifications'];?></td>
 								<td><?php echo $tsStock;?></td>
+								<td><?php echo $tsPrice;?></td>
 								<td><?php echo $wmStock;?></td>
+								<td><?php echo $wmPrice;?></td>
 								<td><?php echo $psStock;?></td>
+								<td><?php echo $psPrice;?></td>
 								<td><?php echo $tsStock+$wmStock+$psStock;?></td>
+								<td><?php echo $tsPrice+$wmPrice+$psPrice;?></td>
 							</tr>
 							<?php endforeach;?>	
 							<!-- end foreach-->
 							<?php else:?>
 							<tr>
-							<td colspan='8'>未查询到数据。</td>
+							<td colspan='12'>未查询到数据。</td>
 							</tr>
 							<?php endif;?>
 						</tbody>

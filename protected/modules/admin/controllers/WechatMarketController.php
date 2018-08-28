@@ -253,16 +253,13 @@ class WechatMarketController extends BackendController {
 			foreach ($userarrays as $userarray){
 				$sql = 'select * from nb_brand_user where lid='.$userarray;
 				$openId = $db->createCommand($sql)->queryRow();
-			//var_dump($userarray);exit;
 				foreach ($materialnums as $materialnum){
 					$materials = array();
 					$materials = explode(',',$materialnum);
 					$plid = $materials[0];
 					$pcode = $materials[1];
-				//var_dump($plid.'@'.$pcode);exit;
 					$sql = 'select * from nb_cupon where lid='.$plid.' and dpid='.$this->companyId.' and delete_flag=0';
 					$cupons = $db->createCommand($sql)->queryRow();
-				//var_dump($buysentprodetail);exit;
 					if(!empty($cupons)&&!empty($plid)){
 						$sql = 'select * from nb_cupon_branduser where cupon_id='.$plid.' and brand_user_lid='.$userarray;
 						$cuponbranduser = $db->createCommand($sql)->queryRow();
@@ -280,9 +277,6 @@ class WechatMarketController extends BackendController {
 
 						$se = new Sequence("cupon_branduser");
 						$id = $se->nextval();
-					//$code=new Sequence("sole_code");
-					//$sole_code = $code->nextval();
-					//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
 						$data = array(
 							'lid'=>$id,
 							'dpid'=>$dpid,
@@ -301,10 +295,7 @@ class WechatMarketController extends BackendController {
 							'is_sync'=>$is_sync,
 							);
 
-					//$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
-					//var_dump($data);exit;
 						$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
-					//exit;
 						Cupon::sentCupon($dpid, $userarray, $cupons['cupon_money'], $cupons['cupon_abstract'], $colseday, 0, $openId['openid']);
 					}
 
