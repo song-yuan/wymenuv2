@@ -232,7 +232,7 @@
 
                             <?php foreach($models as $model):?>
                                 <tr>
-                                    <td><?php echo substr($model['card_id'],5,9);?></td>
+                                    <td><?php echo substr($model['card_id'],5,strlen($model['card_id'])-1);?></td>
                                     <td><?php echo $model['user_name']?$model['user_name'].'|'.$model['nickname']:$model['nickname'];?></td>
                                     <td><?php switch ($model['sex']){case 0:echo "未知"; break; case 1:echo "男";break; case 2:echo "女";};?></td>
                                     <td><?php

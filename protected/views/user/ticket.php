@@ -186,7 +186,15 @@
                   
                         <div class="price">
                             <span class="yen">&yen;</span>
-                            <span class="money"><?php echo $v['cupon_money'];?></span>
+                            <span class="money">
+                            	<?php 
+                                if($v['cupon_money'] == floor($v['cupon_money'])){
+                               		echo floor($v['cupon_money']);
+                                }else{
+                                    echo $v['cupon_money'];
+                                }
+                                ?>
+                            </span>
                         </div>
                         <div class="limit">
                             满<?php echo floor($v['min_consumer']);?>元可用
@@ -218,7 +226,14 @@
                   
                         <div class="price">
                             <span class="yen">&yen;</span>
-                            <span class="money"><?php echo $v['cupon_money'];?></span>
+                            <span class="money">
+                            	<?php 
+                                if($v['cupon_money'] == floor($v['cupon_money'])){
+                               		echo floor($v['cupon_money']);
+                                }else{
+                                    echo $v['cupon_money'];
+                                }
+                                ?></span>
                         </div>
                         <div class="limit">
                             满<?php echo floor($v['min_consumer']);?>元可用

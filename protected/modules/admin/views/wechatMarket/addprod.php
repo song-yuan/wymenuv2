@@ -147,67 +147,67 @@
 </style>
 
 
-			<div class="row">
-				<div class="col-md-12">
-					<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','群发优惠券');?></div>
-							<div class="tools">
-								<a href="javascript:;" class="collapse"></a>
-							</div>
-						</div>
-						<div style="min-height: 500px;" class="portlet-body form">
-							<div class="pbom">
-								<div class="pbomhead">
-									<div class="pbomheadtitle mataction" tasteid="0000000000">系统券</div>
-
-									<div class="clear"></div>
-								</div>
-								<div class="pbombody">
-								<?php if($models):?>
-								<?php foreach ($models as $model):?>
-									<div class="wxcardbg" plid="<?php echo $model->lid;?>" pcode="<?php echo $model->sole_code;?>">
-										<div class="wxcardhead" style="">
-											<div class="wxcardheadl"style="">
-												<div class="wxcardheadll"style="">
-													<div class="money" style=""><span><?php echo floor($model->cupon_money);?></span></div>
-													<div class="unit" style="">元</div>
-												</div>
-											</div>
-											<div class="wxcardheadr" style="">
-												<div class="top" style="">满<span><?php echo floor($model->min_consumer);?></span>可使用</div>
-												<div class="bot" style="">代金券</div>
-												<div class="cen" style=""><?php echo $model->cupon_title;?></div>
-											</div>
-										</div>
-										<?php if($model->time_type=='1'):?>
-										<div class="wxcardend" style="">限<span><?php echo date('Y-m-d',strtotime($model->begin_time));?></span> 至<span><?php echo date('Y-m-d',strtotime($model->end_time));?></span>  使用</div>
-										<?php else:?>
-										<div class="wxcardend" style="">领取后<span><?php echo $model->day_begin?$model->day_begin:'当';?></span> 天生效，有效期：<span><?php echo $model->day;?></span> 天</div>
-										<?php endif;?>
-										<div class="wxcardactive uhide" ><img width="50px" style="" src="../../../../img/checked.png"/></div>
-									</div>
-
-								<?php endforeach;?>
-								<?php endif;?>
-									<div class="clear"></div>
-
-								</div>
-							</div>
-							<div class="addsave"style="float: right;"><button id="add_save">发送</button></div>
-						</div>
-						</div>
-						<div class="pageend">
-							<div class="closediv">
-								<button id="close_modal" type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','关 闭');?></button>
-							</div>
-							<div class="clear"></div>
-						</div>
-					</div>
-
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','群发优惠券');?></div>
+				<div class="tools">
+					<a href="javascript:;" class="collapse"></a>
+				</div>
 			</div>
+			<div style="min-height: 500px;" class="portlet-body form">
+				<div class="pbom">
+					<div class="pbomhead">
+						<div class="pbomheadtitle mataction" tasteid="0000000000">系统券</div>
 
-			<!-- END PAGE CONTENT-->
+						<div class="clear"></div>
+					</div>
+					<div class="pbombody">
+					<?php if($models):?>
+					<?php foreach ($models as $model):?>
+						<div class="wxcardbg" plid="<?php echo $model['lid'];?>" pcode="<?php echo $model['sole_code'];?>">
+							<div class="wxcardhead" style="">
+								<div class="wxcardheadl"style="">
+									<div class="wxcardheadll"style="">
+										<div class="money" style=""><span><?php echo floor($model['cupon_money']);?></span></div>
+										<div class="unit" style="">元</div>
+									</div>
+								</div>
+								<div class="wxcardheadr" style="">
+									<div class="top" style="">满<span><?php echo floor($model['min_consumer']);?></span>可使用</div>
+									<div class="bot" style="">代金券</div>
+									<div class="cen" style=""><?php echo $model['cupon_title'];?></div>
+								</div>
+							</div>
+							<?php if($model['time_type']=='1'):?>
+							<div class="wxcardend" style="">限<span><?php echo date('Y-m-d',strtotime($model['begin_time']));?></span> 至<span><?php echo date('Y-m-d',strtotime($model['end_time']));?></span>  使用</div>
+							<?php else:?>
+							<div class="wxcardend" style="">领取后<span><?php echo $model['day_begin']?$model['day_begin']:'当';?></span> 天生效，有效期：<span><?php echo $model['day'];?></span> 天</div>
+							<?php endif;?>
+							<div class="wxcardactive uhide" ><img width="50px" style="" src="../../../../img/checked.png"/></div>
+						</div>
+
+					<?php endforeach;?>
+					<?php endif;?>
+						<div class="clear"></div>
+
+					</div>
+				</div>
+				<div class="addsave"style="float: right;"><button id="add_save">发送</button></div>
+			</div>
+			</div>
+			<div class="pageend">
+				<div class="closediv">
+					<button id="close_modal" type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','关 闭');?></button>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+</div>
+
+<!-- END PAGE CONTENT-->
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -226,17 +226,14 @@ $(document).ready(function(){
 		var users = '<?php echo $users;?>';
 		<?php if($all): ?>
 		users = $('.all_save').attr('users');
-		// alert(users);
 		<?php endif; ?>
 		$('.activechecked').each(function(){
 			var plid = $(this).attr('plid');
 			var pcode = $(this).attr('pcode');
 			plids = plid +','+ pcode +';'+ plids;
-			});
-		//alert(plids);
+		});
 		if(plids!=''){
 			plids = plids.substr(0,plids.length-1);//除去最后一个“;”
-			//alert(plids);
         }else{
            	 alert("<?php echo yii::t('app','请至少选择一项！！！');?>");
            	 return false;
@@ -248,8 +245,7 @@ $(document).ready(function(){
             data:{
             	'plids':plids,
             	'users':users,
-            },//CF
-            //async:false,
+            },
             dataType: "json",
             success:function(msg){
             	layer.closeAll('loading');

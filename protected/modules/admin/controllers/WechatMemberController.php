@@ -68,7 +68,7 @@ class WechatMemberController extends BackendController {
                     );
     }
     public function actionSearch(){
-        $db=Yii::app()->db;
+        $db = Yii::app()->db;
         $companyId = $this->companyId;
         $more = Yii::app()->request->getPost('more',"0");
         //性别
@@ -227,7 +227,7 @@ class WechatMemberController extends BackendController {
         //检索条件会员等级
         $sql = 'select lid,level_name from nb_brand_user_level where dpid='.$companyId.' and level_type=1 and delete_flag=0';
         $userlevels = $db->createCommand($sql)->queryAll();
-
+		
         $this->render('search',array(
                 'models'=>$models,
              	'pages'=>$pages,

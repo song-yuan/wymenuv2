@@ -79,44 +79,12 @@
 							<option value="0">--全体--</option>
 							<?php if(!empty($userlevels)):?>
 								<?php foreach($userlevels as $userlevel):?>
-									<option value="<?php echo $userlevel->lid;?>" <?php if($userlevel->lid==$finduserlevel) echo 'selected';?>><?php echo $userlevel->level_name;?></option>
+									<option value="<?php echo $userlevel['lid'];?>" <?php if($userlevel['lid']==$finduserlevel) echo 'selected';?>><?php echo $userlevel['level_name'];?></option>
 								<?php endforeach;?>
 							<?php endif;?>
 						</select>
 					</div>
 				</div>
-				<div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
-					<div class="input-group" style="width:95%;">
-						<span class="input-group-addon">未消费时长</span>
-						<select class="form-control" name="noordertime" id="noordertime">
-							<option value="%" <?php if("%"==$noordertime) echo 'selected';?>>--全部--</option>
-							<option value="1" <?php if("1"==$noordertime) echo 'selected';?>>1个月</option>
-							<option value="2" <?php if("2"==$noordertime) echo 'selected';?>>2个月</option>
-							<option value="3" <?php if("3"==$noordertime) echo 'selected';?>>3个月</option>
-							<option value="4" <?php if("4"==$noordertime) echo 'selected';?>>4个月</option>
-							<option value="5" <?php if("5"==$noordertime) echo 'selected';?>>5个月</option>
-							<option value="6" <?php if("6"==$noordertime) echo 'selected';?>>半年</option>
-							<option value="12" <?php if("12"==$noordertime) echo 'selected';?>>一年</option>
-							<option value="18" <?php if("18"==$noordertime) echo 'selected';?>>一年半</option>
-							<option value="24" <?php if("24"==$noordertime) echo 'selected';?>>二年</option>
-						</select>
-					</div>
-				</div>
-				<!--
-                <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
-					<div class="input-group" style="width:95%;">
-						<span class="input-group-addon">微信分组</span>
-						<select class="form-control" name="findweixingroup">
-							<option value="0000000000">--全体--</option>
-							<?php if(!empty($weixingroups)):?>
-							<?php foreach($weixingroups as $weixingroup):?>
-							<option value="<?php echo $weixingroup['id'];?>" <?php if($weixingroup['id']==$findweixingroup) echo 'selected';?>><?php echo $weixingroup['name'];?></option>
-							<?php endforeach;?>
-							<?php endif;?>
-						</select>
-					</div>
-				</div>
-			-->
 			</fieldset>
 			<fieldset>
             <legend class="more-condition" style="font-size:1.2em;display:<?php echo isset($more) && $more?'':'none';?>;"">来源信息:</legend>
@@ -136,7 +104,7 @@
 					</div>
 				</div>
 
-				<div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+				<div class="form-group" style="display:none">
 					<div class="input-group" style="width:95%;">
 						<span class="input-group-addon">区县</span>
 						<select id="area" name="area" class="selectedclass form-control">
@@ -156,22 +124,25 @@
 						</div>
 					</div>
 			</fieldset>
-               <!-- 
-               <div class="form-group more-condition" style="float:left;width:350px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
-					<div class="input-group" style="width:95%;">
-						<span class="input-group-addon">积分</span>
-						<input type="text" maxlength="10" class="form-control" name="pointfrom" value="<?php echo $pointfrom; ?>"><span class="input-group-addon">~</span><input type="text" maxlength="10" class="form-control" name="pointto" value="<?php echo $pointto; ?>">
-					</div>
-				</div>
-               <div class="form-group more-condition" style="float:left;width:350px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
-					<div class="input-group" style="width:95%;">
-						<span class="input-group-addon">余额</span>
-						<input type="text" maxlength="10" class="form-control" name="remainfrom" value="<?php echo $remainfrom; ?>"><span class="input-group-addon">~</span><input type="text" maxlength="10" class="form-control" name="remainto" value="<?php echo $remainto; ?>">
-					</div>
-				</div>
-			-->
 		<fieldset>
         <legend class="more-condition" style="font-size:1.2em;display:<?php echo isset($more) && $more?'':'none';?>;"">订单信息:</legend>
+			<div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+				<div class="input-group" style="width:95%;">
+					<span class="input-group-addon">未消费时长</span>
+					<select class="form-control" name="noordertime" id="noordertime">
+						<option value="%" <?php if("%"==$noordertime) echo 'selected';?>>--全部--</option>
+						<option value="1" <?php if("1"==$noordertime) echo 'selected';?>>1个月</option>
+						<option value="2" <?php if("2"==$noordertime) echo 'selected';?>>2个月</option>
+						<option value="3" <?php if("3"==$noordertime) echo 'selected';?>>3个月</option>
+						<option value="4" <?php if("4"==$noordertime) echo 'selected';?>>4个月</option>
+						<option value="5" <?php if("5"==$noordertime) echo 'selected';?>>5个月</option>
+						<option value="6" <?php if("6"==$noordertime) echo 'selected';?>>半年</option>
+						<option value="12" <?php if("12"==$noordertime) echo 'selected';?>>一年</option>
+						<option value="18" <?php if("18"==$noordertime) echo 'selected';?>>一年半</option>
+						<option value="24" <?php if("24"==$noordertime) echo 'selected';?>>二年</option>
+					</select>
+				</div>
+			</div>
 			<div class="form-group more-condition" style="float:left;width:340px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
 				<div class="input-group date-picker input-daterange" style="width:95%;">
 					<span class="input-group-addon">订单时间</span><input type="text" class="form-control" name="datefrom" value="<?php echo $datefrom; ?>"><span class="input-group-addon">~</span><input type="text" class="form-control" name="dateto" value="<?php echo $dateto; ?>">
@@ -236,7 +207,7 @@
 		<table class="table table-bordered table-hover" id="sample_1">
 			<thead>
 				<tr>
-					<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+					<th class="table-checkbox" width="4%"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 					<th width="8%">卡号</th>
 					<th width="15%" nowrap>名称|昵称</th>
 					<th width="4%" nowrap>性别</th>
@@ -245,9 +216,7 @@
 					<th width="8%">等级</th>
 					<th width="15%">来源店铺名</th>
 					<th width="10%">手机号</th>
-					<th width="10%">余额(返现)</th>
-					<th width="15%" nowrap><a href="javascript:;" onclick="sort(1,<?php echo $sort?0:1;?>);">消费总额|次数 <i class="fa <?php echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
-					<th width="6%">操作</th>
+					<th width="10%">余额</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -255,57 +224,29 @@
 					<?php foreach($models as $model):?>
 						<tr>
 							<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="idchk" /></td>
-							<td><?php echo substr($model['card_id'],-5,5);?></td>
+							<td><?php echo substr($model['card_id'],5,strlen($model['card_id'])-1);?></td>
 							<td><?php echo $model['user_name']?$model['user_name']:$model['nickname'];?></td>
 							<td><?php switch ($model['sex']){case 0:echo "未知"; break; case 1:echo "男";break; case 2:echo "女";};?></td>
 							<td><?php echo substr($model['user_birthday'],5,5);?></td>
 							<td><?php echo substr($model['create_at'],0,10);?></td>
-							<td><?php echo $model['level_name'];//(!empty($model->level)) echo $model->level->level_name;?></td>
-                    <!-- <td><?php
-                    	$hasname=false;
-                        if(!empty($weixingroups))
-                        {
-                        	foreach ($weixingroups as $wg)
-                            {
-                                if($wg["id"]==$model['weixin_group'])
-                                {
-                                    echo $wg['name'];
-                                    $hasname=true;
-                                    break;
-                                 }
-                            }
-                        }
-                        if(!$hasname)
-                        {
-                            echo $model['weixin_group'];
-                        }
-                        ?></td> 
-                    -->
-                    <td> <?php echo $model['company_name'];?></td>
-                    <td><?php
-                    	if($model['mobile_num']){
-                    		if(Yii::app()->user->role == 8){
-                    			$str = substr_replace($model['mobile_num'],'****',3,4);
-                    		}else{
-                    			$str = $model['mobile_num'];
-                    		}
-                    		echo $str;
-                    	}?>
-                    </td>
-                    <td><?php echo $model['remain_money'].'('.$model['remain_back_money'].')'; ?><a class="btn default btn-xs blue cashbacklist" title="充值返现列表" data-id="<?php echo $model['lid'];?>"  href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
-                    <td><?php echo $model['consumetotal']."|".$model['consumetimes'];//echo $model['consume_total_money'];?><a class="btn default btn-xs blue consumelist" title="消费列表" data-id="<?php echo $model['lid'];?>"  href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
-
-                    <td class="button-column">
-                    	<a class="btn default btn-xs blue branduserdetail" title="详细" href="javascript:;"
-                    	data-id="<?php echo $model['lid'];?>"
-                    	data-wg="<?php if(!empty($weixingroup[$model['weixin_group']])) {echo $weixingroup[$model['weixin_group']];} else {echo $model['weixin_group'];}?>"
-                    	data-ul="<?php echo $model['level_name'];?>"><i class="fa fa-search"></i>详细</a>
-                    </td>
-                </tr>
-            <?php endforeach;?>
-        <?php else:?>
+							<td><?php echo $model['level_name'];?></td>
+                    		<td> <?php echo $model['company_name'];?></td>
+		                    <td><?php
+		                    	if($model['mobile_num']){
+		                    		if(Yii::app()->user->role == 8){
+		                    			$str = substr_replace($model['mobile_num'],'****',3,4);
+		                    		}else{
+		                    			$str = $model['mobile_num'];
+		                    		}
+		                    		echo $str;
+		                    	}?>
+		                    </td>
+		                    <td><?php echo $model['all_money']; ?></td>
+		                </tr>
+	            <?php endforeach;?>
+	        <?php else:?>
         	<tr>
-        		<td colspan="12">没有找到数据</td>
+        		<td colspan="10">没有找到数据</td>
         	</tr>
         <?php endif;?>
     </tbody>
@@ -359,58 +300,15 @@
 
 
 <script>
-	addressInit('province', 'city', 'area', '<?php echo $province;?>', '<?php echo $city;?>', '<?php echo $area;?>');
-	// addressInit('province', 'city', 'area');
-	function sort(o,s){
-		var url = $('#Promote').attr('action');
-		oIndex = url.indexOf('/o/');
-		if(oIndex >0){
-			var reg = new RegExp("([\\w\\/\\.]*)\\/o\\/\\d+\\/s\\/\\d+","i");
-                        //alert(reg);
-                        url = url.replace(reg,"$1\/o\/"+o+"\/s\/"+s);
-                    } else {
-                    	url += '/o/'+o+'/s/'+s;
-                    }
-                //alert(url)
-                $('#Promote').attr('action',url);
-                $('#Promote').submit();
-            }
-
-            function exportFile(){
-            	alert("暂不提供");
-            	return;
-            	var url = $('#Promote').attr('action');
-            	dIndex = url.indexOf('&d=1');
-            	if(dIndex <0){
-            		url += '&d=1';
-            	}
-            	url += $('#Promote').serialize();
-            	location.href=url;
-            }
-            $(function(){
-            	$('#yw0').on('click',"li a",function(event) {
-        // 获取这个a标签的href中的url
-        url = $(this).attr("href");
-        //alert(url);return false;
-        // 取消点击事件的默认动作
-        event.preventDefault();
-        // 修改form中的action动作
-        $("#Promote").attr("action", url);
-        // 提交表单
-        $("#Promote").submit();
-    });
-            });
-
-            jQuery(document).ready(function() {
-//App.init();
-//checkSelect();
-if (jQuery().datepicker) {
-	$('.date-picker').datepicker({
-		format: 'yyyy-mm-dd',
-		language: 'zh-CN',
-		rtl: App.isRTL(),
-		autoclose: true
-	});
+addressInit('province', 'city', 'area', '<?php echo $province;?>', '<?php echo $city;?>', '');
+jQuery(document).ready(function() {
+	if (jQuery().datepicker) {
+		$('.date-picker').datepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			rtl: App.isRTL(),
+			autoclose: true
+		});
          $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
      }
  });
@@ -429,52 +327,6 @@ if (jQuery().datepicker) {
 		}
 	});
 
-    //////////////new layout by osy//////
-    var totalurl='';
-    var modalconsumetotal;
-    $(".consumelist").on("click",function(){
-    	var lid=$(this).attr("data-id");
-    	modalconsumetotal=$('#portlet-consume');
-    	totalurl='<?php echo $this->createUrl('member/consumelists',array('companyId'=>$this->companyId));?>/lid/'+lid;
-    	modalconsumetotal.find('.modal-content').load(totalurl
-    		,'', function(){
-    			modalconsumetotal.modal();
-    		});
-    })
-
-    $(".pointlist").on("click",function(){
-    	var lid=$(this).attr("data-id");
-    	modalconsumetotal=$('#portlet-consume');
-    	totalurl='<?php echo $this->createUrl('member/pointlist',array('companyId'=>$this->companyId));?>/lid/'+lid;
-    	modalconsumetotal.find('.modal-content').load(totalurl
-    		,'', function(){
-    			modalconsumetotal.modal();
-    		});
-    })
-
-    $(".cashbacklist").on("click",function(){
-    	var lid=$(this).attr("data-id");
-    	modalconsumetotal=$('#portlet-consume');
-    	totalurl='<?php echo $this->createUrl('weixin/cashbacklist',array('companyId'=>$this->companyId));?>/lid/'+lid;
-    	modalconsumetotal.find('.modal-content').load(totalurl
-    		,'', function(){
-    			modalconsumetotal.modal();
-    		});
-    })
-
-    $(".branduserdetail").on("click",function(){
-    	var lid=$(this).attr("data-id");
-    	var wg=$(this).attr("data-wg");
-    	var ul=$(this).attr("data-ul");
-    	modalconsumetotal=$('#portlet-consume');
-    	totalurl='<?php echo $this->createUrl('member/branduserdetail',array('companyId'=>$this->companyId));?>/lid/'+lid+'/wg/'+wg+'/ul/'+ul;
-    	modalconsumetotal.find('.modal-content').load(totalurl
-    		,'', function(){
-    			modalconsumetotal.modal();
-    		});
-    })
-
-	//var $modal = $('.modal');
 	$('.add_save').on('click', function(){
 		<?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
 			alert("您没有权限！");return false;
@@ -484,7 +336,6 @@ if (jQuery().datepicker) {
 		for (var i = 0; i < aa.length; i++) {
 			if (aa[i].checked){
 				users += aa[i].value +',';
-		            //alert(str);
 		    }
 		}
 	    if(users!=''){
@@ -493,9 +344,8 @@ if (jQuery().datepicker) {
 	    	alert("<?php echo yii::t('app','请勾选会员，再发送优惠券！');?>");
 	    	return false;
 	    }
-	    //alert(users);
 	    modalconsumetotal=$('#portlet-consume');
-	    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/addprod',array('companyId'=>$this->companyId));?>/users/'+users, '', function(){modalconsumetotal.modal();});
+	    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/getCupon',array('companyId'=>$this->companyId));?>/users/'+users, '', function(){modalconsumetotal.modal();});
 	});
 
 	$('.all_save').on('click', function(){
@@ -503,15 +353,13 @@ if (jQuery().datepicker) {
 			alert("您没有权限！");return false;
 		<?php endif;?>
 	    if(confirm('确认要群发所有满足该条件的会员吗 ? ')){
-		    //alert(users);
 		    modalconsumetotal=$('#portlet-consume');
-		    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/addprod',array('companyId'=>$this->companyId,'all'=>1));?>', '', function(){modalconsumetotal.modal();});
+		    modalconsumetotal.find('.modal-content').load('<?php echo $this->createUrl('wechatMarket/getCupon',array('companyId'=>$this->companyId,'all'=>1));?>', '', function(){modalconsumetotal.modal();});
 	    }
 	});
 
 
 var selectcountry;
-
 
 $("#findcountryid").on("change",function(){
 	selectcountry=$(this).val();
@@ -535,7 +383,6 @@ $("#findcountryid").on("change",function(){
 
 $("#findprovinceid").on("change",function(){
 	var thisval=$.trim($(this).val());
-    //alert(thisval);
     if(thisval=="%")
     {
     	$("#findcityid").val("%");
