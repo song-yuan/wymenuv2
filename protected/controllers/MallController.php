@@ -250,7 +250,7 @@ class MallController extends Controller
 		$others = array('takeout'=>$takeoutTypeId,'fullsent'=>$fullsentId);
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$others);
-			var_dump($orderObj->$productTastes);exit;
+			var_dump($orderObj->productTastes);exit;
 			if(empty($orderObj->cart)){
 				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}
