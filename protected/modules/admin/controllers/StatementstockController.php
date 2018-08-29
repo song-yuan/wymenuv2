@@ -394,7 +394,7 @@ class StatementstockController extends BackendController
 	public function actionStocksalesReport(){
 		$dpid = $this->companyId;
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		$download = Yii::app()->request->getParam('download',0);
+		$download = Yii::app()->request->getParam('d',0);
 		$codename = Yii::app()->request->getParam('codename','');
 		$matename = Yii::app()->request->getParam('matename','');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
