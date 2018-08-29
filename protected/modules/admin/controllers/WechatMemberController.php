@@ -113,7 +113,7 @@ class WechatMemberController extends BackendController {
         $sql .=' LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid ';
         if($this->comptype==0){
         	$companyDpid = $this->companyId;
-        	$companyId = WxCompany::getAllDpids($dpid);
+        	$companyId = WxCompany::getAllDpids($companyDpid);
         	$sql .=' where t.dpid='.$this->companyId.' and tl.level_type = 1 and tl.delete_flag = 0';
         }else{
         	$companyDpid = $this->company_dpid;
