@@ -218,7 +218,7 @@ class WxOrder
 			foreach($this->tastes as $taste){
 				$tasteArr = explode('-',$taste);
 				if(count($tasteArr)>1){
-					$productId = (int)$tasteArr[0];
+					$productId = (int)$tasteArr[0].'';
 					$this->productTastes[$productId][] = $tasteArr;
 				}
 			}
