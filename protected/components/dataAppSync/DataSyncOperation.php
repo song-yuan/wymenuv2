@@ -1869,14 +1869,14 @@ class DataSyncOperation {
 		if(empty($tasteArr)){
 			foreach ($results as $key=>$res){
 				if($res['taste_id']!=0){
-					unset($res[$key]);
+					unset($results[$key]);
 				}
 			}
 		}else{
 			foreach ($results as $key=>$res){
 				if($res['taste_id']!=0 && 
 					!in_array($res['taste_id'], $tasteArr)){
-					unset($res[$key]);
+					unset($results[$key]);
 				}
 			}
 		}
