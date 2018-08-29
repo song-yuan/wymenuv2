@@ -112,8 +112,12 @@ class WechatMemberController extends BackendController {
         $sql .=' from nb_brand_user t LEFT JOIN  nb_company com on t.weixin_group = com.dpid ';
         $sql .=' LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid ';
         if($this->comptype==0){
+        	$companyDpid = $this->companyId;
+        	$companyId = WxCompany::getAllDpids($dpid);
         	$sql .=' where t.dpid='.$this->companyId.' and tl.level_type = 1 and tl.delete_flag = 0';
         }else{
+        	$companyDpid = $this->company_dpid;
+        	$companyId = $this->companyId;
         	$sql .=' where t.dpid='.$this->company_dpid.' and weixin_group='.$this->companyId.' and tl.level_type = 1 and tl.delete_flag = 0';
         }
     	
@@ -181,7 +185,7 @@ class WechatMemberController extends BackendController {
         	
         	$where = '';
         	$having = '';
-        	$osql = 'select user_id from nb_order where dpid = '.$companyId;
+        	$osql = 'select user_id from nb_order where dpid in('.$companyId.')';
         	
         	if($noordertime!='%'){
         		$noorderdate = date('Y-m-d',strtotime('-'.$noordertime.' month'));
@@ -227,7 +231,7 @@ class WechatMemberController extends BackendController {
         $models = $pdata->queryAll();
 
         //检索条件会员等级
-        $sql = 'select lid,level_name from nb_brand_user_level where dpid='.$companyId.' and level_type=1 and delete_flag=0';
+        $sql = 'select lid,level_name from nb_brand_user_level where dpid='.$companyDpid.' and level_type=1 and delete_flag=0';
         $userlevels = $db->createCommand($sql)->queryAll();
 		
         $this->render('search',array(
