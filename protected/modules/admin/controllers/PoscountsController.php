@@ -64,7 +64,6 @@ class PoscountsController extends BackendController
                      
                 $models = Yii::app()->db->createCommand($sql)->queryALL();
 
-        // p($models);
         }
             $this->render('hqindex',array(
                     'companys'=>$company,
@@ -83,14 +82,12 @@ class PoscountsController extends BackendController
             $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
             $ids = Yii::app()->request->getPost('ids');
             $status = Yii::app()->request->getPost('status');
-            // var_dump($ids);exit;
             if(!is_array($ids)){
                 $ids = array($ids);
             }
             if(!empty($ids)) {
                     foreach ($ids as $id) {
                         $model = PadSettingStatus::model()->find('pad_setting_id=:id ' , array(':id' => (int)$id ,)) ;
-                        // p($model_one);
                         // 如果状态表数据存在就更新,如果不存在就创建为结算状态
                         if(!empty($model)) {
                             $model->saveAttributes(array('status'=>$status));
@@ -119,7 +116,7 @@ class PoscountsController extends BackendController
     		}
     	}
     	 
-    	$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_mtpay_config t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
+    	$sql = 'select t.*,t1.create_at as com_create_at,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_mtpay_config t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
     	$models = Yii::app()->db->createCommand($sql)->queryAll();
     	 
     	$this->render('pospay',array(
@@ -474,13 +471,13 @@ class PoscountsController extends BackendController
     		}
     	}
     
-    	$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_mtpay_config t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
+    	$sql = 'select t.*,t1.create_at as com_create_at,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_mtpay_config t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$cdpid;
     	$models = Yii::app()->db->createCommand($sql)->queryAll();
     	 
-    	$tableHead = array('序号', '店名','开通时间','联系人','联系电话','联系地址');
+    	$tableHead = array('序号', '店名','开通时间','联系人','联系电话','联系地址','店铺创建时间');
     	$tableData = array();
     	foreach ($models as $k=>$model){
-    		$tempArr = array($k+1,$model['company_name'],$model['create_at'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address']);
+    		$tempArr = array($k+1,$model['company_name'],$model['create_at'],$model['contact_name'],$model['mobile'],$model['province'].$model['city'].$model['county_area'].$model['address'],$model['com_create_at']);
     		array_push($tableData, $tempArr);
     	}
     	Helper::exportExcel($tableHead,$tableData,'美团支付开通报表---'.$comname,'美团支付开通对账报表');
