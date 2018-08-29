@@ -246,6 +246,7 @@ class MallController extends Controller
 		$number = 1;
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
+		var_dump($tastes);exit;
 		$others = array('takeout'=>$takeoutTypeId,'fullsent'=>$fullsentId);
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$others);
