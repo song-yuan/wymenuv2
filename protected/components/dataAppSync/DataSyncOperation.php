@@ -1189,6 +1189,8 @@ class DataSyncOperation {
 				    				'is_sync' => 0
 				    		);
 				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
+				    		
+				    		$boms = self::getBom($dpid, $productId, $tasteArr);
 				    	}
 				    }else{
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice.' and is_retreat=0';
@@ -1862,16 +1864,23 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getBom($dpid, $productId, $tasteArr) {
-		//Helper::writeLog('进入方法');
-		if(empty($tasteArr)){
-			$sql = 'select t.* from nb_product_bom t left join nb_product_material k on(t.dpid = k.dpid and t.material_id = k.lid) where t.dpid='.$dpid.' and t.product_id='.$productId.' and t.taste_id=0 and t.delete_flag=0 and k.delete_flag=0';
-		}else{
-			$tasteStr = join(',', $tasteArr);
-			$sql = 'select t.* from nb_product_bom t left join nb_product_material k on(t.dpid = k.dpid and t.material_id = k.lid) where t.dpid='.$dpid.' and t.product_id='.$productId.' and t.taste_id=0 and t.delete_flag=0 and k.delete_flag =0'.
-					' union select tt.* from nb_product_bom tt left join nb_product_material kk on(tt.dpid = kk.dpid and tt.material_id = kk.lid ) where tt.dpid='.$dpid.' and tt.product_id='.$productId.' and tt.taste_id in('.$tasteStr.') and tt.delete_flag=0 and kk.delete_flag =0';
-		}
+		$sql = 'select t.* from nb_product_bom t left join nb_product_material k on(t.dpid = k.dpid and t.material_id = k.lid) where t.dpid='.$dpid.' and t.product_id='.$productId.' and t.delete_flag=0 and k.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)->queryAll();
-		return $results;
+		if(empty($tasteArr)){
+			foreach ($results as $key=>$res){
+				if($res['taste_id']!=0){
+					unset($res[$key]);
+				}
+			}
+		}else{
+			foreach ($results as $key=>$res){
+				if($res['taste_id']!=0 && 
+					!in_array($res['taste_id'], $tasteArr)){
+					unset($res[$key]);
+				}
+			}
+		}
+		return array_merge($results);
 	}
 	/**
 	 * 更新库存 type 1 堂食出库 2 外卖出库
