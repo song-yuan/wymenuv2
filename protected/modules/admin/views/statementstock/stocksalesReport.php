@@ -10,7 +10,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','报表中心'),'url'=>$this->createUrl('statementstock/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','进销存日报 '),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statementstock/list' , array('companyId' => $this->companyId,'type'=>1,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','报表中心'),'url'=>$this->createUrl('statementstock/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','原料消耗 '),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statementstock/list' , array('companyId' => $this->companyId,'type'=>1,)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -46,10 +46,11 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','进销存消耗');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','原料消耗');?></div>
 					<div class="actions">
 						<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							<button type="button" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
 						</div>			
 					</div>
 			 	</div> 
@@ -78,14 +79,14 @@
 							<!--foreach-->
 							<?php 
 								foreach ($models as $model):
-									$tsStock = isset($model['tangshi_stock'])?$model['tangshi_stock']:0;
-									$tsPrice = isset($model['tangshi_price'])?number_format($model['tangshi_price'],2):0;
-									$wmStock = isset($model['waimai_stock'])?$model['waimai_stock']:0;
-									$wmPrice = isset($model['waimai_price'])?number_format($model['waimai_price'],2):0;
-									$psStock = isset($model['pansun_stock'])?$model['pansun_stock']:0;
-									$psPrice = isset($model['pansun_price'])?number_format($model['pansun_price'],2):0;
-									$pdStock = isset($model['pandian_stock'])?$model['pandian_stock']:0;
-									$pdPrice = isset($model['pandian_price'])?number_format($model['pandian_price'],2):0;
+									$tsStock = $model['tangshi_stock'];
+									$tsPrice = $model['tangshi_price'];
+									$wmStock = $model['waimai_stock'];
+									$wmPrice = $model['waimai_price'];
+									$psStock = $model['pansun_stock'];
+									$psPrice = $model['pansun_price'];
+									$pdStock = $model['pandian_stock'];
+									$pdPrice = $model['pandian_price'];
 							?>
 							<tr class="odd gradeX">
 								<td><?php echo $model['material_identifier'];?></td>
@@ -122,21 +123,19 @@
 
 <script>
 
-		//var str=new array();						
-		jQuery(document).ready(function(){
-		    if (jQuery().datepicker) {
-	            $('.date-picker').datepicker({
+	jQuery(document).ready(function(){
+		  if (jQuery().datepicker) {
+	           $('.date-picker').datepicker({
 	            	format: 'yyyy-mm-dd',
 	            	language: 'zh-CN',
 	                rtl: App.isRTL(),
 	                autoclose: true
-	            });
-	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	            
-           }
-		});
+	           });
+	           $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+          }
+	});
   
-	$('#btn_time_query').click(function time() {
+	$('#btn_time_query').click(function() {
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var cid = $('#selectCategory').val();
@@ -144,5 +143,14 @@
 		var matename = $('#matename').val();
 		var selectDpid = $('select[name="selectDpid"]').val();
 		location.href="<?php echo $this->createUrl('statementstock/stocksalesReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid;    
+	});
+	$('#excel').click(function() {
+		var begin_time = $('#begin_time').val();
+		var end_time = $('#end_time').val();
+		var cid = $('#selectCategory').val();
+		var codename = $('#codename').val();
+		var matename = $('#matename').val();
+		var selectDpid = $('select[name="selectDpid"]').val();
+		location.href="<?php echo $this->createUrl('statementstock/stocksalesReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/codename/"+codename+"/cid/"+cid+"/matename/"+matename+'/selectDpid/'+selectDpid+'/d/1';    
 	});
 </script> 

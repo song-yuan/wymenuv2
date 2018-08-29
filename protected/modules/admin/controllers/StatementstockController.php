@@ -394,6 +394,7 @@ class StatementstockController extends BackendController
 	public function actionStocksalesReport(){
 		$dpid = $this->companyId;
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$download = Yii::app()->request->getParam('download',0);
 		$codename = Yii::app()->request->getParam('codename','');
 		$matename = Yii::app()->request->getParam('matename','');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
@@ -422,30 +423,38 @@ class StatementstockController extends BackendController
 			if(isset($results[$materialId])){
 				if($materialType==1){
 					$results[$materialId]['tangshi_stock'] = $model['stock_num'];
-					$results[$materialId]['tangshi_price'] = $model['price'];
+					$results[$materialId]['tangshi_price'] = number_format($model['price'],2);
 				}elseif ($materialType==2){
 					$results[$materialId]['waimai_stock'] = $model['stock_num'];
-					$results[$materialId]['waimai_price'] = $model['price'];
+					$results[$materialId]['waimai_price'] = number_format($model['price'],2);
 				}elseif ($materialType==4){
 					$results[$materialId]['pansun_stock'] = $model['stock_num'];
-					$results[$materialId]['pansun_price'] = $model['price'];
+					$results[$materialId]['pansun_price'] = number_format($model['price'],2);
 				}else{
 					$results[$materialId]['pandian_stock'] = $model['stock_num'];
-					$results[$materialId]['pandian_price'] = $model['price'];
+					$results[$materialId]['pandian_price'] = number_format($model['price'],2);
 				}
 			}else{
+				$model['tangshi_stock'] = 0;
+				$model['tangshi_price'] = 0;
+				$model['waimai_stock'] = 0;
+				$model['waimai_price'] = 0;
+				$model['pansun_stock'] = 0;
+				$model['pansun_price'] = 0;
+				$model['pandian_stock'] = 0;
+				$model['pandian_price'] = 0;
 				if($materialType==1){
 					$model['tangshi_stock'] = $model['stock_num'];
-					$model['tangshi_price'] = $model['price'];
+					$model['tangshi_price'] = number_format($model['price'],2);
 				}elseif ($materialType==2){
 					$model['waimai_stock'] = $model['stock_num'];
-					$model['waimai_price'] = $model['price'];
+					$model['waimai_price'] = number_format($model['price'],2);
 				}elseif ($materialType==4){
 					$model['pansun_stock'] = $model['stock_num'];
-					$model['pansun_price'] = $model['price'];
+					$model['pansun_price'] = number_format($model['price'],2);
 				}else{
 					$model['pandian_stock'] = $model['stock_num'];
-					$model['pandian_price'] = $model['price'];
+					$model['pandian_price'] = number_format($model['price'],2);
 				}
 				$materUnit = Common::getmaterialUnit($materialId, $selectDpid, 1);
 				$model['material_name'] = $materUnit['material_name'];
@@ -454,6 +463,37 @@ class StatementstockController extends BackendController
 				$model['unit_specifications'] = $materUnit['unit_specifications'];
 				$results[$materialId] = $model;
 			}
+		}
+		if($download){
+			$exportData = array();
+			$tableHeader = array('原料编码','原料名称','原料单位','原料规格','堂食用量','堂食成本','外卖用量','外卖成本','盘损用量','盘损成本','用量汇总','汇总成本');
+			foreach ($results as $m){
+				$tsStock = $m['tangshi_stock'];
+				$tsPrice = $m['tangshi_price'];
+				$wmStock = $m['waimai_stock'];
+				$wmPrice = $m['waimai_price'];
+				$psStock = $m['pansun_stock'];
+				$psPrice = $m['pansun_price'];
+				$pdStock = $m['pandian_stock'];
+				$pdPrice = $m['pandian_price'];
+				$tempArr = array(
+						$m['material_identifier'],
+						$m['material_name'],
+						$m['unit_name'],
+						$m['unit_specifications'],
+						$tsStock,
+						$tsPrice,
+						$wmStock,
+						$wmPrice,
+						$psStock,
+						$psPrice,
+						$tsStock+$wmStock+$psStock,
+						$tsPrice+$wmPrice+$psPrice
+				);
+				array_push($exportData, $tempArr);
+			}
+			Helper::exportExcel($tableHeader,$exportData,'原料消耗报表','原料消耗报表');
+			exit;
 		}
 		
 		$categories = $this->getCategories();
