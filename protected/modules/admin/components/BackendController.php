@@ -4,6 +4,7 @@ class BackendController extends CController
 	public $layout = '/layouts/main_admin';
 	public $companyId = 0;
 	public $comptype = 1;
+	public $company_dpid = 0;
 	public function beforeAction($action) {
 		date_default_timezone_set('PRC');
 		parent::beforeAction($action);
@@ -30,6 +31,7 @@ class BackendController extends CController
 			if($company){
 				$this->companyId = $companyId;
 				$this->comptype = $company['type'];
+				$this->company_dpid = $company['comp_dpid'];
 				if($role < 5){
 					// 超级管理员 所有权限
 					return true;

@@ -39,10 +39,10 @@ class NowmaterialstockController extends BackendController
 		
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.dpid='.$this->companyId.' and t.material_id ='.$materialId.' and t.delete_flag=0';
-		$pages = new CPagination(GoodsMaterialStock::model()->count($criteria));
+		$pages = new CPagination(ProductMaterialStock::model()->count($criteria));
 		$pages->applyLimit($criteria);
-		$models = GoodsMaterialStock::model()->findAll($criteria);
-		$this->render('ckdetailindex',array(
+		$models = ProductMaterialStock::model()->findAll($criteria);
+		$this->render('detailindex',array(
 				'models'=>$models,
 				'pages'=>$pages,
 	

@@ -69,7 +69,6 @@ class WechatMemberController extends BackendController {
     }
     public function actionSearch(){
         $db = Yii::app()->db;
-        $companyId = $this->companyId;
         $more = Yii::app()->request->getPost('more',"0");
         //性别
         $findsex = Yii::app()->request->getPost('findsex',"%");
@@ -110,9 +109,13 @@ class WechatMemberController extends BackendController {
         $cardmobile = Yii::app()->request->getPost('cardmobile',"%");
 
         $sql = 'select t.lid,t.dpid,t.card_id,t.create_at,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country,t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name';
-        $sql .=' from nb_brand_user t LEFT JOIN  nb_company com on com.dpid = t.weixin_group ';
+        $sql .=' from nb_brand_user t LEFT JOIN  nb_company com on t.weixin_group = com.dpid ';
         $sql .=' LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid ';
-        $sql .=' where t.dpid='.$companyId.' and tl.level_type = 1 and tl.delete_flag = 0 and com.delete_flag = 0';
+        if($this->comptype==0){
+        	$sql .=' where t.dpid='.$this->companyId.' and tl.level_type = 1 and tl.delete_flag = 0';
+        }else{
+        	$sql .=' where t.dpid='.$this->company_dpid.' and weixin_group='.$this->companyId.' and tl.level_type = 1 and tl.delete_flag = 0';
+        }
     	
     	// 卡号或手机号
     	if($cardmobile!="%"&&$cardmobile!="")
@@ -214,9 +217,8 @@ class WechatMemberController extends BackendController {
 	        	$sql .= ' and t.user_id in('.$userStr.')';
 	        }
         }
-        $sql = 'select m.* from ('.$sql.')m';
-        
-        $count = $db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
+        $sql = 'select * from ('.$sql.')m';
+        $count = $db->createCommand(str_replace('*','count(*)',$sql))->queryScalar();
         $pages = new CPagination($count);
         $pages->pageSize = 100;
         $pdata =$db->createCommand($sql." LIMIT :offset,:limit");
