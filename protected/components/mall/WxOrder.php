@@ -219,7 +219,7 @@ class WxOrder
 				$tasteArr = explode('-',$taste);
 				if(count($tasteArr)>1){
 					$productId = (int)$tasteArr[0];
-					$this->productTastes[$tasteArr[0]][] = $tasteArr;
+					$this->productTastes[$productId][] = $tasteArr;
 				}
 			}
 		}
