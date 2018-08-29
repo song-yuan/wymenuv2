@@ -60,7 +60,7 @@ class StatementstockController extends BackendController
 			foreach ($sqlmodels as $m){
 				$tempArr = array(
 								$m['create_at'],
-								$m['material_identifier'],
+								$m['material_identifier'].' ',
 								$m['material_name'],
 								$m['sales_name'],
 								$m['prestock_taking_num'],
@@ -129,7 +129,7 @@ class StatementstockController extends BackendController
 			foreach ($sqlmodels as $m){
 				$tempArr = array(
 						$m['create_at'],
-						$m['material_identifier'],
+						$m['material_identifier'].' ',
 						$m['material_name'],
 						$m['sales_name'],
 						$m['prestock_taking_num'],
@@ -199,7 +199,7 @@ class StatementstockController extends BackendController
 			foreach ($sqlmodels as $m){
 				$tempArr = array(
 						$m['create_at'],
-						$m['material_identifier'],
+						$m['material_identifier'].' ',
 						$m['material_name'],
 						$m['sales_name'],
 						$m['prestock_taking_num'],
@@ -279,7 +279,7 @@ class StatementstockController extends BackendController
 				$tempArr = array(
 						$m['create_at'],
 						$typeStr,
-						$m['material_identifier'],
+						$m['material_identifier'].' ',
 						$m['material_name'],
 						$m['sales_name'],
 						$m['prestock_taking_num'],
@@ -360,7 +360,7 @@ class StatementstockController extends BackendController
 				$tempArr = array(
 						$m['create_at'],
 						$typeStr,
-						$m['material_identifier'],
+						$m['material_identifier'].' ',
 						$m['material_name'],
 						$m['sales_name'],
 						$m['system_num'],
@@ -477,7 +477,7 @@ class StatementstockController extends BackendController
 				$pdStock = $m['pandian_stock'];
 				$pdPrice = $m['pandian_price'];
 				$tempArr = array(
-						$m['material_identifier'],
+						$m['material_identifier'].' ',
 						$m['material_name'],
 						$m['unit_name'],
 						$m['unit_specifications'],
