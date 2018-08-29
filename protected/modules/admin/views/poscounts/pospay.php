@@ -76,6 +76,7 @@
 								<th><?php echo yii::t('app','联系人');?></th>
 								<th><?php echo yii::t('app','联系电话');?></th>
 								<th><?php echo yii::t('app','联系地址');?></th>
+								<th><?php echo yii::t('app','店铺创建时间');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -88,6 +89,7 @@
 								<td><?php echo $model['contact_name'];?></td>
 								<td><?php echo $model['mobile'];?></td>
 								<td><?php echo $model['province'].$model['city'].$model['county_area'].$model['address'];?></td>
+								<td><?php echo $model['com_create_at'];?></td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
