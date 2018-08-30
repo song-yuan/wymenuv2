@@ -1999,10 +1999,11 @@ class StatementsController extends BackendController
 					from ( 
 						select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice
 							from (select op.* from nb_order_product op,nb_order o where op.order_id=o.lid and op.dpid=o.dpid and op.set_id >0 and op.dpid = '.$selectDpid.' and op.delete_flag=0 and o.order_type '.$ordertypes.' and o.order_status in(3,4,8) and o.dpid = '.$selectDpid.' and o.create_at >="'.$begin_time.' 00:00:00" and o.create_at <="'.$end_time.' 23:59:59") t 
-							left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) 
-					)k group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc
+							left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) group by t.set_id,t.order_id
+					)k group by k.m_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc
 					)c';
 		}
+// 		echo $sql;exit;
 		$count = $db->createCommand(str_replace('c.*','count(*)',$sql))->queryScalar();
 		
 		$pages = new CPagination($count);
