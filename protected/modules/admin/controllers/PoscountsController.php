@@ -47,7 +47,6 @@ class PoscountsController extends BackendController
                     $use_status='';
                 }else if($pos_used==1){
                     $use_status=' and pss.use_status=1';
-                    $use_time =' and unix_timestamp(pss.used_at) < unix_timestamp("'.$time.'")';
                 }else if($pos_used==0){
                     $use_status=' and pss.use_status=0';
                 }
@@ -56,9 +55,9 @@ class PoscountsController extends BackendController
                 }
                 $sql ='select  DISTINCT(t.lid),pss.status,pss.use_status,pss.pad_no,pss.create_at as poscreate_at,pss.used_at,psd.content,c.company_name,c.contact_name,c.mobile,c.create_at as comp_create_time,t.* from nb_pad_setting t '
                         .' left join nb_company c on(c.dpid = t.dpid ) '
-                        .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid '.$use_time.$use_status.$status.') '
+                        .' left join nb_pad_setting_status pss ON(pss.dpid = t.dpid and pss.pad_setting_id = t.lid '.$use_status.$status.') '
                         .' left join (select a.lid,a.content,a.dpid,a.pad_setting_id from nb_pad_setting_detail a where  UNIX_TIMESTAMP(a.create_at) in(select max(UNIX_TIMESTAMP(b.create_at)) from nb_pad_setting_detail b where b.dpid=a.dpid and b.pad_setting_id=a.pad_setting_id)) psd ON(psd.dpid = t.dpid and psd.pad_setting_id = t.lid) '
-                        .' where t.delete_flag =0 and t.dpid in( '
+                        .' where t.delete_flag =0 and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in( '
                                 .' select dpid from nb_company where comp_dpid ='.$cdpid.$cname.' and delete_flag = 0  and type = 1)'
                         .' order by c.company_name asc';
                      
