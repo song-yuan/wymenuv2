@@ -79,9 +79,9 @@
                                 </select>
                                 <div class="btn-group">
                                     <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-                                        <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>" <?php if ($pos_used != 1){echo 'disabled';} ?> >
+                                        <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">
                                         <span class="input-group-addon">~</span>
-                                        <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>" <?php if ($pos_used != 1){echo 'disabled';} ?> >
+                                        <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">
                                     </div>
                                 </div>
                                 <div class="btn-group">
@@ -379,17 +379,6 @@
             var val = document.getElementById('cdpid').options[index].value;
 
             location.href="<?php echo $this->createUrl('poscounts/hqindex' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/pos_count/"+pos_count+"/pos_used/"+pos_used+"/cdpid/"+val+"/cname/"+cname;
-
-    });
-
-    $('#pos_used').change(function(){
-    var index = document.getElementById('pos_used').selectedIndex;
-    var val = document.getElementById('pos_used').options[index].value;
-    if (val != 1) {
-        $('#begin_time,#end_time').attr('disabled', 'disabled');
-    }else{
-        $('#begin_time,#end_time').removeAttr('disabled');
-    }
 
     });
 
