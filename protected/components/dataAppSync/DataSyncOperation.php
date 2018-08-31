@@ -1157,7 +1157,8 @@ class DataSyncOperation {
 				    	$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				    	foreach ($orderProducts as $orderproduct){
 				    		$orderProductDetailId = $orderproduct['lid'];
-				    	
+				    		$productId = $orderproduct['product_id'];
+				    		
 				    		$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
 				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
@@ -1189,8 +1190,14 @@ class DataSyncOperation {
 				    				'is_sync' => 0
 				    		);
 				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
-				    		
-				    		$boms = self::getBom($dpid, $productId, $tasteArr);
+				    		$tasteArr = array();
+				    		$productBoms = self::getBom($dpid, $productId, $tasteArr);
+				    		if(!empty($productBoms)){
+				    			foreach ($productBoms as $bom){
+				    				$stock = $bom['number']*$pamount;
+				    				self::retreatMaterialStock($dpid,$retreatTime,$bom['material_id'],$stock,$orderProductDetailId);
+				    			}
+				    		}
 				    	}
 				    }else{
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice.' and is_retreat=0';
@@ -1229,6 +1236,15 @@ class DataSyncOperation {
 				    				'is_sync' => 0
 				    		);
 				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
+				    		
+				    		$tasteArr = array();
+				    		$productBoms = self::getBom($dpid, $pproductId, $tasteArr);
+				    		if(!empty($productBoms)){
+				    			foreach ($productBoms as $bom){
+				    				$stock = $bom['number']*$pamount;
+				    				self::retreatMaterialStock($dpid,$retreatTime,$bom['material_id'],$stock,$orderProductDetailId);
+				    			}
+				    		}
 				    	}
 				    }
 				}
@@ -2040,7 +2056,37 @@ class DataSyncOperation {
 			}
 		}
 	}
-	
+	/**
+	 * 退单退原料库存  type 1 堂食  2 外卖
+	 */
+	public static function retreatMaterialStock($dpid,$createAt,$materialId, $stock,$orderProductId){
+		$time = time();
+		$sql = 'select * from nb_material_stock_log where dpid='.$dpid.' and material_id='.$materialId.' and order_product_id='.$orderProductId;
+		$materials = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($materials as $material){
+			$temStock = $material['stock_num'];
+			$sql = 'update nb_product_material_stock set stock= stock+'.$temStock.' where lid='.$material['logid'].' and dpid='.$dpid.' and delete_flag=0';
+			Yii::app ()->db->createCommand ( $sql )->execute ();
+			
+			$se = new Sequence ( "material_stock_log" );
+			$materialStockLogId = $se->nextval ();
+			$materialStockLog = array (
+					'lid' => $materialStockLogId,
+					'dpid' => $dpid,
+					'create_at' => $createAt,
+					'update_at' => date ( 'Y-m-d H:i:s', $time ),
+					'logid'=>$material['lid'],
+					'order_product_id'=>$orderProductId,
+					'material_id' => $materialId,
+					'type' => $material['type'],
+					'stock_num' => -$temStock,
+					'original_num'=>$material['original_num'],
+					'unit_price'=>$material['unit_price'],
+					'resean' => '反结账退库存'
+			);
+			Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
+		}
+	}
 	/**
 	 * 
 	 * 获取双屏信息
