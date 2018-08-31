@@ -1189,8 +1189,10 @@ class DataSyncOperation {
 				    				'retreat_amount' => $pamount,
 				    				'is_sync' => 0
 				    		);
-				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
-				    		$tasteArr = array();
+				    		Yii::app()->db->createCommand()->insert( 'nb_order_retreat', $orderRetreatData );
+				    		
+				    		$sql = 'select taste_id from nb_order_taste where dpid='.$dpid.' and order_id='.$orderProductDetailId.' and is_order=0';
+				    		$tasteArr = Yii::app()->db->createCommand($sql)->queryColumn();
 				    		$productBoms = self::getBom($dpid, $productId, $tasteArr);
 				    		if(!empty($productBoms)){
 				    			foreach ($productBoms as $bom){
@@ -1237,7 +1239,8 @@ class DataSyncOperation {
 				    		);
 				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
 				    		
-				    		$tasteArr = array();
+				    		$sql = 'select taste_id from nb_order_taste where dpid='.$dpid.' and order_id='.$orderProductDetailId.' and is_order=0';
+				    		$tasteArr = Yii::app()->db->createCommand($sql)->queryColumn();
 				    		$productBoms = self::getBom($dpid, $pproductId, $tasteArr);
 				    		if(!empty($productBoms)){
 				    			foreach ($productBoms as $bom){
