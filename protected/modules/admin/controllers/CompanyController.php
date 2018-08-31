@@ -354,6 +354,21 @@ class CompanyController extends BackendController
 }
 }
 	public function actionUpdate(){
+		if(Yii::app()->request->isAjaxRequest){
+			$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+			$up = new CFileUpload();
+			//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+			$up -> set("path", $path);
+			$up -> set("maxsize", 20*1024);
+			$up -> set("allowtype", array("png", "jpg","jpeg"));
+		
+			if($up -> upload("file")) {
+				$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
+			}else{
+				$msg = $up->getErrorMsg();
+			}
+			echo $msg;exit;
+		}
 		$role = Yii::app()->user->role;
 		$db = Yii::app()->db;
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
