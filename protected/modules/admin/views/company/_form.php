@@ -29,17 +29,24 @@
 									<div class="form-group <?php if($model->hasErrors('logo')) echo 'has-error';?>">
 										<?php echo $form->label($model,'logo',array('class'=>'control-label col-md-3')); ?>
 										<div class="col-md-9">
-										<?php
-										$this->widget('application.extensions.swfupload.SWFUpload',array(
-											'callbackJS'=>'swfupload_callback',
-											'fileTypes'=> '*.jpg',
-											'buttonText'=> yii::t('app','上传图片'),
-											'imgUrlList' => array($model->logo),
-										));
-										?>
-										<?php echo $form->hiddenField($model,'logo'); ?>
-										<?php echo $form->error($model,'logo'); ?>
+												<div class="fileupload fileupload-new" data-provides="fileupload">
+													<div class="fileupload-new thumbnail"  style="max-width: 200px; max-height: 200px; line-height: 20px;">
+														<img src="<?php echo $model->logo?$model->logo:'';?>" alt="" />
+													</div>
+													<div class="fileupload-preview fileupload-exists thumbnail" id="img1" style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
+													<div>
+														<span class="btn default btn-file">
+														<span class="fileupload-new"><i class="fa fa-paper-clip"></i> 上传产品图片 </span>
+														<span class="fileupload-exists"><i class="fa fa-undo"></i> 更改 </span>
+														<input type="file" accept="image/png,image/jpg,image/jpeg" name="file" class="default" />
+														</span>
+														<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> 移除 </a>
+													</div>
+												</div>
+												<span class="label label-danger">注意:</span>
+												<span>大小：建议300px*300px且不超过20kb 格式:jpg 、png、jpeg </span>
 										</div>
+										<?php echo $form->hiddenField($model,'logo'); ?>
 									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'contact_name',array('class' => 'col-md-3 control-label'));?>
@@ -284,111 +291,121 @@
 	<script>
 	
 	new PCAS("province","city","area","<?php echo $model->province;?>","<?php echo $model->city;?>","<?php echo $model->county_area;?>");
-	 $('#Company_type').change(function(){ 
-	 //alert($(this).children('option:selected').val()); 
-	 var p1=$(this).children('option:selected').val();//这就是selected的值 
-		//alert(p1);
-		 if(p1=="1"){
-			 $("#yincang").show();
-		 }else{
-			$("#yincang").hide();
-			 }
-	
-	 });
-
-		function swfupload_callback(name,path,oldname)  {
-			$("#Company_logo").val(name);
-			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
-		}
-		function theLocation(result){
-			var cityName = result.name;
-			map.centerAndZoom(cityName,11);
-		}
-		// 腾讯地图API功能
-		var geocoder,map,marker = null;
-		var init = function() {
-			    var center = new qq.maps.LatLng(31.21323,121.31706);
-			    map = new qq.maps.Map($('#allmap')[0],{
-			        center: center,
-			        zoom: 13
-			    });
-			    var marker = new qq.maps.Marker({
-			        position: center,
-			        map: map
-			    });
-			    //调用地址解析类
-			    geocoder = new qq.maps.Geocoder({
-			        complete : function(result){
-			            map.setCenter(result.detail.location);
-			            var lat = result.detail.location.lat;
-			            var lng = result.detail.location.lng;
-			            $('#Company_lng').val(lng);
-			            $('#Company_lat').val(lat);
-			            marker.setVisible(false);
-			            marker = new qq.maps.Marker({
-			                map:map,
-			                position: result.detail.location
-			            });
-			        }
-			    });
+	function theLocation(result){
+		var cityName = result.name;
+		map.centerAndZoom(cityName,11);
+	}
+	// 腾讯地图API功能
+	var geocoder,map,marker = null;
+	var init = function() {
+	    var center = new qq.maps.LatLng(31.21323,121.31706);
+	    map = new qq.maps.Map($('#allmap')[0],{
+	        center: center,
+	        zoom: 13
+	    });
+	    var marker = new qq.maps.Marker({
+	        position: center,
+	        map: map
+	    });
+	    //调用地址解析类
+	    geocoder = new qq.maps.Geocoder({
+	        complete : function(result){
+	            map.setCenter(result.detail.location);
+	            var lat = result.detail.location.lat;
+	            var lng = result.detail.location.lng;
+	            $('#Company_lng').val(lng);
+	            $('#Company_lat').val(lat);
+	            marker.setVisible(false);
+	            marker = new qq.maps.Marker({
+	                map:map,
+	                position: result.detail.location
+	            });
+	        }
+	    });
+	}
+	function codeAddress(address) {
+	    //通过getLocation();方法获取位置信息值
+	    geocoder.getLocation(address);
+	}
+	$(document).ready(function(){
+		
+		init();
+		var province = $('#province').children('option:selected').val();
+        var city = $('#city').children('option:selected').val();
+        var area = $('#area').children('option:selected').val();
+		var address = $('#Company_address').val();
+		if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
+			city = '';
 			}
-		function codeAddress(address) {
-		    //通过getLocation();方法获取位置信息值
-		    geocoder.getLocation(address);
-		}
-		$(document).ready(function(){
-			
-			init();
-			var province = $('#province').children('option:selected').val();
-	        var city = $('#city').children('option:selected').val();
-	        var area = $('#area').children('option:selected').val();
-			var address = $('#Company_address').val();
+		if(area == '市辖区'){
+			area = '';
+			}
+		var real_address = province+city+area+address;	
+		codeAddress(real_address);
+
+		$('input[name="file"]').change(function(){
+		  	$('form').ajaxSubmit(function(msg){
+		  		var str = msg.substr(0,1);
+		  		// alert(str);
+		  		if (str=='/') {
+					$('#Company_logo').val(msg);
+					layer.msg('图片选择成功!!!');
+		  		}else{
+					layer.msg(msg);
+		  			$('#img1 img').attr({
+						src: '',
+						width: '2px',
+						height: '2px',
+					});
+		  		}
+			});
+	   });
+	   $('#Company_type').change(function(){ 
+		 	 var p1=$(this).children('option:selected').val();//这就是selected的值 
+			 if(p1=="1"){
+				 $("#yincang").show();
+			 }else{
+				$("#yincang").hide();
+			 }
+		
+		 });
+		$('.getLocation').click(function(){
+			province = $('#province').children('option:selected').val();
+	        city = $('#city').children('option:selected').val();
+	        area = $('#area').children('option:selected').val();
+			address = $('#Company_address').val();
 			if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
 				city = '';
 				}
 			if(area == '市辖区'){
 				area = '';
 				}
-			var real_address = province+city+area+address;	
+			real_address = province+city+area+address;
+			// 创建地址解析器实例
 			codeAddress(real_address);
-			
-			$('.getLocation').click(function(){
-				province = $('#province').children('option:selected').val();
-		        city = $('#city').children('option:selected').val();
-		        area = $('#area').children('option:selected').val();
-				address = $('#Company_address').val();
-				if(city == '市辖区'|| city == '省直辖县级行政区划' || city == '市辖县'){
-					city = '';
-					}
-				if(area == '市辖区'){
-					area = '';
-					}
-				real_address = province+city+area+address;
-				// 创建地址解析器实例
-				codeAddress(real_address);
-			});
-		     $("#su").on('click',function(){
-
-		    	 var pay_online = $('.pay_online').children('option:selected').val();
-		         //alert(pay_online);
-		         //return false;
-		         var province = $('#province').children('option:selected').val();
-		         var city = $('#city').children('option:selected').val();
-		         var area = $('#area').children('option:selected').val();
-		         
-		         var dayendzero = "00:00";
-		       
-		         if(province == null || province == 'undefind' || province == ''){
-		        	 alert("<?php echo yii::t('app','请填写店铺所处省市信息。。。');?>");
-		        	 return false;
-		         }
-		         //alert(province);return false;
-		         $("#pay_online").val(pay_online);
-		         $("#province1").val(province);
-		         $("#city1").val(city);
-		         $("#area1").val(area);
-		         $("#company-form").submit();
-		     });
-
 		});
+	     $("#su").on('click',function(){
+
+	    	 var pay_online = $('.pay_online').children('option:selected').val();
+	         //alert(pay_online);
+	         //return false;
+	         var province = $('#province').children('option:selected').val();
+	         var city = $('#city').children('option:selected').val();
+	         var area = $('#area').children('option:selected').val();
+	         
+	         var dayendzero = "00:00";
+	       
+	         if(province == null || province == 'undefind' || province == ''){
+	        	 alert("<?php echo yii::t('app','请填写店铺所处省市信息。。。');?>");
+	        	 return false;
+	         }
+	         //alert(province);return false;
+	         $("#pay_online").val(pay_online);
+	         $("#province1").val(province);
+	         $("#city1").val(city);
+	         $("#area1").val(area);
+	         $("#company-form").submit();
+	     });
+
+	});
 	</script>							

@@ -141,12 +141,9 @@ class CompanyController extends BackendController
 		}
 		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
-		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
              
 		$models = Company::model()->findAll($criteria);
-//                var_dump($models);exit;
-//               print_r($criteria);exit;
 		$this->render('listchidren',array(
 				'models'=> $models,
 				'pages'=>$pages,
@@ -155,32 +152,7 @@ class CompanyController extends BackendController
 				'area'=>$areas,
                      
 		));
-        }
-	public function actionIndex1(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-                
-		$criteria = new CDbCriteria;
-                if(Yii::app()->user->role == User::POWER_ADMIN)
-                {
-                    $criteria->condition =' delete_flag=0 ';
-                }else if(Yii::app()->user->role == '2')
-                {
-                    $criteria->condition =' delete_flag=0 and dpid in (select tt.company_id from nb_user_company tt, nb_user tt1 where tt.dpid=tt1.dpid and tt.user_id=tt1.lid and tt.delete_flag=0 and tt.dpid='.Yii::app()->user->companyId.' and tt1.username="'.Yii::app()->user->id.'" )';
-                }else{
-                    $criteria->condition = ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
-                }
-		//var_dump($criteria);exit;
-		
-		$pages = new CPagination(Company::model()->count($criteria));
-			    // $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = Company::model()->findAll($criteria);
-		
-		$this->render('index1',array(
-				'models'=> $models,
-				'pages'=>$pages,
-		));
-	}
+    }
 	protected function afterSave()
 	{
 		if(parent::afterSave()) {
@@ -194,9 +166,24 @@ class CompanyController extends BackendController
 			return false;
 		}
 	}
-public function actionCreate(){
+	public function actionCreate(){
         $type = '-1';
         $type2 = 'create';
+        if(Yii::app()->request->isAjaxRequest){
+        	$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+        	$up = new CFileUpload();
+        	//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+        	$up -> set("path", $path);
+        	$up -> set("maxsize", 20*1024);
+        	$up -> set("allowtype", array("png", "jpg","jpeg"));
+        
+        	if($up -> upload("file")) {
+        		$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
+        	}else{
+        		$msg = $up->getErrorMsg();
+        	}
+        	echo $msg;exit;
+        }
         if(Yii::app()->user->role <= User::ADMIN_AREA) {
 
         $model = new Company();

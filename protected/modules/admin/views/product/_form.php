@@ -20,18 +20,6 @@
 										</div>
 										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 									</div>
-								<?php if($istempp&&(Yii::app()->user->role>5)){ echo '<script>
-															$(".category_selecter").each(function(){
-																$(this).attr("disabled",true)
-																//document.querySelector(".category_selecter").setAttribute("disabled",true);
-															});
-															//var btn=document.querySelector(".category_selecter");
-															//for(var i;i<=btn.length;i++){
-																//$("#test").attr("test","aaa")
-															//	}
-															//btn.disabled=true;
-																				</script>';
-									}?>
 									<div class="form-group <?php if($model->hasErrors('product_name')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'product_name',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
