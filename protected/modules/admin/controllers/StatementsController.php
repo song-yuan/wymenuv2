@@ -1529,11 +1529,11 @@ class StatementsController extends BackendController
 		}
 
 		if($text==1){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid ='.$selectDpid.' and lid in('.$ords.') group by year(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where dpid ='.$selectDpid.' and lid in('.$ords.') group by year(create_at) asc) k';
 		}elseif($text==2){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid ='.$selectDpid.' and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where dpid ='.$selectDpid.' and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc) k';
 		}elseif($text==3){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid ='.$selectDpid.' and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where dpid ='.$selectDpid.' and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
 		}
 			//统计实付价格，客流、单数
 
