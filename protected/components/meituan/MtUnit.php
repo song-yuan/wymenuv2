@@ -6,6 +6,7 @@ class MtUnit
 {
 	const developerId = '100746';
 	const signkey = '8isnqx6h2xewfmiu';
+	const MTHOST = 'https://api-open-cater.meituan.com';
 	public static function dealData($params)
 	{
 		$paramsArr = explode('&',$params); 

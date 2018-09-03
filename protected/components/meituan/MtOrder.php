@@ -68,9 +68,9 @@ class MtOrder
 			$mtToken = self::getToken($ePoiId);
 			$timetamp = time();
 			if($mtToken){
-				$url = 'http://api.open.cater.meituan.com/waimai/order/confirm';
-				$array= array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
-				$sign=MtUnit::sign($array);
+				$url = MtUnit::MTHOST.'/waimai/order/confirm';
+				$array = array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
+				$sign = MtUnit::sign($array);
 				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
 				$result = MtUnit::postHttps($url, $data);
 				Helper::writeLog('confirm-metian:'.$orderId.'-'.$result);
@@ -162,7 +162,7 @@ class MtOrder
 		$timestamp = time();
 		$res = self::getToken($dpid);
 		
-		$url = "http://api.open.cater.meituan.com/waimai/order/queryById";
+		$url = MtUnit::MTHOST."/waimai/order/queryById";
 		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,'orderId'=>$orderId );
 		$sign = MtUnit::sign($array);
 		$url .= "?appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=".$timestamp."&sign=".$sign."&orderId=".$orderId;
@@ -171,7 +171,7 @@ class MtOrder
 	}
 	public static function orderDistr($dpid,$orderId,$courierName,$courierPhone){
 		$res = self::getToken($dpid);
-		$url = "http://api.open.cater.meituan.com/waimai/order/delivering";
+		$url = MtUnit::MTHOST."/waimai/order/delivering";
 		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$orderId );
 		$sign=MtUnit::sign($array);
 		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$orderId&courierName=$courierName&courierPhone=$courierPhone";
@@ -185,7 +185,7 @@ class MtOrder
 		$degradLimit = 1000;
 		$developerId = MtUnit::developerId;
 		$res = self::getToken($dpid);
-		$url = "http://api.open.cater.meituan.com/waimai/order/batchPullPhoneNumber";
+		$url = MtUnit::MTHOST."/waimai/order/batchPullPhoneNumber";
 		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,"degradOffset"=>$degradOffset,'degradLimit'=>$degradLimit,'developerId'=>$developerId);
 		$sign = MtUnit::sign($array);
 		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=".$timestamp."&sign=".$sign."&degradOffset=".$degradOffset."&degradLimit=".$degradLimit."&developerId=".$developerId;
