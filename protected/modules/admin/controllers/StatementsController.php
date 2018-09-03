@@ -1562,14 +1562,13 @@ class StatementsController extends BackendController
 
 		$db = Yii::app()->db;
 		if($text==1){
-			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'") where t.pay_amount < 0 and t.dpid='.$dpid;
+			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.' 00:00:00" and t2.create_at <="'.$end_time.' 23:59:59" and year(t2.create_at) = "'.$y_all.'") where t.pay_amount < 0 and t.dpid='.$dpid;
 
 		}elseif($text==2){
-			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
+			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.' 00:00:00" and t2.create_at <="'.$end_time.' 23:59:59" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
 		}elseif($text==3){
-			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
+			$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.' 00:00:00" and t2.create_at <="'.$end_time.' 23:59:59" and year(t2.create_at) = "'.$y_all.'" and month(t2.create_at) = "'.$m_all.'" and day(t2.create_at) = "'.$d_all.'" ) where t.pay_amount < 0 and t.dpid='.$dpid;
 		}
-		//var_dump($sql2);exit;
 		$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		return $retreat['retreat_allprice'];
 	}
@@ -5078,29 +5077,31 @@ class StatementsController extends BackendController
 	 */
 
 	public function actionBusinessdataReportExport(){
-		date_default_timezone_set('PRC');
 		$objPHPExcel = new PHPExcel();
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-
-		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$this->companyId.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
+		
+		$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid = '.$selectDpid.' and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
 		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		$ords ='0000000000';
 		foreach ($orders as $order){
 			$ords = $ords .','.$order['lid'];
 		}
-		//$criteria->addCondition('t.lid in('.$ords.')');
 
 		$db = Yii::app()->db;
 		if($text==1){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where dpid in('.$selectDpid.') and lid in('.$ords.') group by year(create_at) asc) k';
 		}elseif($text==2){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where dpid in('.$selectDpid.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc) k';
 		}elseif($text==3){
-			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
+			$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice,sum(reality_total) as all_originalprice from nb_order where dpid in('.$selectDpid.') and lid in('.$ords.') group by year(create_at) asc,month(create_at) asc,day(create_at) asc) k';
 		}
 			//统计实付价格，客流、单数
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
@@ -5180,7 +5181,7 @@ class StatementsController extends BackendController
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A'.$i,$v['y_all'].'-'.$v['m_all'].'-'.$v['d_all']);
 			}
-			$retreatnum = $this->getBusinessRetreat($this->companyId,$text,$v['y_all'],$v['m_all'],$v['d_all'],$begin_time,$end_time);
+			$retreatnum = $this->getBusinessRetreat($selectDpid,$text,$v['y_all'],$v['m_all'],$v['d_all'],$begin_time,$end_time);
 			$retreatnum = $retreatnum?$retreatnum:'0.00';
 
 			$objPHPExcel->setActiveSheetIndex(0)

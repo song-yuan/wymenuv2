@@ -91,7 +91,7 @@
 								<td><?php echo $model['all_number'];?></td>
 								<td><?php echo $model['all_account'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_originalprice']);?></td>
-								<?php $retreatnum = $this->getBusinessRetreat($this->companyId,$text,$model['y_all'],$model['m_all'],$model['d_all'],$begin_time,$end_time);
+								<?php $retreatnum = $this->getBusinessRetreat($model['dpid'],$text,$model['y_all'],$model['m_all'],$model['d_all'],$begin_time,$end_time);
 								$retreatnum = $retreatnum?$retreatnum:'0.00';
 								?>
 								<td><?php echo sprintf("%.2f",$model['all_realprice']+$retreatnum).'('.$retreatnum.')';?></td>
