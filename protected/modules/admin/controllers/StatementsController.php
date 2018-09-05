@@ -7724,7 +7724,7 @@ class StatementsController extends BackendController
 			$companyName = '';
 			foreach ($orders as $order){
 				foreach ($order as $k=>$v){
-					$companyName = $v['company_name'];
+					$companyName = isset($v['company_name']) ? $v['company_name'] : '';
 					if($k==0){
 						$orderTotal += $v['should_total'];
 						$orderRealTotal += $v['reality_total'];
