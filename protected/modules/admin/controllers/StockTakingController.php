@@ -201,7 +201,6 @@ class StockTakingController extends BackendController
 				$totalNum = '0.00';//总消耗量
 				$systemNum = $originalNum;//系统库存
 				$nowNum = $nownumd*$ratio + $nownumx;// 盘点库存
-				$difference = $nowNum - $originalNum;// 损溢库存
 				$diffPrice = '0.00';//损溢成本
 				
 				
@@ -217,6 +216,12 @@ class StockTakingController extends BackendController
 					if($statict){
 						$presystemNum = $statict['stock_taking_num'];//上次盘点库存
 						$preStockTime = $statict['create_at'];// 上次盘点时间
+						
+						// 获取两次盘点之间其他类型的盘点 损耗总和  其他盘点不能影响该盘点的系统库存
+						$sql = 'select sum(stock_taking_difnum) as stock_taking_difnum from nb_stock_taking_statistics where dpid='.$dpid.' and create_at>="'.$preStockTime.'" and type!='.$sttype.' and material_id='.$id.' and delete_flag=0';
+						$stDifnum = Yii::app()->db->createCommand($sql)->queryScalar();
+						$systemNum = $systemNum - $stDifnum;
+						
 						// 从库存日志记录表 查询上次盘点到本次盘点的 入库库存 盘损库存 销售库存
 						$sql = 'select type,sum(stock_num) as stock_num,sum(stock_num*unit_price) as stock_cost from nb_material_stock_log where dpid='.$dpid.' and material_id='.$id.' and type in(0,1,2,4) and create_at>"'.$preStockTime.'" group by type';
 						$mStockLogs = $db->createCommand($sql)->queryAll();
@@ -245,6 +250,7 @@ class StockTakingController extends BackendController
 					}
 					
 					// 超过原始库存
+					$difference = $nowNum - $systemNum;// 损溢库存
 					if($difference > 0 ){
 						//盘点操作，当盘点的库存比理论库存多时，直接在后进的库存批次上加上此次的盘点的差值。。。
 						if($stocks['batch_stock'] == 0){
@@ -434,6 +440,7 @@ class StockTakingController extends BackendController
 							}
 						}
 					}
+					
 					// 插入盘点统计信息
 					$totalNum = $damageNum + $salseNum;
 					$se = new Sequence("stock_taking_statistics");
@@ -554,6 +561,12 @@ class StockTakingController extends BackendController
 		return $models;
 	}
 	public function getRatio($mulid,$mslid){
+		if(empty($mulid)){
+			$mulid = 0;
+		}
+		if(empty($mslid)){
+			$mslid = 0;
+		}
 		$sql = 'select unit_ratio from nb_material_unit_ratio where stock_unit_id='.$mulid.' and sales_unit_id='.$mslid;
 		$models = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!empty($models)){
