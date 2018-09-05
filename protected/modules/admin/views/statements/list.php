@@ -177,7 +177,7 @@
                             </a> 
                         </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-                           <a href="<?php echo $this->createUrl('statements/comPayYueReport',array('companyId' => $this->companyId,'text'=>'3'));?>">
+                           <a href="<?php echo $this->createUrl('statements/comPayYueReport',array('companyId' => $this->companyId));?>">
                                 <div class="list_big">支付方式(微信点餐)</div>
                                 <div class="list_small">查询门店账单总营业额和总单数及微信端的账单数据和金额数据</div>
                             </a> 
