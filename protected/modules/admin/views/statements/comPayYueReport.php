@@ -23,6 +23,10 @@
 										</select>
 									</div>
 							    </div>
+							    <?php else:?>
+							    <select name="selectDpid" class="hide">
+							    	<option value="<?php echo $selectDpid;?>"></option>
+							    </select>
 							    <?php endif;?>
                             </div>
                             <div class="modal-footer">
