@@ -205,13 +205,13 @@
     			        }  
     		            location.href="<?php echo $this->createUrl('stocktakinglog/detailindex' , array('companyId'=>$this->companyId,));?>/id/"+msg.logid
     	            }else{
-    		            alert("<?php echo yii::t('app','失败'); ?>");
+    		            alert("盘点失败:"+msg.msg);
     		            _this.attr('clk',0);
     	            }
     			},
                 error:function(){
                 	_this.attr('clk',0);
-    				alert("<?php echo yii::t('app','失败,网络异常'); ?>");  
+    				alert("盘点失败,网络异常");  
     				layer.closeAll('loading');                              
     			},
     		});
@@ -294,11 +294,7 @@
        if(confirm('确认导出并且下载Excel文件吗？')){
 	       //layer.msg('暂未开放！');
     	   location.href="<?php echo $this->createUrl('stockTaking/stockExport' , array('companyId'=>$this->companyId ));?>/cid/"+cid;
-       }
-       else{
-    	   location.href="<?php echo $this->createUrl('stockTaking/index' , array('companyId'=>$this->companyId ));?>/cid/"+cid;
-       }
-	      
+       }   
 	});  
  
     
