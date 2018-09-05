@@ -508,6 +508,9 @@ class StatementsController extends BackendController
 		if($this->comptype==0){
 			$sql = 'select t.dpid,t.company_name from nb_company t,nb_company_property t1 where t.dpid=t1.dpid and t.comp_dpid='.$this->companyId.' and t1.is_rest!="0" and t.delete_flag=0';
 			$wxCompanys = Yii::app()->db->createCommand($sql)->queryAll();
+		}else{
+			$sql = 'select t.dpid,t.company_name from nb_company t,nb_company_property t1 where t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t1.is_rest!="0" and t.delete_flag=0';
+			$wxCompanys = Yii::app()->db->createCommand($sql)->queryAll();
 		}
 		
 		$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
