@@ -9,14 +9,24 @@
                     <div class="modal-content">
                             <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                    <h4 class="modal-title">Modal title</h4>
+                                    <h4 class="modal-title">选择店铺</h4>
                             </div>
                             <div class="modal-body">
-                                    Widget settings form goes here
+                                <?php if(!empty($wxCompanys)):?>
+							    <div class="row">
+							    	<div class="col-md-3"><a class="select-all">全选</a> / <a class="select-none">全不选</a></div>
+							    	<div class="col-md-9">
+										<select name="selectDpid" class="multi-select" multiple="" id="my_multi_select3" >
+											<?php foreach ($wxCompanys as $wx):?>
+											<option value="<?php echo $wx['dpid'];?>" <?php if(strpos($selectDpid,$wx['dpid'])!==false){echo 'selected="selected"';}?>><?php echo $wx['company_name'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+							    </div>
+							    <?php endif;?>
                             </div>
                             <div class="modal-footer">
-                                    <button type="button" class="btn blue">Save changes</button>
-                                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn blue" data-dismiss="modal">确定</button>
                             </div>
                     </div>
                     <!-- /.modal-content -->
@@ -37,9 +47,7 @@
             <div class="portlet-title">
                 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式报表');?></div>
             	<div class="actions">
-            	<div class="btn-group">
-					<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
-				</div>
+            		<button type="button" id="btn_dpid_query" class="btn green" ><?php echo yii::t('app','选择店铺');?></button>
                     <div class="btn-group">
 	                    <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">
@@ -49,8 +57,8 @@
                     </div>
 
                     <div class="btn-group">
-                        <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                        <button type="submit" id="excel"  class="btn blue" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>
+                        <button type="submit" id="btn_time_query" class="btn red" ></i><?php echo yii::t('app','查 询');?></button>
+                        <button type="button" id="excel"  class="btn blue" ><?php echo yii::t('app','导出Excel');?></button>
                     </div>
                 </div>
             </div>
@@ -62,6 +70,7 @@
 		            <tr>
 		                <?php  $grouppay_item = 0;?>
 		               <th><?php echo yii::t('app','日期');?></th>
+		               <th><?php echo yii::t('app','店铺名称');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th>
 		               <th><?php echo yii::t('app','总营业额');?></th>
 		               <th><?php echo yii::t('app','微信点单');?></th>
@@ -93,6 +102,7 @@
 		      	foreach ($models as $model): 
 			      	$order = $model['order'];
 			      	$orderPay = $model['order_pay'];
+			      	$createArr = explode(':', $order['create_at']);
 			      	$all_nums = $order['order_num'];
 			      	$all_moneys = $order['should_total'];
 			      	$orders_total_nums +=$all_nums;
@@ -133,7 +143,8 @@
 		      ?>
 
 		        <tr class="odd gradeX">
-		        	<td><?php echo $order['create_at'];?></td>
+		        	<td><?php echo $createArr[0];?></td>
+		        	<td><?php echo $order['company_name'];?></td>
 					<td><?php echo $all_nums;?></td>
 		            <td><?php echo $all_moneys;?></td>
 		            <td><?php echo $wddPay.'('.$wddPayCount.')';?></td>
@@ -145,6 +156,7 @@
 		        <?php endforeach;?>
 		        <tr>
 		            <td><?php echo "总计";?></td>
+		            <td></td>
 		            <td><?php echo $orders_total_nums; ?></td>
 		            <td><?php echo $orders_total_moneys; ?></td>
 		            <td><?php echo $orders_total_wxord.'('.$orders_total_wxord_count.')'; ?></td>
@@ -169,6 +181,41 @@
 <script>
 //var str=new array();
 jQuery(document).ready(function(){
+	$('#my_multi_select3').multiSelect({
+        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='请输入店铺名称...'>",
+        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='请输入店铺名称...'>",
+        afterInit: function (ms) {
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function (e) {
+                    if (e.which === 40) {
+                        that.$selectableUl.focus();
+                        return false;
+                    }
+                });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function (e) {
+                    if (e.which == 40) {
+                        that.$selectionUl.focus();
+                        return false;
+                    }
+                });
+        },
+        afterSelect: function () {
+            this.qs1.cache();
+            this.qs2.cache();
+        },
+        afterDeselect: function () {
+            this.qs1.cache();
+            this.qs2.cache();
+        }
+    });
 	if (jQuery().datepicker) {
 		$('.date-picker').datepicker({
 			format: 'yyyy-mm-dd',
@@ -178,22 +225,35 @@ jQuery(document).ready(function(){
 		});
 		$('body').removeClass("modal-open");
 	}
+	
+	$('#btn_dpid_query').click(function(){
+		$('.modal').modal();
+	})
+	$('.select-all').click(function(){
+		$('.ms-elem-selectable').each(function(){
+			$(this).trigger('click');
+		});
+	});
+	$('.select-none').click(function(){
+		$('.ms-elem-selection').each(function(){
+			$(this).trigger('click');
+		});
+	});
+	 $('#btn_time_query').click(function time() {
+	     	var begin_time = $('#begin_time').val();
+	     	var end_time = $('#end_time').val();
+	     	var selectDpid = $('select[name="selectDpid"]').val();
+	     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid;
+		});
+
+		$('#excel').click(function excel(){
+			//return false;
+			var begin_time = $('#begin_time').val();
+			var end_time = $('#end_time').val();
+			var selectDpid = $('select[name="selectDpid"]').val();
+			if(confirm('确认导出并且下载Excel文件吗？')){
+				location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid+'/d/1';
+			}
+		});
 });
-    $('#btn_time_query').click(function time() {
-     	var begin_time = $('#begin_time').val();
-     	var end_time = $('#end_time').val();
-     	var selectDpid = $('select[name="selectDpid"]').val();
-     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid;
-	});
-
-	$('#excel').click(function excel(){
-		//return false;
-		var begin_time = $('#begin_time').val();
-		var end_time = $('#end_time').val();
-		var selectDpid = $('select[name="selectDpid"]').val();
-		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/comPayYueExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid;
-		}
-	});
-
 </script>

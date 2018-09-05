@@ -493,6 +493,7 @@ class StatementsController extends BackendController
 	public function actionComPayYueReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$download = Yii::app()->request->getParam('d',0);
 		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		
 		$orderArrs = array();
@@ -500,35 +501,85 @@ class StatementsController extends BackendController
 		$beginTime = $begin_time.' 00:00:00';
 		$endTime = $end_time.' 23:59:59';
 		
-		if($selectDpid == ''){
+		if(empty($selectDpid)){
 			$selectDpid = $this->companyId;
 		}
+		$wxCompanys = array();
+		if($this->comptype==0){
+			$sql = 'select t.dpid,t.company_name from nb_company t,nb_company_property t1 where t.dpid=t1.dpid and t.comp_dpid='.$this->companyId.' and t1.is_rest!="0" and t.delete_flag=0';
+			$wxCompanys = Yii::app()->db->createCommand($sql)->queryAll();
+		}
+		
 		$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
-				' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype in(9,10,12,13) and t.dpid='.$selectDpid;
-		$sql .= ' order by create_at asc,paytype asc';
+				' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype in(9,10,12,13) and t.dpid in('.$selectDpid.')';
+		$sql .= ' order by dpid asc, create_at asc,paytype asc';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($models as $model){
+			$dpid = $model['dpid'];
 			$orderId = $model['order_id'];
 			$createAt = $model['create_at'];
 			$payType = $model['paytype'];
 			$payMethodId = $model['payment_method_id'];
-			if(!isset($orderArrs[$createAt][$orderId])){
-				$orderArrs[$createAt][$orderId] = array();
+			foreach ($wxCompanys as $com){
+				if($com['dpid']==$model['dpid']){
+					$model['company_name'] = $com['company_name'];
+				}
 			}
-			if(!isset($orderPayArrs[$createAt][$payType.'-'.$payMethodId])){
-				$orderPayArrs[$createAt][$payType.'-'.$payMethodId] = array();
+			if(!isset($orderArrs[$createAt.':'.$dpid][$orderId])){
+				$orderArrs[$createAt.':'.$dpid][$orderId] = array();
 			}
-				
-			array_push($orderArrs[$createAt][$orderId],$model);
-			array_push($orderPayArrs[$createAt][$payType.'-'.$payMethodId],$model);
+			if(!isset($orderPayArrs[$createAt.':'.$dpid][$payType.'-'.$payMethodId])){
+				$orderPayArrs[$createAt.':'.$dpid][$payType.'-'.$payMethodId] = array();
+			}
+			array_push($orderArrs[$createAt.':'.$dpid][$orderId],$model);
+			array_push($orderPayArrs[$createAt.':'.$dpid][$payType.'-'.$payMethodId],$model);
 		}
 		$models = $this->dealOrderReport($orderArrs, $orderPayArrs);
+		if($download){
+			$tableArr = array('日期','店铺名称','总单数','总营业额','微信点单','微信外卖','系统券','微信储值消费');
+			$data = array();
+			foreach ($models as $m){
+				$order = $m['order'];
+				$orderPay = $m['order_pay'];
+				$yhqPay = 0;
+				if(isset($orderPay['9-0'])){
+					$yhqPay = $orderPay['9-0']['pay_amount'];
+				}
+				
+				$wxczPay = 0;
+				if(isset($orderPay['10-0'])){
+					$wxczPay = $orderPay['10-0']['pay_amount'];
+				}
+				
+				$wddPay = 0;
+				if(isset($orderPay['12-0'])){
+					$wddPay = $orderPay['12-0']['pay_amount'];
+				}
+				 
+				$wwmPay = 0;
+				if(isset($orderPay['13-0'])){
+					$wwmPay = $orderPay['13-0']['pay_amount'];
+				}
+				$createAtArr = explode(':', $order['create_at']);
+				$tempArr = array(
+						$createAtArr[0],
+						$order['company_name'],
+						$order['order_num'],
+						$order['should_total'],
+						$wddPay,$wwmPay,$yhqPay,$wxczPay
+				);
+				array_push($data, $tempArr);
+			}
+			Helper::exportExcel($tableArr,$data,'支付方式(微信点单)报表','支付方式(微信点单)');
+			exit;
+		}
 		
 
 		$this->render('comPayYueReport',array(
 				'models'=>$models,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
+				'wxCompanys'=>$wxCompanys,
 				'selectDpid'=>$selectDpid,
 		));
 	}
@@ -816,219 +867,6 @@ class StatementsController extends BackendController
 
 	}
 	
-	public function actionComPayYueExport(){
-		$str = Yii::app()->request->getParam('str');
-		$typ = Yii::app()->request->getParam('typ');
-		$begin_time = Yii::app()->request->getParam('begin_time','');
-		$end_time = Yii::app()->request->getParam('end_time','');
-		$dpname = Yii::app()->request->getParam('dpname','');
-
-		if(empty($begin_time) && Yii::app()->user->role >=11){
-			$begin_time = date('Y-m-d',time());
-		}
-		if(empty($end_time) && Yii::app()->user->role >=11){
-			$end_time = date('Y-m-d',time());
-		}
-		if(!empty($dpname)){
-			$dpnames = ' like "%'.$dpname.'%"';
-			$sql = 'select k.lid from nb_order k left join nb_company c on(k.dpid = c.dpid) where k.order_status in(3,4,8) and c.company_name like "%'.$dpname.'%" and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		}else{
-			$dpnames = ' is not null and t.comp_dpid = '.$this->companyId.' or t.dpid ='.$this->companyId;
-			$sql = 'select k.lid from nb_order k where k.order_status in(3,4,8) and k.dpid in (select c.dpid from nb_company c where (c.comp_dpid = '.$this->companyId.' or c.dpid = '.$this->companyId.') and c.delete_flag =0 and c.type =1) and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" group by k.user_id,k.account_no,k.create_at';
-		}
-		$orders = Yii::app()->db->createCommand($sql)->queryAll();
-		$ords ='0000000000';
-		foreach ($orders as $order){
-			$ords = $ords .','.$order['lid'];
-		}
-
-		$sql = 'select year(o.create_at) as y_all,month(o.create_at) as m_all,day(o.create_at) as d_all, '
-				.' t.dpid,t.company_name,o.create_at,o.all_should,op.all_reality,op.all_nums, '
-				.' o.all_num,op9.all_cupon,op9.all_nums as nums_cupon,op10.all_wxmember,op10.all_nums as nums_yue, '
-				.' op12.all_wxord,op12.all_nums as nums_wxord,op13.all_wxwm,op13.all_nums as nums_wxwm '
-				.' from nb_company t '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_reality,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-						.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype !=11 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op on(t.dpid = op.dpid) '
-				.' left join ('
-					.' select sum(top.pay_amount) as all_cupon,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =9 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op9 on(t.dpid = op9.dpid) '
-				
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxmember,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =10 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op10 on(t.dpid = op10.dpid) '
-						
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxord,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =12 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op12 on(t.dpid = op12.dpid) '
-						
-				.' left join ('
-					.' select sum(top.pay_amount) as all_wxwm,count(distinct top.order_id) as all_nums,top.dpid '
-					.' from nb_order_pay top '
-					.' left join nb_order topo on(topo.lid = top.order_id and topo.dpid = top.dpid)'
-					.' where top.paytype =13 and topo.order_status in(3,4,8) and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59"'
-					.' group by top.dpid'
-				.' ) op13 on(t.dpid = op13.dpid) '
-				
-				.' left join ('
-					.' select sum(ot.reality_total) as all_should,count(distinct ot.lid) as all_num,ot.create_at,ot.dpid'
-					.' from nb_order ot '
-					.' where ot.order_status in(3,4,8) and ot.lid in('.$ords.') and ot.create_at >="'.$begin_time.' 00:00:00" and ot.create_at <="'.$end_time.' 23:59:59"'
-					.' group by ot.dpid'
-				.' ) o on(t.dpid = o.dpid)'
-				.' where op.all_reality is not null and t.delete_flag =0 and t.company_name '.$dpnames
-				.' group by t.dpid';
-		$models = Yii::app()->db->createCommand($sql)->queryAll();
-
-        $objPHPExcel = new PHPExcel();
-        //设置第1行的行高
-        $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
-        //设置第2行的行高
-        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
-        $objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
-        //设置字体
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
-        $objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
-        $styleArray1 = array(
-                        'font' => array(
-                                        'bold' => true,
-                                        'color'=>array(
-                                                        'rgb' => '000000',
-                                        ),
-                                        'size' => '20',
-                        ),
-                        'alignment' => array(
-                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                        ),
-        );
-        $styleArray2 = array(
-                        'font' => array(
-                                        'color'=>array(
-                                                        'rgb' => 'ff0000',
-                                        ),
-                                        'size' => '16',
-                        ),
-                        'alignment' => array(
-                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                        ),
-        );
-        //大边框样式 边框加粗
-        $lineBORDER = array(
-                        'borders' => array(
-                                        'outline' => array(
-                                                        'style' => PHPExcel_Style_Border::BORDER_THICK,
-                                                        'color' => array('argb' => '000000'),
-                                        ),
-                        ),
-        );
-        //$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
-        //细边框样式
-        $linestyle = array(
-                        'borders' => array(
-                                        'outline' => array(
-                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
-                                                        'color' => array('argb' => 'FF000000'),
-                                        ),
-                        ),
-        );
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1',yii::t('app','壹点吃微信会员信息表'))
-        ->setCellValue('A2',yii::t('app','查询：').$begin_time.'~'.$end_time)
-        ->setCellValue('A3',yii::t('app','店铺'))
-        ->setCellValue('B3',yii::t('app','时间'))
-        ->setCellValue('C3',yii::t('app','总单数'))
-        ->setCellValue('D3',yii::t('app','营业额'))
-        ->setCellValue('E3',yii::t('app','单数'))
-        ->setCellValue('F3',yii::t('app','微信点单'))
-        ->setCellValue('G3',yii::t('app','单数'))
-        ->setCellValue('H3',yii::t('app','微信外卖'))
-        ->setCellValue('I3',yii::t('app','单数'))
-        ->setCellValue('J3',yii::t('app','系统券'))
-        ->setCellValue('K3',yii::t('app','单数'))
-        ->setCellValue('L3',yii::t('app','微信余额'));
-        $j=4;
-        if($models){
-
-                foreach ($models as $v) {
-                	//日月年
-					$str = $begin_time.'~'.$end_time;
-					
-                    $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$j,$v['company_name'])
-                    ->setCellValue('B'.$j,$str)
-                    ->setCellValue('C'.$j,$v['all_nums'])
-                    ->setCellValue('D'.$j,$v['all_reality'])
-                    ->setCellValue('E'.$j,$v['nums_wxord'])
-                    ->setCellValue('F'.$j,$v['all_wxord'])
-                    ->setCellValue('G'.$j,$v['nums_wxwm'])
-                    ->setCellValue('H'.$j,$v['all_wxwm'])
-                    ->setCellValue('I'.$j,$v['nums_cupon'])
-                    ->setCellValue('J'.$j,$v['all_cupon'])
-                    ->setCellValue('K'.$j,$v['nums_yue'])
-                    ->setCellValue('L'.$j,$v['all_wxmember']);
-                    $j++;
-                }
-            }
-
-        //冻结窗格
-        $objPHPExcel->getActiveSheet()->freezePane('A4');
-        //合并单元格
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:L2');
-        //单元格加粗，居中：
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$j)->applyFromArray($lineBORDER);//大边框格式引用
-        // 将A1单元格设置为加粗，居中
-        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:L3')->applyFromArray($linestyle);
-        //加粗字体
-        $objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getFont()->setBold(true);
-        //设置字体垂直居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-        //设置字体水平居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:L3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-
-        //设置每列宽度
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
-        //输出
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename="支付方式(储值)统计表（".date('m-d H:i',time())."）.xls";
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="'.$filename.'"');
-        header('Cache-Control: max-age=0');
-        $objWriter->save('php://output');
-
-	}
 	//gross profit 毛利润计算
 	public function getGrossProfit($dpid,$begin_time,$end_time,$text,$y_all,$m_all,$d_all,$usertype,$userid){
 
@@ -7880,8 +7718,10 @@ class StatementsController extends BackendController
 			$orderRealTotal = 0;
 			$orderRetreat = 0;
 			$orderNum = count($orders);
+			$companyName = '';
 			foreach ($orders as $order){
 				foreach ($order as $k=>$v){
+					$companyName = $v['company_name'];
 					if($k==0){
 						$orderTotal += $v['should_total'];
 						$orderRealTotal += $v['reality_total'];
@@ -7893,7 +7733,7 @@ class StatementsController extends BackendController
 					}
 				}
 			}
-			$resluts[$key]['order'] = array('create_at'=>$key,'order_num'=>$orderNum,'should_total'=>$orderTotal,'reality_total'=>$orderRealTotal,'order_retreat'=>$orderRetreat);
+			$resluts[$key]['order'] = array('create_at'=>$key,'order_num'=>$orderNum,'should_total'=>$orderTotal,'reality_total'=>$orderRealTotal,'order_retreat'=>$orderRetreat,'company_name'=>$companyName);
 		}
 		//$key 表示日期
 		foreach ($orderPayArr as $key=>$orderPays){
