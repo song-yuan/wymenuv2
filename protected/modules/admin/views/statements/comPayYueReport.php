@@ -52,6 +52,11 @@
                 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式报表');?></div>
             	<div class="actions">
             		<button type="button" id="btn_dpid_query" class="btn green" ><?php echo yii::t('app','选择店铺');?></button>
+                    <select name="text" class="btn yellow" >
+						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
+						<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
+						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
+					</select>
                     <div class="btn-group">
 	                    <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">
@@ -246,17 +251,19 @@ jQuery(document).ready(function(){
 	 $('#btn_time_query').click(function time() {
 	     	var begin_time = $('#begin_time').val();
 	     	var end_time = $('#end_time').val();
+	     	var text = $('select[name="text"]').val();
 	     	var selectDpid = $('select[name="selectDpid"]').val();
-	     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid;
+	     	location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/selectDpid/"+selectDpid;
 		});
 
 		$('#excel').click(function excel(){
 			//return false;
 			var begin_time = $('#begin_time').val();
 			var end_time = $('#end_time').val();
+			var text = $('select[name="text"]').val();
 			var selectDpid = $('select[name="selectDpid"]').val();
 			if(confirm('确认导出并且下载Excel文件吗？')){
-				location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid+'/d/1';
+				location.href="<?php echo $this->createUrl('statements/comPayYueReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/selectDpid/"+selectDpid+'/d/1';
 			}
 		});
 });

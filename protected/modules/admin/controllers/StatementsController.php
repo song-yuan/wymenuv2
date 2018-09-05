@@ -493,6 +493,7 @@ class StatementsController extends BackendController
 	public function actionComPayYueReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$text = Yii::app()->request->getParam('text',2);
 		$download = Yii::app()->request->getParam('d',0);
 		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		
@@ -512,8 +513,15 @@ class StatementsController extends BackendController
 			$sql = 'select t.dpid,t.company_name from nb_company t,nb_company_property t1 where t.dpid=t1.dpid and t.dpid='.$this->companyId.' and t1.is_rest!="0" and t.delete_flag=0';
 			$wxCompanys = Yii::app()->db->createCommand($sql)->queryAll();
 		}
-		
-		$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
+		$sql = 'select t.order_id,t1.dpid,';
+		if($text==1){
+			$sql .='DATE_FORMAT(t.create_at,"%Y") as create_at,';
+		}elseif ($text==2){
+			$sql .='DATE_FORMAT(t.create_at,"%Y-%m") as create_at,';
+		}else{
+			$sql .='DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,';
+		}
+		$sql .='t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
 				' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype in(9,10,12,13) and t.dpid in('.$selectDpid.')';
 		$sql .= ' order by dpid asc, create_at asc,paytype asc';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
@@ -584,6 +592,7 @@ class StatementsController extends BackendController
 				'end_time'=>$end_time,
 				'wxCompanys'=>$wxCompanys,
 				'selectDpid'=>$selectDpid,
+				'text'=>$text
 		));
 	}
 
