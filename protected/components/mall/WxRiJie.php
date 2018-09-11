@@ -358,7 +358,7 @@ class WxRiJie
 		$begainTime = date('Y-m-d 00:00:00',strtotime("-1 day"));
 		$endTime = date('Y-m-d 23:59:59',strtotime("-1 day"));
 		$sql = 'select dpid from nb_company where type=1 and delete_flag=0';
-		$dpids = Yii::app()->db->createCommand($sql)->queryScalar();
+		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
 		foreach ($dpids as $dpid){
 			$sql = 'select * from nb_stock_taking where dpid in ('.$dpid.') and create_at > "'.$begainTime.'" and create_at < "'.$endTime.'"';
 			$stockModels = Yii::app()->db->createCommand($sql)->queryAll();
