@@ -13,7 +13,8 @@ class  CrontabController extends Controller
 	} 
 	// 生成日结统计数据
 	public function actionRijieStatistics(){
-		$result = WxRiJie::rijieStatistics();
+		WxRiJie::rijieStatistics();
+		WxRiJie::dealPandian();
 	}
 	// 同步失败的数据 重新同步
 	public function actionRedisOrder(){

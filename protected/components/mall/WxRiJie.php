@@ -347,11 +347,49 @@ class WxRiJie
 					$transaction->rollback();
 					$message = $e->getMessage();
 					Helper::writeLog('日结失败:'.$dpid.' 日结编码:'.$rjcode.' 错误信息:'.$message);
-					$msg = false;
 				}
 			}
-			return $msg;
 		}
-		return true;
+	}
+	/**
+	 * 查询前一天 盘点数据进行微调
+	 */
+	public static function dealPandian(){
+		$begainTime = date('Y-m-d 00:00:00',strtotime("-1 day"));
+		$endTime = date('Y-m-d 23:59:59',strtotime("-1 day"));
+		$sql = 'select dpid from nb_company where type=1 and delete_flag=0';
+		$dpids = Yii::app()->db->createCommand($sql)->queryScalar();
+		foreach ($dpids as $dpid){
+			$sql = 'select * from nb_stock_taking where dpid in ('.$dpid.') and create_at > "'.$begainTime.'" and create_at < "'.$endTime.'"';
+			$stockModels = Yii::app()->db->createCommand($sql)->queryAll();
+			foreach ($stockModels as $model) {
+				$ldpid = $model['dpid'];
+				$type = $model['type'];
+				$createAt = $model['create_at'];
+				$sql = 'select * from nb_stock_taking where dpid='.$ldpid.' and type='.$type.' and create_at < "'.$createAt.'" order by lid desc limit 1';
+				$premodel = Yii::app()->db->createCommand($sql)->queryRow();
+				if($premodel){
+					$preCreateAt = $premodel['create_at'];
+					$sql = 'select * from nb_stock_taking_statistics where dpid='.$ldpid.' and stock_taking_id='.$model['lid'];
+					$stockStatictis = Yii::app()->db->createCommand($sql)->queryAll();
+			
+					foreach ($stockStatictis as $statictis) {
+						$materialId = $statictis['material_id'];
+						$sql = 'select sum(stock_num) as stock_num,sum(stock_num*unit_price) as stock_cost from nb_material_stock_log where dpid='.$ldpid.' and material_id='.$materialId.' and type in(1,2) and create_at>"'.$preCreateAt.'" and create_at<"'.$createAt.'"';
+						$sstock = Yii::app()->db->createCommand($sql)->queryRow();
+						if($sstock['stock_num']!=null&&$sstock['stock_num']!=$statictis['salse_num']){
+							if(empty($statictis['damage_num'])){
+								$damageNum = 0;
+							}else{
+								$damageNum = $statictis['damage_num'];
+							}
+							$leaveSale = $sstock['stock_num'] - $statictis['salse_num'];
+							$sql = 'update nb_stock_taking_statistics set salse_num='.$sstock['stock_num'].',salse_price='.$sstock['stock_cost'].',total_num='.($sstock['stock_num']+$statictis['damage_num']).',system_num=system_num-'.$leaveSale.',stock_taking_difnum=stock_taking_difnum+'.$leaveSale.' where lid='.$statictis['lid'].' and dpid='.$statictis['dpid'];
+							Yii::app()->db->createCommand($sql)->execute();
+						}
+					}
+				}
+			}
+		}
 	}
 }
