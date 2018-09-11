@@ -1127,7 +1127,28 @@ class WxOrder
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
 	 	
-	 	
+	 	// 获取收款机内容 并放入redis缓存
+	 	$orderAddressArr = array();
+	 	$orderPays = WxOrderPay::get($dpid, $orderId);
+	 	if(in_array($order['order_type'],array(2,3))){
+	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 	}
+	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
+	 	$orderArr['nb_order_product'] = $orderProducts;
+	 	$orderArr['nb_order_pay'] = $orderPays;
+	 	if(!empty($orderAddress)){
+	 		array_push($orderAddressArr, $orderAddress);
+	 	}
+	 	$orderArr['nb_order_address'] = $orderAddressArr;
+	 	$orderArr['nb_order_taste'] = $order['taste'];
+	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
+	 	$orderStr = json_encode($orderArr);
+	 	Helper::writeLog($orderStr);
+	 	$result = WxRedis::pushPlatform($dpid, $orderStr);
+	 	if(!$result){
+	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$dpid.';data:'.$orderStr);
+	 	}
+
 	 	// 获取订单中产品 减少库存
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	foreach ($orderProducts as $product){
@@ -1163,26 +1184,6 @@ class WxOrder
 	 				}
 	 			}
 	 		}
-	 	}
-	 	$orderAddressArr = array();
-	 	$orderPays = WxOrderPay::get($dpid, $orderId);
-	 	if(in_array($order['order_type'],array(2,3))){
-	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
-	 	}
-	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
-	 	$orderArr['nb_order_product'] = $orderProducts;
-	 	$orderArr['nb_order_pay'] = $orderPays;
-	 	if(!empty($orderAddress)){
-	 		array_push($orderAddressArr, $orderAddress);
-	 	}
-	 	$orderArr['nb_order_address'] = $orderAddressArr;
-	 	$orderArr['nb_order_taste'] = $order['taste'];
-	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
-	 	$orderStr = json_encode($orderArr);
-	 	Helper::writeLog($orderStr);
-	 	$result = WxRedis::pushPlatform($dpid, $orderStr);
-	 	if(!$result){
-	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$dpid.';data:'.$orderStr);
 	 	}
 	 }
      /**
