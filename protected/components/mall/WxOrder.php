@@ -1126,7 +1126,8 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
-	 	
+	 	// 获取订单中产品 减少库存
+	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	// 获取收款机内容 并放入redis缓存
 	 	$orderAddressArr = array();
 	 	$orderPays = WxOrderPay::get($dpid, $orderId);
@@ -1149,8 +1150,6 @@ class WxOrder
 	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$dpid.';data:'.$orderStr);
 	 	}
 
-	 	// 获取订单中产品 减少库存
-	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	foreach ($orderProducts as $product){
 	 		if($product['set_id'] > 0){
 	 			$setDetails = $product['set_detail'];
