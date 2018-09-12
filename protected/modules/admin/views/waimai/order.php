@@ -39,6 +39,7 @@
                        <select class="form-control" name="orderType">
                            <option value="1" <?php if($orderType==1){echo 'selected';}?>>美团</option>
                            <option value="2" <?php if($orderType==2){echo 'selected';}?>>饿了么</option>
+                           <option value="3" <?php if($orderType==3){echo 'selected';}?>>微信</option>
                        </select>
                 </div>
             </div>
@@ -57,7 +58,10 @@
         </div>
         <div class="portlet-body">
              <?php if($hasOrder):?>
-              <p>该订单已经存在</p>
+              <table>
+              	<tr><td>该订单后台已经存在,如果收款机没接到订单,请点重新推送按钮</td></tr>
+              	<tr><td><button type="button" id="pushCloudOrder" class="btn blue" order-id="<?php echo $data['lid'];?>">重新推送</button></td></tr>
+              </table>
              <?php else:?>
               <?php if($data!=''):?>
                 <?php 
@@ -125,7 +129,7 @@
                 $.ajax({
                         url:url,
                         type:'POST',
-                        data:{type:'<?php echo $orderType;?>',data:'<?php echo urlencode($data);?>'},//CF
+                        data:{type:'<?php echo $orderType;?>',data:'<?php echo urlencode($data);?>'},
                         dataType: "json",
                         success:function(msg){
                             var data = msg;
@@ -138,5 +142,27 @@
                  });
           }
        });
+      
+      $('#pushCloudOrder').click(function() {
+          if(confirm('是否确定要重新推送订单？')==true){
+              	var orderId = $(this).attr('order-id');
+                var url = "<?php echo $this->createUrl('waimai/pushOrder',array('companyId'=>$this->companyId));?>";
+                $.ajax({
+                        url:url,
+                        type:'POST',
+                        data:{orderId:orderId},
+                        dataType: "json",
+                        success:function(msg){
+                            var data = msg;
+                            if(data.status){
+                                 alert('推送订单成功'); 
+                            }else{
+                              alert('推送订单失败');  
+                            }
+                        }
+                 });
+          }
+       });
+      
     });
 </script>

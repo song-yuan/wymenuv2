@@ -122,12 +122,15 @@ class WaimaiController extends BackendController
 			$sql = 'select * from nb_order where account_no='.$orderId;
 			$order = Yii::app()->db->createCommand($sql)->queryRow();
 			if($order){
+				$data = $order;
 				$hasOrder = true;
 			}else{
 				if($orderType==1){
 					$data = MtOrder::getOrderById($this->companyId, $orderId);
-				}else{
+				}elseif($orderType==2){
 					$data = Elm::getOrderById($this->companyId, $orderId);
+				}else{
+					$data = $order;
 				}
 			}
 		}
@@ -150,6 +153,9 @@ class WaimaiController extends BackendController
 		}
 		$this->render('real',array('re'=>$re));
 	}
+	/**
+	 * 重新生成外卖订单
+	 */ 
 	public function actionDealOrder(){
 		$type = Yii::app()->request->getParam('type');
 		$data = Yii::app()->request->getParam('data');
@@ -173,6 +179,44 @@ class WaimaiController extends BackendController
 		$reslut = json_encode($msg);
 		echo $reslut;exit;
 	}
-	
+	/**
+	 * 重新推送订单
+	 */
+	public function actionDealOrder(){
+		$orderId = Yii::app()->request->getPost('orderId');
+		$dpid = $this->companyId;
+		$order = WxOrder::getOrder($orderId, $dpid);
+		$orderArr = array();
+	 	$orderArr['nb_site_no'] = array();
+	 	$orderArr['nb_order_platform'] = array();
+	 	$order['order_status'] = 3;
+	 	$orderArr['nb_order'] = $order;
+	 	$orderId = $order['lid'];
+	 	$dpid = $order['dpid'];
+		$orderProducts = WxOrder::getOrderProductData($orderId, $dpid);
+		// 获取收款机内容 并放入redis缓存
+		$orderAddressArr = array();
+		$orderPays = WxOrderPay::get($dpid, $orderId);
+		if(in_array($order['order_type'],array(2,3))){
+			$orderAddress = WxOrder::getOrderAddress($orderId, $dpid);
+		}
+		$orderDiscount = WxOrder::getOrderAccountDiscount($orderId, $dpid);
+		$orderArr['nb_order_product'] = $orderProducts;
+		$orderArr['nb_order_pay'] = $orderPays;
+		if(!empty($orderAddress)){
+			array_push($orderAddressArr, $orderAddress);
+		}
+		$orderArr['nb_order_address'] = $orderAddressArr;
+		$orderArr['nb_order_taste'] = $order['taste'];
+		$orderArr['nb_order_account_discount'] = $orderDiscount;
+		$orderStr = json_encode($orderArr);
+		$result = WxRedis::pushPlatform($dpid, $orderStr);
+		$msg = array('status'=>true);
+		if(!$result){
+			$msg = array('status'=>false);
+		}
+		echo json_encode($msg);
+		exit;
+	}
 }
 ?>
