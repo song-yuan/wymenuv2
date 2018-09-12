@@ -1,6 +1,5 @@
 <?php
-class StorekeeperController extends BackendController
-{
+class StorekeeperController extends BackendController{
     public $roles ;
     public $roles2;
     public $roles3;
@@ -26,61 +25,38 @@ class StorekeeperController extends BackendController
             '15' => yii::t('app','组长'),
             '17' => yii::t('app','收银员'),
             '19' => yii::t('app','服务员'),
-        ) ;
+        );
+
         //超级管理员的权限
         $this->roles3 = array(
             '5' => yii::t('app','总部管理员'),
         ) ;
+
         //超级副管理员的权限
         $this->roles5 = array(
-            //'7' => yii::t('app','总部副管理员'),
-            '8' =>yii::t('app','营销员'),
-            //'9' => yii::t('app','区域管理员'),
-            '11' => yii::t('app','店长'),
-            '13' => yii::t('app','副店长'),
-            //'15' => yii::t('app','组长'),
-            '17' => yii::t('app','收银员'),
+            '11' => yii::t('app','仓库管理员'),
             '19' => yii::t('app','服务员'),
         ) ;
+
         //总部管理员的权限
         $this->roles7 = array(
-            //'9' => yii::t('app','区域管理员'),
-            '11' => yii::t('app','店长'),
-            '13' => yii::t('app','副店长'),
-            //'15' => yii::t('app','组长'),
-            '17' => yii::t('app','收银员'),
+            '11' => yii::t('app','仓库管理员'),
             '19' => yii::t('app','服务员'),
         ) ;
+
         //总部副管理员的权限
-
-
         $this->roles9 = array(
-            '11' => yii::t('app','店长'),
-            '13' => yii::t('app','副店长'),
-            '15' => yii::t('app','组长'),
-            '17' => yii::t('app','收银员'),
+            '11' => yii::t('app','仓库管理员'),
             '19' => yii::t('app','服务员'),
         ) ;
-        //区域管理员的权限
-        $this->roles11 = array(
-            '13' => yii::t('app','副店长'),
-            //'15' => yii::t('app','组长'),
-            '17' => yii::t('app','收银员'),
-            '19' => yii::t('app','服务员'),
-        ) ;
+
+
         //店长的权限
         $this->roles13 = array(
-            //'15' => yii::t('app','组长'),
-            '17' => yii::t('app','收银员'),
-            '19' => yii::t('app','服务员'),
+            '19' => yii::t('app','采购员'),
         ) ;
-        //副店长的权限
-        $this->roles15 = array(
-            '17' => yii::t('app','收银员'),
-            '19' => yii::t('app','服务员'),
-        ) ;
-        //组长的权限
 
+        //组长的权限
         $this->roles = array('' => yii::t('app','-- 请选择 --' )) +$this->roles;
     }
 
@@ -92,14 +68,14 @@ class StorekeeperController extends BackendController
         }
         return true;
     }
+
     public function actionIndex() {
         $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
         $criteria = new CDbCriteria;
-        //$criteria->with = 'company' ;
-        //$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->companyId.' and ').'t.status=1 and t.role >='.Yii::app()->user->role ;
+
         $criteria->condition = 't.dpid='.$this->companyId.' and t.status=1 and t.delete_flag = 0 and t.role >='.Yii::app()->user->role ;
         $pages = new CPagination(User::model()->count($criteria));
-        //	    $pages->setPageSize(1);
+        //$pages->setPageSize(1);
         $pages->applyLimit($criteria);
         $models = User::model()->findAll($criteria);
         //var_dump($models);exit;
@@ -109,8 +85,8 @@ class StorekeeperController extends BackendController
             'companyId' => $companyId
         ));
     }
-    public function actionCreate() {
 
+    public function actionCreate() {
         $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
         $model = new UserForm() ;
         $model->dpid = $companyId ;
@@ -130,7 +106,7 @@ class StorekeeperController extends BackendController
                 $username = $model->username;
                 $ordusername = User::model()->find('dpid=:dpid and username=:name and delete_flag=0' , array(':dpid'=> $companyId,':name'=>$username));
                 if($ordusername){
-                    Yii::app()->user->setFlash('error' ,yii::t('app', '该登陆名已存在，请重新取名！！！'));
+                    Yii::app()->user->setFlash('error' ,yii::t('app', '该登陆名 已存在，请重新取名！！！'));
                     $this->redirect(array('storekeeper/create' , 'companyId' => $companyId));
                 }
             }
@@ -144,13 +120,12 @@ class StorekeeperController extends BackendController
             'model' => $model
 
         ));
-
-
     }
+
     public function actionUpdate() {
         $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
         $id = Yii::app()->request->getParam('id');
-        //Until::isUpdateValid(array($id),$companyId,$this);//0,表示企业任何时候都在云端更新。
+
         if(Yii::app()->user->role > User::SHOPKEEPER && Yii::app()->user->userId != $id) {
             Yii::app()->user->setFlash('error' , yii::t('app','你没有权限修改'));
             $this->redirect(array('storekeeper/index' , 'companyId' => $companyId)) ;
@@ -173,6 +148,7 @@ class StorekeeperController extends BackendController
         }
         $this->render('update' , array('model' => $model)) ;
     }
+
     public function actionDelete(){
         $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
         if(Yii::app()->user->role > User::SHOPKEEPER) {
@@ -180,7 +156,7 @@ class StorekeeperController extends BackendController
             $this->redirect(array('storekeeper/index' , 'companyId' => $companyId));
         }
         $ids = Yii::app()->request->getPost('ids');
-        //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+
         if(!empty($ids)) {
             foreach ($ids as $id) {
                 $model = User::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id,':companyId'=>$companyId)) ;
