@@ -377,14 +377,22 @@ class WxRiJie
 						$materialId = $statictis['material_id'];
 						$sql = 'select sum(stock_num) as stock_num,sum(stock_num*unit_price) as stock_cost from nb_material_stock_log where dpid='.$ldpid.' and material_id='.$materialId.' and type in(1,2) and create_at>"'.$preCreateAt.'" and create_at<"'.$createAt.'"';
 						$sstock = Yii::app()->db->createCommand($sql)->queryRow();
-						if($sstock['stock_num']!=null&&$sstock['stock_num']!=$statictis['salse_num']){
+						if($sstock['stock_num']!=$statictis['salse_num']){
 							if(empty($statictis['damage_num'])){
 								$damageNum = 0;
 							}else{
 								$damageNum = $statictis['damage_num'];
 							}
-							$leaveSale = $sstock['stock_num'] - $statictis['salse_num'];
-							$sql = 'update nb_stock_taking_statistics set salse_num='.$sstock['stock_num'].',salse_price='.$sstock['stock_cost'].',total_num='.($sstock['stock_num']+$statictis['damage_num']).',system_num=system_num-'.$leaveSale.',stock_taking_difnum=stock_taking_difnum+'.$leaveSale.' where lid='.$statictis['lid'].' and dpid='.$statictis['dpid'];
+							$tockTakeNum = $statictis['stock_taking_num'];//盘点库存
+							// 获取该原料的实时库存 (提前打开盘点页面实时库存会有差异)
+							$sql = 'select sum(stock) from nb_product_material_stock where material_id='.$materialId.' and dpid='.$dpid.' and delete_flag=0';
+							$systemNum = $db->createCommand($sql)->queryScalar();
+							if(empty($systemNum)){
+								$systemNum = 0;
+							}
+							$diffNum = $tockTakeNum-$systemNum;
+							
+							$sql = 'update nb_stock_taking_statistics set salse_num='.$sstock['stock_num'].',salse_price='.$sstock['stock_cost'].',total_num='.($sstock['stock_num']+$damageNum).',system_num='.$systemNum.',stock_taking_difnum='.$diffNum.' where lid='.$statictis['lid'].' and dpid='.$statictis['dpid'];
 							Yii::app()->db->createCommand($sql)->execute();
 						}
 					}

@@ -107,33 +107,29 @@ $(document).ready(function () {
 		   getStorageOrder(dpid);
 	   });
 	   
+});
+
+
+
+function getStorageOrder(dpid){
+	var storageNo = '<?php echo $model->storage_account_no;?>';
+	$.ajax({
+		url:"<?php echo $this->createUrl('/admin/refundOrder/getStorageOrder',array('companyId'=>$this->companyId));?>",
+		data:{dpid:dpid},
+		success:function(msg){
+			if(msg.length>0){
+				var str = '';
+				for(var i in msg){
+					if(storageNo==msg[i].storage_account_no){
+						str += '<option value="'+msg[i].storage_account_no+'" selected>'+msg[i].storage_account_no+'</option>';
+					}else{
+						str += '<option value="'+msg[i].storage_account_no+'">'+msg[i].storage_account_no+'</option>';
+					}
+				}
+				$('#RefundOrder_storage_account_no').append(str);
+			}
+		},
+		dataType:'json'
 	});
-
-
-
-	   function getStorageOrder(dpid){
-		   
-			var storageNo = '<?php echo $model->storage_account_no;?>';
-			  
-		   
-			$.ajax({
-					url:"<?php echo $this->createUrl('/admin/refundOrder/getStorageOrder',array('companyId'=>$this->companyId));?>",
-					data:{dpid:dpid},
-					success:function(msg){
-						if(msg.length>0){
-							var str = '';
-							for(var i in msg){
-								if(storageNo==msg[i].storage_account_no){
-									str += '<option value="'+msg[i].storage_account_no+'" selected>'+msg[i].storage_account_no+'</option>';
-								}else{
-									str += '<option value="'+msg[i].storage_account_no+'">'+msg[i].storage_account_no+'</option>';
-								}
-							}
-							$('#RefundOrder_storage_account_no').append(str);
-						}
-					},
-					dataType:'json'
-				});
-		}
-
+}
 </script>

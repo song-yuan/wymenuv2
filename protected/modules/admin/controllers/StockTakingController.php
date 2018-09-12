@@ -209,12 +209,6 @@ class StockTakingController extends BackendController
 				$stocks = $db->createCommand($sql)->queryRow();
 				// 已入库
 				if(!empty($stocks)){
-					// 获取该原料的实时库存 (提前打开盘点页面实时库存会有差异)
-					$sql = 'select sum(stock) from nb_product_material_stock where material_id='.$id.' and dpid='.$dpid.' and delete_flag=0';
-					$originalNum = $db->createCommand($sql)->queryScalar();
-					if($originalNum!=$systemNum){
-						$systemNum = $originalNum;
-					}
 					// 获取上一次盘点统计信息
 					$sql = 'select * from nb_stock_taking_statistics where dpid='.$dpid.' and type='.$sttype.' and material_id='.$id.' and delete_flag=0 order by lid desc limit 1';
 					$statict = $db->createCommand($sql)->queryRow();

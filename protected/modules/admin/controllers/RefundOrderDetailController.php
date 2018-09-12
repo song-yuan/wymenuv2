@@ -34,9 +34,6 @@ class RefundOrderDetailController extends BackendController
 		
 		));
 	}
-	public function actionSetMealList() {
-		
-	}
 	public function actionCreate(){
 		$model = new RefundOrderDetail();
 		$model->dpid = $this->companyId ;

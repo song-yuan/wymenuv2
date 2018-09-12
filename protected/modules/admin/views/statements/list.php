@@ -182,17 +182,11 @@
                                 <div class="list_small">查询门店账单总营业额和总单数及微信端的账单数据和金额数据</div>
                             </a> 
                         </div>
-                        <?php endif;if(Yii::app()->user->role <5):?>
+                        <?php endif;if(Yii::app()->user->role <6):?>
         				<div style="height: 80px;" class="list col-sm-3 col-xs-12">
                            <a href="<?php echo $this->createUrl('statements/comPaymentReport',array('companyId' => $this->companyId,'text'=>'3'));?>">
                                 <div class="list_big">支付方式</div>
                                 <div class="list_small">查看不同门店的所有不同支付方式的账单数据以及总单数</div>
-                            </a> 
-                        </div>
-                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
-                            <a href="<?php echo $this->createUrl('statements/rijieReportSp',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0'));?>">
-                                <div class="list_big">日结统计(存储过程)</div>
-                                <div class="list_small">查询门店日结详情数据，日结完成后方可显示数据</div>
                             </a> 
                         </div>
                         <?php endif;?>
