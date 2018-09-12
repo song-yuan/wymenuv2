@@ -122,7 +122,7 @@ class WaimaiController extends BackendController
 			$sql = 'select * from nb_order where account_no='.$orderId;
 			$order = Yii::app()->db->createCommand($sql)->queryRow();
 			if($order){
-				$data = $order;
+				$data = json_encode($order);
 				$hasOrder = true;
 			}else{
 				if($orderType==1){
@@ -130,7 +130,7 @@ class WaimaiController extends BackendController
 				}elseif($orderType==2){
 					$data = Elm::getOrderById($this->companyId, $orderId);
 				}else{
-					$data = $order;
+					$data = '';
 				}
 			}
 		}
@@ -182,7 +182,7 @@ class WaimaiController extends BackendController
 	/**
 	 * 重新推送订单
 	 */
-	public function actionDealOrder(){
+	public function actionPushOrder(){
 		$orderId = Yii::app()->request->getPost('orderId');
 		$dpid = $this->companyId;
 		$order = WxOrder::getOrder($orderId, $dpid);

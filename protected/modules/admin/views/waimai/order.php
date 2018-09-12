@@ -57,10 +57,12 @@
              <div class="actions"></div>
         </div>
         <div class="portlet-body">
-             <?php if($hasOrder):?>
+             <?php if($hasOrder):
+             	$dataObj = json_decode($data,true);
+             ?>
               <table>
               	<tr><td>该订单后台已经存在,如果收款机没接到订单,请点重新推送按钮</td></tr>
-              	<tr><td><button type="button" id="pushCloudOrder" class="btn blue" order-id="<?php echo $data['lid'];?>">重新推送</button></td></tr>
+              	<tr><td><button type="button" id="pushCloudOrder" class="btn blue" order-id="<?php echo $dataObj['lid'];?>">重新推送</button></td></tr>
               </table>
              <?php else:?>
               <?php if($data!=''):?>
@@ -85,7 +87,7 @@
                   <?php }else{?>
                   <tr><td cospan="2">未查询到订单,请确认下订单号</td></tr>
                   <?php }?>
-                <?php else: 
+                <?php elseif($orderType==2): 
                 if(isset($dataObj->result)){
                 $obj = $dataObj->result;?>
                   <tr><td cospan="2">需要补充的订单信息,如下:</td></tr>
@@ -111,6 +113,7 @@
                 <?php }else{?>
                 <tr><td cospan="2">未查询到订单,请确认下订单号</td></tr>
                 <?php }?>
+                <?php else:?>
                 <?php endif;?>
                 </table>
                 <?php endif;?>
