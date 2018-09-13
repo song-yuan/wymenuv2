@@ -25,11 +25,11 @@
 				url:'<?php echo $this->createUrl('/mall/getJsapiparams',array('companyId'=>$this->companyId));?>',
 				data:{rlid:rlid,rdpid:rdpid,remoney:remoney,userId:userId},
 				success:function(parameters){
+					alert(parameters);
 					if(parameters==''){
 						layer.msg('支付异常,无法支付!');
 						return;
 					}
-					alert(parameters);
 					WeixinJSBridge.invoke(
 						'getBrandWCPayRequest',
 						parameters,
