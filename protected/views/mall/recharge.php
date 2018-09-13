@@ -83,9 +83,16 @@
 				);
 				$mtpayUrl = $this->createUrl('/mall/mtJsapiparams',$data);
 		?>
-		<div class="item" ><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
+		<div class="item" onclick="mtApiCall('<?php echo $mtpayUrl;?>')"><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
 		<?php endforeach;?>
 		<div class="clear"></div>
+		<script type="text/javascript">
+			//调用微信JS api 支付
+			function mtApiCall(mtUrl)
+			{
+				location.href = mtUrl;
+			}
+		</script>
 	<?php endif;?>
 <?php else:?>
 	<div class="weui_dialog_alert" id="dialog2">
