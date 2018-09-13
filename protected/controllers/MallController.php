@@ -784,7 +784,7 @@ class MallController extends Controller
 	 		$input->SetTotal_fee($remoney*100);
 	 		$input->SetTime_start(date("YmdHis"));
 	 		$input->SetTime_expire(date("YmdHis", time() + 600));
-	 		$input->SetGoods_tag("充值订单");
+	 		$input->SetGoods_tag("微信充值订单");
 	 		$input->SetNotify_url($notifyUrl);
 	 		$input->SetTrade_type("JSAPI");
 	 		if($account['multi_customer_service_status']==1){
@@ -800,6 +800,36 @@ class MallController extends Controller
 	 		$jsApiParameters = '';
 	 	}
 	 	echo $jsApiParameters;
+	 	exit;
+	 }
+	 /**
+	  * 美团充值支付
+	  */
+	 public function actionMtJsapiparams(){
+	 	$data = $_GET;
+	 	$dpid = $data['companyId'];
+	 	$mtr = MtpConfig::MTPAppKeyMid($dpid);
+	 	if($mtr){
+	 		$mts = explode(',',$mtr);
+	 		$merchantId = $mts[0];
+	 		$appId = $mts[1];
+	 		$key = $mts[2];
+	 	}
+	 	$ods = array(
+	 			'merchantid'=>$merchantId,
+	 			'appid'=>$appId,
+	 	);
+	 	$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+	 	if(!isset($_GET['openId'])){
+	 		MtpPay::getOpenId($ods,$baseUrl);
+	 	}
+	 	$data['merchantId'] = $merchantId;
+	 	$data['appId'] = $appId;
+	 	$data['key'] = $key;
+	 	unset($data['companyId']);
+	 	unset($data['orderId']);
+	 	unset($data['orderDpid']);
+	 	MtpPay::preOrder($data);
 	 	exit;
 	 }
 	/**

@@ -12,50 +12,81 @@
 <div class="section">
 <?php if($this->brandUser['user_name']&&$this->brandUser['mobile_num']):?>
 	<div class="title">充值金额</div>
-	<?php foreach($recharges as $recharge):?>
-	<div class="item"  onclick="jsApiCall('<?php echo $recharge['lid'];?>','<?php echo $recharge['dpid'];?>','<?php echo $recharge['recharge_money'];?>')"><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
-	<?php endforeach;?>
-	<div class="clear"></div>
-	<script type="text/javascript">
-		//调用微信JS api 支付
-		function jsApiCall(rlid,rdpid,remoney)
-		{
-			var userId = '<?php echo $userId?>';
-			$.ajax({
-				url:'<?php echo $this->createUrl('/mall/getJsapiparams',array('companyId'=>$this->companyId));?>',
-				data:{rlid:rlid,rdpid:rdpid,remoney:remoney,userId:userId},
-				success:function(parameters){
-					alert(parameters);
-					if(parameters==''){
-						layer.msg('支付异常,无法支付!');
-						return;
-					}
-					WeixinJSBridge.invoke(
-						'getBrandWCPayRequest',
-						parameters,
-						function(res){
-							alert(JSON.stringify(res));
-							 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-							 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-							 	layer.msg('支付成功!');
-							 	<?php if($backUrl):?>
-							 	location.href = "<?php echo $backUrl;?>";
-							 	<?php else:?>
-							 	history.go(-1);
-							 	<?php endif;?>
-							 }else if(res.err_msg == 'get_brand_wcpay_request:fail'){
-							 	//支付失败或取消支付
-							 	layer.msg('支付失败!');
-							 }else{
-								 layer.msg('支付取消!'); 
-							 }     
+	<?php if($payChannel==1):?>
+		<?php foreach($recharges as $recharge):?>
+		<div class="item"  onclick="jsApiCall('<?php echo $recharge['lid'];?>','<?php echo $recharge['dpid'];?>','<?php echo $recharge['recharge_money'];?>')"><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
+		<?php endforeach;?>
+		<div class="clear"></div>
+		<script type="text/javascript">
+			//调用微信JS api 支付
+			function jsApiCall(rlid,rdpid,remoney)
+			{
+				var userId = '<?php echo $userId?>';
+				$.ajax({
+					url:'<?php echo $this->createUrl('/mall/getJsapiparams',array('companyId'=>$this->companyId));?>',
+					data:{rlid:rlid,rdpid:rdpid,remoney:remoney,userId:userId},
+					success:function(parameters){
+						if(parameters==''){
+							layer.msg('支付异常,无法支付!');
+							return;
 						}
-					);
-				},
-				dataType:'json'
-			});
-		}
-	</script>
+						WeixinJSBridge.invoke(
+							'getBrandWCPayRequest',
+							parameters,
+							function(res){
+								alert(JSON.stringify(res));
+								 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+								 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+								 	layer.msg('支付成功!');
+								 	<?php if($backUrl):?>
+								 	location.href = "<?php echo $backUrl;?>";
+								 	<?php else:?>
+								 	history.go(-1);
+								 	<?php endif;?>
+								 }else if(res.err_msg == 'get_brand_wcpay_request:fail'){
+								 	//支付失败或取消支付
+								 	layer.msg('支付失败!');
+								 }else{
+									 layer.msg('支付取消!'); 
+								 }     
+							}
+						);
+					},
+					dataType:'json'
+				});
+			}
+		</script>
+	<?php elseif($payChannel==3):?>
+		<?php 
+			foreach($recharges as $recharge):
+				$rlid = $recharge['lid'];
+				$rdpid = $recharge['dpid'];
+				$se = new Sequence("order_subno");
+				$orderSubNo = $se->nextval();
+				$rechargeId = $rlid.'-'.$rdpid.'-'.$userId.'-'.$orderSubNo;
+				$remoney = $recharge['recharge_money'];
+				
+				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtrechargeresult');
+				$returnUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/user/index',array('companyId'=>$this->companyId));
+				$data = array(
+						'companyId'=>$this->companyId,
+						'dpid'=>$this->companyId,
+						'outTradeNo'=>$rechargeId,
+						'totalFee'=>$remoney*100,
+						'subject'=>'wx-recharge',
+						'body'=>'wx-recharge',
+						'channel'=>'wx_scan_pay',
+						'expireMinutes'=>'5',
+						'tradeType'=>'JSAPI',
+						'notifyUrl'=>$notifyUrl,
+						'return_url'=>$returnUrl
+				);
+				$mtpayUrl = $this->createUrl('/mall/mtJsapiparams',$data);
+		?>
+		<div class="item" ><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
+		<?php endforeach;?>
+		<div class="clear"></div>
+	<?php endif;?>
 <?php else:?>
 	<div class="weui_dialog_alert" id="dialog2">
          <div class="weui_mask"></div>
