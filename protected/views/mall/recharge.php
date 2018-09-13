@@ -51,7 +51,8 @@
 							 }     
 						}
 					);
-				}
+				},
+				dataType:'json'
 			});
 		}
 	</script>
