@@ -29,6 +29,7 @@
 						layer.msg('支付异常,无法支付!');
 						return;
 					}
+					alert(parameters);
 					WeixinJSBridge.invoke(
 						'getBrandWCPayRequest',
 						parameters,
