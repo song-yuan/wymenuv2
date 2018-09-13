@@ -26,7 +26,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if($this->company['type']=='0'&&!in_array($actin->id,array('reCharge','getJsapiparams'))){
+		if($this->company['type']=='0'&&!in_array($actin->id,array('reCharge','getJsapiparams','mtJsapiparams'))){
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
