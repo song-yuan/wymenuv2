@@ -797,7 +797,6 @@ class MallController extends Controller
 	 			
 	 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 	 	}catch(Exception $e){
-	 		Helper::writeLog($e->getMessage());
 	 		$jsApiParameters = '';
 	 	}
 	 	echo $jsApiParameters;
