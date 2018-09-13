@@ -743,6 +743,7 @@ class MallController extends Controller
 		$coupons = WxPromotionActivity::getNoPush($this->companyId);
 		$this->render('getwxcard',array('companyId'=>$this->companyId,'coupons'=>$coupons));
 	}
+	
 	/**
 	 * 
 	 * 
@@ -755,6 +756,52 @@ class MallController extends Controller
 	 	$backUrl = Yii::app()->request->getParam('url',null);
 	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
 	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>urldecode($backUrl)));
+	 }
+	 /**
+	  * 获取充值支付js参数
+	  */
+	 public function actionGetJsapiparams(){
+	 	$rlid = Yii::app()->request->getParam('rlid');
+	 	$rdpid = Yii::app()->request->getParam('rdpid');
+	 	$remoney = Yii::app()->request->getParam('remoney');
+	 	$userId = Yii::app()->request->getParam('userId');
+	 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
+	 	
+	 	$se = new Sequence("order_subno");
+	 	$orderSubNo = $se->nextval();
+	 	$rechargeId = $rlid.'-'.$rdpid.'-'.$orderSubNo;
+	 	
+	 	//①、获取用户openid
+	 	try{
+	 		$tools = new JsApiPay();
+	 		$openId = WxBrandUser::openId($userId,$this->companyId);
+	 		$account = WxAccount::get($this->companyId);
+	 		//②、统一下单
+	 		$input = new WxPayUnifiedOrder();
+	 		$input->SetBody("点餐订单");
+	 		$input->SetAttach("1");
+	 		$input->SetOut_trade_no($rechargeId);
+	 		$input->SetTotal_fee($remoney*100);
+	 		$input->SetTime_start(date("YmdHis"));
+	 		$input->SetTime_expire(date("YmdHis", time() + 600));
+	 		$input->SetGoods_tag("充值订单");
+	 		$input->SetNotify_url($notifyUrl);
+	 		$input->SetTrade_type("JSAPI");
+	 		if($account['multi_customer_service_status']==1){
+	 			$input->SetSubOpenid($openId);
+	 		}else{
+	 			$input->SetOpenid($openId);
+	 		}
+	 			
+	 		$orderInfo = WxPayApi::unifiedOrder($input);
+	 			
+	 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+	 	}catch(Exception $e){
+	 		$canpWxpay = false;
+	 		$jsApiParameters = '';
+	 	}
+	 	echo $jsApiParameters;
+	 	exit;
 	 }
 	/**
 	 * 
