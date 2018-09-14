@@ -21,7 +21,7 @@
     <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=BWSBZ-GYKE2-GQVUX-COYWJ-JWUM6-6FBDD"></script>
 	<script>
 		var geocoder;
 		var init = function() {

@@ -769,7 +769,7 @@ class MallController extends Controller
 	 	
 	 	$se = new Sequence("order_subno");
 	 	$orderSubNo = $se->nextval();
-	 	$rechargeId = $rlid.'-'.$rdpid.'-'.$orderSubNo;
+	 	$rechargeId = (int)$rlid.'-'.(int)$rdpid.'-'.(int)$userId.'-'.$orderSubNo;
 	 	
 	 	//①、获取用户openid
 	 	try{
@@ -778,7 +778,7 @@ class MallController extends Controller
 	 		$account = WxAccount::get($this->companyId);
 	 		//②、统一下单
 	 		$input = new WxPayUnifiedOrder();
-	 		$input->SetBody("点餐订单");
+	 		$input->SetBody("充值订单");
 	 		$input->SetAttach("1");
 	 		$input->SetOut_trade_no($rechargeId);
 	 		$input->SetTotal_fee($remoney*100);
