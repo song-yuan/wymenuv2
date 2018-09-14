@@ -23,6 +23,13 @@
 				<?php echo $form->error($model, 'mt_key' )?>
 			</div>
 		</div>
+		<div class="form-group">
+			<?php echo $form->label($model, 'mt_merchantId',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'mt_merchantId',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('mt_merchantId'),'disabled'=>$a,));?>
+				<?php echo $form->error($model, 'mt_merchantId' )?>
+			</div>
+		</div>
 	<?php else:?>
 		<div class="form-group">
 			<?php echo $form->label($model, 'mt_merchantId',array('class' => 'col-md-3 control-label'));?>

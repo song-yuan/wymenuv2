@@ -122,6 +122,8 @@
 										$channel = '收钱吧';
 									}elseif($model->property->pay_channel==3){
 										$channel = '美团';
+									}else{
+										$channel = '官方支付';
 									}
 									switch ($model->property->pay_type){
 											case 0: echo '未开通';break;
