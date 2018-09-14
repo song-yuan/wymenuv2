@@ -338,19 +338,17 @@ $('.accountno').click(function() {
 	   $('#btn_time_query').click(function time() {  
 		   var begin_time = $('#begin_time').val();
 		   var end_time = $('#end_time').val();
-		   var text = $('#text').val();
 		   var selectDpid = $('select[name="selectDpid"]').val();
-		   location.href="<?php echo $this->createUrl('statements/retreatdetailReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+'/selectDpid/'+selectDpid;    
+		   location.href="<?php echo $this->createUrl('statements/retreatdetailReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/selectDpid/"+selectDpid;    
         });
 		  
 
 		  $('#excel').click(function excel(){
 	    	   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   var text = $('#text').val();
 			   var selectDpid = $('select[name="selectDpid"]').val();
 		       if(confirm('确认导出并且下载Excel文件吗？')){
-		    	   location.href="<?php echo $this->createUrl('statements/retreatdetailReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+'/selectDpid/'+selectDpid;
+		    	   location.href="<?php echo $this->createUrl('statements/retreatdetailReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/selectDpid/"+selectDpid;
 		       }
 		   });
 </script> 

@@ -1548,7 +1548,6 @@ class StatementsController extends BackendController
 	 * 退菜明细报表
 	 */
 	public function actionRetreatdetailReport(){
-		$text = Yii::app()->request->getParam('text');
 		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
@@ -1558,7 +1557,7 @@ class StatementsController extends BackendController
 		}
 		
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select t1.create_at as ordertime,t1.should_total,t1.reality_total,t1.username,sum(t.pay_amount) as pay_all,t.* from nb_order_pay t left join nb_order t1 on(t.dpid = t1.dpid and t1.lid = t.order_id) where t.paytype != 11 and t.pay_amount <0 and t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59" and t.dpid = '.$selectDpid.' group by t.order_id)k';
+		$sql = 'select k.* from(select t1.create_at as ordertime,t1.should_total,t1.reality_total,t1.username,sum(t.pay_amount) as pay_all,t.* from nb_order_pay t ,nb_order t1 where t.dpid = t1.dpid and t.order_id=t1.lid and t.paytype != 11 and t.pay_amount <0 and t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59" and t.dpid = '.$selectDpid.' group by t.order_id)k';
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		
 		$pages = new CPagination($count);
@@ -1572,7 +1571,6 @@ class StatementsController extends BackendController
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-				'text'=>$text,
 				'selectDpid'=>$selectDpid,
 		));
 	}
@@ -1652,7 +1650,6 @@ class StatementsController extends BackendController
 	 */
 
 	public function actionRetreatreasonReport(){
-		$text = Yii::app()->request->getParam('text');
 		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
@@ -1660,15 +1657,11 @@ class StatementsController extends BackendController
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
+		
 		$db = Yii::app()->db;
-		if($text==1){
-		$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.retreat_id,t1.order_detail_id,t1.retreat_amount,t2.name,t.lid,t.is_retreat,t.price,t.is_print,sum(t.price*t1.retreat_amount) as all_retreatprice,count(t1.retreat_id) as all_num,sum(t1.retreat_amount) as all_amount from nb_order_product t left join nb_order_retreat t1 on(t.dpid = t1.dpid and t.lid = t1.order_detail_id and t1.delete_flag = 0) left join nb_retreat t2 on(t.dpid = t2.dpid and t1.retreat_id = t2.lid and t2.delete_flag = 0) where t.delete_flag = 0 and t.dpid = '.$selectDpid.' and t.is_retreat = 1 and t.is_print = 1 and t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59" group by year(t.create_at),t1.retreat_id) k';
-		}elseif($text==2){
-			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.retreat_id,t1.order_detail_id,t1.retreat_amount,t2.name,t.lid,t.is_retreat,t.price,t.is_print,sum(t.price*t1.retreat_amount) as all_retreatprice,count(t1.retreat_id) as all_num,sum(t1.retreat_amount) as all_amount from nb_order_product t left join nb_order_retreat t1 on(t.dpid = t1.dpid and t.lid = t1.order_detail_id and t1.delete_flag = 0) left join nb_retreat t2 on(t.dpid = t2.dpid and t1.retreat_id = t2.lid and t2.delete_flag = 0) where t.delete_flag = 0 and t.dpid = '.$selectDpid.' and t.is_retreat = 1 and t.is_print = 1 and t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59" group by month(t.create_at),t1.retreat_id) k';
-		}elseif($text==3){
-			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.retreat_id,t1.order_detail_id,t1.retreat_amount,t2.name,t.lid,t.is_retreat,t.price,t.is_print,sum(t.price*t1.retreat_amount) as all_retreatprice,count(t1.retreat_id) as all_num,sum(t1.retreat_amount) as all_amount from nb_order_product t left join nb_order_retreat t1 on(t.dpid = t1.dpid and t.lid = t1.order_detail_id and t1.delete_flag = 0) left join nb_retreat t2 on(t.dpid = t2.dpid and t1.retreat_id = t2.lid and t2.delete_flag = 0) where t.delete_flag = 0 and t.dpid = '.$selectDpid.' and t.is_retreat = 1 and t.is_print = 1 and t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59" group by day(t.create_at),t1.retreat_id) k';
-		}
+		$sql = 'select k.* from(select t.create_at,t1.retreat_id,t1.order_detail_id,t1.retreat_amount,t2.name,t.lid,t.is_retreat,t.price,t.is_print,sum(t.price*t1.retreat_amount) as all_retreatprice,count(t1.retreat_id) as all_num,sum(t1.retreat_amount) as all_amount from nb_order_product t left join nb_order_retreat t1 on(t.dpid = t1.dpid and t.lid = t1.order_detail_id and t1.delete_flag = 0) left join nb_retreat t2 on(t.dpid = t2.dpid and t1.retreat_id = t2.lid and t2.delete_flag = 0) where t.delete_flag = 0 and t.dpid = '.$selectDpid.' and t.is_retreat = 1 and t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59" group by day(t.create_at),t1.retreat_id) k';
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		
 		$pages = new CPagination($count);
 		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
@@ -1680,7 +1673,6 @@ class StatementsController extends BackendController
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-				'text'=>$text,
 				'selectDpid'=>$selectDpid,
 		));
 	}
