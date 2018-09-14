@@ -829,7 +829,6 @@ class MallController extends Controller
 	 	unset($data['companyId']);
 	 	unset($data['orderId']);
 	 	unset($data['orderDpid']);
-	 	Helper::writeLog(json_encode($data));
 	 	MtpPay::preOrder($data);
 	 	exit;
 	 }

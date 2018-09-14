@@ -111,8 +111,8 @@ class MtpayController extends Controller
 		$accountno = $_POST['outTradeNo'];
 		$transactionId = $_POST['transactionId'];
 		$totalFee = $_POST['totalFee'];
+		
 		//订单号解析 relid 充值id 和 redpid 充值dpid
-		Helper::writeLog('mt-'.$accountno);
 		$account_nos = explode('-',$accountno);
 		$rlid = $account_nos[0];
 		$redpid = $account_nos[1];
@@ -147,7 +147,7 @@ class MtpayController extends Controller
 			$notifyWxwapId = $se->nextval();
 			$notifyWxwapData = array (
 					'lid' => $notifyWxwapId,
-					'dpid' => $orderdpid,
+					'dpid' => $redpid,
 					'create_at' => date ( 'Y-m-d H:i:s', time()),
 					'update_at' => date ( 'Y-m-d H:i:s', time()),
 					'accountno' => $accountno,
