@@ -14,7 +14,7 @@
 	<div class="title">充值金额</div>
 	<?php if($payChannel==1):?>
 		<?php foreach($recharges as $recharge):?>
-		<div class="item"  onclick="jsApiCall('<?php echo (int)$recharge['lid'];?>','<?php echo (int)$recharge['dpid'];?>','<?php echo $recharge['recharge_money'];?>')"><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
+		<div class="item"  onclick="jsApiCall('<?php echo $recharge['lid'];?>','<?php echo $recharge['dpid'];?>','<?php echo $recharge['recharge_money'];?>')"><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
 		<?php endforeach;?>
 		<div class="clear"></div>
 		<script type="text/javascript">
@@ -34,7 +34,6 @@
 							'getBrandWCPayRequest',
 							parameters,
 							function(res){
-								alert(JSON.stringify(res));
 								 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 								 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
 								 	layer.msg('支付成功!');
