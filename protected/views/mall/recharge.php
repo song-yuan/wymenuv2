@@ -63,7 +63,7 @@
 				$rdpid = $recharge['dpid'];
 				$se = new Sequence("order_subno");
 				$orderSubNo = $se->nextval();
-				$rechargeId = $rlid.'-'.$rdpid.'-'.$userId.'-'.$orderSubNo;
+				$rechargeId = (int)$rlid.'-'.(int)$rdpid.'-'.(int)$userId.'-'.$orderSubNo;
 				$remoney = $recharge['recharge_money'];
 				
 				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtrechargeresult');
