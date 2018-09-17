@@ -7730,7 +7730,7 @@ class StatementsController extends BackendController
 						$orderTotal += $v['should_total'];
 						$orderRealTotal += $v['reality_total'];
 					}
-					if($v['pay_amount'] < 0){
+					if($v['should_total'] > 0 && $v['pay_amount'] < 0){
 						$orderTotal += $v['pay_amount'];
 						$orderRealTotal += $v['pay_amount'];
 						$orderRetreat += $v['pay_amount'];
