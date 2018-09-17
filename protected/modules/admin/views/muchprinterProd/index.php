@@ -94,7 +94,7 @@ function fun()
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /><?php echo yii::t('app','全选');?></th>
+								<th class="table-checkbox" style="width:8%"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /><?php echo yii::t('app','全选');?></th>
 								<th style="width:15%"><?php echo yii::t('app','名称');?></th>
 								<th><?php echo yii::t('app','类别');?></th>
 								<th><?php echo yii::t('app','厨打方案');?></th>
