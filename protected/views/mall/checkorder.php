@@ -198,7 +198,7 @@
 	    				$active = 'on';
 	    				$tprice = '';
 	    				if($taste["price"]>0){
-	    					$original += $taste["price"];
+	    					$original += $taste["price"]*$model['num'];
 	    					if($model['is_member_discount']){
 	    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
 	    						$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
@@ -223,7 +223,11 @@
 	    <!-- b可选择套餐 -->
 	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
 	    <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
-		     <?php $detailDesc = ''; foreach ($model['detail'] as $k=>$detail): $selectItem = 0;?>
+		     <?php 
+		     	$detailDesc = ''; 
+		     	foreach ($model['detail'] as $k=>$detail): 
+		     	$selectItem = 0;
+		     ?>
 		     <div class="item-group">选择一个</div>
 		     <div class="item-group">
 	    		<?php 
@@ -234,7 +238,7 @@
 	    				$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
 	    				if($item['price'] > 0){
-	    					$original += $item["price"];
+	    					$original += $item["price"]*$model['num'];
 	    					if($model['is_member_discount']){
 	    						$memdisprice += number_format($item["price"]*(1-$levelDiscount),2);
 	    						$taste["price"] = number_format($item["price"]*$levelDiscount,2);
@@ -261,7 +265,7 @@
 			    				$active = 'on';
 			    				$tprice = '';
 			    				if($taste["price"]>0){
-			    					$original += $taste["price"];
+			    					$original += $taste["price"]*$model['num'];
 			    					if($model['is_member_discount']){
 			    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
 	    								$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
