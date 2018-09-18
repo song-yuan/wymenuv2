@@ -175,129 +175,136 @@
 		<!--
 	    <div class="prt-cat">/div>
 	    -->
+	    <?php 
+	    	$pprice = $model['price'];
+	    	$tasteHtml = ''; //可选口味的html
+	    	$prosetHtml = '';// 可选套餐的html
+	    	// 单品口味详情
+	    	if(isset($model['taste_groups'])&&!empty($model['taste_groups'])){
+	    		$tasteHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'">';
+	    		$tdesc = '';
+	    		foreach($model['taste_groups'] as $k=>$groups){
+	    			$tvalue = 0;
+	    			$tasteHtml .= '<div class="item-group">'.$groups['name'].'</div>';
+	    			$tasteHtml .= '<div class="item-group">';
+	    			foreach($groups['tastes'] as $tk=>$taste){
+	    				$active = '';
+	    				if($taste['is_selected']==1){
+	    					$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+	    					$active = 'on';
+	    					$tprice = '';
+	    					if($taste["price"]>0){
+	    						$original += $taste["price"]*$model['num'];
+	    						if($model['is_member_discount']){
+	    							$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
+	    							$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
+	    						}
+	    						$pprice += $taste["price"];
+	    						$price += $taste["price"];
+	    						$tprice = '('.$taste["price"].')';
+	    					}
+	    					$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
+	    				}
+	    				$tasteHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$k.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'">'.$taste['name'];
+	    				if($taste['price'] > 0){
+	    					$tasteHtml .='('.$taste['price'].')';
+	    				}
+	    				$tasteHtml .= '</div>';
+	    			}
+	    			$tasteHtml .= '<input type="hidden" name="taste[]" value="'.$tvalue.'" /><div class="clear"></div></div>';
+	    		}
+	    		$tasteHtml .= '</div><div class="taste-desc">'.$tdesc.'</div><div class="taste">可选口味</div>';
+	    	}
+	    	
+	    	// 套餐详情
+	    	if(isset($model['detail'])&&!empty($model['detail'])){
+	    		$prosetHtml .= '<div class="detail-items" set-id="'.$model['product_id'].'">';
+	    		$detailDesc = '';
+	    		foreach ($model['detail'] as $k=>$detail){
+	    			$selectItem = 0;
+	    			$prosetHtml .= '<div class="item-group">选择一个</div><div class="item-group">';
+	    			foreach($detail as $item){
+	    				$on = '';
+	    				if($item['is_select']==1){
+	    					$on='on';
+	    					$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
+	    					$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
+	    					if($item['price'] > 0){
+	    						$original += $item["price"]*$model['num'];
+	    						if($model['is_member_discount']){
+	    							$memdisprice += number_format($item["price"]*(1-$levelDiscount),2);
+	    							$taste["price"] = number_format($item["price"]*$levelDiscount,2);
+	    						}
+	    						$pprice += $item["price"];
+	    						$price += $item["price"];
+	    					}
+	    					$detailDesc .='</span>';
+	    				}
+	    			}
+	    			
+	    			if(!empty($item['taste_groups'])){
+	    				$prosetHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'-'.$item['product_id'].'">';
+	    				$tdesc = '';
+	    				foreach($item['taste_groups'] as $kk=>$groups){
+	    					$tvalue = 0;
+	    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div><div class="item-group">';
+	    					foreach($groups['tastes'] as $tk=>$taste){
+	    						$active = '';
+	    						if($taste['is_selected']==1){
+	    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+	    							$active = 'on';
+	    							$tprice = '';
+	    							if($taste["price"]>0){
+	    								$original += $taste["price"]*$model['num'];
+	    								if($model['is_member_discount']){
+	    									$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
+	    									$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
+	    								}
+	    								$pprice += $taste["price"];
+	    								$price += $taste["price"];
+	    							}
+	    							$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
+	    						}
+	    						$prosetHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$kk.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'">'.$taste['name'];
+	    						if($taste['price'] > 0){
+	    							$prosetHtml .= '('.$taste['price'].')';
+	    						}
+	    						$prosetHtml .= '</div>';
+	    					}
+	    					$prosetHtml .= '<div class="clear"></div></div>';
+	    				}
+	    				$prosetHtml .= '</div>';
+	    				$prosetHtml .= '<div class="item t-item detail-item has-taste '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'">'.$item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];
+	    				if($item['price'] > 0){
+	    					$prosetHtml .= '('.$item['price'].')';
+	    				}
+	    				$prosetHtml .= '</div>';
+	    			}else{
+	    				$prosetHtml .= '<div class="item t-item detail-item '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'">'.$item['product_name'].'x'.$item['number'];
+	    				if($item['price'] > 0){
+	    					$prosetHtml .= '('.$item['price'].')';
+	    				}
+	    				$prosetHtml .= '</div>';
+	    			}
+	    			$prosetHtml .= '<input type="hidden" name="set-detail[]" value="'. $selectItem.'"/>';
+	    			$prosetHtml .= '<div class="clear"></div></div>';
+	    		}
+	    		$prosetHtml .= '</div><div class="detail-desc"><?php echo $detailDesc;?></div><div class="detail">可选套餐</div>';
+	    	}
+	    	
+	    ?>
+	    
 	    <div class="prt">
 	        <div class="prt-lt"><?php if($model['promotion_type']=='sent'): ?><span class="bttn_orange">赠</span><?php endif;?><?php echo $model['product_name'];?></div>
 	        <div class="prt-mt">x<span class="num"><?php echo $model['num'];?></span></div>
-	        <div class="prt-rt">￥<span class="price"><?php echo $model['price'];?></span></div>
+	        <div class="prt-rt">￥<span class="price"><?php echo $pprice;?></span></div>
 	        <div class="clear"></div>
 	    </div>
 	    <!-- b可选择口味 -->
-	    <?php if(isset($model['taste_groups'])&&!empty($model['taste_groups'])):?>
-	    <div class="taste-items" product-id="<?php echo $model['product_id'];?>">
-	    	<?php 
-	    		$tdesc = ''; 
-	    		foreach($model['taste_groups'] as $k=>$groups):
-	    		$tvalue = 0;
-	    	?>
-	    	<div class="item-group"><?php echo $groups['name'];?></div>
-	    	<div class="item-group">
-	    		<?php foreach($groups['tastes'] as $tk=>$taste):
-	    			$active = '';
-	    			if($taste['is_selected']==1){
-	    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
-	    				$active = 'on';
-	    				$tprice = '';
-	    				if($taste["price"]>0){
-	    					$original += $taste["price"]*$model['num'];
-	    					if($model['is_member_discount']){
-	    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
-	    						$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
-	    					}
-    						$price += $taste["price"];
-	    					$tprice = '('.$taste["price"].')';
-	    				}
-	    				$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
-	    			}
-	    		?>
-    			<div class="item t-item taste-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
-	    		<?php endforeach;?>
-	    		<input type="hidden" name="taste[]" value="<?php echo $tvalue;?>" />
-	    		<div class="clear"></div>
-	    	</div>
-	    	<?php endforeach;?>
-	    </div>
-	    <div class="taste-desc"><?php echo $tdesc;?></div>
-	    <div class="taste">可选口味</div>
-	    <?php endif;?>
+	    <?php echo $tasteHtml;?>
 	    <!-- e可选择口味 -->
 	    <!-- b可选择套餐 -->
-	    <?php if(isset($model['detail'])&&!empty($model['detail'])):?>
-	    <div class="detail-items" set-id="<?php echo $model['product_id'];?>">
-		     <?php 
-		     	$detailDesc = ''; 
-		     	foreach ($model['detail'] as $k=>$detail): 
-		     	$selectItem = 0;
-		     ?>
-		     <div class="item-group">选择一个</div>
-		     <div class="item-group">
-	    		<?php 
-	    			foreach($detail as $item): 
-	    			$on = '';
-	    			if($item['is_select']==1){
-	    				$on='on';
-	    				$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
-	    				$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
-	    				if($item['price'] > 0){
-	    					$original += $item["price"]*$model['num'];
-	    					if($model['is_member_discount']){
-	    						$memdisprice += number_format($item["price"]*(1-$levelDiscount),2);
-	    						$taste["price"] = number_format($item["price"]*$levelDiscount,2);
-	    					}
-	    					$price += $item["price"];
-	    				}
-	    				$detailDesc .='</span>';
-	    			}
-	    		?>
-	    		<!-- b套餐中产品口味 -->
-	    		<?php if(!empty($item['taste_groups'])):?>
-	    		<div class="taste-items" product-id="<?php echo $model['product_id'].'-'.$item['product_id'];?>">
-			    	<?php 
-			    		$tdesc = '';
-			    		foreach($item['taste_groups'] as $kk=>$groups):
-			    		$tvalue = 0;
-			    	?>
-			    	<div class="item-group"><?php echo $groups['name'];?></div>
-			    	<div class="item-group">
-			    		<?php foreach($groups['tastes'] as $tk=>$taste):
-			    			$active = '';
-			    			if($taste['is_selected']==1){
-			    				$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
-			    				$active = 'on';
-			    				$tprice = '';
-			    				if($taste["price"]>0){
-			    					$original += $taste["price"]*$model['num'];
-			    					if($model['is_member_discount']){
-			    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
-	    								$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
-			    					}
-		    						$price += $taste["price"];
-			    				}
-			    				$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
-			    			}
-			    		?>
-		    			<div class="item t-item taste-item <?php echo $active;?>" allflage="<?php echo $groups['allflae'];?>" group="<?php echo $kk;?>" taste-id="<?php echo $taste['lid'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price'] > 0):?>(<?php echo $taste['price'];?>)<?php endif;?></div>
-			    		<?php endforeach;?>
-			    		<!-- 
-			    		<input type="hidden" name="taste[2][]" value="<?php echo $tvalue;?>" />
-			    		 -->
-			    		<div class="clear"></div>
-			    	</div>
-			    	<?php endforeach;?>
-			    </div>
-			    <div class="item t-item detail-item has-taste <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
-			    <?php else:?>
-			    <div class="item t-item detail-item <?php echo $on;?>" group="<?php echo $k;?>" product-id="<?php echo $item['product_id'];?>" detail-num="<?php echo $item['number'];?>" detail-pirce="<?php echo $item['price'];?>"><?php echo $item['product_name'].'x'.$item['number'];?><?php if($item['price'] > 0):?>(<?php echo $item['price'];?>)<?php endif;?></div>
-	    		<?php endif;?>
-	    		<!-- e套餐中产品口味 -->
-	    		<?php endforeach;?>
-	    		<input type="hidden" name="set-detail[]" value="<?php echo $selectItem;?>" />
-	    		<div class="clear"></div>
-	    	</div>
-	     	<?php endforeach;?>
-	     </div>
-	     <div class="detail-desc"><?php echo $detailDesc;?></div>
-	     <div class="detail">可选套餐</div>
-	    <?php endif;?>
+	    <?php echo $prosetHtml;?>
 	    <!-- e可选择套餐 -->
 	</div>
 	<?php endforeach;?>
