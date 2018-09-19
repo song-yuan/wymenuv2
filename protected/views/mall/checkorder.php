@@ -195,17 +195,17 @@
 	    					$tprice = '';
 	    					if($taste["price"]>0){
 	    						$original += $taste["price"]*$model['num'];
+	    						$pprice += $taste["price"];
 	    						if($model['is_member_discount']){
 	    							$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
 	    							$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
 	    						}
-	    						$pprice += $taste["price"];
-	    						$price += $taste["price"];
+	    						$price += $taste["price"]*$model['num'];
 	    						$tprice = '('.$taste["price"].')';
 	    					}
 	    					$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 	    				}
-	    				$tasteHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$k.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'">'.$taste['name'];
+	    				$tasteHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$k.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'"  product-price="'.$model['price'].'">'.$taste['name'];
 	    				if($taste['price'] > 0){
 	    					$tasteHtml .='('.$taste['price'].')';
 	    				}
@@ -231,60 +231,59 @@
 	    					$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
 	    					if($item['price'] > 0){
 	    						$original += $item["price"]*$model['num'];
+	    						$pprice += $item["price"];
 	    						if($model['is_member_discount']){
 	    							$memdisprice += number_format($item["price"]*(1-$levelDiscount),2);
-	    							$taste["price"] = number_format($item["price"]*$levelDiscount,2);
+	    							$item["price"] = number_format($item["price"]*$levelDiscount,2);
 	    						}
-	    						$pprice += $item["price"];
-	    						$price += $item["price"];
+	    						$price += $item["price"]*$model['num'];
 	    					}
 	    					$detailDesc .='</span>';
 	    				}
-	    			}
-	    			
-	    			if(!empty($item['taste_groups'])){
-	    				$prosetHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'-'.$item['product_id'].'">';
-	    				$tdesc = '';
-	    				foreach($item['taste_groups'] as $kk=>$groups){
-	    					$tvalue = 0;
-	    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div><div class="item-group">';
-	    					foreach($groups['tastes'] as $tk=>$taste){
-	    						$active = '';
-	    						if($taste['is_selected']==1){
-	    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
-	    							$active = 'on';
-	    							$tprice = '';
-	    							if($taste["price"]>0){
-	    								$original += $taste["price"]*$model['num'];
-	    								if($model['is_member_discount']){
-	    									$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
-	    									$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
-	    								}
-	    								$pprice += $taste["price"];
-	    								$price += $taste["price"];
-	    							}
-	    							$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
-	    						}
-	    						$prosetHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$kk.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'">'.$taste['name'];
-	    						if($taste['price'] > 0){
-	    							$prosetHtml .= '('.$taste['price'].')';
-	    						}
-	    						$prosetHtml .= '</div>';
-	    					}
-	    					$prosetHtml .= '<div class="clear"></div></div>';
-	    				}
-	    				$prosetHtml .= '</div>';
-	    				$prosetHtml .= '<div class="item t-item detail-item has-taste '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'">'.$item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];
-	    				if($item['price'] > 0){
-	    					$prosetHtml .= '('.$item['price'].')';
-	    				}
-	    				$prosetHtml .= '</div>';
-	    			}else{
-	    				$prosetHtml .= '<div class="item t-item detail-item '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'">'.$item['product_name'].'x'.$item['number'];
-	    				if($item['price'] > 0){
-	    					$prosetHtml .= '('.$item['price'].')';
-	    				}
-	    				$prosetHtml .= '</div>';
+		    			if(!empty($item['taste_groups'])){
+		    				$prosetHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'-'.$item['product_id'].'">';
+		    				$tdesc = '';
+		    				foreach($item['taste_groups'] as $kk=>$groups){
+		    					$tvalue = 0;
+		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div><div class="item-group">';
+		    					foreach($groups['tastes'] as $tk=>$taste){
+		    						$active = '';
+		    						if($taste['is_selected']==1){
+		    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+		    							$active = 'on';
+		    							$tprice = '';
+		    							if($taste["price"]>0){
+		    								$original += $taste["price"]*$model['num'];
+		    								$pprice += $taste["price"];
+		    								if($model['is_member_discount']){
+		    									$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
+		    									$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
+		    								}
+		    								$price += $taste["price"]*$model['num'];
+		    							}
+		    							$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
+		    						}
+		    						$prosetHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$kk.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'" product-price="'.$model['price']+$item['price'].'">'.$taste['name'];
+		    						if($taste['price'] > 0){
+		    							$prosetHtml .= '('.$taste['price'].')';
+		    						}
+		    						$prosetHtml .= '</div>';
+		    					}
+		    					$prosetHtml .= '<div class="clear"></div></div>';
+		    				}
+		    				$prosetHtml .= '</div>';
+		    				$prosetHtml .= '<div class="item t-item detail-item has-taste '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];
+		    				if($item['price'] > 0){
+		    					$prosetHtml .= '('.$item['price'].')';
+		    				}
+		    				$prosetHtml .= '</div>';
+		    			}else{
+		    				$prosetHtml .= '<div class="item t-item detail-item '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'x'.$item['number'];
+		    				if($item['price'] > 0){
+		    					$prosetHtml .= '('.$item['price'].')';
+		    				}
+		    				$prosetHtml .= '</div>';
+		    			}
 	    			}
 	    			$prosetHtml .= '<input type="hidden" name="set-detail[]" value="'. $selectItem.'"/>';
 	    			$prosetHtml .= '<div class="clear"></div></div>';
@@ -700,13 +699,14 @@ $(document).ready(function(){
   	var tasteItems = $(this).parents('.taste-items');
   	var tasteDesc = sectionObj.find('.taste-desc');
   	var productId = tasteItems.attr('product-id');
+  	var productPrice = tasteItems.attr('product-price');
   	var tasteId = $(this).attr('taste-id');
   	var group =  $(this).attr('group');
   	var tastePrice = $(this).attr('taste-pirce');
   	var tastName = $(this).html();
   	var allflage = $(this).attr('allflage');
   	var num = 1;
-  	if(sectionObj.find('.num').length > 0){
+  	if(sectionObj.find('.num').length > 0){ // 非全单口味
   		num = sectionObj.find('.num').html();
   	}
   	if($(this).hasClass('on')){
@@ -730,6 +730,9 @@ $(document).ready(function(){
   	  	}
 	  	$(this).addClass('on');
 	  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice);
+	  	if(sectionObj.find('.price').length > 0){
+	  		sectionObj.find('.price').html(productPrice+tastePrice);
+	  	}
 	  	tasteDesc.find('span[id^='+group+'-]').remove();
 	  	var str = '<span id="'+group+'-'+tasteId+'">'+tastName+'</span>';
 	  	tasteDesc.append(str);
