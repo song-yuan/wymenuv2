@@ -699,7 +699,7 @@ $(document).ready(function(){
   	var tasteItems = $(this).parents('.taste-items');
   	var tasteDesc = sectionObj.find('.taste-desc');
   	var productId = tasteItems.attr('product-id');
-  	var productPrice = tasteItems.attr('product-price');
+  	var productPrice = $(this).attr('product-price');
   	var tasteId = $(this).attr('taste-id');
   	var group =  $(this).attr('group');
   	var tastePrice = $(this).attr('taste-pirce');
@@ -731,7 +731,7 @@ $(document).ready(function(){
 	  	$(this).addClass('on');
 	  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice);
 	  	if(sectionObj.find('.price').length > 0){
-	  		sectionObj.find('.price').html(productPrice+tastePrice);
+	  		sectionObj.find('.price').html((parseFloat(productPrice)+parseFloat(tastePrice)).toFixed(2));
 	  	}
 	  	tasteDesc.find('span[id^='+group+'-]').remove();
 	  	var str = '<span id="'+group+'-'+tasteId+'">'+tastName+'</span>';
@@ -785,6 +785,7 @@ $(document).ready(function(){
 		  	var tasteItems = $(this).parents('.detail-items');
 		  	var detailDesc = sectionObj.children('.detail-desc');
 		  	var setId = tasteItems.attr('set-id');
+		  	var setPrice = $(this).attr('set-price');
 		  	var productId = $(this).attr('product-id');
 		  	var group =  $(this).attr('group');
 			var detailNum = $(this).attr('detail-num');
@@ -801,6 +802,7 @@ $(document).ready(function(){
 	  	  	}
 		  	$(this).addClass('on');
 		  	$(this).siblings('input').val(setId+'-'+productId+'-'+detailNum+'-'+detailPrice);
+		  	sectionObj.find('.price').html((parseFloat(setPrice)+parseFloat(detailPrice)).toFixed(2));
 		  	detailDesc.find('span[id^='+group+'-]').remove();
 		  	var str = '<span id="'+group+'-'+productId+'">'+detailName+'</span>';
 		  	detailDesc.append(str);
