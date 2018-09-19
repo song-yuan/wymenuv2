@@ -396,7 +396,7 @@ class WxOrder
 				unset($this->productSetDetail[$cart['product_id']]['set_name']);
 				unset($this->productSetDetail[$cart['product_id']]['total_original_price']);
 				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
-					$ortherPrice = $detail[3];
+					$ortherPrice += $detail[3];
 					$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $setPrice);
 						
 					$se = new Sequence("order_product");
@@ -412,8 +412,8 @@ class WxOrder
 							'product_id'=>$detail[1],
 							'product_name'=>$detail['product_name'],
 							'product_pic'=>$detail['main_picture'],
-							'price'=>$itemPrice+$ortherPrice,
-							'original_price'=>$detail['original_price']+$ortherPrice,
+							'price'=>$itemPrice+$detail[3],
+							'original_price'=>$detail['original_price']+$detail[3],
 							'amount'=>$detail[2]*$cart['num'],
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>$orderProductStatus,
@@ -508,12 +508,12 @@ class WxOrder
 			}else{
 				if($cart['is_member_discount']){
 					$memdiscount += number_format(($cart['price']+$ortherPrice)*(1-$levelDiscount)*$cart['num'],2);
-					$orderPrice +=  number_format(($cart['price']+$ortherPrice)*$levelDiscount*$cart['num'],2);
+					$orderPrice += number_format(($cart['price']+$ortherPrice)*$levelDiscount*$cart['num'],2);
 				}else{
-					$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
+					$orderPrice += ($cart['price']+$ortherPrice)*$cart['num'];
 				}
 			}
-			$realityPrice += ($cart['original_price']+$ortherPrice)*$cart['num'];
+			$realityPrice +=($cart['original_price']+$ortherPrice)*$cart['num'];
 		}
 		if($this->type!=1){
 			// 满送产品
