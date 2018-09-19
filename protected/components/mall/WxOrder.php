@@ -412,7 +412,7 @@ class WxOrder
 							'product_id'=>$detail[1],
 							'product_name'=>$detail['product_name'],
 							'product_pic'=>$detail['main_picture'],
-							'price'=>$itemPrice,
+							'price'=>$itemPrice+$ortherPrice,
 							'original_price'=>$detail['original_price']+$ortherPrice,
 							'amount'=>$detail[2]*$cart['num'],
 							'zhiamount'=>$cart['num'],
