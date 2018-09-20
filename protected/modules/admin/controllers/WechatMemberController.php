@@ -155,12 +155,12 @@ class WechatMemberController extends BackendController {
         if($findprovince!="请选择..")
         {
         	$findprovincenew = str_replace(array('省','市'),'', $findprovince);
-        	$sql .= ' and t.province like "%'.$findprovincenew.'%"';
+        	$sql .= ' and com.province like "%'.$findprovincenew.'%"';
         }
         if($findcity!="请选择..")
         {
         	$findcitynew = str_replace(array('市','区','县'),'', $findcity);
-        	$sql .= ' and t.city like "'.$findcitynew.'"';
+        	$sql .= ' and com.city like "'.$findcitynew.'"';
         }
         // 来源店铺
         if($source){
