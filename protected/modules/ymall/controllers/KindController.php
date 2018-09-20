@@ -7,7 +7,7 @@ class KindController extends BaseYmallController
 		$db = Yii::app()->db;
 		$sql =' select peisong_id,material_price_group_id from nb_company_property where dpid='.$this->companyId.' and delete_flag=0';
 		$info = $db->createCommand($sql)->queryRow();
-		// p($info);
+		$products = array();
 		if(0 != $info['peisong_id']){
 			if (0 != $info['material_price_group_id']) {
 				//指定产品价格
@@ -31,11 +31,9 @@ class KindController extends BaseYmallController
 			.' left join (select m.unit_specifications,m.unit_name,m.dpid,mr.unit_code from nb_material_unit m inner join nb_material_unit_ratio mr on(m.lid=mr.stock_unit_id)) mu on(mu.dpid=c.comp_dpid and mu.unit_code=ggm.unit_code) '
 			.' where  ggm.delete_flag=0 order by ggm.category_id;';
 			}
-		}else{
-				$sql1='select null';
+			$products = $db->createCommand($sql1)->queryAll();
 		}
-		$products = $db->createCommand($sql1)->queryAll();
-		// p($products);
+		
 		$materials =array();
 		foreach ($products as $key => $product) {
 			if(!isset($materials[$product['lid']])){
