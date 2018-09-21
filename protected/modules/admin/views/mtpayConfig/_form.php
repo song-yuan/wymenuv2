@@ -7,7 +7,7 @@
 		),
 )); ?>
 	<div class="form-body">
-	<?php if($ty==1&&(Yii::app()->user->role>=5))?>
+	<?php if($ty==1&&(Yii::app()->user->role>=5))$a=true;else $a=false;?>
 	<?php if($this->comptype=='0'):?>
 	  <div class="form-group">
 			<?php echo $form->label($model, 'mt_appId',array('class' => 'col-md-3 control-label'));?>
@@ -26,7 +26,7 @@
 		<div class="form-group">
 			<?php echo $form->label($model, 'mt_merchantId',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'mt_merchantId',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('mt_merchantId')));?>
+				<?php echo $form->textField($model, 'mt_merchantId',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('mt_merchantId'),'disabled'=>$a,));?>
 				<?php echo $form->error($model, 'mt_merchantId' )?>
 			</div>
 		</div>
