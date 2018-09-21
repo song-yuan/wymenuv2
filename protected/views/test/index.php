@@ -1,5 +1,5 @@
 <?php
-$keys = Yii::app()->redis->keys('order*');
+$keys = Yii::app()->redis->keys('*');
 var_dump($keys);
 ?>
 
