@@ -10,7 +10,6 @@ class MtpayConfigController extends BackendController
 		return true;
 	}
 	public function actionIndex() {
-		$ty=1;
         $model = MtpayConfig::model()->find('dpid=:dpid',array(':dpid'=>$this->companyId));
         if(empty($model)){
         	$model = new MtpayConfig;
@@ -19,7 +18,6 @@ class MtpayConfigController extends BackendController
         	$model->dpid = $this->companyId;
         	$model->create_at = date('Y-m-d H:i:s',time());
             $model->update_at = date('Y-m-d H:i:s',time());
-            $ty = 0;
         }
         if(Yii::app()->request->isPostRequest){
         	$postData = Yii::app()->request->getPost('MtpayConfig');
@@ -34,7 +32,6 @@ class MtpayConfigController extends BackendController
         }
 		$this->render('index',array(
 				'model'=>$model,
-				'ty'=>$ty,
 		));
 	}
 	
