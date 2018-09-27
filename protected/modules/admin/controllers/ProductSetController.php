@@ -143,7 +143,6 @@ class ProductSetController extends BackendController
 		$islock = Yii::app()->request->getParam('islock');
                 //echo 'ddd';
 		$model = ProductSet::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
 			if($model->category_id){
