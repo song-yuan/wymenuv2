@@ -262,10 +262,8 @@ class ProductController extends BackendController
 
 	public function actionCreate(){
 		$msg = '';
-		//var_dump($model);exit;
+		
 		$istempp = Yii::app()->request->getParam('istempp',0);
-		$model->dpid = $this->companyId ;
-		//$model->create_time = time();
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('product/index' , 'companyId' => $this->companyId)) ;
@@ -286,7 +284,9 @@ class ProductController extends BackendController
 			}
 			echo $msg;exit;
 		}
+		
 		$model = new Product();
+		$model->dpid = $this->companyId ;
 		if(Yii::app()->user->role > 10){
 			$model->is_show_wx = 2;
 		}
