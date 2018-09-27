@@ -72,9 +72,6 @@ class ProductSetController extends BackendController
 		$model = new ProductSet();
 		$model->dpid = $this->companyId ;
 		$status = '';
-		if(Yii::app()->user->role > 10){
-			$model->is_show_wx = 2;
-		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
 
@@ -110,7 +107,9 @@ class ProductSetController extends BackendController
 				 $model->addError('category_id','必须添加二级分类');
 			}
 		}
-
+		if(Yii::app()->user->role > 10){
+			$model->is_show_wx = 2;
+		}
 		$categories = $this->getCategoryList();
 		$this->render('create' , array(
 				'model' => $model,

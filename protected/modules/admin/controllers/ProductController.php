@@ -287,9 +287,6 @@ class ProductController extends BackendController
 		
 		$model = new Product();
 		$model->dpid = $this->companyId ;
-		if(Yii::app()->user->role > 10){
-			$model->is_show_wx = 2;
-		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
 
@@ -333,9 +330,10 @@ class ProductController extends BackendController
 			}
 
 		}
+		if(Yii::app()->user->role > 10){
+			$model->is_show_wx = 2;
+		}
 		$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-                //echo 'ss';exit;
 		$this->render('create' , array(
 			'model' => $model ,
 			'categories' => $categories,
