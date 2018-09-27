@@ -924,7 +924,7 @@ class WxOrder
 		     );
 			$orderPay = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 			
-			WxCupon::dealCupon($cuponBranduserDpid, $cuponBranduserLid, 2);
+			WxCupon::dealCupon($cuponBranduserDpid, $cuponBranduserLid, 2, $order['dpid']);
 			if($money == 0){
 				self::dealOrder($user,$order);
 			}

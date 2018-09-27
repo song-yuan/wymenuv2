@@ -2213,7 +2213,7 @@ class DataSyncOperation {
 			try{
 				if(!empty($cupons)){
 					foreach ($cupons as $cupon){
-						$res = WxCupon::dealCupon($cupon['dpid'], $cupon['cupon_id'], 2);
+						$res = WxCupon::dealCupon($cupon['dpid'], $cupon['cupon_id'], 2, $dpid);
 						if(!$res){
 							throw new Exception('代金券核销失败');
 						}

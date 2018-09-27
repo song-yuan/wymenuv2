@@ -194,9 +194,9 @@ class WxCupon
 	 * 使用核销代金券
 	 * 
 	 */
-	public static function dealCupon($dpid,$cuponId,$status){
+	public static function dealCupon($dpid,$cuponId,$status,$usedDpid = 0){
 		$date = date('Y-m-d H:i:s',time());
-		$sql = 'update nb_cupon_branduser set is_used='.$status.',used_time="'.$date.'" where lid='.$cuponId.' and dpid='.$dpid;
+		$sql = 'update nb_cupon_branduser set is_used='.$status.',used_dpid='.$usedDpid.',used_time="'.$date.'" where lid='.$cuponId.' and dpid='.$dpid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
