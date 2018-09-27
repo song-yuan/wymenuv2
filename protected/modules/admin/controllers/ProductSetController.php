@@ -72,6 +72,9 @@ class ProductSetController extends BackendController
 		$model = new ProductSet();
 		$model->dpid = $this->companyId ;
 		$status = '';
+		if(Yii::app()->user->role > 10){
+			$model->is_show_wx = 2;
+		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
 

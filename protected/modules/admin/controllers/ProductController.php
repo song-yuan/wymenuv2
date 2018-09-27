@@ -262,7 +262,6 @@ class ProductController extends BackendController
 
 	public function actionCreate(){
 		$msg = '';
-		$model = new Product();
 		//var_dump($model);exit;
 		$istempp = Yii::app()->request->getParam('istempp',0);
 		$model->dpid = $this->companyId ;
@@ -286,6 +285,10 @@ class ProductController extends BackendController
 				$msg = $up->getErrorMsg();
 			}
 			echo $msg;exit;
+		}
+		$model = new Product();
+		if(Yii::app()->user->role > 10){
+			$model->is_show_wx = 2;
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
