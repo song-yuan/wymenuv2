@@ -36,24 +36,21 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','代金券使用情况报表');?></div>
-				<div class="actions">
-					<div class="btn-group">
-						<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
-					</div>
-				  	<div class="btn-group">
-					   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-							<span class="input-group-addon">~</span>
-						    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-					  </div>  
-			    	</div>	
-					
-					<div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-					</div>			
-			    </div>
-			 </div> 
+					<div class="actions">
+						<div class="btn-group">
+						<select  class="form-control input-medium select2me" name="selectCupon" data-placeholder="请选择券名...">
+							<option value=""></option>
+							<?php foreach ($cupons as $cupon):?>
+							<option value="<?php echo $cupon['lid'];?>" <?php if($cupon['lid']==$cuponId){ echo 'selected="selected"';}?>><?php echo $cupon['cupon_title'];?></option>
+							<?php endforeach;?>
+						</select>
+						</div>
+						<div class="btn-group">
+								<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+								<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+						</div>			
+				    </div>
+				 </div> 
 			
 				<div class="portlet-body" id="table-manage">
 				<div class="table-responsive">
@@ -61,8 +58,10 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','序号');?></th>
-								<th><?php echo yii::t('app','券名');?></th>
-								<th><?php echo yii::t('app','创建时间');?></th>
+								<th><?php echo yii::t('app','店名');?></th>
+								<th><?php echo yii::t('app','联系人');?></th>
+								<th><?php echo yii::t('app','联系电话');?></th>
+								<th><?php echo yii::t('app','联系地址');?></th>
 								<th><?php echo yii::t('app','发券数量');?></th>
                                 <th><?php echo yii::t('app','当前店铺会员使用数量');?></th>
                                 <th><?php echo yii::t('app','其他店铺会员使用数量');?></th>
@@ -75,8 +74,10 @@
 							<?php $key=0; foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php echo $key+1;?></td>
-								<td><?php echo $model['cupon_title'];?></td>
-								<td><?php echo $model['create_at'];?></td>
+								<td><?php echo $model['company_name'];?></td>
+								<td><?php echo $model['contact_name'];?></td>
+								<td><?php echo $model['mobile'];?></td>
+								<td><?php echo $model['province'].$model['city'].$model['county_area'].$model['address'];?></td>
 								<td><?php echo $model['cupon_sent'];?></td>
 								<td><?php echo count($model['cupon_used_0']);?></td>
 								<td><?php echo count($model['cupon_used_1']);?></td>
@@ -85,7 +86,7 @@
 							</tr>
 							<?php $key++; endforeach;?>
 						<?php else:?>
-						<tr><td colspan="8">未查询到数据</td></tr>
+						<tr><td colspan="10">未查询到数据</td></tr>
 						<?php endif;?>
 						</tbody>
 					</table>
@@ -115,36 +116,11 @@
 		 
 		       
 		   $('#btn_time_query').click(function() {  
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			   var selectDpid = $('select[name="selectDpid"]').val();
-			   location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;
+			   var cuponId = $('select[name="selectCupon"]').val();
+			   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId ));?>/cuponId/"+cuponId;
 			  
 	        });
-		   $('#cx').click(function(){  
-			   // var obj = document.getElementById('accept');
-			    var obj=$('.checkedCN');
-			    
-			    var str=new Array();
-					obj.each(function(){
-						if($(this).attr("checked")=="checked")
-						{
-							
-							str += $(this).val()+","
-							
-						}								
-					});
-				str = str.substr(0,str.length-1);//除去最后一个“，”
-				//alert(str);
-					  var begin_time = $('#begin_time').val();
-					   var end_time = $('#end_time').val();
-					   //var cid = $(this).val();
-					   
-					 location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
-					  
-
-			  });
-			  $('#excel').click(function excel(){
+			 $('#excel').click(function excel(){
 
 				   
 		    	   var begin_time = $('#begin_time').val();

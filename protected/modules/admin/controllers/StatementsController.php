@@ -1866,36 +1866,138 @@ class StatementsController extends BackendController
 	}
 	/**
 	 *
-	 * 现金券使用情况报表
+	 * 统计已发券的使用情况
 	 *
 	 */
 	public function actionCuponReport(){
-		$str = Yii::app()->request->getParam('str',$this->companyId);
-		$download = Yii::app()->request->getParam('d',0);
 		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-
-		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" and is_used=0';
-		$read = Yii::app()->db->createCommand($sql)->queryRow();
-		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" and is_used=1';
-		$receive = Yii::app()->db->createCommand($sql)->queryRow();
-		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" and is_used=2';
-		$used = Yii::app()->db->createCommand($sql)->queryRow();
-
-		//$model = Yii::app()->db->createCommand($sql)->queryRow();
-		$comName = $this->getComName();
+		$download = Yii::app()->request->getParam('d',0);
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+		}
+		
+		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' group by cupon_id';
+		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		$cuponData = array();
+		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid='.$this->companyId;
+		if($selectDpid!=$this->companyId){
+			$sql .=' and cb.used_dpid='.$selectDpid;
+		}
+		$sql .=' and c.create_at >= "'.$beginTime.' 00:00:00" and c.create_at <= "'.$endTime.' 23:59:59" and c.delete_flag=0';
+		$cuponUsers = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($cuponUsers as $cuponUser){
+			$dpidcupon = $cuponUser['dpid'].'-'.$cuponUser['cupon_id'];
+			if(!isset($cuponData[$dpidcupon])){
+				$cuponData[$dpidcupon] = array();
+				$cuponData[$dpidcupon]['cupon_used_0'] = array();// 已使用 当前店铺会员
+				$cuponData[$dpidcupon]['cupon_used_1'] = array();// 已使用 非当前店铺会员
+				$cuponData[$dpidcupon]['cupon_noused'] = array();// 未使用
+				$cuponData[$dpidcupon]['cupon_expire'] = array();// 已过期
+				$cuponcount = 0;
+				foreach ($cuponCounts as $count){
+					if($count['cupon_id']==$cuponUser['cupon_id']){
+						$cuponcount = $count['count'];
+						break;
+					}
+				}
+				$cuponData[$dpidcupon]['cupon_sent'] = $cuponcount;
+				$cuponData[$dpidcupon]['create_at'] = $cuponUser['create_at'];
+				$cuponData[$dpidcupon]['cupon_title'] = $cuponUser['cupon_title'];
+			}
+			if($cuponUser['is_used']==2){
+				if($cuponUser['used_dpid']==$cuponUser['weixin_group']){
+					array_push($cuponData[$dpidcupon]['cupon_used_0'], $cuponUser);
+				}else{
+					array_push($cuponData[$dpidcupon]['cupon_used_1'], $cuponUser);
+				}
+			}else{
+				if($cuponUser['close_day'] < date('Y-m-d H:i:s',time())){
+					array_push($cuponData[$dpidcupon]['cupon_expire'], $cuponUser);
+				}else{
+					array_push($cuponData[$dpidcupon]['cupon_noused'], $cuponUser);
+				}
+			}
+		}
+		
 		$this->render('cuponReport',array(
-				//'model'=>$model,
 				'begin_time'=>$beginTime,
 				'end_time'=>$endTime,
-				'comName'=>$comName,
-				'str'=>$str,
-				'read'=>$read,
-				'receive'=>$receive,
-				'used'=>$used,
+				'models'=>$cuponData,
+				'selectDpid'=>$selectDpid,
 		));
 	}
-
+	/**
+	 *
+	 * 统计某张券按店铺统计的使用情况
+	 *
+	 */
+	public function actionCuponReportDetail(){
+		$download = Yii::app()->request->getParam('d',0);
+		$cuponId = Yii::app()->request->getParam('cuponId','');
+		
+		$sql = 'select lid,cupon_title from nb_cupon where dpid='.$this->companyId.' and delete_flag=0';
+		$cupons = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' group by cupon_id';
+		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
+	
+		$cuponData = array();
+		if($cuponId){
+			$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group,com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid left join nb_company com on cb.used_dpid=com.dpid where cb.dpid='.$this->companyId;
+			$sql .=' and cb.cupon_id='.$cuponId;
+			$sql .=' and cb.used_dpid!=0 and c.delete_flag=0';
+			$cuponUsers = Yii::app()->db->createCommand($sql)->queryAll();
+			foreach ($cuponUsers as $cuponUser){
+				$dpidcupon = $cuponUser['used_dpid'].'-'.$cuponUser['cupon_id'];
+				if(!isset($cuponData[$dpidcupon])){
+					$cuponData[$dpidcupon] = array();
+					$cuponData[$dpidcupon]['cupon_used_0'] = array();// 已使用 当前店铺会员
+					$cuponData[$dpidcupon]['cupon_used_1'] = array();// 已使用 非当前店铺会员
+					$cuponData[$dpidcupon]['cupon_noused'] = array();// 未使用
+					$cuponData[$dpidcupon]['cupon_expire'] = array();// 已过期
+					$cuponcount = 0;
+					foreach ($cuponCounts as $count){
+						if($count['cupon_id']==$cuponUser['cupon_id']){
+							$cuponcount = $count['count'];
+							break;
+						}
+					}
+					$cuponData[$dpidcupon]['cupon_sent'] = $cuponcount;
+					$cuponData[$dpidcupon]['company_name'] = $cuponUser['company_name'];
+					$cuponData[$dpidcupon]['contact_name'] = $cuponUser['contact_name'];
+					$cuponData[$dpidcupon]['mobile'] = $cuponUser['company_name'];
+					$cuponData[$dpidcupon]['province'] = $cuponUser['province'];
+					$cuponData[$dpidcupon]['city'] = $cuponUser['city'];
+					$cuponData[$dpidcupon]['county_area'] = $cuponUser['county_area'];
+					$cuponData[$dpidcupon]['address'] = $cuponUser['address'];
+					$cuponData[$dpidcupon]['create_at'] = $cuponUser['create_at'];
+					$cuponData[$dpidcupon]['cupon_title'] = $cuponUser['cupon_title'];
+				}
+				if($cuponUser['is_used']==2){
+					if($cuponUser['used_dpid']==$cuponUser['weixin_group']){
+						array_push($cuponData[$dpidcupon]['cupon_used_0'], $cuponUser);
+					}else{
+						array_push($cuponData[$dpidcupon]['cupon_used_1'], $cuponUser);
+					}
+				}else{
+					if($cuponUser['close_day'] < date('Y-m-d H:i:s',time())){
+						array_push($cuponData[$dpidcupon]['cupon_expire'], $cuponUser);
+					}else{
+						array_push($cuponData[$dpidcupon]['cupon_noused'], $cuponUser);
+					}
+				}
+			}
+		}
+	
+		$this->render('cuponReportDetail',array(
+				'cupons'=>$cupons,
+				'models'=>$cuponData,
+				'cuponId'=>$cuponId,
+		));
+	}
 	/**
 	 *
 	 * 就餐人数统计
