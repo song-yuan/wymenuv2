@@ -233,6 +233,7 @@ li{
                                 <th>券名称</th>
                                 <th>面额</th>
                                 <th>最低消费</th>
+                                <th>领取时间</th>
                                 <th>过期时间</th>
                                 </tr>
                             </thead>
@@ -251,7 +252,8 @@ li{
                                     <td><?php echo $v->cupon_title;?></td>
                                     <td><?php echo $v->cupon_money;?></td>
                                     <td><?php echo $v->min_consumer;?></td>
-                                    <td><?php echo $v->end_time;?></td>
+                                    <th><?php echo $cupon_array->create_at;?></th>
+                                    <td><?php echo $cupon_array->close_day;?></td>
                                 </tr>
                                 <?php 
                                          endif;
@@ -347,6 +349,7 @@ li{
                                 <th>面额</th>
                                 <th>最低消费</th>
                                 <th>过期时间</th>
+                                <th>领取时间</th>
                                 <th>状态</th>
                                 </tr>
                             </thead>
@@ -365,6 +368,7 @@ li{
                                     <td><?php echo $v->cupon_title;?></td> 
                                     <td><?php echo $v->cupon_money;?></td> 
                                     <td><?php echo $v->min_consumer;?></td>
+                                    <th><?php echo $cupon_array->create_at;?></th>
                                     <td><?php echo $cupon_array->close_day;?></td>
                                     <td><?php 
                                        
