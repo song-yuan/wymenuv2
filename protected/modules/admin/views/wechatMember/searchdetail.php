@@ -252,7 +252,7 @@ li{
                                     <td><?php echo $v->cupon_title;?></td>
                                     <td><?php echo $v->cupon_money;?></td>
                                     <td><?php echo $v->min_consumer;?></td>
-                                    <th><?php echo $cupon_array->create_at;?></th>
+                                    <td><?php echo $cupon_array->create_at;?></td>
                                     <td><?php echo $cupon_array->close_day;?></td>
                                 </tr>
                                 <?php 
@@ -368,7 +368,7 @@ li{
                                     <td><?php echo $v->cupon_title;?></td> 
                                     <td><?php echo $v->cupon_money;?></td> 
                                     <td><?php echo $v->min_consumer;?></td>
-                                    <th><?php echo $cupon_array->create_at;?></th>
+                                    <td><?php echo $cupon_array->create_at;?></td>
                                     <td><?php echo $cupon_array->close_day;?></td>
                                     <td><?php 
                                        
