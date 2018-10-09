@@ -114,51 +114,22 @@
 		});
 		 
 		       
-		   $('#btn_time_query').click(function() {  
-			   var begin_time = $('#begin_time').val();
+	   $('#btn_time_query').click(function() {  
+		   var begin_time = $('#begin_time').val();
+		   var end_time = $('#end_time').val();
+		   var selectDpid = $('select[name="selectDpid"]').val();
+		   location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;
+		  
+        });
+		  $('#excel').click(function excel(){
+
+	    	   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var selectDpid = $('select[name="selectDpid"]').val();
-			   location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;
-			  
-	        });
-		   $('#cx').click(function(){  
-			   // var obj = document.getElementById('accept');
-			    var obj=$('.checkedCN');
-			    
-			    var str=new Array();
-					obj.each(function(){
-						if($(this).attr("checked")=="checked")
-						{
-							
-							str += $(this).val()+","
-							
-						}								
-					});
-				str = str.substr(0,str.length-1);//除去最后一个“，”
-				//alert(str);
-					  var begin_time = $('#begin_time').val();
-					   var end_time = $('#end_time').val();
-					   //var cid = $(this).val();
-					   
-					 location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
-					  
-
-			  });
-			  $('#excel').click(function excel(){
-
-				   
-		    	   var begin_time = $('#begin_time').val();
-				   var end_time = $('#end_time').val();
-				  
-				   //alert(str);
-			       if(confirm('确认导出并且下载Excel文件吗？')){
-
-			    	   location.href="<?php echo $this->createUrl('statements/cuponReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
-			       }
-			      
-			   });
+		       if(confirm('确认导出并且下载Excel文件吗？')){
+		    	   location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time+'/selectDpid/'+selectDpid;
+		       }
+		      
+		   });
 
 </script> 
