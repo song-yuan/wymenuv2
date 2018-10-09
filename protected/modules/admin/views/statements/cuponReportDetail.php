@@ -110,31 +110,18 @@
 	                autoclose: true
 	            });
 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	            
            }
 		});
-		 
-		       
-		   $('#btn_time_query').click(function() {  
-			   var cuponId = $('select[name="selectCupon"]').val();
-			   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId ));?>/cuponId/"+cuponId;
-			  
-	        });
-			 $('#excel').click(function excel(){
-
-				   
-		    	   var begin_time = $('#begin_time').val();
-				   var end_time = $('#end_time').val();
-				  
-				   //alert(str);
-			       if(confirm('确认导出并且下载Excel文件吗？')){
-
-			    	   location.href="<?php echo $this->createUrl('statements/cuponReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
-			       }
-			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
-			       }
-			      
-			   });
+	   $('#btn_time_query').click(function() {  
+		   var cuponId = $('select[name="selectCupon"]').val();
+		   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId ));?>/cuponId/"+cuponId;
+        });
+		$('#excel').click(function excel(){
+			var cuponId = $('select[name="selectCupon"]').val();
+			var cuponName = $('select[name="selectCupon"]').find('option:selected').html();
+	       	if(confirm('确认导出并且下载Excel文件吗？')){
+	    	   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId,'d'=>1));?>/cuponId/"+cuponId+"/cuponName/"+cuponName;
+	       	}
+		});
 
 </script> 

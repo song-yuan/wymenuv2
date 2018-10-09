@@ -1921,7 +1921,27 @@ class StatementsController extends BackendController
 				}
 			}
 		}
-		
+		if($download){
+			$tableArr = array('序号','券名','创建时间','发券数量','当前店铺会员使用数量','其他店铺会员使用数量','未使用数量','过期数量');
+			$data = array();
+			$key = 1;
+			foreach ($cuponData as $m){
+				$tempArr = array(
+						$key,
+						$m['cupon_title'],
+						$m['create_at'],
+						$m['cupon_sent'],
+						count($m['cupon_used_0']),
+						count($m['cupon_used_1']),
+						count($m['cupon_noused']),
+						count($m['cupon_expire'])
+				);
+				array_push($data, $tempArr);
+				$key++;
+			}
+			Helper::exportExcel($tableArr,$data,'代金券汇总报表','代金券汇总');
+			exit;
+		}
 		$this->render('cuponReport',array(
 				'begin_time'=>$beginTime,
 				'end_time'=>$endTime,
@@ -1937,6 +1957,7 @@ class StatementsController extends BackendController
 	public function actionCuponReportDetail(){
 		$download = Yii::app()->request->getParam('d',0);
 		$cuponId = Yii::app()->request->getParam('cuponId','');
+		$cuponName = Yii::app()->request->getParam('cuponName','');
 		
 		$sql = 'select lid,cupon_title from nb_cupon where dpid='.$this->companyId.' and delete_flag=0';
 		$cupons = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1991,7 +2012,29 @@ class StatementsController extends BackendController
 				}
 			}
 		}
-	
+		if($download){
+			$tableArr = array('序号','店名','联系人','联系电话','联系地址	','发券数量','当前店铺会员使用数量','其他店铺会员使用数量','未使用数量','过期数量');
+			$data = array();
+			$key = 1;
+			foreach ($cuponData as $m){
+				$tempArr = array(
+						$key,
+						$m['company_name'],
+						$m['contact_name'],
+						$m['mobile'],
+						$m['province'].$m['city'].$m['county_area'].$m['address'],
+						$m['cupon_sent'],
+						count($m['cupon_used_0']),
+						count($m['cupon_used_1']),
+						count($m['cupon_noused']),
+						count($m['cupon_expire'])
+				);
+				array_push($data, $tempArr);
+				$key++;
+			}
+			Helper::exportExcel($tableArr,$data,'代金券详情报表','代金券详情('.$cuponName.')');
+			exit;
+		}
 		$this->render('cuponReportDetail',array(
 				'cupons'=>$cupons,
 				'models'=>$cuponData,
