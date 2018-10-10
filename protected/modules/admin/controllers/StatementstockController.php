@@ -404,17 +404,17 @@ class StatementstockController extends BackendController
 			$selectDpid = $this->companyId;
 		}
 		
-		$sql = 'select material_id,type,sum(stock_num) as stock_num,sum(stock_num*unit_price) as price from nb_material_stock_log where dpid='.$selectDpid.' and create_at >= "'.$begin_time.' 00:00:00" and create_at <= "'.$end_time.' 23:59:59" and delete_flag=0';
+		$sql = 'select msl.material_id,msl.type,sum(msl.stock_num) as stock_num,sum(msl.stock_num*msl.unit_price) as price from nb_material_stock_log msl,nb_product_material pm where msl.material_id=pm.lid and msl.dpid=pm.dpid and msl.dpid='.$selectDpid.' and msl.create_at >= "'.$begin_time.' 00:00:00" and msl.create_at <= "'.$end_time.' 23:59:59" and msl.delete_flag=0';
 		if($categoryId){
-			$sql .= ' and category_id='.$categoryId;
+			$sql .= ' and pm.category_id='.$categoryId;
 		}
 		if($codename!=''){
-			$sql .= ' and material_identifier like "%'.$codename.'%"';
+			$sql .= ' and pm.material_identifier like "%'.$codename.'%"';
 		}
 		if($matename!=''){
-			$sql .= ' and material_name like "%'.$matename.'%"';
+			$sql .= ' and pm.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' group by type,material_id';
+		$sql .= ' group by msl.type,msl.material_id';
 		$models = Yii::app ()->db->createCommand ( $sql )->queryAll();
 		$results = array();
 		foreach ($models as $model){
