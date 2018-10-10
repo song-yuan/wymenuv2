@@ -406,7 +406,7 @@ class StatementstockController extends BackendController
 		
 		$sql = 'select msl.material_id,msl.type,sum(msl.stock_num) as stock_num,sum(msl.stock_num*msl.unit_price) as price from nb_material_stock_log msl,nb_product_material pm where msl.material_id=pm.lid and msl.dpid=pm.dpid and msl.dpid='.$selectDpid.' and msl.create_at >= "'.$begin_time.' 00:00:00" and msl.create_at <= "'.$end_time.' 23:59:59" and msl.delete_flag=0';
 		if($categoryId){
-			$sql .= ' and pm.category_id='.$categoryId;
+			$sql .= ' and pm.mchs_code='.$categoryId;
 		}
 		if($codename!=''){
 			$sql .= ' and pm.material_identifier like "%'.$codename.'%"';
@@ -579,7 +579,7 @@ class StatementstockController extends BackendController
 				if($model->pid == '0') {
 					$options[$model->lid] = array();
 				} else {
-					$options[$model->pid][$model->lid] = $model->category_name;
+					$options[$model->pid][$model->mchs_code] = $model->category_name;
 				}
 			}
 			//var_dump($options);exit;
