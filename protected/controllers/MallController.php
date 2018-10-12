@@ -30,17 +30,8 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		$dpidSelf = Yii::app()->session['dpid_self_'.(int)$this->companyId];
-		if($dpidSelf !== null){
-			if($dpidSelf == 1){
-				$comdpid = $this->company['dpid'];
-			}else{
-				$comdpid = $this->company['comp_dpid'];
-			}
-			$userId = Yii::app()->session['userId-'.(int)$comdpid];
-		}else{
-			$userId = null;
-		}
+		
+		$userId = Yii::app()->session['userId-'.(int)$comdpid];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
