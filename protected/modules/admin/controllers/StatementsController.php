@@ -1878,7 +1878,7 @@ class StatementsController extends BackendController
 			$selectDpid = $this->companyId;
 		}
 		
-		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' group by cupon_id';
+		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' and create_at >= "'.$beginTime.' 00:00:00" and create_at <= "'.$endTime.' 23:59:59" group by cupon_id';
 		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$cuponData = array();
@@ -1964,7 +1964,7 @@ class StatementsController extends BackendController
 		$sql = 'select lid,cupon_title from nb_cupon where dpid='.$this->companyId.' and delete_flag=0';
 		$cupons = Yii::app()->db->createCommand($sql)->queryAll();
 		
-		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' group by cupon_id';
+		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' and create_at >= "'.$beginTime.' 00:00:00" and create_at <= "'.$endTime.' 23:59:59" group by cupon_id';
 		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
 	
 		$cuponData = array();
