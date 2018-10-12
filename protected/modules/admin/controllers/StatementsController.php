@@ -1882,7 +1882,7 @@ class StatementsController extends BackendController
 		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$cuponData = array();
-		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpidin('.$this->companyId.','.$this->company_dpid.')';
+		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
 		if($selectDpid!=$this->companyId){
 			$sql .=' and cb.used_dpid='.$selectDpid;
 		}
