@@ -1878,11 +1878,11 @@ class StatementsController extends BackendController
 			$selectDpid = $this->companyId;
 		}
 		
-		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' and create_at >= "'.$beginTime.' 00:00:00" and create_at <= "'.$endTime.' 23:59:59" group by cupon_id';
+		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid in('.$this->companyId.','.$this->company_dpid.') and create_at >= "'.$beginTime.' 00:00:00" and create_at <= "'.$endTime.' 23:59:59" group by cupon_id';
 		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$cuponData = array();
-		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid='.$this->companyId;
+		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpidin('.$this->companyId.','.$this->company_dpid.')';
 		if($selectDpid!=$this->companyId){
 			$sql .=' and cb.used_dpid='.$selectDpid;
 		}
@@ -1961,15 +1961,15 @@ class StatementsController extends BackendController
 		$cuponId = Yii::app()->request->getParam('cuponId','');
 		$cuponName = Yii::app()->request->getParam('cuponName','');
 		
-		$sql = 'select lid,cupon_title from nb_cupon where dpid='.$this->companyId.' and delete_flag=0';
+		$sql = 'select lid,cupon_title from nb_cupon where dpid in('.$this->companyId.','.$this->company_dpid.') and delete_flag=0';
 		$cupons = Yii::app()->db->createCommand($sql)->queryAll();
 		
-		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid='.$this->companyId.' and create_at >= "'.$beginTime.' 00:00:00" and create_at <= "'.$endTime.' 23:59:59" group by cupon_id';
+		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid in('.$this->companyId.','.$this->company_dpid.') and create_at >= "'.$beginTime.' 00:00:00" and create_at <= "'.$endTime.' 23:59:59" group by cupon_id';
 		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
 	
 		$cuponData = array();
 		if($cuponId){
-			$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group,com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid left join nb_company com on cb.used_dpid=com.dpid where cb.dpid='.$this->companyId;
+			$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group,com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid left join nb_company com on cb.used_dpid=com.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
 			$sql .=' and cb.cupon_id='.$cuponId;
 			$sql .=' and cb.used_dpid!=0 and cb.used_time >= "'.$beginTime.' 00:00:00" and cb.used_time <= "'.$endTime.' 23:59:59"';
 			$cuponUsers = Yii::app()->db->createCommand($sql)->queryAll();
