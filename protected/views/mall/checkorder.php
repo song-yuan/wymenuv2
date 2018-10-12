@@ -244,12 +244,10 @@
 		    			if(!empty($item['taste_groups'])){
 		    				$prosetHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'-'.$item['product_id'].'">';
 		    				$tdesc = '';
-		    				var_dump($item['taste_groups']);
 		    				foreach($item['taste_groups'] as $kk=>$groups){
 		    					$tvalue = 0;
 		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div>';
 		    					$prosetHtml .= '<div class="item-group">dys';
-		    					var_dump($groups['tastes']);
 		    					foreach($groups['tastes'] as $tk=>$taste){
 		    						var_dump($taste);
 		    						$active = '';
