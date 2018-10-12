@@ -247,8 +247,8 @@
 		    				foreach($item['taste_groups'] as $kk=>$groups){
 		    					$tvalue = 0;
 		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div>';
-		    					$prosetHtml .= '<div class="item-group">';
-		    					echo 22;
+		    					$prosetHtml .= '<div class="item-group">dys';
+		    					
 		    					foreach($groups['tastes'] as $tk=>$taste){
 		    						$active = '';
 		    						if($taste['is_selected']==1){
