@@ -27,43 +27,33 @@ class WechatMemberController extends BackendController {
     public function actionSearchDetail(){
         $num = Yii::app()->request->getParam('num');
         $card_id = Yii::app()->request->getParam('card_id');
-        $brand_user_model = '';
-        $cupon_model = '';
 
-        $orderPay = '';
-        $cashback = 0;
-
-
-        $criteria = new CDbCriteria;
-        $criteria->with = array('point','level','cupon_branduser');
-        $criteria->addCondition("t.dpid=".$this->companyId ." or t.weixin_group = ".$this->companyId);
-        $criteria->addCondition("t.lid=".$num);
-
-        $brand_user_model = BrandUser::model()->find($criteria);
-
-         $company = Company::model()->find('dpid='.$this->companyId);
-         if($company->type==0){
-         	$companys = Company::model()->findAll('comp_dpid='.$this->companyId);
-         	$companyIds = '';
-         	foreach ($companys as $com){
-         		$companyIds .= $com->dpid.',';
-         	}
-         	$companyIds = trim($companyIds,',');
-         }else{
-         	$companyIds = $this->companyId;
-         }
-         $criteria1 = new CDbCriteria;
-         $criteria1->with = array('order4','company');
-         $criteria1->group = 't.order_id';
-         $criteria1->addCondition("t.paytype in (8,9,10) and t.remark='".$card_id."' and t.dpid in (".$companyIds.")");
-
-        $orderPay = OrderPay::model()->findAll($criteria1);
-
-        $cupon_model =  Cupon::model()->findAll("t.delete_flag<1 and t.is_available<1 and t.dpid in (".$companyIds.")");
-
-        $this->render('searchdetail',array( 'brand_user_model'=> $brand_user_model,
-                                        'cupon_model'=> $cupon_model,
-                                        'orderPay'=>$orderPay,
+		$sql = 'select t.*,t1.level_name,t1.level_discount,t1.birthday_discount from nb_brand_user t left join nb_brand_user_level t1 on t.user_level_lid=t1.lid and t.dpid=t1.dpid where (t.dpid='.$this->companyId.' or t.weixin_group='.$this->companyId.') and t.lid='.$num;
+		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		$companyArrs = array();
+		if($this->comptype==0){
+			$companyIds = WxCompany::getAllDpids($this->companyId); //获取所有店铺 拼接
+			$companys = WxCompany::getCompanyChildren($this->companyId);
+		}else{
+			$companyIds = WxCompany::getAllDpids($this->company_dpid); //获取所有店铺 拼接
+			$companys = WxCompany::getCompanyChildren($this->company_dpid);
+		}
+		foreach ($companys as $company){
+			$companyArrs[$company['dpid']] = $company;
+		}
+        
+		$sql = 'select op.*,o.reality_total,o.should_total from nb_order_pay op,nb_order o where op.order_id=o.lid and op.dpid=o.dpid and op.paytype in (8,9,10) and op.remark="'.$card_id.'" and op.dpid in ('.$companyIds.') group by op.order_id order by op.lid desc';
+		$orderPays = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		$sql = 'select cb.*,c.cupon_title,c.cupon_money,c.min_consumer from nb_cupon_branduser cb,nb_cupon c where cb.cupon_id=c.lid and cb.dpid=c.dpid and cb.brand_user_lid='.$num.' and c.is_available=0 and cb.delete_flag=0 and c.delete_flag=0';
+		$userCupons = Yii::app()->db->createCommand($sql)->queryAll();
+		
+       
+        $this->render('searchdetail',array( 'brandUser'=> $brandUser,
+                                        'userCupons'=> $userCupons,
+                                        'orderPays'=>$orderPays,
+        								'companys'=>$companyArrs,
                     			)
                     );
     }

@@ -167,37 +167,32 @@ li{
         <div class="portlet-body" >
             <div class="info">
                 <div class="person_info">
-                      <?php if($brand_user_model) :?>
+                      <?php if($brandUser) :?>
                     <ul>
                         <li class="pull-left">
-                            <span><?php echo $brand_user_model->user_name?$brand_user_model->user_name.'|'.$brand_user_model->nickname:$brand_user_model->nickname;?></span>
+                            <span><?php echo $brandUser['user_name']?$brandUser['user_name'].'|'.$brandUser['nickname']:$brandUser['nickname'];?></span>
                             
                         </li>
                         <li class="pull-left">
                             <span> 性别：
-                                <?php if(($brand_user_model->sex)=="1")  echo "男";?>
-                                <?php if(($brand_user_model->sex)=="2") echo "女";?>
+                                <?php if($brandUser['sex']=="1")  echo "男";elseif($brandUser['sex']=="2") echo "女";else echo "未知";?>
                             </span>
                         </li>
                         <li class="pull-left">
-                          <?php                           
-                           if( isset($brand_user_model->level))
-                                   echo $brand_user_model->level->level_name;
-                               
-                           ?>
+                          <?php echo $brandUser['level_name'];?>
                         </li>
                         <li class="pull-left">
-                            <span><?php echo $brand_user_model->mobile_num;?></span>
-                            <span>（卡号：<span><?php echo $brand_user_model->card_id;?></span>）</span>     
+                            <span><?php echo $brandUser['mobile_num'];?></span>
+                            <span>（卡号：<span><?php echo $brandUser['card_id'];?></span>）</span>     
                         </li>
                         <li class="pull-left">
                             <span>生日：</span>
-                            <span><?php echo $brand_user_model->user_birthday;?></span>
+                            <span><?php echo $brandUser['user_birthday'];?></span>
                         </li>
                         <div style="clear:both;"></div> 
                     </ul>
                     <br>
-                    <ul class="pull-left"><li><span>会员openid：<?php echo $brand_user_model->openid;?></span></li></ul>
+                    <ul class="pull-left"><li><span>会员openid：<?php echo $brandUser['openid'];?></span></li></ul>
                 </div>                
                 <div class="base_info">
                     <div class="info_header"></div>
@@ -214,11 +209,11 @@ li{
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><?php echo $brand_user_model->remain_money;?></td>
-                                    <td><?php echo $brand_user_model->remain_back_money;?></td>
-                                    <td><?php echo $brand_user_model->consume_point_history;?></td>
-                                    <td><?php echo $brand_user_model->create_at;?></td>
-                                    <td><?php echo $brand_user_model->province;?>&nbsp;&nbsp;<?php echo $brand_user_model->city;?></td>
+                                    <td><?php echo $brandUser['remain_money'];?></td>
+                                    <td><?php echo $brandUser['remain_back_money'];?></td>
+                                    <td><?php echo $brandUser['consume_point_history'];?></td>
+                                    <td><?php echo $brandUser['create_at'];?></td>
+                                    <td><?php echo $brandUser['province'];?>&nbsp;&nbsp;<?php echo $brandUser['city'];?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -238,31 +233,20 @@ li{
                                 </tr>
                             </thead>
                             <tbody>                               
-                                <?php  
-                               // var_dump($cupon_model);
-                                $cupon_arrays = $brand_user_model->cupon_branduser;
-                                if(!empty($cupon_arrays)): 
-                                    foreach($cupon_arrays as $cupon_array):   
-                                      if(($cupon_array->is_used)==1):
-                                        foreach ($cupon_model as $v):
-                                          if((date('Y-m-d H:i:s',time())>=$v->begin_time)&&(date('Y-m-d H:i:s',time())<=$v->end_time)):
-                                            if(($cupon_array->cupon_id)==($v->lid)) :
+                                <?php 
+                                	foreach ($userCupons as $userCupon):
+                                		if($userCupon['close_day'] < date('Y-m-d H:i:s')){
+                                			continue;
+                                		}
                                 ?>
                                 <tr>
-                                    <td><?php echo $v->cupon_title;?></td>
-                                    <td><?php echo $v->cupon_money;?></td>
-                                    <td><?php echo $v->min_consumer;?></td>
-                                    <td><?php echo $cupon_array->create_at;?></td>
-                                    <td><?php echo $cupon_array->close_day;?></td>
+                                    <td><?php echo $userCupon['cupon_title'];?></td>
+                                    <td><?php echo $userCupon['cupon_money'];?></td>
+                                    <td><?php echo $userCupon['min_consumer'];?></td>
+                                    <td><?php echo $userCupon['create_at'];?></td>
+                                    <td><?php echo $userCupon['close_day'];?></td>
                                 </tr>
-                                <?php 
-                                         endif;
-                                        endif;
-                                    endforeach; 
-                                 endif;
-                                endforeach;
-                               endif;
-                                ?>
+                                <?php endforeach;?>
                             </tbody>
                         </table>
                     </div>
@@ -286,31 +270,25 @@ li{
                                 </tr>
                             </thead>
                             <?php 
-                             if(!empty($orderPay)):
-                                 foreach ($orderPay as $v):                                     
+                                 foreach ($orderPays as $orderPay):                                     
                              ?>                           
                             <tbody>
                                  <tr>
-                                     <td class="accountno" 
-                                         accountno="<?php echo $v->account_no;?>" 
-                                         orderid="<?php echo $v->order_id?>" 
-                                         originalp="<?php echo sprintf("%.2f",$v->order4?$v->order4->reality_total:'');?>" 
-                                         shouldp="<?php echo sprintf("%.2f",$v->order4?$v->order4->should_total:'');?>" 
-                                         youhuip="<?php echo sprintf("%.2f",($v->order4?$v->order4->reality_total:'')-($v->order4?$v->order4->should_total:''));?>"
+                                    <td class="accountno" 
+                                         accountno="<?php echo $orderPay['account_no'];?>" 
+                                         orderid="<?php echo $orderPay['order_id']?>" 
+                                         originalp="<?php echo sprintf("%.2f",$orderPay['reality_total']);?>" 
+                                         shouldp="<?php echo sprintf("%.2f",$orderPay['should_total']);?>" 
+                                         youhuip="<?php echo sprintf("%.2f",($orderPay['reality_total'])-($orderPay['should_total']));?>"
                                          >
-                                         <?php echo $v->account_no;?>
-                                     </td>
-                                    
-                                    
-                                    <td><?php echo $v->create_at;?></td> 
-                                    <td><?php echo $v->order4?$v->order4->should_total:'';?></td> 
-                                    <td><?php echo $v->company->company_name;?></td> 
+                                         <?php echo $orderPay['account_no'];?>
+                                    </td>
+                                    <td><?php echo $orderPay['create_at'];?></td> 
+                                    <td><?php echo $orderPay['should_total'];?></td> 
+                                    <td><?php echo $companys[$orderPay['dpid']]['company_name'];?></td> 
                                 </tr>
                             </tbody>
-                            <?php 
-                             endforeach;
-                            endif;
-                            ?>
+                            <?php endforeach;?>
                         </table>
                         <table class="info_item table table-striped table-bordered table-hover" id="jifentable">
                              <thead>
@@ -321,26 +299,6 @@ li{
                                                       
                                 </tr>
                             </thead>
-                            <?php 
-                             if(!empty($brand_user_model->point)):
-                                 foreach (($brand_user_model->point) as $v): 
-
-                             ?>                           
-                            <tbody>
-                                 <tr>
-                                      <td> 
-                                          <?php if(($v->point_resource)=="0")  echo "消费";?>
-                                           <?php if(($v->point_resource)=="1")  echo "充值";?>
-                                      </td> 
-                                     <td><?php echo $v->points;?></td> 
-                                    <td><?php echo $v->create_at;?></td> 
-                                    
-                                </tr>
-                            </tbody>
-                            <?php 
-                             endforeach;
-                            endif;
-                            ?>
                         </table>
                         <table class="info_item table table-striped table-bordered table-hover" id="cupontable" style="display: none">
                              <thead>
@@ -348,51 +306,39 @@ li{
                                 <th>券名称</th>
                                 <th>面额</th>
                                 <th>最低消费</th>
-                                <th>过期时间</th>
                                 <th>领取时间</th>
+                                <th>过期时间</th>
                                 <th>状态</th>
                                 </tr>
                             </thead>
                             <tbody>                               
-                                <?php                                 
-                                $cupon_arrays=$brand_user_model->cupon_branduser;
-                                if($cupon_arrays): 
-                                //var_dump($cupon_arrays);
-                                //exit();
-                                    foreach($cupon_arrays as $cupon_array):   
-                                    //    if(($cupon_array->is_used)==1):
-                                            foreach ($cupon_model as $v):
-                                                if(($cupon_array->cupon_id)==($v->lid)) :
+                                <?php 
+                                	foreach ($userCupons as $userCupon):
+                                		if($userCupon['close_day'] < date('Y-m-d H:i:s')){
+                                			continue;
+                                		}
                                 ?>
                                 <tr>
-                                    <td><?php echo $v->cupon_title;?></td> 
-                                    <td><?php echo $v->cupon_money;?></td> 
-                                    <td><?php echo $v->min_consumer;?></td>
-                                    <td><?php echo $cupon_array->create_at;?></td>
-                                    <td><?php echo $cupon_array->close_day;?></td>
+                                    <td><?php echo $userCupon['cupon_title'];?></td>
+                                    <td><?php echo $userCupon['cupon_money'];?></td>
+                                    <td><?php echo $userCupon['min_consumer'];?></td>
+                                    <td><?php echo $userCupon['create_at'];?></td>
+                                    <td><?php echo $userCupon['close_day'];?></td>
                                     <td><?php 
                                        
-                                        if($cupon_array->is_used=="1"){
-                                            if(((date('Y-m-d H:i:s',time()))>=$cupon_array->valid_day)&&((date('Y-m-d H:i:s',time()))<=$cupon_array->close_day)){
-                                                echo "未使用";
-                                            }
-                                            if((date('Y-m-d H:i:s',time()))>=$cupon_array->close_day){
+                                        if($userCupon['is_used']=="1"){
+                                            if(date('Y-m-d H:i:s',time()) > $userCupon['close_day']){
                                                 echo "已过期";
+                                            }else{
+                                            	echo "未使用";
                                             }
-                                        }
-                                        if(($cupon_array->is_used)=="2"){ 
-                                            echo "已使用";
+                                        }else{
+                                        	echo "已使用";
                                         }
                                         ?>
                                     </td>
                                 </tr>
-                                <?php 
-                                        endif;
-                                    endforeach; 
-                               // endif;
-                                endforeach;
-                               endif;
-                                ?>
+                                <?php endforeach;?>
                             </tbody>
                         </table>
                 </div>

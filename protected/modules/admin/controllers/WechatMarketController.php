@@ -243,8 +243,6 @@ class WechatMarketController extends BackendController {
 		}
 
 		public function actionStorsentwxcard(){
-
-			$is_sync = DataSync::getInitSync();
 			$plids = Yii::app()->request->getParam('plids');
 			$users = Yii::app()->request->getParam('users');
 			$dpid = $this->companyId;
@@ -254,8 +252,9 @@ class WechatMarketController extends BackendController {
 			$userarrays = array();
 			$userarrays = explode(',',$users);
 			$msg = '';
+			
+			$sqlArrs = array();
 			$db = Yii::app()->db;
-		
 			foreach ($userarrays as $userarray){
 				$sql = 'select * from nb_brand_user where lid='.$userarray;
 				$openId = $db->createCommand($sql)->queryRow();
@@ -280,34 +279,29 @@ class WechatMarketController extends BackendController {
 							$validay = date('Y-m-d H:i:s',strtotime('+'.$cupons['day_begin'].' day'));
 							$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
 						}
-
+						$nowDate = date('Y-m-d H:i:s',time());
 						$se = new Sequence("cupon_branduser");
 						$id = $se->nextval();
-						$data = array(
-							'lid'=>$id,
-							'dpid'=>$dpid,
-							'create_at'=>date('Y-m-d H:i:s',time()),
-							'update_at'=>date('Y-m-d H:i:s',time()),
-							'cupon_id'=>$plid,
-							'cupon_source'=>'2',
-							'source_id'=>'0000000000',
-							'to_group'=>'3',
-							'brand_user_lid'=>$userarray,
-							'valid_day'=>$validay,
-							'close_day'=>$colseday,
-							'is_used'=>'1',
-							'used_time'=>'0000-00-00 00:00:00',
-							'delete_flag'=>'0',
-							'is_sync'=>$is_sync,
-							);
-
-						$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
-						Cupon::sentCupon($dpid, $userarray, $cupons['cupon_money'], $cupons['cupon_abstract'], $colseday, 0, $openId['openid']);
+						
+						$sql = 'insert into nb_cupon_branduser (lid,dpid,create_at,update_at,cupon_id,cupon_source,to_group,brand_user_lid,valid_day,close_day,is_used)';
+						$sql .= ' VALUES('.$id.','.$dpid.',"'.$nowDate.'","'.$nowDate.'",'.$plid.',"2","3",'.$userarray.',"'.$validay.'","'.$colseday.'","1")';
+						array_push($sqlArrs, $sql);
 					}
-
 				}
 			}
-			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'')));
+			$transaction = $db->beginTransaction();
+			try{
+				foreach ($sqlArrs as $val){
+					$sql = $val;
+					$db->createCommand($sql)->execute();
+				}
+				$transaction->commit();
+	            $msg = json_encode(array('status'=>true,'msg'=>''));
+			}catch (Exception $e) {
+				$transaction->rollback();
+				$msg = json_encode(array('status'=>false,'msg'=>''));
+			}
+			Yii::app()->end($msg);
 
 		
 	}
