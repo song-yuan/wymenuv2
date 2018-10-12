@@ -249,8 +249,9 @@
 		    					$tvalue = 0;
 		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div>';
 		    					$prosetHtml .= '<div class="item-group">dys';
-		    					
+		    					var_dump($groups['tastes']);
 		    					foreach($groups['tastes'] as $tk=>$taste){
+		    						var_dump($taste);
 		    						$active = '';
 		    						if($taste['is_selected']==1){
 		    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
