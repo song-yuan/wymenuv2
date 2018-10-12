@@ -1885,6 +1885,8 @@ class StatementsController extends BackendController
 		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
 		if($selectDpid!=$this->companyId){
 			$sql .=' and cb.used_dpid='.$selectDpid;
+		}else{
+			$sql .=' and cb.used_dpid='.$this->companyId;
 		}
 		$sql .=' and cb.used_time >= "'.$beginTime.' 00:00:00" and cb.used_time <= "'.$endTime.' 23:59:59" and c.delete_flag=0';
 		$cuponUsers = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1971,6 +1973,9 @@ class StatementsController extends BackendController
 		if($cuponId){
 			$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group,com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid left join nb_company com on cb.used_dpid=com.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
 			$sql .=' and cb.cupon_id='.$cuponId;
+			if($this->company_dpid!=$this->companyId){
+				$sql .=' and cb.used_dpid='.$this->companyId;
+			}
 			$sql .=' and cb.used_dpid!=0 and cb.used_time >= "'.$beginTime.' 00:00:00" and cb.used_time <= "'.$endTime.' 23:59:59"';
 			$cuponUsers = Yii::app()->db->createCommand($sql)->queryAll();
 			foreach ($cuponUsers as $cuponUser){
