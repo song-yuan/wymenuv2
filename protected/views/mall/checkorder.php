@@ -764,7 +764,7 @@ $(document).ready(function(){
  	});
 	// 套餐选择
   $('.detail-items .detail-item').click(function(){
-	  if($(this).hasClass('has-taste')){
+// 	  if($(this).hasClass('has-taste')){
 // 		 var _this = $(this);
 // 		 var setId = _this.parents('.detail-items').attr('set-id');
 // 		 var productId = _this.attr('product-id');
@@ -784,7 +784,7 @@ $(document).ready(function(){
 // 		        	layer.close(index);
 // 		   	}
 // 		});
-	  }else{
+// 	  }else{
 		 if(!$(this).hasClass('on')){
 			var sectionObj = $(this).parents('.section');
 		  	var tasteItems = $(this).parents('.detail-items');
@@ -815,7 +815,7 @@ $(document).ready(function(){
 	  			reset_total(detailPrice*num);
 	  	  	}
   		 }
-	  }
+// 	  }
     });
 	$('.section').on('touchstart','.cart-delete',function(){ 
 		var _this = $(this);
