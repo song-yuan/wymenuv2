@@ -286,7 +286,7 @@
 		    			}
 	    			}
 	    			$prosetHtml .= '<input type="hidden" name="set-detail[]" value="'. $selectItem.'"/>';
-	    			$prosetHtml .= '<div class="clear"></div></div>';
+	    			$prosetHtml .= '<div class="clear"></div>';
 	    		}
 	    		$prosetHtml .= '</div><div class="detail-desc">'.$detailDesc.'</div><div class="detail">可选套餐</div>';
 	    	}
