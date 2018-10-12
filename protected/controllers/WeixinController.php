@@ -81,7 +81,6 @@ class WeixinController extends Controller
 	 {
 	 	$companyId = Yii::app()->request->getParam('companyId');
 	 	$url = Yii::app()->request->getParam('url');
-	 	
 	 	$account = WxAccount::get($companyId);
 	 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
 	 	$userInfo = $baseInfo->getSnsapiBase();
@@ -96,11 +95,11 @@ class WeixinController extends Controller
 	 	$userDpid = $brandUser['dpid'];
 	 	// 是否是自己店铺会员（自己店铺有公众号）
 	 	if($companyId==$userDpid){
-	 		Yii::app()->session['dpid_self_'.$companyId] = 1;
+	 		Yii::app()->session['dpid_self_'.(int)$companyId] = 1;
 	 	}else{
-	 		Yii::app()->session['dpid_self_'.$companyId] = 0;
+	 		Yii::app()->session['dpid_self_'.(int)$companyId] = 0;
 	 	}
-	 	Yii::app()->session['userId-'.$userDpid] = $userId;
+	 	Yii::app()->session['userId-'.(int)$userDpid] = $userId;
 	 	
 	 	$this->redirect(urldecode($url));
 	 }
