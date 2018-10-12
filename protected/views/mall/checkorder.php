@@ -246,7 +246,8 @@
 		    				$tdesc = '';
 		    				foreach($item['taste_groups'] as $kk=>$groups){
 		    					$tvalue = 0;
-		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div><div class="item-group">';
+		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div>';
+		    					$prosetHtml .= '<div class="item-group">';
 		    					foreach($groups['tastes'] as $tk=>$taste){
 		    						$active = '';
 		    						if($taste['is_selected']==1){
@@ -273,6 +274,7 @@
 		    					$prosetHtml .= '<div class="clear"></div></div>';
 		    				}
 		    				$prosetHtml .= '</div>';
+		    				
 		    				$prosetHtml .= '<div class="item t-item detail-item has-taste '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];
 		    				if($item['price'] > 0){
 		    					$prosetHtml .= '('.$item['price'].')';
