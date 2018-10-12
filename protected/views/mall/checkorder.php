@@ -241,11 +241,54 @@
 	    					}
 	    					$detailDesc .='</span>';
 	    				}
+		    			if(!empty($item['taste_groups'])){
+		    				$prosetHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'-'.$item['product_id'].'">';
+		    				$tdesc = '';
+		    				foreach($item['taste_groups'] as $kk=>$groups){
+		    					$tvalue = 0;
+		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div>';
+		    					$prosetHtml .= '<div class="item-group">dys';
+		    					foreach($groups['tastes'] as $tk=>$taste){
+		    						var_dump($taste);
+		    						$active = '';
+		    						if($taste['is_selected']==1){
+		    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+		    							$active = 'on';
+		    							$tprice = '';
+		    							if($taste["price"]>0){
+		    								$original += $taste["price"]*$model['num'];
+		    								$pprice += $taste["price"];
+		    								if($model['is_member_discount']){
+		    									$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
+		    									$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
+		    								}
+		    								$price += $taste["price"]*$model['num'];
+		    							}
+		    							$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
+		    						}
+		    						$prosetHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$kk.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'" product-price="'.($model['price']+$item['price']).'">'.$taste['name'];
+		    						if($taste['price'] > 0){
+		    							$prosetHtml .= '('.$taste['price'].')';
+		    						}
+		    						$prosetHtml .= '</div>';
+		    					}
+		    					$prosetHtml .= '<div class="clear"></div></div>';
+		    				}
+		    				$prosetHtml .= '</div>';
+		    				
+		    				
+		    				$prosetHtml .= '<div class="item t-item detail-item has-taste '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];
+		    				if($item['price'] > 0){
+		    					$prosetHtml .= '('.$item['price'].')';
+		    				}
+		    				$prosetHtml .= '</div>';
+		    			}else{
 		    				$prosetHtml .= '<div class="item t-item detail-item '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'x'.$item['number'];
 		    				if($item['price'] > 0){
 		    					$prosetHtml .= '('.$item['price'].')';
 		    				}
 		    				$prosetHtml .= '</div>';
+		    			}
 		    			$prosetHtml .= '<input type="hidden" name="set-detail[]" value="'. $selectItem.'"/>';
 		    			$prosetHtml .= '<div class="clear"></div>';
 	    			}
