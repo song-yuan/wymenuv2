@@ -223,9 +223,9 @@
 	    		foreach ($model['detail'] as $k=>$detail){
 	    			$selectItem = 0;
 	    			$prosetHtml .= '<div class="item-group">选择一个</div>';
+	    			$prosetHtml .= '<div class="item-group">';
 	    			foreach($detail as $item){
 	    				$on = '';
-	    				$prosetHtml .= '<div class="item-group">';
 	    				if($item['is_select']==1){
 	    					$on='on';
 	    					$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
@@ -280,7 +280,7 @@
 		    				if($item['price'] > 0){
 		    					$prosetHtml .= '('.$item['price'].')';
 		    				}
-		    				$prosetHtml .= '</div>';
+		    				$prosetHtml .= '</div></div>';
 		    			}else{
 		    				$prosetHtml .= '<div class="item t-item detail-item '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'x'.$item['number'];
 		    				if($item['price'] > 0){
@@ -289,8 +289,9 @@
 		    				$prosetHtml .= '</div>';
 		    			}
 		    			$prosetHtml .= '<input type="hidden" name="set-detail[]" value="'. $selectItem.'"/>';
-		    			$prosetHtml .= '<div class="clear"></div></div>';
+		    			$prosetHtml .= '<div class="clear"></div>';
 	    			}
+	    			$prosetHtml .= '</div>';
 	    		}
 	    		$prosetHtml .= '</div><div class="detail-desc">'.$detailDesc.'</div><div class="detail">可选套餐</div>';
 	    	}
