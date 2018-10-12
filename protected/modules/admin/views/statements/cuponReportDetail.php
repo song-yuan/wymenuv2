@@ -38,13 +38,20 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','代金券使用情况报表');?></div>
 					<div class="actions">
 						<div class="btn-group">
-						<select  class="form-control input-medium select2me" name="selectCupon" data-placeholder="请选择券名...">
-							<option value=""></option>
-							<?php foreach ($cupons as $cupon):?>
-							<option value="<?php echo $cupon['lid'];?>" <?php if($cupon['lid']==$cuponId){ echo 'selected="selected"';}?>><?php echo $cupon['cupon_title'];?></option>
-							<?php endforeach;?>
-						</select>
+							<select  class="form-control input-medium select2me" name="selectCupon" data-placeholder="请选择券名...">
+								<option value=""></option>
+								<?php foreach ($cupons as $cupon):?>
+								<option value="<?php echo $cupon['lid'];?>" <?php if($cupon['lid']==$cuponId){ echo 'selected="selected"';}?>><?php echo $cupon['cupon_title'];?></option>
+								<?php endforeach;?>
+							</select>
 						</div>
+						<div class="btn-group">
+						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+								<span class="input-group-addon">~</span>
+							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+						  </div>  
+				    	</div>	
 						<div class="btn-group">
 								<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 								<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
@@ -113,14 +120,18 @@
            }
 		});
 	   $('#btn_time_query').click(function() {  
+		   var begin_time = $('#begin_time').val();
+		   var end_time = $('#end_time').val();
 		   var cuponId = $('select[name="selectCupon"]').val();
-		   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId ));?>/cuponId/"+cuponId;
+		   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/cuponId/"+cuponId;
         });
 		$('#excel').click(function excel(){
+			var begin_time = $('#begin_time').val();
+			var end_time = $('#end_time').val();
 			var cuponId = $('select[name="selectCupon"]').val();
 			var cuponName = $('select[name="selectCupon"]').find('option:selected').html();
 	       	if(confirm('确认导出并且下载Excel文件吗？')){
-	    	   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId,'d'=>1));?>/cuponId/"+cuponId+"/cuponName/"+cuponName;
+	    	   location.href="<?php echo $this->createUrl('statements/cuponReportDetail' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/cuponId/"+cuponId+"/cuponName/"+cuponName;
 	       	}
 		});
 

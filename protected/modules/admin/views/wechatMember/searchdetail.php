@@ -314,7 +314,7 @@ li{
                             <tbody>                               
                                 <?php 
                                 	foreach ($userCupons as $userCupon):
-                                		if($userCupon['close_day'] < date('Y-m-d H:i:s')){
+                                		if($userCupon['is_used']=="2"||$userCupon['close_day'] < date('Y-m-d H:i:s')){
                                 			continue;
                                 		}
                                 ?>

@@ -1886,7 +1886,7 @@ class StatementsController extends BackendController
 		if($selectDpid!=$this->companyId){
 			$sql .=' and cb.used_dpid='.$selectDpid;
 		}
-		$sql .=' and c.create_at >= "'.$beginTime.' 00:00:00" and c.create_at <= "'.$endTime.' 23:59:59" and c.delete_flag=0';
+		$sql .=' and cb.used_time >= "'.$beginTime.' 00:00:00" and cb.used_time <= "'.$endTime.' 23:59:59" and c.delete_flag=0';
 		$cuponUsers = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($cuponUsers as $cuponUser){
 			$dpidcupon = $cuponUser['dpid'].'-'.$cuponUser['cupon_id'];
@@ -1956,6 +1956,8 @@ class StatementsController extends BackendController
 	 */
 	public function actionCuponReportDetail(){
 		$download = Yii::app()->request->getParam('d',0);
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$cuponId = Yii::app()->request->getParam('cuponId','');
 		$cuponName = Yii::app()->request->getParam('cuponName','');
 		
@@ -1969,7 +1971,7 @@ class StatementsController extends BackendController
 		if($cuponId){
 			$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group,com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid left join nb_company com on cb.used_dpid=com.dpid where cb.dpid='.$this->companyId;
 			$sql .=' and cb.cupon_id='.$cuponId;
-			$sql .=' and cb.used_dpid!=0 and c.delete_flag=0';
+			$sql .=' and cb.used_dpid!=0 and cb.used_time >= "'.$beginTime.' 00:00:00" and cb.used_time <= "'.$endTime.' 23:59:59"';
 			$cuponUsers = Yii::app()->db->createCommand($sql)->queryAll();
 			foreach ($cuponUsers as $cuponUser){
 				$dpidcupon = $cuponUser['used_dpid'].'-'.$cuponUser['cupon_id'];
@@ -2037,6 +2039,8 @@ class StatementsController extends BackendController
 		}
 		$this->render('cuponReportDetail',array(
 				'cupons'=>$cupons,
+				'begin_time'=>$beginTime,
+				'end_time'=>$endTime,
 				'models'=>$cuponData,
 				'cuponId'=>$cuponId,
 		));
