@@ -9,15 +9,12 @@ class UserController extends Controller
 	public $layout = '/layouts/mallmain';
 	
 	
-	public function init() 
-	{
+	public function beforeAction($actin){
+		$userId = Yii::app()->session['userId'];
+		
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId; // 需为总部CompanyId（或者填公众号店铺）
 		$this->company = WxCompany::get($this->companyId);
-	}
-	
-	public function beforeAction($actin){
-		$userId = Yii::app()->session['userId'];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
