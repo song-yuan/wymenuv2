@@ -18,17 +18,15 @@ class MallController extends Controller
 	
 	public function beforeAction($actin){
 		$userId = Yii::app()->session['userId'];
-		
-		if($this->company['type']=='0'&&!in_array($actin->id,array('reCharge','getJsapiparams','mtJsapiparams'))){
-			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
-			exit;
-		}
-		
 		$companyId = Yii::app()->request->getParam('companyId');
 		$type = Yii::app()->request->getParam('type',6);
 		$this->companyId = $companyId;
 		$this->type = $type;
 		$this->company = WxCompany::get($this->companyId);
+		if($this->company['type']=='0'&&!in_array($actin->id,array('reCharge','getJsapiparams','mtJsapiparams'))){
+			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
+			exit;
+		}
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
