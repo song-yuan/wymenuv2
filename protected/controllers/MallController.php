@@ -30,7 +30,7 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		$userId = Yii::app()->session['userId'];
+		$userId = Yii::app()->session['userId_'.(int)$this->company['comp_dpid']];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
@@ -46,7 +46,7 @@ class MallController extends Controller
 			}
 			if($this->type==1){
 				//堂吃
-				$scaned = WxScanLog::get($comdpid,$userId);
+				$scaned = WxScanLog::get($this->company['comp_dpid'],$userId);
 				if(!empty($scaned)){
 					$scene = WxScanLog::getScene($comdpid,$scaned['scene_id']);
 					Yii::app()->session['qrcode-'.$userId] = $scene['scene_lid'];
