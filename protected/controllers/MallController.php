@@ -46,7 +46,8 @@ class MallController extends Controller
 			}
 			if($this->type==1){
 				//堂吃
-				$scaned = WxScanLog::get($this->company['comp_dpid'],$userId);
+				$comdpid = $this->company['comp_dpid'];
+				$scaned = WxScanLog::get($comdpid,$userId);
 				if(!empty($scaned)){
 					$scene = WxScanLog::getScene($comdpid,$scaned['scene_id']);
 					Yii::app()->session['qrcode-'.$userId] = $scene['scene_lid'];
