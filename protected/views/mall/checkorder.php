@@ -763,28 +763,7 @@ $(document).ready(function(){
  	});
 	// 套餐选择
   $('.detail-items .detail-item').click(function(){
-// 	  if($(this).hasClass('has-taste')){
-// 		 var _this = $(this);
-// 		 var setId = _this.parents('.detail-items').attr('set-id');
-// 		 var productId = _this.attr('product-id');
-// 		 var str = _this.siblings('.taste-items[product-id="'+setId+'-'+productId+'"]').prop("outerHTML");
-// 		 layer.open({
-// 			    type: 1,
-// 			    title: false,
-// 			    shade: false,
-// 			    closeBtn: 0,
-// 			    area: ['100%','60%'],
-// 			    content: str,
-// 			    btn: '确定',
-// 			    success: function(layero, index){
-// 			        layero.find('.taste-items').show();
-// 			    },
-// 			    yes: function(index, layero){ 
-// 		        	layer.close(index);
-// 		   	}
-// 		});
-// 	  }else{
-		 if(!$(this).hasClass('on')){
+		if(!$(this).hasClass('on')){
 			var sectionObj = $(this).parents('.section');
 		  	var tasteItems = $(this).parents('.detail-items');
 		  	var detailDesc = sectionObj.children('.detail-desc');
@@ -813,8 +792,28 @@ $(document).ready(function(){
 		  	if(parseFloat(detailPrice) > 0){
 	  			reset_total(detailPrice*num);
 	  	  	}
-  		 }
-// 	  }
+  		}
+	 	if($(this).hasClass('has-taste')){
+			 var _this = $(this);
+			 var setId = _this.parents('.detail-items').attr('set-id');
+			 var productId = _this.attr('product-id');
+			 var str = _this.siblings('.taste-items[product-id="'+setId+'-'+productId+'"]').prop("outerHTML");
+			 layer.open({
+				    type: 1,
+				    title: false,
+				    shade: false,
+				    closeBtn: 0,
+				    area: ['100%','60%'],
+				    content: str,
+				    btn: '确定',
+				    success: function(layero, index){
+				        layero.find('.taste-items').show();
+				    },
+				    yes: function(index, layero){ 
+			        	layer.close(index);
+			   	}
+			});
+		}
     });
 	$('.section').on('touchstart','.cart-delete',function(){ 
 		var _this = $(this);
