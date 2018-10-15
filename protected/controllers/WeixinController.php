@@ -95,7 +95,7 @@ class WeixinController extends Controller
 	 	$userId = $brandUser['lid'];
 	 	$userDpid = $brandUser['dpid'];
 	 	
-	 	$userId = Yii::app()->session['userId_'.(int)$comdpid];
+	 	$ouserId = Yii::app()->session['userId_'.(int)$comdpid];
 	 	if($ouserId&&$ouserId!=$userId){
 	 		unset(Yii::app()->session['userId_'.(int)$comdpid]);
 	 	}
