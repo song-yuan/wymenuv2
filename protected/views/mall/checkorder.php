@@ -831,7 +831,7 @@ $(document).ready(function(){
 	      	},
 	      	error:function(){
 	      		layer.msg('移除失败,请检查网络');
-	          },
+	         },
 	      	dataType:'json'
 	     });
 	});
