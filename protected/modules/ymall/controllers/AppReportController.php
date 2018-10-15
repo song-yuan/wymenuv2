@@ -12,18 +12,19 @@ class AppReportController extends Controller
 		$this->company = WxCompany::get($this->companyId);
 	}
 	public function beforeAction($actin){
-		$userId = Yii::app()->session['userId'];
+		$comdpid = $this->company['comp_dpid'];
+		$userId = Yii::app()->session['userId_'.(int)$comdpid];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
 				$url = Yii::app()->request->url;
-				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'pcompanyId'=>$comdpid,'url'=>urlencode($url)));
 				exit;
 			}
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			if(empty($this->brandUser)){
 				$url = Yii::app()->request->url;
-				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'pcompanyId'=>$comdpid,'url'=>urlencode($url)));
 				exit;
 			}
 		}else{

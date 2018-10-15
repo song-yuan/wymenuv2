@@ -80,6 +80,7 @@ class WeixinController extends Controller
 	 public function actionRedirect()
 	 {
 	 	$companyId = Yii::app()->request->getParam('companyId');
+	 	$comdpid = Yii::app()->request->getParam('pcompanyId');
 	 	$url = Yii::app()->request->getParam('url');
 	 	$account = WxAccount::get($companyId);
 	 	$baseInfo = new WxUserBase($account['appid'],$account['appsecret']);
@@ -94,11 +95,11 @@ class WeixinController extends Controller
 	 	$userId = $brandUser['lid'];
 	 	$userDpid = $brandUser['dpid'];
 	 	
-	 	$ouserId = Yii::app()->session['userId'];
+	 	$userId = Yii::app()->session['userId_'.(int)$comdpid];
 	 	if($ouserId&&$ouserId!=$userId){
-	 		unset(Yii::app()->session['userId']);
+	 		unset(Yii::app()->session['userId_'.(int)$comdpid]);
 	 	}
-	 	Yii::app()->session['userId'] = $userId;
+	 	Yii::app()->session['userId_'.(int)$comdpid] = $userId;
 	 	$this->redirect(urldecode($url));
 	 }
 }

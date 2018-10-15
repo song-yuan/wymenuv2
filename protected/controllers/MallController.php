@@ -30,23 +30,23 @@ class MallController extends Controller
 			$this->redirect(array('/shop/index','companyId'=>$this->companyId,'type'=>$this->type));
 			exit;
 		}
-		$userId = Yii::app()->session['userId'];
+		$comdpid = $this->company['comp_dpid'];
+		$userId = Yii::app()->session['userId_'.(int)$comdpid];
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			if(empty($userId)){
 				$url = Yii::app()->request->url;
-				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'pcompanyId'=>$comdpid,'url'=>urlencode($url)));
 				exit;
 			}
 			$this->brandUser = WxBrandUser::get($userId, $this->companyId);
 			if(empty($this->brandUser)){
 				$url = Yii::app()->request->url;
-				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'url'=>urlencode($url)));
+				$this->redirect(array('/weixin/redirect','companyId'=>$this->companyId,'pcompanyId'=>$comdpid,'url'=>urlencode($url)));
 				exit;
 			}
 			if($this->type==1){
 				//堂吃
-				$comdpid = $this->company['comp_dpid'];
 				$scaned = WxScanLog::get($comdpid,$userId);
 				if(!empty($scaned)){
 					$scene = WxScanLog::getScene($comdpid,$scaned['scene_id']);
