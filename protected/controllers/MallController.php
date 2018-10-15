@@ -81,14 +81,15 @@ class MallController extends Controller
         $promotions = $promotion->promotionProductList;
         $buySentPromotions = $promotion->buySentProductList;
         $fullSents = $promotion->fullSentList;
-        $cache = Yii::app()->redis->get($key);
-        if($cache!=false){
-        	$products = json_decode($cache,true);
-        }else{
+        $proProIdList = $promotion->proProIdList;
+//         $cache = Yii::app()->redis->get($key);
+//         if($cache!=false){
+//         	$products = json_decode($cache,true);
+//         }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-        	Yii::app()->redis->setex($key,$expire,json_encode($products));
-        }
+//         	Yii::app()->redis->setex($key,$expire,json_encode($products));
+//         }
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
         $disables = $carts['disable'];
@@ -105,7 +106,7 @@ class MallController extends Controller
         }	
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'fullsents'=>$fullSents,'products'=>$products,'cartList'=>$cartList,'disables'=>$disables,'start'=>$start,'notices'=>$notices));
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'fullsents'=>$fullSents,'proProIdList'=>$proProIdList,'products'=>$products,'cartList'=>$cartList,'disables'=>$disables,'start'=>$start,'notices'=>$notices));
 	}
 	/**
 	 * 

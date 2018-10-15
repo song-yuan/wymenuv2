@@ -10,6 +10,7 @@ class WxPromotion
 	public $dpid;
 	public $userId;
 	public $type;
+	public $proProIdList = array();
 	public $promotionProductList;
 	public $buySentProductList;
 	public $fullSentList;
@@ -54,6 +55,7 @@ class WxPromotion
 					}
 					$product['original_price'] = $product['set_price'];
 					$product['product_name'] = $product['set_name'];
+					array_push($this->proProIdList, '1-'.$product['lid']);
 				}else{
 					unset($results[$k]);
 					continue;
@@ -68,6 +70,7 @@ class WxPromotion
 					}else{
 						$product['price'] = ($product['original_price']*$result['promotion_discount']) > 0 ? number_format($product['original_price']*$result['promotion_discount'],2) : number_format(0,2);
 					}
+					array_push($this->proProIdList, '0-'.$product['lid']);
 				}else{
 					unset($results[$k]);
 					continue;
@@ -126,6 +129,7 @@ class WxPromotion
 					$product['original_price'] = $product['set_price'];
 					$product['product_name'] = $product['set_name'];
 					$product['price'] = $product['set_price'];
+					array_push($this->proProIdList, '1-'.$product['lid']);
 				}else{
 					unset($results[$k]);
 					continue;
@@ -136,6 +140,7 @@ class WxPromotion
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
 					$product['price'] = $product['original_price'];
+					array_push($this->proProIdList, '0-'.$product['lid']);
 				}else{
 					unset($results[$k]);
 					continue;
