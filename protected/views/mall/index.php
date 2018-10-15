@@ -268,6 +268,9 @@
 		if($product['cate_type']!='2'){
 			$productStr .='<div class="section" id="st'.$product['lid'].'" type="normal"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach ($productLists as $pProduct){
+				if(in_array('0-'.$pProduct['lid'], $proProIdList)){
+					continue;
+				}
 				if($this->type==2){
 					$pProduct['member_price'] = $pProduct['original_price'];
 				}
@@ -333,6 +336,9 @@
 			// 套餐
 			$productStr .='<div class="section" id="st'.$product['lid'].'" type="normal"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach($productLists as $pProductSet){
+				if(in_array('1-'.$pProductSet['lid'], $proProIdList)){
+					continue;
+				}
 				if($this->type==2){
 					$pProductSet['member_price'] = $pProductSet['set_price'];
 				}
