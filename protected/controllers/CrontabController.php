@@ -69,6 +69,7 @@ class  CrontabController extends Controller
 		$transaction = $db->beginTransaction();
 		try
 		{
+			$time = time();
 			$sql = 'select * from nb_stock_taking where status=0 and delete_flag=0';
 			$stockTakings = $db->createCommand($sql)->queryAll();
 			foreach ($stockTakings as $stockTaking){
