@@ -256,8 +256,6 @@ class WechatMarketController extends BackendController {
 			$sqlArrs = array();
 			$db = Yii::app()->db;
 			foreach ($userarrays as $userarray){
-				$sql = 'select * from nb_brand_user where lid='.$userarray;
-				$openId = $db->createCommand($sql)->queryRow();
 				foreach ($materialnums as $materialnum){
 					$materials = array();
 					$materials = explode(',',$materialnum);
@@ -289,11 +287,11 @@ class WechatMarketController extends BackendController {
 					}
 				}
 			}
-			
 			foreach ($sqlArrs as $val){
 				$sql = $val;
 				$db->createCommand($sql)->execute();
 			}
+			var_dump($sqlArrs);
 			$msg = json_encode(array('status'=>true,'msg'=>''));
 			Yii::app()->end($msg);
 	}
