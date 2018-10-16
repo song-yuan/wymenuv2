@@ -255,7 +255,7 @@ class WechatMarketController extends BackendController {
 			
 			$sqlArrs = array();
 			$db = Yii::app()->db;
-			foreach (materialnums as $materialnum){
+			foreach ($materialnums as $materialnum){
 				$materials = array();
 				$materials = explode(',',$materialnum);
 				$plid = $materials[0];
