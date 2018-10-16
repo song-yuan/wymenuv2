@@ -289,25 +289,13 @@ class WechatMarketController extends BackendController {
 					}
 				}
 			}
-			if(!empty($sqlArrs)){
-				$transaction = $db->beginTransaction();
-				try{
-					foreach ($sqlArrs as $val){
-						$sql = $val;
-						$db->createCommand($sql)->execute();
-					}
-					$transaction->commit();
-					$msg = json_encode(array('status'=>true,'msg'=>''));
-				}catch (Exception $e) {
-					$transaction->rollback();
-					$msg = json_encode(array('status'=>false,'msg'=>''));
-				}
-			}else{
-				$msg = json_encode(array('status'=>true,'msg'=>''));
+			
+			foreach ($sqlArrs as $val){
+				$sql = $val;
+				$db->createCommand($sql)->execute();
 			}
+			$msg = json_encode(array('status'=>true,'msg'=>''));
 			Yii::app()->end($msg);
-
-		
 	}
 
 

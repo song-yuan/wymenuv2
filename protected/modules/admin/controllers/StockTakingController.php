@@ -213,7 +213,7 @@ class StockTakingController extends BackendController
 							'reality_stock' =>$systemNum,
 							'taking_stock' =>$nowNum,
 							'number'=>'1',
-							'reasion'=>'',
+							'reasion'=>$salesName,
 					);
 					$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
 				}else{
