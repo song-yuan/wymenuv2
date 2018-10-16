@@ -290,11 +290,7 @@ class WechatMarketController extends BackendController {
 					}
 				}
 			}
-			var_dump($sql);
 			$msg = json_encode(array('status'=>true,'msg'=>''));
 			Yii::app()->end($msg);
 	}
-
-
-
 }
