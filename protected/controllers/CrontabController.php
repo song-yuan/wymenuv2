@@ -145,6 +145,8 @@ class  CrontabController extends Controller
 						// 超过原始库存
 						$difference = $nowNum - $systemNum;// 损溢库存
 						if($difference > 0 ){
+							$sql = 'select * from nb_product_material_stock where material_id='.$id.' and dpid='.$dpid.' and delete_flag=0 order by create_at desc limit 1';
+							$stocks = $db->createCommand($sql)->queryRow();
 							//盘点操作，当盘点的库存比理论库存多时，直接在后进的库存批次上加上此次的盘点的差值。。。
 							if($stocks['batch_stock'] == 0){
 								$unit_price = '0';
@@ -184,6 +186,8 @@ class  CrontabController extends Controller
 							
 							if(empty($stock2)){
 								// 如果所有批次都为0 在最后这批扣减
+								$sql = 'select * from nb_product_material_stock where material_id='.$id.' and dpid='.$dpid.' and delete_flag=0 order by create_at desc limit 1';
+								$stocks = $db->createCommand($sql)->queryRow();
 								if($stocks['batch_stock'] == 0){
 									$unit_price = '0';
 								}else{
