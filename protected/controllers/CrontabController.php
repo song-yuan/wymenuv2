@@ -96,6 +96,7 @@ class  CrontabController extends Controller
 						$systemNum = $stockTakingDetail['reality_stock'];
 						$nowNum = $stockTakingDetail['taking_stock'];
 						$id = $stockTakingDetail['material_id'];
+						$salesName = $stockTakingDetail['reasion'];
 						
 						$sql = 'select sum(stock) from nb_product_material_stock where material_id='.$id.' and dpid='.$dpid.' and delete_flag=0';
 						$originalNum = $db->createCommand($sql)->queryScalar();
