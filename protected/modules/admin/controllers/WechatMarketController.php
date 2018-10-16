@@ -283,7 +283,7 @@ class WechatMarketController extends BackendController {
 						foreach ($leftUserIds as $userId){
 							$se = new Sequence("cupon_branduser");
 							$id = $se->nextval();
-							$sql .= '('.$id.','.$dpid.',"'.$nowDate.'","'.$nowDate.'",'.$plid.',"2","3",'.$userarray.',"'.$validay.'","'.$colseday.'","1"),';
+							$sql .= '('.$id.','.$dpid.',"'.$nowDate.'","'.$nowDate.'",'.$plid.',"2","3",'.$userId.',"'.$validay.'","'.$colseday.'","1"),';
 						}
 						$sql = rtrim($sql,',');
 						$db->createCommand($sql)->execute();
