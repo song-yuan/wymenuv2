@@ -328,7 +328,7 @@ class  CrontabController extends Controller
 				$db->createCommand($sql)->execute();
 			}
 			$transaction->commit();
-			$msg = json_encode(array("status"=>"success","msg"=>$nostockmsg,"logid"=>$logid));
+			$msg = json_encode(array("status"=>"success","msg"=>''));
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			$msg = json_encode(array("status"=>"fail",'msg'=>$e->getMessage()));
