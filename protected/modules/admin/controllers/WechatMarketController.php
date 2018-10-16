@@ -179,7 +179,7 @@ class WechatMarketController extends BackendController {
 	        	$sql .= ' and t.user_id in('.$userStr.')';
 	        }
         }
-        $usersql = 'select lid from ('.$sql.')m';
+        $usersql = 'select lid from ('.$sql.')m where m.unsubscribe=0';
         $sql = 'select m.* from ('.$sql.')m';
         
         $usersArr = $db->createCommand($usersql)->queryColumn();
