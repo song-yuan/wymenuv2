@@ -255,43 +255,42 @@ class WechatMarketController extends BackendController {
 			
 			$sqlArrs = array();
 			$db = Yii::app()->db;
-			foreach ($userarrays as $userarray){
-				foreach ($materialnums as $materialnum){
-					$materials = array();
-					$materials = explode(',',$materialnum);
-					$plid = $materials[0];
-					$pcode = $materials[1];
-					$sql = 'select * from nb_cupon where lid='.$plid.' and dpid='.$this->companyId.' and delete_flag=0';
-					$cupons = $db->createCommand($sql)->queryRow();
-					if(!empty($cupons)&&!empty($plid)){
-						$sql = 'select * from nb_cupon_branduser where cupon_id='.$plid.' and brand_user_lid='.$userarray;
-						$cuponbranduser = $db->createCommand($sql)->queryRow();
-						if($cuponbranduser){
-							continue;
+			foreach (materialnums as $materialnum){
+				$materials = array();
+				$materials = explode(',',$materialnum);
+				$plid = $materials[0];
+				$pcode = $materials[1];
+				
+				$sql = 'select * from nb_cupon where lid='.$plid.' and dpid='.$this->companyId.' and delete_flag=0';
+				$cupons = $db->createCommand($sql)->queryRow();
+				if(!empty($cupons)&&!empty($plid)){
+					$nowDate = date('Y-m-d H:i:s',time());
+					$timetype = $cupons['time_type'];
+					if($timetype=='1'){
+						$validay = $cupons['begin_time'];
+						$colseday = $cupons['end_time'];
+					}else{
+						$validay = date('Y-m-d H:i:s',strtotime('+'.$cupons['day_begin'].' day'));
+						$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
+					}
+					
+					$sql = 'select brand_user_lid from nb_cupon_branduser where cupon_id='.$plid.' and brand_user_lid in ('.$users.')';
+					$cbuserIds = $db->createCommand($sql)->queryColumn();
+					
+					$leftUserIds = array_diff($userarrays, $cbuserIds);
+					if(!empty($leftUserIds)){
+						$sql = 'insert into nb_cupon_branduser (lid,dpid,create_at,update_at,cupon_id,cupon_source,to_group,brand_user_lid,valid_day,close_day,is_used) VALUES';
+						foreach ($leftUserIds as $userId){
+							$se = new Sequence("cupon_branduser");
+							$id = $se->nextval();
+							$sql .= '('.$id.','.$dpid.',"'.$nowDate.'","'.$nowDate.'",'.$plid.',"2","3",'.$userarray.',"'.$validay.'","'.$colseday.'","1"),';
 						}
-						$timetype = $cupons['time_type'];
-						if($timetype=='1'){
-							$validay = $cupons['begin_time'];
-							$colseday = $cupons['end_time'];
-						}else{
-							$validay = date('Y-m-d H:i:s',strtotime('+'.$cupons['day_begin'].' day'));
-							$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
-						}
-						$nowDate = date('Y-m-d H:i:s',time());
-						$se = new Sequence("cupon_branduser");
-						$id = $se->nextval();
-						
-						$sql = 'insert into nb_cupon_branduser (lid,dpid,create_at,update_at,cupon_id,cupon_source,to_group,brand_user_lid,valid_day,close_day,is_used)';
-						$sql .= ' VALUES('.$id.','.$dpid.',"'.$nowDate.'","'.$nowDate.'",'.$plid.',"2","3",'.$userarray.',"'.$validay.'","'.$colseday.'","1")';
-						array_push($sqlArrs, $sql);
+						$sql = rtrim($sql,',');
+						$db->createCommand($sql)->execute();
 					}
 				}
+				
 			}
-			foreach ($sqlArrs as $val){
-				$sql = $val;
-				$db->createCommand($sql)->execute();
-			}
-			var_dump($sqlArrs);
 			$msg = json_encode(array('status'=>true,'msg'=>''));
 			Yii::app()->end($msg);
 	}
