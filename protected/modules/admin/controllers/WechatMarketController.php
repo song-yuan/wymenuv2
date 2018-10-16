@@ -67,7 +67,7 @@ class WechatMarketController extends BackendController {
         //会员卡号  手机号
         $cardmobile = Yii::app()->request->getPost('cardmobile',"%");
 
-        $sql = 'select t.lid,t.dpid,t.card_id,t.create_at,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country,t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name';
+        $sql = 'select t.lid,t.dpid,t.card_id,t.create_at,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,unsubscribe,t.country,t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name';
         $sql .=' from nb_brand_user t LEFT JOIN  nb_company com on com.dpid = t.weixin_group ';
         $sql .=' LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid ';
 		if($this->comptype==0){
