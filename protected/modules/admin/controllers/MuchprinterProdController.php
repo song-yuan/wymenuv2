@@ -53,45 +53,34 @@ class MuchprinterProdController extends BackendController
 	}
 
 	public function actionStorProduct(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$is_sync = DataSync::getInitSync();
-		$opids = Yii::app()->request->getParam('pids');
+		$companyId = $this->companyId;
+		$opids = Yii::app()->request->getParam('pids');// 产品Id
 		$oprintids = Yii::app()->request->getParam('printids');
-		$pids = array();
-		$pids = explode(',',$opids);
-		$printids = array();
-		$printids = explode(',',$oprintids);
 		
+		$pids = explode(',',$opids);
+		$printids = explode(',',$oprintids);// 打印方案
+		
+		$nowDate = date('Y-m-d H:i:s',time());
 		//****查询公司的产品分类。。。****
 		$db = Yii::app()->db;
 		
         if((!empty($pids))&&(!empty($printids))&&(Yii::app()->user->role <= User::SHOPKEEPER)){
-        	
-	        	foreach ($pids as $pid){
-	        		$sql = 'select lid from nb_product where lid='.$pid.' and dpid='.$this->companyId.' and delete_flag=0';
-	        		$product = $db->createCommand($sql)->queryRow();
-	        		if($product){
-	        			$sql = 'update nb_product_printerway set delete_flag=1 where product_id ='.$pid.' and dpid ='.$this->companyId;
-	        			$result = $db->createCommand($sql)->execute();
-	        			foreach ($printids as $printid){
-	        				
-        					$se=new Sequence("product_printerway");
-        					$lid = $se->nextval();
-        					$data = array(
-        							'lid'=>$lid,
-        							'dpid'=>$this->companyId,
-        							'create_at'=>date('Y-m-d H:i:s',time()),
-        							'update_at'=>date('Y-m-d H:i:s',time()),
-        							'printer_way_id'=>$printid,
-        							'product_id'=>$pid,
-        							'delete_flag'=>"0",
-        					);
-        					Yii::app()->db->createCommand()->insert('nb_product_printerway',$data);
-	        				
-	        			}
-	        		}
-	        	}
-        	
+        	foreach ($printids as $printid){
+        		$sql = 'select product_id from nb_product_printerway where product_id in('.$opids.') and printer_way_id='.$printid.' and dpid='.$this->companyId.' and delete_flag=0';
+        		$propriIds = $db->createCommand($sql)->queryColumn();
+        		$diffProArr = array_diff($pids, $propriIds);
+        		
+        		if(!empty($diffProArr)){
+        			$sql = 'insert into nb_product_printerway (lid,dpid,create_at,update_at,printer_way_id,product_id) VALUES ';
+        			foreach ($diffProArr as $pid){
+        				$se=new Sequence("product_printerway");
+        				$lid = $se->nextval();
+        				$sql .= '('.$lid.','.$companyId.',"'.$nowDate.'","'.$nowDate.'",'.$printid.','.$pid.'),';
+        			}
+        			$sql = rtrim($sql,',');
+        			$db->createCommand($sql)->execute();
+        		}
+        	}
         	Yii::app()->user->setFlash('success' , yii::t('app','菜品批量修改成功！！！'));
         	$this->redirect(array('muchprinterProd/index' , 'companyId' => $companyId)) ;
         	
