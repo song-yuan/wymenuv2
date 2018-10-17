@@ -76,6 +76,7 @@ class  CrontabController extends Controller
 				$logid = $stockTaking['lid'];
 				$dpid = $stockTaking['dpid'];
 				$sttype = $stockTaking['type'];
+				$createAt = $stockTaking['create_at'];
 				
 				$presystemNum = '0.00';
 				$stockinNum = '0.00'; // 入库库存
@@ -168,7 +169,7 @@ class  CrontabController extends Controller
 							$stocktakingdetails = array(
 									'lid'=>$lid,
 									'dpid'=>$dpid,
-									'create_at'=>date('Y-m-d H:i:s',$time),
+									'create_at'=>$createAt,
 									'update_at'=>date('Y-m-d H:i:s',$time),
 									'type'=>3,
 									'logid'=>$logid,
@@ -207,7 +208,7 @@ class  CrontabController extends Controller
 								$stocktakingdetails = array(
 										'lid'=>$lid,
 										'dpid'=>$dpid,
-										'create_at'=>date('Y-m-d H:i:s',$time),
+										'create_at'=>$createAt,
 										'update_at'=>date('Y-m-d H:i:s',$time),
 										'type'=>3,
 										'logid'=>$logid,
@@ -257,7 +258,7 @@ class  CrontabController extends Controller
 										$stocktakingdetails = array(
 												'lid'=>$lid,
 												'dpid'=>$dpid,
-												'create_at'=>date('Y-m-d H:i:s',$time),
+												'create_at'=>$createAt,
 												'update_at'=>date('Y-m-d H:i:s',$time),
 												'type'=>3,
 												'logid'=>$logid,
@@ -280,7 +281,7 @@ class  CrontabController extends Controller
 									$stocktakingdetails = array(
 											'lid'=>$lid,
 											'dpid'=>$dpid,
-											'create_at'=>date('Y-m-d H:i:s',$time),
+											'create_at'=>$createAt,
 											'update_at'=>date('Y-m-d H:i:s',$time),
 											'type'=>3,
 											'logid'=>$logid,
@@ -301,7 +302,7 @@ class  CrontabController extends Controller
 						$statictsArr = array(
 								'lid'=>$lid,
 								'dpid'=>$dpid,
-								'create_at'=>date('Y-m-d H:i:s',$time),
+								'create_at'=>$createAt,
 								'update_at'=>date('Y-m-d H:i:s',$time),
 								'type'=>$sttype,
 								'material_id'=>$id,
