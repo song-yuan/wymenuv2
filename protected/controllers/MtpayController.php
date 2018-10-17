@@ -22,7 +22,7 @@ class MtpayController extends Controller
 
 	public function actionMtwappayresult(){
 		$data = file_get_contents("php://input");
-// 		Helper::writeLog('美团result'.$data);
+		Helper::writeLog('美团result'.$data);
 		$accountno = $_POST['outTradeNo'];
 		$transactionId = $_POST['transactionId'];
 		$totalFee = $_POST['totalFee'];
