@@ -1882,7 +1882,7 @@ class StatementsController extends BackendController
 		$cuponCounts = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$cuponData = array();
-		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
+		$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,c.sole_code,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
 		if($selectDpid!=$this->companyId){
 			$sql .=' and cb.used_dpid='.$selectDpid;
 		}else{
@@ -1908,6 +1908,7 @@ class StatementsController extends BackendController
 				$cuponData[$dpidcupon]['cupon_sent'] = $cuponcount;
 				$cuponData[$dpidcupon]['create_at'] = $cuponUser['create_at'];
 				$cuponData[$dpidcupon]['cupon_title'] = $cuponUser['cupon_title'];
+				$cuponData[$dpidcupon]['sole_code'] = $cuponUser['sole_code'];
 			}
 			if($cuponUser['is_used']==2){
 				if($cuponUser['used_dpid']==$cuponUser['weixin_group']){
@@ -1924,13 +1925,14 @@ class StatementsController extends BackendController
 			}
 		}
 		if($download){
-			$tableArr = array('序号','券名','创建时间','发券数量','当前店铺会员使用数量','其他店铺会员使用数量','未使用数量','过期数量');
+			$tableArr = array('序号','券名','编号','创建时间','发券数量','当前店铺会员使用数量','其他店铺会员使用数量','未使用数量','过期数量');
 			$data = array();
 			$key = 1;
 			foreach ($cuponData as $m){
 				$tempArr = array(
 						$key,
 						$m['cupon_title'],
+						$m['sole_code'],
 						$m['create_at'],
 						$m['cupon_sent'],
 						count($m['cupon_used_0']),
@@ -1963,7 +1965,7 @@ class StatementsController extends BackendController
 		$cuponId = Yii::app()->request->getParam('cuponId','');
 		$cuponName = Yii::app()->request->getParam('cuponName','');
 		
-		$sql = 'select lid,cupon_title from nb_cupon where dpid in('.$this->companyId.','.$this->company_dpid.') and delete_flag=0';
+		$sql = 'select lid,cupon_title,sole_code from nb_cupon where dpid in('.$this->companyId.','.$this->company_dpid.') and delete_flag=0 order by lid desc';
 		$cupons = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$sql = 'select count(*) as count,cupon_id from nb_cupon_branduser where dpid in('.$this->companyId.','.$this->company_dpid.') and create_at >= "'.$beginTime.' 00:00:00" and create_at <= "'.$endTime.' 23:59:59" group by cupon_id';
@@ -1971,7 +1973,7 @@ class StatementsController extends BackendController
 	
 		$cuponData = array();
 		if($cuponId){
-			$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,bu.weixin_group,com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid left join nb_company com on cb.used_dpid=com.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
+			$sql = 'select cb.lid,cb.dpid,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,c.sole_code,bu.weixin_group,com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid left join nb_company com on cb.used_dpid=com.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
 			$sql .=' and cb.cupon_id='.$cuponId;
 			if($this->company_dpid!=$this->companyId){
 				$sql .=' and cb.used_dpid='.$this->companyId;
@@ -2003,6 +2005,7 @@ class StatementsController extends BackendController
 					$cuponData[$dpidcupon]['address'] = $cuponUser['address'];
 					$cuponData[$dpidcupon]['create_at'] = $cuponUser['create_at'];
 					$cuponData[$dpidcupon]['cupon_title'] = $cuponUser['cupon_title'];
+					$cuponData[$dpidcupon]['sole_code'] = $cuponUser['sole_code'];
 				}
 				if($cuponUser['is_used']==2){
 					if($cuponUser['used_dpid']==$cuponUser['weixin_group']){
@@ -2020,7 +2023,7 @@ class StatementsController extends BackendController
 			}
 		}
 		if($download){
-			$tableArr = array('序号','店名','联系人','联系电话','联系地址	','发券数量','当前店铺会员使用数量','其他店铺会员使用数量','未使用数量','过期数量');
+			$tableArr = array('序号','店名','联系人','联系电话','联系地址	','券名','编号','发券数量','当前店铺会员使用数量','其他店铺会员使用数量','未使用数量','过期数量');
 			$data = array();
 			$key = 1;
 			foreach ($cuponData as $m){
@@ -2030,6 +2033,8 @@ class StatementsController extends BackendController
 						$m['contact_name'],
 						$m['mobile'],
 						$m['province'].$m['city'].$m['county_area'].$m['address'],
+						$m['cupon_title'],
+						$m['sole_code'],
 						$m['cupon_sent'],
 						count($m['cupon_used_0']),
 						count($m['cupon_used_1']),

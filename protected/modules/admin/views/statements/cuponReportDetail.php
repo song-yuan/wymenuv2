@@ -41,7 +41,7 @@
 							<select  class="form-control input-medium select2me" name="selectCupon" data-placeholder="请选择券名...">
 								<option value=""></option>
 								<?php foreach ($cupons as $cupon):?>
-								<option value="<?php echo $cupon['lid'];?>" <?php if($cupon['lid']==$cuponId){ echo 'selected="selected"';}?>><?php echo $cupon['cupon_title'];?></option>
+								<option value="<?php echo $cupon['lid'];?>" <?php if($cupon['lid']==$cuponId){ echo 'selected="selected"';}?>><?php echo $cupon['cupon_title'].'('.$cupon['sole_code'].')';?></option>
 								<?php endforeach;?>
 							</select>
 						</div>
@@ -69,6 +69,8 @@
 								<th><?php echo yii::t('app','联系人');?></th>
 								<th><?php echo yii::t('app','联系电话');?></th>
 								<th><?php echo yii::t('app','联系地址');?></th>
+								<th><?php echo yii::t('app','券名');?></th>
+								<th><?php echo yii::t('app','编号');?></th>
 								<th><?php echo yii::t('app','发券数量');?></th>
                                 <th><?php echo yii::t('app','当前店铺会员使用数量');?></th>
                                 <th><?php echo yii::t('app','其他店铺会员使用数量');?></th>
@@ -85,6 +87,8 @@
 								<td><?php echo $model['contact_name'];?></td>
 								<td><?php echo $model['mobile'];?></td>
 								<td><?php echo $model['province'].$model['city'].$model['county_area'].$model['address'];?></td>
+								<td><?php echo $model['cupon_title'];?></td>
+								<td><?php echo $model['sole_code'];?></td>
 								<td><?php echo $model['cupon_sent'];?></td>
 								<td><?php echo count($model['cupon_used_0']);?></td>
 								<td><?php echo count($model['cupon_used_1']);?></td>
@@ -93,7 +97,7 @@
 							</tr>
 							<?php $key++; endforeach;?>
 						<?php else:?>
-						<tr><td colspan="10">未查询到数据</td></tr>
+						<tr><td colspan="12">未查询到数据</td></tr>
 						<?php endif;?>
 						</tbody>
 					</table>

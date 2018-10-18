@@ -62,6 +62,7 @@
 							<tr>
 								<th><?php echo yii::t('app','序号');?></th>
 								<th><?php echo yii::t('app','券名');?></th>
+								<th><?php echo yii::t('app','编号');?></th>
 								<th><?php echo yii::t('app','创建时间');?></th>
 								<th><?php echo yii::t('app','发券数量');?></th>
                                 <th><?php echo yii::t('app','当前店铺会员使用数量');?></th>
@@ -76,6 +77,7 @@
 							<tr class="odd gradeX">
 								<td><?php echo $key+1;?></td>
 								<td><?php echo $model['cupon_title'];?></td>
+								<td><?php echo $model['sole_code'];?></td>
 								<td><?php echo $model['create_at'];?></td>
 								<td><?php echo $model['cupon_sent'];?></td>
 								<td><?php echo count($model['cupon_used_0']);?></td>
@@ -85,7 +87,7 @@
 							</tr>
 							<?php $key++; endforeach;?>
 						<?php else:?>
-						<tr><td colspan="8">未查询到数据</td></tr>
+						<tr><td colspan="9">未查询到数据</td></tr>
 						<?php endif;?>
 						</tbody>
 					</table>
