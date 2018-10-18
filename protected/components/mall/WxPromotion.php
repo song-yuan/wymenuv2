@@ -45,6 +45,10 @@ class WxPromotion
 					continue;
 				}
 			}
+			if(!self::checkDayTime($results['weekday'],$results['day_begin'],$results['day_end'])){
+				continue;
+			}
+			
 			if($result['is_set'] > 0){
 				//套餐	
 				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
@@ -124,6 +128,9 @@ class WxPromotion
 				if(empty($promotionUser)){
 					continue;
 				}
+			}
+			if(!self::checkDayTime($results['weekday'],$results['day_begin'],$results['day_end'])){
+				continue;
 			}
 			if($result['is_set'] > 0){
 				//套餐
@@ -301,6 +308,26 @@ class WxPromotion
 		 				return true;
 		 			}
 	 			}
+	 		}
+	 	}
+	 	return false;
+	 }
+	 /**
+	  * 检查活动当天时间
+	  * 是否有效
+	  */
+	 public static function checkDayTime($weekday,$daybegin,$dayend){
+	 	$week = date('w');
+	 	if($week==0){
+	 		$week = 7;
+	 	}
+	 	$weekdayArr = explode(',',$weekday);
+	 	if(in_array($week, $weekdayArr)){
+	 		$time = date('H:i');
+	 		$proBegin = date('H:i',strtotime($daybegin));
+	 		$proEnd = date('H:i',strtotime($dayend));
+	 		if($proEnd >= $time&&$time >= $proBegin){
+	 			return true;
 	 		}
 	 	}
 	 	return false;
