@@ -150,9 +150,9 @@ class MtOrder
 				'timestamp'=>$timestamp,
 		);
 		$resInser = Yii::app()->db->createCommand()->insert('nb_meituan_token',$inserData);
-		$sql = "update nb_meituan_token set delete_flag=1 where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId;
+		$sql = "update nb_meituan_token set delete_flag=1 where type=1 and dpid=".$ePoiId." and ePoiId=".$ePoiId.' and timestamp<"'.$timestamp.'"';
 		$res = Yii::app()->db->createCommand($sql)->execute();
-		if($res){
+		if($resInser){
 			return '{"data":"success"}';
 		}
 		return '{"data":"error"}';

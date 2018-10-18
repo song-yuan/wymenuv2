@@ -16,7 +16,7 @@
 		$closeShop = true;
 	}else{
 		$currentTime = date('H:i');
-		if($this->type==6){
+		if($this->type==6||$this->type==1){
 			if($this->company['sale_type']==3){
 				$closeShop = true;
 			}

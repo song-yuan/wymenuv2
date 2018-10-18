@@ -29,6 +29,8 @@ class WxPromotion
 			$orderType = 2;
 		}elseif($this->type == '2'){
 			$orderType = 3;
+		}else{
+			$orderType = 2;
 		}
 		$sql = 'select t.*,t1.promotion_title,t1.promotion_abstract,t1.main_picture,t1.to_group,t1.can_cupon,t1.group_id,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and t1.is_available like "%'.$orderType.'%" and t.delete_flag=0 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':now',$now)->queryAll();
@@ -108,6 +110,8 @@ class WxPromotion
 			$orderType = 2;
 		}elseif($this->type == '2'){
 			$orderType = 3;
+		}else{
+			$orderType = 2;
 		}
 		$sql = 'select t.*,t1.promotion_title,t1.promotion_abstract,t1.main_picture,t1.to_group,t1.can_cupon,t1.group_id,t1.begin_time,t1.end_time,t1.weekday,t1.day_begin,t1.day_end,t1.order_num as all_order_num from nb_buysent_promotion_detail t,nb_buysent_promotion t1 where t.buysent_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.begin_time <= :now and t1.end_time >= :now and t1.is_available like "%'.$orderType.'%" and t.delete_flag=0 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':now',$now)->queryAll();

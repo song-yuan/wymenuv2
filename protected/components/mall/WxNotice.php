@@ -1,17 +1,11 @@
 <?php 
 /**
- * 
- * 
- * 获取单品口味
- * 
- * 
+ * 公告
  */
 class WxNotice
 {
 	/**
-	 * 
-	 * 获取全单的口味
-	 * 
+	 * 获取公告
 	 */
 	public static function getNotice($dpid,$type,$userType){
 		$sql = 'select * from nb_announcement where dpid=:dpid and type=:type and use_type=:useType and delete_flag=0';
