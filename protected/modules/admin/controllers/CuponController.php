@@ -90,7 +90,7 @@ class CuponController extends BackendController
 
             $code=new Sequence("cupon_code");
             $codeid = $code->nextval();
-            $model->sole_code = Common::getCode($this->companyId,$lid,$codeid);
+            $model->sole_code = date('Ymd').$codeid;
 			$model->source='0';
             if(Yii::app()->user->role < 11){
             	$model->type_dpid = '0';

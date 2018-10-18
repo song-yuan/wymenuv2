@@ -15,13 +15,13 @@
 }
 .cupon_list{
     width: 230px;
-    height:175px;
+    height:195px;
     margin-top: 5px;
     margin-right: 23px;
     float: left;
 }
 .cupon_item{
-    height: 140px;
+    height: 160px;
     border-radius: 5px;
     border:1px dashed white;
     background-color: #EEA2AD;
@@ -117,6 +117,7 @@
                          </div>
                          <div class="min_date">
                              <div><?php echo $model->cupon_title;?> </div>
+                             <div>编号:<?php echo $model->sole_code;?> </div>
                              <div class="min">满
                                  <span>
                                  <?php echo floor($model->min_consumer);?>
