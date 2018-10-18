@@ -45,7 +45,7 @@ class WxPromotion
 					continue;
 				}
 			}
-			if(!self::checkDayTime($results['weekday'],$results['day_begin'],$results['day_end'])){
+			if(!self::checkDayTime($result['weekday'],$result['day_begin'],$result['day_end'])){
 				continue;
 			}
 			
@@ -129,7 +129,7 @@ class WxPromotion
 					continue;
 				}
 			}
-			if(!self::checkDayTime($results['weekday'],$results['day_begin'],$results['day_end'])){
+			if(!self::checkDayTime($result['weekday'],$result['day_begin'],$result['day_end'])){
 				continue;
 			}
 			if($result['is_set'] > 0){
