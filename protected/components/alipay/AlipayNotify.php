@@ -170,39 +170,9 @@ class AlipayNotify {
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		
-		WxOrder::insertOrderPay($order,2,'');
-		//修改订单状态
-		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
-		//修改订单产品状态
-		WxOrder::updateOrderProductStatus($orderIdArr[0],$orderIdArr[1]);
-		//修改座位状态
-		if($order['order_type']==1){
-			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-		}
-		// 消耗原材料库存
-		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
-		foreach($orderProducts as $product){
-			$productBoms = DataSyncOperation::getBom($order['dpid'], $product['product_id']);
-			if(!empty($productBoms)){
-				foreach ($productBoms as $bom){
-					$stock = $bom['number']/$bom['unit_ratio'];
-					DataSyncOperation::updateMaterialStock($order['dpid'],$bom['material_id'],$stock,1);
-				}
-			}
-		}
-		//发送模板消息通知
-		$company = WxCompany::get($orderIdArr[1]);
-		$data = array(array(
-				'touser'=>$openId,
-				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'],'orderDpid'=>$order['dpid'])),
-				'first'=>'您好，您已成功支付订单',
-				'keyword1'=>$order['account_no'],
-				'keyword2'=>$order['should_total'].'元',
-				'keyword3'=>$company['company_name'],
-				'keyword4'=>date('Y-m-d H:i:s',time()),
-				'remark'=>'已收到订单~请耐心等候~'
-		));
-		new WxMessageTpl($order['dpid'],0,$data);
+		//orderpay表插入数据
+		WxOrder::insertOrderPay($order,2,$data["out_trade_no"]);
+		WxOrder::dealOrder($brandUser, $order);
 	}
 }
 ?>
