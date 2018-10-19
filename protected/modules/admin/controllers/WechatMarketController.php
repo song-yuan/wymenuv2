@@ -287,6 +287,26 @@ class WechatMarketController extends BackendController {
 						}
 						$sql = rtrim($sql,',');
 						$db->createCommand($sql)->execute();
+						
+						// 查询 要发送消息的会员的openId
+						$leftuidStr = join(',', $leftUserIds);
+						$sql = 'select openid from nb_brand_user where lid in('.$leftuidStr.')';
+						$openids = $db->createCommand($sql)->queryColumn();
+						$data = array();
+						foreach ($openids as $openid){
+							$dataTemp = array(
+									'touser'=>$openId,
+									'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
+									'first'=>'现金券已发放到账户',
+									'keyword1'=>$cupons['cupon_money'].'元现金券一张',
+									'keyword2'=>'商家赠送',
+									'keyword3'=>$colseday,
+									'keyword4'=>'点餐下单时,选择现金券即可使用',
+									'remark'=>'如果有任何疑问,请到店里咨询'
+							);
+							array_push($data, $dataTemp);
+						}
+						new WxMessageTpl($dpid, 1, $data);
 					}
 				}
 			}

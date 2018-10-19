@@ -158,8 +158,6 @@ class Cupon extends CActiveRecord
 	 * 发放代金券
 	 */
 	public static function sentCupon($dpid,$userId,$cuponmoney,$cuponmemo,$closeDay,$source,$openId){
-		$company = WxCompany::get($dpid);
-		
 		if($source==0){
 			$sourceStr = '活动领取';
 		}elseif($source==1){
@@ -167,7 +165,7 @@ class Cupon extends CActiveRecord
 		}else{
 			$sourceStr = '商家赠送';
 		}
-		$data = array(
+		$data = array(array(
 				'touser'=>$openId,
 				'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
 				'first'=>'现金券已经领取成功',
@@ -175,9 +173,9 @@ class Cupon extends CActiveRecord
 				'keyword2'=>$sourceStr,
 				'keyword3'=>$closeDay,
 				'keyword4'=>$cuponmemo,
-				'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['telephone'].'咨询'
-		);
-		new WxMessageTpl($dpid,$userId,1,$data);
+				'remark'=>'如果有任何疑问,请到店里咨询'
+		));
+		new WxMessageTpl($dpid,1,$data);
 	
 
 	}

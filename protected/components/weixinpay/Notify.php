@@ -111,7 +111,7 @@ class Notify extends WxPayNotify
 		WxOrder::dealOrder($brandUser, $order);
 		//发送模板消息通知
 		$company = WxCompany::get($orderIdArr[1]);
-		$data = array(
+		$data = array(array(
 				'touser'=>$openId,
 				'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$orderIdArr[1],'orderId'=>$order['lid'],'orderDpid'=>$order['dpid'])),
 				'first'=>'您好，您已成功支付订单',
@@ -120,7 +120,7 @@ class Notify extends WxPayNotify
 				'keyword3'=>$company['company_name'],
 				'keyword4'=>date('Y-m-d H:i:s',time()),
 				'remark'=>'已收到订单~请耐心等候~'
-		);
-		new WxMessageTpl($order['dpid'],$order['user_id'],0,$data);
+		));
+		new WxMessageTpl($order['dpid'],0,$data);
 	}
 }
