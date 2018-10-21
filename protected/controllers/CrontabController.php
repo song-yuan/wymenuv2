@@ -21,7 +21,7 @@ class  CrontabController extends Controller
 				$dpid = $sync['dpid'];
 				$orderData = $sync['content'];
 				$result = WxRedis::pushOrder($dpid, $orderData);
-				if($res){
+				if($result){
 					DataSyncOperation::delSyncFailure($lid,$dpid);
 				}
 			}
