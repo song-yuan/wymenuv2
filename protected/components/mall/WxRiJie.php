@@ -562,6 +562,7 @@ class WxRiJie
 			try
 			{
 				foreach ($sqlArr as $sql){
+					echo '<meta charset="utf8">';
 					echo $sql;
 					$db->createCommand($sql)->execute();
 				}
