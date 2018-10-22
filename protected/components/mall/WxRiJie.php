@@ -550,7 +550,7 @@ class WxRiJie
 					$se = new Sequence("stock_taking_statistics");
 					$lid = $se->nextval();
 					$sql = 'insert into nb_stock_taking_statistics (lid,dpid,create_at,update_at,type,material_id,sales_name,stock_taking_id,prestock_taking_num,stockin_num,stockin_price,damage_num,damage_price,salse_num,salse_price,total_num,system_num,stock_taking_num,stock_taking_difnum,stock_taking_difprice)'.
-							' VALUES ('.$lid.','.$dpid.',"'.$createAt.'","'.date('Y-m-d H:i:s',$time).'",'.$sttype.','.$id.','.$salesName.','.$logid.','.$presystemNum.','.$stockinNum.','.$stockinPrice.','.$damageNum.','.$damagePrice.','.$salseNum.','.$salsePrice.','.$totalNum.','.$systemNum.','.$nowNum.','.$difference.','.$diffPrice.')';
+							' VALUES ('.$lid.','.$dpid.',"'.$createAt.'","'.date('Y-m-d H:i:s',$time).'",'.$sttype.','.$id.',"'.$salesName.'",'.$logid.','.$presystemNum.','.$stockinNum.','.$stockinPrice.','.$damageNum.','.$damagePrice.','.$salseNum.','.$salsePrice.','.$totalNum.','.$systemNum.','.$nowNum.','.$difference.','.$diffPrice.')';
 					array_push($sqlArr, $sql);
 	
 				}
