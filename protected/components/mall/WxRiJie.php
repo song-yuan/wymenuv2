@@ -557,7 +557,7 @@ class WxRiJie
 			}
 			$sql = 'update nb_stock_taking set status=1 where lid='.$logid.' and dpid='.$dpid;
 			array_push($sqlArr, $sql);
-			
+			var_dump($sqlArr);
 			$transaction = $db->beginTransaction();
 			try
 			{
