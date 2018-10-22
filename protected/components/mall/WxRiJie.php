@@ -567,7 +567,7 @@ class WxRiJie
 				$transaction->commit();
 			}catch (Exception $e) {
 				$transaction->rollback(); //如果操作失败, 数据回滚
-				echo $e->getMessage();
+				Helper::writeLog('盘点失败:'.$e->getMessage());
 			}
 		}
 	}
