@@ -458,7 +458,7 @@ class WxRiJie
 						$se = new Sequence("material_stock_log");
 						$lid = $se->nextval();
 						$sql = 'insert into nb_material_stock_log (lid,dpid,create_at,update_at,type,logid,material_id,stock_num,original_num,unit_price,resean)'.
-							   ' values ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.$difference.','.$systemNum.','.$unit_price.',"盘点溢出")';
+							   ' VALUES ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.$difference.','.$systemNum.','.$unit_price.',"盘点溢出")';
 						array_push($sqlArr, $sql);
 					}else{
 						//盘点库存小于系统的库存  查出所有库存不为0批次
@@ -489,7 +489,7 @@ class WxRiJie
 							$se = new Sequence("material_stock_log");
 							$lid = $se->nextval();
 							$sql = 'insert into nb_material_stock_log (lid,dpid,create_at,update_at,type,logid,material_id,stock_num,original_num,unit_price,resean)'.
-									' values ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.$difference.','.$systemNum.','.$unit_price.',"盘点损失")';
+									' VALUES ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.$difference.','.$systemNum.','.$unit_price.',"盘点损失")';
 							array_push($sqlArr, $sql);
 						}
 							
@@ -528,7 +528,7 @@ class WxRiJie
 									$se = new Sequence("material_stock_log");
 									$lid = $se->nextval();
 									$sql = 'insert into nb_material_stock_log (lid,dpid,create_at,update_at,type,logid,material_id,stock_num,original_num,unit_price,resean)'.
-											' values ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.(-$changestock).','.$stockori.','.$unit_price.',"盘点损失")';
+											' VALUES ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.(-$changestock).','.$stockori.','.$unit_price.',"盘点损失")';
 									array_push($sqlArr, $sql);
 								}
 								break;
@@ -540,7 +540,7 @@ class WxRiJie
 								$se = new Sequence("material_stock_log");
 								$lid = $se->nextval();
 								$sql = 'insert into nb_material_stock_log (lid,dpid,create_at,update_at,type,logid,material_id,stock_num,original_num,unit_price,resean)'.
-										' values ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.(-$stockori).','.$stockori.','.$unit_price.',"盘点损失")';
+										' VALUES ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).',3,'.$logid.','.$id.','.(-$stockori).','.$stockori.','.$unit_price.',"盘点损失")';
 								array_push($sqlArr, $sql);
 							}
 						}
@@ -550,7 +550,7 @@ class WxRiJie
 					$se = new Sequence("stock_taking_statistics");
 					$lid = $se->nextval();
 					$sql = 'insert into nb_stock_taking_statistics (lid,dpid,create_at,update_at,type,material_id,sales_name,stock_taking_id,prestock_taking_num,stockin_num,stockin_price,damage_num,damage_price,salse_num,salse_price,total_num,system_num,stock_taking_num,stock_taking_difnum,stock_taking_difprice)'.
-							' values ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).','.$sttype.','.$id.','.$salesName.','.$logid.','.$presystemNum.','.$stockinNum.','.$stockinPrice.','.$damageNum.','.$damagePrice.','.$salseNum.','.$salsePrice.','.$totalNum.','.$systemNum.','.$nowNum.','.$difference.','.$diffPrice.')';
+							' VALUES ('.$lid.','.$dpid.','.$createAt.','.date('Y-m-d H:i:s',$time).','.$sttype.','.$id.','.$salesName.','.$logid.','.$presystemNum.','.$stockinNum.','.$stockinPrice.','.$damageNum.','.$damagePrice.','.$salseNum.','.$salsePrice.','.$totalNum.','.$systemNum.','.$nowNum.','.$difference.','.$diffPrice.')';
 					array_push($sqlArr, $sql);
 	
 				}
@@ -562,8 +562,6 @@ class WxRiJie
 			try
 			{
 				foreach ($sqlArr as $sql){
-					echo '<meta charset="utf8">';
-					echo $sql;
 					$db->createCommand($sql)->execute();
 				}
 				$transaction->commit();
