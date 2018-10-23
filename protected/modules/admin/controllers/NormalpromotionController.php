@@ -135,12 +135,8 @@ class NormalpromotionController extends BackendController
 	public function actionUpdate(){
 		
 		$lid = Yii::app()->request->getParam('lid');
-		//echo 'ddd';
-		//$groupID = Yii::app()->request->getParam('str');
-		//var_dump($groupID);exit;
 		$brdulvs = $this->getBrdulv();
 		$model = NormalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$is_sync = DataSync::getInitSync();
 		
 		$modeldpid = Company::model()->find('dpid=:dpid', array(':dpid'=> $this->companyId));
@@ -150,15 +146,6 @@ class NormalpromotionController extends BackendController
 		$userlvs = $command->queryAll();
 		
 		$model->is_available =explode(',',$model->is_available);
-		//var_dump($userlvs);exit;
-		//$db = Yii::app()->db;
-// 		$transaction = $db->beginTransaction();
-// 		try
-// 		{
-		if(Yii::app()->user->role >=11){
-			Yii::app()->user->setFlash('error' , yii::t('app','总部审核后无法修改...'));
-			$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId));
-		}
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
@@ -173,7 +160,6 @@ class NormalpromotionController extends BackendController
 			if(!empty($groupID)){
 				
 				$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
-				//$sql = 'update nb_normal_branuser set delete_flag = "1",is_sync ="'.$is_sync.'" where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
