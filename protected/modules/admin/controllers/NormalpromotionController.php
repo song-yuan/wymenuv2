@@ -145,13 +145,24 @@ class NormalpromotionController extends BackendController
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
 		
-		$model->is_available =explode(',',$model->is_available);
 		if(Yii::app()->request->isPostRequest) {
 			if(Yii::app()->user->role > User::SHOPKEEPER) {
 				Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId)) ;
 			}
-			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
+			$postData = Yii::app()->request->getPost('NormalPromotion');
+			if(Yii::app()->user->role == User::SHOPKEEPER){
+				$is_available = $model->is_available;
+			}else{
+				$isavaArr = $postData['is_available'];
+				if(empty($isavaArr)){
+					$is_available = 0;
+				}else{
+					$is_available = join(',', $isavaArr);
+				}
+			}
+			$postData['is_available'] = $is_available;
+			$model->attributes = $postData;
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$weekdayID = Yii::app()->request->getParam('weekday');
 			$gropids = array();
@@ -191,13 +202,6 @@ class NormalpromotionController extends BackendController
 			$model->update_at=date('Y-m-d H:i:s',time());
 			$model->weekday = $weekdayID;
 			$model->is_sync=$is_sync;
-			$s = $model->is_available;
-			if(!empty($s)){
-				$st = implode(",",$s);
-			}else{
-				$st = 0;
-			}
-			$model->is_available = $st;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId));
