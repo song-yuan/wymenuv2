@@ -154,7 +154,7 @@ class NormalpromotionController extends BackendController
 			$isavaArr = $postData['is_available'];
 			if(Yii::app()->user->role == User::SHOPKEEPER){
 				$is_available = $model->is_available;
-				if($is_available!=0&&$is_available!=1){
+				if($is_available!='0'&&$is_available!='1'){
 					$isavaArr = explode(',', $is_available);
 				}
 			}
