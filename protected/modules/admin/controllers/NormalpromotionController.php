@@ -211,6 +211,7 @@ class NormalpromotionController extends BackendController
 			}
 				//return true;
 		}
+		$model->is_available = explode(',', $model->is_available);
 		$this->render('update' , array(
 				'model'=>$model,
 				'source'=>$model->source,
