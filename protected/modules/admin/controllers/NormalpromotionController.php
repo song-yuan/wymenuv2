@@ -151,16 +151,18 @@ class NormalpromotionController extends BackendController
 				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId)) ;
 			}
 			$postData = Yii::app()->request->getPost('NormalPromotion');
+			$isavaArr = $postData['is_available'];
 			if(Yii::app()->user->role == User::SHOPKEEPER){
-				$is_available = $model->is_available;
-			}else{
-				$isavaArr = $postData['is_available'];
-				if(empty($isavaArr)){
-					$is_available = 0;
-				}else{
-					$is_available = join(',', $isavaArr);
+				if($is_available!=0&&$is_available!=1){
+					$isavaArr = explode(',', $model->is_available);
 				}
 			}
+			if(empty($isavaArr)){
+				$is_available = 0;
+			}else{
+				$is_available = join(',', $isavaArr);
+			}
+			
 			$postData['is_available'] = $is_available;
 			$model->attributes = $postData;
 			$groupID = Yii::app()->request->getParam('hidden1');
