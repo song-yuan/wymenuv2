@@ -128,11 +128,7 @@
 									} ?>
 								</td>
 								<td class="center">
-								<?php if($model->is_available == '2'&&Yii::app()->user->role >=11):?>
-								<a><?php echo yii::t('app','总部审核后无法编辑修改');?></a>
-								<?php else:?>
-								<a href="<?php echo $this->createUrl('normalpromotion/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-								<?php endif;?>
+									<a href="<?php echo $this->createUrl('normalpromotion/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('normalpromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product','code'=>$model->normal_code,'source'=>$model->source));?>"><?php echo yii::t('app','设置活动优惠产品');?></a></td>
