@@ -8,6 +8,7 @@
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','店铺设置');?></div>
 				</div>
 				<div class="portlet-body clearfix">
+				<?php if($role != 8):?>
 				<div class="panel_body row">
                 	<p>店铺管理</p>
 	                <div style="display: none;" class="list col-sm-3 col-xs-12">
@@ -50,6 +51,7 @@
 					<?php endif;?>
 					
                 </div>
+                <?php endif;?>
 				<div class="panel_body row">
                 	<p>店铺设置</p>
                 	
@@ -67,15 +69,16 @@
 	                </div>
 	                <?php if($role <=9):?>
 	                <div class="list col-sm-3 col-xs-12">
-						<a href="<?php echo $this->createUrl('poscode/index',array('companyId'=>$this->companyId));?>">
-		                <div class="list_big"><i class="fa fa-cny"></i> 收银机设置</div>
-		                <div class="list_small">添加及查询收银机序列号</div>
-		                </a> 
-	                </div>
-	                <div class="list col-sm-3 col-xs-12">
 						<a href="<?php echo $this->createUrl('copyScreen/index',array('companyId'=>$this->companyId));?>">
 		                <div class="list_big"><i class="fa fa-cloud-download"></i> 双屏下发</div>
 		                <div class="list_small">总部用来下发双屏机器客显界面的宣传广告图</div>
+		                </a> 
+	                </div>
+	                <?php if($role !=8):?>
+	                <div class="list col-sm-3 col-xs-12">
+						<a href="<?php echo $this->createUrl('poscode/index',array('companyId'=>$this->companyId));?>">
+		                <div class="list_big"><i class="fa fa-cny"></i> 收银机设置</div>
+		                <div class="list_small">添加及查询收银机序列号</div>
 		                </a> 
 	                </div>
 	                <div class="list col-sm-3 col-xs-12">
@@ -109,7 +112,7 @@
 		                </a> 
 	                </div>
 	               <?php endif;?>
-	               
+	               <?php endif;?>
                 </div>	
                 <?php if($role <=1):?>
                 <div class="panel_body row">
