@@ -7,12 +7,14 @@
                 <div class="sidebar-toggler hidden-phone"></div>
                 <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
             </li>
+            <!-- 
             <li class="<?php if(Yii::app()->controller->id == 'home') echo 'active';?>">
                 <a href="<?php echo $this->createUrl('home/index',array('companyId' => $this->companyId));?>">
                     <i class="fa fa-home"></i> 
                     <span class="title"><?php echo yii::t('app','首页');?></span>					
                  </a>
             </li>
+            -->
 	   <?php if(Yii::app()->user->role !=10):?>
 	   <?php if($this->comptype != 2 && Yii::app()->user->role <= '15' && Yii::app()->user->role !='4'): ?>
         <?php if(Yii::app()->user->role != '8'): ?>
