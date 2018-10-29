@@ -119,7 +119,7 @@
                                                 <label class="radio-inline">
                                                 <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['number'])) echo "checked";else echo "checked";?>> <?php echo yii::t('app','数量限制');?>
                                                 <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['number'])) echo $model['number']; else echo '1'; ?>" onfocus=" if (value =='1'){value = ''}" onblur="if (value ==''){value='1'}" >
-                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
+                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" pcode="<?php echo $model['phs_code'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
                                                  <input type="button" name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
                                                 
                                                 </label>
@@ -214,13 +214,12 @@
             return false;
             <?php endif;?>
             var vid=$(this).attr("id").substr(12,10);
+            var pcode=$(this).attr("pcode");
             var arr=document.getElementsByName("optionsRadios"+vid);
             var chx=document.getElementById("optionsCheck"+vid);
             var optid;
             var optvalue;
             var checkvalue = '1';
-            var cid = $(this).val();
-            //alert(chx);
 			var promotionID='<?php echo $promotionID;?>';
             for(var i=0;i<arr.length;i++)
             {
@@ -229,37 +228,29 @@
                    optid=arr[i].value;
                 }
             }
-            if(optid=="0")
-            	{
+            if(optid=="0"){
                 optvalue= $("#idleftnum0"+vid).val();
                 if(optvalue<'0'){
                 	alert("<?php echo yii::t('app','优惠数值应大于0！！！'); ?>")
                 	return false;
-                    }
-            }else if(optid=="1")
-                {
-            	optvalue= $("#idleftnum1"+vid).val();
-           	 if(optvalue>'1'||optvalue<'0'){
-              	alert("<?php echo yii::t('app','折扣数值应小于1大于0！！！'); ?>")
-              	return false;
                   }
+            }else if(optid=="1"){
+            	optvalue= $("#idleftnum1"+vid).val();
+           	 	if(optvalue>'1'||optvalue<'0'){
+              		alert("<?php echo yii::t('app','折扣数值应小于1大于0！！！'); ?>")
+              		return false;
                 }
-			//if(chx.checked)
-			//	{
-				checkvalue= $("#checknum"+vid).val();
-			
+             }
+			checkvalue= $("#checknum"+vid).val();
             $.ajax({
                         type:'GET',
- 			url:"<?php echo $this->createUrl('fullSentPromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
- 			async: false,
- 			//data:"companyId="+company_id+'&padId='+pad_id,
+			 			url:"<?php echo $this->createUrl('fullSentPromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/pcode/"+pcode+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid,
+			 			async: false,
                         cache:false,
                         dataType:'json',
- 			success:function(msg){
-                            //alert(msg.status);
+ 						success:function(msg){
                             if(msg.status=="success")
                             {
-                                //alert(msg.msg)
                                 alert("<?php echo yii::t('app','成功'); ?>");
                                 
                                 location.reload();
@@ -267,11 +258,11 @@
                                 alert("<?php echo yii::t('app','失败'); ?>"+"1");
                                 location.reload();
                             }
- 			},
+ 						},
                         error:function(){
- 				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
- 			},
- 		});
+			 				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+	 					},
+ 			});
         });
 
         $(".clear_red").on("click",function(){

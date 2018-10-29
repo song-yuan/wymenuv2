@@ -5,14 +5,6 @@
 	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>"></script>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>"></script>
 
-
-
-
-<!-- 		<script type="text/javascript" src="metronic/plugins/select2/select2.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/select2/select2_metro.css" />
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/select2/inserthtml.com.radios.css" />
-		<script src="metronic/plugins/bootbox/bootbox.min.js" type="text/javascript" ></script>
-		 --><!-- END SIDEBAR -->
 		<!-- BEGIN PAGE -->
 <style>
 	.modal-dialog{
@@ -67,6 +59,10 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','买送活动');?></div>
 					<div class="actions">
+						<?php if(Yii::app()->user->role <11):?>
+						<a href="<?php echo $this->createUrl('copypromotion/copybuysentpromotion' , array('companyId' => $this->companyId));?>" class="btn yellow"><i class="fa fa-pencil"></i> <?php echo yii::t('app','进入下发');?></a>
+						<a href="<?php echo $this->createUrl('copypromotion/clearbuysentpromotion' , array('companyId' => $this->companyId));?>" class="btn red"><i class="fa fa-pencil"></i> <?php echo yii::t('app','清除下发');?></a>
+						<?php endif;?>
 						<a href="<?php echo $this->createUrl('buysentpromotion/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加买送活动');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除活动');?></button>

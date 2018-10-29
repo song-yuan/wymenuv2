@@ -10,13 +10,6 @@
         }
     </style>
 
-
-
-<!-- 		<script type="text/javascript" src="metronic/plugins/select2/select2.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/select2/select2_metro.css" />
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/select2/inserthtml.com.radios.css" />
-		<script src="metronic/plugins/bootbox/bootbox.min.js" type="text/javascript" ></script>
-		 --><!-- END SIDEBAR -->
 		<!-- BEGIN PAGE -->
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -48,7 +41,7 @@
 		<div class="row">
 		<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'fullSentPromotion-form',
-				'action' => $this->createUrl('fullSentPromotion/delete' , array('companyId' => $this->companyId,)),
+				'action' => $this->createUrl('fullMinusPromotion/delete' , array('companyId' => $this->companyId,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -57,24 +50,16 @@
 		)); ?>
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
-			<ul class="nav nav-tabs">
-				<!-- <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('fullSentPromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','满送优惠');?></a></li>-->
-				<!--<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('fullMinusPromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','满减优惠');?></a></li>
-                                <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('gift/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','礼品券');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信卡券');?></a></li>-->
-			</ul>
-		
 			<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','满减优惠活动');?></div>
 					<div class="actions">
-					<!-- <p><input type="text" name="datetime" class="ui_timepicker" value=""></p> -->
+						<?php if(Yii::app()->user->role <11):?>
+						<a href="<?php echo $this->createUrl('copypromotion/copyfullminuspromotion' , array('companyId' => $this->companyId));?>" class="btn yellow"><i class="fa fa-pencil"></i> <?php echo yii::t('app','进入下发');?></a>
+						<a href="<?php echo $this->createUrl('copypromotion/clearfullminuspromotion' , array('companyId' => $this->companyId));?>" class="btn red"><i class="fa fa-pencil"></i> <?php echo yii::t('app','清除下发');?></a>
+						<?php endif;?>
 						<a href="<?php echo $this->createUrl('fullMinusPromotion/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加满减优惠活动');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除活动');?></button>

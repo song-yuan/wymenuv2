@@ -56,46 +56,21 @@
 		)); ?>
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
-			<ul class="nav nav-tabs">
-				<!-- <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>-->
-				<!--<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('fullSentPromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','满送优惠');?></a></li>-->
-				<!-- <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('fullMinusPromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','满减优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('gift/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','礼品券');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信卡券');?></a></li>-->
-			</ul>
-		
 			<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','满送优惠活动');?></div>
 					<div class="actions">
-					<!-- <p><input type="text" name="datetime" class="ui_timepicker" value=""></p> -->
+						<?php if(Yii::app()->user->role <11):?>
+						<a href="<?php echo $this->createUrl('copypromotion/copyfullsentpromotion' , array('companyId' => $this->companyId));?>" class="btn yellow"><i class="fa fa-pencil"></i> <?php echo yii::t('app','进入下发');?></a>
+						<a href="<?php echo $this->createUrl('copypromotion/clearfullsentpromotion' , array('companyId' => $this->companyId));?>" class="btn red"><i class="fa fa-pencil"></i> <?php echo yii::t('app','清除下发');?></a>
+						<?php endif;?>
 						<a href="<?php echo $this->createUrl('fullSentPromotion/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加满送优惠活动');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除活动');?></button>
 						</div>
 					</div>
-					<!-- <div class="btn-group">
-							 <input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
-					</div>
-                    <div class="btn-group">
-				
-						<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo ""; ?>">  
-							<span class="input-group-addon">~</span>
-							   <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo "";?>">           
-						</div>  
-			         </div>	
-					
-					    <div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<!--  <a href="#" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打 印');?></a>		  --
-					    </div>		 -->
-					
 				</div>
 				<div class="portlet-body" id="table-manage">
 				<div class="dataTables_wrapper form-inline">
