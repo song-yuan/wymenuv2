@@ -45,7 +45,7 @@ function fun()
 	<div class="row">
 		<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'copyproduct-form',
-				'action' => $this->createUrl('copypromotion/storfullsent' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('copypromotion/storbuysent' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
