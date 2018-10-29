@@ -651,18 +651,18 @@ class CopypromotionController extends BackendController
 		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
 		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
 		$ckc = Yii::app()->request->getParam('ckc');//判断是否清除以前的活动
-		$buysentcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$buycodes = explode(',',$codes);//接收活动编码,总部唯一
 		$dpids = explode(',',$dpid);//接收店铺的dpid
 	
 		$msg = '';
 		$db = Yii::app()->db;
-		foreach ($buycodes as $buylcode){
-			$sql = 'select * from nb_buysent_promotion where dpid='.$companyId.' and sole_code="'.$fullcode.'" and delete_flag=0';
+		foreach ($buycodes as $buycode){
+			$sql = 'select * from nb_buysent_promotion where dpid='.$companyId.' and sole_code="'.$buycode.'" and delete_flag=0';
 			$buysent = $db->createCommand($sql)->queryRow();
 			if($buysent){
 				$sql = 'select * from nb_buysent_promotion_detail where dpid='.$companyId.' and buysent_pro_id='.$buysent['lid'].' and delete_flag=0';
 				$fullsentDetails = $db->createCommand($sql)->queryAll();
-				$buysql = 'INSERT INTO nb_buysent_promotion (lid,dpid,create_at,update_at,sole_code,promotion_title,main_picture,promotion_abstract,promotion_memo,promotion_type,can_cupon,begin_time,end_time,weekday,day_begin,day_end,to_group,group_id,order_num,	is_available,source) VALUES ';
+				$buysql = 'INSERT INTO nb_buysent_promotion (lid,dpid,create_at,update_at,sole_code,promotion_title,main_picture,promotion_abstract,promotion_memo,promotion_type,can_cupon,begin_time,end_time,weekday,day_begin,day_end,to_group,group_id,order_num,is_available,source) VALUES ';
 				$buydetailsql = 'INSERT INTO nb_buysent_promotion_detail (lid,dpid,create_at,update_at,sole_code,buysent_pro_id,fa_sole_code,is_set,product_id,phs_code,buy_num,s_product_id,s_phs_code,sent_num,limit_num,group_no,is_available,source) VALUES ';
 				$createAt = $buysent['create_at'];
 				$updateAt = $buysent['update_at'];
@@ -691,7 +691,7 @@ class CopypromotionController extends BackendController
 					}
 					$se = new Sequence("buysent_promotion");
 					$lid = $se->nextval();
-					$fullsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$mainpicture.'","'.$proabstract.'","'.$promotionmemo.'","'.$promotiontype.'","'.$cancupon.'","'.$beginTime.'","'.$endTime.'","'.$weekday.'","'.$daybegin.'","'.$dayend.'","'.$togroup.'","'.$groupid.'","'.$ordernum.'","'.$isAvailable.'",'.$source.'),';
+					$buysql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$mainpicture.'","'.$proabstract.'","'.$promotionmemo.'","'.$promotiontype.'","'.$cancupon.'","'.$beginTime.'","'.$endTime.'","'.$weekday.'","'.$daybegin.'","'.$dayend.'","'.$togroup.'","'.$groupid.'","'.$ordernum.'","'.$isAvailable.'",'.$source.'),';
 					foreach ($fullsentDetails as $detail){
 						$pcode = $detail['phs_code'];
 						$spcode = $detail['s_phs_code'];
@@ -721,7 +721,7 @@ class CopypromotionController extends BackendController
 				}
 				$buysql = rtrim($buysql,',');
 				$buydetailsql = rtrim($buydetailsql,',');
-	
+				
 				$transaction = $db->beginTransaction();
 				try{
 					$db->createCommand($buysql)->execute();
@@ -733,12 +733,13 @@ class CopypromotionController extends BackendController
 				}
 			}
 		}
+		
 		if($msg==''){
 			Yii::app()->user->setFlash('success' , yii::t('app','下发成功！！！'));
 		}else{
 			Yii::app()->user->setFlash('error' , yii::t('app',$msg));
 		}
-		$this->redirect(array('copypromotion/copyfullsentpromotion' , 'companyId' => $companyId)) ;
+		$this->redirect(array('copypromotion/copybuysentpromotion' , 'companyId' => $companyId)) ;
 	}
 	public function actionClearstorbuysent(){
 		$companyId = $this->companyId;
