@@ -684,14 +684,14 @@ class CopypromotionController extends BackendController
 				$isAvailable = $buysent['is_available'];
 				$source = 1;
 				foreach ($dpids as $dpid){
-					$sql = 'select lid from nb_buysent_promotion_detail where dpid='.$dpid.' and sole_code="'.$soleCode.'" and source=1 and delete_flag=0';
+					$sql = 'select lid from nb_buysent_promotion where dpid='.$dpid.' and sole_code="'.$soleCode.'" and source=1 and delete_flag=0';
 					$hasbuysent = $db->createCommand($sql)->queryRow();
 					if($hasbuysent){
 						continue;
 					}
 					$se = new Sequence("buysent_promotion");
-					$lid = $se->nextval();
-					$buysql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$mainpicture.'","'.$proabstract.'","'.$promotionmemo.'","'.$promotiontype.'","'.$cancupon.'","'.$beginTime.'","'.$endTime.'","'.$weekday.'","'.$daybegin.'","'.$dayend.'","'.$togroup.'","'.$groupid.'","'.$ordernum.'","'.$isAvailable.'",'.$source.'),';
+					$buysentId = $se->nextval();
+					$buysql .= '('.$buysentId.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$mainpicture.'","'.$proabstract.'","'.$promotionmemo.'","'.$promotiontype.'","'.$cancupon.'","'.$beginTime.'","'.$endTime.'","'.$weekday.'","'.$daybegin.'","'.$dayend.'","'.$togroup.'","'.$groupid.'","'.$ordernum.'","'.$isAvailable.'",'.$source.'),';
 					foreach ($fullsentDetails as $detail){
 						$pcode = $detail['phs_code'];
 						$spcode = $detail['s_phs_code'];
@@ -709,11 +709,10 @@ class CopypromotionController extends BackendController
 							}
 						}
 						$se = new Sequence("buysent_promotion_detail");
-						$lid = $se->nextval();
+						$buysentDetailId = $se->nextval();
 						$createAt = $detail['create_at'];
 						$updateAt = $detail['update_at'];
 						$soleCode = $detail['sole_code'];
-						$buysentId = $detail['buysent_pro_id'];	
 						$fasolecode = $detail['fa_sole_code'];
 						$isset = $detail['is_set'];
 						$fproId = $detail['product_id'];
@@ -724,7 +723,7 @@ class CopypromotionController extends BackendController
 						$groupno = $detail['group_no'];
 						$isavailable = $detail['is_available'];
 						$source = 1;
-						$buydetailsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'",'.$buysentId.',"'.$fasolecode.'",'.$isset.','.$fproId.',"'.$pcode.'",'.$buynum.','.$sfproId.',"'.$spcode.'",'.$sentnum.','.$limitnum.','.$groupno.','.$isavailable.','.$source.'),';
+						$buydetailsql .= '('.$buysentDetailId.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'",'.$buysentId.',"'.$fasolecode.'",'.$isset.','.$fproId.',"'.$pcode.'",'.$buynum.','.$sfproId.',"'.$spcode.'",'.$sentnum.','.$limitnum.','.$groupno.','.$isavailable.','.$source.'),';
 					}
 				}
 				$buysql = rtrim($buysql,',');
@@ -741,7 +740,6 @@ class CopypromotionController extends BackendController
 				}
 			}
 		}
-		
 		if($msg==''){
 			Yii::app()->user->setFlash('success' , yii::t('app','下发成功！！！'));
 		}else{
