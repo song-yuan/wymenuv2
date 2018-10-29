@@ -696,18 +696,29 @@ class CopypromotionController extends BackendController
 						$pcode = $detail['phs_code'];
 						$spcode = $detail['s_phs_code'];
 						if($pcode==$spcode){
-							$sql = 'select count(lid) from nb_product where dpid='.$dpid.' and phs_code="'.$pcode.'" and delete_flag=0';
-							$count = $db->createCommand($sql)->queryScalar();
-							if($count!=1){
+							$sql = 'select lid from nb_product where dpid='.$dpid.' and phs_code="'.$pcode.'" and delete_flag=0';
+							$product = $db->createCommand($sql)->queryRow();
+							if(!$product){
 								continue;
 							}
+							$fproId = $product['lid'];
+							$sfproId = $product['lid'];
 						}else{
-							$sql = 'select count(lid) from nb_product where dpid='.$dpid.' and phs_code in("'.$pcode.'","'.$spcode.'") and delete_flag=0';
-							$count = $db->createCommand($sql)->queryScalar();
-							if($count!=2){
+							$sql = 'select lid,phs_code from nb_product where dpid='.$dpid.' and phs_code in("'.$pcode.'","'.$spcode.'") and delete_flag=0';
+							$products = $db->createCommand($sql)->queryAll();
+							if(count($products)!=2){
 								continue;
+							}
+							foreach ($products as $product){
+								if($pcode==$product['phs_code']){
+									$fproId = $product['lid'];
+								}
+								if($spcode==$product['phs_code']){
+									$sfproId = $product['lid'];
+								}
 							}
 						}
+						
 						$se = new Sequence("buysent_promotion_detail");
 						$buysentDetailId = $se->nextval();
 						$createAt = $detail['create_at'];
@@ -715,9 +726,7 @@ class CopypromotionController extends BackendController
 						$soleCode = $detail['sole_code'];
 						$fasolecode = $detail['fa_sole_code'];
 						$isset = $detail['is_set'];
-						$fproId = $detail['product_id'];
 						$buynum = $detail['buy_num'];
-						$sfproId = $detail['s_product_id'];
 						$sentnum = $detail['sent_num'];
 						$limitnum = $detail['limit_num'];
 						$groupno = $detail['group_no'];
