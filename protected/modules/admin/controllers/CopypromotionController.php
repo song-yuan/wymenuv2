@@ -695,10 +695,18 @@ class CopypromotionController extends BackendController
 					foreach ($fullsentDetails as $detail){
 						$pcode = $detail['phs_code'];
 						$spcode = $detail['s_phs_code'];
-						$sql = 'select count(lid) from nb_product where dpid='.$dpid.' and phs_code in("'.$pcode.'","'.$spcode.'") and delete_flag=0';
-						$count = $db->createCommand($sql)->queryScalar();
-						if($count!=2){
-							continue;
+						if($pcode==$spcode){
+							$sql = 'select count(lid) from nb_product where dpid='.$dpid.' and phs_code="'.$pcode.'" and delete_flag=0';
+							$count = $db->createCommand($sql)->queryScalar();
+							if($count!=1){
+								continue;
+							}
+						}else{
+							$sql = 'select count(lid) from nb_product where dpid='.$dpid.' and phs_code in("'.$pcode.'","'.$spcode.'") and delete_flag=0';
+							$count = $db->createCommand($sql)->queryScalar();
+							if($count!=2){
+								continue;
+							}
 						}
 						$se = new Sequence("buysent_promotion_detail");
 						$lid = $se->nextval();
