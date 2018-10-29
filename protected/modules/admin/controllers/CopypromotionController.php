@@ -737,7 +737,7 @@ class CopypromotionController extends BackendController
 					$transaction->commit();
 				}catch(Exception $e){
 					$transaction->rollback();
-					$$msg .= $title.':失败  ';
+					$msg .= $title.':失败  ';
 				}
 			}
 		}
