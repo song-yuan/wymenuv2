@@ -48,7 +48,7 @@
 					</div>	
 					<!-- 商品简要情况 -->
 					</a>
-					<?php if($model['order_status']< 3):?>
+					<?php if($model['order_status']<3 && $model['order_type']!=1):?>
 					<div class="order_bttnbar pad_10">
 						<button class="bttn_large bttn_black2 cancel" order-id="<?php echo $model['lid'];?>" order-dpid="<?php echo $model['dpid'];?>">取消订单</button>
 						<button class="bttn_large bttn_red payorder" href="<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$model['lid'],'orderDpid'=>$model['dpid']));?>">去支付</button>

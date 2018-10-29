@@ -180,7 +180,7 @@
 <?php endif;?>
 
 <div style="height:4em;"></div>
-<?php if($order['order_status']< 3):?>
+<?php if($order['order_status']<3 && $order['order_type']!=1):?>
 <div class="bttnbar">
 	<button class="cancelOrder bttn_large bttn_black2" order-id="<?php echo $order['lid'];?>" order-dpid="<?php echo $order['dpid'];?>" style="margin-right:1.2em;">取消订单</button>
 	<button class="payOrder bttn_large bttn_red">去支付</button>
