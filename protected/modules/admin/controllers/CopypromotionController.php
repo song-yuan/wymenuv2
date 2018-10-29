@@ -20,26 +20,19 @@ class CopypromotionController extends BackendController
 		return true;
 	}
 	public function actionCopynormalpromotion(){
-		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
-
 		$criteria->addCondition('end_time>="'.date('Y-m-d H:i:s',time()).'"');
-
+		$criteria->order = 't.lid desc';
 		$models = NormalPromotion::model()->findAll($criteria);
 
 		$db = Yii::app()->db;
 		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
-		//var_dump($dpids);exit;
-		$categories = $this->getCategories();
-		//var_dump($categories);exit;
 		$this->render('copynormalpromotion',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
-				'categories'=>$categories,
-				'categoryId'=>$categoryId
 		));
 	}
 
@@ -54,16 +47,108 @@ class CopypromotionController extends BackendController
 		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
-		//var_dump($dpids);exit;
-		$categories = $this->getCategories();
-		//var_dump($categories);exit;
 		$this->render('clearnormalpromotion',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
 		));
 	}
-
-//下发普通活动
+	public function actionCopyfullsentpromotion(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.full_type=0 and t.delete_flag=0 and t.dpid='.$this->companyId;
+		$criteria->addCondition('end_time>="'.date('Y-m-d H:i:s',time()).'"');
+		$criteria->order = 't.lid desc';
+		$models = FullSent::model()->findAll($criteria);
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
+		$command = $db->createCommand($sql);
+		$dpids = $command->queryAll();
+		$this->render('copyfullsentpromotion',array(
+				'models'=>$models,
+				'dpids'=>$dpids,
+		));
+	}
+	public function actionClearfullsentpromotion(){
+		$criteria = new CDbCriteria;
+		$criteria->condition = 't.full_type=0 and t.dpid='.$this->companyId;
+	
+		$criteria->order =  't.lid desc';
+		$models = FullSent::model()->findAll($criteria);
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
+		$command = $db->createCommand($sql);
+		$dpids = $command->queryAll();
+		$this->render('clearfullsentpromotion',array(
+				'models'=>$models,
+				'dpids'=>$dpids,
+		));
+	}
+	public function actionCopyfullminuspromotion(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.full_type=1 and t.delete_flag=0 and t.dpid='.$this->companyId;
+		$criteria->addCondition('end_time>="'.date('Y-m-d H:i:s',time()).'"');
+		$criteria->order = 't.lid desc';
+		$models = FullSent::model()->findAll($criteria);
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
+		$command = $db->createCommand($sql);
+		$dpids = $command->queryAll();
+		$this->render('copyfullminuspromotion',array(
+				'models'=>$models,
+				'dpids'=>$dpids,
+		));
+	}
+	public function actionClearfullminuspromotion(){
+		$criteria = new CDbCriteria;
+		$criteria->condition = 't.full_type=1 and t.dpid='.$this->companyId;
+	
+		$criteria->order =  't.lid desc';
+		$models = FullSent::model()->findAll($criteria);
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
+		$command = $db->createCommand($sql);
+		$dpids = $command->queryAll();
+		$this->render('clearfullminuspromotion',array(
+				'models'=>$models,
+				'dpids'=>$dpids,
+		));
+	}
+	public function actionCopybuysentpromotion(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.dpid='.$this->companyId.' and t.delete_flag=0';
+		$criteria->addCondition('end_time>="'.date('Y-m-d H:i:s',time()).'"');
+		$criteria->order = 't.lid desc';
+		$models = BuysentPromotion::model()->findAll($criteria);
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
+		$command = $db->createCommand($sql);
+		$dpids = $command->queryAll();
+		$this->render('copyfullminuspromotion',array(
+				'models'=>$models,
+				'dpids'=>$dpids,
+		));
+	}
+	public function actionClearbuysentpromotion(){
+		$criteria = new CDbCriteria;
+		$criteria->condition = 't.dpid='.$this->companyId;
+	
+		$criteria->order =  't.lid desc';
+		$models = BuysentPromotion::model()->findAll($criteria);
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
+		$command = $db->createCommand($sql);
+		$dpids = $command->queryAll();
+		$this->render('clearfullminuspromotion',array(
+				'models'=>$models,
+				'dpids'=>$dpids,
+		));
+	}
+	//下发普通活动
 	public function actionStorProduct(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$is_sync = DataSync::getInitSync();
@@ -306,15 +391,9 @@ class CopypromotionController extends BackendController
 		$normalcodes = explode(',',$codes);//接收活动编码,总部唯一
 		$dpids = array();
 		$dpids = explode(',',$dpid);//接收店铺的dpid
-		//var_dump($dpids,$normalcodes);exit;
-	
-		//****查询公司的产品分类。。。****
 	
 		$db = Yii::app()->db;
 	
-	
-		//var_dump($catep1,$catep2,$products);exit;
-		//Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
 			$transaction = $db->beginTransaction();
 			try{
@@ -341,7 +420,370 @@ class CopypromotionController extends BackendController
 		}
 	
 	}
-
+	//下发满送活动
+	public function actionStorfullsent(){
+		$companyId = $this->companyId;
+		$ids = Yii::app()->request->getPost('ids');
+		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
+		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$ckc = Yii::app()->request->getParam('ckc');//判断是否清除以前的活动
+		$fullcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$dpids = explode(',',$dpid);//接收店铺的dpid
+		
+		$msg = '';
+		$db = Yii::app()->db;
+		foreach ($fullcodes as $fullcode){
+			$sql = 'select * from nb_full_sent where dpid='.$companyId.' and sole_code="'.$fullcode.'" and delete_flag=0';
+			$fullsent = $db->createCommand($sql)->queryRow();
+			if($fullsent){
+				$sql = 'select * from nb_full_sent_detail where dpid='.$companyId.' and full_sent_id='.$fullsent['lid'].' and delete_flag=0';
+				$fullsentDetails = $db->createCommand($sql)->queryAll();
+				$fullsql = 'INSERT INTO nb_full_sent (lid,dpid,create_at,update_at,sole_code,title,infor,begin_time,end_time,full_type,full_cost,extra_cost,sent_number,is_available,source) VALUES ';
+				$fulldetailsql = 'INSERT INTO nb_full_sent_detail (lid,dpid,create_at,update_at,full_sent_id,product_id,phs_code,is_discount,promotion_money,promotion_discount,number) VALUES ';
+				$createAt = $fullsent['create_at'];
+				$updateAt = $fullsent['update_at'];
+				$soleCode = $fullsent['sole_code'];
+				$title = $fullsent['title'];
+				$infor = $fullsent['infor'];
+				$beginTime = $fullsent['begin_time'];
+				$endTime = $fullsent['end_time'];
+				$fullType = $fullsent['full_type'];
+				$fullCost = $fullsent['full_cost'];
+				$extraCost = $fullsent['extra_cost'];
+				$sentNumber = $fullsent['sent_number'];
+				$isAvailable = $fullsent['is_available'];
+				$source = 1;
+				foreach ($dpids as $dpid){
+					$sql = 'select lid from nb_full_sent dpid='.$dpid.' where sole_code="'.$soleCode.'" and source=1 and delete_flag=0';
+					$hasfullsent = $db->createCommand($sql)->queryRow();
+					if($hasfullsent){
+						continue;
+					}
+					
+					$se = new Sequence("full_sent");
+					$lid = $se->nextval();
+					$fullsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$infor.'","'.$beginTime.'","'.$endTime.'","'.$fullType.'","'.$fullCost.'","'.$extraCost.'","'.$sentNumber.'","'.$isAvailable.'",'.$source.'),';
+					foreach ($fullsentDetails as $detail){
+						$pcode = $detail['phs_code'];
+						$sql = 'select lid from nb_product where dpid='.$dpid.' and phs_code="'.$pcode.'" and delete_flag=0';
+						$product = $db->createCommand($sql)->queryRow();
+						if(!$product){
+							continue;
+						}
+						$se = new Sequence("full_sent_detail");
+						$lid = $se->nextval();
+						$createAt = $detail['create_at'];
+						$updateAt = $detail['update_at'];
+						$fullsentId = $detail['full_sent_id'];
+						$fproId = $product['lid'];
+						$isdiscount = $detail['is_discount'];
+						$promoney = $detail['promotion_money'];
+						$prodiscount = $detail['promotion_discount'];
+						$number = $detail['number'];
+						$fulldetailsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'",'.$fullsentId.','.$fproId.','.$pcode.','.$isdiscount.','.$promoney.','.$prodiscount.','.$number.'),';
+					}
+				}
+				$fullsql = rtrim($fullsql,',');
+				$fulldetailsql = rtrim($fulldetailsql,',');
+				
+				$transaction = $db->beginTransaction();
+				try{
+					$db->createCommand($fullsql)->execute();
+					$db->createCommand($fulldetailsql)->execute();
+					$transaction->commit();
+				}catch(Exception $e){
+					$transaction->rollback();
+					$$msg .= $title.':失败  ';
+				}
+			}
+		}
+		if($msg==''){
+			Yii::app()->user->setFlash('success' , yii::t('app','下发成功！！！'));
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app',$msg));
+		}
+		$this->redirect(array('copypromotion/copyfullsentpromotion' , 'companyId' => $companyId)) ;
+	}
+	public function actionClearstorfullsent(){
+		$companyId = $this->companyId;
+		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
+		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$fullsentcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$dpids = explode(',',$dpid);//接收店铺的dpid
+	
+		$db = Yii::app()->db;
+	
+		if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
+			$sqlArr = array();
+			foreach ($fullsentcodes as $fullsentcode){//遍历需要下发的活动
+				foreach ($dpids as $dpid){//遍历需要下发活动的店铺
+					//查询店铺是否已经由此活动
+					$sql = 'select lid from nb_full_sent where dpid='.$dpid.' and sole_code="'.$fullsentcode.'"';
+					$fullsent = $db->createCommand($sql)->queryRow();
+					if($fullsent){
+						$sql = 'update nb_full_sent set delete_flag=1 where lid='.$fullsent['lid'].' and dpid='.$dpid;
+						array_push($sqlArr, $sql);
+						$sql = 'update nb_full_sent_detail set delete_flag=1 where dpid ='.$dpid.' and full_sent_id='.$fullsent['lid'];
+						array_push($sqlArr, $sql);
+					}
+				}
+			}
+			if($sqlArr){
+				$transaction = $db->beginTransaction();
+				try{
+					foreach ($sqlArr as $sql){
+						$db->createCommand($sql)->execute();
+					}
+					$transaction->commit();
+					Yii::app()->user->setFlash('success' , yii::t('app','清除成功！！！'));
+				}catch (Exception $e){
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error' , yii::t('app','清除失败！！！'));
+				}
+			}
+			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
+			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+		}
+	
+	}
+	//下发满减活动
+	public function actionStorfullminus(){
+		$companyId = $this->companyId;
+		$ids = Yii::app()->request->getPost('ids');
+		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
+		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$ckc = Yii::app()->request->getParam('ckc');//判断是否清除以前的活动
+		$fullcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$dpids = explode(',',$dpid);//接收店铺的dpid
+	
+		$msg = '';
+		$db = Yii::app()->db;
+		foreach ($fullcodes as $fullcode){
+			$sql = 'select * from nb_full_sent where dpid='.$companyId.' and sole_code="'.$fullcode.'" and delete_flag=0';
+			$fullsent = $db->createCommand($sql)->queryRow();
+			if($fullsent){
+				$fullsql = 'INSERT INTO nb_full_sent (lid,dpid,create_at,update_at,sole_code,title,infor,begin_time,end_time,full_type,full_cost,extra_cost,sent_number,is_available,source) VALUES ';
+				$createAt = $fullsent['create_at'];
+				$updateAt = $fullsent['update_at'];
+				$soleCode = $fullsent['sole_code'];
+				$title = $fullsent['title'];
+				$infor = $fullsent['infor'];
+				$beginTime = $fullsent['begin_time'];
+				$endTime = $fullsent['end_time'];
+				$fullType = $fullsent['full_type'];
+				$fullCost = $fullsent['full_cost'];
+				$extraCost = $fullsent['extra_cost'];
+				$sentNumber = $fullsent['sent_number'];
+				$isAvailable = $fullsent['is_available'];
+				$source = 1;
+				foreach ($dpids as $dpid){
+					$sql = 'select lid from nb_full_sent where sole_code="'.$soleCode.'" and source=1 and delete_flag=0';
+					$hasfullsent = $db->createCommand($sql)->queryRow();
+					if($hasfullsent){
+						continue;
+					}
+					$se = new Sequence("full_sent");
+					$lid = $se->nextval();
+					$fullsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$infor.'","'.$beginTime.'","'.$endTime.'","'.$fullType.'","'.$fullCost.'","'.$extraCost.'","'.$sentNumber.'","'.$isAvailable.'",'.$source.'),';
+				}
+				$fullsql = rtrim($fullsql,',');
+				$res = $db->createCommand($fullsql)->execute();
+				if(!$res){
+					$msg .= $title.':失败 ;';
+				}
+			}
+		}
+		if($msg==''){
+			Yii::app()->user->setFlash('success' , yii::t('app','下发成功！！！'));
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app',$msg));
+		}
+		$this->redirect(array('copypromotion/copyfullminuspromotion' , 'companyId' => $companyId)) ;
+	}
+	public function actionClearstorfullminus(){
+		$companyId = $this->companyId;
+		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
+		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$fullsentcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$dpids = explode(',',$dpid);//接收店铺的dpid
+	
+		$db = Yii::app()->db;
+	
+		if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
+			$sqlArr = array();
+			foreach ($fullsentcodes as $fullsentcode){//遍历需要下发的活动
+				foreach ($dpids as $dpid){//遍历需要下发活动的店铺
+					//查询店铺是否已经由此活动
+					$sql = 'select lid from nb_full_sent where dpid='.$dpid.' and sole_code="'.$fullsentcode.'"';
+					$fullsent = $db->createCommand($sql)->queryRow();
+					if($fullsent){
+						$sql = 'update nb_full_sent set delete_flag=1 where lid='.$fullsent['lid'].' and dpid='.$dpid;
+						array_push($sqlArr, $sql);
+					}
+				}
+			}
+			if($sqlArr){
+				$transaction = $db->beginTransaction();
+				try{
+					foreach ($sqlArr as $sql){
+						$db->createCommand($sql)->execute();
+					}
+					$transaction->commit();
+					Yii::app()->user->setFlash('success' , yii::t('app','清除成功！！！'));
+				}catch (Exception $e){
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error' , yii::t('app','清除失败！！！'));
+				}
+			}
+			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
+			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+		}
+	
+	}
+	//下发买送活动
+	public function actionStorbuysent(){
+		$companyId = $this->companyId;
+		$ids = Yii::app()->request->getPost('ids');
+		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
+		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$ckc = Yii::app()->request->getParam('ckc');//判断是否清除以前的活动
+		$buysentcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$dpids = explode(',',$dpid);//接收店铺的dpid
+	
+		$msg = '';
+		$db = Yii::app()->db;
+		foreach ($buycodes as $buylcode){
+			$sql = 'select * from nb_buysent_promotion where dpid='.$companyId.' and sole_code="'.$fullcode.'" and delete_flag=0';
+			$buysent = $db->createCommand($sql)->queryRow();
+			if($buysent){
+				$sql = 'select * from nb_buysent_promotion_detail where dpid='.$companyId.' and buysent_pro_id='.$buysent['lid'].' and delete_flag=0';
+				$fullsentDetails = $db->createCommand($sql)->queryAll();
+				$buysql = 'INSERT INTO nb_buysent_promotion (lid,dpid,create_at,update_at,sole_code,promotion_title,main_picture,promotion_abstract,promotion_memo,promotion_type,can_cupon,begin_time,end_time,weekday,day_begin,day_end,to_group,group_id,order_num,	is_available,source) VALUES ';
+				$buydetailsql = 'INSERT INTO nb_buysent_promotion_detail (lid,dpid,create_at,update_at,sole_code,buysent_pro_id,fa_sole_code,is_set,product_id,phs_code,buy_num,s_product_id,s_phs_code,sent_num,limit_num,group_no,is_available,source) VALUES ';
+				$createAt = $buysent['create_at'];
+				$updateAt = $buysent['update_at'];
+				$soleCode = $buysent['sole_code'];
+				$title = $buysent['promotion_title'];
+				$mainpicture = $buysent['main_picture'];
+				$proabstract = $buysent['promotion_abstract'];
+				$promotionmemo = $buysent['promotion_memo'];
+				$promotiontype = $buysent['promotion_type'];
+				$cancupon = $buysent['can_cupon'];
+				$beginTime = $buysent['begin_time'];
+				$endTime = $buysent['end_time'];
+				$weekday = $buysent['weekday'];
+				$daybegin = $buysent['day_begin'];
+				$dayend = $buysent['day_end'];
+				$togroup = $buysent['to_group'];
+				$groupid = $buysent['group_id'];
+				$ordernum = $buysent['order_num'];
+				$isAvailable = $buysent['is_available'];
+				$source = 1;
+				foreach ($dpids as $dpid){
+					$sql = 'select lid from nb_buysent_promotion_detail where dpid='.$dpid.' and sole_code="'.$soleCode.'" and source=1 and delete_flag=0';
+					$hasbuysent = $db->createCommand($sql)->queryRow();
+					if($hasbuysent){
+						continue;
+					}
+					$se = new Sequence("buysent_promotion");
+					$lid = $se->nextval();
+					$fullsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$mainpicture.'","'.$proabstract.'","'.$promotionmemo.'","'.$promotiontype.'","'.$cancupon.'","'.$beginTime.'","'.$endTime.'","'.$weekday.'","'.$daybegin.'","'.$dayend.'","'.$togroup.'","'.$groupid.'","'.$ordernum.'","'.$isAvailable.'",'.$source.'),';
+					foreach ($fullsentDetails as $detail){
+						$pcode = $detail['phs_code'];
+						$spcode = $detail['s_phs_code'];
+						$sql = 'select count(lid) from nb_product where dpid='.$dpid.' and phs_code in("'.$pcode.'","'.$spcode.'") and delete_flag=0';
+						$count = $db->createCommand($sql)->queryScalar();
+						if($count!=2){
+							continue;
+						}
+						$se = new Sequence("buysent_promotion_detail");
+						$lid = $se->nextval();
+						$createAt = $detail['create_at'];
+						$updateAt = $detail['update_at'];
+						$soleCode = $detail['sole_code'];
+						$buysentId = $detail['buysent_pro_id'];	
+						$fasolecode = $detail['fa_sole_code'];
+						$isset = $detail['is_set'];
+						$fproId = $detail['product_id'];
+						$buynum = $detail['buy_num'];
+						$sfproId = $detail['s_product_id'];
+						$sentnum = $detail['sent_num'];
+						$limitnum = $detail['limit_num'];
+						$groupno = $detail['group_no'];
+						$isavailable = $detail['is_available'];
+						$source = 1;
+						$buydetailsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'",'.$buysentId.',"'.$fasolecode.'",'.$isset.','.$fproId.',"'.$pcode.'",'.$buynum.','.$sfproId.',"'.$spcode.'",'.$sentnum.','.$limitnum.','.$groupno.','.$isavailable.','.$source.'),';
+					}
+				}
+				$buysql = rtrim($buysql,',');
+				$buydetailsql = rtrim($buydetailsql,',');
+	
+				$transaction = $db->beginTransaction();
+				try{
+					$db->createCommand($buysql)->execute();
+					$db->createCommand($buydetailsql)->execute();
+					$transaction->commit();
+				}catch(Exception $e){
+					$transaction->rollback();
+					$$msg .= $title.':失败  ';
+				}
+			}
+		}
+		if($msg==''){
+			Yii::app()->user->setFlash('success' , yii::t('app','下发成功！！！'));
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app',$msg));
+		}
+		$this->redirect(array('copypromotion/copyfullsentpromotion' , 'companyId' => $companyId)) ;
+	}
+	public function actionClearstorbuysent(){
+		$companyId = $this->companyId;
+		$codes = Yii::app()->request->getParam('code');//接收活动编码,总部唯一
+		$dpid = Yii::app()->request->getParam('dpids');//接收店铺的dpid
+		$buysentcodes = explode(',',$codes);//接收活动编码,总部唯一
+		$dpids = explode(',',$dpid);//接收店铺的dpid
+	
+		$db = Yii::app()->db;
+	
+		if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
+			$sqlArr = array();
+			foreach ($buysentcodes as $buysentcode){//遍历需要下发的活动
+				foreach ($dpids as $dpid){//遍历需要下发活动的店铺
+					//查询店铺是否已经由此活动
+					$sql = 'select lid from nb_buysent_promotion where dpid='.$dpid.' and sole_code="'.$buysentcode.'"';
+					$buysent = $db->createCommand($sql)->queryRow();
+					if($buysent){
+						$sql = 'update nb_buysent_promotion set delete_flag=1 where lid='.$buysent['lid'].' and dpid='.$dpid;
+						array_push($sqlArr, $sql);
+						$sql = 'update nb_buysent_promotion_detail set delete_flag=1 where dpid ='.$dpid.' and buysent_pro_id='.$buysent['lid'];
+						array_push($sqlArr, $sql);
+					}
+				}
+			}
+			if($sqlArr){
+				$transaction = $db->beginTransaction();
+				try{
+					foreach ($sqlArr as $sql){
+						$db->createCommand($sql)->execute();
+					}
+					$transaction->commit();
+					Yii::app()->user->setFlash('success' , yii::t('app','清除成功！！！'));
+				}catch (Exception $e){
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error' , yii::t('app','清除失败！！！'));
+				}
+			}
+			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
+			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+		}
+	
+	}
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));

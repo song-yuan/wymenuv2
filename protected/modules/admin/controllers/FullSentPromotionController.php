@@ -72,10 +72,15 @@ class FullSentPromotionController extends BackendController
 			$gropids = explode(',',$groupID);
 			//$db = Yii::app()->db;
 		
+			$code=new Sequence("promotion_code");
+			$codeid = $code->nextval();
+			
 			$se=new Sequence("full_sent");
-			$model->lid = $se->nextval();
+			$lid = $se->nextval();
+			$model->lid = $lid;
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->sole_code = Common::getCode($this->companyId,$lid,$codeid);
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
 			$model->full_type = '0';
@@ -238,6 +243,7 @@ class FullSentPromotionController extends BackendController
 	
 	public function actionStore(){
 		$id = Yii::app()->request->getParam('id');
+		$pcode = Yii::app()->request->getParam('pcode');
 		$promotionID = Yii::app()->request->getParam('promotionID');
 		$typeId = Yii::app()->request->getParam('typeId');
 		$proID = Yii::app()->request->getParam('proID');
@@ -254,99 +260,103 @@ class FullSentPromotionController extends BackendController
 			$se=new Sequence("full_sent_detail");
 			$lid = $se->nextval();
 
-		if($typeId=='product')
-		{
-			$sql = 'update nb_full_sent_detail set delete_flag = "1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
-				
-			$command=$db->createCommand($sql);
-			$command->execute();
-			
-			if($proID=='0'){
-				$data = array(
-						'lid'=>$lid,
-						'dpid'=>$dpid,
-						'create_at'=>date('Y-m-d H:i:s',time()),
-						'update_at'=>date('Y-m-d H:i:s',time()),
-						'full_sent_id'=>$promotionID,
-						'product_id'=>$id,
-						//'is_set'=>0,
-						'is_discount'=>0,
-						'promotion_money'=>$proNum,
-						'promotion_discount'=>'1.00',
-						'number'=>$order_num,
-						'delete_flag'=>'0',
-						'is_sync'=>$is_sync
-				);
-		}elseif($proID=="1"){
-		
-			$data = array(
-					'lid'=>$lid,
-					'dpid'=>$dpid,
-					'create_at'=>date('Y-m-d H:i:s',time()),
-					'update_at'=>date('Y-m-d H:i:s',time()),
-					'full_sent_id'=>$promotionID,
-					'product_id'=>$id,
-					//'is_set'=>0,
-					'is_discount'=>1,
-					'promotion_money'=>'0.00',
-					'promotion_discount'=>$proNum,
-					'number'=>$order_num,
-					'delete_flag'=>'0',
-					'is_sync'=>$is_sync
-			);
-		
-		
-		}
-		}else{
-			$sql = 'update nb_full_sent_detail set delete_flag ="1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
-				
-			$command=$db->createCommand($sql);
-			$command->execute();
-			
-			if($proID=='0')
+			if($typeId=='product')
 			{
+				$sql = 'update nb_full_sent_detail set delete_flag = "1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
 					
-				$data = array(
-						'lid'=>$lid,
-						'dpid'=>$dpid,
-						'create_at'=>date('Y-m-d H:i:s',time()),
-						'update_at'=>date('Y-m-d H:i:s',time()),
-						'full_sent_id'=>$promotionID,
-						'product_id'=>$id,
-						//'is_set'=>1,
-						'is_discount'=>0,
-						'promotion_money'=>$proNum,
-						'promotion_discount'=>'1.00',
-						'number'=>$order_num,
-						'delete_flag'=>'0',
-						'is_sync'=>$is_sync
-				);
+				$command=$db->createCommand($sql);
+				$command->execute();
+				
+				if($proID=='0'){
+					$data = array(
+							'lid'=>$lid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'full_sent_id'=>$promotionID,
+							'product_id'=>$id,
+							'phs_code'=>$pcode,
+							//'is_set'=>0,
+							'is_discount'=>0,
+							'promotion_money'=>$proNum,
+							'promotion_discount'=>'1.00',
+							'number'=>$order_num,
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync
+					);
+				}elseif($proID=="1"){
+				
+					$data = array(
+							'lid'=>$lid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'full_sent_id'=>$promotionID,
+							'product_id'=>$id,
+							'phs_code'=>$pcode,
+							//'is_set'=>0,
+							'is_discount'=>1,
+							'promotion_money'=>'0.00',
+							'promotion_discount'=>$proNum,
+							'number'=>$order_num,
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync
+					);
+				
+				
+				}
+			}else{
+				$sql = 'update nb_full_sent_detail set delete_flag ="1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
+					
+				$command=$db->createCommand($sql);
+				$command->execute();
+				
+				if($proID=='0')
+				{
+						
+					$data = array(
+							'lid'=>$lid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'full_sent_id'=>$promotionID,
+							'product_id'=>$id,
+							'phs_code'=>$pcode,
+							//'is_set'=>1,
+							'is_discount'=>0,
+							'promotion_money'=>$proNum,
+							'promotion_discount'=>'1.00',
+							'number'=>$order_num,
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync
+					);
+				
+				}elseif($proID=='1'){
 			
-			}elseif($proID=='1'){
-		
-				$data = array(
-						'lid'=>$lid,
-						'dpid'=>$dpid,
-						'create_at'=>date('Y-m-d H:i:s',time()),
-						'update_at'=>date('Y-m-d H:i:s',time()),
-						'full_sent_id'=>$promotionID,
-						'product_id'=>$id,
-						//'is_set'=>1,
-						'is_discount'=>1,
-						'promotion_money'=>'0.00',
-						'promotion_discount'=>$proNum,
-						'number'=>$order_num,
-						'delete_flag'=>'0',
-						'is_sync'=>$is_sync
-				);
+					$data = array(
+							'lid'=>$lid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'full_sent_id'=>$promotionID,
+							'product_id'=>$id,
+							'phs_code'=>$pcode,
+							//'is_set'=>1,
+							'is_discount'=>1,
+							'promotion_money'=>'0.00',
+							'promotion_discount'=>$proNum,
+							'number'=>$order_num,
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync
+					);
+				}
 			}
-		}
-		$command = $db->createCommand()->insert('nb_full_sent_detail',$data);
-		
-		$transaction->commit(); //提交事务会真正的执行数据库操作
-		Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID,'msg'=>$ceshi)));
-
-		return true;
+			$command = $db->createCommand()->insert('nb_full_sent_detail',$data);
+			
+			$transaction->commit(); //提交事务会真正的执行数据库操作
+			Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID,'msg'=>$ceshi)));
+	
+			return true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			Yii::app()->end(json_encode(array("status"=>"fail",'msg'=>$ceshi)));

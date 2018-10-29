@@ -78,12 +78,15 @@ class FullMinusPromotionController extends BackendController
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			//$db = Yii::app()->db;
-		
+			$code=new Sequence("promotion_code");
+			$codeid = $code->nextval();
+			
 			$se=new Sequence("full_sent");
-			$model->lid = $se->nextval();
-
+			$lid = $se->nextval();
+			$model->lid = $lid;
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->sole_code = Common::getCode($this->companyId,$lid,$codeid);
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
 			$model->full_type = '1';
@@ -134,7 +137,7 @@ class FullMinusPromotionController extends BackendController
 			$model->is_available = $st;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-				$this->redirect(array('FullMinusPromotion/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('fullMinusPromotion/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
