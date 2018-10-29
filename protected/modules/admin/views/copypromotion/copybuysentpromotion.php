@@ -82,7 +82,7 @@ function fun()
 									<input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" code="<?php echo $model->sole_code;?>" name="ids[]" />
 								</td>
 								<td style="width:25%"><?php echo $model->promotion_title;?></td>
-								<td><?php echo $model->infor;?>&nbsp&nbsp&nbsp<?php echo '活动时间：'.$model->begin_time;echo '~~'; echo $model->end_time;?></td>
+								<td><?php echo $model->promotion_abstract;?>&nbsp&nbsp&nbsp<?php echo '活动时间：'.$model->begin_time;echo '~~'; echo $model->end_time;?></td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
