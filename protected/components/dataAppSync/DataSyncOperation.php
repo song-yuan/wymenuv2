@@ -1159,19 +1159,6 @@ class DataSyncOperation {
 				    		$orderProductDetailId = $orderproduct['lid'];
 				    		$productId = $orderproduct['product_id'];
 				    		
-				    		$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
-				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
-				    		if($orderRetreat && !empty($orderRetreat['total'])){
-			    				if($orderRetreat['total'] >= $orderproduct['zhiamount']){
-			    					$transaction->rollback ();
-			    					$msg = json_encode ( array (
-			    							'status' => true,
-			    							'syncLid' => $syncLid,
-			    							'content' => $content
-			    					) );
-			    					return $msg;
-			    				}
-				    		}
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
 				    		Yii::app ()->db->createCommand ($sql)->execute();
 				    	
@@ -1207,19 +1194,6 @@ class DataSyncOperation {
 				    	if($orderProduct){
 				    		$orderProductDetailId = $orderProduct['lid'];
 				    		 
-				    		$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
-				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
-				    		if($orderRetreat && !empty($orderRetreat['total'])){
-			    				if($orderRetreat['total'] >= $orderProduct['amount']){
-			    					$transaction->rollback ();
-			    					$msg = json_encode ( array (
-			    							'status' => true,
-			    							'syncLid' => $syncLid,
-			    							'content' => $content
-			    					) );
-			    					return $msg;
-			    				}
-				    		}
 				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
 				    		Yii::app ()->db->createCommand ($sql)->execute();
 				    		 
@@ -1251,7 +1225,7 @@ class DataSyncOperation {
 				    	}
 				    }
 				}
-				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype != 11';
+				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid;
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				$allOrderRetreat = false; // 是否整单退
 				if($order['should_total'] == -$retreatprice){
@@ -1260,17 +1234,16 @@ class DataSyncOperation {
 				}
 				
 				foreach ($orderPayArr as $pay){
+					if($pay['pay_amount']<=0 || $pay['paytype']==11){
+						continue;
+					}
 					if($allOrderRetreat){
 						$refund_fee = $pay['pay_amount'];
 					}else{
 						$refund_fee = -$retreatprice;
 					}
 					$remark = $pay['remark'];
-					$sql = 'select * from nb_order_pay where dpid='.$dpid.' and create_at="'.$retreatTime.'" and order_id='.$orderId.' and account_no="'.$accountNo.'" and paytype='.$pay['paytype'].' and payment_method_id='.$pay['payment_method_id'].' and paytype_id='.$pay['paytype_id'].' and remark="'.$remark.'"';
-					$orderpay = Yii::app ()->db->createCommand ($sql)->queryRow();
-					if($orderpay){
-						continue;
-					}
+					
 					if($pay['paytype']==1||$pay['paytype']==12||$pay['paytype']==13){
 						// 微信支付
 						$rData = array('dpid'=>$dpid,'poscode'=>$poscode,'admin_id'=>$adminId,'paytype'=>$pay['paytype'],'out_trade_no'=>$pay['remark'],'total_fee'=>$pay['pay_amount'],'refund_fee'=>$refund_fee);
