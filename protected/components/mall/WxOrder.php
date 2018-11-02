@@ -672,22 +672,23 @@ class WxOrder
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 		
+		$payPrice = $orderPrice;
 		// 现金券
-		if($this->cupon && $orderPrice>0){
-			$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$orderPrice,'pay_price'=>$orderPrice);
+		if($this->cupon && $payPrice>0){
+			$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$payPrice,'order_type'=>$this->type);
 			$payMoney = self::updateOrderCupon($this->cupon, $order, $this->user['card_id']);
-			$orderPrice -= $payMoney;
+			$payPrice -= $payMoney;
 		}
 		// 使用储值
-		if($this->others['yue'] && $orderPrice>0){
+		if($this->others['yue'] && $payPrice>0){
 			$remainMoney = WxBrandUser::getYue($this->user);
 			if($remainMoney > 0){
-				$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$orderPrice,'pay_price'=>$orderPrice);
+				$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$payPrice,'order_type'=>$this->type);
 				$payMoney = self::reduceYue($this->user,$order);
-				$orderPrice -= $payMoney;
+				$payPrice -= $payMoney;
 			}
 		}
-		if($orderPrice <= 0){
+		if($payPrice <= 0){
 			$orderPrice = 0;
 			$this->orderSuccess = true;
 		}else {
@@ -1139,7 +1140,6 @@ class WxOrder
 	 	$orderArr['nb_site_no'] = array();
 	 	$orderArr['nb_order_platform'] = array();
 	 	
-	 	$order = self::getOrder($orderId, $orderDpid);
 	 	$orderArr['nb_order'] = $order;
 	 	
 	 	$orderProducts = self::getOrderProductData($orderId, $orderDpid);
