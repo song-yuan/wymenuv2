@@ -301,6 +301,7 @@ class SqbpayController extends Controller
 					if(!empty($orders)){
 						$user = WxBrandUser::getFromUserId($orders['user_id']);
 						WxOrder::dealOrder($user, $orders);
+						WxOrder::pushOrderToRedis($orders);
 					}
 				}
 			}

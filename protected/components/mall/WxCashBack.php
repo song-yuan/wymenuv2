@@ -196,12 +196,11 @@ class WxCashBack
 	 		throw new Exception('储值支付金额不能小于0');
 	 	}
 	 	$time = time();
-	 	$is_sync = DataSync::getInitSync();
 	 	if($isAll){
-	 		$sql = 'update nb_brand_user set remain_money=0,is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$userDpid;
+	 		$sql = 'update nb_brand_user set remain_money=0  where lid = '.$userId.' and dpid='.$userDpid;
 	 		$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}else{
-	 		$sql = 'update nb_brand_user set remain_money = remain_money - '.$total.',is_sync='.$is_sync.'  where lid = '.$userId.' and dpid='.$userDpid;
+	 		$sql = 'update nb_brand_user set remain_money = remain_money - '.$total.' where lid = '.$userId.' and dpid='.$userDpid;
 	 		$result = Yii::app()->db->createCommand($sql)->execute();
 	 	}
 	 	if(!$result){
@@ -218,7 +217,6 @@ class WxCashBack
 	 			'consume_type'=>1,
 	 			'card_id'=>$userId,
 	 			'consume_amount'=>$total,
-	 			'is_sync'=>$is_sync,
 	 	);
 	 	$result = Yii::app()->db->createCommand()->insert('nb_member_consume_record', $consumeArr);
 	 	if(!$result){

@@ -213,7 +213,8 @@ class WxSiteOrder
 			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 			$orderPrice = $orderPrice - $this->fullMinus;
 			if($orderPrice < 0){
-				$orderPrice = 0;
+				self::update;
+				
 			}
 		}
 		if($orderPrice==0){

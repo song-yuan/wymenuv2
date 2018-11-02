@@ -69,7 +69,6 @@ class Notify extends WxPayNotify
         	'total_fee'=>$data['total_fee'],
         	'time_end'=>$data['time_end'],
         	'attach'=>isset($data['attach'])?$data['attach']:'',
-        	'is_sync'=>DataSync::getInitSync(),
 			);
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		if($data['attach']==1){
@@ -107,7 +106,8 @@ class Notify extends WxPayNotify
 		}
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
-		WxOrder::insertOrderPay($order,1,$data["out_trade_no"]);
+		WxOrder::insertOrderPay($order,1,$data['total_fee']/100,$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
+		WxOrder::pushOrderToRedis($order);
 	}
 }

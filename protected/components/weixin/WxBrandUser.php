@@ -157,11 +157,9 @@ class WxBrandUser {
 	 * 获取会员总余额
 	 * 
 	 */
-	public static function getYue($userId,$dpid) {
-
-		$brandUser = self::get($userId,$dpid);
+	public static function getYue($user) {
+		$brandUser = $user;
 		$remainMoney = $brandUser['remain_money'];
-		
 		$cashback = $brandUser['remain_back_money'];
 		
 		return $cashback ? $cashback + $remainMoney : $remainMoney;
@@ -171,10 +169,9 @@ class WxBrandUser {
 	 * 获取会员充值余额
 	 * 
 	 */
-	public static function getRechargeYue($userId,$dpid) {
-		$brandUser = self::get($userId,$dpid);
+	public static function getRechargeYue($user) {
+		$brandUser = $user;
 		$remainMoney = $brandUser['remain_money'];
-		
 		return $remainMoney;
 	}
 	/**
@@ -182,8 +179,8 @@ class WxBrandUser {
 	 * 获取会员返现余额
 	 * 
 	 */
-	public static function getCashBackYue($userId,$dpid) {
-		$brandUser = self::get($userId,$dpid);
+	public static function getCashBackYue($user) {
+		$brandUser = $user;
 		$remainMoney = $brandUser['remain_back_money'];
 		return $remainMoney;
 	}
@@ -250,28 +247,35 @@ class WxBrandUser {
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
-	public static function reduceYue($userId,$userDpId, $dpid,$total){
-		$yue = WxBrandUser::getYue($userId,$userDpId);//余额
-		$cashRecharge = WxBrandUser::getRechargeYue($userId,$userDpId);//储值余额
-		$cashBack = WxBrandUser::getCashBackYue($userId,$userDpId);//返现余额
+	public static function reduceYue($user, $dpid, $total, &$paymoney){
+		$userId = $user['lid'];
+		$userDpId = $user['dpid'];
+		$yue = WxBrandUser::getYue($user);//余额
+		$cashRecharge = WxBrandUser::getRechargeYue($user);//储值余额
+		$cashBack = WxBrandUser::getCashBackYue($user);//返现余额
 		if($cashRecharge > 0){
 			// 储值余额 大于0
 			if($cashRecharge >= $total){
 				//储值余额大于等于支付
 				WxCashBack::userCashRecharge($total,$userId,$userDpId,$dpid,0);
 				$payMoney = $total;
+				$paymoney = array('charge'=>$payMoney,'back'=>0);
 			}else{
+				$back = 0;
 				WxCashBack::userCashRecharge($cashRecharge,$userId,$userDpId,$dpid,1);
 				if($yue > $total){//剩余返现大于支付
 					WxCashBack::userCashBack($total - $cashRecharge,$userId,$userDpId,$dpid,0);
 					$payMoney = $total;
+					$back = $total - $cashRecharge;
 				}else{
 					//剩余返现小于等于支付
 					if($cashBack > 0){
 						WxCashBack::userCashBack($cashBack,$userId,$userDpId,$dpid,1);
+						$back = $cashBack;
 					}
 					$payMoney = $yue;
 				}
+				$paymoney = array('charge'=>$cashRecharge,'back'=>$back);
 			}
 		}else{
 			// 储值余额 等于=0
@@ -286,6 +290,7 @@ class WxBrandUser {
 				}
 				$payMoney = $yue;
 			}
+			$paymoney = array('charge'=>0,'back'=>$payMoney);
 		}
 		return $payMoney;
 	}

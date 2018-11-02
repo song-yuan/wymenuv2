@@ -82,14 +82,14 @@ class MallController extends Controller
         $buySentPromotions = $promotion->buySentProductList;
         $fullSents = $promotion->fullSentList;
         $proProIdList = $promotion->proProIdList;
-//         $cache = Yii::app()->redis->get($key);
-//         if($cache!=false){
-//         	$products = json_decode($cache,true);
-//         }else{
+        $cache = Yii::app()->redis->get($key);
+        if($cache!=false){
+        	$products = json_decode($cache,true);
+        }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-//         	Yii::app()->redis->setex($key,$expire,json_encode($products));
-//         }
+        	Yii::app()->redis->setex($key,$expire,json_encode($products));
+        }
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();
         $disables = $carts['disable'];
@@ -182,7 +182,7 @@ class MallController extends Controller
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$memdisprice = $original - $price;
 		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
-		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
+		$remainMoney = WxBrandUser::getYue($user);
 		
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
@@ -231,14 +231,14 @@ class MallController extends Controller
 		$fullsentId = Yii::app()->request->getPost('fullsent','0-0-0');
 		$yue = Yii::app()->request->getPost('yue',0);
 		$addressId = Yii::app()->request->getPost('address',-1);
-		$orderTime = Yii::app()->request->getPost('order_time',null);
+		$orderTime = Yii::app()->request->getPost('order_time',0);
 		$remark = Yii::app()->request->getPost('taste_memo',null);
 		
 		$contion = null;
 		$number = 1;
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
 		$tastes = Yii::app()->request->getPost('taste',array());
-		$others = array('takeout'=>$takeoutTypeId,'fullsent'=>$fullsentId);
+		$others = array('cuponId'=>$cuponId,'orderTime'=>$orderTime,'takeout'=>$takeoutTypeId,'fullsent'=>$fullsentId,'yue'=>$yue,'remark'=>$remark);
 		try{
 			$orderObj = new WxOrder($this->companyId,$user,$siteId,$this->type,$number,$setDetails,$tastes,$others);
 			if(empty($orderObj->cart)){
@@ -260,75 +260,34 @@ class MallController extends Controller
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		
+		$orderCreate = false;
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
 			//生成订单
 			$orderId = $orderObj->createOrder();
-		
-			//使用现金券
-			if($cuponId){
-			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
+			if($orderObj->orderSuccess){
+				WxOrder::dealOrder($this->user, $orderObj->order);
 			}
-			//预订时间
-			if($this->type==6||$this->type==2){
-				$orderTime = date('Y-m-d H:i:s',strtotime('+'. $orderTime*60 .' seconds'));
-			}
-			if($orderTime){
-				$contion = $contion.' appointment_time="'.$orderTime.'",';
-			}
-			//备注
-			if($remark){
-				$remark = Helper::dealString($remark);
-				$contion = $contion.' remark="'.$remark.'",';
-			}
-			
-			if($contion){
-				WxOrder::update($orderId,$this->companyId,$contion);
-			}
-		
-			//使用余额
-			if($yue){
-				$order = WxOrder::getOrder($orderId,$this->companyId);
-				if($order['order_status'] < 3){
-					$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
-					if($remainMoney > 0){
-						WxOrder::insertOrderPay($order,10,'');
-					}
-				}
-			}
-			if($paytype == 1){
-				WxOrder::updatePayType($orderId,$this->companyId,2);
-			}else{
-				WxOrder::updatePayType($orderId,$this->companyId,1);
-			}
-		   $transaction->commit();
+		   	$transaction->commit();
+		   	$orderCreate = true;
 		}catch (Exception $e) {
 			$transaction->rollback();
+			$orderCreate = false;
 			$msg = $e->getMessage();
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
-		if($this->type==1){
-			// 餐桌模式 数据放入缓存中
-			$orderArr = array();
+		if($orderObj->orderSuccess && $orderCreate){
 			$order = WxOrder::getOrder($orderId, $this->companyId);
-			$orderProduct = WxOrder::getOrderProductData($orderId, $this->companyId);
-			$orderDiscount = WxOrder::getOrderAccountDiscount($orderId, $this->companyId);
-			$orderArr['nb_site_no'] = $orderObj->siteNo;
-			$orderArr['nb_order_platform'] = array();
-			$orderArr['nb_order'] = $order;
-			$orderArr['nb_order_product'] = $orderProduct;
-			$orderArr['nb_order_pay'] = array();
-			$orderArr['nb_order_address'] = array();
-			$orderArr['nb_order_taste'] = $order['taste'];
-			$orderArr['nb_order_account_discount'] = array();
-			$orderStr = json_encode($orderArr);
-			WxRedis::pushPlatform($this->companyId, $orderStr);
+			WxOrder::pushOrderToRedis($order);
+		}
+		if($this->type==1){
+			$order = WxOrder::getOrder($orderId, $this->companyId);
+			WxOrder::pushSiteOrderToRedis($order);
 			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		if($paytype == 1){
 			//支付宝支付
-			$order = WxOrder::getOrder($orderId,$this->companyId);
-			if($order['order_status'] > 2){
+			if($orderObj->order['order_status'] > 2){
 				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 			}else{
 				$orderPays = WxOrderPay::get($this->companyId,$orderId);
@@ -502,7 +461,7 @@ class MallController extends Controller
 		
 		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr,$levelDiscount);// 购物车优惠原价
 		
-		$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
+		$remainMoney = WxBrandUser::getYue($user);
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
 		if(!$haspormotion){
@@ -569,7 +528,7 @@ class MallController extends Controller
 				if($yue){
 					$order = WxOrder::getOrder($orderId,$this->companyId);
 					if($order['order_status'] < 3){
-						$remainMoney = WxBrandUser::getYue($userId,$user['dpid']);
+						$remainMoney = WxBrandUser::getYue($user);
 						if($remainMoney > 0){
 							WxOrder::insertOrderPay($order,10,'');
 						}

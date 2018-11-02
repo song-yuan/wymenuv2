@@ -20,22 +20,25 @@ class WxOrder
 	public $number;
 	public $cartNumber = 0;// 购物车产品数量
 	public $isTemp = 0;
+	public $levelDiscount = 1;//会员等级折扣
 	public $seatingFee = 0;
 	public $packingFee = 0;
 	public $freightFee = 0;
-	public $takeoutTypeId = 0;
 	public $hasfullsent = false;
+	public $cupon = false;
 	public $fullsent = '0-0-0';//满送满减信息
 	public $fullMinus = 0; //满减金额
 	public $fullSentProduct = array(); //满送产品
 	public $cart = array();
 	public $normalPromotionIds = array();
 	public $tastes = array();//原始产品口味
+	public $others = array();//其他参数
 	public $productTastes = array();//处理后的产品口味
 	public $setDetail = array();  // 套餐详情 set_id - product_id - number - price
 	public $productSetDetail = array();// 处理套餐详情 array(product_id=>array(set_id,product_id,number,price))
 	public $siteNo = false;
 	public $order = false;
+	public $orderSuccess = false;
 	
 	public function __construct($dpid,$user,$siteId = null,$type = 1,$number = 1,$productSet = array(),$tastes = array(),$others){
 		$this->dpid = $dpid;
@@ -45,14 +48,15 @@ class WxOrder
 		$this->type = $type;
 		$this->number = $number;
 		$this->tastes = $tastes;
-		$this->takeoutTypeId = $others['takeout'];
-		$this->fullsent = $others['fullsent'];
+		$this->others = $others;
 		$this->setDetail = $productSet;
+		$this->isTemp = 1;
+		$this->getLevelDiscount();
+		$this->getCupon();
 		$this->getFullsent();
 		$this->getCart();
 		$this->dealTastes();
 		$this->dealProductSet();
-		$this->isTemp = 1;
 		if($this->type==1){
 			$this->isTemp = 0;
 			$this->getSite();
@@ -69,13 +73,34 @@ class WxOrder
 		}
 	}
 	/**
+	 *获取会员等级折扣 
+	 */
+	public function getLevelDiscount(){
+		$this->levelDiscount = WxBrandUser::getUserDiscount($this->user,$this->type);
+	}
+	/**
+	 *获取优惠券信息
+	 */
+	public function getCupon(){
+		$cupoinId = $this->others['cuponId'];
+		if($cupoinId){
+			$now = date('Y-m-d H:i:s',time());
+			$cbArr = explode('-', $cupoinId);
+			$cbLid = $cbArr[0];
+			$cbDpid = $cbArr[1];
+			$sql = 'select t.lid,t.dpid,t.cupon_id,t1.cupon_money,t1.min_consumer from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cbLid.
+			' and t.dpid='.$cbDpid.' and t.valid_day <= "'.$now.'" and "'.$now.'" <= t.close_day and t1.delete_flag=0 and t1.is_available=0';
+			$this->cupon = Yii::app()->db->createCommand($sql)->queryRow();
+		}
+	}
+	/**
 	 *处理满减满送活动
 	 */
 	public function getFullsent(){
-		if($this->fullsent!='0-0-0'){
+		if($this->others['fullsent']!='0-0-0'){
 			$now = date('Y-m-d H:i:s',time());
 			$this->hasfullsent = true;
-			$fullsentArr = explode('-', $this->fullsent);
+			$fullsentArr = explode('-', $this->others['fullsent']);
 			$fullType = $fullsentArr[0];
 			$fullsentId = $fullsentArr[1];
 			$fullsentdetailId = $fullsentArr[2];
@@ -99,9 +124,7 @@ class WxOrder
 			}else{
 				$this->fullMinus = $fullsentObj['extra_cost'];
 			}
-			
 		}
-		
 	}
 	/**
 	 * 获取购物车产品信息
@@ -297,12 +320,18 @@ class WxOrder
 	}
 	//生成订单
 	public function createOrder(){
+		$orderArr = array();
 		$time = time();
 		$orderPrice = 0;
 		$realityPrice = 0;
 		$memdiscount = 0;
 	    $orderProductStatus = 9;
-	    $isSync = DataSync::getInitSync();
+	    $orderTime = $this->others['orderTime'];
+	    $appointmentTime = date('Y-m-d H:i:s',strtotime('+'. $orderTime*60 .' seconds'));
+	    $remark = $this->others['remark'];
+	    if(!empty($remark)){
+	    	$remark = Helper::dealString($remark);
+	    }
 	    if($this->type==1){
 	    	// 餐桌
 	    	$orderProductStatus = 1;
@@ -321,12 +350,13 @@ class WxOrder
     				'number'=>$this->number,
     				'order_status'=>2,
     				'order_type'=>$this->type,
-    				'takeout_typeid'=>$this->takeoutTypeId,
-    				'appointment_time'=>date('Y-m-d H:i:s',$time),
-    				'is_sync'=>$isSync,
+    				'takeout_typeid'=>$this->others['takeout'],
+    				'appointment_time'=>$appointmentTime,
+    				'remark'=>$remark,
     		);
     		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
-		}else{
+    		$orderArr = $insertOrderArr;
+	    }else{
 			// 不带餐桌
 			$se = new Sequence("order");
 			$orderId = $se->nextval();
@@ -343,11 +373,12 @@ class WxOrder
 					'number'=>$this->number,
 					'order_status'=>2,
 					'order_type'=>$this->type,
-					'takeout_typeid'=>$this->takeoutTypeId,
-					'is_sync'=>$isSync,
+					'takeout_typeid'=>$this->others['takeout'],
+					'appointment_time'=>$appointmentTime,
+					'remark'=>$remark,
 			);
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
-			
+			$orderArr = $insertOrderArr;
 			//外卖订单地址
 			if(in_array($this->type,array(2,3,7,8))){
 				$address = WxAddress::getDefault($this->userId,$this->user['dpid']);
@@ -359,11 +390,6 @@ class WxOrder
 		//整单口味
 		if(isset($this->productTastes[0]) && !empty($this->productTastes[0])){
 			foreach($this->productTastes[0] as $ordertaste){
-				$sql = 'select * from nb_taste where lid='.$ordertaste[1].' and dpid='.$this->dpid.' and delete_flag=0';
-				$tasteRes = Yii::app()->db->createCommand($sql)->queryRow();
-				if(!$tasteRes){
-					continue;
-				}
 				if($ordertaste[2] > 0){
 					$orderPrice +=$ordertaste[2];
 					$realityPrice +=$ordertaste[2];
@@ -379,12 +405,11 @@ class WxOrder
 						'taste_id'=>$ordertaste[1],
 						'order_id'=>$orderId,
 						'is_order'=>1,
-						'is_sync'=>$isSync,
 				);
 				$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
 		}
-		$levelDiscount = WxBrandUser::getUserDiscount($this->user,$this->type);
+		$levelDiscount = $this->levelDiscount;
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			
@@ -418,12 +443,11 @@ class WxOrder
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>$orderProductStatus,
 							'taste_memo'=>$setName,
-							'is_sync'=>$isSync,
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				}
 				if($cart['store_number'] > 0){
-					$sql = 'update nb_product_set set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
+					$sql = 'update nb_product_set set store_number =  store_number-'.$cart['num'].' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
 					Yii::app()->db->createCommand($sql)->execute();
 				}
 			}else{
@@ -434,11 +458,6 @@ class WxOrder
 					foreach($this->productTastes[$cart['product_id']] as $taste){
 						if($taste[2] > 0){
 							$ortherPrice +=$taste[2];
-						}
-						$sql = 'select * from nb_taste where lid='.$taste[1].' and dpid='.$this->dpid.' and delete_flag=0';
-						$tasteRes = Yii::app()->db->createCommand($sql)->queryRow();
-						if(!$tasteRes){
-							continue;
 						}
 						$se = new Sequence("order_taste");
 						$orderTasteId = $se->nextval();
@@ -451,7 +470,6 @@ class WxOrder
 								'taste_id'=>$taste[1],
 								'order_id'=>$orderProductId,
 								'is_order'=>0,
-								'is_sync'=>$isSync,
 						);
 						Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 					}
@@ -471,12 +489,11 @@ class WxOrder
 						'original_price'=>$cart['original_price']+$ortherPrice,
 						'amount'=>$cart['num'],
 						'product_order_status'=>$orderProductStatus,
-						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 		
 				if($cart['store_number'] > 0){
-					$sql = 'update nb_product set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
+					$sql = 'update nb_product set store_number =  store_number-'.$cart['num'].' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
 					Yii::app()->db->createCommand($sql)->execute();
 				}
 			}
@@ -500,7 +517,6 @@ class WxOrder
 							'promotion_money'=>$promotion['promotion_money'],
 							'can_cupon'=>$promotion['can_cupon'],
 							'delete_flag'=>0,
-							'is_sync'=>$isSync,
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);
 				}
@@ -535,7 +551,6 @@ class WxOrder
 						'original_price'=>$this->fullSentProduct['original_price'],
 						'amount'=>1,
 						'product_order_status'=>$orderProductStatus,
-						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 			}
@@ -557,7 +572,6 @@ class WxOrder
 						'original_price'=>$this->seatingFee,
 						'amount'=>$this->number,
 						'product_order_status'=>9,
-						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				$orderPrice +=  $this->seatingFee*$this->number;
@@ -581,7 +595,6 @@ class WxOrder
 							'original_price'=>$this->packingFee,
 							'amount'=>$this->cartNumber,
 							'product_order_status'=>9,
-							'is_sync'=>$isSync,
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 					$orderPrice +=  $this->packingFee*$this->cartNumber;
@@ -605,7 +618,6 @@ class WxOrder
 							'original_price'=>$this->freightFee,
 							'amount'=>1,
 							'product_order_status'=>9,
-							'is_sync'=>$isSync,
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 					$orderPrice +=  $this->freightFee;
@@ -626,7 +638,6 @@ class WxOrder
 						'discount_title'=>'会员折扣',
 						'discount_id'=>0,
 						'discount_money'=>$memdiscount,
-						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 			}
@@ -644,7 +655,6 @@ class WxOrder
 						'discount_title'=>$this->fullsent['title'],
 						'discount_id'=>0,
 						'discount_money'=>$this->fullMinus,
-						'is_sync'=>$isSync,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 				$orderPrice = $orderPrice - $this->fullMinus;
@@ -662,16 +672,33 @@ class WxOrder
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 		
-		if($orderPrice==0){
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status=3,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
-			Yii::app()->db->createCommand($sql)->execute();
-		}else{
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
+		// 现金券
+		if($this->cupon && $orderPrice>0){
+			$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$orderPrice,'pay_price'=>$orderPrice);
+			$payMoney = self::updateOrderCupon($this->cupon, $order, $this->user['card_id']);
+			$orderPrice -= $payMoney;
+		}
+		// 使用储值
+		if($this->others['yue'] && $orderPrice>0){
+			$remainMoney = WxBrandUser::getYue($this->user);
+			if($remainMoney > 0){
+				$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$orderPrice,'pay_price'=>$orderPrice);
+				$payMoney = self::reduceYue($this->user,$order);
+				$orderPrice -= $payMoney;
+			}
+		}
+		if($orderPrice <= 0){
+			$orderPrice = 0;
+			$this->orderSuccess = true;
+		}else {
+			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 		//清空购物车
 		$sql = 'delete from nb_cart where user_id='.$this->userId.' and dpid='.$this->dpid;
 		Yii::app()->db->createCommand($sql)->execute();
+		$orderArr['should_total'] = $orderPrice;
+		$this->order = $orderArr;
 		return $orderId;
 	}
 	public static function getOrder($orderId,$dpid){
@@ -860,8 +887,7 @@ class WxOrder
 	}
 	public static function updateOrderStatus($orderId,$dpid){
 		$now = date('Y-m-d H:i:s',time());
-		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set order_status=3,paytype=1,pay_time="'.$now.'",is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$sql = 'update nb_order set order_status=3,paytype=1,pay_time="'.$now.'" where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -870,8 +896,7 @@ class WxOrder
 	 * 
 	 */
 	public static function updateOrderProductStatus($orderId,$dpid){
-		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order_product set product_order_status=8,is_sync='.$isSync.' where order_id='.$orderId.' and dpid='.$dpid.' and delete_flag=0';
+		$sql = 'update nb_order_product set product_order_status=8 where order_id='.$orderId.' and dpid='.$dpid.' and delete_flag=0';
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -881,34 +906,32 @@ class WxOrder
 	 * 
 	 */
 	 public static function updatePayType($orderId,$dpid,$paytype = 1){
-	 	$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set paytype='.$paytype.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$sql = 'update nb_order set paytype='.$paytype.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
 	 * 
 	 * 插入订单代金券表
 	 * 并减少订单相应的金额
-	 * @$cuponBranduserLid 由nb_cupon_branduser 的lid和dpid组成
+	 * @$userCupon 会员领取代金券信息
+	 * $order lid dpid account_no pay_price
+	 * should_total 是需要支付的金额
 	 * 
 	 */
-	public static function updateOrderCupon($orderId,$dpid,$cuponBranduser,$user){
-		$now = date('Y-m-d H:i:s',time());
-		$cuponBranduserArr = explode('-', $cuponBranduser);
-		$cuponBranduserLid = $cuponBranduserArr[0];
-		$cuponBranduserDpid = $cuponBranduserArr[1];
-		$order = self::getOrder($orderId,$dpid);
-		$sql = 'select t.lid,t.cupon_id,t1.cupon_money,t1.min_consumer from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
-				' and t.dpid='.$cuponBranduserDpid.' and t.valid_day <= "'.$now.'" and "'.$now.'" <= t.close_day and t1.delete_flag=0 and t1.is_available=0';
-		
-		$result = Yii::app()->db->createCommand($sql)->queryRow();
-		if($result && $order['should_total'] >= $result['min_consumer']){
-			$isSync = DataSync::getInitSync();
-			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money'] : 0;
-			$cuponMoney = $result['cupon_money'];
+	public static function updateOrderCupon($userCupon,$order,$payPrice,$cardId){
+		$money = 0;
+		if($payPrice >= $userCupon['min_consumer']){
+			$now = date('Y-m-d H:i:s',time());
+			$orderPrice = $payPrice;
+			$cuponPrice = $userCupon['cupon_money'];
+			if($orderPrice <= $cuponPrice){
+				$cuponPrice = $orderPrice;
+			}
+			$money = $cuponPrice;
 			
 			$se = new Sequence("order_pay");
 		    $orderPayId = $se->nextval();
+		    
 		    $insertOrderPayArr = array(
 		        	'lid'=>$orderPayId,
 		        	'dpid'=>$order['dpid'],
@@ -916,19 +939,16 @@ class WxOrder
 		        	'update_at'=>$now, 
 		        	'order_id'=>$order['lid'],
 		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$cuponMoney,
+		        	'pay_amount'=>$cuponPrice,
 		        	'paytype'=>9,
-		        	'paytype_id'=>$result['lid'],
-		    		'remark'=>$user['card_id'],
-		        	'is_sync'=>$isSync,
+		        	'paytype_id'=>$userCupon['lid'],
+		    		'remark'=>$cardId,
 		     );
 			$orderPay = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 			
-			WxCupon::dealCupon($cuponBranduserDpid, $cuponBranduserLid, 2, $order['dpid']);
-			if($money == 0){
-				self::dealOrder($user,$order);
-			}
+			WxCupon::dealCupon($userCupon['dpid'], $userCupon['lid'], 2, $order['dpid']);
 		}
+		return $money;
 	}
 	/**
 	 * 
@@ -937,8 +957,7 @@ class WxOrder
 	 * 
 	 */
 	 public static function update($orderId,$dpid,$contion){
-	 	$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set '.$contion.'is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$sql = 'update nb_order set '.$contion.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -999,61 +1018,36 @@ class WxOrder
 	 * 
 	 * 微信支付 通知时 使用该方法
 	 * order——pay表记录支付数据
-	 * 
+	 * // 微信支付
 	 */
-	 public static function insertOrderPay($order,$paytype = 1,$out_trade_no = ''){
-	 	if($paytype==10){
-	 		$user = WxBrandUser::get($order['user_id'],$order['dpid']);
-	 		if(!$user){
-	 			throw new Exception('不存在该会员!');
-	 		}
-	 		$payMoney = self::reduceYue($user,$order);
-	 	}else{
-	 		$time = time();
-	 		$isSync = DataSync::getInitSync();
-	 		// 微信支付
-	 		$payYue = 0.00;
-	 		$payCupon = 0.00;
-	 		$payPoints = 0.00;
-	 		$orderPays = $orderPays = WxOrderPay::get($order['dpid'],$order['lid']);
-	 		if(!empty($orderPays)){
-	 			foreach($orderPays as $orderPay){
-	 				if($orderPay['paytype']==10){
-	 					$payYue = $orderPay['pay_amount'];
-	 				}elseif($orderPay['paytype']==9){
-	 					$payCupon = $orderPay['pay_amount'];
-	 				}elseif($orderPay['paytype']==8){
-	 					$payPoints = $orderPay['pay_amount'];
-	 				}
-	 			}
-	 		}
-	 		$payPrice = number_format($order['should_total'] - $payYue - $payCupon - $payPoints,2);
-	 		if($order['order_type']==1||$order['order_type']==3||$order['order_type']==6){
-	 			$paytype = 12;
-	 		}elseif($order['order_type']==2){
-	 			$paytype = 13;
-	 		}
-	 		$se = new Sequence("order_pay");
-		    $orderPayId = $se->nextval();
-		    $insertOrderPayArr = array(
-		        	'lid'=>$orderPayId,
-		        	'dpid'=>$order['dpid'],
-		        	'create_at'=>date('Y-m-d H:i:s',$time),
-		        	'update_at'=>date('Y-m-d H:i:s',$time), 
-		        	'order_id'=>$order['lid'],
-		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$payPrice,
-		        	'paytype'=>$paytype,
-		    		'remark'=>$out_trade_no,
-		        	'is_sync'=>$isSync,
-		        );
-			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
-	 	}
+	 public static function insertOrderPay($order,$paytype = 1,$payPrice,$out_trade_no = ''){
+ 		$time = time();
+ 		if(in_array($order['order_type'], array(1,3,6))){
+ 			$paytype = 12;
+ 		}elseif($order['order_type']==2){
+ 			$paytype = 13;
+ 		}
+ 		$se = new Sequence("order_pay");
+	    $orderPayId = $se->nextval();
+	    $insertOrderPayArr = array(
+	        	'lid'=>$orderPayId,
+	        	'dpid'=>$order['dpid'],
+	        	'create_at'=>date('Y-m-d H:i:s',$time),
+	        	'update_at'=>date('Y-m-d H:i:s',$time), 
+	        	'order_id'=>$order['lid'],
+	        	'account_no'=>$order['account_no'],
+	        	'pay_amount'=>$payPrice,
+	        	'paytype'=>$paytype,
+	    		'remark'=>$out_trade_no,
+	        );
+		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 }
 	/**
 	 * 
 	 * 扣除会员余额
-	 * 
+	 * $order : lid dpid account_no should_total 
+	 * should_total 就是需要支付的金额
+	 * $paymoney = array('charge'=>'','back'=>'')
 	 */
 	 public static function reduceYue($user,$order){
 	 	$payMoney = 0;
@@ -1061,44 +1055,20 @@ class WxOrder
 	 	$userDpId = $user['dpid'];
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
-	 	
 	 	$orderTotal = $order['should_total'];
-	 	$payCupon = 0.00;
-	 	$payPoints = 0.00;
-	 	$orderPays = WxOrderPay::get($dpid,$orderId);
-		if(!empty($orderPays)){
-			foreach($orderPays as $orderPay){
-				if($orderPay['paytype']==9){
-					$payCupon = $orderPay['pay_amount']; 
-				}elseif($orderPay['paytype']==8){
-					$payPoints = $orderPay['pay_amount'];
-				}
-			}
+		$total = $orderTotal;
+		
+		$paymoney = array('charge'=>0, 'back'=>0);
+		$payYue = WxBrandUser::reduceYue($user, $dpid, $total, $paymoney);	
+		
+		if($paymoney['charge']){
+			self::insertOrderPay($order, 7, $paymoney['charge'],$user['card_id']);
 		}
-		$total = $orderTotal - $payCupon - $payPoints;
 		
-		$payMoney = WxBrandUser::reduceYue($userId, $userDpId, $dpid, $total);	
-		
-		$time = time();
-		$se = new Sequence("order_pay");
-		$orderPayId = $se->nextval();
-		$insertOrderPayArr = array(
-				'lid'=>$orderPayId,
-				'dpid'=>$order['dpid'],
-				'create_at'=>date('Y-m-d H:i:s',$time),
-				'update_at'=>date('Y-m-d H:i:s',$time),
-				'order_id'=>$order['lid'],
-				'account_no'=>$order['account_no'],
-				'pay_amount'=>$payMoney,
-				'paytype'=>10,
-				'remark'=>$user['card_id'],
-		);
-		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
-		
-		if($payMoney==$total){
-			self::dealOrder($user,$order);
-		} 	
-	 	return $payMoney;
+		if($paymoney['back']){
+			self::insertOrderPay($order, 10, $paymoney['back'],$user['card_id']);
+		}
+	 	return $payYue;
 	 }
 	 /**
 	  * 
@@ -1106,11 +1076,6 @@ class WxOrder
 	  * 
 	  */ 
 	 public static function dealOrder($user,$order){
-	 	$orderArr = array();
-	 	$orderArr['nb_site_no'] = array();
-	 	$orderArr['nb_order_platform'] = array();
-	 	$order['order_status'] = 3;
-	 	$orderArr['nb_order'] = $order;
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
 	 	
@@ -1128,28 +1093,6 @@ class WxOrder
 	 	}
 	 	// 获取订单中产品 减少库存
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
-	 	// 获取收款机内容 并放入redis缓存
-	 	$orderAddressArr = array();
-	 	$orderPays = WxOrderPay::get($dpid, $orderId);
-	 	if(in_array($order['order_type'],array(2,3))){
-	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
-	 	}
-	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $dpid);
-	 	$orderArr['nb_order_product'] = $orderProducts;
-	 	$orderArr['nb_order_pay'] = $orderPays;
-	 	if(!empty($orderAddress)){
-	 		array_push($orderAddressArr, $orderAddress);
-	 	}
-	 	$orderArr['nb_order_address'] = $orderAddressArr;
-	 	$orderArr['nb_order_taste'] = $order['taste'];
-	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
-	 	$orderStr = json_encode($orderArr);
-	 	Helper::writeLog($orderStr);
-	 	$result = WxRedis::pushPlatform($dpid, $orderStr);
-	 	if(!$result){
-	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$dpid.';data:'.$orderStr);
-	 	}
-
 	 	foreach ($orderProducts as $product){
 	 		if($product['set_id'] > 0){
 	 			$setDetails = $product['set_detail'];
@@ -1183,6 +1126,71 @@ class WxOrder
 	 				}
 	 			}
 	 		}
+	 	}
+	 }
+	 /**
+	  * 已支付的订单
+	  * 放入缓存
+	  */
+	 public static function pushOrderToRedis($order){
+	 	$orderId = $order['lid'];
+	 	$orderDpid = $order['dpid'];
+	 	$orderArr = array();
+	 	$orderArr['nb_site_no'] = array();
+	 	$orderArr['nb_order_platform'] = array();
+	 	
+	 	$order = self::getOrder($orderId, $orderDpid);
+	 	$orderArr['nb_order'] = $order;
+	 	
+	 	$orderProducts = self::getOrderProductData($orderId, $orderDpid);
+	 	$orderArr['nb_order_product'] = $orderProducts;
+	 	
+	 	$orderPays = WxOrderPay::get($orderDpid, $orderId);
+	 	$orderArr['nb_order_pay'] = $orderPays;
+	 	
+	 	$orderAddressArr = array();
+	 	if(in_array($order['order_type'],array(2,3))){
+	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 		if(!empty($orderAddress)){
+	 			array_push($orderAddressArr, $orderAddress);
+	 		}
+	 	}
+	 	$orderArr['nb_order_address'] = $orderAddressArr;
+	 	$orderArr['nb_order_taste'] = $order['taste'];
+	 	
+	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $orderDpid);
+	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
+	 	$orderStr = json_encode($orderArr);
+	 	
+	 	$result = WxRedis::pushPlatform($orderDpid, $orderStr);
+	 	if(!$result){
+	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$orderDpid.';data:'.$orderStr);
+	 	}
+	 }
+	 /**
+	  *桌台点单订单 
+	  *放入缓存
+	  */
+	 public static function pushSiteOrderToRedis($order){
+	 	// 餐桌模式 数据放入缓存中
+	 	$orderId = $order['lid'];
+	 	$orderDpid = $order['dpid'];
+	 	
+	 	$orderArr = array();
+	 	$orderProduct = WxOrder::getOrderProductData($orderId, $orderDpid);
+	 	$orderDiscount = WxOrder::getOrderAccountDiscount($orderId, $orderDpid);
+	 	$orderArr['nb_site_no'] = $orderObj->siteNo;
+	 	$orderArr['nb_order_platform'] = array();
+	 	$orderArr['nb_order'] = $order;
+	 	$orderArr['nb_order_product'] = $orderProduct;
+	 	$orderArr['nb_order_pay'] = array();
+	 	$orderArr['nb_order_address'] = array();
+	 	$orderArr['nb_order_taste'] = $order['taste'];
+	 	$orderArr['nb_order_account_discount'] = array();
+	 	$orderStr = json_encode($orderArr);
+	 	$result = WxRedis::pushPlatform($orderDpid, $orderStr);
+	 	if(!$result){
+	 		Helper::writeLog('redis缓存失败 :类型:微信桌台-接单pushPlatform;dpid:'.$orderDpid.';data:'.$orderStr);
 	 	}
 	 }
      /**

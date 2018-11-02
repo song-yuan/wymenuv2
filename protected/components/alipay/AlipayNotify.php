@@ -148,9 +148,6 @@ class AlipayNotify {
 	 	//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
 		//total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-		if($order['should_total'] != $data['total_fee'] || $this->alipay_config['seller_id']!=$data['seller_id']){
-			exit;
-		}
 		
 		$se = new Sequence("notify");
         $lid = $se->nextval();
@@ -166,13 +163,13 @@ class AlipayNotify {
         	'total_fee'=>$data['total_fee'],
         	'time_end'=>date('YmdHis',strtotime($data['notify_time'])),
         	'attach'=>isset($data['body'])?$data['body']:'',
-        	'is_sync'=>DataSync::getInitSync(),
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		
 		//orderpay表插入数据
-		WxOrder::insertOrderPay($order,2,$data["out_trade_no"]);
+		WxOrder::insertOrderPay($order,2,$data['total_fee'],$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
+		WxOrder::pushOrderToRedis($order);
 	}
 }
 ?>

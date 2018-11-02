@@ -85,7 +85,7 @@ class UserController extends Controller
             $img = WxBrandUser::getCardImg($style_id,$user['dpid']);
         }
         
-        $remainMoney =  WxBrandUser::getYue($userId,$user['dpid']);
+        $remainMoney =  WxBrandUser::getYue($user);
         
         $brandUserAdmin = WxBrandUserAdmin::get($userId, $user['dpid']);
         $this->render('index',array(
@@ -106,7 +106,7 @@ class UserController extends Controller
         $user = $this->brandUser;
         //$userId就是brand_user表里的lid
         $userId = $user['lid'];
-    	$remainMoey = WxBrandUser::getYue($userId, $this->companyId);
+    	$remainMoey = WxBrandUser::getYue($user);
     	$comments = WxRecharge::getWxRechargeComment($this->companyId,2,2);
     	$rechargeRecords = WxRecharge::getRechargeRecord($this->companyId,$userId);
     	$consumes = WxRecharge::getConsumeRecord($userId);
