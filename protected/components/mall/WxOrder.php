@@ -671,7 +671,7 @@ class WxOrder
 			$sql = 'update nb_site_no set status=2 where lid='.$this->siteNoId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
-		
+		$orderArr['should_total'] = $orderPrice;
 		$payPrice = $orderPrice;
 		// 现金券
 		if($this->cupon && $payPrice>0){
@@ -688,17 +688,15 @@ class WxOrder
 				$payPrice -= $payMoney;
 			}
 		}
-		if($payPrice <= 0){
-			$orderPrice = 0;
-			$this->orderSuccess = true;
-		}else {
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.' where lid='.$orderId.' and dpid='.$this->dpid;
-			Yii::app()->db->createCommand($sql)->execute();
-		}
+		$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.' where lid='.$orderId.' and dpid='.$this->dpid;
+		Yii::app()->db->createCommand($sql)->execute();
 		//清空购物车
 		$sql = 'delete from nb_cart where user_id='.$this->userId.' and dpid='.$this->dpid;
 		Yii::app()->db->createCommand($sql)->execute();
-		$orderArr['should_total'] = $orderPrice;
+		
+		if($payPrice <= 0){
+			$this->orderSuccess = true;
+		}
 		$this->order = $orderArr;
 		return $orderId;
 	}
@@ -930,23 +928,7 @@ class WxOrder
 			}
 			$money = $cuponPrice;
 			
-			$se = new Sequence("order_pay");
-		    $orderPayId = $se->nextval();
-		    
-		    $insertOrderPayArr = array(
-		        	'lid'=>$orderPayId,
-		        	'dpid'=>$order['dpid'],
-		        	'create_at'=>$now,
-		        	'update_at'=>$now, 
-		        	'order_id'=>$order['lid'],
-		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$cuponPrice,
-		        	'paytype'=>9,
-		        	'paytype_id'=>$userCupon['lid'],
-		    		'remark'=>$cardId,
-		     );
-			$orderPay = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
-			
+			self::insertOrderPay($order,9,$money,$userCupon['lid'],$cardId);
 			WxCupon::dealCupon($userCupon['dpid'], $userCupon['lid'], 2, $order['dpid']);
 		}
 		return $money;
@@ -1021,13 +1003,8 @@ class WxOrder
 	 * order——pay表记录支付数据
 	 * // 微信支付
 	 */
-	 public static function insertOrderPay($order,$paytype = 1,$payPrice,$out_trade_no = ''){
+	 public static function insertOrderPay($order,$paytype = 1,$payPrice = 0,$payTypeId = 0,$out_trade_no = ''){
  		$time = time();
- 		if(in_array($order['order_type'], array(1,3,6))){
- 			$paytype = 12;
- 		}elseif($order['order_type']==2){
- 			$paytype = 13;
- 		}
  		$se = new Sequence("order_pay");
 	    $orderPayId = $se->nextval();
 	    $insertOrderPayArr = array(
@@ -1039,6 +1016,7 @@ class WxOrder
 	        	'account_no'=>$order['account_no'],
 	        	'pay_amount'=>$payPrice,
 	        	'paytype'=>$paytype,
+	    		'paytype_id'=>$payTypeId,
 	    		'remark'=>$out_trade_no,
 	        );
 		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
@@ -1063,11 +1041,11 @@ class WxOrder
 		$payYue = WxBrandUser::reduceYue($user, $dpid, $total, $paymoney);	
 		
 		if($paymoney['charge']){
-			self::insertOrderPay($order, 7, $paymoney['charge'],$user['card_id']);
+			self::insertOrderPay($order, 7, $paymoney['charge'],0,$user['card_id']);
 		}
 		
 		if($paymoney['back']){
-			self::insertOrderPay($order, 10, $paymoney['back'],$user['card_id']);
+			self::insertOrderPay($order, 10, $paymoney['back'],0,$user['card_id']);
 		}
 	 	return $payYue;
 	 }

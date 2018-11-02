@@ -167,7 +167,7 @@ class AlipayNotify {
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		
 		//orderpay表插入数据
-		WxOrder::insertOrderPay($order,2,$data['total_fee'],$data["out_trade_no"]);
+		WxOrder::insertOrderPay($order,2,$data['total_fee'],0,$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
 		WxOrder::pushOrderToRedis($order);
 	}

@@ -106,7 +106,12 @@ class Notify extends WxPayNotify
 		}
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
-		WxOrder::insertOrderPay($order,1,$data['total_fee']/100,$data["out_trade_no"]);
+		if(in_array($order['order_type'], array(1,3,6))){
+			$paytype = 12;
+		}elseif($order['order_type']==2){
+			$paytype = 13;
+		}
+		WxOrder::insertOrderPay($order,$paytype,$data['total_fee']/100,0,$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
 		WxOrder::pushOrderToRedis($order);
 	}
