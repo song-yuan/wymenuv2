@@ -675,7 +675,7 @@ class WxOrder
 		$payPrice = $orderPrice;
 		// 现金券
 		if($this->cupon && $payPrice>0){
-			$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$payPrice,'order_type'=>$this->type);
+			$order = $orderArr;
 			$payMoney = self::updateOrderCupon($this->cupon, $order, $this->user['card_id']);
 			$payPrice -= $payMoney;
 		}
@@ -683,8 +683,8 @@ class WxOrder
 		if($this->others['yue'] && $payPrice>0){
 			$remainMoney = WxBrandUser::getYue($this->user);
 			if($remainMoney > 0){
-				$order = array('lid'=>$orderId,'dpid'=>$this->dpid,'account_no'=>$accountNo,'should_total'=>$payPrice,'order_type'=>$this->type);
-				$payMoney = self::reduceYue($this->user,$order);
+				$order = $orderArr;
+				$payMoney = self::reduceYue($this->user,$order,$payPrice);
 				$payPrice -= $payMoney;
 			}
 		}
@@ -1010,7 +1010,7 @@ class WxOrder
 	    $insertOrderPayArr = array(
 	        	'lid'=>$orderPayId,
 	        	'dpid'=>$order['dpid'],
-	        	'create_at'=>date('Y-m-d H:i:s',$time),
+	        	'create_at'=>$order['create_at'],
 	        	'update_at'=>date('Y-m-d H:i:s',$time), 
 	        	'order_id'=>$order['lid'],
 	        	'account_no'=>$order['account_no'],
@@ -1028,14 +1028,13 @@ class WxOrder
 	 * should_total 就是需要支付的金额
 	 * $paymoney = array('charge'=>'','back'=>'')
 	 */
-	 public static function reduceYue($user,$order){
+	 public static function reduceYue($user,$order,$payPrice){
 	 	$payMoney = 0;
 	 	$userId = $user['lid'];
 	 	$userDpId = $user['dpid'];
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
-	 	$orderTotal = $order['should_total'];
-		$total = $orderTotal;
+		$total = $payPrice;
 		
 		$paymoney = array('charge'=>0, 'back'=>0);
 		$payYue = WxBrandUser::reduceYue($user, $dpid, $total, $paymoney);	

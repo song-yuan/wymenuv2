@@ -113,6 +113,7 @@ class Notify extends WxPayNotify
 		}
 		WxOrder::insertOrderPay($order,$paytype,$data['total_fee']/100,0,$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
+		$order['order_status'] = 3;
 		WxOrder::pushOrderToRedis($order);
 	}
 }

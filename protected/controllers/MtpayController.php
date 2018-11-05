@@ -70,34 +70,18 @@ class MtpayController extends Controller
 			);
 			$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
 			
-			$orders = WxOrder::getOrder($orderid, $orderdpid);
-			if(!empty($orders)){
-				if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
-					$pay_type = '12';
-				}elseif($orders['order_type'] == '2'){
-					$pay_type = '13';
-				}else{
-					$pay_type = '1';
+			$order = WxOrder::getOrder($orderid, $orderdpid);
+			if(!empty($order)){
+				if(in_array($order['order_type'], array(1,3,6))){
+					$paytype = 12;
+				}elseif($order['order_type']==2){
+					$paytype = 13;
 				}
-			
-				$se = new Sequence ( "order_pay" );
-				$orderpayId = $se->nextval();
-				$orderpayData = array (
-						'lid' => $orderpayId,
-						'dpid' => $orderdpid,
-						'create_at' => $orders['create_at'],
-						'update_at' => $orders['update_at'],
-						'order_id' => $orderid,
-						'account_no' => $orders['account_no'],
-						'pay_amount' => number_format($totalFee/100,2),
-						'paytype' => $pay_type,
-						'remark' => $accountno,
-				);
-				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
-				
-				$user = WxBrandUser::getFromUserId($orders['user_id']);
-				WxOrder::dealOrder($user, $orders);
-				WxOrder::pushOrderToRedis($orders);
+				WxOrder::insertOrderPay($order,$paytype,$totalFee/100,0,$accountno);
+				$user = WxBrandUser::getFromUserId($order['user_id']);
+				WxOrder::dealOrder($user, $order);
+				$order['order_status'] = 3;
+				WxOrder::pushOrderToRedis($order);
 				echo '{"status":"SUCCESS"}';
 				exit;
 			}

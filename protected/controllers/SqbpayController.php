@@ -230,38 +230,6 @@ class SqbpayController extends Controller
 				//Helper::writeLog('不同的2:['.$sn.']');
 			}
 		}else{
-			$sql = 'select * from nb_order where dpid ='.$orderdpid.' and lid ='.$orderid;
-			$orders = Yii::app()->db->createCommand($sql)->queryRow();
-			if(!empty($orders)){
-				if($orders['order_type'] == '1' || $orders['order_type'] == '6' || $orders['order_type'] == '3' ){
-					$pay_type = '12';
-				}elseif($orders['order_type'] == '2'){
-					$pay_type = '13';
-				}else{
-					$pay_type = '1';
-				}
-				$sql = 'select * from nb_order_pay where dpid ='.$orderdpid.' and order_id ='.$orderid.' and account_no ="'.$orders['account_no'].'" and paytype ='.$pay_type;
-				$ordpays = Yii::app()->db->createCommand($sql)->queryRow();
-
-				$se = new Sequence ( "order_pay" );
-				$orderpayId = $se->nextval();
-				$orderpayData = array (
-						'lid' => $orderpayId,
-						'dpid' => $orderdpid,
-						'create_at' => $orders['create_at'],
-						'update_at' => $orders['update_at'],
-						'order_id' => $orderid,
-						'account_no' => $orders['account_no'],
-						'pay_amount' => number_format($total_amount/100,2),
-						'paytype' => $pay_type,
-						'remark' => $client_sn,
-				);
-				$result = Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderpayData );
-					
-			}else{
-				Helper::writeLog('未查询到该条订单：'.$orderid);
-			}
-			
 			//Helper::writeLog('第一次1:['.$sn.']');
 			//像微信公众号支付记录表插入记录...
 			$se = new Sequence("notify_wxwap");
@@ -293,19 +261,24 @@ class SqbpayController extends Controller
 			$data = json_encode($notifyWxwapData);
 			$result = Yii::app ()->db->createCommand ()->insert('nb_notify_wxwap',$notifyWxwapData);
 			if($result){
-
 				if($order_status == 'PAID'){
 					//订单成功支付...
 					Helper::writeLog('支付成功!orderid:['.$orderid.'],dpid:['.$orderdpid.']');
-					$orders = WxOrder::getOrder($orderid, $orderdpid);
-					if(!empty($orders)){
-						$user = WxBrandUser::getFromUserId($orders['user_id']);
-						WxOrder::dealOrder($user, $orders);
-						WxOrder::pushOrderToRedis($orders);
+					$order = WxOrder::getOrder($orderid, $orderdpid);
+					if(!empty($order)){
+						if(in_array($order['order_type'], array(1,3,6))){
+							$paytype = 12;
+						}elseif($order['order_type']==2){
+							$paytype = 13;
+						}
+						WxOrder::insertOrderPay($order,$paytype,$total_amount/100,0,$client_sn);
+						$user = WxBrandUser::getFromUserId($order['user_id']);
+						WxOrder::dealOrder($user, $order);
+						$order['order_status'] = 3;
+						WxOrder::pushOrderToRedis($order);
 					}
 				}
 			}
-			//Helper::writeLog('第一次2:['.$result.']');
 		}
 	}
 	/**
