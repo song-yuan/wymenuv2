@@ -676,7 +676,7 @@ class WxOrder
 		// 现金券
 		if($this->cupon && $payPrice>0){
 			$order = $orderArr;
-			$payMoney = self::updateOrderCupon($this->cupon, $order, $this->user['card_id']);
+			$payMoney = self::updateOrderCupon($this->cupon, $order, $payPrice, $this->user['card_id']);
 			$payPrice -= $payMoney;
 		}
 		// 使用储值
