@@ -466,7 +466,7 @@ class WxOrder
 								'dpid'=>$this->dpid,
 								'create_at'=>date('Y-m-d H:i:s',$time),
 								'update_at'=>date('Y-m-d H:i:s',$time),
-								'taste_name'=>$ordertaste[3],
+								'taste_name'=>$taste[3],
 								'taste_id'=>$taste[1],
 								'order_id'=>$orderProductId,
 								'is_order'=>0,
