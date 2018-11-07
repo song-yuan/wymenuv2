@@ -275,14 +275,15 @@ class MallController extends Controller
 			$msg = $e->getMessage();
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
-		if($orderObj->orderSuccess && $orderCreate){
-			$order = WxOrder::getOrder($orderId, $this->companyId);
-			WxOrder::pushOrderToRedis($order);
-		}
 		if($this->type==1){
 			$order = WxOrder::getOrder($orderId, $this->companyId);
 			WxOrder::pushSiteOrderToRedis($order);
 			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
+		}
+		var_dump($this->type);var_dump($orderObj->order);exit;
+		if($orderObj->orderSuccess && $orderCreate){
+			$order = WxOrder::getOrder($orderId, $this->companyId);
+			WxOrder::pushOrderToRedis($order);
 		}
 		if($paytype == 1){
 			//支付宝支付
