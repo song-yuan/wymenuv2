@@ -190,7 +190,7 @@
 	    			foreach($groups['tastes'] as $tk=>$taste){
 	    				$active = '';
 	    				if($taste['is_selected']==1){
-	    					$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+	    					$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
 	    					$active = 'on';
 	    					$tprice = '';
 	    					if($taste["price"]>0){
@@ -251,7 +251,7 @@
 		    					foreach($groups['tastes'] as $tk=>$taste){
 		    						$active = '';
 		    						if($taste['is_selected']==1){
-		    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"];
+		    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
 		    							$active = 'on';
 		    							$tprice = '';
 		    							if($taste["price"]>0){
