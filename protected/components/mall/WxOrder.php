@@ -246,7 +246,6 @@ class WxOrder
 				}
 			}
 		}
-		var_dump($this->productTastes);exit;
 	}
 	//处理订单口味
 	public function dealProductSet(){
