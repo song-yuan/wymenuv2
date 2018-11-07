@@ -144,7 +144,7 @@
 	    			foreach($groups['tastes'] as $taste):
 	    			$taste['price'] = number_format($taste['price']*$levelDiscount,2);
 	    		?>
-	    			<div class="item t-item taste-item"  group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" allflage="<?php echo $taste['allflae'];?>" taste-pirce="<?php echo $taste['price'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
+	    			<div class="item t-item taste-item"  group="<?php echo $k;?>" taste-id="<?php echo $taste['lid'];?>" allflage="<?php echo $taste['allflae'];?>" taste-pirce="<?php echo $taste['price'];?>" taste-name="<?php echo $taste['name'];?>"><?php echo $taste['name'];?><?php if($taste['price']>0):?>(<span class="taste-pice"><?php echo $taste['price'];?></span>)<?php endif;?></div>
 	    		<?php endforeach;?>
 	    		<input type="hidden" name="taste[]" value="0" />
 	    		<div class="clear"></div>
@@ -205,7 +205,7 @@
 	    					}
 	    					$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 	    				}
-	    				$tasteHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$k.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'"  product-price="'.$model['price'].'">'.$taste['name'];
+	    				$tasteHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$k.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'" taste-name="'.$taste['name'].'"  product-price="'.$model['price'].'">'.$taste['name'];
 	    				if($taste['price'] > 0){
 	    					$tasteHtml .='('.$taste['price'].')';
 	    				}
@@ -265,7 +265,7 @@
 		    							}
 		    							$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
 		    						}
-		    						$prosetHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$kk.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'" product-price="'.($model['price']+$item['price']).'">'.$taste['name'];
+		    						$prosetHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$kk.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'" taste-name="'.$taste['name'].'" product-price="'.($model['price']+$item['price']).'">'.$taste['name'];
 		    						if($taste['price'] > 0){
 		    							$prosetHtml .= '('.$taste['price'].')';
 		    						}
@@ -707,7 +707,7 @@ $(document).ready(function(){
 	  	var tasteId = $(this).attr('taste-id');
 	  	var group =  $(this).attr('group');
 	  	var tastePrice = $(this).attr('taste-pirce');
-	  	var tastName = $(this).html();
+	  	var tastName = $(this).attr('taste-name');
 	  	var allflage = $(this).attr('allflage');
 	  	var num = 1;
 	  	if(sectionObj.find('.num').length > 0){ // 非全单口味
@@ -733,7 +733,7 @@ $(document).ready(function(){
 		  	  	onObj.removeClass('on');
 	  	  	}
 		  	$(this).addClass('on');
-		  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice);
+		  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice+'-'+tastName);
 		  	if(sectionObj.find('.price').length > 0){
 		  		sectionObj.find('.price').html((parseFloat(productPrice)+parseFloat(tastePrice)).toFixed(2));
 		  	}
