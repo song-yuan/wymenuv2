@@ -275,9 +275,10 @@ class MallController extends Controller
 			$msg = $e->getMessage();
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
-		var_dump($this->type);exit;
+		
 		if($this->type==1){
 			$order = WxOrder::getOrder($orderId, $this->companyId);
+			var_dump($order);exit;
 			WxOrder::pushSiteOrderToRedis($order);
 			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
 		}
