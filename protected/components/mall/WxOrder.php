@@ -1148,15 +1148,15 @@ class WxOrder
 	  *桌台点单订单 
 	  *放入缓存
 	  */
-	 public static function pushSiteOrderToRedis($order){
+	 public static function pushSiteOrderToRedis($order,$siteNo){
 	 	// 餐桌模式 数据放入缓存中
 	 	$orderId = $order['lid'];
 	 	$orderDpid = $order['dpid'];
 	 	
 	 	$orderArr = array();
-	 	$orderProduct = WxOrder::getOrderProductData($orderId, $orderDpid);
-	 	$orderDiscount = WxOrder::getOrderAccountDiscount($orderId, $orderDpid);
-	 	$orderArr['nb_site_no'] = $orderObj->siteNo;
+	 	$orderProduct = self::getOrderProductData($orderId, $orderDpid);
+	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $orderDpid);
+	 	$orderArr['nb_site_no'] = $siteNo;
 	 	$orderArr['nb_order_platform'] = array();
 	 	$orderArr['nb_order'] = $order;
 	 	$orderArr['nb_order_product'] = $orderProduct;
