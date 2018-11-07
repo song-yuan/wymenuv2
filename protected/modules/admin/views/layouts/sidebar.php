@@ -73,13 +73,13 @@
                     <span class="title"><?php echo yii::t('app','进销存管理');?></span>
                     </a>
             </li>
-            <li class="<?php if(in_array(Yii::app()->controller->id , array('statements','orderManagement','statementmember','pos','statementstock'))) echo 'active';?>">
+        <?php endif; ?>
+       		<li class="<?php if(in_array(Yii::app()->controller->id , array('statements','orderManagement','statementmember','pos','statementstock'))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('statements/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-bar-chart-o"></i> 
                     <span class="title"><?php echo yii::t('app','报表中心');?></span>					
                     </a>
             </li>
-        <?php endif; ?>
 			 <?php if(Yii::app()->user->role != '8'): ?>
             <li class="<?php if(in_array(Yii::app()->controller->id , array('waimai',))) echo 'active';?>">
                     <a href="<?php echo $this->createUrl('waimai/list',array('companyId' => $this->companyId,'type'=>0));?>">
