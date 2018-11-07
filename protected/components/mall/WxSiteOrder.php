@@ -12,19 +12,25 @@ class WxSiteOrder
 	public $dpid;
 	public $siteId; // nb_site_no表的lid
 	public $seatingFee = 0;
+	public $levelDiscount = 1;//会员等级折扣
 	public $user;
 	public $hasfullsent = false;
 	public $fullsent = '0-0-0';//满送满减信息
 	public $fullMinus = 0; //满减金额
 	public $fullSentProduct = array(); //满送产品
-	public $orders = false;
+	public $others = array();//其他参数
+	public $orders = false; //餐桌多次下单
+	public $order = false;//最早一次下单
+	public $orderSuccess = false;
 	
 	public function __construct($dpid, $siteId, $user, $others){
 		$this->dpid = $dpid;
 		$this->siteId = $siteId;
 		$this->user = $user;
-		$this->fullsent = $others['fullsent'];
+		$this->others = $others;
 		$this->getSeatingFee();
+		$this->getLevelDiscount();
+		$this->getCupon();
 		$this->getFullsent();
 		$this->getSiteOrders();
 	}
@@ -37,8 +43,32 @@ class WxSiteOrder
 			$this->seatingFee = 0;
 		}
 	}
+	/**
+	 *获取会员等级折扣
+	 */
+	public function getLevelDiscount(){
+		$this->levelDiscount = WxBrandUser::getUserDiscount($this->user,$this->type);
+	}
+	/**
+	 *获取优惠券信息
+	 */
+	public function getCupon(){
+		$cupoinId = $this->others['cuponId'];
+		if($cupoinId){
+			$now = date('Y-m-d H:i:s',time());
+			$cbArr = explode('-', $cupoinId);
+			$cbLid = $cbArr[0];
+			$cbDpid = $cbArr[1];
+			$sql = 'select t.lid,t.dpid,t.cupon_id,t1.cupon_money,t1.min_consumer from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cbLid.
+			' and t.dpid='.$cbDpid.' and t.valid_day <= "'.$now.'" and "'.$now.'" <= t.close_day and t1.delete_flag=0 and t1.is_available=0';
+			$this->cupon = Yii::app()->db->createCommand($sql)->queryRow();
+		}
+	}
+	/**
+	 * 处理满减满送活动
+	 */
 	public function getFullsent(){
-		if($this->fullsent!='0-0-0'){
+		if($this->others['fullsent']!='0-0-0'){
 			$now = date('Y-m-d H:i:s',time());
 			$this->hasfullsent = true;
 			$fullsentArr = explode('-', $this->fullsent);
@@ -84,12 +114,13 @@ class WxSiteOrder
 		$sorderId = '';
 		$sorderproductId = '';
 		$time = time();
-		$levelDiscount = WxBrandUser::getUserDiscount($this->user,'1');
+		$levelDiscount = $this->levelDiscount;
 		foreach ($this->orders as $key=>$order){
 			if($key==0){
 				$forderId = $order['lid'];
 				$accountNo = $order['account_no'];
 				$number = $order['number'];
+				$this->order = $order;
 			}else{
 				$sorderId .= $order['lid'].',';
 			}
@@ -213,16 +244,31 @@ class WxSiteOrder
 			Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderAccountData);
 			$orderPrice = $orderPrice - $this->fullMinus;
 			if($orderPrice < 0){
-				self::update;
-				
+				$orderPrice = 0;
 			}
 		}
-		if($orderPrice==0){
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status=3 where lid='.$forderId.' and dpid='.$this->dpid;
-			Yii::app()->db->createCommand($sql)->execute();
-		}else{
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.' where lid='.$forderId.' and dpid='.$this->dpid;
-			Yii::app()->db->createCommand($sql)->execute();
+		$orderArr['should_total'] = $orderPrice;
+		$payPrice = $orderPrice;
+		
+		// 现金券
+		if($this->cupon && $payPrice>0){
+			$order = $orderArr;
+			$payMoney = self::updateOrderCupon($this->cupon, $order, $payPrice, $this->user['card_id']);
+			$payPrice -= $payMoney;
+		}
+		// 使用储值
+		if($this->others['yue'] && $payPrice>0){
+			$remainMoney = WxBrandUser::getYue($this->user);
+			if($remainMoney > 0){
+				$order = $orderArr;
+				$payMoney = self::reduceYue($this->user,$order,$payPrice);
+				$payPrice -= $payMoney;
+			}
+		}
+		$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.' where lid='.$orderId.' and dpid='.$this->dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+		if($payPrice <= 0){
+			$this->orderSuccess = true;
 		}
 		return $forderId;
 	}

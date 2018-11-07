@@ -272,7 +272,6 @@ class MallController extends Controller
 		   	$orderCreate = true;
 		}catch (Exception $e) {
 			$transaction->rollback();
-			$orderCreate = false;
 			$msg = $e->getMessage();
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
@@ -489,7 +488,6 @@ class MallController extends Controller
 	  * 
 	  */
 	  public function actionGeneralSiteOrder(){
-	  		$contion = null;
 		  	$user = $this->brandUser;
         	$userId = $user['lid'];
 			$siteId = Yii::app()->request->getParam('siteNoId');
@@ -498,7 +496,7 @@ class MallController extends Controller
 			$cuponId = Yii::app()->request->getPost('cupon');
 			$remark = Yii::app()->request->getPost('remark',null);
 			$yue = Yii::app()->request->getPost('yue',0);
-			$others = array('fullsent'=>$fullsent);
+			$others = array('cuponId'=>$cuponId,'orderTime'=>$orderTime,'fullsent'=>$fullsent,'yue'=>$yue,'remark'=>$remark);
 			try {
 				$sorderObj = new WxSiteOrder($this->companyId, $siteId, $user, $others);
 				if(empty($sorderObj->orders)){
@@ -508,41 +506,23 @@ class MallController extends Controller
 				$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>1));
 			}
 			
+			$orderCreate = false;
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
 				$orderId = $sorderObj->createOrder();
-				if($cuponId){
-					WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId,$user);
+				if($sorderObj->orderSuccess){
+					WxOrder::dealOrder($user, $orderObj->order);
 				}
-					
-				if($remark){
-					$remark = Helper::dealString($remark);
-					$contion = $contion.' remark="'.$remark.'",';
-				}
-					
-				if($contion){
-					WxOrder::update($orderId,$this->companyId,$contion);
-				}
-				
-				//使用余额
-				if($yue){
-					$order = WxOrder::getOrder($orderId,$this->companyId);
-					if($order['order_status'] < 3){
-						$remainMoney = WxBrandUser::getYue($user);
-						if($remainMoney > 0){
-							WxOrder::insertOrderPay($order,10,'');
-						}
-					}
-				}	
-				if($paytype == 1){
-					//支付宝支付
-					WxOrder::updatePayType($orderId,$this->companyId,2);
-				}
-				WxOrder::updatePayType($orderId,$this->companyId);
 				$transaction->commit();
+				$orderCreate = true;
 			}catch (Exception $e){
 				$transaction->rollback();
 				$msg = $e->getMessage();
+				$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>1));
+			}
+			if($sorderObj->orderSuccess && $orderCreate){
+				$order = WxOrder::getOrder($orderId, $this->companyId);
+				WxOrder::pushOrderToRedis($order);
 			}
 			if($paytype == 1){
 				$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
