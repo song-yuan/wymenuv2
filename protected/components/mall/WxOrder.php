@@ -246,7 +246,6 @@ class WxOrder
 				}
 			}
 		}
-		var_dump($this->productTastes);exit;
 	}
 	//处理订单口味
 	public function dealProductSet(){
@@ -402,7 +401,7 @@ class WxOrder
 						'dpid'=>$this->dpid,
 						'create_at'=>date('Y-m-d H:i:s',$time),
 						'update_at'=>date('Y-m-d H:i:s',$time),
-						'taste_name'=>$tasteRes['name'],
+						'taste_name'=>$ordertaste[3],
 						'taste_id'=>$ordertaste[1],
 						'order_id'=>$orderId,
 						'is_order'=>1,
@@ -467,7 +466,7 @@ class WxOrder
 								'dpid'=>$this->dpid,
 								'create_at'=>date('Y-m-d H:i:s',$time),
 								'update_at'=>date('Y-m-d H:i:s',$time),
-								'taste_name'=>$tasteRes['name'],
+								'taste_name'=>$ordertaste[3],
 								'taste_id'=>$taste[1],
 								'order_id'=>$orderProductId,
 								'is_order'=>0,
