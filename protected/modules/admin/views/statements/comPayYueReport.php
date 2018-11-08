@@ -78,15 +78,15 @@
 		        <thead>
 		            <tr>
 		                <?php  $grouppay_item = 0;?>
-		               <th><?php echo yii::t('app','日期');?></th>
-		               <th><?php echo yii::t('app','店铺名称');?></th>
-		               <th><?php echo yii::t('app','总单数');?></th>
-		               <th><?php echo yii::t('app','总营业额');?></th>
-		               <th><?php echo yii::t('app','微信点单');?></th>
-		               <th><?php echo yii::t('app','微信外卖');?></th>
-		               <th><?php echo yii::t('app','系统券');?></th>
-		               <th><?php echo yii::t('app','微信储值消费');?></th>
-
+		               	<th><?php echo yii::t('app','日期');?></th>
+		               	<th><?php echo yii::t('app','店铺名称');?></th>
+		               	<th><?php echo yii::t('app','总单数');?></th>
+		               	<th><?php echo yii::t('app','总营业额');?></th>
+		               	<th><?php echo yii::t('app','微信点单');?></th>
+		               	<th><?php echo yii::t('app','微信外卖');?></th>
+		               	<th><?php echo yii::t('app','系统券');?></th>
+		               	<th><?php echo yii::t('app','微信储值(充)');?></th>
+						<th><?php echo yii::t('app','微信储值(返)');?></th>
 		            </tr>
 		        </thead>
 				<tbody>
@@ -102,8 +102,10 @@
 		        $orders_total_wxwm_count = 0;
 		        $orders_total_cupon = 0;
 		        $orders_total_cupon_count = 0;
-		        $orders_total_yue = 0;
-		        $orders_total_yue_count = 0;
+		        $orders_total_cyue = 0;
+		        $orders_total_cyue_count = 0;
+		        $orders_total_fyue = 0;
+		        $orders_total_fyue_count = 0;
 		        
 
 				if($models):?>
@@ -125,13 +127,21 @@
 			      	$orders_total_cupon += $yhqPay;
 			      	$orders_total_cupon_count += $yhqPayCount;
 			      	
-			      	$wxczPay = 0;$wxczPayCount = 0;
-			      	if(isset($orderPay['10-0'])){
-			      		$wxczPay = $orderPay['10-0']['pay_amount'];
-			      		$wxczPayCount = $orderPay['10-0']['pay_count'];
+			      	$cwxczPay = 0;$cwxczPayCount = 0;
+			      	if(isset($orderPay['7-0'])){
+			      		$cwxczPay = $orderPay['7-0']['pay_amount'];
+			      		$cwxczPayCount = $orderPay['7-0']['pay_count'];
 			      	}
-			      	$orders_total_yue += $wxczPay;
-			      	$orders_total_yue_count += $wxczPayCount;
+			      	$orders_total_cyue += $cwxczPay;
+			      	$orders_total_cyue_count += $cwxczPayCount;
+			      	
+			      	$fwxczPay = 0;$fwxczPayCount = 0;
+			      	if(isset($orderPay['10-0'])){
+			      		$fwxczPay = $orderPay['10-0']['pay_amount'];
+			      		$fwxczPayCount = $orderPay['10-0']['pay_count'];
+			      	}
+			      	$orders_total_fyue += $fwxczPay;
+			      	$orders_total_fyue_count += $fwxczPayCount;
 			      	
 			      	$wddPay = 0;$wddPayCount = 0;
 			      	if(isset($orderPay['12-0'])){
@@ -159,7 +169,8 @@
 		            <td><?php echo $wddPay.'('.$wddPayCount.')';?></td>
 		            <td><?php echo $wwmPay.'('.$wwmPayCount.')';?></td>
 		            <td><?php echo $yhqPay.'('.$yhqPayCount.')';?></td>
-		            <td><?php echo $wxczPay.'('.$wxczPayCount.')';?></td>
+		            <td><?php echo $cwxczPay.'('.$cwxczPayCount.')';?></td>
+		            <td><?php echo $fwxczPay.'('.$fwxczPayCount.')';?></td>
 		        </tr>
 
 		        <?php endforeach;?>
@@ -171,8 +182,8 @@
 		            <td><?php echo $orders_total_wxord.'('.$orders_total_wxord_count.')'; ?></td>
 		            <td><?php echo $orders_total_wxwm.'('.$orders_total_wxwm_count.')'; ?></td>
 		            <td><?php echo $orders_total_cupon.'('.$orders_total_cupon_count.')';?></td>
-		            <td><?php echo $orders_total_yue.'('.$orders_total_yue_count.')';?></td>
-
+		            <td><?php echo $orders_total_cyue.'('.$orders_total_cyue_count.')';?></td>
+					<td><?php echo $orders_total_fyue.'('.$orders_total_fyue_count.')';?></td>
 		        </tr>
 		       	<?php endif;?>
 		        </tbody>

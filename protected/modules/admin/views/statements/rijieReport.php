@@ -88,6 +88,8 @@
 		               <th><?php echo yii::t('app','支付宝');?></th>
 		               <th><?php echo yii::t('app','银联');?></th>
 		               <th><?php echo yii::t('app','会员卡');?></th>
+		               <th><?php echo yii::t('app','微信储值(充)');?></th>
+		               <th><?php echo yii::t('app','微信储值(返)');?></th>
 		               <th><?php echo yii::t('app','美团·外卖');?></th>
 		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
 		               <?php if($payments):?>
@@ -99,7 +101,6 @@
 		               <?php endif;?>   
 		               <th><?php echo yii::t('app','系统券');?></th>
 		               <th><?php echo yii::t('app','积分');?></th> 
-		               <th><?php echo yii::t('app','微信余额');?></th>                                                            
 		               <th><?php echo yii::t('app','退款');?></th>
 		
 		            </tr>
@@ -120,6 +121,8 @@
 		         $alipay_total = 0;    // 支付宝
 		         $unionpay_total=0;    // 银联
 		         $vipcard_total = 0;   // 会员卡 
+		         $all_cwxcharges = 0;
+		         $all_fwxcharges = 0;
 		         $mtwm_total = 0;   // 对接美团
 		         $eleme_total = 0;   // 对接饿了么
 		         $htpay_total = 0;
@@ -129,7 +132,6 @@
 		           // $grouppay.$i =0;
 		        }
 		        $all_wxcards = 0;
-		        $all_wxcharges = 0;
 		        $all_wxpoints = 0;
 		        $retreats = 0;
 		         if($prices):?>
@@ -209,6 +211,18 @@
 				            $vipcard_total += $vipcard;
 				            echo $vipcard;
 		            ?></td>
+		             <td><?php 
+				            $cwxcharge = $m['cwxyue_money'];
+				            $all_cwxcharges = $all_cwxcharges + $cwxcharge;
+				            echo $cwxcharge;
+		                ?>
+		            </td>
+		             <td><?php 
+				            $fwxcharge = $m['fwxyue_money'];
+				            $all_fwxcharges = $all_fwxcharges + $fwxcharge;
+				            echo $fwxcharge;
+		                ?>
+		            </td>
 		            <td id="mtwm"><?php 
 				            $mtwm = $m['mt_money'];
 				            $mtwm_total += $mtwm;
@@ -246,12 +260,6 @@
 		                ?>
 		            </td>
 		            <td><?php 
-		            $wxcharge = $m['wxyue_money'];
-		            $all_wxcharges = $all_wxcharges + $wxcharge;
-		            echo $wxcharge;
-		                ?>
-		            </td>
-		            <td><?php 
 		            	echo $retreat;
 		            ?></td>
 		            					
@@ -270,15 +278,17 @@
 		                    ?>
 		                </td>
 		            <?php endif;?>
-		            <td><?php  echo $cash_total; ?></td>
-		            <td><?php  echo $wechat_total;?></td>
-		            <td><?php  echo $wxorder_total;?></td>
-		            <td><?php  echo $wxwaimai_total;?></td>
-		            <td><?php  echo $alipay_total;?></td>
-		            <td><?php  echo $unionpay_total;?></td>
-		            <td><?php  echo $vipcard_total; ?></td>
-		            <td><?php  echo $mtwm_total; ?></td>
-		            <td><?php  echo $eleme_total; ?></td>
+		            <td><?php echo $cash_total; ?></td>
+		            <td><?php echo $wechat_total;?></td>
+		            <td><?php echo $wxorder_total;?></td>
+		            <td><?php echo $wxwaimai_total;?></td>
+		            <td><?php echo $alipay_total;?></td>
+		            <td><?php echo $unionpay_total;?></td>
+		            <td><?php echo $vipcard_total; ?></td>
+		            <td><?php echo $all_cwxcharges;?></td>
+		            <td><?php echo $all_fwxcharges;?></td>
+		            <td><?php echo $mtwm_total; ?></td>
+		            <td><?php echo $eleme_total; ?></td>
 		            <?php if($payments):?>
 		                <?php  $j =0;foreach ($payments as $payment):?>
 		                    <td><?php  echo $grouppay_arr[$j++];
@@ -290,13 +300,8 @@
 		            <?php endif;?> 
 		            <td><?php echo $all_wxcards;?></td>
 		            <td><?php echo $all_wxpoints;?></td>
-		            <td><?php echo $all_wxcharges;?></td>
 		            <td><?php echo $retreats;?></td>
-										
 		        </tr>
-
-		       
-		        
 		        </tbody>
     	</table>
 		</div>

@@ -79,7 +79,8 @@
 		               <th><?php echo yii::t('app','银联');?></th>
 		               -->
 		               <th><?php echo yii::t('app','会员卡');?></th>
-		               <th><?php echo yii::t('app','微信储值');?></th> 
+		               <th><?php echo yii::t('app','微信储值(充)');?></th>
+		               <th><?php echo yii::t('app','微信储值(返)');?></th> 
 		               <th><?php echo yii::t('app','美团·外卖');?></th>
 		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
 	                    <?php 
@@ -116,7 +117,8 @@
 		        $elmPayTotal = 0;$elmPayCountTotal = 0;
 		        $yhqPayTotal = 0;$yhqPayCountTotal = 0;
 		        $jfPayTotal = 0;$jfPayCountTotal = 0;
-		        $wxczPayTotal = 0;$wxczPayCountTotal = 0;
+		        $cwxczPayTotal = 0;$cwxczPayCountTotal = 0;
+		        $fwxczPayTotal = 0;$fwxczPayCountTotal = 0;
 		        foreach ($models as $model):
 		        	$paytypeTotal = 0; // 支付方式总和统计
 		        	$order = $model['order'];
@@ -217,14 +219,23 @@
 		        	$yhqPayTotal += $yhqPay;
 		        	$yhqPayCountTotal += $yhqPayCount;
 		        	
-		        	$wxczPay = 0;$wxczPayCount = 0;
-		        	if(isset($orderPay['10-0'])){
-		        		$wxczPay = $orderPay['10-0']['pay_amount'];
-		        		$wxczPayCount = $orderPay['10-0']['pay_count'];
-		        		$paytypeTotal += $wxczPay;
+		        	$cwxczPay = 0;$cwxczPayCount = 0;
+		        	if(isset($orderPay['7-0'])){
+		        		$cwxczPay = $orderPay['7-0']['pay_amount'];
+		        		$cwxczPayCount = $orderPay['7-0']['pay_count'];
+		        		$paytypeTotal += $cwxczPay;
 		        	}
-		        	$wxczPayTotal += $wxczPay;
-		        	$wxczPayCountTotal += $wxczPayCount;
+		        	$cwxczPayTotal += $cwxczPay;
+		        	$cwxczPayCountTotal += $cwxczPayCount;
+		        	
+		        	$fwxczPay = 0;$fwxczPayCount = 0;
+		        	if(isset($orderPay['10-0'])){
+		        		$fwxczPay = $orderPay['10-0']['pay_amount'];
+		        		$fwxczPayCount = $orderPay['10-0']['pay_count'];
+		        		$paytypeTotal += $fwxczPay;
+		        	}
+		        	$fwxczPayTotal += $fwxczPay;
+		        	$fwxczPayCountTotal += $fwxczPayCount;
 		        ?>
 		
 		        <tr class="odd gradeX">
@@ -239,7 +250,8 @@
 	               	<td><?php echo $wwmPay?number_format($wwmPay,2).'('.$wwmPayCount.')':'';?></td>
 	               	<td><?php echo $zfbPay?number_format($zfbPay,2).'('.$zfbPayCount.')':'';?></td>
 	               	<td><?php echo $hykPay?number_format($hykPay,2).'('.$hykPayCount.')':'';?></td>
-	               	<td><?php echo $wxczPay ? number_format($wxczPay,2).'('.$wxczPayCount.')':'';?></td>
+	               	<td><?php echo $cwxczPay ? number_format($cwxczPay,2).'('.$cwxczPayCount.')':'';?></td>
+	               	<td><?php echo $fwxczPay ? number_format($fwxczPay,2).'('.$fwxczPayCount.')':'';?></td>
 	               	<td><?php echo $mtPay?number_format($mtPay,2).'('.$mtPayCount.')':'';?></td>
 	               	<td><?php echo $elmPay?number_format($elmPay,2).'('.$elmPayCount.')':'';?></td>
 		            <?php 
@@ -281,7 +293,8 @@
 	               	<td><?php echo $wwmPayTotal?number_format($wwmPayTotal,2).'('.$wwmPayCountTotal.')':'';?></td>
 	               	<td><?php echo $zfbPayTotal?number_format($zfbPayTotal,2).'('.$zfbPayCountTotal.')':'';?></td>
 	               	<td><?php echo $hykPayTotal?number_format($hykPayTotal,2).'('.$hykPayCountTotal.')':'';?></td>
-	               	<td><?php echo $wxczPayTotal ? number_format($wxczPayTotal,2).'('.$wxczPayCountTotal.')':'';?></td>
+	               	<td><?php echo $cwxczPayTotal ? number_format($cwxczPayTotal,2).'('.$cwxczPayCountTotal.')':'';?></td>
+	               	<td><?php echo $fwxczPayTotal ? number_format($fwxczPayTotal,2).'('.$fwxczPayCountTotal.')':'';?></td>
 	               	<td><?php echo $mtPayTotal?number_format($mtPayTotal,2).'('.$mtPayCountTotal.')':'';?></td>
 	               	<td><?php echo $elmPayTotal?number_format($elmPayTotal,2).'('.$elmPayCountTotal.')':'';?></td>
 		            <?php 
@@ -330,7 +343,7 @@ jQuery(document).ready(function(){
      	var end_time = $('#end_time').val();
      	var text = $('#text').val();
      	var selectDpid = $('select[name="selectDpid"]').val();
-     	location.href="<?php echo $this->createUrl('statements/comPaymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/selectDpid/"+selectDpid    
+     	location.href="<?php echo $this->createUrl('statements/comPaymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/selectDpid/"+selectDpid;   
 	});
 	
 	$('#excel').click(function excel(){
@@ -338,8 +351,9 @@ jQuery(document).ready(function(){
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();
 		var selectDpid = $('select[name="selectDpid"]').val();
+		var selectName = $('select[name="selectDpid"]').find('option:selected').html();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/comPaymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text;
+			location.href="<?php echo $this->createUrl('statements/comPaymentReport' , array('companyId'=>$this->companyId ));?>/d/1/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/selectDpid/"+selectDpid+"/selectName/"+selectName;   
 		}
 	});
 
