@@ -154,6 +154,13 @@
 	     background-color: #EDEDED;
 	     font-size: 15px;
 	}
+	.hd{
+		height:100%;
+		background-color:#EDEDED;
+	}
+	.weui_cell{
+		background-color:white;
+	}
 </style>
     <div class="container js_container">
         <div class="page">
@@ -165,7 +172,7 @@
                </div>
             </div>
             
-            <div class="bd" style="height:100%;background-color:#EDEDED">
+            <div class="bd" style="">
                 <div class="weui_cells weui_cells_access global_navs">
                     <a class="weui_cell js_cell" href="<?php echo $this->createUrl('user/money',array('companyId'=>$this->companyId));?>" >
                         <span class="weui_cell_hd "><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdcz.png" class="icon_nav" alt=""/></span>
