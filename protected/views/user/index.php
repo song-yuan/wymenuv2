@@ -10,9 +10,9 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/plugins/font-awesome/css/font-awesome.min.css">
 <style>
     .hd {
-    padding:15px 0px 8px 0px;
-   
-}
+	    padding:15px 0px 8px 0px;
+	   
+	}
     .img-box{
             background-repeat: no-repeat;
             height: 180px;
@@ -157,8 +157,7 @@
 	.hd{
 		background-color:white;
 	}
-	.bd{
-		height:100%;
+	.page{
 		background-color:#EDEDED;
 	}
 	.weui_cell{
@@ -250,8 +249,8 @@
                         </div>
                     </a>
                     <?php endif;?>
-                    <div class="empty1"></div>
                     <!-- 
+                    <div class="empty1"></div>
                     <div class="empty3"></div>
                      <div class="put_into_bg">
                     <div class="weui_btn weui_btn_primary put_into">放入微信卡包</div> 
