@@ -154,7 +154,7 @@
 	     background-color: #EDEDED;
 	     font-size: 15px;
 	}
-	.hd{
+	.bd{
 		height:100%;
 		background-color:#EDEDED;
 	}
