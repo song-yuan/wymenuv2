@@ -203,23 +203,6 @@
                         <div class="weui_cell_ft">
                         </div>
                     </a>
-                   <?php if($userLevel): ?>
-                    <div class="empty1"></div>                     
-                    <a class="weui_cell js_cell" href="javascript:;" data-id="privilege" data_target="#chanel_demo1">
-                        <span class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/wechat_img/icon-wdzxtq.png" class="icon_nav" alt=""></span>
-                        <div class="weui_cell_bd weui_cell_primary">
-                            <p>我的专享特权</p>
-                        </div>
-                        <div class="up_down1" ></div>
-                    </a>
-                    <div class="collapse pri_style" id="chanel_demo1">            
-                        <div class="introduce"><?php echo $userLevel['level_name']; ?>：</div>
-                        <ul>
-                            <li>到店即可享受&nbsp;<?php echo WxBrandUser::numTochinese($userLevel['level_discount']*10);?>&nbsp;折优惠</li>
-                            <li>生日当天可享受&nbsp;<?php echo WxBrandUser::numTochinese($userLevel['birthday_discount']*10);?>&nbsp;折优惠</li>
-                        </ul>
-                    </div>
-   					<?php endif; ?>
                     
                     
                     <div class="empty1"></div>
