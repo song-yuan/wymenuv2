@@ -163,6 +163,11 @@
 			<div class="lt">现金券:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
 			<div class="clear"></div>
 		</div>
+		<?php elseif($pay['paytype']==7):?>
+		<div class="item">
+			<div class="lt">储值支付:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
+			<div class="clear"></div>
+		</div>
 		<?php elseif($pay['paytype']==10):?>
 		<div class="item">
 			<div class="lt">储值支付:</div><div class="rt">￥<?php echo $pay['pay_amount'];?></div>
