@@ -26,43 +26,82 @@ class WxrechargeController extends BackendController
 		));
 	}
 	public function actionCreate() {
+		$redpids = array();
 		$model = new WeixinRecharge ;
 		$model->dpid = $this->companyId ;
-		
-		if(Yii::app()->request->isPostRequest && Yii::app()->user->role <= User::SHOPKEEPER) {
-			$model->attributes = Yii::app()->request->getPost('WeixinRecharge');
-                        
-                        $se=new Sequence("weixin_recharge");
-                        $model->lid = $se->nextval();
-                        $model->create_at=date('Y-m-d H:i:s',time());
-                        $model->update_at=date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
-                        //var_dump($model);exit;
+		$companys = $this->getDp($this->comptype);
+		if(Yii::app()->request->isPostRequest) {
+			$postData = Yii::app()->request->getPost('WeixinRecharge');
+			$se = new Sequence("weixin_recharge");
+			$model->lid = $se->nextval();
+            $model->attributes = $postData;
+            $model->create_at = date('Y-m-d H:i:s',time());
+            $model->update_at = date('Y-m-d H:i:s',time());
+			
+			if(isset($postData['recharge_dpid'])){
+				$model->recharge_dpid = 1;
+				foreach ($postData['recharge_dpid'] as $rdpid){
+					$rechargeModel = new WeixinRechargeDpid();
+					$se = new Sequence("weixin_recharge_dpid");
+					$rechargeModel->lid = $se->nextval();
+					$rechargeModel->dpid = $this->companyId ;
+					$rechargeModel->create_at = date('Y-m-d H:i:s',time());
+					$rechargeModel->update_at = date('Y-m-d H:i:s',time());
+					$rechargeModel->weixin_recharge_id = $model->lid;
+					$rechargeModel->recharge_dpid = $rdpid;
+					$rechargeModel->save();
+				}
+			}else{
+				$model->recharge_dpid = 0;
+			}
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				$this->redirect(array('wxrecharge/index' , 'companyId' => $this->companyId));
 			}
-		}else{Yii::app()->user->setFlash('error' , yii::t('app','无权限'));}
+		}
 		$this->render('create' , array(
-				'model' => $model
+				'model' => $model,
+				'companys' => $companys,
+				'redpids'=>$redpids
 		));
 	}
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
 		$model = WeixinRecharge::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
-                        
-		if(Yii::app()->request->isPostRequest && Yii::app()->user->role <= User::SHOPKEEPER) {
-			$model->attributes = Yii::app()->request->getPost('WeixinRecharge');
-			$model->update_at=date('Y-m-d H:i:s',time());
-                        //var_dump($model->attributes);exit;
+		$companys = $this->getDp($this->comptype);
+		$redpids = $this->getRechargeDpid($lid);
+		if(Yii::app()->request->isPostRequest) {
+			$postData = Yii::app()->request->getPost('WeixinRecharge');
+			$model->attributes = $postData;
+			$model->update_at = date('Y-m-d H:i:s',time());
+			if(isset($postData['recharge_dpid'])){
+				$model->recharge_dpid = 1;
+				if($postData['recharge_dpid']!=$redpids){
+					WeixinRechargeDpid::model()->updateAll(array('delete_flag'=>1),'weixin_recharge_id=:rid',array(':rid'=>$lid));
+					foreach ($postData['recharge_dpid'] as $rdpid){
+						$rechargeModel = new WeixinRechargeDpid();
+						$se = new Sequence("weixin_recharge_dpid");
+						$rechargeModel->lid = $se->nextval();
+						$rechargeModel->dpid = $this->companyId ;
+						$rechargeModel->create_at = date('Y-m-d H:i:s',time());
+						$rechargeModel->update_at = date('Y-m-d H:i:s',time());;
+						$rechargeModel->weixin_recharge_id = $lid;
+						$rechargeModel->recharge_dpid = $rdpid;
+						$rechargeModel->save();
+					}
+				}
+			}else{
+				$model->recharge_dpid = 0;
+			}
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('wxrecharge/index' , 'companyId' => $this->companyId));
 			}
-		}else{Yii::app()->user->setFlash('error' , yii::t('app','无权限'));}
+		}
 		$this->render('update' , array(
-			'model'=>$model
+			'model'=>$model,
+			'companys' => $companys,
+			'redpids'=>$redpids
 		));
 	}
 	public function actionDelete(){
@@ -72,8 +111,7 @@ class WxrechargeController extends BackendController
 		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('lid');
-		//Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
-                if(!empty($ids)) {
+        if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = WeixinRecharge::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
@@ -86,5 +124,24 @@ class WxrechargeController extends BackendController
 			$this->redirect(array('wxrecharge/index' , 'companyId' => $companyId)) ;
 		}
 	}
-	
+	private function getRechargeDpid($rechargeId){
+		$sql = 'select recharge_dpid from nb_weixin_recharge_dpid where weixin_recharge_id='.$rechargeId.' and delete_flag=0';
+		$rdpids = Yii::app()->db->createCommand($sql)->queryColumn();
+		return $rdpids;
+	}
+	private function getDp($type = 0){
+		if($type==0){
+			$sql = 'select dpid,company_name from nb_company where type=1 and comp_dpid='.$this->companyId.' and delete_flag=0';
+			$companys = Yii::app()->db->createCommand($sql)->queryAll();
+		}else{
+			//门店
+			$companys = array();
+			$sql = 'select dpid,company_name from nb_company where dpid='.$this->companyId.' and delete_flag=0';
+			$company = Yii::app()->db->createCommand($sql)->queryRow();
+			if($company){
+				array_push($companys, $company);
+			}
+		}
+		return $companys;
+	}
 }

@@ -150,14 +150,56 @@ class WxRecharge
 	/**
 	 * 
 	 * 获取微信充值模板
-	 * 
+	 * $userGroup 会员所属店铺
 	 */
-	public static function getWxRecharge($dpid){
+	public static function getWxRecharge($dpid,$userId,$userGroup){
 		$sql = 'select * from nb_weixin_recharge where dpid=:dpid and is_available=0 and delete_flag=0';
 		$recharges = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
-	    return $recharges;		  
+		foreach ($recharges as $key=>$recharge){
+			if($recharge['recharge_number'] > 0){
+				$count = self::getRechargeCount($dpid,$userId);	
+				if($count >= recharge['recharge_number']){
+					unset($recharges[$key]);
+					continue;
+				}
+			}
+			if($recharge['recharge_dpid'] > 0){
+				$redpids = self::getRechargeDpids($dpid, $recharge['lid']);
+				if(!in_array($userGroup, $redpids)){
+					unset($recharges[$key]);
+					continue;
+				}
+			}
+		}
+	    return array_merge($recharges);		  
+	}
+	/**
+	 *
+	 * 获取充值模板限制店铺
+	 *
+	 */
+	public static function getRechargeDpids($dpid,$rechargeId){
+		$sql = 'select recharge_dpid from nb_weixin_recharge_dpid where dpid=:dpid and weixin_recharge_id=:rechargeId and delete_flag=0';
+		$dpids = Yii::app()->db->createCommand($sql)
+					->bindValue(':dpid',$dpid)
+					->bindValue(':rechargeId',$rechargeId)
+					->queryColumn();
+		return $dpids;
+	}
+	/**
+	 *
+	 * 获取充值次数
+	 *
+	 */
+	public static function getRechargeCount($dpid,$userId){
+		$sql = 'select count(lid) from nb_recharge_record where dpid=:dpid and brand_user_lid=:userId and delete_flag=0';
+		$recount = Yii::app()->db->createCommand($sql)
+					->bindValue(':dpid',$dpid)
+					->bindValue(':userId',$userId)
+					->queryScalar();
+		return $recount;
 	}
 	/**
 	 * 

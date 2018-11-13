@@ -685,8 +685,9 @@ class MallController extends Controller
 	 public function actionReCharge(){
 	 	$user = $this->brandUser;
         $userId = $user['lid'];
+        $userGroupDpid = $user['weixin_group'];
 	 	$backUrl = Yii::app()->request->getParam('url',null);
-	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
+	 	$recharges = WxRecharge::getWxRecharge($this->companyId,$userId,$userGroupDpid);
 	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>urldecode($backUrl)));
 	 }
 	 /**
