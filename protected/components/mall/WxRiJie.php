@@ -366,22 +366,22 @@ class WxRiJie
 			$sttype = $stockTaking['type'];
 			$createAt = $stockTaking['create_at'];
 	
-			$presystemNum = '0.00';
-			$stockinNum = '0.00'; // 入库库存
-			$stockinPrice = '0.00';// 入库成本
-			$damageNum = '0'; //损耗数量
-			$damagePrice = '0';//损耗成本
-			$salseNum = '0.00';//销售数量
-			$salsePrice = '0.00';//销售成本
-			$totalNum = '0.00';//总消耗量
-			$systemNum = 0;//系统库存
-			$nowNum = 0;// 盘点库存
-			$diffPrice = '0.00';//损溢成本
-	
 			$sql = 'select * from nb_stock_taking_detail where dpid='.$dpid.' and logid='.$logid.' and delete_flag=0';
 			$stockTakingDetails = Yii::app()->db->createCommand($sql)->queryAll();
 			foreach ($stockTakingDetails as $stockTakingDetail){
 				if($stockTakingDetail['number']>0){
+					$presystemNum = '0.00';
+					$stockinNum = '0.00'; // 入库库存
+					$stockinPrice = '0.00';// 入库成本
+					$damageNum = '0'; //损耗数量
+					$damagePrice = '0';//损耗成本
+					$salseNum = '0.00';//销售数量
+					$salsePrice = '0.00';//销售成本
+					$totalNum = '0.00';//总消耗量
+					$systemNum = 0;//系统库存
+					$nowNum = 0;// 盘点库存
+					$diffPrice = '0.00';//损溢成本
+					
 					$systemNum = $stockTakingDetail['reality_stock'];
 					$nowNum = $stockTakingDetail['taking_stock'];
 					$id = $stockTakingDetail['material_id'];
