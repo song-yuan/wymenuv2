@@ -160,7 +160,7 @@ class WxRecharge
 		foreach ($recharges as $key=>$recharge){
 			if($recharge['recharge_number'] > 0){
 				$count = self::getRechargeCount($dpid,$userId);	
-				if($count >= recharge['recharge_number']){
+				if($count >= $recharge['recharge_number']){
 					unset($recharges[$key]);
 					continue;
 				}

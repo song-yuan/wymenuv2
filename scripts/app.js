@@ -690,6 +690,10 @@ var App = function () {
                 placeholder: "Select",
                 allowClear: true
             });
+            $('#select2_sample2').select2({
+	            placeholder: "请选择店铺..",
+	            allowClear: true
+	        });
         }
     }
 
