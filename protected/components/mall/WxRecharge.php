@@ -159,7 +159,7 @@ class WxRecharge
 				  ->queryAll();
 		foreach ($recharges as $key=>$recharge){
 			if($recharge['recharge_number'] > 0){
-				$count = self::getRechargeCount($dpid,$userId);	
+				$count = self::getRechargeCount($dpid, $userId, $recharge['lid']);	
 				if($count >= $recharge['recharge_number']){
 					unset($recharges[$key]);
 					continue;
@@ -193,10 +193,11 @@ class WxRecharge
 	 * 获取充值次数
 	 *
 	 */
-	public static function getRechargeCount($dpid,$userId){
-		$sql = 'select count(lid) from nb_recharge_record where dpid=:dpid and brand_user_lid=:userId and delete_flag=0';
+	public static function getRechargeCount($dpid,$userId,$rechargeId){
+		$sql = 'select count(lid) from nb_recharge_record where dpid=:dpid and recharge_lid=:rechargeId and brand_user_lid=:userId and delete_flag=0';
 		$recount = Yii::app()->db->createCommand($sql)
 					->bindValue(':dpid',$dpid)
+					->bindValue(':rechargeId',$rechargeId)
 					->bindValue(':userId',$userId)
 					->queryScalar();
 		return $recount;
