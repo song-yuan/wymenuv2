@@ -24,11 +24,6 @@
 		$freightFee = 0;
 	}
 ?>
-<style>
-.weui-dialog__btn_primary {
-    color: #0bb20c !important;
-}
-</style>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
@@ -42,7 +37,17 @@
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_003.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_005.js" type="text/javascript"></script>
 <link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
-
+<style>
+.weui-dialog__btn_primary {
+    color: #0bb20c !important;
+}
+.weui-badge{
+	margin-left:10px;
+	display:inline-block !important;
+	color:#fff !important;
+	font-size:12px !important;
+}
+</style>
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
 	<div class="order-time" style="margin:10px 0;font-size: 14px;">
 		<p>餐厅名称:<?php echo $this->company['company_name'];?></p>
@@ -111,9 +116,9 @@
 		<div class="clear"></div>
 	</div>
 <?php elseif($this->type==6):?>
-	<div class="order-site"><div class="lt">取餐方式</div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
+	<div class="order-site"><div class="lt">取餐方式<span class="weui-badge">可选</span></div><div class="rt"><button type="button" class="specialbttn bttn_orange" type_id="0" style="margin-right:20px;">堂食</button><button  type="button" class="specialbttn bttn_grey" type_id="1">打包</button></div><div class="clear"></div></div>
 	<div class="order-time arrowright" style="margin:10px 0;">
-		<div class="time-lt">取餐时间</div>
+		<div class="time-lt">取餐时间<span class="weui-badge">可选</span></div>
 		<div class="time-rt">
 			<select name="order_time">
                  <option selected="selected" value="0">即食</option>
