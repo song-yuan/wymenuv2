@@ -5,11 +5,11 @@
 	$desc = '自助点餐,点餐不排队';
 	$imgUrl = Yii::app()->request->getHostInfo().$this->company['logo'];
 	if($this->type==2){
-		$this->setPageTitle('外卖点单');
+		$this->setPageTitle('外卖点单 '.$this->company['company_name']);
 	}elseif($this->type==6){
-		$this->setPageTitle('堂食点单');
+		$this->setPageTitle('堂食点单 '.$this->company['company_name']);
 	}else{
-		$this->setPageTitle('自助点单');
+		$this->setPageTitle('自助点单 '.$this->company['company_name']);
 	}
 	$closeShop = false;
 	if($this->company['is_rest'] < 3){
