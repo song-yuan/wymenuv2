@@ -143,7 +143,7 @@ class CopypromotionController extends BackendController
 		$sql = 'select t.dpid,t.type,t.company_name,t1.is_rest from nb_company t left join nb_company_property t1 on(t1.dpid = t.dpid) where t.delete_flag = 0 and t.type = 1 and t.comp_dpid = '.$this->companyId.' group by t.dpid';
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
-		$this->render('clearfullminuspromotion',array(
+		$this->render('clearbuysentpromotion',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
 		));
@@ -793,10 +793,10 @@ class CopypromotionController extends BackendController
 					Yii::app()->user->setFlash('error' , yii::t('app','清除失败！！！'));
 				}
 			}
-			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+			$this->redirect(array('copypromotion/clearbuysentpromotion' , 'companyId' => $companyId)) ;
 		}else{
 			Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
-			$this->redirect(array('copypromotion/clearfullsentpromotion' , 'companyId' => $companyId)) ;
+			$this->redirect(array('copypromotion/clearbuysentpromotion' , 'companyId' => $companyId)) ;
 		}
 	
 	}

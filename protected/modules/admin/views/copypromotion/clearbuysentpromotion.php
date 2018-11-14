@@ -45,7 +45,7 @@ function fun()
 	<div class="row">
 		<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'copyproduct-form',
-				'action' => $this->createUrl('copypromotion/clearstorfullsent' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('copypromotion/clearstorbuysent' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -82,8 +82,8 @@ function fun()
 								<td>
 									<input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" code="<?php echo $model->sole_code;?>" name="ids[]" />
 								</td>
-								<td style="width:25%"><?php echo $model->title;?></td>
-								<td><?php echo $model->infor;?>&nbsp&nbsp&nbsp<?php echo '活动时间：'.$model->begin_time;echo '~~'; echo $model->end_time;?></td>
+								<td style="width:25%"><?php echo $model->promotion_title;?></td>
+								<td><?php echo $model->promotion_memo;?>&nbsp&nbsp&nbsp<?php echo '活动时间：'.$model->begin_time;echo '~~'; echo $model->end_time;?></td>
 								<td style="width:25%"><?php echo $model->delete_flag?'已删除':'正常';?></td>
 							</tr>
 						<?php endforeach;?>
@@ -108,7 +108,7 @@ function fun()
 
 	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
          <div class="modal-header">
-         	<h4 class="modal-title">选择需要下发菜品的店铺</h4>
+         	<h4 class="modal-title">选择需要清除的店铺</h4>
          </div>
          <div>
          <span>选择店铺类型</span>
