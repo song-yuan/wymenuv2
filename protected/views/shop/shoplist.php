@@ -34,6 +34,7 @@
 		var init = function() {
 		    geocoder = new qq.maps.Geocoder({
 		        complete : function(result){
+			        var city = result.detail.addressComponents.city;
 			        var district = result.detail.addressComponents.district;
 			        var streetNumber = result.detail.addressComponents.streetNumber;
 		          	$('#current_position').html(district+streetNumber);
