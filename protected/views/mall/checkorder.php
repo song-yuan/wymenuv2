@@ -27,7 +27,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_002.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_004.js" type="text/javascript"></script>
@@ -42,7 +41,7 @@
     color: #0bb20c !important;
 }
 .weui-badge{
-	margin-left:10px;
+	margin-left:5px;
 	display:inline-block !important;
 	color:#fff !important;
 	font-size:12px !important;
