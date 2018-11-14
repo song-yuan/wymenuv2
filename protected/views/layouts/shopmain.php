@@ -23,14 +23,6 @@
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=BWSBZ-GYKE2-GQVUX-COYWJ-JWUM6-6FBDD"></script>
 	<script>
-		var geocoder;
-		var init = function() {
-		    geocoder = new qq.maps.Geocoder({
-		        complete : function(result){
-		          	$('#current_position').html(result.detail.address);
-		        }
-		    });
-		}
 	  	wx.config({
 		    debug: false,
 		    appId: '<?php echo $signPackage["appId"];?>',

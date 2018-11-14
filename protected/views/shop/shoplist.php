@@ -30,6 +30,16 @@
 		var longitude = 0;
 		var shopName = '';
 		var showDiscount = <?php echo $this->company['distance'];?>;
+		var geocoder;
+		var init = function() {
+		    geocoder = new qq.maps.Geocoder({
+		        complete : function(result){
+			        var district = result.detail.addressComponents.district;
+			        var streetNumber = result.detail.addressComponents.streetNumber;
+		          	$('#current_position').html(district+streetNumber);
+		        }
+		    });
+		}
 		function getShopList(){ 
 	    	$.ajax({
 		        url:'<?php echo $this->createUrl('/shop/ajaxGetShop',array('companyId'=>$this->companyId,'type'=>$this->type));?>',
