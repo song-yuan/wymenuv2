@@ -653,7 +653,6 @@ class CopypromotionController extends BackendController
 		$ckc = Yii::app()->request->getParam('ckc');//判断是否清除以前的活动
 		$buycodes = explode(',',$codes);//接收活动编码,总部唯一
 		$dpids = explode(',',$dpid);//接收店铺的dpid
-	
 		$msg = '';
 		$db = Yii::app()->db;
 		foreach ($buycodes as $buycode){
@@ -723,7 +722,7 @@ class CopypromotionController extends BackendController
 						$buysentDetailId = $se->nextval();
 						$createAt = $detail['create_at'];
 						$updateAt = $detail['update_at'];
-						$soleCode = $detail['sole_code'];
+						$dsoleCode = $detail['sole_code'];
 						$fasolecode = $detail['fa_sole_code'];
 						$isset = $detail['is_set'];
 						$buynum = $detail['buy_num'];
@@ -732,7 +731,7 @@ class CopypromotionController extends BackendController
 						$groupno = $detail['group_no'];
 						$isavailable = $detail['is_available'];
 						$source = 1;
-						$buydetailsql .= '('.$buysentDetailId.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'",'.$buysentId.',"'.$fasolecode.'",'.$isset.','.$fproId.',"'.$pcode.'",'.$buynum.','.$sfproId.',"'.$spcode.'",'.$sentnum.','.$limitnum.','.$groupno.','.$isavailable.','.$source.'),';
+						$buydetailsql .= '('.$buysentDetailId.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$dsoleCode.'",'.$buysentId.',"'.$fasolecode.'",'.$isset.','.$fproId.',"'.$pcode.'",'.$buynum.','.$sfproId.',"'.$spcode.'",'.$sentnum.','.$limitnum.','.$groupno.','.$isavailable.','.$source.'),';
 					}
 				}
 				$buysql = rtrim($buysql,',');
