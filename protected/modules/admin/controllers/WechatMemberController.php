@@ -203,12 +203,14 @@ class WechatMemberController extends BackendController {
         		$having .=' and count(lid)<='.$timesto;
         	}
         	if($having!=''){
-        		$osql .=' having by '.$having;
+        		$having = ltrim($having, ' and');
+        		$osql .=' having '.$having;
         	}
         	$userIds = $db->createCommand($osql)->queryColumn();
         	$userStr = join($userIds, ',');
 	        if($userStr!=''){
-	        	$sql .= ' and t.user_id in('.$userStr.')';
+	        	$userStr = ltrim($userStr, ',');
+	        	$sql .= ' and t.lid in('.$userStr.')';
 	        }
         }
         $sql = 'select * from ('.$sql.')m';
