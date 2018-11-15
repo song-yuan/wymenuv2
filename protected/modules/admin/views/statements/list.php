@@ -75,6 +75,15 @@
                             </a> 
                         </div>
                     </div>
+                    <div class="panel_body row">
+                        <p>菜品明细报表</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('statements/productdetailReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'-1'));?>">
+                                <div class="list_big">单品销售详情</div>
+                                <div class="list_small">查询单品以及套餐内单品的销售时间</div>
+                            </a> 
+                        </div>
+                    </div>
                     <?php elseif (Yii::app()->user->role == 8):?>
                     <div class= "panel_body row">
                         <p>营销活动统计报表</p>
