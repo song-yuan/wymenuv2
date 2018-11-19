@@ -415,6 +415,7 @@ class DataAppSyncController extends Controller
 					'notify_url'=>$notifyUrl,
 			);
 			$result = SqbPay::precreate($data);
+			var_dump($result);
 			if($result['status']){
 				$qrCode = $result['result']['qr_code'];
 				$code = new QRCode($qrCode);
