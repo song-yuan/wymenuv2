@@ -401,9 +401,11 @@ class DataAppSyncController extends Controller
 			$data['appId'] = $appId;
 			$data['key'] = $key;
 			$result = MtpPay::preOrderNative($data);
-			var_dump($result);
-		}else{
-			var_dump('error');
+			if($result['status'] == 'SUCCESS'){
+				$qrCode = $result['qrCode'];
+				$code = new QRCode($qrCode);
+				$code->create();
+			}
 		}
 		exit;
 	}
