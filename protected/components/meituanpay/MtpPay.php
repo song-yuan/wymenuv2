@@ -337,9 +337,8 @@ class MtpPay{
     	$expireMinutes = $data['expireMinutes'];
     	$tradeType = 'NATIVE';
     	$notifyUrl = $data['notifyUrl'];
-    	$openId = $data['openId'];
-    	//      /*支付完成后的回调地址*/
     	$random = self::getNonceStr();
+    	
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
     	Helper::writeLog('return_url==='.$returnUrl);
     	 
