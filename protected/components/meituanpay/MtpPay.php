@@ -340,7 +340,6 @@ class MtpPay{
     	$random = self::getNonceStr();
     	
     	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
-    	Helper::writeLog('return_url==='.$returnUrl);
     	 
     	//获取美团支付参数
     	$datas = array(
@@ -378,7 +377,7 @@ class MtpPay{
     
     	$body = json_encode($datas);
     	$result = MtpCurl::httpPost($url, $body);
-    	Helper::writeLog('公众号支付返回结果：'.$result);
+    	Helper::writeLog('native支付返回结果：'.$result);
     	$obj = json_decode($result,true);
     	return $obj;
     }
