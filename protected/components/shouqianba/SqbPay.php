@@ -321,7 +321,7 @@ class SqbPay{
     	$payway = $data['pay_way'];
     	$subpayway = $data['sub_pay_way'];
     	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
-    	$subject = $data['abstract'];
+    	$subject = $data['subject'];
     	/*本次交易的简要介绍*/
     	$operator = $data['operator'];
     	/*发起本次交易的操作员*/
