@@ -381,6 +381,7 @@ class DataAppSyncController extends Controller
 		$randNum = Helper::randNum(6);
 		$orderId = date('YmdHis').$randNum;
 		$compaychannel = WxCompany::getpaychannel($dpid);
+		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 		if($payChannel==1){
 			//模式二扫码支付
 			$notify = new WxPayNativePay();
