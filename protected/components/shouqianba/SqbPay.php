@@ -69,23 +69,6 @@ class SqbPay{
     		//var_dump('111');exit;
     		return $result;
     	}
-//     	/*该接口用于支付，用到的SN及KEY为我们的商户的每一台设备对应的sn和key*/
-//     	$terminal_sn = $data['terminal_sn'];
-//     	$terminal_key = $data['terminal_key'];
-//     	/*终端号及终端秘钥*/
-//     	$clientSn = $data['clientSn'];
-//     	/*必须在商户系统内唯一；且长度不超过32字节*/
-//     	$total_amount = $data['totalAmount'];
-//     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
-//     	$paytype = $data['payType'];
-//     	/*非必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
-//     	$dynamicId = $data['dynamicId'];
-//     	/*条码内容*/
-//     	$subject = $data['abstract'];
-//     	/*本次交易的简要介绍*/
-//     	$operator = $data['userName'];
-    	/*发起本次交易的操作员*/
-    	//var_dump($dynamicId);exit;
     	$url = SqbConfig::SQB_DOMAIN.'/upay/v2/pay';
     	$datas = array(
     				'terminal_sn'=>$terminal_sn,
