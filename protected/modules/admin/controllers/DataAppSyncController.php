@@ -380,31 +380,73 @@ class DataAppSyncController extends Controller
 		$payPrice = 0.01;
 		$randNum = Helper::randNum(6);
 		$orderId = date('YmdHis').$randNum;
-		$mtr = MtpConfig::MTPAppKeyMid($dpid);
-		if($mtr){
-			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtwappayresult');
-			$data = array(
-					'outTradeNo'=>$orderId,
-					'totalFee'=>$payPrice*100,
-					'subject'=>'years-fee',
-					'body'=>'pos-years-fee',
-					'channel'=>'wx_scan_pay',
-					'expireMinutes'=>'5',
-					'notifyUrl'=>$notifyUrl,
-			);
+		$compaychannel = WxCompany::getpaychannel($dpid);
+		if($payChannel==1){
+			//模式二扫码支付
+			$notify = new WxPayNativePay();
+			$input = new WxPayUnifiedOrder();
+			$input->SetBody("收银机续费");
+			$input->SetAttach("0");
+			$input->SetOut_trade_no($orderId);
+			$input->SetTotal_fee($payPrice*100);
+			$input->SetTime_start(date("YmdHis"));
+			$input->SetTime_expire(date("YmdHis", time() + 600));
+			$input->SetGoods_tag("续费");
+			$input->SetNotify_url($notifyUrl);
+			$input->SetTrade_type("NATIVE");
+			$input->SetProduct_id("123456789");
 			
-			$mts = explode(',',$mtr);
-			$merchantId = $mts[0];
-			$appId = $mts[1];
-			$key = $mts[2];
-			$data['merchantId'] = $merchantId;
-			$data['appId'] = $appId;
-			$data['key'] = $key;
-			$result = MtpPay::preOrderNative($data);
-			if($result['status'] == 'SUCCESS'){
-				$qrCode = $result['qrCode'];
+			$result = $notify->GetPayUrl($input);
+			$qrCode = $result["code_url"];
+			
+			$code=new QRCode($url2);
+			$code->create();
+		}elseif($payChannel==2){
+			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
+			$data = array(
+					'dpid'=>$dpid,
+					'client_sn'=>$orderId,
+					'total_amount'=>$payPrice*100,
+					'subject'=>'posfee',
+					'payway'=>3,
+					'sub_payway'=>3,
+					'operator'=>$poscode,
+					'notify_url'=>$notifyUrl,
+			);
+			$result = SqbPay::precreate($data);
+			if($result['status']){
+				$qrCode = $result['result']['qr_code'];
 				$code = new QRCode($qrCode);
 				$code->create();
+			}
+		}elseif($payChannel==3){
+			//美团
+			$mtr = MtpConfig::MTPAppKeyMid($dpid);
+			if($mtr){
+				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtwappayresult');
+				$data = array(
+						'outTradeNo'=>$orderId,
+						'totalFee'=>$payPrice*100,
+						'subject'=>'posfee',
+						'body'=>'pos-years-fee',
+						'channel'=>'wx_scan_pay',
+						'expireMinutes'=>'5',
+						'notifyUrl'=>$notifyUrl,
+				);
+					
+				$mts = explode(',',$mtr);
+				$merchantId = $mts[0];
+				$appId = $mts[1];
+				$key = $mts[2];
+				$data['merchantId'] = $merchantId;
+				$data['appId'] = $appId;
+				$data['key'] = $key;
+				$result = MtpPay::preOrderNative($data);
+				if($result['status'] == 'SUCCESS'){
+					$qrCode = $result['qrCode'];
+					$code = new QRCode($qrCode);
+					$code->create();
+				}
 			}
 		}
 		exit;
