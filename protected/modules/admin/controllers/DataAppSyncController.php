@@ -368,4 +368,43 @@ class DataAppSyncController extends Controller
 		$result = SiteClass::operateSite($dpid,'0',$type,$siteId,$ositeId);
 		echo json_encode($result);exit;
 	}
+	
+	/**
+	 * 软件到期续费
+	 * 生成支付二维码
+	 */
+	public function actionGetPosPayCode(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$poscode = Yii::app()->request->getParam('poscode');
+		
+		$payPrice = 0.01;
+		$randNum = Helper::randNum(6);
+		$orderId = date('YmdHis').$randNum;
+		$mtr = MtpConfig::MTPAppKeyMid($dpid);
+		if($mtr){
+			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtwappayresult');
+			$data = array(
+					'outTradeNo'=>$orderId,
+					'totalFee'=>$payPrice*100,
+					'subject'=>'years-fee',
+					'body'=>'pos-years-fee',
+					'channel'=>'wx_scan_pay',
+					'expireMinutes'=>'5',
+					'notifyUrl'=>$notifyUrl,
+			);
+			
+			$mts = explode(',',$mtr);
+			$merchantId = $mts[0];
+			$appId = $mts[1];
+			$key = $mts[2];
+			$data['merchantId'] = $merchantId;
+			$data['appId'] = $appId;
+			$data['key'] = $key;
+			$result = MtpPay::preOrderNative($data);
+			var_dump($result);
+		}else{
+			var_dump('error');
+		}
+		exit;
+	}
 }

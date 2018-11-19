@@ -27,6 +27,10 @@ class MtpPay{
 		}
 		return $str;
 	}
+	/**
+	 * 刷卡支付
+	 * 扫顾客条码
+	 */
     public static function pay($data){
     	//     	/*该接口用于美团支付*/
     	//     	$channel = $data['channel'];
@@ -235,39 +239,11 @@ class MtpPay{
     	return $result;
     }
 	
-    // 线上web api
+    /**
+     * 预下单接口
+     * 公众号支付
+     */
     public static function preOrder($data){
-    	//     	/*该接口用于美团线上支付*/
-    	//     	$channel = $data['channel'];
-    	//     	/*支付渠道、必填项、最大64字符、'wx_barcode_pay':微信刷卡支付'ali_barcode_pay':支付宝刷卡支付*/
-    	//     	$totalFee = $data['totalFee'];
-    	//     	/*以分为单位,*/
-    	//     	$outTradeNo = $data['outTradeNo'];
-    	//     	/*必传。内容为字符串。接入方订单号 不超过64位*/
-    	//     	$subject = $data['subject'];
-    	//     	/*商品标题*/
-    	//     	$body = $data['body'];
-    	//		/*商品详情*/
-    	//     	$channel = $data['channel'];
-    	//		/*支付渠道：'wx_scan_pay':微信扫码支付 ；'ali_scan_pay':支付宝扫码支付*/
-    	//     	$expireMinutes = $data['expireMinutes'];
-    	//		/*创建支付订单后，订单关闭时间，单位为分钟。默认设置为5分钟,最长不超过30分钟，超过关单时间无法支付*/
-    	//     	$tradeType = $data['tradeType'];
-    	//		/*交易类型'NATIVE'： 返回二维码url (动态二维码)'JSAPI'： 返回会话标识等信息调起客户端支付sdk(静态二维码)*/
-    	//     	$openId = $data['openId'];
-    	//		/*微信主扫且tradeType为JSAPI时必填,为支付宝或微信各自的openId，获取方式参考H5接口*/
-    	//     	$notifyUrl = $data['notifyUrl'];
-    	//		/*支付成功通知回调地址*/
-    	//     	$merchantId = $data['merchantId'];
-    	//		/*开放平台分配的商户id, 目前是 美团POI ID*/
-    	//     	$appId= $data['appId'];
-    	//		/*接入方标识，由美团开放平台分配 参考 https://platform.meituan.com/buffet/list*/
-    	//     	$sign= $data['sign'];
-    	//		/*验证签名*/
-    	//     	$random= $data['random'];
-    	//		/*随机数*/
-    	//     	$wxSubAppId= $data['wxSubAppId'];
-    	//		/*用到小程序支付才有，申请小程序时微信分配的小程序的appid 此参数不参与签名*/
     	$merchantId = $data['merchantId'];
     	$appId = $data['appId'];
     	$key = $data['key'];
@@ -277,7 +253,7 @@ class MtpPay{
     	$body = $data['body'];
     	$channel = $data['channel'];
     	$expireMinutes = $data['expireMinutes'];
-    	$tradeType = $data['tradeType'];
+    	$tradeType = 'JSAPI';
     	$notifyUrl = $data['notifyUrl'];
     	$returnUrl = $data['return_url'];
     	$openId = $data['openId'];
@@ -345,6 +321,68 @@ class MtpPay{
     		}
     		return $result;exit;
     } 
+    /**
+     * native方式生产动态二维码
+     * 
+     */
+    public static function preOrderNative($data){
+    	$merchantId = $data['merchantId'];
+    	$appId = $data['appId'];
+    	$key = $data['key'];
+    	$outTradeNo = $data['outTradeNo'];
+    	$totalFee = $data['totalFee'];
+    	$subject = $data['subject'];
+    	$body = $data['body'];
+    	$channel = $data['channel'];
+    	$expireMinutes = $data['expireMinutes'];
+    	$tradeType = 'NATIVE';
+    	$notifyUrl = $data['notifyUrl'];
+    	$openId = $data['openId'];
+    	//      /*支付完成后的回调地址*/
+    	$random = self::getNonceStr();
+    	$url = MtpConfig::MTP_DOMAIN.'/api/precreate';
+    	Helper::writeLog('return_url==='.$returnUrl);
+    	 
+    	//获取美团支付参数
+    	$datas = array(
+    			'outTradeNo'=>$outTradeNo,
+    			'totalFee'=>$totalFee,
+    			'subject'=>$subject,
+    			'body'=>$body,
+    			'channel'=>$channel,
+    			'expireMinutes'=>$expireMinutes,
+    			'tradeType'=>$tradeType,
+    			'notifyUrl'=>$notifyUrl,
+    			'merchantId'=>$merchantId,
+    			'appId'=>$appId,
+    			'random'=>$random,
+    	);
+    
+    	ksort($datas);
+    	$paramsStrs = '';
+    	if(is_array($datas)){
+    		foreach($datas as $k => $v)
+    		{
+    			$paramsStrs .= $k.'='.$v.'&';
+    		}
+    	}else{
+    		$result = array(
+    				"return_code"=>"ERROR",
+    				"result_code"=>"ERROR",
+    				'msg'=>'未知状态！');
+    		return $result;
+    	}
+    	$st = $paramsStrs.'key='.$key;
+    	$sign = hash("sha256", $st);
+    
+    	$datas['sign'] = $sign;
+    
+    	$body = json_encode($datas);
+    	$result = MtpCurl::httpPost($url, $body);
+    	Helper::writeLog('公众号支付返回结果：'.$result);
+    	$obj = json_decode($result,true);
+    	return $obj;
+    }
     /**
      * 该接口用于查询订单状态
      * 查询订单状态

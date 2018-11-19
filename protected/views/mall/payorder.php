@@ -86,7 +86,6 @@
 				'body'=>'goods',
 				'channel'=>'wx_scan_pay',
 				'expireMinutes'=>'5',
-				'tradeType'=>'JSAPI',
 				'notifyUrl'=>$notifyUrl,
 				'return_url'=>$returnUrl
 		);
