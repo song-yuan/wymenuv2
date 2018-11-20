@@ -312,7 +312,6 @@ class SqbPay{
     	return $result;
     }
     public static function precreate($data){
-    	
     	$dpid = $data['dpid'];
     	$clientSn = $data['client_sn'];
     	/*必须在商户系统内唯一；且长度不超过32字节*/
@@ -350,6 +349,7 @@ class SqbPay{
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	$obj = json_decode($result);
+    	var_dump($obj);
     	if($obj->result_code=='200' && $obj->biz_response->result_code=="PRECREATE_SUCCESS"){
     		return array('status'=>true, 'result'=>$obj->biz_response->data);
     	}else{
