@@ -375,7 +375,7 @@ class DataAppSyncController extends Controller
 	 */
 	public function actionGetPosPayCode(){
 		$dpid = Yii::app()->request->getParam('dpid');
-		$poscode = Yii::app()->request->getParam('poscode');
+		$poscode = Yii::app()->request->getParam('poscode','0');
 		
 		$payPrice = 0.01;
 		$randNum = Helper::randNum(6);
@@ -410,7 +410,7 @@ class DataAppSyncController extends Controller
 					'total_amount'=>$payPrice*100,
 					'subject'=>'posfee',
 					'pay_way'=>3,
-					'sub_payway'=>3,
+					'sub_payway'=>2,
 					'operator'=>$poscode,
 					'notify_url'=>$notifyUrl,
 			);
