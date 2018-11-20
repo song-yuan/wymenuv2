@@ -318,7 +318,7 @@ class SqbPay{
     	$total_amount = $data['total_amount'];
     	/*以分为单位,不超过10位纯数字字符串,超过1亿元的收款请使用银行转账*/
     	$payway = $data['pay_way'];
-    	$subpayway = $data['sub_pay_way'];
+    	$subpayway = $data['sub_payway'];
     	/*必传。内容为数字的字符串。一旦设置，则根据支付码判断支付通道的逻辑失效*/
     	$subject = $data['subject'];
     	/*本次交易的简要介绍*/
@@ -346,10 +346,11 @@ class SqbPay{
     				'operator'=>$operator,
     				'notify_url'=>$notify_url,
     	);
+    	echo '<meta charset="utf8">';
+    	var_dump($data);
     	$body = json_encode($data);
     	$result = SqbCurl::httpPost($url, $body, $terminal_sn , $terminal_key);
     	$obj = json_decode($result);
-    	echo '<meta charset="utf8">';
     	var_dump($obj);
     	if($obj->result_code=='200' && $obj->biz_response->result_code=="PRECREATE_SUCCESS"){
     		return array('status'=>true, 'result'=>$obj->biz_response->data);

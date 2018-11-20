@@ -410,7 +410,7 @@ class DataAppSyncController extends Controller
 					'total_amount'=>$payPrice*100,
 					'subject'=>'posfee',
 					'pay_way'=>3,
-					'sub_pay_way'=>3,
+					'sub_payway'=>3,
 					'operator'=>$poscode,
 					'notify_url'=>$notifyUrl,
 			);
