@@ -253,7 +253,7 @@ $('document').ready(function(){
     });
        
     $('.bttn_small').click(function(){
-         $('#mobile').removeAttr('disabled');
+         $('#mobile').removeAttr('readonly');
          $('.revise').hide();
 //          $('.sentMessage').css('display','block');
 //          $('.code_box').css('display','flex');              
