@@ -32,7 +32,7 @@ class  CrontabController extends Controller
 			$orderData = Yii::app()->redis->get($key);
 			if($orderData){
 				Yii::app()->redis->delete($key);
-				WxRedis::pushOrder($dpid, $orderData);
+				WxRedis::pushOrder('0', $orderData);
 			}
 		}
 	}
