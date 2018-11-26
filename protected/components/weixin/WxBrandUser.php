@@ -247,6 +247,7 @@ class WxBrandUser {
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
+	// $total 需要支付金额 $paymoney 返回结算方式
 	public static function reduceYue($user, $dpid, $total, &$paymoney){
 		$userId = $user['lid'];
 		$userDpId = $user['dpid'];
@@ -292,10 +293,6 @@ class WxBrandUser {
 			}
 			$paymoney = array('charge'=>0,'back'=>$payMoney);
 		}
-		return $payMoney;
-	}
-	public static function dealYue($userId,$userDpid,$dpid,$money){
-		$payMoney = self::reduceYue($userId,$userDpid,$dpid,-$money);
 		return $payMoney;
 	}
 	/**

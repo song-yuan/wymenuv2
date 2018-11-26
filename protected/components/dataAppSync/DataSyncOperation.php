@@ -2180,8 +2180,10 @@ class DataSyncOperation {
 		$cupons = isset($data['cupon'])?json_decode($data['cupon'],true):array();
 		$yue = $data['yue'];
 		$points = $data['points'];
+		Helper::writeLog('yue:'.$yue);
 		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
+			$paymoney = array('recharge'=>0,'back'=>0);
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				if(!empty($cupons)){
@@ -2193,7 +2195,7 @@ class DataSyncOperation {
 					}
 				}
 				if($yue!=0){
-					$res = WxBrandUser::dealYue($user['lid'], $user['dpid'], $dpid, -$yue);
+					$res = WxBrandUser::reduceYue($user, $dpid, -$yue,$paymoney);
 					WxBrandUser::isUserFirstOrder($user,$dpid);
 					if(!$res){
 						throw new Exception('储值支付失败');
