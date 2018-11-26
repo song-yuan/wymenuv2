@@ -372,7 +372,7 @@ class DataAppSyncController extends Controller
 	 * 软件到期续费订单
 	 * 
 	 */
-	public function actionGetPosPayCode(){
+	public function actionGetPosPayOrder(){
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode','0');
 		$msg = array('status'=>false);

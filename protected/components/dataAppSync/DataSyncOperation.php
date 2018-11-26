@@ -2194,7 +2194,7 @@ class DataSyncOperation {
 					}
 				}
 				if($yue!=0){
-					$res = WxBrandUser::reduceYue($user, $dpid, $yue,$paymoney);
+					$res = WxBrandUser::reduceYue($user, $dpid, $yue, $paymoney);
 					WxBrandUser::isUserFirstOrder($user,$dpid);
 					if(!$res){
 						throw new Exception('储值支付失败');
