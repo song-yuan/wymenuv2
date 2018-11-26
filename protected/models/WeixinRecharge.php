@@ -75,7 +75,7 @@ class WeixinRecharge extends CActiveRecord
 			'recharge_pointback' => '返积分',
 			'recharge_cashback' => '返现',
 			'recharge_number' => '限制数量',
-			'recharge_dpid' => '限制店铺',
+			'recharge_dpid' => '参与店铺',
 			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
 		);
