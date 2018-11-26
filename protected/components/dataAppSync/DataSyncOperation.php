@@ -2217,7 +2217,6 @@ class DataSyncOperation {
 		}else{
 			$msg = array('status'=>false,'msg'=>'不存在该会员信息');
 		}
-		Helper::writeLog('wxyuepay:'.json_encode($msg));
 		return json_encode($msg);
 	}
 	public static function refundWxHykPay($data) {

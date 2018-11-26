@@ -26,6 +26,15 @@ class  CrontabController extends Controller
 				}
 			}
 		}
+		// 有些订单生成过程中 进程结束
+		$skeys = Yii::app()->redis->keys('order-*');
+		foreach ($skeys as $key){
+			$orderData = Yii::app()->redis->get($key);
+			if($orderData){
+				Yii::app()->redis->delete($key);
+				WxRedis::pushOrder($dpid, $orderData);
+			}
+		}
 	}
 	public function actionSentCuponToBirthDay(){
 		//生日赠券 提前一周发券
