@@ -2180,10 +2180,9 @@ class DataSyncOperation {
 		$cupons = isset($data['cupon'])?json_decode($data['cupon'],true):array();
 		$yue = $data['yue'];
 		$points = $data['points'];
-		Helper::writeLog('yue:'.$yue);
 		$user = WxBrandUser::getFromCardId($dpid,$cardId);
 		if($user){
-			$paymoney = array('recharge'=>0,'back'=>0);
+			$paymoney = array();
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				if(!empty($cupons)){
@@ -2195,7 +2194,7 @@ class DataSyncOperation {
 					}
 				}
 				if($yue!=0){
-					$res = WxBrandUser::reduceYue($user, $dpid, -$yue,$paymoney);
+					$res = WxBrandUser::reduceYue($user, $dpid, $yue,$paymoney);
 					WxBrandUser::isUserFirstOrder($user,$dpid);
 					if(!$res){
 						throw new Exception('储值支付失败');
@@ -2209,7 +2208,7 @@ class DataSyncOperation {
 					}
 				}
 				$transaction->commit();
-				$msg = array('status'=>true);
+				$msg = array('status'=>true,'paymoney'=>$paymoney);
 			}catch (Exception $e) {
 				$message = $e->getMessage();
 				$transaction->rollback();
@@ -2218,6 +2217,7 @@ class DataSyncOperation {
 		}else{
 			$msg = array('status'=>false,'msg'=>'不存在该会员信息');
 		}
+		Helper::writeLog('wxyuepay:'.json_encode($msg));
 		return json_encode($msg);
 	}
 	public static function refundWxHykPay($data) {

@@ -368,18 +368,54 @@ class DataAppSyncController extends Controller
 		$result = SiteClass::operateSite($dpid,'0',$type,$siteId,$ositeId);
 		echo json_encode($result);exit;
 	}
-	
+	/**
+	 * 软件到期续费订单
+	 * 
+	 */
+	public function actionGetPosPayCode(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$poscode = Yii::app()->request->getParam('poscode','0');
+		$msg = array('status'=>false);
+		
+		$comdpid = WxCompany::getCompanyDpid($dpid);
+		$posfee = PoscodeFee::getPosfeeset($comdpid);
+		if($posfee){
+			$years = $posfee['years'];
+			$amount = $posfee['price']*100;
+			$orderId = (int)$dpid . date('YmdHis') . $randNum;
+			$se = new Sequence("poscode_fee_order");
+			$id = $se->nextval();
+			$data = array(
+					'lid'=>$id,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',time()),
+					'update_at'=>date('Y-m-d H:i:s',time()),
+					'poscode'=>$poscode,
+					'trade_no'=>$orderId,
+					'years'=>$years,
+					'total_amount'=>$amount
+			);
+			$result = Yii::app()->db->createCommand()->insert('nb_poscode_fee_order',$data);
+			if($result){
+				$msg = array('status'=>true,'trade_no'=>$orderId);
+			}
+		}
+		Yii::app()->end(json_encode($msg));
+	}
 	/**
 	 * 软件到期续费
 	 * 生成支付二维码
 	 */
 	public function actionGetPosPayCode(){
 		$dpid = Yii::app()->request->getParam('dpid');
-		$poscode = Yii::app()->request->getParam('poscode','0');
+		$orderId = Yii::app()->request->getParam('tradeno','0');
 		
-		$payPrice = 0.01;
-		$randNum = Helper::randNum(6);
-		$orderId = date('YmdHis').$randNum;
+		$sql = 'select * from nb_poscode_fee_order where dpid='.$dpid.' and trade_no="'.$orderId.'" and delete_flag=0';
+		$posfeeOrder = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!$posfeeOrder){
+			exit;
+		}
+		$payPrice = $posfeeOrder['total_amount'];
 		$compaychannel = WxCompany::getpaychannel($dpid);
 		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 		if($payChannel==1){
@@ -387,9 +423,8 @@ class DataAppSyncController extends Controller
 			$notify = new WxPayNativePay();
 			$input = new WxPayUnifiedOrder();
 			$input->SetBody("收银机续费");
-			$input->SetAttach("0");
 			$input->SetOut_trade_no($orderId);
-			$input->SetTotal_fee($payPrice*100);
+			$input->SetTotal_fee($payPrice);
 			$input->SetTime_start(date("YmdHis"));
 			$input->SetTime_expire(date("YmdHis", time() + 600));
 			$input->SetGoods_tag("续费");
@@ -407,7 +442,7 @@ class DataAppSyncController extends Controller
 			$data = array(
 					'dpid'=>$dpid,
 					'client_sn'=>$orderId,
-					'total_amount'=>$payPrice*100,
+					'total_amount'=>$payPrice,
 					'subject'=>'posfee',
 					'pay_way'=>3,
 					'sub_payway'=>2,
@@ -415,7 +450,6 @@ class DataAppSyncController extends Controller
 					'notify_url'=>$notifyUrl,
 			);
 			$result = SqbPay::precreate($data);
-			var_dump($result);
 			if($result['status']){
 				$qrCode = $result['result']['qr_code'];
 				$code = new QRCode($qrCode);
@@ -425,10 +459,10 @@ class DataAppSyncController extends Controller
 			//美团
 			$mtr = MtpConfig::MTPAppKeyMid($dpid);
 			if($mtr){
-				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtwappayresult');
+				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtposfeeresult');
 				$data = array(
 						'outTradeNo'=>$orderId,
-						'totalFee'=>$payPrice*100,
+						'totalFee'=>$payPrice,
 						'subject'=>'posfee',
 						'body'=>'pos-years-fee',
 						'channel'=>'wx_scan_pay',
