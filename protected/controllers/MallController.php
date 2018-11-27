@@ -233,7 +233,6 @@ class MallController extends Controller
 		$addressId = Yii::app()->request->getPost('address',-1);
 		$orderTime = Yii::app()->request->getPost('order_time',0);
 		$remark = Yii::app()->request->getPost('taste_memo',null);
-		
 		$contion = null;
 		$number = 1;
 		$setDetails = Yii::app()->request->getPost('set-detail',array());
@@ -275,17 +274,16 @@ class MallController extends Controller
 			$msg = $e->getMessage();
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
-		
 		if($this->type==1){
 			$order = WxOrder::getOrder($orderId, $this->companyId);
 			WxOrder::pushSiteOrderToRedis($order,$orderObj->siteNo);
 			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
 		}
+		
 		if($orderObj->orderSuccess && $orderCreate){
 			$order = WxOrder::getOrder($orderId, $this->companyId);
 			WxOrder::pushOrderToRedis($order);
 		}
-		var_dump($orderObj->orderSuccess);var_dump($orderCreate);exit;
 		if($paytype == 1){
 			//支付宝支付
 			if($orderObj->order['order_status'] > 2){

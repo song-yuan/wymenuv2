@@ -1131,7 +1131,7 @@ class WxOrder
 	 	
 	 	$orderAddressArr = array();
 	 	if(in_array($order['order_type'],array(2,3))){
-	 		$orderAddress = self::getOrderAddress($orderId, $dpid);
+	 		$orderAddress = self::getOrderAddress($orderId, $orderDpid);
 	 		if(!empty($orderAddress)){
 	 			array_push($orderAddressArr, $orderAddress);
 	 		}
