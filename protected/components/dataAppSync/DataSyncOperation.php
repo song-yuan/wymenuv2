@@ -1286,6 +1286,19 @@ class DataSyncOperation {
 							$user = WxBrandUser::getFromCardId($dpid, $pay['remark']);
 						}
 						WxCupon::refundCupon($pay['paytype_id'],$user['lid']);
+					}elseif ($pay['paytype']==7){
+						if($order['order_type'] > 0){
+							if($pay['remark']!='全款支付'){
+								$cardId = $pay['remark'];
+								$user = WxBrandUser::getFromCardId($dpid, $cardId);
+							}else{
+								$user = WxBrandUser::get($order['user_id'],$dpid);
+							}
+						}else{
+							$cardId = $pay['remark'];
+							$user = WxBrandUser::getFromCardId($dpid, $cardId);
+						}
+						WxBrandUser::refundYue($refund_fee, $user, $dpid, 1);
 					}elseif ($pay['paytype']==10){
 						if($order['order_type'] > 0){
 							if($pay['remark']!='全款支付'){

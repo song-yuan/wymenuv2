@@ -332,20 +332,27 @@ class WxBrandUser {
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}
+	
 	/**
 	 *
 	 * 会员退储值余额
 	 *
 	 */
-	public static function refundYue($amount,$user,$dpid) {
+	public static function refundYue($amount,$user,$dpid,$paytype = 0) {
 		if($amount < 0){
 			throw new Exception('储值退款不能小于0!');
 		}
 		$time = time();
 		$userId = $user['lid'];
 		$userDpid = $user['dpid'];
-		$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$amount.' where lid='.$userId.' and dpid='.$userDpid;
-		$result = Yii::app()->db->createCommand($sql)->execute();
+		if($paytype==0){
+			$sql = 'update nb_brand_user set remain_back_money=remain_back_money+'.$amount.' where lid='.$userId.' and dpid='.$userDpid;
+			$result = Yii::app()->db->createCommand($sql)->execute();
+		}else{
+			$sql = 'update nb_brand_user set remain_money=remain_money+'.$amount.' where lid='.$userId.' and dpid='.$userDpid;
+			$result = Yii::app()->db->createCommand($sql)->execute();
+		}
+		
 		if(!$result){
 			throw new Exception('储值退回失败!');
 		}

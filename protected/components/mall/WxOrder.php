@@ -989,9 +989,13 @@ class WxOrder
 					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
 					WxCupon::refundCupon($orderpay['paytype_id'],$user['lid']);
 					WxOrderPay::refundOrderPay($orderpay);
+				}else if($orderpay['paytype']==7){
+					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
+					WxBrandUser::refundYue($orderpay['pay_amount'], $user, $dpid, 1);
+					WxOrderPay::refundOrderPay($orderpay);
 				}else if($orderpay['paytype']==10){
 					$user = WxBrandUser::getFromCardId($dpid, $orderpay['remark']);
-					WxBrandUser::refundYue($orderpay['pay_amount'], $user,$dpid);
+					WxBrandUser::refundYue($orderpay['pay_amount'],$user,$dpid);
 					WxOrderPay::refundOrderPay($orderpay);
 				}
 			}
