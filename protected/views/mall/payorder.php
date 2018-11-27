@@ -7,8 +7,10 @@
 	$payPoints = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
-			if($orderPay['paytype']==10){
-				$payYue = $orderPay['pay_amount']; 
+			if($orderPay['paytype']==7){
+				$payYue += $orderPay['pay_amount'];
+			}elseif($orderPay['paytype']==10){
+				$payYue += $orderPay['pay_amount']; 
 			}elseif($orderPay['paytype']==9){
 				$payCupon = $orderPay['pay_amount']; 
 			}elseif($orderPay['paytype']==8){
