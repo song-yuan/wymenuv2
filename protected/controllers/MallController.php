@@ -285,6 +285,7 @@ class MallController extends Controller
 			$order = WxOrder::getOrder($orderId, $this->companyId);
 			WxOrder::pushOrderToRedis($order);
 		}
+		var_dump($orderObj->orderSuccess);var_dump($orderCreate);exit;
 		if($paytype == 1){
 			//支付宝支付
 			if($orderObj->order['order_status'] > 2){
