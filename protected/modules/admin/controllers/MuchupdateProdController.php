@@ -50,18 +50,15 @@ class MuchupdateProdController extends BackendController
 
 	public function actionStorProduct(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$is_sync = DataSync::getInitSync();
-		//var_dump($companyId);exit;
-		$ids = Yii::app()->request->getParam('ids');
-		// var_dump($ids);exit();
-		$original_price = Yii::app()->request->getParam('Originalprice');
-		// var_dump($original_price);exit();
-		$member_price = Yii::app()->request->getParam('Memberprice');
-		$sort = Yii::app()->request->getParam('Sort');
-		$dabao_fee = Yii::app()->request->getParam('Dabaofee');
-		$is_member_discount = Yii::app()->request->getParam('Ismemberdiscount');
-		$is_discount = Yii::app()->request->getParam('Isdiscount');
-		$is_show = Yii::app()->request->getParam('Isshow');
+		
+		$ids = Yii::app()->request->getPost('ids');
+		$original_price = Yii::app()->request->getPost('Originalprice');
+		$member_price = Yii::app()->request->getPost('Memberprice');
+		$sort = Yii::app()->request->getPost('Sort');
+		$dabao_fee = Yii::app()->request->getPost('Dabaofee');
+		$is_member_discount = Yii::app()->request->getPost('Ismemberdiscount');
+		$is_discount = Yii::app()->request->getPost('Isdiscount');
+		$is_show = Yii::app()->request->getPost('Isshow');
 		$models = array();
 		$c = 0;
 		for($i=0;$i<=count($ids)-1;$i++){

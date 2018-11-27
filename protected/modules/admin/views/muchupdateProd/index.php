@@ -43,6 +43,7 @@ function fun()
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'muchupdateProd-form',
 				'action' => $this->createUrl('muchupdateProd/storProduct' , array('companyId' => $this->companyId)),
+				'method' => 'POST',
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -109,11 +110,6 @@ function fun()
 						<?php endforeach;?>
 						<?php endif;?>
 						</tbody>
-						<div style="display: none;">
-						<input type="hidden" id="pids" name="pids" value="" />
-						<input type="hidden" id="prodids" name="prodids" value="" />
-						<input type="hidden" id="nums" name="nums" value="" />
-						</div>
 					</table>
 					</div>
 				</div>
@@ -125,42 +121,25 @@ function fun()
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		
-		$('#product-form').submit(function(){
-			if(!$('.checkboxes:checked').length){
-				alert("<?php echo yii::t('app','请选择要删除的项');?>");
-				return false;
-			}
-			return true;
-		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('muchupdateProd/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('muchupdateProd/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('muchupdateProd/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
-	});
 
-
-	$("#su").on('click',function() {
-		var aa = document.getElementsByName("ids[]");
-        var pids = new Array();
-        for (var i = 0; i < aa.length; i++) {
-            if (aa[i].checked) {
-                pids += aa[i].getAttribute("value") +',';
-            }
-        }
-        if(pids!=''){
-        	pids = pids.substr(0,pids.length-1);//除去最后一个“，”
-        }else{
-       	 	alert("<?php echo yii::t('app','请选择要修改的菜品！！！');?>");
-       		return false;
-       	}
+		$("#su").on('click',function() {
+			var aa = document.getElementsByName("ids[]");
+	        var pids = new Array();
+	        for (var i = 0; i < aa.length; i++) {
+	            if (aa[i].checked) {
+	                pids += aa[i].getAttribute("value") +',';
+	            }
+	        }
+	        if(pids!=''){
+	        	pids = pids.substr(0,pids.length-1);//除去最后一个“，”
+	        }else{
+	       	 	alert("<?php echo yii::t('app','请选择要修改的菜品！！！');?>");
+	       		return false;
+	       	}
+		});
 	});
 	</script>	
