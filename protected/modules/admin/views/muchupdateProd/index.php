@@ -90,22 +90,36 @@ function fun()
 								</td>
 								<td><?php echo $model->product_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
-								<td ><?php echo $form->textField($model, 'original_price',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('originalprice['.$model["lid"].'][]')));?>
-									</td>
 								<td >
-								<?php echo $form->textField($model, 'member_price',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('memberprice['.$model["lid"].'][]')));?>
-									
+									<input class="form-control" type="text" name="Product[<?php echo $model->lid;?>][original_price]" value="<?php echo $model->original_price;?>">
 								</td>
-								<td ><?php echo $form->textField($model, 'sort',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('sort['.$model["lid"].'][]')));?>
-									</td>
-								<td ><?php echo $form->textField($model, 'dabao_fee',array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('dabaofee['.$model["lid"].'][]')));?>
+								<td >
+									<input class="form-control" type="text" name="Product[<?php echo $model->lid;?>][member_price]" value="<?php echo $model->member_price;?>">
 								</td>
-								<td ><?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('ismemberdiscount['.$model["lid"].'][]')));?>
-									</td>
-								<td ><?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('isdiscount['.$model["lid"].'][]')));?>
-									</td>
-                                <td ><?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control '.$model['lid'],'name'=>$model->getAttributeLabel('isshow['.$model["lid"].'][]')));?>
-									</td>
+								<td >
+									<input class="form-control" type="text" name="Product[<?php echo $model->lid;?>][sort]" value="<?php echo $model->sort;?>">
+								</td>
+								<td >
+									<input class="form-control" type="text" name="Product[<?php echo $model->lid;?>][dabao_fee]" value="<?php echo $model->dabao_fee;?>">
+								</td>
+								<td >
+									<select class="form-control" name="Product[<?php echo $model->lid;?>][is_member_discount]">
+										<option value="0" <?php if($model->is_member_discount==0){ echo 'selected="selected';}?>">否</option>
+										<option value="1" <?php if($model->is_member_discount==1){ echo 'selected="selected';}?>">是</option>
+									</select>
+								</td>
+								<td >
+									<select class="form-control" name="Product[<?php echo $model->lid;?>][is_discount]">
+										<option value="0" <?php if($model->is_discount==0){ echo 'selected="selected';}?>">否</option>
+										<option value="1" <?php if($model->is_discount==1){ echo 'selected="selected';}?>">是</option>
+									</select>
+								</td>
+                                <td >
+									<select class="form-control" name="Product[<?php echo $model->lid;?>][is_show]">
+										<option value="0" <?php if($model->is_show==0){ echo 'selected="selected';}?>">否</option>
+										<option value="1" <?php if($model->is_show==1){ echo 'selected="selected';}?>">是</option>
+									</select>
+								</td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>

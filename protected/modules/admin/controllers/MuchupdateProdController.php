@@ -52,39 +52,39 @@ class MuchupdateProdController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		
 		$ids = Yii::app()->request->getPost('ids');
-		$original_price = Yii::app()->request->getPost('Originalprice');
-		$member_price = Yii::app()->request->getPost('Memberprice');
-		$sort = Yii::app()->request->getPost('Sort');
-		$dabao_fee = Yii::app()->request->getPost('Dabaofee');
-		$is_member_discount = Yii::app()->request->getPost('Ismemberdiscount');
-		$is_discount = Yii::app()->request->getPost('Isdiscount');
-		$is_show = Yii::app()->request->getPost('Isshow');
-		$models = array();
-		$c = 0;
-		for($i=0;$i<=count($ids)-1;$i++){
-			$model = array(
-				'lid'=>$ids[$i],
-				'original_price'=>$original_price[$ids[$i]][$c],
-				'member_price'=>$member_price[$ids[$i]][$c],
-				'sort'=>$sort[$ids[$i]][$c],
-				'dabao_fee'=>$dabao_fee[$ids[$i]][$c],
-				'is_member_discount'=>$is_member_discount[$ids[$i]][$c],
-				'is_discount'=>$is_discount[$ids[$i]][$c],
-				'is_show'=>$is_show[$ids[$i]][$c]
-				);
-			array_push($models, $model);
-		}
-		// var_dump($models);exit();
-		//****查询公司的产品分类。。。****
-		$db = Yii::app()->db;
+		$products = Yii::app()->request->getPost('Product');
 		
-		//var_dump($catep1,$catep2,$products);exit;
-        //Until::isUpdateValid($pids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-        if((!empty($models))&&(Yii::app()->user->role <= User::SHOPKEEPER)){
-        	foreach ($models as $key => $model){
-        		$sql = "update nb_product set update_at='".date("Y-m-d H:i:s",time())."',original_price=".$models[$key]['original_price'].",member_price=".$models[$key]['member_price'].",sort=".$models[$key]['sort'].",dabao_fee=".$models[$key]['dabao_fee'].",is_member_discount=".$models[$key]['is_member_discount'].",is_discount=".$models[$key]['is_discount'].",is_show=".$models[$key]['is_show']." where lid=".$models[$key]['lid']." and delete_flag=0";
-        		$rel = $db->createCommand($sql)->execute();
+		
+        if((!empty($ids))&&(Yii::app()->user->role <= User::SHOPKEEPER)){
+        	$db = Yii::app()->db;
+        	
+        	$orsql = '';
+        	$mesql = '';
+        	$sosql = '';
+        	$dasql = '';
+        	$mdsql = '';
+        	$dsql = '';
+        	$ssql = '';
+        	foreach ($ids as $id) {
+        		$product = $products[$id];
+        		$orsql .= ' WHEN '.$id.' THEN '.$product['original_price'];
+        		$mesql .= ' WHEN '.$id.' THEN '.$product['member_price'];
+        		$sosql .= ' WHEN '.$id.' THEN '.$product['sort'];
+        		$dasql .= ' WHEN '.$id.' THEN '.$product['dabao_fee'];
+        		$mdsql .= ' WHEN '.$id.' THEN '.$product['is_member_discount'];
+        		$dsql .= ' WHEN '.$id.' THEN '.$product['is_discount'];
+        		$ssql .= ' WHEN '.$id.' THEN '.$product['is_show'];
         	}
+        	$sql = 'update nb_product set '
+        			.'original_price= CASE lid'.$orsql.' END,'
+        			.' member_price=CASE lid'.$mesql.' END,'
+        			.' sort=CASE lid'.$sosql.' END,'
+        			.' dabao_fee=CASE lid'.$dasql.' END,'
+        			.' is_member_discount=CASE lid'.$mdsql.' END,'
+        			.' is_discount=CASE lid'.$dsql.' END,'
+        			.' is_show=CASE lid'.$ssql.' END'
+        			.' WHERE lid in('. join(',', $ids) .') and dpid='.$companyId;
+        	$result = $db->createCommand($sql)->execute();
         	Yii::app()->user->setFlash('success' , yii::t('app','菜品批量修改成功！！！'));
         	$this->redirect(array('muchupdateProd/index' , 'companyId' => $companyId)) ;
         	
