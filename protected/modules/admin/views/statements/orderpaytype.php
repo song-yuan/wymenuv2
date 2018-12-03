@@ -183,7 +183,7 @@
 										case 15: echo '饿了么·外卖';break;
 								} ;?><?php if($model['pay_amount']<0)echo '(退款)';?></td>
 								<td><?php echo sprintf("%.2f",$model['pay_amount']);?></td>
-								<td><?php echo $model['transaction_id'];?></td>
+								<td><?php echo isset($model['transaction_id'])?$model['transaction_id']:'';?></td>
 								</tr>
 						
 						<?php endforeach;?>	
