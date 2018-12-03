@@ -376,7 +376,7 @@ class DataAppSyncController extends Controller
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode','0');
 		$msg = array('status'=>false);
-		$posfee = PoscodeFee::getPosfee($dpid, $poscede);
+		$posfee = PoscodeFee::getPosfee($dpid, $poscode);
 		if(!$posfee){
 			Yii::app()->end(json_encode($msg));
 		}
