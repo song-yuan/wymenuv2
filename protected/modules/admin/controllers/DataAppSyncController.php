@@ -376,13 +376,18 @@ class DataAppSyncController extends Controller
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode','0');
 		$msg = array('status'=>false);
-		
+		$posfee = PoscodeFee::getPosfee($dpid, $poscede);
+		if(!$posfee){
+			Yii::app()->end(json_encode($msg));
+		}
 		$comdpid = WxCompany::getCompanyDpid($dpid);
-		$posfee = PoscodeFee::getPosfeeset($comdpid);
-		if($posfee){
-			$years = $posfee['years'];
-			$amount = $posfee['price']*100;
+		$posfeeset = PoscodeFee::getPosfeeset($comdpid);
+		if($posfeeset){
+			$randNum = Helper::randNum(4);
 			$orderId = (int)$dpid . date('YmdHis') . $randNum;
+			$years = $posfeeset['years'];
+			$amount = $posfeeset['price']*100;
+			
 			$se = new Sequence("poscode_fee_order");
 			$id = $se->nextval();
 			$data = array(
@@ -393,7 +398,8 @@ class DataAppSyncController extends Controller
 					'poscode'=>$poscode,
 					'trade_no'=>$orderId,
 					'years'=>$years,
-					'total_amount'=>$amount
+					'total_amount'=>$amount,
+					'exp_time'=>$posfee['exp_time']
 			);
 			$result = Yii::app()->db->createCommand()->insert('nb_poscode_fee_order',$data);
 			if($result){
@@ -420,6 +426,7 @@ class DataAppSyncController extends Controller
 		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 		if($payChannel==1){
 			//模式二扫码支付
+			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotice');
 			$notify = new WxPayNativePay();
 			$input = new WxPayUnifiedOrder();
 			$input->SetBody("收银机续费");

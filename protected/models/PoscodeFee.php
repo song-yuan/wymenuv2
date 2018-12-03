@@ -116,4 +116,40 @@ class PoscodeFee extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	public static function getPosfee($dpid,$poscede){
+		$sql = 'select * from nb_poscode_fee where dpid='.$dpid.' and poscode="'.$poscede.'" and delete_flag=0';
+		$posfee = Yii::app()->db->createCommand($sql)->queryRow();
+		return $posfee;
+	}
+	public static function getPosfeeset($dpid){
+		$sql = 'select * from nb_poscode_feeset where dpid='.$comdpid.' and delete_flag=0';
+		$posfeeset = Yii::app()->db->createCommand($sql)->queryRow();
+		return $posfeeset;
+	}
+	public static function dealPosfeeOrder($posfeeorder,$transactionId){
+		$now = date('Y-m-d H:i:s',time());
+		$extTime = $posfeeorder['exp_time'];
+		if($extTime < $now){
+			$extTime = $now;
+		}
+		$addtime = $posfeeorder['years'];
+		$time = date('Y-m-d H:i:s',strtotime($extTime.' +'.$addtime.' year'));
+		
+		$sql = 'update nb_poscode_fee_order set transcation_id="'.$transactionId.'",status=1 where lid='.$posfeeorder['lid'].' and dpid='.$posfeeorder['dpid'];
+		Yii::app()->db->createCommand($sql)->execute();
+		
+		$se = new Sequence("poscode_fee_record");
+		$id = $se->nextval();
+		$data = array(
+				'lid'=>$id,
+				'dpid'=>$posfeeorder['dpid'],
+				'create_at'=>$now,
+				'update_at'=>$now,
+				'poscode'=>$posfeeorder['poscode'],
+				'type'=>1,
+				'add_time'=>$addtime,
+				'expire_time'=>$time
+		);
+		$result = $db->createCommand()->insert('nb_poscode_fee_record',$data);
+	}
 }
