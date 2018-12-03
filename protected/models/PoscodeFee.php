@@ -117,12 +117,12 @@ class PoscodeFee extends CActiveRecord
 		return parent::model($className);
 	}
 	public static function getPosfee($dpid,$poscede){
-		$sql = 'select * from nb_poscode_fee where dpid='.$dpid.' and poscode="'.$poscede.'" and delete_flag=0';
+		$sql = 'select * from nb_poscode_fee where dpid='.$dpid.' and poscode="'.$poscede.'"';
 		$posfee = Yii::app()->db->createCommand($sql)->queryRow();
 		return $posfee;
 	}
 	public static function getPosfeeset($dpid){
-		$sql = 'select * from nb_poscode_feeset where dpid='.$comdpid.' and delete_flag=0';
+		$sql = 'select * from nb_poscode_feeset where dpid='.$comdpid;
 		$posfeeset = Yii::app()->db->createCommand($sql)->queryRow();
 		return $posfeeset;
 	}
