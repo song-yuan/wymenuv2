@@ -375,11 +375,14 @@ class DataAppSyncController extends Controller
 	public function actionGetPosPayOrder(){
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode','0');
+		Helper::writeLog($dpid);
+		Helper::writeLog($poscode);
 		$msg = array('status'=>false);
 		$posfee = PoscodeFee::getPosfee($dpid, $poscode);
 		if(!$posfee){
 			Yii::app()->end(json_encode($msg));
 		}
+		Helper::writeLog('ddd8765987787');
 		$comdpid = WxCompany::getCompanyDpid($dpid);
 		$posfeeset = PoscodeFee::getPosfeeset($comdpid);
 		if($posfeeset){
@@ -414,9 +417,10 @@ class DataAppSyncController extends Controller
 	 */
 	public function actionGetPosPayCode(){
 		$dpid = Yii::app()->request->getParam('dpid');
+		$poscode = Yii::app()->request->getParam('poscode');
 		$orderId = Yii::app()->request->getParam('tradeno','0');
 		
-		$posfeeOrder = PoscodeFee::getPosfeeOrder($dpid, $orderId);
+		$posfeeOrder = PoscodeFee::getPosfeeOrder($dpid, $poscode, $orderId);
 		if(!$posfeeOrder){
 			exit;
 		}
