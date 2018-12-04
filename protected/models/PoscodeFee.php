@@ -126,8 +126,8 @@ class PoscodeFee extends CActiveRecord
 		$posfeeset = Yii::app()->db->createCommand($sql)->queryRow();
 		return $posfeeset;
 	}
-	public static function getPosfeeOrder($dpid,$poscede,$tradeno){
-		$sql = 'select * from nb_poscode_fee_order where dpid='.$dpid.' and poscode="'.$poscede.'" and trade_no="'.$tradeno.'" and delete_flag=0';
+	public static function getPosfeeOrder($dpid,$poscode,$tradeno){
+		$sql = 'select * from nb_poscode_fee_order where dpid='.$dpid.' and poscode="'.$poscode.'" and trade_no="'.$tradeno.'" and delete_flag=0';
 		$posfeeorder = Yii::app()->db->createCommand($sql)->queryRow();
 		return $posfeeorder;
 	}
@@ -142,11 +142,11 @@ class PoscodeFee extends CActiveRecord
 		$addtime = $posfeeorder['years'];
 		$time = date('Y-m-d H:i:s',strtotime($extTime.' +'.$addtime.' year'));
 		
-		$sql = 'update nb_poscode_fee_order set transcation_id="'.$transactionId.'",status=1 where lid='.$posfeeorder['lid'].' and dpid='.$posfeeorder['dpid'];
+		$sql = 'update nb_poscode_fee_order set transcation_id="'.$transactionId.'",status=1 where lid='.$posfeeorder['lid'].' and dpid='.$dpid;
 		Helper::writeLog($sql);
 		Yii::app()->db->createCommand($sql)->execute();
 		
-		$sql = 'update nb_poscode_fee set exp_time="'.$time.'" where dpid='.$dpid.' and poscode="'.$poscede.'"';
+		$sql = 'update nb_poscode_fee set exp_time="'.$time.'" where dpid='.$dpid.' and poscode="'.$poscode.'"';
 		Helper::writeLog($sql);
 		Yii::app()->db->createCommand($sql)->execute();
 		
