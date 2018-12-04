@@ -416,8 +416,7 @@ class DataAppSyncController extends Controller
 		$dpid = Yii::app()->request->getParam('dpid');
 		$orderId = Yii::app()->request->getParam('tradeno','0');
 		
-		$sql = 'select * from nb_poscode_fee_order where dpid='.$dpid.' and trade_no="'.$orderId.'" and delete_flag=0';
-		$posfeeOrder = Yii::app()->db->createCommand($sql)->queryRow();
+		$posfeeOrder = PoscodeFee::getPosfeeOrder($dpid, $orderId);
 		if(!$posfeeOrder){
 			exit;
 		}
@@ -493,5 +492,22 @@ class DataAppSyncController extends Controller
 			}
 		}
 		exit;
+	}
+	/**
+	 * 获取延期订单的状态
+	 */
+	public function actionGetPosPayStatus(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$poscode = Yii::app()->request->getParam('poscode');
+		$orderId = Yii::app()->request->getParam('tradeno','0');
+		$posfeeOrder = PoscodeFee::getPosfeeOrder($dpid, $poscode, $orderId);
+		if(!$posfeeOrder){
+			exit;
+		}
+		$status = false;
+		if($posfeeOrder['status']){
+			$status = true;
+		}
+		Yii::app()->end(json_encode(array('status'=>$status)));
 	}
 }

@@ -126,6 +126,11 @@ class PoscodeFee extends CActiveRecord
 		$posfeeset = Yii::app()->db->createCommand($sql)->queryRow();
 		return $posfeeset;
 	}
+	public static function getPosfeeOrder($dpid,$poscede,$tradeno){
+		$sql = 'select * from nb_poscode_fee_order where dpid='.$dpid.' and poscode="'.$poscede.'" and trade_no="'.$tradeno.'" and delete_flag=0';
+		$posfeeorder = Yii::app()->db->createCommand($sql)->queryRow();
+		return $posfeeorder;
+	}
 	public static function dealPosfeeOrder($posfeeorder,$transactionId){
 		$now = date('Y-m-d H:i:s',time());
 		$extTime = $posfeeorder['exp_time'];
