@@ -1020,6 +1020,7 @@ class DataSyncTables
         		"dpid int(10) NOT NULL,".
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"sole_code varchar(20) NOT NULL DEFAULT '0',".
         		"title varchar(64) NOT NULL,".
         		"infor varchar(255) NOT NULL,".
         		"begin_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
