@@ -1029,6 +1029,7 @@ class DataSyncTables
                 "extra_cost decimal(10,2) NOT NULL DEFAULT '0.00',".
                 "sent_number int(3) NOT NULL DEFAULT '1',".
         		"is_available varchar(16) NOT NULL DEFAULT '0',".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
@@ -1040,6 +1041,7 @@ class DataSyncTables
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"full_sent_id int(10) NOT NULL DEFAULT '0',".
         		"product_id int(10) NOT NULL DEFAULT '0',".
+        		"phs_code varchar(15) NOT NULL DEFAULT '0',".
         		"is_discount varchar(2) NOT NULL DEFAULT '0',".
         		"promotion_money decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"promotion_discount decimal(10,2) NOT NULL DEFAULT '1.00',".
