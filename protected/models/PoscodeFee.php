@@ -143,9 +143,11 @@ class PoscodeFee extends CActiveRecord
 		$time = date('Y-m-d H:i:s',strtotime($extTime.' +'.$addtime.' year'));
 		
 		$sql = 'update nb_poscode_fee_order set transcation_id="'.$transactionId.'",status=1 where lid='.$posfeeorder['lid'].' and dpid='.$posfeeorder['dpid'];
+		Helper::writeLog($sql);
 		Yii::app()->db->createCommand($sql)->execute();
 		
 		$sql = 'update nb_poscode_fee set exp_time="'.$time.'" where dpid='.$dpid.' and poscode="'.$poscede.'"';
+		Helper::writeLog($sql);
 		Yii::app()->db->createCommand($sql)->execute();
 		
 		$se = new Sequence("poscode_fee_record");
@@ -160,6 +162,7 @@ class PoscodeFee extends CActiveRecord
 				'add_time'=>$addtime,
 				'expire_time'=>$time
 		);
+		Helper::writeLog(json_encode($data));
 		$result = Yii::app()->db->createCommand()->insert('nb_poscode_fee_record',$data);
 	}
 }
