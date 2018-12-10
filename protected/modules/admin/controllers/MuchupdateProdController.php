@@ -28,23 +28,22 @@ class MuchupdateProdController extends BackendController
 			$criteria->condition.=' and t.category_id = '.$categoryId;
 		}
 		
-		//$pages = new CPagination(Product::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		//$pages->applyLimit($criteria);
+		$pages = new CPagination(Product::model()->count($criteria));
+		$pages->setPageSize(100);
+		$pages->applyLimit($criteria);
 		$models = Product::model()->findAll($criteria);
 		
 		$db = Yii::app()->db;
 		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
-		//var_dump($dpids);exit;
 		$categories = $this->getCategories();
-//                var_dump($categories);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'dpids'=>$dpids,
 				'categories'=>$categories,
-				'categoryId'=>$categoryId
+				'categoryId'=>$categoryId,
+				'pages'=>$pages
 		));
 	}
 
@@ -89,7 +88,7 @@ class MuchupdateProdController extends BackendController
         	$this->redirect(array('muchupdateProd/index' , 'companyId' => $companyId)) ;
         	
         }else{
-        	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
+        	Yii::app()->user->setFlash('error' , yii::t('app','请选中修改菜品或无权限进行此项操作！！！'));
         	$this->redirect(array('muchupdateProd/index' , 'companyId' => $companyId)) ;
         }
 	}
