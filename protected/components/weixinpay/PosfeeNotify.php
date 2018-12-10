@@ -5,7 +5,7 @@
  * @author widyhu
  *
  */
-class Notify extends WxPayNotify
+class PosfeeNotify extends WxPayNotify
 {
 	//查询订单
 	public function Queryorder($out_trade_no)
@@ -51,69 +51,32 @@ class Notify extends WxPayNotify
 		}
 	}
 	public function insertNotify($data){
-		$orderIdArr = explode('-',$data["out_trade_no"]);
-		$openId = isset($data['sub_openid'])?$data['sub_openid']:$data['openid'];
-
-		$brandUser = WxBrandUser::getFromOpenId($openId);
-
+		//订单号查询订单
+		$sql = 'select * from nb_poscode_fee_order where trade_no="'.$data['out_trade_no'].'" and delete_flag=0';
+		$posfeeOrder = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!$posfeeOrder){
+			echo '{"status":"SUCCESS"}';
+			exit;
+		}
+		$dpid = $posfeeOrder['dpid'];
 		$se = new Sequence("notify");
         $lid = $se->nextval();
 		$notifyData = array(
 			'lid'=>$lid,
-        	'dpid'=>$orderIdArr[1],
+        	'dpid'=>$dpid,
         	'create_at'=>date('Y-m-d H:i:s',time()),
         	'update_at'=>date('Y-m-d H:i:s',time()),
-        	'user_id'=>$brandUser['lid'],
+        	'user_id'=>0,
         	'out_trade_no'=>$data['out_trade_no'],
         	'transaction_id'=>$data['transaction_id'],
         	'total_fee'=>$data['total_fee'],
         	'time_end'=>$data['time_end'],
         	'attach'=>isset($data['attach'])?$data['attach']:'',
-			);
+		);
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
-		if($data['attach']==1){
-			//充值
-			$recharge = new WxRecharge($orderIdArr[0],$orderIdArr[1],$brandUser['lid']);
-			exit;
-
-		}else if($data['attach']==3){
-			//商铺原料支付
-			$Yorder = GoodsOrder::model()->find('account_no=:account_no and dpid=:dpid',array(':account_no'=>$orderIdArr[0],':dpid'=>$orderIdArr[1]));
-			$Yorder->order_status= 1;
-			$Yorder->paytype = 1;
-			$Yorder->pay_status = 1;
-			$Yorder->pay_time = date('Y-m-d H:i:s',time());
-			$Yorder->update();
-			$se = new Sequence("goods_order_pay");
-			$lid = $se->nextval();
-			$Data = array(
-				'lid'=>$lid,
-				'dpid'=>$orderIdArr[1],
-				'create_at'=>date('Y-m-d H:i:s',time()),
-				'update_at'=>date('Y-m-d H:i:s',time()),
-				'account_no'=>$orderIdArr[0],
-				'order_id'=>$Yorder->lid,
-				'pay_amount'=>$Yorder->reality_total,
-				'paytype'=>1,
-				'paytype_id'=>$data['transaction_id'],
-				'remark'=>'商铺原材料微信支付',
-				'delete_flag'=>0,
-				'is_sync'=>DataSync::getInitSync(),
-				);
-			Yii::app()->db->createCommand()->insert('nb_goods_order_pay', $Data);
-			exit;
-
-		}
-		//orderpay表插入数据
-		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
-		if(in_array($order['order_type'], array(1,3,6))){
-			$paytype = 12;
-		}elseif($order['order_type']==2){
-			$paytype = 13;
-		}
-		$order['order_status'] = 3;
-		WxOrder::pushOrderToRedis($order);
-		WxOrder::insertOrderPay($order,$paytype,$data['total_fee']/100,0,$data["out_trade_no"]);
-		WxOrder::dealOrder($brandUser, $order);
+		// 处理续费
+		PoscodeFee::dealPosfeeOrder($posfeeOrder,$data['transaction_id']);
+		echo '{"status":"SUCCESS"}';
+		exit;
 	}
 }

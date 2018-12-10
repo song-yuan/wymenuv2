@@ -24,6 +24,7 @@ class DataSyncOperation {
 	 */
 	public static function getDataSyncPosInfor($code,$mac) {
 		if($code){
+			$code = trim($code);
 			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){

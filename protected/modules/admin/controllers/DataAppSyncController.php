@@ -416,10 +416,12 @@ class DataAppSyncController extends Controller
 	/**
 	 * 软件到期续费
 	 * 生成支付二维码
+	 * type 0 微信 1 支付宝
 	 */
 	public function actionGetPosPayCode(){
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode');
+		$type = Yii::app()->request->getParam('type',0);
 		$orderId = Yii::app()->request->getParam('tradeno','0');
 		
 		$posfeeOrder = PoscodeFee::getPosfeeOrder($dpid, $poscode, $orderId);
@@ -431,7 +433,7 @@ class DataAppSyncController extends Controller
 		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 		if($payChannel==1){
 			//模式二扫码支付
-			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotice');
+			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
 			$notify = new WxPayNativePay();
 			$input = new WxPayUnifiedOrder();
 			$input->SetBody("收银机续费");
@@ -443,11 +445,12 @@ class DataAppSyncController extends Controller
 			$input->SetNotify_url($notifyUrl);
 			$input->SetTrade_type("NATIVE");
 			$input->SetProduct_id("123456789");
+			$input->SetAttach($dpid.'-'.$poscode);
 			
 			$result = $notify->GetPayUrl($input);
 			$qrCode = $result["code_url"];
 			
-			$code=new QRCode($url2);
+			$code=new QRCode($qrCode);
 			$code->create();
 		}elseif($payChannel==2){
 			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');

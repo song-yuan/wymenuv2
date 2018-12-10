@@ -11,6 +11,10 @@ class WeixinController extends Controller
 	{
 		$this->render('notify');
 	}
+	public function actionPosfeenotify()
+	{
+		$this->render('posfeenotify');
+	}
 	/**
 	 * 
 	 * 生成二维码支付
