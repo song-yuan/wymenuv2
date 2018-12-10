@@ -434,48 +434,7 @@ class DataAppSyncController extends Controller
 		$orderId = $orderId.$type;// 订单号加类型 组成新订单号
 		$payPrice = $posfeeOrder['total_amount'];
 		
-		if($payChannel==1){
-			//模式二扫码支付
-			if($type==0){
-				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
-				$notify = new WxPayNativePay();
-				$input = new WxPayUnifiedOrder();
-				$input->SetBody("收银机续费");
-				$input->SetOut_trade_no($orderId);
-				$input->SetTotal_fee($payPrice);
-				$input->SetTime_start(date("YmdHis"));
-				$input->SetTime_expire(date("YmdHis", time() + 600));
-				$input->SetGoods_tag("续费");
-				$input->SetNotify_url($notifyUrl);
-				$input->SetTrade_type("NATIVE");
-				$input->SetProduct_id("123456789");
-				$input->SetAttach($dpid.'-'.$poscode);
-					
-				$result = $notify->GetPayUrl($input);
-				$qrCode = $result["code_url"];
-					
-				$code=new QRCode($qrCode);
-				$code->create();
-			}
-		}elseif($payChannel==2){
-			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
-			$data = array(
-					'dpid'=>$dpid,
-					'client_sn'=>$orderId,
-					'total_amount'=>$payPrice,
-					'subject'=>'posfee',
-					'pay_way'=>3,
-					'sub_payway'=>2,
-					'operator'=>$poscode,
-					'notify_url'=>$notifyUrl,
-			);
-			$result = SqbPay::precreate($data);
-			if($result['status']){
-				$qrCode = $result['result']['qr_code'];
-				$code = new QRCode($qrCode);
-				$code->create();
-			}
-		}elseif($payChannel==3){
+		if($payChannel==3){
 			//美团
 			if($type==0){
 				// 微信

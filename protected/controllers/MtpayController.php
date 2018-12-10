@@ -158,6 +158,7 @@ class MtpayController extends Controller
 		$totalFee = $_POST['totalFee'];
 	
 		//订单号查询订单
+		$accountno = substr($accountno, 0, strlen($accountno)-1);// 订单号加类型 组成新订单号
 		$sql = 'select * from nb_poscode_fee_order where trade_no="'.$accountno.'" and delete_flag=0';
 		$posfeeOrder = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$posfeeOrder){
@@ -165,7 +166,6 @@ class MtpayController extends Controller
 			exit;
 		}
 		$dpid = $posfeeOrder['dpid'];
-		$accountno = substr($accountno, 0, strlen($accountno)-1);// 订单号加类型 组成新订单号
 		$sql = 'select * from nb_mtpay_info where dpid ='.$dpid.' and accountno="'.$accountno.'" and transactionId ="'.$transactionId.'"';
 		$notify = Yii::app()->db->createCommand($sql)->queryRow();
 		if($notify){
