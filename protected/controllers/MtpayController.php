@@ -164,8 +164,8 @@ class MtpayController extends Controller
 			echo '{"status":"SUCCESS"}';
 			exit;
 		}
-		
 		$dpid = $posfeeOrder['dpid'];
+		$accountno = substr($accountno, 0, strlen($accountno)-1);// 订单号加类型 组成新订单号
 		$sql = 'select * from nb_mtpay_info where dpid ='.$dpid.' and accountno="'.$accountno.'" and transactionId ="'.$transactionId.'"';
 		$notify = Yii::app()->db->createCommand($sql)->queryRow();
 		if($notify){

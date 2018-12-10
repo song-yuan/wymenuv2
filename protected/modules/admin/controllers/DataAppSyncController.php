@@ -431,6 +431,7 @@ class DataAppSyncController extends Controller
 		if(!$posfeeOrder){
 			exit;
 		}
+		$orderId = $orderId.$type;// 订单号加类型 组成新订单号
 		$payPrice = $posfeeOrder['total_amount'];
 		
 		if($payChannel==1){
@@ -495,7 +496,6 @@ class DataAppSyncController extends Controller
 						'expireMinutes'=>'5',
 						'notifyUrl'=>$notifyUrl,
 				);
-					
 				$mts = explode(',',$mtr);
 				$merchantId = $mts[0];
 				$appId = $mts[1];
