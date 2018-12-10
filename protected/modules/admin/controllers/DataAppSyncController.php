@@ -423,8 +423,9 @@ class DataAppSyncController extends Controller
 	public function actionGetPosPayCode(){
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode');
-		$payChannel = Yii::app()->request->getParam('paychannel',0);
 		$orderId = Yii::app()->request->getParam('tradeno','0');
+		$payChannel = Yii::app()->request->getParam('paychannel',0);
+		$type = Yii::app()->request->getParam('type',0);
 		
 		$posfeeOrder = PoscodeFee::getPosfeeOrder($dpid, $poscode, $orderId);
 		if(!$posfeeOrder){
@@ -434,25 +435,27 @@ class DataAppSyncController extends Controller
 		
 		if($payChannel==1){
 			//模式二扫码支付
-			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
-			$notify = new WxPayNativePay();
-			$input = new WxPayUnifiedOrder();
-			$input->SetBody("收银机续费");
-			$input->SetOut_trade_no($orderId);
-			$input->SetTotal_fee($payPrice);
-			$input->SetTime_start(date("YmdHis"));
-			$input->SetTime_expire(date("YmdHis", time() + 600));
-			$input->SetGoods_tag("续费");
-			$input->SetNotify_url($notifyUrl);
-			$input->SetTrade_type("NATIVE");
-			$input->SetProduct_id("123456789");
-			$input->SetAttach($dpid.'-'.$poscode);
-			
-			$result = $notify->GetPayUrl($input);
-			$qrCode = $result["code_url"];
-			
-			$code=new QRCode($qrCode);
-			$code->create();
+			if($type==0){
+				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
+				$notify = new WxPayNativePay();
+				$input = new WxPayUnifiedOrder();
+				$input->SetBody("收银机续费");
+				$input->SetOut_trade_no($orderId);
+				$input->SetTotal_fee($payPrice);
+				$input->SetTime_start(date("YmdHis"));
+				$input->SetTime_expire(date("YmdHis", time() + 600));
+				$input->SetGoods_tag("续费");
+				$input->SetNotify_url($notifyUrl);
+				$input->SetTrade_type("NATIVE");
+				$input->SetProduct_id("123456789");
+				$input->SetAttach($dpid.'-'.$poscode);
+					
+				$result = $notify->GetPayUrl($input);
+				$qrCode = $result["code_url"];
+					
+				$code=new QRCode($qrCode);
+				$code->create();
+			}
 		}elseif($payChannel==2){
 			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/sqbpay/wappayresult');
 			$data = array(
@@ -473,6 +476,13 @@ class DataAppSyncController extends Controller
 			}
 		}elseif($payChannel==3){
 			//美团
+			if($type==0){
+				// 微信
+				$channel = 'wx_scan_pay';
+			}else{
+				// 支付宝
+				$channel = 'ali_scan_pay';
+			}
 			$mtr = MtpConfig::MTPAppKeyMid($dpid);
 			if($mtr){
 				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/mtposfeeresult');
@@ -481,7 +491,7 @@ class DataAppSyncController extends Controller
 						'totalFee'=>$payPrice,
 						'subject'=>'posfee',
 						'body'=>'pos-years-fee',
-						'channel'=>'wx_scan_pay',
+						'channel'=>$channel,
 						'expireMinutes'=>'5',
 						'notifyUrl'=>$notifyUrl,
 				);
