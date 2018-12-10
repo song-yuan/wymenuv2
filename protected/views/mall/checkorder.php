@@ -217,7 +217,7 @@
 	    			}
 	    			$tasteHtml .= '<input type="hidden" name="taste[]" value="'.$tvalue.'" /><div class="clear"></div></div>';
 	    		}
-	    		$tasteHtml .= '</div><div class="taste-desc">'.$tdesc.'</div><div class="taste">可选口味</div>';
+	    		$tasteHtml .= '</div><div class="taste-desc">'.$tdesc.'</div><div class="taste">可选口味</div><span class="weui-badge">可选</span>';
 	    	}
 	    	
 	    	// 套餐详情
@@ -296,7 +296,7 @@
 	    			$prosetHtml .= '<input type="hidden" name="set-detail[]" value="'. $selectItem.'"/>';
 	    			$prosetHtml .= '<div class="clear"></div></div>';
 	    		}
-	    		$prosetHtml .= '</div><div class="detail-desc">'.$detailDesc.'</div><div class="detail">可选套餐</div>';
+	    		$prosetHtml .= '</div><div class="detail-desc">'.$detailDesc.'</div><div class="detail">可选套餐</div><span class="weui-badge">可选</span>';
 	    	}
 	    	
 	    ?>
