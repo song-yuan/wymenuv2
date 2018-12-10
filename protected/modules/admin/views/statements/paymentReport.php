@@ -74,7 +74,9 @@
 		               <th><?php echo yii::t('app','时间');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','毛利润');?></th> 
-		               <th><?php echo yii::t('app','优惠');?></th>
+		               <th><?php echo yii::t('app','折扣优惠');?></th>
+		               <th><?php echo yii::t('app','微信现金券');?></th>
+		               <th><?php echo yii::t('app','积分抵扣');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
 		               <?php if($userid != '0'): ?>
 		               <th><?php echo yii::t('app','营业员');?></th>
@@ -88,8 +90,8 @@
 		               <th><?php echo yii::t('app','银联');?></th>
 		               -->
 		               <th><?php echo yii::t('app','会员卡');?></th>
-		               <th><?php echo yii::t('app','微信储值(充)');?></th> 
-		               <th><?php echo yii::t('app','微信储值(返)');?></th>
+		               <th><?php echo yii::t('app','微信储值(充)');?></th>
+		               <th><?php echo yii::t('app','微信储值(返)');?></th> 
 		               <th><?php echo yii::t('app','美团·外卖');?></th>
 		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
 	                    <?php 
@@ -99,8 +101,6 @@
 	                    ?>
 	                         <th><?php echo $payment['name'];?></th>
 	                    <?php endforeach;?>
-		               <th><?php echo yii::t('app','系统券');?></th>
-		               <th><?php echo yii::t('app','积分');?></th> 
 		               <th><?php echo yii::t('app','退款');?></th>
 					   <th><?php echo yii::t('app','支付方式总和');?></th>
 		            </tr>
@@ -132,7 +132,6 @@
 		        	$paytypeTotal = 0; // 支付方式总和统计
 		        	$order = $model['order'];
 		        	$orderPay = $model['order_pay'];
-		        	$discount = $order['reality_total']-$order['should_total'];
 		        	$orderNumTotal += $order['order_num'];
 		        	$orderRealTotal += $order['reality_total'];
 		        	$orderDiscountTotal += $discount;
@@ -221,12 +220,13 @@
 
 		        	$yhqPay = 0;$yhqPayCount = 0;
 		        	if(isset($orderPay['9-0'])){
+		        		//现金券
 		        		$yhqPay = $orderPay['9-0']['pay_amount'];
 		        		$yhqPayCount = $orderPay['9-0']['pay_count'];
-		        		$paytypeTotal += $yhqPay;
+		        		//$paytypeTotal += $yhqPay;
 		        	}
 		        	$yhqPayTotal += $yhqPay;
-		        	$yhqPayCountTotal += $yhqPayCount;
+		        	//$yhqPayCountTotal += $yhqPayCount;
 		        	
 		        	$cwxczPay = 0;$cwxczPayCount = 0;
 		        	if(isset($orderPay['7-0'])){
@@ -245,6 +245,8 @@
 		        	}
 		        	$fwxczPayTotal += $fwxczPay;
 		        	$fwxczPayCountTotal += $fwxczPayCount;
+		        	
+		        	$discount = $order['reality_total']-$order['should_total']-$yhqPay;
 		        ?>
 		
 		        <tr class="odd gradeX">
@@ -252,6 +254,7 @@
 		            <td><?php echo $order['order_num'];?></td>
 		            <td><?php echo number_format($order['reality_total'],2);?></td>
 		            <td><?php echo number_format($discount,2);?></td>
+		            <td><?php echo $yhqPay ? number_format($yhqPay,2):'';?></td>
 		            <td><?php echo number_format($order['should_total'],2);?></td>
 		            <?php if($userid != '0'): ?>
 		            	<td><?php echo $seUsername;?></td>
@@ -277,9 +280,8 @@
 			            	$paymentPayTotal[$payment['lid']]['pay_count'] += $paymentPayCount;
 			            	$paytypeTotal += $paymentPay;
 		            ?>
-	                    <td><?php echo $paymentPay?number_format($paymentPay,2).'('.$paymentPayCount.')':'';?></td>
+	                <td><?php echo $paymentPay?number_format($paymentPay,2).'('.$paymentPayCount.')':'';?></td>
 	                <?php endforeach;?>
-		            <td><?php echo $yhqPay ? number_format($yhqPay,2).'('.$yhqPayCount.')':'';?></td>
 	                <td><?php echo $jfPay ? number_format($jfPay,2).'('.$jfPayCount.')':'';?></td> 
 		            <td><?php echo number_format($order['order_retreat'],2);?></td>
 					<?php if(number_format($paytypeTotal,2)==number_format($order['should_total'],2)):?>
@@ -298,6 +300,7 @@
 		            <td><?php echo $orderNumTotal;?></td>
 		             <td><?php echo number_format($orderRealTotal,2);?></td>
 		            <td><?php echo number_format($orderDiscountTotal,2);?></td>
+		            <td><?php echo $yhqPayTotal ? number_format($yhqPayTotal,2):'';?></td>
 		            <td><?php echo number_format($orderShouldTotal,2);?></td>
 		            <?php if($userid != '0'): ?>
 		            	<td><?php echo $seUsername;?></td>
@@ -318,9 +321,8 @@
 		            		$paymentPayCountTo = $paymentPayTotal[$payment['lid']]['pay_count'];
 			            	
 		            ?>
-	                    <td><?php echo $paymentPayTo?number_format($paymentPayTo,2).'('.$paymentPayCountTo.')':'';?></td>
+	                <td><?php echo $paymentPayTo?number_format($paymentPayTo,2).'('.$paymentPayCountTo.')':'';?></td>
 	                <?php endforeach;?>
-		            <td><?php echo $yhqPayTotal ? number_format($yhqPayTotal,2).'('.$yhqPayCountTotal.')':'';?></td>
 	                <td><?php echo $jfPayTotal ? number_format($jfPayTotal,2).'('.$jfPayCountTotal.')':'';?></td> 
 		            <td><?php echo number_format($orderRetreatTotal,2);?></td>
 					<td><?php echo number_format($apaytypeTotal,2);?></td>					
