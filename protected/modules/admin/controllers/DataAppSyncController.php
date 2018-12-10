@@ -382,6 +382,8 @@ class DataAppSyncController extends Controller
 			Yii::app()->end(json_encode($msg));
 		}
 		$comdpid = WxCompany::getCompanyDpid($dpid);
+		$compaychannel = WxCompany::getpaychannel($comdpid);
+		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 		$posfeeset = PoscodeFee::getPosfeeset($comdpid);
 		if($posfeeset){
 			$randNum = Helper::randNum(4);
@@ -408,7 +410,7 @@ class DataAppSyncController extends Controller
 				PoscodeFee::dealPosfeeOrder($data,'0');
 			}
 			if($result){
-				$msg = array('status'=>true,'success'=>$success,'trade_no'=>$orderId);
+				$msg = array('status'=>true,'success'=>$success,'trade_no'=>$orderId,'pay_channel'=>$payChannel);
 			}
 		}
 		Yii::app()->end(json_encode($msg));
@@ -421,7 +423,7 @@ class DataAppSyncController extends Controller
 	public function actionGetPosPayCode(){
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode');
-		$type = Yii::app()->request->getParam('type',0);
+		$payChannel = Yii::app()->request->getParam('paychannel',0);
 		$orderId = Yii::app()->request->getParam('tradeno','0');
 		
 		$posfeeOrder = PoscodeFee::getPosfeeOrder($dpid, $poscode, $orderId);
@@ -429,8 +431,7 @@ class DataAppSyncController extends Controller
 			exit;
 		}
 		$payPrice = $posfeeOrder['total_amount'];
-		$compaychannel = WxCompany::getpaychannel($dpid);
-		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
+		
 		if($payChannel==1){
 			//模式二扫码支付
 			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
