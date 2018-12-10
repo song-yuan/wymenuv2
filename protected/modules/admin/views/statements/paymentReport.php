@@ -76,7 +76,6 @@
 		               <th><?php echo yii::t('app','毛利润');?></th> 
 		               <th><?php echo yii::t('app','折扣优惠');?></th>
 		               <th><?php echo yii::t('app','微信现金券');?></th>
-		               <th><?php echo yii::t('app','积分抵扣');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
 		               <?php if($userid != '0'): ?>
 		               <th><?php echo yii::t('app','营业员');?></th>
@@ -101,6 +100,7 @@
 	                    ?>
 	                         <th><?php echo $payment['name'];?></th>
 	                    <?php endforeach;?>
+	                    <th><?php echo yii::t('app','微信积分');?></th>
 		               <th><?php echo yii::t('app','退款');?></th>
 					   <th><?php echo yii::t('app','支付方式总和');?></th>
 		            </tr>
