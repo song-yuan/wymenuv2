@@ -134,8 +134,8 @@
 		        	$orderPay = $model['order_pay'];
 		        	$orderNumTotal += $order['order_num'];
 		        	$orderRealTotal += $order['reality_total'];
+		        	$discount = $order['reality_total']-$order['should_total'];
 		        	$orderDiscountTotal += $discount;
-		        	$orderShouldTotal += $order['should_total'];
 		        	$orderRetreatTotal += $order['order_retreat'];
 		        	$cashPay = 0;$cashPayCount = 0;
 		        	if(isset($orderPay['0-0'])){
@@ -246,7 +246,7 @@
 		        	$fwxczPayTotal += $fwxczPay;
 		        	$fwxczPayCountTotal += $fwxczPayCount;
 		        	
-		        	$discount = $order['reality_total']-$order['should_total']-$yhqPay;
+		        	$orderShouldTotal += $order['should_total']-$yhqPay;
 		        ?>
 		
 		        <tr class="odd gradeX">
@@ -255,7 +255,7 @@
 		            <td><?php echo number_format($order['reality_total'],2);?></td>
 		            <td><?php echo number_format($discount,2);?></td>
 		            <td><?php echo $yhqPay ? number_format($yhqPay,2):'';?></td>
-		            <td><?php echo number_format($order['should_total'],2);?></td>
+		            <td><?php echo number_format($order['should_total']-$yhqPay,2);?></td>
 		            <?php if($userid != '0'): ?>
 		            	<td><?php echo $seUsername;?></td>
 		            <?php endif;?>
