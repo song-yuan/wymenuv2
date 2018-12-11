@@ -163,49 +163,65 @@ class StatementsController extends BackendController
 		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
 		$payments = $this->getPayment($this->companyId); // 后台手动添加到支付方式
 		if($download){
-			$tableArr = array('日期','总单数','毛利润','优惠','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
+			$tableArr = array('日期','总单数','毛利润','折扣优惠','销售额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
 			foreach ($payments as $payment){
 				array_push($tableArr, $payment['name']);
 			}
-			$tableArr = array_merge($tableArr, array('系统券','积分','退款'));
+			$tableArr = array_merge($tableArr, array('微信现金券','微信积分','退款'));
 			$data = array();
 			foreach ($model as $m){
 				$order = $m['order'];
 				$orderPay = $m['order_pay'];
-				
+				$orderTotal = 0;
 				$discount = number_format($order['reality_total'] - $order['should_total'],2);
 				$cashPay = 0;
 				if(isset($orderPay['0-0'])){
 					$cashPay = $m['0-0']['pay_amount'];
 				}
+				$orderTotal += $cashPay;
+				
 				$wxPay = 0;
 				if(isset($orderPay['1-0'])){
 					$wxPay = $orderPay['1-0']['pay_amount'];
 				}
+				$orderTotal += $wxPay;
+				
 				$wddPay = 0;
 				if(isset($orderPay['12-0'])){
 					$wddPay = $orderPay['12-0']['pay_amount'];
 				}
+				$orderTotal += $wddPay;
+				
 				$wwmPay = 0;
 				if(isset($orderPay['13-0'])){
 					$wwmPay = $orderPay['13-0']['pay_amount'];
 				}
+				$orderTotal += $wwmPay;
+				
 				$zfbPay = 0;
 				if(isset($orderPay['2-0'])){
 					$zfbPay = $orderPay['2-0']['pay_amount'];
 				}
+				$orderTotal += $zfbPay;
+				
 				$hykPay = 0;
 				if(isset($orderPay['4-0'])){
 					$hykPay = $orderPay['4-0']['pay_amount'];
 				}
+				$orderTotal += $hykPay;
+				
 				$mtPay = 0;
 				if(isset($orderPay['14-0'])){
 					$mtPay = $orderPay['14-0']['pay_amount'];
 				}
+				$orderTotal += $mtPay;
+				
 				$elmPay = 0;
 				if(isset($orderPay['15-0'])){
 					$elmPay = $orderPay['15-0']['pay_amount'];
 				}
+				$orderTotal += $elmPay;
+				
 				$jfPay = 0;
 				if(isset($orderPay['8-0'])){
 					$jfPay = $orderPay['8-0']['pay_amount'];
@@ -218,6 +234,8 @@ class StatementsController extends BackendController
 				if(isset($orderPay['7-0'])){
 					$cwxczPay = $orderPay['7-0']['pay_amount'];
 				}
+				$orderTotal += $cwxczPay;
+				
 				$fwxczPay = 0;
 				if(isset($orderPay['10-0'])){
 					$fwxczPay = $orderPay['10-0']['pay_amount'];
@@ -228,7 +246,7 @@ class StatementsController extends BackendController
 						$order['reality_total'],
 						$discount,
 						$order['should_total'],
-						$cashPay,$wxPay,$wddPay,$wwmPay,$zfbPay,$hykPay,$cwxczPay,$fwxczPay,$mtPay,$elmPay
+						$orderTotal,$cashPay,$wxPay,$wddPay,$wwmPay,$zfbPay,$hykPay,$cwxczPay,$fwxczPay,$mtPay,$elmPay
 				);
 				foreach ($payments as $payment){
 					$paymentPay = 0;
@@ -449,7 +467,7 @@ class StatementsController extends BackendController
 					.' where top.dpid = '.$this->companyId.' and top.paytype =22 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
 					.' group by '.$users
 				.' ) op22 on(t.dpid = op22.dpid and op22.username '.$user.$timesy.'op22.y_oo'.$timesm.'op22.m_oo'.$timesd.'op22.d_oo ) '
-				.' where t.paytype in(0,1,2,3,4,5,6,8,9,10,12,13,14,15) and t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.username '.$username.' and t.delete_flag=0'
+				.' where t.paytype in(0,1,2,3,4,5,6,7,8,9,10,12,13,14,15) and t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.username '.$username.' and t.delete_flag=0'
 				.' group by '.$useros		
 		;
 		$payments = $this->getPayment($this->companyId);
@@ -570,49 +588,65 @@ class StatementsController extends BackendController
 		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
 		$payments = $this->getPayment($selectDpid); // 后台手动添加到支付方式
 		if($download){
-			$tableArr = array('日期','店铺','总单数','毛利润','优惠','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
+			$tableArr = array('日期','店铺','总单数','毛利润','折扣优惠','营业额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
 			foreach ($payments as $payment){
 				array_push($tableArr, $payment['name']);
 			}
-			$tableArr = array_merge($tableArr, array('系统券','积分','退款'));
+			$tableArr = array_merge($tableArr, array('微信现金券','微信积分','退款'));
 			$data = array();
 			foreach ($model as $m){
 				$order = $m['order'];
 				$orderPay = $m['order_pay'];
-		
+				$orderTotal = 0;
 				$discount = number_format($order['reality_total'] - $order['should_total'],2);
 				$cashPay = 0;
 				if(isset($orderPay['0-0'])){
 					$cashPay = $m['0-0']['pay_amount'];
 				}
+				$orderTotal += $cashPay;
+				
 				$wxPay = 0;
 				if(isset($orderPay['1-0'])){
 					$wxPay = $orderPay['1-0']['pay_amount'];
 				}
+				$orderTotal += $wxPay;
+				
 				$wddPay = 0;
 				if(isset($orderPay['12-0'])){
 					$wddPay = $orderPay['12-0']['pay_amount'];
 				}
+				$orderTotal += $wddPay;
+				
 				$wwmPay = 0;
 				if(isset($orderPay['13-0'])){
 					$wwmPay = $orderPay['13-0']['pay_amount'];
 				}
+				$orderTotal += $wwmPay;
+				
 				$zfbPay = 0;
 				if(isset($orderPay['2-0'])){
 					$zfbPay = $orderPay['2-0']['pay_amount'];
 				}
+				$orderTotal += $zfbPay;
+				
 				$hykPay = 0;
 				if(isset($orderPay['4-0'])){
 					$hykPay = $orderPay['4-0']['pay_amount'];
 				}
+				$orderTotal += $hykPay;
+				
 				$mtPay = 0;
 				if(isset($orderPay['14-0'])){
 					$mtPay = $orderPay['14-0']['pay_amount'];
 				}
+				$orderTotal += $mtPay;
+				
 				$elmPay = 0;
 				if(isset($orderPay['15-0'])){
 					$elmPay = $orderPay['15-0']['pay_amount'];
 				}
+				$orderTotal += $elmPay;
+				
 				$jfPay = 0;
 				if(isset($orderPay['8-0'])){
 					$jfPay = $orderPay['8-0']['pay_amount'];
@@ -625,6 +659,8 @@ class StatementsController extends BackendController
 				if(isset($orderPay['7-0'])){
 					$cwxczPay = $orderPay['7-0']['pay_amount'];
 				}
+				$orderTotal += $cwxczPay;
+				
 				$fwxczPay = 0;
 				if(isset($orderPay['10-0'])){
 					$fwxczPay = $orderPay['10-0']['pay_amount'];
@@ -636,7 +672,7 @@ class StatementsController extends BackendController
 						$order['reality_total'],
 						$discount,
 						$order['should_total'],
-						$cashPay,$wxPay,$wddPay,$wwmPay,$zfbPay,$hykPay,$cwxczPay,$fwxczPay,$mtPay,$elmPay
+						$orderTotal,$cashPay,$wxPay,$wddPay,$wwmPay,$zfbPay,$hykPay,$cwxczPay,$fwxczPay,$mtPay,$elmPay
 				);
 				foreach ($payments as $payment){
 					$paymentPay = 0;

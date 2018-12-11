@@ -76,7 +76,8 @@
 		               <th><?php echo yii::t('app','时间');?></th>
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','毛利润');?></th> 
-		               <th><?php echo yii::t('app','优惠');?></th>
+		               <th><?php echo yii::t('app','折扣优惠');?></th>
+		               <th><?php echo yii::t('app','销售额');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
 		               <?php if($userid != '0'): ?>
 		               <th><?php echo yii::t('app','营业员');?></th>
@@ -99,8 +100,8 @@
 		                         ?></th>
 		                    <?php endforeach;?>
 		               <?php endif;?>   
-		               <th><?php echo yii::t('app','系统券');?></th>
-		               <th><?php echo yii::t('app','积分');?></th> 
+		               <th><?php echo yii::t('app','微信现金券');?></th>
+		               <th><?php echo yii::t('app','微信积分');?></th> 
 		               <th><?php echo yii::t('app','退款');?></th>
 		
 		            </tr>
@@ -113,7 +114,8 @@
 		         $orders_total=0;      // 总单数
 		         $grossprofit_total=0; // 总毛利润
 		         $discount_total=0;    // 总优惠
-		         $gather_total=0;      // 实收款 
+		         $gather_total=0;      // 销售 
+		         $order_total=0;      // 实收款
 		         $cash_total=0;        // 现金
 		         $wechat_total = 0;    // 微信
 		         $wxorder_total = 0;    // 微信点单
@@ -121,8 +123,8 @@
 		         $alipay_total = 0;    // 支付宝
 		         $unionpay_total=0;    // 银联
 		         $vipcard_total = 0;   // 会员卡 
-		         $all_cwxcharges = 0;
-		         $all_fwxcharges = 0;
+		         $all_cwxcharges = 0;//微信充值
+		         $all_fwxcharges = 0;//微信返现
 		         $mtwm_total = 0;   // 对接美团
 		         $eleme_total = 0;   // 对接饿了么
 		         $htpay_total = 0;
@@ -136,11 +138,14 @@
 		        $retreats = 0;
 		         if($prices):?>
 		      	<?php 
-		      		foreach ($prices as $m): 
+		      		foreach ($prices as $m):
+		      			$order_price = 0;
 			      		//退款...
 			      		$retreat = $this->getRijieRetreat($m['dpid'],$begin_time,$end_time,$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']);
 			      		$retreats+=$retreat;
-		      	?>
+			      		$order_price = $m['cash_money']+$m['wx_money']+$m['ali_money']+$m['member_money']+$m['visa_money']+$m['cwxyue_money']+$m['wxord_money']+$m['wxwm_money']+$m['mt_money']+$m['elem_money'];
+			      		$order_total += $order_price;
+			     ?>
 		
 		        <tr class="odd gradeX">
 		            <td><?php 
@@ -170,6 +175,10 @@
 		                	$gather=sprintf("%.2f",$m['chunli_money']+$retreat);;
 		                	$gather_total += $gather;
 		                	echo $gather;
+		            ?></td>
+		            <td><?php 
+		            		$order_price = number_format($order_price,2);
+		                	echo $order_price;
 		            ?></td>
 		            <?php if($userid != '0'): ?>
 		            <td><?php 
@@ -273,6 +282,7 @@
 		            <td><?php  echo $grossprofit_total;?></td>
 		            <td><?php echo $discount_total; ?></td>
 		            <td><?php  echo $gather_total;?></td>
+		            <td><?php  echo $order_total;?></td>
 		            <?php if($userid != '0'): ?>
 		                <td><?php   
 		                    ?>

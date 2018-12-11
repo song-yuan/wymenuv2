@@ -75,7 +75,7 @@
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','毛利润');?></th> 
 		               <th><?php echo yii::t('app','折扣优惠');?></th>
-		               <th><?php echo yii::t('app','微信现金券');?></th>
+		               <th><?php echo yii::t('app','销售额');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
 		               <?php if($userid != '0'): ?>
 		               <th><?php echo yii::t('app','营业员');?></th>
@@ -100,6 +100,7 @@
 	                    ?>
 	                         <th><?php echo $payment['name'];?></th>
 	                    <?php endforeach;?>
+	                    <th><?php echo yii::t('app','微信现金券');?></th>
 	                    <th><?php echo yii::t('app','微信积分');?></th>
 		               <th><?php echo yii::t('app','退款');?></th>
 					   <th><?php echo yii::t('app','支付方式总和');?></th>
@@ -113,6 +114,7 @@
 		        $orderRealTotal = 0;
 		        $orderDiscountTotal = 0;
 		        $orderShouldTotal = 0;
+		        $allOrderTotal = 0;
 		        $orderRetreatTotal = 0;
 		        $apaytypeTotal = 0;
 		        
@@ -130,6 +132,7 @@
 		        $fwxczPayTotal = 0;$fwxczPayCountTotal = 0;
 		        foreach ($models as $model):
 		        	$paytypeTotal = 0; // 支付方式总和统计
+		        	$orderTotal = 0;// 实收款
 		        	$order = $model['order'];
 		        	$orderPay = $model['order_pay'];
 		        	$orderNumTotal += $order['order_num'];
@@ -141,8 +144,9 @@
 		        	if(isset($orderPay['0-0'])){
 		        		$cashPay = $orderPay['0-0']['pay_amount'];
 		        		$cashPayCount = $orderPay['0-0']['pay_count'];
-		        		$paytypeTotal += $cashPay;
 		        	}
+		        	$orderTotal += $cashPay;
+		        	$paytypeTotal += $cashPay;
 		        	$cashPayTotal += $cashPay;
 		        	$cashPayCountTotal += $cashPayCount;
 		        	
@@ -150,8 +154,9 @@
 		        	if(isset($orderPay['1-0'])){
 		        		$wxPay = $orderPay['1-0']['pay_amount'];
 		        		$wxPayCount = $orderPay['1-0']['pay_count'];
-		        		$paytypeTotal += $wxPay;
 		        	}
+		        	$orderTotal += $wxPay;
+		        	$paytypeTotal += $wxPay;
 		        	$wxPayTotal += $wxPay;
 		        	$wxPayCountTotal += $wxPayCount;
 		        	
@@ -159,8 +164,9 @@
 		        	if(isset($orderPay['12-0'])){
 		        		$wddPay = $orderPay['12-0']['pay_amount'];
 		        		$wddPayCount = $orderPay['12-0']['pay_count'];
-		        		$paytypeTotal += $wddPay;
 		        	}
+		        	$orderTotal += $wddPay;
+		        	$paytypeTotal += $wddPay;
 		        	$wddPayTotal += $wddPay;
 		        	$wddPayCountTotal += $wddPayCount;
 		        	
@@ -168,8 +174,9 @@
 		        	if(isset($orderPay['13-0'])){
 		        		$wwmPay = $orderPay['13-0']['pay_amount'];
 		        		$wwmPayCount = $orderPay['13-0']['pay_count'];
-		        		$paytypeTotal += $wwmPay;
 		        	}
+		        	$orderTotal += $wwmPay;
+		        	$paytypeTotal += $wwmPay;
 		        	$wwmPayTotal += $wwmPay;
 		        	$wwmPayCountTotal += $wwmPayCount;
 		        	
@@ -177,8 +184,9 @@
 		        	if(isset($orderPay['2-0'])){
 		        		$zfbPay = $orderPay['2-0']['pay_amount'];
 		        		$zfbPayCount = $orderPay['2-0']['pay_count'];
-		        		$paytypeTotal += $zfbPay;
 		        	}
+		        	$orderTotal += $zfbPay;
+		        	$paytypeTotal += $zfbPay;
 		        	$zfbPayTotal += $zfbPay;
 		        	$zfbPayCountTotal += $zfbPayCount;
 		        	
@@ -186,8 +194,9 @@
 		        	if(isset($orderPay['4-0'])){
 		        		$hykPay = $orderPay['4-0']['pay_amount'];
 		        		$hykPayCount = $orderPay['4-0']['pay_count'];
-		        		$paytypeTotal += $hykPay;
 		        	}
+		        	$orderTotal += $hykPay;
+		        	$paytypeTotal += $hykPay;
 		        	$hykPayTotal += $hykPay;
 		        	$hykPayCountTotal += $hykPayCount;
 		        	
@@ -195,8 +204,9 @@
 		        	if(isset($orderPay['14-0'])){
 		        		$mtPay = $orderPay['14-0']['pay_amount'];
 		        		$mtPayCount = $orderPay['14-0']['pay_count'];
-		        		$paytypeTotal += $mtPay;
 		        	}
+		        	$orderTotal += $mtPay;
+		        	$paytypeTotal += $mtPay;
 		        	$mtPayTotal += $mtPay;
 		        	$mtPayCountTotal += $mtPayCount;
 		        	
@@ -204,8 +214,9 @@
 		        	if(isset($orderPay['15-0'])){
 		        		$elmPay = $orderPay['15-0']['pay_amount'];
 		        		$elmPayCount = $orderPay['15-0']['pay_count'];
-		        		$paytypeTotal += $elmPay;
 		        	}
+		        	$orderTotal += $elmPay;
+		        	$paytypeTotal += $elmPay;
 		        	$elmPayTotal += $elmPay;
 		        	$elmPayCountTotal += $elmPayCount;
 		        	
@@ -223,17 +234,18 @@
 		        		//现金券
 		        		$yhqPay = $orderPay['9-0']['pay_amount'];
 		        		$yhqPayCount = $orderPay['9-0']['pay_count'];
-		        		//$paytypeTotal += $yhqPay;
+		        		$paytypeTotal += $yhqPay;
 		        	}
 		        	$yhqPayTotal += $yhqPay;
-		        	//$yhqPayCountTotal += $yhqPayCount;
+		        	$yhqPayCountTotal += $yhqPayCount;
 		        	
 		        	$cwxczPay = 0;$cwxczPayCount = 0;
 		        	if(isset($orderPay['7-0'])){
 		        		$cwxczPay = $orderPay['7-0']['pay_amount'];
 		        		$cwxczPayCount = $orderPay['7-0']['pay_count'];
-		        		$paytypeTotal += $cwxczPay;
 		        	}
+		        	$orderTotal += $cwxczPay;
+		        	$paytypeTotal += $cwxczPay;
 		        	$cwxczPayTotal += $cwxczPay;
 		        	$cwxczPayCountTotal += $cwxczPayCount;
 		        	
@@ -245,8 +257,9 @@
 		        	}
 		        	$fwxczPayTotal += $fwxczPay;
 		        	$fwxczPayCountTotal += $fwxczPayCount;
-		        	
-		        	$orderShouldTotal += $order['should_total']-$yhqPay;
+		        	$orderShould = $order['should_total'];
+		        	$orderShouldTotal += $orderShould;
+		        	$allOrderTotal += $orderTotal;
 		        ?>
 		
 		        <tr class="odd gradeX">
@@ -254,8 +267,8 @@
 		            <td><?php echo $order['order_num'];?></td>
 		            <td><?php echo number_format($order['reality_total'],2);?></td>
 		            <td><?php echo number_format($discount,2);?></td>
-		            <td><?php echo $yhqPay ? number_format($yhqPay,2):'';?></td>
-		            <td><?php echo number_format($order['should_total']-$yhqPay,2);?></td>
+		            <td><?php echo number_format($orderShould,2);?></td>
+		            <td><?php echo number_format($orderTotal,2);?></td>
 		            <?php if($userid != '0'): ?>
 		            	<td><?php echo $seUsername;?></td>
 		            <?php endif;?>
@@ -282,9 +295,10 @@
 		            ?>
 	                <td><?php echo $paymentPay?number_format($paymentPay,2).'('.$paymentPayCount.')':'';?></td>
 	                <?php endforeach;?>
+	                 <td><?php echo $yhqPay ? number_format($yhqPay,2).'('.$yhqPayCount.')':'';?></td>
 	                <td><?php echo $jfPay ? number_format($jfPay,2).'('.$jfPayCount.')':'';?></td> 
 		            <td><?php echo number_format($order['order_retreat'],2);?></td>
-					<?php if(number_format($paytypeTotal,2)==number_format($order['should_total'],2)):?>
+					<?php if(number_format($paytypeTotal,2)==number_format($orderShould,2)):?>
 					<td><?php echo number_format($paytypeTotal,2);?></td>
 					<?php else:?>
 					<td><span style="color:red"><?php echo number_format($paytypeTotal,2);?></span></td>
@@ -300,8 +314,8 @@
 		            <td><?php echo $orderNumTotal;?></td>
 		             <td><?php echo number_format($orderRealTotal,2);?></td>
 		            <td><?php echo number_format($orderDiscountTotal,2);?></td>
-		            <td><?php echo $yhqPayTotal ? number_format($yhqPayTotal,2):'';?></td>
 		            <td><?php echo number_format($orderShouldTotal,2);?></td>
+		            <td><?php echo number_format($allOrderTotal,2);?></td>
 		            <?php if($userid != '0'): ?>
 		            	<td><?php echo $seUsername;?></td>
 		            <?php endif;?>
@@ -323,6 +337,7 @@
 		            ?>
 	                <td><?php echo $paymentPayTo?number_format($paymentPayTo,2).'('.$paymentPayCountTo.')':'';?></td>
 	                <?php endforeach;?>
+	                <td><?php echo $yhqPayTotal ? number_format($yhqPayTotal,2).'('.$yhqPayCountTotal.')':'';?></td> 
 	                <td><?php echo $jfPayTotal ? number_format($jfPayTotal,2).'('.$jfPayCountTotal.')':'';?></td> 
 		            <td><?php echo number_format($orderRetreatTotal,2);?></td>
 					<td><?php echo number_format($apaytypeTotal,2);?></td>					
