@@ -176,7 +176,7 @@ class StatementsController extends BackendController
 				$discount = number_format($order['reality_total'] - $order['should_total'],2);
 				$cashPay = 0;
 				if(isset($orderPay['0-0'])){
-					$cashPay = $m['0-0']['pay_amount'];
+					$cashPay = $orderPay['0-0']['pay_amount'];
 				}
 				$orderTotal += $cashPay;
 				
@@ -588,7 +588,7 @@ class StatementsController extends BackendController
 		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
 		$payments = $this->getPayment($selectDpid); // 后台手动添加到支付方式
 		if($download){
-			$tableArr = array('日期','店铺','总单数','毛利润','折扣优惠','营业额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
+			$tableArr = array('日期','店铺','总单数','毛利润','折扣优惠','销售额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
 			foreach ($payments as $payment){
 				array_push($tableArr, $payment['name']);
 			}
@@ -601,7 +601,7 @@ class StatementsController extends BackendController
 				$discount = number_format($order['reality_total'] - $order['should_total'],2);
 				$cashPay = 0;
 				if(isset($orderPay['0-0'])){
-					$cashPay = $m['0-0']['pay_amount'];
+					$cashPay = $orderPay['0-0']['pay_amount'];
 				}
 				$orderTotal += $cashPay;
 				
