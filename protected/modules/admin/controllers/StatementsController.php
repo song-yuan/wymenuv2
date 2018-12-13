@@ -163,7 +163,7 @@ class StatementsController extends BackendController
 		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
 		$payments = $this->getPayment($this->companyId); // 后台手动添加到支付方式
 		if($download){
-			$tableArr = array('日期','总单数','毛利润','折扣优惠','销售额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
+			$tableArr = array('日期','总单数','毛利润','折扣优惠','营业额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
 			foreach ($payments as $payment){
 				array_push($tableArr, $payment['name']);
 			}
@@ -284,211 +284,122 @@ class StatementsController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time','');
 		$dpname = Yii::app()->request->getParam('dpname','');
 		$d = Yii::app()->request->getParam('d','0');
+	
+		$orderPayArrs = array();
 		if(empty($begin_time)){
 			$begin_time = date('Y-m-d',time());
 		}
 		if(empty($end_time)){
 			$end_time = date('Y-m-d',time());
 		}
-	
-		if($userid == '0'){
-			$username = ' != -1';
-			$user = ' != -1';
-		}elseif($userid == '-1'){
-			$username = ' != -1';
-			$user = ' = t.username ';
-		}else{
-			$username = ' = "'.$userid.'"';
-			$user = ' = "'.$userid.'"';
-		}
+		$beginTime = $begin_time.' 00:00:00';
+		$endTime = $end_time.' 23:59:59';
 		
+		$whereUser = '';
+		if($userid != '0'){
+			$whereUser = ' and username ="'.$userid.'"';
+		}
 		if($text==1){
-			$timesy = ' and year(t.create_at) = ';
-			$timesm = ' and 0< ';
-			$timesd = ' and 0<';
-			
-			if($userid != '0'){
-				$users ='top.dpid,year(top.create_at),top.username';
-				$useros ='t.dpid,year(t.create_at),t.username';
-				$usernames = $username;
-				
-			}else{
-				$users ='top.dpid,year(top.create_at)';
-				$useros ='t.dpid,year(t.create_at)';
-				$userots = 'ot.dpid,year(ot.create_at)';
-				$usernames = $username;
-				
-			}
-		}elseif($text == 2){
-			
-			$timesy = ' and year(t.create_at) = ';
-			$timesm = ' and month(t.create_at) = ';
-			$timesd = ' and 0< ';
-			
-			if($userid != '0'){
-				$users ='top.dpid,year(top.create_at),month(top.create_at),top.username';
-				$useros ='t.dpid,year(t.create_at),month(t.create_at),t.username';
-				$usernames = $username;
-			}else{
-				$users ='top.dpid,year(top.create_at),month(top.create_at)';
-				$useros ='t.dpid,year(t.create_at),month(t.create_at)';
-				$usernames = $username;
-			}
-		}else{
-			
-			$timesy = ' and year(t.create_at) = ';
-			$timesm = ' and month(t.create_at) = ';
-			$timesd = ' and day(t.create_at) = ';
-			
-			if($userid != '0'){
-				$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at),top.username';
-				$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),t.username';
-				$usernames = $username;
-			}else{
-				$users ='top.dpid,year(top.create_at),month(top.create_at),day(top.create_at)';
-				$useros ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
-				$usernames = $username;
-			}
+			// 按年查询
+			$sql = 'select dpid,DATE_FORMAT(create_at,"%Y") as create_at,pay_order_num,pay_amount_total as pay_amount,paytype,payment_id  from nb_order_paytype_total'.
+					' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$this->companyId.$whereUser;
+		}elseif ($text==2){
+			// 按月查询
+			$sql = 'select dpid,DATE_FORMAT(create_at,"%Y-%m") as create_at,pay_order_num,pay_amount_total as pay_amount,paytype,payment_id  from nb_order_paytype_total'.
+					' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$this->companyId.$whereUser;
+		}elseif ($text==3){
+			// 按日查询
+			$sql = 'select dpid,DATE_FORMAT(create_at,"%Y-%m-%d") as create_at,pay_order_num,pay_amount_total as pay_amount,paytype,payment_id  from nb_order_paytype_total'.
+				   ' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$this->companyId.$whereUser;
+				   
 		}
-		
-		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, '
-				.' t.dpid,t.username,t.create_at,t.poscode, '
-				.' sum(t.pay_amount_total) as all_reality,sum(t.pay_order_num) as all_nums, '
-				.' ifnull(op0.all_reality,"") as cash_money, '
-				.' ifnull(op1.all_reality,"") as wx_money, '
-				.' ifnull(op2.all_reality,"") as ali_money, '
-				.' ifnull(op3.all_reality,"") as orther_money, '
-				.' ifnull(op4.all_reality,"") as member_money, '
-				.' ifnull(op5.all_reality,"") as visa_money, '
-				.' ifnull(op7.all_reality,"") as cwxyue_money, '
-				.' ifnull(op8.all_reality,"") as jifen_money, '
-				.' ifnull(op9.all_reality,"") as cupon_money, '
-				.' ifnull(op10.all_reality,"") as fwxyue_money, '
-				.' ifnull(op12.all_reality,"") as wxord_money, '
-				.' ifnull(op13.all_reality,"") as wxwm_money, '
-				.' ifnull(op14.all_reality,"") as mt_money, '
-				.' ifnull(op15.all_reality,"") as elem_money, '
-				.' ifnull(op20.all_reality,"") as maoli_money,op20.all_nums as maoli_nums, '
-				.' ifnull(op22.all_reality,"") as chunli_money,op22.all_nums as chunli_nums '
-				.' from nb_order_paytype_total t '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =0 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op0 on(t.dpid = op0.dpid and op0.username '.$user.$timesy.'op0.y_oo'.$timesm.'op0.m_oo'.$timesd.'op0.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =1 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op1 on(t.dpid = op1.dpid and op1.username '.$user.$timesy.'op1.y_oo'.$timesm.'op1.m_oo'.$timesd.'op1.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =2 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op2 on(t.dpid = op2.dpid and op2.username '.$user.$timesy.'op2.y_oo'.$timesm.'op2.m_oo'.$timesd.'op2.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =3 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op3 on(t.dpid = op3.dpid and op3.username '.$user.$timesy.'op3.y_oo'.$timesm.'op3.m_oo'.$timesd.'op3.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =4 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op4 on(t.dpid = op4.dpid and op4.username '.$user.$timesy.'op4.y_oo'.$timesm.'op4.m_oo'.$timesd.'op4.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =5 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op5 on(t.dpid = op5.dpid and op5.username '.$user.$timesy.'op5.y_oo'.$timesm.'op5.m_oo'.$timesd.'op5.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =7 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op7 on(t.dpid = op7.dpid and op7.username '.$user.$timesy.'op7.y_oo'.$timesm.'op7.m_oo'.$timesd.'op7.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =8 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op8 on(t.dpid = op8.dpid and op8.username '.$user.$timesy.'op8.y_oo'.$timesm.'op8.m_oo'.$timesd.'op8.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =9 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op9 on(t.dpid = op9.dpid and op9.username '.$user.$timesy.'op9.y_oo'.$timesm.'op9.m_oo'.$timesd.'op9.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =10 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op10 on(t.dpid = op10.dpid and op10.username '.$user.$timesy.'op10.y_oo'.$timesm.'op10.m_oo'.$timesd.'op10.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =12 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op12 on(t.dpid = op12.dpid and op12.username '.$user.$timesy.'op12.y_oo'.$timesm.'op12.m_oo'.$timesd.'op12.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =13 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op13 on(t.dpid = op13.dpid and op13.username '.$user.$timesy.'op13.y_oo'.$timesm.'op13.m_oo'.$timesd.'op13.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =14 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op14 on(t.dpid = op14.dpid and op14.username '.$user.$timesy.'op14.y_oo'.$timesm.'op14.m_oo'.$timesd.'op14.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =15 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op15 on(t.dpid = op15.dpid and op15.username '.$user.$timesy.'op15.y_oo'.$timesm.'op15.m_oo'.$timesd.'op15.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =20 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op20 on(t.dpid = op20.dpid and op20.username '.$user.$timesy.'op20.y_oo'.$timesm.'op20.m_oo'.$timesd.'op20.d_oo ) '
-				.' left join ('
-					.' select sum(top.pay_amount_total) as all_reality,sum(top.pay_order_num) as all_nums,top.dpid,top.create_at,top.username,top.poscode,year(top.create_at) as y_oo,month(top.create_at) as m_oo,day(top.create_at) as d_oo '
-					.' from nb_order_paytype_total top '
-					.' where top.dpid = '.$this->companyId.' and top.paytype =22 and top.create_at >="'.$begin_time.' 00:00:00" and top.create_at <="'.$end_time.' 23:59:59" and top.username '.$username.' and top.delete_flag=0'
-					.' group by '.$users
-				.' ) op22 on(t.dpid = op22.dpid and op22.username '.$user.$timesy.'op22.y_oo'.$timesm.'op22.m_oo'.$timesd.'op22.d_oo ) '
-				.' where t.paytype in(0,1,2,3,4,5,6,7,8,9,10,12,13,14,15) and t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.username '.$username.' and t.delete_flag=0'
-				.' group by '.$useros		
-		;
+		$sql .= ' order by create_at asc,paytype asc';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($models as $model){
+			$createAt = $model['create_at'];
+			$payType = $model['paytype'];
+			$payMethodId = $model['payment_id'];
+			if(!isset($orderPayArrs[$createAt][$payType.'-'.$payMethodId])){
+				$orderPayArrs[$createAt][$payType.'-'.$payMethodId] = array();
+			}
+			array_push($orderPayArrs[$createAt][$payType.'-'.$payMethodId],$model);
+		}
+		$models = $this->dealRjOrderReport($orderPayArrs);
 		$payments = $this->getPayment($this->companyId);
 		$username = $this->getUsername($this->companyId);
-		$comName = $this->getComName();
 		
 		if($d){
-			$models = Yii::app()->db->createCommand($sql)->queryAll();
+			$tableArr = array('日期','总单数','毛利润','折扣优惠','营业额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
+			foreach ($payments as $payment){
+				array_push($tableArr, $payment['name']);
+			}
+			$tableArr = array_merge($tableArr, array('微信现金券','微信积分','退款'));
+			var_dump($models);exit;
+			$data = array();
+			foreach ($models as $m){
+				$orderTotal = 0;
+				$createAt = $m['y_all'].'-'.$m['m_all'].'-'.$m['d_all'];
+				$allNum = $m['all_nums'];
+				$realityTotal = $m['maoli_money'];
+				$shouldTotal = $m['chunli_money'];
+				$discount = number_format($realityTotal - $shouldTotal,2);
+				$cashPay = $m['cash_money'];
+				$orderTotal += $cashPay;
+			
+				$wxPay = $m['wx_money'];
+				$orderTotal += $wxPay;
+			
+				$wddPay = $m['wxord_money'];
+				$orderTotal += $wddPay;
+			
+				$wwmPay = $m['wxwm_money'];
+				$orderTotal += $wwmPay;
+			
+				$zfbPay = $m['ali_money'];
+				$orderTotal += $zfbPay;
+			
+				$hykPay = $m['member_money'];
+				$orderTotal += $hykPay;
+			
+				$mtPay = $m['mt_money'];
+				$orderTotal += $mtPay;
+			
+				$elmPay = $m['elem_money'];
+				$orderTotal += $elmPay;
+			
+				$jfPay = $m['jifen_money'];
+				$yhqPay = $m['cupon_money'];
+				$cwxczPay = $m['cwxyue_money'];
+				$orderTotal += $cwxczPay;
+			
+				$fwxczPay = $m['fwxyue_money'];
+				$tempArr = array(
+						$createAt,
+						$allNum,
+						$realityTotal,
+						$discount,
+						$shouldTotal,
+						$orderTotal,$cashPay,$wxPay,$wddPay,$wwmPay,$zfbPay,$hykPay,$cwxczPay,$fwxczPay,$mtPay,$elmPay
+				);
+				foreach ($payments as $payment){
+					
+					array_push($tempArr, $paymentPay);
+				}
+				$tempArr = array_merge($tempArr,array($yhqPay,$jfPay,$order['order_retreat']));
+				array_push($data, $tempArr);
+			}
+			Helper::exportExcel($tableArr,$data,'支付方式(员工营业额)报表','支付方式(员工营业额)');
+			exit;
+			
 			$this->RijieReportExport($models,$payments,$text,$userid,$this->companyId,$begin_time,$end_time);
 			exit;
 		}
-		
-		$prices = Yii::app()->db->createCommand($sql)->queryAll();
-		
 		$this->render('rijieReport',array(
-				'prices'=>$prices,
+				'models'=>$models,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
 				'str'=>$str,
-				'comName'=>$comName,
 				'payments'=>$payments,
 				'username'=>$username,
 				'userid'=>$userid,
@@ -588,7 +499,7 @@ class StatementsController extends BackendController
 		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
 		$payments = $this->getPayment($selectDpid); // 后台手动添加到支付方式
 		if($download){
-			$tableArr = array('日期','店铺','总单数','毛利润','折扣优惠','销售额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
+			$tableArr = array('日期','店铺','总单数','毛利润','折扣优惠','营业额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
 			foreach ($payments as $payment){
 				array_push($tableArr, $payment['name']);
 			}
@@ -7112,23 +7023,24 @@ class StatementsController extends BackendController
 		->setCellValue('A3',yii::t('app','时间'))
 		->setCellValue('B3',yii::t('app','总单数'))
 		->setCellValue('C3',yii::t('app','毛利润'))
-		->setCellValue('D3',yii::t('app','优惠'))
-		->setCellValue('E3',yii::t('app','实收款'))
-		->setCellValue('F3',yii::t('app','营业员'))
-		->setCellValue('G3',yii::t('app','现金'))
-		->setCellValue('H3',yii::t('app','微信'))
-		->setCellValue('I3',yii::t('app','微点单'))
-		->setCellValue('J3',yii::t('app','微外卖'))
-		->setCellValue('K3',yii::t('app','支付宝'))
-		->setCellValue('L3',yii::t('app','银联'))
-		->setCellValue('M3',yii::t('app','会员卡'))
-		->setCellValue('N3',yii::t('app','微信储值(充)'))
-		->setCellValue('O3',yii::t('app','微信储值(返)'))
-		->setCellValue('P3',yii::t('app','美团·外卖'))
-		->setCellValue('Q3',yii::t('app','饿了么·外卖'))
-		->setCellValue('R3',yii::t('app','系统券'))
-		->setCellValue('S3',yii::t('app','积分'));
-		$letternext= 'T';
+		->setCellValue('D3',yii::t('app','优惠折扣'))
+		->setCellValue('E3',yii::t('app','营业额'))
+		->setCellValue('F3',yii::t('app','实收款'))
+		->setCellValue('G3',yii::t('app','营业员'))
+		->setCellValue('H3',yii::t('app','现金'))
+		->setCellValue('I3',yii::t('app','微信'))
+		->setCellValue('J3',yii::t('app','微点单'))
+		->setCellValue('K3',yii::t('app','微外卖'))
+		->setCellValue('L3',yii::t('app','支付宝'))
+		->setCellValue('M3',yii::t('app','银联'))
+		->setCellValue('N3',yii::t('app','会员卡'))
+		->setCellValue('O3',yii::t('app','微信储值(充)'))
+		->setCellValue('P3',yii::t('app','微信储值(返)'))
+		->setCellValue('Q3',yii::t('app','美团·外卖'))
+		->setCellValue('R3',yii::t('app','饿了么·外卖'))
+		->setCellValue('S3',yii::t('app','微信现金券'))
+		->setCellValue('T3',yii::t('app','微信积分'));
+		$letternext= 'U';
 		if($payments){
 			$let = '0';
 			$letter='';
@@ -7136,12 +7048,11 @@ class StatementsController extends BackendController
 				$paymentname = $payment['name'];
 				$let++;
 				switch ($let){
-					case 1: $letter = 'T3';$letternext = 'U';break;
-					case 2: $letter = 'U3';$letternext = 'V';break;
-					case 3: $letter = 'V3';$letternext = 'W';break;
-					case 4: $letter = 'W3';$letternext = 'X';break;
-					case 5: $letter = 'X3';$letternext = 'Y';break;
-					case 6: $letter = 'Y3';$letternext = 'Z';break;
+					case 1: $letter = 'U3';$letternext = 'V';break;
+					case 2: $letter = 'V3';$letternext = 'W';break;
+					case 3: $letter = 'W3';$letternext = 'X';break;
+					case 4: $letter = 'X3';$letternext = 'Y';break;
+					case 5: $letter = 'Y3';$letternext = 'Z';break;
 					default:break;
 				}
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
@@ -7392,6 +7303,27 @@ class StatementsController extends BackendController
 				}
 				
 				$resluts[$key]['order_pay'][$payType.'-'.$payMethodId] = array('pay_type'=>$payType,'payment_method_id'=>$payMethodId,'pay_amount'=>$payAmount,'pay_count'=>$payCount);
+			}
+		}
+		return $resluts;
+	}
+	private function dealRjOrderReport($orderPayArr){
+		$resluts = array();
+		foreach ($orderPayArr as $key=>$orderPays){
+			foreach ($orderPays as $pays){
+				// 遍历 付款方式
+				$payType = 0;
+				$payMethodId = 0;
+				$payAmount = 0;
+				$payCount = 0;
+				foreach ($pays as $pay){
+					$payType = $pay['paytype'];
+					$payMethodId = (int)$pay['payment_id'];
+					$payAmount += $pay['pay_amount'];
+					$payCount += $pay['pay_order_num'];
+				}
+		
+				$resluts[$key][$payType.'-'.$payMethodId] = array('pay_type'=>$payType,'payment_method_id'=>$payMethodId,'pay_amount'=>$payAmount,'pay_count'=>$payCount);
 			}
 		}
 		return $resluts;

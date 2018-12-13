@@ -77,7 +77,7 @@
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','毛利润');?></th> 
 		               <th><?php echo yii::t('app','折扣优惠');?></th>
-		               <th><?php echo yii::t('app','销售额');?></th>
+		               <th><?php echo yii::t('app','营业额');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
 		               <?php if($userid != '0'): ?>
 		               <th><?php echo yii::t('app','营业员');?></th>
@@ -93,13 +93,11 @@
 		               <th><?php echo yii::t('app','微信储值(返)');?></th>
 		               <th><?php echo yii::t('app','美团·外卖');?></th>
 		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
-		               <?php if($payments):?>
-		                    <?php foreach ($payments as $payment):?>
-		                         <th><?php echo $payment['name'];
-		                            $grouppay_item ++;
-		                         ?></th>
-		                    <?php endforeach;?>
-		               <?php endif;?>   
+		               <?php 
+	                    	foreach ($payments as $payment):
+	                    ?>
+		                   <th><?php echo $payment['name'];?></th>
+		                   <?php endforeach;?>
 		               <th><?php echo yii::t('app','微信现金券');?></th>
 		               <th><?php echo yii::t('app','微信积分');?></th> 
 		               <th><?php echo yii::t('app','退款');?></th>
@@ -108,210 +106,269 @@
 		        </thead>
 				<tbody>
 		        
+		        <?php if( $models) :?>
 		        <!--foreach-->
-		        <?php $a=1;?>
 		        <?php 
-		         $orders_total=0;      // 总单数
-		         $grossprofit_total=0; // 总毛利润
-		         $discount_total=0;    // 总优惠
-		         $gather_total=0;      // 销售 
-		         $order_total=0;      // 实收款
-		         $cash_total=0;        // 现金
-		         $wechat_total = 0;    // 微信
-		         $wxorder_total = 0;    // 微信点单
-		         $wxwaimai_total = 0;    // 微信外卖
-		         $alipay_total = 0;    // 支付宝
-		         $unionpay_total=0;    // 银联
-		         $vipcard_total = 0;   // 会员卡 
-		         $all_cwxcharges = 0;//微信充值
-		         $all_fwxcharges = 0;//微信返现
-		         $mtwm_total = 0;   // 对接美团
-		         $eleme_total = 0;   // 对接饿了么
-		         $htpay_total = 0;
-		         $grouppay_arr = array();   //支付宝/美团
-		        for($i =0;$i<$grouppay_item;$i++){
-		           $grouppay_arr[$i] =0; 
-		           // $grouppay.$i =0;
-		        }
-		        $all_wxcards = 0;
-		        $all_wxpoints = 0;
-		        $retreats = 0;
-		         if($prices):?>
-		      	<?php 
-		      		foreach ($prices as $m):
-		      			$order_price = 0;
-			      		//退款...
-			      		$retreat = $this->getRijieRetreat($m['dpid'],$begin_time,$end_time,$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']);
-			      		$retreats+=$retreat;
-			      		$order_price = $m['cash_money']+$m['wx_money']+$m['ali_money']+$m['member_money']+$m['visa_money']+$m['cwxyue_money']+$m['wxord_money']+$m['wxwm_money']+$m['mt_money']+$m['elem_money'];
-			      		$order_total += $order_price;
-			     ?>
+		        $orderNumTotal = 0;
+		        $orderRealTotal = 0;
+		        $orderDiscountTotal = 0;
+		        $orderShouldTotal = 0;
+		        $allOrderTotal = 0;
+		        $orderRetreatTotal = 0;
+		        $apaytypeTotal = 0;
+		        $paymentPayTotal = array();
+		        
+		        $cashPayTotal = 0;$cashPayCountTotal = 0;
+		        $wxPayTotal = 0;$wxPayCountTotal = 0;
+		        $wddPayTotal = 0;$wddPayCountTotal = 0;
+		        $wwmPayTotal = 0;$wwmPayCountTotal = 0;
+		        $zfbPayTotal = 0;$zfbPayCountTotal = 0;
+		        $hykPayTotal = 0;$hykPayCountTotal = 0;
+		        $mtPayTotal = 0;$mtPayCountTotal = 0;
+		        $elmPayTotal = 0;$elmPayCountTotal = 0;
+		        $yhqPayTotal = 0;$yhqPayCountTotal = 0;
+		        $jfPayTotal = 0;$jfPayCountTotal = 0;
+		        $cwxczPayTotal = 0;$cwxczPayCountTotal = 0;
+		        $fwxczPayTotal = 0;$fwxczPayCountTotal = 0;
+		        foreach ($models as $key=>$model):
+		        	$paytypeTotal = 0; // 支付方式总和统计
+		        	$orderTotal = 0;// 实收款
+		        	$orderPay = $model;
+		        	$orderNum = 0;
+		        	$orderReal = 0; //毛利润
+		        	$orderShould = 0;
+		        	if(isset($orderPay['20-0'])){
+		        		$orderReal =$orderPay['20-0']['pay_amount'];
+		        		$orderNum = $orderPay['20-0']['pay_count'];
+		        	}
+		        	if(isset($orderPay['22-0'])){
+		        		$orderShould =$orderPay['22-0']['pay_amount'];
+		        	}
+		        	$discount = $orderReal-$orderShould;
+		        	$orderDiscountTotal += $discount;
+		        	
+		        	
+		        	$cashPay = 0;$cashPayCount = 0;
+		        	if(isset($orderPay['0-0'])){
+		        		$cashPay = $orderPay['0-0']['pay_amount'];
+		        		$cashPayCount = $orderPay['0-0']['pay_count'];
+		        	}
+		        	$orderTotal += $cashPay;
+		        	$paytypeTotal += $cashPay;
+		        	$cashPayTotal += $cashPay;
+		        	$cashPayCount += $cashPayCount;
+		        	
+		        	$wxPay = 0;$wxPayCount = 0;
+		        	if(isset($orderPay['1-0'])){
+		        		$wxPay = $orderPay['1-0']['pay_amount'];
+		        		$wxPayCount = $orderPay['1-0']['pay_count'];
+		        	}
+		        	$orderTotal += $wxPay;
+		        	$paytypeTotal += $wxPay;
+		        	$wxPayTotal += $wxPay;
+		        	$wxPayCountTotal += $wxPayCount;
+		        	
+		        	$wddPay = 0;$wddPayCount = 0;
+		        	if(isset($orderPay['12-0'])){
+		        		$wddPay = $orderPay['12-0']['pay_amount'];
+		        		$wddPayCount = $orderPay['12-0']['pay_count'];
+		        	}
+		        	$orderTotal += $wddPay;
+		        	$paytypeTotal += $wddPay;
+		        	$wddPayTotal += $wddPay;
+		        	$wddPayCountTotal += $wddPayCount;
+		        	
+		        	$wwmPay = 0;$wwmPayCount = 0;
+		        	if(isset($orderPay['13-0'])){
+		        		$wwmPay = $orderPay['13-0']['pay_amount'];
+		        		$wwmPayCount = $orderPay['13-0']['pay_count'];
+		        	}
+		        	$orderTotal += $wwmPay;
+		        	$paytypeTotal += $wwmPay;
+		        	$wwmPayTotal += $wwmPay;
+		        	$wwmPayCountTotal += $wwmPayCount;
+		        	
+		        	$zfbPay = 0;$zfbPayCount = 0;
+		        	if(isset($orderPay['2-0'])){
+		        		$zfbPay = $orderPay['2-0']['pay_amount'];
+		        		$zfbPayCount = $orderPay['2-0']['pay_count'];
+		        	}
+		        	$orderTotal += $zfbPay;
+		        	$paytypeTotal += $zfbPay;
+		        	$zfbPayTotal += $zfbPay;
+		        	$zfbPayCountTotal += $zfbPayCount;
+		        	
+		        	$hykPay = 0;$hykPayCount = 0;
+		        	if(isset($orderPay['4-0'])){
+		        		$hykPay = $orderPay['4-0']['pay_amount'];
+		        		$hykPayCount = $orderPay['4-0']['pay_count'];
+		        	}
+		        	$orderTotal += $hykPay;
+		        	$paytypeTotal += $hykPay;
+		        	$hykPayTotal += $hykPay;
+		        	$hykPayCountTotal += $hykPayCount;
+		        	
+		        	$mtPay = 0;$mtPayCount = 0;
+		        	if(isset($orderPay['14-0'])){
+		        		$mtPay = $orderPay['14-0']['pay_amount'];
+		        		$mtPayCount = $orderPay['14-0']['pay_count'];
+		        	}
+		        	$orderTotal += $mtPay;
+		        	$paytypeTotal += $mtPay;
+		        	$mtPayTotal += $mtPay;
+		        	$mtPayCountTotal += $mtPayCount;
+		        	
+		        	$elmPay = 0;$elmPayCount = 0;
+		        	if(isset($orderPay['15-0'])){
+		        		$elmPay = $orderPay['15-0']['pay_amount'];
+		        		$elmPayCount = $orderPay['15-0']['pay_count'];
+		        	}
+		        	$orderTotal += $elmPay;
+		        	$paytypeTotal += $elmPay;
+		        	$elmPayTotal += $elmPay;
+		        	$elmPayCountTotal += $elmPayCount;
+		        	
+		        	$jfPay = 0;$jfPayCount = 0;
+		        	if(isset($orderPay['8-0'])){
+		        		$jfPay = $orderPay['8-0']['pay_amount'];
+		        		$jfPayCount = $orderPay['8-0']['pay_count'];
+		        		$paytypeTotal += $jfPay;
+		        	}
+		        	$jfPayTotal += $jfPay;
+		        	$jfPayCountTotal += $jfPayCount;
+
+		        	$yhqPay = 0;$yhqPayCount = 0;
+		        	if(isset($orderPay['9-0'])){
+		        		//现金券
+		        		$yhqPay = $orderPay['9-0']['pay_amount'];
+		        		$yhqPayCount = $orderPay['9-0']['pay_count'];
+		        		$paytypeTotal += $yhqPay;
+		        	}
+		        	$yhqPayTotal += $yhqPay;
+		        	$yhqPayCountTotal += $yhqPayCount;
+		        	
+		        	$cwxczPay = 0;$cwxczPayCount = 0;
+		        	if(isset($orderPay['7-0'])){
+		        		$cwxczPay = $orderPay['7-0']['pay_amount'];
+		        		$cwxczPayCount = $orderPay['7-0']['pay_count'];
+		        	}
+		        	$orderTotal += $cwxczPay;
+		        	$paytypeTotal += $cwxczPay;
+		        	$cwxczPayTotal += $cwxczPay;
+		        	$cwxczPayCountTotal += $cwxczPayCount;
+		        	
+		        	$fwxczPay = 0;$fwxczPayCount = 0;
+		        	if(isset($orderPay['10-0'])){
+		        		$fwxczPay = $orderPay['10-0']['pay_amount'];
+		        		$fwxczPayCount = $orderPay['10-0']['pay_count'];
+		        		$paytypeTotal += $fwxczPay;
+		        	}
+		        	$fwxczPayTotal += $fwxczPay;
+		        	$fwxczPayCountTotal += $fwxczPayCount;
+		        	
+		        	$paymentPayArr = array();
+		        	foreach ($payments as $payment){
+		        		$paymentPay = 0;$paymentPayCount = 0;
+		        		if(isset($orderPay['3-'.(int)$payment['lid']])){
+		        			$paymentPay = $orderPay['3-'.(int)$payment['lid']]['pay_amount'];
+		        			$paymentPayCount = $orderPay['3-'.(int)$payment['lid']]['pay_count'];
+		        		}
+		        		if(!isset($paymentPayTotal[$payment['lid']])){
+		        			$paymentPayTotal[$payment['lid']] = array('pay_amount'=>0,'pay_count'=>0);
+		        		}
+		        		if(!isset($paymentPayArr[$payment['lid']])){
+		        			$paymentPayTotal[$payment['lid']] = array('pay_amount'=>0,'pay_count'=>0);
+		        		}
+		        		$paymentPayArr[$payment['lid']]['pay_amount'] = $paymentPay;
+		        		$paymentPayArr[$payment['lid']]['pay_count'] = $paymentPayCount;
+		        		$paymentPayTotal[$payment['lid']]['pay_amount'] += $paymentPay;
+		        		$paymentPayTotal[$payment['lid']]['pay_count'] += $paymentPayCount;
+		        		$orderTotal += $paymentPay;
+		        		$paytypeTotal += $paymentPay;
+		        	}
+		        	
+		        	$orderRealTotal += $orderReal;
+		        	$orderShouldTotal += $orderShould;
+		        	$allOrderTotal += $orderTotal;
+		        	$orderNumTotal += $orderNum;
+		        	
+		        	$apaytypeTotal += $paytypeTotal;
+		        ?>
 		
 		        <tr class="odd gradeX">
-		            <td><?php 
-		            		if($text==1){
-		            			echo $m['y_all'];
-		            		}elseif($text==2){ 
-								echo $m['y_all'].-$m['m_all'];
-							}else{
-								echo $m['y_all'].-$m['m_all'].-$m['d_all'];
-							}
-					?></td>
-		            <td><?php $orders_total = $orders_total+$m['maoli_nums'];
-		                echo $m['maoli_nums'];?></td>
-		            <td><?php
-		            		$reality_all = sprintf("%.2f",$m['maoli_money'] + $retreat);
-		             		$grossprofit_total+=$reality_all;
-		             		echo $reality_all;
-		            ?></td>
-		            
-		            <td><?php 
-				            //折扣
-				            $discount=sprintf("%.2f",$reality_all-$m['chunli_money']-$retreat);
-				            $discount_total += $discount;
-				            echo $discount;
-		            ?></td>
-		            <td><?php 
-		                	$gather=sprintf("%.2f",$m['chunli_money']+$retreat);;
-		                	$gather_total += $gather;
-		                	echo $gather;
-		            ?></td>
-		            <td><?php 
-		            		$order_price = number_format($order_price,2);
-		                	echo $order_price;
-		            ?></td>
+		            <td><?php echo $key;?></td>
+		            <td><?php echo $orderNum;?></td>
+		            <td><?php echo number_format($orderReal,2);?></td>
+		            <td><?php echo number_format($discount,2);?></td>
+		            <td><?php echo number_format($orderShould,2);?></td>
+		            <td><?php echo number_format($orderTotal,2);?></td>
 		            <?php if($userid != '0'): ?>
-		            <td><?php 
-		                echo $m['username'].'('.$this->getUserstaffno($this->companyId,$m['username']).')';
-		             ?></td>
+		            	<td><?php echo $seUsername;?></td>
 		            <?php endif;?>
-		            <td><?php 
-		            		$cash = $m['cash_money'];
-				            $cash_total += $cash;
-				            echo $cash;
-		            ?></td>
-		            <td><?php
-				            $wechat = $m['wx_money']; 
-				            $wechat_total +=$wechat;
-				            echo $wechat;
-		            ?></td>
-		            <td><?php
-				            $wxorderpay = $m['wxord_money'];
-				            $wxorder_total += $wxorderpay;
-				            echo $wxorderpay;
-		            ?></td>
-		            <td><?php 
-				            $wxwaimaipay = $m['wxwm_money'];
-				            $wxwaimai_total += $wxwaimaipay;
-				            echo $wxwaimaipay;
-		            ?></td>
-		            <td><?php
-				            $alipay = $m['ali_money'];
-				            $alipay_total += $alipay;
-				            echo $alipay;
-		            ?></td>
-		            <td><?php 
-				            $unionpay = $m['visa_money'];
-				            $unionpay_total += $unionpay;
-				            echo $unionpay;
-		            ?></td>
-		            <td id="alipay4"><?php 
-				            $vipcard = $m['member_money'];
-				            $vipcard_total += $vipcard;
-				            echo $vipcard;
-		            ?></td>
-		             <td><?php 
-				            $cwxcharge = $m['cwxyue_money'];
-				            $all_cwxcharges = $all_cwxcharges + $cwxcharge;
-				            echo $cwxcharge;
-		                ?>
-		            </td>
-		             <td><?php 
-				            $fwxcharge = $m['fwxyue_money'];
-				            $all_fwxcharges = $all_fwxcharges + $fwxcharge;
-				            echo $fwxcharge;
-		                ?>
-		            </td>
-		            <td id="mtwm"><?php 
-				            $mtwm = $m['mt_money'];
-				            $mtwm_total += $mtwm;
-				            echo $mtwm;
-		            ?></td>
-		            <td id="elemewm"><?php 
-				            $elemewm = $m['elem_money'];
-				            $eleme_total += $elemewm;
-				            echo $elemewm;
-		            ?></td>
-		            <?php if($payments):?>
-		                
-		                <?php $j = 0;foreach ($payments as $payment):?>
-		                    <td><?php 
-		                           $pay_item =  $this->getRijiePrice($m['dpid'],$begin_time,$end_time,$payment['lid'],$text,$m['y_all'],$m['m_all'],$m['d_all'],$userid,$m['username']); 
-		                           $grouppay_arr[$j] +=$pay_item;
-		                            
-		                            $j++;
-		                            echo $pay_item;
-		                            ?>
-		                    </td>
-		                <?php endforeach;?>
-		            <?php endif;?> 
-		            <td>
+		            <td><?php echo $cashPay?number_format($cashPay,2).'('.$cashPayCount.')':'';?></td>
+	               	<td><?php echo $wxPay?number_format($wxPay,2).'('.$wxPayCount.')':'';?></td>
+	               	<td><?php echo $wddPay?number_format($wddPay,2).'('.$wddPayCount.')':'';?></td>
+	               	<td><?php echo $wwmPay?number_format($wwmPay,2).'('.$wwmPayCount.')':'';?></td>
+	               	<td><?php echo $zfbPay?number_format($zfbPay,2).'('.$zfbPayCount.')':'';?></td>
+	               	<td><?php echo $hykPay?number_format($hykPay,2).'('.$hykPayCount.')':'';?></td>
+	               	<td><?php echo $cwxczPay ? number_format($cwxczPay,2).'('.$cwxczPayCount.')':'';?></td>
+	               	<td><?php echo $fwxczPay ? number_format($fwxczPay,2).'('.$fwxczPayCount.')':'';?></td>
+	               	<td><?php echo $mtPay?number_format($mtPay,2).'('.$mtPayCount.')':'';?></td>
+	               	<td><?php echo $elmPay?number_format($elmPay,2).'('.$elmPayCount.')':'';?></td>
 		            <?php 
-		            $wxcard = $m['cupon_money'];
-		            $all_wxcards = $all_wxcards + $wxcard;
-		                echo $wxcard;
-		                ?>
-		            </td> 
-		            <td><?php 
-		            $wxpoint = $m['jifen_money'];
-		            $all_wxpoints = $all_wxpoints + $wxpoint;
-		            echo $wxpoint;
-		                ?>
-		            </td>
-		            <td><?php 
-		            	echo $retreat;
-		            ?></td>
-		            					
+		            	foreach ($payments as $payment):
+			            		$paymentPay = $paymentPayArr[$payment['lid']]['pay_amount'];
+			            		$paymentPayCount = $paymentPayArr[$payment['lid']]['pay_count'];
+		            ?>
+	                <td><?php echo $paymentPay?number_format($paymentPay,2).'('.$paymentPayCount.')':'';?></td>
+	                <?php endforeach;?>
+	                 <td><?php echo $yhqPay ? number_format($yhqPay,2).'('.$yhqPayCount.')':'';?></td>
+	                <td><?php echo $jfPay ? number_format($jfPay,2).'('.$jfPayCount.')':'';?></td> 
+		            <td></td>
+					<?php if(number_format($paytypeTotal,2)==number_format($orderShould,2)):?>
+					<td><?php echo number_format($paytypeTotal,2);?></td>
+					<?php else:?>
+					<td><span style="color:red"><?php echo number_format($paytypeTotal,2);?></span></td>
+					<?php endif;?>					
 		        </tr>
 		       
-		        <?php endforeach;?>
-		        <?php endif;?>
-		        <tr>
-		            <td><?php echo "总计";?></td>
-		            <td><?php echo $orders_total; ?></td>
-		            <td><?php  echo $grossprofit_total;?></td>
-		            <td><?php echo $discount_total; ?></td>
-		            <td><?php  echo $gather_total;?></td>
-		            <td><?php  echo $order_total;?></td>
+		        <?php 
+		        	endforeach;
+		        ?>	
+		        <tr class="odd gradeX">
+		            <td>总计</td>
+		            <td><?php echo $orderNumTotal;?></td>
+		             <td><?php echo number_format($orderRealTotal,2);?></td>
+		            <td><?php echo number_format($orderDiscountTotal,2);?></td>
+		            <td><?php echo number_format($orderShouldTotal,2);?></td>
+		            <td><?php echo number_format($allOrderTotal,2);?></td>
 		            <?php if($userid != '0'): ?>
-		                <td><?php   
-		                    ?>
-		                </td>
+		            	<td><?php echo $seUsername;?></td>
 		            <?php endif;?>
-		            <td><?php echo $cash_total; ?></td>
-		            <td><?php echo $wechat_total;?></td>
-		            <td><?php echo $wxorder_total;?></td>
-		            <td><?php echo $wxwaimai_total;?></td>
-		            <td><?php echo $alipay_total;?></td>
-		            <td><?php echo $unionpay_total;?></td>
-		            <td><?php echo $vipcard_total; ?></td>
-		            <td><?php echo $all_cwxcharges;?></td>
-		            <td><?php echo $all_fwxcharges;?></td>
-		            <td><?php echo $mtwm_total; ?></td>
-		            <td><?php echo $eleme_total; ?></td>
-		            <?php if($payments):?>
-		                <?php  $j =0;foreach ($payments as $payment):?>
-		                    <td><?php  echo $grouppay_arr[$j++];
-		                   // echo $grouppay.$i;
-		                   // $i++;
-		                    ?></td>
-		                    
-		                <?php endforeach;?>
-		            <?php endif;?> 
-		            <td><?php echo $all_wxcards;?></td>
-		            <td><?php echo $all_wxpoints;?></td>
-		            <td><?php echo $retreats;?></td>
+		            <td><?php echo $cashPayTotal?number_format($cashPayTotal,2).'('.$cashPayCountTotal.')':'';?></td>
+	               	<td><?php echo $wxPayTotal?number_format($wxPayTotal,2).'('.$wxPayCountTotal.')':'';?></td>
+	               	<td><?php echo $wddPayTotal?number_format($wddPayTotal,2).'('.$wddPayCountTotal.')':'';?></td>
+	               	<td><?php echo $wwmPayTotal?number_format($wwmPayTotal,2).'('.$wwmPayCountTotal.')':'';?></td>
+	               	<td><?php echo $zfbPayTotal?number_format($zfbPayTotal,2).'('.$zfbPayCountTotal.')':'';?></td>
+	               	<td><?php echo $hykPayTotal?number_format($hykPayTotal,2).'('.$hykPayCountTotal.')':'';?></td>
+	               	<td><?php echo $cwxczPayTotal ? number_format($cwxczPayTotal,2).'('.$cwxczPayCountTotal.')':'';?></td>
+	               	<td><?php echo $fwxczPayTotal ? number_format($fwxczPayTotal,2).'('.$fwxczPayCountTotal.')':'';?></td>
+	               	<td><?php echo $mtPayTotal?number_format($mtPayTotal,2).'('.$mtPayCountTotal.')':'';?></td>
+	               	<td><?php echo $elmPayTotal?number_format($elmPayTotal,2).'('.$elmPayCountTotal.')':'';?></td>
+		            <?php 
+		            	foreach ($payments as $payment):
+		            		$paymentPayTo = $paymentPayTotal[$payment['lid']]['pay_amount'];
+		            		$paymentPayCountTo = $paymentPayTotal[$payment['lid']]['pay_count'];
+			            	
+		            ?>
+	                <td><?php echo $paymentPayTo?number_format($paymentPayTo,2).'('.$paymentPayCountTo.')':'';?></td>
+	                <?php endforeach;?>
+	                <td><?php echo $yhqPayTotal ? number_format($yhqPayTotal,2).'('.$yhqPayCountTotal.')':'';?></td> 
+	                <td><?php echo $jfPayTotal ? number_format($jfPayTotal,2).'('.$jfPayCountTotal.')':'';?></td> 
+		            <td></td>
+					<td><?php echo number_format($apaytypeTotal,2);?></td>					
 		        </tr>
+		      <?php endif;?>
 		        </tbody>
     	</table>
 		</div>

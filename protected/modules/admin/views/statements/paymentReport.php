@@ -75,7 +75,7 @@
 		               <th><?php echo yii::t('app','总单数');?></th> 
 		               <th><?php echo yii::t('app','毛利润');?></th> 
 		               <th><?php echo yii::t('app','折扣优惠');?></th>
-		               <th><?php echo yii::t('app','销售额');?></th>
+		               <th><?php echo yii::t('app','营业额');?></th>
 		               <th><?php echo yii::t('app','实收款');?></th>
 		               <?php if($userid != '0'): ?>
 		               <th><?php echo yii::t('app','营业员');?></th>
@@ -94,9 +94,7 @@
 		               <th><?php echo yii::t('app','美团·外卖');?></th>
 		               <th><?php echo yii::t('app','饿了么·外卖');?></th>
 	                    <?php 
-	                    	$paymentPayTotal = array();
 	                    	foreach ($payments as $payment):
-	                    	$paymentPayTotal[$payment['lid']] = array('pay_amount'=>0,'pay_count'=>0);
 	                    ?>
 	                         <th><?php echo $payment['name'];?></th>
 	                    <?php endforeach;?>
@@ -107,9 +105,7 @@
 		            </tr>
 		        </thead>
 				<tbody>
-		        <?php if( $models) :?>
-		        <!--foreach-->
-		        <?php 
+		        <?php if( $models) :
 		        $orderNumTotal = 0;
 		        $orderRealTotal = 0;
 		        $orderDiscountTotal = 0;
@@ -117,6 +113,7 @@
 		        $allOrderTotal = 0;
 		        $orderRetreatTotal = 0;
 		        $apaytypeTotal = 0;
+		        $paymentPayTotal = array();
 		        
 		        $cashPayTotal = 0;$cashPayCountTotal = 0;
 		        $wxPayTotal = 0;$wxPayCountTotal = 0;
@@ -139,6 +136,8 @@
 		        	$orderRealTotal += $order['reality_total'];
 		        	$discount = $order['reality_total']-$order['should_total'];
 		        	$orderDiscountTotal += $discount;
+		        	$orderShould = $order['should_total'];
+		        	$orderShouldTotal += $orderShould;
 		        	$orderRetreatTotal += $order['order_retreat'];
 		        	$cashPay = 0;$cashPayCount = 0;
 		        	if(isset($orderPay['0-0'])){
@@ -253,12 +252,32 @@
 		        	if(isset($orderPay['10-0'])){
 		        		$fwxczPay = $orderPay['10-0']['pay_amount'];
 		        		$fwxczPayCount = $orderPay['10-0']['pay_count'];
-		        		$paytypeTotal += $fwxczPay;
 		        	}
+		        	$paytypeTotal += $fwxczPay;
 		        	$fwxczPayTotal += $fwxczPay;
 		        	$fwxczPayCountTotal += $fwxczPayCount;
-		        	$orderShould = $order['should_total'];
-		        	$orderShouldTotal += $orderShould;
+		        	
+		        	$paymentPayArr = array();
+		        	foreach ($payments as $payment){
+		        		$paymentPay = 0;$paymentPayCount = 0;
+		        		if(isset($orderPay['3-'.(int)$payment['lid']])){
+		        			$paymentPay = $orderPay['3-'.(int)$payment['lid']]['pay_amount'];
+		        			$paymentPayCount = $orderPay['3-'.(int)$payment['lid']]['pay_count'];
+		        		}
+		        		if(!isset($paymentPayTotal[$payment['lid']])){
+		        			$paymentPayTotal[$payment['lid']] = array('pay_amount'=>0,'pay_count'=>0);
+		        		}
+		        		if(!isset($paymentPayArr[$payment['lid']])){
+		        			$paymentPayTotal[$payment['lid']] = array('pay_amount'=>0,'pay_count'=>0);
+		        		}
+		        		$paymentPayArr[$payment['lid']]['pay_amount'] = $paymentPay;
+		        		$paymentPayArr[$payment['lid']]['pay_count'] = $paymentPayCount;
+		        		$paymentPayTotal[$payment['lid']]['pay_amount'] += $paymentPay;
+		        		$paymentPayTotal[$payment['lid']]['pay_count'] += $paymentPayCount;
+		        		$orderTotal += $paymentPay;
+		        		$paytypeTotal += $paymentPay;
+		        	}
+		        	
 		        	$allOrderTotal += $orderTotal;
 		        ?>
 		
@@ -284,14 +303,8 @@
 	               	<td><?php echo $elmPay?number_format($elmPay,2).'('.$elmPayCount.')':'';?></td>
 		            <?php 
 		            	foreach ($payments as $payment):
-		            		$paymentPay = 0;$paymentPayCount = 0;
-			            	if(isset($orderPay['3-'.(int)$payment['lid']])){
-			            		$paymentPay = $orderPay['3-'.(int)$payment['lid']]['pay_amount'];
-			            		$paymentPayCount = $orderPay['3-'.(int)$payment['lid']]['pay_count'];
-			            	}
-			            	$paymentPayTotal[$payment['lid']]['pay_amount'] += $paymentPay;
-			            	$paymentPayTotal[$payment['lid']]['pay_count'] += $paymentPayCount;
-			            	$paytypeTotal += $paymentPay;
+			            		$paymentPay = $paymentPayArr[$payment['lid']]['pay_amount'];
+			            		$paymentPayCount = $paymentPayArr[$payment['lid']]['pay_count'];
 		            ?>
 	                <td><?php echo $paymentPay?number_format($paymentPay,2).'('.$paymentPayCount.')':'';?></td>
 	                <?php endforeach;?>
@@ -306,7 +319,6 @@
 		        </tr>
 		       
 		        <?php 
-		        	$apaytypeTotal += $paytypeTotal;
 		        	endforeach;
 		        ?>	
 		        <tr class="odd gradeX">
