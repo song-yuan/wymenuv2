@@ -353,6 +353,7 @@ class WxOrder
     				'takeout_typeid'=>$this->others['takeout'],
     				'appointment_time'=>$appointmentTime,
     				'remark'=>$remark,
+    				'taste_memo'=>''
     		);
     		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
     		$orderArr = $insertOrderArr;
@@ -376,6 +377,7 @@ class WxOrder
 					'takeout_typeid'=>$this->others['takeout'],
 					'appointment_time'=>$appointmentTime,
 					'remark'=>$remark,
+					'taste_memo'=>''
 			);
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 			$orderArr = $insertOrderArr;
