@@ -335,8 +335,8 @@ class StatementsController extends BackendController
 			}
 			$tableArr = array_merge($tableArr, array('微信现金券','微信积分','退款'));
 			$data = array();
-			foreach ($model as $key=>$m){
-				$orderPay = $m;
+			foreach ($models as $key=>$model){
+				$orderPay = $model;
 				$orderTotal = 0;
 				$orderNum = 0;
 	        	$orderReal = 0; //毛利润
