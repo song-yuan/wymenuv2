@@ -334,58 +334,104 @@ class StatementsController extends BackendController
 				array_push($tableArr, $payment['name']);
 			}
 			$tableArr = array_merge($tableArr, array('微信现金券','微信积分','退款'));
-			var_dump($models);exit;
 			$data = array();
-			foreach ($models as $m){
+			foreach ($model as $key=>$m){
+				$orderPay = $m;
 				$orderTotal = 0;
-				$createAt = $m['y_all'].'-'.$m['m_all'].'-'.$m['d_all'];
-				$allNum = $m['all_nums'];
-				$realityTotal = $m['maoli_money'];
-				$shouldTotal = $m['chunli_money'];
-				$discount = number_format($realityTotal - $shouldTotal,2);
-				$cashPay = $m['cash_money'];
+				$orderNum = 0;
+	        	$orderReal = 0; //毛利润
+	        	$orderShould = 0;
+	        	if(isset($orderPay['20-0'])){
+	        		$orderReal =$orderPay['20-0']['pay_amount'];
+	        		$orderNum = $orderPay['20-0']['pay_count'];
+	        	}
+	        	if(isset($orderPay['22-0'])){
+	        		$orderShould =$orderPay['22-0']['pay_amount'];
+	        	}
+	        	$discount = $orderReal-$orderShould;
+	        	$orderDiscountTotal += $discount;
+				$cashPay = 0;
+				if(isset($orderPay['0-0'])){
+					$cashPay = $orderPay['0-0']['pay_amount'];
+				}
 				$orderTotal += $cashPay;
-			
-				$wxPay = $m['wx_money'];
+				
+				$wxPay = 0;
+				if(isset($orderPay['1-0'])){
+					$wxPay = $orderPay['1-0']['pay_amount'];
+				}
 				$orderTotal += $wxPay;
-			
-				$wddPay = $m['wxord_money'];
+				
+				$wddPay = 0;
+				if(isset($orderPay['12-0'])){
+					$wddPay = $orderPay['12-0']['pay_amount'];
+				}
 				$orderTotal += $wddPay;
-			
-				$wwmPay = $m['wxwm_money'];
+				
+				$wwmPay = 0;
+				if(isset($orderPay['13-0'])){
+					$wwmPay = $orderPay['13-0']['pay_amount'];
+				}
 				$orderTotal += $wwmPay;
-			
-				$zfbPay = $m['ali_money'];
+				
+				$zfbPay = 0;
+				if(isset($orderPay['2-0'])){
+					$zfbPay = $orderPay['2-0']['pay_amount'];
+				}
 				$orderTotal += $zfbPay;
-			
-				$hykPay = $m['member_money'];
+				
+				$hykPay = 0;
+				if(isset($orderPay['4-0'])){
+					$hykPay = $orderPay['4-0']['pay_amount'];
+				}
 				$orderTotal += $hykPay;
-			
-				$mtPay = $m['mt_money'];
+				
+				$mtPay = 0;
+				if(isset($orderPay['14-0'])){
+					$mtPay = $orderPay['14-0']['pay_amount'];
+				}
 				$orderTotal += $mtPay;
-			
-				$elmPay = $m['elem_money'];
+				
+				$elmPay = 0;
+				if(isset($orderPay['15-0'])){
+					$elmPay = $orderPay['15-0']['pay_amount'];
+				}
 				$orderTotal += $elmPay;
-			
-				$jfPay = $m['jifen_money'];
-				$yhqPay = $m['cupon_money'];
-				$cwxczPay = $m['cwxyue_money'];
+				
+				$jfPay = 0;
+				if(isset($orderPay['8-0'])){
+					$jfPay = $orderPay['8-0']['pay_amount'];
+				}
+				$yhqPay = 0;
+				if(isset($orderPay['9-0'])){
+					$yhqPay = $orderPay['9-0']['pay_amount'];
+				}
+				$cwxczPay = 0;
+				if(isset($orderPay['7-0'])){
+					$cwxczPay = $orderPay['7-0']['pay_amount'];
+				}
 				$orderTotal += $cwxczPay;
-			
-				$fwxczPay = $m['fwxyue_money'];
+				
+				$fwxczPay = 0;
+				if(isset($orderPay['10-0'])){
+					$fwxczPay = $orderPay['10-0']['pay_amount'];
+				}
 				$tempArr = array(
-						$createAt,
-						$allNum,
-						$realityTotal,
+						$key,
+						$orderNum,
+						$orderReal,
 						$discount,
-						$shouldTotal,
+						$orderShould,
 						$orderTotal,$cashPay,$wxPay,$wddPay,$wwmPay,$zfbPay,$hykPay,$cwxczPay,$fwxczPay,$mtPay,$elmPay
 				);
 				foreach ($payments as $payment){
-					
+					$paymentPay = 0;
+					if(isset($orderPay['3-'.(int)$payment['lid']])){
+						$paymentPay = $orderPay['3-'.(int)$payment['lid']]['pay_amount'];
+					}
 					array_push($tempArr, $paymentPay);
 				}
-				$tempArr = array_merge($tempArr,array($yhqPay,$jfPay,$order['order_retreat']));
+				$tempArr = array_merge($tempArr,array($yhqPay,$jfPay,''));
 				array_push($data, $tempArr);
 			}
 			Helper::exportExcel($tableArr,$data,'支付方式(员工营业额)报表','支付方式(员工营业额)');
