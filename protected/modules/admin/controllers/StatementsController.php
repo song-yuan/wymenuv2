@@ -349,7 +349,7 @@ class StatementsController extends BackendController
 	        		$orderShould =$orderPay['22-0']['pay_amount'];
 	        	}
 	        	$discount = $orderReal-$orderShould;
-	        	$orderDiscountTotal += $discount;
+	        	
 				$cashPay = 0;
 				if(isset($orderPay['0-0'])){
 					$cashPay = $orderPay['0-0']['pay_amount'];
