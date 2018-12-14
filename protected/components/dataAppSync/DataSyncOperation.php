@@ -1914,7 +1914,7 @@ class DataSyncOperation {
 					}
 					if($realityStock<=0 && $k+1==$count){
 						// 最后一批库存还小于等于0 
-						$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+						$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid;
 						Yii::app ()->db->createCommand ( $sql )->execute ();
 							
 						$se = new Sequence ( "material_stock_log" );
@@ -1931,8 +1931,7 @@ class DataSyncOperation {
 								'stock_num' => $temStock,
 								'original_num'=>$materialStock['batch_stock'],
 								'unit_price'=>$stockPrice,
-								'resean' => '正常消耗',
-								'is_sync' => DataSync::getInitSync ()
+								'resean' => '正常消耗'
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
 						break;
@@ -1941,7 +1940,7 @@ class DataSyncOperation {
 					if($temStock > 0){
 						// 消耗库存大于该批次库存
 						if($k+1 == $count){
-							$sql = 'update nb_product_material_stock set stock = stock - '.($temStock + $realityStock).' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+							$sql = 'update nb_product_material_stock set stock = stock - '.($temStock + $realityStock).' where lid='.$materialStock['lid'].' and dpid='.$dpid;
 							Yii::app ()->db->createCommand ( $sql )->execute ();
 							
 							$se = new Sequence ( "material_stock_log" );
@@ -1958,12 +1957,11 @@ class DataSyncOperation {
 									'stock_num' => $temStock + $realityStock,
 									'original_num'=>$materialStock['batch_stock'],
 									'unit_price'=>$stockPrice,
-									'resean' => '正常消耗',
-									'is_sync' => DataSync::getInitSync ()
+									'resean' => '正常消耗'
 							);
 							Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
 						}else{
-							$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+							$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid;
 							Yii::app ()->db->createCommand ( $sql )->execute ();
 							
 							$se = new Sequence ( "material_stock_log" );
@@ -1980,14 +1978,13 @@ class DataSyncOperation {
 									'stock_num' => $realityStock,
 									'original_num'=>$materialStock['batch_stock'],
 									'unit_price'=>$stockPrice,
-									'resean' => '正常消耗',
-									'is_sync' => DataSync::getInitSync ()
+									'resean' => '正常消耗'
 							);
 							Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
 						}
 					}else{
 						// 消耗库存小于于该批次库存
-						$sql = 'update nb_product_material_stock set stock = stock - '.($temStock + $realityStock).' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+						$sql = 'update nb_product_material_stock set stock = stock - '.($temStock + $realityStock).' where lid='.$materialStock['lid'].' and dpid='.$dpid;
 						Yii::app ()->db->createCommand ( $sql )->execute ();
 						
 						$se = new Sequence ( "material_stock_log" );
@@ -2004,8 +2001,7 @@ class DataSyncOperation {
 								'stock_num' => $temStock + $realityStock,
 								'original_num'=>$materialStock['batch_stock'],
 								'unit_price'=>$stockPrice,
-								'resean' => '正常消耗',
-								'is_sync' => DataSync::getInitSync ()
+								'resean' => '正常消耗'
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
 						break;
@@ -2022,7 +2018,7 @@ class DataSyncOperation {
 				}else{
 					$stockPrice = 0;
 				}
-				$sql = 'update nb_product_material_stock set stock= stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+				$sql = 'update nb_product_material_stock set stock= stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid;
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 				
 				$se = new Sequence ( "material_stock_log" );
@@ -2039,8 +2035,7 @@ class DataSyncOperation {
 						'stock_num' => $temStock,
 						'original_num'=>$materialStock['batch_stock'],
 						'unit_price'=>$stockPrice,
-						'resean' => '正常消耗',
-						'is_sync' => DataSync::getInitSync ()
+						'resean' => '正常消耗'
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
 			}

@@ -169,7 +169,7 @@ class AlipayNotify {
 		//orderpay表插入数据
 		WxOrder::insertOrderPay($order,2,$data['total_fee'],0,$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
-		WxOrder::pushOrderToRedis($order);
+		WxOrder::orderSuccess($order);
 	}
 }
 ?>

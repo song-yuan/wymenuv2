@@ -274,8 +274,7 @@ class SqbpayController extends Controller
 						WxOrder::insertOrderPay($order,$paytype,$total_amount/100,0,$client_sn);
 						$user = WxBrandUser::getFromUserId($order['user_id']);
 						WxOrder::dealOrder($user, $order);
-						$order['order_status'] = 3;
-						WxOrder::pushOrderToRedis($order);
+						WxOrder::orderSuccess($order);
 					}
 				}
 			}

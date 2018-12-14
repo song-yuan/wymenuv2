@@ -275,14 +275,12 @@ class MallController extends Controller
 			$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		if($this->type==1){
-			$order = WxOrder::getOrder($orderId, $this->companyId);
-			WxOrder::pushSiteOrderToRedis($order,$orderObj->siteNo);
+			WxOrder::pushSiteOrderToRedis($orderObj->order,$orderObj->siteNo);
 			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		
 		if($orderObj->orderSuccess && $orderCreate){
-			$order = WxOrder::getOrder($orderId, $this->companyId);
-			WxOrder::pushOrderToRedis($order);
+			WxOrder::orderSuccess($orderObj->order);
 		}
 		if($paytype == 1){
 			//支付宝支付
@@ -521,8 +519,7 @@ class MallController extends Controller
 				$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>1));
 			}
 			if($sorderObj->orderSuccess && $orderCreate){
-				$order = WxOrder::getOrder($orderId, $this->companyId);
-				WxOrder::pushOrderToRedis($order);
+				WxOrder::orderSuccess($orderObj->order);
 			}
 			if($paytype == 1){
 				$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;

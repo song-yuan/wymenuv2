@@ -1060,7 +1060,6 @@ class WxOrder
 	 public static function dealOrder($user,$order){
 	 	$orderId = $order['lid'];
 	 	$dpid = $order['dpid'];
-	 	
 	 	WxBrandUser::isUserFirstOrder($user,$dpid);
 	 	//修改订单状态
 	 	self::updateOrderStatus($orderId,$dpid);
@@ -1073,6 +1072,12 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
+	 	self::dealMaterialStock($orderId, $dpid);
+	 }
+	 /**
+	  * 处理产品库存
+	  */
+	 public static function dealMaterialStock($orderId, $dpid){
 	 	// 获取订单中产品 减少库存
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	foreach ($orderProducts as $product){
@@ -1109,6 +1114,15 @@ class WxOrder
 	 			}
 	 		}
 	 	}
+	 }
+	 /**
+	  * 订单完成 订单放入redis 
+	  * 扣减库存
+	  */
+	 public static function orderSuccess($order){
+	 	$order['order_status'] = 3;
+	 	self::pushOrderToRedis($order);
+	 	self::dealMaterialStock($order['lid'], $order['dpid']);
 	 }
 	 /**
 	  * 已支付的订单
