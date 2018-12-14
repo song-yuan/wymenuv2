@@ -388,6 +388,7 @@ class WxOrder
 			}
 		}
 		//整单口味
+		$orderArr['taste'] = array();
 		if(isset($this->productTastes[0]) && !empty($this->productTastes[0])){
 			$otArr = array();
 			foreach($this->productTastes[0] as $ordertaste){
