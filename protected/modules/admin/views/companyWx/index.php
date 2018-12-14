@@ -109,7 +109,10 @@
 						<select id="isopen" name="isopen" class="selectedclass">
 							<option value="0" <?php if($isopen==0) echo 'selected';?>>全部</option>
 							<option value="1" <?php if($isopen==1) echo 'selected';?>>开通</option>
-							<option value="2" <?php if($isopen==2) echo 'selected';?>>未开通</option>
+							<option value="1" <?php if($isopen==2) echo 'selected';?>>堂食</option>
+							<option value="1" <?php if($isopen==3) echo 'selected';?>>外卖</option>
+							<option value="1" <?php if($isopen==4) echo 'selected';?>>全开</option>
+							<option value="2" <?php if($isopen==5) echo 'selected';?>>未开通</option>
 						</select>
                     </div>
                     <div class="btn-group">

@@ -21,7 +21,7 @@ class CompanyWxController extends BackendController
 	
 		$criteria = new CDbCriteria;
 		$criteria->with = 'property';
-		$criteria->condition ='t.type =1 and t.delete_flag=0 and t.dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.$companyId.' and tt.delete_flag=0 ) or t.dpid='.$companyId;
+		$criteria->condition ='t.type =1 and (t.comp_dpid='.$companyId.' or t.dpid='.$companyId.') and t.delete_flag=0';
 		
 		$province = $provinces;
 		$city = $citys;
@@ -44,11 +44,17 @@ class CompanyWxController extends BackendController
 		}
 		if($isOpen){
 			if($isOpen==1){
-				$isopen = '2,3';
+				$isopensql = 'property.is_rest in(2,3)';
+			}elseif($isOpen==2){
+				$isopensql = 'property.is_rest in(2,3) and property.sale_type in(1,2)';
+			}elseif($isOpen==3){
+				$isopensql = 'property.is_rest in(2,3) and property.sale_type in(1,3)';
+			}elseif($isOpen==4){
+				$isopensql = 'property.is_rest in(2,3) and property.sale_type=1';
 			}else{
-				$isopen = '0,1';
+				$isopensql = 'property.is_rest in(0,1)';
 			}
-			$criteria->addCondition('property.is_rest in('.$isopen.')');
+			$criteria->addCondition($isopensql);
 		}
 		$criteria->order = 't.dpid asc';
 		$pages = new CPagination(Company::model()->count($criteria));
