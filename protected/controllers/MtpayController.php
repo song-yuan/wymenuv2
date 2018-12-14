@@ -78,10 +78,9 @@ class MtpayController extends Controller
 					$paytype = 13;
 				}
 				WxOrder::insertOrderPay($order,$paytype,$totalFee/100,0,$accountno);
-				$order['order_status'] = 3;
-				WxOrder::pushOrderToRedis($order);
 				$user = WxBrandUser::getFromUserId($order['user_id']);
 				WxOrder::dealOrder($user, $order);
+				WxOrder::orderSuccess($order);
 				echo '{"status":"SUCCESS"}';
 				exit;
 			}

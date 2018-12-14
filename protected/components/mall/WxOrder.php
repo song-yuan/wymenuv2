@@ -389,6 +389,7 @@ class WxOrder
 		}
 		//整单口味
 		if(isset($this->productTastes[0]) && !empty($this->productTastes[0])){
+			$otArr = array();
 			foreach($this->productTastes[0] as $ordertaste){
 				if($ordertaste[2] > 0){
 					$orderPrice +=$ordertaste[2];
@@ -407,7 +408,9 @@ class WxOrder
 						'is_order'=>1,
 				);
 				$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
+				array_push($otArr, $orderTasteData);
 			}
+			$orderArr['taste'] = $otArr;
 		}
 		$levelDiscount = $this->levelDiscount;
 		foreach($this->cart as $cart){
@@ -1156,7 +1159,6 @@ class WxOrder
 	 	$orderDiscount = self::getOrderAccountDiscount($orderId, $orderDpid);
 	 	$orderArr['nb_order_account_discount'] = $orderDiscount;
 	 	$orderStr = json_encode($orderArr);
-	 	
 	 	$result = WxRedis::pushPlatform($orderDpid, $orderStr);
 	 	if(!$result){
 	 		Helper::writeLog('redis缓存失败 :类型:微信-接单pushPlatform;dpid:'.$orderDpid.';data:'.$orderStr);
