@@ -454,7 +454,7 @@ class CopypromotionController extends BackendController
 				$isAvailable = $fullsent['is_available'];
 				$source = 1;
 				foreach ($dpids as $dpid){
-					$sql = 'select lid from nb_full_sent dpid='.$dpid.' where sole_code="'.$soleCode.'" and source=1 and delete_flag=0';
+					$sql = 'select lid from nb_full_sent where dpid='.$dpid.' and sole_code="'.$soleCode.'" and source=1 and delete_flag=0';
 					$hasfullsent = $db->createCommand($sql)->queryRow();
 					if($hasfullsent){
 						continue;
