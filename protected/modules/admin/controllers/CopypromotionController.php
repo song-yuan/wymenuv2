@@ -461,8 +461,8 @@ class CopypromotionController extends BackendController
 					}
 					
 					$se = new Sequence("full_sent");
-					$lid = $se->nextval();
-					$fullsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$infor.'","'.$beginTime.'","'.$endTime.'","'.$fullType.'","'.$fullCost.'","'.$extraCost.'","'.$sentNumber.'","'.$isAvailable.'",'.$source.'),';
+					$fullsentId = $se->nextval();
+					$fullsql .= '('.$fullsentId.','.$dpid.',"'.$createAt.'","'.$updateAt.'","'.$soleCode.'","'.$title.'","'.$infor.'","'.$beginTime.'","'.$endTime.'","'.$fullType.'","'.$fullCost.'","'.$extraCost.'","'.$sentNumber.'","'.$isAvailable.'",'.$source.'),';
 					foreach ($fullsentDetails as $detail){
 						$pcode = $detail['phs_code'];
 						$sql = 'select lid from nb_product where dpid='.$dpid.' and phs_code="'.$pcode.'" and delete_flag=0';
@@ -471,16 +471,15 @@ class CopypromotionController extends BackendController
 							continue;
 						}
 						$se = new Sequence("full_sent_detail");
-						$lid = $se->nextval();
+						$sentDetaillid = $se->nextval();
 						$createAt = $detail['create_at'];
 						$updateAt = $detail['update_at'];
-						$fullsentId = $detail['full_sent_id'];
 						$fproId = $product['lid'];
 						$isdiscount = $detail['is_discount'];
 						$promoney = $detail['promotion_money'];
 						$prodiscount = $detail['promotion_discount'];
 						$number = $detail['number'];
-						$fulldetailsql .= '('.$lid.','.$dpid.',"'.$createAt.'","'.$updateAt.'",'.$fullsentId.','.$fproId.','.$pcode.','.$isdiscount.','.$promoney.','.$prodiscount.','.$number.'),';
+						$fulldetailsql .= '('.$sentDetaillid.','.$dpid.',"'.$createAt.'","'.$updateAt.'",'.$fullsentId.','.$fproId.','.$pcode.','.$isdiscount.','.$promoney.','.$prodiscount.','.$number.'),';
 					}
 				}
 				$fullsql = rtrim($fullsql,',');
