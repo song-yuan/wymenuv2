@@ -434,6 +434,7 @@ class DataAppSyncController extends Controller
 		$orderId = $orderId.$type;// 订单号加类型 组成新订单号
 		$payPrice = $posfeeOrder['total_amount'];
 		if($payChannel==1){
+			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
 			$notify = new WxPayNativePay();
 			$input = new WxPayUnifiedOrder();
 			$input->SetBody("续费订单");
