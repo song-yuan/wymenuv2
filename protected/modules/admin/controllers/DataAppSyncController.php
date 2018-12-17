@@ -386,8 +386,8 @@ class DataAppSyncController extends Controller
 		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
 		$posfeeset = PoscodeFee::getPosfeeset($comdpid);
 		if($posfeeset){
-			$randNum = Helper::randNum(4);
-			$orderId = (int)$dpid . date('YmdHis') . $randNum;
+			$randNum = Helper::randNum(2);
+			$orderId = date('YmdHis') . $randNum . '-' . (int)$dpid;
 			$years = $posfeeset['years'];
 			$amount = $posfeeset['price']*100;
 			
@@ -433,8 +433,27 @@ class DataAppSyncController extends Controller
 		}
 		$orderId = $orderId.$type;// 订单号加类型 组成新订单号
 		$payPrice = $posfeeOrder['total_amount'];
-		
-		if($payChannel==3){
+		if($payChannel==1){
+			$notify = new WxPayNativePay();
+			$input = new WxPayUnifiedOrder();
+			$input->SetBody("续费订单");
+			$input->SetAttach("3");
+			$input->SetOut_trade_no($orderId);
+			$input->SetTotal_fee($payPrice);
+			$input->SetTime_start(date("YmdHis"));
+			$input->SetTime_expire(date("YmdHis", time() + 600));
+			$input->SetGoods_tag("续费订单");
+			$input->SetNotify_url($notifyUrl);
+			$input->SetTrade_type("NATIVE");
+			$input->SetProduct_id($poscode);
+			
+			$result = $notify->GetPayUrl($input);
+			if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
+				$qrCode = $result["code_url"];
+				$code = new QRCode($qrCode);
+				$code->create();
+			}
+		}elseif($payChannel==3){
 			//美团
 			if($type==0){
 				// 微信
