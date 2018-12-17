@@ -151,13 +151,16 @@ class MtpayController extends Controller
 	 * 收款机续费通知
 	 */
 	public function actionMtposfeeresult(){
+		Helper::writeLog('account1');
 		$data = file_get_contents("php://input");
 		$accountno = $_POST['outTradeNo'];
 		$transactionId = $_POST['transactionId'];
 		$totalFee = $_POST['totalFee'];
-	
+		Helper::writeLog('account2');
 		//订单号查询订单
+		Helper::writeLog('account:'.$accountno);
 		$accountno = substr($accountno, 0, strlen($accountno)-1);// 订单号加类型 组成新订单号
+		Helper::writeLog('account:'.$accountno);
 		$sql = 'select * from nb_poscode_fee_order where trade_no="'.$accountno.'" and delete_flag=0';
 		$posfeeOrder = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$posfeeOrder){
