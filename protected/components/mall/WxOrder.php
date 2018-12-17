@@ -679,6 +679,7 @@ class WxOrder
 			$sql = 'update nb_site_no set status=2 where lid='.$this->siteNoId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
+		$orderArr['reality_total'] = $realityPrice;
 		$orderArr['should_total'] = $orderPrice;
 		$payPrice = $orderPrice;
 		// 现金券
