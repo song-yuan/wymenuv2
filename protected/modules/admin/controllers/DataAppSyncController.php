@@ -387,7 +387,7 @@ class DataAppSyncController extends Controller
 		$posfeeset = PoscodeFee::getPosfeeset($comdpid);
 		if($posfeeset){
 			$randNum = Helper::randNum(2);
-			$orderId = date('YmdHis') . $randNum . '-' . (int)$dpid;
+			$orderId = (int)$dpid.date('YmdHis') . $randNum . '-' . (int)$comdpid;
 			$years = $posfeeset['years'];
 			$amount = $posfeeset['price']*100;
 			
@@ -431,7 +431,6 @@ class DataAppSyncController extends Controller
 		if(!$posfeeOrder){
 			exit;
 		}
-		$orderId = $orderId.$type;// 订单号加类型 组成新订单号
 		$payPrice = $posfeeOrder['total_amount'];
 		if($payChannel==1){
 			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
@@ -455,6 +454,7 @@ class DataAppSyncController extends Controller
 				$code->create();
 			}
 		}elseif($payChannel==3){
+			$orderId = $orderId.$type;// 订单号加类型 组成新订单号
 			//美团
 			if($type==0){
 				// 微信
