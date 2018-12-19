@@ -433,25 +433,27 @@ class DataAppSyncController extends Controller
 		}
 		$payPrice = $posfeeOrder['total_amount'];
 		if($payChannel==1){
-			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
-			$notify = new WxPayNativePay();
-			$input = new WxPayUnifiedOrder();
-			$input->SetBody("续费订单");
-			$input->SetAttach("3");
-			$input->SetOut_trade_no($orderId);
-			$input->SetTotal_fee($payPrice);
-			$input->SetTime_start(date("YmdHis"));
-			$input->SetTime_expire(date("YmdHis", time() + 600));
-			$input->SetGoods_tag("续费订单");
-			$input->SetNotify_url($notifyUrl);
-			$input->SetTrade_type("NATIVE");
-			$input->SetProduct_id($poscode);
-			
-			$result = $notify->GetPayUrl($input);
-			if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
-				$qrCode = $result["code_url"];
-				$code = new QRCode($qrCode);
-				$code->create();
+			if($type==0){
+				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
+				$notify = new WxPayNativePay();
+				$input = new WxPayUnifiedOrder();
+				$input->SetBody("续费订单");
+				$input->SetAttach("3");
+				$input->SetOut_trade_no($orderId);
+				$input->SetTotal_fee($payPrice);
+				$input->SetTime_start(date("YmdHis"));
+				$input->SetTime_expire(date("YmdHis", time() + 600));
+				$input->SetGoods_tag("续费订单");
+				$input->SetNotify_url($notifyUrl);
+				$input->SetTrade_type("NATIVE");
+				$input->SetProduct_id($poscode);
+					
+				$result = $notify->GetPayUrl($input);
+				if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'){
+					$qrCode = $result["code_url"];
+					$code = new QRCode($qrCode);
+					$code->create();
+				}
 			}
 		}elseif($payChannel==3){
 			$orderId = $orderId.$type;// 订单号加类型 组成新订单号

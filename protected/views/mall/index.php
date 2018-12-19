@@ -268,7 +268,13 @@
 		if($product['cate_type']!='2'){
 			$productStr .='<div class="section" id="st'.$product['lid'].'" type="normal"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach ($productLists as $pProduct){
-				if(in_array('0-'.$pProduct['lid'], $proProIdList)){
+				$productId = (int)$pProduct['lid'];
+				$isSet = 0;
+				$promotionId = -1;
+				$toGroup = -1;
+				$canCupon = 0;
+				$cartKey = 'normal-'.$productId.'-0--1--1-0';
+				if(in_array('0-'.$pProduct['lid'], $proProIdList) && !isset($cartList[$cartKey])){
 					continue;
 				}
 				if($this->type==2){
@@ -296,12 +302,6 @@
                 $productStr .='¥<span class="price">'.$pProduct['member_price'].'</span>';
 				$productStr .='</p>';
 				if(!$closeShop){
-					$productId = (int)$pProduct['lid'];
-					$isSet = 0;
-					$promotionId = -1;
-					$toGroup = -1;
-					$canCupon = 0;
-					$cartKey = 'normal-'.$productId.'-0--1--1-0';
 					if(isset($cartList[$cartKey])){
 						$cartItem = $cartList[$cartKey];
 						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
