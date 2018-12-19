@@ -280,6 +280,7 @@ span.oprice {
 	width:0.5rem;
 	font-size: 0.15rem;
 	text-align: center;
+	height: 0.3rem;
 	line-height: 0.3rem;
 	color: red;
 	float:right;
