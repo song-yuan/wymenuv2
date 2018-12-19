@@ -42,6 +42,9 @@ class WxProduct
 			if($category['cate_type']!=2){
 				$sql = 'select * from nb_product where status=0 and is_show=1 and is_show_wx=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by sort asc,lid desc';
 				$categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->queryAll();
+				foreach ($categoryProducts as $key=>$product){
+					$categoryProducts[$key]['taste_groups'] = WxTaste::getProductTastes($product['lid'],$product['dpid']);
+				}
 			}else{
 				$sql = 'select * from nb_product_set where status=0 and is_show=1 and is_show_wx=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by sort asc,lid desc';
 				$categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->queryAll();

@@ -302,30 +302,36 @@
                 $productStr .='¥<span class="price">'.$pProduct['member_price'].'</span>';
 				$productStr .='</p>';
 				if(!$closeShop){
-					if(isset($cartList[$cartKey])){
-						$cartItem = $cartList[$cartKey];
-						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
-						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
-		
-						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="normal_0_'.$productId.'_-1_-1_0">';
-						$cartStr .='<div class="cart-dtl-item-inner">';
-						$cartStr .='<i class="cart-dtl-dot"></i>';
-						$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
-						$cartStr .='<div class="j-item-console cart-dtl-oprt">';
-						$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-						$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
-						$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
-						$cartStr .='</div>';
-						$cartStr .='<span class="cart-dtl-price">¥'.$pProduct['member_price'].'</span>';
-						$cartStr .='</div>';
-						$cartStr .='</div>';
+					if(!empty($pProduct['taste_groups'])){
+						// 有口味
+						$productStr .='<div class="lt-rt"><div class="add-taste">选口味</div></div>';
 					}else{
-						if($pProduct['store_number'] != 0){
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
-							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
+						// 无口味
+						if(isset($cartList[$cartKey])){
+							$cartItem = $cartList[$cartKey];
+							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
+							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
+						
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="normal_0_'.$productId.'_-1_-1_0">';
+							$cartStr .='<div class="cart-dtl-item-inner">';
+							$cartStr .='<i class="cart-dtl-dot"></i>';
+							$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
+							$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+							$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+							$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
+							$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+							$cartStr .='</div>';
+							$cartStr .='<span class="cart-dtl-price">¥'.$pProduct['member_price'].'</span>';
+							$cartStr .='</div>';
+							$cartStr .='</div>';
 						}else{
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
-							$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
+							if($pProduct['store_number'] != 0){
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
+							}else{
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
+							}
 						}
 					}
 				}
@@ -404,7 +410,7 @@
 	}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201712121424">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201712121424">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201812191526">
 <style type="text/css">
 .layui-layer-content img {
 	width: 100%;
