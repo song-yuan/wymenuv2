@@ -322,7 +322,7 @@ class MtOrder
 			array_push($orderCloudArr['nb_order_product'], $orderProduct);
 		}
 		$receiveAddress = $obj->recipientAddress;
-		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$receiveAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->recipientPhone));
+		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$receiveAddress,'mobile'=>$obj->recipientPhone,'tel'=>$obj->backupRecipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		
 		$receiveArr = explode('@#', $receiveAddress);
