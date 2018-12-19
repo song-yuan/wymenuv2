@@ -283,7 +283,7 @@ span.oprice {
 	color: red;
 	float:right;
 	border:1px solid #e5e5e5;
-	border-radius:10px;
+	border-radius:20px;
 	padding: 0.05rem 0.1rem;
 }
 .prt-lt .lt-rt .add-detail {
