@@ -53,7 +53,7 @@ class WxProduct
 				$sql = 'select * from nb_product_set where status=0 and is_show=1 and is_show_wx!=2 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by sort asc,lid desc';
 				$categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->queryAll();
 				foreach ($categoryProducts as $sk=>$set){
-					if(($this->type=='6'&&$product['is_show_wx']=='4')||($this->type=='2'&&$product['is_show_wx']=='3')||$product['is_show_wx']=='2'){
+					if(($this->type=='6'&&$set['is_show_wx']=='4')||($this->type=='2'&&$set['is_show_wx']=='3')||$set['is_show_wx']=='2'){
 						unset($categoryProducts[$key]);
 						continue;
 					}
