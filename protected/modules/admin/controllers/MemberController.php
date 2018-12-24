@@ -469,10 +469,7 @@ class MemberController extends BackendController
 		$id = Yii::app()->request->getParam('id');
 		$papage = Yii::app()->request->getParam('papage');
 		if(!empty($id)) {
-				$model = MemberCard::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
-				if($model) {
-					$model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
-				}
+			$model = MemberCard::model()->deleteAll('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 			$this->redirect(array('member/index' , 'companyId' => $companyId, 'page'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
