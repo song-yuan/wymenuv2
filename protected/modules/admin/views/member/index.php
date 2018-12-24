@@ -96,7 +96,7 @@
 										<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
 										<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
 	                                    <?php endif;?>
-	                                    <!-- <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a> -->
+	                                   <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a>
 									</td>
 								</tr>
 							<?php endforeach;?>
