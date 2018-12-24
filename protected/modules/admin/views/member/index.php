@@ -208,12 +208,25 @@
 		});
         $(".deletememberid").on("click",function(){
                var id = $(this).attr('data-id');
-               msg ='确定要删除该会员吗?';
-	       	   bootbox.confirm(msg, function(result) {
-                   if(result){
-                       location.href="<?php echo $this->createUrl('member/delete',array('companyId' => $this->companyId));?>/id/"+id;
-                   }
-                });
+               var title ='确定要删除该会员吗?';
+               var msg = '删除后会员数据将无法找回！！！';
+	       	   bootbox.confirm({
+       		        title : title,
+       		        message: msg, 
+       		        buttons: {
+       		                 confirm: {
+       		                    label: "确定"
+       		                 },
+       		                 cancel:{
+       		                    label:"取消"
+       		                 }
+       		        }, 
+       				callback: function(result) {
+	                   if(result){
+	                       location.href="<?php echo $this->createUrl('member/delete',array('companyId' => $this->companyId));?>/id/"+id;
+	                   }
+	                }
+	            });
         });
 
 		$('#inExcel').on('click',function(){
