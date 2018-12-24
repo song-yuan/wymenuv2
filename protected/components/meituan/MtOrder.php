@@ -351,7 +351,6 @@ class MtOrder
 		
 		// type 同步类型  2订单
 		$orderData = array('sync_lid'=>0,'dpid'=>$dpid,'type'=>2,'is_pos'=>0,'posLid'=>0,'data'=>json_encode($orderArr));
-		var_dump($orderCloudArr);var_dump($orderData);exit;
 		$orderStr = json_encode($orderData);
 		$orderCloudStr = json_encode($orderCloudArr);
 		
