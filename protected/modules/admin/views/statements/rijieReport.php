@@ -87,7 +87,6 @@
 		               <th><?php echo yii::t('app','微点单');?></th>
 		               <th><?php echo yii::t('app','微外卖');?></th>
 		               <th><?php echo yii::t('app','支付宝');?></th>
-		               <th><?php echo yii::t('app','银联');?></th>
 		               <th><?php echo yii::t('app','会员卡');?></th>
 		               <th><?php echo yii::t('app','微信储值(充)');?></th>
 		               <th><?php echo yii::t('app','微信储值(返)');?></th>
@@ -100,7 +99,7 @@
 		                   <?php endforeach;?>
 		               <th><?php echo yii::t('app','微信现金券');?></th>
 		               <th><?php echo yii::t('app','微信积分');?></th> 
-		               <th><?php echo yii::t('app','退款');?></th>
+		               <th><?php echo yii::t('app','支付方式总和');?></th>
 		
 		            </tr>
 		        </thead>
