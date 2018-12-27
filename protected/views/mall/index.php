@@ -445,7 +445,7 @@
 							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="'.$detailIds.'" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 						
-							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProductSet['member_price'].'" data-category="#st'.$product['lid'].'" data-orderid="normal_1_'.$productId.'_-1_-1_'.$detailIds.'">';
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProductSet['member_price'].'" data-category="#st'.$product['lid'].'" data-orderid="normal_1_'.$productId.'_-1_-1_0_'.$detailIds.'">';
 							$cartStr .='<div class="cart-dtl-item-inner">';
 							$cartStr .='<i class="cart-dtl-dot"></i>';
 							$cartStr .='<p class="cart-goods-name">'.$pProductSet['set_name'].'</p>';
@@ -1389,12 +1389,13 @@ $(document).ready(function(){
         var toGroup = t.attr('to-group');
         var isSet = t.attr('is-set');
         var canCupon = t.attr('can-cupon');
+        var detail = t.attr('detail');
         var storeNum = t.attr('store-number');
         var rand = new Date().getTime();
         
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:detail,rand:rand},
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
@@ -1409,7 +1410,7 @@ $(document).ready(function(){
 			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
 			   	    }
-			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_0"]');
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detail+'"]');
 			        if(cartObj.length > 0){
 				        if(parseInt(t.val()) == 0){
 				        	cartObj.remove();
