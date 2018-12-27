@@ -538,10 +538,11 @@ i {
 	padding:5px 0;
 }
 .group-content .taste-item,.detail-content .detail-item{
-	min-width: 80px;
+	min-width: 20%;
     text-align: center;
     padding: 5px 10px;
 	margin-right: 10px;
+	margin-bottom: 10px;
 	float:left;
 	border:1px solid #E5E5E5;
 }
