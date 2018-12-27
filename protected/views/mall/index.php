@@ -1074,7 +1074,7 @@ $(document).ready(function(){
 					price += parseFloat(detailItem['price']);
 					detailIdStr += detailItem['product_id']+',';
 				}
-				str += '<div class="detail-item '+active+'" detail-id="'+detailItem['product_id']+'" detail-price="'+detailItem['price']+'" detail-name="'+detailItem['product_name']+'">'+detailItem['product_name']+'</div>';
+				str += '<div class="detail-item '+active+'" detail-id="'+detailItem['product_id']+'" detail-price="'+detailItem['price']+'" detail-name="'+detailItem['product_name']+'" detail-number="'+detailItem['number']+'">'+detailItem['product_name']+'</div>';
 			}
 			str += '</div>';
 			str += '</div>';
@@ -1173,11 +1173,11 @@ $(document).ready(function(){
             var detailId = itemObj.attr('detail-id');
             var detailName = itemObj.attr('detail-name');
             var detailPrice = itemObj.attr('detail-price');
-            detailNameStr += detailName+',';
+            var number = itemObj.attr('detail-number');
+            detailNameStr += detailName+'×'+number+' ';
             detailIdStr += detailId+',';
         });
 
-        detailNameStr = detailNameStr.substr(0,detailNameStr.length-1);
         detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
