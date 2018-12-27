@@ -32,7 +32,7 @@ class WxCart
 	}
 	//加入购物车 判断
 	public function isCart(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and is_set=:isSet and promotion_id=:privationPromotionId and to_group=:toGroup and can_cupon=:canCupon';
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and is_set=:isSet and promotion_id=:privationPromotionId and to_group=:toGroup and can_cupon=:canCupon and detail_id=:detailId';
 		$this->cart = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':userId',$this->userId)
@@ -42,6 +42,7 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['promotion_id'])
 					  ->bindValue(':toGroup',$this->productArr['to_group'])
 					  ->bindValue(':canCupon',$this->productArr['can_cupon'])
+					  ->bindValue(':detailId',$this->productArr['detail'])
 					  ->queryRow();
 	}
 	//判断产品库存
@@ -154,29 +155,29 @@ class WxCart
 		if($this->type==2){
 			$hideCate = WxCategory::getHideCate($this->dpid, 2);
 			if(empty($hideCate)){
-				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t.detail_id,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 			}else{
 				$categoryStr = join(',', $hideCate);
-				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t.detail_id,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 			}
 		}elseif($this->type==6){
 			$hideCate = WxCategory::getHideCate($this->dpid, 3);
 			if(empty($hideCate)){
-				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t.detail_id,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 			}else{
 				$categoryStr = join(',', $hideCate);
-				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t.detail_id,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 			}
 		}else{
 			$hideCate = WxCategory::getHideCate($this->dpid, 4);
 			if(empty($hideCate)){
-				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t.detail_id,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 			}else{
 				$categoryStr = join(',', $hideCate);
-				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+				$sql = 'select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t.detail_id,t1.phs_code as pro_code,t1.product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.category_id not in ('.$categoryStr.') and t.user_id=:userId and t.is_set=0 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 			}
 		}
-		$sql .= ' union select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t1.pshs_code as pro_code,t1.set_name as product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=1 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
+		$sql .= ' union select t.lid,t.dpid,t.product_id,t.is_set,t.num,t.promotion_type,t.promotion_id,t.to_group,t.can_cupon,t.detail_id,t1.pshs_code as pro_code,t1.set_name as product_name,t1.main_picture,t1.is_member_discount,t1.member_price,t1.set_price as original_price from nb_cart t,nb_product_set t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.is_set=1 and t1.is_show=1 and t1.is_show_wx=1 and t1.delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
@@ -297,7 +298,6 @@ class WxCart
 						'promotion_detail_id'=>$sentDetail['lid'],
 						'to_group'=>$this->productArr['to_group'],
 						'can_cupon'=>$this->productArr['can_cupon'],
-						'is_sync'=>DataSync::getInitSync(),
 				);
 				$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
 			}
@@ -353,7 +353,7 @@ class WxCart
 	        	'promotion_id'=>$this->productArr['promotion_id'],
 	        	'to_group'=>$this->productArr['to_group'],
 	        	'can_cupon'=>$this->productArr['can_cupon'],
-	        	'is_sync'=>DataSync::getInitSync(),	
+	        	'detail_id'=>$this->productArr['detail']	
 	        );
 			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
 	        if($this->productArr['promotion_type'] == 'buysent'){
@@ -363,8 +363,7 @@ class WxCart
 	        	$success = true;
 	        }
 		}else{
-			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_cart set num=num+1,is_sync='.$isSync.' where lid=:lid and dpid=:dpid';
+			$sql = 'update nb_cart set num=num+1 where lid=:lid and dpid=:dpid';
 			$result = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':lid',$this->cart['lid'])->execute();
@@ -387,8 +386,7 @@ class WxCart
 		$success = false;
 		$time = time();
 		if($this->cart['num'] > 1){
-			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_cart set num=num-1,is_sync='.$isSync.' where lid=:lid and dpid=:dpid';
+			$sql = 'update nb_cart set num=num-1 where lid=:lid and dpid=:dpid';
 			$result = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':lid',$this->cart['lid'])->execute();

@@ -58,37 +58,25 @@
 			$productId = (int)$disable['product_id'];
 			$promotionId = $disable['promotion_id'];
 			$isSet = $disable['is_set'];
-			if($promotionId > 0){
-				$promotionType = $disable['promotion_type'];
-				if($promotionType=='buysent'){
-					$promotionId = (int)$disable['buysent_pro_id'];
-				}
-				$toGroup = $disable['to_group'];
-				$canCupon = $disable['can_cupon'];
-				
-				$cartStr .='<div class="j-fooditem cart-dtl-item disable" data-orderid="'.$promotionType.'_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
-				$cartStr .='<div class="cart-dtl-item-inner">';
-				$cartStr .='<i class="cart-dtl-dot"></i>';
-				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'-'.$disable['msg'].'</p>';
-				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
-				$cartStr .='<span class="cart-delete" lid="'.$disable['lid'].'">删除</span>';
-				$cartStr .='</div>';
-				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
-				$cartStr .='</div></div>';
-			}else{
-				$cartStr .='<div class="j-fooditem cart-dtl-item disable" data-orderid="normal_'.$isSet.'_'.$productId.'_-1_-1_0">';
-				$cartStr .='<div class="cart-dtl-item-inner">';
-				$cartStr .='<i class="cart-dtl-dot"></i>';
-				$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'-'.$disable['msg'].'</p>';
-				$cartStr .='<div class="j-item-console cart-dtl-oprt">';
-				$cartStr .='<span class="cart-delete" lid="'.$disable['lid'].'">删除</span>';
-				$cartStr .='</div>';
-				$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
-				$cartStr .='</div>';
-				$cartStr .='</div>';
+			$promotionType = $disable['promotion_type'];
+			if($promotionType=='buysent'){
+				$promotionId = (int)$disable['buysent_pro_id'];
 			}
+			$toGroup = $disable['to_group'];
+			$canCupon = $disable['can_cupon'];
+			
+			$cartStr .='<div class="j-fooditem cart-dtl-item disable" data-price="0" data-category="#st0" data-orderid="'.$promotionType.'_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+			$cartStr .='<div class="cart-dtl-item-inner">';
+			$cartStr .='<i class="cart-dtl-dot"></i>';
+			$cartStr .='<p class="cart-goods-name">'.$disable['product_name'].'-'.$disable['msg'].'</p>';
+			$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+			$cartStr .='<span class="cart-delete" lid="'.$disable['lid'].'">删除</span>';
+			$cartStr .='</div>';
+			$cartStr .='<span class="cart-dtl-price">¥'.$disable['member_price'].'</span>';
+			$cartStr .='</div></div>';
 		}
 	}
+	
 	// 买送活动
 	if(!empty($buySentPromotions)){
 		foreach ($buySentPromotions as $key=>$buysent){
@@ -137,13 +125,14 @@
 						$promotionId = (int)$sent['buysent_pro_id'];
 						$toGroup = $sent['to_group'];
 						$canCupon = $sent['can_cupon'];
+						$detail = $sent['detail_id'];
 						$cartKey = 'buysent-'.$productId.'-'.$isSet.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
 						if(isset($cartList[$cartKey])){
-							$cartItem = $cartList[$cartKey];
+							$cartItem = $cartList[$cartKey][0];
 							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$sentProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 								
-							$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$sentProduct['price'].'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
 							$cartStr .='<div class="cart-dtl-item-inner">';
 							$cartStr .='<i class="cart-dtl-dot"></i>';
 							$cartStr .='<p class="cart-goods-name">'.$sentProduct['product_name'].'</p>';
@@ -221,11 +210,11 @@
 						$canCupon = $objPro['can_cupon'];
 						$cartKey = 'promotion-'.$productId.'-'.$isSet.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
 						if(isset($cartList[$cartKey])){
-							$cartItem = $cartList[$cartKey];
+							$cartItem = $cartList[$cartKey][0];
 							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" store-number="'.$promotionProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 								
-							$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$promotionProduct['price'].'" data-category="#st-promotion'.$key.'" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
 							$cartStr .='<div class="cart-dtl-item-inner">';
 							$cartStr .='<i class="cart-dtl-dot"></i>';
 							$cartStr .='<p class="cart-goods-name">'.$promotionProduct['product_name'].'</p>';
@@ -266,6 +255,7 @@
 		}
 		$productLists = $product['product_list'];
 		if($product['cate_type']!='2'){
+			// 单品分类
 			$productStr .='<div class="section" id="st'.$product['lid'].'" type="normal"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach ($productLists as $pProduct){
 				$productId = (int)$pProduct['lid'];
@@ -304,15 +294,46 @@
 				if(!$closeShop){
 					if(!empty($pProduct['taste_groups'])){
 						// 有口味
-						$productStr .='<div class="lt-rt"><div class="add-taste">选口味</div></div>';
+						$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-taste" taste="'.urlencode(json_encode($pProduct['taste_groups'])).'">选规格</div></div>';
+						if(isset($cartList[$cartKey])){
+							$cartLists = $cartList[$cartKey];
+							foreach ($cartLists as $cartItem){
+								$tasteStr = $cartItem['detail_id'];
+								$tasteArr = explode(',',$tasteStr);
+								$tasteNames = '';
+								$pPrice = $pProduct['member_price'];
+								foreach ($pProduct['taste_groups'] as $groups){
+									foreach ($groups['tastes'] as $taste){
+										if(in_array($taste['lid'], $tasteArr)){
+											$tasteNames .= $taste['name'].' ';
+											$pPrice += $taste['price'];
+										}
+									}
+								}
+								$pPrice = number_format($pPrice,2);
+								$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st'.$product['lid'].'" data-orderid="normal_0_'.$productId.'_-1_-1_0_'.$tasteStr.'">';
+								$cartStr .='<div class="cart-dtl-item-inner">';
+								$cartStr .='<i class="cart-dtl-dot"></i>';
+								$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
+								$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+								$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+								$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
+								$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+								$cartStr .='</div>';
+								$cartStr .='<span class="cart-dtl-price">¥'.$pPrice.'</span>';
+								$cartStr .='</div>';
+								$cartStr .='<div class="cart-dtl-taste">'.$tasteNames.'</div>';
+								$cartStr .='</div>';
+							}
+						}
 					}else{
 						// 无口味
 						if(isset($cartList[$cartKey])){
-							$cartItem = $cartList[$cartKey];
-							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
+							$cartItem = $cartList[$cartKey][0];
+							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 						
-							$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="normal_0_'.$productId.'_-1_-1_0">';
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['member_price'].'" data-category="#st'.$product['lid'].'" data-orderid="normal_0_'.$productId.'_-1_-1_0_0">';
 							$cartStr .='<div class="cart-dtl-item-inner">';
 							$cartStr .='<i class="cart-dtl-dot"></i>';
 							$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -326,10 +347,10 @@
 							$cartStr .='</div>';
 						}else{
 							if($pProduct['store_number'] != 0){
-								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
 								$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
 							}else{
-								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
 								$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
 							}
 						}
@@ -339,15 +360,20 @@
 			}
 			$productStr .='</div>';
 		}else{
-			// 套餐
+			// 套餐分类
 			$productStr .='<div class="section" id="st'.$product['lid'].'" type="normal"><div class="prt-title">'.$product['category_name']. '</div>';
 			foreach($productLists as $pProductSet){
-				if(in_array('1-'.$pProductSet['lid'], $proProIdList)){
+				$productId = (int)$pProductSet['lid'];
+				$cartKey = 'normal-'.$productId.'-1--1--1-0';
+				if(in_array('1-'.$pProductSet['lid'], $proProIdList) && !isset($cartList[$cartKey])){
 					continue;
 				}
+				
 				if($this->type==2){
 					$pProductSet['member_price'] = $pProductSet['set_price'];
 				}
+				
+				// 套餐详情
 				$pDetail = $pProductSet['detail'];
 				if($pProductSet['main_picture']==''){
 					$pProductSet['main_picture'] = $defaultImg;
@@ -364,46 +390,89 @@
                 $productStr .='¥<span class="price">'.$pProductSet['member_price'].'</span>';
 				$productStr .='</p>';
 				if(!$closeShop){
-					$productId = (int)$pProductSet['lid'];
-					$cartKey = 'normal-'.$productId.'-1--1--1-0';
-					if(isset($cartList[$cartKey])){
-						$cartItem = $cartList[$cartKey];
-						$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
-						$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
-		
-						$cartStr .='<div class="j-fooditem cart-dtl-item" data-orderid="1_'.$productId.'_-1_-1_0">';
-						$cartStr .='<div class="cart-dtl-item-inner">';
-						$cartStr .='<i class="cart-dtl-dot"></i>';
-						$cartStr .='<p class="cart-goods-name">'.$pProductSet['set_name'].'</p>';
-						$cartStr .='<div class="j-item-console cart-dtl-oprt">';
-						$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
-						$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
-						$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
-						$cartStr .='</div>';
-						$cartStr .='<span class="cart-dtl-price">¥'.$pProductSet['member_price'].'</span>';
-						$cartStr .='</div>';
-						$cartStr .='</div>';
+					$hasSelect = false;
+					$detailStr = '';
+					$detailIds = '';
+					foreach($pDetail as $detail){
+						if(count($detail) > 1){
+							$hasSelect = true;
+						}
+						foreach ($detail as $detailItem){
+							if($detailItem['is_select']=='1'){
+								$detailIds .= $detailItem['product_id'].',';
+								$detailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
+							}
+						}
+					}
+					$detailIds = rtrim($detailIds,',');
+					if($hasSelect){
+						$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0"><div class="add-detail" detail="'.urlencode(json_encode($pDetail)).'">选套餐</div></div>';
+						if(isset($cartList[$cartKey])){
+							$cartLists = $cartList[$cartKey];
+							$pPrice = $pProductSet['member_price'];
+							foreach ($cartLists as $cartItem){
+								$detailIds = $cartItem['detail_id'];
+								$detailArr = explode(',',$detailIds);
+								$cdetailStr = '';
+								foreach($pDetail as $detail){
+									foreach ($detail as $detailItem){
+										if(in_array($detailItem['product_id'], $detailArr)){
+											$pPrice += $detailItem['price'];
+											$cdetailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
+										}
+									}
+								}
+								$pPrice = number_format($pPrice,2);
+								$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st'.$product['lid'].'" data-orderid="normal_1_'.$productId.'_-1_-1_0_'.$detailIds.'">';
+								$cartStr .='<div class="cart-dtl-item-inner">';
+								$cartStr .='<i class="cart-dtl-dot"></i>';
+								$cartStr .='<p class="cart-goods-name">'.$pProductSet['set_name'].'</p>';
+								$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+								$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+								$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
+								$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+								$cartStr .='</div>';
+								$cartStr .='<span class="cart-dtl-price">¥'.$pPrice.'</span>';
+								$cartStr .='</div>';
+								$cartStr .='<div class="cart-dtl-taste">'.$cdetailStr.'</div>';
+								$cartStr .='</div>';
+							}
+						}
 					}else{
-						if($pProductSet['store_number'] != 0){
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
-							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
+						if(isset($cartList[$cartKey])){
+							$cartItem = $cartList[$cartKey][0];
+							$detailIds = $cartItem['detail_id'];
+							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="'.$detailIds.'" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
+							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
+						
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProductSet['member_price'].'" data-category="#st'.$product['lid'].'" data-orderid="normal_1_'.$productId.'_-1_-1_'.$detailIds.'">';
+							$cartStr .='<div class="cart-dtl-item-inner">';
+							$cartStr .='<i class="cart-dtl-dot"></i>';
+							$cartStr .='<p class="cart-goods-name">'.$pProductSet['set_name'].'</p>';
+							$cartStr .='<div class="j-item-console cart-dtl-oprt">';
+							$cartStr .='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
+							$cartStr .='<span class="j-item-num foodop-num">'.$cartItem['num'].'</span> ';
+							$cartStr .='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+							$cartStr .='</div>';
+							$cartStr .='<span class="cart-dtl-price">¥'.$pProductSet['member_price'].'</span>';
+							$cartStr .='</div>';
+							$cartStr .='<div class="cart-dtl-taste">'.$detailStr.'</div>';
+							$cartStr .='</div>';
 						}else{
-							$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
-							$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+							if($pProductSet['store_number'] != 0){
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="'.$detailIds.'" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
+							}else{
+								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="'.$detailIds.'" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0">';
+								$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
+							}
 						}
 					}
 				}
 				$productStr .='</div><div class="clear"></div>';
 				// 套餐详情
-				$productStr .='<div class="tips">';
-				foreach($pDetail as $detail){
-					foreach ($detail as $detailItem){
-						if($detailItem['is_select']=='1'){
-							$productStr .=$detailItem['product_name'].'x'.$detailItem['number'].' ';
-						}
-					}
-				}
-				$productStr .='</div></div>';
+				$productStr .='<div class="tips">'.$detailStr.'</div>';
+				$productStr .='</div>';
 			}
 			$productStr .='</div>';
 		}
@@ -412,10 +481,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201712121424">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201812191617">
 <style type="text/css">
-.layui-layer-content img {
-	width: 100%;
-	height: 100%;
-}
 .layui-layer-setwin .layui-layer-close2 {
 	right: -12px;
 }
@@ -435,8 +500,6 @@
 	display: none;
 }
 </style>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
 <?php if(empty($notices)):?>
 <div class="header"><marquee scrolldelay="50">欢迎光临本店:<?php echo $this->company['company_name'];?></marquee></div>
 <?php else:?>
@@ -454,7 +517,7 @@
 <div class="content">
 	<div class="nav-lf">
 		<ul id="nav">
-			
+			<?php echo $navLiStr;?>
 		</ul>
 	</div>
 	
@@ -462,7 +525,7 @@
 		<div id="product-top" class="container-top" style="display:block;">
 			<div><?php echo $topTitle;?></div>
 		</div>
-		
+		<?php echo $productStr;?>
 	</div>
 </div>
 <footer>
@@ -505,6 +568,23 @@
 
 <div id="boll" class="boll"></div>
 
+<div id="taste" class="taste">
+	<div class="taste-content"></div>
+	<div class="taste-bottom">
+		<div class="bottom-content clearfix">
+			<div class="bottom-left left">￥<span class="p-price">0.00</span></div><div class="bottom-right right clearfix"><div class="minus zero"><?php echo $minus;?></div><input type="text" class="result zero" is-set="0" product-id="0" promote-id="-1" to-group="-1" can-cupon="0" store-number="-1" disabled="disabled" value="0"><div class="add"><?php echo $plus;?></div></div>
+		</div>
+	</div>
+</div>
+
+<div id="detail" class="detail">
+	<div class="detail-content"></div>
+	<div class="detail-bottom">
+		<div class="bottom-content clearfix">
+			<div class="bottom-left left">￥<span class="p-price">0.00</span></div><div class="bottom-right right clearfix"><div class="minus zero"><?php echo $minus;?></div><input type="text" class="result zero" is-set="1" product-id="0" promote-id="-1" to-group="-1" can-cupon="0" store-number="-1" disabled="disabled" value="0"><div class="add"><?php echo $plus;?></div></div>
+		</div>
+	</div>
+</div>
 
 <div class="j-mask mask cart-mask" style="display:none;"></div>
 <div id="cart-dtl" class="cart-dtl" style="display:none;">
@@ -518,6 +598,8 @@
 	</div>
 	
 </div>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
 <script> 
 var orderType = '<?php echo $this->type;?>';//订单类型
 var hasclose = false; // 店铺是否休息
@@ -526,35 +608,29 @@ hasclose = true;
 var resMsg = '<?php echo $this->company['rest_message']?$this->company['rest_message']:"店铺休息中....";?>';
 <?php endif;?>
 function setTotal(){ 
-    var s=0;
-    var v=0;
-    var n=0;
-    <!--计算总额--> 
-    $(".lt-rt").each(function(){ 
-    	s+=parseInt($(this).find('input[class*=result]').val())*parseFloat($(this).siblings().find('span[class*=price]:last-child').text()); 
+    var s = 0;
+    var v = 0;
+    <!--计算总额s 计算总份数 v--> 
+    $('.cart-dtl-item').each(function(){ 
+		var num = parseInt($(this).find('.foodop-num').html());
+		var price = parseFloat($(this).attr('data-price'));
+		s += num*price;
+		v += num;
     });
-
-    <!--计算菜种-->
-    $('li').each(function(){
-    	var nIn = $(this).find("a").attr("href");
-	    $(nIn).find("input[type='text']").each(function() {
-	    	if(parseInt($(this).val()) > 0){
-	    		n++;
-	    	}
-	    });
-	    if(n>0){
-    		$(this).find("b").html(n).show();		
+    <!-- 计算菜种n --> 
+	$('li').each(function(){
+		var n = 0;
+		var category = $(this).find('a').attr('href');
+		$('.cart-dtl-item[data-category="'+category+'"]').each(function(){
+			var fnum = parseInt($(this).find('.foodop-num').html());
+			n += fnum;
+		});
+		if(n>0){
+			$(this).find("b").html(n).show();		
 	    }else{
-	    	$(this).find("b").hide();		
+	    	$(this).find("b").html(n).hide();
 	    }
-	    n = 0;	
-    });
-
-    <!--计算总份数-->
-    $("input[type='text']").each(function(){
-    	v += parseInt($(this).val());
-    });
-    
+	});
     $(".share").html(v);
     $("#total").html(s.toFixed(2)); 
     if(orderType==2){
@@ -613,12 +689,8 @@ $(document).ready(function(){
 	var topHeight = $('.top-des').height();
 	var footHeight = $('footer').height();
 	var cHeight = $('body').height()-topHeight-headHeight-footHeight;
-	var navListr = '<?php echo $navLiStr;?>';
-	var productStr = '<?php echo $productStr;?>';
 	$(".content").css({"height" : cHeight+"px","padding-top" : (topHeight+headHeight)+"px"});
-	$('#nav').html(navListr);
 	$('#nav').find('li.current').next().addClass('b-radius-rt');
-	$('#container').append(productStr);
 	setTotal();
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
@@ -631,10 +703,6 @@ $(document).ready(function(){
         $('#nav').find('li').removeClass('current');
         $('#nav').find('li').removeClass('b-radius-rt');
         $('#nav').find('li').removeClass('b-radius-rb');
-
-		// var top = $(href).offset().top;
-		// var height = $(href).outerHeight();
-  //       $('#container').scrollTop(top-40);
 
         if(_this.next().attr('class')==''){
             _this.next().addClass('b-radius-rt');
@@ -649,94 +717,222 @@ $(document).ready(function(){
     });
 
     $('#container').scroll(function(){
-		// alert(isScroll);
 	    var ptHeight = $('.prt-title').outerHeight();
 	    $('.section').each(function(){
-		if(isScroll){
-			isScroll = false;
-			return false;
-		}
-			// alert(isScroll);
-    	var id = $(this).attr('id');
-        var top = $(this).offset().top;
-        var height = $(this).outerHeight(); //div.section,,,height, padding, border
-        if(top <= ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) >= 0){
-            $('a[href=#'+id+']').parents('ul').find('li').removeClass('b-radius-rt');
-            $('a[href=#'+id+']').parents('ul').find('li').removeClass('b-radius-rb');
-    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
-            if($('a[href=#'+id+']').parent('li').next().attr('class')==''){
-                $('a[href=#'+id+']').parent('li').next().addClass('b-radius-rt');
-            }
-            if ($('a[href=#'+id+']').parent('li').prev().attr('class')=='') {
-                $('a[href=#'+id+']').parent('li').prev().addClass('b-radius-rb');
-            }
-        	$('a[href=#'+id+']').parent('li').addClass('current');
-        	var pName = $('a[href=#'+id+']').parent('li').find('a span.nav-span').html();
-        	var desc = $('a[href=#'+id+']').parent('li').attr('abstract');
-            $('#product-top').find('div').html(pName+desc);
-        	var index = $('a[href=#'+id+']').parent('li').index();
-        	var length = $('a[href=#'+id+']').parent('li').parent('ul').find('li').size();
-        	var height = $('#nav').outerHeight();
-        	if(index==0){
-        	// alert("index"+index);
-				$('#nav').parent().scrollTop(0);
-        	}
-        	if(index!=0&&(index/length)>0.06&&(index/length)<0.2){
-        	// alert(index/length);
-				$('#nav').parent().scrollTop(60);
-        	}
-        	if(index!=0&&(index/length)>0.2&&(index/length)<0.6){
-        	// alert(index/length);
-				$('#nav').parent().scrollTop(120);
-        	}
-        	if(index!=0&&(index/length)>0.6){
-        	// alert(index/length);
-				$('#nav').parent().scrollTop(height);
-        	}
-        	return false;
-        }else{
-        	var pName = $('#nav').find('li.current').find('a span.nav-span').html();
-            var desc = $('#nav').find('li.current').attr('abstract');
-            $('#product-top').find('div').html(pName+desc);
-        }
-    });
-   
-});
-
-
-    $('#container').on('touchstart','.add',function(){
-    	var height = $('body').height();
-    	var top = $(this).offset().top;
-    	var left = $(this).offset().left;
-		
+			if(isScroll){
+				isScroll = false;
+				return false;
+			}
+	    	var id = $(this).attr('id');
+	        var top = $(this).offset().top;
+	        var height = $(this).outerHeight(); //div.section,,,height, padding, border
+	        if(top <= ptHeight && (parseInt(top) + parseInt(height) - parseInt(ptHeight)) >= 0){
+	            $('a[href=#'+id+']').parents('ul').find('li').removeClass('b-radius-rt');
+	            $('a[href=#'+id+']').parents('ul').find('li').removeClass('b-radius-rb');
+	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
+	            if($('a[href=#'+id+']').parent('li').next().attr('class')==''){
+	                $('a[href=#'+id+']').parent('li').next().addClass('b-radius-rt');
+	            }
+	            if ($('a[href=#'+id+']').parent('li').prev().attr('class')=='') {
+	                $('a[href=#'+id+']').parent('li').prev().addClass('b-radius-rb');
+	            }
+	        	$('a[href=#'+id+']').parent('li').addClass('current');
+	        	var pName = $('a[href=#'+id+']').parent('li').find('a span.nav-span').html();
+	        	var desc = $('a[href=#'+id+']').parent('li').attr('abstract');
+	            $('#product-top').find('div').html(pName+desc);
+	        	var index = $('a[href=#'+id+']').parent('li').index();
+	        	var length = $('a[href=#'+id+']').parent('li').parent('ul').find('li').size();
+	        	var height = $('#nav').outerHeight();
+	        	if(index==0){
+					$('#nav').parent().scrollTop(0);
+	        	}
+	        	if(index!=0&&(index/length)>0.06&&(index/length)<0.2){
+					$('#nav').parent().scrollTop(60);
+	        	}
+	        	if(index!=0&&(index/length)>0.2&&(index/length)<0.6){
+					$('#nav').parent().scrollTop(120);
+	        	}
+	        	if(index!=0&&(index/length)>0.6){
+					$('#nav').parent().scrollTop(height);
+	        	}
+	        	return false;
+	        }else{
+	        	var pName = $('#nav').find('li.current').find('a span.nav-span').html();
+	            var desc = $('#nav').find('li.current').attr('abstract');
+	            $('#product-top').find('div').html(pName+desc);
+	        }
+	    });
+	   
+	});
+	// 选口味
+    $('#container').on('click','.add-taste',function(){
+        var price = 0;
+    	var taste = decodeURIComponent($(this).attr('taste'));
+		var tasteObj = JSON.parse(taste);
+        var productName = $(this).parents('.lt-ct').find('.name').html();
+        var productPrice = $(this).parents('.lt-ct').find('.price').html();
+        var parSec = $(this).parents('.section');
     	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
-        var promoteType = $(this).parents('.section').attr('type');
+        var secId = parSec.attr('id');;
+        var promoteType = parSec.attr('type');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
         var canCupon = t.attr('can-cupon');
         var isSet = t.attr('is-set');
+        $('#taste').attr('cate-type',secId);
+        $('#taste').attr('type',promoteType);
+        $('#taste').attr('p-price',productPrice);
+        $('#taste').attr('p-name',productName);
+        var ti = $('#taste').find('input[class*=result]');
+        ti.attr('product-id',productId);
+        ti.attr('promote-id',promoteId);
+        ti.attr('to-group',toGroup);
+        ti.attr('can-cupon',canCupon);
+        ti.attr('is-set',isSet);
+
+        price += parseFloat(productPrice);
+		var str = '';
+		var tasteIdStr = '';
+		for(var i in tasteObj){
+			var tasteGroup = tasteObj[i];
+			var tasteItems = tasteGroup['tastes'];
+			str += '<div class="taste-group">';
+			str += '<div class="group-title">'+tasteGroup['name']+'</div>';
+			str += '<div class="group-content clearfix">';
+			for(var j in tasteItems){
+				var tasteItem = tasteItems[j];
+				var active = '';
+				if(tasteItem['is_selected']=='1'){
+					active = 'taste-item-active';
+					price += parseFloat(tasteItem['price']);
+					tasteIdStr += tasteItem['lid']+',';
+				}
+				str += '<div class="taste-item '+active+'" taste-id="'+tasteItem['lid']+'" taste-price="'+tasteItem['price']+'" taste-name="'+tasteItem['name']+'">'+tasteItem['name']+'</div>';
+			}
+			str += '</div>';
+			str += '</div>';
+		}
+		tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
+		
+		$('#taste').find('.taste-content').html(str);
+		$('#taste').find('.p-price').html(price.toFixed(2));
+
+		var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+tasteIdStr+'"]');
+		if(cartObj.length > 0){
+	        var num = cartObj.find('.foodop-num').html();
+	        ti.val(num);
+	        ti.removeClass('zero');
+	        $('#taste').find('.minus').removeClass('zero');
+        }else{
+        	ti.val(0);
+        	ti.addClass('zero');
+        	$('#taste').find('.minus').addClass('zero'); 
+	    }
+		layer.open({
+		    type: 1,
+		    title: productName,
+		    shadeClose: true,
+		    area: ['100%','60%'],
+		    content:$('#taste')
+		});
+    });
+	// 选择规格
+    $('#taste').on('click','.taste-item',function(){
+        if(!$(this).hasClass('taste-item-active')){
+            var price = 0;
+            var parObj = $(this).parents('.taste');
+            var secId = parObj.attr('cate-type');;
+            var promoteType = parObj.attr('type');
+            var t = parObj.find('input[class*=result]');
+            var productId = t.attr('product-id');
+            var promoteId = t.attr('promote-id');
+            var toGroup = t.attr('to-group');
+            var canCupon = t.attr('can-cupon');
+            var isSet = t.attr('is-set');
+            
+            var pprice = $('#taste').attr('p-price');
+            $(this).parents('.taste-group').find('.taste-item-active').removeClass('taste-item-active');
+            $(this).addClass('taste-item-active');
+            price += parseFloat(pprice);
+            
+            var tasteIdStr = '';
+            parObj.find('.taste-item-active').each(function(){
+            	var tasteId = $(this).attr('taste-id');
+				var tprice = $(this).attr('taste-price');
+				price += parseFloat(tprice);
+				tasteIdStr += tasteId+',';
+			});
+            tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
+			$('#taste').find('.p-price').html(price.toFixed(2));
+			var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+tasteIdStr+'"]');
+	        if(cartObj.length > 0){
+		        var num = cartObj.find('.foodop-num').html();
+		        t.val(num);
+		        t.removeClass('zero');
+		        parObj.find('.minus').removeClass('zero');
+	        }else{
+        	 	t.val(0);
+		        t.addClass('zero');
+		        parObj.find('.minus').addClass('zero'); 
+		    }
+			
+        }
+    });
+    // 规格添加产品
+    $('#taste').on('touchstart','.add',function(){
+    	var height = $('body').height();
+    	var top = $(this).offset().top;
+    	var left = $(this).offset().left;
+
+		var parObj = $(this).parents('.taste');
+        var secId = parObj.attr('cate-type');;
+        var promoteType = parObj.attr('type');
+        var t = parObj.find('input[class*=result]');
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
+        var canCupon = t.attr('can-cupon');
+        var isSet = t.attr('is-set');
+        var storeNum = t.attr('store-number');
         var rand = new Date().getTime();
-        
+
+        var tasteNameStr = '';
+        var tasteIdStr = '';
+        $('#taste').find('.taste-group').each(function(){
+            var itemObj = $(this).find('.taste-item-active');
+            if(itemObj.length==0){
+                layer.msg('请先选择规格!!!');
+                return;
+            }
+            var tasteId = itemObj.attr('taste-id');
+            var tasteName = itemObj.attr('taste-name');
+            var tastePrice = itemObj.attr('taste-price');
+            tasteNameStr += tasteName+',';
+            tasteIdStr += tasteId+',';
+        });
+
+        tasteNameStr = tasteNameStr.substr(0,tasteNameStr.length-1);
+        tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:tasteIdStr,rand:rand},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
 			        if(parseInt(t.val()) > 0){
-			            t.siblings(".minus").show();
-			            t.show();
+			            t.siblings(".minus").removeClass('zero');
+			            t.removeClass('zero');;
 			        }
-			        var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+tasteIdStr+'"]');
 			        if(cartObj.length > 0){
 			        	cartObj.find('.foodop-num').html(t.val());
 			        }else{
-				        var pName = parObj.find('.name').html();
-				        var pPrice = parObj.find('.price').html();
+				        var pPrice =  parObj.attr('p-price');
+				        var pName = parObj.attr('p-name');
 				        var cartStr = '';
-					    cartStr +='<div class="j-fooditem cart-dtl-item" data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'">';
+					    cartStr +='<div class="j-fooditem cart-dtl-item" data-price="'+pPrice+'" data-category="#'+secId+'" data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+tasteIdStr+'">';
         				cartStr +='<div class="cart-dtl-item-inner">';
         				cartStr +='<i class="cart-dtl-dot"></i>';
         				cartStr +='<p class="cart-goods-name">'+ pName +'</p>';
@@ -747,6 +943,7 @@ $(document).ready(function(){
         				cartStr +='</div>';
         				cartStr +='<span class="cart-dtl-price">¥'+pPrice+'</span>';
         				cartStr +='</div>';
+        				cartStr +='<div class="cart-dtl-taste">'+tasteNameStr+'</div>';
         				cartStr +='</div>';
         				$('.j-cart-dtl-list-inner').append(cartStr);
 			        }
@@ -761,7 +958,7 @@ $(document).ready(function(){
 						curvature: 0.005,
 						duration: 500,
 						callback:function(){
-							$('#boll'+j).css('display','none');
+							$('#boll'+j).remove();
 							j++;
 						},
 						stepCallback:function(x,y){
@@ -771,14 +968,418 @@ $(document).ready(function(){
 					bool.start();
 					i++;
         		}else{
-        			$('#boll'+(i-1)).css('display','none');
+        			$('#boll'+(i-1)).remove();
         			layer.msg(msg.msg);
         		}
         	},
         	dataType:'json'
         });
     });
-     
+	// 规格减少产品
+	$('#taste').on('touchstart','.minus',function(){ 
+		var parObj = $(this).parents('.taste');
+        var secId = parObj.attr('cate-type');;
+        var promoteType = parObj.attr('type');
+        var t = parObj.find('input[class*=result]');
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
+        var canCupon = t.attr('can-cupon');
+        var isSet = t.attr('is-set');
+        var storeNum = t.attr('store-number');
+        var rand = new Date().getTime();
+
+        var tasteIdStr = '';
+        $('#taste').find('.taste-group').each(function(){
+            var itemObj = $(this).find('.taste-item-active');
+            var tasteId = itemObj.attr('taste-id');
+            tasteIdStr += tasteId+',';
+        });
+        tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
+        
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:tasteIdStr,rand:rand},
+        	success:function(msg){
+        		if(msg.status){
+    			  if(parseInt(t.val())==1){
+			          t.siblings(".minus").addClass('zero');
+			          t.addClass('zero');
+			          if(parseInt(storeNum)==0){
+			          	t.siblings(".add").addClass('zero');
+			          	t.siblings(".sale-out").removeClass('zero');
+			          }
+			       }
+			       t.val(parseInt(t.val())-1);
+			       if(parseInt(t.val()) < 0){ 
+			           t.val(0); 
+			   	    }
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+tasteIdStr+'"]');
+			        if(cartObj.length > 0){
+				        if(parseInt(t.val()) == 0){
+				        	cartObj.remove();
+					    }else{
+					    	cartObj.find('.foodop-num').html(t.val());
+						}
+			        }
+			    	setTotal(); 
+        		}else{
+        			layer.msg(msg.msg);
+        		}
+        	},
+        	dataType:'json'
+        });
+    });
+    // 选套餐
+    $('#container').on('click','.add-detail',function(){
+    	var price = 0;
+    	var detail = decodeURIComponent($(this).attr('detail'));
+		var detailObj = JSON.parse(detail);
+        var productName = $(this).parents('.lt-ct').find('.name').html();
+        var productPrice = $(this).parents('.lt-ct').find('.price').html();
+        var parSec = $(this).parents('.section');
+    	var parObj = $(this).parents('.prt-lt');
+        var t = parObj.find('input[class*=result]');
+        var secId = parSec.attr('id');;
+        var promoteType = parSec.attr('type');
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
+        var canCupon = t.attr('can-cupon');
+        var isSet = t.attr('is-set');
+        $('#detail').attr('cate-type',secId);
+        $('#detail').attr('type',promoteType);
+        $('#detail').attr('p-price',productPrice);
+        $('#detail').attr('p-name',productName);
+        var ti = $('#detail').find('input[class*=result]');
+        ti.attr('product-id',productId);
+        ti.attr('promote-id',promoteId);
+        ti.attr('to-group',toGroup);
+        ti.attr('can-cupon',canCupon);
+        ti.attr('is-set',isSet);
+
+        price += parseFloat(productPrice);
+		var str = '';
+		var detailIdStr = '';
+		for(var i in detailObj){
+			var detailItems = detailObj[i];
+			str += '<div class="detail-group">';
+			str += '<div class="group-title">选择一个</div>';
+			str += '<div class="group-content clearfix">';
+			for(var j in detailItems){
+				var detailItem = detailItems[j];
+				var active = '';
+				if(detailItem['is_select']=='1'){
+					active = 'detail-item-active';
+					price += parseFloat(detailItem['price']);
+					detailIdStr += detailItem['product_id']+',';
+				}
+				str += '<div class="detail-item '+active+'" detail-id="'+detailItem['product_id']+'" detail-price="'+detailItem['price']+'" detail-name="'+detailItem['product_name']+'">'+detailItem['product_name']+'</div>';
+			}
+			str += '</div>';
+			str += '</div>';
+		}
+		detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
+
+		$('#detail').find('.detail-content').html(str);
+		$('#detail').find('.p-price').html(price.toFixed(2));
+
+		var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'"]');
+		if(cartObj.length > 0){
+	        var num = cartObj.find('.foodop-num').html();
+	        ti.val(num);
+	        ti.removeClass('zero');
+	        $('#detail').find('.minus').removeClass('zero');
+        }else{
+        	ti.val(0);
+        	ti.addClass('zero');
+        	$('#detail').find('.minus').addClass('zero'); 
+	    }
+		layer.open({
+		    type: 1,
+		    title: productName,
+		    shadeClose: true,
+		    area: ['100%','60%'],
+		    content:$('#detail')
+		});        
+    });
+   	// 套餐选择
+    $('#detail').on('click','.detail-item',function(){
+    	if(!$(this).hasClass('detail-item-active')){
+            var price = 0;
+            var parObj = $(this).parents('.detail');
+            var secId = parObj.attr('cate-type');;
+            var promoteType = parObj.attr('type');
+            var t = parObj.find('input[class*=result]');
+            var productId = t.attr('product-id');
+            var promoteId = t.attr('promote-id');
+            var toGroup = t.attr('to-group');
+            var canCupon = t.attr('can-cupon');
+            var isSet = t.attr('is-set');
+            
+            var pprice = $('#detail').attr('p-price');
+            $(this).parents('.detail-group').find('.detail-item-active').removeClass('detail-item-active');
+            $(this).addClass('detail-item-active');
+            price += parseFloat(pprice);
+            
+            var detailIdStr = '';
+            parObj.find('.detail-item-active').each(function(){
+            	var detailId = $(this).attr('detail-id');
+				var tprice = $(this).attr('detail-price');
+				price += parseFloat(tprice);
+				detailIdStr += detailId+',';
+			});
+            detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
+			$('#detail').find('.p-price').html(price.toFixed(2));
+			var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'"]');
+	        if(cartObj.length > 0){
+		        var num = cartObj.find('.foodop-num').html();
+		        t.val(num);
+		        t.removeClass('zero');
+		        parObj.find('.minus').removeClass('zero');
+	        }else{
+        	 	t.val(0);
+		        t.addClass('zero');
+		        parObj.find('.minus').addClass('zero'); 
+		    }
+        }     	
+    });
+    // 套餐添加产品
+    $('#detail').on('touchstart','.add',function(){
+    	var height = $('body').height();
+    	var top = $(this).offset().top;
+    	var left = $(this).offset().left;
+
+		var parObj = $(this).parents('.detail');
+        var secId = parObj.attr('cate-type');;
+        var promoteType = parObj.attr('type');
+        var t = parObj.find('input[class*=result]');
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
+        var canCupon = t.attr('can-cupon');
+        var isSet = t.attr('is-set');
+        var storeNum = t.attr('store-number');
+        var rand = new Date().getTime();
+
+        var detailNameStr = '';
+        var detailIdStr = '';
+        $('#detail').find('.detail-group').each(function(){
+            var itemObj = $(this).find('.detail-item-active');
+            if(itemObj.length==0){
+                layer.msg('请先选择一个产品!!!');
+                return;
+            }
+            var detailId = itemObj.attr('detail-id');
+            var detailName = itemObj.attr('detail-name');
+            var detailPrice = itemObj.attr('detail-price');
+            detailNameStr += detailName+',';
+            detailIdStr += detailId+',';
+        });
+
+        detailNameStr = detailNameStr.substr(0,detailNameStr.length-1);
+        detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:detailIdStr,rand:rand},
+        	success:function(msg){
+        		if(msg.status){
+        			t.val(parseInt(t.val())+1);
+			        if(parseInt(t.val()) > 0){
+			            t.siblings(".minus").removeClass('zero');
+			            t.removeClass('zero');
+			        }
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'"]');
+			        if(cartObj.length > 0){
+			        	cartObj.find('.foodop-num').html(t.val());
+			        }else{
+				        var pPrice =  parObj.attr('p-price');
+				        var pName = parObj.attr('p-name');
+				        var cartStr = '';
+					    cartStr +='<div class="j-fooditem cart-dtl-item" data-price="'+pPrice+'" data-category="#'+secId+'" data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'">';
+        				cartStr +='<div class="cart-dtl-item-inner">';
+        				cartStr +='<i class="cart-dtl-dot"></i>';
+        				cartStr +='<p class="cart-goods-name">'+ pName +'</p>';
+        				cartStr +='<div class="j-item-console cart-dtl-oprt">';
+        				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
+        				cartStr +='<span class="j-item-num foodop-num">1</span> ';
+        				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+        				cartStr +='</div>';
+        				cartStr +='<span class="cart-dtl-price">¥'+pPrice+'</span>';
+        				cartStr +='</div>';
+        				cartStr +='<div class="cart-dtl-taste">'+detailNameStr+'</div>';
+        				cartStr +='</div>';
+        				$('.j-cart-dtl-list-inner').append(cartStr);
+			        }
+			        setTotal();
+			        //动画
+			        var str = '<div id="boll'+i+'" class="boll"></div>';
+			    	$('body').append(str);
+			    	$('#boll'+i).css({top:top,left:left,display:"block"});
+			    	var bool = new Parabola({
+						el: "#boll"+i,
+						offset: [-left+10, height-top-25],
+						curvature: 0.005,
+						duration: 500,
+						callback:function(){
+							$('#boll'+j).remove();
+							j++;
+						},
+						stepCallback:function(x,y){
+						}
+					});
+					
+					bool.start();
+					i++;
+        		}else{
+        			$('#boll'+(i-1)).remove();
+        			layer.msg(msg.msg);
+        		}
+        	},
+        	dataType:'json'
+        });   	
+    });
+    // 套餐减少产品
+    $('#detail').on('touchstart','.minus',function(){ 
+    		var parObj = $(this).parents('.detail');
+            var secId = parObj.attr('cate-type');;
+            var promoteType = parObj.attr('type');
+            var t = parObj.find('input[class*=result]');
+            var productId = t.attr('product-id');
+            var promoteId = t.attr('promote-id');
+            var toGroup = t.attr('to-group');
+            var canCupon = t.attr('can-cupon');
+            var isSet = t.attr('is-set');
+            var storeNum = t.attr('store-number');
+            var rand = new Date().getTime();
+
+            var detailIdStr = '';
+            $('#detail').find('.detail-group').each(function(){
+                var itemObj = $(this).find('.detail-item-active');
+                var detailId = itemObj.attr('detail-id');
+                detailIdStr += detailId+',';
+            });
+            detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
+            
+            $.ajax({
+            	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
+            	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:detailIdStr,rand:rand},
+            	success:function(msg){
+            		if(msg.status){
+        			  if(parseInt(t.val())==1){
+    			          t.siblings(".minus").addClass('zero');
+    			          t.addClass('zero');
+    			          if(parseInt(storeNum)==0){
+    			          	t.siblings(".add").addClass('zero');
+    			          	t.siblings(".sale-out").removeClass('zero');
+    			          }
+    			       }
+    			       t.val(parseInt(t.val())-1);
+    			       if(parseInt(t.val()) < 0){ 
+    			           t.val(0); 
+    			   	    }
+    			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'"]');
+    			        if(cartObj.length > 0){
+    				        if(parseInt(t.val()) == 0){
+    				        	cartObj.remove();
+    					    }else{
+    					    	cartObj.find('.foodop-num').html(t.val());
+    						}
+    			        }
+    			    	setTotal(); 
+            		}else{
+            			layer.msg(msg.msg);
+            		}
+            	},
+            	dataType:'json'
+            });
+     });
+    // 添加产品
+    $('#container').on('touchstart','.add',function(){
+    	var height = $('body').height();
+    	var top = $(this).offset().top;
+    	var left = $(this).offset().left;
+
+		var parSec = $(this).parents('.section');
+    	var parObj = $(this).parents('.prt-lt');
+        var t = parObj.find('input[class*=result]');
+        var secId = parSec.attr('id');;
+        var promoteType = parSec.attr('type');
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
+        var canCupon = t.attr('can-cupon');
+        var isSet = t.attr('is-set');
+        var detail = t.attr('detail');
+        var rand = new Date().getTime();
+        
+        var detailStr = '';
+        if(isSet=='1'){
+        	detailStr = parObj.find('.tips').html();
+        }
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
+        	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:detail,rand:rand},
+        	success:function(msg){
+        		if(msg.status){
+        			 t.val(parseInt(t.val())+1);
+			        if(parseInt(t.val()) > 0){
+			            t.siblings(".minus").removeClass('zero');
+			            t.removeClass('zero');
+			        }
+			        var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detail+'"]');
+			        if(cartObj.length > 0){
+			        	cartObj.find('.foodop-num').html(t.val());
+			        }else{
+				        var pName = parObj.find('.name').html();
+				        var pPrice = parObj.find('.price').html();
+				        var cartStr = '';
+					    cartStr +='<div class="j-fooditem cart-dtl-item" data-price="'+pPrice+'" data-category="#'+secId+'" data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detail+'">';
+        				cartStr +='<div class="cart-dtl-item-inner">';
+        				cartStr +='<i class="cart-dtl-dot"></i>';
+        				cartStr +='<p class="cart-goods-name">'+ pName +'</p>';
+        				cartStr +='<div class="j-item-console cart-dtl-oprt">';
+        				cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>'; 
+        				cartStr +='<span class="j-item-num foodop-num">1</span> ';
+        				cartStr +='<a class="j-remove-item remove-food" href="javascript:void(0);"><span class="icon i-remove-food">-</span></a>';
+        				cartStr +='</div>';
+        				cartStr +='<span class="cart-dtl-price">¥'+pPrice+'</span>';
+        				cartStr +='</div>';
+        				if(detailStr!=''){
+        					cartStr +='<div class="cart-dtl-taste">'+detailStr+'</div>';
+            			}
+        				cartStr +='</div>';
+        				$('.j-cart-dtl-list-inner').append(cartStr);
+			        }
+			        setTotal();
+			        //动画
+			        var str = '<div id="boll'+i+'" class="boll"></div>';
+			    	$('body').append(str);
+			    	$('#boll'+i).css({top:top,left:left,display:"block"});
+			    	var bool = new Parabola({
+						el: "#boll"+i,
+						offset: [-left+10, height-top-25],
+						curvature: 0.005,
+						duration: 500,
+						callback:function(){
+							$('#boll'+j).remove();
+							j++;
+						},
+						stepCallback:function(x,y){
+						}
+					});
+					
+					bool.start();
+					i++;
+        		}else{
+        			$('#boll'+(i-1)).remove();
+        			layer.msg(msg.msg);
+        		}
+        	},
+        	dataType:'json'
+        });
+    });
+    // 减少产品
     $('#container').on('touchstart','.minus',function(){ 
     	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
@@ -797,18 +1398,18 @@ $(document).ready(function(){
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
-			          t.siblings(".minus").hide();
-			          t.hide();
+			          t.siblings(".minus").addClass('zero');
+			          t.addClass('zero');
 			          if(parseInt(storeNum)==0){
-			          	t.siblings(".add").hide();
-			          	t.siblings(".sale-out").show();
+			          	t.siblings(".add").addClass('zero');
+			          	t.siblings(".sale-out").removeClass('zero');
 			          }
 			       }
 			       t.val(parseInt(t.val())-1);
 			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
 			   	    }
-			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
+			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_0"]');
 			        if(cartObj.length > 0){
 				        if(parseInt(t.val()) == 0){
 				        	cartObj.remove();
@@ -824,6 +1425,7 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
+	// 购物车增加菜品
    $('.j-cart-dtl-list-inner').on('click','.add-food',function(){
         var parentObj = $(this).parents('.cart-dtl-item');
         var dataId = parentObj.attr('data-orderid');
@@ -835,30 +1437,29 @@ $(document).ready(function(){
         var promoteId = dataArr[3];
         var toGroup = dataArr[4];
         var canCupon = dataArr[5];
-        
-        var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
+        var detail = dataArr[6];
         var rand = new Date().getTime();
+
+        var cartObj = $('.cart-dtl-item[data-orderid="'+promotionType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detail+'"]');
+        var t = $('.prt-lt').find('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
         
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-        	data:{productId:productId,promoteType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
+        	data:{productId:productId,promoteType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:detail,rand:rand},
         	success:function(msg){
         		if(msg.status){
-        			 t.val(parseInt(t.val())+1);
-			        if(parseInt(t.val()) > 0){
-			            t.siblings(".minus").show();
-			            t.show();
-			        }
-			        var cartObj = $('.cart-dtl-item[data-orderid="'+promotionType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
+            		var num = cartObj.find('.foodop-num').html();
 			        if(cartObj.length > 0){
-			        	cartObj.find('.foodop-num').html(t.val());
+			        	cartObj.find('.foodop-num').html(parseInt(num)+1);
 			        }
+			        t.val(parseInt(num)+1);
 			        setTotal();
         		}
         	},
         	dataType:'json'
         });
     });
+	// 购物车减少菜品
     $('.j-cart-dtl-list-inner').on('click','.remove-food',function(){
        var parentObj = $(this).parents('.cart-dtl-item');
        var dataId = parentObj.attr('data-orderid');
@@ -870,38 +1471,41 @@ $(document).ready(function(){
        var promoteId = dataArr[3];
        var toGroup = dataArr[4];
        var canCupon = dataArr[5];
+       var tastes = dataArr[6];
        
-       var t = $('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
+       var cartObj = $('.cart-dtl-item[data-orderid="'+promotionType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+tastes+'"]');
+       var t = $('.prt-lt').find('input[class*=result][is-set="'+isSet+'"][product-id="'+productId+'"][promote-id="'+promoteId+'"][to-group="'+toGroup+'"][can-cupon="'+canCupon+'"]');
        var storeNum = t.attr('store-number');
        var rand = new Date().getTime();
        $.ajax({
 	       	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
-	       	data:{productId:productId,promoteType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,rand:rand},
+	       	data:{productId:productId,promoteType:promotionType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:tastes,rand:rand},
 	       	success:function(msg){
 	       		if(msg.status){
-	   			  if(parseInt(t.val())==1){
-			          t.siblings(".minus").hide();
-			          t.hide();
-			          if(parseInt(storeNum)==0){
-			          	t.siblings(".add").hide();
-			          	t.siblings(".sale-out").show();
-			          }
-			       }
-			       t.val(parseInt(t.val())-1);
-			       if(parseInt(t.val()) < 0){ 
-			           t.val(0); 
-			   	    }
-			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promotionType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'"]');
-			        if(cartObj.length > 0){
-				        if(parseInt(t.val()) == 0){
+		       		var num = cartObj.find('.foodop-num').html();
+	       			if(cartObj.length > 0){
+				        if(parseInt(num) == 1){
 				        	if($('.cart-dtl-item').length == 1){
 				        		$('.ft-lt').trigger('click');
 				        	}
 				        	cartObj.remove();
 					    }else{
-					    	cartObj.find('.foodop-num').html(t.val());
+					    	cartObj.find('.foodop-num').html(parseInt(num)-1);
 						}
+						
 			        }
+			        if(parseInt(num)<0){
+			        	t.val(0); 
+				    }else if(parseInt(num)==1){
+			          	t.siblings(".minus").addClass('zero');
+			          	t.addClass('zero');
+			          	if(parseInt(storeNum)==0){
+				          	t.siblings(".add").addClass('zero');
+				          	t.siblings(".sale-out").removeClass('zero');
+			          	}
+			       	}else{
+				       	t.val(parseInt(num)-1);
+				    }
 			    	setTotal(); 
 	       		}else{
 	       			layer.msg(msg.msg);
@@ -910,14 +1514,15 @@ $(document).ready(function(){
 	       	dataType:'json'
        });
     });
+	// 清空购物车
     $('.j-cart-dusbin').on('click',function(){
         $.ajax({
         	url:"<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'all'=>1));?>",
         	success:function(msg){
         		if(msg){
             		$('input.result').each(function(){
-                		$(this).hide();
-                		$(this).parent().find('.minus').hide();
+                		$(this).addClass('zero');
+                		$(this).parent().find('.minus').addClass('zero');
                 		$(this).val(0);
                 	});
             		$('.ft-lt').trigger('click');
@@ -929,6 +1534,7 @@ $(document).ready(function(){
         	},
         });
     });
+    // 删除购物车产品
     $('.j-cart-dtl-list-inner').on('click','.cart-delete',function(){ 
 		var _this = $(this);
 	  	var lid = _this.attr('lid');

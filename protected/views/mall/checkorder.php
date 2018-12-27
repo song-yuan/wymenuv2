@@ -181,59 +181,44 @@
 	    -->
 	    <?php 
 	    	$pprice = $model['price'];
-	    	$tasteHtml = ''; //可选口味的html
-	    	$prosetHtml = '';// 可选套餐的html
+	    	$tasteHtml = '';// 已选口味html
+	    	$prosetHtml = '';// 已选套餐的html
+	    	$detailArr = explode(',', $model['detail_id']);
 	    	// 单品口味详情
 	    	if(isset($model['taste_groups'])&&!empty($model['taste_groups'])){
-	    		$tasteHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'">';
 	    		$tdesc = '';
 	    		foreach($model['taste_groups'] as $k=>$groups){
 	    			$tvalue = 0;
-	    			$tasteHtml .= '<div class="item-group">'.$groups['name'].'</div>';
-	    			$tasteHtml .= '<div class="item-group">';
 	    			foreach($groups['tastes'] as $tk=>$taste){
 	    				$active = '';
-	    				if($taste['is_selected']==1){
-	    					$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
-	    					$active = 'on';
-	    					$tprice = '';
+	    				if(in_array($taste['lid'], $detailArr)){
 	    					if($taste["price"]>0){
-	    						$original += $taste["price"]*$model['num'];
 	    						$pprice += $taste["price"];
-	    						if($model['is_member_discount']){
-	    							$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
-	    							$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
-	    						}
-	    						$price += $taste["price"]*$model['num'];
-	    						$tprice = '('.$taste["price"].')';
+	    						$original += $taste["price"]*$model['num'];
+		    					if($model['is_member_discount']){
+		    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
+		    						$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
+		    					}
+		    					$price += $taste["price"]*$model['num'];
 	    					}
-	    					$tdesc.='<span id="'.$k.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
+	    					$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
+	    					$tdesc.='<span>'.$taste['name'].'</span>';
 	    				}
-	    				$tasteHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$k.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'" taste-name="'.$taste['name'].'"  product-price="'.$model['price'].'">'.$taste['name'];
-	    				if($taste['price'] > 0){
-	    					$tasteHtml .='('.$taste['price'].')';
-	    				}
-	    				$tasteHtml .= '</div>';
 	    			}
-	    			$tasteHtml .= '<input type="hidden" name="taste[]" value="'.$tvalue.'" /><div class="clear"></div></div>';
+	    			$tasteHtml .= '<input type="hidden" name="taste[]" value="'.$tvalue.'" />';
 	    		}
-	    		$tasteHtml .= '</div><div class="taste-desc">'.$tdesc.'</div><div class="taste">选择口味</div><span class="weui-badge">可选</span>';
+	    		$tasteHtml .= '<div class="taste-desc">'.$tdesc.'</div>';
 	    	}
 	    	
 	    	// 套餐详情
 	    	if(isset($model['detail'])&&!empty($model['detail'])){
-	    		$prosetHtml .= '<div class="detail-items" set-id="'.$model['product_id'].'">';
 	    		$detailDesc = '';
 	    		foreach ($model['detail'] as $k=>$detail){
-	    			$selectItem = 0;
-	    			$prosetHtml .= '<div class="item-group">选择一个</div>';
-	    			$prosetHtml .= '<div class="item-group">';
+	    			$selectItem = '';
 	    			foreach($detail as $item){
-	    				$on = '';
-	    				if($item['is_select']==1){
-	    					$on='on';
+	    				if(in_array($item['product_id'], $detailArr)){
 	    					$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
-	    					$detailDesc .='<span id="'. $k.'-'.$item['product_id'].'">'.$item['product_name'].'x'.$item['number'];
+	    					$detailDesc .='<span>'.$item['product_name'].'x'.$item['number'].'</span>';
 	    					if($item['price'] > 0){
 	    						$original += $item["price"]*$model['num'];
 	    						$pprice += $item["price"];
@@ -243,62 +228,13 @@
 	    						}
 	    						$price += $item["price"]*$model['num'];
 	    					}
-	    					$detailDesc .='</span>';
 	    				}
-		    			if(!empty($item['taste_groups'])){
-		    				$prosetHtml .= '<div class="taste-items" product-id="'. $model['product_id'].'-'.$item['product_id'].'">';
-		    				$tdesc = '';
-		    				foreach($item['taste_groups'] as $kk=>$groups){
-		    					$tvalue = 0;
-		    					$prosetHtml .= '<div class="item-group">'.$groups['name'].'</div>';
-		    					$prosetHtml .= '<div class="item-group">';
-		    					foreach($groups['tastes'] as $tk=>$taste){
-		    						$active = '';
-		    						if($taste['is_selected']==1){
-		    							$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
-		    							$active = 'on';
-		    							$tprice = '';
-		    							if($taste["price"]>0){
-		    								$original += $taste["price"]*$model['num'];
-		    								$pprice += $taste["price"];
-		    								if($model['is_member_discount']){
-		    									$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
-		    									$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
-		    								}
-		    								$price += $taste["price"]*$model['num'];
-		    							}
-		    							$tdesc.='<span id="'.$kk.'-'.$taste["lid"].'">'.$taste['name'].$tprice.'</span>';
-		    						}
-		    						$prosetHtml .= '<div class="item t-item taste-item '.$active.'" allflage="'.$groups['allflae'].'" group="'.$kk.'" taste-id="'.$taste['lid'].'" taste-pirce="'.$taste['price'].'" taste-name="'.$taste['name'].'" product-price="'.($model['price']+$item['price']).'">'.$taste['name'];
-		    						if($taste['price'] > 0){
-		    							$prosetHtml .= '('.$taste['price'].')';
-		    						}
-		    						$prosetHtml .= '</div>';
-		    					}
-		    					$prosetHtml .= '<div class="clear"></div></div>';
-		    				}
-		    				$prosetHtml .= '</div>';
-		    				
-		    				
-		    				$prosetHtml .= '<div class="item t-item detail-item has-taste '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'<span class="detail-desc">('.$tdesc.')</span>'.'x'.$item['number'];
-		    				if($item['price'] > 0){
-		    					$prosetHtml .= '('.$item['price'].')';
-		    				}
-		    				$prosetHtml .= '</div>';
-		    			}else{
-		    				$prosetHtml .= '<div class="item t-item detail-item '.$on.'" group="'.$k.'" product-id="'.$item['product_id'].'" detail-num="'.$item['number'].'" detail-pirce="'.$item['price'].'" set-price="'.$model['price'].'">'.$item['product_name'].'x'.$item['number'];
-		    				if($item['price'] > 0){
-		    					$prosetHtml .= '('.$item['price'].')';
-		    				}
-		    				$prosetHtml .= '</div>';
-		    			}
 	    			}
 	    			$prosetHtml .= '<input type="hidden" name="set-detail[]" value="'. $selectItem.'"/>';
-	    			$prosetHtml .= '<div class="clear"></div></div>';
 	    		}
-	    		$prosetHtml .= '</div><div class="detail-desc">'.$detailDesc.'</div><div class="detail">选择套餐</div><span class="weui-badge">可选</span>';
+	    		$prosetHtml .= '<div class="detail-desc">'.$detailDesc.'</div>';
 	    	}
-	    	
+	    	$pprice = number_format($pprice,2);
 	    ?>
 	    
 	    <div class="prt">
@@ -307,9 +243,9 @@
 	        <div class="prt-rt">￥<span class="price"><?php echo $pprice;?></span></div>
 	        <div class="clear"></div>
 	    </div>
-	    <!-- b可选择口味 -->
+	    <!-- b已选择口味 -->
 	    <?php echo $tasteHtml;?>
-	    <!-- e可选择口味 -->
+	    <!-- e已选择口味 -->
 	    <!-- b可选择套餐 -->
 	    <?php echo $prosetHtml;?>
 	    <!-- e可选择套餐 -->
@@ -659,7 +595,15 @@ $(document).ready(function(){
 	$('#total').html(totalFee);
 	$('#total').attr('total',totalFee);
 	<?php endif;?>
-	
+	function hideActionSheet(weuiActionsheet, mask) {
+        weuiActionsheet.removeClass('weui_actionsheet_toggle');
+        mask.removeClass('weui_fade_toggle');
+        weuiActionsheet.on('transitionend', function () {
+            mask.hide();
+        }).on('webkitTransitionEnd', function () {
+            mask.hide();
+        });
+    }
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'type'=>$this->type,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
@@ -677,148 +621,7 @@ $(document).ready(function(){
 		$('input[name="paytype"]').val(paytype);
 		$(this).addClass('on');
 	});
-	function hideActionSheet(weuiActionsheet, mask) {
-        weuiActionsheet.removeClass('weui_actionsheet_toggle');
-        mask.removeClass('weui_fade_toggle');
-        weuiActionsheet.on('transitionend', function () {
-            mask.hide();
-        }).on('webkitTransitionEnd', function () {
-            mask.hide();
-        });
-    }
-   $('.taste').click(function(){
-	  	var _this = $(this);
-	  	layer.open({
-		    type: 1,
-		    title: false,
-		    shadeClose: true,
-		    closeBtn: 0,
-		    area: ['100%','60%'],
-		    content:_this.siblings('.taste-items'),
-		    btn: '确定',
-		    yes: function(index, layero){ 
-	         layer.close(index);
-	    	}
-		});
-  });
-   // 口味选择
-  $('.taste-items').on('click','.taste-item',function(){
-		var sectionObj = $(this).parents('.section');
-	  	var tasteItems = $(this).parents('.taste-items');
-	  	var tasteDesc = sectionObj.find('.taste-desc');
-	  	var productId = tasteItems.attr('product-id');
-	  	var productPrice = $(this).attr('product-price');
-	  	var tasteId = $(this).attr('taste-id');
-	  	var group =  $(this).attr('group');
-	  	var tastePrice = $(this).attr('taste-pirce');
-	  	var tastName = $(this).attr('taste-name');
-	  	var allflage = $(this).attr('allflage');
-	  	var num = 1;
-	  	if(sectionObj.find('.num').length > 0){ // 非全单口味
-	  		num = sectionObj.find('.num').html();
-	  	}
-	  	if($(this).hasClass('on')){
-	  	  	if(allflage=='0'){
-	  	  	  	return;
-	  	  	}
-	  		$(this).removeClass('on');
-	  		$(this).siblings('input').val(0);
-	  		tasteDesc.find('#'+group+'-'+tasteId).remove();
-	  		if(parseFloat(tastePrice) > 0){
-	  			reset_total(-tastePrice*num);
-	  	  	}
-	  	}else{
-	  	  	var onObj = $(this).siblings('.on');
-	  	  	if(onObj.length > 0){
-		  	  	var onPrice = onObj.attr('taste-pirce');
-		  	  	if(parseFloat(onPrice) > 0){
-		  	  		reset_total(-onPrice*num);
-		  	  	}
-		  	  	onObj.removeClass('on');
-	  	  	}
-		  	$(this).addClass('on');
-		  	$(this).siblings('input').val(productId+'-'+tasteId+'-'+tastePrice+'-'+tastName);
-		  	if(sectionObj.find('.price').length > 0){
-		  		sectionObj.find('.price').html((parseFloat(productPrice)+parseFloat(tastePrice)).toFixed(2));
-		  	}
-		  	tasteDesc.find('span[id^='+group+'-]').remove();
-		  	var str = '<span id="'+group+'-'+tasteId+'">'+tastName+'</span>';
-		  	tasteDesc.append(str);
-		  	if(parseFloat(tastePrice) > 0){
-	  			reset_total(tastePrice*num);
-	  	  	}
-	  	}
-  });
-
-  $('.detail').click(function(){
-	 	var _this = $(this);
-	 	layer.open({
-		    type: 1,
-		    title: false,
-		    shadeClose: false,
-		    closeBtn: 0,
-		    area: ['100%','60%'],
-		    content:_this.siblings('.detail-items'),
-		    btn: '确定',
-		    yes: function(index, layero){ 
-		        layer.close(index);
-		   	}
-		});
- 	});
-	// 套餐选择
-  $('.detail-items .detail-item').click(function(){
-		if(!$(this).hasClass('on')){
-			var sectionObj = $(this).parents('.section');
-		  	var tasteItems = $(this).parents('.detail-items');
-		  	var detailDesc = sectionObj.children('.detail-desc');
-		  	var setId = tasteItems.attr('set-id');
-		  	var setPrice = $(this).attr('set-price');
-		  	var productId = $(this).attr('product-id');
-		  	var group =  $(this).attr('group');
-			var detailNum = $(this).attr('detail-num');
-		  	var detailPrice = $(this).attr('detail-pirce');
-		  	var detailName = $(this).html();
-		  	var num = sectionObj.find('.num').html();
-	  	  	var onObj = $(this).siblings('.on');
-	  	  	if(onObj.length > 0){
-		  	  	var onPrice = onObj.attr('detail-pirce');
-		  	  	if(parseFloat(onPrice) > 0){
-		  	  		reset_total(-onPrice*num);
-		  	  	}
-		  	  	onObj.removeClass('on');
-	  	  	}
-		  	$(this).addClass('on');
-		  	$(this).siblings('input').val(setId+'-'+productId+'-'+detailNum+'-'+detailPrice);
-		  	sectionObj.find('.price').html((parseFloat(setPrice)+parseFloat(detailPrice)).toFixed(2));
-		  	detailDesc.find('span[id^='+group+'-]').remove();
-		  	var str = '<span id="'+group+'-'+productId+'">'+detailName+'</span>';
-		  	detailDesc.append(str);
-		  	if(parseFloat(detailPrice) > 0){
-	  			reset_total(detailPrice*num);
-	  	  	}
-  		}
-// 	 	if($(this).hasClass('has-taste')){
-// 			 var _this = $(this);
-// 			 var setId = _this.parents('.detail-items').attr('set-id');
-// 			 var productId = _this.attr('product-id');
-// 			 var str = _this.siblings('.taste-items[product-id="'+setId+'-'+productId+'"]').prop("outerHTML");
-// 			 layer.open({
-// 				    type: 1,
-// 				    title: false,
-// 				    shade: false,
-// 				    closeBtn: 0,
-// 				    area: ['100%','60%'],
-// 				    content: str,
-// 				    btn: '确定',
-// 				    success: function(layero, index){
-// 				        layero.find('.taste-items').show();
-// 				    },
-// 				    yes: function(index, layero){ 
-// 			        	layer.close(index);
-// 			   	}
-// 			});
-// 		}
-    });
+ 
 	$('.section').on('touchstart','.cart-delete',function(){ 
 		var _this = $(this);
 	  	var lid = _this.attr('lid');

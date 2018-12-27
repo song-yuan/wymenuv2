@@ -102,7 +102,10 @@ class MallController extends Controller
         	$toGroup = $cart['to_group'];
         	$canCupon = $cart['can_cupon'];
         	$cartKey = $promotionType.'-'.$productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
-        	$cartList[$cartKey] = $cart;
+        	if(!isset($cartList[$cartKey])){
+        		$cartList[$cartKey] = array();
+        	}
+        	array_push($cartList[$cartKey], $cart);
         }	
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
@@ -807,8 +810,9 @@ class MallController extends Controller
 		$toGroup = Yii::app()->request->getParam('toGroup');
 		$canCupon = Yii::app()->request->getParam('canCupon');
 		$isSet =  Yii::app()->request->getParam('isSet');
+		$detail =  Yii::app()->request->getParam('detail','0');// 口味或套餐产品id
 		
-		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_type'=>$promoteType,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_type'=>$promoteType,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon,'detail'=>$detail);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$type);
 		
 		//检查活动商品数量
@@ -860,8 +864,9 @@ class MallController extends Controller
 		$toGroup = Yii::app()->request->getParam('toGroup');
 		$canCupon = Yii::app()->request->getParam('canCupon');
 		$isSet =  Yii::app()->request->getParam('isSet');
+		$detail =  Yii::app()->request->getParam('detail',0);
 		
-		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_type'=>$promoteType,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon);
+		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_type'=>$promoteType,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon,'detail'=>$detail);
 		
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$type);
 		if($cart->deleteCart()){
