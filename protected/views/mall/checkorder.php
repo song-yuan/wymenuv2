@@ -201,7 +201,7 @@
 		    					}
 		    					$price += $taste["price"]*$model['num'];
 	    					}
-	    					$tvalue = $groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
+	    					$tvalue = $model['lid'].'_'.$groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
 	    					$tdesc.='<span>'.$taste['name'].'</span>';
 	    				}
 	    			}

@@ -479,7 +479,7 @@
 	}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201712121424">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201812271734">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201812271807">
 <style type="text/css">
 .layui-layer-setwin .layui-layer-close2 {
 	right: -12px;

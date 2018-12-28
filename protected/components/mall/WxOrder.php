@@ -241,8 +241,8 @@ class WxOrder
 			foreach($this->tastes as $taste){
 				$tasteArr = explode('-',$taste);
 				if(count($tasteArr)>1){
-					$productId = (int)$tasteArr[0];
-					$this->productTastes[$productId][] = $tasteArr;
+					$cartId = (int)$tasteArr[0];
+					$this->productTastes[$cartId][] = $tasteArr;
 				}
 			}
 		}
@@ -461,11 +461,11 @@ class WxOrder
 			}else{
 				$se = new Sequence("order_product");
 				$orderProductId = $se->nextval();
-				//单品 插入产品口味
-				if(isset($this->productTastes[$cart['product_id']]) && !empty($this->productTastes[$cart['product_id']])){
-					foreach($this->productTastes[$cart['product_id']] as $taste){
-						if($taste[2] > 0){
-							$ortherPrice +=$taste[2];
+				//单品 插入产品口味 cartid-produtId-tasteId-tasteprice-tastename
+				if(isset($this->productTastes[$cart['lid']]) && !empty($this->productTastes[$cart['lid']])){
+					foreach($this->productTastes[$cart['lid']] as $taste){
+						if($taste[3] > 0){
+							$ortherPrice +=$taste[3];
 						}
 						$se = new Sequence("order_taste");
 						$orderTasteId = $se->nextval();
@@ -474,8 +474,8 @@ class WxOrder
 								'dpid'=>$this->dpid,
 								'create_at'=>date('Y-m-d H:i:s',$time),
 								'update_at'=>date('Y-m-d H:i:s',$time),
-								'taste_name'=>$taste[3],
-								'taste_id'=>$taste[1],
+								'taste_name'=>$taste[4],
+								'taste_id'=>$taste[2],
 								'order_id'=>$orderProductId,
 								'is_order'=>0,
 						);
