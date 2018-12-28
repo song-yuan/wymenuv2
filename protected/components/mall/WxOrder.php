@@ -795,7 +795,7 @@ class WxOrder
 			$orderProductPromotion = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			$orderProduct [$k] ['product_promotion'] = $orderProductPromotion;
 			if($product['set_id'] > 0){
-				$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'];
+				$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['order_id'] . ' and t.set_id='.$product['set_id'].' and main_id='.$product['main_id'];
 				$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				if(!empty($productSet)){
 					$orderProduct[$k]['amount'] = $product['zhiamount'];
