@@ -217,7 +217,7 @@
 	    			$selectItem = '';
 	    			foreach($detail as $item){
 	    				if(in_array($item['product_id'], $detailArr)){
-	    					$selectItem = $model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
+	    					$selectItem = $model['lid'].'-'.$model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    					$detailDesc .='<span>'.$item['product_name'].'x'.$item['number'].'</span>';
 	    					if($item['price'] > 0){
 	    						$original += $item["price"]*$model['num'];
