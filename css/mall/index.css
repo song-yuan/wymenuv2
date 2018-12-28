@@ -507,21 +507,23 @@ i {
 .b-radius-rb{
 	border-bottom-right-radius:15px!important;
 }
+.blank-h-5{
+	height:0.5rem;
+}
 
 .taste,.detail{
 	display:none;
-	position:absolute;
+	position:relative;
 	width:100%;
 	height:100%;
-	left:0;
-	right:0;
 	font-size:0.15rem;
 	
 }
 .taste .taste-content,.detail .detail-content{
 	width:90%;
+	height:100%;
+	overflow:auto;
 	margin: 0 auto;
-	padding-top:10px;
 }
 .taste .taste-bottom,.detail .detail-bottom{
 	position:absolute;

@@ -569,7 +569,9 @@
 <div id="boll" class="boll"></div>
 
 <div id="taste" class="taste">
-	<div class="taste-content"></div>
+	<div class="taste-content">
+		<div style="height:50px;"></div>
+	</div>
 	<div class="taste-bottom">
 		<div class="bottom-content clearfix">
 			<div class="bottom-left left">￥<span class="p-price">0.00</span></div><div class="bottom-right right clearfix"><div class="minus zero"><?php echo $minus;?></div><input type="text" class="result zero" is-set="0" product-id="0" promote-id="-1" to-group="-1" can-cupon="0" store-number="-1" disabled="disabled" value="0"><div class="add"><?php echo $plus;?></div></div>
@@ -814,6 +816,7 @@ $(document).ready(function(){
 			str += '</div>';
 			str += '</div>';
 		}
+		str += '<div class="blank-h-5"></div>';
 		tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
 		
 		$('#taste').find('.taste-content').html(str);
@@ -834,7 +837,7 @@ $(document).ready(function(){
 		    type: 1,
 		    title: productName,
 		    shadeClose: true,
-		    area: ['100%','60%'],
+		    area: ['80%','60%'],
 		    content:$('#taste')
 		});
     });
@@ -900,11 +903,14 @@ $(document).ready(function(){
 
         var tasteNameStr = '';
         var tasteIdStr = '';
+
+        var hasNoSelect = false;
         $('#taste').find('.taste-group').each(function(){
             var itemObj = $(this).find('.taste-item-active');
             if(itemObj.length==0){
+            	hasNoSelect = true;
                 layer.msg('请先选择规格!!!');
-                return;
+                return false;
             }
             var tasteId = itemObj.attr('taste-id');
             var tasteName = itemObj.attr('taste-name');
@@ -912,7 +918,9 @@ $(document).ready(function(){
             tasteNameStr += tasteName+',';
             tasteIdStr += tasteId+',';
         });
-
+		if(hasNoSelect){
+			return;
+		}
         tasteNameStr = tasteNameStr.substr(0,tasteNameStr.length-1);
         tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
         $.ajax({
@@ -1079,6 +1087,7 @@ $(document).ready(function(){
 			str += '</div>';
 			str += '</div>';
 		}
+		str += '<div class="blank-h-5"></div>';
 		detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
 
 		$('#detail').find('.detail-content').html(str);
@@ -1099,7 +1108,7 @@ $(document).ready(function(){
 		    type: 1,
 		    title: productName,
 		    shadeClose: true,
-		    area: ['100%','60%'],
+		    area: ['80%','60%'],
 		    content:$('#detail')
 		});        
     });
