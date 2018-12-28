@@ -253,16 +253,20 @@ class WxOrder
 			foreach($this->setDetail as $detail){
 				$detailArr = explode('-',$detail);
 				if(count($detailArr) > 1){
-					$this->productSetDetail[$detailArr[0]][] = $detailArr;
+					$cartId = $detailArr[0];
+					$this->productSetDetail[$cartId][] = $detailArr;
 				}
 			}
 			// 套餐内单品
 			foreach ($this->productSetDetail as $k=>$setdetail){
 				$totalOriginPrice = 0;
-				$productSet = WxProduct::getProductSet($k, $this->dpid);
+				$setId = $setdetail[0][1];
+				$productSet = WxProduct::getProductSet($setId, $this->dpid);
 				foreach ($setdetail as $key=>$val){
-					$setProduct = WxProduct::getProduct($val[1], $this->dpid);
-					$totalOriginPrice += $setProduct['original_price']*$val[2];
+					$productId = $val[2];
+					$num = $val[3];
+					$setProduct = WxProduct::getProduct($productId, $this->dpid);
+					$totalOriginPrice += $setProduct['original_price']*$num;
 					$this->productSetDetail[$k][$key]['product_name'] = $setProduct['product_name'];
 					$this->productSetDetail[$k][$key]['main_picture'] = $setProduct['main_picture'];
 					$this->productSetDetail[$k][$key]['original_price'] = $setProduct['original_price'];
@@ -420,16 +424,15 @@ class WxOrder
 		$levelDiscount = $this->levelDiscount;
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
-			
 			if($cart['is_set'] > 0){
 				$setPrice = $cart['price'];
-				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(set_id,product_id,num,price); price 套餐内加价
-				$setName = $this->productSetDetail[$cart['product_id']]['set_name'];
-				$totalProductPrice = $this->productSetDetail[$cart['product_id']]['total_original_price'];
-				unset($this->productSetDetail[$cart['product_id']]['set_name']);
-				unset($this->productSetDetail[$cart['product_id']]['total_original_price']);
-				foreach ($this->productSetDetail[$cart['product_id']] as $i=>$detail){
-					$ortherPrice += $detail[3];
+				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(cart_id,set_id,product_id,num,price); price 套餐内加价
+				$setName = $this->productSetDetail[$cart['lid']]['set_name'];
+				$totalProductPrice = $this->productSetDetail[$cart['lid']]['total_original_price'];
+				unset($this->productSetDetail[$cart['lid']]['set_name']);
+				unset($this->productSetDetail[$cart['lid']]['total_original_price']);
+				foreach ($this->productSetDetail[$cart['lid']] as $i=>$detail){
+					$ortherPrice += $detail[4];
 					$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $setPrice);
 						
 					$se = new Sequence("order_product");
@@ -442,12 +445,12 @@ class WxOrder
 							'order_id'=>$orderId,
 							'set_id'=>$cart['product_id'],
 							'private_promotion_lid'=>$cart['promotion_id'],
-							'product_id'=>$detail[1],
+							'product_id'=>$detail[2],
 							'product_name'=>$detail['product_name'],
 							'product_pic'=>$detail['main_picture'],
-							'price'=>$itemPrice+$detail[3],
-							'original_price'=>$detail['original_price']+$detail[3],
-							'amount'=>$detail[2]*$cart['num'],
+							'price'=>$itemPrice+$detail[4],
+							'original_price'=>$detail['original_price']+$detail[4],
+							'amount'=>$detail[3]*$cart['num'],
 							'zhiamount'=>$cart['num'],
 							'product_order_status'=>$orderProductStatus,
 							'taste_memo'=>$setName,
