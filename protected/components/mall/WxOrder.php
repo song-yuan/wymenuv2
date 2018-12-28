@@ -422,6 +422,8 @@ class WxOrder
 			$orderArr['taste'] = $otArr;
 		}
 		$levelDiscount = $this->levelDiscount;
+		// mainId 用于区分不同明细的套餐
+		$mainId = 1;
 		foreach($this->cart as $cart){
 			$ortherPrice = 0;
 			if($cart['is_set'] > 0){
@@ -445,6 +447,7 @@ class WxOrder
 							'order_id'=>$orderId,
 							'set_id'=>$cart['product_id'],
 							'private_promotion_lid'=>$cart['promotion_id'],
+							'main_id'=>$mainId,
 							'product_id'=>$detail[2],
 							'product_name'=>$detail['product_name'],
 							'product_pic'=>$detail['main_picture'],
@@ -461,6 +464,7 @@ class WxOrder
 					$sql = 'update nb_product_set set store_number =  store_number-'.$cart['num'].' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
 					Yii::app()->db->createCommand($sql)->execute();
 				}
+				$mainId++;
 			}else{
 				$se = new Sequence("order_product");
 				$orderProductId = $se->nextval();

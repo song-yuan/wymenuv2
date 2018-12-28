@@ -235,8 +235,11 @@ class MtOrder
 		}
 		$poiReceiveDetail = json_decode($obj->poiReceiveDetail);
 		
-		$caution = $obj->caution;
-		$caution = strstr($caution, '收餐人隐私号', TRUE);
+		$ocaution = $obj->caution;
+		$caution = strstr($ocaution, '收餐人隐私号', TRUE);
+		if($caution===false){
+			$caution = $ocaution;
+		}
 		$orderArr['order_info'] = array('creat_at'=>$orderTime,'account_no'=>$orderId,'classes'=>0,'username'=>'','site_id'=>0,'is_temp'=>1,'number'=>1,'order_status'=>$obj->status,'order_type'=>7,'should_total'=>$poiReceiveDetail->wmPoiReceiveCent/100,'reality_total'=>$obj->originalPrice,'takeout_typeid'=>0,'callno'=>$obj->daySeq,'paytype'=>$payType,'appointment_time'=>$deliveryTime,'remark'=>$caution,'taste_memo'=>'');
 		$orderArr['order_platform'] = array('original_total'=>$obj->originalPrice,'logistics_total'=>$poiReceiveDetail->logisticsFee/100,'platform_total'=>$poiReceiveDetail->foodShareFeeChargeByPoi/100,'pay_total'=>$poiReceiveDetail->onlinePayment/100,'receive_total'=>$poiReceiveDetail->wmPoiReceiveCent/100);
 		$orderArr['order_product'] = array();

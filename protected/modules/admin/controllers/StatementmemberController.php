@@ -39,7 +39,7 @@ class StatementmemberController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$criteria = new CDbCriteria;
 		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,count(t.lid) as all_num';
-		$criteria->condition = 't.dpid='.$this->companyId;
+		$criteria->condition = '(t.dpid='.$this->companyId.' or t.weixin_group='.$this->companyId.')';
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
