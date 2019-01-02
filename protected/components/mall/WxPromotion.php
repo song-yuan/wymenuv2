@@ -51,9 +51,14 @@ class WxPromotion
 			
 			if($result['is_set'] > 0){
 				//套餐	
-				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and status=0 and is_show=1 and delete_flag=0';
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
+					$isShow = WxProduct::isProductWxShow($this->type, $product['is_show_wx']);
+					if(!$isShow){
+						unset($results[$k]);
+						continue;
+					}
 					if($result['is_discount']==0){
 						$product['price'] = ($product['set_price'] - $result['promotion_money']) > 0 ? number_format($product['set_price'] - $result['promotion_money'],2) : number_format(0,2);
 					}else{
@@ -61,6 +66,12 @@ class WxPromotion
 					}
 					$product['original_price'] = $product['set_price'];
 					$product['product_name'] = $product['set_name'];
+					$setDetail = WxProduct::getProductSetDetail($product['lid'], $product['dpid']);
+					if(empty($setDetail)){
+						unset($results[$k]);
+						continue;
+					}
+					$product['detail'] = $setDetail;
 					array_push($this->proProIdList, '1-'.$product['lid']);
 				}else{
 					unset($results[$k]);
@@ -68,14 +79,20 @@ class WxPromotion
 				}
 			}else{
 				//单品
-				$sql = 'select * from nb_product where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$sql = 'select * from nb_product where lid=:lid and dpid=:dpid and status=0 and is_show=1 and delete_flag=0';
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
+					$isShow = WxProduct::isProductWxShow($this->type, $product['is_show_wx']);
+					if(!$isShow){
+						unset($results[$k]);
+						continue;
+					}
 					if($result['is_discount']==0){
 						$product['price'] = ($product['original_price'] - $result['promotion_money']) > 0 ? number_format($product['original_price'] - $result['promotion_money'],2) : number_format(0,2);
 					}else{
 						$product['price'] = ($product['original_price']*$result['promotion_discount']) > 0 ? number_format($product['original_price']*$result['promotion_discount'],2) : number_format(0,2);
 					}
+					$product['taste_groups'] = WxTaste::getProductTastes($product['lid'],$product['dpid']);
 					array_push($this->proProIdList, '0-'.$product['lid']);
 				}else{
 					unset($results[$k]);
@@ -134,12 +151,23 @@ class WxPromotion
 			}
 			if($result['is_set'] > 0){
 				//套餐
-				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and status=0 and is_show=1 and and delete_flag=0';
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
+					$isShow = WxProduct::isProductWxShow($this->type, $product['is_show_wx']);
+					if(!$isShow){
+						unset($results[$k]);
+						continue;
+					}
 					$product['original_price'] = $product['set_price'];
 					$product['product_name'] = $product['set_name'];
 					$product['price'] = $product['set_price'];
+					$setDetail = WxProduct::getProductSetDetail($product['lid'], $product['dpid']);
+					if(empty($setDetail)){
+						unset($results[$k]);
+						continue;
+					}
+					$product['detail'] = $setDetail;
 					array_push($this->proProIdList, '1-'.$product['lid']);
 				}else{
 					unset($results[$k]);
@@ -147,10 +175,16 @@ class WxPromotion
 				}
 			}else{
 				//单品
-				$sql = 'select * from nb_product where lid=:lid and dpid=:dpid and delete_flag=0 and status=0 and is_show=1 and is_show_wx=1';
+				$sql = 'select * from nb_product where lid=:lid and dpid=:dpid and status=0 and is_show=1 and delete_flag=0';
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
+					$isShow = WxProduct::isProductWxShow($this->type, $product['is_show_wx']);
+					if(!$isShow){
+						unset($results[$k]);
+						continue;
+					}
 					$product['price'] = $product['original_price'];
+					$product['taste_groups'] = WxTaste::getProductTastes($product['lid'],$product['dpid']);
 					array_push($this->proProIdList, '0-'.$product['lid']);
 				}else{
 					unset($results[$k]);

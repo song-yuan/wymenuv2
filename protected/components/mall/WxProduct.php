@@ -43,17 +43,19 @@ class WxProduct
 				$sql = 'select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by sort asc,lid desc';
 				$categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->queryAll();
 				foreach ($categoryProducts as $key=>$product){
-					if(($this->type=='6'&&$product['is_show_wx']=='4')||($this->type=='2'&&$product['is_show_wx']=='3')||$product['is_show_wx']=='2'){
+					$isShow = self::isProductWxShow($this->type, $product['is_show_wx']);
+					if(!$isShow){
 						unset($categoryProducts[$key]);
 						continue;
 					}
 					$categoryProducts[$key]['taste_groups'] = WxTaste::getProductTastes($product['lid'],$product['dpid']);
 				}
 			}else{
-				$sql = 'select * from nb_product_set where status=0 and is_show=1 and is_show_wx!=2 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by sort asc,lid desc';
+				$sql = 'select * from nb_product_set where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by sort asc,lid desc';
 				$categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->queryAll();
 				foreach ($categoryProducts as $sk=>$set){
-					if(($this->type=='6'&&$set['is_show_wx']=='4')||($this->type=='2'&&$set['is_show_wx']=='3')||$set['is_show_wx']=='2'){
+					$isShow = self::isProductWxShow($this->type, $set['is_show_wx']);
+					if(!$isShow){
 						unset($categoryProducts[$key]);
 						continue;
 					}
@@ -102,5 +104,15 @@ class WxProduct
 	 		$setDetails[$detail['group_no']][] = $detail;
 	 	}
  		return array_merge($setDetails);
+	 }
+	 /**
+	  * 产品或套餐是否显示
+	  * type 点单类型   showStatus 产品显示状态
+	  */
+	 public static function isProductWxShow($type,$showStatus){
+	 	if(($type=='6'&&$showStatus=='4')||($type=='2'&&$showStatus=='3')||$showStatus=='2'){
+	 		return false;
+	 	}
+	 	return true;
 	 }
 }
