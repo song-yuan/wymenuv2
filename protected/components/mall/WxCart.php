@@ -298,6 +298,7 @@ class WxCart
 						'promotion_detail_id'=>$sentDetail['lid'],
 						'to_group'=>$this->productArr['to_group'],
 						'can_cupon'=>$this->productArr['can_cupon'],
+						'detail_id'=>$this->productArr['detail']
 				);
 				$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
 			}
