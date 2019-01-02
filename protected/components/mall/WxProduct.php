@@ -56,7 +56,7 @@ class WxProduct
 				foreach ($categoryProducts as $sk=>$set){
 					$isShow = self::isProductWxShow($this->type, $set['is_show_wx']);
 					if(!$isShow){
-						unset($categoryProducts[$key]);
+						unset($categoryProducts[$sk]);
 						continue;
 					}
 					$setDetail = self::getProductSetDetail($set['lid'], $set['dpid']);

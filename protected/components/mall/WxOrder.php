@@ -425,7 +425,13 @@ class WxOrder
 		// mainId 用于区分不同明细的套餐
 		$mainId = 1;
 		foreach($this->cart as $cart){
-			$ortherPrice = 0;
+			$isSent = false;
+			$ortherPrice = 0;// 产品加价
+			$oortherPrice = 0;// 产品原价加价
+			$pptype = $cart['promotion_type'];
+			if($pptype=='sent'){
+				$isSent = true;
+			}
 			if($cart['is_set'] > 0){
 				$setPrice = $cart['price'];
 				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(cart_id,set_id,product_id,num,price); price 套餐内加价
@@ -434,7 +440,10 @@ class WxOrder
 				unset($this->productSetDetail[$cart['lid']]['set_name']);
 				unset($this->productSetDetail[$cart['lid']]['total_original_price']);
 				foreach ($this->productSetDetail[$cart['lid']] as $i=>$detail){
-					$ortherPrice += $detail[4];
+					if(!$isSent){
+						$ortherPrice += $detail[4];
+					}
+					$oortherPrice += $detail[4];
 					$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $setPrice);
 						
 					$se = new Sequence("order_product");
@@ -451,7 +460,7 @@ class WxOrder
 							'product_id'=>$detail[2],
 							'product_name'=>$detail['product_name'],
 							'product_pic'=>$detail['main_picture'],
-							'price'=>$itemPrice+$detail[4],
+							'price'=>$itemPrice+$dprice,
 							'original_price'=>$detail['original_price']+$detail[4],
 							'amount'=>$detail[3]*$cart['num'],
 							'zhiamount'=>$cart['num'],
@@ -472,7 +481,10 @@ class WxOrder
 				if(isset($this->productTastes[$cart['lid']]) && !empty($this->productTastes[$cart['lid']])){
 					foreach($this->productTastes[$cart['lid']] as $taste){
 						if($taste[3] > 0){
-							$ortherPrice +=$taste[3];
+							if(!$isSent){
+								$ortherPrice +=$taste[3];
+							}
+							$oortherPrice +=$taste[3];
 						}
 						$se = new Sequence("order_taste");
 						$orderTasteId = $se->nextval();
@@ -501,7 +513,7 @@ class WxOrder
 						'product_name'=>$cart['product_name'],
 						'product_pic'=>$cart['main_picture'],
 						'price'=>$cart['price']+$ortherPrice,
-						'original_price'=>$cart['original_price']+$ortherPrice,
+						'original_price'=>$cart['original_price']+$oortherPrice,
 						'amount'=>$cart['num'],
 						'product_order_status'=>$orderProductStatus,
 				);
@@ -544,7 +556,7 @@ class WxOrder
 					$orderPrice += ($cart['price']+$ortherPrice)*$cart['num'];
 				}
 			}
-			$realityPrice +=($cart['original_price']+$ortherPrice)*$cart['num'];
+			$realityPrice +=($cart['original_price']+$oortherPrice)*$cart['num'];
 		}
 		if($this->type!=1){
 			// 满送产品

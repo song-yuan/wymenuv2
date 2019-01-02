@@ -180,7 +180,12 @@
 	    <div class="prt-cat">/div>
 	    -->
 	    <?php 
+	    	$isSent = false;
 	    	$pprice = $model['price'];
+	    	$pptype = $model['promotion_type'];
+	    	if($pptype=='sent'){
+	    		$isSent = true;
+	    	}
 	    	$tasteHtml = '';// 已选口味html
 	    	$prosetHtml = '';// 已选套餐的html
 	    	$detailArr = explode(',', $model['detail_id']);
@@ -193,13 +198,15 @@
 	    				$active = '';
 	    				if(in_array($taste['lid'], $detailArr)){
 	    					if($taste["price"]>0){
-	    						$pprice += $taste["price"];
-	    						$original += $taste["price"]*$model['num'];
 		    					if($model['is_member_discount']){
 		    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
-		    						$taste["price"] = number_format($taste["price"]*$levelDiscount,2);
+		    						$mtasteprice = number_format($taste["price"]*$levelDiscount,2);
 		    					}
-		    					$price += $taste["price"]*$model['num'];
+		    					if(!$isSent){
+		    						$pprice += $taste["price"];
+		    						$price += $mtasteprice*$model['num'];
+		    					}
+		    					$original += $taste["price"]*$model['num'];
 	    					}
 	    					$tvalue = $model['lid'].'-'.$groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
 	    					$tdesc.='<span>'.$taste['name'].'</span>';
@@ -220,13 +227,15 @@
 	    					$selectItem = $model['lid'].'-'.$model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    					$detailDesc .='<span>'.$item['product_name'].'x'.$item['number'].'</span>';
 	    					if($item['price'] > 0){
-	    						$original += $item["price"]*$model['num'];
-	    						$pprice += $item["price"];
 	    						if($model['is_member_discount']){
 	    							$memdisprice += number_format($item["price"]*(1-$levelDiscount),2);
-	    							$item["price"] = number_format($item["price"]*$levelDiscount,2);
+	    							$mdprice = number_format($item["price"]*$levelDiscount,2);
 	    						}
-	    						$price += $item["price"]*$model['num'];
+	    						if(!$isSent){
+	    							$pprice += $item["price"];
+	    							$price += $mdprice*$model['num'];
+	    						}
+	    						$original += $item["price"]*$model['num'];
 	    					}
 	    				}
 	    			}
@@ -238,7 +247,7 @@
 	    ?>
 	    
 	    <div class="prt">
-	        <div class="prt-lt"><?php if($model['promotion_type']=='sent'): ?><span class="bttn_orange">赠</span><?php endif;?><?php echo $model['product_name'];?></div>
+	        <div class="prt-lt"><?php if($isSent): ?><span class="bttn_orange">赠</span><?php endif;?><?php echo $model['product_name'];?></div>
 	        <div class="prt-mt">x<span class="num"><?php echo $model['num'];?></span></div>
 	        <div class="prt-rt">￥<span class="price"><?php echo $pprice;?></span></div>
 	        <div class="clear"></div>
