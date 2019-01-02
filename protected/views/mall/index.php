@@ -1184,6 +1184,8 @@ $(document).ready(function(){
 		var parObj = $(this).parents('.taste');
         var secId = parObj.attr('cate-type');;
         var promoteType = parObj.attr('type');
+        var pPrice =  parseFloat(parObj.attr('p-price'));
+        var pName = parObj.attr('p-name');
         var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -1209,10 +1211,12 @@ $(document).ready(function(){
             var tastePrice = itemObj.attr('taste-price');
             tasteNameStr += tasteName+',';
             tasteIdStr += tasteId+',';
+            pPrice += parseFloat(tastePrice);
         });
 		if(hasNoSelect){
 			return;
 		}
+		pPrice = pPrice.toFixed(2);
         tasteNameStr = tasteNameStr.substr(0,tasteNameStr.length-1);
         tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
         $.ajax({
@@ -1229,8 +1233,6 @@ $(document).ready(function(){
 			        if(cartObj.length > 0){
 			        	cartObj.find('.foodop-num').html(t.val());
 			        }else{
-				        var pPrice =  parObj.attr('p-price');
-				        var pName = parObj.attr('p-name');
 				        var cartStr = '';
 					    cartStr +='<div class="j-fooditem cart-dtl-item" data-price="'+pPrice+'" data-category="#'+secId+'" data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+tasteIdStr+'">';
         				cartStr +='<div class="cart-dtl-item-inner">';
@@ -1472,6 +1474,8 @@ $(document).ready(function(){
 		var parObj = $(this).parents('.detail');
         var secId = parObj.attr('cate-type');;
         var promoteType = parObj.attr('type');
+        var pPrice = parseFloat(parObj.attr('p-price'));
+        var pName = parObj.attr('p-name');
         var t = parObj.find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -1495,8 +1499,9 @@ $(document).ready(function(){
             var number = itemObj.attr('detail-number');
             detailNameStr += detailName+'×'+number+' ';
             detailIdStr += detailId+',';
+            pPrice += parseFloat(detailPrice);
         });
-
+        pPrice = pPrice.toFixed(2);
         detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
@@ -1512,8 +1517,6 @@ $(document).ready(function(){
 			        if(cartObj.length > 0){
 			        	cartObj.find('.foodop-num').html(t.val());
 			        }else{
-				        var pPrice =  parObj.attr('p-price');
-				        var pName = parObj.attr('p-name');
 				        var cartStr = '';
 					    cartStr +='<div class="j-fooditem cart-dtl-item" data-price="'+pPrice+'" data-category="#'+secId+'" data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'">';
         				cartStr +='<div class="cart-dtl-item-inner">';
