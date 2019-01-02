@@ -198,6 +198,7 @@
 	    				$active = '';
 	    				if(in_array($taste['lid'], $detailArr)){
 	    					if($taste["price"]>0){
+	    						$mtasteprice = $taste["price"];
 		    					if($model['is_member_discount']){
 		    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
 		    						$mtasteprice = number_format($taste["price"]*$levelDiscount,2);
@@ -227,12 +228,13 @@
 	    					$selectItem = $model['lid'].'-'.$model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    					$detailDesc .='<span>'.$item['product_name'].'x'.$item['number'].'</span>';
 	    					if($item['price'] > 0){
+	    						$mdprice = $item['price'];
 	    						if($model['is_member_discount']){
-	    							$memdisprice += number_format($item["price"]*(1-$levelDiscount),2);
-	    							$mdprice = number_format($item["price"]*$levelDiscount,2);
+	    							$memdisprice += number_format($item['price']*(1-$levelDiscount),2);
+	    							$mdprice = number_format($item['price']*$levelDiscount,2);
 	    						}
 	    						if(!$isSent){
-	    							$pprice += $item["price"];
+	    							$pprice += $item['price'];
 	    							$price += $mdprice*$model['num'];
 	    						}
 	    						$original += $item["price"]*$model['num'];
