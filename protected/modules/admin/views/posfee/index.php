@@ -47,7 +47,7 @@
 					<div class="portlet box purple">
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'ty'=>$ty)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
