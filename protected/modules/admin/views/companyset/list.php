@@ -111,6 +111,12 @@
 		                <div class="list_small">软件使用期限设置。</div>
 		                </a> 
 	                </div>
+	                <div class="list col-sm-3 col-xs-12">
+						<a href="<?php echo $this->createUrl('posfee/index',array('companyId'=>$this->companyId));?>">
+		                <div class="list_big"><i class="fa fa-star-half-o"></i> 软件收费配置</div>
+		                <div class="list_small">软件使用期限设置。</div>
+		                </a> 
+	                </div>
 	               <?php endif;?>
 	               <?php endif;?>
                 </div>	
@@ -139,12 +145,6 @@
 						<a href="<?php echo $this->createUrl('connectUs/index',array('companyId'=>$this->companyId));?>">
 		                <div class="list_big"><i class="fa fa-phone"></i>联系我们</div>
 		                <div class="list_small"></div>
-		                </a> 
-	                </div>
-	                <div class="list col-sm-3 col-xs-12">
-						<a href="<?php echo $this->createUrl('posfee/index',array('companyId'=>$this->companyId));?>">
-		                <div class="list_big"><i class="fa fa-star-half-o"></i> 软件收费配置</div>
-		                <div class="list_small">软件使用期限设置。</div>
 		                </a> 
 	                </div>
                 </div>
