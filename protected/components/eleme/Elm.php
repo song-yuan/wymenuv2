@@ -803,6 +803,9 @@ class Elm
 					$newSpecs = $item->newSpecs;
 					$attributes = $item->attributes;
 					$extendCode = $item->extendCode;
+					if($extendCode==''){
+						$extendCode = 0;
+					}
 					$tasteArr = array();
 					if(!empty($newSpecs)){
 						foreach ($newSpecs as $newSpec){
