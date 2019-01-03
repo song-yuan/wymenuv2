@@ -214,7 +214,7 @@
 		    						$mtasteprice = number_format($mtasteprice*$levelDiscount,2);
 		    					}
 		    					if(!$isSent){
-		    						$pprice += $taste["price"];
+		    						$pprice += $mtasteprice;
 		    						$price += $mtasteprice*$model['num'];
 		    					}
 		    					$original += $taste["price"]*$model['num'];
@@ -244,7 +244,7 @@
 	    							$mdprice = number_format($mdprice*$levelDiscount,2);
 	    						}
 	    						if(!$isSent){
-	    							$pprice += $item['price'];
+	    							$pprice += $mdprice;
 	    							$price += $mdprice*$model['num'];
 	    						}
 	    						$original += $item["price"]*$model['num'];

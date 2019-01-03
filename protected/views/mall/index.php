@@ -1489,6 +1489,9 @@ $(document).ready(function(){
         var toGroup = t.attr('to-group');
         var canCupon = t.attr('can-cupon');
         var isSet = t.attr('is-set');
+        var isdiscount = t.attr('is-discount');
+        var promoney = t.attr('promotion-money');
+        var prodiscount = t.attr('promotion-discount');
         var storeNum = t.attr('store-number');
         var rand = new Date().getTime();
 
@@ -1506,7 +1509,11 @@ $(document).ready(function(){
             var number = itemObj.attr('detail-number');
             detailNameStr += detailName+'×'+number+' ';
             detailIdStr += detailId+',';
-            pPrice += parseFloat(detailPrice);
+            if(isdiscount=='1'){
+            	pPrice += parseFloat(detailPrice*prodiscount);
+			}else{
+				pPrice += parseFloat(detailPrice);
+			}
         });
         pPrice = pPrice.toFixed(2);
         detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
