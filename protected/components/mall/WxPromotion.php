@@ -277,11 +277,11 @@ class WxPromotion
 	 			if($promotion['is_discount']==0){
 	 				$price = ($product['set_price'] - $promotion['promotion_money']) > 0 ? number_format($product['set_price'] - $promotion['promotion_money'],2) : number_format(0,2);
 	 				$promotion_money = $price ? $promotion['promotion_money'] : $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon']));
 	 			}else{
 	 				$price = number_format($product['set_price']*$promotion['promotion_discount'],2);
 	 				$promotion_money = $product['set_price'] - $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>1,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array('is_discount'=>1,'promotion_discount'=>$promotion['promotion_discount'],'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon']));
 	 			}
 	 		}else{
 	 			return array('promotion_type'=>-1,'price'=>$product['original_price'],'promotion_info'=>array());
@@ -294,11 +294,11 @@ class WxPromotion
 	 			if($promotion['is_discount']==0){
 	 				$price = ($product['original_price'] - $promotion['promotion_money']) > 0 ? number_format($product['original_price'] - $promotion['promotion_money'],2) : number_format(0,2);
 	 				$promotion_money = $price ? $promotion['promotion_money'] : $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon']));
 	 			}else{
 	 				$price = number_format($product['original_price']*$promotion['promotion_discount'],2);
 	 				$promotion_money = $product['original_price'] - $price;
-	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>1,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon'])));
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array('is_discount'=>1,'promotion_discount'=>$promotion['promotion_discount'],'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['normal_promotion_id'],'can_cupon'=>$promotion['can_cupon']));
 	 			}
 	 		}else{
 	 			return array('promotion_type'=>-1,'price'=>$product['original_price'],'promotion_info'=>array());

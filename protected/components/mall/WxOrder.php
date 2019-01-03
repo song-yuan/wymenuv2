@@ -425,23 +425,42 @@ class WxOrder
 		// mainId 用于区分不同明细的套餐
 		$mainId = 1;
 		foreach($this->cart as $cart){
-			$isSent = false;
+			$isSent = false; // 是赠送产品
+			$isPromotion = false;// 是否普通优惠活动
 			$ortherPrice = 0;// 产品加价
 			$oortherPrice = 0;// 产品原价加价
+			$prodiscount = 1; //活动折扣
 			$pptype = $cart['promotion_type'];
 			if($pptype=='sent'){
 				$isSent = true;
 			}
+			if($cart['promotion_id'] > 0){
+				$isPromotion = true;
+				$proinfo = $cart['promotion']['promotion_info'];
+				$protype = $proinfo['is_discount'];
+				if($protype > 0){
+					$prodiscount = $proinfo['promotion_discount'];
+				}
+			}
+			
+			$cartPrice = $cart['price'];
+			$cartNum = $cart['num'];
+			$orderPrice += $cartPrice*$cartNum;
 			if($cart['is_set'] > 0){
-				$setPrice = $cart['price'];
+				$setPrice = $cartPrice;
 				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(cart_id,set_id,product_id,num,price); price 套餐内加价
 				$setName = $this->productSetDetail[$cart['lid']]['set_name'];
 				$totalProductPrice = $this->productSetDetail[$cart['lid']]['total_original_price'];
 				unset($this->productSetDetail[$cart['lid']]['set_name']);
 				unset($this->productSetDetail[$cart['lid']]['total_original_price']);
 				foreach ($this->productSetDetail[$cart['lid']] as $i=>$detail){
+					$dprice = $detail[4]*$prodiscount;
+					if(!$isPromotion&&$cart['is_member_discount']){
+						$memdiscount += number_format($dprice*(1-$levelDiscount)*$cartNum,2);
+						$dprice = number_format($dprice*$levelDiscount,2);
+					}
 					if(!$isSent){
-						$ortherPrice += $detail[4];
+						$orderPrice += $dprice*$cartNum;
 					}
 					$oortherPrice += $detail[4];
 					$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $setPrice);
@@ -462,15 +481,15 @@ class WxOrder
 							'product_pic'=>$detail['main_picture'],
 							'price'=>$itemPrice+$dprice,
 							'original_price'=>$detail['original_price']+$detail[4],
-							'amount'=>$detail[3]*$cart['num'],
-							'zhiamount'=>$cart['num'],
+							'amount'=>$detail[3]*$cartNum,
+							'zhiamount'=>$cartNum,
 							'product_order_status'=>$orderProductStatus,
 							'taste_memo'=>$setName,
 					);
 					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				}
 				if($cart['store_number'] > 0){
-					$sql = 'update nb_product_set set store_number =  store_number-'.$cart['num'].' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
+					$sql = 'update nb_product_set set store_number =  store_number-'.$cartNum.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
 					Yii::app()->db->createCommand($sql)->execute();
 				}
 				$mainId++;
@@ -481,10 +500,16 @@ class WxOrder
 				if(isset($this->productTastes[$cart['lid']]) && !empty($this->productTastes[$cart['lid']])){
 					foreach($this->productTastes[$cart['lid']] as $taste){
 						if($taste[3] > 0){
-							if(!$isSent){
-								$ortherPrice +=$taste[3];
+							$dprice = $taste[3]*$prodiscount;
+							if(!$isPromotion&&$cart['is_member_discount']){
+								$memdiscount += number_format($dprice*(1-$levelDiscount)*$cartNum,2);
+								$dprice = number_format($dprice*$levelDiscount,2);
 							}
-							$oortherPrice +=$taste[3];
+							if(!$isSent){
+								$orderPrice += $dprice*$cartNum;
+							}
+							$ortherPrice += $dprice;
+							$oortherPrice += $taste[3];
 						}
 						$se = new Sequence("order_taste");
 						$orderTasteId = $se->nextval();
@@ -501,6 +526,7 @@ class WxOrder
 						Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 					}
 				}
+				
 				$orderProductData = array(
 						'lid'=>$orderProductId,
 						'dpid'=>$this->dpid,
@@ -524,39 +550,28 @@ class WxOrder
 					Yii::app()->db->createCommand($sql)->execute();
 				}
 			}
-				
-		
 			//插入订单优惠
-			if($cart['promotion_id'] > 0){
-				foreach($cart['promotion']['promotion_info'] as $promotion){
-					$se = new Sequence("order_product_promotion");
-					$orderproductpromotionId = $se->nextval();
-					$orderProductPromotionData =array(
-							'lid'=>$orderproductpromotionId,
-							'dpid'=>$this->dpid,
-							'create_at'=>date('Y-m-d H:i:s',$time),
-							'update_at'=>date('Y-m-d H:i:s',$time),
-							'order_id'=>$orderId,
-							'order_product_id'=>$orderProductId,
-							'account_no'=>$accountNo,
-							'promotion_type'=>$cart['promotion']['promotion_type'],
-							'promotion_id'=>$promotion['poromtion_id'],
-							'promotion_money'=>$promotion['promotion_money'],
-							'can_cupon'=>$promotion['can_cupon'],
-							'delete_flag'=>0,
-					);
-					Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);
-				}
-				$orderPrice +=  ($cart['price']+$ortherPrice)*$cart['num'];
-			}else{
-				if($cart['is_member_discount']){
-					$memdiscount += number_format(($cart['price']+$ortherPrice)*(1-$levelDiscount)*$cart['num'],2);
-					$orderPrice += number_format(($cart['price']+$ortherPrice)*$levelDiscount*$cart['num'],2);
-				}else{
-					$orderPrice += ($cart['price']+$ortherPrice)*$cart['num'];
-				}
+			if($isPromotion){
+				$promotion = $cart['promotion']['promotion_info'];
+				$se = new Sequence("order_product_promotion");
+				$orderproductpromotionId = $se->nextval();
+				$orderProductPromotionData =array(
+						'lid'=>$orderproductpromotionId,
+						'dpid'=>$this->dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'order_id'=>$orderId,
+						'order_product_id'=>$orderProductId,
+						'account_no'=>$accountNo,
+						'promotion_type'=>$cart['promotion']['promotion_type'],
+						'promotion_id'=>$promotion['poromtion_id'],
+						'promotion_money'=>$promotion['promotion_money'],
+						'can_cupon'=>$promotion['can_cupon'],
+						'delete_flag'=>0,
+				);
+				Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);
 			}
-			$realityPrice +=($cart['original_price']+$oortherPrice)*$cart['num'];
+			$realityPrice +=($cart['original_price']+$oortherPrice)*$cartNum;
 		}
 		if($this->type!=1){
 			// 满送产品

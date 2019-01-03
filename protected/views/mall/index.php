@@ -1193,6 +1193,9 @@ $(document).ready(function(){
         var canCupon = t.attr('can-cupon');
         var isSet = t.attr('is-set');
         var storeNum = t.attr('store-number');
+        var isdiscount = t.attr('is-discount');
+        var promoney = t.attr('promotion-money');
+        var prodiscount = t.attr('promotion-discount');
         var rand = new Date().getTime();
 
         var tasteNameStr = '';
@@ -1208,10 +1211,14 @@ $(document).ready(function(){
             }
             var tasteId = itemObj.attr('taste-id');
             var tasteName = itemObj.attr('taste-name');
-            var tastePrice = itemObj.attr('taste-price');
+            var tprice = itemObj.attr('taste-price');
             tasteNameStr += tasteName+',';
             tasteIdStr += tasteId+',';
-            pPrice += parseFloat(tastePrice);
+            if(isdiscount=='1'){
+            	pPrice += parseFloat(tprice*prodiscount);
+			}else{
+				pPrice += parseFloat(tprice);
+			}
         });
 		if(hasNoSelect){
 			return;

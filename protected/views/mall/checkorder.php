@@ -181,10 +181,20 @@
 	    -->
 	    <?php 
 	    	$isSent = false;
+	    	$isPromotion = false;// 是否普通优惠活动
+	    	$prodiscount = 1; //活动折扣
 	    	$pprice = $model['price'];
 	    	$pptype = $model['promotion_type'];
 	    	if($pptype=='sent'){
 	    		$isSent = true;
+	    	}
+	    	if($model['promotion_id'] > 0){
+	    		$isPromotion = true;
+	    		$proinfo = $model['promotion']['promotion_info'];
+	    		$protype = $proinfo['is_discount'];
+	    		if($protype > 0){
+	    			$prodiscount = $proinfo['promotion_discount'];
+	    		}
 	    	}
 	    	$tasteHtml = '';// 已选口味html
 	    	$prosetHtml = '';// 已选套餐的html
@@ -198,10 +208,10 @@
 	    				$active = '';
 	    				if(in_array($taste['lid'], $detailArr)){
 	    					if($taste["price"]>0){
-	    						$mtasteprice = $taste["price"];
-		    					if($model['is_member_discount']){
-		    						$memdisprice += number_format($taste["price"]*(1-$levelDiscount),2);
-		    						$mtasteprice = number_format($taste["price"]*$levelDiscount,2);
+	    						$mtasteprice = $taste["price"]*$prodiscount;
+		    					if(!$isPromotion&&$model['is_member_discount']){
+		    						$memdisprice += number_format($mtasteprice*(1-$levelDiscount),2);
+		    						$mtasteprice = number_format($mtasteprice*$levelDiscount,2);
 		    					}
 		    					if(!$isSent){
 		    						$pprice += $taste["price"];
@@ -228,10 +238,10 @@
 	    					$selectItem = $model['lid'].'-'.$model['product_id'].'-'.$item['product_id'].'-'.$item['number'].'-'.$item['price'];
 	    					$detailDesc .='<span>'.$item['product_name'].'x'.$item['number'].'</span>';
 	    					if($item['price'] > 0){
-	    						$mdprice = $item['price'];
-	    						if($model['is_member_discount']){
-	    							$memdisprice += number_format($item['price']*(1-$levelDiscount),2);
-	    							$mdprice = number_format($item['price']*$levelDiscount,2);
+	    						$mdprice = $item['price']*$prodiscount;
+	    						if(!$isPromotion&&$model['is_member_discount']){
+	    							$memdisprice += number_format($mdprice*(1-$levelDiscount),2);
+	    							$mdprice = number_format($mdprice*$levelDiscount,2);
 	    						}
 	    						if(!$isSent){
 	    							$pprice += $item['price'];
