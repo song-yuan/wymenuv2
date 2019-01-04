@@ -980,7 +980,9 @@ $(document).ready(function(){
 	var topHeight = $('.top-des').height();
 	var footHeight = $('footer').height();
 	var cHeight = $('body').height()-topHeight-headHeight-footHeight;
-	$(".content").css({"height" : cHeight+"px","padding-top" : (topHeight+headHeight)+"px"});
+	$(".content").css('padding-top',(topHeight+headHeight));
+	$('#nav').css('height',cHeight);
+	$('#container').css('height',cHeight);
 	$('#nav').find('li.current').next().addClass('b-radius-rt');
 	setTotal();
 	if(hasclose){
