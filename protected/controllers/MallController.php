@@ -281,7 +281,6 @@ class MallController extends Controller
 			WxOrder::pushSiteOrderToRedis($orderObj->order,$orderObj->siteNo);
 			$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>$this->type));
 		}
-		
 		if($orderObj->orderSuccess && $orderCreate){
 			WxOrder::orderSuccess($orderObj->order);
 		}

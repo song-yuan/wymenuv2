@@ -66,7 +66,7 @@ body {
 	-webkit-tap-highlight-color: transparent;
 }
 
-.nav-lf ul li b {
+.nav-lf ul li b{
 	position: absolute;
 	top: 0.05rem;
 	right: 0.05rem;
@@ -78,6 +78,21 @@ body {
 	color: #fff;
 	background-color: #FF5151;
 	border-radius: 0.1rem;
+	text-align:center;
+}
+.lt-rt b{
+	position: absolute;
+	top: -0.05rem;
+	right: -0.05rem;
+	display: none;
+	width: 0.2rem;
+	height: 0.2rem;
+	line-height: 0.2rem;
+	font-size: 0.15rem;
+	color: #fff;
+	background-color: #FF5151;
+	border-radius: 0.1rem;
+	text-align:center;
 }
 
 .container {

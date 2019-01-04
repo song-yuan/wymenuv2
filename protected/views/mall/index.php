@@ -126,10 +126,10 @@
 						$productStr .='</p>';
 						if(!$closeShop){
 							if(!empty($pProduct['taste_groups'])){
-								// 有口味
-								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-taste" taste="'.urlencode(json_encode($pProduct['taste_groups'])).'">选规格</div></div>';
+								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
+									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									foreach ($cartLists as $cartItem){
 										$tasteStr = $cartItem['detail_id'];
 										$tasteArr = explode(',',$tasteStr);
@@ -159,6 +159,8 @@
 										$cartStr .='</div>';
 									}
 								}
+								// 有口味
+								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-taste" taste="'.urlencode(json_encode($pProduct['taste_groups'])).'">选规格</div>'.$cartnum.'</div>';
 							}else{
 								if(isset($cartList[$cartKey])){
 									$cartItem = $cartList[$cartKey][0];
@@ -220,9 +222,10 @@
 							}
 							$detailIds = rtrim($detailIds,',');
 							if($hasSelect){
-								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-detail" detail="'.urlencode(json_encode($pDetail)).'">选套餐</div></div>';
+								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
+									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									$pPrice = $pProduct['price'];
 									foreach ($cartLists as $cartItem){
 										$detailIds = $cartItem['detail_id'];
@@ -256,6 +259,8 @@
 										$cartStr .='</div>';
 									}
 								}
+								// 有可选套餐
+								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-detail" detail="'.urlencode(json_encode($pDetail)).'">选套餐</div>'.$cartnum.'</div>';
 							}else{
 								if(isset($cartList[$cartKey])){
 									$cartItem = $cartList[$cartKey][0];
@@ -346,10 +351,10 @@
 						
 						if(!$closeShop){
 							if(!empty($pProduct['taste_groups'])){
-								// 有口味
-								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'"  is-discount="'.$isDiscount.'" promotion-money="'.$promoney.'" promotion-discount="'.$prodiscount.'" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-taste" taste="'.urlencode(json_encode($pProduct['taste_groups'])).'">选规格</div></div>';
+								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
+									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									foreach ($cartLists as $cartItem){
 										$tasteStr = $cartItem['detail_id'];
 										$tasteArr = explode(',',$tasteStr);
@@ -383,6 +388,8 @@
 										$cartStr .='</div>';
 									}
 								}
+								// 有口味
+								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'"  is-discount="'.$isDiscount.'" promotion-money="'.$promoney.'" promotion-discount="'.$prodiscount.'" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-taste" taste="'.urlencode(json_encode($pProduct['taste_groups'])).'">选规格</div>'.$cartnum.'</div>';
 							}else{
 								if(isset($cartList[$cartKey])){
 									$cartItem = $cartList[$cartKey][0];
@@ -444,9 +451,10 @@
 							}
 							$detailIds = rtrim($detailIds,',');
 							if($hasSelect){
-								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'"  is-discount="'.$isDiscount.'" promotion-money="'.$promoney.'" promotion-discount="'.$prodiscount.'" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-detail" detail="'.urlencode(json_encode($pDetail)).'">选套餐</div></div>';
+								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
+									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									$pPrice = $pProduct['price'];
 									foreach ($cartLists as $cartItem){
 										$detailIds = $cartItem['detail_id'];
@@ -480,6 +488,8 @@
 										$cartStr .='</div>';
 									}
 								}
+								// 有可选套餐
+								$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'"  is-discount="'.$isDiscount.'" promotion-money="'.$promoney.'" promotion-discount="'.$prodiscount.'" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-detail" detail="'.urlencode(json_encode($pDetail)).'">选套餐</div>'.$cartnum.'</div>';
 							}else{
 								if(isset($cartList[$cartKey])){
 									$cartItem = $cartList[$cartKey][0];
@@ -567,10 +577,10 @@
 				$productStr .='</p>';
 				if(!$closeShop){
 					if(!empty($pProduct['taste_groups'])){
-						// 有口味
-						$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" is-discount="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-taste" taste="'.urlencode(json_encode($pProduct['taste_groups'])).'">选规格</div></div>';
+						$cartnum = '<b></b>';
 						if(isset($cartList[$cartKey])){
 							$cartLists = $cartList[$cartKey];
+							$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 							foreach ($cartLists as $cartItem){
 								$tasteStr = $cartItem['detail_id'];
 								$tasteArr = explode(',',$tasteStr);
@@ -600,6 +610,8 @@
 								$cartStr .='</div>';
 							}
 						}
+						// 有口味
+						$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" is-discount="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0"><div class="add-taste" taste="'.urlencode(json_encode($pProduct['taste_groups'])).'">选规格</div>'.$cartnum.'</div>';
 					}else{
 						// 无口味
 						if(isset($cartList[$cartKey])){
@@ -680,9 +692,10 @@
 					}
 					$detailIds = rtrim($detailIds,',');
 					if($hasSelect){
-						$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" is-discount="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0"><div class="add-detail" detail="'.urlencode(json_encode($pDetail)).'">选套餐</div></div>';
+						$cartnum = '<b></b>';
 						if(isset($cartList[$cartKey])){
 							$cartLists = $cartList[$cartKey];
+							$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 							$pPrice = $pProductSet['member_price'];
 							foreach ($cartLists as $cartItem){
 								$detailIds = $cartItem['detail_id'];
@@ -712,6 +725,8 @@
 								$cartStr .='</div>';
 							}
 						}
+						// 有可选套餐
+						$productStr .='<div class="lt-rt"><input type="text" class="result zero" is-set="1" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" is-discount="0" store-number="'.$pProductSet['store_number'].'" disabled="disabled" value="0"><div class="add-detail" detail="'.urlencode(json_encode($pDetail)).'">选套餐</div>'.$cartnum.'</div>';
 					}else{
 						if(isset($cartList[$cartKey])){
 							$cartItem = $cartList[$cartKey][0];
