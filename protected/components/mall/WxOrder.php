@@ -566,7 +566,7 @@ class WxOrder
 						'order_product_id'=>$orderProductId,
 						'account_no'=>$accountNo,
 						'promotion_type'=>$cart['promotion']['promotion_type'],
-						'promotion_id'=>$promotion['poromtion_id'],
+						'promotion_id'=>$promotion['promotion_id'],
 						'promotion_money'=>$promotion['promotion_money'],
 						'can_cupon'=>$promotion['can_cupon'],
 						'delete_flag'=>0,
