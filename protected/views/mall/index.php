@@ -144,7 +144,7 @@
 											}
 										}
 										$pPrice = number_format($pPrice,2);
-										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-buysent'.$key.'" data-orderid="normal_0_'.$productId.'_-1_-1_0_'.$tasteStr.'">';
+										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_'.$tasteStr.'">';
 										$cartStr .='<div class="cart-dtl-item-inner">';
 										$cartStr .='<i class="cart-dtl-dot"></i>';
 										$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -241,7 +241,7 @@
 											}
 										}
 										$pPrice = number_format($pPrice,2);
-										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_'.$detailIds.'">';
 										$cartStr .='<div class="cart-dtl-item-inner">';
 										$cartStr .='<i class="cart-dtl-dot"></i>';
 										$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -368,7 +368,7 @@
 											}
 										}
 										$pPrice = number_format($pPrice,2);
-										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-promotion'.$key.'" data-orderid="normal_0_'.$productId.'_-1_-1_0_'.$tasteStr.'">';
+										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-promotion'.$key.'" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_'.$tasteStr.'">';
 										$cartStr .='<div class="cart-dtl-item-inner">';
 										$cartStr .='<i class="cart-dtl-dot"></i>';
 										$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -465,7 +465,7 @@
 											}
 										}
 										$pPrice = number_format($pPrice,2);
-										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-promotion'.$key.'" data-orderid="normal_1_'.$productId.'_-1_-1_0_'.$detailIds.'">';
+										$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pPrice.'" data-category="#st-promotion'.$key.'" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_'.$detailIds.'">';
 										$cartStr .='<div class="cart-dtl-item-inner">';
 										$cartStr .='<i class="cart-dtl-dot"></i>';
 										$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';

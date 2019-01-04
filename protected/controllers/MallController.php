@@ -793,7 +793,6 @@ class MallController extends Controller
 		$userId = Yii::app()->request->getParam('userId');
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$type = Yii::app()->request->getParam('type');
-		
 		if($userId < 0){
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众进行点餐')));
 		}
@@ -867,7 +866,6 @@ class MallController extends Controller
 		$detail =  Yii::app()->request->getParam('detail',0);
 		
 		$productArr = array('product_id'=>$productId,'is_set'=>$isSet,'num'=>1,'promotion_type'=>$promoteType,'promotion_id'=>$promoteId,'to_group'=>$toGroup,'can_cupon'=>$canCupon,'detail'=>$detail);
-		
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId,$type);
 		if($cart->deleteCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
