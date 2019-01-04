@@ -437,9 +437,11 @@ class WxOrder
 			if($cart['promotion_id'] > 0){
 				$isPromotion = true;
 				$proinfo = $cart['promotion']['promotion_info'];
-				$protype = $proinfo['is_discount'];
-				if($protype > 0){
-					$prodiscount = $proinfo['promotion_discount'];
+				if(!empty($proinfo)){
+					$protype = $proinfo['is_discount'];
+					if($protype > 0){
+						$prodiscount = $proinfo['promotion_discount'];
+					}
 				}
 			}
 			
