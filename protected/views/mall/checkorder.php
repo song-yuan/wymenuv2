@@ -210,7 +210,7 @@
 	    				$active = '';
 	    				if(in_array($taste['lid'], $detailArr)){
 	    					if($taste["price"]>0){
-	    						$mtasteprice = $taste["price"]*$prodiscount;
+	    						$mtasteprice = $taste['price']*$prodiscount;
 		    					if(!$isPromotion&&$model['is_member_discount']){
 		    						$memdisprice += number_format($mtasteprice*(1-$levelDiscount),2);
 		    						$mtasteprice = number_format($mtasteprice*$levelDiscount,2);
@@ -219,7 +219,6 @@
 		    						$pprice += $mtasteprice;
 		    						$price += $mtasteprice*$model['num'];
 		    					}
-		    					$original += $taste["price"]*$model['num'];
 	    					}
 	    					$tvalue = $model['lid'].'-'.$groups['product_id'].'-'.$taste["lid"].'-'.$taste["price"].'-'.$taste['name'];
 	    					$tdesc.='<span>'.$taste['name'].'</span>';
@@ -249,7 +248,6 @@
 	    							$pprice += $mdprice;
 	    							$price += $mdprice*$model['num'];
 	    						}
-	    						$original += $item["price"]*$model['num'];
 	    					}
 	    				}
 	    			}
@@ -399,7 +397,7 @@
 <?php else:?>
 <footer>
     <div class="ft-lt">
-        <p style="margin-left:10px;">总计 ￥<span id="total" class="total" total="<?php echo $original;?>"><?php echo $original;?></span></p>
+        <p style="margin-left:10px;">总计 ￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt" id="payorder">
     	<a href="javascript:;">
