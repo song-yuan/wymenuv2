@@ -129,7 +129,7 @@
 								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
-									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
+									//$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									foreach ($cartLists as $cartItem){
 										$tasteStr = $cartItem['detail_id'];
 										$tasteArr = explode(',',$tasteStr);
@@ -225,7 +225,7 @@
 								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
-									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
+									//$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									$pPrice = $pProduct['price'];
 									foreach ($cartLists as $cartItem){
 										$detailIds = $cartItem['detail_id'];
@@ -354,7 +354,7 @@
 								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
-									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
+									//$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									foreach ($cartLists as $cartItem){
 										$tasteStr = $cartItem['detail_id'];
 										$tasteArr = explode(',',$tasteStr);
@@ -454,7 +454,7 @@
 								$cartnum = '<b></b>';
 								if(isset($cartList[$cartKey])){
 									$cartLists = $cartList[$cartKey];
-									$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
+									//$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 									$pPrice = $pProduct['price'];
 									foreach ($cartLists as $cartItem){
 										$detailIds = $cartItem['detail_id'];
@@ -580,7 +580,7 @@
 						$cartnum = '<b></b>';
 						if(isset($cartList[$cartKey])){
 							$cartLists = $cartList[$cartKey];
-							$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
+							//$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 							foreach ($cartLists as $cartItem){
 								$tasteStr = $cartItem['detail_id'];
 								$tasteArr = explode(',',$tasteStr);
@@ -695,7 +695,7 @@
 						$cartnum = '<b></b>';
 						if(isset($cartList[$cartKey])){
 							$cartLists = $cartList[$cartKey];
-							$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
+							//$cartnum = '<b style="display:inline;">'.count($cartLists).'</b>';
 							$pPrice = $pProductSet['member_price'];
 							foreach ($cartLists as $cartItem){
 								$detailIds = $cartItem['detail_id'];
@@ -803,7 +803,7 @@
 	</marquee>
 </div>
 <?php endif;?>
-<div class="content">
+<div class="content clearfix">
 	<div class="nav-lf">
 		<ul id="nav">
 			<?php echo $navLiStr;?>
@@ -1241,6 +1241,7 @@ $(document).ready(function(){
 		pPrice = pPrice.toFixed(2);
         tasteNameStr = tasteNameStr.substr(0,tasteNameStr.length-1);
         tasteIdStr = tasteIdStr.substr(0,tasteIdStr.length-1);
+
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
         	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:tasteIdStr,rand:rand},
