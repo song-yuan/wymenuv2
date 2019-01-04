@@ -552,6 +552,7 @@ class WxOrder
 					Yii::app()->db->createCommand($sql)->execute();
 				}
 			}
+			
 			//插入订单优惠
 			if($isPromotion){
 				$promotion = $cart['promotion']['promotion_info'];
@@ -726,6 +727,7 @@ class WxOrder
 			$payMoney = self::updateOrderCupon($this->cupon, $order, $payPrice, $this->user['card_id']);
 			$payPrice -= $payMoney;
 		}
+		
 		// 使用储值
 		if($this->others['yue'] && $payPrice>0){
 			$remainMoney = WxBrandUser::getYue($this->user);
@@ -740,7 +742,6 @@ class WxOrder
 		//清空购物车
 		$sql = 'delete from nb_cart where user_id='.$this->userId.' and dpid='.$this->dpid;
 		Yii::app()->db->createCommand($sql)->execute();
-		
 		if($payPrice <= 0){
 			$this->orderSuccess = true;
 		}
@@ -1119,13 +1120,15 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
-	 	self::dealMaterialStock($orderId, $dpid);
+	 	self::dealMaterialStock($order);
 	 }
 	 /**
 	  * 处理产品库存
 	  */
-	 public static function dealMaterialStock($orderId, $dpid){
+	 public static function dealMaterialStock($order){
 	 	// 获取订单中产品 减少库存
+	 	$orderId = $order['lid'];
+	 	$dpid = $order['dpid'];
 	 	$orderProducts = self::getOrderProductData($orderId, $dpid);
 	 	foreach ($orderProducts as $product){
 	 		if($product['set_id'] > 0){
@@ -1169,7 +1172,7 @@ class WxOrder
 	 public static function orderSuccess($order){
 	 	$order['order_status'] = 3;
 	 	self::pushOrderToRedis($order);
-	 	self::dealMaterialStock($order['lid'], $order['dpid']);
+	 	self::dealMaterialStock($order);
 	 }
 	 /**
 	  * 已支付的订单
