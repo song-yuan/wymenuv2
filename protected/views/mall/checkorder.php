@@ -191,9 +191,11 @@
 	    	if($model['promotion_id'] > 0){
 	    		$isPromotion = true;
 	    		$proinfo = $model['promotion']['promotion_info'];
-	    		$protype = $proinfo['is_discount'];
-	    		if($protype > 0){
-	    			$prodiscount = $proinfo['promotion_discount'];
+	    		if(!empty($proinfo)){
+	    			$protype = $proinfo['is_discount'];
+	    			if($protype > 0){
+	    				$prodiscount = $proinfo['promotion_discount'];
+	    			}
 	    		}
 	    	}
 	    	$tasteHtml = '';// 已选口味html
