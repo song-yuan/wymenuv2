@@ -555,23 +555,25 @@ class WxOrder
 			//插入订单优惠
 			if($isPromotion){
 				$promotion = $cart['promotion']['promotion_info'];
-				$se = new Sequence("order_product_promotion");
-				$orderproductpromotionId = $se->nextval();
-				$orderProductPromotionData =array(
-						'lid'=>$orderproductpromotionId,
-						'dpid'=>$this->dpid,
-						'create_at'=>date('Y-m-d H:i:s',$time),
-						'update_at'=>date('Y-m-d H:i:s',$time),
-						'order_id'=>$orderId,
-						'order_product_id'=>$orderProductId,
-						'account_no'=>$accountNo,
-						'promotion_type'=>$cart['promotion']['promotion_type'],
-						'promotion_id'=>$promotion['promotion_id'],
-						'promotion_money'=>$promotion['promotion_money'],
-						'can_cupon'=>$promotion['can_cupon'],
-						'delete_flag'=>0,
-				);
-				Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);
+				if(!empty($promotion)){
+					$se = new Sequence("order_product_promotion");
+					$orderproductpromotionId = $se->nextval();
+					$orderProductPromotionData =array(
+							'lid'=>$orderproductpromotionId,
+							'dpid'=>$this->dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'order_id'=>$orderId,
+							'order_product_id'=>$orderProductId,
+							'account_no'=>$accountNo,
+							'promotion_type'=>$cart['promotion']['promotion_type'],
+							'promotion_id'=>$promotion['poromtion_id'],
+							'promotion_money'=>$promotion['promotion_money'],
+							'can_cupon'=>$promotion['can_cupon'],
+							'delete_flag'=>0,
+					);
+					Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);
+				}
 			}
 			$realityPrice +=($cart['original_price']+$oortherPrice)*$cartNum;
 		}
