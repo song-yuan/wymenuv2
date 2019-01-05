@@ -774,8 +774,8 @@
 		}
 	}
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201712121424">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201812281807">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201901051707">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201901051707">
 <style type="text/css">
 .layui-layer-setwin .layui-layer-close2 {
 	right: -12px;
