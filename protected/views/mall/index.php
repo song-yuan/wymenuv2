@@ -167,7 +167,7 @@
 									$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 									$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 					
-									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_0">';
 									$cartStr .='<div class="cart-dtl-item-inner">';
 									$cartStr .='<i class="cart-dtl-dot"></i>';
 									$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -189,7 +189,7 @@
 								}
 							}
 						}
-						$productStr .='</div></div>';
+						$productStr .='</div><div class="clear"></div></div>';
 					}else{
 						// 套餐
 						$productStr .= '<div class="prt-lt"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
@@ -202,24 +202,24 @@
 						}
 						$productStr .= ' ¥<span class="price">'.$pProduct['price'].'</span>';
 						$productStr .='</p>';
-					
-						if(!$closeShop){
-							$hasSelect = false;
-							$detailStr = '';
-							$detailIds = '';
-							// 套餐详情
-							$pDetail = $pProduct['detail'];
-							foreach($pDetail as $detail){
-								if(count($detail) > 1){
-									$hasSelect = true;
-								}
-								foreach ($detail as $detailItem){
-									if($detailItem['is_select']=='1'){
-										$detailIds .= $detailItem['product_id'].',';
-										$detailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
-									}
+						
+						$hasSelect = false;
+						$detailStr = '';
+						$detailIds = '';
+						// 套餐详情
+						$pDetail = $pProduct['detail'];
+						foreach($pDetail as $detail){
+							if(count($detail) > 1){
+								$hasSelect = true;
+							}
+							foreach ($detail as $detailItem){
+								if($detailItem['is_select']=='1'){
+									$detailIds .= $detailItem['product_id'].',';
+									$detailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
 								}
 							}
+						}
+						if(!$closeShop){
 							$detailIds = rtrim($detailIds,',');
 							if($hasSelect){
 								$cartnum = '<b></b>';
@@ -267,7 +267,7 @@
 									$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" detail="'.$detailIds.'" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 									$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 										
-									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-buysent'.$key.'" data-orderid="buysent_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_'.$detailIds.'">';
 									$cartStr .='<div class="cart-dtl-item-inner">';
 									$cartStr .='<i class="cart-dtl-dot"></i>';
 									$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -289,7 +289,10 @@
 								}
 							}
 						}
-						$productStr .='</div></div>';
+						$productStr .='</div><div class="clear"></div>';
+						// 套餐详情
+						$productStr .='<div class="tips">'.$detailStr.'</div>';
+						$productStr .='</div>';
 					}
 				}
 			}
@@ -396,7 +399,7 @@
 									$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 									$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 								
-									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-promotion'.$key.'" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-promotion'.$key.'" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_0">';
 									$cartStr .='<div class="cart-dtl-item-inner">';
 									$cartStr .='<i class="cart-dtl-dot"></i>';
 									$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -418,7 +421,7 @@
 								}
 							}
 						}
-						$productStr .='</div></div>';
+						$productStr .='</div><div class="clear"></div></div>';
 					}else{
 						// 套餐
 						$productStr .= '<div class="prt-lt"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
@@ -432,23 +435,23 @@
 						$productStr .= ' ¥<span class="price">'.$pProduct['price'].'</span>';
 						$productStr .='</p>';
 						
-						if(!$closeShop){
-							$hasSelect = false;
-							$detailStr = '';
-							$detailIds = '';
-							// 套餐详情
-							$pDetail = $pProduct['detail'];
-							foreach($pDetail as $detail){
-								if(count($detail) > 1){
-									$hasSelect = true;
-								}
-								foreach ($detail as $detailItem){
-									if($detailItem['is_select']=='1'){
-										$detailIds .= $detailItem['product_id'].',';
-										$detailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
-									}
+						$hasSelect = false;
+						$detailStr = '';
+						$detailIds = '';
+						// 套餐详情
+						$pDetail = $pProduct['detail'];
+						foreach($pDetail as $detail){
+							if(count($detail) > 1){
+								$hasSelect = true;
+							}
+							foreach ($detail as $detailItem){
+								if($detailItem['is_select']=='1'){
+									$detailIds .= $detailItem['product_id'].',';
+									$detailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
 								}
 							}
+						}
+						if(!$closeShop){
 							$detailIds = rtrim($detailIds,',');
 							if($hasSelect){
 								$cartnum = '<b></b>';
@@ -496,7 +499,7 @@
 									$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="'.$isSet.'" product-id="'.$productId.'" promote-id="'.$promotionId.'" to-group="'.$toGroup.'" can-cupon="'.$canCupon.'" detail="'.$detailIds.'" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 									$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 								
-									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-promotion'.$key.'" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'">';
+									$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['price'].'" data-category="#st-promotion'.$key.'" data-orderid="promotion_'.$isSet.'_'.$productId.'_'.$promotionId.'_'.$toGroup.'_'.$canCupon.'_'.$detailIds.'">';
 									$cartStr .='<div class="cart-dtl-item-inner">';
 									$cartStr .='<i class="cart-dtl-dot"></i>';
 									$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -518,7 +521,10 @@
 								}
 							}
 						}
-						$productStr .='</div></div>';
+						$productStr .='</div><div class="clear"></div>';
+						// 套餐详情
+						$productStr .='<div class="tips">'.$detailStr.'</div>';
+						$productStr .='</div>';
 					}
 				}
 			}
@@ -619,7 +625,7 @@
 							$productStr .='<div class="lt-rt"><div class="minus">'.$minus.'</div><input type="text" class="result" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="'.$cartItem['num'].'">';
 							$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div></div>';
 						
-							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['member_price'].'" data-category="#st'.$product['lid'].'" data-orderid="normal_0_'.$productId.'_-1_-1_0_0">';
+							$cartStr .='<div class="j-fooditem cart-dtl-item" data-price="'.$pProduct['member_price'].'" data-category="#st'.$product['lid'].'" data-orderid="normal_0_'.$productId.'_-1_-1_0_0_0">';
 							$cartStr .='<div class="cart-dtl-item-inner">';
 							$cartStr .='<i class="cart-dtl-dot"></i>';
 							$cartStr .='<p class="cart-goods-name">'.$pProduct['product_name'].'</p>';
@@ -634,15 +640,15 @@
 						}else{
 							if($pProduct['store_number'] != 0){
 								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
-								$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div><div class="clear"></div>';
+								$productStr .='<div class="add">'.$plus.'</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div>';
 							}else{
 								$productStr .='<div class="lt-rt"><div class="minus zero">'.$minus.'</div><input type="text" class="result zero" is-set="0" product-id="'.$productId.'" promote-id="-1" to-group="-1" can-cupon="0" detail="0" store-number="'.$pProduct['store_number'].'" disabled="disabled" value="0">';
-								$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div><div class="clear"></div>';
+								$productStr .='<div class="add zero">'.$plus.'</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div>';
 							}
 						}
 					}
 				}
-				$productStr .='</div></div>';
+				$productStr .='</div><div class="clear"></div></div>';
 			}
 			$productStr .='</div>';
 		}else{
@@ -673,23 +679,24 @@
                 }
                 $productStr .='¥<span class="price">'.$pProductSet['member_price'].'</span>';
 				$productStr .='</p>';
-				if(!$closeShop){
-					$hasSelect = false;
-					$detailStr = '';
-					$detailIds = '';
-					// 套餐详情
-					$pDetail = $pProductSet['detail'];
-					foreach($pDetail as $detail){
-						if(count($detail) > 1){
-							$hasSelect = true;
-						}
-						foreach ($detail as $detailItem){
-							if($detailItem['is_select']=='1'){
-								$detailIds .= $detailItem['product_id'].',';
-								$detailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
-							}
+				
+				$hasSelect = false;
+				$detailStr = '';
+				$detailIds = '';
+				// 套餐详情
+				$pDetail = $pProductSet['detail'];
+				foreach($pDetail as $detail){
+					if(count($detail) > 1){
+						$hasSelect = true;
+					}
+					foreach ($detail as $detailItem){
+						if($detailItem['is_select']=='1'){
+							$detailIds .= $detailItem['product_id'].',';
+							$detailStr .=$detailItem['product_name'].'×'.$detailItem['number'].' ';
 						}
 					}
+				}
+				if(!$closeShop){
 					$detailIds = rtrim($detailIds,',');
 					if($hasSelect){
 						$cartnum = '<b></b>';
