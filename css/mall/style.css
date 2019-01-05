@@ -79,11 +79,11 @@ footer .ft-lt {
 }
 footer .cart-img{
 	position:absolute;
-	top:15px;
+	top:-10px;
 	left:10px;
-	width:20px;
-	height:20px;
-	border-radius:10px;
+	width:40px;
+	height:40px;
+	border-radius:20px;
 	line-height:6px;
 	background:#fe7058;
 	text-align:center;
@@ -100,7 +100,7 @@ footer .cart-img{
 }
 footer .ft-lt p {
 	float: left;
-	margin-left: 30px;
+	margin-left: 50px;
 	font-size: 0.18rem;
 }
 
