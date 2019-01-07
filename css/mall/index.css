@@ -574,6 +574,9 @@ i {
 }
 .bottom-content .bottom-left{
 	color:#fe7058;
+	height: 35px;
+	line-height: 35px;
+    font-size: 1.5em;
 }
 
 .taste-bottom div.minus, .detail-bottom div.minus{
