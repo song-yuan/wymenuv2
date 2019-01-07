@@ -99,7 +99,7 @@ body {
 	float:right;
 	width: 3rem;
 	height: 100%;
-	overflow-y: scroll;
+	overflow: scroll;
 	position:relative;
 }
 .container-top{
