@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/shop.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/shop.css?_t=201901071539">
 
 <body class="shop_list bg_lgrey">
 	<div id="topbar" class="bg_white pad_10" style="text-align:left;">当前位置:<span id="current_position" class="font_org"></span> </div>
