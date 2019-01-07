@@ -106,7 +106,7 @@
 					}
 					if($isSet==0){
 						// 单品
-						$productStr .= '<div class="prt-lt clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
+						$productStr .= '<div class="prt-lt"><div class="clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
 						$productStr .= '<div class="lt-ct"><p><span class="name">'.$pProduct['product_name'].'</span>';
 						$spicy = $pProduct['spicy'];
 						if($spicy==1){
@@ -189,10 +189,10 @@
 								}
 							}
 						}
-						$productStr .='</div></div>';
+						$productStr .='</div></div></div>';
 					}else{
 						// 套餐
-						$productStr .= '<div class="prt-lt clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
+						$productStr .= '<div class="prt-lt"><div class="clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
 						$productStr .= '<div class="lt-ct"><p><span class="name">'.$pProduct['product_name'].'</span>';
 						$productStr .='</p>';
 					
@@ -289,7 +289,7 @@
 								}
 							}
 						}
-						$productStr .='</div>';
+						$productStr .='</div></div>';
 						// 套餐详情
 						$productStr .='<div class="tips">'.$detailStr.'</div>';
 						$productStr .='</div>';
@@ -333,7 +333,7 @@
 					}
 					if($isSet==0){
 						// 单品
-						$productStr .= '<div class="prt-lt clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
+						$productStr .= '<div class="prt-lt"><div class="clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
 						$productStr .= '<div class="lt-ct"><p><span class="name">'.$pProduct['product_name'].'</span>';
 						$spicy = $pProduct['spicy'];
 						if($spicy==1){
@@ -421,10 +421,10 @@
 								}
 							}
 						}
-						$productStr .='</div></div>';
+						$productStr .='</div></div></div>';
 					}else{
 						// 套餐
-						$productStr .= '<div class="prt-lt clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
+						$productStr .= '<div class="prt-lt"><div class="clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
 						$productStr .= '<div class="lt-ct"><p><span class="name">'.$pProduct['product_name'].'</span>';
 						$productStr .='</p>';
 						
@@ -521,7 +521,7 @@
 								}
 							}
 						}
-						$productStr .='</div>';
+						$productStr .='</div></div>';
 						// 套餐详情
 						$productStr .='<div class="tips">'.$detailStr.'</div>';
 						$productStr .='</div>';
@@ -563,7 +563,7 @@
 				if($pProduct['main_picture']==''){
 					$pProduct['main_picture'] = $defaultImg;
 				}
-				$productStr .='<div class="prt-lt clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
+				$productStr .='<div class="prt-lt"><div class="clearfix"><div class="lt-lt"><img src="'.$pProduct['main_picture'].'"></div>';
 				$productStr .='<div class="lt-ct"><p><span class="name">'.$pProduct['product_name'].'</span>';
 				$spicy = $pProduct['spicy'];
 				if($spicy==1){
@@ -668,7 +668,7 @@
 				if($pProductSet['main_picture']==''){
 					$pProductSet['main_picture'] = $defaultImg;
 				}
-				$productStr .='<div class="prt-lt clearfix"><div class="lt-lt"><img src="'.$pProductSet['main_picture'].'"></div>';
+				$productStr .='<div class="prt-lt"><div class="clearfix"><div class="lt-lt"><img src="'.$pProductSet['main_picture'].'"></div>';
 				$productStr .='<div class="lt-ct"><p><span class="name">'.$pProductSet['set_name'].'</span>';
 				
 				$productStr .='</p>';
@@ -765,7 +765,7 @@
 						}
 					}
 				}
-				$productStr .='</div>';
+				$productStr .='</div></div>';
 				// 套餐详情
 				$productStr .='<div class="tips">'.$detailStr.'</div>';
 				$productStr .='</div>';
