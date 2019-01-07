@@ -17,6 +17,9 @@ class ShopController extends Controller
 	public function actionIndex(){
 		$this->render('shoplist',array('companyId'=>$this->companyId));
 	}
+	public function actionList(){
+		$this->render('shoplist',array('companyId'=>$this->companyId));
+	}
 	public function actionAjaxGetShop(){
 		$page = Yii::app()->request->getParam('page');
 		$lat = Yii::app()->request->getParam('lat');
