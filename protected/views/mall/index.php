@@ -648,7 +648,7 @@
 						}
 					}
 				}
-				$productStr .='</div></div>';
+				$productStr .='</div></div></div>';
 			}
 			$productStr .='</div>';
 		}else{
