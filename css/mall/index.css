@@ -239,7 +239,8 @@ span.oprice {
 	font-size: 0.15rem;
 	text-align: right;
 	line-height: 0.3rem;
-	color: #BFBEBE
+	color: #BFBEBE;
+	float:right;
 }
 
 .prt-lt .lt-rt div.minus {
