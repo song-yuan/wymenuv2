@@ -811,8 +811,8 @@
 </div>
 <?php endif;?>
 <div class="content pad-top40 clearfix">
-	<div class="nav-lf">
-		<ul id="nav">
+	<div id="nav" class="nav-lf">
+		<ul>
 			<?php echo $navLiStr;?>
 		</ul>
 	</div>
