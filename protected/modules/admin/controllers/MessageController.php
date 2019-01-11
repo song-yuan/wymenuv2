@@ -3,12 +3,9 @@ class MessageController extends BackendController
 {
 
 	public function actionIndex() {
-
 		$db=Yii::app()->db;
 		$sql='select s.lid,s.downdate,s.dpid,s.all_message_no,s.send_message_no,s.money from nb_message_set s  where  s.delete_flag=0 and dpid='.$this->companyId;
-
 		$models = $db->createCommand($sql)->queryAll();
-		// p($models);
 		$sql2 = 'select * from nb_message where delete_flag=0 and dpid='.$this->companyId.' and unix_timestamp(downdate_at) >'.time();
 		$infos = $db->createCommand($sql2)->queryAll();
 		$this->render('index',array(
@@ -33,7 +30,6 @@ class MessageController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());
 		$models = $pdata->queryAll();
-		// p($models);
 		$this->render('setindex',array(
 				'models'=>$models,
 				'pages' => $pages,
@@ -62,7 +58,6 @@ class MessageController extends BackendController
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->update_at=date('Y-m-d H:i:s',time());
             $model->delete_flag = '0';
-// p($model);
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('message/setindex' , 'companyId' => $this->companyId));
