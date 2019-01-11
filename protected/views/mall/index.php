@@ -983,11 +983,10 @@ $(document).ready(function(){
 	var j = 0;
 	var isScroll = false;
 	var headHeight = $('.header').height();
-	var topHeight = $('.top-des').height();
 	var footHeight = $('footer').height();
-	var cHeight = $('body').height()-topHeight-headHeight-footHeight;
+	var cHeight = $('body').height()-headHeight-footHeight;
 	alert(cHeight);
-	$(".content").css('padding-top',(topHeight+headHeight));
+	$(".content").css('padding-top',(headHeight));
 	$('#nav').css('height',cHeight);
 	$('#container').css('height',cHeight);
 	$('#nav').find('li.current').next().addClass('b-radius-rt');
