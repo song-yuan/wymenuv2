@@ -982,13 +982,12 @@ $(document).ready(function(){
 	var i = 0;
 	var j = 0;
 	var isScroll = false;
-	var headHeight = $('.header').height();
-	var footHeight = $('footer').height();
-	var cHeight = $('body').height()-headHeight-footHeight;
+	var headHeight = $('.header').outerHeight();
+	var footHeight = $('footer').outerHeight();
+	var cHeight = $('body').outerHeight()-headHeight-footHeight;
 	alert(cHeight);
 	$(".content").css('padding-top',(headHeight));
-	$('#nav').css('height',cHeight);
-	$('#container').css('height',cHeight);
+	$('#nav,#container').css('height',cHeight);
 	$('#nav').find('li.current').next().addClass('b-radius-rt');
 	setTotal();
 	if(hasclose){
