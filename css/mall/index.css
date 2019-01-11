@@ -179,7 +179,7 @@ body {
 	float: left;
 	width: 1rem;
 	height: 1rem;
-	margin: 0.25rem 0.1rem;
+	padding: 0.25rem 0.1rem;
 }
 
 .prt-lt .lt-lt img {
@@ -204,7 +204,7 @@ body {
 	float: left;
 	width: 1.7rem;
 	height: 1.25rem;
-	margin-top: 0.1rem;
+	padding-top: 0.1rem;
 }
 
 .prt-lt .lt-ct p {
