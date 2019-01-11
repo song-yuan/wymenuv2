@@ -817,11 +817,13 @@
 		</ul>
 	</div>
 	
-	<div id="container" class="container">
+	<div class="container">
+		<div id="container">
 		<div id="product-top" class="container-top" style="display:block;">
 			<div><?php echo $topTitle;?></div>
 		</div>
 		<?php echo $productStr;?>
+		</div>
 	</div>
 </div>
 <footer class="clearfix">
