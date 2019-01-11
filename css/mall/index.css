@@ -185,6 +185,7 @@ body {
 .prt-lt .lt-lt img {
 	width: 1rem;
 	height: 1rem;
+	vertical-align: top;
 }
 
 .prt-lt .lt-lt i.commend {
@@ -210,7 +211,6 @@ body {
 	font-size: 0.18rem;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	overflow: hidden;
 	text-align: right;
 }
 
