@@ -97,7 +97,7 @@ body {
 	float:right;
 	width: 3rem;
 	height: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
 }
 .container-top{
 	position: fixed;
@@ -206,11 +206,12 @@ body {
 
 .prt-lt .lt-ct p {
 	font-size: 0.18rem;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	padding-right:1em;
 	text-align: right;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
 }
-
 .prt-lt .lt-ct p.pr {
 	padding-top: 0.1rem;
 	color: #FF5151;
@@ -498,9 +499,7 @@ i {
 	font-size:1.6em;
 	margin-right:0.5em;
 }
-.prt-lt .lt-ct p .name{
-	margin-right:1em;
-}
+
 .nav-img{
 	width:0.35rem;
 	height:0.35rem;
