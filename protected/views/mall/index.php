@@ -810,7 +810,7 @@
 	</marquee>
 </div>
 <?php endif;?>
-<div class="content pad-top40 clearfix">
+<div class="content clearfix">
 	<div id="nav" class="nav-lf">
 		<ul>
 			<?php echo $navLiStr;?>
