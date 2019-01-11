@@ -775,7 +775,7 @@
 	}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201901111705">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201901111705">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201901111805">
 <style type="text/css">
 .layui-layer-setwin .layui-layer-close2 {
 	right: -12px;
@@ -810,7 +810,7 @@
 	</marquee>
 </div>
 <?php endif;?>
-<div class="content clearfix">
+<div class="content pad-top40 clearfix">
 	<div class="nav-lf">
 		<ul id="nav">
 			<?php echo $navLiStr;?>
@@ -982,11 +982,10 @@ $(document).ready(function(){
 	var i = 0;
 	var j = 0;
 	var isScroll = false;
-	var headHeight = $('.header').outerHeight();
-	var footHeight = $('footer').outerHeight();
-	alert(headHeight);alert(footHeight);
+	var headHeight = 40;
+	var footHeight = 50;
+	alert($('body').outerHeight());
 	var cHeight = $('body').outerHeight()-headHeight-footHeight;
-	$(".content").css('padding-top',(headHeight));
 	$('#nav,#container').css('height',cHeight);
 	$('#nav').find('li.current').next().addClass('b-radius-rt');
 	setTotal();

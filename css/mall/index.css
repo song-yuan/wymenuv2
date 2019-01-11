@@ -14,7 +14,9 @@ body {
 	background:url(../../img/mall/notice.png) 4px 8px no-repeat;
 	background-size: 24px 24px;
 }
-
+.pad-top40{
+	padding-top:40px;
+}
 .content{
 	position:relative;
 }
