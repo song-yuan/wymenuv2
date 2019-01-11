@@ -984,8 +984,8 @@ $(document).ready(function(){
 	var isScroll = false;
 	var headHeight = $('.header').outerHeight();
 	var footHeight = $('footer').outerHeight();
+	alert(headHeight);alert(footHeight);
 	var cHeight = $('body').outerHeight()-headHeight-footHeight;
-	alert(cHeight);
 	$(".content").css('padding-top',(headHeight));
 	$('#nav,#container').css('height',cHeight);
 	$('#nav').find('li.current').next().addClass('b-radius-rt');
