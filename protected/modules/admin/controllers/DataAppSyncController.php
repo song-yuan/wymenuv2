@@ -438,7 +438,7 @@ class DataAppSyncController extends Controller
 				$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/posfeenotify');
 				$notify = new WxPayNativePay();
 				$input = new WxPayUnifiedOrder();
-				$input->SetBody("续费订单");
+				$input->SetBody("收款机延期");
 				$input->SetAttach("3");
 				$input->SetOut_trade_no($orderId);
 				$input->SetTotal_fee($payPrice);
