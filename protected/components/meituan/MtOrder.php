@@ -328,7 +328,12 @@ class MtOrder
 		}
 		$receiveAddress = $obj->recipientAddress;
 		$recipientPhone = $obj->recipientPhone;
-		$backupRecipientPhone = isset($obj->backupRecipientPhone)?$obj->backupRecipientPhone:$recipientPhone;
+		$backupRecipientPhone = isset($obj->backupRecipientPhone)?$obj->backupRecipientPhone:'';
+		if($backupRecipientPhone!=''){
+			$backupRecipientPhone = json_decode($backupRecipientPhone);
+			$backupRecipientPhone = join(',', $backupRecipientPhone);
+		}
+		
 		$orderArr['order_address'] = array(array('consignee'=>$obj->recipientName,'street'=>$receiveAddress,'mobile'=>$recipientPhone,'tel'=>$backupRecipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$poiReceiveDetail->wmPoiReceiveCent/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		
@@ -350,7 +355,6 @@ class MtOrder
 				array_push($orderCloudArr['nb_order_account_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
 			}
 		}
-		
 		
 		// type 同步类型  2订单
 		$orderData = array('sync_lid'=>0,'dpid'=>$dpid,'type'=>2,'is_pos'=>0,'posLid'=>0,'data'=>json_encode($orderArr));
