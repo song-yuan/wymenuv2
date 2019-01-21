@@ -449,6 +449,7 @@ class WxOrder
 				$cart['price'] = $cart['price']*$levelDiscount;
 			}
 			$cartPrice = $cart['price'];
+			$cartNum = $cart['num'];
 			$orderPrice += $cartPrice*$cartNum;
 			if($cart['is_set'] > 0){
 				$setPrice = $cartPrice;
