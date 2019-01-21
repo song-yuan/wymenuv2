@@ -51,7 +51,7 @@
 		
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201901111705">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201901211805">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201901211429">
 <style type="text/css">
 .layui-layer-setwin .layui-layer-close2 {
 	right: -12px;
@@ -1170,7 +1170,7 @@ $(document).ready(function(){
 		    type: 1,
 		    title: productName,
 		    shadeClose: true,
-		    area: ['80%','60%'],
+		    area: ['80%','auto'],
 		    content:$('#taste')
 		});
     });
