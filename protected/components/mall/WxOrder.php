@@ -447,7 +447,11 @@ class WxOrder
 			
 			$cartPrice = $cart['price'];
 			$cartNum = $cart['num'];
-			$orderPrice += $cartPrice*$cartNum;
+			if(!$isPromotion&&$cart['is_member_discount']){
+				$orderPrice += $cartPrice*$levelDiscoun*$cartNum;
+			}else{
+				$orderPrice += $cartPrice*$cartNum;
+			}
 			if($cart['is_set'] > 0){
 				$setPrice = $cartPrice;
 				// 套餐 插入套餐明细  计算单个套餐数量  $detail = array(cart_id,set_id,product_id,num,price); price 套餐内加价
