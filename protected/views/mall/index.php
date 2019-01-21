@@ -893,7 +893,7 @@ function getProduct(){
 									cartStr +='<div class="j-fooditem cart-dtl-item" data-price="'+pProduct['member_price']+'" data-category="#st'+product['lid']+'" data-orderid="normal_'+isSet+'_'+productId+'_'+promotionId+'_'+toGroup+'_'+canCupon+'_'+detailIds+'">';
 									cartStr +='<div class="cart-dtl-item-inner">';
 									cartStr +='<i class="cart-dtl-dot"></i>';
-									cartStr +='<p class="cart-goods-name">'+pProduct['product_name']+'</p>';
+									cartStr +='<p class="cart-goods-name">'+pProduct['set_name']+'</p>';
 									cartStr +='<div class="j-item-console cart-dtl-oprt">';
 									cartStr +='<a class="j-add-item add-food" href="javascript:void(0);"><span class="icon i-add-food">+</span></a>';
 									cartStr +='<span class="j-item-num foodop-num">'+cartItem['num']+'</span> ';
