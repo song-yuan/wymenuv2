@@ -446,7 +446,7 @@ class WxOrder
 			}
 			
 			if(!$isPromotion&&$cart['is_member_discount']){
-				$cart['price'] = $cart['price']*$levelDiscoun;
+				$cart['price'] = $cart['price']*$levelDiscount;
 			}
 			$cartPrice = $cart['price'];
 			$orderPrice += $cartPrice*$cartNum;
