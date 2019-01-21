@@ -76,40 +76,10 @@ class MallController extends Controller
         $userId = $user['lid'];
         $cartList = array();
         $siteId = Yii::app()->session['qrcode-'.$userId];
-        
-        $promotion = new WxPromotion($this->companyId,$userId,$this->type);
-        $promotions = $promotion->promotionProductList;
-        $buySentPromotions = $promotion->buySentProductList;
-        $fullSents = $promotion->fullSentList;
-        $proProIdList = $promotion->proProIdList;
-        $cache = Yii::app()->redis->get($key);
-        if($cache!=false){
-        	$products = json_decode($cache,true);
-        }else{
-        	$product = new WxProduct($this->companyId,$userId,$this->type);
-        	$products = $product->categoryProductLists;
-        	Yii::app()->redis->setex($key,$expire,json_encode($products));
-        }
-        $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
-        $carts = $cartObj->getCart();
-        $disables = $carts['disable'];
-        $avalibles = $carts['available'];
-        foreach ($avalibles as $cart){
-        	$productId = (int)$cart['product_id'];
-        	$isSte = $cart['is_set'];
-        	$promotionType = $cart['promotion_type'];
-        	$promotionId = (int)$cart['promotion_id'];
-        	$toGroup = $cart['to_group'];
-        	$canCupon = $cart['can_cupon'];
-        	$cartKey = $promotionType.'-'.$productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
-        	if(!isset($cartList[$cartKey])){
-        		$cartList[$cartKey] = array();
-        	}
-        	array_push($cartList[$cartKey], $cart);
-        }	
+       	
 		$start = WxCompanyFee::get(4,$this->companyId);
 		$notices = WxNotice::getNotice($this->company['comp_dpid'], 2, 1);
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'promotions'=>$promotions,'buySentPromotions'=>$buySentPromotions,'fullsents'=>$fullSents,'proProIdList'=>$proProIdList,'products'=>$products,'cartList'=>$cartList,'disables'=>$disables,'start'=>$start,'notices'=>$notices));
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'start'=>$start,'notices'=>$notices));
 	}
 	/**
 	 * 
@@ -772,15 +742,42 @@ class MallController extends Controller
 	public function actionGetProduct()
 	{
 		$userId = Yii::app()->request->getParam('userId');
+		$siteId = Yii::app()->session['qrcode-'.$userId];
+		$key = 'productList-'.$this->companyId.'-'.$this->type;
+		$expire = 10*60; // 过期时间
+		$cartList = array();
 		//普通优惠
 		$promotion = new WxPromotion($this->companyId,$userId,$this->type);
-		$promotions = $promotion->promotionProductList;
-		
-		$product = new WxProduct($this->companyId,$userId,$this->type);
-		$categorys = $product->categorys;
-		$products = $product->categoryProductLists;
-		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));
-		exit;
+        $promotions = $promotion->promotionProductList;
+        $buySentPromotions = $promotion->buySentProductList;
+        $fullSents = $promotion->fullSentList;
+        $proProIdList = $promotion->proProIdList;
+        $cache = Yii::app()->redis->get($key);
+        if($cache!=false){
+        	$products = json_decode($cache,true);
+        }else{
+        	$product = new WxProduct($this->companyId,$userId,$this->type);
+        	$products = $product->categoryProductLists;
+        	Yii::app()->redis->setex($key,$expire,json_encode($products));
+        }
+        $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
+        $carts = $cartObj->getCart();
+        $disables = $carts['disable'];
+        $avalibles = $carts['available'];
+        foreach ($avalibles as $cart){
+        	$productId = (int)$cart['product_id'];
+        	$isSte = $cart['is_set'];
+        	$promotionType = $cart['promotion_type'];
+        	$promotionId = (int)$cart['promotion_id'];
+        	$toGroup = $cart['to_group'];
+        	$canCupon = $cart['can_cupon'];
+        	$cartKey = $promotionType.'-'.$productId.'-'.$isSte.'-'.$promotionId.'-'.$toGroup.'-'.$canCupon;
+        	if(!isset($cartList[$cartKey])){
+        		$cartList[$cartKey] = array();
+        	}
+        	array_push($cartList[$cartKey], $cart);
+        }
+		Yii::app()->end(json_encode(array('disables'=>$disables,'buySentPromotions'=>$buySentPromotions,'promotions'=>$promotions,'products'=>$products,'cartList'=>$cartList)));
 	}
 	/**
 	 * 
