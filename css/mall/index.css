@@ -528,7 +528,7 @@ i {
 	display:none;
 	width:100%;
 	min-height:200px;
-	max-height:500px;
+	max-height:400px;
 	font-size:0.15rem;
 	overflow:scroll;
 }
