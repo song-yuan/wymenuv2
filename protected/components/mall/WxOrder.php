@@ -512,8 +512,8 @@ class WxOrder
 							}
 							if(!$isSent){
 								$orderPrice += $dprice*$cartNum;
+								$ortherPrice += $dprice;
 							}
-							$ortherPrice += $dprice;
 							$oortherPrice += $taste[3];
 						}
 						$se = new Sequence("order_taste");
