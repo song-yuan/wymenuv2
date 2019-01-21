@@ -282,9 +282,10 @@ function getProduct(){
 												var groups = tasteGroups[j]['tastes'];
 												for (var k in groups){
 													var taste = groups[k];
-													if(tasteArr.indexOf(taste['lid'])){
+													if(tasteArr.indexOf(taste['lid'])>-1){
 														tasteNames += taste['name']+' ';
 														pPrice += parseFloat(taste['price']);
+														continue;
 													}
 												}
 											}
@@ -381,9 +382,10 @@ function getProduct(){
 												var detail = pDetail[j];
 												for (var k in detail){
 													var detailItem = detail[k];
-													if(detailArr.indexOf(detailItem['product_id'])!=-1){
+													if(detailArr.indexOf(detailItem['product_id'])>-1){
 														pPrice += parseFloat(detailItem['price']);
 														cdetailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
+														continue;
 													}
 												}
 											}
@@ -515,13 +517,14 @@ function getProduct(){
 												var groups = tasteGroups[j]['tastes'];
 												for (var k in groups){
 													var taste = groups[k];
-													if(tasteArr.indexOf(taste['lid'])){
+													if(tasteArr.indexOf(taste['lid'])>-1){
 														tasteNames += taste['name']+' ';
 														if(isDiscount){
 															$pPrice += parseFloat(taste['price']*prodiscount);
 														}else{
 															pPrice += parseFloat(taste['price']);
 														}
+														continue;
 													}
 												}
 											}
@@ -618,13 +621,14 @@ function getProduct(){
 												var detail = pDetail[j];
 												for (var k in detail){
 													var detailItem = detail[k];
-													if(detailArr.indexOf(detailItem['product_id'])!=-1){
+													if(detailArr.indexOf(detailItem['product_id'])>-1){
 														if(isDiscount){
 															pPrice += parseFloat(detailItem['price']*prodiscount);
 														}else{
 															pPrice += parseFloat(detailItem['price']);
 														}
 														cdetailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
+														continue;
 													}
 												}
 											}
@@ -757,9 +761,10 @@ function getProduct(){
 											var groups = tasteGroups[j]['tastes'];
 											for (var k in groups){
 												var taste = groups[k];
-												if(tasteArr.indexOf(taste['lid'])){
+												if(tasteArr.indexOf(taste['lid'])>-1){
 													tasteNames += taste['name']+' ';
 													pPrice += parseFloat(taste['price']);
+													continue;
 												}
 											}
 										}
@@ -859,9 +864,10 @@ function getProduct(){
 											var detail = pDetail[j];
 											for (var k in detail){
 												var detailItem = detail[k];
-												if(detailArr.indexOf(detailItem['product_id'])!=-1){
+												if(detailArr.indexOf(detailItem['product_id'])>-1){
 													pPrice += parseFloat(detailItem['price']);
 													cdetailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
+													continue;
 												}
 											}
 										}
