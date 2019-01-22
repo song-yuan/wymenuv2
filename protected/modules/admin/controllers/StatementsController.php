@@ -2506,7 +2506,50 @@ class StatementsController extends BackendController
 				'selectDpid'=>$selectDpid
 		));
 	}
-
+	
+	// 收款机续费报表
+	public function actionPosfee(){
+		$begin_time = Yii::app()->request->getParam('begintime',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('endtime',date('Y-m-d',time()));
+		$download = Yii::app()->request->getParam('d',0);
+		$sql = 'select t.*,t1.company_name,t1.contact_name,t1.mobile,t1.country,t1.province,t1.city,t1.county_area,t1.address from nb_poscode_fee_record t,nb_company t1 where t.dpid=t1.dpid and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t1.comp_dpid='.$this->companyId;
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		 
+		if($download){
+			$tableArr = array('序号','店名','序列号','延期日期','延期类型','延期时间','到期时间','	联系人','联系电话','联系地址');
+			$data = array();
+			$key = 1;
+			foreach ($models as $m){
+				if($m['type']==1){
+					$type = '年';
+				}else{
+					$type = '月';
+				}
+				$address = $m['province'].$m['city'].$m['county_area'].$m['address'];
+				$tempArr = array(
+						$key,
+						$m['company_name'],
+						$m['poscode'],
+						$m['create_at'],
+						$type,
+						$m['add_time'],
+						$m['expire_time'],
+						$m['contact_name'],
+						$m['mobile'],
+						$address
+				);
+				array_push($data, $tempArr);
+				$key++;
+			}
+			Helper::exportExcel($tableArr,$data,'收款机续费报表','收款机续费');
+			exit;
+		}
+		$this->render('posfee',array(
+				'models'=>$models,
+				'begintime'=>$begin_time,
+				'endtime'=>$end_time
+		));
+	}
 
 	public function getAccountMoney($account_no){
 		$accountMoney = '';
@@ -2761,7 +2804,7 @@ class StatementsController extends BackendController
 			$setids = '>=0';
 			$setname = '综合、';
 		}
-		$download = Yii::app()->request->getParam('d');
+		$download = Yii::app()->request->getParam('d',0);
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$comName = $this->getComName();

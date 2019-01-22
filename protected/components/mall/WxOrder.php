@@ -466,6 +466,7 @@ class WxOrder
 					}
 					if(!$isSent){
 						$orderPrice += $dprice*$cartNum;
+						$ortherPrice = $dprice;
 					}
 					$oortherPrice += $detail[4];
 					$itemPrice = Helper::dealProductPrice($detail['original_price'], $totalProductPrice, $setPrice);
@@ -484,7 +485,7 @@ class WxOrder
 							'product_id'=>$detail[2],
 							'product_name'=>$detail['product_name'],
 							'product_pic'=>$detail['main_picture'],
-							'price'=>$itemPrice+$dprice,
+							'price'=>$itemPrice+$ortherPrice,
 							'original_price'=>$detail['original_price']+$detail[4],
 							'amount'=>$detail[3]*$cartNum,
 							'zhiamount'=>$cartNum,

@@ -221,6 +221,14 @@
                                 <div class="list_small">查询账单的账单号、下单时间、金额和支付方式</div>
                             </a> 
                         </div>
+                        <?php if(Yii::app()->user->role <6):?>
+        				<div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/posfee',array('companyId' => $this->companyId));?>">
+                                <div class="list_big">收款机续费报表</div>
+                                <div class="list_small">查看一段时间内收款机续费的门店</div>
+                            </a> 
+                        </div>
+                        <?php endif;?>
                     </div>
                     <div class= "panel_body row">
                         <p>营销活动统计报表</p>
