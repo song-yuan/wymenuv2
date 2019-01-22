@@ -99,7 +99,7 @@
                         <?php if($dpids):?>
                         <?php foreach($dpids as $dpid):?>
                             <li style="width:50%;float:left;">
-                                    <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                    <div style="width:10%;float:left;"><?php echo (int)$dpid['dpid'];?></div>
                                     <div style="width:70%;float:left;"><?php echo $dpid['company_name'];?></div>
                                     <div style="width:10%;float:left;">
                                            <input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" />
