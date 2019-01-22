@@ -40,7 +40,7 @@
 			         <?php if($dpids):?>
 			         <?php foreach($dpids as $dpid):?>
 				         <li style="width:50%;float:left;" class="company <?php $a=$dpid['is_rest']; if($a == 3)echo 'wxdp';else echo 'ortherdp';?>">
-					         <div style="width:20%;float:left;"><?php echo $dpid['dpid']%1000;?></div>
+					         <div style="width:20%;float:left;"><?php echo $dpid['dpid'];?></div>
 					         <div style="width:10%;float:left;">
 					         	<input style="height:20px;" type="checkbox" class="checkdpids ckall <?php if($a == 3) echo 'ckwx';else echo 'ckor';?>" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" id="rep<?php echo $dpid['dpid'];?>"/>
 					         </div>

@@ -135,7 +135,7 @@
                                        <input style="height:20px;" type="checkbox" class="checkdpids" value="<?php  echo $dpid['dpid'];?>" id="check<?php echo $a; ?>" name="reportlist[]" />
                                 </div>
                                 <label for="check<?php echo $a; ?>" style="font-size:1em;width:80%;">
-                                    <div style="width:10%;float:left;"><?php echo $a; $a++;?></div>
+                                    <div style="width:10%;float:left;"><?php echo $dpid['dpid'];?></div>
                                     <div style="width:90%;float:left;"><?php echo $dpid['company_name'];?></div>
                                 </label>
                             </li>
