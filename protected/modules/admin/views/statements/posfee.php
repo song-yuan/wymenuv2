@@ -65,10 +65,12 @@
 								<th><?php echo yii::t('app','序号');?></th>
 								<th><?php echo yii::t('app','店名');?></th>
 								<th><?php echo yii::t('app','序列号');?></th>
-								<th><?php echo yii::t('app','延期日期');?></th>
-								<th><?php echo yii::t('app','延期类型');?></th>
-								<th><?php echo yii::t('app','延期时间');?></th>
+								<th><?php echo yii::t('app','续费日期');?></th>
+								<th><?php echo yii::t('app','续费类型');?></th>
+								<th><?php echo yii::t('app','续费时间');?></th>
 								<th><?php echo yii::t('app','到期时间');?></th>
+								<th><?php echo yii::t('app','续费金额');?></th>
+								<th><?php echo yii::t('app','续费方式');?></th>
 								<th><?php echo yii::t('app','联系人');?></th>
 								<th><?php echo yii::t('app','联系电话');?></th>
 								<th><?php echo yii::t('app','联系地址');?></th>
@@ -85,6 +87,8 @@
 								<td><?php if($model['type']==1){echo '年';}else{ echo '月';}?></td>
 								<td><?php echo $model['add_time'];?></td>
 								<td><?php echo $model['expire_time'];?></td>
+								<td><?php echo $model['price'];?></td>
+								<td><?php if($model['add_type']==0){echo '后台续费';}else{echo '扫码续费';};?></td>
 								<td><?php echo $model['contact_name'];?></td>
 								<td><?php echo $model['mobile'];?></td>
 								<td><?php echo $model['province'].$model['city'].$model['county_area'].$model['address'];?></td>

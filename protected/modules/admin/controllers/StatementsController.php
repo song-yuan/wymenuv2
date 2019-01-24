@@ -2516,7 +2516,7 @@ class StatementsController extends BackendController
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		 
 		if($download){
-			$tableArr = array('序号','店名','序列号','延期日期','延期类型','延期时间','到期时间','	联系人','联系电话','联系地址');
+			$tableArr = array('序号','店名','序列号','续费日期','续费类型','续费时间','到期时间','续费金额','续费方式','	联系人','联系电话','联系地址');
 			$data = array();
 			$key = 1;
 			foreach ($models as $m){
@@ -2524,6 +2524,11 @@ class StatementsController extends BackendController
 					$type = '年';
 				}else{
 					$type = '月';
+				}
+				if($m['add_type']==1){
+					$addtype = '扫码续费';
+				}else{
+					$addtype = '后台续费';
 				}
 				$address = $m['province'].$m['city'].$m['county_area'].$m['address'];
 				$tempArr = array(
@@ -2534,6 +2539,8 @@ class StatementsController extends BackendController
 						$type,
 						$m['add_time'],
 						$m['expire_time'],
+						$m['price'],
+						$addtype,
 						$m['contact_name'],
 						$m['mobile'],
 						$address
