@@ -139,6 +139,7 @@ class PoscodeFee extends CActiveRecord
 		if($extTime < $now){
 			$extTime = $now;
 		}
+		$price = number_format($posfeeorder['total_amount']/100,2);
 		$addtime = $posfeeorder['years'];
 		$time = date('Y-m-d H:i:s',strtotime($extTime.' +'.$addtime.' year'));
 		
@@ -157,8 +158,10 @@ class PoscodeFee extends CActiveRecord
 				'update_at'=>$now,
 				'poscode'=>$poscode,
 				'type'=>1,
+				'price'=>$price,
 				'add_time'=>$addtime,
-				'expire_time'=>$time
+				'expire_time'=>$time,
+				'add_type'=>1
 		);
 		$result = Yii::app()->db->createCommand()->insert('nb_poscode_fee_record',$data);
 	}
