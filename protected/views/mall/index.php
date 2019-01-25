@@ -168,6 +168,14 @@
 	</div>
 	
 </div>
+<!-- loading toast -->
+<div id="loadingToast" style="display:none;font-size:0.15em;">
+<div class="weui-mask_transparent"></div>
+	<div class="weui-toast">
+		<i class="weui-loading weui-icon_toast"></i>
+		<p class="weui-toast__content">菜单加载中</p>
+ 	</div>
+</div>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
 <script> 
@@ -179,7 +187,7 @@ var resMsg = '<?php echo $this->company['rest_message']?$this->company['rest_mes
 <?php endif;?>
 
 function getProduct(){
-	layer.load(2);
+	$('#loadingToast').show();
 	$.ajax({
 		url:"<?php echo $this->createUrl('/mall/getProduct',array('companyId'=>$this->companyId,'type'=>$this->type,'userId'=>$userId));?>",
 		success:function(data){
@@ -931,7 +939,7 @@ function getProduct(){
 			$('.j-cart-dtl-list-inner').html(cartStr);
 			$('#nav').find('li.current').next().addClass('b-radius-rt');
 			setTotal();
-			layer.closeAll('loading');
+			$('#loadingToast').hide();
 		},
 		dataType:'json'
 	});
