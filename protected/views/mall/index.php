@@ -269,7 +269,6 @@ function getProduct(){
 							if(!hasclose){
 								var tasteGroups = pProduct['taste_groups'];
 								if(tasteGroups.length > 0){
-									var cartnum = '<b></b>';
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartLists = cartList[cartKey];
 										for (var i in cartLists){
@@ -306,7 +305,7 @@ function getProduct(){
 										}
 									}
 									// 有口味
-									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-taste" taste="'+encodeURI(JSON.stringify(pProduct['taste_groups']))+'">选规格</div>'+cartnum+'</div>';
+									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-taste" taste="'+encodeURI(JSON.stringify(pProduct['taste_groups']))+'">选规格</div></div>';
 								}else{
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartItem = cartList[cartKey][0];
@@ -406,7 +405,7 @@ function getProduct(){
 										}
 									}
 									// 有可选套餐
-									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-detail" detail="'+encodeURI(JSON.stringify(pDetail))+'">选套餐</div>'+cartnum+'</div>';
+									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-detail" detail="'+encodeURI(JSON.stringify(pDetail))+'">选套餐</div></div>';
 								}else{
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartItem = cartList[cartKey][0];
@@ -504,7 +503,6 @@ function getProduct(){
 							if(!hasclose){
 								var tasteGroups = pProduct['taste_groups'];
 								if(tasteGroups.length > 0){
-									var cartnum = '<b></b>';
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartLists = cartList[cartKey];
 										for (var i in cartLists){
@@ -545,7 +543,7 @@ function getProduct(){
 										}
 									}
 									// 有口味
-									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="'+isDiscount+'" promotion-money="'+promoney+'" promotion-discount="'+prodiscount+'" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-taste" taste="'+encodeURI(JSON.stringify(pProduct['taste_groups']))+'">选规格</div>'+cartnum+'</div>';
+									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="'+isDiscount+'" promotion-money="'+promoney+'" promotion-discount="'+prodiscount+'" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-taste" taste="'+encodeURI(JSON.stringify(pProduct['taste_groups']))+'">选规格</div></div>';
 								}else{
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartItem = cartList[cartKey][0];
@@ -649,7 +647,7 @@ function getProduct(){
 										}
 									}
 									// 有可选套餐
-									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="'+isDiscount+'" promotion-money="'+promoney+'" promotion-discount="'+prodiscount+'" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-detail" detail="'+encodeURI(JSON.stringify(pDetail))+'">选套餐</div>'+cartnum+'</div>';
+									productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="'+isDiscount+'" promotion-money="'+promoney+'" promotion-discount="'+prodiscount+'" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-detail" detail="'+encodeURI(JSON.stringify(pDetail))+'">选套餐</div></div>';
 								}else{
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartItem = cartList[cartKey][0];
@@ -748,7 +746,6 @@ function getProduct(){
 						if(!hasclose){
 							var tasteGroups = pProduct['taste_groups'];
 							if(tasteGroups.length > 0){
-								var cartnum = '<b></b>';
 								if(typeof cartList[cartKey] != "undefined"){
 									var cartLists = cartList[cartKey];
 									for (var i in cartLists){
@@ -785,7 +782,7 @@ function getProduct(){
 									}
 								}
 								// 有口味
-								productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-taste" taste="'+encodeURI(JSON.stringify(pProduct['taste_groups']))+'">选规格</div>'+cartnum+'</div>';
+								productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-taste" taste="'+encodeURI(JSON.stringify(pProduct['taste_groups']))+'">选规格</div></div>';
 							}else{
 								if(typeof cartList[cartKey] != "undefined"){
 									var cartItem = cartList[cartKey][0];
@@ -888,7 +885,7 @@ function getProduct(){
 									}
 								}
 								// 有可选套餐
-								productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-detail" detail="'+encodeURI(JSON.stringify(pDetail))+'">选套餐</div>'+cartnum+'</div>';
+								productStr +='<div class="lt-rt clearfix"><input type="text" class="result zero" is-set="'+isSet+'" product-id="'+productId+'" promote-id="'+promotionId+'" to-group="'+toGroup+'" can-cupon="'+canCupon+'" is-discount="0" promotion-money="0" promotion-discount="1" store-number="'+pProduct['store_number']+'" disabled="disabled" value="0"><div class="add-detail" detail="'+encodeURI(JSON.stringify(pDetail))+'">选套餐</div></div>';
 							}else{
 								if(typeof cartList[cartKey] != "undefined"){
 									var cartItem = cartList[cartKey][0];
