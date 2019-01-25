@@ -81,17 +81,6 @@
 <input type="hidden" id="user_id" name="user[lid]" value="<?php echo $user['lid'];?>"/>
 <input type="hidden" id="user_id" name="user[dpid]" value="<?php echo $user['dpid'];?>"/>
 </form>
-<div class="weui_dialog_alert" id="dialog2" style="display: none;">
-	<div class="weui_mask"></div>
-	<div class="weui_dialog">
-	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-	    <div class="weui_dialog_bd"></div>
-	    <div class="weui_dialog_ft">
-	        <a href="javascript:;" id="confirm" class="weui_btn_dialog primary">确定</a>
-	    </div>
-	</div>
-</div>
-
 <div id="dialogs">
 	<div class="js_dialog" id="dialogaddbirth" style="display: none;">
             <div class="weui-mask"></div>
