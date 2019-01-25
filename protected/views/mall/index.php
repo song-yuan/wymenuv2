@@ -1475,7 +1475,7 @@ $(document).ready(function(){
 		    type: 1,
 		    title: productName,
 		    shadeClose: true,
-		    area: ['80%','60%'],
+		    area: ['80%','auto'],
 		    content:$('#detail')
 		});        
     });
