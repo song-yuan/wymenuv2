@@ -687,7 +687,7 @@ var App = function () {
     var handleSelect2 = function() {
         if (jQuery().select2) {
             $('.select2me').select2({
-                placeholder: "Select",
+                placeholder: "请选择..",
                 allowClear: true
             });
             $('#select2_sample2').select2({
