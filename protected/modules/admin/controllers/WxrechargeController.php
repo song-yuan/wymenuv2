@@ -27,9 +27,11 @@ class WxrechargeController extends BackendController
 	}
 	public function actionCreate() {
 		$redpids = array();
-		$model = new WeixinRecharge ;
-		$model->dpid = $this->companyId ;
+		$recashcards = array();
+		$model = new WeixinRecharge;
+		$model->dpid = $this->companyId;
 		$companys = $this->getDp($this->comptype);
+		$cashcards = $this->getCashCard($this->companyId);
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('WeixinRecharge');
 			$se = new Sequence("weixin_recharge");
@@ -38,6 +40,23 @@ class WxrechargeController extends BackendController
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->update_at = date('Y-m-d H:i:s',time());
 			
+            if(isset($postData['recharge_cashcard'])){
+            	$model->recharge_cashcard = 1;
+            	foreach ($postData['recharge_cashcard'] as $rcash){
+            		$rechargeModel = new WeixinRechargeCashcard();
+            		$se = new Sequence("weixin_recharge_cashcard");
+            		$rechargeModel->lid = $se->nextval();
+            		$rechargeModel->dpid = $this->companyId ;
+            		$rechargeModel->create_at = date('Y-m-d H:i:s',time());
+            		$rechargeModel->update_at = date('Y-m-d H:i:s',time());
+            		$rechargeModel->weixin_recharge_id = $model->lid;
+            		$rechargeModel->cashcard_id = $rcash;
+            		$rechargeModel->save();
+            	}
+            }else{
+            	$model->recharge_cashcard = 0;
+            }
+            
 			if(isset($postData['recharge_dpid'])){
 				$model->recharge_dpid = 1;
 				foreach ($postData['recharge_dpid'] as $rdpid){
@@ -62,7 +81,9 @@ class WxrechargeController extends BackendController
 		$this->render('create' , array(
 				'model' => $model,
 				'companys' => $companys,
-				'redpids'=>$redpids
+				'cashcards' =>$cashcards,
+				'redpids'=>$redpids,
+				'recashcards'=>$recashcards
 		));
 	}
 	public function actionUpdate(){
@@ -70,10 +91,33 @@ class WxrechargeController extends BackendController
 		$model = WeixinRecharge::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		$companys = $this->getDp($this->comptype);
 		$redpids = $this->getRechargeDpid($lid);
+		$cashcards = $this->getCashCard($this->companyId);
+		$recashcards = $this->getRechargeCashcard($lid);
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('WeixinRecharge');
 			$model->attributes = $postData;
 			$model->update_at = date('Y-m-d H:i:s',time());
+			
+			if(isset($postData['recharge_cashcard'])){
+				$model->recharge_cashcard = 1;
+				if($postData['recharge_cashcard']!=$recashcards){
+					WeixinRechargeCashcard::model()->updateAll(array('delete_flag'=>1),'weixin_recharge_id=:rid',array(':rid'=>$lid));
+					foreach ($postData['recharge_cashcard'] as $rcash){
+						$rechargeModel = new WeixinRechargeCashcard();
+						$se = new Sequence("weixin_recharge_cashcard");
+						$rechargeModel->lid = $se->nextval();
+						$rechargeModel->dpid = $this->companyId ;
+						$rechargeModel->create_at = date('Y-m-d H:i:s',time());
+						$rechargeModel->update_at = date('Y-m-d H:i:s',time());;
+						$rechargeModel->weixin_recharge_id = $lid;
+						$rechargeModel->cashcard_id = $rcash;
+						$rechargeModel->save();
+					}
+				}
+			}else{
+				$model->recharge_cashcard = 0;
+			}
+			
 			if(isset($postData['recharge_dpid'])){
 				$model->recharge_dpid = 1;
 				if($postData['recharge_dpid']!=$redpids){
@@ -101,7 +145,9 @@ class WxrechargeController extends BackendController
 		$this->render('update' , array(
 			'model'=>$model,
 			'companys' => $companys,
-			'redpids'=>$redpids
+			'cashcards' =>$cashcards,
+			'redpids'=>$redpids,
+			'recashcards'=>$recashcards
 		));
 	}
 	public function actionDelete(){
@@ -143,5 +189,15 @@ class WxrechargeController extends BackendController
 			}
 		}
 		return $companys;
+	}
+	private function getRechargeCashcard($rechargeId){
+		$sql = 'select cashcard_id from nb_weixin_recharge_cashcard where weixin_recharge_id='.$rechargeId.' and delete_flag=0';
+		$rdpids = Yii::app()->db->createCommand($sql)->queryColumn();
+		return $rdpids;
+	}
+	private function getCashCard($dpid = 0){
+		$sql = 'select lid,sole_code,cupon_title from nb_cupon where dpid='.$dpid.' and delete_flag=0';
+		$cashcards = Yii::app()->db->createCommand($sql)->queryAll();
+		return $cashcards;
 	}
 }

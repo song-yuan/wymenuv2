@@ -8,10 +8,11 @@
  */
 class WxRecharge
 {
-	public function __construct($rechargeId,$dpid,$userId){
+	public function __construct($rechargeId,$dpid,$userId,$openId = ''){
 		$this->rechargeId = $rechargeId;
 		$this->dpid = $dpid;
 		$this->userId = $userId;
+		$this->openId = $openId;
 		$transaction = Yii::app()->db->beginTransaction();
  		try {
 			$this->getRecharge();
@@ -33,9 +34,7 @@ class WxRecharge
 						  ->queryRow();
 	}
 	/**
-	 * 
 	 * 充值记录
-	 * 
 	 */
 	 public function recharge(){
 	 	$time = time();
@@ -53,42 +52,35 @@ class WxRecharge
         	'brand_user_lid'=>$this->userId,
         	'is_sync'=>DataSync::getInitSync(),	
         	);
-       $result = Yii::app()->db->createCommand()->insert('nb_recharge_record', $insertDataArr);
-       if(!$result){
+       	$result = Yii::app()->db->createCommand()->insert('nb_recharge_record', $insertDataArr);
+       	if(!$result){
        		throw new Exception('插入记录失败!');
-       }
+       	}
 	 }
 	 /**
-	  * 
 	  *更改会员信息 
-	  * 
 	  */
-	  public function updateBrandUser(){
-		  $isSync = DataSync::getInitSync();
-		  $sql = 'update nb_brand_user set remain_money = remain_money + '.$this->recharge['recharge_money'].',remain_back_money = remain_back_money + '.$this->recharge['recharge_cashback'].',is_sync='.$isSync.' where lid='.$this->userId.' and dpid='.$this->dpid;
-		  $result = Yii::app()->db->createCommand($sql)->execute();
-		  if(!$result){
+  	public function updateBrandUser(){
+	  	$sql = 'update nb_brand_user set remain_money = remain_money + '.$this->recharge['recharge_money'].',remain_back_money = remain_back_money + '.$this->recharge['recharge_cashback'].' where lid='.$this->userId.' and dpid='.$this->dpid;
+	  	$result = Yii::app()->db->createCommand($sql)->execute();
+	  	if(!$result){
        		throw new Exception('更新会员余额失败!');
-       	   }
-	  }
+       	}
+	}
 	/**
-	 * 
-	 * 
 	 * 获取积分有效期
-	 * 
 	 */
 	 public function getPointsValid(){
 	 	$sql = 'select * from nb_points_valid where dpid='.$this->dpid.' and is_available=0 and delete_flag=0';
 		$this->pointsValid = Yii::app()->db->createCommand($sql)->queryRow();
 	 }
  	 /**
-   	* 
-  	 * 插入积分、返现记录
+  	 * 插入积分、返现记录、返券
   	 * 
-   	* 
    	*/
    	public function insertPoints(){
    	   $time = time();
+   	   
    	   if($this->recharge['recharge_pointback']){
    	   		if($this->pointsValid){
 				$endTime = date('Y-m-d H:i:s',strtotime('+'.$this->pointsValid['valid_days'].' day'));
@@ -137,6 +129,13 @@ class WxRecharge
        			throw new Exception('插入返现失败!');
        	   }
    	   }
+   	   if($this->recharge['recharge_cashcard']){
+   	   		$cashcards = self::getRechargeCashcards($this->dpid, $this->rechargeId);
+   	   		foreach ($cashcards as $cashcard){
+   	   			WxCupon::sentCupon($this->dpid, $this->userId, $cashcard, 3, $this->rechargeId, $this->openId);
+   	   		}
+   	   }
+   	   
    	}
    	public static function getWxRechargeComment($dpid,$type,$useType){
    		$sql = 'select * from nb_announcement where dpid=:dpid and type=:type and use_type=:userType and delete_flag=0';
@@ -176,16 +175,25 @@ class WxRecharge
 	    return array_merge($recharges);		  
 	}
 	/**
-	 *
+	 * 获取充值模板返券
+	 */
+	public static function getRechargeCashcards($dpid,$rechargeId){
+		$sql = 'select cashcard_id from nb_weixin_recharge_cashcard where dpid=:dpid and weixin_recharge_id=:rechargeId and delete_flag=0';
+		$cashcards = Yii::app()->db->createCommand($sql)
+								->bindValue(':dpid',$dpid)
+								->bindValue(':rechargeId',$rechargeId)
+								->queryColumn();
+		return $cashcards;
+	}
+	/**
 	 * 获取充值模板限制店铺
-	 *
 	 */
 	public static function getRechargeDpids($dpid,$rechargeId){
 		$sql = 'select recharge_dpid from nb_weixin_recharge_dpid where dpid=:dpid and weixin_recharge_id=:rechargeId and delete_flag=0';
 		$dpids = Yii::app()->db->createCommand($sql)
-					->bindValue(':dpid',$dpid)
-					->bindValue(':rechargeId',$rechargeId)
-					->queryColumn();
+								->bindValue(':dpid',$dpid)
+								->bindValue(':rechargeId',$rechargeId)
+								->queryColumn();
 		return $dpids;
 	}
 	/**

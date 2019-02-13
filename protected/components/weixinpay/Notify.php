@@ -73,7 +73,7 @@ class Notify extends WxPayNotify
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		if($data['attach']==1){
 			//充值
-			$recharge = new WxRecharge($orderIdArr[0],$orderIdArr[1],$brandUser['lid']);
+			$recharge = new WxRecharge($orderIdArr[0],$orderIdArr[1],$brandUser['lid'],$openId);
 			exit;
 
 		}else if($data['attach']==3){

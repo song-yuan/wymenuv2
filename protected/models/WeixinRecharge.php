@@ -45,7 +45,7 @@ class WeixinRecharge extends CActiveRecord
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, wr_name, recharge_money, recharge_pointback, recharge_cashback, recharge_number, recharge_dpid, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, wr_name, recharge_money, recharge_pointback, recharge_cashback, recharge_cashcard, recharge_number, recharge_dpid, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,7 +74,8 @@ class WeixinRecharge extends CActiveRecord
 			'recharge_money' => '充值的金额',
 			'recharge_pointback' => '返积分',
 			'recharge_cashback' => '返现',
-			'recharge_number' => '限制数量',
+			'recharge_cashcard' => '返现金券',
+			'recharge_number' => '充值次数',
 			'recharge_dpid' => '参与店铺',
 			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
@@ -107,6 +108,7 @@ class WeixinRecharge extends CActiveRecord
 		$criteria->compare('recharge_money',$this->recharge_money,true);
 		$criteria->compare('recharge_pointback',$this->recharge_pointback,true);
 		$criteria->compare('recharge_cashback',$this->recharge_cashback,true);
+		$criteria->compare('recharge_number',$this->recharge_cashcard,true);
 		$criteria->compare('recharge_number',$this->recharge_number,true);
 		$criteria->compare('recharge_dpid',$this->recharge_dpid,true);
 		$criteria->compare('is_available',$this->is_available,true);

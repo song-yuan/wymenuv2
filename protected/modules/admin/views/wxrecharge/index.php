@@ -66,6 +66,9 @@
 	                        <th><?php echo yii::t('app','充值金额');?></th>
 	                        <th><?php echo yii::t('app','返积分');?></th>
 	                        <th><?php echo yii::t('app','返现');?></th>
+	                        <th><?php echo yii::t('app','返现金券');?></th>
+	                        <th><?php echo yii::t('app','限制次数');?></th>
+	                        <th><?php echo yii::t('app','限制店铺');?></th>
 	                        <th><?php echo yii::t('app','是否有效');?></th>
 	                        <th>&nbsp;</th>
                         </tr>
@@ -79,6 +82,13 @@
 								<td ><?php echo $model->recharge_money;?></td>
                                 <td ><?php echo $model->recharge_pointback;?></td>
                                 <td ><?php echo $model->recharge_cashback;?></td>
+                                <td>
+                                	<?php if($model->recharge_cashcard) {echo '是';} else {echo '否';} ?>
+								</td>
+								<td ><?php echo $model->recharge_number;?></td>
+								<td>
+                                	<?php if($model->recharge_dpid) {echo '是';} else {echo '否';} ?>
+								</td>
                                 <td>
                                 	<?php if($model->is_available) {echo '否';} else {echo '是';} ?>
 								</td>

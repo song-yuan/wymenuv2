@@ -886,13 +886,11 @@ class Elm
 			}
 		}
 		
-		
 		// type 同步类型  2订单
 		$orderData = array('sync_lid'=>0,'dpid'=>$dpid,'type'=>2,'is_pos'=>0,'posLid'=>0,'data'=>json_encode($orderArr));
 		
 		$orderStr = json_encode($orderData);
 		$orderCloudStr = json_encode($orderCloudArr);
-		
 		// 放入redis中
 		$result = WxRedis::pushOrder($dpid, $orderStr);
 		if(!$result){
