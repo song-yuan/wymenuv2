@@ -10,10 +10,9 @@
                       <div class="portlet-body clearfix" >
                           <div class="panel_body row">
                                 <p>优惠券</p>
-                                    
                                     <div class="list col-sm-3 col-xs-12">
                                          <a href="<?php echo $this->createUrl('cupon/index',array('companyId' => $this->companyId))?>">
-                                             <div class="list_big"> 系统券</div>
+                                             <div class="list_big"> 现金券</div>
                                              <div class="list_small">系统内生成的券</div>
                                          </a> 
                                     </div>
