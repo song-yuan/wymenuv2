@@ -9,11 +9,9 @@
  */
 class WxMessageTpl
 {
-	
 	public function __construct($dpid,$type,$data){
 		$this->dpid = $dpid;
 		$this->dpids = WxCompany::getCompanyDpid($dpid);
-		$this->userId = $userId;
 		$this->type = $type;
 		$this->data = $data;
 		$this->getMsgTpl();

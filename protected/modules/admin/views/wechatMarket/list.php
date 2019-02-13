@@ -1,5 +1,3 @@
-
-
 <div class="page-content">
    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','微信赠券'),'url'=>''))));?>
  					<?php if($iscom['type'] == "0" || $isrest=="3"):?>

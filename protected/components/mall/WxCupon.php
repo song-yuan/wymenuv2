@@ -300,7 +300,7 @@ class WxCupon
 							'keyword4'=>$cupon['cupon_abstract'],
 							'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['telephone'].'咨询'
 					);
-					new WxMessageTpl($dpid,$userId,1,$data);
+					new WxMessageTpl($dpid,1,$data);
 				}
 			}
 		}
