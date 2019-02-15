@@ -604,6 +604,8 @@ class WxOrder
 						'product_order_status'=>$orderProductStatus,
 				);
 				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				$orderPrice +=  $this->fullSentProduct['price'];
+				$realityPrice += $this->fullSentProduct['price'];
 			}
 			if(($this->type==3) && $this->seatingFee > 0){
 				$se = new Sequence("order_product");

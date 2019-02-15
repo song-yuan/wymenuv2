@@ -276,8 +276,7 @@ class WxCupon
 						'source_id'=>$source_id,
 						'valid_day'=>$validDay,
 						'close_day'=>$closeDay,
-						'is_used'=>1,
-						'is_sync'=>DataSync::getInitSync(),
+						'is_used'=>1
 				);
 				$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
 				if(!empty($openId)){
