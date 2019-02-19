@@ -363,7 +363,6 @@
 	                <?php endforeach;?>
 	                <td><?php echo $yhqPayTotal ? number_format($yhqPayTotal,2).'('.$yhqPayCountTotal.')':'';?></td> 
 	                <td><?php echo $jfPayTotal ? number_format($jfPayTotal,2).'('.$jfPayCountTotal.')':'';?></td> 
-		            <td></td>
 					<td><?php echo number_format($apaytypeTotal,2);?></td>					
 		        </tr>
 		      <?php endif;?>
