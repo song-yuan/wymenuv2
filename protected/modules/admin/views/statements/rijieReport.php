@@ -323,7 +323,6 @@
 	                <?php endforeach;?>
 	                 <td><?php echo $yhqPay ? number_format($yhqPay,2).'('.$yhqPayCount.')':'';?></td>
 	                <td><?php echo $jfPay ? number_format($jfPay,2).'('.$jfPayCount.')':'';?></td> 
-		            <td></td>
 					<?php if(number_format($paytypeTotal,2)==number_format($orderShould,2)):?>
 					<td><?php echo number_format($paytypeTotal,2);?></td>
 					<?php else:?>
