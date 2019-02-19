@@ -1126,7 +1126,6 @@ class WxOrder
 	 	}else{
 	 		WxSite::updateTempSiteStatus($order['site_id'],$dpid,4);
 	 	}
-	 	self::dealMaterialStock($order);
 	 }
 	 /**
 	  * 处理产品库存
