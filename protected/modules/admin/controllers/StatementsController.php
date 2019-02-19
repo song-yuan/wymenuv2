@@ -82,7 +82,7 @@ class StatementsController extends BackendController
 		}
 		if($download){
 			$models = $db->createCommand($sql)->queryAll();
-			$this->exportIncomeReport($models,$text);
+			$this->ortIncomeReport($models,$text);
 			exit;
 		}
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -435,9 +435,6 @@ class StatementsController extends BackendController
 				array_push($data, $tempArr);
 			}
 			Helper::exportExcel($tableArr,$data,'支付方式(员工营业额)报表','支付方式(员工营业额)');
-			exit;
-			
-			$this->RijieReportExport($models,$payments,$text,$userid,$this->companyId,$begin_time,$end_time);
 			exit;
 		}
 		$this->render('rijieReport',array(
