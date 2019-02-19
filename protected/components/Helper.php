@@ -288,37 +288,34 @@ class Helper
 		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
 		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
 		
-		// 返回字符A的  ASCII 码值
-		$column = ord('A');
-		
 		// 设置工作表的表头
-		foreach ($table_head as $v) {
+		foreach ($table_head as $row=>$v) {
 			// 居中 加粗
-			$activeSheet->getStyle(chr($column)."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$activeSheet->getStyle(chr($column)."2")->getFont()->setBold(true);
+			$column = PHPExcel_Cell::stringFromColumnIndex($row);
+			$activeSheet->getStyle($column."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$activeSheet->getStyle($column."2")->getFont()->setBold(true);
 			// 设置单元格的值
-			$activeSheet->setCellValue(chr($column)."2", $v);
-			$column++;
+			$activeSheet->setCellValue($column."2", $v);
+			
+			if($row == count($table_head)){
+				//设置excel表格的 标题 合并单元格 设置居中
+				$activeSheet->setCellValue("A1", $sheet_name);
+				$activeSheet->getStyle("A1")->getFont()->setSize(20);
+				$activeSheet->getStyle("A1")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$activeSheet->mergeCells('A1:'.$column.'1');
+			}
 		}
 		
-		//设置excel表格的 标题 合并单元格 设置居中
-		$activeSheet->setCellValue("A1", $sheet_name);
-		$activeSheet->getStyle("A1")->getFont()->setSize(20);
-		$activeSheet->getStyle("A1")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$activeSheet->mergeCells('A1:'.chr($column-1).'1');
-		
-		$column = ord('A');   // 返回字符的  ASCII 码值
 		// 将$data中的数据填充到单元格中
-		foreach ($data as $row=>$col) {
-			$i=0;
-			foreach ($col as $v ) {
+		foreach ($data as $key=>$col) {
+			foreach ($col as $row=>$v ) {
 				// 字体大小
-				$activeSheet->getStyle(chr($column+$i).($row+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-				$activeSheet->setCellValue(chr($column+$i).($row+3), $v);
-				if($row==0){
-					$activeSheet->getColumnDimension(chr($column+$i))->setWidth(strlen($v)+5);
+				$column = PHPExcel_Cell::stringFromColumnIndex($row);
+				$activeSheet->getStyle($column.($key+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$activeSheet->setCellValue($column.($key+3), $v);
+				if($key==0){
+					$activeSheet->getColumnDimension($column)->setWidth(strlen($v)+5);
 				}
-				$i++;
 			}
 			//设置每列宽度
 		}
