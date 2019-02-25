@@ -27,7 +27,7 @@
 					
 				</div>
 				<?php if(empty($tokenmodel)){?>
-					<iframe frameborder="0" width= 100% height= 700px src="https://open-erp.meituan.com/storemap?developerId=<?php echo $developerId;?>&businessId=2&ePoiId=<?php echo $companyId;?>&signKey=<?php echo $signkey;?>&netStore=1"></iframe>
+					<iframe frameborder="0" width= 100% height= 700px src="<?php echo 'https://open-erp.meituan.com/storemap?developerId='.$developerId.'&businessId=2&ePoiId='.$companyId.'&timestamp='.$timestamp.'&sign='.$sign;?>"></iframe>
 			<?php }else{?>
 				<?php echo '店铺已映射';?>
 			<?php }?>

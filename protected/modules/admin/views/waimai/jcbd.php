@@ -29,7 +29,7 @@
 			<?php if(empty($tokenmodel['appAuthToken'])){?>
 				<?php echo "<h1>缺少参数：appAuthToken</h1>";?>
 		<?php }else{?>
-		<iframe frameborder="0" width= 100% height= 700px src="https://open-erp.meituan.com/releasebinding?signKey=<?php echo $signkey;?>&businessId=2&appAuthToken=<?php echo $tokenmodel['appAuthToken'];?>"></iframe>
+		<iframe frameborder="0" width= 100% height= 700px src="<?php echo 'https://open-erp.meituan.com/releasebinding?signKey='.$sign.'&businessId=2&appAuthToken='.$tokenmodel['appAuthToken'].'&timestamp='.$timestamp;?>"></iframe>
 		<?php }?>
 		   </div>
 		</div>

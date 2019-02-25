@@ -24,9 +24,8 @@
 			<div class="portlet purple box">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','菜品映射');?></div>
-					
 				</div>
-				<iframe id="cc" name="cc" frameborder="0" width= 100% height= 700px src="https://open-erp.meituan.com/waimai-dish-mapping?signKey=<?php echo $signkey;?>&appAuthToken=<?php echo $tokenmodel['appAuthToken'];?>&ePoiId=<?php echo $companyId;?>"></iframe>
+				<iframe id="cc" name="cc" frameborder="0" width= 100% height= 700px src="<?php echo 'https://open-erp.meituan.com/waimai-dish-mapping?sign='.$sign.'&appAuthToken='.$tokenmodel['appAuthToken'].'&ePoiId='.$companyId.'&timestamp='.$timestamp;?>"></iframe>
 			</div>
 		</div>
 	</div>

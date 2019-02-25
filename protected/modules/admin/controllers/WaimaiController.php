@@ -27,20 +27,22 @@ class WaimaiController extends BackendController
 	}
 	public function actionCaipinyingshe(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$signkey = MtUnit::signkey;
+		$timestamp = time();
 		$epoiid= 'type=1 and ePoiId='.$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
-		// print_r($tokenmodel);exit;
 		$criteria = " dpid=".$companyId." and delete_flag=0";
 		$productmodels = Product::model()->findAll($criteria);
 		$setmodels = ProductSet::model()->findAll($criteria);
-		// print_r($productmodels);exit;
+		
+		$data = array('ppAuthToken'=>$tokenmodel['appAuthToken'],'ePoiId'=>$companyId,'timestamp'=>$timestamp);
+		$sign = MtUnit::sign($data);
 		$this->render('caipinyingshe',array(
 				"productmodels"=>$productmodels,
 				"tokenmodel"=>$tokenmodel,
 				"companyId"=>$companyId,
 				"setmodels"=>$setmodels,
-				'signkey'=>$signkey
+				"timestamp"=>$timestamp,
+				'sign'=>$sign
 			));
 	}
 	public function actionDpbd(){
@@ -48,22 +50,27 @@ class WaimaiController extends BackendController
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$developerId = MtUnit::developerId;
-		$signkey = MtUnit::signkey;
+		$timestamp = time();
+		$data = array('developerId'=>$developerId,'businessId'=>2,'ePoiId'=>$companyId,'timestamp'=>$timestamp);
+		$sign = MtUnit::sign($data);
 		$this->render('dpbd',array(
 			'companyId'=>$companyId,
 			'developerId'=>$developerId,
-			'signkey'=>$signkey,
+			'timestamp'=>$timestamp,
+			'sign'=>$sign,
 			'tokenmodel'=>$tokenmodel
 			));
 	}
 	public function actionJcbd(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$signkey = MtUnit::signkey;
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
+		$timestamp = time();
+		$data = array('appAuthToken'=>$tokenmodel['appAuthToken'],'businessId'=>2,'timestamp'=>$timestamp);
 		$this->render('jcbd',array(
 			'tokenmodel' =>$tokenmodel,
-			'signkey'=>$signkey
+			'timestamp'=>$timestamp,
+			'sign'=>$sign
 			));
 	}
 	public function actionPeisong(){
