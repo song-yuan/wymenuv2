@@ -337,7 +337,7 @@ class WxOrder
 	    	$remark = Helper::dealString($remark);
 	    }
 	    if($this->type==6){
-	    	$remark .= '联系电话 '.$this->user['mobile_num'];
+	    	$remark .= '联系电话:'.$this->user['mobile_num'];
 	    }
 	    if($this->type==1){
 	    	// 餐桌
