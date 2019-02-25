@@ -297,11 +297,11 @@ class Helper
 			// 设置单元格的值
 			$activeSheet->setCellValue($column."2", $v);
 			
-			if($row == count($table_head)){
+			if($row == count($table_head)-1){
 				//设置excel表格的 标题 合并单元格 设置居中
-				$activeSheet->setCellValue("A1", $sheet_name);
-				$activeSheet->getStyle("A1")->getFont()->setSize(20);
-				$activeSheet->getStyle("A1")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$activeSheet->setCellValue('A1', $sheet_name);
+				$activeSheet->getStyle('A1')->getFont()->setSize(20);
+				$activeSheet->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 				$activeSheet->mergeCells('A1:'.$column.'1');
 			}
 		}

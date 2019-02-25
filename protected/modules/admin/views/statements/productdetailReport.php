@@ -43,9 +43,7 @@
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','单品销售详情报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 	<div class="row">
-	<div class="col-md-12">
-	<div style="border: 1px solid silver;padding: 10px;margin-bottom: 25px;">
-		<div class="actions ">
+		<div class="col-md-12">
 			<div class="btn-group">
 				<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
 			</div>
@@ -99,9 +97,9 @@
 	            <input type="text" class="form-control" name="endtime" id="day_end" placeholder="<?php echo yii::t('app','终止时段');?>"  value="<?php echo $day_end;?>"> 
 	            </div> 
             </div>	
+            <a id="btn_time_query" class="btn green" ><?php echo yii::t('app','查 询');?></a>
+			<a id="excel"  class="btn blue" ><?php echo yii::t('app','导出Excel');?></a>		
 	    </div>
-	</div>
-	</div>
 	</div>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -111,12 +109,6 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','单品销售报表');?></div>
-					<div class="actions">
-						<div class="btn-group">
-								<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-								<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>		
-						</div>
-					</div>
 			 	</div> 
 				<div class="portlet-body" id="table-manage">
 				<div class="dataTables_wrapper form-inline">

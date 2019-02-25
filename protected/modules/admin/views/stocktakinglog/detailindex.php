@@ -108,6 +108,11 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php $typeStr = '日盘'; if($stockTaking['type']==2){$typeStr = '周盘';}elseif($stockTaking['type']==3){$typeStr = '月盘';} echo yii::t('app','盘点记录详情列表(类型:'.$typeStr.')');?></div>
+					<div class="actions">
+						<a href="<?php echo $this->createUrl('stocktakinglog/detailindex', array('companyId' => $this->companyId,'id'=>$stockTaking['lid'],'d'=>1));?>" class="btn blue" style="padding: 6px;margin-left: 8px">
+                             	导出Excel
+                        </a>
+					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 				<div class="table-responsive">
@@ -138,7 +143,7 @@
 								<td><?php echo $material['unit_specifications'];?></td>
 								<td><?php echo $material['unit_name'];?></td>
 								<td><?php echo $model['reality_stock'];?></td>
-								<td ><?php echo $model['taking_stock'];?></td>
+								<td><?php echo $model['taking_stock'];?></td>
 								<td><?php echo $model['number'];?></td>
 								<td><?php echo $model['reasion'];?></td>
 								<td class="center">

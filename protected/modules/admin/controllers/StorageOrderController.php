@@ -219,10 +219,27 @@ class StorageOrderController extends BackendController
 		}
 	}
 	public function actionDetailIndex(){
-		$criteria = new CDbCriteria;
-		$slid = Yii::app()->request->getParam('lid');   //此处lid为StorageOrder表的lid
-		$status = Yii::app()->request->getParam('status');
+		//此处lid为StorageOrder表的lid
+		$slid = Yii::app()->request->getParam('lid'); 
+		$download = Yii::app()->request->getParam('d',0);
+		if($download){
+			$sql = 'select * from nb_storage_order where lid='.$slid.' and dpid='.$this->companyId;
+			$storage = Yii::app()->db->createCommand($sql)->queryRow();
+			$sql = 'select * from nb_storage_order_detail where dpid='.$this->companyId.' and storage_id='.$slid.' and delete_flag=0';
+			$storageDetails = Yii::app()->db->createCommand($sql)->queryAll();
+			$tableArr = array('入库时间','入库单号','品项名称','单位规格','单位名称','入库价格','入库数量','赠品数量','库存天数');
+			$data = array();
+			foreach ($storageDetails as $detail){
+				$tempArr = array();
+				$materialUnit = Common::getmaterialUnit($detail['material_id'], $detail['dpid'], 0);
+				array_push($tempArr,$storage['create_at'],$storage['storage_account_no'],$materialUnit['material_name'],$materialUnit['unit_specifications'],$materialUnit['unit_name'],$detail['price'],$detail['stock'],$detail['free_stock'],$detail['stock_day']);
+				array_push($data, $tempArr);
+			}
+			Helper::exportExcel($tableArr,$data,'入库单详情','入库单明细');
+			exit;
+		}
 		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
+		$criteria = new CDbCriteria;
 		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.storage_id='.$slid;
         $pages = new CPagination(StorageOrderDetail::model()->count($criteria));
 		
@@ -234,7 +251,6 @@ class StorageOrderController extends BackendController
 				'pages'=>$pages,
 				'slid'=>$slid,
 				'dpid'=>$this->companyId,
-				'status'=>$status,
 		));
 	}
 	public function actionCkdetailIndex(){
@@ -565,7 +581,6 @@ class StorageOrderController extends BackendController
 	}
 	public function actionDetailDelete(){
 		$slid = Yii::app()->request->getParam('slid');
-		$status = Yii::app()->request->getParam('status');
 		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
@@ -573,10 +588,10 @@ class StorageOrderController extends BackendController
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_storage_order_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('storageOrder/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
+			$this->redirect(array('storageOrder/detailindex' , 'companyId' => $companyId,'lid'=>$slid)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('storageOrder/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
+			$this->redirect(array('storageOrder/detailindex' , 'companyId' => $companyId,'lid'=>$slid )) ;
 		}
 	}
 	public function actionCkdetailDelete(){

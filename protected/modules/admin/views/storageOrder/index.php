@@ -1,3 +1,6 @@
+    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
+    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
+     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/css/datepicker.css';?>" />
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -23,24 +26,24 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','入库单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','入库单列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
-	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
-	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
-
 	<!-- END PAGE HEADER-->
 	<style>
 		.find form input{display: inline;width:180px;}
 	</style>
 	<div class="find">
 		<form action="" method="post">
-			<input type="text" name="mid" class="form-control" placeholder="厂商名称" value="<?php echo isset($mid) && $mid ?$mid:'';?>" />
-			<input type="text" name="storage" class="form-control" placeholder="入库单号" value="<?php echo isset($storage) && $storage ?$storage:'';?>" />
-			<input type="text" name="purchase" class="form-control" placeholder="订货单号" value="<?php echo isset($purchase) && $purchase ?$purchase:'';?>" />
-			<input type="text" name="begintime" class="ui_timepicker form-control" placeholder="起始日期" value="<?php echo isset($begintime) && $begintime ?$begintime:'';?>" />
-			<input type="text" name="endtime" class="ui_timepicker form-control" placeholder="结束日期" value="<?php echo isset($endtime) && $endtime ?$endtime:'';?>" />
+			<div class="btn-group">
+				<input type="text" name="mid" class="form-control" placeholder="厂商名称" value="<?php echo isset($mid) && $mid ?$mid:'';?>" />
+				<input type="text" name="storage" class="form-control" placeholder="入库单号" value="<?php echo isset($storage) && $storage ?$storage:'';?>" />
+				<input type="text" name="purchase" class="form-control" placeholder="订货单号" value="<?php echo isset($purchase) && $purchase ?$purchase:'';?>" />
+			</div>
+			<div class="btn-group">
+				<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+					<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo isset($begintime) && $begintime ?$begintime:'';?>">  
+					<span class="input-group-addon">~</span>
+				    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo isset($endtime) && $endtime ?$endtime:'';?>">           
+			  	</div>
+		 	</div>
 			<button type="submit" class="btn green">
 				查找 &nbsp;
 				<i class="m-icon-swapright m-icon-white"></i>
@@ -105,7 +108,7 @@
 								<td><?php echo $model->remark;?></td>
 								<td><span style="color: red;"><?php if($model->status==1){ echo '审核通过';}elseif($model->status==2){ echo '审核失败';}elseif($model->status==3){ echo '已入库';}elseif($model->status==4){ echo '送审中...';}else{ echo '正在编辑';};?></span></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('storageOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','入库单详情');?></a>
+									<a href="<?php echo $this->createUrl('storageOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','入库单详情');?></a>
 								</td>
 								<td class="center">
 								<?php if($model->status == 0 || $model->status == 2):?>
@@ -158,6 +161,17 @@
 	</div>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
+	$(function () {
+		if (jQuery().datepicker) {
+			$('.date-picker').datepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				rtl: App.isRTL(),
+				autoclose: true
+			});
+			$('body').removeClass("modal-open");
+		}
+	});
 	$(document).ready(function(){
 		$('#material-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
@@ -178,14 +192,5 @@
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
-	});
-	$(function () {
-		$(".ui_timepicker").datetimepicker({
-			showSecond: true,
-			timeFormat: 'hh:mm:ss',
-			stepHour: 1,
-			stepMinute: 1,
-			stepSecond: 1
-		})
 	});
 	</script>	

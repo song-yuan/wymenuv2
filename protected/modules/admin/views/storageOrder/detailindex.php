@@ -34,7 +34,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('storageOrder/detailDelete' , array('companyId' => $this->companyId,'slid'=>$slid,'status'=>$status,)),
+				'action' => $this->createUrl('storageOrder/detailDelete' , array('companyId' => $this->companyId,'slid'=>$slid)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -54,7 +54,7 @@
 	                    	<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 	                    </div>
 						<?php endif;?>
-	                    <!-- <a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a> -->
+	                    <a href="<?php echo $this->createUrl('storageOrder/detailIndex', array('companyId' => $this->companyId, 'lid'=>$slid,'d'=>1));?>"  class="btn blue"> <?php echo yii::t('app','导出Excel');?></a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -91,7 +91,7 @@
 								<td><?php echo $model->free_stock;?></td>
 								<td><?php echo $model->stock_day;?></td>
 								<td class="center">
-								<?php if($status == 0 || $status == 2):?>
+								<?php if($storage->status == 0 || $storage->status == 2):?>
 									<a href="<?php echo $this->createUrl('storageOrder/detailupdate',array('lid' => $model->lid , 'slid'=>$model->storage_id,  'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>

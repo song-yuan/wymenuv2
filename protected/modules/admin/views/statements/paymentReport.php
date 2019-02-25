@@ -31,39 +31,40 @@
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
     <div class="row">
+    	<div class="col-md-12">
+    		<?php $this->widget('application.modules.admin.components.widgets.CompanySelect2', array('companyType'=>$this->comptype,'companyId'=>$this->companyId,'selectCompanyId'=>$selectDpid));?>
+    		<select id="userid" class="btn yellow" >
+             	<option value="0" <?php if ($userid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择服务员--');?></option>
+                <option value="-1" <?php if ($userid==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','--列出所有--');?></option>
+                <?php if($username):?>
+                <?php foreach ($username as $user):?>
+                <option value="<?php echo $user['username'];?>" <?php if ($userid==$user['username']){?> selected="selected" <?php }?> ><?php echo $user['username'].'('.$user['staff_no'].')';?></option>
+                <?php endforeach;?>
+                <?php endif;?>
+             </select>
+             <select id="text" class="btn yellow" >
+                   <option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
+                   <option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
+                   <option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
+             </select>
+             <div class="btn-group">
+	              <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+	                <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+                 	<span class="input-group-addon">~</span>
+                    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+	             </div>  
+              </div>	
+              <a id="btn_time_query" class="btn red" ><?php echo yii::t('app','查 询');?></a>
+              <a id="excel"  class="btn green" ><?php echo yii::t('app','导出Excel');?></a>				
+    	</div>
+    </div>
+    <br>
+    <div class="row">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet box purple">
             <div class="portlet-title">
                 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式（员工营业额）报表');?></div>
-            	<div class="actions">
-                    <select id="userid" class="btn yellow" >
-                            <option value="0" <?php if ($userid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择服务员--');?></option>
-                            <option value="-1" <?php if ($userid==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','--列出所有--');?></option>
-                            <?php $seUsername = ''; if($username):?>
-                            <?php foreach ($username as $user):?>
-                            <option value="<?php echo $user['username'];?>" <?php if ($userid==$user['username']){ $seUsername = $user['username'].'('.$user['staff_no'].')';?> selected="selected" <?php }?> ><?php echo $user['username'].'('.$user['staff_no'].')';?></option>
-                            <?php endforeach;?>
-                            <?php endif;?>
-                    </select>
-                    <select id="text" class="btn yellow" >
-                            <option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
-                            <option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
-                            <option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
-                    </select>
-                    <div class="btn-group">
-	                    <div class="input-group input-large date-picker input-daterange" data-date="<?php echo date('d/m/Y',strtotime('-1 months'));?>" data-date-format="mm/dd/yyyy">
-	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','开始时间');?>" value="<?php echo $begin_time; ?>">  
-	                         <span class="input-group-addon">~</span>
-	                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-	                    </div>  
-                    </div>	
-					
-                    <div class="btn-group">
-                                    <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                                    <button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-                    </div>			
-                </div>
             </div> 
 			
 			<div class="portlet-body" id="table-manage">
@@ -370,35 +371,51 @@
 <!-- END PAGE -->
 
 <script>
-//var str=new array();						
-jQuery(document).ready(function(){
-	if (jQuery().datepicker) {
-		$('.date-picker').datepicker({
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-			rtl: App.isRTL(),
-			autoclose: true
-		});
-		$('body').removeClass("modal-open");
-	}
-});
-    $('#btn_time_query').click(function time() {  
+	jQuery(document).ready(function(){
+		if (jQuery().datepicker) {
+			$('.date-picker').datepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				rtl: App.isRTL(),
+				autoclose: true
+			});
+			$('body').removeClass("modal-open");
+		}
+	});
+    $('#btn_time_query').click(function() {  
+    	var selectDpid = $('select[name="selectDpid"]').val();
      	var begin_time = $('#begin_time').val();
      	var end_time = $('#end_time').val();
      	var text = $('#text').val();
      	var userid = $('#userid').val();
-     	location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid    
+     	location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid+"/selectDpid/"+selectDpid;  
 	});
 	
-	$('#excel').click(function excel(){
-
+	$('#excel').click(function(){
+		var selectDpid = $('select[name="selectDpid"]').val();
 		var begin_time = $('#begin_time').val();
 		var end_time = $('#end_time').val();
 		var text = $('#text').val();
 		var userid = $('#userid').val();
 		if(confirm('确认导出并且下载Excel文件吗？')){
-			location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId));?>/d/1/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
+			location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid+"/selectDpid/"+selectDpid+"/d/1";
 		}
 	});
-
+	$('select[name="selectDpid"]').change(function(){
+		var selectDpid = $(this).val();
+		$.ajax({
+				url:'<?php echo $this->createUrl('statements/ajaxGetusername',array('companyId'=>$this->companyId));?>/selectDpid/'+selectDpid,
+				success:function(data){
+					var str = '';
+					str += '<option value="0" selected="selected">--请选择服务员--</option>';
+					str += '<option value="-1" selected="selected">--列出所有--</option>';
+					for(var i in data){
+						var obj = data[i];
+		                str +='<option value="'+obj.username+'">'+obj.username+'('+obj.staff_no+')</option>';
+					}
+					$('#userid').html(str);
+				},
+				dataType:'json'
+		});
+	});
 </script> 

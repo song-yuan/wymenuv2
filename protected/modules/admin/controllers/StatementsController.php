@@ -112,6 +112,7 @@ class StatementsController extends BackendController
 		$userid = Yii::app()->request->getParam('userid');
 		$begin_time = Yii::app()->request->getParam('begin_time','');//开始时间
 		$end_time = Yii::app()->request->getParam('end_time','');//结束时间
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		$download = Yii::app()->request->getParam('d',0);//结束时间
 		
 		$orderArrs = array();
@@ -124,6 +125,14 @@ class StatementsController extends BackendController
 		}
 		$beginTime = $begin_time.' 00:00:00';
 		$endTime = $end_time.' 23:59:59';
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+			$payments = array();
+			$username = array();
+		}else{
+			$payments = $this->getPayment($selectDpid);
+			$username = $this->getUsername($selectDpid);
+		}
 		
 		$whereUser = '';
 		if($userid != '0'){
@@ -132,15 +141,15 @@ class StatementsController extends BackendController
 		if($text==1){
 			// 按年查询
 			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
-					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid.$whereUser;
 		}elseif ($text==2){
 			// 按月查询
 			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
-					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid.$whereUser;
 		}elseif ($text==3){
 			// 按日查询
 			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
-				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$this->companyId.$whereUser;
+				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid.$whereUser;
 				   
 		}
 		$sql .= ' order by create_at asc,paytype asc';
@@ -161,7 +170,6 @@ class StatementsController extends BackendController
 			array_push($orderPayArrs[$createAt][$payType.'-'.$payMethodId],$model);
 		}
 		$model = $this->dealOrderReport($orderArrs, $orderPayArrs);
-		$payments = $this->getPayment($this->companyId); // 后台手动添加到支付方式
 		if($download){
 			$tableArr = array('日期','总单数','毛利润','折扣优惠','营业额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
 			foreach ($payments as $payment){
@@ -261,7 +269,6 @@ class StatementsController extends BackendController
 			Helper::exportExcel($tableArr,$data,'支付方式(员工营业额)报表','支付方式(员工营业额)');
 			exit;
 		}
-		$username = $this->getUsername($this->companyId);// 后台所有管理员
 		$this->render('paymentReport',array(
 				'models'=>$model,
 				'begin_time'=>$begin_time,
@@ -271,6 +278,7 @@ class StatementsController extends BackendController
 				'payments'=>$payments,
 				'username'=>$username,
 				'userid'=>$userid,
+				'selectDpid'=>$selectDpid
 		));
 	}		
 	/**
@@ -283,6 +291,7 @@ class StatementsController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time','');
 		$end_time = Yii::app()->request->getParam('end_time','');
 		$dpname = Yii::app()->request->getParam('dpname','');
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		$d = Yii::app()->request->getParam('d','0');
 	
 		$orderPayArrs = array();
@@ -294,6 +303,14 @@ class StatementsController extends BackendController
 		}
 		$beginTime = $begin_time.' 00:00:00';
 		$endTime = $end_time.' 23:59:59';
+		if($selectDpid==''){
+			$selectDpid = $this->companyId;
+			$payments = array();
+			$username = array();
+		}else{
+			$payments = $this->getPayment($selectDpid);
+			$username = $this->getUsername($selectDpid);
+		}
 		
 		$whereUser = '';
 		if($userid != '0'){
@@ -302,15 +319,15 @@ class StatementsController extends BackendController
 		if($text==1){
 			// 按年查询
 			$sql = 'select dpid,DATE_FORMAT(create_at,"%Y") as create_at,pay_order_num,pay_amount_total as pay_amount,paytype,payment_id  from nb_order_paytype_total'.
-					' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$this->companyId.$whereUser;
+					' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$selectDpid.$whereUser;
 		}elseif ($text==2){
 			// 按月查询
 			$sql = 'select dpid,DATE_FORMAT(create_at,"%Y-%m") as create_at,pay_order_num,pay_amount_total as pay_amount,paytype,payment_id  from nb_order_paytype_total'.
-					' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$this->companyId.$whereUser;
+					' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$selectDpid.$whereUser;
 		}elseif ($text==3){
 			// 按日查询
 			$sql = 'select dpid,DATE_FORMAT(create_at,"%Y-%m-%d") as create_at,pay_order_num,pay_amount_total as pay_amount,paytype,payment_id  from nb_order_paytype_total'.
-				   ' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$this->companyId.$whereUser;
+				   ' where create_at>="'.$beginTime.'" and create_at<="'.$endTime.'" and paytype!="11" and dpid='.$selectDpid.$whereUser;
 				   
 		}
 		$sql .= ' order by create_at asc,paytype asc';
@@ -325,8 +342,6 @@ class StatementsController extends BackendController
 			array_push($orderPayArrs[$createAt][$payType.'-'.$payMethodId],$model);
 		}
 		$models = $this->dealRjOrderReport($orderPayArrs);
-		$payments = $this->getPayment($this->companyId);
-		$username = $this->getUsername($this->companyId);
 		
 		if($d){
 			$tableArr = array('日期','总单数','毛利润','折扣优惠','营业额','实收款','现金','微信','微点单','微外卖','支付宝','会员卡','微信储值(充)','微信储值(返)','美团.外卖','饿了么.外卖');
@@ -447,6 +462,7 @@ class StatementsController extends BackendController
 				'username'=>$username,
 				'userid'=>$userid,
 				'dpname'=>$dpname,
+				'selectDpid'=>$selectDpid
 		));
 	}
 	/**
@@ -511,18 +527,18 @@ class StatementsController extends BackendController
 		if($text==1){
 			// 按年查询
 			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
-					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid;
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid in('.$selectDpid.')';
 		}elseif ($text==2){
 			// 按月查询
 			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t1.create_at,"%Y-%m") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id  from nb_order_pay t,nb_order t1'.
-					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid;
+					' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid in('.$selectDpid.')';
 		}elseif ($text==3){
 			// 按日查询
 			$sql = 'select t.order_id,t1.dpid,DATE_FORMAT(t.create_at,"%Y-%m-%d") as create_at,t1.user_id,t.pay_amount,t1.should_total,t1.reality_total,t.paytype,t.payment_method_id from nb_order_pay t,nb_order t1'.
-				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid='.$selectDpid;
+				   ' where t.order_id=t1.lid and t.dpid=t1.dpid and t1.create_at>="'.$beginTime.'" and t1.create_at<="'.$endTime.'" and t1.order_status in (3,4,8) and t.paytype!="11" and t.dpid in('.$selectDpid.')';
 				   
 		}
-		$sql .= ' order by create_at asc,paytype asc';
+		$sql .= 'group by dpid order by create_at asc,paytype asc,dpid asc';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 		foreach ($models as $model){
 			$orderId = $model['order_id'];
@@ -1587,10 +1603,10 @@ class StatementsController extends BackendController
 		}else{
 			$ordertypes = '>=0';
 		}
-		
 // 		if($text==1){
 // 			// 年
-// 			$sql = 'select DATE_FORMAT(op.create_at,"%Y") as create_at,op.product_name,op.product_id,op.price,op.amount,op.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
+// 			$sql = 'select DATE_FORMAT(op.create_at,"%Y") as create_at,op.product_name,op.product_id,op.price,op.amount,op.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage from nb_order_product';
+			
 // 		}elseif ($text==2){
 // 			// 月
 			
@@ -1603,7 +1619,7 @@ class StatementsController extends BackendController
 		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.product_name,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,t.product_type,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
 		$criteria->with = array('company','product','order');
 
-		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.delete_flag=0 and t.dpid='.$selectDpid.' and t.set_id '.$setids.' ';
+		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.delete_flag=0 and t.dpid in('.$selectDpid.') and t.set_id '.$setids.' ';
 		if($ordertype >0){
 			$criteria->addCondition("order.order_type =".$ordertype);
 		}
@@ -1614,14 +1630,14 @@ class StatementsController extends BackendController
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 
 		if($text==1){
-			$criteria->group =' t.product_type,t.product_id,year(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			$criteria->group =' t.product_type,t.product_id,year(t.create_at),t.dpid';
+			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}elseif($text==2){
-			$criteria->group =' t.product_type,t.product_id,month(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			$criteria->group =' t.product_type,t.product_id,month(t.create_at),t.dpid';
+			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}else{
-			$criteria->group =' t.product_type,t.product_id,day(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			$criteria->group =' t.product_type,t.product_id,day(t.create_at),t.dpid';
+			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}
 
 
@@ -2687,34 +2703,11 @@ class StatementsController extends BackendController
 		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
 	}
 	
-	/**
-	 *
-	 * 员工营业额
-	 *
-	 */
-	private function exportTurnOver($models,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
- 		$attributes = array(
-			'id'=>'编号',
-			'username'=>'员工名',
-			'total'=>'营业额',
-		);
- 		$data[1] = array_values($attributes);
- 		$fields = array_keys($attributes);
-
-		foreach($models as $k=>$model){
-			$arr = array();
-			foreach($fields as $f){
-				if($f == 'id'){
-					$arr[] = $k+1;
-				}else{
-					$arr[] = $model[$f];
-				}
-			}
-			$data[] = $arr;
-		}
- 		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
+	public function actionAjaxGetusername(){
+		$dpid = Yii::app()->request->getParam('selectDpid');
+		$user = $this->getUsername($dpid);
+		Yii::app()->end(json_encode($user));
 	}
-
 	public function getPaymentName($paymentMethodId){
 		$name='';
 		$sql = 'select t.name from nb_payment_method t where t.delete_flag = 0 and t.lid='.$paymentMethodId;
@@ -2726,15 +2719,9 @@ class StatementsController extends BackendController
 		return $name;
 	}
 	public function getUsername($dpid){
-		$name='';
-		$sql = 'select t.* from nb_user t where t.delete_flag = 0 and t.dpid='.$dpid;
-		$connect = Yii::app()->db->createCommand($sql);
-		$model = $connect->queryAll();
-		if(!empty($model)){
-			return $model;
-		}else{
-			return $name;
-		}
+		$sql = 'select * from nb_user where dpid='.$dpid.' and delete_flag=0';
+		$model = Yii::app()->db->createCommand($sql)->queryAll();
+		return $model;
 	}
 	public function getUserstaffno($dpid,$username){
 		$name='XX';
@@ -3925,7 +3912,7 @@ class StatementsController extends BackendController
 		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.product_name,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,t.product_type,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
 		$criteria->with = array('company','product','order');
 
-		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid='.$selectDpid.' and t.set_id '.$setids.' ';
+		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid in('.$selectDpid.') and t.set_id '.$setids.' ';
 		if($ordertype >0){
 			$criteria->addCondition("order.order_type =".$ordertype);
 		}
@@ -3936,14 +3923,14 @@ class StatementsController extends BackendController
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 
 		if($text==1){
-			$criteria->group =' t.product_type,t.product_id,year(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			$criteria->group =' t.product_type,t.product_id,year(t.create_at),t.dpid';
+			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}elseif($text==2){
-			$criteria->group =' t.product_type,t.product_id,month(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			$criteria->group =' t.product_type,t.product_id,month(t.create_at),t.dpid';
+			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}else{
-			$criteria->group =' t.product_type,t.product_id,day(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			$criteria->group =' t.product_type,t.product_id,day(t.create_at),t.dpid';
+			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
 		}
 		$models = OrderProduct::model()->findAll($criteria);
 
@@ -7052,234 +7039,6 @@ class StatementsController extends BackendController
 	
 	
 
-	//导出支付方式员工营业额的报表
-	private function RijieReportExport($models,$payments,$text,$userid,$dpid,$begin_time,$end_time){
-		date_default_timezone_set('PRC');
-		$objPHPExcel = new PHPExcel();
-	
-		//设置第1行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
-		//设置第2行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(17);
-		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
-		//设置字体
-		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
-		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
-		$styleArray1 = array(
-				'font' => array(
-						'bold' => true,
-						'color'=>array(
-								'rgb' => '000000',
-						),
-						'size' => '20',
-				),
-				'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-				),
-		);
-		$styleArray2 = array(
-				'font' => array(
-						'color'=>array(
-								'rgb' => 'ff0000',
-						),
-						'size' => '16',
-				),
-				'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-				),
-		);
-		//大边框样式 边框加粗
-		$lineBORDER = array(
-				'borders' => array(
-						'outline' => array(
-								'style' => PHPExcel_Style_Border::BORDER_THICK,
-								'color' => array('argb' => '000000'),
-						),
-				),
-		);
-		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
-		//细边框样式
-		$linestyle = array(
-				'borders' => array(
-						'outline' => array(
-								'style' => PHPExcel_Style_Border::BORDER_THIN,
-								'color' => array('argb' => 'FF000000'),
-						),
-				),
-		);
-	
-		$objPHPExcel->setActiveSheetIndex(0)
-		->setCellValue('A1',yii::t('app','支付方式（员工营业额）报表'))
-		->setCellValue('A2',yii::t('app','报表生成时间：').date('Y-m-d H:i:s',time()))
-		->setCellValue('A3',yii::t('app','时间'))
-		->setCellValue('B3',yii::t('app','总单数'))
-		->setCellValue('C3',yii::t('app','毛利润'))
-		->setCellValue('D3',yii::t('app','优惠折扣'))
-		->setCellValue('E3',yii::t('app','营业额'))
-		->setCellValue('F3',yii::t('app','实收款'))
-		->setCellValue('G3',yii::t('app','营业员'))
-		->setCellValue('H3',yii::t('app','现金'))
-		->setCellValue('I3',yii::t('app','微信'))
-		->setCellValue('J3',yii::t('app','微点单'))
-		->setCellValue('K3',yii::t('app','微外卖'))
-		->setCellValue('L3',yii::t('app','支付宝'))
-		->setCellValue('M3',yii::t('app','银联'))
-		->setCellValue('N3',yii::t('app','会员卡'))
-		->setCellValue('O3',yii::t('app','微信储值(充)'))
-		->setCellValue('P3',yii::t('app','微信储值(返)'))
-		->setCellValue('Q3',yii::t('app','美团·外卖'))
-		->setCellValue('R3',yii::t('app','饿了么·外卖'))
-		->setCellValue('S3',yii::t('app','微信现金券'))
-		->setCellValue('T3',yii::t('app','微信积分'));
-		$letternext= 'U';
-		if($payments){
-			$let = '0';
-			$letter='';
-			foreach ($payments as $payment){
-				$paymentname = $payment['name'];
-				$let++;
-				switch ($let){
-					case 1: $letter = 'U3';$letternext = 'V';break;
-					case 2: $letter = 'V3';$letternext = 'W';break;
-					case 3: $letter = 'W3';$letternext = 'X';break;
-					case 4: $letter = 'X3';$letternext = 'Y';break;
-					case 5: $letter = 'Y3';$letternext = 'Z';break;
-					default:break;
-				}
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
-			}
-		}
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternext.'3',yii::t('app','退款'));
-		$j=4;
-		foreach($models as $v){
-			if ($text==1){
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v['y_all']);
-			}elseif($text==2){
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v['y_all'].'-'.$v['m_all']);
-			}else{
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v['y_all'].'-'.$v['m_all'].'-'.$v['d_all']);
-			}
-			if($userid !='0'){
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j,$v['username'].'('.$this->getUserstaffno($dpid,$v['username']).')');
-			}else{
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j);
-			}
-			$retreats = $this->getRijieRetreat($v['dpid'],$begin_time,$end_time,$text,$v['y_all'],$v['m_all'],$v['d_all'],$userid,$v['username']);
-			$objPHPExcel->setActiveSheetIndex(0)
-			->setCellValue('B'.$j,$v['maoli_nums'])
-			->setCellValue('C'.$j,$reality_all = $v['maoli_money'])
-			->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v['chunli_money']))
-			->setCellValue('E'.$j,sprintf("%.2f",$retreats+$v['chunli_money']))
-			->setCellValue('G'.$j,$v['cash_money'])
-			->setCellValue('H'.$j,$v['wx_money'])
-			->setCellValue('I'.$j,$v['wxord_money'])
-			->setCellValue('J'.$j,$v['wxwm_money'])
-			->setCellValue('K'.$j,$v['ali_money'])
-			->setCellValue('L'.$j,$v['visa_money'])
-			->setCellValue('M'.$j,$v['member_money'])
-			->setCellValue('N'.$j,$v['cwxyue_money'])
-			->setCellValue('O'.$j,$v['fwxyue_money'])
-			->setCellValue('P'.$j,$v['mt_money'])
-			->setCellValue('Q'.$j,$v['elem_money'])
-			->setCellValue('R'.$j,$v['cupon_money'])
-			->setCellValue('S'.$j,$v['jifen_money']);
-			$letters='';
-			$letternexts= 'T';
-			if($payments){
-				$let = '0';
-	
-	
-				foreach ($payments as $payment){
-					$paymentname = $payment['name'];
-					$let++;
-					switch ($let){
-						case 1: $letters = 'T';$letternexts = 'U';break;
-						case 2: $letters = 'U';$letternexts = 'V';break;
-						case 3: $letters = 'V';$letternexts = 'W';break;
-						case 4: $letters = 'W';$letternexts = 'X';break;
-						case 5: $letters = 'X';$letternexts = 'Y';break;
-						case 6: $letters = 'Y';$letternexts = 'Z';break;
-						default:break;
-					}
-					$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v['dpid'],$begin_time,$end_time,3,$payment['lid'],$text,$v['y_all'],$v['m_all'],$v['d_all'],$userid,$v['username']));
-				}
-				$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-	
-			}
-			$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternexts.$j,$retreats);
-			//细边框引用
-			$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->applyFromArray($linestyle);
-			$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->applyFromArray($linestyle);
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':'.$letternext.$j)->applyFromArray($linestyle);
-			//设置填充颜色
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
-			//设置字体靠左、靠右
-			$objPHPExcel->getActiveSheet()->getStyle('B'.$j.':'.$letternext.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-			//细边框样式引用
-			//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
-			$j++;
-		}
-		//冻结窗格
-		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.$j)->applyFromArray($lineBORDER);
-		//大边框样式引用
-		//$objPHPExcel->getActiveSheet()->getStyle('A2:E'.$j)->applyFromArray($linestyle);
-		//合并单元格
-		$objPHPExcel->getActiveSheet()->mergeCells('A1:'.$letternext.'1');
-		$objPHPExcel->getActiveSheet()->mergeCells('A2:'.$letternext.'2');
-		//单元格加粗，居中：
-	
-		// 将A1单元格设置为加粗，居中
-		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-	
-		//加粗字体
-		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFont()->setBold(true);
-		//设置字体垂直居中
-		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-		//$objPHPExcel->getActiveSheet()->getStyle('D4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-		//设置字体水平居中
-		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		//字体靠左
-		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-		//设置填充颜色
-		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		//$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->getStartColor()->setARGB('fdfc8d');
-		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		//$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->getStartColor()->setARGB('FFB848');
-		$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		//$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->getStartColor()->setARGB('FFB848');
-		//设置每列宽度
-		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(8);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(12);
-		//输出
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$filename="支付方式（员工营业额）报表（".date('y年m月d日  H时i分',time())."）.xls";
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$filename.'"');
-		header('Cache-Control: max-age=0');
-		$objWriter->save('php://output');
-	
-	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
@@ -7288,7 +7047,6 @@ class StatementsController extends BackendController
 	
 		$models = ProductCategory::model()->findAll($criteria);
 	
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
@@ -7299,10 +7057,8 @@ class StatementsController extends BackendController
 					$options[$model->pid][$model->lid] = $model->category_name;
 				}
 			}
-			//var_dump($options);exit;
 		}
 		foreach ($options as $k=>$v) {
-			//var_dump($k,$v);exit;
 			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
@@ -7316,7 +7072,6 @@ class StatementsController extends BackendController
 	
 		$models = ProductCategory::model()->findAll($criteria);
 	
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
@@ -7327,10 +7082,8 @@ class StatementsController extends BackendController
 					$options[$model->pid][$model->chs_code] = $model->category_name;
 				}
 			}
-			//var_dump($options);exit;
 		}
 		foreach ($options as $k=>$v) {
-			//var_dump($k,$v);exit;
 			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
@@ -7338,18 +7091,9 @@ class StatementsController extends BackendController
 	}
 	private function getComProducts(){
 		$criteria = new CDbCriteria;
-		//$criteria->with = 'category';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->condition =  't.dpid='.$this->companyId.' and t.delete_flag=0';
 		$criteria->order = 't.lid asc ';
 		$models = Product::model()->findAll($criteria);
-		//$options = array(yii::t('app','--请选择单品--'));
-		//var_dump($models);exit;
-// 		if($models) {
-// 			foreach ($models as $model) {
-// 				$options[$model->chs_code][$model->phs_code] = $model->product_name;
-// 			}
-// 		}
-		//var_dump($options);exit;
 		return $models;
 	}
 	// 支付方式 员工业绩 处理 array('时间'=>array('order'=>array(),'order_pay'=>array()))

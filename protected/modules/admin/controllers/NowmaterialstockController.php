@@ -12,6 +12,25 @@ class NowmaterialstockController extends BackendController
 	}
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$download = Yii::app()->request->getParam('d',0);
+		if($download){
+			$sql = 'select t.*,t1.category_name from nb_product_material t,nb_material_category t1 where t.dpid=t1.dpid and t.category_id=t1.lid and t.dpid='.$this->companyId;
+			if($categoryId){
+				$sql .= ' and t.category_id = '.$categoryId;
+			}
+			$sql .= ' and t.delete_flag=0';
+			$productMaterials = Yii::app()->db->createCommand($sql)->queryAll();
+			$tableArr = array('原料编号','原料名称','类型','实时库存','单位');
+			$data = array();
+			foreach ($productMaterials as $material){
+				$stock = ProductMaterial::getJitStock($material['lid'],$material['dpid']);;
+				$unitname =  Common::getStockName($material['sales_unit_id']);
+				$tempArr = array($material['material_identifier'],$material['material_name'],$material['category_name'],$stock,$unitname);
+				array_push($data, $tempArr);
+			}
+			Helper::exportExcel($tableArr,$data,'实时库存','实时库存');
+			exit;
+		}
 		$criteria = new CDbCriteria;
 		$criteria->with = array('category');
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;

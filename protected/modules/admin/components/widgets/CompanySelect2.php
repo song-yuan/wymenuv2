@@ -9,6 +9,7 @@ class CompanySelect2 extends CWidget{
 	public $companyType;
 	public $companyId;
 	public $selectCompanyId;
+	public $multiple = '';
 	public function init(){
 		
 	}
@@ -26,7 +27,7 @@ class CompanySelect2 extends CWidget{
 				array_push($companys, $company);
 			}
 		}
-		$this->render('companySelect2',array('companys'=>$companys,'selectDpid'=>$this->selectCompanyId));
+		$this->render('companySelect2',array('companys'=>$companys,'selectDpid'=>$this->selectCompanyId,'multiple'=>$this->multiple));
 	}
 } 
 ?>

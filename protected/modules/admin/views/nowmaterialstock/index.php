@@ -48,10 +48,12 @@
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
                         <div class="btn-group">
-                            <!--<input type="button" id="caution" class="btn green" style="padding: 6px;margin-left: 8px" value="库存预警"/>-->
-                            <a href="javascript:void(0);" class="btn blue" id="caution" style="padding: 6px;margin-left: 8px">
-                                <i class="fa fa-pencil"></i>
-                                库存预警
+                            <!--<input type="button" id="caution" class="btn red" style="padding: 6px;margin-left: 8px" value="库存预警"/>-->
+                            <a href="javascript:void(0);" class="btn red" id="caution" style="padding: 6px;margin-left: 8px">
+                                	库存预警
+                            </a>
+                            <a href="<?php echo $this->createUrl('nowmaterialstock/index', array('companyId' => $this->companyId,'cid'=>$categoryId,'d'=>1));?>" class="btn blue" style="padding: 6px;margin-left: 8px">
+                                	导出Excel
                             </a>
                         </div>
 					</div>

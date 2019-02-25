@@ -38,11 +38,30 @@ class StocktakinglogController extends BackendController
 	}
 	public function actionDetailindex(){
 		$stockTakingId = Yii::app()->request->getParam('id',0);
+		$download = Yii::app()->request->getParam('d',0);
 		$sql = 'select * from nb_stock_taking where lid='.$stockTakingId.' and dpid='.$this->companyId;
 		$stockTaking = Yii::app()->db->createCommand($sql)->queryRow();
 		
 		$sql = 'select lid,dpid,logid,material_id,material_stock_id,sum(reality_stock) as reality_stock,sum(taking_stock) as taking_stock,sum(number) as number,reasion from nb_stock_taking_detail where dpid='.$this->companyId.' and logid ='.$stockTakingId.' and delete_flag=0 group by material_id';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		if($download){
+			$tableArr = array('盘点日期','盘点类型','品项名称','单位规格','单位名称','原始库存','盘点库存','盈亏差值','原因');
+			$data = array();
+			foreach ($models as $model){
+				if($stockTaking['type']==1){
+					$type = '日盘';
+				}else if($stockTaking['type']==2){
+					$type = '周盘';
+				}else{
+					$type = '月盘';
+				}
+				$material = Common::getmaterialUnit($model['material_id'],$model['dpid'],0);
+				$tempArr = array($stockTaking['create_at'],$type,$material['material_name'],$material['unit_specifications'],$material['unit_name'],$model['reality_stock'],$model['taking_stock'],$model['number'],$model['reasion']);
+				array_push($data, $tempArr);
+			}
+			Helper::exportExcel($tableArr,$data,'实时库存','实时库存');
+			exit;
+		}
 		$this->render('detailindex',array(
 				'stockTaking'=>$stockTaking,
 				'models'=>$models
