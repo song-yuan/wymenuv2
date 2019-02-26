@@ -16,10 +16,24 @@ class Helper
 		}
 		return $data;
 	}
+	/**
+	 * 写日志
+	 */
 	public static function writeLog($text) {
 		$filePath = Yii::app()->basePath."/data/".date('Ymd',time())."-log.txt";
 		file_put_contents ( $filePath, date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
 	}
+	/**
+	 * 获取毫秒时间戳
+	 */
+	public static function getMillisecond()  
+    {  
+    	$microtime = explode (' ', microtime());
+    	$time = $microtime[1] . ($microtime[0] * 1000);
+    	$time = explode ( '.', $time );
+    	$time = $time[0];
+    	return $time;
+    }
 	// 替换掉换行符等
 	public static function dealString($str) {
 		$replace = array(

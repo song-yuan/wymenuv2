@@ -27,7 +27,7 @@ class WaimaiController extends BackendController
 	}
 	public function actionCaipinyingshe(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$timestamp = time();
+		$timestamp = Helper::getMillisecond();
 		$epoiid= 'type=1 and ePoiId='.$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$criteria = " dpid=".$companyId." and delete_flag=0";
@@ -50,7 +50,7 @@ class WaimaiController extends BackendController
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$developerId = MtUnit::developerId;
-		$timestamp = time();
+		$timestamp = Helper::getMillisecond();
 		$data = array('developerId'=>$developerId,'businessId'=>2,'ePoiId'=>$companyId,'timestamp'=>$timestamp);
 		$sign = MtUnit::sign($data);
 		$this->render('dpbd',array(
@@ -65,7 +65,7 @@ class WaimaiController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
-		$timestamp = time();
+		$timestamp = Helper::getMillisecond();
 		$data = array('appAuthToken'=>$tokenmodel['appAuthToken'],'businessId'=>2,'timestamp'=>$timestamp);
 		$this->render('jcbd',array(
 			'tokenmodel' =>$tokenmodel,
