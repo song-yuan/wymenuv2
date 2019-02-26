@@ -34,7 +34,7 @@ class WaimaiController extends BackendController
 		$productmodels = Product::model()->findAll($criteria);
 		$setmodels = ProductSet::model()->findAll($criteria);
 		
-		$data = array('ppAuthToken'=>$tokenmodel['appAuthToken'],'ePoiId'=>$companyId,'timestamp'=>$timestamp);
+		$data = array('appAuthToken'=>$tokenmodel['appAuthToken'],'ePoiId'=>$companyId,'timestamp'=>$timestamp);
 		$sign = MtUnit::sign($data);
 		$this->render('caipinyingshe',array(
 				"productmodels"=>$productmodels,
