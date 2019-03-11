@@ -103,17 +103,17 @@ class WxPayDataBase
 	public function MakeSign()
 	{
 		$key = '';
-		if(isset($_GET['companyId'])||isset($_GET['dpid'])){
-			$dpid = isset($_GET['companyId'])?$_GET['companyId']:$_GET['dpid'];
+		if(isset($this->values['out_trade_no'])){
+			$orderIdArr = explode('-',$this->values['out_trade_no']);
+			$dpid = $orderIdArr[1];
 			$account = WxAccount::get($dpid);
 			if($account['multi_customer_service_status'] == 1){
 				$key = WxPayConfig::KEY;
 			}else{
 				$key = $account['key'];
 			}
-		}elseif(isset($this->values['out_trade_no'])){
-			$orderIdArr = explode('-',$this->values['out_trade_no']);
-			$dpid = $orderIdArr[1];
+		}else{
+			$dpid = isset($_GET['companyId'])?$_GET['companyId']:$_GET['dpid'];
 			$account = WxAccount::get($dpid);
 			if($account['multi_customer_service_status'] == 1){
 				$key = WxPayConfig::KEY;
