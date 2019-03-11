@@ -113,7 +113,7 @@ class WxPayDataBase
 				$key = $account['key'];
 			}
 		}else{
-			var_dump($this->values);exit;
+			Helper::writeLog(json_encode($this->values));
 			$appid = $this->values['appid'];
 			$account = WxAccount::getAccountByAppid($appid);
 			if($account['multi_customer_service_status'] == 1){
