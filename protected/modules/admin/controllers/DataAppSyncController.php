@@ -396,8 +396,10 @@ class DataAppSyncController extends Controller
 			if($posfeePayType==2){
 				$comdpid = '1-'.(int)$comdpid;
 				$payChannel = 1;
+			}else{
+				$comdpid = (int)$comdpid;
 			}
-			$orderId = (int)$dpid.date('YmdHis') . $randNum . '-' . (int)$comdpid;
+			$orderId = (int)$dpid.date('YmdHis') . $randNum . '-' . $comdpid;
 			$years = $posfeeset['years'];
 			$amount = $posfeeset['price']*100;
 			
