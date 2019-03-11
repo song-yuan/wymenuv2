@@ -113,8 +113,8 @@ class WxPayDataBase
 				$key = $account['key'];
 			}
 		}else{
-			$dpid = isset($_GET['companyId'])?$_GET['companyId']:$_GET['dpid'];
-			$account = WxAccount::get($dpid);
+			$appid = $this->values['appid'];
+			$account = WxAccount::getAccountByAppid($appid);
 			if($account['multi_customer_service_status'] == 1){
 				$key = WxPayConfig::KEY;
 			}else{
@@ -122,12 +122,10 @@ class WxPayDataBase
 			}
 		}
 		//签名步骤一：按字典序排序参数
-		Helper::writeLog(json_encode($this->values));
 		ksort($this->values);
 		$string = $this->ToUrlParams();
 		//签名步骤二：在string后加入KEY
 		$string = $string . "&key=".$key;
-		Helper::writeLog($string);
 		//签名步骤三：MD5加密
 		$string = md5($string);
 		//签名步骤四：所有字符转为大写

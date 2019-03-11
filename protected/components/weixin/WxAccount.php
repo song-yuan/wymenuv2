@@ -1,11 +1,5 @@
 <?php
-/**
- * Token.php
- *
- */
- 
 class WxAccount {
-	
 	/**
 	 * 获取品牌的token
 	 */
@@ -16,7 +10,6 @@ class WxAccount {
 				$weixinServiceAccount = self::getCompanyAccount($brandId);
 		}else{
 			if(empty($weixinServiceAccount['appid'])){
-				// 获取总部的 微信信息
 				$weixinServiceAccount = self::getCompanyAccount($brandId);
 			}
 		}
@@ -25,9 +18,20 @@ class WxAccount {
 		}
 		return $weixinServiceAccount;
 	}
+	/**
+	 * 获取总部的 微信信息
+	 */ 
 	public static function getCompanyAccount($brandId) {
 		$companyId = WxCompany::getCompanyDpid($brandId);
 		$sql = 'select * from nb_weixin_service_account where dpid = '.$companyId;
+		$weixinServiceAccount = Yii::app()->db->createCommand($sql)->queryRow();
+		return $weixinServiceAccount;
+	}
+	/**
+	 * 通过appid获取微信信息
+	 */
+	public static function getAccountByAppid($appid) {
+		$sql = 'select * from nb_weixin_service_account where appid = "'.$appid.'"';
 		$weixinServiceAccount = Yii::app()->db->createCommand($sql)->queryRow();
 		return $weixinServiceAccount;
 	}
