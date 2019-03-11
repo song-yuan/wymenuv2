@@ -14,7 +14,7 @@ class MtOrder
 	public static function token($data){
 		Helper::writeLog('bd:'.$data);
 		if(empty($data)){
-			return '200';
+			return '{ "data": "success"}';
 		}
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
@@ -53,7 +53,7 @@ class MtOrder
 	}
 	public static function order($data){
 		if(empty($data)){
-			return '200';
+			return '{ "data": "success"}';
 		}
 		
 		$resArr = MtUnit::dealData($data);
@@ -94,7 +94,7 @@ class MtOrder
 	}
 	public static function orderconfirm($data){
 		if(empty($data)){
-			return '200';
+			return '{ "data": "success"}';
 		}
 		$resArr = MtUnit::dealData($data);
 		$ePoiId = $resArr['ePoiId'];
@@ -105,7 +105,7 @@ class MtOrder
 	}
 	public static function orderCancel($data){
 		if(empty($data)){
-			return '200';
+			return '{ "data": "success"}';
 		}
 		$resArr = MtUnit::dealData($data);
 		$order = $resArr['orderCancel'];

@@ -10,7 +10,7 @@ class WxCompany
 {
 	// 获取公司的信息
 	public static function get($dpid){
-		$sql = 'select t.*,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.sale_type,t1.rest_message,t1.shop_time,t1.closing_time,t1.wm_shop_time,t1.wm_closing_time from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.dpid=:dpid and t.delete_flag=0 and t1.delete_flag=0';
+		$sql = 'select t.*,t1.material_pay_type,t1.posfee_pay_type,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.sale_type,t1.rest_message,t1.shop_time,t1.closing_time,t1.wm_shop_time,t1.wm_closing_time from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.dpid=:dpid and t.delete_flag=0 and t1.delete_flag=0';
 		$company = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
@@ -25,13 +25,13 @@ class WxCompany
 		->bindValue(':dpid',$dpid)
 		->queryRow();
 		if(!$company){
-			$company = array('pay_type'=>'0','pay_channel'=>'0');
+			$company = array('material_pay_type'=>'1','posfee_pay_type'=>'1','pay_type'=>'0','pay_channel'=>'0');
 		}
 		return $company;
 	}
 	// 获取总部的字店铺
 	public static function getCompanyChildren($dpid){
-		$sql = 'select t.*,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.rest_message,t1.shop_time,t1.closing_time from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.comp_dpid=:dpid and t.type=1 and t.delete_flag=0 and t1.delete_flag=0';
+		$sql = 'select t.*,t1.material_pay_type,t1.posfee_pay_type,t1.pay_type,t1.pay_channel,t1.appId,t1.code,t1.qr_code,t1.is_rest,t1.rest_message,t1.shop_time,t1.closing_time from nb_company t left join nb_company_property t1 on t.dpid=t1.dpid where t.comp_dpid=:dpid and t.type=1 and t.delete_flag=0 and t1.delete_flag=0';
 		$companys = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();

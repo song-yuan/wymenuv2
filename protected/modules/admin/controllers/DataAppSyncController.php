@@ -376,16 +376,27 @@ class DataAppSyncController extends Controller
 		$dpid = Yii::app()->request->getParam('dpid');
 		$poscode = Yii::app()->request->getParam('poscode','0');
 		$success = false;
+		$msg = array('status'=>false);
 		$posfee = PoscodeFee::getPosfee($dpid, $poscode);
 		if(!$posfee){
 			Yii::app()->end(json_encode($msg));
 		}
 		$comdpid = WxCompany::getCompanyDpid($dpid);
 		$compaychannel = WxCompany::getpaychannel($comdpid);
-		$payChannel = $compaychannel?$compaychannel['pay_channel']:0;
+		$posfeePayType = $compaychannel['posfee_pay_type'];
+		$payType = $compaychannel['pay_type'];
+		$payChannel = $compaychannel['pay_channel'];
+		if($posfeePayType==1&&$payType==0){
+			Yii::app()->end(json_encode($msg));
+		}
+		
 		$posfeeset = PoscodeFee::getPosfeeset($comdpid);
 		if($posfeeset){
 			$randNum = Helper::randNum(2);
+			if($posfeePayType==2){
+				$comdpid = '1-'.(int)$comdpid;
+				$payChannel = 1;
+			}
 			$orderId = (int)$dpid.date('YmdHis') . $randNum . '-' . (int)$comdpid;
 			$years = $posfeeset['years'];
 			$amount = $posfeeset['price']*100;
