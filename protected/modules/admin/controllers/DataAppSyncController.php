@@ -369,6 +369,31 @@ class DataAppSyncController extends Controller
 		echo json_encode($result);exit;
 	}
 	/**
+	 * 微信和外卖订单联系方式
+	 */
+	public function actionGetOrderUserInfo(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		$accountNo = Yii::app()->request->getParam('accountNo');
+		$data = array('name'=>'','phone'=>'','address'=>'');
+		$order = WxOrder::getOrderByAccountNo($dpid, $accountNo);
+		if($order){
+			$orderType = $order['order_type'];
+			if($orderType==6){
+				$userId = $order['user_id'];
+				$user = WxBrandUser::get($userId, $dpid);
+				$data['name'] = $user['user_name'];
+				$data['phone'] = $user['mobile_num'];
+			}elseif ($orderType==2||$orderType==3||$orderType==7||$orderType==8){
+				$orderId = $order['lid'];
+				$address = WxOrder::getOrderAddress($orderId, $dpid);
+				$data['name'] = $address['consignee'];
+				$data['phone'] = $address['mobile'];
+				$data['address'] = $address['street'];
+			}
+		}
+		echo json_encode($data);exit;
+	}
+	/**
 	 * 软件到期续费订单
 	 * 
 	 */

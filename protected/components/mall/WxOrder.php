@@ -754,6 +754,9 @@ class WxOrder
 		$this->order = $orderArr;
 		return $orderId;
 	}
+	/**
+	 * 订单id 店铺id获取订单
+	 */
 	public static function getOrder($orderId,$dpid){
 		$sql = 'select * from nb_order where lid=:lid and dpid=:dpid';
 		$order = Yii::app()->db->createCommand($sql)
@@ -764,6 +767,17 @@ class WxOrder
 			$order['taste'] = self::getOrderTaste($orderId, $dpid, 1);
 		}
 	    return $order;
+	}
+	/**
+	 * 账单号获取订单
+	 */
+	public static function getOrderByAccountNo($dpid,$accountNo){
+		$sql = 'select * from nb_order where dpid=:dpid and account_no=:accountNo';
+		$order = Yii::app()->db->createCommand($sql)
+				->bindValue(':dpid',$dpid)
+				->bindValue(':accountNo',$accountNo)
+				->queryRow();
+		return $order;
 	}
 	/**
 	 * 
