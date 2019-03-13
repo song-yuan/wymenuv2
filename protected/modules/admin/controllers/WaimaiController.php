@@ -67,6 +67,7 @@ class WaimaiController extends BackendController
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$timestamp = Helper::getMillisecond();
 		$data = array('appAuthToken'=>$tokenmodel['appAuthToken'],'businessId'=>2,'timestamp'=>$timestamp);
+		$sign = MtUnit::sign($data);
 		$this->render('jcbd',array(
 			'tokenmodel' =>$tokenmodel,
 			'timestamp'=>$timestamp,
