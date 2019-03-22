@@ -2252,8 +2252,8 @@ class DataSyncOperation {
 				}
 			}
 			var_dump($yue);
-			var_dump($yue!=0);
-			if($yue!=0){
+			var_dump($yue!='0');
+			if($yue!='0'){
 				$yueArr = explode(',', $yue);
 				$yueCharge = $yueArr[0];
 				$yueBack = $yueArr[1];
