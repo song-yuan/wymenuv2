@@ -2252,7 +2252,15 @@ class DataSyncOperation {
 				}
 			}
 			if($yue!=0){
-				WxBrandUser::refundYue($yue, $user, $dpid);
+				$yueArr = explode(',', $yue);
+				$yueCharge = $yueArr[0];
+				$yueBack = $yueArr[1];
+				if($yueCharge!=0){
+					WxBrandUser::refundYue($yueCharge, $user, $dpid,1);
+				}
+				if($yueBack!=0){
+					WxBrandUser::refundYue($yueBack, $user, $dpid,0);
+				}
 			}
 			if($points!='0-0'){
 				$pointArr = explode('-', $points);

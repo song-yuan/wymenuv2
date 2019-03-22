@@ -383,6 +383,11 @@ class DataAppSyncController extends Controller
 				$user = WxBrandUser::get($userId, $dpid);
 				$data['name'] = $user['user_name'];
 				$data['phone'] = $user['mobile_num'];
+				if($order['takeout_typeid']==0){
+					$data['address'] = '堂食';
+				}else{
+					$data['address'] = '打包';
+				}
 			}elseif ($orderType==2||$orderType==3||$orderType==7||$orderType==8){
 				$orderId = $order['lid'];
 				$address = WxOrder::getOrderAddress($orderId, $dpid);
