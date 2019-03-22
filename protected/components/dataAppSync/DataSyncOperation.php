@@ -2251,6 +2251,8 @@ class DataSyncOperation {
 					WxCupon::refundCupon($cupon['cupon_id'], $user['lid']);
 				}
 			}
+			var_dump($yue);
+			var_dump($yue!=0);
 			if($yue!=0){
 				$yueArr = explode(',', $yue);
 				$yueCharge = $yueArr[0];
