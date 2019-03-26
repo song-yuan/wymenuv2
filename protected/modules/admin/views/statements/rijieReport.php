@@ -38,7 +38,7 @@
                 <option value="-1" <?php if ($userid==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','--列出所有--');?></option>
                 <?php if($username):?>
                 <?php foreach ($username as $user):?>
-                <option value="<?php echo $user['username'];?>" <?php if ($userid==$user['username']){?> selected="selected" <?php }?> ><?php echo $user['username'].'('.$user['staff_no'].')';?></option>
+                <option value="<?php echo $user['username'];?>" <?php if ($userid==$user['username']){ $seUsername = $user['username'];?> selected="selected" <?php }?> ><?php echo $user['username'].'('.$user['staff_no'].')';?></option>
                 <?php endforeach;?>
                 <?php endif;?>
              </select>
