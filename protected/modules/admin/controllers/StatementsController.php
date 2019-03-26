@@ -127,12 +127,9 @@ class StatementsController extends BackendController
 		$endTime = $end_time.' 23:59:59';
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
-			$payments = array();
-			$username = array();
-		}else{
-			$payments = $this->getPayment($selectDpid);
-			$username = $this->getUsername($selectDpid);
 		}
+		$payments = $this->getPayment($selectDpid);
+		$username = $this->getUsername($selectDpid);
 		
 		$whereUser = '';
 		if($userid != '0'){
