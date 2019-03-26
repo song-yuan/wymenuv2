@@ -526,7 +526,7 @@ function getProduct(){
 													if(tasteArr.indexOf(taste['lid'])>-1){
 														tasteNames += taste['name']+' ';
 														if(isDiscount){
-															$pPrice += parseFloat(taste['price']*prodiscount);
+															pPrice += parseFloat(taste['price']*prodiscount);
 														}else{
 															pPrice += parseFloat(taste['price']);
 														}
