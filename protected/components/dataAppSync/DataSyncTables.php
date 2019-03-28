@@ -42,6 +42,9 @@ class DataSyncTables
         array("name"=>"口味分组","table"=>"nb_taste_group"), 
     	array("name"=>"产品标签","table"=>"nb_product_label"),
     	array("name"=>"产品标签详情","table"=>"nb_product_label_detail"),
+    	array("name"=>"指令表","table"=>"nb_instruction"),
+    	array("name"=>"指令详情表","table"=>"nb_instruction_detail"),
+    	array("name"=>"产品指令表","table"=>"nb_product_instruction"),    		
     );
     
     //实时同步数据包括
@@ -1097,6 +1100,43 @@ class DataSyncTables
         		"is_available varchar(2) NOT NULL DEFAULT '1',".
         		"source varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag varchar(2) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_instruction" => "CREATE TABLE IF NOT EXISTS nb_instruction (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"phs_code varchar(16) NOT NULL,".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
+        		"instruct_name varchar(16) NOT NULL,".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_instruction_detail" => "CREATE TABLE IF NOT EXISTS nb_instruction_detail (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"instruction_id int(10) NOT NULL,".
+        		"time varchar(2) NOT NULL DEFAULT '0',".
+        		"instruct varchar(32) NOT NULL,".
+        		"sort varchar(3) NOT NULL DEFAULT '50',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_product_instruction" => "CREATE TABLE IF NOT EXISTS nb_product_instruction (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"instruction_id int(10) NOT NULL,".
+        		"product_id int(10) NOT NULL,".
+        		"is_taste varchar(2) NOT NULL,".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
