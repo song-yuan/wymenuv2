@@ -171,10 +171,8 @@ class UserController extends Controller
         $userId = $user['lid'];
         $cardId = $user['card_id'];
 		$type = Yii::app()->request->getParam('t',0);
-		$page = Yii::app()->request->getParam('p',1);
 		
-		$orderLists = WxOrder::getUserOrderList($userId,$cardId,$type,$page);
-		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type,'userId'=>$userId,'cardId'=>$cardId));
+		$this->render('orderlist',array('companyId'=>$this->companyId,'type'=>$type,'userId'=>$userId,'cardId'=>$cardId));
 	}
 	/**
 	 * 
