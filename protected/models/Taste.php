@@ -54,6 +54,7 @@ class Taste extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'productInstruct' => array(self::HAS_MANY , 'ProductInstruction' ,'','on'=>'t.lid=productInstruct.product_id and t.dpid=productInstruct.dpid and productInstruct.is_taste=1 and productInstruct.delete_flag=0'),
 		);
 	}
 

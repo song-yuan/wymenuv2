@@ -206,6 +206,45 @@ class InstructController extends BackendController
 			'productInstructs'=>$productInstructs,
 		));
 	}
+	public function actionTasteInstruct(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'productInstruct';
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+		$criteria->order = ' lid desc ';
+		$criteria->params[':dpid']=$this->companyId;
+		$pages = new CPagination(Product::model()->count($criteria));
+		$pages->applyLimit($criteria);
+		$models = Taste::model()->findAll($criteria);
+		$instruct = array();
+		$instructions = Instruction::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId));
+		foreach ($instructions as $instruction){
+			$instruct['lid-'.(int)$instruction['lid']] = $instruction;
+		}
+		$this->render('tasteInstruct',array(
+				'instruct'=>$instruct,
+				'models'=>$models,
+				'pages' => $pages,
+		));
+	}
+	public function actionUpdateTasteInstruct(){
+		$lid = Yii::app()->request->getParam('lid');
+		$model = Taste::model()->find('lid=:lid and dpid=:dpid', array(':lid'=>$lid,':dpid'=>$this->companyId));
+	
+		if(Yii::app()->request->isPostRequest) {
+			$postData = Yii::app()->request->getPost('Instruct');
+			if($this->saveProductInstruction($lid,$postData,1)){
+				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
+				$this->redirect(array('instruct/tasteInstruct' , 'companyId' => $this->companyId));
+			}
+		}
+		$instructions = $this->getInstruction();
+		$productInstructs = $this->getProductInstruction($lid);
+		$this->render('updateTasteInstruct' , array(
+				'model'=>$model,
+				'instructions'=>$instructions,
+				'productInstructs'=>$productInstructs,
+		));
+	}
 	// 获取指令
 	private function getInstruction(){
 		$sql = 'select * from nb_instruction where dpid='.$this->companyId.' and delete_flag=0';

@@ -66,35 +66,30 @@
 		<div class="portlet box purple">
 			<div class="portlet-title">
 				<div class="caption"><i class="fa fa-cogs"></i><a href="<?php echo $this->createUrl('instruct/index',array('companyId'=>$this->companyId));?>"><span class="tab" ><?php echo yii::t('app','指令设置');?></span></a><a href="<?php echo $this->createUrl('instruct/productInstruct',array('companyId'=>$this->companyId));?>"><span class="tab tab-active" ><?php echo yii::t('app','指令对应');?></span></a></div>
-					<div class="actions">						
-                        <div class="btn-group">
-							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
-						</div>						
-					</div>
-				</div>
-				<div class="portlet-body tabbable-custom" id="table-manage">
-					<ul class="nav nav-tabs">
-						<li class="active"><a href="javascrip:;">菜品指令对应</a></li>
-						<li class=""><a href="<?php echo $this->createUrl('instruct/tasteInstruct',array('companyId'=>$this->companyId));?>">口味指令对应</a></li>
-					</ul>
-					<table class="table table-striped table-bordered table-hover" id="sample_1">
-						<thead>
-							<tr>
-                             	<th class="col-md-3"><?php echo yii::t('app','产品名称');?></th>
-                                <th><?php echo yii::t('app','产品指令');?></th>
-                                <th class="col-md-1">&nbsp;</th>                               
-							</tr>
-						</thead>
-						<tbody>
+			</div>
+			<div class="portlet-body tabbable-custom" id="table-manage">
+				<ul class="nav nav-tabs">
+					<li class=""><a href="<?php echo $this->createUrl('instruct/productInstruct',array('companyId'=>$this->companyId));?>">菜品指令对应</a></li>
+					<li class="active"><a href="javascrip:;">口味指令对应</a></li>
+				</ul>
+				<table class="table table-striped table-bordered table-hover" id="sample_1">
+					<thead>
+						<tr>
+                         	<th class="col-md-3"><?php echo yii::t('app','产品名称');?></th>
+                            <th><?php echo yii::t('app','产品指令');?></th>
+                            <th class="col-md-1">&nbsp;</th>    	                               
+						</tr>
+					</thead>
+					<tbody>
 					<?php if($models):?>
 					<?php foreach ($models as $model):?>
 						<tr class="odd gradeX">
-							<td ><?php echo $model->product_name;?></td>
+							<td ><?php echo $model->name;?></td>
 							<td>
 								<?php 
 									$instructName = '';
 									foreach($model->productInstruct as $val){
-										if($val['is_taste']){
+										if(!$val['is_taste']){
 											continue;
 										}
 										$instrucntId = $val['instruction_id'];
@@ -106,7 +101,7 @@
 								?>
 							</td>
 							<td class="center">
-							<a href="<?php echo $this->createUrl('instruct/updateProductInstruct',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+							<a href="<?php echo $this->createUrl('instruct/updateTasteInstruct',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 							</td>
 						</tr>
 					<?php endforeach;?>
