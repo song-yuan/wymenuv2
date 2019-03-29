@@ -117,6 +117,14 @@
 			                	</div>
 			                </a> 
 	                	</div>
+	                	<div class="list col-sm-3 col-xs-12">
+			                <a href="<?php echo $this->createUrl('instruct/index',array('companyId'=>$this->companyId));?>">
+			                	<div class="margin-left-right">
+			                	<div class="list_big"><i class="fa fa-home"></i>指令设置</div>
+			                	<div class="list_small">为不同菜品设置相应指令</div>
+			                	</div>
+			                </a> 
+	                	</div>
 	                </div>
 	                <div class="panel_body row">
 	                	<p>菜品修改</p>
