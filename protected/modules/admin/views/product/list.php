@@ -188,6 +188,14 @@
 			                	</div>
 			                </a> 
 						</div>
+						<div class="list col-sm-3 col-xs-12">
+			                <a href="<?php echo $this->createUrl('copyinstruct/index',array('companyId'=>$this->companyId));?>">
+			                	<div class="margin-left-right">
+			                	<div class="list_big"><i class="fa fa-home"></i>指令下发</div>
+			                	<div class="list_small"></div>
+			                	</div>
+			                </a> 
+						</div>
 						<?php endif;?>
 					</div>
 					<div class="panel_body row">
