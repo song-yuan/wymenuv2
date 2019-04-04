@@ -36,10 +36,11 @@ class InstructionDetail extends CActiveRecord
 			array('lid, dpid, create_at, instruction_id, time, instruct, sort', 'required'),
 			array('instruction_id', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('time, delete_flag', 'length', 'max'=>2),
+			array('time', 'length', 'max'=>4),
 			array('instruct', 'length', 'max'=>32),
 			array('sort', 'length', 'max'=>3),
 			array('is_sync', 'length', 'max'=>50),
+			array('delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
