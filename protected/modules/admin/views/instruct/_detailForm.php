@@ -8,6 +8,13 @@
 							)); ?>
 								<div class="form-body">
 									<div class="form-group">
+										<?php echo $form->label($model, 'instruct_name',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'instruct_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('instruct_name')));?>
+											<?php echo $form->error($model, 'instruct_name' )?>
+										</div>
+									</div>
+									<div class="form-group">
 										<?php echo $form->label($model, 'time',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'time',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('time')));?>

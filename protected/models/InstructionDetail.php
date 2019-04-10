@@ -33,10 +33,11 @@ class InstructionDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, create_at, instruction_id, time, instruct, sort', 'required'),
+			array('lid, dpid, create_at, instruction_id, instruct_name, time, instruct, sort', 'required'),
 			array('instruction_id', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('time', 'length', 'max'=>4),
+			array('instruct_name', 'length', 'max'=>16),
 			array('instruct', 'length', 'max'=>64),
 			array('sort', 'length', 'max'=>3),
 			array('is_sync', 'length', 'max'=>50),
@@ -44,7 +45,7 @@ class InstructionDetail extends CActiveRecord
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, instruction_id, time, instruct, sort, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, instruction_id, instruct_name, time, instruct, sort, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,6 +72,7 @@ class InstructionDetail extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'instruction_id' => 'Instruction',
+			'instruct_name' => '指令名称',
 			'time' => '执行时间',
 			'instruct' => '指令',
 			'sort' => '排序',
@@ -102,6 +104,7 @@ class InstructionDetail extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('instruction_id',$this->instruction_id);
+		$criteria->compare('instruct_name',$this->instruct_name,true);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('instruct',$this->instruct,true);
 		$criteria->compare('sort',$this->sort,true);
