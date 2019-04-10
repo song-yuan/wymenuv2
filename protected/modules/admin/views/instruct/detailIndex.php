@@ -53,6 +53,7 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+								<th><?php echo yii::t('app','指令名称');?></th>
 								<th><?php echo yii::t('app','执行时间');?></th>
 								<th><?php echo yii::t('app','指令');?></th>
 								<th><?php echo yii::t('app','排序');?></th>
@@ -65,6 +66,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
+								<td ><?php echo $model->instruct_name;?></td>
 								<td ><?php echo $model->time;?></td>
 								<td><?php echo $model->instruct;?></td>
 								<td><?php echo $model->sort;?></td>
