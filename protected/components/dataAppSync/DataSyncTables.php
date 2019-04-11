@@ -1121,8 +1121,9 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"instruction_id int(10) NOT NULL,".
+        		"instruct_name varchar(16) NOT NULL,".
         		"time varchar(2) NOT NULL DEFAULT '0',".
-        		"instruct varchar(32) NOT NULL,".
+        		"instruct varchar(64) NOT NULL,".
         		"sort varchar(3) NOT NULL DEFAULT '50',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
