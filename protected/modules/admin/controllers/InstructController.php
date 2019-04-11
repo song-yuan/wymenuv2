@@ -57,6 +57,7 @@ class InstructController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Instruction');
+			$model->update_at = date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('instruct/index','companyId'=>$this->companyId));
@@ -130,6 +131,7 @@ class InstructController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('InstructionDetail');
+			$model->update_at = date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('instruct/detailIndex', 'groupid'=>$model->instruction_id, 'companyId' => $this->companyId));
