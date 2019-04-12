@@ -3,45 +3,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/css/datepicker.css';?>" />
    <!-- BEGIN PAGE -->
 <div class="page-content">
-    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-    <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                    <div class="modal-content">
-                            <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                    <h4 class="modal-title">选择店铺</h4>
-                            </div>
-                            <div class="modal-body">
-                                <?php if(!empty($wxCompanys)):?>
-							    <div class="row">
-							    	<div class="col-md-3"><a class="select-all">全选</a> / <a class="select-none">全不选</a></div>
-							    	<div class="col-md-9">
-										<select name="selectDpid" class="multi-select" multiple="" id="my_multi_select3" >
-											<?php foreach ($wxCompanys as $wx):?>
-											<option value="<?php echo $wx['dpid'];?>" <?php if(strpos($selectDpid,$wx['dpid'])!==false){echo 'selected="selected"';}?>><?php echo $wx['company_name'];?></option>
-											<?php endforeach;?>
-										</select>
-									</div>
-							    </div>
-							    <?php else:?>
-							    <select name="selectDpid" class="hide">
-							    	<option value="<?php echo $selectDpid;?>"></option>
-							    </select>
-							    <?php endif;?>
-                            </div>
-                            <div class="modal-footer">
-                                    <button type="button" class="btn blue" data-dismiss="modal">确定</button>
-                            </div>
-                    </div>
-                    <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-    <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
     <!-- BEGIN PAGE HEADER-->
     <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','支付方式报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
-
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
     <div class="row">
@@ -51,8 +14,15 @@
             <div class="portlet-title">
                 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式报表');?></div>
             	<div class="actions">
-            		<button type="button" id="btn_dpid_query" class="btn green" ><?php echo yii::t('app','选择店铺');?></button>
-                    <select name="text" class="btn yellow" >
+            		<div class="btn-group">
+            			<select  class="form-control select2me" name="selectDpid" data-placeholder="请选择店铺...">
+							<option value=""></option>
+							<?php foreach ($wxCompanys as $company):?>
+							<option value="<?php echo $company['dpid'];?>" <?php if(strpos($selectDpid,$company['dpid'])!==false){ echo 'selected="selected"';}?>><?php echo $company['company_name'];?></option>
+							<?php endforeach;?>
+						</select>
+					</div>
+					<select name="text" class="btn yellow" >
 						<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
 						<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
 						<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
@@ -201,41 +171,6 @@
 <script>
 //var str=new array();
 jQuery(document).ready(function(){
-	$('#my_multi_select3').multiSelect({
-        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='请输入店铺名称...'>",
-        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='请输入店铺名称...'>",
-        afterInit: function (ms) {
-            var that = this,
-                $selectableSearch = that.$selectableUl.prev(),
-                $selectionSearch = that.$selectionUl.prev(),
-                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
-
-            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-                .on('keydown', function (e) {
-                    if (e.which === 40) {
-                        that.$selectableUl.focus();
-                        return false;
-                    }
-                });
-
-            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-                .on('keydown', function (e) {
-                    if (e.which == 40) {
-                        that.$selectionUl.focus();
-                        return false;
-                    }
-                });
-        },
-        afterSelect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        },
-        afterDeselect: function () {
-            this.qs1.cache();
-            this.qs2.cache();
-        }
-    });
 	if (jQuery().datepicker) {
 		$('.date-picker').datepicker({
 			format: 'yyyy-mm-dd',
@@ -246,19 +181,6 @@ jQuery(document).ready(function(){
 		$('body').removeClass("modal-open");
 	}
 	
-	$('#btn_dpid_query').click(function(){
-		$('.modal').modal();
-	})
-	$('.select-all').click(function(){
-		$('.ms-elem-selectable').each(function(){
-			$(this).trigger('click');
-		});
-	});
-	$('.select-none').click(function(){
-		$('.ms-elem-selection').each(function(){
-			$(this).trigger('click');
-		});
-	});
 	 $('#btn_time_query').click(function time() {
 	     	var begin_time = $('#begin_time').val();
 	     	var end_time = $('#end_time').val();
