@@ -675,12 +675,14 @@ class StatementsController extends BackendController
 		if(!empty($selectDpid)){
 			$sqlDpid = $selectDpid;
 		}
+		
 		$wxCompanys = array();
 		if($this->comptype==0){
 			$sql = 'select t.dpid,t.company_name from nb_company t,nb_company_property t1 where t.dpid=t1.dpid and t.comp_dpid='.$this->companyId.' and t1.is_rest!="0" and t.delete_flag=0';
 			$wxCompanys = Yii::app()->db->createCommand($sql)->queryAll();
 			if(empty($selectDpid)){
 				$selectDpid = $this->companyId;
+				$sqlDpid = '';
 				foreach ($wxCompanys as $company){
 					$sqlDpid .= $company['dpid'].',';
 				}
