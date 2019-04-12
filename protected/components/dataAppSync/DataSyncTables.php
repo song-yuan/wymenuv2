@@ -1121,6 +1121,7 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"instruction_id int(10) NOT NULL,".
+        		"number varchar(4) NOT NULL DEFAULT '00',".
         		"instruct_name varchar(16) NOT NULL,".
         		"time varchar(2) NOT NULL DEFAULT '0',".
         		"instruct varchar(64) NOT NULL,".

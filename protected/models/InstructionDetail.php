@@ -36,7 +36,7 @@ class InstructionDetail extends CActiveRecord
 			array('lid, dpid, create_at, instruction_id, instruct_name, time, instruct, sort', 'required'),
 			array('instruction_id', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('time', 'length', 'max'=>4),
+			array('number, time', 'length', 'max'=>4),
 			array('instruct_name', 'length', 'max'=>16),
 			array('instruct', 'length', 'max'=>64),
 			array('sort', 'length', 'max'=>3),
@@ -45,7 +45,7 @@ class InstructionDetail extends CActiveRecord
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, instruction_id, instruct_name, time, instruct, sort, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, instruction_id, number, instruct_name, time, instruct, sort, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +72,7 @@ class InstructionDetail extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'instruction_id' => 'Instruction',
+			'number' => '板子编号',
 			'instruct_name' => '指令名称',
 			'time' => '执行时间',
 			'instruct' => '指令',
@@ -104,6 +105,7 @@ class InstructionDetail extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('instruction_id',$this->instruction_id);
+		$criteria->compare('number',$this->time,true);
 		$criteria->compare('instruct_name',$this->instruct_name,true);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('instruct',$this->instruct,true);
