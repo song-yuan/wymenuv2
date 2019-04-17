@@ -44,7 +44,7 @@ class CopyinstructController extends BackendController
         			$hasdetail = false;
         			$hasproins = false;
         			$sqlInstruct = 'insert into nb_instruction (lid,dpid,create_at,phs_code,source,instruct_name) values ';
-        			$sqlIndetail = 'insert into nb_instruction_detail (lid,dpid,create_at,instruction_id,time,instruct,sort) values ';
+        			$sqlIndetail = 'insert into nb_instruction_detail (lid,dpid,create_at,instruction_id,number,instruct_name,time,instruct,sort) values ';
         			$sqlproInstruct = 'insert into nb_product_instruction (lid,dpid,create_at,instruction_id,product_id,is_taste) values ';
         			
         			$sql = 'select * from nb_instruction_detail where dpid='.$instruct['dpid'].' and instruction_id='.$instruct['lid'].' and delete_flag=0';
@@ -69,7 +69,7 @@ class CopyinstructController extends BackendController
         					$hasdetail = true;
         					$se = new Sequence("instruction_detail");
         					$dlid = $se->nextval();
-        					$sqlIndetail .= '('.$dlid.','.$dpid.',"'.$createAt.'",'.$lid.',"'.$detail['time'].'","'.$detail['instruct'].'","'.$detail['sort'].'"),';
+        					$sqlIndetail .= '('.$dlid.','.$dpid.',"'.$createAt.'",'.$lid.',"'.$detail['number'].'","'.$detail['instruct_name'].'","'.$detail['time'].'","'.$detail['instruct'].'","'.$detail['sort'].'"),';
         				}
         				foreach ($productInstruct as $proInstruct){
         					$sql = 'select phs_code from nb_product where lid='.$proInstruct['product_id'].' and dpid='.$instruct['dpid'];
