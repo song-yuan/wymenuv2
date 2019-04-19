@@ -1126,6 +1126,7 @@ class DataSyncTables
         		"time varchar(2) NOT NULL DEFAULT '0',".
         		"instruct varchar(64) NOT NULL,".
         		"sort varchar(3) NOT NULL DEFAULT '50',".
+        		"is_waiting varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
