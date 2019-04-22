@@ -352,7 +352,7 @@ class MtOrder
 		foreach ($extras as  $extra) {
 			if(!empty($extra)){
 				array_push($orderArr['order_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
-				array_push($orderCloudArr['nb_order_account_discount'],array('discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
+				array_push($orderCloudArr['nb_order_account_discount'],array('account_no'=>$orderId,'discount_title'=>$extra['remark'],'discount_type'=>'5','discount_id'=>'0','discount_money'=>$extra['reduce_fee']));
 			}
 		}
 		

@@ -882,7 +882,7 @@ class Elm
 		if(!empty($orderActivities)){
 			foreach ($orderActivities as $orderActivitive){
 				array_push($orderArr['order_discount'],array('discount_title'=>$orderActivitive->name,'discount_type'=>'5','discount_id'=>'0','discount_money'=>abs($orderActivitive->amount)));
-				array_push($orderCloudArr['nb_order_account_discount'],array('discount_title'=>$orderActivitive->name,'discount_type'=>'5','discount_id'=>'0','discount_money'=>abs($orderActivitive->amount)));
+				array_push($orderCloudArr['nb_order_account_discount'],array('account_no'=>$orderId,'discount_title'=>$orderActivitive->name,'discount_type'=>'5','discount_id'=>'0','discount_money'=>abs($orderActivitive->amount)));
 			}
 		}
 		
