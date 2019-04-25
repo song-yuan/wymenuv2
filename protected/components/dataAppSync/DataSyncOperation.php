@@ -273,6 +273,7 @@ class DataSyncOperation {
 			return json_encode ( $data );
 		}
 		$keyOrder = 'redis-third-platform-'.(int)$dpid;
+		Helper::writeLog('keyOrder:'.$keyOrder);
 		$orderSize = Yii::app()->redis->lLen($keyOrder);
 		Helper::writeLog('orderSize:'.$orderSize);
 		if($orderSize > 0){
