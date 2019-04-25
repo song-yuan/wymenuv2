@@ -12,6 +12,7 @@ $dpid = 0;
 $res = Elm::dealOrder($order,$dpid,4);
 var_dump($res);
 $keyOrder = 'redis-third-platform-'.(int)$dpid;
+var_dump($keyOrder);
 $orderSize = Yii::app()->redis->lLen($keyOrder);
 var_dump($orderSize);
 ?>
