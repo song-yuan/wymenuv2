@@ -10,4 +10,5 @@ $message = $obj->message;
 $order = json_decode($message);
 $dpid = 0;
 $res = Elm::dealOrder($order,$dpid,4);
+var_dump($res);
 ?>
