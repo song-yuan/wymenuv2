@@ -268,14 +268,11 @@ class DataSyncOperation {
 		$data = array ();
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
-		Helper::writeLog('ptype:'.$ptype);
 		if($ptype){
 			return json_encode ( $data );
 		}
 		$keyOrder = 'redis-third-platform-'.(int)$dpid;
-		Helper::writeLog('keyOrder:'.$keyOrder);
 		$orderSize = Yii::app()->redis->lLen($keyOrder);
-		Helper::writeLog('orderSize:'.$orderSize);
 		if($orderSize > 0){
 			$popKey = 'redis-third-platform-pop'.(int)$dpid;
 			$isPop = Yii::app()->redis->get($popKey);
