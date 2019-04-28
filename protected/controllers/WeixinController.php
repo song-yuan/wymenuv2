@@ -15,6 +15,11 @@ class WeixinController extends Controller
 	{
 		$this->render('posfeenotify');
 	}
+	public function actionNative(){
+		$companyId = Yii::app()->request->getParam('companyId');
+		$payPrice = Yii::app()->request->getParam('payPrice');
+		$this->render('native',array('dpid'=>$companyId,'should_total'=>$payPrice));
+	}
 	/**
 	 * 
 	 * 生成二维码支付
