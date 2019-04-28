@@ -13,7 +13,7 @@ $data = array(
 		'dpid' => $dpid,
 		'pay_type' => 0,
 		'out_trade_no' => $orderId,
-		'total_fee' => ''.$should_total
+		'total_fee' => $should_total
 );
 $result = MicroPayModel::insert($data);
 
@@ -31,7 +31,7 @@ if($result['status']){
 				'type'=>'3',
 				'device_id'=>$poscode,
 				'dynamicId'=>$auth_code,
-				'totalAmount'=>''.$should_total*100,
+				'totalAmount'=>$should_total*100,
 				'clientSn'=>$orderId,
 				'dpid'=>$dpid,
 				'subject'=>$companyName,
@@ -46,7 +46,7 @@ if($result['status']){
 			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/nativenotify');
 			$data = array(
 					'outTradeNo'=>$orderId,
-					'totalFee'=>$payPrice,
+					'totalFee'=>$should_total*100,
 					'subject'=>'posfee',
 					'body'=>'order',
 					'channel'=>$channel,
