@@ -20,6 +20,10 @@ class WeixinController extends Controller
 		$payPrice = Yii::app()->request->getParam('payPrice');
 		$this->render('native',array('dpid'=>$companyId,'should_total'=>$payPrice));
 	}
+	public function actionNativenotify()
+	{
+		$this->render('nativenotify');
+	}
 	/**
 	 * 
 	 * 生成二维码支付
