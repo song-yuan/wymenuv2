@@ -212,6 +212,62 @@ class MtpayController extends Controller
 		echo '{"status":"FAIL"}';exit;
 	}
 	/**
+	 * native 支付通知
+	 */
+	public function actionNativenotify(){
+		$data = file_get_contents("php://input");
+		$accountno = $_POST['outTradeNo'];
+		$transactionId = $_POST['transactionId'];
+		$totalFee = $_POST['totalFee'];
+		
+		$ourTradeArr = explode('-', $accountno);
+		$dpid = $ourTradeArr[1];
+		$sql = 'select * from nb_mtpay_info where dpid ='.$dpid.' and accountno="'.$accountno.'" and transactionId ="'.$transactionId.'"';
+		$notify = Yii::app()->db->createCommand($sql)->queryRow();
+		if($notify){
+			echo '{"status":"SUCCESS"}';
+			exit;
+		}
+	
+		$infos = MtpConfig::MTPAppKeyMid($dpid);
+		$info = explode(',',$infos);
+		$appId = $info[1];
+		$merchantId = $info[0];
+		$key = $info[2];
+	
+		$returnRes = MtpPay::query(array(
+				'outTradeNo'=>$accountno,
+				'appId'=>$appId,
+				'key'=>$key,
+				'merchantId'=>$merchantId,
+		));
+		$obj = json_decode($returnRes,true);
+	
+		$return_status = $obj['status'];
+		$pay_status = $obj['orderStatus'];
+		if($return_status=='SUCCESS' && $pay_status=='ORDER_SUCCESS'){
+			//微信公众号支付记录表插入记录...
+			$se = new Sequence("mtpay_info");
+			$notifyWxwapId = $se->nextval();
+				
+			$notifyWxwapData = array (
+					'lid' => $notifyWxwapId,
+					'dpid' => $dpid,
+					'create_at' => date ( 'Y-m-d H:i:s', time()),
+					'update_at' => date ( 'Y-m-d H:i:s', time()),
+					'accountno' => $accountno,
+					'transactionId' => $transactionId,
+					'content' => $data,
+					'pay_status' => $pay_status
+			);
+			$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
+			// 处理续费
+			echo '{"status":"SUCCESS"}';
+			exit;
+		}
+		echo '{"status":"FAIL"}';exit;
+	}
+	/**
 	 * 支付后跳转页面
 	 * 
 	 */

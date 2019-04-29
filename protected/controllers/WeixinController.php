@@ -22,7 +22,6 @@ class WeixinController extends Controller
 	}
 	public function actionNativenotify()
 	{
-		Helper::writeLog('native:beigain');
 		$this->render('nativenotify');
 	}
 	/**

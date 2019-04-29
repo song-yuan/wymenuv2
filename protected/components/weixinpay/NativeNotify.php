@@ -52,11 +52,12 @@ class NativeNotify extends WxPayNotify
 	}
 	public function insertNotify($data){
 		Helper::writeLog('native-reult:'.json_encode($data));
+		$outTradeArr = explode('-', $data['out_trade_no']);
 		$se = new Sequence("notify");
         $lid = $se->nextval();
 		$notifyData = array(
 			'lid'=>$lid,
-        	'dpid'=>$orderIdArr[1],
+        	'dpid'=>$outTradeArr[1],
         	'create_at'=>date('Y-m-d H:i:s',time()),
         	'update_at'=>date('Y-m-d H:i:s',time()),
         	'user_id'=>0,
@@ -68,6 +69,6 @@ class NativeNotify extends WxPayNotify
 			);
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		
-		
+		MicroPayModel::update($outTradeArr[1], $data['out_trade_no'], $data['transaction_id'], json_encode($data));
 	}
 }

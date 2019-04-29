@@ -560,10 +560,17 @@ class DataAppSyncController extends Controller
 		$dpid = Yii::app()->request->getParam('companyId');
 		$orderId = Yii::app()->request->getParam('tradeno','0');
 		$status = false;
-		$sql = 'select * from nb_notify where dpid='.$dpid.' and out_trade_no="'.$orderId.'"';
-		$notify = Yii::app()->db->createCommand($sql)->queryRow();
-		if($notify){
-			$status = true;
+		$sql = 'select * from nb_micro_pay where dpid='.$dpid.' and out_trade_no="'.$orderId.'"';
+		$micropay = Yii::app()->db->createCommand($sql)->queryRow();
+		if($micropay){
+			$payResult = $micropay['pay_result'];
+			$reslut = json_decode($payResult);
+			if($reslut->return_code){
+				$status = true;
+			}else{
+				$status = true;
+			}
+			
 		}
 		Yii::app()->end(json_encode(array('status'=>$status)));
 	}
