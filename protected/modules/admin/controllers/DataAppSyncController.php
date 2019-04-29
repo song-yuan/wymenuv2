@@ -566,9 +566,9 @@ class DataAppSyncController extends Controller
 			$payResult = $micropay['pay_result'];
 			if(!empty($payResult)){
 				$reslut = json_decode($payResult);
-				if($reslut->return_code){
-					$status = true;
-				}else{
+				$returnStatus = isset($reslut->status)?$reslut->status:$reslut->return_code;
+				$reslutStatus = isset($reslut->orderStatus)?$reslut->orderStatus:$reslut->result_code;
+				if($returnStatus=='SUCCESS'&&($reslutStatus=='ORDER_SUCCESS'||$reslutStatus=='SUCCESS')){
 					$status = true;
 				}
 			}
