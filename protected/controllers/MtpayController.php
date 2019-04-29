@@ -261,7 +261,8 @@ class MtpayController extends Controller
 					'pay_status' => $pay_status
 			);
 			$result = Yii::app ()->db->createCommand ()->insert('nb_mtpay_info',$notifyWxwapData);
-			// 处理续费
+			
+			MicroPayModel::update($dpid, $accountno, $transactionId, $returnRes);
 			echo '{"status":"SUCCESS"}';
 			exit;
 		}
