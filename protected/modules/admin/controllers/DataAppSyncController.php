@@ -557,7 +557,7 @@ class DataAppSyncController extends Controller
 	 * 获取扫码支付的状态
 	 */
 	public function actionGetNativePayStatus(){
-		$dpid = Yii::app()->request->getParam('dpid');
+		$dpid = Yii::app()->request->getParam('companyId');
 		$orderId = Yii::app()->request->getParam('tradeno','0');
 		$status = false;
 		$sql = 'select * from nb_notify where dpid='.$dpid.' and out_trade_no="'.$orderId.'"';
