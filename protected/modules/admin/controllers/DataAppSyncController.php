@@ -564,13 +564,14 @@ class DataAppSyncController extends Controller
 		$micropay = Yii::app()->db->createCommand($sql)->queryRow();
 		if($micropay){
 			$payResult = $micropay['pay_result'];
-			$reslut = json_decode($payResult);
-			if($reslut->return_code){
-				$status = true;
-			}else{
-				$status = true;
+			if(!empty($payResult)){
+				$reslut = json_decode($payResult);
+				if($reslut->return_code){
+					$status = true;
+				}else{
+					$status = true;
+				}
 			}
-			
 		}
 		Yii::app()->end(json_encode(array('status'=>$status)));
 	}
