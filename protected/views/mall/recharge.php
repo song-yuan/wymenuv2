@@ -14,7 +14,14 @@
 	<div class="title">充值金额</div>
 	<?php if($payChannel==1):?>
 		<?php foreach($recharges as $recharge):?>
-		<div class="item"  onclick="jsApiCall('<?php echo $recharge['lid'];?>','<?php echo $recharge['dpid'];?>','<?php echo $recharge['recharge_money'];?>')"><div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo $recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
+		<div class="item"  onclick="jsApiCall('<?php echo $recharge['lid'];?>','<?php echo $recharge['dpid'];?>','<?php echo $recharge['recharge_money'];?>')">
+			<div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div>
+			<div class="down">
+			<?php if($recharge['recharge_cashback']):?>赠送<?php echo $recharge['recharge_cashback'];?>元<?php endif;?>
+			<?php if($recharge['recharge_pointback']):?>赠送<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?>
+			<?php if($recharge['recharge_cashcard']):?>赠送现金券<?php endif;?>
+			</div>
+		</div>
 		<?php endforeach;?>
 		<div class="clear"></div>
 		<script type="text/javascript">
