@@ -21,16 +21,7 @@ if($result['status']){
 		exit;
 	}
 	if($this->compaychannel['pay_channel']=='2'){
-		$result = SqbPay::pay(array(
-				'type'=>'1',
-				'device_id'=>$poscode,
-				'dynamicId'=>$authCode,
-				'totalAmount'=>''.$totalAmount*100,
-				'clientSn'=>$outTradeNo,
-				'dpid'=>$dpid,
-				'subject'=>$companyName,
-				'operator'=>$username,
-		));
+		
 	}elseif ($this->compaychannel['pay_channel']=='3'){
 		//美团 支付宝
 		$channel = 'ali_scan_pay';
@@ -39,8 +30,8 @@ if($result['status']){
 			$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/mtpay/nativenotify');
 			$data = array(
 					'outTradeNo'=>$orderId,
-					'totalFee'=>$should_total*100,
-					'subject'=>'posfee',
+					'totalFee'=>$totalAmount*100,
+					'subject'=>'payorder',
 					'body'=>'order',
 					'channel'=>$channel,
 					'expireMinutes'=>'5',

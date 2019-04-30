@@ -27,16 +27,6 @@ if($result['status']){
 		exit;
 	}
 	if($compaychannel['pay_channel']=='2'){
-		$result = SqbPay::pay(array(
-				'type'=>'3',
-				'device_id'=>$poscode,
-				'dynamicId'=>$auth_code,
-				'totalAmount'=>$should_total*100,
-				'clientSn'=>$orderId,
-				'dpid'=>$dpid,
-				'subject'=>$companyName,
-				'operator'=>$username,
-		));
 		
 	}elseif ($compaychannel['pay_channel']=='3'){
 		//美团 微信
