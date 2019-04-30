@@ -112,7 +112,7 @@ if($result['status']){
 		$barPayRequestBuilder->setAppAuthToken($appAuthToken);
 		
 		// 调用qrPay方法获取当面付应答
-		$qrPay = new AlipayTradeService($config);
+		$qrPay = new AlipayTradeService($this->f2fpay_config);
 		$qrPayResult = $qrPay->qrPay($qrPayRequestBuilder);
 		
 		$response = $barPayResult->getResponse();
