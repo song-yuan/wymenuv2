@@ -1,14 +1,14 @@
 <?php 
 $now = time();
 $rand = rand(100,999);
-$outTradeNo = $now.'-'.$this->companyId.'-'.$rand;
+$orderId = $now.'-'.$this->companyId.'-'.$rand;
 
 $company = WxCompany::get($this->companyId);
 
 $data = array(
 		'dpid' => $this->companyId,
 		'pay_type' => 1,
-		'out_trade_no' => $outTradeNo,
+		'out_trade_no' => $orderId,
 		'total_fee' => $totalAmount
 );
 $result = MicroPayModel::insert($data);
@@ -97,7 +97,7 @@ if($result['status']){
 		
 		// 创建请求builder，设置请求参数
 		$qrPayRequestBuilder = new AlipayTradePayContentBuilder();
-		$qrPayRequestBuilder->setOutTradeNo($outTradeNo);
+		$qrPayRequestBuilder->setOutTradeNo($orderId);
 		$qrPayRequestBuilder->setTotalAmount($totalAmount);
 		$qrPayRequestBuilder->setTimeExpress($timeExpress);
 		$qrPayRequestBuilder->setSubject($subject);
@@ -119,7 +119,7 @@ if($result['status']){
 		switch ($qrPayResult->getTradeStatus()) {
 			case "SUCCESS":
 				$codeUrl = $response->qr_code;
-				echo json_encode(array('status'=>true,'trade_no'=>$outTradeNo,'code_url'=>$codeUrl));
+				echo json_encode(array('status'=>true,'trade_no'=>$orderId,'code_url'=>$codeUrl));
 				break;
 			case "FAILED":
 				echo json_encode(array('status'=>false));
