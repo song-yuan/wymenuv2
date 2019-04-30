@@ -99,7 +99,6 @@ if($result['status']){
 		$barPayRequestBuilder = new AlipayTradePayContentBuilder();
 		$barPayRequestBuilder->setOutTradeNo($outTradeNo);
 		$barPayRequestBuilder->setTotalAmount($totalAmount);
-		$barPayRequestBuilder->setAuthCode($authCode);
 		$barPayRequestBuilder->setTimeExpress($timeExpress);
 		$barPayRequestBuilder->setSubject($subject);
 		$barPayRequestBuilder->setBody($body);
