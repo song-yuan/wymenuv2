@@ -237,8 +237,8 @@ class AlipayController extends Controller
     public function actionNative()
     {
     	$companyId = Yii::app()->request->getParam('companyId');
-    	$totalAmount = Yii::app()->request->getParam('pay_price');
-    	$goodStr = Yii::app()->request->getParam('goods');
+    	$totalAmount = Yii::app()->request->getParam('payPrice');
+    	$goodStr = Yii::app()->request->getParam('goods','');
     	$this->render('native',array('dpid'=>$companyId,'totalAmount'=>$totalAmount,'goodStr'=>$goodStr));
     }
     // 退款
