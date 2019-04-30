@@ -55,6 +55,7 @@ if($result['status']){
 			$msg = array('status'=>false);
 		}
 	}else{
+		$this->notify_url = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/alipay/nativenotify');
 		$subject = $companyName;
 		
 		$undiscountableAmount = "0.01";

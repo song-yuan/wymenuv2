@@ -364,5 +364,45 @@ class AlipayController extends Controller
             echo "fail";
         }
         exit;
-	}  
+	} 
+	public function actionNativenotify()
+	{
+		$alipayNotify = new AlipayNotify($this->alipay_config);
+		$verify_result = $alipayNotify->verifyNotify();
+		if($verify_result) {//验证成功
+			$out_trade_no = $_POST['out_trade_no'];
+			//支付宝交易号
+			$trade_no = $_POST['trade_no'];
+			//交易状态
+			$trade_status = $_POST['trade_status'];
+			//WAIT_BUYER_PAY交易创建，等待买家付款。
+			//TRADE_CLOSED 在指定时间段内未支付时关闭的交易；在交易完成全额退款成功时关闭的交易。
+			//TRADE_SUCCESS 交易成功，且可对该交易做操作，如：多级分润、退款等。
+			//TRADE_PENDING 等待卖家收款（买家付款后，如果卖家账号被冻结）。
+			//TRADE_FINISHED 交易成功且结束，即不可再做任何操作
+			if($_POST['trade_status'] == 'TRADE_FINISHED') {
+				//判断该笔订单是否在商户网站中已经做过处理
+				//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+				//如果有做过处理，不执行商户的业务程序
+				//注意：
+				//退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
+				//调试用，写文本函数记录程序运行情况是否正常
+				//厨打、收款/退款、结单
+				//                $this->notifyTrade($out_trade_no,$trade_no,$trade_no);
+			}else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
+				//判断该笔订单是否在商户网站中已经做过处理
+				//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+				//如果有做过处理，不执行商户的业务程序
+				//注意：
+				//付款完成后，支付宝系统发送该交易状态通知
+				//厨打、收款/退款、结单
+				$alipayNotify->checkNotify($_POST);
+			}
+			echo "success";		//请不要修改或删除
+		}else{
+			//验证失败
+			echo "fail";
+		}
+		exit;
+	}
 }

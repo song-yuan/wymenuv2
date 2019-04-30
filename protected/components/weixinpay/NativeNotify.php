@@ -51,7 +51,6 @@ class NativeNotify extends WxPayNotify
 		}
 	}
 	public function insertNotify($data){
-		Helper::writeLog('native-reult:'.json_encode($data));
 		$outTradeArr = explode('-', $data['out_trade_no']);
 		$se = new Sequence("notify");
         $lid = $se->nextval();
