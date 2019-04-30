@@ -231,7 +231,15 @@ class AlipayController extends Controller
     	$totalAmount = Yii::app()->request->getParam('pay_price');
     	$authCode = Yii::app()->request->getParam('auth_code');
     	$goodStr = Yii::app()->request->getParam('goods');
-    	$this->render('barpay',array('dpid'=>$companyId,'totalAmount'=>$totalAmount,'authCode'=>$authCode,'goodStr'=>$goodStr,'poscode'=>$poscode,'username'=>$username,));
+    	$this->render('barpay',array('dpid'=>$companyId,'totalAmount'=>$totalAmount,'authCode'=>$authCode,'goodStr'=>$goodStr,'poscode'=>$poscode,'username'=>$username));
+    }
+    // 当面付 二维码支付
+    public function actionNative()
+    {
+    	$companyId = Yii::app()->request->getParam('companyId');
+    	$totalAmount = Yii::app()->request->getParam('pay_price');
+    	$goodStr = Yii::app()->request->getParam('goods');
+    	$this->render('native',array('dpid'=>$companyId,'totalAmount'=>$totalAmount,'goodStr'=>$goodStr));
     }
     // 退款
     public function actionRefund()

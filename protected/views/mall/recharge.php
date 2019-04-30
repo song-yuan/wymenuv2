@@ -8,7 +8,7 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wechat_css/weui.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/recharge.css?_t=20190430">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/recharge.css?_t=2019043001">
 <div class="section">
 <?php if($this->brandUser['user_name']&&$this->brandUser['mobile_num']):?>
 	<div class="title">充值金额</div>
