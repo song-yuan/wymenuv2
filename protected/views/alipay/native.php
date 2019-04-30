@@ -96,27 +96,27 @@ if($result['status']){
 		$appAuthToken = ""; //201701BBda91f2d7e6964c37b616687e75858C86
 		
 		// 创建请求builder，设置请求参数
-		$barPayRequestBuilder = new AlipayTradePayContentBuilder();
-		$barPayRequestBuilder->setOutTradeNo($outTradeNo);
-		$barPayRequestBuilder->setTotalAmount($totalAmount);
-		$barPayRequestBuilder->setTimeExpress($timeExpress);
-		$barPayRequestBuilder->setSubject($subject);
-		$barPayRequestBuilder->setBody($body);
-		$barPayRequestBuilder->setUndiscountableAmount($undiscountableAmount);
-		$barPayRequestBuilder->setExtendParams($extendParamsArr);
-		$barPayRequestBuilder->setGoodsDetailList($goodsDetailList);
-		$barPayRequestBuilder->setStoreId($storeId);
-		$barPayRequestBuilder->setOperatorId($operatorId);
-		$barPayRequestBuilder->setAlipayStoreId($alipayStoreId);
+		$qrPayRequestBuilder = new AlipayTradePayContentBuilder();
+		$qrPayRequestBuilder->setOutTradeNo($outTradeNo);
+		$qrPayRequestBuilder->setTotalAmount($totalAmount);
+		$qrPayRequestBuilder->setTimeExpress($timeExpress);
+		$qrPayRequestBuilder->setSubject($subject);
+		$qrPayRequestBuilder->setBody($body);
+		$qrPayRequestBuilder->setUndiscountableAmount($undiscountableAmount);
+		$qrPayRequestBuilder->setExtendParams($extendParamsArr);
+		$qrPayRequestBuilder->setGoodsDetailList($goodsDetailList);
+		$qrPayRequestBuilder->setStoreId($storeId);
+		$qrPayRequestBuilder->setOperatorId($operatorId);
+		$qrPayRequestBuilder->setAlipayStoreId($alipayStoreId);
 		
-		$barPayRequestBuilder->setAppAuthToken($appAuthToken);
+		$qrPayRequestBuilder->setAppAuthToken($appAuthToken);
 		
 		// 调用qrPay方法获取当面付应答
 		$qrPay = new AlipayTradeService($this->f2fpay_config);
 		$qrPayResult = $qrPay->qrPay($qrPayRequestBuilder);
 		
-		$response = $barPayResult->getResponse();
-		switch ($barPayResult->getTradeStatus()) {
+		$response = $qrPayResult->getResponse();
+		switch ($qrPayResult->getTradeStatus()) {
 			case "SUCCESS":
 				$codeUrl = $response->qr_code;
 				echo json_encode(array('status'=>true,'trade_no'=>$outTradeNo,'code_url'=>$codeUrl));
