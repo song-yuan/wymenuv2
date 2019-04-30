@@ -17,8 +17,8 @@
 		<div class="item"  onclick="jsApiCall('<?php echo $recharge['lid'];?>','<?php echo $recharge['dpid'];?>','<?php echo $recharge['recharge_money'];?>')">
 			<div class="top"><?php if($recharge['recharge_money']-(int)$recharge['recharge_money']==0){echo (int)$recharge['recharge_money'];}else{ echo $recharge['recharge_money'];}?>元</div>
 			<div class="down">
-			<?php if($recharge['recharge_cashback']!=0):?>赠送<?php echo $recharge['recharge_cashback'];?>元<?php endif;?><br>
-			<?php if($recharge['recharge_pointback']!=0):?>赠送<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?><br>
+			<?php if($recharge['recharge_cashback']!=0):?>赠送<?php echo $recharge['recharge_cashback'];?>元<br><?php endif;?>
+			<?php if($recharge['recharge_pointback']!=0):?>赠送<?php echo $recharge['recharge_pointback'];?>积分<br><?php endif;?>
 			<?php if($recharge['recharge_cashcard']!=0):?>赠送现金券<?php endif;?>
 			</div>
 		</div>
