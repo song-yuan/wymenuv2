@@ -735,7 +735,6 @@ class CopypromotionController extends BackendController
 				}
 				$buysql = rtrim($buysql,',');
 				$buydetailsql = rtrim($buydetailsql,',');
-				
 				$transaction = $db->beginTransaction();
 				try{
 					$db->createCommand($buysql)->execute();
@@ -743,7 +742,7 @@ class CopypromotionController extends BackendController
 					$transaction->commit();
 				}catch(Exception $e){
 					$transaction->rollback();
-					$msg .= $title.':失败  ';
+					$msg .= $title.':失败  '.$e->getMessage();
 				}
 			}
 		}

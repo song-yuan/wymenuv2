@@ -367,7 +367,7 @@ class AlipayController extends Controller
 	} 
 	public function actionNativenotify()
 	{
-		$alipayNotify = new AlipayNotify($this->alipay_config);
+		$alipayNotify = new AlipayNativeNotify($this->alipay_config);
 		$verify_result = $alipayNotify->verifyNotify();
 		if($verify_result) {//验证成功
 			$out_trade_no = $_POST['out_trade_no'];
