@@ -76,6 +76,7 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+								<th><?php echo yii::t('app','创建时间');?></th>
 								<th><?php echo yii::t('app','活动名称');?></th>
 								<th><?php echo yii::t('app','活动摘要');?></th>
 								<th><?php echo yii::t('app','活动类型');?></th>
@@ -96,6 +97,7 @@
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td><?php echo $model->create_at; ?></td>
 								<td><?php echo $model->promotion_title; ?></td>
 								<td><?php echo $model->promotion_abstract;?></td>
 								<td><?php switch ($model->promotion_type){case 0:echo yii::t('app','独享');break;case 1:echo yii::t('app','共享');break;default:echo '';break;} ?></td>
