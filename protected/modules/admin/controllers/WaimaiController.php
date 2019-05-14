@@ -194,9 +194,16 @@ class WaimaiController extends BackendController
 		$orderId = Yii::app()->request->getPost('orderId');
 		$dpid = $this->companyId;
 		$order = WxOrder::getOrder($orderId, $dpid);
+		$orderPlatform = array();
+		
+		$pfsql = 'select * from nb_order_platform where dpid='.$dpid.' and order_id='.$orderId;
+		$platform = Yii::app()->db->createCommand($pfsql)->queryRow();
+		if($platform){
+			$orderPlatform = $platform;
+		}
 		$orderArr = array();
 	 	$orderArr['nb_site_no'] = array();
-	 	$orderArr['nb_order_platform'] = array();
+	 	$orderArr['nb_order_platform'] = $orderPlatform;
 	 	$order['order_status'] = 3;
 	 	$orderArr['nb_order'] = $order;
 	 	$orderId = $order['lid'];
