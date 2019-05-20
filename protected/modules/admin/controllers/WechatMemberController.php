@@ -401,7 +401,7 @@ class WechatMemberController extends BackendController {
         }
         $sql = 'select m.* from ('.$sql.')m';
         $models = $db->createCommand($sql)->queryAll();
-
+		
         $objPHPExcel = new PHPExcel();
         //设置第1行的行高
         $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -459,7 +459,7 @@ class WechatMemberController extends BackendController {
         ->setCellValue('A1',yii::t('app','壹点吃微信会员信息表'))
         ->setCellValue('A2',yii::t('app','注意：该表为所选查询条件的查询结果'))
         ->setCellValue('A3',yii::t('app','卡号'))
-        ->setCellValue('B3',yii::t('app','姓名|昵称'))
+        ->setCellValue('B3',yii::t('app','姓名'))
         ->setCellValue('C3',yii::t('app','性别'))
         ->setCellValue('D3',yii::t('app','手机号'))
         ->setCellValue('E3',yii::t('app','生日'))
@@ -499,7 +499,7 @@ class WechatMemberController extends BackendController {
                     }
                     $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValueExplicit('A'.$j,$v['card_id'],PHPExcel_Cell_DataType::TYPE_STRING)
-                    ->setCellValue('B'.$j,$v['user_name']?$v['user_name']:$v['nickname'])
+                    ->setCellValue('B'.$j,$v['user_name'])
                     ->setCellValue('C'.$j,$v['sex'])
                     ->setCellValue('D'.$j,$str)
                     ->setCellValue('E'.$j,$birth)

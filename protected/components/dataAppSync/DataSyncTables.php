@@ -44,7 +44,9 @@ class DataSyncTables
     	array("name"=>"产品标签详情","table"=>"nb_product_label_detail"),
     	array("name"=>"指令表","table"=>"nb_instruction"),
     	array("name"=>"指令详情表","table"=>"nb_instruction_detail"),
-    	array("name"=>"产品指令表","table"=>"nb_product_instruction"),    		
+    	array("name"=>"产品指令表","table"=>"nb_product_instruction"),
+    	array("name"=>"副屏表","table"=>"nb_double_screen"),
+    	array("name"=>"副屏详情表","table"=>"nb_double_screen_detail"),
     );
     
     //实时同步数据包括
@@ -1139,6 +1141,33 @@ class DataSyncTables
         		"instruction_id int(10) NOT NULL,".
         		"product_id int(10) NOT NULL,".
         		"is_taste varchar(2) NOT NULL,".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_double_screen" => "CREATE TABLE IF NOT EXISTS nb_double_screen (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"phs_code varchar(25) NOT NULL,".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
+        		"title varchar(32) NOT NULL,".
+        		"type varchar(2) NOT NULL DEFAULT '0',".
+        		"description varchar(32) DEFAULT NULL,".
+        		"is_able varchar(2) NOT NULL DEFAULT '0',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_double_screen_detail" => "CREATE TABLE IF NOT EXISTS nb_double_screen_detail (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"double_screen_id int(10) NOT NULL,".
+        		"type varchar(2) NOT NULL DEFAULT '0',".
+        		"url varchar(255) DEFAULT NULL,".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
