@@ -102,7 +102,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
 								<td ><?php echo $model->title;?></td>
-								<td><?php echo $model->desc;?></td>
+								<td><?php echo $model->description;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('doubleScreen/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>

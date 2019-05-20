@@ -15,10 +15,10 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<?php echo $form->label($model, 'desc',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'description',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'desc',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('desc')));?>
-											<?php echo $form->error($model, 'desc' )?>
+											<?php echo $form->textField($model, 'description',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('description')));?>
+											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
 									<!-- 

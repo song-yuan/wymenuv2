@@ -35,13 +35,13 @@ class DoubleScreen extends CActiveRecord
 		return array(
 			array('update_at, title,', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('title, desc', 'length', 'max'=>32),
+			array('title, description', 'length', 'max'=>32),
 			array('type, is_able, delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, title, type, desc, is_able, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, title, type, description, is_able, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,7 +68,7 @@ class DoubleScreen extends CActiveRecord
 			'update_at' => '更新时间',
 			'title' => '双屏标题',
 			'type' => '客户界面类型',
-			'desc' => '双屏说明',
+			'description' => '双屏说明',
 			'is_able' => '是否有效 ',
 			'delete_flag' => '是否删除 0 否 1 是',
 			'is_sync' => '同步标志',
@@ -99,7 +99,7 @@ class DoubleScreen extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('type',$this->type,true);
-		$criteria->compare('desc',$this->desc,true);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('is_able',$this->is_able,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
