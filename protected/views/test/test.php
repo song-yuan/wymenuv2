@@ -1,17 +1,7 @@
 <?php 
 // 获取云端失败数据
-$dpid = 27;
-$data = '{"requestId":"200031096190230840","type":10,"appId":84719338,"message":"{\"id\":\"3040804753624760398\",\"orderId\":\"3040804753624760398\",\"address\":\"上海大学嘉定校区8号楼232\",\"createdAt\":\"2019-04-24T11:42:18\",\"activeAt\":\"2019-04-24T11:42:18\",\"deliverFee\":1.8,\"merchantDeliverySubsidy\":-2.0,\"deliverTime\":null,\"description\":\"\",\"groups\":[{\"name\":\"1号篮子\",\"type\":\"normal\",\"items\":[{\"id\":1530959462,\"skuId\":200000338894214456,\"name\":\"天使意面\",\"categoryId\":1,\"price\":26.0,\"quantity\":1,\"total\":26.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"204050613044\",\"barCode\":\"204050613044\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0,\"vfoodId\":1484812123,\"ingredients\":[]},{\"id\":1543158601,\"skuId\":200000351401186616,\"name\":\"吮指鸡块6块\",\"categoryId\":1,\"price\":10.0,\"quantity\":1,\"total\":10.0,\"additions\":[],\"newSpecs\":[],\"attributes\":[],\"extendCode\":\"537549679808\",\"barCode\":\"537549679808\",\"weight\":1.0,\"userPrice\":0.0,\"shopPrice\":0.0,\"vfoodId\":1491281586,\"ingredients\":[]}],\"relatedItems\":[]},{\"name\":\"其它费用\",\"type\":\"extra\",\"items\":[{\"id\":-70000,\"skuId\":-1,\"name\":\"餐盒\",\"categoryId\":102,\"price\":3.0,\"quantity\":1,\"total\":3.0,\"additions\":[],\"newSpecs\":null,\"attributes\":null,\"extendCode\":\"\",\"barCode\":\"\",\"weight\":null,\"userPrice\":0.0,\"shopPrice\":0.0,\"vfoodId\":0,\"ingredients\":[]}],\"relatedItems\":[]}],\"invoice\":null,\"book\":false,\"onlinePaid\":true,\"railwayAddress\":\"\",\"phoneList\":[\"13020146407,227\"],\"shopId\":167283454,\"shopName\":\"拉丝维斯(披萨现厂店)\",\"daySn\":2,\"status\":\"unprocessed\",\"refundStatus\":\"noRefund\",\"userId\":98084130,\"userIdStr\":\"98084130\",\"totalPrice\":26.8,\"originalPrice\":40.8,\"consignee\":\"陆**\",\"deliveryGeo\":\"121.24906087,31.37689906\",\"deliveryPoiAddress\":\"上海大学嘉定校区8号楼232\",\"invoiced\":false,\"income\":19.0,\"serviceRate\":0.17,\"serviceFee\":-4.0,\"hongbao\":0.0,\"packageFee\":3.0,\"activityTotal\":-14.0,\"shopPart\":-14.0,\"elemePart\":-0.0,\"downgraded\":false,\"vipDeliveryFeeDiscount\":0.0,\"openId\":\"0000000537\",\"secretPhoneExpireTime\":\"2019-04-24T17:42:09\",\"orderActivities\":[{\"categoryId\":12,\"name\":\"在线支付立减优惠\",\"amount\":-10.0,\"elemePart\":0.0,\"restaurantPart\":-10.0,\"familyPart\":0.0,\"userPart\":0.0,\"id\":2097123522,\"metaId\":789949242,\"orderAllPartiesPartList\":[{\"partName\":\"商家补贴\",\"partAmount\":\"10.0\"}]},{\"categoryId\":15,\"name\":\"超级会员专享红包\",\"amount\":-4.0,\"elemePart\":0.0,\"restaurantPart\":-4.0,\"familyPart\":0.0,\"userPart\":0.0,\"id\":400009603388428161,\"metaId\":0,\"orderAllPartiesPartList\":[{\"partName\":\"商家补贴\",\"partAmount\":\"4.0\"}]}],\"invoiceType\":null,\"taxpayerId\":\"\",\"coldBoxFee\":0.0,\"cancelOrderDescription\":null,\"cancelOrderCreatedAt\":null,\"orderCommissions\":[],\"baiduWaimai\":false,\"userExtraInfo\":{\"giverPhone\":\"\",\"greeting\":\"\"},\"consigneePhones\":[\"135****9355\"],\"superVip\":\"ELEME_SUPER_VIP\",\"confirmCookingTime\":null,\"orderActivityParts\":[{\"partName\":\"商户承担\",\"partValue\":-14.0,\"weight\":2},{\"partName\":\"优惠总计\",\"partValue\":-14.0,\"weight\":10}],\"orderBusinessType\":0,\"pickUpTime\":\"1970-01-01T08:00:00\",\"pickUpNumber\":0,\"umpOrder\":0,\"tianmaoPart\":-0.0,\"shopBrandId\":0,\"userPart\":0.0,\"specUserPart\":0.0,\"isBusinessOrder\":false,\"pinTuanOrder\":false,\"svcPart\":-0.0,\"orderSourceTag\":\"ELEME\"}","shopId":167283454,"timestamp":1556077338934,"signature":"5C9BA0D9F2FA9795A613779CA2E48171","userId":363866789364710663}';
-$data = urldecode($data);
-$obj = json_decode($data);
-$type = $obj->type;
-$shopId = $obj->shopId;
-$message = $obj->message;
-$order = json_decode($message);
-$res = Elm::dealOrder($order,$dpid,4);
-var_dump($res);
-$keyOrder = 'redis-third-platform-'.(int)$dpid;
-var_dump($keyOrder);
-$orderSize = Yii::app()->redis->lLen($keyOrder);
-var_dump($orderSize);
+$orderData = Yii::app()->redis->get('order-183-2019-05-22 14:42:09-20190522144209003');
+$orderDataArr = json_decode($orderData,true);
+$result = DataSyncOperation::operateOrder($orderDataArr);
+var_dump($result);
 ?>
