@@ -44,7 +44,7 @@ class BuysentPromotion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('sole_code, promotion_title, main_picture, promotion_abstract', 'required'),
+			array('sole_code, promotion_title, promotion_abstract', 'required'),
 			array('lid, dpid, group_id', 'length', 'max'=>10),
 			array('sole_code', 'length', 'max'=>20),
 			array('promotion_title, is_sync', 'length', 'max'=>50),
