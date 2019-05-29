@@ -379,8 +379,8 @@ function getProduct(){
 								if(hasSelect){
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartLists = cartList[cartKey];
-										var pPrice = parseFloat(pProduct['price']);
 										for (var i in cartLists){
+											var pPrice = parseFloat(pProduct['price']);
 											var cartItem = cartLists[i];
 											var detailIds = cartItem['detail_id'];
 											var detailArr = detailIds.split(',');
@@ -617,12 +617,12 @@ function getProduct(){
 								if(hasSelect){
 									if(typeof cartList[cartKey] != "undefined"){
 										var cartLists = cartList[cartKey];
-										var pPrice = parseFloat(pProduct['price']);
 										for (var i in cartLists){
 											var cartItem = cartLists[i];
 											var detailIds = cartItem['detail_id'];
 											var detailArr = detailIds.split(',');
 											var cdetailStr = '';
+											var pPrice = parseFloat(pProduct['price']);
 											for(var j in pDetail){
 												var detail = pDetail[j];
 												for (var k in detail){
