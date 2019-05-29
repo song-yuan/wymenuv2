@@ -269,7 +269,7 @@ class WxCart
 			$buyNum = $sentDetail['buy_num'];
 			$sentNum = $sentDetail['sent_num'];
 			$realNum = floor($cartNum/$buyNum*$sentNum);
-			$sql = 'select * from nb_cart where dpid='.$this->dpid.' and user_id='.$this->userId.' and product_id='.$sentProductId.' and detail_id='.$this->productArr['detail'].' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and 	promotion_detail_id='.$sentDetail['lid'];
+			$sql = 'select * from nb_cart where dpid='.$this->dpid.' and user_id='.$this->userId.' and product_id='.$sentProductId.' and detail_id="'.$this->productArr['detail'].'" and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and 	promotion_detail_id='.$sentDetail['lid'];
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			if($res){
 				if($realNum > 0){
@@ -312,7 +312,7 @@ class WxCart
 			$buyNum = $sentDetail['buy_num'];
 			$sentNum = $sentDetail['sent_num'];
 			$realNum = floor($cartNum/$buyNum*$sentNum);
-			$sql = 'select * from nb_cart where dpid='.$this->dpid.' and user_id='.$this->userId.' and product_id='.$sentProductId.' and detail_id='.$this->productArr['detail'].' and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and promotion_detail_id='.$sentDetail['lid'];
+			$sql = 'select * from nb_cart where dpid='.$this->dpid.' and user_id='.$this->userId.' and product_id='.$sentProductId.' and detail_id="'.$this->productArr['detail'].'" and promotion_type="sent" and promotion_id='.$this->productArr['promotion_id'].' and promotion_detail_id='.$sentDetail['lid'];
 			$res = Yii::app()->db->createCommand($sql)->queryRow();
 			if($res){
 				if($realNum > 0){
