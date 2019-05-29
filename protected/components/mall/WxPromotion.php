@@ -255,11 +255,11 @@ class WxPromotion
 	 	}elseif($promotionType=='buysent'){
 	 		$sql = 'select * from  nb_buysent_promotion_detail where dpid=:dpid and buysent_pro_id=:promotionId and product_id=:productId and is_set=:isSet and delete_flag=0';
 	 	}elseif($promotionType=='sent'){
-	 		$isSet = 0;
 	 		$sql = 'select * from  nb_buysent_promotion_detail where dpid=:dpid and buysent_pro_id=:promotionId and s_product_id=:productId and is_set=:isSet and delete_flag=0';
 	 	}else{
 	 		return false;
 	 	}
+	 	Helper::writeLog($sql);
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->bindValue(':isSet',$isSet)->queryRow();
 	 	return $result;
 	 }
