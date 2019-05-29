@@ -168,7 +168,7 @@ class WxOrder
 			$results[$k]['store_number'] = $store['msg'];
 			if($result['promotion_id'] > 0){
 				$promotionType = $result['promotion_type'];
-				$productPromotion = WxPromotion::getProductPromotion($this->dpid,$promotionType,$result['promotion_id'],$result['product_id'],$result['is_set']);
+				$productPromotion = WxPromotion::getProductPromotion($this->dpid,$promotionType,$result['promotion_id'],$result['product_id']);
 				if(!$productPromotion){
 					throw new Exception('该产品已无优惠活动');
 				}

@@ -249,18 +249,17 @@ class WxPromotion
 	  * 获取单品活动详情
 	  *
 	  */
-	 public static function getProductPromotion($dpid,$promotionType,$promotionId,$productId,$isSet){
+	 public static function getProductPromotion($dpid,$promotionType,$promotionId,$productId){
 	 	if($promotionType=='promotion'){
-	 		$sql = 'select * from  nb_normal_promotion_detail where dpid=:dpid and normal_promotion_id=:promotionId and product_id=:productId and is_set=:isSet and delete_flag=0';
+	 		$sql = 'select * from  nb_normal_promotion_detail where dpid=:dpid and normal_promotion_id=:promotionId and product_id=:productId and delete_flag=0';
 	 	}elseif($promotionType=='buysent'){
-	 		$sql = 'select * from  nb_buysent_promotion_detail where dpid=:dpid and buysent_pro_id=:promotionId and product_id=:productId and is_set=:isSet and delete_flag=0';
+	 		$sql = 'select * from  nb_buysent_promotion_detail where dpid=:dpid and buysent_pro_id=:promotionId and product_id=:productId and delete_flag=0';
 	 	}elseif($promotionType=='sent'){
-	 		$sql = 'select * from  nb_buysent_promotion_detail where dpid=:dpid and buysent_pro_id=:promotionId and s_product_id=:productId and is_set=:isSet and delete_flag=0';
+	 		$sql = 'select * from  nb_buysent_promotion_detail where dpid=:dpid and buysent_pro_id=:promotionId and s_product_id=:productId and delete_flag=0';
 	 	}else{
 	 		return false;
 	 	}
-	 	Helper::writeLog($sql.$isSet);
-	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->bindValue(':isSet',$isSet)->queryRow();
+	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->queryRow();
 	 	return $result;
 	 }
 	/**

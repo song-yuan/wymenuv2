@@ -199,7 +199,7 @@ class WxCart
 			$promotionId = $result['promotion_id'];
 			$promotionType = $result['promotion_type'];
 			if($promotionId > 0){
-				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
+				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id']);
 				if(!$productPromotion){
 					$result['msg'] = '该产品已无优惠活动';
 					$result['buysent_pro_id'] = $promotionId;
@@ -262,7 +262,7 @@ class WxCart
 	}
 	// 添加 买送产品
 	public function addSentProduct($cartNum){
-		$sentDetail = WxPromotion::getProductPromotion($this->dpid, $this->productArr['promotion_type'], $this->productArr['promotion_id'], $this->productArr['product_id'], $this->productArr['is_set']);
+		$sentDetail = WxPromotion::getProductPromotion($this->dpid, $this->productArr['promotion_type'], $this->productArr['promotion_id'], $this->productArr['product_id']);
 		if($sentDetail){
 			$sentProductId = $sentDetail['s_product_id'];
 			$buyNum = $sentDetail['buy_num'];
@@ -289,7 +289,7 @@ class WxCart
 						'update_at'=>date('Y-m-d H:i:s',$time),
 						'user_id'=>$this->userId,
 						'product_id'=>$sentProductId,
-						'is_set'=>$sentDetail['is_set'],
+						'is_set'=>0,
 						'num'=>$realNum,
 						'site_id'=>$this->siteId,
 						'promotion_type'=>'sent',
@@ -297,7 +297,7 @@ class WxCart
 						'promotion_detail_id'=>$sentDetail['lid'],
 						'to_group'=>$this->productArr['to_group'],
 						'can_cupon'=>$this->productArr['can_cupon'],
-						'detail_id'=>$this->productArr['detail']
+						'detail_id'=>0
 				);
 				$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
 			}
