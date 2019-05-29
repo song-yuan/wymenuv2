@@ -200,12 +200,14 @@ class WxCart
 			$promotionType = $result['promotion_type'];
 			if($promotionId > 0){
 				$productPromotion = WxPromotion::getProductPromotion($this->dpid, $promotionType,$promotionId,$result['product_id'],$result['is_set']);
+				Helper::writeLog('1');
 				if(!$productPromotion){
 					$result['msg'] = '该产品已无优惠活动';
 					$result['buysent_pro_id'] = $promotionId;
 					array_push($cartListArr['disable'], $result);
 					continue;
 				}
+				Helper::writeLog('2');
 				$promotion = WxPromotion::isPromotionValid($this->dpid, $promotionType, $promotionId,$this->type);
 				if(!$promotion){
 					$result['msg'] = '优惠活动已结束';
@@ -213,6 +215,7 @@ class WxCart
 					array_push($cartListArr['disable'], $result);
 					continue;
 				}
+				Helper::writeLog('3');
 				if($result['to_group']==3){
 					$this->pormotionYue = true;
 				}elseif($result['to_group']==2){
@@ -226,7 +229,7 @@ class WxCart
 						continue;
 					}
 				}
-				
+				Helper::writeLog('4');
 				if($promotionType=='promotion'){
 					$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['is_set'],$promotionId,$result['to_group']);
 					$result['price'] = $productPrice['price'];
