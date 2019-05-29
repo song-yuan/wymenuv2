@@ -259,7 +259,7 @@ class WxPromotion
 	 	}else{
 	 		return false;
 	 	}
-	 	Helper::writeLog($sql);
+	 	Helper::writeLog($sql.$isSet);
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$promotionId)->bindValue(':productId',$productId)->bindValue(':isSet',$isSet)->queryRow();
 	 	return $result;
 	 }
