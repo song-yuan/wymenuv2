@@ -859,8 +859,8 @@ function getProduct(){
 							if(hasSelect){
 								if(typeof cartList[cartKey] != "undefined"){
 									var cartLists = cartList[cartKey];
-									var pPrice = parseFloat(pProduct['member_price']);
 									for (var i in cartLists){
+										var pPrice = parseFloat(pProduct['member_price']);
 										var cartItem = cartLists[i];
 										var detailIds = cartItem['detail_id'];
 										var detailArr = detailIds.split(',');

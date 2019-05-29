@@ -151,7 +151,7 @@ class WxPromotion
 			}
 			if($result['is_set'] > 0){
 				//套餐
-				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and status=0 and is_show=1 and and delete_flag=0';
+				$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid and status=0 and is_show=1 and delete_flag=0';
 				$product = Yii::app()->db->createCommand($sql)->bindValue(':lid',$result['product_id'])->bindValue(':dpid',$this->dpid)->queryRow();
 				if($product){
 					$isShow = WxProduct::isProductWxShow($this->type, $product['is_show_wx']);
