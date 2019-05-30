@@ -306,18 +306,25 @@
 						<div class="material">
 							<div class="materialhead">产品列表</div>
 							<div class="materialbody">
-								<?php if($products): ?>
 								<?php $a = 1;?>
 								<?php foreach ($products as $product):?>
 								<div id="<?php echo $product->lid;?>" catid="<?php echo $product->category_id;?>" class="bodymaterial">
-									<div class="div1"><span><?php echo $a;?></span></div><div class="div2"><input id="check<?php echo $product->lid;?>" type="checkbox" stockname="" matecode="<?php echo $product->phs_code;?>" matename="<?php echo $product->product_name;?>" class="checkboxes" value="<?php echo $product->lid;?>"  name="ids[]" /></div>
+									<div class="div1"><span><?php echo $a;?></span></div><div class="div2"><input id="check<?php echo $product->lid;?>" type="checkbox" stockname="" matecode="<?php echo $product->phs_code;?>" matename="<?php echo $product->product_name;?>" is-set="0" class="checkboxes" value="<?php echo $product->lid;?>"  name="ids[]" /></div>
 									<div class="matename ">
 									<label for="check<?php echo $product->lid; ?>"><?php echo $product->product_name;?></label>
 									</div>
 								</div>
 								<?php $a++;?>
 								<?php endforeach;?>
-								<?php endif;?>
+								<?php foreach ($productSets as $productSet):?>
+								<div id="<?php echo $productSet->lid;?>" catid="<?php echo $productSet->category_id;?>" class="bodymaterial">
+									<div class="div1"><span><?php echo $a;?></span></div><div class="div2"><input id="check<?php echo $productSet->lid;?>" type="checkbox" stockname="" matecode="<?php echo $productSet->pshs_code;?>" matename="<?php echo $productSet->set_name;?>" is-set="1" class="checkboxes" value="<?php echo $productSet->lid;?>"  name="ids[]" /></div>
+									<div class="matename ">
+									<label for="check<?php echo $productSet->lid; ?>"><?php echo $productSet->set_name;?></label>
+									</div>
+								</div>
+								<?php $a++;?>
+								<?php endforeach;?>
 							</div>
 							<div class="materialend">
 								<div class="matersubmit"><button id="add_material" class="btn green">添加 >></button></div>
@@ -372,29 +379,24 @@ $(document).ready(function(){
         }else{
         	$(".bodymaterial").removeClass("uhide");
         	}
-        //var settype = $(this).attr("settype");
-        //alert(catid);
-       // product_cate_select(catid,settype);
 
     });
     $('#add_material').on('click',function(){
     	var aa = document.getElementsByName("ids[]");
-        var codep=new Array();
         var bombodydiv = '';
         for (var i = 0; i < aa.length; i++) {
             if (aa[i].checked) {
-                //alert(aa[i].getAttribute("value"));
                 var materialid = aa[i].getAttribute("value");
                 var matename = aa[i].getAttribute("matename");
                 var matecode = aa[i].getAttribute("matecode");
                 var stockname = aa[i].getAttribute("stockname");
-                codep += materialid +','+ matename + ';';
+                var isset = aa[i].getAttribute("is-set");
                 var bommatif = $('#bommat'+materialid).attr('bommatif');
                 if(bommatif == undefined){
                 	bommatif = 0;
                     }
                 if(bommatif==0){
-                var bombodyhead = '<div id="bommat'+materialid+'" class="bommaterial" bommatif="1" bommatid="'+materialid+'" matename="'+matename+'" matecode="'+matecode+'">'
+                var bombodyhead = '<div id="bommat'+materialid+'-'+isset+'" class="bommaterial" bommatif="1" bommatid="'+materialid+'" matename="'+matename+'" matecode="'+matecode+'" is-set="'+isset+'">'
 								+'<div class="div1 uhide"><span>'+i+'</span></div>'
 								
 								+'<div class="div2"><span><b >买 </b></span><input type="text" onkeypress="return event.keyCode>=48&&event.keyCode<=57" id="buynum'+materialid+'" placeholder="多少" value="1"/>'
@@ -405,10 +407,10 @@ $(document).ready(function(){
 								+'<select name="selectproduct" id="selectproduct'+materialid+'" class="btn gray selectproduct">'
 								+' <option value="">-请选择-</option>'
 								<?php foreach ($products as $product):?>
-								+' <option value="<?php echo $product->lid;?>" smatecode="<?php echo $product->phs_code;?>"><?php echo $product->product_name;?></option>'
+								+' <option value="<?php echo $product->lid;?>" is-set="0" smatecode="<?php echo $product->phs_code;?>"><?php echo $product->product_name;?></option>'
 								<?php endforeach; ?>
 								+'</select>'
-								+'<button  class="bommatdet btn red" materialid="'+materialid+'" >移除</button></div>'
+								+'<button  class="bommatdet btn red" materialid="'+materialid+'-'+isset+'" >移除</button></div>'
 								+'</div>';
                 bombodydiv = bombodydiv + bombodyhead;
                 }
@@ -420,14 +422,6 @@ $(document).ready(function(){
         	var catid=$(this).attr("materialid");
         	$("#bommat"+catid).remove();
          });
-        //alert(codep);
-     });
-    //移除操作
-    $('.bommatdet').on('click',function(){
-        alert(111);
-    	var catid=$(this).attr("materialid");
-    	$("#bommat"+catid).remove();
-    	alert(catid);
      });
     $('#add_matersubmit').on('click',function(){
         <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
@@ -442,37 +436,28 @@ $(document).ready(function(){
     		var bommatid = $(this).attr("bommatid");
     		var matename = $(this).attr("matename");
     		var matecode = $(this).attr("matecode");
-    		var buynum = $("#buynum"+bommatid).val();
-    		var sentnum = $("#sentnum"+bommatid).val();
+    		var bisset = $(this).attr("is-set");
+    		var buynum = $(this).find("#buynum"+bommatid).val();
+    		var sentnum = $(this).find("#sentnum"+bommatid).val();
 
-    		// var sentmatecode = $("#selectproduct"+bommatid + " option:selected").attr("smatecode");
-    		// var sentmatid = $("#selectproduct"+bommatid + " option:selected").val();
-
-    		var sentmatecode = $("#selectproduct"+bommatid ).find('option:selected').attr("smatecode");
-    		// alert(sentmatecode);
-    		var sentmatid = $("#selectproduct"+bommatid ).find('option:selected').val();
-    		var sentname = $("#selectproduct"+bommatid ).find('option:selected').text();
-    		//alert(sentmatecode);
-    		// console.log(sentmatecode);
-    		// if(sentmatecode == undefined){
-    		// 	alert(111);
-    		// };
-    		// alert(22);
+			var selectObj =  $(this).find("#selectproduct"+bommatid).find('option:selected');
+    		var sentmatecode = selectObj.attr("smatecode");
+    		var sisset = selectObj.attr("is-set");
+    		var sentmatid = selectObj.val();
+    		var sentname = selectObj.text();
     		if(buynum == '' || sentnum == '' || sentmatecode == undefined){
     			matenames = matenames + matename+',';
     		}
-    		matids = matids + bommatid +','+ matecode +','+ buynum +','+ sentmatid +','+ sentmatecode +','+ sentnum +';';
-    		});
+    		matids = matids + bommatid+','+ matecode+','+bisset+','+ buynum+','+ sentmatid +','+ sentmatecode+','+sisset+','+sentnum+';';
+    	});
 
 		if(matenames){
 			alert('下列产品数量规则填写不全，请填写完整后再保存：'+matenames);
 		}else{
 			if(matids == ''){
 				alert("请至少添加一项活动产品，再保存！");
-				//return false;
 			}else{
 				matids = matids.substr(0,matids.length-1);//除去最后一个“；”
-				//alert(matids);alert(prodid);alert(prodcode);alert(tasteid);
 				var url = "<?php echo $this->createUrl('buysentpromotion/storbuysent',array('companyId'=>$this->companyId));?>/matids/"+matids+"/prodid/"+prodid+"/prodcode/"+prodcode+"/tasteid/"+tasteid;
 	               $.ajax({
 	                   url:url,
@@ -484,23 +469,14 @@ $(document).ready(function(){
 	                       var data=msg;
 	                       if(data.status){
 		                       alert("保存成功");
-		                       //$("#close_modal").trigger(click);
 		                       if(prodtaste == 0){
-			                       //alert(prodtaste);
 		                       		document.getElementById("close_modal").click();
 		                       }else{
 			                       layer.msg("请添加口味配方；或者点击右下角关闭页面！");
 			                       }
-							//alert(data.matids);
-							//alert(data.prodid);
 	                       }else{
 	                           alert("保存失败");
 	                       }
-	                   },
-	                   error: function(msg){
-		                   var data=msg;
-	                       // alert(1111);
-	                       alert(data.msg);
 	                   }
 	               });
 				}

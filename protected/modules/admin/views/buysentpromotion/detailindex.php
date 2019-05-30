@@ -54,28 +54,12 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-                                    <?php if($typeId=='product') :?>
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $prodname.yii::t('app','活动产品设置');?></div>
 					<div class="actions">						
-                        <div style="margin-top:-5px !important;" class="btn-group">
-							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
-						</div>
 						<div class="btn-group">
 							<button type="button" id="yichu"  class="btn red" style="padding:6px 10px;margin-top:2px;" ><i class="fa fa-ban"></i> <?php echo yii::t('app','勾选批量移除');?></button>
 						</div>
 					</div>
-                                        <?php else :?>
-                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐特价活动设置');?></div>
-                                        <?php endif;?>
-                                            <div class="col-md-3 pull-right">
-												<div class="input-group">
-                                                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>                                                  
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -95,9 +79,23 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
-								<td style="width:10%"><?php if($typeId=='product') echo $model['product_name']; else echo $model['set_name'];?></td>
+								<td style="width:10%">
+								<?php if($model['is_set']):?>
+									<?php foreach ($productSets as $set):?>
+										<?php if($set['lid']==$model['product_id']){ $model['product_name']= $set['set_name']; echo $set['set_name'];}?>
+									<?php endforeach;?>
+								<?php else:?>
+									<?php foreach ($products as $product):?>
+										<?php if($product['lid']==$model['product_id']){ $model['product_name']= $product['product_name']; echo $product['product_name'];}?>
+									<?php endforeach;?>
+								<?php endif;?>
+								</td>
 								<td ><?php echo $model['buy_num'];?></td>
-								<td style="width:10%"><?php if($typeId=='product') echo $model['sent_name']; else echo $model['set_name'];?></td>
+								<td style="width:10%">
+								<?php foreach ($products as $product):?>
+									<?php if($product['lid']==$model['s_product_id']){ echo $product['product_name'];}?>
+								<?php endforeach;?>
+								</td>
 								<td ><?php echo $model['sent_num'];?></td>
                                 <td ><?php if($model['is_available'])echo '生效';else echo '失效';?></td>
                                 <td class="xiugai" lid="<?php echo $model['lid'];?>" name = "<?php echo $model['product_name'];?>"><a><?php echo yii::t('app','编辑');?></a></td>

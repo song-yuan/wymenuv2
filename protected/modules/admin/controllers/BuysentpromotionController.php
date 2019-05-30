@@ -253,13 +253,18 @@ class BuysentpromotionController extends BackendController
 		$criteria->condition =  't.pid != 0 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$models = ProductCategory::model()->findAll($criteria);
-		//查询原料分类
+		//查询分类
 	
 		$criteria = new CDbCriteria;
 		$criteria->condition =  ' t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$products = Product::model()->findAll($criteria);
-		//查询原料信息
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition =  ' t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$productSets = ProductSet::model()->findAll($criteria);
+		
 	
 		$db = Yii::app()->db;
 		$sql = 'select t.* from nb_taste t where t.taste_group_id in(select t1.taste_group_id from nb_product_taste t1 where t1.delete_flag = 0 and t1.product_id='.$pid.' and t1.dpid='.$this->companyId.') and t.delete_flag = 0 and t.dpid ='.$this->companyId ;
@@ -267,46 +272,33 @@ class BuysentpromotionController extends BackendController
 		$prodTastes = $command1->queryAll();
 		//查询产品口味
 	
-		//var_dump($products);exit;
 		$this->render('addprod' , array(
 				'models' => $models,
 				'prodname' => $prodname,
 				'pid' => $pid,
 				'phscode' => $phscode,
 				'products' => $products,
+				'productSets' => $productSets,
 				'prodTastes' => $prodTastes,
 				'action' => $this->createUrl('buysentpromotion/addprod' , array('companyId'=>$this->companyId))
 		));
 	}
 	
 	public function actionDetailindex(){
-		//$sc = Yii::app()->request->getPost('csinquery');
 		$promotionID = Yii::app()->request->getParam('lid');
 		$typeId = Yii::app()->request->getParam('typeId');
 		$categoryId = Yii::app()->request->getParam('cid',"");
 		$csinquery=Yii::app()->request->getPost('csinquery',"");
-
 		$prodname = Yii::app()->request->getParam('prodname');
-		//var_dump($typeId);exit;
+		
 		$db = Yii::app()->db;
 		if($typeId=='product')
 		{
+			$products = Product::model()->findAll('dpid='.$this->companyId.' and delete_flag=0');
+			$productSets = ProductSet::model()->findAll('dpid='.$this->companyId.' and delete_flag=0');
 			
-			if(empty($promotionID)){
-				$promotionID = Yii::app()->request->getParam('promotionID');
-			}
-			if(!empty($categoryId)){
-				//$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.is_set = 0 and t1.delete_flag = 0 and t1.private_promotion_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.category_id = '.$categoryId.' ) k';
-				$sql = 'select k.* from(select t2.product_name as sent_name,t1.product_name,t1.main_picture,t.* from nb_buysent_promotion_detail t left join nb_product t1 on(t.product_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_product t2 on(t.s_product_id = t2.lid and t.dpid = t2.dpid and t2.delete_flag =0) where t.buysent_pro_id = '.$promotionID.' and t.delete_flag = 0 and t.dpid = '.$this->companyId.' and t.is_set = 0 and t1.category_id = '.$categoryId.') k';
-				//var_dump($sql);exit;
-			}elseif(!empty($csinquery)){
-				$sql = 'select k.* from(select t2.product_name as sent_name,t1.product_name,t1.main_picture,t.* from nb_buysent_promotion_detail t left join nb_product t1 on(t.product_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_product t2 on(t.s_product_id = t2.lid and t.dpid = t2.dpid and t2.delete_flag =0) where t.buysent_pro_id = '.$promotionID.' and t.delete_flag = 0 and t.dpid = '.$this->companyId.' and t.is_set = 0 and t1.simple_code like "%'.strtoupper($csinquery).'%" or t1.product_name like "%'.strtoupper($csinquery).'%") k';
-			}else{
-				$sql = 'select k.* from(select t2.product_name as sent_name,t1.product_name,t1.main_picture,t.* from nb_buysent_promotion_detail t left join nb_product t1 on(t.product_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_product t2 on(t.s_product_id = t2.lid and t.dpid = t2.dpid and t2.delete_flag =0) where t.buysent_pro_id = '.$promotionID.' and t.delete_flag = 0 and t.dpid = '.$this->companyId.' and t.is_set = 0) k';	
-			}
-			//var_dump($sql);exit;
-			$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-			//var_dump($count);exit;
+			$sql = 'select * from nb_buysent_promotion_detail where dpid='.$this->companyId.' and buysent_pro_id='.$promotionID.' and delete_flag=0';
+			$count = $db->createCommand(str_replace('*','count(*)',$sql))->queryScalar();
 			$pages = new CPagination($count);
 			$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 			$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
@@ -316,8 +308,8 @@ class BuysentpromotionController extends BackendController
 			$this->render('detailindex',array(
 					'models'=>$models,
 					'pages'=>$pages,
-					'categories'=>$categories,
-					'categoryId'=>$categoryId,
+					'products'=>$products,
+					'productSets'=>$productSets,
 					'typeId' => $typeId,
 					'promotionID'=>$promotionID,
 					'prodname'=>$prodname
@@ -364,9 +356,6 @@ class BuysentpromotionController extends BackendController
 	}
 	
 	public function actionStorbuysent(){
-		
-		$is_sync = DataSync::getInitSync();
-		//var_dump($companyId);exit;
 		$ids = Yii::app()->request->getPost('ids');
 		$matids = Yii::app()->request->getParam('matids');
 		$prodid = Yii::app()->request->getParam('prodid');
@@ -377,28 +366,25 @@ class BuysentpromotionController extends BackendController
 		$materialnums = explode(';',$matids);
 		$msg = '';
 		$db = Yii::app()->db;
-		//var_dump($matids,$materialnums);exit;
 		$transaction = $db->beginTransaction();
 		try{
-			//var_dump($materialnums);exit;
 			foreach ($materialnums as $materialnum){
 				$materials = array();
 				$materials = explode(',',$materialnum);
 				$mateid = $materials[0];
 				$matecode = $materials[1];
-				$matenum = $materials[2];
-				$sentid = $materials[3];
-				$sentcode = $materials[4];
-				$sentnum = $materials[5];
-				$prodmaterials = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$mateid,':companyId'=>$this->companyId));
+				$bisset = $materials[2];
+				$matenum = $materials[3];
+				$sentid = $materials[4];
+				$sentcode = $materials[5];
+				$sisset = $materials[6];
+				$sentnum = $materials[7];
 				$buysentprodetail = BuysentPromotionDetail::model()->find('buysent_pro_id =:bpid and product_id =:prodid and dpid=:companyId and delete_flag=0', array(':bpid'=>$prodid, ':prodid'=>$mateid, ':companyId'=>$this->companyId));
-				//var_dump($buysentprodetail);exit;
-				if(!empty($prodmaterials)&&!empty($mateid)&&empty($buysentprodetail)){
+				if(!empty($mateid)&&empty($buysentprodetail)){
 					$se = new Sequence("buysent_promotion_detail");
 					$id = $se->nextval();
 					$code=new Sequence("sole_code");
 					$sole_code = $code->nextval();
-					//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
 					$dataprodbom = array(
 							'lid'=>$id,
 							'dpid'=>$dpid,
@@ -406,7 +392,7 @@ class BuysentpromotionController extends BackendController
 							'update_at'=>date('Y-m-d H:i:s',time()),
 							'sole_code'=>ProductCategory::getChscode($this->companyId, $id, $sole_code),
 							'buysent_pro_id'=>$prodid,
-							'is_set'=>'0',
+							'is_set'=>$bisset,
 							'fa_sole_code'=>$prodcode,
 							'product_id'=>$mateid,
 							'phs_code'=>$matecode,
@@ -419,16 +405,10 @@ class BuysentpromotionController extends BackendController
 							'is_available'=>'1',
 							'source'=>'0',
 							'delete_flag'=>'0',
-							'is_sync'=>$is_sync,
 					);
-					$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['product_name'].'@@'.$prodmaterials['phs_code'].'@@'.$prodcode;
-					//var_dump($dataprodbom);exit;
 					$command = $db->createCommand()->insert('nb_buysent_promotion_detail',$dataprodbom);
-					
 				}
-				
 			}
-			//Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
 			

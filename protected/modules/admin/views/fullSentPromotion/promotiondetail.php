@@ -231,23 +231,16 @@
             $.ajax({
             type:'GET',
             url:"<?php echo $this->createUrl('fullSentPromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
- 			//url:"<?php echo $this->createUrl('fullSentPromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
- 			async: false,
- 			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
+            dataType:'json',
  			success:function(msg){
                             //alert(msg.status);
                             if(msg.status=="success")
                             {
-                                //alert("<?php echo $promotionID;?>")
                                 alert("<?php echo yii::t('app','成功'); ?>");
                                 
                                 location.reload();
                             }else{
-                            	//alert("<?php echo $typeId;?>")
                                 alert("<?php echo yii::t('app','失败'); ?>"+"11")
-                                //alert(msg.msg);
                                 location.reload();
                             }
  			},
@@ -263,32 +256,23 @@
             alert("您没有权限!");
             return false;
             <?php endif;?>
-            var vid=$(this).attr("id").substr(12,10);
+            var vid=$(this).attr("id").substr(6,10);
            
             $.ajax({
-                        type:'GET',
- 			url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+vid+"/page/",
- 			async: false,
- 			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
- 			success:function(msg){
-                            //alert(msg.status);
-                            if(msg.status=="success")
-                            {
-                                
-                                alert("<?php echo yii::t('app','成功'); ?>");
-                                
-                                location.reload();
-                            }else{
-                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
-                                location.reload();
-                            }
- 			},
-                        error:function(){
- 				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
- 			},
- 		});
+            	type:'GET',
+ 				url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId,'fullsentid'=>$promotionID));?>/id/"+vid,
+            	dataType:'json',
+ 				success:function(msg){
+	 				if(msg.status=="success")
+	                {
+	                    alert("<?php echo yii::t('app','成功'); ?>");
+	                    location.reload();
+	                }else{
+	                    alert("<?php echo yii::t('app','失败'); ?>"+"1")
+	                    location.reload();
+	                }               
+ 				}
+            });
         });
 
 
@@ -300,46 +284,35 @@
             var aa = document.getElementsByName("idchk");
             var str=new Array();
             for (var i = 0; i < aa.length; i++) {
-            if (aa[i].checked){
-                str += aa[i].value +',';
-                //alert(str);
-            }
+	            if (aa[i].checked){
+	                str += aa[i].value +',';
+	            }
             }
             if(str!=''){
                 str = str.substr(0,str.length-1);//除去最后一个“，”
-                }else{
+           }else{
                	 alert("<?php echo yii::t('app','请勾选相应的菜品再进行一键移除！！！');?>");
                	 return false;
-               	 }
-            //str = str.substr(0,str.length-1);//除去最后一个“，”
-            //alert(str);
-            //var vid=$(this).attr("id").substr(12,10);
-            //alert(vid);
+           }
 
             $.ajax({
-                        type:'GET',
- 			url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+str+"/page/",
- 			async: false,
- 			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
- 			success:function(msg){
-                            //alert(msg.status);
-                            if(msg.status=="success")
-                            {
-                                
-                                alert("<?php echo yii::t('app','成功'); ?>");
-                                
-                                location.reload();
-                            }else{
-                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
-                                location.reload();
-                            }
- 			},
-                        error:function(){
- 				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
- 			},
- 		});
+                type:'GET',
+ 				url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId,'fullsentid'=>$promotionID));?>/id/"+str+"/page/",
+            	dataType:'json',
+ 				success:function(msg){
+ 					if(msg.status=="success")
+                    {
+                        alert("<?php echo yii::t('app','成功'); ?>");
+                        location.reload();
+                    }else{
+                        alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                        location.reload();
+                    }           
+ 				},
+                error:function(){
+ 					alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+ 				},
+ 			});
         });
         
 	</script>	

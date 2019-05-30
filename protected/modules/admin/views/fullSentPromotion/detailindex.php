@@ -270,15 +270,13 @@
             alert("您没有权限!");
             return false;
             <?php endif;?>
-            var vid=$(this).attr("id").substr(12,10);
+            
+            var vid=$(this).attr("id").substr(6,10);
          
             $.ajax({
                         type:'GET',
- 			url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/page/",
- 			async: false,
- 			//data:"companyId="+company_id+'&padId='+pad_id,
-                        cache:false,
-                        dataType:'json',
+ 			url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId,'fullsentid'=>$promotionID));?>/id/"+vid,
+            dataType:'json',
  			success:function(msg){
                             //alert(msg.status);
                             if(msg.status=="success")

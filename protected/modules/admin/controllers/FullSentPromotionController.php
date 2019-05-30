@@ -421,13 +421,11 @@ class FullSentPromotionController extends BackendController
 	public function actionDetaildelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getParam('id');
-		$is_sync = DataSync::getInitSync();
-		//        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		$fullsentid = Yii::app()->request->getParam('fullsentid');
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_full_sent_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id in('.$ids.') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_full_sent_detail set delete_flag="1" where full_sent_id='.$fullsentid.' and product_id in('.$ids.') and dpid = :companyId and delete_flag=0')
 			->execute(array( ':companyId' => $this->companyId));
 			Yii::app()->end(json_encode(array("status"=>"success")));
-			//$this->redirect(array('privatepromotion/detailindex' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要移除的项目'));
 			$this->redirect(array('fullSentPromotion/detailindex' , 'companyId' => $companyId)) ;
