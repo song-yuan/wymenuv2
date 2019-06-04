@@ -31,13 +31,14 @@ class WaimaiSetting extends CActiveRecord
         // will receive user inputs.
         return array(
             array('update_at', 'required'),
-            array('lid, dpid', 'length', 'max'=>10),
+            array('lid, dpid, developer_id', 'length', 'max'=>10),
             array('is_receive, delete_flag', 'length', 'max'=>2),
+        	array('signkey', 'length', 'max'=>32),
             array('is_sync', 'length', 'max'=>50),
             array('create_at', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('lid, dpid, create_at, update_at, is_receive, delete_flag, is_sync', 'safe', 'on'=>'search'),
+            array('lid, dpid, create_at, update_at, developer_id, signkey, is_receive, delete_flag, is_sync', 'safe', 'on'=>'search'),
         );
     }
 
@@ -62,6 +63,8 @@ class WaimaiSetting extends CActiveRecord
             'dpid' => '店铺id',
             'create_at' => '添加时间',
             'update_at' => '更新时间',
+        	'developer_id' => '开发者ID',
+        	'signkey' => '开发者密钥',
             'is_receive' => yii::t('app','是否自动接单'),
             'delete_flag' => 'Delete Flag',
             'is_sync' => yii::t('app','是否同步'),
@@ -90,6 +93,8 @@ class WaimaiSetting extends CActiveRecord
         $criteria->compare('dpid',$this->dpid,true);
         $criteria->compare('create_at',$this->create_at,true);
         $criteria->compare('update_at',$this->update_at,true);
+        $criteria->compare('developer_id',$this->developer_id,true);
+        $criteria->compare('signkey',$this->signkey,true);
         $criteria->compare('is_receive',$this->is_receive,true);
         $criteria->compare('delete_flag',$this->delete_flag,true);
         $criteria->compare('is_sync',$this->is_sync,true);

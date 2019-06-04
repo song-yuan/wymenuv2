@@ -68,9 +68,12 @@ class MtOrder
 			$mtToken = self::getToken($ePoiId);
 			$timetamp = time();
 			if($mtToken){
+				$compdpid = WxCompany::getCompanyDpid($ePoiId);
+				$wmsetting = MtUnit::getWmSetting($compdpid);
+				$signkey = $wmsetting['signkey'];
 				$url = MtUnit::MTHOST.'/waimai/order/confirm';
 				$array = array('appAuthToken'=>$mtToken['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timetamp,'orderId'=>$orderId);
-				$sign = MtUnit::sign($array);
+				$sign = MtUnit::sign($array,$signkey);
 				$data = "appAuthToken=".$mtToken['appAuthToken']."&charset=utf-8&timestamp=".$timetamp."&sign=".$sign."&orderId=".$orderId;
 				$result = MtUnit::postHttps($url, $data);
 				Helper::writeLog('confirm-metian:'.$orderId.'-'.$result);
@@ -161,19 +164,26 @@ class MtOrder
 	public static function getOrderById($dpid,$orderId){
 		$timestamp = time();
 		$res = self::getToken($dpid);
+		$compdpid = WxCompany::getCompanyDpid($dpid);
+		$wmsetting = MtUnit::getWmSetting($compdpid);
+		$signkey = $wmsetting['signkey'];
 		
 		$url = MtUnit::MTHOST."/waimai/order/queryById";
 		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,'orderId'=>$orderId );
-		$sign = MtUnit::sign($array);
+		$sign = MtUnit::sign($array,$signkey);
 		$url .= "?appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=".$timestamp."&sign=".$sign."&orderId=".$orderId;
 		$result = MtUnit::postHttps($url);
 		return $result;
 	}
 	public static function orderDistr($dpid,$orderId,$courierName,$courierPhone){
 		$res = self::getToken($dpid);
+		$compdpid = WxCompany::getCompanyDpid($dpid);
+		$wmsetting = MtUnit::getWmSetting($compdpid);
+		$signkey = $wmsetting['signkey'];
+		
 		$url = MtUnit::MTHOST."/waimai/order/delivering";
 		$array= array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>124,'orderId'=>$orderId );
-		$sign=MtUnit::sign($array);
+		$sign=MtUnit::sign($array,$signkey);
 		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=124&sign=$sign&orderId=$orderId&courierName=$courierName&courierPhone=$courierPhone";
 		$result = MtUnit::postHttps($url, $data);
 		return $result;
@@ -183,11 +193,15 @@ class MtOrder
 		$timestamp = time();
 		$degradOffset = 0;
 		$degradLimit = 1000;
-		$developerId = MtUnit::developerId;
 		$res = self::getToken($dpid);
+		$compdpid = WxCompany::getCompanyDpid($dpid);
+		$wmsetting = MtUnit::getWmSetting($compdpid);
+		$developerId = $wmsetting['developer_id'];
+		$signkey = $wmsetting['signkey'];
+		
 		$url = MtUnit::MTHOST."/waimai/order/batchPullPhoneNumber";
 		$array = array('appAuthToken'=>$res['appAuthToken'],'charset'=>'utf-8','timestamp'=>$timestamp,"degradOffset"=>$degradOffset,'degradLimit'=>$degradLimit,'developerId'=>$developerId);
-		$sign = MtUnit::sign($array);
+		$sign = MtUnit::sign($array,$signkey);
 		$data = "appAuthToken=".$res['appAuthToken']."&charset=utf-8&timestamp=".$timestamp."&sign=".$sign."&degradOffset=".$degradOffset."&degradLimit=".$degradLimit."&developerId=".$developerId;
 		$result = MtUnit::postHttps($url, $data);
 		return $result;

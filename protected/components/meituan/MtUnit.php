@@ -4,8 +4,6 @@
 */
 class MtUnit
 {
-	const developerId = '100746';
-	const signkey = '8isnqx6h2xewfmiu';
 	const MTHOST = 'https://api-open-cater.meituan.com';
 	public static function dealData($params)
 	{
@@ -38,13 +36,13 @@ class MtUnit
 		curl_close($ch);									// 关闭cURL资源
 		return $returnTransfer;	
 	}
-	public static function sign($data){
+	public static function sign($data,$signkey){
 		ksort($data);
 		$sign='';
 		foreach ($data as $key => $value) {
 			$sign.= $key.$value;
 		}
-		$sign = self::signkey.$sign;
+		$sign = $signkey.$sign;
 		$sign = strtolower(sha1($sign));
 		return $sign;
 	}

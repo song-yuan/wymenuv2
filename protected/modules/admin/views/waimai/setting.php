@@ -53,6 +53,20 @@
 					<?php echo $form->error($model, 'dpid' )?>
 					</div>
 				</div>
+				<?php if($this->comptype=='0'):?>
+				<div class="form-group">
+				<?php echo $form->label($model, 'developer_id',array('class' => 'col-md-3 control-label'));?>
+					<div class="col-md-4">
+					<?php echo $form->textField($model, 'developer_id', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('developer_id')));?>
+					</div>
+				</div>
+				<div class="form-group">
+				<?php echo $form->label($model, 'signkey',array('class' => 'col-md-3 control-label'));?>
+					<div class="col-md-4">
+					<?php echo $form->textField($model, 'signkey', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('signkey')));?>
+					</div>
+				</div>
+				<?php endif;?>
 				<div class="form-group">
 				<?php echo $form->label($model, 'is_receive',array('class' => 'col-md-3 control-label'));?>
 					<div class="col-md-4">

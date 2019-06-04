@@ -33,9 +33,10 @@ class WaimaiController extends BackendController
 		$criteria = " dpid=".$companyId." and delete_flag=0";
 		$productmodels = Product::model()->findAll($criteria);
 		$setmodels = ProductSet::model()->findAll($criteria);
-		
+		$wmsetting = MtUnit::getWmSetting($this->company_dpid);
+		$signkey = $wmsetting['signkey'];
 		$data = array('appAuthToken'=>$tokenmodel['appAuthToken'],'ePoiId'=>$companyId,'timestamp'=>$timestamp);
-		$sign = MtUnit::sign($data);
+		$sign = MtUnit::sign($data,$signkey);
 		$this->render('caipinyingshe',array(
 				"productmodels"=>$productmodels,
 				"tokenmodel"=>$tokenmodel,
@@ -49,10 +50,13 @@ class WaimaiController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
-		$developerId = MtUnit::developerId;
+		
 		$timestamp = Helper::getMillisecond();
+		$wmsetting = MtUnit::getWmSetting($this->company_dpid);
+		$developerId = $wmsetting['developer_id'];
+		$signkey = $wmsetting['signkey'];
 		$data = array('developerId'=>$developerId,'businessId'=>2,'ePoiId'=>$companyId,'timestamp'=>$timestamp);
-		$sign = MtUnit::sign($data);
+		$sign = MtUnit::sign($data,$signkey);
 		$this->render('dpbd',array(
 			'companyId'=>$companyId,
 			'developerId'=>$developerId,
@@ -66,8 +70,10 @@ class WaimaiController extends BackendController
 		$epoiid = "type=1 and ePoiId=".$companyId." and delete_flag=0";
 		$tokenmodel = MeituanToken::model()->find($epoiid);
 		$timestamp = Helper::getMillisecond();
+		$wmsetting = MtUnit::getWmSetting($this->company_dpid);
+		$signkey = $wmsetting['signkey'];
 		$data = array('appAuthToken'=>$tokenmodel['appAuthToken'],'businessId'=>2,'timestamp'=>$timestamp);
-		$sign = MtUnit::sign($data);
+		$sign = MtUnit::sign($data,$signkey);
 		$this->render('jcbd',array(
 			'tokenmodel' =>$tokenmodel,
 			'timestamp'=>$timestamp,

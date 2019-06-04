@@ -1590,13 +1590,7 @@ class StatementsController extends BackendController
 		$text = Yii::app()->request->getParam('text');
 		$setid = Yii::app()->request->getParam('setid');
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		if($setid == 0){
-			$setids = '=0';
-		}elseif ($setid == 2){
-			$setids = '>0';
-		}else{
-			$setids = '>=0';
-		}
+		
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
@@ -1604,52 +1598,44 @@ class StatementsController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 
-		if($ordertype >=0){
-			$ordertypes = '='.$ordertype;
-		}else{
-			$ordertypes = '>=0';
-		}
-// 		if($text==1){
-// 			// 年
-// 			$sql = 'select DATE_FORMAT(op.create_at,"%Y") as create_at,op.product_name,op.product_id,op.price,op.amount,op.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage from nb_order_product';
-			
-// 		}elseif ($text==2){
-// 			// 月
-			
-// 		}else{
-// 			// 日
-			
-// 		}
 		
-		$criteria = new CDbCriteria;
-		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.product_name,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,t.product_type,sum(t.price*t.amount) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
-		$criteria->with = array('company','product','order');
-
-		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.delete_flag=0 and t.dpid in('.$selectDpid.') and t.set_id '.$setids.' ';
-		if($ordertype >0){
-			$criteria->addCondition("order.order_type =".$ordertype);
-		}
-		if($categoryId >0){
-			$criteria->addCondition("product.category_id =".$categoryId);
-		}
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-
+		$sql = 'select m.* from(select op.dpid,';
 		if($text==1){
-			$criteria->group =' t.product_type,t.product_id,year(t.create_at),t.dpid';
-			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
-		}elseif($text==2){
-			$criteria->group =' t.product_type,t.product_id,month(t.create_at),t.dpid';
-			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			// 年
+			$sql .= 'DATE_FORMAT(op.create_at,"%Y") as create_at,';
+			
+		}elseif ($text==2){
+			// 月
+			$sql .= 'DATE_FORMAT(op.create_at,"%Y-%m") as create_at,';
 		}else{
-			$criteria->group =' t.product_type,t.product_id,day(t.create_at),t.dpid';
-			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			// 日
+			$sql .= 'DATE_FORMAT(op.create_at,"%Y-%m-%d") as create_at,';
 		}
+		$sql .= 'op.product_name,op.product_id,op.product_type,op.is_retreat,sum(op.price) as all_money,sum(op.amount) as all_total, sum(op.price*op.amount) as all_price, sum(op.original_price*op.amount) as all_jiage from nb_order_product op,nb_order o';
+		$sql .=' where op.order_id=o.lid and op.dpid=o.dpid and op.dpid in('.$selectDpid.')';
+		if($setid == 0){
+			$sql .=' and op.set_id=0';
+		}elseif ($setid == 2){
+			$sql .=' and op.set_id>0';
+		}
+		if($ordertype >=0){
+			$sql .=' and o.order_type ='.$ordertype;
+		}
+		$sql .=' and op.create_at>="'.$begin_time.' 00:00:00" and  op.create_at<="'.$end_time.' 23:59:59" and o.order_status in(3,4,8) and op.is_retreat=0 and op.delete_flag=0';
+		$sql .= ' group by op.product_type,op.product_id,create_at,op.dpid)m';
+		if($categoryId >0){
+			$sql .=' left join nb_product p on (m.product_id=p.lid and m.dpid=p.dpid) 
+					where p.category_id='.$categoryId;
+		}
+		$sql .= ' order by m.create_at asc,m.all_total desc,m.all_jiage desc,m.dpid asc';
 
-
-		$pages = new CPagination(OrderProduct::model()->count($criteria));
-		$pages->applyLimit($criteria);
-		$models = OrderProduct::model()->findAll($criteria);
+		$count = Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
+		$pages = new CPagination($count);
+		
+		$pdata =Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
 		$categories = $this->getCategories();
 
 		$this->render('productSalseReport',array(
@@ -1666,8 +1652,7 @@ class StatementsController extends BackendController
 		));
 	}
 	/**
-	 * 产品销售报表
-	 *
+	 * 产品明细报表
 	 **/
 	public function actionOrderproductsReport(){
 		$text = Yii::app()->request->getParam('text');
@@ -1676,34 +1661,30 @@ class StatementsController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$selectDpid = Yii::app()->request->getParam('selectDpid','');
-		if($ordertype >=0){
-			$ordertypes = '='.$ordertype;
-		}else{
-			$ordertypes = '>=0';
-		}
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
 		
-		$criteria = new CDbCriteria;
-		$criteria->select ='t.product_name,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,t.product_type,t.set_id,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
-		$criteria->with = array('product','order','productSet');
-	
-		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.delete_flag=0 and t.dpid='.$selectDpid;
-		if($ordertype >0){
-			$criteria->addCondition("order.order_type =".$ordertype);
+		$sql = 'select m.*from(select op.product_name,op.create_at,op.lid,op.dpid,op.product_id,op.price,op.amount,op.is_retreat,op.product_type,op.set_id,sum(op.price) as all_money,sum(op.amount) as all_total, sum(op.price*op.amount) as all_price, sum(op.original_price*op.amount) as all_jiage,o.account_no from nb_order_product op,nb_order o';
+		$sql .=' where op.order_id=o.lid and op.dpid=o.dpid and op.dpid in('.$selectDpid.')';
+		if($ordertype >=0){
+			$sql .=' and o.order_type ='.$ordertype;
 		}
+		$sql .=' and op.create_at>="'.$begin_time.' 00:00:00" and  op.create_at<="'.$end_time.' 23:59:59" and o.order_status in(3,4,8) and op.is_retreat=0 and op.delete_flag=0';
+		$sql .= ' group by op.order_id,op.product_id,op.dpid)m';
 		if($categoryId >0){
-			$criteria->addCondition("product.category_id =".$categoryId);
+			$sql .=' left join nb_product p on (m.product_id=p.lid and m.dpid=p.dpid)
+					where p.category_id='.$categoryId;
 		}
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-		$criteria->group = 't.order_id,t.product_id';
-		$criteria->order = 'order.create_at asc';
-	
-		$pages = new CPagination(OrderProduct::model()->count($criteria));
-		$pages->applyLimit($criteria);
-		$models = OrderProduct::model()->findAll($criteria);
+		$sql .= ' order by m.lid asc';
+		
+		$count = Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
+		$pages = new CPagination($count);
+		
+		$pdata =Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
 		$categories = $this->getCategories();
 	
 		$this->render('orderproductsReport',array(
@@ -2158,7 +2139,6 @@ class StatementsController extends BackendController
 		
 		$count =  Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
 		$pages = new CPagination($count);
-		$pages->pageSize = 10;
 		$pdata =Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());
@@ -3878,16 +3858,6 @@ class StatementsController extends BackendController
 		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		$setid = Yii::app()->request->getParam('setid');
 		$categoryId = Yii::app()->request->getParam('cid',0);
-		if($setid == 0){
-			$setids = '=0';
-			$setname = '单品、';
-		}elseif ($setid == 2){
-			$setids = '>0';
-			$setname = '套餐单品、';
-		}else{
-			$setids = '>=0';
-			$setname = '综合、';
-		}
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
@@ -3895,11 +3865,6 @@ class StatementsController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		if($ordertype >=0){
-			$ordertypes = '='.$ordertype;
-		}else{
-			$ordertypes = '>=0';
-		}
 		$typesname = '';
 		switch($ordertype){
 			case -1: $typesname = '全部';break;
@@ -3914,31 +3879,42 @@ class StatementsController extends BackendController
 			case 8: $typesname = '饿了么·';break;
 			default: $typesname = '';break;
 		}
-		$criteria = new CDbCriteria;
-		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.product_name,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,t.product_type,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
-		$criteria->with = array('company','product','order');
-
-		$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2,8,9) and t.delete_flag=0 and t.dpid in('.$selectDpid.') and t.set_id '.$setids.' ';
-		if($ordertype >0){
-			$criteria->addCondition("order.order_type =".$ordertype);
-		}
-		if($categoryId >0){
-			$criteria->addCondition("product.category_id =".$categoryId);
-		}
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-
+		
+		$sql = 'select m.* from(select op.dpid,';
 		if($text==1){
-			$criteria->group =' t.product_type,t.product_id,year(t.create_at),t.dpid';
-			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
-		}elseif($text==2){
-			$criteria->group =' t.product_type,t.product_id,month(t.create_at),t.dpid';
-			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			// 年
+			$sql .= 'DATE_FORMAT(op.create_at,"%Y") as create_at,';
+				
+		}elseif ($text==2){
+			// 月
+			$sql .= 'DATE_FORMAT(op.create_at,"%Y-%m") as create_at,';
 		}else{
-			$criteria->group =' t.product_type,t.product_id,day(t.create_at),t.dpid';
-			$criteria->order = 't.create_at asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+			// 日
+			$sql .= 'DATE_FORMAT(op.create_at,"%Y-%m-%d") as create_at,';
 		}
-		$models = OrderProduct::model()->findAll($criteria);
+		$sql .= 'op.product_name,op.product_id,op.product_type,op.is_retreat,sum(op.price) as all_money,sum(op.amount) as all_total, sum(op.price*op.amount) as all_price, sum(op.original_price*op.amount) as all_jiage from nb_order_product op,nb_order o';
+		$sql .=' where op.order_id=o.lid and op.dpid=o.dpid and op.dpid in('.$selectDpid.')';
+		
+		$setname = '综合、';
+		if($setid == 0){
+			$setname = '单品、';
+			$sql .=' and op.set_id=0';
+		}elseif ($setid == 2){
+			$setname = '套餐单品、';
+			$sql .=' and op.set_id>0';
+		}
+		if($ordertype >=0){
+			$sql .=' and o.order_type ='.$ordertype;
+		}
+		$sql .=' and op.create_at>="'.$begin_time.' 00:00:00" and  op.create_at<="'.$end_time.' 23:59:59" and o.order_status in(3,4,8) and op.is_retreat=0 and op.delete_flag=0';
+		$sql .= ' group by op.product_type,op.product_id,create_at,op.dpid)m';
+		if($categoryId >0){
+			$sql .=' left join nb_product p on (m.product_id=p.lid and m.dpid=p.dpid)
+					where p.category_id='.$categoryId;
+		}
+		$sql .= ' order by m.create_at asc,m.all_total desc,m.all_jiage desc,m.dpid asc';
+		
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
 
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
@@ -4007,27 +3983,20 @@ class StatementsController extends BackendController
 		->setCellValue('J3','折后均价');
 		$i=4;
 		foreach($models as $v){
-			//print_r($v);exit;
-			if($v->product_type !=2) { $name = $v->product_name;}else {$name = '打包费';}
-			if($text ==1){
-				$t = $v->y_all;
-			}elseif($text ==2){
-				$t = $v->y_all.'-'.$v->m_all;
-			}elseif($text ==3){
-				$t = $v->y_all.'-'.$v->m_all.'-'.$v->d_all;
-			}
+			if($v['product_type'] !=2) { $name = $v['product_name'];}else {$name = '打包费';}
+			$t = $v['create_at']; 
 
 			$objPHPExcel->setActiveSheetIndex(0)
 			->setCellValue('A'.$i,$t)
-			->setCellValue('B'.$i,$v->company->company_name)
+			->setCellValue('B'.$i,'')
 			->setCellValue('C'.$i,$name)
 			->setCellValue('D'.$i,$i-3)
-			->setCellValue('E'.$i,$v->all_total)
-			->setCellValue('F'.$i,$v->all_jiage)
-			->setCellValue('G'.$i,$v->all_jiage-$v->all_price)
-			->setCellValue('H'.$i,$v->all_price)
-			->setCellValue('I'.$i,$v->all_jiage/$v->all_total)
-			->setCellValue('J'.$i,$v->all_price/$v->all_total);
+			->setCellValue('E'.$i,$v['all_total'])
+			->setCellValue('F'.$i,$v['all_jiage'])
+			->setCellValue('G'.$i,$v['all_jiage']-$v['all_price'])
+			->setCellValue('H'.$i,$v['all_price'])
+			->setCellValue('I'.$i,$v['all_jiage']/$v['all_total'])
+			->setCellValue('J'.$i,$v['all_price']/$v['all_total']);
 		
 			$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($linestyle);
 			$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($linestyle);

@@ -85,14 +85,14 @@
 						<?php if( $models) :?>
 						<!--foreach-->
 						<?php foreach ($models as $model):?>
-						<?php if($model->all_total == 0 || $model->all_total == null): $model->total = 1;endif;?>
+						<?php if($model['all_total'] == 0 || $model['all_total'] == null): $model['all_total'] = 1;endif;?>
 								<tr class="odd gradeX">
-								<td><?php echo $model->create_at;?></td>
-								<td><?php echo $model->order->account_no;?></td>
-								<td><?php if($model->product_type !=2) echo $model->product_name;else echo '打包费';?><?php if($model->set_id >0) echo '('.$model->productSet->set_name.')';?></td>
-								<td><?php echo $model->all_total;?></td>
-								<td><?php echo sprintf("%.2f",$model->all_jiage);?></td>
-								<td><?php echo sprintf("%.2f",$model->all_price);?></td>
+								<td><?php echo $model['create_at'];?></td>
+								<td><?php echo $model['account_no'];?></td>
+								<td><?php if($model['product_type'] !=2) echo $model['product_name'];else echo '打包费';?></td>
+								<td><?php echo $model['all_total'];?></td>
+								<td><?php echo sprintf("%.2f",$model['all_jiage']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_price']);?></td>
 								<td></td>
 								
 							</tr>
