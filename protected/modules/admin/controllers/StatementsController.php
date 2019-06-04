@@ -3881,7 +3881,7 @@ class StatementsController extends BackendController
 			default: $typesname = '';break;
 		}
 		
-		$sql = 'select m.* from(select op.dpid,';
+		$sql = 'select m.*,c.company_name from(select op.dpid,';
 		if($text==1){
 			// 年
 			$sql .= 'DATE_FORMAT(op.create_at,"%Y") as create_at,';
@@ -3909,6 +3909,7 @@ class StatementsController extends BackendController
 		}
 		$sql .=' and op.create_at>="'.$begin_time.' 00:00:00" and  op.create_at<="'.$end_time.' 23:59:59" and o.order_status in(3,4,8) and op.is_retreat=0 and op.delete_flag=0';
 		$sql .= ' group by op.product_type,op.product_id,create_at,op.dpid)m';
+		$sql .= ' left join nb_company c on(m.dpid=c.dpid)';
 		if($categoryId >0){
 			$sql .=' left join nb_product p on (m.product_id=p.lid and m.dpid=p.dpid)
 					where p.category_id='.$categoryId;
@@ -3989,7 +3990,7 @@ class StatementsController extends BackendController
 
 			$objPHPExcel->setActiveSheetIndex(0)
 			->setCellValue('A'.$i,$t)
-			->setCellValue('B'.$i,'')
+			->setCellValue('B'.$i,$v['company_name'])
 			->setCellValue('C'.$i,$name)
 			->setCellValue('D'.$i,$i-3)
 			->setCellValue('E'.$i,$v['all_total'])
