@@ -112,7 +112,7 @@
 						<?php if($model['all_total'] == 0 || $model['all_total'] == null): $model['all_total'] = 1;endif;?>
 								<tr class="odd gradeX">
 								<td><?php echo $model['create_at'];?></td>
-								<td><?php echo '';?></td>
+								<td><?php echo $model['company_name'];?></td>
 								<td><?php if($model['product_type'] !=2) echo $model['product_name'];else echo '打包费';?></td>
 								<td><?php echo $a+$pages->getCurrentPage()*10;?></td>
 								<td><?php echo $model['all_total'];?></td>
