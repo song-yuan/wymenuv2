@@ -1778,6 +1778,7 @@ $(document).ready(function(){
     });
     // 减少产品
     $('#container').on('touchstart','.minus',function(){ 
+    	event.preventDefault();
     	var parObj = $(this).parents('.prt-lt');
         var t = parObj.find('input[class*=result]');
         var promoteType = $(this).parents('.section').attr('type');
