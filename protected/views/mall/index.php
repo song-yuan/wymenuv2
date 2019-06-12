@@ -1236,6 +1236,7 @@ $(document).ready(function(){
     });
     // 规格添加产品
     $('#taste').on('touchstart','.add',function(){
+    	event.preventDefault();
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
@@ -1345,7 +1346,8 @@ $(document).ready(function(){
         });
     });
 	// 规格减少产品
-	$('#taste').on('touchstart','.minus',function(){ 
+	$('#taste').on('touchstart','.minus',function(){
+		event.preventDefault(); 
 		var parObj = $(this).parents('.taste');
         var secId = parObj.attr('cate-type');;
         var promoteType = parObj.attr('type');
@@ -1534,6 +1536,7 @@ $(document).ready(function(){
     });
     // 套餐添加产品
     $('#detail').on('touchstart','.add',function(){
+    	event.preventDefault();
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
@@ -1637,58 +1640,59 @@ $(document).ready(function(){
     });
     // 套餐减少产品
     $('#detail').on('touchstart','.minus',function(){ 
-    		var parObj = $(this).parents('.detail');
-            var secId = parObj.attr('cate-type');;
-            var promoteType = parObj.attr('type');
-            var t = parObj.find('input[class*=result]');
-            var productId = t.attr('product-id');
-            var promoteId = t.attr('promote-id');
-            var toGroup = t.attr('to-group');
-            var canCupon = t.attr('can-cupon');
-            var isSet = t.attr('is-set');
-            var storeNum = t.attr('store-number');
-            var rand = new Date().getTime();
+    	event.preventDefault();
+    	var parObj = $(this).parents('.detail');
+        var secId = parObj.attr('cate-type');;
+        var promoteType = parObj.attr('type');
+        var t = parObj.find('input[class*=result]');
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
+        var canCupon = t.attr('can-cupon');
+        var isSet = t.attr('is-set');
+        var storeNum = t.attr('store-number');
+        var rand = new Date().getTime();
 
-            var detailIdStr = '';
-            $('#detail').find('.detail-group').each(function(){
-                var itemObj = $(this).find('.detail-item-active');
-                var detailId = itemObj.attr('detail-id');
-                detailIdStr += detailId+',';
-            });
-            detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
+        var detailIdStr = '';
+        $('#detail').find('.detail-group').each(function(){
+             var itemObj = $(this).find('.detail-item-active');
+             var detailId = itemObj.attr('detail-id');
+             detailIdStr += detailId+',';
+        });
+        detailIdStr = detailIdStr.substr(0,detailIdStr.length-1);
             
-            $.ajax({
-            	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
-            	data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:detailIdStr,rand:rand},
-            	success:function(msg){
-            		if(msg.status){
-        			  if(parseInt(t.val())==1){
-    			          t.siblings(".minus").addClass('zero');
-    			          t.addClass('zero');
-    			          if(parseInt(storeNum)==0){
-    			          	t.siblings(".add").addClass('zero');
-    			          	t.siblings(".sale-out").removeClass('zero');
-    			          }
-    			       }
-    			       t.val(parseInt(t.val())-1);
-    			       if(parseInt(t.val()) < 0){ 
-    			           t.val(0); 
-    			   	    }
-    			       	var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'"]');
-    			        if(cartObj.length > 0){
-    				        if(parseInt(t.val()) == 0){
-    				        	cartObj.remove();
-    					    }else{
-    					    	cartObj.find('.foodop-num').html(t.val());
-    						}
-    			        }
-    			    	setTotal(); 
-            		}else{
-            			layer.msg(msg.msg);
-            		}
-            	},
-            	dataType:'json'
-            });
+        $.ajax({
+            url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'userId'=>$userId,'type'=>$this->type));?>',
+            data:{productId:productId,promoteType:promoteType,promoteId:promoteId,isSet:isSet,toGroup:toGroup,canCupon:canCupon,detail:detailIdStr,rand:rand},
+            success:function(msg){
+            	if(msg.status){
+        			if(parseInt(t.val())==1){
+    			        t.siblings(".minus").addClass('zero');
+    			        t.addClass('zero');
+    			       	if(parseInt(storeNum)==0){
+    			        	t.siblings(".add").addClass('zero');
+    			        	t.siblings(".sale-out").removeClass('zero');
+    			    	}
+    			    }
+    			    t.val(parseInt(t.val())-1);
+    			    if(parseInt(t.val()) < 0){ 
+    			        t.val(0); 
+    			   	}
+    			    var cartObj = $('.cart-dtl-item[data-orderid="'+promoteType+'_'+isSet+'_'+productId+'_'+promoteId+'_'+toGroup+'_'+canCupon+'_'+detailIdStr+'"]');
+    			    if(cartObj.length > 0){
+    				    if(parseInt(t.val()) == 0){
+    				        cartObj.remove();
+    					}else{
+    					    cartObj.find('.foodop-num').html(t.val());
+    					}
+    			    }
+    			    setTotal(); 
+            	}else{
+            		layer.msg(msg.msg);
+            	}
+            },
+           	dataType:'json'
+         });
      });
     // 添加产品
     $('#container').on('touchstart','.add',function(e){
