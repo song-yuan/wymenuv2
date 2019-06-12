@@ -1693,7 +1693,7 @@ $(document).ready(function(){
     // 添加产品
     $('#container').on('touchstart','.add',function(e){
         alert(2);
-    	e.stopPropagation();
+    	e.preventDefault();
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
