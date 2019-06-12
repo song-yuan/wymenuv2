@@ -1692,6 +1692,7 @@ $(document).ready(function(){
      });
     // 添加产品
     $('#container').on('touchstart','.add',function(e){
+        alert(2);
     	e.stopPropagation();
     	var height = $('body').height();
     	var top = $(this).offset().top;
@@ -1768,6 +1769,7 @@ $(document).ready(function(){
 					
 					bool.start();
 					i++;
+					alert(3);
         		}else{
         			$('#boll'+(i-1)).remove();
         			layer.msg(msg.msg);
