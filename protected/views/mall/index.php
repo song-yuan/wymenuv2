@@ -1691,7 +1691,8 @@ $(document).ready(function(){
             });
      });
     // 添加产品
-    $('#container').on('touchstart','.add',function(){
+    $('#container').on('touchstart','.add',function(e){
+    	e.stopPropagation();
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
