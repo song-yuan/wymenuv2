@@ -3,7 +3,8 @@ class MeituanOpenController extends Controller
 {
 	public function actionReceiveOrder(){
 		//推送订单
-       
+		echo '{ "data": "OK"}';
+		exit();
 	}
 	public function actionConfirmOrder(){
 		//订单确认
