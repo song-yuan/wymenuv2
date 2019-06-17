@@ -1107,7 +1107,7 @@ class StatementsController extends BackendController
                 $branch = Yii::app()->db->createCommand($branch_sql)->queryAll();
 
 		if($text==1){
-			$sql = 'select k.* from(select t1.selfcode,t1.name,t.type,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
+			$sql = 'select k.* from(select t.create_at,t1.selfcode,t1.name,t.type,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
 
 		}else if($text==2){
 
