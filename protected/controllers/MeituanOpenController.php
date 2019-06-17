@@ -74,7 +74,7 @@ class MeituanOpenController extends Controller
 		echo '{ "data": "OK"}';
 		exit();
 	}
-	public function actionPrivacyNumber(){
+	public function actionOrderPayment(){
 		//推送订单赔付消息
 		$data = file_get_contents('php://input');
 		echo '{ "data": "OK"}';
