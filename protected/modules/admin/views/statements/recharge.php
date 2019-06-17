@@ -73,6 +73,7 @@
                                 <th><?php echo yii::t('app','充值方式');?></th>
                                 <th><?php echo yii::t('app','充值金额');?></th>                                                                
                                 <th><?php echo yii::t('app','返现');?></th>
+                                <th><?php echo yii::t('app','充值时间');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
                             </tr>
                         </thead>
@@ -97,6 +98,7 @@
                                         	?></td>
                                         <td><?php echo $model['reality_money'];?></td>
                                         <td><?php echo $model['give_money'];?></td>
+                                        <td><?php echo $model['create_at'];?></td>
                                         <td></td>
                                     </tr>
                                 <?php endforeach;?>
