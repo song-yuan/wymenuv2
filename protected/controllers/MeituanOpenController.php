@@ -28,50 +28,55 @@ class MeituanOpenController extends Controller
 		exit();
 	}
 	public function actionOrderRefund(){
+		//美团用户或客服退款流程操作
+		$data = file_get_contents('php://input');
+		echo '{ "data": "OK"}';
+		exit();
+	}
+	public function actionOrderPartRefund(){
+		//美团用户或客服部分退款流程操作
+		$data = file_get_contents('php://input');
+		echo '{ "data": "OK"}';
+		exit();
+	}
+	public function actionOrderShipper(){
+		//订单退款信息推送
+		$data = file_get_contents('php://input');
+		echo '{ "data": "OK"}';
+		exit();
+	}
+	public function actionOrderComplete(){
 		//订单取消信息推送
 		$data = file_get_contents('php://input');
 		echo '{ "data": "OK"}';
 		exit();
 	}
-	public function actionToken(){
-		//绑定门店获取appAuthToken
+	public function actionOrderSettlement(){
+		//订单结算信息
 		$data = file_get_contents('php://input');
-		$remt = MtOrder::token($data);
-		echo $remt;
+		echo '{ "data": "OK"}';
 		exit();
 	}
-	public function actionXintiao(){
-		//心跳 URL
-		echo '{"data":"OK"}';
+	public function actionOrderReminder(){
+		//催单推送
+		$data = file_get_contents('php://input');
+		echo '{ "data": "OK"}';
 		exit();
 	}
 	public function actionPrivacyNumber(){
-		// 隐私号降级 URL
+		//隐私号降级推送
 		$data = file_get_contents('php://input');
-		if(empty($data)){
-			echo '{"data":"OK"}';
-		}else{
-			echo '{"data":"OK"}';
-		}
+		echo '{ "data": "OK"}';
 		exit();
 	}
-	public function actionUnbind(){
+	public function actionModifyOrder(){
+		//修改订单信息回调
 		$data = file_get_contents('php://input');
-		$remt = MtOrder::Jcbd($data);
-		echo $remt;
+		echo '{ "data": "OK"}';
 		exit();
 	}
-	public function actionDistribution(){
-		//配送员上传
-		$dpid = $_POST['companyId'];
-		$orderId = $_POST['orderid'];
-		$courierName = $_POST['name'];
-		$courierPhone = $_POST['phone'];
-		$result = MtOrder::orderDistr($dpid,$orderId,$courierName,$courierPhone); 
-		echo $result;
-
-	}
-	public function actionCompleteOrder(){
+	public function actionPrivacyNumber(){
+		//推送订单赔付消息
 		$data = file_get_contents('php://input');
 		echo '{ "data": "OK"}';
 		exit();
