@@ -1,7 +1,6 @@
 <?php 
 class MeituanOpenController extends Controller
 {
-	
 	public function actionChangedpinfo(){
 		//门店状态变更
 		$data = file_get_contents('php://input');
