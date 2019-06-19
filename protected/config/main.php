@@ -29,6 +29,7 @@ return array(
 		'application.components.shouqianba.*',
 		'application.components.meituanpay.*',
 		'application.components.meituan.*',
+		'application.components.meituanopen.*',
 		'application.components.eleme.*',
 		'application.components.alipay.*',
 		'application.components.alipay.f2fpay.*',
