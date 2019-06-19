@@ -22,7 +22,6 @@ class MtOpenNotify
 	public function Handle($type)
 	{
 		if($type=='new'){
-			$this->ReplyNotify(true);
 			$result = self::callUserFunc(array($this, 'newOrderCallBack'));
 		}elseif($type=='confirm'){
 			$result = self::callUserFunc(array($this, 'confirmOrderCallBack'));
@@ -91,9 +90,9 @@ class MtOpenNotify
 	private function ReplyNotify($status = true)
 	{
 		if($status){
-			echo '{ "data": "OK"}';
+			echo '{ "data": "ok"}';
 		}else {
-			echo '{ "data": "ERROR"}';
+			echo '{ "data": "ng"}';
 		}	
 	}
 }
