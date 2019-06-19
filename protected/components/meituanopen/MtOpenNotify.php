@@ -14,8 +14,9 @@ class MtOpenNotify
 	 */
 	public static function callUserFunc($callback){
 		$data = file_get_contents('php://input');
+		$data = $GLOBALS['HTTP_RAW_POST_DATA'];
 		if(empty($data)){
-			return true;
+			$data = $GLOBALS['HTTP_RAW_POST_DATA'];
 		}
 		return call_user_func($callback,$data);
 	}
