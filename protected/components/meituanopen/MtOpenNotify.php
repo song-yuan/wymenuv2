@@ -13,10 +13,9 @@ class MtOpenNotify
 	 * 通过回调函数 先返回结果
 	 */
 	public static function callUserFunc($callback){
-		$data = file_get_contents('php://input');
-		$data = $GLOBALS['HTTP_RAW_POST_DATA'];
+		$data = isset($GLOBALS['HTTP_RAW_POST_DATA'])? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
 		if(empty($data)){
-			$data = $GLOBALS['HTTP_RAW_POST_DATA'];
+			$data = file_get_contents('php://input');
 		}
 		return call_user_func($callback,$data);
 	}
