@@ -1727,6 +1727,7 @@ class StatementsController extends BackendController
 		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		$text = Yii::app()->request->getParam('text');
 		$setid = Yii::app()->request->getParam('setid');
+		$download = Yii::app()->request->getParam('d',0);
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
 		}
@@ -1762,7 +1763,21 @@ class StatementsController extends BackendController
 					)k group by k.m_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc
 					)c';
 		}
-// 		echo $sql;exit;
+		if($download){
+			$models = $db->createCommand($sql)->queryAll();
+			$tableArr = array('时间','店铺名称','套餐名称','排名','销量','销售金额','折扣金额','实收金额','原始均价','折后均价');
+			$data = array();
+			$i = 1;
+			foreach ($models as $m){
+				$name = $m['set_name'];
+				$tempArr = array($m['create_at'],$m['company_name'],$name,$i,number_format($m['all_setnum'],2),number_format($m['all_orisetprice'],2),number_format($m['all_orisetprice']-$m['all_setprice'],2),number_format($m['all_setprice'],2),number_format($m['all_orisetprice']/$m['all_setnum'],2),number_format($m['all_setprice']/$m['all_setnum'],2));
+				$i++;
+				array_push($data, $tempArr);
+			}
+			Helper::exportExcel($tableArr,$data,'套餐销售报表','套餐销售报表');
+			exit;
+		}
+		
 		$count = $db->createCommand(str_replace('c.*','count(*)',$sql))->queryScalar();
 		
 		$pages = new CPagination($count);
