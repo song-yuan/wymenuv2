@@ -12,7 +12,7 @@ class MeituanOpenController extends Controller
 		$notify = new MtOpenNotify();
         $notify->Handle('new');
 	}
-	public function actionCancelOrder(){
+	public function actionConfirmOrder(){
 		//订单取消信息推送*
 		Helper::writeLog('2');
 		$notify = new MtOpenNotify();
