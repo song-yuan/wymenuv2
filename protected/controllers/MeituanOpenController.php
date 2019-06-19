@@ -8,16 +8,25 @@ class MeituanOpenController extends Controller
 	}
 	public function actionReceiveOrder(){
 		//推送订单*
+		Helper::writeLog(1);
 		$notify = new MtOpenNotify();
         $notify->Handle('new');
 	}
 	public function actionCancelOrder(){
 		//订单取消信息推送*
+		Helper::writeLog(2);
+		$notify = new MtOpenNotify();
+		$notify->Handle('confirm');
+	}
+	public function actionCancelOrder(){
+		//订单取消信息推送*
+		Helper::writeLog(3);
 		$notify = new MtOpenNotify();
         $notify->Handle('cancel');
 	}
 	public function actionOrderRefund(){
 		//美团用户或客服退款流程操作
+		Helper::writeLog(4);
 		$notify = new MtOpenNotify();
         $notify->Handle('refund');
 	}

@@ -24,6 +24,8 @@ class MtOpenNotify
 		if($type=='new'){
 			$this->ReplyNotify(true);
 			$result = self::callUserFunc(array($this, 'newOrderCallBack'));
+		}elseif($type=='confirm'){
+			$result = self::callUserFunc(array($this, 'confirmOrderCallBack'));
 		}elseif($type=='cancel'){
 			$result = self::callUserFunc(array($this, 'cancelOrderCallBack'));
 		}elseif($type=='reminder'){
@@ -51,6 +53,7 @@ class MtOpenNotify
 	 * 确认订单
 	 */
 	public function confirmOrderCallBack($data){
+		Helper::writeLog('confirm:'.$data);
 		$remt = MtOpenOrder::orderconfirm($data);
 		return $remt;
 	}
