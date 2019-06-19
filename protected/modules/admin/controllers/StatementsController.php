@@ -3921,7 +3921,7 @@ class StatementsController extends BackendController
 		$tableArr = array('时间','店铺名称','单品名称','排名','销量','销售金额','折扣金额','实收金额','原始均价','折后均价');
 		$data = array();
 		$i = 1;
-		foreach ($model as $m){
+		foreach ($models as $m){
 			if($m['product_type'] !=2) {
 				$name = $m['product_name'];
 			}else {
