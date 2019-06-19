@@ -3927,7 +3927,7 @@ class StatementsController extends BackendController
 			}else {
 				$name = '打包费';
 			}
-			$tempArr = array($m['create_at'],$m['company_name'],$name,$i,$m['all_total'],$m['all_jiage'],$m['all_jiage']-$m['all_price'],$m['all_price'],$m['all_jiage']/$m['all_total'],$m['all_price']/$m['all_total']);
+			$tempArr = array($m['create_at'],$m['company_name'],$name,$i,number_format($m['all_total'],2),number_format($m['all_jiage'],2),number_format($m['all_jiage']-$m['all_price'],2),number_format($m['all_price'],2),number_format($m['all_jiage']/$m['all_total'],2),number_format($m['all_price']/$m['all_total'],2));
 			$i++;
 			array_push($data, $tempArr);
 		}
