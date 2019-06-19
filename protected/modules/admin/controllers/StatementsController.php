@@ -1590,6 +1590,7 @@ class StatementsController extends BackendController
 		$text = Yii::app()->request->getParam('text');
 		$setid = Yii::app()->request->getParam('setid');
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$download = Yii::app()->request->getParam('d',0);
 		
 		if($selectDpid==''){
 			$selectDpid = $this->companyId;
@@ -1629,7 +1630,25 @@ class StatementsController extends BackendController
 					where p.category_id='.$categoryId;
 		}
 		$sql .= ' order by m.create_at asc,m.all_total desc,m.all_jiage desc,m.dpid asc';
-
+		
+		if($download){
+			$models = Yii::app()->db->createCommand($sql)->queryAll();
+			$tableArr = array('时间','店铺名称','单品名称','排名','销量','销售金额','折扣金额','实收金额','原始均价','折后均价');
+			$data = array();
+			$i = 1;
+			foreach ($models as $m){
+				if($m['product_type'] !=2) {
+					$name = $m['product_name'];
+				}else {
+					$name = '打包费';
+				}
+				$tempArr = array($m['create_at'],$m['company_name'],$name,$i,number_format($m['all_total'],2),number_format($m['all_jiage'],2),number_format($m['all_jiage']-$m['all_price'],2),number_format($m['all_price'],2),number_format($m['all_jiage']/$m['all_total'],2),number_format($m['all_price']/$m['all_total'],2));
+				$i++;
+				array_push($data, $tempArr);
+			}
+			Helper::exportExcel($tableArr,$data,'产品销售报表','产品销售报表');
+			exit;
+		}
 		$count = Yii::app()->db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
 		$pages = new CPagination($count);
 		
@@ -3896,12 +3915,9 @@ class StatementsController extends BackendController
 		$sql .= 'op.product_name,op.product_id,op.product_type,op.is_retreat,sum(op.price) as all_money,sum(op.amount) as all_total, sum(op.price*op.amount) as all_price, sum(op.original_price*op.amount) as all_jiage from nb_order_product op,nb_order o';
 		$sql .=' where op.order_id=o.lid and op.dpid=o.dpid and op.dpid in('.$selectDpid.')';
 		
-		$setname = '综合、';
 		if($setid == 0){
-			$setname = '单品、';
 			$sql .=' and op.set_id=0';
 		}elseif ($setid == 2){
-			$setname = '套餐单品、';
 			$sql .=' and op.set_id>0';
 		}
 		if($ordertype >=0){
@@ -3918,21 +3934,7 @@ class StatementsController extends BackendController
 		
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 
-		$tableArr = array('时间','店铺名称','单品名称','排名','销量','销售金额','折扣金额','实收金额','原始均价','折后均价');
-		$data = array();
-		$i = 1;
-		foreach ($models as $m){
-			if($m['product_type'] !=2) {
-				$name = $m['product_name'];
-			}else {
-				$name = '打包费';
-			}
-			$tempArr = array($m['create_at'],$m['company_name'],$name,$i,number_format($m['all_total'],2),number_format($m['all_jiage'],2),number_format($m['all_jiage']-$m['all_price'],2),number_format($m['all_price'],2),number_format($m['all_jiage']/$m['all_total'],2),number_format($m['all_price']/$m['all_total'],2));
-			$i++;
-			array_push($data, $tempArr);
-		}
-		Helper::exportExcel($tableArr,$data,'产品销售报表','产品销售报表');
-		exit;		
+				
 	}
 	/*
 	 *

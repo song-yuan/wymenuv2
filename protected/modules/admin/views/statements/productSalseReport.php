@@ -206,7 +206,7 @@
 				   var cid = $('#selectCategory').val();
 				   var selectDpid = $('select[name="selectDpid"]').val();
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-			    	   location.href="<?php echo $this->createUrl('statements/productSalseReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid+'/selectDpid/'+selectDpid;
+			    	   location.href="<?php echo $this->createUrl('statements/productSalseReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid+"/cid/"+cid+'/selectDpid/'+selectDpid+'/d/1';
 			       }
 			      
 			   });
