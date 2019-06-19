@@ -1770,7 +1770,7 @@ class StatementsController extends BackendController
 			$i = 1;
 			foreach ($models as $m){
 				$name = $m['set_name'];
-				$tempArr = array($m['create_at'],$m['company_name'],$name,$i,number_format($m['all_setnum'],2),number_format($m['all_orisetprice'],2),number_format($m['all_orisetprice']-$m['all_setprice'],2),number_format($m['all_setprice'],2),number_format($m['all_orisetprice']/$m['all_setnum'],2),number_format($m['all_setprice']/$m['all_setnum'],2));
+				$tempArr = array($m['create_at'],'',$name,$i,number_format($m['all_setnum'],2),number_format($m['all_orisetprice'],2),number_format($m['all_orisetprice']-$m['all_setprice'],2),number_format($m['all_setprice'],2),number_format($m['all_orisetprice']/$m['all_setnum'],2),number_format($m['all_setprice']/$m['all_setnum'],2));
 				$i++;
 				array_push($data, $tempArr);
 			}
