@@ -3918,148 +3918,21 @@ class StatementsController extends BackendController
 		
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 
-		//设置第1行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
-		//设置第2行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
-		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
-		//设置字体
-		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
-		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
-		$styleArray1 = array(
-				'font' => array(
-						'bold' => true,
-						'color'=>array(
-								'rgb' => '000000',
-						),
-						'size' => '20',
-				),
-				'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-				),
-		);
-		$styleArray2 = array(
-				'font' => array(
-						'color'=>array(
-								'rgb' => 'ff0000',
-						),
-						'size' => '16',
-				),
-				'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-				),
-		);
-		//大边框样式 边框加粗
-		$lineBORDER = array(
-				'borders' => array(
-						'outline' => array(
-								'style' => PHPExcel_Style_Border::BORDER_THICK,
-								'color' => array('argb' => '000000'),
-						),
-				),
-		);
-		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
-		//细边框样式
-		$linestyle = array(
-				'borders' => array(
-						'outline' => array(
-								'style' => PHPExcel_Style_Border::BORDER_THIN,
-								'color' => array('argb' => 'FF000000'),
-						),
-				),
-		);
-		$objPHPExcel->setActiveSheetIndex(0)
-		->setCellValue('A1','产品销售报表')
-		->setCellValue('A2',yii::t('app','查询条件：').$typesname.';'.$setname.';'.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
-		->setCellValue('A3','时间')
-		->setCellValue('B3','店铺名称')
-		->setCellValue('C3','单品名称')
-		->setCellValue('D3','排名')
-		->setCellValue('E3','销量')
-		->setCellValue('F3','销售金额')
-		->setCellValue('G3','折扣金额')
-		->setCellValue('H3','实收金额')
-		->setCellValue('I3','原始均价')
-		->setCellValue('J3','折后均价');
-		$i=4;
-		foreach($models as $v){
-			if($v['product_type'] !=2) { $name = $v['product_name'];}else {$name = '打包费';}
-			$t = $v['create_at']; 
-
-			$objPHPExcel->setActiveSheetIndex(0)
-			->setCellValue('A'.$i,$t)
-			->setCellValue('B'.$i,$v['company_name'])
-			->setCellValue('C'.$i,$name)
-			->setCellValue('D'.$i,$i-3)
-			->setCellValue('E'.$i,$v['all_total'])
-			->setCellValue('F'.$i,$v['all_jiage'])
-			->setCellValue('G'.$i,$v['all_jiage']-$v['all_price'])
-			->setCellValue('H'.$i,$v['all_price'])
-			->setCellValue('I'.$i,$v['all_jiage']/$v['all_total'])
-			->setCellValue('J'.$i,$v['all_price']/$v['all_total']);
-		
-			$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($linestyle);
-			$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($linestyle);
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($linestyle);
-			//设置填充颜色
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
-			//设置字体靠左
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$objPHPExcel->getActiveSheet()->getStyle('N'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$objPHPExcel->getActiveSheet()->getStyle('F'.$i.':J'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+		$tableArr = array('时间','店铺名称','单品名称','排名','销量','销售金额','折扣金额','实收金额','原始均价','折后均价');
+		$data = array();
+		$i = 1;
+		foreach ($model as $m){
+			if($m['product_type'] !=2) {
+				$name = $m['product_name'];
+			}else {
+				$name = '打包费';
+			}
+			$tempArr = array($m['create_at'],$m['company_name'],$name,$i,$m['all_total'],$m['all_jiage'],$m['all_jiage']-$m['all_price'],$m['all_price'],$m['all_jiage']/$m['all_total'],$m['all_price']/$m['all_total']);
 			$i++;
+			array_push($data, $tempArr);
 		}
-		//冻结窗格
-		$objPHPExcel->getActiveSheet()->freezePane('A4');
-		//合并单元格
-		$objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
-		$objPHPExcel->getActiveSheet()->mergeCells('A2:J2');
-		//单元格加粗，居中：
-		$objPHPExcel->getActiveSheet()->getStyle('A1:J'.$i)->applyFromArray($lineBORDER);//大边框格式引用
-		// 将A1单元格设置为加粗，居中
-		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-
-		//加粗字体
-		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFont()->setBold(true);
-		//设置字体垂直居中
-		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-		//设置字体水平居中
-		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		//字体靠左
-		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-		//设置填充颜色
-		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->getStartColor()->setARGB('fdfc8d');
-		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->getStartColor()->setARGB('fdfc8d');
-		$objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFill()->getStartColor()->setARGB('FFB848');
-		$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->getFill()->getStartColor()->setARGB('FFB848');
-		//设置每列宽度
-		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(6);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(6);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
-
-		//输出
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$filename="产品销售报表（".date('m-d',time())."）.xls";
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$filename.'"');
-		header('Cache-Control: max-age=0');
-		$objWriter->save('php://output');
-
+		Helper::exportExcel($tableArr,$data,'产品销售报表','产品销售报表');
+		exit;		
 	}
 	/*
 	 *
