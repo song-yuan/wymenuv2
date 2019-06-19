@@ -37,9 +37,9 @@ class MtOpenNotify
 		}
 		if($result){
 			$this->ReplyNotify(true);
-			return;
+		}else{
+			$this->ReplyNotify(false);
 		}
-		$this->ReplyNotify(false);
 	}
 	/**
 	 * 推送订单
