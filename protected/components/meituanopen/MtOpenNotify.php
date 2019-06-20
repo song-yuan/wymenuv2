@@ -17,6 +17,8 @@ class MtOpenNotify
 		if(empty($data)){
 			$data = file_get_contents('php://input');
 		}
+		Helper::writeLog('post:'.json_encode($_POST));
+		Helper::writeLog('get:'.json_encode($_GET));
 		return call_user_func($callback,$data);
 	}
 	public function Handle($type)
