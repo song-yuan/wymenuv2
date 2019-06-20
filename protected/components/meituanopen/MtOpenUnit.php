@@ -52,9 +52,6 @@ class MtOpenUnit
 		$str = rtrim($str,'&');
 		$str = self::YDCURL.self::getSigUrl($type).'?'.$str.$appsecret;
 		$hsign = md5($str);
-		Helper::writeLog($str);
-		Helper::writeLog($sign);
-		Helper::writeLog($hsign);
 		if($sign==$hsign){
 			return true;
 		}
