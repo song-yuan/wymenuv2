@@ -13,12 +13,11 @@ class MtOpenNotify
 	 * 通过回调函数 先返回结果
 	 */
 	public static function callUserFunc($callback){
-		$data = isset($GLOBALS['HTTP_RAW_POST_DATA'])? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
+		$data = file_get_contents('php://input');
+		$data = $_POST;
 		if(empty($data)){
-			$data = file_get_contents('php://input');
+			$data = $_GET;
 		}
-		Helper::writeLog('post:'.json_encode($_POST));
-		Helper::writeLog('get:'.json_encode($_GET));
 		return call_user_func($callback,$data);
 	}
 	public function Handle($type)
@@ -46,7 +45,7 @@ class MtOpenNotify
 	 * 推送订单
 	 */
 	public function newOrderCallBack($data){
-		Helper::writeLog('new:'.$data);
+		Helper::writeLog('new:'.json_encode($data));
 		$remt = MtOpenOrder::order($data);
 		return $remt;
 	}
@@ -54,7 +53,7 @@ class MtOpenNotify
 	 * 确认订单
 	 */
 	public function confirmOrderCallBack($data){
-		Helper::writeLog('confirm:'.$data);
+		Helper::writeLog('confirm:'.json_encode($data));
 		$remt = MtOpenOrder::orderconfirm($data);
 		return $remt;
 	}
@@ -62,7 +61,7 @@ class MtOpenNotify
 	 * 取消订单
 	 */
 	public function cancelOrderCallBack($data){
-		Helper::writeLog('cancel:'.$data);
+		Helper::writeLog('cancel:'.json_encode($data));
 		$remt = MtOpenOrder::orderCancel($data);
 		return $remt;
 	}
@@ -70,7 +69,7 @@ class MtOpenNotify
 	 * 催单
 	 */
 	public function reminderOrderCallBack($data){
-		Helper::writeLog('reminder:'.$data);
+		Helper::writeLog('reminder:'.json_encode($data));
 		$remt = MtOpenOrder::orderReminder($data);
 		return $remt;
 	}
@@ -78,7 +77,7 @@ class MtOpenNotify
 	 * 美团用户或客服退款流程操作
 	 */
 	public function refundOrderCallBack($data){
-		Helper::writeLog('refund:'.$data);
+		Helper::writeLog('refund:'.json_encode($data));
 		$remt = MtOpenOrder::orderRefund($data);
 		return $remt;
 	}
@@ -86,7 +85,7 @@ class MtOpenNotify
 	 * 隐私号降级推送
 	 */
 	public function privacyNumberCallBack($data){
-		$remt = MtOpenOrder::orderCancel($data);
+		$remt = MtOpenOrder::privacyNumber(json_encode($data));
 		return $remt;
 	}
 	private function ReplyNotify($status = true)
