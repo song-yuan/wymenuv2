@@ -13,14 +13,12 @@ class MtOpenNotify
 	 * 通过回调函数 先返回结果
 	 */
 	public static function callUserFunc($callback,$type){
-		Helper::writeLog(Yii::app()->request->getHostInfo().Yii::app()->request->url);
 		$data = $_POST;
 		if(empty($data)){
 			$data = $_GET;
 		}
 		if(!empty($data)){
 			$appid = $data['app_id'];
-			$apppoicode = $data['app_poi_code'];
 			$appidkey = 'mtwm-open-appid-'.$appid;
 			$appsecret = Yii::app()->redis->get($appidkey);
 			if(!$appsecret){
