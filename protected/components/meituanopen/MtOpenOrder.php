@@ -6,13 +6,16 @@
 class MtOpenOrder
 {
 	public static function order($data){
-		$resArr = MtOpenUnit::urlToArr($data);
-		$ePoiId = $resArr['app_poi_code'];
-		$detail = $resArr['detail'];
-		$order = urldecode(urldecode($detail));
+// 		$resArr = MtOpenUnit::urlToArr($data);
+// 		$ePoiId = $resArr['app_poi_code'];
+// 		$detail = $resArr['detail'];
+// 		$order = urldecode(urldecode($detail));
 // 		$result = self::dealOrder($order,$ePoiId,2);
 		return true;
 		
+	}
+	public static function orderconfirm($data){
+		return true;
 	}
 	public static function orderCancel($data){
 		return true;
