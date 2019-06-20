@@ -12,28 +12,45 @@ class MtOpenNotify
 	/**
 	 * 通过回调函数 先返回结果
 	 */
-	public static function callUserFunc($callback){
-		$data = file_get_contents('php://input');
+	public static function callUserFunc($callback,$type){
+		Helper::writeLog(Yii::app()->request->getHostInfo().Yii::app()->request->url);
 		$data = $_POST;
 		if(empty($data)){
 			$data = $_GET;
 		}
-		return call_user_func($callback,$data);
+		if(!empty($data)){
+			$appid = $data['app_id'];
+			$apppoicode = $data['app_poi_code'];
+			$appidkey = 'mtwm-open-appid-'.$appid;
+			$appsecret = Yii::app()->redis->get($appidkey);
+			if(!$appsecret){
+				$mtconfig = MtOpenUnit::getMtConfigByAppid($appid);
+				$appsecret = $mtconfig['app_secret'];
+				Yii::app()->redis->set($appidkey,$appsecret);
+			}
+			$hasSig = MtOpenUnit::checkSign($type, $data, $appsecret);
+			if($hasSig){
+				return call_user_func($callback,$data);
+			}
+		}
+		return true;
 	}
 	public function Handle($type)
 	{
 		if($type=='new'){
-			$result = self::callUserFunc(array($this, 'newOrderCallBack'));
+			$result = self::callUserFunc(array($this, 'newOrderCallBack'),$type);
 		}elseif($type=='confirm'){
-			$result = self::callUserFunc(array($this, 'confirmOrderCallBack'));
+			$result = self::callUserFunc(array($this, 'confirmOrderCallBack'),$type);
 		}elseif($type=='cancel'){
-			$result = self::callUserFunc(array($this, 'cancelOrderCallBack'));
+			$result = self::callUserFunc(array($this, 'cancelOrderCallBack'),$type);
+		}elseif($type=='shipper'){
+			$result = self::callUserFunc(array($this, 'shipperOrderCallBack'),$type);
 		}elseif($type=='reminder'){
-			$result = self::callUserFunc(array($this, 'reminderOrderCallBack'));
+			$result = self::callUserFunc(array($this, 'reminderOrderCallBack'),$type);
 		}elseif($type=='refund'){
-			$result = self::callUserFunc(array($this, 'refundOrderCallBack'));
+			$result = self::callUserFunc(array($this, 'refundOrderCallBack'),$type);
 		}elseif($type=='privacynumber'){
-			$result = self::callUserFunc(array($this, 'privacyNumberCallBack'));
+			$result = self::callUserFunc(array($this, 'privacyNumberCallBack'),$type);
 		}
 		if($result){
 			$this->ReplyNotify(true);
@@ -45,7 +62,6 @@ class MtOpenNotify
 	 * 推送订单
 	 */
 	public function newOrderCallBack($data){
-		Helper::writeLog('new:'.json_encode($data));
 		$remt = MtOpenOrder::order($data);
 		return $remt;
 	}
@@ -62,6 +78,14 @@ class MtOpenNotify
 	 */
 	public function cancelOrderCallBack($data){
 		Helper::writeLog('cancel:'.json_encode($data));
+		$remt = MtOpenOrder::orderCancel($data);
+		return $remt;
+	}
+	/**
+	 * 订单配送
+	 */
+	public function shipperOrderCallBack($data){
+		Helper::writeLog('shipper:'.json_encode($data));
 		$remt = MtOpenOrder::orderCancel($data);
 		return $remt;
 	}

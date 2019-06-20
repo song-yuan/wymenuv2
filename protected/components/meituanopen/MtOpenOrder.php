@@ -6,10 +6,9 @@
 class MtOpenOrder
 {
 	public static function order($data){
-// 		$resArr = MtOpenUnit::urlToArr($data);
-// 		$ePoiId = $resArr['app_poi_code'];
-// 		$detail = $resArr['detail'];
-// 		$order = urldecode(urldecode($detail));
+		$appPoiCode = $data['app_poi_code'];
+		$detail = $data['detail'];
+		$order = urldecode(urldecode($detail));
 // 		$result = self::dealOrder($order,$ePoiId,2);
 		return true;
 		
