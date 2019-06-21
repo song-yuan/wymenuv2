@@ -17,13 +17,13 @@ class MtOpenUnit
 		return $result;
 	}
 	public static function getMtappsecret($appid){
-// 		$appidkey = 'mtwm-open-appid-'.$appid;
-// 		$appsecret = Yii::app()->redis->get($appidkey);
-// 		if(!$appsecret){
+		$appidkey = 'mtwm-open-appid-'.$appid;
+		$appsecret = Yii::app()->redis->get($appidkey);
+		if(!$appsecret){
 			$mtconfig = self::getMtConfigByAppid($appid);
 			$appsecret = $mtconfig['app_secret'];
-// 			Yii::app()->redis->set($appidkey,$appsecret);
-// 		}
+			Yii::app()->redis->set($appidkey,$appsecret);
+		}
 		return $appsecret;
 	}
 	public static function getSigUrl($type)

@@ -102,10 +102,10 @@ class MtOpenOrder
 			$caution = $ocaution;
 		}
 		$orderStatus = $data['status'];
-		$dayseq = $data['daySeq'];
+		$dayseq = $data['day_seq'];
 		$originPrice = $data['original_price'];
 		
-		$poirede = $data['poi_receive_detail'];
+		$poirede = urldecode($data['poi_receive_detail']);
 		$poiredeArr = json_decode($poirede,true);
 		$platformTotal = $poiredeArr['foodShareFeeChargeByPoi'];
 		$logisticsTotal = $poiredeArr['logisticsFee'];
@@ -121,8 +121,8 @@ class MtOpenOrder
 		$orderCloudArr['nb_order_platform'] = array('dpid'=>$dpid,'original_total'=>$originPrice,'logistics_total'=>$logisticsTotal/100,'platform_total'=>$platformTotal/100,'pay_total'=>$payTotal/100,'receive_total'=>$shouldTotal/100);
 		$orderCloudArr['nb_order_product'] = array();
 		
-		$pdetail = $data['detail'];
-		$proDetail=json_decode($pdetail,true);
+		$pdetail = urldecode($data['detail']);
+		$proDetail = json_decode($pdetail,true);
 		foreach ($proDetail as $key => $value) {
 			$phsCode =  $value['sku_id'];
 			$price = $value['price'];
@@ -205,14 +205,14 @@ class MtOpenOrder
 			$orderProduct = array('is_set'=>0,'set_name'=>'','set_price'=>0,'dpid'=>$dpid,'create_at'=>$orderTime,'set_id'=>0,'main_id'=>0,'product_id'=>0,'product_name'=>'配送费','product_pic'=>'','original_price'=>$shippingFee,'price'=>$shippingFee,'amount'=>1,'zhiamount'=>1,'product_type'=>3,'product_order_status'=>2,'taste_memo'=>'','product_taste'=>array(),'product_promotion'=>array());
 			array_push($orderCloudArr['nb_order_product'], $orderProduct);
 		}
-		$receiveAddress = $data['recipient_address'];
+		$receiveAddress = urldecode($data['recipient_address']);
 		$recipientPhone = $data['recipient_phone'];
 		$backupRecipientPhone = $data['backup_recipient_phone'];
 		$backupRecipientPhone = json_decode($backupRecipientPhone,true);
 		if(!empty($backupRecipientPhone)){
 			$backupRecipientPhone = join(',', $backupRecipientPhone);
 		}
-		$consignee = $data['recipient_name'];
+		$consignee = urldecode($data['recipient_name']);
 		$orderArr['order_address'] = array(array('consignee'=>$consignee,'street'=>$receiveAddress,'mobile'=>$recipientPhone,'tel'=>$backupRecipientPhone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$shouldTotal/100,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		
