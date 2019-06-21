@@ -54,6 +54,7 @@ class MtOpenNotify
 	 * 推送订单
 	 */
 	public function newOrderCallBack($data){
+		Helper::writeLog('new:'.json_encode($data));
 		$remt = MtOpenOrder::order($data);
 		return $remt;
 	}
