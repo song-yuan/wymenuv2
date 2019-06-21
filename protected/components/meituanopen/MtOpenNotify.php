@@ -19,13 +19,7 @@ class MtOpenNotify
 		}
 		if(!empty($data)){
 			$appid = $data['app_id'];
-			$appidkey = 'mtwm-open-appid-'.$appid;
-			$appsecret = Yii::app()->redis->get($appidkey);
-			if(!$appsecret){
-				$mtconfig = MtOpenUnit::getMtConfigByAppid($appid);
-				$appsecret = $mtconfig['app_secret'];
-				Yii::app()->redis->set($appidkey,$appsecret);
-			}
+			$appsecret = MtOpenUnit::getMtappsecret($appid);
 			$hasSig = MtOpenUnit::checkSign($type, $data, $appsecret);
 			if($hasSig){
 				return call_user_func($callback,$data);

@@ -32,10 +32,9 @@ class MeituanOpenController extends Controller
         $notify->Handle('refund');
 	}
 	public function actionOrderShipper(){
-		//订单退款信息推送
-		$data = file_get_contents('php://input');
-		echo '{ "data": "OK"}';
-		exit();
+		//订单配送状态回调推送
+		$notify = new MtOpenNotify();
+        $notify->Handle('shipper');
 	}
 	public function actionOrderComplete(){
 		//订单完成信息推送
