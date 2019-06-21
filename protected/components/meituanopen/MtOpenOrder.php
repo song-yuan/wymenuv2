@@ -45,7 +45,7 @@ class MtOpenOrder
 		$appid = $data['app_id'];
 		$appPoiCode = $data['app_poi_code'];
 		$orderId = $data['order_id'];
-		$res = MtOpenUnit::getMtappsecret($appid,$appPoiCode,$orderId);
+		$res = self::confirm($appid, $appPoiCode, $orderId);
 		return $res;
 		
 	}
