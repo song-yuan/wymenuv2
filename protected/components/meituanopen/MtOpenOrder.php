@@ -13,6 +13,7 @@ class MtOpenOrder
 				'app_id'=>$appid,
 				'timestamp'=>$timestamp,
 				'app_poi_codes'=>$apppoicode,
+				'order_id'=>$orderId
 		);
 		$url = MtOpenUnit::getUrlStr($url, $data, $appSerect);
 		$result = Curl::https($url);
