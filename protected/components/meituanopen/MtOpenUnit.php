@@ -79,12 +79,23 @@ class MtOpenUnit
 		return $sign;
 	}
 	public static function getUrlStr($url,$data,$appsecret){
+		ksort($data);
 		$str = '';
 		foreach ($data as $key => $value) {
 			$str .= $key.'='.$value.'&';
 		}
 		$sign = self::getSign($url, $data, $appsecret);
 		$str = $url.'?'.$str.'sig='.$sign;
+		return $str;
+	}
+	public static function getPostStr($url,$data,$appsecret){
+		ksort($data);
+		$str = '';
+		foreach ($data as $key => $value) {
+			$str .= $key.'='.$value.'&';
+		}
+		$sign = self::getSign($url, $data, $appsecret);
+		$str = $str.'sig='.$sign;
 		return $str;
 	}
 }

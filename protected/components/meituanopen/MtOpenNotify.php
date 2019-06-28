@@ -54,7 +54,6 @@ class MtOpenNotify
 	 * 推送订单
 	 */
 	public function newOrderCallBack($data){
-		Helper::writeLog('new:'.json_encode($data));
 		$remt = MtOpenOrder::order($data);
 		return $remt;
 	}
@@ -62,7 +61,6 @@ class MtOpenNotify
 	 * 确认订单
 	 */
 	public function confirmOrderCallBack($data){
-		Helper::writeLog('confirm:'.json_encode($data));
 		$remt = MtOpenOrder::orderconfirm($data);
 		return $remt;
 	}
@@ -70,7 +68,6 @@ class MtOpenNotify
 	 * 取消订单
 	 */
 	public function cancelOrderCallBack($data){
-		Helper::writeLog('cancel:'.json_encode($data));
 		$remt = MtOpenOrder::orderCancel($data);
 		return $remt;
 	}
@@ -78,7 +75,6 @@ class MtOpenNotify
 	 * 订单配送
 	 */
 	public function shipperOrderCallBack($data){
-		Helper::writeLog('shipper:'.json_encode($data));
 		$remt = MtOpenOrder::orderCancel($data);
 		return $remt;
 	}
@@ -86,7 +82,6 @@ class MtOpenNotify
 	 * 催单
 	 */
 	public function reminderOrderCallBack($data){
-		Helper::writeLog('reminder:'.json_encode($data));
 		$remt = MtOpenOrder::orderReminder($data);
 		return $remt;
 	}
@@ -94,7 +89,6 @@ class MtOpenNotify
 	 * 美团用户或客服退款流程操作
 	 */
 	public function refundOrderCallBack($data){
-		Helper::writeLog('refund:'.json_encode($data));
 		$remt = MtOpenOrder::orderRefund($data);
 		return $remt;
 	}

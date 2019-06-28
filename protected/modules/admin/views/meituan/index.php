@@ -45,51 +45,20 @@ span.tab{
 			<div class="portlet purple box">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','美团外卖');?></div>
-					<?php if(!$models) :?>
-					<div class="actions">
-						<a href="<?php echo $this->createUrl('waimai/dpbd',array('companyId'=>$this->companyId));?>" class="btn blue"><i class="fa fa-plus"></i> <?php echo yii::t('app','店铺授权');?></a>
-					</div>
-					<?php endif;?>
 				</div>
-				<div class="portlet-body">
-				<div class="dataTables_wrapper form-inline">
-					<div class="table-responsive">
-					<table class="table table-striped table-bordered table-hover" id="sample_1">
-						<thead>
-							<tr >
-								<th ><?php echo yii::t('app','门店名称');?></th>
-								<th><?php echo yii::t('app','城市');?></th>
-								<th ><?php echo yii::t('app','接入美团配送');?></th>
-								<th><?php echo yii::t('app','门店信息状态');?></th>
-								<th><?php echo yii::t('app','营业状态');?></th>
-								<th><?php echo yii::t('app','上下线');?></th>
-								<th><?php echo yii::t('app','创建时间');?></th>
-								<th><?php echo yii::t('app','更新时间');?></th>
-								<th><?php echo yii::t('app','操作');?></th>
-							</tr>
-						</thead>
-						<tbody>
-						<?php if($models) :?>
-						<?php foreach ($models as $model):?>
-							<tr class="odd gradeX">
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-						<?php endforeach;?>
-						<?php else:?>
-						<tr class="odd gradeX"><td colspan="3">暂无数据</td></tr>
-						<?php endif;?>
-						</tbody>
-					</table>
-					</div>
-					</div>
+				<div class="portlet-body clearfix">
+					<div class="panel_body row">
+						<?php if($models):?>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('meituan/productDy',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">菜品对应</div>
+                                <div class="list_small">美团外卖中菜品与收款机菜品相对应</div>
+                            </a> 
+                        </div>
+                        <?php else:?>
+                        <span>请先联系公司绑定店铺后再来进行菜品对应。</span>
+                        <?php endif;?>
+                    </div>
 				</div>
 			</div>
 		</div>

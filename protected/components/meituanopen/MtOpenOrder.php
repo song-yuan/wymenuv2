@@ -79,7 +79,6 @@ class MtOpenOrder
 		// 收银机云端同步订单数据
 		$orderCloudArr = array();
 		$dpid = $data['app_poi_code'];
-		$dpid = '0000000027';
 		$orderId = $data['order_id'];
 		$orderTime = $data['ctime'];
 		$payType = $data['pay_type'];
