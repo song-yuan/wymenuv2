@@ -58,9 +58,9 @@ class Elm
 					);
 					$res = Yii::app()->db->createCommand()->insert('nb_eleme_token',$inserData);
 				}
-				return "授权成功";
+				return true;
 			}else{
-				return "授权失败";
+				return false;
 			}
 	}
 	public static function elemeGetToken($dpid){
@@ -195,6 +195,8 @@ class Elm
         $result =ElUnit::post($url,$protocol);
         return $result;
 	}
+	
+	
 	public static function getErpDpid($shopId){
 		$sql = "select * from nb_eleme_dpdy where shopId=".$shopId." and delete_flag=0";
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
@@ -678,6 +680,34 @@ class Elm
         );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
         $result =ElUnit::post($url,$protocol);
+	}
+	public static function getShopItems($dpid,$shopId){
+		//查询店铺下的菜品
+		$access_token = self::elemeGetToken($dpid);
+		if(!$access_token){
+			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
+		}
+		$app_key = ElmConfig::key;
+		$secret = ElmConfig::secret;
+		$url = ElmConfig::url;
+		$protocol = array(
+				"nop" => '1.0.0',
+				"id" => ElUnit::create_uuid(),
+				"action" => "eleme.product.item.queryItemByPage",
+				"token" => $access_token,
+				"metas" => array(
+						"app_key" => $app_key,
+						"timestamp" => time(),
+				),
+				"params" => array(
+						'shopId'=>$shopId,
+						'offset'=>0,
+						'limit'=>299
+				),
+		);
+		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
+		$result =ElUnit::post($url,$protocol);
+		return $result;
 	}
 	public static function getItems($dpid,$categoryId){
 		//查询菜品分类下的菜品
