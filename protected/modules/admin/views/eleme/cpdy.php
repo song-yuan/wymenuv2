@@ -18,10 +18,6 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-	 <?php 
- 	$result = $category_id->result;
- 	$dpid = $this->companyId;	
- ?> 
  <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('breadcrumbs'=>array(array('word'=>yii::t('app','外卖设置'),'url'=>$this->createUrl('waimai/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','饿了么外卖'),'url'=>$this->createUrl('eleme/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','菜品对应'),'url'=>$this->createUrl('eleme/cpdy' , array('companyId'=>$this->companyId,'type'=>0)))),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('eleme/index' , array('companyId' => $this->companyId,'type' => '0')))));?>
 	
 	<!-- END PAGE HEADER-->
@@ -45,74 +41,103 @@
 				<div class="table-responsive">
 					<table class="tree table table-striped table-hover table-bordered dataTable">
 						<tr>
- 		<td>饿了么外卖菜品</td>
- 		<td colspan="3">收银机关联菜品</td>
- 	</tr>
- 	<?php foreach ($result as $category) {?>
- 		<?php 
- 			$categoryId = $category->id;
- 		?>
- 		<?php
-			$products = Elm::getItems($dpid,$categoryId);
-
-	 		$productsobj = json_decode($products,true);
-	 		$resultid = $productsobj['result'];	 
-	 		// var_dump($resultid);exit();		
-			foreach ($resultid as $product){
-				$specs = $product['specs'];
-			?>
- 		
-			<?php if(count($specs)>1):?>
-				<?php foreach($specs as $spec):?>
-			<tr>
-			<td>
-				<span class="id" style="display: none;"><?php echo $product['id'];?></span><span><?php echo $product['name'];?><?php echo $spec['name'];?></span>
-			</td>
-			<?php if(in_array($product['id'], $itemm ) && in_array($spec['specId'], $spemodel)){?>
-			<td>
-			<?php foreach ($items as $item):?>
-			<?php if(in_array($spec['specId'], $item)):?>
-				<span><?php echo $item['name'];?></span>
-				<?php endif;?>
-
-			<?php endforeach;?>		
-			</td>
-			<td>
-				<a class="add_btn" pid="<?php echo $product['id'];?>" specsId="<?php echo $spec['specId'];?>" data-toggle="modal"><?php echo yii::t('app','菜品重新关联')?></a>
-			</td>
-			<?php }else{?>
-			<td>
-				<a class="add_btn" pid="<?php echo $product['id'];?>" specsId="<?php echo $spec['specId'];?>" data-toggle="modal"><?php echo yii::t('app','菜品关联')?></a>
-			</td>
-			<?php }?>
-			</tr>
-			<?php endforeach;?>
-			<?php else:?>
-			<tr >
-				<td>
-				<span class="id" style="display: none;"><?php echo $product['id'];?></span><span><?php echo $product['name'];?></span>
-			</td>
-				<?php if(in_array($product['id'], $itemm)){?>
-			<td>
-			<?php foreach ($items as $item):?>
-			<?php if(in_array($product['id'], $item)):?>
-				<span><?php echo $item['name'];?></span>
-				<?php endif;?>
-
-			<?php endforeach;?>		
-			</td>
-			<td>
-				<a class="add_btn" pid="<?php echo $product['id'];?>" data-toggle="modal"><?php echo yii::t('app','菜品重新关联')?></a>
-			</td>
-			<?php }else{?>
-			<td>
-				<a class="add_btn" pid="<?php echo $product['id'];?>" data-toggle="modal"><?php echo yii::t('app','菜品关联')?></a>
-			</td>
-			<?php }?>
-			<?php endif;?>
- 		</tr>
- 		<?php }?>
- 	<?php }?>
+							<th>饿了么菜品分类</th>
+					 		<th>饿了么菜品</th>
+					 		<th colspan="3">收银机关联菜品</th>
+					 	</tr>
+					 	<?php 
+					 		foreach ($ecategorys as $ecate):
+					 			$ecid = $ecate['id'];
+					 			$ecateId = 'lid-'.$ecid;
+					 			$model = isset($eproducts[$ecateId])?$eproducts[$ecateId]:array();
+					 			if(empty($model)){
+					 				continue;
+					 			}
+					 		foreach ($model['data'] as $key=>$m):
+					 			$i = $key;
+					 			$specs = $m['specs'];
+					 			foreach ($specs as $spec):
+					 			$i++;
+					 	?>
+						<tr>
+							<?php if($i==1):?>
+							<td rowspan="<?php echo $model['length'];?>"><?php echo $ecate['name'];?></td>
+							<?php endif;?>
+							<td>
+								<?php
+									if($spec['name']!=''){
+										echo $m['name'].'('.$spec['name'].')';
+									}else{
+										echo $m['name'];
+									}
+								?>
+							</td>
+							<?php if(isset($products[$spec['extendCode']])):?>
+							<td>
+								<?php echo $products[$spec['extendCode']]['product_name'];?>
+							</td>
+							<td>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<select class="form-control" name="category_name">
+												<option>---请选择---</option>
+												<?php foreach ($categorys['0000000000'] as $cate):?>
+												<optgroup label="<?php echo $cate['category_name'];?>">
+													<?php if(isset($categorys[$cate['lid']])):?>
+													<?php foreach ($categorys[$cate['lid']] as $c):?>
+													<option value="<?php echo $c['lid'];?>"><?php echo $c['category_name'];?></option>
+													<?php endforeach;?>
+													<?php endif;?>
+												</optgroup>
+												<?php endforeach;?>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<select class="form-control" name="product_name">
+												<option value="" category_id="0">---请选择---</option>
+												<?php foreach ($products as $p):?>
+												<option value="<?php echo $p['phs_code'];?>" category_id="<?php echo $p['category_id'];?>" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode(json_encode($specs));?>"><?php echo $p['product_name'];?></option>
+												<?php endforeach;?>
+											</select>
+										</div>
+									</div>
+								</div>
+							</td>
+							<?php else:?>
+							<td>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<select class="form-control" name="category_name">
+												<option>---请选择---</option>
+												<?php foreach ($categorys['0000000000'] as $cate):?>
+												<optgroup label="<?php echo $cate['category_name'];?>">
+													<?php if(isset($categorys[$cate['lid']])):?>
+													<?php foreach ($categorys[$cate['lid']] as $c):?>
+													<option value="<?php echo $c['lid'];?>"><?php echo $c['category_name'];?></option>
+													<?php endforeach;?>
+													<?php endif;?>
+												</optgroup>
+												<?php endforeach;?>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<select class="form-control" name="product_name">
+												<option value="" category_id="0">---请选择---</option>
+												<?php foreach ($products as $p):?>
+												<option value="<?php echo $p['phs_code'];?>" category_id="<?php echo $p['category_id'];?>" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode(json_encode($specs));?>"><?php echo $p['product_name'];?></option>
+												<?php endforeach;?>
+											</select>
+										</div>
+									</div>
+								</div>
+							</td>
+							<?php endif;?>
+				 		</tr>
+				 		<?php endforeach;?>
+					 	<?php endforeach;?>
+					 	<?php endforeach;?>
 					</table>
                 </div>
 			</div>
@@ -121,22 +146,42 @@
 <?php $this->endWidget(); ?>
 </div>
 <script type="text/javascript">
-	var $modal = $('.modal');
-    $('.add_btn').on('click', function(){
-        <?php if(Yii::app()->user->role > User::SHOPKEEPER):?>
-         alert("您没有权限！！！");
-         return false;
-        <?php endif;?>
-        id = $(this).attr('pid');
-        specs = $(this).attr('specsId');
-        if(specs){
-        	 $modal.find('.modal-content').load('<?php echo $this->createUrl('eleme/glcp',array('companyId'=>$this->companyId));?>/id/'+id+'/specs/'+specs+'', function(){
-	          $modal.modal();
-	        });
-        }else{
-        	 $modal.find('.modal-content').load('<?php echo $this->createUrl('eleme/glcp',array('companyId'=>$this->companyId));?>/id/'+id+'', function(){
-	          $modal.modal();
-	        });
-        }
-    });
+$('select[name="category_name"]').change(function(){
+	var cid = $(this).val();
+	var obj = $(this).parents('td').find('select[name="product_name"] option');
+	obj.each(function(){
+		var cateId = $(this).attr('category_id');
+		if(parseInt(cid)==parseInt(cateId)){
+			$(this).show();
+		}else{
+			$(this).hide();
+		}
+	});
+});
+$('select[name="product_name"]').change(function(){
+	var pcode = $(this).val();
+	if(pcode!=''){
+		var obj = $(this).find('option:selected');
+		var eId = obj.attr('e_id');
+		var eCateId = obj.attr('e_cid');
+		var eName = obj.attr('e_name');
+		var eSpecid = obj.attr('e_spec_id');
+		var eSpec = obj.attr('e_spec');
+		$.ajax({
+			url:'<?php echo $this->createUrl('eleme/ajaxProductDy',array('companyId'=>$this->companyId));?>',
+			data:{extendcode:pcode,e_name:eName,e_id:eId,e_cateid:eCateId,e_specid:eSpecid,e_spec:eSpec},
+			type:'POST',
+			success:function(msg){
+				if(msg.status){
+					var data = msg.data;
+					$('select[name="product_name"]').find('option[e_id="'+eId+'"]').attr('e_spec',data);
+					alert('关联成功');
+				}else{
+					alert('关联失败('+msg.msg+')');
+				}
+			},
+			dataType:'json'
+		});
+	}
+});
 </script>

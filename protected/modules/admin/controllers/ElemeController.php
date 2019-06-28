@@ -12,9 +12,8 @@ class ElemeController extends BackendController
 		);
 	}
 	public function actionIndex(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = Yii::app()->request->getParam('companyId');
 		$models = ElemeToken::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$companyId));
-		// var_dump($dp);exit();
 		$sql = "select * from nb_eleme_dpdy where dpid=".$this->companyId." and delete_flag=0";
 	    $dp = Yii::app()->db->createCommand($sql)->queryRow();
 		$this->render('index',array('companyId'=>$companyId,'models'=>$models,'dp'=>$dp));
@@ -25,9 +24,7 @@ class ElemeController extends BackendController
 		$url = urlencode($url);
 		$clientId = ElmConfig::key;
 		$sqUrl = ElmConfig::squrl;
-		// var_dump($token);exit;
 		$type = Yii::app()->request->getParam('type');
-		// var_dump($type);exit;
 		if(!empty($type)){
 			$sql = "update nb_eleme_token set delete_flag=1 where dpid=".$companyId." and delete_flag=0";
 			Yii::app()->db->createCommand($sql)->execute();
@@ -41,7 +38,6 @@ class ElemeController extends BackendController
 			$sql = 'select * from nb_eleme_token where dpid='.$companyId.' and delete_flag=0';
 			$token = Yii::app()->db->createCommand($sql)->queryRow();
 		}
-		// var_dump($type);exit;
 		$this->render('dpsq',array(
 				'companyId'=>$companyId,
 				'url'=>$url,
@@ -50,206 +46,89 @@ class ElemeController extends BackendController
 				'token'=>$token
 			));
 	}
-	public function actionCpdy(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$dpid = $companyId;
-		$resultid = Elm::elemeId($companyId);
-		$obj = json_decode($resultid);
-		$auth = $obj->result->authorizedShops;
-		$shopid = $auth[0]->id;
-		$category = Elm::getShopCategories($companyId,$shopid);
-		$eleme = Yii::app()->request->getParam('eleme');
-		$itemm =array();
-		$error = '';
-		if($eleme){
-			$phs_code = $eleme['phs_code'];
-			$itemid = $eleme['elemeId'];
-			if(isset($eleme['specid'])){
-				$specsid = $eleme['specid'];
-			}else{
-				$specsid = "";
-			}
-			$sql = 'select product_name as name from nb_product where dpid='.$dpid.' and phs_code="'.$phs_code.'" and delete_flag=0 union select set_name as name from nb_product_set where dpid='.$dpid.' and pshs_code="'.$phs_code.'" and delete_flag=0';
-			$names =Yii::app()->db->createCommand($sql)->queryRow();
-			$productname = $names['name'];
-			$item = Elm::getItem($companyId,$itemid);
-			$ite = json_decode($item);
-			$categoryid = $ite->result->categoryId;
-			$name = $ite->result->name;
-			$description = $ite->result->description;
-			$specs = $ite->result->specs;
-			$spes = array();
-			if(count($specs)>1){
-				foreach ($specs as $value) {
-					if($specsid!=$value->specId){
-						array_push($spes, $value);
-					}
-				}
-			}
-			foreach ($specs as $spec) {	
-				if(!empty($specsid)){
-					if($specsid==$spec->specId){
-						$specId = $spec->specId;
-						$original_price = $spec->price;
-						$spename = $spec->name;	
-					}
-				}else{
-					$specId = $spec->specId;
-					$original_price = $spec->price;
-					$spename = $spec->name;
-				}
-			}
-			$attributes = $ite->result->attributes;
-			$attr['name'] ='';
-			$attr['details']='';
-			foreach ($attributes as $attribute) {
-				$attributeName = $attribute->name;
-				$details = $attribute->details;
-				$attr['name']=$attributeName;
-				$attr['details']=$details;
-			}
-			$attributes1 = array($attr);
-			if(!empty($specsid)){
-				$sql = "select elemeID from nb_eleme_cpdy where dpid=".$dpid." and elemeID=".$itemid." and specsid=".$specsid." and delete_flag=0";
-			}else{
-				$sql = "select elemeID from nb_eleme_cpdy where dpid=".$dpid." and elemeID=".$itemid." and delete_flag=0";
-			}
-			$elememodel = Yii::app()->db->createCommand($sql)->queryRow();
-			if(empty($elememodel['elemeID'])){
-				if(empty($description) && empty($attr['name'])){
-					$rest = Elm::updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$spes,$spename);
-				}elseif(!empty($description) && empty($attr['name'])){
-					$rest = Elm::updateItem2($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description,$spes,$spename);
-				}else{
-					$rest = Elm::updateItem1($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description,$attributes1,$spes,$spename);
-				}
-				$obj = json_decode($rest);
-				// var_dump($rest);exit;
-				if(!empty($obj->result)){
-					$se = new Sequence("eleme_cpdy");
-					$lid = $se->nextval();
-					$creat_at = date("Y-m-d H:i:s");
-					$update_at = date("Y-m-d H:i:s");
-					$inserData = array(
-								'lid'=>	$lid,
-								'dpid'=> $dpid,
-								'create_at'=>$creat_at,
-								'update_at'=>$update_at,
-								'elemeID'=>$itemid,
-								'categoryId'=>$categoryid,
-								'phs_code'=>$phs_code,
-								'name'=>"$productname",
-								'specsid'=>$specsid
-					);
-					$res = Yii::app()->db->createCommand()->insert('nb_eleme_cpdy',$inserData);
-					 Yii::app()->user->setFlash('success',yii::t('app','菜品关联成功！'));
-				}else{
-					$error = Yii::app()->user->setFlash('error' , $obj->error->message);
-				}
-			}else{
-				if(empty($description) && empty($attr['name'])){
-					$rest = Elm::updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$spes,$spename);
-					// var_dump($rest);exit;
-				}elseif(!empty($description) && empty($attr['name'])){
-					$rest = Elm::updateItem2($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description,$spes,$spename);
-					// var_dump($rest);exit;
-				}else{
-					$rest = Elm::updateItem1($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description,$attributes1,$spes,$spename);
-					// var_dump($rest);exit;
-				}
-				$obj = json_decode($rest);
-				// var_dump($rest);exit();
-				if(!empty($obj->result)){
-					if(!empty($specsid)){
-						$sql = "update nb_eleme_cpdy set phs_code=".$phs_code.",name='".$productname."' where dpid=".$companyId." and elemeID=".$itemid." and specsid=".$specsid." and delete_flag=0";
-					}else{
-						$sql = "update nb_eleme_cpdy set phs_code=".$phs_code.",name='".$productname."' where dpid=".$companyId." and elemeID=".$itemid." and delete_flag=0";
-					}
-					$res = Yii::app()->db->createCommand($sql)->execute();
-					Yii::app()->user->setFlash('success',yii::t('app','菜品重新关联成功！'));
-				}else{
-					$error = Yii::app()->user->setFlash('error' , $obj->error->message);
-				}
-			}
-			
-		}
-		$sql = 'select elemeID,name,specsid from nb_eleme_cpdy where dpid='.$companyId.' and delete_flag=0';
-		$items = Yii::app()->db->createCommand($sql)->queryAll();
-		$sql = 'select elemeID from nb_eleme_cpdy where dpid='.$companyId.' and delete_flag=0';
-		$itemm = Yii::app()->db->createCommand($sql)->queryColumn();
-		$sql1 = "select specsid from nb_eleme_cpdy where dpid=".$companyId." and delete_flag=0";
-		$spemodel = Yii::app()->db->createCommand($sql1)->queryColumn();
-		// var_dump($spemodel);exit;
-		$category_id = json_decode($category);
-		$this->render('cpdy',array(
-			'companyId'=>$companyId,
-			'category_id'=>$category_id,
-			'items'=>$items,
-			'itemm'=>$itemm,
-			'spemodel'=>$spemodel,
-			'error'=>$error
-			));
-	}
 	public function actionDpdy(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = Yii::app()->request->getParam('companyId');
 		$resultid = Elm::ElemeId($companyId);
 		$obj = json_decode($resultid);
 		$auth = $obj->result->authorizedShops;
 		$shopid = $auth[0]->id;
 		$result = Elm::elemeUpdateId($companyId,$shopid);
 		$obj = json_decode($result);
-        if(!empty($obj->result)){
-    		$se=new Sequence("eleme_dpdy");
+		if(!empty($obj->result)){
+			$se=new Sequence("eleme_dpdy");
 			$lid = $se->nextval();
 			$creat_at = date("Y-m-d H:i:s");
 			$update_at = date("Y-m-d H:i:s");
 			$shopid = $obj->result->id;
 			$inserData = array(
-						'lid'=>	$lid,
-						'dpid'=>$this->companyId,
-						'create_at'=>$creat_at,
-						'update_at'=>$update_at,
-						'shopId'=>$shopid
-				);
+					'lid'=>	$lid,
+					'dpid'=>$this->companyId,
+					'create_at'=>$creat_at,
+					'update_at'=>$update_at,
+					'shopId'=>$shopid
+			);
 			$res = Yii::app()->db->createCommand()->insert('nb_eleme_dpdy',$inserData);
 			Yii::app()->user->setFlash('success',yii::t('app','店铺对应成功！'));
 			$this->redirect(array('eleme/index' ,'companyId' => $this->companyId));
-        }
+		}
 	}
-	public function actionGlcp(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$id = Yii::app()->request->getParam('id');
-		$specsid = Yii::app()->request->getParam('specs');
-		$item = Elm::getItem($companyId,$id);
-		$ite = json_decode($item);
+	public function actionCpdy(){
+		$companyId = Yii::app()->request->getParam('companyId');
+		$dpid = $companyId;
 		
-		$name = $ite->result->name;
-		$specs = $ite->result->specs;
-		// var_dump($specs);exit();
-		if(empty($specsid)){
-			$specsid = "";
-			$specname = "";
-		}else{
-			foreach ($specs as $spec) {
-				if($specsid==$spec->specId){
-					$specname = $spec->name;
-					// echo $specname;
-				}
+		$sql = "select shopId from nb_eleme_dpdy where dpid=".$this->companyId." and delete_flag=0";
+	    $shopid = Yii::app()->db->createCommand($sql)->queryScalar();
+		$ecateobj = Elm::getShopCategories($companyId,$shopid);
+		$eporobj = Elm::getShopItems($companyId,$shopid);
+		$ecategory = json_decode($ecateobj,true);//产品分类
+		$ecategorys = $ecategory['result'];
+		$eproduct = json_decode($eporobj,true);//产品列表
+		$eproducts = $eproduct['result'];
+		
+		$eproduct = array();
+		foreach ($eproducts as $p){
+			$categoryId = 'lid-'.$p['categoryId'];
+			$specs = $p['specs'];
+			if(!isset($eproduct[$categoryId])){
+				$eproduct[$categoryId] = array('length'=>0,'data'=>array());
+			}
+			$eproduct[$categoryId]['length'] = $eproduct[$categoryId]['length'] + count($specs);
+			array_push($eproduct[$categoryId]['data'], $p);
+		}
+		$category = $this->getCategory($dpid);
+		$product = $this->getProduct($dpid);
+		$this->render('cpdy',array(
+			'companyId'=>$companyId,
+			'ecategorys'=>$ecategorys,
+			'eproducts'=>$eproduct,
+			'categorys'=>$category,
+			'products'=>$product,
+		));
+	}
+	public function actionAjaxProductDy(){
+		$dpid = $this->companyId;
+		$extendcode = Yii::app()->request->getPost('extendcode');
+		$eid = Yii::app()->request->getPost('e_id');
+		$name = Yii::app()->request->getPost('e_name');
+		$ecateid = Yii::app()->request->getPost('e_cateid');
+		$especid = Yii::app()->request->getPost('e_specid');
+		$espec = Yii::app()->request->getPost('e_spec');
+		$especs = json_decode(urldecode($espec),true);
+		foreach ($especs as $k=>$es){
+			$spid = $es['specId'];
+			if($especid==$spid){
+				$especs[$k]['extendCode'] = $extendcode;
 			}
 		}
-		
-		$elemeId = $ite->result->id;
-		$modelCategory = ProductCategory::model()->findAll("dpid=".$companyId." and pid!=0 and delete_flag=0");
-		// var_dump($modelCategory);exit;
-		$this->renderPartial('glcp',array(
-			'action'=>$this->createUrl('eleme/cpdy',array('companyId'=>$this->companyId)),
-			'name'=>$name,
-			'specname'=>$specname,
-			'specsid'=>$specsid,
-			'elemeId'=>$elemeId,
-			'modelCategory'=>$modelCategory,
-			'companyId'=>$companyId
-			));
+		$res = Elm::updateItem($eid, $dpid, $ecateid, $name, $especs);
+		$obj = json_decode($res,true);
+		if(!empty($obj['error'])){
+			$msg = array('status'=>false,'msg'=>$obj['error']['message']);
+		}else {
+			$msg = array('status'=>true,'data'=>urlencode(json_encode($especs)));
+		}
+		echo json_encode($msg);
+		exit;
 	}
 	public function actionCanzhi(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
@@ -280,6 +159,29 @@ class ElemeController extends BackendController
 			Yii::app()->end(json_encode(array("status"=>"fail")));
 			return false;
 		}
+	}
+	public function getCategory($dpid){
+		$category = array();
+		$sql = 'select lid,pid,category_name from nb_product_category where dpid='.$dpid.' and delete_flag=0';
+		$categorys = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($categorys as $c){
+			$pid = $c['pid'];
+			if(!isset($category[$pid])){
+				$category[$pid] = array();
+			}
+			array_push($category[$pid], $c);
+		}
+		return $category;
+	}
+	public function getProduct($dpid){
+		$product = array();
+		$sql = 'select category_id,phs_code,product_name from nb_product where dpid='.$dpid.' and delete_flag=0';
+		$sql .= ' union select category_id,pshs_code as phs_code,set_name as product_name from nb_product_set where dpid='.$dpid.' and delete_flag=0';
+		$products = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($products as $p){
+			$product[$p['phs_code']] = $p;
+		}
+		return $product;
 	}
 }
 ?>

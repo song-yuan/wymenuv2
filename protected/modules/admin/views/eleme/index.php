@@ -89,8 +89,12 @@ span.tab{
 								<td width="33%"><?php echo $model->create_at;?></td>
                                 <td width="33%"><?php echo date('Y-m-d H:i:s', $model->expires_in);?></td>
 								<td width="33%">
-									<a class = "btn<?php if(empty($dp)):?> green<?php else:?> payonline<?php endif;?>" <?php if(empty($dp)):?> href="<?php echo $this->createUrl('eleme/dpdy',array('companyId'=>$this->companyId));?>"<?php endif;?><?php if(!empty($dp)):?> style="color: #000;"<?php endif;?>><?php if(empty($dp)):?>店铺对应<?php else:?>店铺已对应<?php endif;?></a>
+									<?php if(empty($dp)):?>
+									<a class = "btn green"  href="<?php echo $this->createUrl('eleme/dpdy',array('companyId'=>$this->companyId));?>">店铺对应</a>
+									<?php else:?>
+									<a class = "btn payonline" href="javascript:;" style="color: #000;">店铺已对应</a>
 									<a class = "btn yellow" href="<?php echo $this->createUrl('eleme/cpdy',array('companyId'=>$this->companyId));?>">菜品对应</a>
+									<?php endif;?>
 									<a class="btn red a" dpid="<?php echo $this->companyId;?>">解绑</a>
 								</td>
 							</tr>

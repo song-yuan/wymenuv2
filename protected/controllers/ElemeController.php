@@ -12,10 +12,12 @@ class ElemeController extends Controller
 			$code = $_GET['code'];
 			$dpid = $_GET['state'];
 			$res = Elm::eleMetoken($code,$dpid);
-			echo $res;
-		 }else{
-			 echo "授权失败";
-		}
+			if($res){
+				echo '已授权成功,请刷新当前页面';
+			}
+		 }
+		 echo '授权失败,请重新授权';
+		 exit;
 	}
 	public function actionElemeOrder(){
 		

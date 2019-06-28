@@ -382,94 +382,7 @@ class Elm
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		return $res;
 	}
-	public static function updateItem($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$spes,$spename){
-		$access_token = self::elemeGetToken($dpid);
-		if(!$access_token){
-			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-		}
-		$app_key = ElmConfig::key;
-		$secret = ElmConfig::secret;
-		$url = ElmConfig::url;
-		if(!empty($spes)){
-			$specsArr = array(array(
-	            			'specId'=>$specId,
-	            			'name'=>"$spename",
-	            			'price'=>$original_price,
-	            			'stock'=>9000,
-	            			'maxStock'=>10000,
-	            			'packingFee'=>0,
-	            			'onShelf'=>1,
-	            			'extendCode'=>$phs_code,
-	            			'barCode'=>$phs_code,
-	            			'weight'=>0
-	            			));
-			foreach ($spes as $spe) {
-				$specItem = array(
-					'specId'=>$spe->specId,
-        			'name'=>"$spe->name",
-        			'price'=>$spe->price,
-        			'stock'=>9000,
-        			'maxStock'=>10000,
-        			'packingFee'=>0,
-        			'onShelf'=>1,
-        			'extendCode'=>$spe->extendCode,
-        			'barCode'=>$spe->barCode,
-        			'weight'=>0
-				);
-				array_push($specsArr, $specItem);
-			}
-			$protocol = array(
-	            "nop" => '1.0.0',
-	            "id" => ElUnit::create_uuid(),
-	            "action" => "eleme.product.item.updateItem",
-	            "token" => $access_token,
-	            "metas" => array(
-	                "app_key" => $app_key,
-	                "timestamp" => time(),
-	            ),
-	            "params" => array(
-	            	'itemId'=>$itemid,
-	            	'categoryId'=>$categoryid,
-	            	'properties'=>array(
-	            		'name'=>$name,
-	            		'specs'=>$specsArr,
-	            	)),
-	        );
-		}else{
-			$protocol = array(
-	            "nop" => '1.0.0',
-	            "id" => ElUnit::create_uuid(),
-	            "action" => "eleme.product.item.updateItem",
-	            "token" => $access_token,
-	            "metas" => array(
-	                "app_key" => $app_key,
-	                "timestamp" => time(),
-	            ),
-	            "params" => array(
-	            	'itemId'=>$itemid,
-	            	'categoryId'=>$categoryid,
-	            	'properties'=>array(
-	            		'name'=>$name,
-	            		'specs'=>array(array(
-	            			'specId'=>$specId,
-	            			'name'=>"",
-	            			'price'=>$original_price,
-	            			'stock'=>9000,
-	            			'maxStock'=>10000,
-	            			'packingFee'=>0,
-	            			'onShelf'=>1,
-	            			'extendCode'=>$phs_code,
-	            			'barCode'=>$phs_code,
-	            			'weight'=>0
-	            			)),
-	            	)),
-	        );
-		}
-        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-        $result =ElUnit::post($url,$protocol);
-        return $result;
-	}
-	public static function updateItem1($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description,$attributes1,$spes,$spename){
+	public static function updateItem($itemid,$dpid,$categoryid,$name,$spes){
 		$access_token = self::elemeGetToken($dpid);
 		if(!$access_token){
 			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
@@ -478,179 +391,28 @@ class Elm
 		$secret = ElmConfig::secret;
 		$url = ElmConfig::url;
 		
-		if(!empty($spes)){
-			$specsArr = array(array(
-            			'specId'=>$specId,
-            			'name'=>"$spename",
-            			'price'=>$original_price,
-            			'stock'=>9000,
-            			'maxStock'=>10000,
-            			'packingFee'=>0,
-            			'onShelf'=>1,
-            			'extendCode'=>$phs_code,
-            			'barCode'=>$phs_code,
-            			'weight'=>0
-            			));
-			foreach ($spes as $spe) {
-				$specItem = array(
-					'specId'=>$spe->specId,
-        			'name'=>"$spe->name",
-        			'price'=>$spe->price,
-        			'stock'=>9000,
-        			'maxStock'=>10000,
-        			'packingFee'=>0,
-        			'onShelf'=>1,
-        			'extendCode'=>$spe->extendCode,
-        			'barCode'=>$spe->barCode,
-        			'weight'=>0
-				);
-				array_push($specsArr, $specItem);
-			}
-			
-			$protocol = array(
-	            "nop" => '1.0.0',
-	            "id" => ElUnit::create_uuid(),
-	            "action" => "eleme.product.item.updateItem",
-	            "token" => $access_token,
-	            "metas" => array(
-	                "app_key" => $app_key,
-	                "timestamp" => time(),
-	            ),
-	            "params" => array(
-	            	'itemId'=>$itemid,
-	            	'categoryId'=>$categoryid,
-	            	'properties'=>array(
-	            		'name'=>$name,
-	            		'description'=>$description,
-	            		'specs'=>$specsArr,
-	            		'attributes'=>$attributes1
-	            	)),
-	        );
-		}else{
-			$protocol = array(
-	            "nop" => '1.0.0',
-	            "id" => ElUnit::create_uuid(),
-	            "action" => "eleme.product.item.updateItem",
-	            "token" => $access_token,
-	            "metas" => array(
-	                "app_key" => $app_key,
-	                "timestamp" => time(),
-	            ),
-	            "params" => array(
-	            	'itemId'=>$itemid,
-	            	'categoryId'=>$categoryid,
-	            	'properties'=>array(
-	            		'name'=>$name,
-	            		'description'=>$description,
-	            		'specs'=>array(array(
-	            			'specId'=>$specId,
-	            			'name'=>"",
-	            			'price'=>$original_price,
-	            			'stock'=>9000,
-	            			'maxStock'=>10000,
-	            			'packingFee'=>0,
-	            			'onShelf'=>1,
-	            			'extendCode'=>$phs_code,
-	            			'barCode'=>$phs_code,
-	            			'weight'=>0
-	            			)),
-	            		'attributes'=>$attributes1
-	            	)),
-	        );
-		}
+		$protocol = array(
+            "nop" => '1.0.0',
+            "id" => ElUnit::create_uuid(),
+            "action" => "eleme.product.item.updateItem",
+            "token" => $access_token,
+            "metas" => array(
+                "app_key" => $app_key,
+                "timestamp" => time(),
+            ),
+            "params" => array(
+            	'itemId'=>$itemid,
+            	'categoryId'=>$categoryid,
+            	'properties'=>array(
+            		'name'=>$name,
+            		'specs'=>$spes,
+            	)),
+        );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
         $result =ElUnit::post($url,$protocol);
         return $result;
 	}
-	public static function updateItem2($itemid,$dpid,$categoryid,$name,$original_price,$phs_code,$specId,$description,$spes,$spename){
-		$access_token = self::elemeGetToken($dpid);
-		if(!$access_token){
-			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
-		}
-		$app_key = ElmConfig::key;
-		$secret = ElmConfig::secret;
-		$url = ElmConfig::url;
-		if(!empty($spes)){
-			$specsArr = array(array(
-	            			'specId'=>$specId,
-	            			'name'=>"$spename",
-	            			'price'=>$original_price,
-	            			'stock'=>9000,
-	            			'maxStock'=>10000,
-	            			'packingFee'=>0,
-	            			'onShelf'=>1,
-	            			'extendCode'=>$phs_code,
-	            			'barCode'=>$phs_code,
-	            			'weight'=>0
-	            			));
-			foreach ($spes as $spe) {
-				$specItem = array(
-					'specId'=>$spe->specId,
-        			'name'=>"$spe->name",
-        			'price'=>$spe->price,
-        			'stock'=>9000,
-        			'maxStock'=>10000,
-        			'packingFee'=>0,
-        			'onShelf'=>1,
-        			'extendCode'=>$spe->extendCode,
-        			'barCode'=>$spe->barCode,
-        			'weight'=>0
-				);
-				array_push($specsArr, $specItem);
-			}
-			$protocol = array(
-	            "nop" => '1.0.0',
-	            "id" => ElUnit::create_uuid(),
-	            "action" => "eleme.product.item.updateItem",
-	            "token" => $access_token,
-	            "metas" => array(
-	                "app_key" => $app_key,
-	                "timestamp" => time(),
-	            ),
-	            "params" => array(
-	            	'itemId'=>$itemid,
-	            	'categoryId'=>$categoryid,
-	            	'properties'=>array(
-	            		'name'=>$name,
-	            		'description'=>$description,
-	            		'specs'=>$specsArr
-	            	)),
-	        );
-		}else{
-			$protocol = array(
-	            "nop" => '1.0.0',
-	            "id" => ElUnit::create_uuid(),
-	            "action" => "eleme.product.item.updateItem",
-	            "token" => $access_token,
-	            "metas" => array(
-	                "app_key" => $app_key,
-	                "timestamp" => time(),
-	            ),
-	            "params" => array(
-	            	'itemId'=>$itemid,
-	            	'categoryId'=>$categoryid,
-	            	'properties'=>array(
-	            		'name'=>$name,
-	            		'description'=>$description,
-	            		'specs'=>array(array(
-	            			'specId'=>$specId,
-	            			'name'=>"",
-	            			'price'=>$original_price,
-	            			'stock'=>9000,
-	            			'maxStock'=>10000,
-	            			'packingFee'=>0,
-	            			'onShelf'=>1,
-	            			'extendCode'=>$phs_code,
-	            			'barCode'=>$phs_code,
-	            			'weight'=>0
-	            			))
-	            	)),
-	        );
-		}
-        $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);
-        $result =ElUnit::post($url,$protocol);
-        return $result;
-	}
+	
 	public static function orderCancel($message){
 		
 	}
@@ -700,9 +462,11 @@ class Elm
 						"timestamp" => time(),
 				),
 				"params" => array(
-						'shopId'=>$shopId,
-						'offset'=>0,
-						'limit'=>299
+						'queryPage'=>array(
+								'shopId'=>$shopId,
+								'offset'=>0,
+								'limit'=>299
+						)
 				),
 		);
 		$protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);

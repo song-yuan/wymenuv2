@@ -24,6 +24,9 @@ class MtOpenNotify
 			if($hasSig){
 				return call_user_func($callback,$data);
 			}
+		}else{
+			echo '200';
+			exit;
 		}
 		return true;
 	}

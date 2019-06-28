@@ -64,6 +64,7 @@ class MtOpenOrder
 		return true;
 	}
 	public static function privacyNumber($dpid){
+		
 		return true;
 	}
 	/**
