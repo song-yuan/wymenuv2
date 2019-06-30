@@ -91,7 +91,7 @@ class MtOpenOrder
 	public static function pullPhoneNumber ($appid,$apppoicode){
 		$timestamp = time();
 		$appSerect = MtOpenUnit::getMtappsecret($appid);
-		$url = MtOpenUnit::MTURL.'order/refund/reject';
+		$url = MtOpenUnit::MTURL.'order/batchPullPhoneNumber';
 		$data = array(
 				'app_id'=>$appid,
 				'timestamp'=>$timestamp,
