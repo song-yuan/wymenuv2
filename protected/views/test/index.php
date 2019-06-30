@@ -1,4 +1,8 @@
 <?php 
-$keys = Yii::app()->redis->get('order-183-2019-05-22 14:42:09-20190522144209003');
-var_dump($keys);
+$appid = 4073;
+$apppoicode = 't_9uCwcElNGj';
+$orderId = '';
+$reason = '售完';
+$reasonCode = 1001;
+$res = MtOpenOrder::cancel($appid, $apppoicode, $orderId, $reason, $reasonCode);
 ?>

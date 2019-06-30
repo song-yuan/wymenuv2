@@ -32,6 +32,51 @@ class MtOpenOrder
 				'app_id'=>$appid,
 				'timestamp'=>$timestamp,
 				'app_poi_codes'=>$apppoicode,
+				'order_id'=>$orderId,
+				'reason'=>$reason,
+				'reason_code'=>$reasonCode,
+		);
+		$url = MtOpenUnit::getUrlStr($url, $data, $appSerect);
+		$result = Curl::https($url);
+		$obj = json_decode($result,true);
+		$data = $obj['data'];
+		if($data=='ok'){
+			return true;
+		}
+		return false;
+	}
+	//订单确认退款请求
+	public static function agree($appid,$apppoicode,$orderId,$reason){
+		$timestamp = time();
+		$appSerect = MtOpenUnit::getMtappsecret($appid);
+		$url = MtOpenUnit::MTURL.'order/refund/agree';
+		$data = array(
+				'app_id'=>$appid,
+				'timestamp'=>$timestamp,
+				'app_poi_codes'=>$apppoicode,
+				'order_id'=>$orderId,
+				'reason'=>$reason
+		);
+		$url = MtOpenUnit::getUrlStr($url, $data, $appSerect);
+		$result = Curl::https($url);
+		$obj = json_decode($result,true);
+		$data = $obj['data'];
+		if($data=='ok'){
+			return true;
+		}
+		return false;
+	}
+	//驳回订单退款申请
+	public static function reject($appid,$apppoicode,$orderId,$reason){
+		$timestamp = time();
+		$appSerect = MtOpenUnit::getMtappsecret($appid);
+		$url = MtOpenUnit::MTURL.'order/refund/reject';
+		$data = array(
+				'app_id'=>$appid,
+				'timestamp'=>$timestamp,
+				'app_poi_codes'=>$apppoicode,
+				'order_id'=>$orderId,
+				'reason'=>$reason
 		);
 		$url = MtOpenUnit::getUrlStr($url, $data, $appSerect);
 		$result = Curl::https($url);
