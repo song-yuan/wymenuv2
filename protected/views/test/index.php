@@ -2,7 +2,7 @@
 function cancel(){
 	$appid = 4073;
 	$apppoicode = 't_9uCwcElNGj';
-	$orderId = '26959143364425973';
+	$orderId = '26959140812816829';
 	$reason = '售完';
 	$reasonCode = 1001;
 	$res = MtOpenOrder::cancel($appid, $apppoicode, $orderId, $reason, $reasonCode);
@@ -26,6 +26,6 @@ function reject(){
 	$res = MtOpenOrder::reject($appid, $apppoicode, $orderId, $reason);
 	var_dump($res);
 }
-reject();
+cancel();
 exit;
 ?>
