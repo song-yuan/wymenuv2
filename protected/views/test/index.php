@@ -17,6 +17,15 @@ function agree(){
 	$res = MtOpenOrder::agree($appid, $apppoicode, $orderId, $reason);
 	var_dump($res);
 }
-agree();
+function reject(){
+	$appid = 4073;
+	$apppoicode = 't_9uCwcElNGj';
+	$orderId = '26959140812816829';
+	$reason = '售完';
+	$reasonCode = 1001;
+	$res = MtOpenOrder::reject($appid, $apppoicode, $orderId, $reason);
+	var_dump($res);
+}
+reject();
 exit;
 ?>
