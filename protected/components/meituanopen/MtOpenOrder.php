@@ -87,6 +87,24 @@ class MtOpenOrder
 		}
 		return false;
 	}
+	//拉取用户真实手机号
+	public static function pullPhoneNumber ($appid,$apppoicode){
+		$timestamp = time();
+		$appSerect = MtOpenUnit::getMtappsecret($appid);
+		$url = MtOpenUnit::MTURL.'order/refund/reject';
+		$data = array(
+				'app_id'=>$appid,
+				'timestamp'=>$timestamp,
+				'app_poi_codes'=>$apppoicode,
+				'offset'=>0,
+				'limit'=>200
+		);
+		$pdata = MtOpenUnit::getPostStr($url, $data, $appSerect);
+		$result = Curl::https($url,$pdata);
+		$obj = json_decode($result,true);
+		$data = $obj['data'];
+		return $data;
+	}
 	public static function order($data){
 		$appid = $data['app_id'];
 		$appPoiCode = $data['app_poi_code'];

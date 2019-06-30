@@ -26,6 +26,12 @@ function reject(){
 	$res = MtOpenOrder::reject($appid, $apppoicode, $orderId, $reason);
 	var_dump($res);
 }
-cancel();
+function pullPhoneNumber(){
+	$appid = 4073;
+	$apppoicode = 't_9uCwcElNGj';
+	$res = MtOpenOrder::pullPhoneNumber($appid, $apppoicode);
+	var_dump($res);
+}
+pullPhoneNumber();
 exit;
 ?>
