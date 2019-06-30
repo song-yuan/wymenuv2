@@ -100,7 +100,7 @@ class MtOpenOrder
 				'limit'=>200
 		);
 		$pdata = MtOpenUnit::getPostStr($url, $data, $appSerect);
-		$result = Curl::https($url,$pdata);
+		$result = Curl::postHttps($url,$pdata);
 		$obj = json_decode($result,true);
 		$data = $obj['data'];
 		return $data;
