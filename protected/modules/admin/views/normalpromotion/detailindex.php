@@ -284,7 +284,7 @@
            
             $.ajax({
             type:'GET',
- 			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/page/",
+ 			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId,'pid'=>$promotionID,'typeId'=>$typeId));?>/id/"+vid+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
             cache:false,

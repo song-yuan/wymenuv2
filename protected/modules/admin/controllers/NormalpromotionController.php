@@ -474,13 +474,11 @@ class NormalpromotionController extends BackendController
 			}
 			$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 			$ids = Yii::app()->request->getParam('id');
-			$is_sync = DataSync::getInitSync();
-			//        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+			$pid = Yii::app()->request->getParam('pid');
 			if(!empty($ids)) {
-				Yii::app()->db->createCommand('update nb_normal_promotion_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id in('.$ids.') and dpid = :companyId')
+				Yii::app()->db->createCommand('update nb_normal_promotion_detail set delete_flag="1" where product_id in('.$ids.') and dpid = :companyId and normal_promotion_id='.$pid)
 				->execute(array( ':companyId' => $this->companyId));
 				Yii::app()->end(json_encode(array("status"=>"success")));
-				//$this->redirect(array('normalpromotion/detailindex' , 'companyId' => $companyId)) ;
 			} else {
 				Yii::app()->user->setFlash('error' , yii::t('app','请选择要移除的项目'));
 				$this->redirect(array('normalpromotion/detailindex' , 'companyId' => $companyId)) ;
