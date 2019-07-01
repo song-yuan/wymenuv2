@@ -273,7 +273,7 @@
 
             $.ajax({
             type:'GET',
- 			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+vid+"/page/",
+ 			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId,'pid'=>$promotionID));?>/id/"+vid+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
             cache:false,
@@ -322,7 +322,7 @@
 
             $.ajax({
             type:'GET',
- 			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+str+"/page/",
+ 			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId,'pid'=>$promotionID));?>/id/"+str+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
             cache:false,
