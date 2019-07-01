@@ -75,9 +75,15 @@ span.tab{
                                 <div class="list_small">设置美团和饿了么是否自动接单</div>
                             </a> 
                         </div>
+                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('waimai/index',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">美团外卖(聚宝盆)</div>
+                                <div class="list_small">设置绑定美团外卖，菜品映射和解除绑定</div>
+                            </a> 
+                        </div>
                         <div style="height: 80px;" class="list col-sm-3 col-xs-12">
                             <a href="<?php echo $this->createUrl('meituan/index',array('companyId'=>$this->companyId));?>">
-                                <div class="list_big">美团外卖</div>
+                                <div class="list_big">美团外卖(开放平台)</div>
                                 <div class="list_small">设置绑定美团外卖，菜品映射和解除绑定</div>
                             </a> 
                         </div>

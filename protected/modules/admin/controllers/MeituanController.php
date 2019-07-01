@@ -10,23 +10,43 @@ class MeituanController extends BackendController
 		$dpid = $this->companyId;
 		if($this->comptype==1){
 			$dpid = $this->company_dpid;
+			$mtconfig = MtOpenUnit::getMtConfig($dpid);
+			$appid = $mtconfig['app_id'];
+			$appSerect = $mtconfig['app_secret'];
+			$url = MtOpenUnit::MTURL.'poi/mget';
+			$data = array(
+					'app_id'=>$appid,
+					'timestamp'=>$timestamp,
+					'app_poi_codes'=>$this->companyId,
+			);
+			$url = MtOpenUnit::getUrlStr($url, $data, $appSerect);
+			$result = Curl::https($url);
+			$obj = json_decode($result,true);
+			$model = $obj['data'];
+		}else{
+			$model = MeituanSetting::model()->find('dpid='.$dpid.' and delete_flag=0');
+			if(Yii::app()->request->isPostRequest){
+				if(empty($model)){
+					$model = new MeituanSetting();
+					$se = new Sequence("meituan_setting");
+					$lid = $se->nextval();
+					$model->lid = $lid;
+					$model->dpid = $dpid;
+					$model->create_at = date('Y-m-d H:i:s',time());
+				}
+				$model->attributes = Yii::app()->request->getPost('MeituanSetting');
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
+				}
+				$this->redirect(array('meituan/index' , 'companyId' => $this->companyId));
+			}
+			if(empty($model)){
+				$model = new MeituanSetting();
+			}
 		}
-		$mtconfig = MtOpenUnit::getMtConfig($dpid);
-		$appid = $mtconfig['app_id'];
-		$appSerect = $mtconfig['app_secret'];
-		$url = MtOpenUnit::MTURL.'poi/mget';
-		$data = array(
-				'app_id'=>$appid,
-				'timestamp'=>$timestamp,
-				'app_poi_codes'=>$this->companyId,
-		);
-		$url = MtOpenUnit::getUrlStr($url, $data, $appSerect);
-		$result = Curl::https($url);
-		$obj = json_decode($result,true);
-		$models = $obj['data'];
 		$this->render('index',array(
 				'companyId'=>$this->companyId,
-				'models'=>$models
+				'model'=>$model
 			));
 	}
 	/**
