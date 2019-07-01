@@ -269,7 +269,7 @@
             alert("您没有权限！");
             return false;
             <?php endif;?>
-            var vid=$(this).attr("id").substr(12,10);
+            var vid=$(this).attr("id").substr(6,10);
 
             $.ajax({
             type:'GET',
