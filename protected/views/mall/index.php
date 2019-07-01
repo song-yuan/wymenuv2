@@ -704,11 +704,11 @@ function getProduct(){
 					product['main_picture'] = defaultNavImg;
 				}
 				if(current){
-					navLiStr += '<li class="" abstract="'+product['category_name']+'"><a href="#st'+product['lid']+'" onselectstart="return false"><img src="'+product['main_picture']+'" class="nav-img"/><span class="nav-span">'+product['category_name']+'</span></a><b></b></li>';
+					navLiStr += '<li class="" abstract=""><a href="#st'+product['lid']+'" onselectstart="return false"><img src="'+product['main_picture']+'" class="nav-img"/><span class="nav-span">'+product['category_name']+'</span></a><b></b></li>';
 				}else{
 					current = true;
 					topTitle = product['category_name'];
-					navLiStr += '<li class="current" abstract="'+product['category_name']+'"><a href="#st'+product['lid']+'" onselectstart="return false"><img src="'+product['main_picture']+'" class="nav-img"/><span class="nav-span">'+product['category_name']+'</span></a><b></b></li>';
+					navLiStr += '<li class="current" abstract=""><a href="#st'+product['lid']+'" onselectstart="return false"><img src="'+product['main_picture']+'" class="nav-img"/><span class="nav-span">'+product['category_name']+'</span></a><b></b></li>';
 				}
 				productStr += '<div class="section" id="st'+product['lid']+'" type="normal"><div class="prt-title">'+product['category_name']+'</div>';
 				var productLists = product['product_list'];
