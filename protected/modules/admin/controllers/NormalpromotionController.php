@@ -476,7 +476,7 @@ class NormalpromotionController extends BackendController
 			$ids = Yii::app()->request->getParam('id');
 			$pid = Yii::app()->request->getParam('pid');
 			if(!empty($ids)) {
-				Yii::app()->db->createCommand('update nb_normal_promotion_detail set delete_flag="1" where product_id in('.$ids.') and dpid = :companyId and normal_promotion_id='.$pid)
+				Yii::app()->db->createCommand('update nb_normal_promotion_detail set delete_flag="1" where product_id in('.$ids.') and dpid = :companyId and normal_promotion_id='.$pid.' and delete_flag=0')
 				->execute(array( ':companyId' => $this->companyId));
 				Yii::app()->end(json_encode(array("status"=>"success")));
 			} else {
