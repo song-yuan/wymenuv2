@@ -49,9 +49,15 @@
 							<td rowspan="<?php echo $model['length'];?>"><?php echo $cateName;?></td>
 							<?php endif;?>
 							<td>
-								<?php echo $m['name'].'('.$sku['spec'].')';?>
+								<?php 
+									if($sku['sku_id']!=''){
+										echo $m['name'].'('.$sku['spec'].')';
+									}else{ 
+										echo $m['name'];
+									}
+								?>
 							</td>
-							<?php if(isset($products[$sku['sku_id']])):?>
+							<?php if(isset($products[$sku['sku_id']])||isset($products[$sku['app_food_code']])):?>
 							<td>
 								<?php echo $products[$sku['sku_id']]['product_name'];?>
 							</td>

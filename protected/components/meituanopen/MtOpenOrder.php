@@ -188,6 +188,9 @@ class MtOpenOrder
 		$proDetail = json_decode($pdetail,true);
 		foreach ($proDetail as $key => $value) {
 			$phsCode =  $value['sku_id'];
+			if($phsCode==''){
+				$phsCode =  $value['app_food_code'];
+			}
 			$price = $value['price'];
 			$amount = $value['quantity'];
 			$sql = 'select 0 as is_set,lid,product_name as name,original_price from nb_product where dpid='.$dpid.' and phs_code="'.$phsCode.'" and delete_flag=0 union select 1 as is_set,lid,set_name as name,set_price as original_price from nb_product_set where dpid='.$dpid.' and pshs_code="'.$phsCode.'" and delete_flag=0 ';

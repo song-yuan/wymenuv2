@@ -120,10 +120,13 @@ class MeituanController extends BackendController
 				'app_poi_code'=>$this->companyId,
 				'name'=>$name,
 				'category_name'=>$cateName,
-				'spec'=>$spec,
 				'app_food_code'=>$appFoodCode,
-				'sku_id'=>$appFoodCode
+				
 		);
+		if($skuid!=''){
+			$data['sku_id'] = $appFoodCode;
+			$data['spec'] = $spec;
+		}
 		$data = MtOpenUnit::getPostStr($url, $data, $appSerect);
 		$result = Curl::postHttps($url,$data);
 		$obj = json_decode($result,true);
