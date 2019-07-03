@@ -57,7 +57,7 @@
 									}
 								?>
 							</td>
-							<?php if(isset($products[$sku['sku_id']])||isset($products[$sku['app_food_code']])):?>
+							<?php if(isset($products[$sku['sku_id']])||isset($products[$m['app_food_code']])):?>
 							<td>
 								<?php echo $products[$sku['sku_id']]['product_name'];?>
 							</td>
