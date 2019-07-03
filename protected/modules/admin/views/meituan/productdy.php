@@ -59,7 +59,14 @@
 							</td>
 							<?php if(($sku['sku_id']!=''&&isset($products[$sku['sku_id']]))||($m['app_food_code']!=''&&isset($products[$m['app_food_code']]))):?>
 							<td>
-								<?php echo $products[$sku['sku_id']]['product_name'];?>
+								<?php 
+									if($sku['sku_id']!=''){
+										echo $products[$sku['sku_id']]['product_name'];
+									}else{
+										echo $products[$m['app_food_code']]['product_name'];
+									}
+									
+								?>
 							</td>
 							<td>
 								<div class="row">
