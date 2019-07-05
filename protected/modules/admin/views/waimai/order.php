@@ -107,7 +107,7 @@
                   </td>
                  </tr>
                  <tr><td>收货人名称:</td><td><?php echo $obj->consignee;?></td></tr>
-                 <tr><td>收货人电话:</td><td><?php echo $obj->phoneList[0];?></td></tr>
+                 <tr><td>收货人电话:</td><td><?php echo isset($obj->phoneList[0])?$obj->phoneList[0]:'';?></td></tr>
                  <tr><td>收货人地址:</td><td><?php echo $obj->deliveryPoiAddress;?></td></tr>
                  <tr><td cospan="2"><button type="button" id="createOrder" class="btn blue">确定</button></td></tr>
                 <?php }else{?>

@@ -661,7 +661,11 @@ class Elm
 		}
 		
 		$me->deliveryPoiAddress = $me->deliveryPoiAddress;
-		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$me->phoneList[0],'tel'=>$me->phoneList[0]));
+		$phone = '';
+		if(!empty($me->phoneList)){
+			$phone = $me->phoneList[0];
+		}
+		$orderArr['order_address'] = array(array('consignee'=>$me->consignee,'street'=>$me->deliveryPoiAddress,'mobile'=>$phone,'tel'=>$phone));
 		$orderArr['order_pay'] = array(array('pay_amount'=>$income,'paytype'=>$orderPayPaytype,'payment_method_id'=>0,'paytype_id'=>0,'remark'=>''));
 		
 		
