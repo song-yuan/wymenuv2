@@ -87,7 +87,7 @@ class InstructController extends BackendController
 		$groupid = Yii::app()->request->getParam('groupid',0);
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('t.dpid=:dpid and t.instruction_id=:groupid and t.delete_flag=0');
-		$criteria->order = 't.lid desc ';
+		$criteria->order = 't.sort asc,t.lid desc';
 		$criteria->params[':dpid']=$this->companyId;
 		$criteria->params[':groupid']=$groupid; 
 		
