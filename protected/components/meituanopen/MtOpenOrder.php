@@ -159,7 +159,7 @@ class MtOpenOrder
 		}
 		$poiReceiveDetail = json_decode($data['detail']);
 		
-		$ocaution = $data['caution'];
+		$ocaution = urldecode($data['caution']);
 		$caution = strstr($ocaution, '收餐人隐私号', TRUE);
 		if($caution===false){
 			$caution = $ocaution;
