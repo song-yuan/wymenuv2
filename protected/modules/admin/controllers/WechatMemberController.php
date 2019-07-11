@@ -509,7 +509,7 @@ class WechatMemberController extends BackendController {
                     ->setCellValue('H'.$j,$v['company_name'])
                     ->setCellValue('I'.$j,$guanzhuri)
                     ->setCellValue('J'.$j,$v['remain_money'])
-                    ->setCellValue('J'.$j,$v['remain_back_money']);
+                    ->setCellValue('K'.$j,$v['remain_back_money']);
                     $j++;
                 }
             }
@@ -518,20 +518,20 @@ class WechatMemberController extends BackendController {
         //冻结窗格
         $objPHPExcel->getActiveSheet()->freezePane('A4');
         //合并单元格
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
-        $objPHPExcel->getActiveSheet()->mergeCells('A2:J2');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:K1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:K2');
         //单元格加粗，居中：
-        $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$j)->applyFromArray($lineBORDER);//大边框格式引用
+        $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$j)->applyFromArray($lineBORDER);//大边框格式引用
         // 将A1单元格设置为加粗，居中
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($linestyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->applyFromArray($linestyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:K3')->applyFromArray($linestyle);
         //加粗字体
-        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:K3')->getFont()->setBold(true);
         //设置字体垂直居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:K3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         //设置字体水平居中
-        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:K3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         //设置每列宽度
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
@@ -544,6 +544,7 @@ class WechatMemberController extends BackendController {
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
         //输出
         $filename="微信会员统计表（".date('m-d',time())."）.xls";
         header('Content-Type: application/vnd.ms-excel');
