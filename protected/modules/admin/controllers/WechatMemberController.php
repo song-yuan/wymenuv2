@@ -294,7 +294,7 @@ class WechatMemberController extends BackendController {
         //会员卡号  手机号
         $cardmobile = Yii::app()->request->getPost('cardmobile',"%");
 
-        $sql = 'select t.lid,t.dpid,t.card_id,t.create_at,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country,t.province,t.city,t.mobile_num,(t.remain_money+t.remain_back_money) as all_money,com.dpid as companyid,com.company_name';
+        $sql = 'select t.lid,t.dpid,t.card_id,t.create_at,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country,t.province,t.city,t.mobile_num,t.remain_money,t.remain_back_money,com.dpid as companyid,com.company_name';
         $sql .=' from nb_brand_user t LEFT JOIN  nb_company com on com.dpid = t.weixin_group ';
         $sql .=' LEFT JOIN nb_brand_user_level tl on tl.dpid = t.dpid and tl.lid = t.user_level_lid ';
         $sql .=' where t.dpid='.$companyId.' and tl.level_type = 1 and tl.delete_flag = 0 and com.delete_flag = 0';
@@ -467,7 +467,8 @@ class WechatMemberController extends BackendController {
         ->setCellValue('G3',yii::t('app','地区(会员)'))
         ->setCellValue('H3',yii::t('app','来源店铺'))
         ->setCellValue('I3',yii::t('app','关注日期'))
-        ->setCellValue('J3',yii::t('app','余额'));
+        ->setCellValue('J3',yii::t('app','充值金额'))
+        ->setCellValue('K3',yii::t('app','返现金额'));
         $j=4;
         if($models){
 
@@ -507,7 +508,8 @@ class WechatMemberController extends BackendController {
                     ->setCellValue('G'.$j,$v['country'].$v['province'].$v['city'])
                     ->setCellValue('H'.$j,$v['company_name'])
                     ->setCellValue('I'.$j,$guanzhuri)
-                    ->setCellValue('J'.$j,$v['all_money']);
+                    ->setCellValue('J'.$j,$v['remain_money'])
+                    ->setCellValue('J'.$j,$v['remain_back_money']);
                     $j++;
                 }
             }
