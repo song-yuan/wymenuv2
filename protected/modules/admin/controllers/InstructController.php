@@ -163,18 +163,18 @@ class InstructController extends BackendController
 	public function actionProductInstruct(){
         $categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
-		$criteria->with = 'productInstruct';
 		if($categoryId!=0)
 		{
 			$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 and t.category_id ='.$categoryId);
 		}else{
 			$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
 		}        
-		$criteria->order = ' lid desc ';
+		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		$categories = $this->getCategories();
 		$pages = new CPagination(Product::model()->count($criteria));
 		$pages->applyLimit($criteria);
+		$criteria->with = 'productInstruct';
 		$models = Product::model()->findAll($criteria);
 		$instruct = array();
 		$instructions = Instruction::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId));
@@ -210,12 +210,12 @@ class InstructController extends BackendController
 	}
 	public function actionTasteInstruct(){
 		$criteria = new CDbCriteria;
-		$criteria->with = 'productInstruct';
 		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
-		$criteria->order = ' lid desc ';
+		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
-		$pages = new CPagination(Product::model()->count($criteria));
+		$pages = new CPagination(Taste::model()->count($criteria));
 		$pages->applyLimit($criteria);
+		$criteria->with = 'productInstruct';
 		$models = Taste::model()->findAll($criteria);
 		$instruct = array();
 		$instructions = Instruction::model()->findAll('dpid=:dpid and delete_flag=0',array(':dpid'=>$this->companyId));
@@ -262,7 +262,7 @@ class InstructController extends BackendController
 	// 对应指令保存
 	private function saveProductInstruction($productId,$instructIds,$isTaste = 0){
 		$sql = 'update nb_product_instruction set delete_flag=1 where dpid='.$this->companyId.' and product_id='.$productId;
-		Yii::app()->db->createCommand($sql)->execute();
+		$res = Yii::app()->db->createCommand($sql)->execute();
 		if(!empty($instructIds)){
 			$sql = 'insert into nb_product_instruction (lid,dpid,create_at,instruction_id,product_id,is_taste) values ';
 			foreach ($instructIds as $id){

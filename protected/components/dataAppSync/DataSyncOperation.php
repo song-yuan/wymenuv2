@@ -1110,6 +1110,7 @@ class DataSyncOperation {
 			$msg = array('status'=>false,'msg'=>'不存在该服务员');
 			return json_encode($msg);
 		}
+		
 		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4,8)';
 		$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
 		if($order){	
