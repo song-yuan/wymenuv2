@@ -45,7 +45,7 @@
 					 		<th>饿了么菜品</th>
 					 		<th colspan="3">收银机关联菜品</th>
 					 	</tr>
-					 	<?php 
+					 	<?php
 					 		foreach ($ecategorys as $ecate):
 					 			$ecid = $ecate['id'];
 					 			$ecateId = 'lid-'.$ecid;
@@ -53,9 +53,11 @@
 					 			if(empty($model)){
 					 				continue;
 					 			}
+
 					 		foreach ($model['data'] as $key=>$m):
 					 			$i = $key;
 					 			$specs = $m['specs'];
+					 			$dspecs = json_encode($specs);
 					 			foreach ($specs as $spec):
 					 			$i++;
 					 	?>
@@ -94,10 +96,10 @@
 											</select>
 										</div>
 										<div class="col-md-6">
-											<select class="form-control" name="product_name">
+											<select class="form-control" name="product_name" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode($dspecs);?>">
 												<option value="" category_id="0">---请选择---</option>
-												<?php foreach ($products as $p):?>
-												<option value="<?php echo $p['phs_code'];?>" category_id="<?php echo $p['category_id'];?>" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode(json_encode($specs));?>"><?php echo $p['product_name'];?></option>
+												<?php foreach ($products as $ph):?>
+												<option value="<?php echo $ph['phs_code'];?>" category_id="<?php echo $ph['category_id'];?>"><?php echo $ph['product_name'];?></option>
 												<?php endforeach;?>
 											</select>
 										</div>
@@ -123,10 +125,10 @@
 											</select>
 										</div>
 										<div class="col-md-6">
-											<select class="form-control" name="product_name">
+											<select class="form-control" name="product_name" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode($dspecs);?>">
 												<option value="" category_id="0">---请选择---</option>
 												<?php foreach ($products as $p):?>
-												<option value="<?php echo $p['phs_code'];?>" category_id="<?php echo $p['category_id'];?>" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode(json_encode($specs));?>"><?php echo $p['product_name'];?></option>
+												<option value="<?php echo $p['phs_code'];?>" category_id="<?php echo $p['category_id'];?>"><?php echo $p['product_name'];?></option>
 												<?php endforeach;?>
 											</select>
 										</div>
@@ -161,12 +163,11 @@ $('select[name="category_name"]').change(function(){
 $('select[name="product_name"]').change(function(){
 	var pcode = $(this).val();
 	if(pcode!=''){
-		var obj = $(this).find('option:selected');
-		var eId = obj.attr('e_id');
-		var eCateId = obj.attr('e_cid');
-		var eName = obj.attr('e_name');
-		var eSpecid = obj.attr('e_spec_id');
-		var eSpec = obj.attr('e_spec');
+		var eId =  $(this).attr('e_id');
+		var eCateId =  $(this).attr('e_cid');
+		var eName =  $(this).attr('e_name');
+		var eSpecid =  $(this).attr('e_spec_id');
+		var eSpec =  $(this).attr('e_spec');
 		$.ajax({
 			url:'<?php echo $this->createUrl('eleme/ajaxProductDy',array('companyId'=>$this->companyId));?>',
 			data:{extendcode:pcode,e_name:eName,e_id:eId,e_cateid:eCateId,e_specid:eSpecid,e_spec:eSpec},
