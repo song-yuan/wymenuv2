@@ -57,6 +57,8 @@
 								<th><?php echo yii::t('app','指令名称');?></th>
 								<th><?php echo yii::t('app','执行时间');?></th>
 								<th><?php echo yii::t('app','指令');?></th>
+								<th><?php echo yii::t('app','等待');?></th>
+								<th><?php echo yii::t('app','查询');?></th>
 								<th><?php echo yii::t('app','排序');?></th>
 								<th><?php echo yii::t('app','添加时间');?></th>
 								<th>&nbsp;</th>
@@ -71,6 +73,8 @@
 								<td ><?php echo $model->instruct_name;?></td>
 								<td ><?php echo $model->time;?></td>
 								<td><?php echo $model->instruct;?></td>
+								<td><?php echo $model->is_waiting;?></td>
+								<td><?php echo $model->is_enquire;?></td>
 								<td><?php echo $model->sort;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
