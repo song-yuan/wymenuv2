@@ -86,8 +86,8 @@ class MeituanController extends BackendController
 				array_push($models[$cateName]['data'], $v);
 			}
 		}
-		$category = $this->getCategory($dpid);
-		$product = $this->getProduct($dpid); 
+		$category = $this->getCategory($this->companyId);
+		$product = $this->getProduct($this->companyId); 
 		$this->render('productdy',array(
 				'companyId'=>$this->companyId,
 				'models'=>$models,

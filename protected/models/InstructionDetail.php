@@ -45,7 +45,7 @@ class InstructionDetail extends CActiveRecord
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, instruction_id, number, instruct_name, time, instruct, sort, is_waiting, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, instruction_id, number, instruct_name, time, instruct, sort, is_waiting, is_enquire, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,6 +78,7 @@ class InstructionDetail extends CActiveRecord
 			'instruct' => '指令',
 			'sort' => '排序',
 			'is_waiting' => '是否等待',
+			'is_enquire' => '是否查询',
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => 'Is Sync',
 		);
@@ -111,7 +112,8 @@ class InstructionDetail extends CActiveRecord
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('instruct',$this->instruct,true);
 		$criteria->compare('sort',$this->sort,true);
-		$criteria->compare('is_waiting',$this->delete_flag,true);
+		$criteria->compare('is_waiting',$this->is_waiting,true);
+		$criteria->compare('is_enquire',$this->is_enquire,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
