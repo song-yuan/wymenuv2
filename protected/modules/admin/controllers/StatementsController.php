@@ -1110,18 +1110,15 @@ class StatementsController extends BackendController
 			$sql = 'select k.* from(select t.create_at,t1.selfcode,t1.name,t.type,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
 
 		}else if($text==2){
-
-                     if($com['type']==0){
-			$sql = 'select k.* from(select t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t.recharge_money,t.cashback_num  from nb_recharge_record t ,nb_brand_user t1'
+           if($com['type']==0){
+				$sql = 'select k.* from(select t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t.recharge_money,t.cashback_num  from nb_recharge_record t ,nb_brand_user t1'
                                 . '  where t.brand_user_lid = t1.lid and  t1.dpid =  t.dpid  and '
                                 . '  t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid ='.$companyId.') k';
-
-                     }else{
-
-                     $sql = 'select k.* from(select t1.card_id,t1.user_name,t1.nickname,t.recharge_money,t.cashback_num ,com.company_name from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
+            }else{
+               	$sql = 'select k.* from(select t1.card_id,t1.user_name,t1.nickname,t.recharge_money,t.cashback_num ,com.company_name from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
                              . '   where  t.brand_user_lid = t1.lid and t1.dpid='.$com['comp_dpid'].' and t1.weixin_group = '.$companyId.' and com.dpid = t1.weixin_group and  '
                              . '  t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$com['comp_dpid'].') k';
-                     }
+            }
 		}else{
 			//$money = "0";
 			//传统卡充值
@@ -5699,15 +5696,18 @@ class StatementsController extends BackendController
 		$db = Yii::app()->db;
 		if($text==1){
 			$sql = 'select k.* from(select t1.selfcode,t1.name,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
-			//var_dump($sql);exit;
 		}
 		//传统卡充值
-		//$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
-		//$money = Yii::app()->db->createCommand($sql)->queryRow();
-		//var_dump($models);exit;
 		if($text==2){
-			$sql = 'select k.* from(select t1.card_id,t1.user_name,t.recharge_money,t.cashback_num from nb_recharge_record t left join nb_brand_user t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid ) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')) k';
-			//var_dump($sql);exit;
+			if($this->comptype==0){
+				$sql = 'select k.* from(select t1.card_id,t1.user_name,t1.nickname,t1.weixin_group,t.recharge_money,t.cashback_num  from nb_recharge_record t ,nb_brand_user t1'
+                                . '  where t.brand_user_lid = t1.lid and  t1.dpid =  t.dpid  and '
+                                . '  t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid ='.$this->companyId.') k';
+            }else{
+               	$sql = 'select k.* from(select t1.card_id,t1.user_name,t1.nickname,t.recharge_money,t.cashback_num ,com.company_name from nb_recharge_record t,nb_brand_user t1 ,nb_company com'
+                             . '   where  t.brand_user_lid = t1.lid and t1.dpid='.$this->company_dpid.' and t1.weixin_group = '.$this->companyId.' and com.dpid = t1.weixin_group and  '
+                             . '  t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid = '.$this->company_dpid.') k';
+            }
 		}
 		if($text==3){
 			//$money = "0";
