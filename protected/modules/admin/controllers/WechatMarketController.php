@@ -295,7 +295,7 @@ class WechatMarketController extends BackendController {
 						$data = array();
 						foreach ($openids as $openid){
 							$dataTemp = array(
-									'touser'=>$openId,
+									'touser'=>$openid,
 									'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
 									'first'=>'恭喜你,已成功获取现金券一张',
 									'keyword1'=>$validay.'至'.$colseday,
