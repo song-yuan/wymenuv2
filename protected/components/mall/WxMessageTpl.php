@@ -64,25 +64,25 @@ class WxMessageTpl
 							)
 					)
 			);
-			if($data['keyword1']){
+			if(isset($data['keyword1'])){
 				$megTplData['data']['keyword1']['value'] = $data['keyword1'];
 			}else{
 				unset($megTplData['data']['keyword1']);
 			}
 			
-			if($data['keyword2']){
+			if(isset($data['keyword2'])){
 				$megTplData['data']['keyword2']['value'] = $data['keyword2'];
 			}else{
 				unset($megTplData['data']['keyword2']);
 			}
 			
-			if($data['keyword3']){
+			if(isset($data['keyword3'])){
 				$megTplData['data']['keyword3']['value'] = $data['keyword3'];
 			}else{
 				unset($megTplData['data']['keyword3']);
 			}
 			
-			if($data['keyword4']){
+			if(isset($data['keyword4'])){
 				$megTplData['data']['keyword4']['value'] = $data['keyword4'];
 			}else{
 				unset($megTplData['data']['keyword4']);
