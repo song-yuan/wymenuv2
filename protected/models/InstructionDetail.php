@@ -41,7 +41,7 @@ class InstructionDetail extends CActiveRecord
 			array('instruct', 'length', 'max'=>64),
 			array('sort', 'length', 'max'=>3),
 			array('is_sync', 'length', 'max'=>50),
-			array('is_waiting, delete_flag', 'length', 'max'=>2),
+			array('is_waiting, is_enquire, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
