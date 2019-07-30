@@ -292,11 +292,9 @@ class WxCupon
 					$data = array(
 							'touser'=>$openId,
 							'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
-							'first'=>'现金券已经领取成功',
-							'keyword1'=>$cupon['cupon_money'].'元现金券一张',
-							'keyword2'=>$sourceStr,
-							'keyword3'=>$closeDay,
-							'keyword4'=>$cupon['cupon_abstract'],
+							'first'=>'恭喜你,已成功获取现金券一张',
+							'keyword1'=>$validDay.'至'.$closeDay,
+							'keyword2'=>$cupon['cupon_money'].'元现金券一张',
 							'remark'=>'如果有任何疑问,欢迎拨打电话'.$company['telephone'].'咨询'
 					);
 					new WxMessageTpl($dpid,1,$data);
