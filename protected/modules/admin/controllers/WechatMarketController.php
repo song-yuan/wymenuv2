@@ -307,7 +307,7 @@ class WechatMarketController extends BackendController {
 									'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
 									'first'=>'恭喜你,已成功获取现金券'.$renum.'张',
 									'keyword1'=>$validay.'至'.$colseday,
-									'keyword2'=>$cupons['cupon_money'].'元现金券一张',
+									'keyword2'=>$cupons['cupon_money'].'元现金券'.$renum.'张',
 									'remark'=>'如果有任何疑问,请到店里咨询'
 							);
 							array_push($data, $dataTemp);
