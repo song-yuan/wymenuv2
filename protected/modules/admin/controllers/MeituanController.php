@@ -25,23 +25,22 @@ class MeituanController extends BackendController
 			$model = $obj['data'];
 		}else{
 			$model = MeituanSetting::model()->find('dpid='.$dpid.' and delete_flag=0');
+			if(!$model){
+				$model = new MeituanSetting();
+			}
 			if(Yii::app()->request->isPostRequest){
-				if(empty($model)){
-					$model = new MeituanSetting();
-					$se = new Sequence("meituan_setting");
-					$lid = $se->nextval();
-					$model->lid = $lid;
-					$model->dpid = $dpid;
-					$model->create_at = date('Y-m-d H:i:s',time());
-				}
+				$model = new MeituanSetting();
+				$se = new Sequence("meituan_setting");
+				$lid = $se->nextval();
+				$model->lid = $lid;
+				$model->dpid = $dpid;
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
 				$model->attributes = Yii::app()->request->getPost('MeituanSetting');
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
 				}
 				$this->redirect(array('meituan/index' , 'companyId' => $this->companyId));
-			}
-			if(empty($model)){
-				$model = new MeituanSetting();
 			}
 		}
 		$this->render('index',array(
