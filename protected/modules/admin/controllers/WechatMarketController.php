@@ -245,6 +245,7 @@ class WechatMarketController extends BackendController {
 		public function actionStorsentwxcard(){
 			$plids = Yii::app()->request->getParam('plids');
 			$users = Yii::app()->request->getParam('users');
+			$repeat = Yii::app()->request->getParam('repeat',0);
 			$dpid = $this->companyId;
 			$materialnums = array();
 			$materialnums = explode(';',$plids);
@@ -274,10 +275,13 @@ class WechatMarketController extends BackendController {
 						$colseday = date('Y-m-d H:i:s',strtotime($validay.'+'.$cupons['day'].' day'));
 					}
 					
-					$sql = 'select brand_user_lid from nb_cupon_branduser where cupon_id='.$plid.' and brand_user_lid in ('.$users.')';
-					$cbuserIds = $db->createCommand($sql)->queryColumn();
-					
-					$leftUserIds = array_diff($userarrays, $cbuserIds);
+					if(!$repeat){
+						$sql = 'select brand_user_lid from nb_cupon_branduser where cupon_id='.$plid.' and brand_user_lid in ('.$users.')';
+						$cbuserIds = $db->createCommand($sql)->queryColumn();
+						$leftUserIds = array_diff($userarrays, $cbuserIds);
+					}else{
+						$leftUserIds = $userarrays;
+					}
 					if(!empty($leftUserIds)){
 						$sql = 'insert into nb_cupon_branduser (lid,dpid,create_at,update_at,cupon_id,cupon_source,to_group,brand_user_lid,valid_day,close_day,is_used) VALUES';
 						foreach ($leftUserIds as $userId){

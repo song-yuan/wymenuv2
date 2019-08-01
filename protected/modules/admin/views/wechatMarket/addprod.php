@@ -138,6 +138,11 @@
 		float: right;
 		margin: 10px 10px 0px 0px;
 	}
+	.addsave select{
+		font-size: 18px;
+		padding: 4px 10px;
+		background-color: #6beaff;
+	}
 	.addsave button{
 		font-size: 18px;
 		padding: 4px 10px;
@@ -194,7 +199,13 @@
 
 					</div>
 				</div>
-				<div class="addsave"style="float: right;"><button id="add_save">发送</button></div>
+				<div class="addsave">
+					<select name="repeat">
+						<option value="0">不可重复领取</option>
+						<option value="1">可以重复领取</option>
+					</select>
+					<button id="add_save">发送</button>
+				</div>
 			</div>
 			</div>
 			<div class="pageend">
@@ -235,9 +246,11 @@ $(document).ready(function(){
 		if(plids!=''){
 			plids = plids.substr(0,plids.length-1);//除去最后一个“;”
         }else{
-           	 alert("<?php echo yii::t('app','请至少选择一项！！！');?>");
-           	 return false;
+        	layer.closeAll('loading');
+           	alert("<?php echo yii::t('app','请至少选择一项！！！');?>");
+           	return false;
         }
+        var repeat = $('select[name="repeat"]').val();
 		var url = "<?php echo $this->createUrl('wechatMarket/storsentwxcard',array('companyId'=>$this->companyId));?>";
         $.ajax({
             url:url,
@@ -245,6 +258,7 @@ $(document).ready(function(){
             data:{
             	'plids':plids,
             	'users':users,
+            	'repeat':repeat,
             },
             dataType: "json",
             success:function(msg){
@@ -257,10 +271,6 @@ $(document).ready(function(){
                 }else{
                     alert("发送失败");
                 }
-            },
-            error: function(msg){
-                var data=msg;
-                alert(data.msg);
             }
         });
 	});
