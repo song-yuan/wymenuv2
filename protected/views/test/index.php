@@ -1,16 +1,16 @@
 <?php 
 function cancel(){
-	$appid = 4073;
-	$apppoicode = 't_9uCwcElNGj';
-	$orderId = '26959140812816829';
+	$appid = 4190;
+	$apppoicode = 't_ADV1kPfiDx';
+	$orderId = '26964223528475184';
 	$reason = '售完';
 	$reasonCode = 1001;
 	$res = MtOpenOrder::cancel($appid, $apppoicode, $orderId, $reason, $reasonCode);
 	var_dump($res);
 }
 function agree(){
-	$appid = 4073;
-	$apppoicode = 't_9uCwcElNGj';
+	$appid = 4190;
+	$apppoicode = 't_ADV1kPfiDx';
 	$orderId = '26959143173839162';
 	$reason = '售完';
 	$reasonCode = 1001;
@@ -18,8 +18,8 @@ function agree(){
 	var_dump($res);
 }
 function reject(){
-	$appid = 4073;
-	$apppoicode = 't_9uCwcElNGj';
+	$appid = 4190;
+	$apppoicode = 't_ADV1kPfiDx';
 	$orderId = '26959140812816829';
 	$reason = '售完';
 	$reasonCode = 1001;
@@ -27,11 +27,11 @@ function reject(){
 	var_dump($res);
 }
 function pullPhoneNumber(){
-	$appid = 4073;
-	$apppoicode = 't_9uCwcElNGj';
+	$appid = 4190;
+	$apppoicode = 't_ADV1kPfiDx';
 	$res = MtOpenOrder::pullPhoneNumber($appid, $apppoicode);
 	var_dump($res);
 }
-pullPhoneNumber();
+cancel();
 exit;
 ?>
