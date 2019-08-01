@@ -248,7 +248,6 @@ class AlipayController extends Controller
 		$adminId = Yii::app()->request->getParam('admin_id');
 		$outTradeNo = Yii::app()->request->getParam('out_trade_no');
 		$refundAmount = Yii::app()->request->getParam('refund_fee');
-		echo $refundAmount;exit;
 		$this->render('refund',array('dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'refund_amount'=>$refundAmount,'poscode'=>$poscode));
     }
    // 手机订单支付

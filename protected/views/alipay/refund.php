@@ -16,7 +16,7 @@ if(isset($admin_id) && $admin_id != "" ){
 }
 if(isset($out_trade_no) && $out_trade_no != ""){
 	//第三方应用授权令牌,商户授权系统商开发模式下使用
-	if($this->compaychannel=='2'){
+	if($this->compaychannel['pay_channel']=='2'){
 		$result = SqbPay::refund(array(
 				'device_id'=>$poscode,
 				'refund_amount'=>''.$refund_amount*100,
@@ -29,7 +29,7 @@ if(isset($out_trade_no) && $out_trade_no != ""){
 		}else{
 			$msg = array('status'=>false,'msg'=>'支付宝退款失败!!!');
 		}
-	}elseif ($this->compaychannel=='3'){
+	}elseif ($this->compaychannel['pay_channel']=='3'){
 		$mtr = MtpConfig::MTPAppKeyMid($dpid);
 		$mts = explode(',',$mtr);
 		$merchantId = $mts[0];
