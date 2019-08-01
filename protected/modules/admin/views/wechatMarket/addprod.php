@@ -204,6 +204,11 @@
 						<option value="0">不可重复领取</option>
 						<option value="1">可以重复领取</option>
 					</select>
+					<select name="re-number" style="display:none;">
+						<?php for ($i=1;$i<11;$i++):?>
+						<option><?php echo $i;?></option>
+						<?php endfor;?>
+					</select>
 					<button id="add_save">发送</button>
 				</div>
 			</div>
@@ -230,7 +235,15 @@ $(document).ready(function(){
 			$(this).find('.wxcardactive').removeClass('uhide');
 			$(this).addClass('activechecked');
 		}
-	})
+	});
+	$('select[name="repeat"]').change(function(){
+		var v = $(this).val();
+		if(v=='0'){
+			$('select[name="re-number"]').hide();
+		}else{
+			$('select[name="re-number"]').show();
+		}
+	});
 	$('#add_save').on('click', function(){
 		layer.load(2);
 		var plids = '';
@@ -251,6 +264,7 @@ $(document).ready(function(){
            	return false;
         }
         var repeat = $('select[name="repeat"]').val();
+        var renum = $('select[name="re-number"]').val();
 		var url = "<?php echo $this->createUrl('wechatMarket/storsentwxcard',array('companyId'=>$this->companyId));?>";
         $.ajax({
             url:url,
@@ -259,6 +273,7 @@ $(document).ready(function(){
             	'plids':plids,
             	'users':users,
             	'repeat':repeat,
+            	'renum':renum
             },
             dataType: "json",
             success:function(msg){

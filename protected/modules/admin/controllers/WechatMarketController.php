@@ -246,6 +246,7 @@ class WechatMarketController extends BackendController {
 			$plids = Yii::app()->request->getParam('plids');
 			$users = Yii::app()->request->getParam('users');
 			$repeat = Yii::app()->request->getParam('repeat',0);
+			$renum = Yii::app()->request->getParam('renum',1);
 			$dpid = $this->companyId;
 			$materialnums = array();
 			$materialnums = explode(';',$plids);
@@ -276,6 +277,7 @@ class WechatMarketController extends BackendController {
 					}
 					
 					if(!$repeat){
+						$renum = 1;
 						$sql = 'select brand_user_lid from nb_cupon_branduser where cupon_id='.$plid.' and brand_user_lid in ('.$users.')';
 						$cbuserIds = $db->createCommand($sql)->queryColumn();
 						$leftUserIds = array_diff($userarrays, $cbuserIds);
@@ -285,9 +287,11 @@ class WechatMarketController extends BackendController {
 					if(!empty($leftUserIds)){
 						$sql = 'insert into nb_cupon_branduser (lid,dpid,create_at,update_at,cupon_id,cupon_source,to_group,brand_user_lid,valid_day,close_day,is_used) VALUES';
 						foreach ($leftUserIds as $userId){
-							$se = new Sequence("cupon_branduser");
-							$id = $se->nextval();
-							$sql .= '('.$id.','.$dpid.',"'.$nowDate.'","'.$nowDate.'",'.$plid.',"2","3",'.$userId.',"'.$validay.'","'.$colseday.'","1"),';
+							for($i=0;$i<$renum;$i++){
+								$se = new Sequence("cupon_branduser");
+								$id = $se->nextval();
+								$sql .= '('.$id.','.$dpid.',"'.$nowDate.'","'.$nowDate.'",'.$plid.',"2","3",'.$userId.',"'.$validay.'","'.$colseday.'","1"),';
+							}
 						}
 						$sql = rtrim($sql,',');
 						$db->createCommand($sql)->execute();
@@ -301,7 +305,7 @@ class WechatMarketController extends BackendController {
 							$dataTemp = array(
 									'touser'=>$openid,
 									'url'=>Yii::app()->createAbsoluteUrl('/user/ticket',array('companyId'=>$dpid)),
-									'first'=>'恭喜你,已成功获取现金券一张',
+									'first'=>'恭喜你,已成功获取现金券'.$renum.'张',
 									'keyword1'=>$validay.'至'.$colseday,
 									'keyword2'=>$cupons['cupon_money'].'元现金券一张',
 									'remark'=>'如果有任何疑问,请到店里咨询'
