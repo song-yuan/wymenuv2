@@ -557,6 +557,7 @@ function reset_cupon(){
 	$('.cart-price').html(money);
 	$('#total').html(money);
 	$('#total').attr('total',money);
+	$('.cart-discount').html(memdis);
 	$('.cupon').find('.copun-rt').html(cuponNum+'张可用');
 }
 function reset_fullsent(){
@@ -591,8 +592,10 @@ function reset_fullsent(){
 		}
 	}
 	money = money.toFixed(2);
+	$('.cart-price').html(money);
 	$('#total').html(money);
 	$('#total').attr('total',money);
+	$('.cart-discount').html(memdis);
 }
 window.onload = emptyCart;
 $(document).ready(function(){
@@ -836,8 +839,10 @@ $(document).ready(function(){
 			}
 		}
 		money = money.toFixed(2);
+		$('.cart-price').html(money);
 		$('#total').html(money);
 		$('#total').attr('total',money);
+		$('.cart-discount').html(sentPrice);
 		
 		layer.close(sent_layer);
 	});
