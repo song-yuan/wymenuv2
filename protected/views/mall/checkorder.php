@@ -449,7 +449,7 @@
 				$sentProPrice = number_format($sent['original_price'] - $sent['promotion_money'],2);
 			}
 		?>
-		<div class="item useSent" sent-type="0" sent-id="<?php echo $fullsent['lid'];?>" sent-product-id="<?php echo $sent['lid'];?>" sent-price="<?php echo $sentProPrice;?>">
+		<div class="item useSent" sent-type="0" sent-id="<?php echo $fullsent['lid'];?>" sent-product-id="<?php echo $sent['lid'];?>" dis-price="<?php echo number_format($sent['original_price'] - $sentProPrice,2);?>" sent-price="<?php echo $sentProPrice;?>">
 			<div class="item-top">
 				<div class="item-top-left"><?php echo $sent['product_name'];?></div>
 				<div class="item-top-right"><span style="font-size:15px;color:gray;"><strike>￥<?php echo $sent['original_price'];?></strike></span> <span>￥<?php echo $sentProPrice;?></span></div>
@@ -827,14 +827,15 @@ $(document).ready(function(){
 		$('input[name="fullsent"]').val(sval);
 		if(sentType=='0'){
 			var sentPrice = $(this).attr('sent-price');
+			var disPrice = $(this).attr('dis-price');
 			$('.noSent').attr('sent-price',sentPrice);
 			$('.fullsent').find('.copun-rt').html(pName+'￥'+sentPrice);
 			money = parseFloat(total) + parseFloat(sentPrice);
 		}else{
-			var sentPrice = $(this).attr('minus-price');
+			var disPrice = $(this).attr('minus-price');
 			$('.noSent').attr('sent-price',sentPrice);
-			$('.fullsent').find('.copun-rt').html('-￥'+sentPrice);
-			money = parseFloat(total) - parseFloat(sentPrice);
+			$('.fullsent').find('.copun-rt').html('-￥'+disPrice);
+			money = parseFloat(total) - parseFloat(disPrice);
 		}
 
 		if(yue > 0){
@@ -848,7 +849,7 @@ $(document).ready(function(){
 		$('.cart-price').html(money);
 		$('#total').html(money);
 		$('#total').attr('total',money);
-		$('.cart-discount').html(sentPrice);
+		$('.cart-discount').html(disPrice);
 		
 		layer.close(sent_layer);
 	});
