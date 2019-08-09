@@ -149,7 +149,7 @@ class MallController extends Controller
 		$availables = $carts['available'];
 		$original = WxCart::getCartOrigianPrice($availables); // 购物车原价
 		$price = WxCart::getCartPrice($availables,$levelDiscount);// 购物车价格 会员折扣后价格
-		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables,$levelDiscount);// 购物车可使用优惠券的价格
+		$canuseCuponPrice = WxCart::getCartUnDiscountPrice($availables,1);// 购物车可使用优惠券的价格
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);//全单口味
 		$memdisprice = $original - $price;
 		$productCodeArr = WxCart::getCartCanCuponProductCode($availables);
@@ -158,20 +158,11 @@ class MallController extends Controller
 		// 如果没普通优惠活动  可满减满送
 		$fullsent = array();
 		if(!$cartObj->haspormotion){
-			$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, $this->type);
-			if(!empty($fullsent)){
-				if($fullsent['full_type']){
-					$minusprice = $price - $fullsent['extra_cost'];
-					$canuseCuponPrice = $canuseCuponPrice - $fullsent['extra_cost'];
-					if($minusprice > 0){
-						$price = $minusprice;
-					}else{
-						$price = 0;
-					}
-				}
-			}
+			$fullsent = WxFullSent::canUseFullsent($this->companyId, $original, $this->type);
 		}
+		
 		$cupons = WxCupon::getUserAvaliableCupon($productCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
+		
 		if($this->type!=6){
 			$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
 			$isPackingFee = WxCompanyFee::get(2,$this->companyId);
@@ -184,7 +175,7 @@ class MallController extends Controller
 			$isFreightFee = 0;
 			$address = array();
 		}
-		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'memdisprice'=>$memdisprice,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'levelDiscount'=>$levelDiscount,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'fullsent'=>$fullsent,'msg'=>$msg));
+		$this->render('checkorder',array('company'=>$this->company,'models'=>$availables,'disables'=>$disables,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'original'=>$original,'price'=>$price,'memdisprice'=>$memdisprice,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'levelDiscount'=>$levelDiscount,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'isMustYue'=>$isMustYue,'fullsent'=>$fullsent,'msg'=>$msg));
 	}
 	/**
 	 * 

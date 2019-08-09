@@ -421,7 +421,11 @@ class WxOrder
 			}
 			$orderArr['taste'] = $otArr;
 		}
-		$levelDiscount = $this->levelDiscount;
+		if($this->cupon){
+			$levelDiscount = 1;
+		}else{
+			$levelDiscount = $this->levelDiscount;
+		}
 		// mainId 用于区分不同明细的套餐
 		$mainId = 1;
 		foreach($this->cart as $cart){
