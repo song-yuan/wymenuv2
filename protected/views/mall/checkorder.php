@@ -736,7 +736,7 @@ $(document).ready(function(){
 		var money = 0;
 
 		if($('.userdiscount').length > 0){
-			$('.userdiscount').hide();
+			$('.userdiscount').show();
 		}
 		$('#cuponList .item').removeClass('on');
 		$('input[name="cupon"]').val(userCuponId);
