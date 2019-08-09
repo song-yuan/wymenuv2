@@ -524,78 +524,84 @@ function emptyCart(){
 }
 function reset_cupon(){
 	var obj = $('#cuponList .item.noCupon');
-	var cuponNum = obj.attr('cupon-num');
-	var userCuponId = obj.attr('user-cupon-id');
-	var total = $('#total').attr('original');
-	var memdis = $('#total').attr('memdiscount');
-	var yue = parseFloat($('#yue').attr('yue'));
-	var money = 0;
+	if(obj.length > 0){
+		var cuponNum = obj.attr('cupon-num');
+		var userCuponId = obj.attr('user-cupon-id');
+		var total = $('#total').attr('original');
+		var memdis = $('#total').attr('memdiscount');
+		var yue = parseFloat($('#yue').attr('yue'));
+		var money = 0;
 
-	if($('.userdiscount').length > 0){
-		$('.userdiscount').show();
-	}
-	$('#cuponList .item').removeClass('on');
-	$('input[name="cupon"]').val(userCuponId);
-	
-	$(this).attr('min-money',0);
-	$(this).attr('cupon-money',0);
-	
-	money = parseFloat(total) - parseFloat(memdis);
-	if(money > 0){
-		money = money;
-	}else{
-		money = 0;
-	}
-	if(yue > 0){
-		if(yue > money){
-			$('.use-yue').html(money.toFixed(2));
-		}else{
-			$('.use-yue').html(yue.toFixed(2));
+		if($('.userdiscount').length > 0){
+			$('.userdiscount').show();
 		}
+		$('#cuponList .item').removeClass('on');
+		$('input[name="cupon"]').val(userCuponId);
+		
+		$(this).attr('min-money',0);
+		$(this).attr('cupon-money',0);
+		
+		money = parseFloat(total) - parseFloat(memdis);
+		if(money > 0){
+			money = money;
+		}else{
+			money = 0;
+		}
+		if(yue > 0){
+			if(yue > money){
+				$('.use-yue').html(money.toFixed(2));
+			}else{
+				$('.use-yue').html(yue.toFixed(2));
+			}
+		}
+		money = money.toFixed(2);
+		$('.cart-price').html(money);
+		$('#total').html(money);
+		$('#total').attr('total',money);
+		$('.cart-discount').html(memdis);
+		$('.cupon').find('.copun-rt').html(cuponNum+'张可用&nbsp;');
+	}else{
+		$('.cupon').find('.copun-rt').html('暂无可用&nbsp;');
 	}
-	money = money.toFixed(2);
-	$('.cart-price').html(money);
-	$('#total').html(money);
-	$('#total').attr('total',money);
-	$('.cart-discount').html(memdis);
-	$('.cupon').find('.copun-rt').html(cuponNum+'张可用');
 }
 function reset_fullsent(){
 	var obj = $('#sentList .item.noSent');
-	var sval = '0-0-0';
-	var sentType = obj.attr('sent-type');
-	var yue = parseFloat($('#yue').attr('yue'));
-	var total = $('#total').attr('original');
-	var memdis = $('#total').attr('memdiscount');
-	var money = 0;
-	$('#sentList .item').removeClass('on');
+	if(obj.length > 0){
+		var sval = '0-0-0';
+		var sentType = obj.attr('sent-type');
+		var yue = parseFloat($('#yue').attr('yue'));
+		var total = $('#total').attr('original');
+		var memdis = $('#total').attr('memdiscount');
+		var money = 0;
+		$('#sentList .item').removeClass('on');
 
-	if($('.userdiscount').length > 0){
-		$('.userdiscount').show();
-	}
-	$('input[name="fullsent"]').val(sval);
-	$(this).attr('sent-price','0.00');
-
-	if(sentType=='0'){
-		var sentPrice = obj.attr('sent-price');
-		money = parseFloat(total) - parseFloat(memdis);
-		$('.fullsent').find('.copun-rt').html('选择产品&nbsp;');
-	}else{
-		money = parseFloat(total) - parseFloat(memdis);
-		$('.fullsent').find('.copun-rt').html('可选&nbsp;');
-	}
-	if(yue > 0){
-		if(yue > money){
-			$('.use-yue').html(money.toFixed(2));
-		}else{
-			$('.use-yue').html(yue.toFixed(2));
+		if($('.userdiscount').length > 0){
+			$('.userdiscount').show();
 		}
+		$('input[name="fullsent"]').val(sval);
+		$(this).attr('sent-price','0.00');
+
+		if(sentType=='0'){
+			var sentPrice = obj.attr('sent-price');
+			money = parseFloat(total) - parseFloat(memdis);
+			$('.fullsent').find('.copun-rt').html('选择产品&nbsp;');
+		}else{
+			money = parseFloat(total) - parseFloat(memdis);
+			$('.fullsent').find('.copun-rt').html('可选&nbsp;');
+		}
+		if(yue > 0){
+			if(yue > money){
+				$('.use-yue').html(money.toFixed(2));
+			}else{
+				$('.use-yue').html(yue.toFixed(2));
+			}
+		}
+		money = money.toFixed(2);
+		$('.cart-price').html(money);
+		$('#total').html(money);
+		$('#total').attr('total',money);
+		$('.cart-discount').html(memdis);
 	}
-	money = money.toFixed(2);
-	$('.cart-price').html(money);
-	$('#total').html(money);
-	$('#total').attr('total',money);
-	$('.cart-discount').html(memdis);
 }
 window.onload = emptyCart;
 $(document).ready(function(){
