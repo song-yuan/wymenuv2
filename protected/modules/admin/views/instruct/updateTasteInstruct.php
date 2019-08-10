@@ -44,6 +44,7 @@
 						),
 					)); ?>
 						<div class="form-body">
+							<?php foreach ($models as $model):?>
 							<div class="form-group">
 								<?php echo $form->label($model, 'name',array('class' => 'col-md-3 control-label'));?>
 								<div class="col-md-4">
@@ -51,6 +52,20 @@
 									<?php echo $form->error($model, 'name' )?>
 								</div>
 							</div>
+							<?php endforeach;?>
+							<?php if(count($models) < 3):?>
+							<div class="form-group">
+								<label  class="col-md-3 control-label"><?php echo yii::t('app','口味名称');?></label>
+								<div class="col-md-4">
+									<select class="form-control" name="Taste[]">
+									<option value="0">---请选择---</option>
+										<?php foreach ($tastes as $taste):?>
+										<option value="<?php echo (int)$taste['lid']?>"><?php echo $taste['name']?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+							</div>
+							<?php endif;?>
 							<div class="form-group">
 								<label  class="col-md-3 control-label"><?php echo yii::t('app','指令选择');?></label>
 								<div class="col-md-8">
@@ -64,7 +79,7 @@
 							<div class="form-actions fluid">
 								<div class="col-md-offset-3 col-md-9">
 									<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-									<a href="<?php echo $this->createUrl('instruct/productInstruct' , array('companyId'=>$model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
+									<a href="<?php echo $this->createUrl('instruct/tasteInstruct' , array('companyId'=>$model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 								</div>
 							</div>
 					<?php $this->endWidget(); ?>

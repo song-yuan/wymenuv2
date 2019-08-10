@@ -70,7 +70,7 @@
 			<div class="portlet-body tabbable-custom" id="table-manage">
 				<ul class="nav nav-tabs">
 					<li class=""><a href="<?php echo $this->createUrl('instruct/productInstruct',array('companyId'=>$this->companyId));?>">菜品指令对应</a></li>
-					<li class="active"><a href="javascrip:;">口味指令对应</a></li>
+					<li class="active"><a href="<?php echo $this->createUrl('instruct/tasteInstruct',array('companyId'=>$this->companyId));?>">口味指令对应</a></li>
 				</ul>
 				<table class="table table-striped table-bordered table-hover" id="sample_1">
 					<thead>
@@ -84,65 +84,28 @@
 					<?php if($models):?>
 					<?php foreach ($models as $model):?>
 						<tr class="odd gradeX">
-							<td ><?php echo $model->name;?></td>
+							<td >
+								<?php 
+									foreach ($model['taste'] as $t){
+										echo $t['name'].' ';
+									}
+								?>
+							</td>
 							<td>
 								<?php 
-									$instructName = '';
-									foreach($model->productInstruct as $val){
-										if(!$val['is_taste']){
-											continue;
-										}
-										$instrucntId = $val['instruction_id'];
-										if(isset($instruct['lid-'.$instrucntId])){
-											$instructName .= $instruct['lid-'.$instrucntId]['instruct_name'].' ';
-										}
+									foreach ($model['instruct'] as $ins){
+										echo $ins['instruct_name'].' ';
 									}
-									echo $instructName;
 								?>
 							</td>
 							<td class="center">
-								<?php if(!empty($model->productInstruct)):?>
-								<a href="<?php echo $this->createUrl('instruct/tasteInstructList',array('lid' => (int)$model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-								<?php else:?>
-								<a href="<?php echo $this->createUrl('instruct/updateTasteInstruct',array('lid' => (int)$model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','添加');?></a>
-								<?php endif;?>
+								<a href="<?php echo $this->createUrl('instruct/updateTasteInstruct',array('lid' => (int)$model['model']['product_id'] , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
 							</td>
 						</tr>
 					<?php endforeach;?>
 					<?php endif;?>
 					</tbody>
 				</table>
-					<?php if($pages->getItemCount()):?>
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">
-								<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
-							</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-							<?php $this->widget('CLinkPager', array(
-								'pages' => $pages,
-								'header'=>'',
-								'firstPageLabel' => '<<',
-								'lastPageLabel' => '>>',
-								'firstPageCssClass' => '',
-								'lastPageCssClass' => '',
-								'maxButtonCount' => 8,
-								'nextPageCssClass' => '',
-								'previousPageCssClass' => '',
-								'prevPageLabel' => '<',
-								'nextPageLabel' => '>',
-								'selectedPageCssClass' => 'active',
-								'internalPageCssClass' => '',
-								'hiddenPageCssClass' => 'disabled',
-								'htmlOptions'=>array('class'=>'pagination pull-right')
-							));
-							?>
-							</div>
-						</div>
-					</div>
-					<?php endif;?>					
 				
 			</div>
 		</div>
