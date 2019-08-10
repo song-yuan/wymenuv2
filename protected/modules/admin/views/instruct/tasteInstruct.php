@@ -103,6 +103,7 @@
 							<td class="center">
 								<?php if(!empty($model->productInstruct)):?>
 								<a href="<?php echo $this->createUrl('instruct/tasteInstructList',array('lid' => (int)$model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('instruct/updateTasteInstruct',array('lid' => (int)$model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','添加');?></a>
 								<?php else:?>
 								<a href="<?php echo $this->createUrl('instruct/updateTasteInstruct',array('lid' => (int)$model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','添加');?></a>
 								<?php endif;?>
