@@ -277,7 +277,8 @@ class InstructController extends BackendController
 			$tastes = Yii::app()->request->getPost('Taste',0);
 			$postData = Yii::app()->request->getPost('Instruct');
 			if($tastes&&$tastes[0]){
-				$lid = $lid.','.join(',', $tastes);
+				array_push($tastes, $lid);
+				$lid = join(',', $tastes);
 			}
 			if($this->saveProductInstruction($lid,$postData,1)){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
