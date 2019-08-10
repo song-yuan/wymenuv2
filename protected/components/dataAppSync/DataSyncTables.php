@@ -1140,7 +1140,7 @@ class DataSyncTables
         		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"instruction_id int(10) NOT NULL,".
-        		"product_id int(10) NOT NULL,".
+        		"product_id varchar(32) NOT NULL,".
         		"is_taste varchar(2) NOT NULL,".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
