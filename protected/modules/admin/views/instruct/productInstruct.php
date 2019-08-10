@@ -106,7 +106,7 @@
 								?>
 							</td>
 							<td class="center">
-							<a href="<?php echo $this->createUrl('instruct/updateProductInstruct',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+							<a href="<?php echo $this->createUrl('instruct/updateProductInstruct',array('lid' => (int)$model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 							</td>
 						</tr>
 					<?php endforeach;?>
