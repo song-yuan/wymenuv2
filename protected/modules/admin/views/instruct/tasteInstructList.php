@@ -99,7 +99,7 @@
 								?>
 							</td>
 							<td class="center">
-								<a href="<?php echo $this->createUrl('instruct/updateTasteInstruct',array('lid' => (int)$model['model']['product_id'] , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('instruct/updateTasteInstruct',array('lid' => $model['model']['product_id'] , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
 							</td>
 						</tr>
 					<?php endforeach;?>

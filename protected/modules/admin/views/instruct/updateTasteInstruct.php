@@ -60,7 +60,7 @@
 									<select class="form-control" name="Taste[]">
 									<option value="0">---请选择---</option>
 										<?php foreach ($tastes as $taste):?>
-										<option value="<?php echo (int)$taste['lid']?>"><?php echo $taste['name']?></option>
+										<option value="<?php echo $taste['lid']?>"><?php echo $taste['name']?></option>
 										<?php endforeach;?>
 									</select>
 								</div>
