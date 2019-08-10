@@ -272,7 +272,6 @@ class InstructController extends BackendController
 	public function actionUpdateTasteInstruct(){
 		$lid = Yii::app()->request->getParam('lid');
 		$models = Taste::model()->findAll('lid in('.$lid.') and dpid='.$this->companyId);
-		
 		if(Yii::app()->request->isPostRequest) {
 			$tastes = Yii::app()->request->getPost('Taste',0);
 			$postData = Yii::app()->request->getPost('Instruct');
