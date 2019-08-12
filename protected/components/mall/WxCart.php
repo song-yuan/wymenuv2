@@ -305,7 +305,7 @@ class WxCart
 	}
 	// 减少买送产品
 	public function delSentProduct($cartNum){
-		$sentDetail = WxPromotion::getProductPromotion($this->dpid, $this->productArr['promotion_type'], $this->productArr['promotion_id'], $this->productArr['product_id'], $this->productArr['is_set']);
+		$sentDetail = WxPromotion::getProductPromotion($this->dpid, $this->productArr['promotion_type'], $this->productArr['promotion_id'], $this->productArr['product_id']);
 		if($sentDetail){
 			$sentProductId = $sentDetail['s_product_id'];
 			$buyNum = $sentDetail['buy_num'];
