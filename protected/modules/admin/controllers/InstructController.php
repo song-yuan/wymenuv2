@@ -210,7 +210,7 @@ class InstructController extends BackendController
 	}
 	public function actionTasteInstruct(){
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+		$criteria->addCondition('t.dpid=:dpid and t.allflae=0 and t.delete_flag=0');
 		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		$pages = new CPagination(Taste::model()->count($criteria));
