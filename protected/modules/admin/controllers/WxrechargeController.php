@@ -136,6 +136,7 @@ class WxrechargeController extends BackendController
 				}
 			}else{
 				$model->recharge_dpid = 0;
+				WeixinRechargeDpid::model()->updateAll(array('delete_flag'=>1),'weixin_recharge_id=:rid',array(':rid'=>$lid));
 			}
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
