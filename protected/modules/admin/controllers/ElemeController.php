@@ -113,14 +113,16 @@ class ElemeController extends BackendController
 		$ecateid = Yii::app()->request->getPost('e_cateid');
 		$especid = Yii::app()->request->getPost('e_specid');
 		$espec = Yii::app()->request->getPost('e_spec');
+		$ematerial = Yii::app()->request->getPost('e_materials');
 		$especs = json_decode(urldecode($espec),true);
+		$ematerials = json_decode(urldecode($ematerial),true);
 		foreach ($especs as $k=>$es){
 			$spid = $es['specId'];
 			if($especid==$spid){
 				$especs[$k]['extendCode'] = $extendcode;
 			}
 		}
-		$res = Elm::updateItem($eid, $dpid, $ecateid, $name, $especs);
+		$res = Elm::updateItem($eid, $dpid, $ecateid, $name, $especs, $ematerials);
 		$obj = json_decode($res,true);
 		if(!empty($obj['error'])){
 			$msg = array('status'=>false,'msg'=>$obj['error']['message']);

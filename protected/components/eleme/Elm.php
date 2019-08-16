@@ -382,7 +382,7 @@ class Elm
 		$res = Yii::app()->db->createCommand($sql)->queryRow();
 		return $res;
 	}
-	public static function updateItem($itemid,$dpid,$categoryid,$name,$spes){
+	public static function updateItem($itemid,$dpid,$categoryid,$name,$spes,$materials){
 		$access_token = self::elemeGetToken($dpid);
 		if(!$access_token){
 			return '{"result": null,"error": {"code":"VALIDATION_FAILED","message": "请先绑定店铺"}}';
@@ -406,6 +406,7 @@ class Elm
             	'properties'=>array(
             		'name'=>$name,
             		'specs'=>$spes,
+            		'materials'=>$materials,
             	)),
         );
         $protocol['signature'] = ElUnit::generate_signature($protocol,$access_token,$secret);

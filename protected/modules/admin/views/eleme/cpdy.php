@@ -57,7 +57,9 @@
 					 		foreach ($model['data'] as $key=>$m):
 					 			$i = $key;
 					 			$specs = $m['specs'];
+					 			$materials = $m['materials'];
 					 			$dspecs = json_encode($specs);
+					 			$dmaterials = json_encode($materials);
 					 			foreach ($specs as $spec):
 					 			$i++;
 					 	?>
@@ -96,7 +98,7 @@
 											</select>
 										</div>
 										<div class="col-md-6">
-											<select class="form-control" name="product_name" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode($dspecs);?>">
+											<select class="form-control" name="product_name" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode($dspecs);?>" e_materials="<?php echo urlencode($dmaterials);?>">
 												<option value="" category_id="0">---请选择---</option>
 												<?php foreach ($products as $ph):?>
 												<option value="<?php echo $ph['phs_code'];?>" category_id="<?php echo $ph['category_id'];?>"><?php echo $ph['product_name'];?></option>
@@ -125,7 +127,7 @@
 											</select>
 										</div>
 										<div class="col-md-6">
-											<select class="form-control" name="product_name" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode($dspecs);?>">
+											<select class="form-control" name="product_name" e_cid="<?php echo $ecid;?>" e_id="<?php echo $m['id'];?>" e_name="<?php echo $m['name'];?>" e_spec_id="<?php echo $spec['specId'];?>" e_spec="<?php echo urlencode($dspecs);?>" e_materials="<?php echo urlencode($dmaterials);?>">
 												<option value="" category_id="0">---请选择---</option>
 												<?php foreach ($products as $p):?>
 												<option value="<?php echo $p['phs_code'];?>" category_id="<?php echo $p['category_id'];?>"><?php echo $p['product_name'];?></option>
@@ -168,9 +170,10 @@ $('select[name="product_name"]').change(function(){
 		var eName =  $(this).attr('e_name');
 		var eSpecid =  $(this).attr('e_spec_id');
 		var eSpec =  $(this).attr('e_spec');
+		var eMaterials = $(this).attr('e_materials');
 		$.ajax({
 			url:'<?php echo $this->createUrl('eleme/ajaxProductDy',array('companyId'=>$this->companyId));?>',
-			data:{extendcode:pcode,e_name:eName,e_id:eId,e_cateid:eCateId,e_specid:eSpecid,e_spec:eSpec},
+			data:{extendcode:pcode,e_name:eName,e_id:eId,e_cateid:eCateId,e_specid:eSpecid,e_spec:eSpec,e_materials:eMaterials},
 			type:'POST',
 			success:function(msg){
 				if(msg.status){
