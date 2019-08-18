@@ -271,7 +271,9 @@ class UserController extends Controller
                        
 			$result = WxBrandUser::update($userInfo);
 			if($result){
-				WxCupon::getWxSentCupon($this->companyId, 1, $userInfo['lid'],$this->brandUser['openid']);
+				if(empty($this->brandUser['mobile_num'])){
+					WxCupon::getWxSentCupon($this->companyId, 1, $userInfo['lid'],$this->brandUser['openid']);
+				}
 				if($back){
 					$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$type));
 				}else{
