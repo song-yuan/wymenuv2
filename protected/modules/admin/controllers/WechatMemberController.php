@@ -43,10 +43,10 @@ class WechatMemberController extends BackendController {
 			$companyArrs[$company['dpid']] = $company;
 		}
         
-		$sql = 'select op.*,o.reality_total,o.should_total from nb_order_pay op,nb_order o where op.order_id=o.lid and op.dpid=o.dpid and op.paytype in (8,9,10) and op.remark="'.$card_id.'" and op.dpid in ('.$companyIds.') group by op.order_id order by op.lid desc';
+		$sql = 'select op.*,o.reality_total,o.should_total from nb_order_pay op,nb_order o where op.order_id=o.lid and op.dpid=o.dpid and op.paytype in (8,9,10) and op.remark="'.$card_id.'" group by op.order_id order by op.lid desc limit 10';
 		$orderPays = Yii::app()->db->createCommand($sql)->queryAll();
 		
-		$sql = 'select cb.*,c.cupon_title,c.cupon_money,c.min_consumer from nb_cupon_branduser cb,nb_cupon c where cb.cupon_id=c.lid and cb.dpid=c.dpid and cb.brand_user_lid='.$num.' and c.is_available=0 and cb.delete_flag=0 and c.delete_flag=0';
+		$sql = 'select cb.*,c.cupon_title,c.cupon_money,c.min_consumer from nb_cupon_branduser cb,nb_cupon c where cb.cupon_id=c.lid and cb.dpid=c.dpid and cb.brand_user_lid='.$num.' and c.is_available=0 and cb.delete_flag=0 and c.delete_flag=0 limit 10';
 		$userCupons = Yii::app()->db->createCommand($sql)->queryAll();
 		
        
@@ -912,6 +912,23 @@ public function actionAccountDetail(){
      	$sql = "update nb_brand_user_admin set delete_flag=1 where lid in (".$checkbox_names.")";
      	$res = Yii::app()->db->createCommand($sql)->execute();
      	// var_dump($res);exit();
+     	if(empty($res)){
+     		Yii::app()->user->setFlash('error',yii::t('app','删除失败'));
+     		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
+     	}else{
+     		Yii::app()->user->setFlash('success',yii::t('app','删除成功'));
+     		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
+     	}
+     }
+     public function actionDeletedp(){
+     	$num =  Yii::app()->request->getParam('num');
+     	$checkbox_names = Yii::app()->request->getParam('checkbox_name');
+     	$checkbox_names = json_encode($checkbox_names);
+     	$checkbox_names = str_replace('[', '', $checkbox_names);
+     	$checkbox_names = str_replace(']', '', $checkbox_names);
+     	$checkbox_names = str_replace('"', '', $checkbox_names);
+     	$sql = "update nb_brand_user_admin set delete_flag=1 where lid in (".$checkbox_names.")";
+     	$res = Yii::app()->db->createCommand($sql)->execute();
      	if(empty($res)){
      		Yii::app()->user->setFlash('error',yii::t('app','删除失败'));
      		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
