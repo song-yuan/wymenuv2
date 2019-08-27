@@ -87,6 +87,12 @@
                     <?php elseif (Yii::app()->user->role == 8):?>
                     <div class= "panel_body row">
                         <p>营销活动统计报表</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                           <a href="<?php echo $this->createUrl('statements/cuponReport',array('companyId' => $this->companyId));?>">
+                                <div class="list_big">代金券发放明细</div>
+                                <div class="list_small">查询所有发出的代金券情况</div>
+                            </a> 
+                        </div>
         				<div style="height: 80px;" class="list col-sm-3 col-xs-12">
                            <a href="<?php echo $this->createUrl('statements/cuponReport',array('companyId' => $this->companyId));?>">
                                 <div class="list_big">代金券汇总</div>

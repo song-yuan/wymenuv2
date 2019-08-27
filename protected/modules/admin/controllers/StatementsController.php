@@ -1795,6 +1795,32 @@ class StatementsController extends BackendController
 		));
 	}
 	/**
+	 * 发券情况统计
+	 */
+	public function actionCuponSentReport(){
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+		$db = Yii::app()->db;
+		$sql = 'select * from (select cb.lid,cb.dpid,cb.create_at as cucreate_at,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,c.sole_code,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
+		$sql .=' and cb.create_at >= "'.$beginTime.' 00:00:00" and cb.create_at <= "'.$endTime.' 23:59:59" and c.delete_flag=0)m';
+		$count = $db->createCommand(str_replace('*','count(*)',$sql))->queryScalar();
+		
+		$pages = new CPagination($count);
+		$pages->pageSize = 20;
+		$pdata = $db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+	
+		$this->render('cuponsent',array(
+					'models'=>$models,
+					'pages'=>$pages,
+					'begin_time'=>$beginTime,
+					'end_time'=>$endTime,
+				));
+	}
+	/**
 	 *
 	 * 统计已发券的使用情况
 	 *
