@@ -232,7 +232,7 @@
 	function genQrcode(that){
 		var id = $(that).attr('lid');
 		var $parent = $(that).parent();
-		$.get('<?php echo $this->createUrl('/admin/company/genWxQrcode');?>/dpid/'+id,function(data){
+		$.get('<?php echo $this->createUrl('/admin/company/genWxQrcode', array('companyId'=>$this->companyId));?>/dpid/'+id,function(data){
 			if(data.status){
 				$parent.find('img').remove();
 				$parent.prepend('<img style="width:100px;" src="/wymenuv2/./'+data.qrcode+'">');
