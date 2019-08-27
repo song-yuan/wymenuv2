@@ -918,23 +918,4 @@ public function actionAccountDetail(){
      		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
      	}
      }
-     public function actionDeletedp(){
-     	$num =  Yii::app()->request->getParam('num');
-     	$checkbox_names = Yii::app()->request->getParam('checkbox_name');
-     	$checkbox_names = json_encode($checkbox_names);
-     	$checkbox_names = str_replace('[', '', $checkbox_names);
-     	$checkbox_names = str_replace(']', '', $checkbox_names);
-     	$checkbox_names = str_replace('"', '', $checkbox_names);
-     	$sql = "update nb_brand_user_admin set delete_flag=1 where lid in (".$checkbox_names.")";
-     	$res = Yii::app()->db->createCommand($sql)->execute();
-     	if(empty($res)){
-     		Yii::app()->user->setFlash('error',yii::t('app','删除失败'));
-     		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
-     	}else{
-     		Yii::app()->user->setFlash('success',yii::t('app','删除成功'));
-     		$this->redirect(array('WechatMember/dp','num'=>$num,'companyId' => $this->companyId));
-     	}
-     }
 }
-
-
