@@ -57,6 +57,8 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
+								<th><?php echo yii::t('app','姓名');?></th>
+								<th><?php echo yii::t('app','手机号');?></th>
 								<th><?php echo yii::t('app','领取时间');?></th>
 								<th><?php echo yii::t('app','券名');?></th>
 								<th><?php echo yii::t('app','编号');?></th>
@@ -69,6 +71,8 @@
 						<?php if($models):?>
 							<?php $key=0; foreach ($models as $model):?>
 							<tr class="odd gradeX">
+								<td><?php echo $model['user_name'];?></td>
+								<td><?php echo $model['mobile_num'];?></td>
 								<td><?php echo $model['cucreate_at'];?></td>
 								<td><?php echo $model['cupon_title'];?></td>
 								<td><?php echo $model['sole_code'];?></td>
@@ -79,7 +83,7 @@
 							</tr>
 							<?php endforeach;?>
 						<?php else:?>
-						<tr><td colspan="6">未查询到数据</td></tr>
+						<tr><td colspan="8">未查询到数据</td></tr>
 						<?php endif;?>
 						</tbody>
 					</table>

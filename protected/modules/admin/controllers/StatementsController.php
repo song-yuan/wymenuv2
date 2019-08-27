@@ -1802,7 +1802,7 @@ class StatementsController extends BackendController
 		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
 		$db = Yii::app()->db;
-		$sql = 'select * from (select cb.lid,cb.dpid,cb.create_at as cucreate_at,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,c.sole_code,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
+		$sql = 'select * from (select cb.lid,cb.dpid,cb.create_at as cucreate_at,cb.cupon_id,cb.used_dpid,cb.valid_day,cb.close_day,cb.is_used,c.cupon_title,c.create_at as create_at,c.sole_code,bu.user_name,bu.mobile_num,bu.weixin_group from nb_cupon_branduser cb left join nb_cupon c on cb.cupon_id=c.lid and cb.dpid=c.dpid left join nb_brand_user bu on cb.brand_user_lid=bu.lid and cb.dpid=bu.dpid where cb.dpid in('.$this->companyId.','.$this->company_dpid.')';
 		$sql .=' and cb.create_at >= "'.$beginTime.' 00:00:00" and cb.create_at <= "'.$endTime.' 23:59:59" and c.delete_flag=0)m';
 		$count = $db->createCommand(str_replace('*','count(*)',$sql))->queryScalar();
 		
