@@ -25,17 +25,11 @@ class NewBrandUser {
 		try {
 			$this->openId = $opendId;
 			$this->brandId = $brandId;
-			Helper::writeLog('1');
 			$this->brandUser();
-			Helper::writeLog('2');
 			$this->newBrandUser();
-			Helper::writeLog('3');
 			$this->pullUserInfo();
-			Helper::writeLog('4');
 			$this->sentCupon();
-			Helper::writeLog('5');
 			$this->sentGift();
-			Helper::writeLog('6');
 			$this->success = true;
 			$transaction->commit();
 		} catch(Exception $e) {
