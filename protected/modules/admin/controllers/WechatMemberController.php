@@ -33,10 +33,8 @@ class WechatMemberController extends BackendController {
 		
 		$companyArrs = array();
 		if($this->comptype==0){
-			$companyIds = WxCompany::getAllDpids($this->companyId); //获取所有店铺 拼接
 			$companys = WxCompany::getCompanyChildren($this->companyId);
 		}else{
-			$companyIds = WxCompany::getAllDpids($this->company_dpid); //获取所有店铺 拼接
 			$companys = WxCompany::getCompanyChildren($this->company_dpid);
 		}
 		foreach ($companys as $company){
