@@ -66,6 +66,7 @@ class Server {
 	 */
 	public function postArr() {
 		$this->postArr = XML::getPostArr();
+		Helper::writeLog(json_encode($this->postArr));
 	}
 	 /**
      * 通过$this->postArr['FromUserName']获取用户的信息 yk_brand_user
