@@ -507,7 +507,7 @@ class CompanyController extends BackendController
 		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
 	
 		$wxQrcode = new WxQrcode($companyDpid);
-		$qrcode = $wxQrcode->getQrcode(WxQrcode::COMPANY_QRCODE,$model->dpid,strtotime('2050-01-01 00:00:00'));
+		$qrcode = $wxQrcode->getQrcode(WxQrcode::COMPANY_QRCODE,$model->lid,$model->dpid,strtotime('2050-01-01 00:00:00'));
 	
 		if($qrcode){
 			$model->qr_code = $qrcode;
