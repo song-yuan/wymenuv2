@@ -77,7 +77,6 @@
 								<td><?php echo $model['cupon_title'];?></td>
 								<td><?php echo $model['sole_code'];?></td>
 								<td><?php echo $model['create_at'];?></td>
-								<td><?php echo $model['cupon_sent'];?></td>
 								<td><?php if($model['is_used']==2){ echo '已使用';} else{ echo '未使用';}?></td>
 								<td><?php echo $model['valid_day'].'~'.$model['close_day'];?></td>
 							</tr>
