@@ -187,6 +187,11 @@ class WxCupon
 				  ->bindValue(':lid',$cuponId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
+		if($cupon&&$cupon['type_dpid']==2){
+			$sql = 'select cupon_dpid from nb_cupon_dpid where dpid='.$dpid.' and cupon_id='.$cuponId.' and delete_flag=0';
+			$cdpid = Yii::app()->db->createCommand($sql)->queryColumn();
+			$cupon['dpid_list'] = $cdpid;
+		}
 	    return $cupon;
 	}
 	/**
@@ -217,7 +222,7 @@ class WxCupon
 	 * 获取发放的代金券 活动
 	 * 
 	 */
-	public static function getWxSentCupon($dpid,$type,$userId,$openId){
+	public static function getWxSentCupon($dpid,$type,$userId,$openId,$wxgroup){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select t.* from nb_sentwxcard_promotion_detail t,nb_sentwxcard_promotion t1 where t.sentwxcard_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.type=:type and t1.begin_time <=:now and :now <= t1.end_time and t.delete_flag=0 and t1.delete_flag=0';
 		$sentPromotion = Yii::app()->db->createCommand($sql)
@@ -226,7 +231,7 @@ class WxCupon
 							->bindValue(':type',$type)
 							->queryAll();
 		foreach ($sentPromotion as $promotion){
-			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId);
+			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId,$wxgroup);
 		}
 	}
 	public static function getOneMonthByBirthday(){
@@ -236,7 +241,7 @@ class WxCupon
 		$users = Yii::app()->db->createCommand($sql)->queryAll();
 		if(!empty($users)){
 			foreach ($users as $user){
-				self::getWxSentCupon($user['dpid'],2,$user['lid'],$user['openid']);
+				self::getWxSentCupon($user['dpid'],2,$user['lid'],$user['openid'],$user['weixin_group']);
 			}
 		}
 	}
@@ -244,11 +249,14 @@ class WxCupon
 	 * 
 	 * 发放代金券
 	 */
-	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId){
+	public static function sentCupon($dpid,$userId,$cuponId,$source,$source_id,$openId,$wxgroup){
 		$company = WxCompany::get($dpid);
 		$now = date('Y-m-d H:i:s',time());
 		$cupon = self::getCupon($dpid, $cuponId);
 		if($cupon){
+			if($cupon['type_dpid']==2&&$dpid!=$wxgroup&&!in_array($wxgroup, $cupon['dpid_list'])){
+				return;
+			}
 			$validDay = '';
 			$closeDay = '';
 			if($cupon['time_type']==1){

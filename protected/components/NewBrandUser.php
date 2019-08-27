@@ -66,7 +66,6 @@ class NewBrandUser {
 			        	'update_at'=>date('Y-m-d H:i:s',$time), 
                 		'weixin_group'=>$this->brandId,
                 		'scene_type'=>0,
-        				'is_sync'=>DataSync::getInitSync(),	
         				);
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
         if(!$result){
@@ -108,7 +107,7 @@ class NewBrandUser {
 	}
 	public function sentCupon() {
 		// 关注自动送券
-    	WxCupon::getWxSentCupon($this->brandId, 0, $this->userId,$this->openId);
+    	WxCupon::getWxSentCupon($this->brandId, 0, $this->userId,$this->openId,$this->brandId);
 	}
 	public function sentGift() {
 		WxGiftCard::sentGift($this->brandId,$this->userId);

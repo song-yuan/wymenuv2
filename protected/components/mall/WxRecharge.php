@@ -132,7 +132,7 @@ class WxRecharge
    	   if($this->recharge['recharge_cashcard']){
    	   		$cashcards = self::getRechargeCashcards($this->dpid, $this->rechargeId);
    	   		foreach ($cashcards as $cashcard){
-   	   			WxCupon::sentCupon($this->dpid, $this->userId, $cashcard, 3, $this->rechargeId, $this->openId);
+   	   			WxCupon::sentCupon($this->dpid, $this->userId, $cashcard, 3, $this->rechargeId, $this->openId,$this->dpid);
    	   		}
    	   }
    	   
