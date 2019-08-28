@@ -218,6 +218,21 @@ class WxCupon
 		}
 	}
 	/**
+	 * 订单满额送券
+	 */
+	public static function getWxSentMoneyCupon($dpid,$userId,$openId,$wxgroup,$money){
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select t.* from nb_sentwxcard_promotion_detail t,nb_sentwxcard_promotion t1 where t.sentwxcard_pro_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t1.type=8 and consume_money<=:money and t1.begin_time <=:now and :now <= t1.end_time and t.delete_flag=0 and t1.delete_flag=0';
+		$sentPromotion = Yii::app()->db->createCommand($sql)
+							->bindValue(':dpid',$dpid)
+							->bindValue(':money',$money)
+							->bindValue(':now',$now)
+							->queryAll();
+		foreach ($sentPromotion as $promotion){
+			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId,$wxgroup);
+		}
+	}
+	/**
 	 * 
 	 * 获取发放的代金券 活动
 	 * 
@@ -234,6 +249,9 @@ class WxCupon
 			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId,$wxgroup);
 		}
 	}
+	/**
+	 * 生日发券
+	 */
 	public static function getOneMonthByBirthday(){
 		$monthBegain = date('m-d',strtotime('+1 week'));
 		

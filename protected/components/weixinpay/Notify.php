@@ -114,5 +114,6 @@ class Notify extends WxPayNotify
 		WxOrder::insertOrderPay($order,$paytype,$data['total_fee']/100,0,$data["out_trade_no"]);
 		WxOrder::dealOrder($brandUser, $order);
 		WxOrder::orderSuccess($order);
+		WxCupon::getWxSentMoneyCupon($orderIdArr[1], $brandUser['lid'], $openId, $brandUser['weixin_group'], $data['total_fee']/100);
 	}
 }
