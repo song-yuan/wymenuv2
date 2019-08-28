@@ -243,23 +243,26 @@
                                             <?php if($cupons):?>
                                                 <?php foreach ($cupons as $cupon):?>
                                                     <div class="wxcardbg <?php if(in_array($cupon->lid, $selcups)) echo 'activechecked';?>" plid="<?php echo $cupon->lid;?>" pcode="<?php echo $cupon->sole_code;?>">
-                                                        <div class="wxcardhead" style="">
-                                                            <div class="wxcardheadl"style="">
-                                                                <div class="wxcardheadll"style="">
-                                                                    <div class="money" style=""><span><?php echo floor($cupon->cupon_money);?></span></div>
-                                                                    <div class="unit" style="">元</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="wxcardheadr" style="">
-                                                                <div class="top" style="">满<span><?php echo floor($cupon->min_consumer);?></span>可使用</div>
-                                                                <div class="cen" style="">赠送1张</div>
-                                                                <div class="bot" style="">代金券</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="wxcardend" style="">限<span><?php echo date('Y-m-d',strtotime($cupon->begin_time));?></span> 至<span><?php echo date('Y-m-d',strtotime($cupon->end_time));?></span>  使用</div>
-
-                                                        <div class="wxcardactive <?php if(in_array($cupon->lid, $selcups)) echo '';else echo 'uhide';?>" ><img width="50px" style="" src="<?php if($is_new) echo '../../../../../../img/checked.png';else echo '../../../../img/checked.png';?>"/></div>
-                                                    </div>
+														<div class="wxcardhead" style="">
+															<div class="wxcardheadl"style="">
+																<div class="wxcardheadll"style="">
+																	<div class="money" style=""><span><?php echo floor($cupon->cupon_money);?></span></div>
+																	<div class="unit" style="">元</div>
+																</div>
+															</div>
+															<div class="wxcardheadr" style="">
+																<div class="top" style="">满<span><?php echo floor($cupon->min_consumer);?></span>可使用</div>
+																<div class="cen" style="">赠送1张</div>
+																<div class="bot" style="">代金券</div>
+															</div>
+														</div>
+														<?php if($cupon->time_type == '1'):?>
+														<div class="wxcardend" style="">限<span><?php echo date('Y-m-d',strtotime($cupon->begin_time));?></span> 至<span><?php echo date('Y-m-d',strtotime($cupon->end_time));?></span>  使用</div>
+														<?php else:?>
+														<div class="wxcardend" style="">领取后<span><?php echo $cupon->day_begin?$cupon->day_begin:'当';?></span> 天生效，有效期：<span><?php echo $cupon->day;?></span> 天</div>
+														<?php endif;?>
+														<div class="wxcardactive <?php if(in_array($cupon->lid, $selcups)) echo '';else echo 'uhide';?>" ><img width="50px" style="" src="<?php if($is_new) echo '../../../../../../img/checked.png';else echo '../../../../img/checked.png';?>"/></div>
+													</div>
                                                 <?php endforeach;?>
                                             <?php endif;?>
                                             <div style="clear: both;"></div>
