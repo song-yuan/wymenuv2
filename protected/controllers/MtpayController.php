@@ -81,7 +81,7 @@ class MtpayController extends Controller
 				$user = WxBrandUser::getFromUserId($order['user_id']);
 				WxOrder::dealOrder($user, $order);
 				WxOrder::orderSuccess($order);
-				WxCupon::getWxSentMoneyCupon($orderdpid, $user['lid'], $user['openid'], $user['weixin_group'], $totalFee/100);
+				WxCupon::getWxSentMoneyCupon($user['dpid'], $user['lid'], $user['openid'], $user['weixin_group'], $totalFee/100);
 				echo '{"status":"SUCCESS"}';
 				exit;
 			}
