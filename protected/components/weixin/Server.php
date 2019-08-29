@@ -276,8 +276,7 @@ class Server {
 			$time = time();
 			$se = new Sequence("scene_scan_log");
             $lid = $se->nextval();
-            $isSync = DataSync::getInitSync();
-			$sql = 'INSERT INTO nb_scene_scan_log(lid, dpid, create_at, update_at, scene_id, user_id, is_sync) VALUES(' . $lid . ','.$this->brandId.', "'.date('Y-m-d H:i:s',$time).'","'.date('Y-m-d H:i:s',$time).'",'.$this->sceneId.' , '.$this->userId.', '.$isSync.')';
+			$sql = 'INSERT INTO nb_scene_scan_log(lid, dpid, create_at, update_at, scene_id, user_id) VALUES(' . $lid . ','.$this->brandId.', "'.date('Y-m-d H:i:s',$time).'","'.date('Y-m-d H:i:s',$time).'",'.$this->sceneId.' , '.$this->userId.')';
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	}
@@ -316,8 +315,7 @@ class Server {
      * 把普通用户对公众帐号的取消关注状态重新设置为关注状态 yk_brand_user unsubscribe = 0
      */
     public function cancelUnsubscribe() {
-    	$isSync = DataSync::getInitSync();
-    	$sql = 'update nb_brand_user set unsubscribe = 0,is_sync='.$isSync.' where openid = "' . $this->postArr['FromUserName'] .'"';
+    	$sql = 'update nb_brand_user set unsubscribe = 0 where openid = "' . $this->postArr['FromUserName'] .'"';
         Yii::app()->db->createCommand($sql)->execute();
     }
     
@@ -325,8 +323,7 @@ class Server {
      * 当普通用户取消关注公众帐号时，需要在yk_brand_user中把unsubscribe设置为1
      */
     public function unsubscribe() {
-    	$isSync = DataSync::getInitSync();
-    	$sql = 'update nb_brand_user set unsubscribe = 1, unsubscribe_time =  ' . time() . ',is_sync='.$isSync.' where openid = "' . $this->postArr['FromUserName'] .'"';
+    	$sql = 'update nb_brand_user set unsubscribe = 1, unsubscribe_time =  ' . time() . ' where openid = "' . $this->postArr['FromUserName'] .'"';
         Yii::app()->db->createCommand($sql)->execute();
     }
     
