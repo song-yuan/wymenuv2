@@ -82,9 +82,9 @@ class ProductSetController extends BackendController
 				$command = $db->createCommand($sql);
 				$categoryId = $command->queryRow();
 
-				$se=new Sequence("porduct_set");
+				$se = new Sequence("porduct_set");
 				$model->lid = $lid = $se->nextval();
-				$code=new Sequence("phs_code");
+				$code = new Sequence("phs_code");
 				$pshs_code = $code->nextval();
 
 				if($model->member_price==''){
@@ -98,8 +98,8 @@ class ProductSetController extends BackendController
 				$model->delete_flag = '0';
 				$py=new Pinyin();
 				$model->simple_code = $py->py($model->set_name);
-				//var_dump($model);exit;
 				if($model->save()) {
+					$this->delprokey($this->companyId,$model->is_show,$model->is_show_wx);
 					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 					$this->redirect(array('productSet/detailindex','lid' => $model->lid , 'companyId' => $model->dpid , 'status' => ''));
 				}
@@ -143,9 +143,10 @@ class ProductSetController extends BackendController
 		$papage = Yii::app()->request->getParam('papage');
 		$istempp = Yii::app()->request->getParam('istempp');
 		$islock = Yii::app()->request->getParam('islock');
-                //echo 'ddd';
 		$model = ProductSet::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
+			$isShow = $model->is_show;
+			$isShowWx = $model->is_show_wx;
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
 			if($model->category_id){
 				$cateID = $model->category_id;
@@ -155,12 +156,14 @@ class ProductSetController extends BackendController
 				$categoryId = $command->queryRow();
 				$model->chs_code = $categoryId['chs_code'];
 			}
-            $py=new Pinyin();
+            $py = new Pinyin();
             $model->simple_code = $py->py($model->set_name);
             $model->update_at=date('Y-m-d H:i:s',time());
 
-                        //var_dump($model->attributes);var_dump(Yii::app()->request->getPost('ProductSet'));exit;
 			if($model->save()){
+				if($isShow!=$model->is_show||$isShowWx!=$model->is_show_wx){
+					$this->delprokey($this->companyId,1,$model->is_show_wx);
+				}
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productSet/index' , 'companyId' => $this->companyId ,'page' => $papage));
 			}
@@ -184,9 +187,7 @@ class ProductSetController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 
 		$papage = Yii::app()->request->getParam('papage');
-		//var_dump($papage);exit;
 		$ids = Yii::app()->request->getPost('ids');
-        //Until::isUpdateValid(array($ids),$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_set set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -200,6 +201,7 @@ class ProductSetController extends BackendController
 
 			Yii::app()->db->createCommand('update nb_product_set_group set delete_flag=1 where set_id in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
+			$this->delprokey($this->companyId,1,1);
 			$this->redirect(array('productSet/index' , 'companyId' => $companyId, 'page' => $papage));
 		} else {
 			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
@@ -217,7 +219,6 @@ class ProductSetController extends BackendController
 		$criteria = new CDbCriteria;
         $criteria->with = array('product');
         $criteria->order =  't.group_no';
-        //$criteria->with = 'printer';
 		$criteria->condition =  't.dpid='.$dpid.' and t.set_id='.$pwlid.' and t.delete_flag=0 and product.delete_flag=0';
 
 
@@ -229,19 +230,15 @@ class ProductSetController extends BackendController
         $db=Yii::app()->db;
 
         $infos = $db->createCommand($sql)->queryAll();
-		// p($infos);
 		$criteria2 = new CDbCriteria;
 		$criteria2->condition =  't.dpid='.$dpid .' and t.lid='.$pwlid.' and t.delete_flag=0';
 
 		$pages = new CPagination(ProductSetDetail::model()->count($criteria)+count($infos));
-		// $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 
 		$models = ProductSetDetail::model()->findAll($criteria);
-        // p($models);
 
 		$psmodel = ProductSet::model()->find($criteria2);
-        // var_dump($psmodel);exit;
 		$this->render('detailindex',array(
 			'infos'=>$infos,
 			'pslid'=>$pwlid,
@@ -386,12 +383,9 @@ class ProductSetController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 
 		$papage = Yii::app()->request->getParam('papage');
-		//var_dump($papage);exit;
 		$pslid = Yii::app()->request->getParam('pslid');
 		$pglid = Yii::app()->request->getParam('pglid');
 		$lid = Yii::app()->request->getParam('lid');
-		// p($pslid);
-        //Until::isUpdateValid(array($ids),$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($pglid)) {
 			$info = Yii::app()->db->createCommand('update nb_product_set_group set delete_flag=1 where lid=:lid and prod_group_id=:prod_group_id and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId,':prod_group_id'=>$pglid,':lid'=>$lid));
@@ -416,11 +410,10 @@ class ProductSetController extends BackendController
 		$papage = Yii::app()->request->getParam('papage');
 
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-	if(Yii::app()->user->role > User::SHOPKEEPER) {
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id)) ;
 		}
-        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
 			$groupno = Yii::app()->request->getParam('groupno');
@@ -431,17 +424,14 @@ class ProductSetController extends BackendController
 			$model->group_no = $groupno;
 			$model->is_select = $isselect;
 			$model->number = $number;
-			//var_dump($model);exit;
 			//只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
 			$modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
-			//var_dump($modelsp);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id ,'status'=>$status));
 			}
 		}
                 $maxgroupno=$this->getMaxGroupNo($model->set_id);
-                //$printers = $this->getPrinters();
                 $categories = $this->getCategories();
                 $categoryId=  $this->getCategoryId($lid);
                 $products = $this->getProducts($categoryId);
@@ -462,21 +452,18 @@ class ProductSetController extends BackendController
 		));
 	}
 
-        public function actionGroupdetail(){
+    public function actionGroupdetail(){
 
 		$pwlid = Yii::app()->request->getParam('lid');
 		$dpid = Yii::app()->request->getParam('companyId');
 		$status = Yii::app()->request->getParam('status',0);
 		$papage = Yii::app()->request->getParam('papage');
 		$pslid = Yii::app()->request->getParam('pslid');
-		//var_dump($pwlid);exit;
 		$criteria = new CDbCriteria;
         $criteria->with = array('product');
         $criteria->order = 't.prod_group_id';
-        //var_dump($criteria);exit;
 		$criteria->condition =  't.dpid='.$dpid .' and t.prod_group_id='.$pwlid.' and t.delete_flag=0 and product.delete_flag=0';
 		$pages = new CPagination(ProductGroupDetail::model()->count($criteria));
-		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = ProductGroupDetail::model()->findAll($criteria);
                 
@@ -486,7 +473,6 @@ class ProductSetController extends BackendController
 		$criteria2 = new CDbCriteria;
 		$criteria2->condition = 't.dpid='.$dpid .' and t.lid='.$pwlid.' and t.delete_flag=0'; 
 		$psmodel = ProductGroup::model()->find($criteria2);
-        // p($psmodel);
 		$this->render('groupdetail',array(
 			'models'=>$models,
 			'pslid'=>$pslid,
@@ -504,12 +490,10 @@ class ProductSetController extends BackendController
         $papage = Yii::app()->request->getParam('papage');
 		$ids = Yii::app()->request->getPost('ids');
 		$glids = Yii::app()->request->getPost('glids');
-		// p($glids);
 		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
 			$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		}
-                //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)||!empty($glids)) {
 			if (!empty($ids)) {
 				Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')->execute(array( ':companyId' => $this->companyId));
@@ -544,13 +528,11 @@ class ProductSetController extends BackendController
 	public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);
 		$productSetId = Yii::app()->request->getParam('$productSetId',0);
-		// var_dump($productSetId);exit;
 		if(!$categoryId){
 			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
 		}
 		$treeDataSource = array('data'=>array(),'delay'=>400);
 		$produts=  $this->getProducts($categoryId);
-		//var_dump($produts);exit;
 		foreach($produts as $c){
 			$tmp['name'] = $c['product_name'];
 			$tmp['id'] = $c['lid'];
@@ -565,7 +547,6 @@ class ProductSetController extends BackendController
         $companyId = Yii::app()->request->getParam('companyId',0);
         $treeDataSource = array('data'=>FALSE,'delay'=>400);
         $product= ProductSetDetail::model()->find('t.dpid = :dpid and t.set_id = :setid and t.product_id = :productid and t.delete_flag=0',array(':dpid'=>$companyId,':setid'=>$productSetId,':productid'=>$productId));
-        //var_dump($productId,$productSetId,$companyId,$product);exit;
         if(!empty($product)){
             $treeDataSource['data'] = TRUE;
 		}
@@ -575,16 +556,12 @@ class ProductSetController extends BackendController
 	private function getProducts($categoryId){
                 if($categoryId==0)
                 {
-                    //var_dump ('2',$categoryId);exit;
                     $products = Product::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
                 }else{
-                    //var_dump ('3',$categoryId);exit;
                     $products = Product::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
                 }
                 $products = $products ? $products : array();
-                //var_dump($products);exit;
                 return $products;
-		//return CHtml::listData($products, 'lid', 'product_name');
 	}
 
         private function getSetProducts($categoryId,$productSetId){
@@ -607,9 +584,7 @@ class ProductSetController extends BackendController
                 }
                 $products=$command->queryAll();
                 $products = $products ? $products : array();
-                //var_dump($sql);exit;
                 return $products;
-		//return CHtml::listData($products, 'lid', 'product_name');
 	}
 
         private function getCategoryId($lid){
@@ -645,7 +620,6 @@ class ProductSetController extends BackendController
 
 		$models = ProductCategory::model()->findAll($criteria);
 
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
@@ -656,10 +630,8 @@ class ProductSetController extends BackendController
 					$options[$model->pid][$model->lid] = $model->category_name;
 				}
 			}
-                        //var_dump($options);exit;
 		}
 		foreach ($options as $k=>$v) {
-                    //var_dump($k,$v);exit;
 			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
@@ -673,7 +645,6 @@ class ProductSetController extends BackendController
 
 		$models = ProductCategory::model()->findAll($criteria);
 
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
@@ -684,10 +655,8 @@ class ProductSetController extends BackendController
 					$options[$model->pid][$model->lid] = $model->category_name;
 				}
 			}
-                        //var_dump($options);exit;
 		}
 		foreach ($options as $k=>$v) {
-                    //var_dump($k,$v);exit;
 			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
@@ -696,13 +665,11 @@ class ProductSetController extends BackendController
 
    private function getCategoryList(){
 		$criteria = new CDbCriteria;
-		//$criteria->with = 'company';
 		$criteria->condition =  't.cate_type !=2 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,t.lid asc ';
 
 		$models = ProductCategory::model()->findAll($criteria);
 
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
@@ -713,10 +680,8 @@ class ProductSetController extends BackendController
 					$options[$model->pid][$model->lid] = $model->category_name;
 				}
 			}
-                        //var_dump($options);exit;
 		}
 		foreach ($options as $k=>$v) {
-                    //var_dump($k,$v);exit;
 			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
@@ -726,12 +691,24 @@ class ProductSetController extends BackendController
 		if($setid)
 		{
 			$sql = 'select t1.*,t.product_name from nb_product t left join nb_product_set_detail t1 on( t.dpid = t1.dpid and t1.delete_flag =0 and t.lid = t1.product_id and t1.set_id ='.$setid.' ) where t1.is_select = 1 and t1.lid is not null and t.dpid ='.$this->companyId.' and t.delete_flag = 0 group by t1.group_no' ;
-			//$groupnos = ProductSetDetail::model()->findAll('left join nb_product t on(t.dpid = dpid and t.delete_flag = 0)dpid=:companyId and delete_flag=0 and set_id =:setId group by group_no' , array(':companyId' => $this->companyId,':setId'=>$setid));
 			$command1 = Yii::app()->db->createCommand($sql);
 			$groupnos = $command1->queryAll();
-			//var_dump($sql);exit;
 		}
 		$groupnos = $groupnos ? $groupnos : array();
 		return $groupnos;
+	}
+	private function delprokey($companyId,$isshow,$isshowwx){
+		if($isshow=1){
+			if($isshowwx==1){
+				$key = array('productList-'.$companyId.'-2','productList-'.$companyId.'-6');
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==3){
+				$key = 'productList-'.$companyId.'-6';
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==4){
+				$key = 'productList-'.$companyId.'-2';
+				Yii::app()->redis->delete($key);
+			}
+		}
 	}
 }

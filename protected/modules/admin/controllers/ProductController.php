@@ -320,7 +320,7 @@ class ProductController extends BackendController
 					$py = new Pinyin();
 					$model->simple_code = $py->py($model->product_name);
 					if($model->save()){
-						delprokey($this->companyId,$model->is_show,$model->is_show_wx);
+						$this->delprokey($this->companyId,$model->is_show,$model->is_show_wx);
 						Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 						$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
 					}
@@ -388,7 +388,7 @@ class ProductController extends BackendController
 				$model->update_at=date('Y-m-d H:i:s',time());
 				if($model->save()){
 					if($isShow!=$model->is_show||$isShowWx!=$model->is_show_wx){
-						delprokey($this->companyId,1,$model->is_show_wx);
+						$this->delprokey($this->companyId,1,$model->is_show_wx);
 					}
 					Yii::app()->user->setFlash('success',yii::t('app','修改成功！'.$msg));
 					$this->redirect(array('product/index' , 'companyId' => $this->companyId ,'page' => $papage));
@@ -435,7 +435,7 @@ class ProductController extends BackendController
 					'out_time'=>"0000-00-00 00:00:00"
 			);
 			Yii::app()->db->createCommand()->insert('nb_b_login',$data);
-			delprokey($this->companyId,1,1);
+			$this->delprokey($this->companyId,1,1);
 			Yii::app()->user->setFlash('success' , yii::t('app','删除成功'));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -531,7 +531,7 @@ class ProductController extends BackendController
 				Yii::app()->db->createCommand('update nb_product set is_show = '.$shownum.' where lid in ('.$pid.') and dpid = :companyId')
 				->execute(array( ':companyId' => $this->companyId));
 				$transaction->commit();
-				delprokey($this->companyId,1,$showwx);
+				$this->delprokey($this->companyId,1,$showwx);
 				Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 			}else{
 				$dpids = '000';
@@ -564,7 +564,7 @@ class ProductController extends BackendController
 		{
 			Yii::app()->db->createCommand('update nb_product set is_show_wx = '.$shownum.' where lid in ('.$pid.') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			delprokey($this->companyId,1,$shownum);
+			$this->delprokey($this->companyId,1,$shownum);
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 
