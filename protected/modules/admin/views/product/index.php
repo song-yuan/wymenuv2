@@ -135,22 +135,22 @@
 								<?php if(yii::app()->user->role >=9):?>
 									
 										<?php if($model->is_show <=5):?>
-										<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" >自下架</button>
+										<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" showwx="<?php echo $model->is_show_wx;?>">自下架</button>
 										<?php elseif($model->is_show ==6):?>
 										<button type="button" class = "on_off_sell" pid = "<?php echo $model->lid;?>" disabled style="background-color: #cdd4d2;color: #fff;font-weight:600;">无法上架</button>
 										<?php elseif($model->is_show ==7):?>
-										<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" >自上架</button>
+										<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" showwx="<?php echo $model->is_show_wx;?>">自上架</button>
 										<?php endif;?>
 									
 								<?php else:?>
 									<?php if($model->is_show <=5):?>
-									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7">自下架</button>
+									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "7" showwx="<?php echo $model->is_show_wx;?>">自下架</button>
 									<?php else:?>
-									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" >自上架</button>
+									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "0" shownum = "1" showwx="<?php echo $model->is_show_wx;?>">自上架</button>
 									<?php endif;?>
 									<?php if($comtype == 0):?>
-									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "1" >统一上架</button>
-									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "6" style="">统一下架</button>
+									<button type="button" class = "on_off_sell shangjia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "1" showwx="<?php echo $model->is_show_wx;?>">统一上架</button>
+									<button type="button" class = "on_off_sell xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" showtype = "1" shownum = "6" showwx="<?php echo $model->is_show_wx;?>">统一下架</button>
 									<?php endif;?>
 									<?php if($model->is_show_wx == '1'):?>
 									<button type="button" class = "on_off_sellwx xiajia" pid = "<?php echo $model->lid;?>" pcode = "<?php echo $model->phs_code;?>" shownum = "2" title="点击按钮，进行下架操作，下架后，微信端不可见">微店下架</button>
@@ -302,6 +302,7 @@
 			var showtype = $(this).attr('showtype');
 			var shownum = $(this).attr('shownum');
 			var pcode = $(this).attr('pcode');
+			var showwx = $(this).attr('showwx');
 			if(pid!=''&&showtype!=''&&shownum!=''&&pcode!=''){
 				var istrue = 1;
 			}else{
@@ -311,7 +312,7 @@
 			if(window.confirm("确认进行此项操作?")&&istrue){
 				$.ajax({
 		            type:'GET',
-					url:"<?php echo $this->createUrl('product/store',array('companyId'=>$this->companyId,));?>/pid/"+pid+"/showtype/"+showtype+"/shownum/"+shownum+"/pcode/"+pcode,
+					url:"<?php echo $this->createUrl('product/store',array('companyId'=>$this->companyId,));?>/pid/"+pid+"/showtype/"+showtype+"/shownum/"+shownum+"/pcode/"+pcode+"/showwx/"+showwx,
 					async: false,
 					//data:"companyId="+company_id+'&padId='+pad_id,
 		            cache:false,

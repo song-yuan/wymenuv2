@@ -733,7 +733,6 @@ class MallController extends Controller
 		$userId = Yii::app()->request->getParam('userId');
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$key = 'productList-'.$this->companyId.'-'.$this->type;
-		$expire = 10*60; // 过期时间
 		$cartList = array();
 		//普通优惠
 		$promotion = new WxPromotion($this->companyId,$userId,$this->type);
@@ -747,7 +746,7 @@ class MallController extends Controller
         }else{
         	$product = new WxProduct($this->companyId,$userId,$this->type);
         	$products = $product->categoryProductLists;
-        	Yii::app()->redis->setex($key,$expire,json_encode($products));
+        	Yii::app()->redis->set($key,json_encode($products));
         }
         $cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId,$this->type);
         $carts = $cartObj->getCart();

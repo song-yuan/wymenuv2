@@ -317,10 +317,10 @@ class ProductController extends BackendController
 					$model->chs_code = $categoryId['chs_code'];
 					$model->phs_code = ProductCategory::getChscode($this->companyId, $lid, $phs_code);
 					$model->delete_flag = '0';
-					$py=new Pinyin();
+					$py = new Pinyin();
 					$model->simple_code = $py->py($model->product_name);
-					//var_dump($model);exit;
 					if($model->save()){
+						delprokey($this->companyId,$model->is_show,$model->is_show_wx);
 						Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 						$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
 					}
@@ -366,12 +366,12 @@ class ProductController extends BackendController
 		$istempp = Yii::app()->request->getParam('istempp');
 		$papage = Yii::app()->request->getParam('papage');
 		$islock = Yii::app()->request->getParam('islock');
-		//var_dump($istempp);exit;
+		
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
-		//var_dump($model);exit;
 		$model->dpid = $this->companyId;
-		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
+			$isShow = $model->is_show;
+			$isShowWx = $model->is_show_wx;
 			$model->attributes = Yii::app()->request->getPost('Product');
 			$name = $model->product_name;
 			$sql = 'select lid from nb_product where dpid ='.$this->companyId.' and product_name ="'.$name.'" and delete_flag =0 and lid !='.$id;
@@ -383,12 +383,13 @@ class ProductController extends BackendController
 					$categoryId = ProductCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
 					$model->chs_code = $categoryId['chs_code'];
 				}
-	                $py=new Pinyin();
-	                $model->simple_code = $py->py($model->product_name);
+                $py = new Pinyin();
+                $model->simple_code = $py->py($model->product_name);
 				$model->update_at=date('Y-m-d H:i:s',time());
-				//$model->is_lock = '0';
-				//var_dump($model);exit;
 				if($model->save()){
+					if($isShow!=$model->is_show||$isShowWx!=$model->is_show_wx){
+						delprokey($this->companyId,1,$model->is_show_wx);
+					}
 					Yii::app()->user->setFlash('success',yii::t('app','修改成功！'.$msg));
 					$this->redirect(array('product/index' , 'companyId' => $this->companyId ,'page' => $papage));
 				}
@@ -434,7 +435,7 @@ class ProductController extends BackendController
 					'out_time'=>"0000-00-00 00:00:00"
 			);
 			Yii::app()->db->createCommand()->insert('nb_b_login',$data);
-
+			delprokey($this->companyId,1,1);
 			Yii::app()->user->setFlash('success' , yii::t('app','删除成功'));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -520,21 +521,17 @@ class ProductController extends BackendController
 		$showtype = Yii::app()->request->getParam('showtype');//下架类型，0表示自上下架，1表示统一上下架。
 		$shownum = Yii::app()->request->getParam('shownum');//表示下架后菜品is_show字段的数值，0表示单品不显示，1表示都显示，6表示公司统一下架，7表示自下架。
 		$pcode = Yii::app()->request->getParam('pcode');//菜品在公司内的唯一编码.
+		$showwx = Yii::app()->request->getParam('showwx');
 		$dpid = $this->companyId;
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
-		//$msg = $pid.'@@'.$shownum.'##'.$showtype.'$$'.$pcode.'%%'.$dpid;
 		try
 		{
-			$is_sync = DataSync::getInitSync();
-			//盘点日志
-			//盘点日志
 			if($showtype==0){
 				Yii::app()->db->createCommand('update nb_product set is_show = '.$shownum.' where lid in ('.$pid.') and dpid = :companyId')
 				->execute(array( ':companyId' => $this->companyId));
-				//Yii::app()->user->setFlash('success' , yii::t('app','删除成功'));
-				//$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 				$transaction->commit();
+				delprokey($this->companyId,1,$showwx);
 				Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 			}else{
 				$dpids = '000';
@@ -567,6 +564,7 @@ class ProductController extends BackendController
 		{
 			Yii::app()->db->createCommand('update nb_product set is_show_wx = '.$shownum.' where lid in ('.$pid.') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
+			delprokey($this->companyId,1,$shownum);
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success",'msg'=>'成功')));
 
@@ -575,5 +573,18 @@ class ProductController extends BackendController
 			Yii::app()->end(json_encode(array("status"=>"fail")));
 		}
 	}
-
+	private function delprokey($companyId,$isshow,$isshowwx){
+		if($isshow=1){
+			if($isshowwx==1){
+				$key = array('productList-'.$companyId.'-2','productList-'.$companyId.'-6');
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==3){
+				$key = 'productList-'.$companyId.'-6';
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==4){
+				$key = 'productList-'.$companyId.'-2';
+				Yii::app()->redis->delete($key);
+			}
+		}
+	}
 }
