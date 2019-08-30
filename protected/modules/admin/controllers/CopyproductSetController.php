@@ -194,7 +194,8 @@ class CopyproductSetController extends BackendController
 
 	        		}
 	        		if($ctp==2){
-	        			$sql ='delete from nb_product_set where source=1 and dpid ='.$dpid;
+	        			$updateat = date('Y-m-d H:i:s',time());
+	        			$sql ='update nb_product_set set update_at="'.$updateat.'",delete_flag=1 where source=1 and dpid ='.$dpid;
 	        			$re = Yii::app()->db->createCommand($sql)->execute();
 	        		}
         			foreach ($pshscodes as $prodsethscode){

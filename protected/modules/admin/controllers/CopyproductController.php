@@ -199,11 +199,12 @@ class CopyproductController extends BackendController
         			}
         		}
         		if($products){
+        			$updateat = date('Y-m-d H:i:s',time());
         			if($ctp==2){
-        				$sql ='delete from nb_product where is_temp_price=1 and dpid ='.$dpid;
+        				$sql ='update nb_product set update_at="'.$updateat.'",delete_flag=1 where is_temp_price=1 and dpid ='.$dpid;
         				$re = Yii::app()->db->createCommand($sql)->execute();
         			}elseif($ctp==3){
-        				$sql ='delete from nb_product where dpid ='.$dpid;
+        				$sql ='update nb_product set update_at="'.$updateat.'",delete_flag=1 where dpid ='.$dpid;
         				$re = Yii::app()->db->createCommand($sql)->execute();
         			}
         			foreach ($phscodes as $prodhscode){
@@ -364,7 +365,6 @@ class CopyproductController extends BackendController
         		$arr_dpid = '';
         		Yii::app()->user->setFlash('success' , yii::t('app','菜品下发成功！！！'));
         	}
-        	// gp($dpid_view);
         	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId,'arr_dpid' => $arr_dpid)) ;
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
