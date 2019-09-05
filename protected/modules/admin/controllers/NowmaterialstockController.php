@@ -23,7 +23,7 @@ class NowmaterialstockController extends BackendController
 			$tableArr = array('原料编号','原料名称','类型','实时库存','单位');
 			$data = array();
 			foreach ($productMaterials as $material){
-				$stock = ProductMaterial::getJitStock($material['lid'],$material['dpid']);;
+				$stock = ProductMaterial::getJitStock($material['lid'],$material['dpid']);
 				$unitname =  Common::getStockName($material['sales_unit_id']);
 				$tempArr = array($material['material_identifier'],$material['material_name'],$material['category_name'],$stock,$unitname);
 				array_push($data, $tempArr);

@@ -3,7 +3,8 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-$basePath = Yii::app()->baseUrl;;
+$basePath = Yii::app()->baseUrl;
+$flash = Yii::app()->user->getFlash('success');
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,5 +24,10 @@ $basePath = Yii::app()->baseUrl;;
 <body>
     <?php echo $content ?>
 </body>
+<script>
+<?php if($flash):?>
+	mui.toast('<?php echo $flash;?>');
+<?php endif;?>
+</script>
 </html>
 

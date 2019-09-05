@@ -52,7 +52,7 @@ class AppReportController extends Controller
 		$type = $this->type();
 		if(empty($type)){
 			if($this->brandUser['dpid']==$companyId){
-			$fensql = "select lid,group_name,area_group_id,y.dpid,company_name,logo,address from (select dpid,admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) a inner join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.dpid=g.dpid inner join (select area_group_id,dpid,company_id from nb_area_group_company where delete_flag=0) c on c.area_group_id=g.lid and a.admin_dpid=c.company_id inner join (select dpid,company_name,logo,address from nb_company where type=1 and delete_flag=0) y on a.admin_dpid=y.dpid group by lid,group_name,y.dpid";
+				$fensql = "select lid,group_name,area_group_id,y.dpid,company_name,logo,address from (select dpid,admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) a inner join (select lid,group_name,dpid from nb_area_group where type=3 and delete_flag=0) g on a.dpid=g.dpid inner join (select area_group_id,dpid,company_id from nb_area_group_company where delete_flag=0) c on c.area_group_id=g.lid and a.admin_dpid=c.company_id inner join (select dpid,company_name,logo,address from nb_company where type=1 and delete_flag=0) y on a.admin_dpid=y.dpid group by lid,group_name,y.dpid";
 				$fens = Yii::app()->db->createCommand($fensql)->queryAll();
 				if(count($fens)>1){
 					//重新组成的数组
@@ -233,7 +233,6 @@ class AppReportController extends Controller
 			'date'=>$date,
 			'type'=>$type
 			));
-		// $this->render('list');
 	}
 	public function actionYclxh(){
 		$now = time();
@@ -253,29 +252,23 @@ class AppReportController extends Controller
 			'date'=>$date,
 			'type'=>$type
 			));
-		// $this->render('list');
 	}
 	public function actionTcxs(){
 		$now = time();
 		$defaultData = array('start'=>date('Y-m-d',$now),'End'=>date('Y-m-d',$now));
 		$companyId = $this->companyId;
 		$date = Yii::app()->request->getParam('date',$defaultData);
-		// var_dump($date);exit;
 		$orders =array();
 		$type = $this->type();
 		if($type){
     		if(!empty($date)){
 				$sql ="select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,t.set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >='".$date['start']." 00:00:00' and t.create_at <= '".$date['End']." 23:59:59' and t.dpid in (select admin_dpid from nb_brand_user_admin where brand_user_id=".$this->brandUser['lid']." and delete_flag=0) group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc) c";
-				// echo $sql;exit;
 				$orders = Yii::app()->db->createCommand($sql)->queryAll();
-				// var_dump($orders);exit();
 			}
     	}else{
     		if(!empty($date)){
 				$sql ="select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,t.set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >='".$date['start']." 00:00:00' and t.create_at <= '".$date['End']." 23:59:59' and t.dpid=".$companyId." group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc) c";
-				// echo $sql;exit;
 				$orders = Yii::app()->db->createCommand($sql)->queryAll();
-				// var_dump($orders);exit();
 			}
     	}
 		$this->render('tcxs',array(
@@ -326,32 +319,77 @@ class AppReportController extends Controller
 	}
 	public function actionCzygl(){
 		$companyId = $this->companyId;
-		// var_dump($dp);exit();
 		$glsql = "select lid,username,staff_no,mobile,role from nb_user where dpid=".$companyId." and delete_flag=0 and role>=11";
 		$gls = Yii::app()->db->createCommand($glsql)->queryAll();
-		// var_dump($gls);exit;
 		$this->render('czygl',array(
 			'gls'=>$gls
-			));
+		));
 	}
 	public function actionTjgly(){
 		$companyId = $this->companyId;
 		$sql = "select * from nb_user where dpid=".$companyId." and role in (1,5,11)";
 		$model = Yii::app()->db->createCommand($sql)->queryRow();
-		// var_dump($model);exit();
 		$role = $model['role'];
-		// var_dump($role);exit();
 		$roles = $this->Jurisdiction($role);
-		// var_dump($roles);exit;
-		// var_dump($modle);exit();
-		// echo $modle['role'];exit;
 		$this->render('tjgly',array(
 			'model'=>$model,
 			'roles'=>$roles
-			));
+		));
+	}
+	//安全库存
+	public function actionAqkc(){
+		$companyId = $this->companyId;
+		$sql = "select * from nb_stock_setting where dpid=".$companyId." and delete_flag=0";
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		if(Yii::app()->request->isPostRequest){
+			$data = Yii::app()->request->getPost('m');
+			if($model){
+				$sql = 'update nb_stock_setting set dsales_day='.$data['dsales_day'].',dsafe_min_day='.$data['dsafe_min_day'].',dsafe_max_day='.$data['dsafe_max_day'].' where lid='.$model['lid'].' and dpid='.$model['dpid'];
+			}else{
+				$time = date('Y-m-d H:i:s',time());
+				$se = new Sequence("stock_setting");
+            	$lid = $se->nextval();
+				$sql = 'insert into nb_stock_setting(lid,dpid,create_at,update_at,dsales_day,dsafe_min_day,dsafe_max_day) values ('.$lid.','.$companyId.','.$time.','.$time.','.$data['dsales_day'].','.$data['dsafe_min_day'].','.$data['dsafe_max_day'].')';
+			}
+			$result = Yii::app()->db->createCommand($sql)->execute();
+			if($result){
+				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
+			}else{
+				Yii::app()->user->setFlash('success',yii::t('app','修改失败！'));
+			}
+			$this->redirect(array('appReport/aqkc','companyId'=>$companyId));
+		}
+		$this->render('aqkc',array(
+				'model'=>$model,
+		));
+	}
+	// 实时库存
+	public function actionSskc(){
+		$companyId = $this->companyId;
+		$categoryId = Yii::app()->request->getParam('cid',0);
+		$categorys = array();
+		$sql = 'select * from nb_material_category where dpid='.$companyId.' and delete_flag=0';
+		$cs = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($cs as $c){
+			$pid = 'lid-'.$c['pid'];
+			if(!isset($categorys[$pid])){
+				$categorys[$pid] = array();
+			}
+			array_push($categorys[$pid], $c);
+		}
+		$sql = 'select t.*,t1.category_name from nb_product_material t,nb_material_category t1 where t.dpid=t1.dpid and t.category_id=t1.lid and t.dpid='.$companyId;
+		if($categoryId){
+			$sql .= ' and t.category_id = '.$categoryId;
+		}
+		$sql .= ' and t.delete_flag=0';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+		$this->render('sskc',array(
+				'categoryId'=>$categoryId,
+				'categorys'=>$categorys,
+				'models'=>$models,
+		));
 	}
 	public function Jurisdiction($role){
-		// var_dump($role);exit();
 		switch($role){
 			case 1: $roles = array(
 			'1' => yii::t('app','超级管理员'),

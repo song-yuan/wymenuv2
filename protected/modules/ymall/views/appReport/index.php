@@ -304,6 +304,7 @@
 	</div>
 	<!--店铺管理-->
 <?php if(empty($type)):?>
+	<!-- 
 	<div class="bb">
 		<ul class="mui-table-view">
 			<li class="mui-table-view-cell mui-media">
@@ -322,7 +323,9 @@
 			</li>
 		</ul>
 	</div>
+	-->
 	<!--基础设置-->
+	<!-- 
 	<div class="bb">
 		<ul class="mui-table-view">
 			<li class="mui-table-view-cell mui-media">
@@ -347,7 +350,9 @@
 			</li>
 		</ul>
 	</div>
+	 -->
 	<!--营销活动-->
+	<!--
 	<div class="bb">
 		<ul class="mui-table-view">
 			<li class="mui-table-view-cell mui-media">
@@ -372,62 +377,22 @@
 			</li>
 		</ul>
 	</div>
+	-->
 	<!--进销存管理-->
 	<div class="bb">
 		<ul class="mui-table-view">
 			<li class="mui-table-view-cell mui-media">
-				<a href="javascript:;">
-					<div class="mui-media-body">
-						<div class="bb1">
-							<h4>供应链</h4>
-						</div>
-						<div class="bb2">
-							<a>安全库存</a>
-						</div>
-						<div class="bb3">
-							<a>预估额采购</a>
-						</div>
-						<div class="bb2">
-							<a>实时库存</a>
-						</div>
-						<div class="bb8">
-							<a>库存调整</a>
-						</div>
-						<div class="bb2">
-							<a>单据审核</a>
-						</div>
-						<div class="bb8">
-							<a>采购入库</a>
-						</div>
-						<div style="float: none;"></div>
-						<div class="bb9">
-							<a>供应链详情>>></a>
-						</div>
+				<div class="mui-media-body">
+					<div class="bb1">
+						<h4>供应链</h4>
 					</div>
-				</a>
-			</li>
-		</ul>
-	</div>
-	<!--外卖管理-->
-	<div class="bb">
-		<ul class="mui-table-view">
-			<li class="mui-table-view-cell mui-media">
-				<a href="javascript:;">
-					<div class="mui-media-body">
-						<div class="bb1">
-							<h4>外卖管理</h4>
-						</div>
-						<div class="bb2">
-							<a>美团外卖</a>
-						</div>
-						<div class="bb3">
-							<a>饿了么外卖</a>
-						</div>
-						<div class="bb10">
-							<a>设置</a>
-						</div>
+					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/aqkc',array('companyId'=>$this->companyId));?>">安全库存</a>
 					</div>
-				</a>
+					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">实时库存</a>
+					</div>
+				</div>
 			</li>
 		</ul>
 	</div>
