@@ -257,7 +257,8 @@ li{
                 <ul class="nav nav-tabs"id="attr_info" role="tablist">
                     <li role="presentation" class="active"><a href="javascript:void(0)" data-target ='zhangdantable'>账单</a></li>
                     <li role="presentation" ><a href="javascript:void(0)" data-target ='jifentable'>积分</a></li>
-                    <li role="presentation"><a href="javascript:void(0)" data-target ='cupontable'>优惠券</a></li>                   
+                    <li role="presentation"><a href="javascript:void(0)" data-target ='cupontable'>优惠券</a></li>
+                    <li role="presentation"><a href="javascript:void(0)" data-target ='recharge'>充值记录</a></li>                     
                 </ul>
                 <div class="info_content"> 
                           <table class="info_item table table-striped table-bordered table-hover" id="zhangdantable">
@@ -338,6 +339,22 @@ li{
                                 <?php endforeach;?>
                             </tbody>
                         </table>
+                        <table class="info_item table table-striped table-bordered table-hover" id="recharge">
+                             <thead>
+                                <tr>
+                                    <th>充值金额</th>    
+                                    <th>赠送金额</th>
+                                    <th>充值时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($recharges as $recharge):?>
+                            <tr>
+                            	<td><?php echo $recharge['recharge_money'];?></td><td><?php echo $recharge['cashback_num'];?></td><td><?php echo $recharge['create_at'];?></td>
+                            </tr>
+                            <?php endforeach;?>
+                            </tbody>
+                        </table>
                 </div>
             </div>
           <?php endif;?>  
@@ -347,7 +364,7 @@ li{
 </div>
 </div>
 <script>
-    $(function(){
+ $(function(){
 
         $(".info_item").hide();
         $(".info_item").eq(0).show();
@@ -359,7 +376,6 @@ li{
             //当前对应的显示
            $("#"+$(this).attr("data-target")).show();
         });
-        
     });
     
 $('.accountno').click(function() {
