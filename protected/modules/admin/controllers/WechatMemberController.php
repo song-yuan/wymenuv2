@@ -781,8 +781,14 @@ public function actionAccountDetail(){
      	$db = Yii::app()->db;
      	$user = BrandUser::model()->find('dpid=:companyId and lid=:lid' , array(':companyId'=>$dpid,':lid'=>$userid));
      	if(!empty($user)){
-     		$all_money = $user->remain_back_money + $money;
-     		$sql = 'update nb_brand_user set update_at ="'.date('Y-m-d H:i:s',time()).'",remain_back_money ="'.$all_money.'" where dpid ='.$dpid.' and lid ='.$userid;
+     		if($user->remain_back_money > -$money){
+     			$all_money = $user->remain_back_money + $money;
+     			$sql = 'update nb_brand_user set update_at ="'.date('Y-m-d H:i:s',time()).'",remain_back_money ='.$all_money.' where dpid ='.$dpid.' and lid ='.$userid;
+     		}else{
+     			$all_bmoney = 0;
+     			$all_money = $user->remain_money + $user->remain_back_money + $money;
+     			$sql = 'update nb_brand_user set update_at ="'.date('Y-m-d H:i:s',time()).'",remain_money ='.$all_money.',remain_back_money ='.$all_bmoney.' where dpid ='.$dpid.' and lid ='.$userid;
+     		}	
      		$result = $db->createCommand($sql)->execute();
      		if($result){
 
