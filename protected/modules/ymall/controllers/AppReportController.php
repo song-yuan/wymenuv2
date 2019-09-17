@@ -336,6 +336,109 @@ class AppReportController extends Controller
 			'roles'=>$roles
 		));
 	}
+	//厂商分类
+	public function actionCsfl(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.dpid='.$this->companyId.' and t.delete_flag=0';	
+		$criteria->order = ' t.lid desc ';	
+		$models = ManufacturerClassification::model()->findAll($criteria);
+		$this->render('csfl',array(
+				'models'=>$models
+		
+		));
+	}
+	public function actionCreateCsfl(){
+		$id = Yii::app()->request->getParam('id',0);
+		if($id){
+			$criteria = new CDbCriteria;
+			$criteria->condition =  'lid='.$id.' and dpid='.$this->companyId.' and delete_flag=0';
+			$model = ManufacturerClassification::model()->find($criteria);
+		}else{
+			$model = new ManufacturerClassification();
+		}
+		if(Yii::app()->request->isPostRequest){
+			$data = Yii::app()->request->getPost('ManufacturerClassification');
+			if(!$id){
+				$se=new Sequence("manufacturer_classification");
+				$model->lid = $se->nextval();
+				$model->dpid = $this->companyId;
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+			}
+			$model->attributes = $data;
+			if($model->save()){
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('appReport/csfl' , 'companyId' => $this->companyId ));
+			}
+		}
+		$this->render('ccsfl',array(
+				'model'=>$model
+	
+		));
+	}
+	public function actionDeleteCsfl(){
+		$id = Yii::app()->request->getParam('id',0);
+		$sql = 'update nb_manufacturer_classification set delete_flag=1 where lid='.$id.' and dpid='.$this->companyId;
+		$result = Yii::app()->db->createCommand($sql)->execute();
+		if($result){
+			Yii::app()->user->setFlash('success',yii::t('app','删除成功！'));
+		}else{
+			Yii::app()->user->setFlash('success',yii::t('app','删除失败！'));
+		}
+		$this->redirect(array('appReport/csfl' , 'companyId' => $this->companyId ));
+	}
+	//厂商信息
+	public function actionCsxx(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.dpid='.$this->companyId.' and t.delete_flag=0';
+		$criteria->order = ' t.lid desc ';
+		$models = ManufacturerInformation::model()->findAll($criteria);
+		$this->render('csxx',array(
+				'models'=>$models
+	
+		));
+	}
+	public function actionCreateCsxx(){
+		$id = Yii::app()->request->getParam('id',0);
+		$classifications = ManufacturerClassification::model()->findAll('dpid='.$this->companyId.' and delete_flag=0');
+		if($id){
+			$criteria = new CDbCriteria;
+			$criteria->condition =  'lid='.$id.' and dpid='.$this->companyId.' and delete_flag=0';
+			$model = ManufacturerInformation::model()->find($criteria);
+		}else{
+			$model = new ManufacturerInformation();
+		}
+		if(Yii::app()->request->isPostRequest){
+			$data = Yii::app()->request->getPost('ManufacturerClassification');
+			if(!$id){
+				$se=new Sequence("manufacturer_information");
+				$model->lid = $se->nextval();
+				$model->dpid = $this->companyId;
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+			}
+			$model->attributes = $data;
+			if($model->save()){
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('appReport/csxx' , 'companyId' => $this->companyId ));
+			}
+		}
+		$this->render('ccsxx',array(
+				'model'=>$model,
+				'classifications'=>$classifications
+		));
+	}
+	public function actionDeleteCsxx(){
+		$id = Yii::app()->request->getParam('id',0);
+		$sql = 'update nb_manufacturer_information set delete_flag=1 where lid='.$id.' and dpid='.$this->companyId;
+		$result = Yii::app()->db->createCommand($sql)->execute();
+		if($result){
+			Yii::app()->user->setFlash('success',yii::t('app','删除成功！'));
+		}else{
+			Yii::app()->user->setFlash('success',yii::t('app','删除失败！'));
+		}
+		$this->redirect(array('appReport/csxx' , 'companyId' => $this->companyId ));
+	}
 	//安全库存
 	public function actionAqkc(){
 		$companyId = $this->companyId;
@@ -389,7 +492,76 @@ class AppReportController extends Controller
 				'models'=>$models,
 		));
 	}
-	public function Jurisdiction($role){
+	//入库订单
+	public function actionRkdd(){
+		$companyId = $this->companyId;
+		$time = date('Y-m-d',time());
+		$defaultData = array('start'=>$time,'End'=>$time);
+		$date = Yii::app()->request->getParam('date',$defaultData);
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->order = ' lid desc ';
+		$criteria->params[':dpid']=$this->companyId;
+		$pages = new CPagination(StorageOrder::model()->count($criteria));
+		$pages->applyLimit($criteria);
+		$models = StorageOrder::model()->findAll($criteria);
+		$this->render('rkdd',array(
+				'models'=>$models,
+				'date'=>$date,
+				'pages'=>$pages,
+		));
+	}
+	public function actionRkdddetail(){
+		$companyId = $this->companyId;
+		$id = Yii::app()->request->getParam('id',0);
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('lid='.$id.' and dpid='.$companyId.' and delete_flag=0');
+		$model = StorageOrder::model()->find($criteria);
+		$details = StorageOrderDetail::model()->findAll('storage_id='.$id.' and dpid='.$companyId.' and delete_flag=0');
+		$this->render('rkdddetail',array(
+				'model'=>$model,
+				'details'=>$details
+		));
+	}
+	public function actionCreateRkdd(){
+		$companyId = $this->companyId;
+		$id = Yii::app()->request->getParam('id',0);
+		$model = StorageOrder::model()->find('lid='.$id.' and dpid='.$companyId.' and delete_flag=0');
+		$details = StorageOrderDetail::model()->findAll('storage_id='.$id.' and dpid='.$companyId.' and delete_flag=0');
+		
+		$mfrs = ManufacturerInformation::model()->findAll('dpid='.$companyId.' and delete_flag=0');
+		$users = User::model()->findAll('dpid='.$companyId.' and status=1 and delete_flag=0') ;
+		$categorys = $this->getMaterialCategory($companyId);
+		$materials = $this->getMaterials($companyId);
+		
+		$this->render('createRkdd',array(
+				'model'=>$model,
+				'details'=>$details,
+				'categorys'=>$categorys,
+				'materials'=>$materials,
+				'mfrs'=>$mfrs,
+				'users'=>$users
+		));
+	}
+	private function getMaterialCategory($dpid){
+		$categorys = array();
+		$sql = 'select * from nb_material_category where dpid='.$dpid.' and delete_flag=0';
+		$cates = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($cates as $cate){
+			$pid = $cate['pid'];
+			if(!isset($categorys[$pid])){
+				$categorys[$pid] = array();
+			}
+			array_push($categorys[$pid], $cate);
+		}
+		return $categorys;
+	}
+	private function getMaterials($dpid){
+		$sql = 'select * from nb_product_material where dpid='.$dpid.' and delete_flag=0';
+		$materials = Yii::app()->db->createCommand($sql)->queryAll();
+		return $materials;
+	}
+	private  function Jurisdiction($role){
 		switch($role){
 			case 1: $roles = array(
 			'1' => yii::t('app','超级管理员'),

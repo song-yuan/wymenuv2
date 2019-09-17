@@ -24,10 +24,10 @@ $flash = Yii::app()->user->getFlash('success');
 <body>
     <?php echo $content ?>
 </body>
-<script>
 <?php if($flash):?>
+<script>
 	mui.toast('<?php echo $flash;?>');
-<?php endif;?>
 </script>
+<?php endif;?>
 </html>
 

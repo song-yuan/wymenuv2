@@ -387,10 +387,41 @@
 						<h4>供应链</h4>
 					</div>
 					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/csfl',array('companyId'=>$this->companyId));?>">厂商分类</a>
+					</div>
+					<div class="bb3">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/csxx',array('companyId'=>$this->companyId));?>">厂商信息</a>
+					</div>
+					
+					<div class="bb2">
 						<a href="<?php echo $this->createUrl('/ymall/appReport/aqkc',array('companyId'=>$this->companyId));?>">安全库存</a>
 					</div>
-					<div class="bb2">
+					<div class="bb3">
 						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">实时库存</a>
+					</div>
+					
+					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/rkdd',array('companyId'=>$this->companyId));?>">入库订单</a>
+					</div>
+					<div class="bb3">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">退货订单</a>
+					</div>
+					
+					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘损原因</a>
+					</div>
+					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘损</a>
+					</div>
+					<div class="bb9">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘点</a>
+					</div>
+					
+					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘损记录</a>
+					</div>
+					<div class="bb2">
+						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘点记录</a>
 					</div>
 				</div>
 			</li>
