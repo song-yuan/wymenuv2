@@ -261,7 +261,21 @@ input[type=submit]{
 .ul .li-4{
 	width: 25%;
 	text-align: center;
-	line-height: 30px;
+	height:2.5em;
+	line-height: 2.5em;
+	white-space: nowrap;
+	overflow: auto;
+}
+.ul .li-5{
+	width: 20%;
+	text-align: center;
+	height:2.5em;
+	line-height: 2.5em;
+	white-space: nowrap;
+	overflow: auto;
+}
+.ul .li-4 input{
+	width:100%;
 }
 #ul li{
 	float: left;
