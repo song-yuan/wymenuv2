@@ -526,11 +526,77 @@ class AppReportController extends Controller
 	public function actionCreateRkdd(){
 		$companyId = $this->companyId;
 		$id = Yii::app()->request->getParam('id',0);
+		
 		$model = StorageOrder::model()->find('lid='.$id.' and dpid='.$companyId.' and delete_flag=0');
-		$details = StorageOrderDetail::model()->findAll('storage_id='.$id.' and dpid='.$companyId.' and delete_flag=0');
+		if(Yii::app()->request->isPostRequest){
+			$storage = Yii::app()->request->getPost('StorageOrder');
+			$materials = Yii::app()->request->getPost('material');
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+				if(!$model){
+					$model = new StorageOrder();
+					$se = new Sequence("storage_order");
+					$model->lid = $se->nextval();
+					$model->dpid = $companyId;
+					$model->create_at = date('Y-m-d H:i:s',time());
+					$model->update_at = date('Y-m-d H:i:s',time());
+					$model->storage_account_no = date('YmdHis',time()).substr($model->lid,-4);
+					$model->purchase_account_no = '';
+					$model->status = 0;
+				}
+				$model->manufacturer_id = $storage['manufacturer_id'];
+				$model->organization_id = $companyId;
+				$model->admin_id = $storage['admin_id'];
+				$model->remark = $storage['remark'];
+				$sql = 'update nb_storage_order_detail set delete_flag=1 where storage_id='.$id.' and dpid='.$companyId.' and delete_flag=0';
+				Yii::app()->db->createCommand($sql)->execute();
+				foreach ($materials as $key=>$material){
+					$mphsCode = $material['mphs_code'];
+					$stock = $material['stock'];
+					$price = $material['price'];
+					if($stock > 0){
+						$stde = new StorageOrderDetail();
+						$se = new Sequence("storage_order_detail");
+						$stde->lid = $se->nextval();
+						$stde->dpid = $companyId;
+						$stde->create_at = date('Y-m-d H:i:s',time());
+						$stde->update_at = date('Y-m-d H:i:s',time());
+						$stde->storage_id = $id;
+						$stde->material_id = $key;
+						$stde->mphs_code = $mphsCode;
+						$stde->stock = $stock;
+						$stde->price = $price;
+						$stde->save();
+					}
+				}
+				$transaction->commit();
+				$status = true;
+				$id = $model->lid;
+			}catch (Exception $e) {
+				$transaction->rollback(); //如果操作失败, 数据回滚
+				$status = false;
+			} 
+			if($status){
+				Yii::app()->user->setFlash('success',yii::t('app','保存成功！'));
+				$this->redirect(array('/ymall/appReport/rkdddetail','companyId'=>$companyId,'id'=>$id));
+			}else{
+				Yii::app()->user->setFlash('success',yii::t('app','保存失败！'));
+				$this->redirect(array('/ymall/appReport/createRkdd','companyId'=>$companyId,'id'=>$id));
+			}
+		}
+		$details = array();
+		$dets = StorageOrderDetail::model()->findAll('storage_id='.$id.' and dpid='.$companyId.' and delete_flag=0');
 		
 		$mfrs = ManufacturerInformation::model()->findAll('dpid='.$companyId.' and delete_flag=0');
 		$users = User::model()->findAll('dpid='.$companyId.' and status=1 and delete_flag=0') ;
+		
+		foreach ($dets as $det){
+			$mid = $det['material_id'];
+			if(!isset($details[$mid])){
+				$details[$mid] = array();
+			}
+			array_push($details[$mid], $det);
+		}
 		$categorys = $this->getMaterialCategory($companyId);
 		$materials = $this->getMaterials($companyId);
 		
@@ -542,6 +608,473 @@ class AppReportController extends Controller
 				'mfrs'=>$mfrs,
 				'users'=>$users
 		));
+	}
+	//库存盘点
+	public function actionKcpd(){
+		$db = Yii::app()->db;
+		$cate ='>0';
+		$sql = 'select ms.stock_all,mu.unit_name,mu.lid as mu_lid,ms.lid as ms_lid,ms.unit_name as sales_name,k.category_name,inv.inventory_stock,inv.inventory_sales,inv.ratio,inv.lid as invtid,t.* from nb_product_material t '.
+				'left join nb_material_category k on(t.category_id = k.lid and t.dpid = k.dpid)'.
+				'left join nb_material_unit mu on(t.stock_unit_id = mu.lid and t.dpid = mu.dpid) '.
+				'left join nb_material_unit ms on(t.sales_unit_id = ms.lid and t.dpid = ms.dpid) '.
+				'left join (select sum(stock) as stock_all,material_id from nb_product_material_stock where dpid='.$this->companyId.' and delete_flag=0 group by material_id) ms on(t.lid = ms.material_id)'.
+				'left join (select lid,material_id,inventory_stock,inventory_sales,ratio from nb_inventory_detail where inventory_id in(select max(lid) from nb_inventory where dpid ='.$this->companyId.' and type =2 and status =0) group by material_id) inv on(inv.material_id = t.lid)'.
+				'where t.lid in(select tt.lid from nb_product_material tt where tt.delete_flag = 0 and tt.dpid ='.$this->companyId.' and tt.category_id '.$cate.') and mu.delete_flag =0 and ms.delete_flag =0 order by t.material_identifier asc,t.category_id asc,t.lid asc';
+		$models = $db->createCommand($sql)->queryAll();
+		$categories = $this->getMaterialCategory($this->companyId);
+		$this->render('kcpd',array(
+				'models'=>$models,
+				'categorys'=>$categories,
+		
+		));
+	}
+	//库存盘损原因
+	public function actionKcpsyy(){
+		$criteria = new CDbCriteria;
+		$criteria->condition = 't.dpid='.$this->companyId.' and t.type=2 and t.delete_flag=0';
+		$criteria->order = ' t.lid desc ';
+		$models = Retreat::model()->findAll($criteria);
+		$this->render('kcpsyy',array(
+				'models'=>$models
+		));
+	}
+	public function actionCreateKcpsyy(){
+		$id = Yii::app()->request->getParam('id',0);
+		if($id){
+			$criteria = new CDbCriteria;
+			$criteria->condition =  'lid='.$id.' and dpid='.$this->companyId.' and type=2 and delete_flag=0';
+			$model = Retreat::model()->find($criteria);
+		}else{
+			$model = new Retreat();
+		}
+		if(Yii::app()->request->isPostRequest){
+			$data = Yii::app()->request->getPost('Retreat');
+			if(!$id){
+				$se = new Sequence("retreat");
+				$model->lid = $se->nextval();
+				$model->dpid = $this->companyId;
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->type = 2;
+			}
+			$model->attributes = $data;
+			if($model->save()){
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('appReport/kcpsyy' , 'companyId' => $this->companyId ));
+			}
+		}
+		$this->render('ckcpsyy',array(
+				'model'=>$model
+	
+		));
+	}
+	public function actionDeleteKcpsyy(){
+		$id = Yii::app()->request->getParam('id',0);
+		$sql = 'update nb_retreat set delete_flag=1 where lid='.$id.' and dpid='.$this->companyId;
+		$result = Yii::app()->db->createCommand($sql)->execute();
+		if($result){
+			Yii::app()->user->setFlash('success',yii::t('app','删除成功！'));
+		}else{
+			Yii::app()->user->setFlash('success',yii::t('app','删除失败！'));
+		}
+		$this->redirect(array('appReport/kcpsyy' , 'companyId' => $this->companyId ));
+	}
+	//库存盘损
+	public function actionKcps(){
+		$companyId = $this->companyId;
+		$reasons = Retreat::model()->findAll('dpid='.$companyId.' and type=2 and delete_flag=0');
+		$users = User::model()->findAll('dpid='.$companyId.' and status=1 and delete_flag=0') ;
+		
+		$pcategorys = $this->getProductCategory($companyId);
+		$categorys = $this->getMaterialCategory($companyId);
+		$products = $this->getProducts($companyId);
+		$materials = $this->getMaterials($companyId);
+		
+		$this->render('kcps',array(
+				'pcategorys'=>$pcategorys,
+				'categorys'=>$categorys,
+				'materials'=>$materials,
+				'products'=>$products,
+				'reasons'=>$reasons,
+				'users'=>$users
+		));
+	}
+	public function actionStore(){
+		$sid = Yii::app()->request->getParam('sid');
+		$sql = 'select * from nb_storage_order where lid='.$sid.' and dpid='.$this->companyId.' and delete_flag=0';
+		$storage = Yii::app()->db->createCommand($sql)->queryRow();
+		if($storage){
+			$sql = 'select * from nb_storage_order_detail where storage_id='.$sid.' and dpid='.$this->companyId.' and delete_flag=0';
+			$storageDetails = Yii::app()->db->createCommand($sql)->queryAll();
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+				foreach ($storageDetails as $detail){
+					$sql = 'select * from nb_product_material where lid='.$detail['material_id'].' and dpid='.$this->companyId.' and delete_flag=0';
+					$prodmaterial = Yii::app()->db->createCommand($sql)->queryRow();
+					
+					$sql = 'select * from nb_material_unit_ratio where stock_unit_id='.$prodmaterial['stock_unit_id'].' and sales_unit_id='.$prodmaterial['sales_unit_id'].' and dpid='.$this->companyId.' and delete_flag=0';
+					$unitratio = Yii::app()->db->createCommand($sql)->queryRow();
+					if(!empty($unitratio)){
+						$sql = 'update nb_product_material_stock set stock=0 where stock<0 and delete_flag=0 and material_id='.$detail['material_id'].' and dpid='.$this->companyId;
+						Yii::app()->db->createCommand($sql)->execute();
+						
+						$num = $detail['stock'] * $unitratio['unit_ratio'];
+						$pms = new Sequence("product_material_stock");
+						$lid = $pms->nextval(); 
+						$gmdata = array(
+								'lid'=>$lid,
+								'dpid'=>$this->companyId,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'material_id'=>$detail['material_id'],
+								'mphs_code'=>$detail['mphs_code'],
+								'stock_day'=>$detail['stock_day'],
+								'batch_stock'=>$num,
+								'stock'=>$num,
+								'free_stock'=>$detail['free_stock'],
+								'stock_cost'=>$detail['price'],
+						);
+						Yii::app()->db->createCommand()->insert('nb_product_material_stock',$gmdata);
+						//入库日志
+						$se=new Sequence("material_stock_log");
+						$lid = $se->nextval();
+						$gmlogdata = array(
+								'lid'=>$lid,
+								'dpid'=>$this->companyId,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'material_id'=>$detail['material_id'],
+								'type'=>0,
+								'stock_num'=>$num,
+								'resean'=>'入库单入库',
+						);
+						
+						Yii::app()->db->createCommand()->insert('nb_material_stock_log',$gmlogdata);
+					}
+					//如果没有入库单位和零售单位比的话，要提示没有入库成功。。。
+				}
+				$sql = 'update nb_storage_order set status=3,storage_date="'.date('Y-m-d H:i:s',time()).'" where dpid='.$dpid.' and lid='.$sid;
+				Yii::app()->db->createCommand($sql)->execute();
+				$transaction->commit();
+				echo 'true';exit;
+			}catch (Exception $e){
+				var_dump($e->getMessage());
+				$transaction->rollback();
+				echo 'false';exit;
+			}
+		}
+		echo 'false';
+		exit;
+		
+	}
+	//盘损保存
+	public function actionAjaxKcps(){
+		$dpid = $this->companyId;
+		$inventory = Yii::app()->request->getPost('Inventory');
+		$materials = Yii::app()->request->getPost('material');
+		$products = Yii::app()->request->getPost('product');
+		$time = time();
+		$db = Yii::app()->db;
+		$transaction = $db->beginTransaction();
+		try
+		{
+			//盘损日志
+			$se = new Sequence("inventory");
+			$lid = $se->nextval();
+			$stockArr = array(
+					'lid'=>$lid,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'type'=>1,
+					'opretion_id'=>$inventory['opretion_id'],
+					'reason_id'=>$inventory['reason_id'],
+					'inventory_account_no'=>date('YmdHis',time()).substr($lid,-4),
+					'status'=>1,
+					'remark'=>$inventory['remark'],
+			);
+			$db->createCommand()->insert('nb_inventory',$stockArr);
+			
+			$materialArr = array();
+			foreach ($materials as $key=>$m){
+				$num = $m['number'];
+				if(!empty($num)){
+					$se = new Sequence("inventory_detail");
+					$dlid = $se->nextval();
+					$stockArr = array(
+							'lid'=>$dlid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'type'=>1,
+							'inventory_id'=>$lid,
+							'material_id'=>$key,
+							'inventory_stock'=>$num,
+					);
+					$db->createCommand()->insert('nb_inventory_detail',$stockArr);
+					
+					$tempArr = array();
+					$tempArr['material_id'] = $key;
+					$tempArr['inventory_stock'] = $num;
+					array_push($materialArr, $tempArr);
+				}
+			}
+			foreach ($products as $key=>$p){
+				$num = $p['number'];
+				if(!empty($num)){
+					$se = new Sequence("inventory_detail");
+					$dlid = $se->nextval();
+					$stockArr = array(
+							'lid'=>$dlid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'type'=>2,
+							'inventory_id'=>$lid,
+							'material_id'=>$key,
+							'inventory_stock'=>$num,
+					);
+					$db->createCommand()->insert('nb_inventory_detail',$stockArr);
+					
+					$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$key.' and delete_flag=0';
+					$boms = $db->createCommand($sql)->queryAll();
+					foreach ($boms as $bom){
+						$tempArr = array();
+						$tempArr['material_id'] = $bom['material_id'];
+						$tempArr['inventory_stock'] = $num*$bom['number'];
+						array_push($materialArr, $tempArr);
+					}
+				}
+			}
+			
+			$pid = $lid;
+			foreach ($materialArr as $material){
+				$id = $material['material_id'];
+				$nowNum = $material['inventory_stock'];//盘损的库存
+					
+				// 盘损记录
+				$originalNum = 0;
+				$sql = 'select sum(stock) as stocks from nb_product_material_stock where stock != 0 and dpid ='.$dpid.' and material_id ='.$id;
+				$ms = $db->createCommand($sql)->queryRow();
+				if($ms){
+					$originalNum = $ms['stocks'];//原始库存
+				}
+					
+				$sql = 'select * from nb_product_material_stock where material_id='.$id.' and dpid='.$this->companyId.' and delete_flag=0 order by create_at desc limit 1';
+				$stocks = $db->createCommand($sql)->queryRow();
+				// 已经入库
+				if(!empty($stocks)){
+					//对该次盘损进行日志保存
+					if($nowNum>0){
+						$sql = 'select * from nb_product_material_stock where stock != 0 and dpid ='.$dpid.' and material_id = '.$id.' and delete_flag = 0 order by create_at asc';
+						$stock2 = $db->createCommand($sql)->queryAll();
+						$minusnum = $nowNum;
+							
+						foreach ($stock2 as $stock){
+							$stockori = $stock['stock'];
+							if($minusnum >= 0){
+								$minusnums = $minusnum - $stockori ;
+								if($stock['batch_stock'] == '0.00'){
+									$unit_price = '0';
+								}else{
+									$unit_price = $stock['stock_cost'] / $stock['batch_stock'];
+								}
+								if($minusnums <= 0 ) {
+									$changestock = $stock['stock'] - $minusnum;
+										
+									$sql = 'update nb_product_material_stock set stock = '.$changestock. ' where dpid ='.$this->companyId.' and lid='.$stock['lid'].' and delete_flag = 0';
+									$command=$db->createCommand($sql)->execute();
+									// 盘损成本
+									//对该次盘损进行日志保存
+									$se = new Sequence("material_stock_log");
+									$stocktakingdetails = array(
+											'lid'=>$se->nextval(),
+											'dpid'=>$dpid,
+											'create_at'=>date('Y-m-d H:i:s',time()),
+											'update_at'=>date('Y-m-d H:i:s',time()),
+											'type'=>4,
+											'logid'=>$pid,
+											'material_id'=>$id,
+											'stock_num' => $minusnum,
+											'original_num' => $stock['stock'],
+											'unit_price'=>$unit_price,
+											'resean'=>'盘损消耗',
+									);
+									$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
+									break;
+								}else{
+									$minusnum = $minusnums;
+									$sql = 'update nb_product_material_stock set stock=0 where delete_flag = 0 and lid ='.$stock['lid'].' and dpid ='.$this->companyId;
+									$command = $db->createCommand($sql)->execute();
+										
+									//对该次盘点进行日志保存
+									$se = new Sequence("material_stock_log");
+									$stocktakingdetails = array(
+											'lid'=>$se->nextval(),
+											'dpid'=>$dpid,
+											'create_at'=>date('Y-m-d H:i:s',time()),
+											'update_at'=>date('Y-m-d H:i:s',time()),
+											'type'=>4,
+											'logid'=>$pid,
+											'material_id'=>$id,
+											'stock_num' => $stock['stock'],
+											'original_num' => $stock['stock'],
+											'unit_price'=>$unit_price,
+											'resean'=>'盘损消耗',
+									);
+									$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
+								}
+							}
+						}
+					}
+				}else{
+					$se = new Sequence("material_stock_log");
+					$stocktakingdetails = array(
+							'lid'=>$se->nextval(),
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'type'=>4,
+							'logid'=>$pid,
+							'material_id'=>$id,
+							'stock_num' => $nowNum,
+							'original_num' => 0,
+							'unit_price'=>0,
+							'resean'=>'盘损消耗',
+					);
+					$command = $db->createCommand()->insert('nb_material_stock_log',$stocktakingdetails);
+				}
+			}
+			$transaction->commit();
+			$status = true;
+		}catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			$status = false;
+		}
+		if($status){
+			Yii::app()->user->setFlash('success',yii::t('app','盘点成功！'));
+			$this->redirect(array('/ymall/appReport/psjl','companyId'=>$companyId));
+		}else{
+			Yii::app()->user->setFlash('success',yii::t('app','盘点失败！'));
+			$this->redirect(array('/ymall/appReport/kcps','companyId'=>$companyId));
+		}
+	}
+	//盘点保存
+	public function actionAjaxKcpd(){
+		$sttype = Yii::app()->request->getPost('type',0);
+		$materials = Yii::app()->request->getPost('material',0);
+		$username = Yii::app()->user->username;
+		$nostockmsg = '';
+		$time = time();
+		$dpid = $this->companyId;
+		$db = Yii::app()->db;
+		$transaction = $db->beginTransaction();
+		try
+		{
+			//盘点日志
+			$se = new Sequence("stock_taking");
+			$logid = $se->nextval();
+			$stockArr = array(
+					'lid'=>$logid,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'username'=>$username,
+					'type'=>$sttype,
+					'title'=>date('m月d日 H时i分',$time).' 盘点操作记录',
+					'status'=>0
+			);
+			$db->createCommand()->insert('nb_stock_taking',$stockArr);
+				
+			foreach ($materials as $key=>$material){
+		
+				$id = $key;
+				$nownumd = $material['inventory_stock'];
+				$nownumx = $material['inventory_sales'];
+				$ratio = $material['ratio'];
+		
+				// 系统库存
+				$originalNum = $material['origin-num'];
+				// 原料销售单位
+				$salesName = $material['sales_name'];
+		
+				$systemNum = $originalNum;//系统库存
+				$nowNum = $nownumd*$ratio + $nownumx;// 盘点库存
+		
+				// 查询原料是否入库
+				$sql = 'select * from nb_product_material_stock where material_id='.$id.' and dpid='.$dpid.' and delete_flag=0 order by create_at desc limit 1';
+				$stocks = $db->createCommand($sql)->queryRow();
+				// 已入库
+				if(!empty($stocks)){
+					//盘点详情记录
+					$se = new Sequence("stock_taking_detail");
+					$lid = $se->nextval();
+					$stocktakingdetails = array(
+							'lid'=>$lid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'logid'=>$logid,
+							'material_id'=>$id,
+							'material_stock_id' =>$stocks['lid'],
+							'reality_stock' =>$systemNum,
+							'taking_stock' =>$nowNum,
+							'number'=>'1',
+							'reasion'=>$salesName,
+					);
+					$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
+				}else{
+					$matername = Common::getmaterialName($id);
+					$nostockmsg = $nostockmsg.','.$matername;
+						
+					//对该次盘点进行日志保存
+					$se=new Sequence("stock_taking_detail");
+					$detailid = $se->nextval();
+					$stocktakingdetail = array(
+							'lid'=>$detailid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'logid'=>$logid,
+							'material_id'=>$id,
+							'material_stock_id' => '0000000000',
+							'reality_stock' => $systemNum,
+							'taking_stock' => $nowNum,
+							'number'=>'0',
+							'reasion'=>'该次盘点['.$matername.']尚未入库，无法进行盘点,请先添加入库单进行入库.',
+					);
+					$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
+				}
+			}
+				
+			$sql = 'update nb_inventory set status =2 where status=0 and dpid='.$dpid.' and delete_flag=0';
+			$db->createCommand($sql)->execute();
+			$transaction->commit();
+			$status = true;
+		}catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			$status = false;
+		}
+		if($status){
+			Yii::app()->user->setFlash('success',yii::t('app','盘点成功！'));
+			$this->redirect(array('/ymall/appReport/pdjl','companyId'=>$companyId));
+		}else{
+			Yii::app()->user->setFlash('success',yii::t('app','盘点失败！'));
+			$this->redirect(array('/ymall/appReport/kcpd','companyId'=>$companyId));
+		}
+	}
+	private function getProductCategory($dpid){
+		$categorys = array();
+		$sql = 'select * from nb_product_category where dpid='.$dpid.' and cate_type=0 and delete_flag=0';
+		$cates = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($cates as $cate){
+			$pid = $cate['pid'];
+			if(!isset($categorys[$pid])){
+				$categorys[$pid] = array();
+			}
+			array_push($categorys[$pid], $cate);
+		}
+		return $categorys;
 	}
 	private function getMaterialCategory($dpid){
 		$categorys = array();
@@ -560,6 +1093,21 @@ class AppReportController extends Controller
 		$sql = 'select * from nb_product_material where dpid='.$dpid.' and delete_flag=0';
 		$materials = Yii::app()->db->createCommand($sql)->queryAll();
 		return $materials;
+	}
+	private function getProducts($dpid){
+		$sql = 'select * from nb_product where dpid='.$dpid.' and delete_flag=0';
+		$materials = Yii::app()->db->createCommand($sql)->queryAll();
+		return $materials;
+	}
+	public function getRatio($mulid,$mslid){
+		$sql = 'select unit_ratio from nb_material_unit_ratio where stock_unit_id='.$mulid.' and sales_unit_id='.$mslid;
+		$models = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!empty($models)){
+			$r = $models['unit_ratio'];
+		}else{
+			$r = '0';
+		}
+		return $r;
 	}
 	private  function Jurisdiction($role){
 		switch($role){

@@ -404,24 +404,24 @@
 						<a href="<?php echo $this->createUrl('/ymall/appReport/rkdd',array('companyId'=>$this->companyId));?>">入库订单</a>
 					</div>
 					<div class="bb3">
-						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">退货订单</a>
+						<a href="<?php echo $this->createUrl('/ymall/appReport/thdd',array('companyId'=>$this->companyId));?>">退货订单</a>
 					</div>
 					
 					<div class="bb2">
-						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘损原因</a>
+						<a href="<?php echo $this->createUrl('/ymall/appReport/kcpsyy',array('companyId'=>$this->companyId));?>">盘损原因</a>
 					</div>
 					<div class="bb2">
-						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘损</a>
+						<a href="<?php echo $this->createUrl('/ymall/appReport/kcps',array('companyId'=>$this->companyId));?>">盘损</a>
 					</div>
 					<div class="bb9">
-						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘点</a>
+						<a href="<?php echo $this->createUrl('/ymall/appReport/kcpd',array('companyId'=>$this->companyId));?>">盘点</a>
 					</div>
 					
 					<div class="bb2">
-						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘损记录</a>
+						<a href="<?php echo $this->createUrl('/ymall/appReport/psjl',array('companyId'=>$this->companyId));?>">盘损记录</a>
 					</div>
 					<div class="bb2">
-						<a href="<?php echo $this->createUrl('/ymall/appReport/sskc',array('companyId'=>$this->companyId));?>">盘点记录</a>
+						<a href="<?php echo $this->createUrl('/ymall/appReport/pdjl',array('companyId'=>$this->companyId));?>">盘点记录</a>
 					</div>
 				</div>
 			</li>

@@ -38,7 +38,7 @@
 	<div class="dp1">
 	<?php foreach($models as $model):?>
 		<ul class="ul">
-			<a href="<?php echo $this->createUrl('appReport/rkdddetail',array('companyId'=>$this->companyId,'id'=>$model->lid));?>"><li class="li-4"><?php echo $model['storage_account_no'];?></li></a>
+			<a <?php if($model->status==0){ echo 'style="color:red;"';}?> href="<?php echo $this->createUrl('appReport/rkdddetail',array('companyId'=>$this->companyId,'id'=>$model->lid));?>"><li class="li-4"><?php echo $model['storage_account_no'];?></li></a>
 			<li class="li-4"><?php echo Common::getmfrName($model->manufacturer_id);?></li>
 			<li class="li-4"><?php echo Common::getuserName($model->admin_id);?></li>
 			<li class="li-4"><?php echo date('Y-m-d',strtotime($model->create_at));?></li>
