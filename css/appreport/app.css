@@ -258,6 +258,22 @@ input[type=submit]{
 	text-align: center;
 	line-height: 30px;
 }
+.ul .li-2{
+	width: 75%;
+	text-align: center;
+	height:2.5em;
+	line-height: 2.5em;
+	white-space: nowrap;
+	overflow: auto;
+}
+.ul .li-3{
+	width: 33.33%;
+	text-align: center;
+	height:2.5em;
+	line-height: 2.5em;
+	white-space: nowrap;
+	overflow: auto;
+}
 .ul .li-4{
 	width: 25%;
 	text-align: center;
