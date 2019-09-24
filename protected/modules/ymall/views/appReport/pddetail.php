@@ -1,0 +1,55 @@
+<?php 
+	$basePath = Yii::app()->baseUrl;
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/app.css">
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
+	<h1 class="mui-title">盘损详情</h1>
+</header>
+<form class="mui-input-group">
+<div class="sd">
+	<div class="mui-input-row">
+		<label>盘点时间</label>
+		<label style="width:65%;"><?php echo $model->create_at;?></label>
+	</div>
+	<div class="mui-input-row">
+		<label>盘点类型</label>
+		<?php if($model->type==1):?>
+		<label>日盘</label>
+		<?php elseif($model->type==2):?>
+		<label>周盘</label>
+		<?php else:?>
+		<label>月盘</label>
+		<?php endif;?>
+	</div>
+	<div class="mui-input-row">
+		<label>盘点人</label>
+		<label><?php echo $model->username;?></label>
+	</div>
+</div>
+<div class="dp">
+	<div style="margin-top: 10px;">
+		<ul class="ul">
+			<li class="li-4">品项名称</li>
+			<li class="li-4">单位规格</li>
+			<li class="li-4">单位名称</li>
+			<li class="li-4">盘点库存</li>
+			<div style="clear: both;"></div>
+		</ul>
+	</div>
+	<div class="dp1">
+	<?php 
+		foreach($models as $m):
+		$materialUnit = Common::getmaterialUnit($m['material_id'], $m['dpid'], 0);
+	?>
+		<ul class="ul">
+			<li class="li-4"><?php echo $materialUnit['material_name'];?></li>
+			<li class="li-4"><?php echo $materialUnit['unit_name'];?></li>
+			<li class="li-4"><?php echo $materialUnit['unit_specifications'];?></li>
+			<li class="li-4"><?php echo $m['taking_stock'];?></li>
+			<div style="clear: both;"></div>
+		</ul>
+		<?php endforeach;?>
+	</div>
+</div>
+</form>

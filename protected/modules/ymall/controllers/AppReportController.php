@@ -699,6 +699,93 @@ class AppReportController extends Controller
 				'users'=>$users
 		));
 	}
+	// 盘损记录
+	public function actionPsjl(){
+		$retreatId = Yii::app()->request->getParam('rid',0);
+		$start = Yii::app()->request->getParam('start','');
+		$end = Yii::app()->request->getParam('end','');
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('t.dpid='.$this->companyId.' and t.type =1 and t.delete_flag=0');
+		if($retreatId){
+			$criteria->addCondition('t.reason_id='.$retreatId);
+		}
+		if(!empty($start)){
+			$criteria->addCondition('t.create_at >="'.$start.' 00:00:00"');
+		}
+		if(!empty($end)){
+			$criteria->addCondition('t.create_at <="'.$end.' 23:59:59"');
+		}
+		$criteria->order = ' t.lid desc ';
+		
+		$pages = new CPagination(Inventory::model()->count($criteria));
+		$pages->applyLimit($criteria);
+		$models = Inventory::model()->findAll($criteria);
+		
+		$retreats = Retreat::model()->findAll('dpid='.$this->companyId.' and type=2 and delete_flag=0');
+		
+		$this->render('psjl',array(
+				'models'=>$models,
+				'retreats'=>$retreats,
+				'start'=>$start,
+				'end'=>$end,
+				'retreatId'=>$retreatId,
+				'pages'=>$pages
+		));
+	}
+	public function actionPsdetail(){
+		$id = Yii::app()->request->getParam('id',0);
+		$criteria = new CDbCriteria;
+		$criteria->with = 'retreat';
+		$criteria->condition = 't.lid='.$id.' and t.dpid='.$this->companyId.' and t.delete_flag=0';
+		$model = Inventory::model()->find($criteria);
+		$models = InventoryDetail::model()->findAll('dpid='.$this->companyId.' and inventory_id='.$id.' and delete_flag=0');
+		$this->render('psdetail',array(
+				'model'=>$model,
+				'models'=>$models
+		));
+	}
+	// 盘点记录
+	public function actionPdjl(){
+		$type = Yii::app()->request->getParam('type',0);
+		$start = Yii::app()->request->getParam('start','');
+		$end = Yii::app()->request->getParam('end','');
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('t.dpid='.$this->companyId.' and t.delete_flag=0');
+		if($type){
+			$criteria->addCondition('t.type='.$type);
+		}
+		if(!empty($start)){
+			$criteria->addCondition('t.create_at >="'.$start.' 00:00:00"');
+		}
+		if(!empty($end)){
+			$criteria->addCondition('t.create_at <="'.$end.' 23:59:59"');
+		}
+		$criteria->order = ' t.lid desc ';
+	
+		$pages = new CPagination(StockTaking::model()->count($criteria));
+		$pages->applyLimit($criteria);
+		$models = StockTaking::model()->findAll($criteria);
+	
+	
+		$this->render('pdjl',array(
+				'models'=>$models,
+				'start'=>$start,
+				'end'=>$end,
+				'type'=>$type,
+				'pages'=>$pages
+		));
+	}
+	public function actionPddetail(){
+		$id = Yii::app()->request->getParam('id',0);
+		$criteria = new CDbCriteria;
+		$criteria->condition = 't.lid='.$id.' and t.dpid='.$this->companyId.' and t.delete_flag=0';
+		$model = StockTaking::model()->find($criteria);
+		$models = StockTakingDetail::model()->findAll('dpid='.$this->companyId.' and logid='.$id.' and delete_flag=0');
+		$this->render('pddetail',array(
+				'model'=>$model,
+				'models'=>$models
+		));
+	}
 	public function actionStore(){
 		$sid = Yii::app()->request->getParam('sid');
 		$sql = 'select * from nb_storage_order where lid='.$sid.' and dpid='.$this->companyId.' and delete_flag=0';
