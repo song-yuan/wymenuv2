@@ -68,8 +68,8 @@
 	<div class="dp1">
 	<?php 
 		foreach($materials as $material):
-		$stock = '0.00';
-		$price = '0.00';
+		$stock = '';
+		$price = '';
 		if(isset($details[$material['lid']])){
 			foreach ($details[$material['lid']] as $de){
 				$s = $de['stock'];
@@ -82,9 +82,9 @@
 	?>
 		<ul class="ul" c-id="<?php echo $material['category_id'];?>" m-id="<?php echo $material['lid'];?>">
 			<li class="li-4"><?php echo $material['material_name'];?></li>
-			<li class="li-4"><input class="stock" name="material[<?php echo $material['lid'];?>][stock]" placeholder="输入入库库存" value="<?php echo $stock;?>"/></li>
+			<li class="li-4"><input type="number" class="stock" name="material[<?php echo $material['lid'];?>][stock]" placeholder="输入入库库存" value="<?php echo $stock;?>"/></li>
 			<li class="li-4"><?php echo $materialUnit['unit_specifications'];?></li>
-			<li class="li-4"><input class="price" name="material[<?php echo $material['lid'];?>][price]" placeholder="输入入库价格" value="<?php echo $price;?>"/></li>
+			<li class="li-4"><input type="number" class="price" name="material[<?php echo $material['lid'];?>][price]" placeholder="输入入库价格" value="<?php echo $price;?>"/></li>
 			<div style="clear: both;"></div>
 			<input name="material[<?php echo $material['lid'];?>][mphs_code]" type="hidden" value="<?php echo $material['mphs_code'];?>"/>
 		</ul>
