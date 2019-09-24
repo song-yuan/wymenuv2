@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/mui.picker.min.css">
 <header class="mui-bar mui-bar-nav">
 		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
-		<h1 class="mui-title">盘损列表</h1>
+		<h1 class="mui-title">盘点列表</h1>
 		<a class="mui-icon mui-pull-right" href="<?php echo $this->createUrl('appReport/kcps',array('companyId'=>$this->companyId));?>">新增</a>
 </header>
 <div class="sd">
@@ -21,7 +21,7 @@
 			</li>
 			<li class="mui-table-view-cell">
 				<span>盘点类型</span>
-				<select name="type" class="mui-navigate-right" style="margin-left: 95px;width:55%;font-size:17px;">
+				<select name="type" class="mui-navigate-right" style="margin-left: 95px;width:50%;font-size:17px;">
 					<option value="0">请选择</option>
 					<option value="1" <?php if($type==1){echo 'selected="true"';}?>>日盘</option>
 					<option value="2" <?php if($type==2){echo 'selected="true"';}?>>周盘</option>

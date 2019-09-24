@@ -21,7 +21,7 @@
 			</li>
 			<li class="mui-table-view-cell">
 				<span>盘损原因</span>
-				<select name="rid" class="mui-navigate-right" style="margin-left: 95px;width:55%;font-size:17px;">
+				<select name="rid" class="mui-navigate-right" style="margin-left: 95px;width:50%;font-size:17px;">
 					<option value="0">请选择</option>
 					<?php foreach ($retreats as $retreat):?>
 					<option value="<?php echo $retreat['lid']?>" <?php if($retreat['lid']==$retreatId){echo 'selected="true"';}?>><?php echo $retreat['name'];?></option>
