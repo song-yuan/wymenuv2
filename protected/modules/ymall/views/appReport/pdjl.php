@@ -4,7 +4,7 @@
 <header class="mui-bar mui-bar-nav">
 		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
 		<h1 class="mui-title">盘点列表</h1>
-		<a class="mui-icon mui-pull-right" href="<?php echo $this->createUrl('appReport/kcps',array('companyId'=>$this->companyId));?>">新增</a>
+		<a class="mui-icon mui-pull-right" href="<?php echo $this->createUrl('appReport/kcpd',array('companyId'=>$this->companyId));?>">新增</a>
 </header>
 <div class="sd">
 	<form method="get">

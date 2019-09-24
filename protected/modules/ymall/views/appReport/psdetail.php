@@ -3,13 +3,13 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/app.css">
 <header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/kcps',array('companyId'=>$this->companyId));?>"></a>
 	<h1 class="mui-title">盘损详情</h1>
 </header>
 <form class="mui-input-group">
 <div class="sd">
 	<div class="mui-input-row">
-		<label>盘损时间</label><label><?php echo $model->create_at;?></label>
+		<label>盘损时间</label><label style="width:55%;"><?php echo $model->create_at;?></label>
 	</div>
 	<div class="mui-input-row">
 		<label>操作员</label>

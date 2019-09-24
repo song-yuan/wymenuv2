@@ -3,8 +3,8 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/app.css">
 <header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/index',array('companyId'=>$this->companyId));?>"></a>
-	<h1 class="mui-title">盘损详情</h1>
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="<?php echo $this->createUrl('appReport/kcpd',array('companyId'=>$this->companyId));?>"></a>
+	<h1 class="mui-title">盘点详情</h1>
 </header>
 <form class="mui-input-group">
 <div class="sd">

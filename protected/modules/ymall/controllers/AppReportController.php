@@ -548,6 +548,8 @@ class AppReportController extends Controller
 				$model->organization_id = $companyId;
 				$model->admin_id = $storage['admin_id'];
 				$model->remark = $storage['remark'];
+				$model->save();
+				$id = $model->lid;
 				$sql = 'update nb_storage_order_detail set delete_flag=1 where storage_id='.$id.' and dpid='.$companyId.' and delete_flag=0';
 				Yii::app()->db->createCommand($sql)->execute();
 				foreach ($materials as $key=>$material){
@@ -571,7 +573,6 @@ class AppReportController extends Controller
 				}
 				$transaction->commit();
 				$status = true;
-				$id = $model->lid;
 			}catch (Exception $e) {
 				$transaction->rollback(); //如果操作失败, 数据回滚
 				$status = false;
@@ -840,7 +841,7 @@ class AppReportController extends Controller
 					}
 					//如果没有入库单位和零售单位比的话，要提示没有入库成功。。。
 				}
-				$sql = 'update nb_storage_order set status=3,storage_date="'.date('Y-m-d H:i:s',time()).'" where dpid='.$dpid.' and lid='.$sid;
+				$sql = 'update nb_storage_order set status=3,storage_date="'.date('Y-m-d H:i:s',time()).'" where dpid='.$this->companyId.' and lid='.$sid;
 				Yii::app()->db->createCommand($sql)->execute();
 				$transaction->commit();
 				echo 'true';exit;
