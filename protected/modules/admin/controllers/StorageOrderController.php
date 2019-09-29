@@ -13,15 +13,14 @@ class StorageOrderController extends BackendController
 	}
 	
 	public function actionIndex(){
-		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
 		$mid=0;
 		$begintime=0;
 		$endtime=0;
 		$storage=0;
 		$purchase=0;
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->with = 'company';
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
 		if(Yii::app()->request->isPostRequest){
 			$mid = Yii::app()->request->getPost('mid',0);
 			if($mid){
@@ -614,6 +613,7 @@ class StorageOrderController extends BackendController
 		$sid = Yii::app()->request->getParam('sid');
 		$sql = 'select * from nb_storage_order where lid='.$sid.' and dpid='.$this->companyId.' and delete_flag=0';
 		$storage = Yii::app()->db->createCommand($sql)->queryRow();
+		var_dump($storage);exit;
 		if($storage['status']){
 			$sql = 'select * from nb_storage_order_detail where storage_id='.$sid.' and dpid='.$this->companyId.' and delete_flag=0';
 			$storageDetails = Yii::app()->db->createCommand($sql)->queryAll();

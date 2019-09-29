@@ -20,7 +20,6 @@ class MfrClassificationController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
-		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
@@ -31,8 +30,7 @@ class MfrClassificationController extends BackendController
 		$models = ManufacturerClassification::model()->findAll($criteria);
 		$this->render('index',array(
 				'models'=>$models,
-				'pages'=>$pages,
-				'categoryId'=>$categoryId
+				'pages'=>$pages
 		
 		));
 	}

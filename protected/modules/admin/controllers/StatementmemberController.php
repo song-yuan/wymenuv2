@@ -29,19 +29,23 @@ class StatementmemberController extends BackendController
 	}
 	
 	public function actionWxmemberReport(){
-		$xAxisname = '[';
-		$seriesnum = '[';
-		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$sex = Yii::app()->request->getParam('sex','-1');
 		$sub = Yii::app()->request->getParam('sub','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$selectDpid = Yii::app()->request->getParam('selectDpid','');
 		$criteria = new CDbCriteria;
 		$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,count(t.lid) as all_num';
-		$criteria->condition = '(t.dpid='.$this->companyId.' or t.weixin_group='.$this->companyId.')';
-		if($str){
-			$criteria->condition = 't.dpid in('.$str.')';
+		if($selectDpid!=''){
+			$criteria->condition = 't.weixin_group='.$selectDpid;
+		}else{
+			if($this->comptype==1){
+				$selectDpid = $this->companyId;
+				$criteria->condition = 't.weixin_group='.$selectDpid;
+			}else{
+				$criteria->condition = 't.dpid='.$this->companyId;
+			}
 		}
 		if($sex>=0){
 			$criteria->addCondition("t.sex =".$sex);
@@ -61,38 +65,15 @@ class StatementmemberController extends BackendController
 			$criteria->group ='day(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,t.dpid asc';
 		}
-		//$pages = new CPagination(BrandUser::model()->count($criteria));
-		//$pages->applyLimit($criteria);
 		$models = BrandUser::model()->findAll($criteria);
-		if($models){
-			foreach ($models as $model){
-				if($text==1){
-					$xAxisname = $xAxisname .'"'.$model->y_all.'",';
-				}elseif($text==2){
-					$xAxisname = $xAxisname .'"'.$model->y_all.'-'.$model->m_all.'",';
-				}else{
-					$xAxisname = $xAxisname .'"'.$model->y_all.'-'.$model->m_all.'-'.$model->d_all.'",';
-				}
-				
-				$seriesnum = $seriesnum.$model->all_num.',';
-			}
-			$xAxisname = $xAxisname .']';
-			$seriesnum = $seriesnum .']';
-		}else{
-			$xAxisname =0;
-			$seriesnum =0;
-		}
 		$this->render('wxmemberReport',array(
 				'models'=>$models,
-				//'pages'=>$pages,
+				'selectDpid'=>$selectDpid,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
-				'str'=>$str,
 				'sex'=>$sex,
 				'sub'=>$sub,
-				'xAxisname'=>$xAxisname,
-				'seriesnum'=>$seriesnum,
 		));
 	}
 
