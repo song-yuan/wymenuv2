@@ -73,7 +73,7 @@
 }
 </style>
 <?php if(empty($notices)):?>
-<div class="header"><marquee scrolldelay="50">欢迎光临本店:<?php echo $this->company['company_name'];?></marquee></div>
+<div class="header"><marquee scrolldelay="50">欢迎光临本店:<?php echo $this->company['company_name'].',订餐热线:'.$this->company['telephone'];?></marquee></div>
 <?php else:?>
 <div class="header">
 	<marquee scrolldelay="150">
