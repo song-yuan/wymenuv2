@@ -140,13 +140,18 @@ class PosfeeController extends BackendController
 		Yii::app()->end(json_encode(array("status"=>true,'msg'=>'成功')));
 	}
 	public function actionPostore(){
+		$now = time();
+		$nowDate = date('Y-m-d H:i:s',$now);
 		$dpid = Yii::app()->request->getParam('companyId',0);
 		$poscode = Yii::app()->request->getParam('poscode',0);
 		$years = Yii::app()->request->getParam('years',0);
 		$month = Yii::app()->request->getParam('month',0);
 		$status = Yii::app()->request->getParam('status',0);
-		$time = Yii::app()->request->getParam('expt',date('Y-m-d H:i:s',time()));
-		//var_dump($time);exit;
+		$time = Yii::app()->request->getParam('expt',$nowDate);
+		if($now > strtotime($time)){
+			$time = $nowDate;
+		}
+		
 		$type = 1;
 		$addtime = 0;
 		if($years){
