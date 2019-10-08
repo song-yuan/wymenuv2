@@ -1145,10 +1145,10 @@ class AppReportController extends Controller
 		}
 		if($status){
 			Yii::app()->user->setFlash('success',yii::t('app','盘点成功！'));
-			$this->redirect(array('/ymall/appReport/pdjl','companyId'=>$companyId));
+			$this->redirect(array('/ymall/appReport/pdjl','companyId'=>$dpid));
 		}else{
 			Yii::app()->user->setFlash('success',yii::t('app','盘点失败！'));
-			$this->redirect(array('/ymall/appReport/kcpd','companyId'=>$companyId));
+			$this->redirect(array('/ymall/appReport/kcpd','companyId'=>$dpid));
 		}
 	}
 	private function getProductCategory($dpid){
