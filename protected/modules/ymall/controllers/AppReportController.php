@@ -1088,7 +1088,10 @@ class AppReportController extends Controller
 		
 				$systemNum = $originalNum;//系统库存
 				$nowNum = $nownumd*$ratio + $nownumx;// 盘点库存
-		
+				
+				if(empty($nowNum)){
+					continue;
+				}
 				// 查询原料是否入库
 				$sql = 'select * from nb_product_material_stock where material_id='.$id.' and dpid='.$dpid.' and delete_flag=0 order by create_at desc limit 1';
 				$stocks = $db->createCommand($sql)->queryRow();
