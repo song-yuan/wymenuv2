@@ -1051,7 +1051,7 @@ class AppReportController extends Controller
 	public function actionAjaxKcpd(){
 		$sttype = Yii::app()->request->getPost('type',0);
 		$materials = Yii::app()->request->getPost('material',0);
-		$username = Yii::app()->user->username;
+		$username = $this->brandUser['user_name'];
 		$nostockmsg = '';
 		$time = time();
 		$dpid = $this->companyId;
