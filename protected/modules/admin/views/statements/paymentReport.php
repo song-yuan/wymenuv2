@@ -408,7 +408,7 @@
 				success:function(data){
 					var str = '';
 					str += '<option value="0" selected="selected">--请选择服务员--</option>';
-					str += '<option value="-1" selected="selected">--列出所有--</option>';
+					str += '<option value="-1">--列出所有--</option>';
 					for(var i in data){
 						var obj = data[i];
 		                str +='<option value="'+obj.username+'">'+obj.username+'('+obj.staff_no+')</option>';

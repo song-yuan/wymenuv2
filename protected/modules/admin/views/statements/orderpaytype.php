@@ -118,7 +118,8 @@
                             <option paymentid="1" value="4" <?php if ($paymentid=='1' && $paytype=='4'){?> selected="selected" <?php }?> ><?php echo yii::t('app','会员卡');?></option>
                             <option paymentid="1" value="5" <?php if ($paymentid=='1' && $paytype=='5'){?> selected="selected" <?php }?> ><?php echo yii::t('app','银联卡');?></option>
                             <option paymentid="1" value="9" <?php if ($paymentid=='1' && $paytype=='9'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信代金券');?></option>
-                            <option paymentid="1" value="10" <?php if ($paymentid=='1'&& $paytype=='10'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信余额');?></option>
+                            <option paymentid="1" value="7" <?php if ($paymentid=='1'&& $paytype=='7'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信储值(充)');?></option>
+                            <option paymentid="1" value="10" <?php if ($paymentid=='1'&& $paytype=='10'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信储值(返)');?></option>
                             <option paymentid="1" value="12" <?php if ($paymentid=='1'&& $paytype=='12'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信点单');?></option>
                             <option paymentid="1" value="13" <?php if ($paymentid=='1'&& $paytype=='13'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
                             <option paymentid="1" value="14" <?php if ($paymentid=='1'&& $paytype=='14'){?> selected="selected" <?php }?> ><?php echo yii::t('app','美团·外卖');?></option>
