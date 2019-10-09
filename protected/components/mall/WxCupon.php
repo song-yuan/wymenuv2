@@ -101,7 +101,7 @@ class WxCupon
 	 public static function getUserExpireCupon($userId,$dpid){
 	 	$now = date('Y-m-d H:i:s',time());
 		$sql = 'select m.lid,m.is_used,m.valid_day,m.close_day,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time ,n.cupon_memo from nb_cupon_branduser m ,nb_cupon n' .
-				' where m.cupon_id=n.lid and m.dpid=n.dpid and m.dpid='.$dpid.' and m.to_group=3 and m.brand_user_lid='.$userId.' and m.close_day>=:now and n.delete_flag=0';
+				' where m.cupon_id=n.lid and m.dpid=n.dpid and m.dpid='.$dpid.' and m.to_group=3 and m.brand_user_lid='.$userId.' and m.close_day<=:now and n.delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':now',$now)
 				  ->queryAll();
