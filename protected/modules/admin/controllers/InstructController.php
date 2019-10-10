@@ -12,7 +12,7 @@ class InstructController extends BackendController
 	public function actionIndex() {
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
-		$criteria->order = 'lid desc ';
+		$criteria->order = 'sort asc,lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		
 		$pages = new CPagination(Instruction::model()->count($criteria));

@@ -36,11 +36,12 @@ class Instruction extends CActiveRecord
 			array('lid, dpid', 'length', 'max'=>10),
 			array('phs_code, instruct_name', 'length', 'max'=>16),
 			array('source, delete_flag', 'length', 'max'=>2),
+			array('sort', 'length', 'max'=>3),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, phs_code, source, instruct_name, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, phs_code, source, instruct_name, sort, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,7 @@ class Instruction extends CActiveRecord
 			'phs_code' => 'Phs Code',
 			'source' => 'Source',
 			'instruct_name' => '指令名称',
+			'sort' => '排序',
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => 'Is Sync',
 		);
@@ -98,6 +100,7 @@ class Instruction extends CActiveRecord
 		$criteria->compare('phs_code',$this->phs_code,true);
 		$criteria->compare('source',$this->source,true);
 		$criteria->compare('instruct_name',$this->instruct_name,true);
+		$criteria->compare('sort',$this->sort,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
