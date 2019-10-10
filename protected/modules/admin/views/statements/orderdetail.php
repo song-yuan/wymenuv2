@@ -328,10 +328,12 @@ $(function () {
 												paytypename = '会员卡支付';
 											}else if(paytype==5){
 												paytypename = '银联支付';
+											}else if(paytype==7){
+												paytypename = '微信储值(充)';
 											}else if(paytype==9){
 												paytypename = '微信代金券';
 											}else if(paytype==10){
-												paytypename = '微信储值';
+												paytypename = '微信储值(返)';
 											}else if(paytype==12){
 												paytypename = '微信支付~';
 											}else if(paytype==13){

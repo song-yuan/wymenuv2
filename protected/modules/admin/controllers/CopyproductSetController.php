@@ -360,6 +360,7 @@ class CopyproductSetController extends BackendController
         		$arr_dpid = '';
     			Yii::app()->user->setFlash('success' , yii::t('app','套餐下发成功！！！'));
         	}
+        	$this->delprokey($companyId,1,1);
     		$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId,'arr_dpid' => $arr_dpid)) ;
 
         }else{
@@ -368,6 +369,19 @@ class CopyproductSetController extends BackendController
         }
 
 	}
-
+	private function delprokey($companyId,$isshow,$isshowwx){
+		if($isshow=1){
+			if($isshowwx==1){
+				$key = array('productList-'.$companyId.'-2','productList-'.$companyId.'-6');
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==3){
+				$key = 'productList-'.$companyId.'-6';
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==4){
+				$key = 'productList-'.$companyId.'-2';
+				Yii::app()->redis->delete($key);
+			}
+		}
+	}
 
 }

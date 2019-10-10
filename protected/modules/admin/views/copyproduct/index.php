@@ -232,13 +232,6 @@ function fun()
 		        layer_index_printerportlist = 0;
 		        });
 		<?php endif; ?>
-		$('#product-form').submit(function(){
-			if(!$('.checkboxes:checked').length){
-				alert("<?php echo yii::t('app','请选择要删除的项');?>");
-				return false;
-			}
-			return true;
-		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('copyproduct/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
@@ -275,10 +268,7 @@ function fun()
 	})
 
 	$("#su").on('click',function() {
-
-        //alert(11);
 		var aa = document.getElementsByName("ids[]");
-		//var aa = document.getElementsByName("ids[]");
         var codep=new Array();
         var codec=new Array();
         for (var i = 0; i < aa.length; i++) {

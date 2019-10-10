@@ -52,7 +52,6 @@ class CopyproductController extends BackendController
 
 	public function actionStorProduct(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$is_sync = DataSync::getInitSync();
 		$ids = Yii::app()->request->getPost('ids');
 		$chscode = Yii::app()->request->getParam('chscode');
 		$phscode = Yii::app()->request->getParam('phscode');
@@ -66,6 +65,7 @@ class CopyproductController extends BackendController
 		$dpids = array();
 		$dpids = explode(',',$dpid);
 
+		
 		//****查询公司的产品分类。。。****
 		$db = Yii::app()->db;
 		$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.pid = 0 and t.dpid = '.$this->companyId;
@@ -116,7 +116,6 @@ class CopyproductController extends BackendController
 	                        		'main_picture'=>$category['main_picture'],
 	                        		'order_num'=>$category['order_num'],
 	                        		'delete_flag'=>'0',
-	                        		'is_sync'=>$is_sync,
 	                        );
 	                        $command = $db->createCommand()->insert('nb_product_category',$data);
 
@@ -176,7 +175,6 @@ class CopyproductController extends BackendController
         								'main_picture'=>$category['main_picture'],
         								'order_num'=>$category['order_num'],
         								'delete_flag'=>'0',
-        								'is_sync'=>$is_sync,
         						);
         						$command = $db->createCommand()->insert('nb_product_category',$datacate);
 
@@ -313,7 +311,6 @@ class CopyproductController extends BackendController
     							'is_show_wx'=>$product['is_show_wx'],
     							'is_lock'=>$product['is_lock'],
     							'delete_flag'=>'0',
-    							'is_sync'=>$is_sync,
         					);
         					$command = $db->createCommand()->insert('nb_product',$dataprod);
         					if (!$command) {
@@ -349,7 +346,6 @@ class CopyproductController extends BackendController
         					$producto->is_show_wx = $product['is_show_wx'];
         					//$producto->is_lock = $product['is_lock'];
         					$producto->delete_flag = '0';
-        					$producto->is_sync = $is_sync;
         					$rows = $producto->save();
         					if (!$rows) {
         						$dpid_view .= $dpid.',';
@@ -365,6 +361,7 @@ class CopyproductController extends BackendController
         		$arr_dpid = '';
         		Yii::app()->user->setFlash('success' , yii::t('app','菜品下发成功！！！'));
         	}
+        	$this->delprokey($companyId,1,1);
         	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId,'arr_dpid' => $arr_dpid)) ;
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
@@ -442,5 +439,18 @@ class CopyproductController extends BackendController
 		$departments = Department::model()->findAll('company_id=:companyId',array(':companyId'=>$this->companyId)) ;
 		return CHtml::listData($departments, 'department_id', 'name');
 	}
-
+	private function delprokey($companyId,$isshow,$isshowwx){
+		if($isshow=1){
+			if($isshowwx==1){
+				$key = array('productList-'.$companyId.'-2','productList-'.$companyId.'-6');
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==3){
+				$key = 'productList-'.$companyId.'-6';
+				Yii::app()->redis->delete($key);
+			}elseif($isshowwx==4){
+				$key = 'productList-'.$companyId.'-2';
+				Yii::app()->redis->delete($key);
+			}
+		}
+	}
 }

@@ -108,7 +108,16 @@ span.tab{
                                 <div class="list_small">查询外卖订单的隐私号对应的真实手机号</div>
                             </a> 
                         </div>
-                    </div>     
+                    </div> 
+                    <div class="panel_body row">
+                    	<p>外卖产品原料消耗</p>
+                        <div style="height: 80px;" class="list col-sm-3 col-xs-12">
+                            <a href="<?php echo $this->createUrl('waimai/product',array('companyId'=>$this->companyId));?>">
+                                <div class="list_big">产品原料消耗</div>
+                                <div class="list_small">没有对应的外卖产品，手动进行原料消耗</div>
+                            </a> 
+                        </div>
+                    </div>    
 				</div>
 			</div>
 		</div>

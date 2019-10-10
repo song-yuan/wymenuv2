@@ -175,8 +175,9 @@
 										case 2: echo '支付宝';break;
 										case 4: echo '会员卡';break;
 										case 5: echo '银联';break;
+										case 7: echo '微信储值(充)';break;
 										case 9: echo '微信代金券';break;
-										case 10: echo '微信余额';break;
+										case 10: echo '微信储值(返)';break;
 										case 11: echo '找零';break;
 										case 12: echo '微信点单';break;
 										case 13: echo '微信外卖';break;

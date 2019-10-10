@@ -299,7 +299,7 @@ class ProductSetController extends BackendController
 	                Yii::app()->db->createCommand($sqlgroup)->execute();
 	            }
 				if($model->save()) {
-
+					$this->delprokey($this->companyId,1,1);
 					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 					$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id,'papage'=>$papage));
 				}
@@ -427,6 +427,7 @@ class ProductSetController extends BackendController
 			//只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
 			$modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
 			if($model->save()){
+				$this->delprokey($this->companyId,1,1);
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id ,'status'=>$status));
 			}
@@ -501,6 +502,7 @@ class ProductSetController extends BackendController
 			if (!empty($glids)){
 				Yii::app()->db->createCommand('update nb_product_set_group set delete_flag=1 where lid in ('.implode(',' , $glids).') and dpid = :companyId')->execute(array( ':companyId' => $this->companyId));
 			}
+			$this->delprokey($this->companyId,1,1);
 			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset,'papage'=>$papage)) ;
 		} else {
 			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));

@@ -239,5 +239,55 @@ class WaimaiController extends BackendController
 		echo json_encode($msg);
 		exit;
 	}
+	// 产品原料消耗
+	public function actionProduct(){
+		$categorys = $this->getProductCategory($this->companyId);
+		$products = $this->getProducts($this->companyId);
+		$this->render('product',array('categorys'=>$categorys,'products'=>$products));
+	}
+	public function actionProductBom(){
+		$productId = Yii::app()->request->getPost('productId');
+		$number = Yii::app()->request->getPost('number');
+		$dpid = $this->companyId;
+		$date = date('Y-m-d H:i:s',time());
+		$productTasteArr = array();
+		$productBoms = DataSyncOperation::getBom($dpid, $productId, $productTasteArr);
+		if(!empty($productBoms)){
+			$transaction = Yii::app()->db->beginTransaction();
+			try {
+				foreach ($productBoms as $bom){
+					$stock = $bom['number']*$number;
+					DataSyncOperation::updateMaterialStock($dpid,$date,$bom['material_id'],$stock,0,1);
+				}
+				$transaction->commit();
+				$msg = array('status'=>false,'msg'=>'消耗原料成功');
+			}catch (Exception $e) {
+				$transaction->rollback();
+				$msg = array('status'=>false,'msg'=>'消耗原料失败');
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'该产品没有添加配方');
+		}
+		echo json_encode($msg);
+		exit;
+	}
+	private function getProductCategory($dpid){
+		$categorys = array();
+		$sql = 'select * from nb_product_category where dpid='.$dpid.' and cate_type=0 and delete_flag=0';
+		$cates = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($cates as $cate){
+			$pid = $cate['pid'];
+			if(!isset($categorys[$pid])){
+				$categorys[$pid] = array();
+			}
+			array_push($categorys[$pid], $cate);
+		}
+		return $categorys;
+	}
+	private function getProducts($dpid){
+		$sql = 'select * from nb_product where dpid='.$dpid.' and delete_flag=0';
+		$materials = Yii::app()->db->createCommand($sql)->queryAll();
+		return $materials;
+	}
 }
 ?>
