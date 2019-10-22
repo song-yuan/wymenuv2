@@ -369,7 +369,7 @@ function getProduct(){
 								for (var j in detail){
 									var detailItem = detail[j];
 									if(detailItem['is_select']=='1'){
-										detailIds += detailItem['product_id']+',';
+										detailIds += detailItem['product_id']+'-'+detailItem['group_no']+',';
 										detailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
 									}
 								}
@@ -389,7 +389,7 @@ function getProduct(){
 												var detail = pDetail[j];
 												for (var k in detail){
 													var detailItem = detail[k];
-													if(detailArr.indexOf(detailItem['product_id'])>-1){
+													if(detailArr.indexOf(detailItem['product_id']+'-'+detailItem['group_no'])>-1){
 														pPrice += parseFloat(detailItem['price']);
 														cdetailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
 														continue;
@@ -607,7 +607,7 @@ function getProduct(){
 								for (var j in detail){
 									var detailItem = detail[j];
 									if(detailItem['is_select']=='1'){
-										detailIds += detailItem['product_id']+',';
+										detailIds += detailItem['product_id']+'-'+detailItem['group_no']+',';
 										detailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
 									}
 								}
@@ -627,7 +627,7 @@ function getProduct(){
 												var detail = pDetail[j];
 												for (var k in detail){
 													var detailItem = detail[k];
-													if(detailArr.indexOf(detailItem['product_id'])>-1){
+													if(detailArr.indexOf(detailItem['product_id']+'-'+detailItem['group_no'])>-1){
 														if(isDiscount){
 															pPrice += parseFloat(detailItem['price']*prodiscount);
 														}else{
@@ -849,7 +849,7 @@ function getProduct(){
 							for (var j in detail){
 								var detailItem = detail[j];
 								if(detailItem['is_select']=='1'){
-									detailIds += detailItem['product_id']+',';
+									detailIds += detailItem['product_id']+'-'+detailItem['group_no']+',';
 									detailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
 								}
 							}
@@ -869,7 +869,7 @@ function getProduct(){
 											var detail = pDetail[j];
 											for (var k in detail){
 												var detailItem = detail[k];
-												if(detailArr.indexOf(detailItem['product_id'])>-1){
+												if(detailArr.indexOf(detailItem['product_id']+'-'+detailItem['group_no'])>-1){
 													pPrice += parseFloat(detailItem['price']);
 													cdetailStr += detailItem['product_name']+'×'+detailItem['number']+' ';
 													continue;
@@ -1454,9 +1454,9 @@ $(document).ready(function(){
 					}else{
 						price += parseFloat(detailItem['price']);
 					}
-					detailIdStr += detailItem['product_id']+',';
+					detailIdStr += detailItem['product_id']+'-'+detailItem['group_no']+',';
 				}
-				str += '<div class="detail-item '+active+'" detail-id="'+detailItem['product_id']+'" detail-price="'+detailItem['price']+'" detail-name="'+detailItem['product_name']+'" detail-number="'+detailItem['number']+'">'+detailItem['product_name']+'</div>';
+				str += '<div class="detail-item '+active+'" detail-id="'+detailItem['product_id']+'-'+detailItem['group_no']+'" detail-price="'+detailItem['price']+'" detail-name="'+detailItem['product_name']+'" detail-number="'+detailItem['number']+'">'+detailItem['product_name']+'</div>';
 			}
 			str += '</div>';
 			str += '</div>';
