@@ -1059,6 +1059,9 @@ class AppReportController extends Controller
 		$transaction = $db->beginTransaction();
 		try
 		{
+			//清除之前盘点
+			$sql = 'update nb_stock_taking set delete_flag=1 where dpid='.$dpid.' and status=0';
+			$db->createCommand()->execute();
 			//盘点日志
 			$se = new Sequence("stock_taking");
 			$logid = $se->nextval();

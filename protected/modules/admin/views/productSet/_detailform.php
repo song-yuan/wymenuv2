@@ -150,26 +150,26 @@ $(document).ready(function(){
 			}
 		});
 	});
-	var productVal=$('#ProductSetDetail_product_id').val();
-	$('#ProductSetDetail_product_id').change(function(){
-		var productid = $(this).val();
-		//alert(productid);
-		$.ajax({
+// 	var productVal=$('#ProductSetDetail_product_id').val();
+// 	$('#ProductSetDetail_product_id').change(function(){
+// 		var productid = $(this).val();
+// 		//alert(productid);
+// 		$.ajax({
 			url:'<?php echo $this->createUrl('productSet/isDoubleSetDetail',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/productid/'+productid,
-			type:'GET',
-			dataType:'json',
-			success:function(result){
-				if(result.data){
+// 			type:'GET',
+// 			dataType:'json',
+// 			success:function(result){
+// 				if(result.data){
 					alert("<?php echo yii::t('app','该单品套餐内已经存在！');?>");
-					$('#ProductSetDetail_product_id').val(productVal);
-				}else{
-				//alert(2);
-					productVal=$('#ProductSetDetail_product_id').val();
+// 					$('#ProductSetDetail_product_id').val(productVal);
+// 				}else{
+// 				//alert(2);
+// 					productVal=$('#ProductSetDetail_product_id').val();
 
-				}
-			}
-		});
-	});
+// 				}
+// 			}
+// 		});
+// 	});
 });
 	$('input[name="cz"]').change(function(){
 		var type = '<?php echo $type;?>';

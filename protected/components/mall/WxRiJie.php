@@ -399,11 +399,6 @@ class WxRiJie
 						$presystemNum = $statict['stock_taking_num'];//上次盘点库存
 						$preStockTime = $statict['create_at'];// 上次盘点时间
 							
-						// 获取两次盘点之间其他类型的盘点 损耗总和  其他盘点不能影响该盘点的系统库存
-						$sql = 'select sum(stock_taking_difnum) as stock_taking_difnum from nb_stock_taking_statistics where dpid='.$dpid.' and create_at>"'.$preStockTime.'" and create_at<="'.$createAt.'" and type!='.$sttype.' and material_id='.$id.' and delete_flag=0';
-						$stDifnum = Yii::app()->db->createCommand($sql)->queryScalar();
-						$systemNum = $systemNum - $stDifnum;
-							
 						// 从库存日志记录表 查询上次盘点到本次盘点的 入库库存 盘损库存 销售库存
 						$sql = 'select type,sum(stock_num) as stock_num,sum(stock_num*unit_price) as stock_cost from nb_material_stock_log where dpid='.$dpid.' and material_id='.$id.' and type in(0,1,2,4) and create_at>"'.$preStockTime.'" and create_at<="'.$createAt.'" group by type';
 						$mStockLogs = $db->createCommand($sql)->queryAll();
