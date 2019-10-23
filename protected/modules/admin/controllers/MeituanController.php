@@ -122,7 +122,7 @@ class MeituanController extends BackendController
 				'app_food_code'=>$appFoodCode,
 				
 		);
-		if($skuid!=''){
+		if($skuid!=''&&$spec!=''){
 			$data['sku_id'] = $appFoodCode;
 			$data['spec'] = $spec;
 		}
