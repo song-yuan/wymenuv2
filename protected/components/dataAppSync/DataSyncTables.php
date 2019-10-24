@@ -47,6 +47,9 @@ class DataSyncTables
     	array("name"=>"产品指令表","table"=>"nb_product_instruction"),
     	array("name"=>"副屏表","table"=>"nb_double_screen"),
     	array("name"=>"副屏详情表","table"=>"nb_double_screen_detail"),
+    	array("name"=>"产品BOM表","table"=>"nb_product_bom"),
+    	array("name"=>"品项信息表","table"=>"nb_product_material"),
+    	array("name"=>"品项库存表","table"=>"nb_product_material_stock"),
     );
     
     //实时同步数据包括
@@ -1170,6 +1173,75 @@ class DataSyncTables
         		"double_screen_id int(10) NOT NULL,".
         		"type varchar(2) NOT NULL DEFAULT '0',".
         		"url varchar(255) DEFAULT NULL,".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_material_category"=>"CREATE TABLE IF NOT EXISTS nb_material_category (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"pid int(10) NOT NULL DEFAULT '0',".
+        		"tree varchar(50) NOT NULL,".
+        		"category_name varchar(50) NOT NULL,".
+        		"mchs_code varchar(12) NOT NULL,".
+        		"main_picture varchar(255) NOT NULL DEFAULT '',".
+        		"order_num int(4) NOT NULL DEFAULT '0',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_product_bom" => "CREATE TABLE IF NOT EXISTS nb_product_bom (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"product_id int(10) NOT NULL,".
+        		"taste_id int(10) NOT NULL DEFAULT '0',".
+        		"material_id int(10) NOT NULL DEFAULT '0',".
+        		"number decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"sales_unit_id int(10) NOT NULL,".
+        		"mphs_code varchar(12) DEFAULT NULL,".
+        		"phs_code varchar(12) DEFAULT NULL,".
+        		"mushs_code varchar(12) DEFAULT NULL,".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_product_material" => "CREATE TABLE IF NOT EXISTS nb_product_material (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"category_id int(10) NOT NULL,".
+        		"material_name varchar(255) DEFAULT NULL,".
+        		"material_identifier varchar(255) DEFAULT NULL,".
+        		"material_private_identifier varchar(255) DEFAULT NULL,".
+        		"stock_unit_id int(10) NOT NULL DEFAULT '0',".
+        		"sales_unit_id int(10) NOT NULL DEFAULT '0',".
+        		"mchs_code varchar(12) DEFAULT NULL,".
+        		"mphs_code varchar(12) DEFAULT NULL,".
+        		"mulhs_code varchar(12) DEFAULT NULL,".
+        		"mushs_code varchar(12) DEFAULT NULL,".
+        		"source varchar(2) NOT NULL DEFAULT '0',".
+        		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_product_material_stock" => "CREATE TABLE IF NOT EXISTS nb_product_material_stock (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"material_id int(10) NOT NULL,".
+        		"mphs_code varchar(12) DEFAULT NULL,".
+        		"stock_day int(4) NOT NULL DEFAULT '0',".
+        		"batch_stock decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"stock decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"free_stock decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"stock_cost decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
