@@ -855,6 +855,7 @@ class WxOrder
 				$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				if(!empty($productSet)){
 					$orderProduct[$k]['amount'] = $product['zhiamount'];
+					$orderProduct[$k]['tamount'] = $product['amount'];
 					$orderProduct[$k]['set_name'] = $productSet[0]['set_name'];
 					$orderProduct[$k]['set_price'] = $product['set_price'];
 					$orderProduct[$k]['set_detail'] = $productSet;
@@ -1166,7 +1167,7 @@ class WxOrder
 	 				$productBoms = DataSyncOperation::getBom($dpid, $detail['product_id'], $productTasteArr);
 	 				if(!empty($productBoms)){
 	 					foreach ($productBoms as $bom){
-	 						$stock = $bom['number']*$product['amount'];
+	 						$stock = $bom['number']*$product['tamount'];
 	 						DataSyncOperation::updateMaterialStock($dpid,$order['create_at'],$bom['material_id'],$stock,$detail['lid'],1);
 	 					}
 	 				}
