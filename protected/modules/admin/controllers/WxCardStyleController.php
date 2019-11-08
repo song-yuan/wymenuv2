@@ -85,7 +85,7 @@ class WxCardStyleController extends BackendController
     		$up = new CFileUpload();
     		//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
     		$up -> set("path", $path);
-    		$up -> set("maxsize", 20*1024);
+    		$up -> set("maxsize", 50*1024);
     		$up -> set("allowtype", array("png", "jpg","jpeg"));
     	
     		if($up -> upload("file")) {

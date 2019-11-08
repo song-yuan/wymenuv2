@@ -35,7 +35,7 @@
 						</div>
 					</div>
 					<span class="label label-danger">注意:</span>
-					<span>大小：建议300px*180px且不超过20kb 格式:jpg 、png、jpeg </span>
+					<span>大小：建议300px*180px且不超过50kb 格式:jpg 、png、jpeg </span>
 			</div>
 			<?php echo $form->hiddenField($model,'bg_img'); ?>
 		</div>       
