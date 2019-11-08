@@ -35,6 +35,21 @@ class WxCardStyleController extends BackendController
     //    $style_cardnum_style[2] = "卡号在右边";
         $model = new MemberWxcardStyle();
         $model->dpid = $this->companyId ;
+        if(Yii::app()->request->isAjaxRequest){
+        	$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+        	$up = new CFileUpload();
+        	//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+        	$up -> set("path", $path);
+        	$up -> set("maxsize", 20*1024);
+        	$up -> set("allowtype", array("png", "jpg","jpeg"));
+        
+        	if($up -> upload("file")) {
+        		$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
+        	}else{
+        		$msg = $up->getErrorMsg();
+        	}
+        	echo $msg;exit;
+        }
         if(Yii::app()->request->isPostRequest) {
              $cardImg = Yii::app()->request->getPost('MemberWxcardStyle');
                 $se=new Sequence("member_wxcard_style");
@@ -65,6 +80,21 @@ class WxCardStyleController extends BackendController
        // $style_cardnum_style[1] = "卡号在左边";
        // $style_cardnum_style[2] = "卡号在右边";
         //通过get方法接收要展示的信息的主键。
+    	if(Yii::app()->request->isAjaxRequest){
+    		$path = Yii::app()->basePath.'/../uploads/company_'.$this->companyId;
+    		$up = new CFileUpload();
+    		//设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+    		$up -> set("path", $path);
+    		$up -> set("maxsize", 20*1024);
+    		$up -> set("allowtype", array("png", "jpg","jpeg"));
+    	
+    		if($up -> upload("file")) {
+    			$msg = '/wymenuv2/./uploads/company_'.$this->companyId.'/'.$up->getFileName();
+    		}else{
+    			$msg = $up->getErrorMsg();
+    		}
+    		echo $msg;exit;
+    	}
         $lid = Yii::app()->request->getParam('lid');
         //在数据库查找该主键对应的条目。
         $model = MemberWxcardStyle::model()->find('lid=:lid and dpid=:dpid' , array(':lid' => $lid,':dpid'=> $this->companyId)) ;
