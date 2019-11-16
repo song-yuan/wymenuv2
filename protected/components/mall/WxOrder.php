@@ -364,9 +364,7 @@ class WxOrder
     		$orderArr = $insertOrderArr;
 	    }else{
 			// 不带餐桌
-			$callnokey = 'callno-'.$this->dpid;
-			Yii::app()->redis->incr($callnokey);
-			$callno = Yii::app()->redis->get($callnokey);
+			$callno = '';
 			$se = new Sequence("order");
 			$orderId = $se->nextval();
 			$accountNo = self::getAccountNo($this->dpid,$this->siteId,0,$orderId);
@@ -760,6 +758,12 @@ class WxOrder
 		}
 		$this->order = $orderArr;
 		return $orderId;
+	}
+	public static function getCallno($dpid){
+		$callnokey = 'callno-'.$dpid;
+		Yii::app()->redis->incr($callnokey);
+		$callno = Yii::app()->redis->get($callnokey);
+		return $callno;
 	}
 	/**
 	 * 订单id 店铺id获取订单
@@ -1198,8 +1202,18 @@ class WxOrder
 	  */
 	 public static function orderSuccess($order){
 	 	$order['order_status'] = 3;
+	 	$callno = self::getCallno($order['dpid']);
+	 	$order['callno'] = $callno;
+	 	self::updateOrderCallno($order['lid'],$order['dpid'],$callno);
 	 	self::pushOrderToRedis($order);
 	 	self::dealMaterialStock($order);
+	 }
+	 /**
+	  * 修改订单序号
+	  */
+	 public static function updateOrderCallno($lid,$dpid,$callno){
+ 		$sql = 'update nb_order set callno='.$callno.' where lid='.$lid.' and dpid='.$dpid;
+		Yii::app ()->db->createCommand ( $sql )->execute ();
 	 }
 	 /**
 	  * 已支付的订单
