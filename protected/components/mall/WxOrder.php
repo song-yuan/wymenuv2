@@ -364,6 +364,9 @@ class WxOrder
     		$orderArr = $insertOrderArr;
 	    }else{
 			// 不带餐桌
+			$callnokey = 'callno-'.$this->dpid;
+			Yii::app()->redis->incr($callnokey);
+			$callno = Yii::app()->redis->get($callnokey);
 			$se = new Sequence("order");
 			$orderId = $se->nextval();
 			$accountNo = self::getAccountNo($this->dpid,$this->siteId,0,$orderId);
@@ -377,7 +380,7 @@ class WxOrder
 					'site_id'=>$this->siteId,
 					'is_temp'=>$this->isTemp,
 					'number'=>$this->number,
-					'callno'=>'',
+					'callno'=>$callno,
 					'order_status'=>2,
 					'order_type'=>$this->type,
 					'takeout_typeid'=>$this->others['takeout'],
