@@ -117,6 +117,8 @@ class WxRiJie
 	 */
 	public static function dealSyncDataCb($dpid) {
 		$key = 'co-order-platformcb-'.(int)$dpid;
+		$callnokey = 'callno-'.$dpid;
+		Yii::app()->redis->delete($callnokey);
 		$data = Yii::app()->redis->get($key);
 		if(!empty($data)){
 			$orderKeys = json_decode($data);
