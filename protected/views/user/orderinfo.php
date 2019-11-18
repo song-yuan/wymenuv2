@@ -13,8 +13,9 @@
 <?php if($order['order_type']==1):?>
 <div class="order-title">桌号: <?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
-<div class="order-callno ">取餐号<br>
- <span class="font_red"><?php echo $order['callno'];?></span>
+<div class="order-callno ">
+	<div class="small">取餐号</div>
+ 	<div class="font_red"><?php echo $order['callno'];?></div>
 </div>
 <?php endif;?>
 <div class="order-site">
