@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/user.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css?_t=20191118">
 
 
 <?php if($order['order_type']==1):?>
