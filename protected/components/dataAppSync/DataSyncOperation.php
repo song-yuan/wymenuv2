@@ -1772,13 +1772,7 @@ class DataSyncOperation {
 		return $msg;
 	}
 	/**
-	 * 
-	 * 
-	 * 
 	 * 获取订单
-	 * 
-	 * 
-	 * 
 	 */
 	public static function getOrderStaus($dpid, $orderId) {
 		$order = WxOrder::getOrder ( $orderId, $dpid );
@@ -1795,13 +1789,24 @@ class DataSyncOperation {
 		}
 	}
 	/**
-	 * 
-	 * 
-	 * 
+	 * 账单号获取订单
+	 */
+	public static function getOrderStausBA($dpid, $accountNo) {
+		$order = WxOrder::getOrderByAccountNo($dpid, $accountNo);
+		if ($order) {
+			return json_encode ( array (
+					'status' => true,
+					'order_status' => $order ['order_status']
+			) );
+		} else {
+			return json_encode ( array (
+					'status' => false,
+					'order_status' => ''
+			) );
+		}
+	}
+	/**
 	 * 日结订单
-	 * 
-	 * 
-	 * 
 	 */
 	public static function operateCloseAccount($dpid, $userId) {
 		$time = time ();

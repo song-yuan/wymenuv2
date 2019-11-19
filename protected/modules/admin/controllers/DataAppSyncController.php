@@ -162,6 +162,17 @@ class DataAppSyncController extends Controller
 	 	echo $result;exit;
 	}
 	/**
+	 *
+	 * 通过账单号获取订单状态
+	 *
+	 */
+	public function actionGetOrderStatusBA(){
+		$dpid = Yii::app()->request->getParam('companyId');
+		$accountNo = Yii::app()->request->getParam('accountNo');
+		$result = DataSyncOperation::getOrderStausBA($dpid,$accountNo);
+		echo $result;exit;
+	}
+	/**
 	 * 
 	 * 
 	 * 
