@@ -612,7 +612,7 @@ class MallController extends Controller
 	 	$user = $this->brandUser;
 	 	$userId = $user['lid'];
 	 	$siteId = Yii::app()->session['qrcode-'.$userId];
-	 	$productArr = urldecode(json_decode($product,true));
+	 	$productArr = json_decode(urldecode($product),true);
 	 	$result = WxCart::addCarts($dpid,$userId,$siteId,$accountNo,$productArr);
 	 	if($result){
 	 		$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$type));
