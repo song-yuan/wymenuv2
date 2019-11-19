@@ -377,9 +377,7 @@ class WxCart
 		return $success;
 	}
 	/**
-	 * 
 	 * @return boolean
-	 * 
 	 * 减少菜品
 	 */
 	public function deleteCart(){
@@ -411,9 +409,35 @@ class WxCart
 		return $success;
 	}
 	/**
-	 * 
+	 *加入购物车
+	 */
+	public static function addCarts($dpid, $userId, $siteId, $accountNo, $productArr) {
+		$time = time();
+		foreach ($productArr as $product){
+			$se = new Sequence("cart");
+			$lid = $se->nextval();
+			$insertCartArr = array(
+					'lid'=>$lid,
+					'dpid'=>$dpid,
+					'create_at'=>date('Y-m-d H:i:s',$time),
+					'update_at'=>date('Y-m-d H:i:s',$time),
+					'user_id'=>$userId,
+					'product_id'=>$this->productArr['product_id'],
+					'is_set'=>$product['is_set'],
+					'num'=>$product['num'],
+					'site_id'=>$siteId,
+					'promotion_type'=>$productArr['promotion_type'],
+					'promotion_id'=>$productArr['promotion_id'],
+					'to_group'=>$productArr['to_group'],
+					'can_cupon'=>$productArr['can_cupon'],
+					'detail_id'=>$productArr['detail']
+			);
+			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
+		}
+		return $result;
+	}
+	/**
 	 * 删除购物车某条记录
-	 * 
 	 */
 	public static function deleteCartItem($lid,$dpid){
 		$success = false;

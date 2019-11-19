@@ -576,52 +576,6 @@ class MallController extends Controller
 		}
 		$this->render('redpacket',array('companyId'=>$this->companyId,'redPacket'=>$redPacket,'redPacketDetails'=>$redPacketDetails));
 	}
-	
-	/**
-	 * 
-	 * 输入金额
-	 * 买单
-	 * 
-	 */
-	 public function actionBill(){
-	    $user = $this->brandUser;
-        $userId = $user['lid'];
-	 	$this->render('bill',array('userId'=>$userId));
-	 }
-     /**
-	 * 
-	 * 生成扫码订单
-	 * 
-	 */
-	 public function actionCreateBillOrder(){
-	 	$userId = Yii::app()->request->getPost('userId');
-        $orderPrice = Yii::app()->request->getPost('orderPrice');
-        $offprice = Yii::app()->request->getPost('offprice');
-        $result = WxOrder::createBillOrder($this->companyId,$userId,$orderPrice,$offprice);
-        echo $result;
-        exit;
-	 }
-     /**
-	 * 
-	 * 支付扫码订单
-	 * 
-	 */
-     public function actionPayBillOrder(){
-        $type = Yii::app()->request->getParam('type');
-        $orderId = Yii::app()->request->getParam('oid');
-        $userId = Yii::app()->request->getParam('uid');
-        
-        $order = WxOrder::getOrder($orderId,$this->companyId);
-        if($type==1){
-            $showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
-		
-    		if($order['order_status'] > 2){
-    			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-    		}
-    		$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'扫码买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
-        }
-        $this->render('paybill',array('order'=>$order,'userId'=>$userId));
-	 }
 	/**
 	 * 
 	 * 卡券领取页面
@@ -646,6 +600,23 @@ class MallController extends Controller
 	 	$backUrl = Yii::app()->request->getParam('url',null);
 	 	$recharges = WxRecharge::getWxRecharge($this->companyId,$userId,$userGroupDpid);
 	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>urldecode($backUrl)));
+	 }
+	 /**
+	  * 自助点单加入购物车
+	  */
+	 public function actionGetZizhuPayCode(){
+	 	$dpid = Yii::app()->request->getParam('companyId');
+	 	$accountNo = Yii::app()->request->getParam('accountNo');
+	 	$product = Yii::app()->request->getParam('product');
+	 	$type = 5;
+	 	$user = $this->brandUser;
+	 	$userId = $user['lid'];
+	 	$siteId = Yii::app()->session['qrcode-'.$userId];
+	 	$productArr = urldecode(json_decode($product,true));
+	 	$result = WxCart::addCarts($dpid,$userId,$siteId,$accountNo,$productArr);
+	 	if($result){
+	 		$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$type));
+	 	}
 	 }
 	 /**
 	  * 获取充值支付js参数
