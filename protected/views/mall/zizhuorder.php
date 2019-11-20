@@ -23,9 +23,9 @@
 		<div class="clear"></div>
 	</div>
 		<?php if(isset($product['taste'])&&!empty($product['taste'])):?>
-		<div class="taste">口味:
+		<div class="taste">
 		<?php foreach ($product['taste'] as $taste):?>
-		<span> <?php echo $taste['name'].'('.$taste['price'].')';?> </span>
+		<span> <?php echo $taste['name'];?> </span>
 		<?php endforeach;?>
 		</div>
 		<?php endif;?>

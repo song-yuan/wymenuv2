@@ -572,7 +572,7 @@ class MallController extends Controller
 	  	$cuponId = Yii::app()->request->getPost('cupon');
 	  	$remark = Yii::app()->request->getPost('remark',null);
 	  	$yue = Yii::app()->request->getPost('yue',0);
-	  	$others = array('cuponId'=>$cuponId,'orderTime'=>$orderTime,'fullsent'=>$fullsent,'yue'=>$yue,'remark'=>$remark);
+	  	$others = array('cuponId'=>$cuponId,'orderTime'=>'0','fullsent'=>$fullsent,'yue'=>$yue,'remark'=>$remark);
 	  	try {
 	  		$orderObj = new WxZizhuOrder($this->companyId, $orderId, $user, $others);
 	  		if(empty($orderObj->order)){
