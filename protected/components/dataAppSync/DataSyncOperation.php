@@ -2362,7 +2362,7 @@ class DataSyncOperation {
 								'original_price'=>$detail[3],
 								'amount'=>$detail[4]*$pnumber,
 								'zhiamount'=>$pnumber,
-								'product_order_status'=>$orderProductStatus,
+								'product_order_status'=>2,
 								'taste_memo'=>$setName,
 						);
 						Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
@@ -2431,7 +2431,7 @@ class DataSyncOperation {
 			}
 			$orderStatus = 2;
 			if($orderPrice<=0){
-				$orderStatus = 3;
+				$orderStatus = 4;
 			}
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status='.$orderStatus.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();

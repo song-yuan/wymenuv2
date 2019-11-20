@@ -157,7 +157,6 @@ class MtOpenOrder
 		}else{
 			$orderPayPaytype = 0;
 		}
-		$poiReceiveDetail = json_decode($data['detail']);
 		
 		$ocaution = urldecode($data['caution']);
 		$caution = strstr($ocaution, '收餐人隐私号', TRUE);
@@ -293,7 +292,8 @@ class MtOpenOrder
 		$orderArr['order_discount'] = array();
 		$orderCloudArr['nb_order_account_discount'] = array();
 		
-		$extras = json_decode($data['extras'],true);
+		$jextras = urldecode($data['extras']);
+		$extras = json_decode($jextras,true);
 		if(!empty($extras)){
 			foreach ($extras as  $extra) {
 				if(!isset($extra['rider_fee'])){
