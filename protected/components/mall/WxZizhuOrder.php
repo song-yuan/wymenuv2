@@ -47,7 +47,7 @@ class WxZizhuOrder
 	 *获取会员等级折扣
 	 */
 	public function getLevelDiscount(){
-		$this->levelDiscount = WxBrandUser::getUserDiscount($this->user,$this->type);
+		$this->levelDiscount = WxBrandUser::getUserDiscount($this->user,5);
 	}
 	/**
 	 *获取优惠券信息
