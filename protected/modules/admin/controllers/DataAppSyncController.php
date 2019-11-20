@@ -165,7 +165,7 @@ class DataAppSyncController extends Controller
 	 * 生成自助点餐订单
 	 */
 	public function actionCreateZizhuOrder(){
-		$result = DataSyncOperation::createZizhuOrder($_GET);
+		$result = DataSyncOperation::createZizhuOrder($_POST);
 		echo $result;exit;
 	}
 	/**
