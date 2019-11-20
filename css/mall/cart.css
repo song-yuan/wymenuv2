@@ -63,7 +63,7 @@ input.num-add{color: #FF5151;width:30px;font-size:0.20rem;border:none;background
 input.number{color: #A1A09C;width:30px;font-size:0.20rem;border:none;background-color:#E5E5E5;text-align:center;}
 
 .cart-info {padding:10px;font-size: 16px;background: rgb(255,255,255);border-radius: 0 0 10px 10px;}
-.taste{display:inline-block;background: white;width:100px;height:20px;line-height:20px;text-align:center;border-radius:10px;color:#FF5151;font-size:1.0em;border:1px solid #A09C9C;}
+.cart-info .taste{display:inline-block;background: white;width:100px;height:20px;line-height:20px;text-align:center;border-radius:10px;color:#FF5151;font-size:1.0em;border:1px solid #A09C9C;}
 .taste-desc{line-height:20px;font-size:12px;}
 .taste-desc span{margin-left:10px;}
 .taste-items{display:none;font-size: 15px;}
