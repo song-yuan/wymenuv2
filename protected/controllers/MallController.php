@@ -533,9 +533,9 @@ class MallController extends Controller
   				$price +=  $amount*$product['price'];
   			}
   		}
-	  
+  		
 	  	$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr,$levelDiscount);// 购物车优惠原价
-	  
+	  	
 	  	$remainMoney = WxBrandUser::getYue($user);
 	  	// 如果没普通优惠活动  可满减满送
 	  	$fullsent = array();
@@ -554,8 +554,8 @@ class MallController extends Controller
 	  		}
 	  	}
 	  	$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,5);
-	  
-	  	$this->render('zizhuorder',array('companyId'=>$this->companyId,'orderId'=>$orderId,'cupons'=>$cupons,'user'=>$user,'price'=>$price,'remainMoney'=>$remainMoney,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
+	  	
+	  	$this->render('zizhuorder',array('companyId'=>$this->companyId,'orderId'=>$orderId,'orderProducts'=>$orderProducts,'cupons'=>$cupons,'user'=>$user,'price'=>$price,'remainMoney'=>$remainMoney,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
 	  }
 	  /**
 	   *
