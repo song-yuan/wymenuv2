@@ -409,35 +409,6 @@ class WxCart
 		return $success;
 	}
 	/**
-	 *加入购物车
-	 */
-	public static function addCarts($dpid, $userId, $siteId, $accountNo, $productArr) {
-		$time = time();
-		self::clearCart($userId,$dpid);
-		foreach ($productArr as $product){
-			$se = new Sequence("cart");
-			$lid = $se->nextval();
-			$insertCartArr = array(
-					'lid'=>$lid,
-					'dpid'=>$dpid,
-					'create_at'=>date('Y-m-d H:i:s',$time),
-					'update_at'=>date('Y-m-d H:i:s',$time),
-					'user_id'=>$userId,
-					'product_id'=>$product['product_id'],
-					'is_set'=>$product['is_set'],
-					'num'=>$product['num'],
-					'site_id'=>$siteId,
-					'promotion_type'=>$product['promote_type'],
-					'promotion_id'=>$product['promote_id'],
-					'to_group'=>$product['to_group'],
-					'can_cupon'=>$product['can_cupon'],
-					'detail_id'=>$product['detail']
-			);
-			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
-		}
-		return $result;
-	}
-	/**
 	 * 删除购物车某条记录
 	 */
 	public static function deleteCartItem($lid,$dpid){

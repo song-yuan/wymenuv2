@@ -162,28 +162,17 @@ class DataAppSyncController extends Controller
 	 	echo $result;exit;
 	}
 	/**
-	 *
-	 * 通过账单号获取订单状态
-	 *
+	 * 生成自助点餐订单
 	 */
-	public function actionGetOrderStatusBA(){
-		$dpid = Yii::app()->request->getParam('companyId');
-		$accountNo = Yii::app()->request->getParam('accountNo');
-		$result = DataSyncOperation::getOrderStausBA($dpid,$accountNo);
+	public function actionCreateZizhuOrder(){
+		$result = DataSyncOperation::createZizhuOrder($_POST);
 		echo $result;exit;
 	}
 	/**
-	 * 
-	 * 
-	 * 
-	 */
-	/**
-	 * 
 	 * app订单同步云端
 	 * sid 台号
 	 * isTemp 是否是临时台
 	 * post传参
-	 * 
 	 */
 	 public function actionCreateOrder(){
 	 	$result = DataSyncOperation::operateOrder($_POST);

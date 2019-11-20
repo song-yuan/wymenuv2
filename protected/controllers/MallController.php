@@ -493,6 +493,123 @@ class MallController extends Controller
 			}
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }
+	  /**
+	   * 处理自助点餐订单
+	   */
+	  public function actionCheckZizhuOrder()
+	  {
+	  	$user = $this->brandUser;
+	  	$userId = $user['lid'];
+	  	$orderId = Yii::app()->request->getParam('orderId');
+	  	$proCodeArr = array();
+	  	$productArr = array();
+	  	$haspormotion = false;
+	  	$price = 0;
+	  	$memdisprice = 0;
+	  
+	  	$levelDiscount = WxBrandUser::getUserDiscount($user,'1');
+	  
+  		$orderProducts = WxOrder::getOrderProduct($orderId, $this->companyId);
+  		foreach ($orderProducts as $product){
+  			array_push($proCodeArr, $product['phs_code']);
+  			if($product['set_id'] > 0){
+  				$amount = $product['zhiamount'];
+  			}else{
+  				$amount = $product['amount'];
+  			}
+  			if($product['private_promotion_lid'] > 0){
+  				$orderPromotion = WxOrder::getOrderProductPromotion($product['lid'],$this->companyId);
+  				$haspormotion = true;
+  				$isdiscount = 0;
+  				array_push($productArr, array('promotion_id'=>$orderPromotion['	promotion_id'],'num'=>$amount,'price'=>$product['price'],'can_cupon'=>$orderPromotion['can_cupon'],'is_member_discount'=>'0'));
+  			}else{
+  				$isdiscount = $product['is_member_discount'];
+  				array_push($productArr, array('promotion_id'=>-1,'num'=>$amount,'price'=>$product['price'],'can_cupon'=>1,'is_member_discount'=>$isdiscount));
+  			}
+  			if($isdiscount){
+  				$memdisprice += $amount*$product['price']*(1-$levelDiscount);
+  				$price +=  $amount*$product['price']*$levelDiscount;
+  			}else{
+  				$price +=  $amount*$product['price'];
+  			}
+  		}
+	  
+	  	$canuseCuponPrice = WxCart::getCartUnDiscountPrice($productArr,$levelDiscount);// 购物车优惠原价
+	  
+	  	$remainMoney = WxBrandUser::getYue($user);
+	  	// 如果没普通优惠活动  可满减满送
+	  	$fullsent = array();
+	  	if(!$haspormotion){
+	  		$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, $order['order_type']);
+	  		if(!empty($fullsent)){
+	  			if($fullsent['full_type']){
+	  				$minusprice = $price - $fullsent['extra_cost'];
+	  				$canuseCuponPrice = $canuseCuponPrice - $fullsent['extra_cost'];
+	  				if($minusprice > 0){
+	  					$price = $minusprice;
+	  				}else{
+	  					$price = 0;
+	  				}
+	  			}
+	  		}
+	  	}
+	  	$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
+	  
+	  	$this->render('zizhuorder',array('companyId'=>$this->companyId,'orderId'=>$orderId,'cupons'=>$cupons,'user'=>$user,'price'=>$price,'remainMoney'=>$remainMoney,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
+	  }
+	  /**
+	   *
+	   * 处理餐桌订单
+	   * 餐桌有多个订单的合并到最新订单里
+	   *
+	   */
+	  public function actionGeneralZizhuOrder(){
+	  	$user = $this->brandUser;
+	  	$userId = $user['lid'];
+	  	$orderId = Yii::app()->request->getParam('orderId');
+	  	$paytype = Yii::app()->request->getPost('paytype');
+	  	$fullsent = Yii::app()->request->getPost('fullsent');
+	  	$cuponId = Yii::app()->request->getPost('cupon');
+	  	$remark = Yii::app()->request->getPost('remark',null);
+	  	$yue = Yii::app()->request->getPost('yue',0);
+	  	$others = array('cuponId'=>$cuponId,'orderTime'=>$orderTime,'fullsent'=>$fullsent,'yue'=>$yue,'remark'=>$remark);
+	  	try {
+	  		$orderObj = new WxZizhuOrder($this->companyId, $orderId, $user, $others);
+	  		if(empty($orderObj->order)){
+	  			throw new Exception('没有订单不能支付！');
+	  		}
+	  	}catch (Exception $e){
+	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'type'=>5));
+	  	}
+	  		
+	  	$orderCreate = false;
+	  	$transaction = Yii::app()->db->beginTransaction();
+	  	try{
+	  		$orderId = $orderObj->createOrder();
+	  		if($orderObj->orderSuccess){
+	  			WxOrder::dealOrder($user, $orderObj->order);
+	  		}
+	  		$transaction->commit();
+	  		$orderCreate = true;
+	  	}catch (Exception $e){
+	  		$transaction->rollback();
+	  		$msg = $e->getMessage();
+	  		$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>1));
+	  	}
+	  	if($orderObj->orderSuccess && $orderCreate){
+	  		WxOrder::orderSuccess($orderObj->order);
+	  	}
+	  	if($paytype == 1){
+	  		$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
+	  		//支付宝支付
+	  		$order = WxOrder::getOrder($orderId,$this->companyId);
+	  		if($order['order_status'] > 2){
+	  			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+	  		}
+	  		$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+	  	}
+	  	$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
+	  }
 	 /**
 	 * 
 	 * 
@@ -600,23 +717,6 @@ class MallController extends Controller
 	 	$backUrl = Yii::app()->request->getParam('url',null);
 	 	$recharges = WxRecharge::getWxRecharge($this->companyId,$userId,$userGroupDpid);
 	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId,'backUrl'=>urldecode($backUrl)));
-	 }
-	 /**
-	  * 自助点单加入购物车
-	  */
-	 public function actionGetZizhuPayCode(){
-	 	$dpid = Yii::app()->request->getParam('companyId');
-	 	$accountNo = Yii::app()->request->getParam('accountNo');
-	 	$product = Yii::app()->request->getParam('product');
-	 	$type = 5;
-	 	$user = $this->brandUser;
-	 	$userId = $user['lid'];
-	 	$siteId = Yii::app()->session['qrcode-'.$userId];
-	 	$productArr = json_decode(urldecode($product),true);
-	 	$result = WxCart::addCarts($dpid,$userId,$siteId,$accountNo,$productArr);
-	 	if($result){
-	 		$this->redirect(array('/mall/checkOrder','companyId'=>$this->companyId,'type'=>$type));
-	 	}
 	 }
 	 /**
 	  * 获取充值支付js参数

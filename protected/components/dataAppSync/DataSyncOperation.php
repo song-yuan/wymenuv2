@@ -2285,14 +2285,139 @@ class DataSyncOperation {
 		return json_encode($msg);
 	}
 	/**
-	 * 
 	 * 获取原材料消耗
-	 * 
 	 */
 	public static function getMaterial($dpid,$startTime,$endTime) {
 		$sql = 'select t.material_id,sum(t.stock_num) as material_num,t1.material_name,t2.unit_name from nb_material_stock_log t left join nb_product_material t1 on t.material_id=t1.lid and t.dpid=t1.dpid left join nb_material_unit t2 on t1.sales_unit_id=t2.lid and t1.dpid=t2.dpid where t.dpid='.$dpid.' and t.create_at >= "'.$startTime.'" and t.create_at <="'.$endTime.'" and t.type in(1,2) and t1.delete_flag = 0 group by t.material_id';
 		$result = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return $result;
+	}
+	public static function createZizhuOrder($data) {
+		$dpid = $data['dpid'];
+		$product = $data['product'];
+		$time = time();
+		$productArr = json_decode(urldecode($product),true);
+		$se = new Sequence("order");
+		$orderId = $se->nextval();
+		$accountNo = WxOrder::getAccountNo($dpid,0,0,$orderId);
+		$insertOrderArr = array(
+				'lid'=>$orderId,
+				'dpid'=>$dpid,
+				'create_at'=>date('Y-m-d H:i:s',$time),
+				'update_at'=>date('Y-m-d H:i:s',$time),
+				'account_no'=>$accountNo,
+				'user_id'=>0,
+				'site_id'=>0,
+				'is_temp'=>1,
+				'number'=>1,
+				'callno'=>'',
+				'order_status'=>2,
+				'order_type'=>5,
+				'takeout_typeid'=>0,
+				'appointment_time'=>date('Y-m-d H:i:s',$time),
+				'remark'=>'',
+				'taste_memo'=>''
+		);
+		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+		$mainId = 0;
+		foreach ($productArr as $product){
+			$isSet = $product['is_set'];
+			$detail = $product['detail'];
+			if($isSet>0){
+				$setName = $product['product_name'];
+				$setPrice = $product['price'];
+				$setItemArr = explode('-', $detail);
+				$totalProductPrice = 0;
+				foreach ($setItemArr as $item){
+					$detail = explode(':', $item);
+					$totalProductPrice += $detail[3];
+				}
+				foreach ($setItemArr as $item){
+					$detail = explode(':', $item);
+					$itemPrice = Helper::dealProductPrice($detail[3], $totalProductPrice, $setPrice);
+					$se = new Sequence("order_product");
+					$orderProductId = $se->nextval();
+					$orderProductData = array(
+							'lid'=>$orderProductId,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'order_id'=>$orderId,
+							'set_id'=>$product['product_id'],
+							'private_promotion_lid'=>$product['promote_id'],
+							'main_id'=>$mainId,
+							'product_id'=>$detail[0],
+							'product_name'=>$detail[1],
+							'product_pic'=>'',
+							'price'=>$itemPrice,
+							'original_price'=>$detail[3],
+							'amount'=>$detail[4]*$product['num'],
+							'zhiamount'=>$product['num'],
+							'product_order_status'=>$orderProductStatus,
+							'taste_memo'=>$setName,
+					);
+					Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				}
+				$mainId++;
+			}else{
+				$se = new Sequence("order_product");
+				$orderProductId = $se->nextval();
+				if($detail!=''){
+					$tasteArr = explode('-', $detail);
+					foreach ($tasteArr as $taste){
+						$se = new Sequence("order_taste");
+						$orderTasteId = $se->nextval();
+						$orderTasteData = array(
+								'lid'=>$orderTasteId,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',$time),
+								'update_at'=>date('Y-m-d H:i:s',$time),
+								'taste_name'=>$taste[1],
+								'taste_id'=>$taste[0],
+								'order_id'=>$orderProductId,
+								'is_order'=>0,
+						);
+						Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
+					}
+				}
+				$orderProductData = array(
+						'lid'=>$orderProductId,
+						'dpid'=>$dpid,
+						'create_at'=>date('Y-m-d H:i:s',$time),
+						'update_at'=>date('Y-m-d H:i:s',$time),
+						'order_id'=>$orderId,
+						'set_id'=>0,
+						'private_promotion_lid'=>$product['promote_id'],
+						'product_id'=>$$product['product_id'],
+						'product_name'=>$product['product_name'],
+						'product_pic'=>$product['main_picture'],
+						'price'=>$product['price'],
+						'original_price'=>$product['o_price'],
+						'amount'=>$product['num'],
+						'product_order_status'=>8,
+				);
+				Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				if($product['promote_id'] > 0){
+					$se = new Sequence("order_product_promotion");
+					$orderproductpromotionId = $se->nextval();
+					$oProPromoData =array(
+							'lid'=>$orderproductpromotionId,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+							'update_at'=>date('Y-m-d H:i:s',$time),
+							'order_id'=>$orderId,
+							'order_product_id'=>$orderProductId,
+							'account_no'=>$accountNo,
+							'promotion_type'=>0,
+							'promotion_id'=>$product['promote_id'],
+							'promotion_money'=>$product['promote_money'],
+							'can_cupon'=>$product['can_cupon'],
+							'delete_flag'=>0,
+					);
+					Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$oProPromoData);
+				}
+			}
+		}
 	}
 }
 
