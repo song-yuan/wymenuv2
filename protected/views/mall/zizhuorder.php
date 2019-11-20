@@ -172,7 +172,7 @@
 	<input type="hidden" name="cupon" value="0" />
 </form>
 
-<div id="dialogs">
+<div id="dialogs" tyle="font-size:22px;">
 	<!--BEGIN dialog1-->
 	<div class="js_dialog" id="dialog1" style="display: none;">
 	    <div class="weui-mask"></div>
