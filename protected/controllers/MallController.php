@@ -506,9 +506,11 @@ class MallController extends Controller
 	  	$haspormotion = false;
 	  	$price = 0;
 	  	$memdisprice = 0;
-	  
+	  	$order = WxOrder::getOrder($orderId, $this->companyId);
+	  	if($order['order_status']>2){
+	  		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+	  	}
 	  	$levelDiscount = WxBrandUser::getUserDiscount($user,'1');
-	  
   		$orderProducts = WxOrder::getOrderProduct($orderId, $this->companyId);
   		foreach ($orderProducts as $product){
   			array_push($proCodeArr, $product['phs_code']);
@@ -580,6 +582,9 @@ class MallController extends Controller
 	  		}
 	  	}catch (Exception $e){
 	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
+	  	}
+	  	if($orderObj->order['order_status']>2){
+	  		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  	}
 	  	$orderCreate = false;
 	  	$transaction = Yii::app()->db->beginTransaction();
