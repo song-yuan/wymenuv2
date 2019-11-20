@@ -581,7 +581,6 @@ class MallController extends Controller
 	  	}catch (Exception $e){
 	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  	}
-	  		
 	  	$orderCreate = false;
 	  	$transaction = Yii::app()->db->beginTransaction();
 	  	try{
@@ -594,7 +593,7 @@ class MallController extends Controller
 	  	}catch (Exception $e){
 	  		$transaction->rollback();
 	  		$msg = $e->getMessage();
-	  		$this->redirect(array('/mall/siteOrder','companyId'=>$this->companyId,'type'=>1));
+	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'orderId'=>$orderId,'type'=>5));
 	  	}
 	  	if($orderObj->orderSuccess && $orderCreate){
 	  		WxOrder::orderSuccess($orderObj->order);

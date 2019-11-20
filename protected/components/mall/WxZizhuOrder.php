@@ -223,7 +223,7 @@ class WxZizhuOrder
 		// 现金券
 		if($this->cupon && $payPrice>0){
 			$order = $orderArr;
-			$payMoney = WxOrder::updateOrderCupon($this->cupon, $order, $payPrice, $this->user['card_id']);
+			$payMoney = WxOrder::updateOrderCupon($this->cupon, $this->order, $payPrice, $this->user['card_id']);
 			$payPrice -= $payMoney;
 		}
 		// 使用储值
@@ -231,7 +231,7 @@ class WxZizhuOrder
 			$remainMoney = WxBrandUser::getYue($this->user);
 			if($remainMoney > 0){
 				$order = $orderArr;
-				$payMoney = WxOrder::reduceYue($this->user,$order,$payPrice);
+				$payMoney = WxOrder::reduceYue($this->user,$this->order,$payPrice);
 				$payPrice -= $payMoney;
 			}
 		}
