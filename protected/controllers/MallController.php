@@ -579,7 +579,7 @@ class MallController extends Controller
 	  			throw new Exception('没有订单不能支付！');
 	  		}
 	  	}catch (Exception $e){
-	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'type'=>5));
+	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  	}
 	  		
 	  	$orderCreate = false;

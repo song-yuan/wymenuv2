@@ -15,6 +15,7 @@ class WxZizhuOrder
 	public $levelDiscount = 1;//会员等级折扣
 	public $user;
 	public $hasfullsent = false;
+	public $cupon = false;
 	public $fullsent = '0-0-0';//满送满减信息
 	public $fullMinus = 0; //满减金额
 	public $fullSentProduct = array(); //满送产品
@@ -25,6 +26,7 @@ class WxZizhuOrder
 	
 	public function __construct($dpid, $orderId, $user, $others){
 		$this->dpid = $dpid;
+		$this->orderId = $orderId;
 		$this->user = $user;
 		$this->others = $others;
 		$this->getSeatingFee();
