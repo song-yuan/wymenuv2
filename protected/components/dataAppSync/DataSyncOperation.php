@@ -2300,7 +2300,7 @@ class DataSyncOperation {
 		$orderPrice = 0;
 		$realityPrice = 0;
 		$status = false;
-		
+		var_dump($productArr);exit;
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
 			$se = new Sequence("order");
@@ -2397,7 +2397,7 @@ class DataSyncOperation {
 							'order_id'=>$orderId,
 							'set_id'=>0,
 							'private_promotion_lid'=>$product['promote_id'],
-							'product_id'=>$$product['product_id'],
+							'product_id'=>$product['product_id'],
 							'product_name'=>$product['product_name'],
 							'product_pic'=>'',
 							'price'=>$pprice,
