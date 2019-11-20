@@ -13,10 +13,12 @@
 <?php if($order['order_type']==1):?>
 <div class="order-title">桌号: <?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
+<?php if(in_array($order['order_status'], array(3,4,8))):?>
 <div class="order-callno ">
 	<div class="small">取餐号</div>
  	<div class="font_red"><?php echo $order['callno'];?></div>
 </div>
+<?php endif;?>
 <?php endif;?>
 <div class="order-site">
 	<div class="lt">订单状态</div>
