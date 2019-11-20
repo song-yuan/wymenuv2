@@ -507,9 +507,9 @@ class MallController extends Controller
 	  	$price = 0;
 	  	$memdisprice = 0;
 	  	$order = WxOrder::getOrder($orderId, $this->companyId);
-	  	if($order['order_status']>2){
-	  		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-	  	}
+	  	if($order['order_status'] > 2){
+			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
+		}
 	  	$levelDiscount = WxBrandUser::getUserDiscount($user,'1');
   		$orderProducts = WxOrder::getOrderProduct($orderId, $this->companyId);
   		foreach ($orderProducts as $product){
@@ -584,7 +584,7 @@ class MallController extends Controller
 	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  	}
 	  	if($orderObj->order['order_status']>2){
-	  		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 	  	}
 	  	$orderCreate = false;
 	  	$transaction = Yii::app()->db->beginTransaction();
@@ -608,7 +608,7 @@ class MallController extends Controller
 	  		//支付宝支付
 	  		$order = WxOrder::getOrder($orderId,$this->companyId);
 	  		if($order['order_status'] > 2){
-	  			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+	  			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId)));
 	  		}
 	  		$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
 	  	}
@@ -644,7 +644,7 @@ class MallController extends Controller
 				$msg = $e->getMessage();
 			}
 		}
-		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId)));
 	 }
 	 /**
 	 * 
