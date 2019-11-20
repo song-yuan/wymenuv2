@@ -25,7 +25,6 @@ class WxZizhuOrder
 	
 	public function __construct($dpid, $orderId, $user, $others){
 		$this->dpid = $dpid;
-		$this->siteId = $siteId;
 		$this->user = $user;
 		$this->others = $others;
 		$this->getSeatingFee();
