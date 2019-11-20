@@ -121,7 +121,7 @@ class WxCupon
 			// 微信外卖
 			$types = ' t.type like "%3%" and ';
 			$typess = ' type like "%3%" and ';
-		}elseif($type ==1 || $type ==6 || $type ==3){
+		}elseif($type ==1 || $type ==3 || $type ==5 || $type ==6){
 			$types = ' t.type like "%2%" and ';
 			$typess = ' type like "%2%" and ';
 		}else{

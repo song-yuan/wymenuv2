@@ -540,7 +540,7 @@ class MallController extends Controller
 	  	// 如果没普通优惠活动  可满减满送
 	  	$fullsent = array();
 	  	if(!$haspormotion){
-	  		$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, $order['order_type']);
+	  		$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, 5);
 	  		if(!empty($fullsent)){
 	  			if($fullsent['full_type']){
 	  				$minusprice = $price - $fullsent['extra_cost'];
@@ -553,7 +553,7 @@ class MallController extends Controller
 	  			}
 	  		}
 	  	}
-	  	$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$order['order_type']);
+	  	$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,5);
 	  
 	  	$this->render('zizhuorder',array('companyId'=>$this->companyId,'orderId'=>$orderId,'cupons'=>$cupons,'user'=>$user,'price'=>$price,'remainMoney'=>$remainMoney,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
 	  }
