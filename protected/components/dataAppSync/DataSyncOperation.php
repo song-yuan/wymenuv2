@@ -2293,7 +2293,7 @@ class DataSyncOperation {
 		return $result;
 	}
 	public static function createZizhuOrder($data) {
-		$dpid = $data['dpid'];
+		$dpid = $data['companyId'];
 		$product = $data['product'];
 		$time = time();
 		$productArr = json_decode(urldecode($product),true);
