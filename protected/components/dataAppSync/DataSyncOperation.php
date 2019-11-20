@@ -2373,6 +2373,7 @@ class DataSyncOperation {
 					if($detail!=''){
 						$tasteArr = explode('-', $detail);
 						foreach ($tasteArr as $taste){
+							$tasteItem = explode(':', $taste);
 							$se = new Sequence("order_taste");
 							$orderTasteId = $se->nextval();
 							$orderTasteData = array(
@@ -2380,8 +2381,8 @@ class DataSyncOperation {
 									'dpid'=>$dpid,
 									'create_at'=>date('Y-m-d H:i:s',$time),
 									'update_at'=>date('Y-m-d H:i:s',$time),
-									'taste_name'=>$taste[1],
-									'taste_id'=>$taste[0],
+									'taste_name'=>$tasteItem[1],
+									'taste_id'=>$tasteItem[0],
 									'order_id'=>$orderProductId,
 									'is_order'=>0,
 							);
