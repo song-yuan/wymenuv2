@@ -1779,7 +1779,9 @@ class DataSyncOperation {
 		if ($order) {
 			return json_encode ( array (
 					'status' => true,
-					'order_status' => $order ['order_status'] 
+					'order_status' => $order ['order_status'],
+					'call_no' => $order ['callno'],
+					'account_no' => $order ['account_no']
 			) );
 		} else {
 			return json_encode ( array (
