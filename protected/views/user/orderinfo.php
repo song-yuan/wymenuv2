@@ -12,7 +12,7 @@
 
 <?php if($order['order_type']==1):?>
 <div class="order-title">桌号: <?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
-<?php else:?>
+<?php elseif($order['order_type']==6):?>
 <?php if(in_array($order['order_status'], array(3,4,8))):?>
 <div class="order-callno ">
 	<div class="small">取餐号</div>

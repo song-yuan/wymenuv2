@@ -9,9 +9,9 @@
 	}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_t=201911201607">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css?_t=201911201607">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css?_t=201911201607">
 
 <form action="<?php echo $this->createUrl('/mall/generalZizhuOrder',array('companyId'=>$this->companyId,'orderId'=>$orderId,'type'=>$this->type));?>" method="post">
 

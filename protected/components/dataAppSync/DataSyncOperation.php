@@ -2429,11 +2429,7 @@ class DataSyncOperation {
 				$orderPrice +=$pprice*$pnumber;
 				$realityPrice +=$poprice*$pnumber;
 			}
-			$orderStatus = 2;
-			if($orderPrice<=0){
-				$orderStatus = 4;
-			}
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status='.$orderStatus.' where lid='.$orderId.' and dpid='.$dpid;
+			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',order_status=2 where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 			$transaction->commit();
 			$status = true;

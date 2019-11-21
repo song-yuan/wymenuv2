@@ -542,7 +542,7 @@ class MallController extends Controller
 	  	// 如果没普通优惠活动  可满减满送
 	  	$fullsent = array();
 	  	if(!$haspormotion){
-	  		$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, 5);
+	  		$fullsent = WxFullSent::canUseFullsent($this->companyId, $price, $this->type);
 	  		if(!empty($fullsent)){
 	  			if($fullsent['full_type']){
 	  				$minusprice = $price - $fullsent['extra_cost'];
@@ -555,7 +555,7 @@ class MallController extends Controller
 	  			}
 	  		}
 	  	}
-	  	$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,5);
+	  	$cupons = WxCupon::getUserAvaliableCupon($proCodeArr,$canuseCuponPrice,$userId,$this->companyId,$this->type);
 	  	
 	  	$this->render('zizhuorder',array('companyId'=>$this->companyId,'orderId'=>$orderId,'orderProducts'=>$orderProducts,'cupons'=>$cupons,'user'=>$user,'price'=>$price,'remainMoney'=>$remainMoney,'memdisprice'=>$memdisprice,'fullsent'=>$fullsent));
 	  }
@@ -581,7 +581,7 @@ class MallController extends Controller
 	  			throw new Exception('没有订单不能支付！');
 	  		}
 	  	}catch (Exception $e){
-	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
+	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'type'=>$this->type,'orderId'=>$orderId));
 	  	}
 	  	if($orderObj->order['order_status']>2){
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
@@ -598,7 +598,7 @@ class MallController extends Controller
 	  	}catch (Exception $e){
 	  		$transaction->rollback();
 	  		$msg = $e->getMessage();
-	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'orderId'=>$orderId,'type'=>5));
+	  		$this->redirect(array('/mall/checkZizhuOrder','companyId'=>$this->companyId,'type'=>$this->type,'orderId'=>$orderId));
 	  	}
 	  	if($orderObj->orderSuccess && $orderCreate){
 	  		WxOrder::orderSuccess($orderObj->order);
