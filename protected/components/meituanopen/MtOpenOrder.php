@@ -163,6 +163,7 @@ class MtOpenOrder
 		if($caution===false){
 			$caution = $ocaution;
 		}
+		$caution = Helper::dealString($caution);
 		$orderStatus = $data['status'];
 		$dayseq = $data['day_seq'];
 		$originPrice = $data['original_price'];

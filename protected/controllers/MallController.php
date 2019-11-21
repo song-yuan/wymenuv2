@@ -608,7 +608,7 @@ class MallController extends Controller
 	  		//支付宝支付
 	  		$order = WxOrder::getOrder($orderId,$this->companyId);
 	  		if($order['order_status'] > 2){
-	  			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId)));
+	  			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 	  		}
 	  		$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
 	  	}
@@ -644,7 +644,7 @@ class MallController extends Controller
 				$msg = $e->getMessage();
 			}
 		}
-		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId)));
+		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'orderDpid'=>$this->companyId));
 	 }
 	 /**
 	 * 
