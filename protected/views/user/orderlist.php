@@ -15,15 +15,16 @@
 <body class="gift_exchange bg_lgrey2">
 	<div id="topnav">
 		<ul>
-			<li class="all <?php if($type==0) echo 'current';?>"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId));?>"><span>全部</span></a></li>
-			<li class="for_delivery <?php if($type==1) echo 'current';?>"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId,'t'=>1));?>"><span>待付款</span></a></li>
-			<li class="for_confirm <?php if($type==2) echo 'current';?>"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId,'t'=>2));?>"><span>已付款</span></a></li>
+			<li class="all <?php if($type==0) echo 'current';?>" style="width:24%;"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId));?>"><span>全部</span></a></li>
+			<li class="for_delivery <?php if($type==1) echo 'current';?>" style="width:24%;"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId,'t'=>1));?>"><span>待付款</span></a></li>
+			<li class="for_confirm <?php if($type==2) echo 'current';?>" style="width:24%;"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId,'t'=>2));?>"><span>已付款</span></a></li>
+			<li class="for_confirm <?php if($type==3) echo 'current';?>" style="width:24%;"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId,'t'=>3));?>"><span>已完成</span></a></li>
 		</ul>
 	</div>
 	<div class="orderlist with_topbar">
 		<!-- 全部 -->
 		<ul id="all">
-			<div id="more" class="more-info">点击查看更多</div>
+			<div id="more" class="more-info" style="display:none;">点击查看更多</div>
 		</ul>
 		<!-- 全部 -->
 	</div>
