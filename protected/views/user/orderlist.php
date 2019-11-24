@@ -81,6 +81,7 @@ function getOrderList(){
 			$('#loadingMoreToast').fadeOut(200);
 			if(data.length==10){
 				page++;
+				$('#more').show();
 			}else{
 				$('#more').hide();
 			}
