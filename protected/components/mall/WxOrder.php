@@ -905,7 +905,7 @@ class WxOrder
 	    return $orderProduct;
 	}
 	public static function getUserOrderList($userId,$cardId,$type,$page){
-		$createAt = strtotime('-1 year');
+		$createAt = date('Y-m-d 00:00:00',strtotime('-1 year'));
 		$ssql = 'select lid from nb_order where create_at > "'.$createAt.'" and user_id='.$userId.' and account_no >0';
 		if($type==1){
 			$sql = 'select * from nb_order where lid in('.$ssql.') and order_type between 1 and 6 and order_status between 1 and 2 order by lid desc';
