@@ -905,14 +905,16 @@ class WxOrder
 	    return $orderProduct;
 	}
 	public static function getUserOrderList($userId,$cardId,$type,$page){
+		$createAt = strtotime('-1 year');
+		$ssql = 'select lid from nb_order where create_at > "'.$createAt.'" and user_id='.$userId.' and account_no >0';
 		if($type==1){
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type between 1 and 6 and order_status between 1 and 2 order by lid desc';
+			$sql = 'select * from nb_order where lid in('.$ssql.') and order_type between 1 and 6 and between 1 and 2 order by lid desc';
 		}elseif($type==2){
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type between 1 and 6 and order_status between 3 and 4 order by lid desc';
+			$sql = 'select * from nb_order where lid in('.$ssql.') and order_type between 1 and 6 and between 3 and 4 order by lid desc';
 		}elseif($type==3){
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type between 1 and 6 and order_status=8 order by lid desc';
+			$sql = 'select * from nb_order where lid in('.$ssql.') and order_type between 1 and 6 and order_status=8 order by lid desc';
 		}else{
-			$sql = 'select * from nb_order where user_id='.$userId.' and order_type between 1 and 6 order by lid desc';
+			$sql = 'select * from nb_order where lid in('.$ssql.') and order_type between 1 and 6 order by lid desc';
 		}
 		$sql .= '  limit '. ($page-1)*10 .',10';
 		$orderList = Yii::app()->db->createCommand($sql)->queryAll();
