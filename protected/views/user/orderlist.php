@@ -94,6 +94,8 @@ function getOrderList(){
 					+'<div class="left small font_l">'+model.create_at+'</div>';
 					if(model.order_status < '3'){
 						str += '<div class="right small font_red">待付款</div>';
+					}else if(model.order_status == '7'){
+						str += '<div class="right small font_red">已取消</div>';
 					}else{
 						if(model.takeout_status == '0'){
 							str += '<div class="right small font_org">已支付</div>';
