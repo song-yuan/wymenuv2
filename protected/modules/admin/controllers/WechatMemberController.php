@@ -43,7 +43,7 @@ class WechatMemberController extends BackendController {
         
 		$orders = array();
 		$sql = 'select lid,dpid,create_at,account_no,reality_total,should_total from nb_order where lid in(select lid from nb_order where create_at > "2016-01-01 00:00:00" and user_id='.$brandUser['lid'].' and account_no > 0) and order_type in(1,2,3,5,6) and order_status in(3,4,8) order by lid desc';
-		$orders = Yii::app()->db->createCommand($sql)->queryColumn();
+		$orders = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$sql = 'select cb.*,c.cupon_title,c.cupon_money,c.min_consumer from nb_cupon_branduser cb,nb_cupon c where cb.cupon_id=c.lid and cb.dpid=c.dpid and cb.brand_user_lid='.$num.' and c.is_available=0 and cb.delete_flag=0 and c.delete_flag=0 order by cb.lid desc limit 50';
 		$userCupons = Yii::app()->db->createCommand($sql)->queryAll();
