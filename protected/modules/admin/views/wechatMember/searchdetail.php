@@ -271,22 +271,22 @@ li{
                                 </tr>
                             </thead>
                             <?php 
-                                 foreach ($orderPays as $orderPay):                                     
+                                 foreach ($orders as $order):                                     
                              ?>                           
                             <tbody>
                                  <tr>
                                     <td class="accountno" 
-                                         accountno="<?php echo $orderPay['account_no'];?>" 
-                                         orderid="<?php echo $orderPay['order_id']?>" 
-                                         originalp="<?php echo sprintf("%.2f",$orderPay['reality_total']);?>" 
-                                         shouldp="<?php echo sprintf("%.2f",$orderPay['should_total']);?>" 
-                                         youhuip="<?php echo sprintf("%.2f",($orderPay['reality_total'])-($orderPay['should_total']));?>"
+                                         accountno="<?php echo $order['account_no'];?>" 
+                                         orderid="<?php echo $order['lid']?>" 
+                                         originalp="<?php echo sprintf("%.2f",$order['reality_total']);?>" 
+                                         shouldp="<?php echo sprintf("%.2f",$order['should_total']);?>" 
+                                         youhuip="<?php echo sprintf("%.2f",($order['reality_total'])-($order['should_total']));?>"
                                          >
-                                         <?php echo $orderPay['account_no'];?>
+                                         <?php echo $order['account_no'];?>
                                     </td>
-                                    <td><?php echo $orderPay['create_at'];?></td> 
-                                    <td><?php echo $orderPay['should_total'];?></td> 
-                                    <td><?php echo $companys[$orderPay['dpid']]['company_name'];?></td> 
+                                    <td><?php echo $order['create_at'];?></td> 
+                                    <td><?php echo $order['should_total'];?></td> 
+                                    <td><?php echo $companys[$order['dpid']]['company_name'];?></td> 
                                 </tr>
                             </tbody>
                             <?php endforeach;?>
