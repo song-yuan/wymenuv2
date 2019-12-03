@@ -95,8 +95,8 @@
 	}
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_t=201911201608">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css?_t=201911201608">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 
 <div class="order-title">等待付款</div>
