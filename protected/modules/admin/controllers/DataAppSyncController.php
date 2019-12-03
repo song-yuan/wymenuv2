@@ -575,4 +575,20 @@ class DataAppSyncController extends Controller
 		}
 		Yii::app()->end(json_encode(array('status'=>$status)));
 	}
+	/**
+	 * 取消订单
+	 */
+	public function actionCancelOrder(){
+		$orderId = Yii::app()->request->getParam('orderId',0);
+		$dpid = Yii::app()->request->getParam('companyId',0);
+		try{
+			 WxOrder::cancelOrder($orderId,$dpid);
+			 $transaction->commit();
+			 echo 1;
+		}catch (Exception $e) {
+			$transaction->rollback();
+			echo 0;
+		}
+		exit;
+	}
 }
