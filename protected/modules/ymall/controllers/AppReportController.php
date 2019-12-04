@@ -95,7 +95,7 @@ class AppReportController extends Controller
 		 	$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
 		 	
 		 	$cuponsql = "select sum(pay_amount) as pay_amount from nb_order_pay where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and paytype=9 and dpid=".$companyId;
-		 	$cupons = Yii::app()->db->createCommand($cashsql)->queryAll();
+		 	$cupons = Yii::app()->db->createCommand($cuponsql)->queryAll();
 		 	
 		 	$cardsql = "select count(rfid) as rfid from nb_member_card where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and dpid in(".$admindpid.")";
 		 	$cards = Yii::app()->db->createCommand($cardsql)->queryAll();
@@ -119,7 +119,7 @@ class AppReportController extends Controller
 		 	$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
 		 	
 		 	$cuponsql = "select sum(pay_amount) as pay_amount from nb_order_pay where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and paytype=9 and dpid=".$companyId;
-		 	$cupons = Yii::app()->db->createCommand($cashsql)->queryAll();
+		 	$cupons = Yii::app()->db->createCommand($cuponsql)->queryAll();
 		 	
 		 	$cardsql = "select count(rfid) as rfid from nb_member_card where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and dpid=".$companyId;
 		 	$cards = Yii::app()->db->createCommand($cardsql)->queryAll();
