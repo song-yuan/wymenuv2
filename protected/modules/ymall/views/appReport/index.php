@@ -1,4 +1,20 @@
-<?php $basePath = Yii::app()->baseUrl;?>
+<?php 
+	$basePath = Yii::app()->baseUrl;
+	$realityTotal = 0;
+	$shouldTotal = 0;
+	$orderCount = 0;
+	$number = 0;
+	$cupon = 0;
+	foreach($orders as $order){
+		$realityTotal += $order['reality_total'];
+		$shouldTotal += $order['pay_amount'];
+		$orderCount += $order['counts'];
+		$number += $order['number'];
+	}
+	foreach ($cupons as $c){
+		$cupon += $c['pay_amount'];
+	}
+?>
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/app.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $basePath;?>/css/appreport/mui.min.css">
 <!--导航栏-->
@@ -30,68 +46,36 @@
 	<div class="shou">
 		<div class="shou1">
 			<h4>今日应收</h4>
-			<h3><?php foreach($orders as $order){
-				if(!empty($order['reality_total'])){
-					echo $order['reality_total'];
-				}else{
-					echo '0';
-				}
-				}?></h3>
+			<h3><?php echo $realityTotal;?></h3>
 		</div>
 		<div class="shou2">
 			<h4>今日实收</h4>
-			<h3><?php foreach($orders as $order){
-				if(!empty($order['pay_amount'])){
-					$pay_amount = $order['pay_amount'];
-					echo $pay_amount;
-				}else{
-					echo '0';
-				}
-				}?></h3>
+			<h3><?php echo $shouldTotal - $cupon;?></h3>
 		</div>
 		<div class="shou3">
 			<h4>总订单数</h4>
-			<h3><?php foreach($orders as $order){
-				$reality_total = $order['reality_total'];
-				if(!empty($order['counts'])){
-					$counts = $order['counts'];
-					echo $counts;
-				}else{
-					echo '0';
-				}
-				}?></h3>
+			<h3><?php echo $orderCount;?></h3>
 		</div>
 		<div class="shou4">
 			<h4>订单平均价</h4>
 			<h3><?php 
-				 foreach($orders as $order){
-					$reality_total = $order['reality_total'];
-					$pay_amount = $order['pay_amount'];
-					if(!empty($order['counts'])){
-						echo round($pay_amount/$counts,2);
-					}else{
-						echo '0';
-					}
+				if($orderCount > 0){
+					echo round($shouldTotal/$orderCount,2);
+				}else{
+					echo '0.00';
 				}
 				?></h3>
 		</div>
 		<div class="shou5"><hr></div>
 		<div class="shou3">
 			<h4 >总消费人数</h4>
-			<h3><?php foreach($orders as $order){
-				if(!empty($order['number'])){
-					$number = $order['number'];
-					echo $number;
-				}else{
-					echo '0';
-				}
-				}?></h3>
+			<h3><?php echo $number;?>
 		</div>
 		<div class="shou4">
 			<h4>人均消费</h4>
 			<h3><?php 
-				if(!empty($number)){
-					$round = round($pay_amount/$number,2);
+				if($number > 0){
+					$round = round($shouldTotal/$number,2);
 					echo $round;
 				}else{
 					echo '0';
@@ -110,52 +94,38 @@
                 <div class="ys">
 					<div class="ys1">
 						<h6>实收</h6>
-						<span><?php if(!empty($pay_amount)){
-							echo $pay_amount;
-						}else{
-							echo '0';
-						}?></span>
+						<span><?php 
+								echo $shouldTotal - $cupon;	echo '0';
+							?>
+						</span>
 					</div>
 					<div class="ys2">
 						<h6>折扣</h6>
 						<span><?php 
-				if(!empty($pay_amount)){
-					echo round($reality_total-$pay_amount,2);
-				}else{
-					echo '0';
-				}
-				?></span>
+						echo round($realityTotal-$shouldTotal,2);
+					?>
+					</span>
 					</div>
 					<div class="ys4">
 						<h6>人均</h6>
-						<span><?php if(!empty($number)){
-					$round = round($pay_amount/$number,2);
-					echo $round;
-				}else{
-					echo '0';
-				}?></span>
+						<span><?php 
+							echo round($shouldTotal/$number,2);
+						?>
+						</span>
 					</div>
 					<div class="ys5">
 						<h6>订单数</h6>
-						<span><?php foreach($orders as $order){
-				if(!empty($order['counts'])){
-					$counts = $order['counts'];
-					echo $counts;
-				}else{
-					echo '0';
-				}
-				}?></span>
+						<span><?php 
+						echo $orderCount;
+						?>
+						</span>
 					</div>
 					<div class="ys6">
 						<h6>总客人</h6>
-						<span><?php foreach($orders as $order){
-				if(!empty($order['number'])){
-					$number = $order['number'];
-					echo $number;
-				}else{
-					echo '0';
-				}
-				}?></span>
+						<span><?php 
+							echo $number;
+						?>
+						</span>
 					</div>
 					<!-- <div class="ys7">
 								<a href="turnover.html">查看详细营业额>>></a>
