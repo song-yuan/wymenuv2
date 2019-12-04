@@ -109,7 +109,12 @@
 					<div class="ys4">
 						<h6>人均</h6>
 						<span><?php 
-							echo round($shouldTotal/$number,2);
+						if($number > 0){
+							$round = round($shouldTotal/$number,2);
+							echo $round;
+						}else{
+							echo '0';
+						}
 						?>
 						</span>
 					</div>
