@@ -1044,7 +1044,7 @@ $(document).ready(function(){
 	var i = 0;
 	var j = 0;
 	var isScroll = false;
-	var headHeight = 40;
+	var headHeight = 190;
 	var footHeight = 50;
 	var cHeight = $('body').height()-headHeight-footHeight;
 	$('#nav,#container').css('height',cHeight);
