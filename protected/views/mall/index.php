@@ -203,7 +203,7 @@ function getBanner(){
 				var str = '';
 				for(var i=0;i<data.length;i++){
 					var obj = data[i];
-					str +='<div class="swiper-slide">1</div>';
+					str +='<div class="swiper-slide"><img src="'+obj.url+'"></div>';
 				}
 				$('.banner').find('.swiper-wrapper').html(str);
 				var swiper = new Swiper('.swiper-container',{
