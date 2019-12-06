@@ -797,11 +797,14 @@ class MallController extends Controller
 	 	MtpPay::preOrder($data);
 	 	exit;
 	 }
+	 public function actionGetBanner()
+	 {
+	 	$ds = WxDoubleScreen::get($this->companyId);
+	 	echo json_encode($ds);
+	 	exit;
+	 }
 	/**
-	 * 
 	 * 获取商品
-	 * 
-	 * 
 	 */
 	public function actionGetProduct()
 	{

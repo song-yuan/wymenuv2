@@ -88,10 +88,9 @@
 </div>
 <?php endif;?>
 <div class="banner" style="font-size:20px;">
-	<div class="swiper-container" style="with:100%;height:100%;">
+	<div class="swiper-container">
 		<div class="swiper-wrapper">
-			<div class="swiper-slide">1</div>
-			<div class="swiper-slide">2</div>
+			
 		</div>
 		<div class="swiper-scrollbar"></div>
 	</div>
@@ -197,16 +196,32 @@ hasclose = true;
 var resMsg = '<?php echo $this->company['rest_message']?$this->company['rest_message']:"店铺休息中....";?>';
 <?php endif;?>
 function getBanner(){
-	var swiper = new Swiper('.swiper-container',{
-		  autoplay: {
-	        delay: 2500,
-	        disableOnInteraction: false,
-	      },
-	      scrollbar: {
-	        el: '.swiper-scrollbar',
-	        hide: true,
-	      },
-	    });
+	$.ajax({
+		url:"<?php echo $this->createUrl('/mall/getBanner',array('companyId'=>$this->companyId,'type'=>$this->type));?>",
+		success:function(data){
+			if(data.length >0 ){
+				var str = '';
+				for(var i=0;i<data.length;i++){
+					var obj = data[i];
+					str +='<div class="swiper-slide">1</div>';
+				}
+				$('.banner').find('.swiper-container').html(str);
+				var swiper = new Swiper('.swiper-container',{
+					  autoplay: {
+				        delay: 2500,
+				        disableOnInteraction: false,
+				      },
+				      scrollbar: {
+				        el: '.swiper-scrollbar',
+				        hide: true,
+				      },
+			    });
+			}else{
+				$('.banner').hide();
+			}
+		},
+		dataType:'json'
+	});
 }
 function getProduct(){
 	$('#loadingToast').show();
