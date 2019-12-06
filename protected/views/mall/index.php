@@ -52,6 +52,7 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201901111705">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201901211437">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/swiper.min.css?_=201901211437">
 <style type="text/css">
 .layui-layer-title{
 	font-size: 18px;
@@ -86,6 +87,15 @@
 	</marquee>
 </div>
 <?php endif;?>
+<div class="banner" style="font-size:20px;">
+	<div class="swiper-container" style="with:100%;height:100%;">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">1</div>
+			<div class="swiper-slide">2</div>
+		</div>
+		<div class="swiper-scrollbar"></div>
+	</div>
+</div>
 <div class="content clearfix">
 	<div id="nav" class="nav-lf">
 		<ul></ul>
@@ -178,6 +188,7 @@
 </div>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/swiper.min.js"></script>
 <script> 
 var orderType = '<?php echo $this->type;?>';//订单类型
 var hasclose = false; // 店铺是否休息
@@ -185,7 +196,18 @@ var hasclose = false; // 店铺是否休息
 hasclose = true;
 var resMsg = '<?php echo $this->company['rest_message']?$this->company['rest_message']:"店铺休息中....";?>';
 <?php endif;?>
-
+function getBanner(){
+	var swiper = new Swiper('.swiper-container',{
+		  autoplay: {
+	        delay: 2500,
+	        disableOnInteraction: false,
+	      },
+	      scrollbar: {
+	        el: '.swiper-scrollbar',
+	        hide: true,
+	      },
+	    });
+}
 function getProduct(){
 	$('#loadingToast').show();
 	$.ajax({
@@ -1026,6 +1048,7 @@ $(document).ready(function(){
 	var footHeight = 50;
 	var cHeight = $('body').height()-headHeight-footHeight;
 	$('#nav,#container').css('height',cHeight);
+	getBanner();
 	getProduct();
 	if(hasclose){
 		$('footer').html('<p class="sh-close">'+resMsg+'</p>');
