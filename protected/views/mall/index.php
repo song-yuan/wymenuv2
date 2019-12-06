@@ -68,7 +68,9 @@
 	z-index: 5;
 	display: none;
 }
-
+.swiper-slide img{
+	width:100%;
+}
 .none {
 	display: none;
 }
