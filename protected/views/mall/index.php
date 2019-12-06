@@ -205,7 +205,7 @@ function getBanner(){
 					var obj = data[i];
 					str +='<div class="swiper-slide">1</div>';
 				}
-				$('.banner').find('.swiper-container').html(str);
+				$('.banner').find('.swiper-wrapper').html(str);
 				var swiper = new Swiper('.swiper-container',{
 					  autoplay: {
 				        delay: 2500,
