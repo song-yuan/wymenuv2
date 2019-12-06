@@ -106,7 +106,7 @@ class Notify extends WxPayNotify
 		}
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
-		if(in_array($order['order_type'], array(1,3,6))){
+		if(in_array($order['order_type'], array(1,3,5,6))){
 			$paytype = 12;
 		}elseif($order['order_type']==2){
 			$paytype = 13;
