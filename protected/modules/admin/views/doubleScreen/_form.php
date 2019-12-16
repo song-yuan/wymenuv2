@@ -21,6 +21,13 @@
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'is_able',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_able', array('0' => yii::t('app','不显示'), '1' => yii::t('app','pos机显示'), '2' => yii::t('app','微信端显示')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_able')));?>
+											<?php echo $form->error($model, 'is_able' )?>
+										</div>
+									</div>
 									<!-- 
 									<div class="form-group">
 										<?php echo $form->label($model, 'is_able',array('class' => 'col-md-3 control-label'));?>

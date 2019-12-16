@@ -92,7 +92,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','双屏标题');?></th>
 								<th><?php echo yii::t('app','双屏说明');?></th>
-								<th>&nbsp;</th>
+								<th><?php echo yii::t('app','显示状态');?></th>
                                 <th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -103,11 +103,20 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
 								<td ><?php echo $model->title;?></td>
 								<td><?php echo $model->description;?></td>
-								<td class="center">
-								<a href="<?php echo $this->createUrl('doubleScreen/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
+								<td>
+									<?php 
+										if($model->is_able==0){
+											echo '不显示';
+										}elseif($model->is_able==1){
+											echo '收款机显示';
+										}elseif($model->is_able==2){
+											echo '微信端显示';
+										}
+									?>
 								</td>
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('doubleScreen/detailIndex',array('groupid' => $model->lid,'type'=>$type, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
+	                                <a href="<?php echo $this->createUrl('doubleScreen/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('doubleScreen/detailIndex',array('groupid' => $model->lid,'type'=>$type, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
