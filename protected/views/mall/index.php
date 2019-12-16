@@ -202,6 +202,7 @@ function getBanner(){
 		url:"<?php echo $this->createUrl('/mall/getBanner',array('companyId'=>$this->companyId,'type'=>$this->type));?>",
 		success:function(data){
 			if(data.length >0 ){
+				var headHeight = 190;
 				$('.banner').attr('item',data.length);
 				var str = '';
 				for(var i=0;i<data.length;i++){
@@ -220,9 +221,9 @@ function getBanner(){
 				      },
 			    });
 			}else{
+				var headHeight = 40;
 				$('.banner').attr('item','0').hide();
 			}
-			var headHeight = 190;
 			var footHeight = 50;
 			var cHeight = $('body').height()-headHeight-footHeight;
 			$('#nav,#container').css('height',cHeight);
