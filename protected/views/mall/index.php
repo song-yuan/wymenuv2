@@ -1095,16 +1095,19 @@ $(document).ready(function(){
     $('#container').scroll(function(){
         var st = $(this).scrollTop();
         var ch = $(this).height();
-        if(st<10){
-            if(!$('.banner').is(':visible')){
-            	$('.banner').show();
-                $('#nav,#container').css('height',ch-150);
+        var it = $('.banner').attr('item');
+        if(it!='0'){
+        	if(st<10){
+                if(!$('.banner').is(':visible')){
+                	$('.banner').show();
+                    $('#nav,#container').css('height',ch-150);
+                }
+            }else{
+            	if($('.banner').is(':visible')){
+    	        	$('.banner').hide();
+    	        	$('#nav,#container').css('height',ch+150);
+            	}
             }
-        }else{
-        	if($('.banner').is(':visible')){
-	        	$('.banner').hide();
-	        	$('#nav,#container').css('height',ch+150);
-        	}
         }
 	    var ptHeight = $('.prt-title').outerHeight();
 	    $('.section').each(function(){
