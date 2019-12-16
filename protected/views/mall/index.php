@@ -1093,7 +1093,7 @@ $(document).ready(function(){
 
     $('#container').scroll(function(){
         var st = $(this).scrollTop();
-        var ch = $(this).hight();
+        var ch = $(this).height();
         if(st<10){
             if(!$('.banner').is(':visible')){
             	$('.banner').show();
