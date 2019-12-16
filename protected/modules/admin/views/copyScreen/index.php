@@ -71,7 +71,7 @@
                                     <input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" lid="<?php echo $model->lid;?>" name="ids[]" /> 
                                 </td>
                                 <td ><?php echo $model->title;?></td>
-                                <td><?php echo $model->desc;?></td>
+                                <td><?php echo $model->description;?></td>
                             </tr>
                             <?php endforeach;?>
                             <?php endif;?>

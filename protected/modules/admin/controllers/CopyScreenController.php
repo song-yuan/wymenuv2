@@ -86,7 +86,7 @@ class CopyScreenController extends BackendController
                                         'source'=>'1',
                                         'title'=>$sreen_hq['title'],
                                         'type' =>$sreen_hq['type'], 
-                                        'desc' => $sreen_hq['desc'],
+                                        'description' => $sreen_hq['desc'],
                                         'is_able' =>$sreen_hq['is_able'], 
                                         'delete_flag' => $sreen_hq['delete_flag'],
                                         'is_sync' => $sreen_hq['is_sync'],
