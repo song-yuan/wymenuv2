@@ -89,7 +89,7 @@
 	</marquee>
 </div>
 <?php endif;?>
-<div class="banner" style="font-size:20px;">
+<div class="banner" item="0" style="font-size:20px;">
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
 			
@@ -202,6 +202,11 @@ function getBanner(){
 		url:"<?php echo $this->createUrl('/mall/getBanner',array('companyId'=>$this->companyId,'type'=>$this->type));?>",
 		success:function(data){
 			if(data.length >0 ){
+				var headHeight = 190;
+				var footHeight = 50;
+				var cHeight = $('body').height()-headHeight-footHeight;
+				$('#nav,#container').css('height',cHeight);
+				$('.banner').attr('item',data.length);
 				var str = '';
 				for(var i=0;i<data.length;i++){
 					var obj = data[i];
@@ -219,7 +224,7 @@ function getBanner(){
 				      },
 			    });
 			}else{
-				$('.banner').hide();
+				$('.banner').attr('item','0').hide();
 			}
 		},
 		dataType:'json'
@@ -1061,10 +1066,6 @@ $(document).ready(function(){
 	var i = 0;
 	var j = 0;
 	var isScroll = false;
-	var headHeight = 190;
-	var footHeight = 50;
-	var cHeight = $('body').height()-headHeight-footHeight;
-	$('#nav,#container').css('height',cHeight);
 	getBanner();
 	getProduct();
 	if(hasclose){
