@@ -1093,7 +1093,11 @@ $(document).ready(function(){
 
     $('#container').scroll(function(){
         var st = $(this).scrollTop();
-        alert(st);
+        if(st<10){
+            $('.banner').show();
+        }else{
+        	$('.banner').hide();
+        }
 	    var ptHeight = $('.prt-title').outerHeight();
 	    $('.section').each(function(){
 			if(isScroll){
