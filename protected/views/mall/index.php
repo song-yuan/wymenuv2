@@ -1093,10 +1093,17 @@ $(document).ready(function(){
 
     $('#container').scroll(function(){
         var st = $(this).scrollTop();
+        var ch = $(this).hight();
         if(st<10){
-            $('.banner').show();
+            if(!$('.banner').is(':visible')){
+            	$('.banner').show();
+                $('#nav,#container').css('height',ch-150);
+            }
         }else{
-        	$('.banner').hide();
+        	if($('.banner').is(':visible')){
+	        	$('.banner').hide();
+	        	$('#nav,#container').css('height',ch+150);
+        	}
         }
 	    var ptHeight = $('.prt-title').outerHeight();
 	    $('.section').each(function(){
