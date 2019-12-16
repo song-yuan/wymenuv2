@@ -189,7 +189,7 @@
 </div>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/swiper.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/swiper.min.js?_=201901216447"></script>
 <script> 
 var orderType = '<?php echo $this->type;?>';//订单类型
 var hasclose = false; // 店铺是否休息
