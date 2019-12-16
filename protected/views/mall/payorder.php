@@ -258,6 +258,8 @@
 		<?php endif;?>
 	}
 	$(document).ready(function(){
+		layer.load(2);
+		callpay();
 		$('#payOrder').click(function(){
 			layer.load(2);
 			callpay();

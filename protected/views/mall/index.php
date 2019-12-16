@@ -52,7 +52,7 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css?_=201901111705">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css?_=201901211437">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/swiper.min.css?_=201901211437">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/swiper.min.css?_=201901211447">
 <style type="text/css">
 .layui-layer-title{
 	font-size: 18px;
@@ -1092,6 +1092,8 @@ $(document).ready(function(){
     });
 
     $('#container').scroll(function(){
+        var st = $(this).scrollTop();
+        alert(st);
 	    var ptHeight = $('.prt-title').outerHeight();
 	    $('.section').each(function(){
 			if(isScroll){
