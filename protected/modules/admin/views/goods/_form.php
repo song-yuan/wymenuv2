@@ -255,16 +255,16 @@
 				$('#goods-form').submit();
 			}
 		});
-// 		   $('.mater_sel').on('change','.materials',function(){
-// 		   		var id = $(this).val();
-// 		   		//layer.msg(id);
-// 		   		$('#Goods_material_id').val(id);
-// 		   });
-// 		   $('.unit_sel').on('change','.materials',function(){
-// 		   		var id = $(this).val();
-// 		   		//layer.msg(id);
-// 		   		$('#Goods_unit_id').val(id);
-// 		   });
+		   $('.mater_sel').on('change','.materials',function(){
+		   		var id = $(this).val();
+		   		//layer.msg(id);
+		   		$('#Goods_material_id').val(id);
+		   });
+		   $('.unit_sel').on('change','.materials',function(){
+		   		var id = $(this).val();
+		   		//layer.msg(id);
+		   		$('#Goods_unit_id').val(id);
+		   });
 
 	});
 	</script>
