@@ -228,9 +228,7 @@
 	   					});
 	   					str = str + '</select>';
 	   					$parent.append(str);
-	   					$parent.find('span').remove();
 	   				}else{
-		   				layer.msg('ceshi');
 		   				var str = '<select class="form-control materials" tabindex="-1" name="category_id_selecter" id="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
 	   					'<option value="0">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
 	   					str = str + '</select>';
@@ -257,12 +255,12 @@
 		});
 		   $('.mater_sel').on('change','.materials',function(){
 		   		var id = $(this).val();
-		   		//layer.msg(id);
+		   		$(this).parents('.mater_sel').find('span').remove();
 		   		$('#Goods_material_id').val(id);
 		   });
 		   $('.unit_sel').on('change','.materials',function(){
 		   		var id = $(this).val();
-		   		//layer.msg(id);
+		   		$(this).parents('.unit_sel').find('span').remove();
 		   		$('#Goods_unit_id').val(id);
 		   });
 
