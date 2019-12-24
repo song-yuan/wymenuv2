@@ -118,7 +118,7 @@ class AppReportController extends Controller
 		 	$Membersql = "select distinct count(paytype_id) as paytype_id from nb_order_pay where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and paytype=4 and dpid=".$companyId;
 		 	$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
 		 	
-		 	$cuponsql = "select sum(op.pay_amount) as pay_amount from nb_order_pay op,nb_order o where op.order_id=o.lid and op.dpid=o.dpid and op.dpid=".$companyId." and op.create_at >= '".$beginTime."' and op.create_at <= '".$endTime."' and op.paytype=9 and o.and order_status in(3,4,8)";
+		 	$cuponsql = "select sum(op.pay_amount) as pay_amount from nb_order_pay op,nb_order o where op.order_id=o.lid and op.dpid=o.dpid and op.dpid=".$companyId." and op.create_at >= '".$beginTime."' and op.create_at <= '".$endTime."' and op.paytype=9 and o.order_status in(3,4,8)";
 		 	$cupons = Yii::app()->db->createCommand($cuponsql)->queryAll();
 		 	
 		 	$cardsql = "select count(rfid) as rfid from nb_member_card where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and dpid=".$companyId;
