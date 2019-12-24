@@ -118,7 +118,7 @@ class AppReportController extends Controller
 		 	$Membersql = "select distinct count(paytype_id) as paytype_id from nb_order_pay where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and paytype=4 and dpid=".$companyId;
 		 	$Members = Yii::app()->db->createCommand($Membersql)->queryAll();
 		 	
-		 	$cuponsql = "select sum(pay_amount) as pay_amount from nb_order_pay where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and paytype=9 and dpid=".$companyId;
+		 	$cuponsql = "select sum(op.pay_amount) as pay_amount from nb_order_pay op,nb_order o where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and paytype=9 and dpid=".$companyId;
 		 	$cupons = Yii::app()->db->createCommand($cuponsql)->queryAll();
 		 	
 		 	$cardsql = "select count(rfid) as rfid from nb_member_card where create_at >= '".$beginTime."' and create_at <= '".$endTime."' and dpid=".$companyId;
@@ -1154,13 +1154,14 @@ class AppReportController extends Controller
 			$status = true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
+			$message = $e->getMessage();
 			$status = false;
 		}
 		if($status){
 			Yii::app()->user->setFlash('success',yii::t('app','盘点成功！'));
 			$this->redirect(array('/ymall/appReport/pdjl','companyId'=>$dpid));
 		}else{
-			Yii::app()->user->setFlash('success',yii::t('app','盘点失败！'));
+			Yii::app()->user->setFlash('success',yii::t('app','盘点失败！'.$message));
 			$this->redirect(array('/ymall/appReport/kcpd','companyId'=>$dpid));
 		}
 	}
