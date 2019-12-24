@@ -1157,6 +1157,7 @@ class AppReportController extends Controller
 			$message = $e->getMessage();
 			$status = false;
 		}
+		var_dump($message);exit;
 		if($status){
 			Yii::app()->user->setFlash('success',yii::t('app','盘点成功！'));
 			$this->redirect(array('/ymall/appReport/pdjl','companyId'=>$dpid));
