@@ -273,11 +273,7 @@
 	         var weekday = document.getElementsByName("week");
 	         var str=new Array();
 	         var weekstr=new Array();
-	         //alert(begintime);
-	         //alert(dayend);
 	         var dayendzero = "00:00";
-	         //var ss = "";
-	       // if(aa.checked){
 	         if(endtime<=begintime){
 	        	 alert("<?php echo yii::t('app','活动结束日期应该大于开始日期!!!');?>");
 	        	 return false;
@@ -305,16 +301,12 @@
 	        	 if (weekday[j].checked) {
 	                 weekstr += weekday[j].value +',';
 	             }
-	             }
+	         }
 	         if(weekstr!=''){
 	             weekstr = weekstr.substr(0,weekstr.length-1);//除去最后一个“，”
-	             }
-	         //else{
-	        //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
-	          //   }
-	        // alert(str);
-	      //  }else{
-	        //alert(str);}
+	         }else{
+	        	 weekstr = '0';
+	         }
 	         $("#weekday").val(weekstr);
 	         $("#hidden1").val(str);
 	         $("#normalpromotion-form").submit();

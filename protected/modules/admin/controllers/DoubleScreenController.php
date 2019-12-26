@@ -105,7 +105,7 @@ class DoubleScreenController extends BackendController
 			$this->redirect(array('doubleScreen/index' , 'companyId' => $companyId,'type'=>$type)) ;
 		}
 	}
-        public function actionDetailIndex() {
+    public function actionDetailIndex() {
 		$groupid = Yii::app()->request->getParam('groupid',0);
         $groupname = Yii::app()->request->getParam('groupname',0);
         $type = Yii::app()->request->getParam('type',0);

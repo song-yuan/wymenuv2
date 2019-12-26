@@ -240,6 +240,16 @@ class StatementmemberController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 		
+		$dpids = $this->companyId;
+		if($this->comptype==0){
+			$sql = 'select c.dpid,c.company_name,c.contact_name,c.mobile,c.province,c.city,c.county_area,c.address from nb_company c,nb_company_property cp where c.dpid=cp.dpid and cp.is_rest in(2,3) and c.comp_dpid ='.$this->companyId.' and c.delete_flag =0';
+			$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
+		}
+		
+		$sql = 'select * from nb_order_pay op left join nb_order o '
+			.' on(o.dpid = op.dpid and op.order_id = o.lid) '
+			.' where o.order_status in(3,4,8) and op.dpid in('.$dpids.')';
+			
 		$sql = 'select com.company_name,com.contact_name,com.mobile,com.province,com.city,com.county_area,com.address,pri.all_reality,pri.all_nums,point.point_price,cupon.cupon_price,recharge_price from '
 				.' nb_company com '
 				.' left join '
@@ -286,16 +296,11 @@ class StatementmemberController extends BackendController
 				.' where com.delete_flag =0 and (com.dpid ='.$this->companyId.' or com.comp_dpid ='.$this->companyId.') and cdp.is_rest in(2,3)';
 		//echo $sql;
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
-		$payments = $this->getPayment($this->companyId);
-		$username = $this->getUsername($this->companyId);
-		$comName = $this->getComName();
 
 		$this->render('paymentReport',array(
 				'models'=>$models,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-				'comName'=>$comName,
-				'payments'=>$payments,
 		));
 	}
 	public function actionConsumelist(){

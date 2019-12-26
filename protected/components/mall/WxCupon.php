@@ -230,6 +230,58 @@ class WxCupon
 		}
 	}
 	/**
+	 * 定时发券
+	 */
+	public static function getWxSentTimeCupon(){
+		$nweekday = date('w');
+		if($nweekday==0){
+			$nweekday = 7;
+		}
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select lid,dpid,weekday,to_group,group_id from nb_sentwxcard_promotion where begin_time <=:now and :now <= end_time and type=9 and delete_flag=0';
+		$sps = Yii::app()->db->createCommand($sql)
+							->bindValue(':now',$now)
+							->queryAll();
+		foreach ($sps as $sp){
+			$weekday = $sp['weekday'];
+			if(in_array($nweekday, explode(',', $weekday))){
+				$dpid = $sp['dpid'];
+				$toGroup = $sp['to_group'];
+				$groupId = $sp['group_id'];
+				if($toGroup!=2){
+					//全部 
+					$sql = 'select lid,dpid,openid,weixin_group from nb_brand_user where dpid='.$dpid.' and unsubscribe=0';
+					$userArr = Yii::app()->db->createCommand($sql)->queryAll();
+				}else{
+					//等级
+					$sql = 'select lid,dpid,openid,weixin_group from nb_brand_user where dpid='.$dpid.' and user_level_lid='.$groupId.' and unsubscribe=0';
+					$userArr = Yii::app()->db->createCommand($sql)->queryAll();
+				}
+				foreach ($userArr as $user){
+					$sql = 'select wxcard_id,sentwxcard_pro_id from nb_sentwxcard_promotion_detail where sentwxcard_pro_id='.$sp['lid'].' and dpid='.$dpid.' and delete_flag=0';
+					$sentPromotion = Yii::app()->db->createCommand($sql)->queryAll();
+					foreach ($sentPromotion as $promotion){
+						self::sentCupon($dpid,$user['lid'],$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$user['openid'],$user['weixin_group']);
+					}
+				}
+			}
+		}
+	}
+	/**
+	 * 生日发券
+	 */
+	public static function getOneMonthByBirthday(){
+		$monthBegain = date('m-d',strtotime('+1 week'));
+	
+		$sql = 'select lid,dpid,openid,weixin_group from nb_brand_user where user_birthday like "%-'.$monthBegain.'%" and unsubscribe = 0';
+		$users = Yii::app()->db->createCommand($sql)->queryAll();
+		if(!empty($users)){
+			foreach ($users as $user){
+				self::getWxSentCupon($user['dpid'],2,$user['lid'],$user['openid'],$user['weixin_group']);
+			}
+		}
+	}
+	/**
 	 * 
 	 * 获取发放的代金券 活动
 	 * 
@@ -244,20 +296,6 @@ class WxCupon
 							->queryAll();
 		foreach ($sentPromotion as $promotion){
 			self::sentCupon($dpid,$userId,$promotion['wxcard_id'],2,$promotion['sentwxcard_pro_id'],$openId,$wxgroup);
-		}
-	}
-	/**
-	 * 生日发券
-	 */
-	public static function getOneMonthByBirthday(){
-		$monthBegain = date('m-d',strtotime('+1 week'));
-		
-		$sql = 'select * from nb_brand_user where user_birthday like "%-'.$monthBegain.'%" and unsubscribe = 0';
-		$users = Yii::app()->db->createCommand($sql)->queryAll();
-		if(!empty($users)){
-			foreach ($users as $user){
-				self::getWxSentCupon($user['dpid'],2,$user['lid'],$user['openid'],$user['weixin_group']);
-			}
 		}
 	}
 	/**

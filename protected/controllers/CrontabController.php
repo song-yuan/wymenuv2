@@ -39,6 +39,8 @@ class  CrontabController extends Controller
 	public function actionSentCuponToBirthDay(){
 		//生日赠券 提前一周发券
 		WxCupon::getOneMonthByBirthday();
+		//定时赠券
+		WxCupon::getWxSentTimeCupon();
 	} 
 	// 生成日结统计数据
 	public function actionRijieStatistics(){

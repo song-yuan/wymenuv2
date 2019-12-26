@@ -1,25 +1,25 @@
 <?php
 
-class SentwxcardpromotionController extends BackendController
+class SentwxcardTimeController extends BackendController
 {
 
-	public function actions() {
-		return array(
-				'upload'=>array(
-						'class'=>'application.extensions.swfupload.SWFUploadAction',
-						//注意这里是绝对路径,.EXT是文件后缀名替代符号
-						'filepath'=>Helper::genFileName().'.EXT',
-						//'onAfterUpload'=>array($this,'saveFile'),
-				)
-		);
-	}
+    public function actions() {
+        return array(
+                'upload'=>array(
+                        'class'=>'application.extensions.swfupload.SWFUploadAction',
+                        //注意这里是绝对路径,.EXT是文件后缀名替代符号
+                        'filepath'=>Helper::genFileName().'.EXT',
+                        //'onAfterUpload'=>array($this,'saveFile'),
+                )
+        );
+    }
     public function beforeAction($action) {
-    	parent::beforeAction($action);
-    	if(!$this->companyId && $this->getAction()->getId() != 'upload') {
-    		Yii::app()->user->setFlash('error' , '请选择公司˾');
-    		$this->redirect(array('company/index'));
-    	}
-    	return true;
+        parent::beforeAction($action);
+        if(!$this->companyId && $this->getAction()->getId() != 'upload') {
+            Yii::app()->user->setFlash('error' , '请选择公司˾');
+            $this->redirect(array('company/index'));
+        }
+        return true;
     }
 
 
@@ -32,9 +32,8 @@ class SentwxcardpromotionController extends BackendController
         $criteria->order = ' t.update_at desc';
         $criteria->addCondition("t.dpid= ".$this->companyId);
         $criteria->addCondition('t.delete_flag=0');
-        $criteria->addCondition('t.type=0');
+        $criteria->addCondition('t.type=9');
         $models = SentwxcardPromotion::model()->findAll($criteria);
-        // p($models);
         $this->render('index',array(
                 'models'=>$models,
         ));
@@ -44,13 +43,13 @@ class SentwxcardpromotionController extends BackendController
     public function actionCreate(){
         $lid = Yii::app()->request->getParam('lid','0');
         $is_sync = '11111';
+        
         $selcups = array();
-
         $model = new SentwxcardPromotion();
-
         $pid = $model->lid;
         $phscode = $model->sole_code;
-    
+        $brdulvs = $this->getBrdulv();
+        
         $cups = new CDbCriteria;
         $cups->select = 't.*';
         $cups->order = ' t.update_at desc';
@@ -76,7 +75,7 @@ class SentwxcardpromotionController extends BackendController
         if(Yii::app()->request->isPostRequest) {
             if(Yii::app()->user->role > User::SHOPKEEPER) {
                 Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-                $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId)) ;
+                $this->redirect(array('sentwxcardBirthday/index' , 'companyId' => $this->companyId)) ;
             }
             $model->attributes = Yii::app()->request->getPost('SentwxcardPromotion');
             $model->dpid = $this->companyId ;
@@ -88,30 +87,24 @@ class SentwxcardpromotionController extends BackendController
             $model->sole_code = ProductCategory::getChscode($this->companyId, $lid, $sole_code);
             $facode = $model->sole_code;
             $model->delete_flag = '0';
-            $model->type = '0';
+            $model->type = '9';
             $model->is_sync = $is_sync;
-            // p($model);
             $plids = Yii::app()->request->getPost('newselcups');
             $db = Yii::app()->db;
-// p($plids);
             $dpid = $this->companyId;
             $materialnums = array();
             $materialnums = explode(';',$plids);
-            //var_dump($plids,$materialnums);exit;
             $transaction = $db->beginTransaction();
             try{
                 Yii::app()->db->createCommand('update nb_sentwxcard_promotion_detail set delete_flag ="1",is_sync ='.$is_sync.' where sentwxcard_pro_id =:lid and dpid = :companyId')
                 ->execute(array(':lid' =>$lid ,':companyId' => $this->companyId));
-                //var_dump($materialnums);
                 foreach ($materialnums as $materialnum){
                     $materials = array();
                     $materials = explode(',',$materialnum);
                     $plid = $materials[0];
                     $pcode = $materials[1];
-                    //var_dump($plid.'@'.$pcode);exit;
                     $cupons = Cupon::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$plid,':companyId'=>$this->companyId));
                     $sentwxcardtprodetail = SentwxcardPromotionDetail::model()->find('sentwxcard_pro_id =:plid and wxcard_id =:prodid and dpid=:companyId', array('plid'=>$lid,':prodid'=>$plid, ':companyId'=>$this->companyId));
-                    //var_dump($sentwxcardtprodetail);
                     if(!empty($cupons)&&!empty($plid)&&empty($sentwxcardtprodetail)){
                         $se = new Sequence("sentwxcard_promotion_detail");
                         $id = $se->nextval();
@@ -146,17 +139,19 @@ class SentwxcardpromotionController extends BackendController
                 if($model->save()){
                     Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
                     $transaction->commit(); //提交事务会真正的执行数据库操作
-                    $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId));
+                    $this->redirect(array('sentwxcardTime/index' , 'companyId' => $this->companyId));
                 }
             } catch (Exception $e) {
                 $transaction->rollback();
-                $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId));
+                $this->redirect(array('sentwxcardTime/index' , 'companyId' => $this->companyId));
             }
         }
+        
         $this->render('create',array(
                 'model'=>$model,
                 'cupons'=>$cupons,
                 'selcups'=>$selcups,
+        		'brdulvs'=>$brdulvs
         ));
     }
 
@@ -164,13 +159,12 @@ class SentwxcardpromotionController extends BackendController
         $brdulvs = $this->getBrdulv();
         $lid = Yii::app()->request->getParam('lid','0');
         $show = Yii::app()->request->getParam('show','0');
-        $is_sync = DataSync::getInitSync();
-        $models = '';
+        $is_sync = '11111';
         $selcups = array();
 
         $pid = '';
         $phscode = '';
-
+        $brdulvs = $this->getBrdulv();
 
         $criteria = new CDbCriteria;
         $criteria->with = 'sentwxcarDet';
@@ -179,7 +173,7 @@ class SentwxcardpromotionController extends BackendController
         $criteria->addCondition("t.dpid= ".$this->companyId);
         $criteria->addCondition("t.lid= ".$lid);
         $criteria->addCondition('t.delete_flag=0');
-        $criteria->addCondition('t.type=0');
+        $criteria->addCondition('t.type=9');
         $model = SentwxcardPromotion::model()->find($criteria);
 
         if($model){
@@ -224,7 +218,7 @@ class SentwxcardpromotionController extends BackendController
         if(Yii::app()->request->isPostRequest) {
             if(Yii::app()->user->role > User::SHOPKEEPER) {
                 Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
-                $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId)) ;
+                $this->redirect(array('sentwxcardTime/index' , 'companyId' => $this->companyId)) ;
             }
             $model->attributes = Yii::app()->request->getPost('SentwxcardPromotion');
             $falid = Yii::app()->request->getPost('falid');
@@ -287,12 +281,12 @@ class SentwxcardpromotionController extends BackendController
                 if($model->save()){
                     Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
                     $transaction->commit(); //提交事务会真正的执行数据库操作
-                    $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId));
+                    $this->redirect(array('sentwxcardTime/index' , 'companyId' => $this->companyId));
                 }
 
             } catch (Exception $e) {
                 $transaction->rollback();
-                $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId));
+                $this->redirect(array('sentwxcardTime/index' , 'companyId' => $this->companyId));
             }
 
         }
@@ -305,6 +299,7 @@ class SentwxcardpromotionController extends BackendController
                 'pid' => $pid,
                 'phscode'=>$phscode,
                 'show'=>$show,
+        		'brdulvs'=>$brdulvs
         ));
     }
 
@@ -326,12 +321,12 @@ class SentwxcardpromotionController extends BackendController
                 }
                 $transaction->commit(); //提交事务会真正的执行数据库操作
                 Yii::app()->user->setFlash('success' , yii::t('app','活动删除成功'));
-                $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId));
+                $this->redirect(array('sentwxcardBirthday/index' , 'companyId' => $this->companyId));
 
             } catch (Exception $e) {
                 $transaction->rollback();
                 Yii::app()->user->setFlash('success' , yii::t('app','活动删除失败'));
-                $this->redirect(array('sentwxcardpromotion/index' , 'companyId' => $this->companyId));
+                $this->redirect(array('sentwxcardBirthday/index' , 'companyId' => $this->companyId));
             }
 
 
@@ -339,64 +334,60 @@ class SentwxcardpromotionController extends BackendController
     }
 
 
-	private function getCategories(){
-		$criteria = new CDbCriteria;
-		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' tree,t.lid asc ';
+    private function getCategories(){
+        $criteria = new CDbCriteria;
+        $criteria->with = 'company';
+        $criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+        $criteria->order = ' tree,t.lid asc ';
 
-		$models = ProductCategory::model()->findAll($criteria);
+        $models = ProductCategory::model()->findAll($criteria);
 
-		//return CHtml::listData($models, 'lid', 'category_name','pid');
-		$options = array();
-		$optionsReturn = array(yii::t('app','--请选择分类--'));
-		if($models) {
-			foreach ($models as $model) {
-				if($model->pid == '0') {
-					$options[$model->lid] = array();
-				} else {
-					$options[$model->pid][$model->lid] = $model->category_name;
-				}
-			}
-			//var_dump($options);exit;
-		}
-		foreach ($options as $k=>$v) {
-			//var_dump($k,$v);exit;
-			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
-			$optionsReturn[$model->category_name] = $v;
-		}
-		return $optionsReturn;
-	}
-
-
-
-	/*
-	 *
-	 * 获取会员等级。。。
-	 *
-	 * */
-	private function getBrdulv(){
-		$criteria = new CDbCriteria;
-		$criteria->with = '';
-		$criteria->condition = ' t.delete_flag=0 and t.dpid='.$this->companyId ;
-		$criteria->order = ' t.min_total_points asc ' ;
-		$brdules = BrandUserLevel::model()->findAll($criteria);
-		if(!empty($brdules)){
-		return $brdules;
-		}
-// 		else{
-// 			return flse;
-// 		}
-	}
+        //return CHtml::listData($models, 'lid', 'category_name','pid');
+        $options = array();
+        $optionsReturn = array(yii::t('app','--请选择分类--'));
+        if($models) {
+            foreach ($models as $model) {
+                if($model->pid == '0') {
+                    $options[$model->lid] = array();
+                } else {
+                    $options[$model->pid][$model->lid] = $model->category_name;
+                }
+            }
+            //var_dump($options);exit;
+        }
+        foreach ($options as $k=>$v) {
+            //var_dump($k,$v);exit;
+            $model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+            $optionsReturn[$model->category_name] = $v;
+        }
+        return $optionsReturn;
+    }
 
 
 
-	protected function performAjaxValidation($model)
-	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='cashcard-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-	}
+    /*
+     *
+     * 获取会员等级。。。
+     *
+     * */
+    private function getBrdulv(){
+        $criteria = new CDbCriteria;
+        $criteria->condition = ' t.delete_flag=0 and t.dpid='.$this->companyId ;
+        $criteria->order = ' t.min_total_points asc ' ;
+        $brdules = BrandUserLevel::model()->findAll($criteria);
+        if(!empty($brdules)){
+        	return $brdules;
+        }
+    }
+
+
+
+    protected function performAjaxValidation($model)
+    {
+        if(isset($_POST['ajax']) && $_POST['ajax']==='cashcard-form')
+        {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+    }
 }

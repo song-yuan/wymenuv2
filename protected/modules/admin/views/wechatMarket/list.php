@@ -119,7 +119,13 @@
                                              <div class="list_big">生日赠券</div>
                                              <div class="list_small">建立会员生日送券活动，生日总要腐败一下，这时一条生日优惠也许会将他们拉到店中</div>
                                         </a> 
-                                    </div> 
+                                    </div>
+                                    <div class="list col-sm-3 col-xs-12">
+                                        <a href="<?php echo $this->createUrl('sentwxcardTime/index',array('companyId' => $this->companyId))?>">
+                                             <div class="list_big">定时发券</div>
+                                             <div class="list_small">设置固定的日期内给等级人员或全部会员发券</div>
+                                        </a> 
+                                    </div>
                             </div> 
 
                     </div>

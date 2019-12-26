@@ -578,9 +578,6 @@ class NormalpromotionController extends BackendController
 				if(!empty($brdules)){
 					return $brdules;
 				}
-				// 		else{
-				// 			return flse;
-				// 		}
 			}
 			private function getCategories(){
 				$criteria = new CDbCriteria;

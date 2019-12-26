@@ -43,10 +43,8 @@ class SentwxcardBirthdayController extends BackendController
 
     public function actionCreate(){
         $lid = Yii::app()->request->getParam('lid','0');
-        $is_sync = DataSync::getInitSync();
-        $model = '';
+        $is_sync = '11111';
         $selcups = array();
-
         $model = new SentwxcardPromotion();
 
         $pid = $model->lid;
