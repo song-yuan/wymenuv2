@@ -55,7 +55,6 @@ class CopyScreenController extends BackendController
                 $transaction = $db->beginTransaction();
         	try{ 
                     foreach ($dpids as $dpid){
-
                         foreach ($lids as $lid){
                             $sreen_hq = DoubleScreen::model()->find('lid =:lid and dpid=:dpid and delete_flag=0 ',array(':dpid'=>$companyId,':lid'=>$lid));
                             if(empty($sreen_hq['phs_code'])){
@@ -86,7 +85,7 @@ class CopyScreenController extends BackendController
                                         'source'=>'1',
                                         'title'=>$sreen_hq['title'],
                                         'type' =>$sreen_hq['type'], 
-                                        'description' => $sreen_hq['desc'],
+                                        'description' => $sreen_hq['description'],
                                         'is_able' =>$sreen_hq['is_able'], 
                                         'delete_flag' => $sreen_hq['delete_flag'],
                                         'is_sync' => $sreen_hq['is_sync'],
