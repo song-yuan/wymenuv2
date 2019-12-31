@@ -30,10 +30,11 @@
 <div class="dp">
 	<div style="margin-top: 10px;">
 		<ul class="ul">
-			<li class="li-4">品项名称</li>
-			<li class="li-4">单位规格</li>
-			<li class="li-4">单位名称</li>
-			<li class="li-4">盘点库存</li>
+			<li class="li-5">品项名称</li>
+			<li class="li-5">单位规格</li>
+			<li class="li-5">单位名称</li>
+			<li class="li-5">盘点库存</li>
+			<li class="li-5">库存差异</li>
 			<div style="clear: both;"></div>
 		</ul>
 	</div>
@@ -43,10 +44,11 @@
 		$materialUnit = Common::getmaterialUnit($m['material_id'], $m['dpid'], 0);
 	?>
 		<ul class="ul">
-			<li class="li-4"><?php echo $materialUnit['material_name'];?></li>
-			<li class="li-4"><?php echo $materialUnit['unit_name'];?></li>
-			<li class="li-4"><?php echo $materialUnit['unit_specifications'];?></li>
-			<li class="li-4"><?php echo $m['taking_stock'];?></li>
+			<li class="li-5"><?php echo $materialUnit['material_name'];?></li>
+			<li class="li-5"><?php echo $materialUnit['unit_name'];?></li>
+			<li class="li-5"><?php echo $materialUnit['unit_specifications'];?></li>
+			<li class="li-5"><?php echo $m['taking_stock'];?></li>
+			<li class="li-5"><?php if($m['number']<0){ echo '<span style="color:red">'.$m['number'].'</span>';}else{ echo $m['number'];}?></li>
 			<div style="clear: both;"></div>
 		</ul>
 		<?php endforeach;?>
