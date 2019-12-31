@@ -154,8 +154,11 @@
 							<div class="col-md-4 select middle">&nbsp;生效,有效天数 </div>
 							<div class="col-md-4 select left">
 								<select class="form-control" id="day" >
-									<?php for($i=3;$i<361;$i+=3):?>
-									<option value="<?php echo $i;?>" <?php if($i==60) echo 'selected';?>><?php echo $i;?>天</option>
+									<?php for($i=1;$i<30;$i++):?>
+									<option value="<?php echo $i;?>"><?php echo $i;?>天</option>
+									<?php endfor;?>
+									<?php for($i=1;$i<13;$i++):?>
+									<option value="<?php echo $i*30;?>"><?php echo $i;?>月</option>
 									<?php endfor;?>
 								</select>
 							</div>
