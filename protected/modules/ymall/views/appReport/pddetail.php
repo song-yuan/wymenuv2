@@ -48,7 +48,15 @@
 			<li class="li-5"><?php echo $materialUnit['unit_name'];?></li>
 			<li class="li-5"><?php echo $materialUnit['unit_specifications'];?></li>
 			<li class="li-5"><?php echo $m['taking_stock'];?></li>
-			<li class="li-5"><?php if($m['number']!=0){ echo '<span style="color:red">'.$m['number'].'</span>';}else{ echo $m['number'];}?></li>
+			<li class="li-5">
+			<?php if($m['number']<0){
+				echo '<span style="color:red">'.$m['number'].'</span>';
+			}elseif($m['number']>0){
+				echo '<span style="color:blue">'.$m['number'].'</span>';
+			}else{
+				echo $m['number'];
+			}?>
+			</li>
 			<div style="clear: both;"></div>
 		</ul>
 		<?php endforeach;?>
