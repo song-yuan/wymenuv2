@@ -47,8 +47,10 @@ class DataSyncTables
     	array("name"=>"产品指令表","table"=>"nb_product_instruction"),
     	array("name"=>"副屏表","table"=>"nb_double_screen"),
     	array("name"=>"副屏详情表","table"=>"nb_double_screen_detail"),
+    	array("name"=>"品项分类表","table"=>"nb_material_category"),
     	array("name"=>"产品BOM表","table"=>"nb_product_bom"),
     	array("name"=>"品项信息表","table"=>"nb_product_material"),
+    	array("name"=>"品项单位表","table"=>"nb_material_unit"),
     	array("name"=>"品项库存表","table"=>"nb_product_material_stock"),
     );
     
@@ -1227,6 +1229,20 @@ class DataSyncTables
         		"mushs_code varchar(12) DEFAULT NULL,".
         		"source varchar(2) NOT NULL DEFAULT '0',".
         		"delete_flag char(1) NOT NULL DEFAULT '0',".
+        		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
+        		"PRIMARY KEY (lid,dpid)".
+        		")",
+        	"nb_material_unit" => "CREATE TABLE IF NOT EXISTS nb_material_unit (".
+        		"lid int(10) NOT NULL,".
+        		"dpid int(10) NOT NULL,".
+        		"create_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"update_at TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"unit_type tinyint(2) DEFAULT '0',".
+        		"unit_name varchar(255) DEFAULT NULL,".
+        		"unit_specifications varchar(255) DEFAULT NULL,".
+        		"sort_code varchar(10) DEFAULT '0',".
+        		"muhs_code varchar(12) DEFAULT NULL,".
+        		"delete_flag tinyint(2) NOT NULL DEFAULT '0',".
         		"is_sync varchar(50) NOT NULL DEFAULT '11111',".
         		"PRIMARY KEY (lid,dpid)".
         		")",
