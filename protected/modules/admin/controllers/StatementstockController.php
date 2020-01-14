@@ -332,7 +332,7 @@ class StatementstockController extends BackendController
 		}
 		$download = Yii::app()->request->getParam('d',0);
 		
-		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.system_num,sts.stock_taking_num,sts.stock_taking_difnum,sts.stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
+		$sql = 'select DATE_FORMAT(sts.create_at,"%Y-%m-%d") as create_at,sts.type,sts.material_id,sts.sales_name,sts.system_num,sts.stock_taking_num,sum(sts.stock_taking_difnum) as stock_taking_difnum,sum(sts.stock_taking_difprice) as stock_taking_difprice,pm.material_name,pm.material_identifier from nb_stock_taking_statistics sts left join nb_product_material pm on sts.material_id=pm.lid and sts.dpid=pm.dpid';
 		$sql .= ' where sts.dpid='.$selectDpid.' and sts.create_at >= "'.$begin_time.' 00:00:00" and sts.create_at <= "'.$end_time.' 23:59:59"';
 		if($categoryId){
 			$sql .= ' and pm.category_id='.$categoryId;
@@ -343,7 +343,7 @@ class StatementstockController extends BackendController
 		if($matename!=''){
 			$sql .= ' and pm.material_name like "%'.$matename.'%"';
 		}
-		$sql .= ' order by pm.material_identifier asc';
+		$sql .= ' group by material_id order by pm.material_identifier asc';
 		$sqlmodels = Yii::app()->db->createCommand($sql)->queryAll();
 		if($download){
 			$exportData = array();
