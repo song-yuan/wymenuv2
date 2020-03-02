@@ -55,10 +55,8 @@ return array(
 		'admin' => array(
 				
 		),
-		'ymall' => array(
-		
-		),
-		'waiter',
+		'ymall' => array(),
+		'mall',
                 'thinterface',
                 'wifi',
 	),
