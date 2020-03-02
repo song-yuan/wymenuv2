@@ -13,10 +13,10 @@ class CuponController extends Controller
 	public function actionGetUserCupon()
 	{
 		var_dump($_POST);
-		$userId = Yii::app()->request->getPost('userId');
-		$proCodeArr = Yii::app()->request->getPost('proCodeArr');
-		$total = Yii::app()->request->getPost('total');
-		$type = Yii::app()->request->getPost('type');
+		$userId = Yii::app()->request->getParam('userId');
+		$proCodeArr = Yii::app()->request->getParam('proCodeArr');
+		$total = Yii::app()->request->getParam('total');
+		$type = Yii::app()->request->getParam('type');
 		$dpid = $this->companyId;
 		var_dump($proCodeArr);
 		var_dump($total);
