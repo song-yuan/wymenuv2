@@ -1,6 +1,6 @@
 <?php
 
-class ThinterfaceModule extends CWebModule
+class MallModule extends CWebModule
 {
 	public function init()
 	{
@@ -9,8 +9,8 @@ class ThinterfaceModule extends CWebModule
 
 		// import the module-level models and components
 		$this->setImport(array(
-			'thinterface.models.*',
-			'thinterface.components.*',
+			'mall.models.*',
+			'mall.components.*',
 		));
 	}
 
