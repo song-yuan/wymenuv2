@@ -1,6 +1,6 @@
 <?php
 
-class MallModule extends CWebModule
+class InxcxModule extends CWebModule
 {
 	public function init()
 	{
@@ -9,8 +9,8 @@ class MallModule extends CWebModule
 
 		// import the module-level models and components
 		$this->setImport(array(
-			'mall.models.*',
-			'mall.components.*',
+			'inxcx.models.*',
+			'inxcx.components.*',
 		));
 	}
 
