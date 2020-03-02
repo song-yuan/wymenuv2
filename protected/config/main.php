@@ -56,7 +56,7 @@ return array(
 				
 		),
 		'ymall' => array(),
-		'mall',
+		'inxcx',
                 'thinterface',
                 'wifi',
 	),
