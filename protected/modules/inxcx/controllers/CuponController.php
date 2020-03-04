@@ -19,6 +19,6 @@ class CuponController extends Controller
 		$dpid = $this->companyId;
 		$proCodeArr = explode(',', $proCode);
 		$cupon = WxCupon::getUserAvaliableCupon($proCodeArr, $total, $userId, $dpid, $type);
-		echo json_encode(array('cupon'=>$cupon));
+		echo json_encode(array('cupon'=>$cupon));exit;
 	}
 }
