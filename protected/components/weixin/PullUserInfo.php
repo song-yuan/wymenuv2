@@ -69,8 +69,7 @@ class PullUserInfo {
 				'sex'=>$this->response->sex,
 				'country'=>$this->response->country,
 				'province'=>$this->response->province,
-				'city'=>$this->response->city,
-				'is_sync'=>DataSync::getInitSync(),
+				'city'=>$this->response->city
 			);
 			Yii::app()->db->createCommand()->update('nb_brand_user', $updateArr, 'lid='.$this->userId.' and dpid='.$this->brandId);
 			

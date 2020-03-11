@@ -52,9 +52,7 @@ class AccessToken {
 		if($weixinServerReturn = Curl::https($url)) {
 			$accessTokenStdClass = json_decode($weixinServerReturn);
 			if(isset($accessTokenStdClass->access_token)){
-				$isSync = DataSync::getInitSync();
-				$sql = 'UPDATE nb_weixin_service_account set expire = ' . strtotime('2 hours'). ', access_token = "' .$accessTokenStdClass->access_token . '",is_sync='.$isSync.'
-					WHERE dpid = ' .$this->brandId;
+				$sql = 'UPDATE nb_weixin_service_account set expire = ' . strtotime('2 hours'). ', access_token = "' .$accessTokenStdClass->access_token . '" WHERE dpid = ' .$this->brandId;
 				Yii::app()->db->createCommand($sql)->execute();
 				return $accessTokenStdClass->access_token;
 			}else{

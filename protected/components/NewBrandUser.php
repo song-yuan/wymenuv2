@@ -12,6 +12,7 @@
 class NewBrandUser {
 	public $openId;
 	public $brandId;
+	public $type = 0;//0 公众号 1 小程序
 	public $success = false;
 	public $errorMessage;
 	public $brandUser = null;
@@ -20,16 +21,20 @@ class NewBrandUser {
 	 * @param String $openId 微信会员对微信服务号唯一识别标识openId
 	 * @param Mixed $brandId 品牌身份唯一标识，此处可以用品牌的主键或者微信服务号唯一标识appId
 	 */
-	public function __construct($opendId, $brandId) {
+	public function __construct($opendId, $brandId ,$type=0) {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
 			$this->openId = $opendId;
 			$this->brandId = $brandId;
+			$this->type = $type;
 			$this->brandUser();
 			$this->newBrandUser();
-			$this->pullUserInfo();
 			$this->sentCupon();
-			$this->sentGift();
+			if($this->type==0){
+				$this->pullUserInfo();
+				$this->sentGift();
+			}
+			
 			$this->success = true;
 			$transaction->commit();
 		} catch(Exception $e) {
@@ -59,6 +64,7 @@ class NewBrandUser {
                 $insertBrandUserArr = array(
 			        	'lid'=>$lid,
 			        	'dpid'=>$this->brandId,
+                		'type'=>$this->type,
 			        	'openid'=>$this->openId,
 			        	'user_level_lid'=>$this->brandUserLevelId(),
 			        	'card_id'=>$this->newBrandUserCardId(),
