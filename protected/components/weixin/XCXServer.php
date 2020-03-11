@@ -16,7 +16,7 @@ class XCXServer {
 		$secret = $account['appsecret'];
 		$url = 'https://api.weixin.qq.com/sns/jscode2session?appid='.$appid.'&secret='.$secret.'&js_code='.$code.'&grant_type=authorization_code';
 		$result = Curl::https($url);
-		if($result['errcode']==0){
+		if(isset($result['openid'])){
 			$data = $result;
 		}
 		return $data;
