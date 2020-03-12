@@ -21,7 +21,7 @@ class UserController extends Controller
 			$openId = $data['openid'];
 			$user = WxBrandUser::getFromOpenId($openId);
 			if(empty($user)){
-				$newBrandUser = new NewBrandUser($openid, $this->companyId, 1);
+				$newBrandUser = new NewBrandUser($openId, $this->companyId, 1);
 				$user = $newBrandUser->brandUser;
 			}
 		}
